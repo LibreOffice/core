@@ -9,12 +9,7 @@ import android.graphics.PointF;
 import android.view.MotionEvent;
 import android.view.View;
 
-import org.libreoffice.LOKitShell;
-
 public interface PanZoomController {
-    // The distance the user has to pan before we recognize it as such (e.g. to avoid 1-pixel pans
-    // between the touch-down and touch-up of a click). In units of density-independent pixels.
-    public static final float PAN_THRESHOLD = 1/16f * LOKitShell.getDpi();
 
     static class Factory {
         static PanZoomController create(PanZoomTarget target, View view) {
