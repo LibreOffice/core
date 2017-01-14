@@ -291,14 +291,32 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
 {
     bool bGlyphs = false;
     const GlyphItem* pGlyph;
+    HFONT hFont = nullptr;
+    HFONT hAltFont = nullptr;
+    bool bCheckFont = false;
+    bool bUseAlt = false;
+    const CommonSalLayout* pCSL = dynamic_cast<const CommonSalLayout*>(&rLayout);
+    if ( pCSL )
+    {
+        hFont = pCSL->getHFONT();
+        hAltFont = pCSL->getAltHFONT();
+        bCheckFont = hFont && hAltFont;
+    }
     while (rLayout.GetNextGlyphs(1, &pGlyph, *pPos, *pGetNextGlypInfo))
     {
         bGlyphs = true;
         WORD glyphWStr[] = { pGlyph->maGlyphId };
         if (pGlyph->IsVertical())
             glyphWStr[0] |= 0x02000000; // A (undocumented?) GDI flag for vertical glyphs
+        if ( bCheckFont && pGlyph->IsVertical() == bUseAlt )
+        {
+            SelectFont( hDC, bUseAlt ? hFont : hAltFont );
+            bUseAlt = !bUseAlt;
+        }
         ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), 1, nullptr);
     }
+    if ( bCheckFont && bUseAlt )
+        SelectFont( hDC, hFont );
 
     return (pRectToErase && bGlyphs);
 }
