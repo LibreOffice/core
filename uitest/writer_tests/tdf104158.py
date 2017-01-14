@@ -19,6 +19,12 @@ class tdf104158(UITestCase):
         xOkBtn = xInsertDlg.getChild("ok")
         xOkBtn.executeAction("CLICK", tuple())
 
+        document = self.ui_test.get_component()
+
+        tables = document.getTextTables()
+        self.assertEqual(len(tables[0].getRows()), 2)
+        self.assertEqual(len(tables[0].getColumns()), 2)
+
         self.ui_test.execute_dialog_through_command(".uno:TableNumberFormatDialog")
 
         xNumberFormatDlg = self.xUITest.getTopFocusWindow()
