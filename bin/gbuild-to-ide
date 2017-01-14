@@ -49,8 +49,7 @@ class GbuildParser:
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
         (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'],
                                                                     os.environ['INSTDIR'], os.environ['WORKDIR'])
-        (self.modules, self.files) = (collections.OrderedDict(), [])
-        self.target_by_path = collections.OrderedDict()
+        (self.modules, self.target_by_path) = (collections.OrderedDict(), collections.OrderedDict())
 
     _includepattern = re.compile('-I(\S+)')
     _isystempattern = re.compile('-isystem\s*(\S+)')
@@ -87,6 +86,7 @@ class GbuildParser:
         return [cxxflag.strip() for cxxflag in GbuildParser._warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
 
     def parse(self):
+        moduleDict = {}
         for jsontype in ['Library', 'Executable', 'CppunitTest']:
             for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', jsontype)):
                 with open(os.path.join(self.workdir, 'GbuildToJson', jsontype, jsonfilename), 'r') as f:
@@ -94,48 +94,47 @@ class GbuildParser:
 
                     (foundincludes, foundisystem) = GbuildParser.__split_includes(jsondata['INCLUDE'])
                     match = GbuildParser._buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
+                    location = os.path.dirname(jsondata['MAKEFILE'])
                     newObj = GbuildLinkTarget(match,
-                                              os.path.dirname(jsondata['MAKEFILE']),
+                                              location,
                                               foundincludes,
                                               foundisystem,
                                               GbuildParser.__split_defs(jsondata['DEFS']),
-                                              GbuildParser.__split_objs(jsondata['CXXOBJECTS']),
+                                              sorted(GbuildParser.__split_objs(jsondata['CXXOBJECTS'])),
                                               GbuildParser.__split_flags(jsondata['CXXFLAGS'], jsondata['CXXFLAGSAPPEND']),
                                               jsondata['LINKED_LIBS'].strip().split(' '),
-                                              jsondata['ASMOBJECTS'],
+                                              sorted(jsondata['ASMOBJECTS']),
                                               GbuildParser.__split_flags(jsondata['CFLAGS'], jsondata['CFLAGSAPPEND']),
-                                              jsondata['GENCOBJECTS'],
-                                              jsondata['GENCXXOBJECTS'],
+                                              sorted(jsondata['GENCOBJECTS']),
+                                              sorted(jsondata['GENCXXOBJECTS']),
                                               jsondata['ILIBTARGET'],
                                               jsondata['LINKED_STATIC_LIBS'],
                                               jsondata['LINKTARGET'],
                                               GbuildParser.__split_flags(jsondata['OBJCFLAGS'], jsondata['OBJCFLAGSAPPEND']),
-                                              jsondata['OBJCOBJECTS'],
+                                              sorted(jsondata['OBJCOBJECTS']),
                                               GbuildParser.__split_flags(jsondata['OBJCXXFLAGS'], jsondata['OBJCXXFLAGSAPPEND']),
-                                              jsondata['OBJCXXOBJECTS'],
-                                              jsondata['YACCOBJECTS'],
+                                              sorted(jsondata['OBJCXXOBJECTS']),
+                                              sorted(jsondata['YACCOBJECTS']),
                                               jsontype)
-                    self.files.append(newObj)
+                    module = location.split('/')[-1]
+                    if not module in moduleDict:
+                        moduleDict[module] = {'targets': set()}
+                        moduleDict[module]['targets'] |= set([newObj])
 
-        moduleDict = {}
-        for target in self.files:
-            module = target.location.split('/')[-1]
-            if not module in moduleDict:
-                moduleDict[module] = {'targets': set()}
-            moduleDict[module]['targets'] |= set([target])
-
-            for cxx in target.cxxobjects:
-                path = '/'.join(cxx.split('/')[:-1])
-                if path not in self.target_by_path:
-                    self.target_by_path[path] = set()
-                self.target_by_path[path] |= set([target])
+        for module in sorted(moduleDict):
+            self.modules[module] = moduleDict[module]
+        for m in self.modules:
+            for target in self.modules[m]['targets']:
+                for cxx in target.cxxobjects:
+                    path = '/'.join(cxx.split('/')[:-1])
+                    if path not in self.target_by_path:
+                        self.target_by_path[path] = set()
+                    self.target_by_path[path] |= set([target])
         for path in self.target_by_path:
             x = self.target_by_path[path]
             if path != '' and len(set(self.target_by_path[path])) > 1:
                 print('fdo#70422: multiple target use dir %s: %s' % (
                     path, ', '.join([target.target_name for target in set(self.target_by_path[path])])))
-        for module in sorted(moduleDict):
-            self.modules[module] = moduleDict[module]
         return self
 
 
@@ -273,15 +272,15 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         print(self.gbuildparser.srcdir)
         print(self.gbuildparser.builddir)
-        for f in self.gbuildparser.files:
-            print(f)
+        for f in self.gbuildparser.modules:
+            for j in self.gbuildparser.modules[f]['targets']:
+                print(j)
 
         VisualStudioIntegrationGenerator(self.gbuildparser, self.ide).emit()
         XcodeIntegrationGenerator(self.gbuildparser, self.ide).emit()
 
         EclipseCDTIntegrationGenerator(self.gbuildparser, self.ide).emit()
         KdevelopIntegrationGenerator(self.gbuildparser, self.ide).emit()
-        VisualStudioIntegrationGenerator(self.gbuildparser, self.ide).emit()
         VimIntegrationGenerator(self.gbuildparser, self.ide).emit()
         QtCreatorIntegrationGenerator(self.gbuildparser, self.ide).emit()
 
@@ -293,13 +292,14 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
 
     def emit(self):
         global_list = []
-        for lib in self.gbuildparser.files:
-            entries = []
-            for file in lib.cxxobjects:
-                filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
-                entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
-                entries.append(entry)
-            global_list.extend(entries)
+        for m in self.gbuildparser.modules:
+            for lib in self.gbuildparser.modules[m]['targets']:
+                entries = []
+                for file in lib.cxxobjects:
+                    filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
+                    entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
+                    entries.append(entry)
+                global_list.extend(entries)
         export_file = open('compile_commands.json', 'w')
         json.dump(global_list, export_file)
 
@@ -1018,10 +1018,11 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
         self.target_by_location = {}
-        for target in self.gbuildparser.files:
-            if target.location not in self.target_by_location:
-                self.target_by_location[target.location] = set()
-            self.target_by_location[target.location] |= set([target])
+        for m in self.gbuildparser.modules:
+            for target in self.gbuildparser.modules[m]['targets']:
+                if target.location not in self.target_by_location:
+                    self.target_by_location[target.location] = set()
+                self.target_by_location[target.location] |= set([target])
 
         self._do_log = False  # set to 'True' to activate log of QtCreatorIntegrationGenerator
         if self._do_log:
@@ -1474,7 +1475,10 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
         self.data_libs = {}
 
-        all_libs = self.gbuildparser.files
+        all_libs = []
+        for m in self.gbuildparser.modules:
+            for f in self.gbuildparser.modules[m]['targets']:
+                all_libs.append(f)
         for lib in all_libs:
             self._log("\nlibrary : %s, loc=%s" % (lib.target_name, lib.location))
             lib_name = os.path.basename(lib.location)
