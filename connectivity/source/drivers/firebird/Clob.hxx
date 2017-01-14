@@ -35,7 +35,7 @@ namespace connectivity
              * hence we store the data in a Blob, and the Clob class is
              * a wrapper around that.
              */
-            connectivity::firebird::Blob     m_aBlob;
+            css::uno::Reference <css::sdbc::XBlob >     m_aBlob;
 
         public:
             Clob(isc_db_handle* pDatabaseHandle,
