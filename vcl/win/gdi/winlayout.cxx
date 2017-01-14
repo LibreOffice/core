@@ -291,14 +291,34 @@ bool ExTextOutRenderer::operator ()(SalLayout const &rLayout, HDC hDC,
 {
     bool bGlyphs = false;
     const GlyphItem* pGlyph;
+    HFONT hFont = static_cast<HFONT>(GetCurrentObject( hDC, OBJ_FONT ));
+    HFONT hFontAlt = nullptr;
+    LOGFONTW aLogFont;
+    GetObjectW(hFont, sizeof(LOGFONTW), &aLogFont);
+    if (aLogFont.lfFaceName[0] == '@')
+    {
+        memmove( &aLogFont.lfFaceName[0], &aLogFont.lfFaceName[1],
+            sizeof(aLogFont.lfFaceName)-sizeof(aLogFont.lfFaceName[0]) );
+        hFontAlt = CreateFontIndirectW(&aLogFont);
+    }
     while (rLayout.GetNextGlyphs(1, &pGlyph, *pPos, *pGetNextGlypInfo))
     {
         bGlyphs = true;
         WORD glyphWStr[] = { pGlyph->maGlyphId };
         if (pGlyph->IsVertical())
             glyphWStr[0] |= 0x02000000; // A (undocumented?) GDI flag for vertical glyphs
+        if ( hFontAlt )
+        {
+            if ( pGlyph->IsVertical() )
+                SelectFont( hDC, hFont );
+            else
+                SelectFont( hDC, hFontAlt );
+        }
         ExtTextOutW(hDC, pPos->X(), pPos->Y(), ETO_GLYPH_INDEX, nullptr, LPCWSTR(&glyphWStr), 1, nullptr);
     }
+    SelectFont( hDC, hFont );
+    if (hFontAlt)
+        DeleteObject(hFontAlt);
 
     return (pRectToErase && bGlyphs);
 }
