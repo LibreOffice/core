@@ -4058,7 +4058,7 @@ static Any lcl_GetDisplayBitmap(const OUString& _sLinkSuffix)
 
     if (nImgId)
     {
-        aRet <<= VCLUnoHelper::CreateBitmap(BitmapEx(SW_RES(nImgId)).GetBitmap());
+        aRet <<= VCLUnoHelper::CreateBitmap(BitmapEx(SW_RES(nImgId)));
     }
     return aRet;
 }
