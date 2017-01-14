@@ -28,13 +28,14 @@ Clob::Clob(isc_db_handle* pDatabaseHandle,
            isc_tr_handle* pTransactionHandle,
            ISC_QUAD& aBlobID):
     Clob_BASE(m_aMutex),
-    m_aBlob(pDatabaseHandle, pTransactionHandle, aBlobID)
+    m_aBlob(new connectivity::firebird::Blob(pDatabaseHandle, pTransactionHandle, aBlobID))
 {
 }
 
 void SAL_CALL Clob::disposing()
 {
-    m_aBlob.disposing();
+    m_aBlob->dispose();
+    m_aBlob.clear();
     Clob_BASE::disposing();
 }
 
@@ -46,7 +47,7 @@ sal_Int64 SAL_CALL Clob::length()
 
     // read the entire blob
     // TODO FIXME better solution?
-    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob.getBytes( 1, m_aBlob.length());
+    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob->getBytes( 1, m_aBlob->length());
     OUString sEntireClob (  reinterpret_cast< sal_Char *>( aEntireBlob.getArray() ),
                             aEntireBlob.getLength(),
                             RTL_TEXTENCODING_UTF8 );
@@ -63,7 +64,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
     // read the entire blob
     // TODO FIXME better solution?
     // TODO FIXME Assume indexing of nPosition starts at position 1.
-    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob.getBytes( 1, m_aBlob.length());
+    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob->getBytes( 1, m_aBlob->length());
     OUString sEntireClob (  reinterpret_cast< sal_Char *>( aEntireBlob.getArray() ),
                             aEntireBlob.getLength(),
                             RTL_TEXTENCODING_UTF8 );
@@ -77,7 +78,10 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
 uno::Reference< XInputStream > SAL_CALL  Clob::getCharacterStream()
     throw(SQLException, RuntimeException, std::exception)
 {
-    return m_aBlob.getBinaryStream();
+    MutexGuard aGuard(m_aMutex);
+    checkDisposed(Clob_BASE::rBHelper.bDisposed);
+
+    return m_aBlob->getBinaryStream();
 }
 
 sal_Int64 SAL_CALL Clob::position(const OUString& /*rPattern*/,
