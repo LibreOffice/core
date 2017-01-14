@@ -34,7 +34,7 @@ Clob::Clob(isc_db_handle* pDatabaseHandle,
 
 void SAL_CALL Clob::disposing()
 {
-    m_aBlob.disposing();
+    m_aBlob->disposing();
     Clob_BASE::disposing();
 }
 
@@ -46,7 +46,7 @@ sal_Int64 SAL_CALL Clob::length()
 
     // read the entire blob
     // TODO FIXME better solution?
-    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob.getBytes( 1, m_aBlob.length());
+    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob->getBytes( 1, m_aBlob.length());
     OUString sEntireClob (  reinterpret_cast< sal_Char *>( aEntireBlob.getArray() ),
                             aEntireBlob.getLength(),
                             RTL_TEXTENCODING_UTF8 );
@@ -63,7 +63,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
     // read the entire blob
     // TODO FIXME better solution?
     // TODO FIXME Assume indexing of nPosition starts at position 1.
-    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob.getBytes( 1, m_aBlob.length());
+    uno::Sequence < sal_Int8 > aEntireBlob = m_aBlob->getBytes( 1, m_aBlob.length());
     OUString sEntireClob (  reinterpret_cast< sal_Char *>( aEntireBlob.getArray() ),
                             aEntireBlob.getLength(),
                             RTL_TEXTENCODING_UTF8 );
@@ -77,7 +77,7 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
 uno::Reference< XInputStream > SAL_CALL  Clob::getCharacterStream()
     throw(SQLException, RuntimeException, std::exception)
 {
-    return m_aBlob.getBinaryStream();
+    return m_aBlob->getBinaryStream();
 }
 
 sal_Int64 SAL_CALL Clob::position(const OUString& /*rPattern*/,
