@@ -199,72 +199,72 @@ Bitmap BMP_PLACEHOLDER_TABLE_LARGE_HOVER
 
 Bitmap BMP_FOILN_01
 {
-    File = "foiln01.bmp" ;
+    File = "foiln01.png" ;
 };
 
 Bitmap BMP_PAGE
 {
-    File = "page.bmp" ;
+    File = "page.png" ;
 };
 
 Bitmap BMP_PAGE_EXCLUDED
 {
-    File = "pageexcl.bmp" ;
+    File = "pageexcl.png" ;
 };
 
 Bitmap BMP_PAGEOBJS_EXCLUDED
 {
-    File = "pagobjex.bmp" ;
+    File = "pagobjex.png" ;
 };
 
 Bitmap BMP_PAGEOBJS
 {
-    File = "pageobjs.bmp" ;
+    File = "pageobjs.png" ;
 };
 
 Bitmap BMP_OBJECTS
 {
-    File = "objects.bmp" ;
+    File = "objects.png" ;
 };
 
 Bitmap BMP_OLE
 {
-    File = "ole.bmp" ;
+    File = "ole.png" ;
 };
 
 Bitmap BMP_GROUP
 {
-    File = "group.bmp" ;
+    File = "group.png" ;
 };
 
 Bitmap BMP_DOC_OPEN
 {
-    File = "docopen.bmp" ;
+    File = "docopen.png" ;
 };
 
 Bitmap BMP_DOC_CLOSED
 {
-    File = "docclose.bmp" ;
+    File = "docclose.png" ;
 };
 
 Bitmap BMP_DOC_TEXT
 {
-    File = "doctext.bmp" ;
+    File = "doctext.png" ;
 };
 
 Bitmap BMP_EXPAND
 {
-    File = "plus.bmp" ;
+    File = "plus.png" ;
 };
 
 Bitmap BMP_COLLAPSE
 {
-    File = "minus.bmp" ;
+    File = "minus.png" ;
 };
 
 Bitmap BMP_GRAPHIC
 {
-    File = "graphic.bmp" ;
+    File = "graphic.png" ;
 };
 
 String STR_STYLE_FILTER_USED
@@ -312,52 +312,52 @@ Bitmap BMP_STYLES_FAMILY_PRESENTATIONS
 
 Bitmap BMP_PRESOBJ_GRAPHIC
 {
-    File = "image.bmp" ;
+    File = "image.png" ;
 };
 
 Bitmap BMP_PRESOBJ_OBJECT
 {
-    File = "object.bmp" ;
+    File = "object.png" ;
 };
 
 Bitmap BMP_PRESOBJ_CHART
 {
-    File = "chart.bmp" ;
+    File = "chart.png" ;
 };
 
 Bitmap BMP_PRESOBJ_ORGCHART
 {
-    File = "orgchart.bmp" ;
+    File = "orgchart.png" ;
 };
 
 Bitmap BMP_PRESOBJ_TABLE
 {
-    File = "table.bmp" ;
+    File = "table.png" ;
 };
 
 Bitmap BMP_POINTER_ICON
 {
-    File = "pointericon.bmp";
+    File = "pointericon.png";
 };
 
 Bitmap BMP_WAIT_ICON
 {
-    File = "waiticon.bmp";
+    File = "waiticon.png";
 };
 
 Bitmap BMP_FADE_EFFECT_INDICATOR
 {
-    File = "fade_effect_indicator.bmp";
+    File = "fade_effect_indicator.png";
 };
 
 Bitmap BMP_CUSTOM_ANIMATION_INDICATOR
 {
-    File = "click_16.bmp";
+    File = "click_16.png";
 };
 
 Bitmap BMP_COMMENTS_INDICATOR
 {
-    File = "comments_indicator.bmp";
+    File = "comments_indicator.png";
 };
 
 // Presenter Screen bitmaps:
