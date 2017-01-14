@@ -21,7 +21,6 @@ import xml.dom.minidom as minidom
 import traceback
 import collections
 
-
 class GbuildLinkTarget:
     def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs,
                  asmobjects, cflags, gencobjects, gencxxobjects, ilibtarget, linked_static_libs, linktarget,
@@ -86,6 +85,18 @@ class GbuildParser:
         return [cxxflag.strip() for cxxflag in GbuildParser._warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
 
     def parse(self):
+        # Relation between json object and file extension
+        # Missing relations: .hxx  .hpp .hrc  .src  .java  .py  .h  .s  .c  .pl  .S  .ui  .l  .cpp
+        jsonSrc = {'ASMOBJECTS':    '.asm',
+                   'CXXOBJECTS':    '.cxx',
+                   'GENCOBJECTS':   '?',
+                   'GENCXXOBJECTS': '.cxx', # this does not sound right
+                   'OBJCOBJECTS':   '.m',
+                   'OBJCXXOBJECTS': '.mm',
+                   'YACCOBJECTS':   '.y'
+                   }
+
+
         moduleDict = {}
         for jsontype in ['Library', 'Executable', 'CppunitTest']:
             for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', jsontype)):
@@ -95,26 +106,35 @@ class GbuildParser:
                     (foundincludes, foundisystem) = GbuildParser.__split_includes(jsondata['INCLUDE'])
                     match = GbuildParser._buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
                     location = os.path.dirname(jsondata['MAKEFILE'])
+                    filesSorted = {}
+                    for i in jsonSrc:
+                        if len(jsondata[i]) > 0:
+                            if jsonSrc[i] == '?':
+                                raise Exception('type need conversion')
+                            filesSorted[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
+                        else:
+                            filesSorted[i] = []
+
                     newObj = GbuildLinkTarget(match,
                                               location,
                                               foundincludes,
                                               foundisystem,
                                               GbuildParser.__split_defs(jsondata['DEFS']),
-                                              sorted(GbuildParser.__split_objs(jsondata['CXXOBJECTS'])),
+                                              filesSorted['CXXOBJECTS'],
                                               GbuildParser.__split_flags(jsondata['CXXFLAGS'], jsondata['CXXFLAGSAPPEND']),
                                               jsondata['LINKED_LIBS'].strip().split(' '),
-                                              sorted(jsondata['ASMOBJECTS']),
+                                              filesSorted['ASMOBJECTS'],
                                               GbuildParser.__split_flags(jsondata['CFLAGS'], jsondata['CFLAGSAPPEND']),
-                                              sorted(jsondata['GENCOBJECTS']),
-                                              sorted(jsondata['GENCXXOBJECTS']),
+                                              filesSorted['GENCOBJECTS'],
+                                              filesSorted['GENCXXOBJECTS'],
                                               jsondata['ILIBTARGET'],
                                               jsondata['LINKED_STATIC_LIBS'],
                                               jsondata['LINKTARGET'],
                                               GbuildParser.__split_flags(jsondata['OBJCFLAGS'], jsondata['OBJCFLAGSAPPEND']),
-                                              sorted(jsondata['OBJCOBJECTS']),
+                                              filesSorted['OBJCOBJECTS'],
                                               GbuildParser.__split_flags(jsondata['OBJCXXFLAGS'], jsondata['OBJCXXFLAGSAPPEND']),
-                                              sorted(jsondata['OBJCXXOBJECTS']),
-                                              sorted(jsondata['YACCOBJECTS']),
+                                              filesSorted['OBJCXXOBJECTS'],
+                                              filesSorted['YACCOBJECTS'],
                                               jsontype)
                     module = location.split('/')[-1]
                     if not module in moduleDict:
