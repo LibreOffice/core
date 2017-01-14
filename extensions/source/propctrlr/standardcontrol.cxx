@@ -463,7 +463,7 @@ namespace pcr
     {
         ActionEvent aEvent( *this, OUString( "clicked" ) );
         m_aActionListeners.forEach< XActionListener >(
-            [this, &aEvent] (uno::Reference<awt::XActionListener> const& xListener)
+            [&aEvent] (uno::Reference<awt::XActionListener> const& xListener)
                 { return xListener->actionPerformed(aEvent); });
     }
 
