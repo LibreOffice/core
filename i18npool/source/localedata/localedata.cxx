@@ -657,12 +657,11 @@ Sequence< CalendarItem2 > &LocaleDataImpl::getCalendarItemByName(const OUString&
     }
 }
 
-
 Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
         sal_Unicode const * const * const allCalendars, sal_Int16 & rnOffset,
         const sal_Int16 nWhichItem, const sal_Int16 nCalendar,
         const Locale & rLocale, const Sequence< Calendar2 > & calendarsSeq )
-        throw(RuntimeException)
+        throw(RuntimeException, std::exception)
 {
     Sequence< CalendarItem2 > aItems;
     if ( OUString( allCalendars[rnOffset] ) == "ref" )
@@ -705,7 +704,6 @@ Sequence< CalendarItem2 > LocaleDataImpl::getCalendarItems(
     }
     return aItems;
 }
-
 
 Sequence< Calendar2 > SAL_CALL
 LocaleDataImpl::getAllCalendars2( const Locale& rLocale ) throw(RuntimeException, std::exception)

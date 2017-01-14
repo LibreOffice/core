@@ -142,7 +142,7 @@ private:
             const sal_Int16 nCalendar,
             const css::lang::Locale & rLocale,
             const css::uno::Sequence< css::i18n::Calendar2 > & calendarsSeq )
-        throw( css::uno::RuntimeException );
+        throw( css::uno::RuntimeException, std::exception );
 
 };
 
