@@ -47,21 +47,22 @@ class GbuildParser:
     def __init__(self, makecmd):
         self.makecmd = makecmd
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
-        (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
-        (self.modulenamelist, self.files) = ([], [])
-        (self.target_by_path, self.target_by_location) = (collections.OrderedDict(), collections.OrderedDict())
+        (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'],
+                                                                    os.environ['INSTDIR'], os.environ['WORKDIR'])
+        (self.modules, self.files) = (collections.OrderedDict(), [])
+        self.target_by_path = collections.OrderedDict()
 
-    includepattern = re.compile('-I(\S+)')
-    isystempattern = re.compile('-isystem\s*(\S+)')
-    warningpattern = re.compile('-W\S+')
-    buildpattern = {'Library': re.compile('Library_(.*)\.mk'),
-                    'Executable': re.compile('Executable_(.*)\.mk'),
-                    'CppunitTest': re.compile('CppunitTest_(.*)\.mk')}
+    _includepattern = re.compile('-I(\S+)')
+    _isystempattern = re.compile('-isystem\s*(\S+)')
+    _warningpattern = re.compile('-W\S+')
+    _buildpattern = {'Library': re.compile('Library_(.*)\.mk'),
+                     'Executable': re.compile('Executable_(.*)\.mk'),
+                     'CppunitTest': re.compile('CppunitTest_(.*)\.mk')}
 
     @staticmethod
     def __split_includes(includes):
-        foundisystem = GbuildParser.isystempattern.findall(includes)
-        foundincludes = [includeswitch.strip() for includeswitch in GbuildParser.includepattern.findall(includes) if
+        foundisystem = GbuildParser._isystempattern.findall(includes)
+        foundincludes = [includeswitch.strip() for includeswitch in GbuildParser._includepattern.findall(includes) if
                 len(includeswitch) > 2]
         return (foundincludes, foundisystem)
 
@@ -83,7 +84,7 @@ class GbuildParser:
 
     @staticmethod
     def __split_flags(flagsline, flagslineappend):
-        return [cxxflag.strip() for cxxflag in GbuildParser.warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
+        return [cxxflag.strip() for cxxflag in GbuildParser._warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
 
     def parse(self):
         for jsontype in ['Library', 'Executable', 'CppunitTest']:
@@ -92,7 +93,7 @@ class GbuildParser:
                     jsondata = json.load(f)
 
                     (foundincludes, foundisystem) = GbuildParser.__split_includes(jsondata['INCLUDE'])
-                    match = GbuildParser.buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
+                    match = GbuildParser._buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
                     newObj = GbuildLinkTarget(match,
                                               os.path.dirname(jsondata['MAKEFILE']),
                                               foundincludes,
@@ -115,10 +116,14 @@ class GbuildParser:
                                               jsondata['YACCOBJECTS'],
                                               jsontype)
                     self.files.append(newObj)
+
+        moduleDict = {}
         for target in self.files:
-            if target.location not in self.target_by_location:
-                self.target_by_location[target.location] = set()
-            self.target_by_location[target.location] |= set([target])
+            module = target.location.split('/')[-1]
+            if not module in moduleDict:
+                moduleDict[module] = {'targets': set()}
+            moduleDict[module]['targets'] |= set([target])
+
             for cxx in target.cxxobjects:
                 path = '/'.join(cxx.split('/')[:-1])
                 if path not in self.target_by_path:
@@ -129,8 +134,8 @@ class GbuildParser:
             if path != '' and len(set(self.target_by_path[path])) > 1:
                 print('fdo#70422: multiple target use dir %s: %s' % (
                     path, ', '.join([target.target_name for target in set(self.target_by_path[path])])))
-        for location in self.target_by_location:
-            self.modulenamelist.append(os.path.split(location)[1])
+        for module in sorted(moduleDict):
+            self.modules[module] = moduleDict[module]
         return self
 
 
@@ -148,7 +153,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
     def create_include_paths(self):
-        for module in self.gbuildparser.modulenamelist:
+        for module in self.gbuildparser.modules:
             modulepath = os.path.join(self.gbuildparser.builddir, module)
             includedirfile = open(os.path.join(modulepath, '.eclipsesettingfile'), 'w')
             modulelibs = []
@@ -164,7 +169,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 
 
     def create_macros(self):
-        for module in self.gbuildparser.modulenamelist:
+        for module in self.gbuildparser.modules:
             modulepath = os.path.join(self.gbuildparser.builddir, module)
             macrofile = open(os.path.join(modulepath, '.macros'), 'w')
             modulelibs = []
@@ -220,7 +225,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 </cdtprojectproperties>
 """
 
-        for module in self.gbuildparser.modulenamelist:
+        for module in self.gbuildparser.modules:
             tempxml = []
             modulepath = os.path.join(self.gbuildparser.builddir, module)
 
@@ -270,6 +275,15 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
         print(self.gbuildparser.builddir)
         for f in self.gbuildparser.files:
             print(f)
+
+        VisualStudioIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        XcodeIntegrationGenerator(self.gbuildparser, self.ide).emit()
+
+        EclipseCDTIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        KdevelopIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        VisualStudioIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        VimIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        QtCreatorIntegrationGenerator(self.gbuildparser, self.ide).emit()
 
 
 class VimIntegrationGenerator(IdeIntegrationGenerator):
@@ -471,17 +485,16 @@ VersionControl=kdevgit
     def emit(self):
         for path in self.gbuildparser.target_by_path:
             self.write_includepaths(path)
-        for location in self.gbuildparser.target_by_location:
+        for modulename in self.gbuildparser.modules:
+            location = self.gbuildparser.srcdir + '/' + modulename
+            self.write_modulestub(location, modulename)
+            self.write_modulebeef(location, modulename)
             for f in os.listdir(location):
                 if f.endswith('.kdev4'):
                     try:
                         os.remove(os.path.join(location, f))
                     except OSError:
                         shutil.rmtree(os.path.join(location, f))
-        for location in self.gbuildparser.target_by_location:
-            modulename = os.path.split(location)[1]
-            self.write_modulestub(location, modulename)
-            self.write_modulebeef(location, modulename)
 
 
 class XcodeIntegrationGenerator(IdeIntegrationGenerator):
@@ -512,8 +525,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                    'objects': {rootId : self.rootObj,
                                mainGroupId : mainGroup},
                    'rootObject': rootId}
-        for location in self.gbuildparser.target_by_location:
-            module = location[location.rindex('/') + 1:]
+        for module in self.gbuildparser.modules:
             sourceId, self.sourceObj = self.define_pbxgroup('Sources')
             includeId, self.includeObj = self.define_pbxgroup('Headers')
             targetId, targetObj = self.define_pbxgroup('Targets')
@@ -533,7 +545,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                                         moduleId: self.moduleObj})
             mainGroup['children'].append(moduleId)
 
-            for target in self.gbuildparser.target_by_location[location]:
+            for target in self.gbuildparser.modules[module]['targets']:
                 pbxproj['objects'].update(self.generate_project(target))
 
         xcodeprojdir = './osx/libreoffice.xcodeproj'
@@ -792,11 +804,10 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     def emit(self):
         all_projects = []
-        for location in self.gbuildparser.target_by_location:
+        for module in self.gbuildparser.modules:
             projects = []
-            module = location.split('/')[-1]
             module_directory = os.path.join(self.solution_directory, module)
-            for target in self.gbuildparser.target_by_location[location]:
+            for target in self.gbuildparser.modules[module]['targets']:
                 project_path = os.path.join(module_directory, '%s.vcxproj' % target.target_name)
                 project_guid = self.write_project(project_path, target)
                 p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
@@ -1654,13 +1665,16 @@ if __name__ == '__main__':
 
     paths = {}
     generators = {
+        # Supported platforms
+        'vs2013': VisualStudioIntegrationGenerator,
+        'xcode': XcodeIntegrationGenerator,
+        'debug': DebugIntegrationGenerator,
+
+        # Old platforms
         'eclipsecdt': EclipseCDTIntegrationGenerator,
         'kdevelop': KdevelopIntegrationGenerator,
-        'xcode': XcodeIntegrationGenerator,
-        'vs2013': VisualStudioIntegrationGenerator,
         'vs2015': VisualStudioIntegrationGenerator,
         'vim': VimIntegrationGenerator,
-        'debug': DebugIntegrationGenerator,
         'qtcreator': QtCreatorIntegrationGenerator,
     }
 
