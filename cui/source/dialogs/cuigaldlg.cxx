@@ -690,7 +690,7 @@ void TPGalleryThemeGeneral::SetXChgData( ExchangeData* _pData )
     else
         nId = RID_SVXBMP_THEME_NORMAL_BIG;
 
-    m_pFiMSImage->SetImage( Image( Bitmap( CUI_RES( nId ) ), COL_LIGHTMAGENTA ) );
+    m_pFiMSImage->SetImage(Image(BitmapEx(CUI_RES(nId))));
 }
 
 
