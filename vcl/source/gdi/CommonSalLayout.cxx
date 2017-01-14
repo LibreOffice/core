@@ -611,13 +611,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
                 DeviceCoordinate nAdvance, nXOffset, nYOffset;
                 if (aSubRun.maDirection == HB_DIRECTION_TTB)
                 {
-                    // If the vertical orientation is Tr, then we need to
-                    // consider the glyph upright only if it was a vertical
-                    // alternate (i.e. transformed).
-                    // See http://unicode.org/reports/tr50/#vo
-                    if (vcl::GetVerticalOrientation(aChar) != VerticalOrientation::TransformedRotated
-                    || IsVerticalAlternate(pHbGlyphInfos[i].codepoint))
-                        nGlyphFlags |= GlyphItem::IS_VERTICAL;
+                    // Use IS_VERTICAL for alternative font.
+                    nGlyphFlags |= GlyphItem::IS_VERTICAL;
 
                     nAdvance = -pHbPositions[i].y_advance;
                     nXOffset =  pHbPositions[i].y_offset;
