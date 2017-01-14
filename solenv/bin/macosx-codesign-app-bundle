@@ -39,7 +39,6 @@ fi
 # order matters/screws things up otherwise
 find -d "$APP_BUNDLE" \( -name '*.jnilib' \) ! -type l |
     while read file; do
-    echo "signing $file"
     id=`echo ${file#${APP_BUNDLE}/Contents/} | sed -e 's,/,.,g'`
     codesign --verbose --identifier=$MACOSX_BUNDLE_IDENTIFIER.$id --sign "$MACOSX_CODESIGNING_IDENTITY" "$file" || exit 1
 done
