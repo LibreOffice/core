@@ -851,7 +851,7 @@ void CallbackFlushHandler::queue(const int type, const char* data)
                 {
                     const std::string name = payload.substr(0, pos + 1);
                     removeAll(
-                        [type, &payload, &name] (const queue_type::value_type& elem) {
+                        [type, &name] (const queue_type::value_type& elem) {
                             return (elem.first == type) && (elem.second.compare(0, name.size(), name) == 0);
                         }
                     );
