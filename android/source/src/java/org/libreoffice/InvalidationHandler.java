@@ -24,10 +24,12 @@ public class InvalidationHandler implements Document.MessageCallback {
     private final GeckoLayerClient mLayerClient;
     private OverlayState mState;
     private boolean mKeyEvent = false;
+    private LibreOfficeMainActivity mContext;
 
-    public InvalidationHandler(LibreOfficeMainActivity mainActivity) {
-        mDocumentOverlay = mainActivity.getDocumentOverlay();
-        mLayerClient = LibreOfficeMainActivity.getLayerClient();
+    public InvalidationHandler(LibreOfficeMainActivity context) {
+        mContext = context;
+        mDocumentOverlay = mContext.getDocumentOverlay();
+        mLayerClient = mContext.getLayerClient();
         mState = OverlayState.NONE;
     }
 
@@ -72,7 +74,7 @@ public class InvalidationHandler implements Document.MessageCallback {
                 }
                 Intent urlIntent = new Intent(Intent.ACTION_VIEW);
                 urlIntent.setData(Uri.parse(payload));
-                LibreOfficeMainActivity.mAppContext.startActivity(urlIntent);
+                mContext.startActivity(urlIntent);
                 break;
             case Document.CALLBACK_STATE_CHANGED:
                 stateChanged(payload);
@@ -92,25 +94,25 @@ public class InvalidationHandler implements Document.MessageCallback {
         boolean pressed = Boolean.parseBoolean(value);
 
         if (parts[0].equals(".uno:Bold")) {
-            LOKitShell.getFormattingController().onToggleStateChanged(Document.BOLD, pressed);
+            mContext.getFormattingController().onToggleStateChanged(Document.BOLD, pressed);
         } else if (parts[0].equals(".uno:Italic")) {
-            LOKitShell.getFormattingController().onToggleStateChanged(Document.ITALIC, pressed);
+            mContext.getFormattingController().onToggleStateChanged(Document.ITALIC, pressed);
         } else if (parts[0].equals(".uno:Underline")) {
-            LOKitShell.getFormattingController().onToggleStateChanged(Document.UNDERLINE, pressed);
+            mContext.getFormattingController().onToggleStateChanged(Document.UNDERLINE, pressed);
         } else if (parts[0].equals(".uno:Strikeout")) {
-            LOKitShell.getFormattingController().onToggleStateChanged(Document.STRIKEOUT, pressed);
+            mContext.getFormattingController().onToggleStateChanged(Document.STRIKEOUT, pressed);
         } else if (parts[0].equals(".uno:CharFontName")) {
-            LOKitShell.getFontController().selectFont(value);
+            mContext.getFontController().selectFont(value);
         } else if (parts[0].equals(".uno:FontHeight")) {
-            LOKitShell.getFontController().selectFontSize(value);
+            mContext.getFontController().selectFontSize(value);
         } else if (parts[0].equals(".uno:LeftPara")) {
-            LOKitShell.getFormattingController().onToggleStateChanged(Document.ALIGN_LEFT, pressed);
+            mContext.getFormattingController().onToggleStateChanged(Document.ALIGN_LEFT, pressed);
         } else if (parts[0].equals(".uno:CenterPara")) {
-            LOKitShell.getFormattingController().onToggleStateChanged(Document.ALIGN_CENTER, pressed);
+            mContext.getFormattingController().onToggleStateChanged(Document.ALIGN_CENTER, pressed);
         } else if (parts[0].equals(".uno:RightPara")) {
-            LOKitShell.getFormattingController().onToggleStateChanged(Document.ALIGN_RIGHT, pressed);
+            mContext.getFormattingController().onToggleStateChanged(Document.ALIGN_RIGHT, pressed);
         } else if (parts[0].equals(".uno:JustifyPara")) {
-            LOKitShell.getFormattingController().onToggleStateChanged(Document.ALIGN_JUSTIFY, pressed);
+            mContext.getFormattingController().onToggleStateChanged(Document.ALIGN_JUSTIFY, pressed);
         } else {
             Log.d(LOGTAG, "LOK_CALLBACK_STATE_CHANGED type uncatched: " + payload);
         }
@@ -140,7 +142,7 @@ public class InvalidationHandler implements Document.MessageCallback {
         int width = Integer.decode(coordinates[2]);
         int height = Integer.decode(coordinates[3]);
 
-        float dpi = LOKitShell.getDpi();
+        float dpi = LOKitShell.getDpi(mContext);
 
         return new RectF(
                 LOKitTileProvider.twipToPixel(x, dpi),
@@ -233,7 +235,7 @@ public class InvalidationHandler implements Document.MessageCallback {
             newTop = cursorRectangle.bottom - (moveToRect.height() / 2.0f);
         }
 
-        LOKitShell.moveViewportTo(new PointF(newLeft, newTop), null);
+        LOKitShell.moveViewportTo(mContext, new PointF(newLeft, newTop), null);
     }
 
     /**
@@ -360,9 +362,9 @@ public class InvalidationHandler implements Document.MessageCallback {
      */
     private void handleGeneralChangeState(OverlayState previous, OverlayState next) {
         if (previous == OverlayState.NONE) {
-            LOKitShell.getToolbarController().switchToEditMode();
+            mContext.getToolbarController().switchToEditMode();
         } else if (next == OverlayState.NONE) {
-            LOKitShell.getToolbarController().switchToViewMode();
+            mContext.getToolbarController().switchToViewMode();
         }
     }
 
@@ -381,7 +383,7 @@ public class InvalidationHandler implements Document.MessageCallback {
         mDocumentOverlay.hideSelections();
         mDocumentOverlay.hideCursor();
         mDocumentOverlay.hideGraphicSelection();
-        LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
+        mContext.hideSoftKeyboard();
     }
 
     /**
@@ -397,7 +399,7 @@ public class InvalidationHandler implements Document.MessageCallback {
      * Handle a transition to OverlayState.CURSOR state.
      */
     private void handleCursorState(OverlayState previous) {
-        LibreOfficeMainActivity.mAppContext.showSoftKeyboardOrFormattingToolbar();
+        mContext.showSoftKeyboardOrFormattingToolbar();
         if (previous == OverlayState.TRANSITION) {
             mDocumentOverlay.showHandle(SelectionHandle.HandleType.MIDDLE);
             mDocumentOverlay.showCursor();
@@ -424,7 +426,7 @@ public class InvalidationHandler implements Document.MessageCallback {
      */
     private void handleGraphicSelectionState(OverlayState previous) {
         mDocumentOverlay.showGraphicSelection();
-        LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
+        mContext.hideSoftKeyboard();
     }
 
     /**

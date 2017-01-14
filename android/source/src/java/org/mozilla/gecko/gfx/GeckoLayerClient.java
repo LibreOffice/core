@@ -138,7 +138,7 @@ public class GeckoLayerClient implements PanZoomTarget {
 
     /* Informs Gecko that the screen size has changed. */
     private void sendResizeEventIfNecessary() {
-        DisplayMetrics metrics = LOKitShell.getDisplayMetrics();
+        DisplayMetrics metrics = mContext.getResources().getDisplayMetrics();
         IntSize newScreenSize = new IntSize(metrics.widthPixels, metrics.heightPixels);
 
         if (mScreenSize.equals(newScreenSize)) {
