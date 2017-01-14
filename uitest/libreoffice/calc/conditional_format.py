@@ -8,6 +8,10 @@
 # this file provides methods to interact with the new conditional format API
 
 def get_conditional_format_from_sheet(sheet):
+    """ Returns a conditional format object belonging to a sheet
+
+    Keyword arguments:
+    sheet -- a XSheet object"""
     return sheet.getPropertyValue("ConditionalFormats")
 
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

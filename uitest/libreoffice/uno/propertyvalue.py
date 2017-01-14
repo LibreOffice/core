@@ -27,6 +27,8 @@ def mkPropertyValues(vals):
     return tuple([mkPropertyValue(name, value) for (name, value) in vals.items()])
 
 def convert_property_values_to_dict(propMap):
+    """ Create a dictionary from a sequence of property values
+    """
     ret = {}
     for entry in propMap:
         name = entry.Name
