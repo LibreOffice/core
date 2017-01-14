@@ -175,6 +175,7 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 :   mrFontSelData(rWinFontInstance.maFontSelData)
 ,   mhDC(hDC)
 ,   mhFont(static_cast<HFONT>(GetCurrentObject(hDC, OBJ_FONT)))
+,   mhAltFont( nullptr )
 ,   mrWinFontInstance(rWinFontInstance)
 ,   mnAveWidthFactor(1.0f)
 ,   mpVertGlyphs(nullptr)
@@ -211,6 +212,19 @@ CommonSalLayout::CommonSalLayout(HDC hDC, WinFontInstance& rWinFontInstance, con
 
         mnAveWidthFactor = nUPEM / aFontMetric.tmAveCharWidth;
     }
+
+    if ( mrFontSelData.mbVertical && mhAltFont == nullptr )
+    {
+        LOGFONTW aLogFont;
+        GetObjectW(mhFont, sizeof(LOGFONTW), &aLogFont);
+        if (aLogFont.lfFaceName[0] == '@')
+        {
+            memmove( &aLogFont.lfFaceName[0], &aLogFont.lfFaceName[1],
+                sizeof(aLogFont.lfFaceName)-sizeof(aLogFont.lfFaceName[0]) );
+            mhAltFont = CreateFontIndirectW(&aLogFont);
+        }
+    }
+
 }
 
 #elif defined(MACOSX) || defined(IOS)
@@ -858,4 +872,11 @@ bool CommonSalLayout::IsKashidaPosValid(int nCharPos) const
     return false;
 }
 
+CommonSalLayout::~CommonSalLayout()
+{
+#if defined(_WIN32)
+    if (mhAltFont)
+        DeleteObject(mhAltFont);
+#endif
+}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

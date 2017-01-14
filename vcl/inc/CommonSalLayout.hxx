@@ -45,6 +45,7 @@ class CommonSalLayout : public GenericSalLayout
 #ifdef _WIN32
     HDC                     mhDC;
     HFONT                   mhFont;
+    HFONT                   mhAltFont;
     WinFontInstance&        mrWinFontInstance;
     double                  mnAveWidthFactor;
 #elif defined(MACOSX) || defined(IOS)
@@ -69,6 +70,7 @@ public:
     explicit                CommonSalLayout(HDC, WinFontInstance&, const WinFontFace&);
     const FontSelectPattern& getFontSelData() const { return mrFontSelData; };
     HFONT                   getHFONT() const { return mhFont; }
+    HFONT                   getAltHFONT() const { return mhAltFont; }
     WinFontInstance&        getWinFontInstance() const { return mrWinFontInstance; }
 #elif defined(MACOSX) || defined(IOS)
     explicit                CommonSalLayout(const CoreTextStyle&);
@@ -88,6 +90,8 @@ public:
     void                    ApplyDXArray(ImplLayoutArgs&) final override;
 
     bool                    IsKashidaPosValid(int nCharPos) const final override;
+protected:
+    virtual                 ~CommonSalLayout() override;
 };
 
 enum class VerticalOrientation {
