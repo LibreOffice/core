@@ -1,11 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
 #GERRITHOST=gerrit.libreoffice.org
 GERRITHOST=logerrit
 GERRITURL=ssh://$GERRITHOST/core
 
 get_SHA_for_change() {
-    SHA=`ssh ${GERRITHOST?} gerrit query --all-approvals change:$1|grep ref|tail -1|cut -d: -f2`
+    SHA=$(ssh ${GERRITHOST?} gerrit query --all-approvals change:$1|grep ref|tail -1|cut -d: -f2)
 }
 
 submit() {
@@ -13,7 +13,7 @@ submit() {
         BRANCH=$2
         if test -z "$BRANCH"
         then
-            BRANCH=`git symbolic-ref HEAD 2> /dev/null`
+            BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
             BRANCH="${BRANCH##refs/heads/}"
             if test -z "$BRANCH"
             then
@@ -63,7 +63,12 @@ case "$1" in
         exit
     ;;
     setup)
-        cd $(dirname $(readlink -f $0))
+        script_canonical_file=$(readlink -f "$0")
+        script_canonical_dir=$(dirname "$script_canonical_file")
+        if ! cd "$script_canonical_dir"; then
+            echo "Can't cd to $script_canonical_dir"
+            exit 1
+        fi
 	ssh_home="$HOME/.ssh";
 	ssh_key=
 	created_ssh=
@@ -80,9 +85,9 @@ case "$1" in
 	fi
 	if test -d $ssh_home; then
 	    if test -f "$ssh_home/id_rsa.pub"; then
-		ssh_key=`cat $ssh_home/id_rsa.pub`;
+		ssh_key=$(cat $ssh_home/id_rsa.pub);
 	    elif test -f "$ssh_home/id_dsa.pub"; then
-		ssh_key=`cat $ssh_home/id_dsa.pub`;
+		ssh_key=$(cat $ssh_home/id_dsa.pub);
 	    fi
 	fi
         echo "Please go to https://gerrit.libreoffice.org/ and:"
@@ -119,7 +124,7 @@ case "$1" in
         ./g -z
     ;;
     test)
-        if test -n "`ssh $GERRITHOST 2>&1|grep \"Welcome to Gerrit Code Review\"`"
+        if test -n "$(ssh $GERRITHOST 2>&1|grep "Welcome to Gerrit Code Review")"
         then
             echo "Your gerrit setup was successful!"
         else
@@ -135,24 +140,24 @@ case "$1" in
         submit drafts $2
     ;;
     nextchange)
-        if test -n "`git status -s -uno`"
+        if test -n "$(git status -s -uno)"
         then
             echo "You have uncommitted changes. Please commit or stash these:"
             git status
             exit 1
         fi
-        CHANGEID=`git log --format=format:%b -1 HEAD|grep Change-Id|cut -d: -f2|tr -d \ `
+        CHANGEID=$(git log --format=format:%b -1 HEAD|grep Change-Id|cut -d: -f2|tr -d \ )
         if test -z "$CHANGEID"
         then
             CHANGEID="NOCHANGEID"
         fi
-        BACKUPBRANCH=backup/$CHANGEID-`date +%F-%H%M%S`
+        BACKUPBRANCH=backup/$CHANGEID-$(date +%F-%H%M%S)
         git branch $BACKUPBRANCH
         echo "current state backed up as $BACKUPBRANCH"
         BRANCH=$2
         if test -z "$BRANCH"
         then
-            BRANCH=`git symbolic-ref HEAD 2> /dev/null`
+            BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
             BRANCH="${BRANCH##refs/heads/}"
             if test -z "$BRANCH"
             then
@@ -189,13 +194,13 @@ case "$1" in
     ;;
     query)
         shift
-        ssh ${GERRITHOST?} gerrit query project:core $@
+        ssh ${GERRITHOST?} gerrit query project:core "$@"
     ;;
     testfeature)
         BRANCH=$2
         if test -z "$BRANCH"
         then
-            BRANCH=`git symbolic-ref HEAD 2> /dev/null`
+            BRANCH=$(git symbolic-ref HEAD 2> /dev/null)
             BRANCH="${BRANCH##refs/heads/}"
             if test -z "$BRANCH"
             then
@@ -205,14 +210,14 @@ case "$1" in
             echo "no branch specified, guessing current branch $BRANCH"
         fi
         BRANCH="${BRANCH##feature/}"
-        WORKDIR=`mktemp -d`
+        WORKDIR=$(mktemp -d)
         if test -z "$WORKDIR"
         then
             echo "could no create work directory."
             exit 1
         fi
         echo workdir at $WORKDIR
-        git clone -s `dirname $0` $WORKDIR/core
+        git clone -s "$(dirname $0)" $WORKDIR/core
         pushd $WORKDIR/core
         echo "noop commit: trigger test build for branch feature/$BRANCH" > ../commitmsg
         echo >> ../commitmsg
@@ -227,6 +232,6 @@ case "$1" in
         rm -rf $WORKDIR/core
     ;;
     *)
-        ssh ${GERRITHOST?} gerrit $@
+        ssh ${GERRITHOST?} gerrit "$@"
     ;;
 esac
