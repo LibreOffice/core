@@ -159,7 +159,7 @@ public class TestParameters extends HashMap<String,Object> {
         put(PropertyName.AUTO_RESTART, Boolean.FALSE);
 
         // get the operating system
-        put(PropertyName.OPERATING_SYSTEM, getSOCompatibleOSName());
+        put(PropertyName.UNORC_NAME, getUnoRcName());
 
         //For compatibility Reasons
         System.setProperty("DOCPTH", DefaultTestDocumentPath);
@@ -193,31 +193,14 @@ public class TestParameters extends HashMap<String,Object> {
     }
 
     /**
-     * Convert the system dependent operating system name to a name according
-     * to OOo rules.
-     * @return A valid OS name, or "" if the name is not known.
+     * @return The uno rc file name uno.ini for windows and unorc for everything else
      */
-    private String getSOCompatibleOSName() {
+    private String getUnoRcName() {
         String osname = System.getProperty ("os.name").toLowerCase ();
-        String osarch = System.getProperty ("os.arch");
-        String operatingSystem = "";
         if (osname.indexOf ("windows")>-1) {
-            operatingSystem = PropertyName.WNTMSCI;
-        } else if (osname.indexOf ("linux")>-1 || osname.indexOf ("kfreebsd")>-1) {
-            operatingSystem = PropertyName.UNXLNGI;
-        } else if (osname.indexOf ("sunos")>-1) {
-            if (osarch.equals ("x86")) {
-                operatingSystem = PropertyName.UNXSOLI;
-            } else {
-                operatingSystem = PropertyName.UNXSOLS;
-            }
-        } else if (osname.indexOf ("mac")>-1) {
-            operatingSystem = PropertyName.UNXMACXI;
-        } else {
-            System.out.println("ERROR: not supported platform: " + osname);
-            System.exit(1);
+            return "uno.ini";
         }
-        return operatingSystem;
+        return "unorc";
     }
 
 }// finish class TestParamenters
