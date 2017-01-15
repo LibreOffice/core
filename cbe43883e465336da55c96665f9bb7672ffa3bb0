@@ -22,6 +22,30 @@
       "revId": "cbe43883e465336da55c96665f9bb7672ffa3bb0",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_d28164fd",
+        "filename": "sw/uiconfig/swriter/ui/pageorientationcontrol.ui",
+        "patchSetId": 5
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000664
+      },
+      "writtenOn": "2017-01-15T01:08:56Z",
+      "side": 1,
+      "message": "This is superfluous string... probably caused by copy \u0026 paste. I will remove it.",
+      "parentUuid": "fa48f94a_12c4cc90",
+      "range": {
+        "startLine": 56,
+        "startChar": 61,
+        "endLine": 56,
+        "endChar": 67
+      },
+      "revId": "cbe43883e465336da55c96665f9bb7672ffa3bb0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
