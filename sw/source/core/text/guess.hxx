@@ -48,7 +48,7 @@ public:
     bool AlternativeSpelling( const SwTextFormatInfo &rInf, const sal_Int32 nPos );
 
     SwHangingPortion* GetHangingPortion() const { return pHanging.get(); }
-    void ClearHangingPortion() { pHanging = nullptr; }
+    SwHangingPortion* ReleaseHangingPortion() { return pHanging.release(); }
     sal_uInt16 BreakWidth() const { return nBreakWidth; }
     sal_Int32 CutPos() const { return nCutPos; }
     sal_Int32 BreakStart() const { return nBreakStart; }

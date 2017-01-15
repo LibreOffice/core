@@ -340,9 +340,8 @@ bool SwTextPortion::Format_( SwTextFormatInfo &rInf )
     {
         Width( aGuess.BreakWidth() );
         SetLen( aGuess.BreakPos() - rInf.GetIdx() );
-        Insert( aGuess.GetHangingPortion() );
         aGuess.GetHangingPortion()->SetAscent( GetAscent() );
-        aGuess.ClearHangingPortion();
+        Insert( aGuess.ReleaseHangingPortion() );
     }
     // breakPos >= index
     else if ( aGuess.BreakPos() >= rInf.GetIdx() && aGuess.BreakPos() != COMPLETE_STRING )
