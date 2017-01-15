@@ -3803,7 +3803,7 @@
      <table:table-cell table:style-name="ce19" office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce29" table:formula="of:=ROUND([.A2];12)=ROUND([.B2];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce29" table:formula="of:=ISERROR([.A2])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A2])" office:value-type="string" office:string-value="=T.TEST(F1:F11,G1:G11,1,1)" calcext:value-type="string">
@@ -4042,7 +4042,7 @@
      <table:table-cell office:value-type="float" office:value="0" calcext:value-type="float">
       <text:p>0</text:p>
      </table:table-cell>
-     <table:table-cell table:style-name="ce28" table:formula="of:=ROUND([.A6];12)=ROUND([.B6];12)" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+     <table:table-cell table:style-name="ce28" table:formula="of:=ISERROR([.A6])" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
       <text:p>TRUE</text:p>
      </table:table-cell>
      <table:table-cell table:style-name="ce32" table:formula="of:=FORMULA([.A6])" office:value-type="string" office:string-value="=T.TEST(F1:F11,G1:G11,2,1)" calcext:value-type="string">
