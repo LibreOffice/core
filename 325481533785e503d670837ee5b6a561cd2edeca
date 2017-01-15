@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_f2a3c84d",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000119
+      },
+      "writtenOn": "2017-01-15T15:26:47Z",
+      "side": 1,
+      "message": "It looks sensible to use sc::TwipsToHMM(), however it is not yet clear to me, why this case is completely different from the other ones.",
+      "revId": "325481533785e503d670837ee5b6a561cd2edeca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
