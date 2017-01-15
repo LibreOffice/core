@@ -31,6 +31,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/simpress,\
 	sd/uiconfig/simpress/popupmenu/measure \
 	sd/uiconfig/simpress/popupmenu/media \
 	sd/uiconfig/simpress/popupmenu/multiselect \
+	sd/uiconfig/simpress/popupmenu/notebookbar \
 	sd/uiconfig/simpress/popupmenu/oleobject \
 	sd/uiconfig/simpress/popupmenu/outlinetext \
 	sd/uiconfig/simpress/popupmenu/outline \

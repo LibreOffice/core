@@ -1941,7 +1941,7 @@ void SfxDispatcher::ExecutePopup( vcl::Window *pWin, const Point *pPos )
     }
 }
 
-void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window *pWin, const Point* pPos )
+void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window* pWin, const Point* pPos, PopupMenuFlags nFlags )
 {
     css::uno::Sequence< css::uno::Any > aArgs( 3 );
     aArgs[0] <<= comphelper::makePropertyValue( "Value", rResName );
@@ -1986,7 +1986,7 @@ void SfxDispatcher::ExecutePopup( const OUString& rResName, vcl::Window *pWin, c
         OUString aMenuURL = "private:resource/popupmenu/" + rResName;
         if (pVCLMenu && GetFrame()->GetViewShell()->TryContextMenuInterception(*pVCLMenu, aMenuURL, aEvent))
         {
-            pVCLMenu->Execute(pWindow, aPos);
+            pVCLMenu->Execute(pWindow, Rectangle(aPos, aPos), nFlags);
         }
     }
 
