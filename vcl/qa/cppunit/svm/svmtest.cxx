@@ -19,8 +19,6 @@ using namespace css;
 
 class SvmTest : public test::BootstrapFixture, public XmlTestTools
 {
-    OUString maDataUrl;
-
     /*OUString getFullUrl(const OUString& sFileName)
     {
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
@@ -93,8 +91,7 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
 
 public:
     SvmTest() :
-        BootstrapFixture(true, false),
-        maDataUrl("/vcl/qa/cppunit/svm/data/")
+        BootstrapFixture(true, false)
     {}
 
     CPPUNIT_TEST_SUITE(SvmTest);
