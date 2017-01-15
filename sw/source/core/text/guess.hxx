@@ -47,13 +47,13 @@ public:
                     const sal_uInt16 nHeight );
     bool AlternativeSpelling( const SwTextFormatInfo &rInf, const sal_Int32 nPos );
 
-    inline SwHangingPortion* GetHangingPortion() const { return pHanging.get(); }
-    inline void ClearHangingPortion() { pHanging = nullptr; }
-    inline sal_uInt16 BreakWidth() const { return nBreakWidth; }
-    inline sal_Int32 CutPos() const { return nCutPos; }
-    inline sal_Int32 BreakStart() const { return nBreakStart; }
-    inline sal_Int32 BreakPos() const {return nBreakPos; }
-    inline sal_Int32 FieldDiff() const {return nFieldDiff; }
+    SwHangingPortion* GetHangingPortion() const { return pHanging.get(); }
+    void ClearHangingPortion() { pHanging = nullptr; }
+    sal_uInt16 BreakWidth() const { return nBreakWidth; }
+    sal_Int32 CutPos() const { return nCutPos; }
+    sal_Int32 BreakStart() const { return nBreakStart; }
+    sal_Int32 BreakPos() const {return nBreakPos; }
+    sal_Int32 FieldDiff() const {return nFieldDiff; }
     const css::uno::Reference< css::linguistic2::XHyphenatedWord >& HyphWord() const
         { return xHyphWord; }
 };
