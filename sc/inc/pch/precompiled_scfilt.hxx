@@ -137,11 +137,13 @@
 #include <osl/interlck.h>
 #include <osl/mutex.hxx>
 #include <rtl/alloc.h>
+#include <rtl/random.h>
 #include <rtl/string.h>
 #include <rtl/ustrbuf.h>
 #include <rtl/ustring.h>
 #include <sal/mathconf.h>
 #include <sal/types.h>
+#include <sax/fshelper.hxx>
 #include <sot/exchange.hxx>
 #include <sot/factory.hxx>
 #include <sot/storage.hxx>
@@ -205,6 +207,7 @@
 #include <uno/any2.h>
 #include <uno/lbnames.h>
 #include <uno/sequence2.h>
+#include <unotools/streamwrap.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
 #include <vcl/apptypes.hxx>
