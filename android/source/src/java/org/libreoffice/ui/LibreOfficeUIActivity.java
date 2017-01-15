@@ -50,7 +50,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.libreoffice.LOAbout;
+import org.libreoffice.AboutDialogFragment;
 import org.libreoffice.LibreOfficeMainActivity;
 import org.libreoffice.R;
 import org.libreoffice.SettingsActivity;
@@ -99,12 +99,7 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
     GridView gv;
     ListView lv;
 
-    private final LOAbout mAbout;
     private boolean canQuit = false;
-
-    public LibreOfficeUIActivity() {
-        mAbout = new LOAbout(this, true);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -543,8 +538,10 @@ public class LibreOfficeUIActivity extends AppCompatActivity {
             case R.id.menu_sort_modified:
                 sortFiles(item);
                 break;
-            case R.id.action_about:
-                mAbout.showAbout();
+            case R.id.action_about: {
+                AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+                aboutDialogFragment.show(getSupportFragmentManager(), "AboutDialogFragment");
+            }
                 return true;
             case R.id.action_settings:
                 startActivity(new Intent(getApplicationContext(), SettingsActivity.class));

@@ -67,7 +67,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     public Handler mMainHandler;
 
     private DrawerLayout mDrawerLayout;
-    private LOAbout mAbout;
 
     private ListView mDrawerList;
     private List<DocumentPartView> mDocumentPartView = new ArrayList<DocumentPartView>();
@@ -81,10 +80,6 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private ToolbarController mToolbarController;
     private FontController mFontController;
     private SearchController mSearchController;
-
-    public LibreOfficeMainActivity() {
-        mAbout = new LOAbout(this, false);
-    }
 
     public static GeckoLayerClient getLayerClient() {
         return mLayerClient;
@@ -613,7 +608,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     }
 
     public void showAbout() {
-        mAbout.showAbout();
+        AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
+        aboutDialogFragment.show(getSupportFragmentManager(), "AboutDialogFragment");
     }
 
     public void showSettings() {
