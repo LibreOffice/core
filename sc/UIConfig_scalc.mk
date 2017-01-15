@@ -35,6 +35,7 @@ $(eval $(call gb_UIConfig_add_popupmenufiles,modules/scalc,\
 	sc/uiconfig/scalc/popupmenu/freezepanes \
 	sc/uiconfig/scalc/popupmenu/graphic \
 	sc/uiconfig/scalc/popupmenu/media \
+	sc/uiconfig/scalc/popupmenu/notebookbar \
 	sc/uiconfig/scalc/popupmenu/oleobject \
 	sc/uiconfig/scalc/popupmenu/pagebreak \
 	sc/uiconfig/scalc/popupmenu/pivot \

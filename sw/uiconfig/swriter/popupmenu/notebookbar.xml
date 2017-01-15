@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * This file is part of the LibreOffice project.
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ *
+-->
+<menu:menupopup xmlns:menu="http://openoffice.org/2001/menu">
+  <menu:menuitem menu:id=".uno:OpenFromWriter"/>
+  <menu:menuitem menu:id=".uno:Save"/>
+  <menu:menuitem menu:id=".uno:Undo"/>
+  <menu:menuitem menu:id=".uno:Redo"/>
+  <menu:menuitem menu:id=".uno:Print"/>
+  <menu:menuitem menu:id=".uno:Menubar"/>
+  <menu:menuitem menu:id=".uno:OptionsTreeDialog"/>
+  <menu:menuitem menu:id=".uno:CloseDoc"/>
+</menu:menupopup>

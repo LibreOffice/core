@@ -7408,6 +7408,7 @@ SfxVoidItem OpenFromWriter FN_OPEN_FILE
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Asynchron;
 
     SlotType = SfxStringItem
 

@@ -13,14 +13,13 @@
 #include <unotools/viewoptions.hxx>
 #include <vcl/notebookbar.hxx>
 #include <vcl/syswin.hxx>
-#include <vcl/menu.hxx>
+#include <vcl/tabctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
-#include "NotebookBarPopupMenu.hxx"
 #include <officecfg/Office/UI/Notebookbar.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
@@ -336,15 +335,13 @@ void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
 
 IMPL_STATIC_LINK(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, pNotebookbar, void)
 {
-    if (pNotebookbar)
+    SfxViewFrame* pViewFrame = SfxViewFrame::Current();
+    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : nullptr;
+    if (pNotebookbar && pDispatcher)
     {
-        ScopedVclPtrInstance<NotebookBarPopupMenu> pMenu;
-        if (SfxViewFrame::Current())
-        {
-            const Reference<frame::XFrame>& xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-            if (xFrame.is())
-                pMenu->Execute(pNotebookbar, xFrame);
-        }
+        Point aPos(0, NotebookbarTabControl::GetHeaderHeight());
+        pDispatcher->ExecutePopup("notebookbar", pNotebookbar, &aPos,
+                                  PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
     }
 }
 
