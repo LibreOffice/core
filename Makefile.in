@@ -387,6 +387,7 @@ symbols:
 	mkdir -p $(WORKDIR)/symbols/
 ifeq ($(OS),WNT)
 	$(SRCDIR)/bin/symbolstore.py $(WORKDIR)/UnpackedTarball/breakpad/src/tools/windows/binaries/dump_syms.exe $(WORKDIR)/symbols/ $(INSTDIR)/program/*
+	$(SRCDIR)/bin/symstore.sh
 else
 	$(SRCDIR)/bin/symbolstore.py $(WORKDIR)/UnpackedTarball/breakpad/src/tools/linux/dump_syms/dump_syms $(WORKDIR)/symbols/ $(INSTDIR)/program/*
 endif
