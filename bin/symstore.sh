@@ -5,22 +5,22 @@ add_pdb()
     extension=$1
     type=$2
     list=$3
-    for file in `find ${INSTDIR}/ -name *.${extension}`; do
-        filename=`basename $file .${extension}`
-        pdb=`echo ${WORKDIR}/LinkTarget/${type}/${filename}.pdb`
+    for file in $(find "${INSTDIR}/" -name "*.${extension}"); do
+        filename=$(basename "$file" ".${extension}")
+        pdb="${WORKDIR}/LinkTarget/${type}/${filename}.pdb"
         if [ -f "$pdb" ]; then
-            echo `cygpath -w $pdb` >>$list
+            cygpath -w "$pdb" >> "$list"
         fi
     done
 
 }
 
 # check preconditions
-if [ -z ${INSTDIR} -o -z ${WORKDIR} ]; then
+if [ -z "${INSTDIR}" ] || [ -z "${WORKDIR}" ]; then
     echo "INSTDIR or WORKDIR not set - script expects calling inside buildenv"
     exit 1
 fi
-if [ ! -d ${INSTDIR} -o ! -d ${WORKDIR} ]; then
+if [ ! -d "${INSTDIR}" ] || [ ! -d "${WORKDIR}" ]; then
     echo "INSTDIR or WORKDIR not present - script expects calling after full build"
     exit 1
 fi
@@ -47,35 +47,35 @@ do
    case "$1" in
     -k|--keep) MAX_KEEP="$2"; shift 2;;
     -p|--path) SYM_PATH="$2"; shift 2;;
-    -h|--help) printf "$USAGE"; exit 0; shift;;
-    -*) echo "$USAGE" >&2; exit 1;;
+    -h|--help) echo "${USAGE}"; exit 0; shift;;
+    -*) echo "${USAGE}" >&2; exit 1;;
     *) break;;
    esac
 done
 
 if [ $# -gt 0 ]; then
-    echo $usage >&2
+    echo "${USAGE}" >&2
     exit 1
 fi
 
 # populate symbol store from here
-TMPFILE=`mktemp` || exit 1
-trap "{ rm -f $TMPFILE; }" EXIT
+TMPFILE=$(mktemp) || exit 1
+trap '{ rm -f ${TMPFILE}; }' EXIT
 
 # add dlls and executables
-add_pdb dll Library $TMPFILE
-add_pdb exe Executable $TMPFILE
+add_pdb dll Library "${TMPFILE}"
+add_pdb exe Executable "${TMPFILE}"
 
 # stick all of it into symbol store
-symstore.exe add /compress /f @${TMPFILE} /s $SYM_PATH /t "${PRODUCTNAME}" /v "${LIBO_VERSION_MAJOR}.${LIBO_VERSION_MINOR}.${LIBO_VERSION_MICRO}.${LIBO_VERSION_PATCH}${LIBO_VERSION_SUFFIX}${LIBO_VERSION_SUFFIX_SUFFIX}"
-rm -f $TMPFILE
+symstore.exe add /compress /f "@$(cygpath -w "${TMPFILE}")" /s "$(cygpath -w "${SYM_PATH}")" /t "${PRODUCTNAME}" /v "${LIBO_VERSION_MAJOR}.${LIBO_VERSION_MINOR}.${LIBO_VERSION_MICRO}.${LIBO_VERSION_PATCH}${LIBO_VERSION_SUFFIX}${LIBO_VERSION_SUFFIX_SUFFIX}"
+rm -f "${TMPFILE}"
 
 # Cleanup symstore, older revisions will be removed.  Unless the
 # .dll/.exe changes, the .pdb should be shared, so with incremental
 # tinderbox several revisions should not be that space-demanding.
-if [ $MAX_KEEP -gt 0 -a -d ${SYM_PATH}/000Admin ]; then
-    to_remove=`ls -1 ${SYM_PATH}/000Admin | grep -v '\.txt' | grep -v '\.deleted' | sort | head -n -${MAX_KEEP}`
+if [ "${MAX_KEEP}" -gt 0 ] && [ -d "${SYM_PATH}/000Admin" ]; then
+    to_remove=$(ls -1 "${SYM_PATH}/000Admin" | grep -v '\.txt' | grep -v '\.deleted' | sort | head -n "-${MAX_KEEP}")
     for revision in $to_remove; do
-        symstore.exe del /i ${revision} /s `cygpath -w $SYM_PATH`
+        symstore.exe del /i "${revision}" /s "$(cygpath -w "${SYM_PATH}")"
     done
 fi
