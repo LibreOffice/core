@@ -2685,8 +2685,14 @@ void ScInterpreter::ScTTest()
             PushNoValue();
             return;
         }
-        fT = sqrt(fCount-1.0) * fabs(fSum1 - fSum2) /
-             sqrt(fCount * fSumSqrD - (fSum1-fSum2)*(fSum1-fSum2));
+        double fSumD = fSum1 - fSum2;
+        double fDivider = (fCount*fSumSqrD - fSumD*fSumD);
+        if ( fDivider == 0.0 )
+        {
+            PushError(FormulaError::DivisionByZero);
+            return;
+        }
+        fT = fabs(fSumD) * sqrt((fCount-1.0) / fDivider);
         fF = fCount - 1.0;
     }
     else if (fTyp == 2.0)
