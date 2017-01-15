@@ -34,6 +34,7 @@
 #include <osl/diagnose.h>
 
 #include <algorithm>
+#include <iterator>
 #include <vector>
 
 #include "blowfishcontext.hxx"
