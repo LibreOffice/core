@@ -6468,6 +6468,7 @@ SfxVoidItem OpenFromCalc SID_OPEN_CALC
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
+    Asynchron;
 
     SlotType = SfxStringItem
 

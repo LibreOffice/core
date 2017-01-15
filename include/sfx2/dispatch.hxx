@@ -25,6 +25,7 @@
 
 #include <sfx2/bindings.hxx>
 #include <sfx2/viewfrm.hxx>
+#include <vcl/menu.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 #include <initializer_list>
@@ -147,7 +148,8 @@ public:
     SfxViewFrame*       GetFrame() const;
     SfxModule*          GetModule() const;
 
-    void                ExecutePopup( const OUString &rResName, vcl::Window *pWin = nullptr, const Point *pPos = nullptr );
+    void                ExecutePopup( const OUString &rResName, vcl::Window *pWin = nullptr, const Point *pPos = nullptr,
+                                      PopupMenuFlags nFlags = PopupMenuFlags::ExecuteDown );
     static void         ExecutePopup( vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr );
 
     bool                IsAppDispatcher() const;

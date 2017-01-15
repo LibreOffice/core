@@ -60,6 +60,11 @@
           <value xml:lang="en-US">Media</value>
         </prop>
       </node>
+      <node oor:name="private:resource/popupmenu/notebookbar" oor:op="replace">
+        <prop oor:name="UIName" oor:type="xs:string">
+          <value xml:lang="en-US">Notebookbar</value>
+        </prop>
+      </node>
       <node oor:name="private:resource/popupmenu/oleobject" oor:op="replace">
         <prop oor:name="UIName" oor:type="xs:string">
           <value xml:lang="en-US">OLE Object</value>
