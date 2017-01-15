@@ -307,7 +307,6 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
 AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::svt::IAccessibleTableProvider& _rBrowseBox )
         :m_xParent( _rxParent )
         ,m_rBrowseBox( _rBrowseBox )
-        ,m_pContext( nullptr )
 {
 }
 
@@ -321,7 +320,6 @@ void AccessibleBrowseBoxAccess::dispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    m_pContext = nullptr;
     ::comphelper::disposeComponent( m_xContext );
 }
 
@@ -330,16 +328,13 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OSL_ENSURE( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
-        "extended/AccessibleBrowseBoxAccess::getAccessibleContext: inconsistency!" );
-
     // if the context died meanwhile (there is no listener, so it won't tell us explicitly when this happens),
     // then reset and re-create.
-    if ( m_pContext && !m_pContext->isAlive() )
-        m_xContext = m_pContext = nullptr;
+    if ( m_xContext.is() && !m_xContext->isAlive() )
+        m_xContext = nullptr;
 
     if ( !m_xContext.is() )
-        m_xContext = m_pContext = new AccessibleBrowseBox( m_xParent, this, m_rBrowseBox );
+        m_xContext = new AccessibleBrowseBox( m_xParent, this, m_rBrowseBox );
 
     return m_xContext;
 }
