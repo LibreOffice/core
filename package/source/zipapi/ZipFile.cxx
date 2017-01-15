@@ -35,6 +35,7 @@
 #include <o3tl/make_unique.hxx>
 
 #include <algorithm>
+#include <iterator>
 #include <vector>
 
 #include "blowfishcontext.hxx"
