@@ -99,6 +99,9 @@ my_components = \
     component/remotebridges/source/unourl_resolver/uuresolver \
     component/sax/source/expatwrap/expwrap \
     component/sax/source/fastparser/fastsax \
+    component/sc/util/sc \
+    component/sc/util/scd \
+    component/sc/util/vbaobj \
     component/sd/util/sd \
     component/sd/util/sdd \
     component/sfx2/util/sfx \
@@ -173,8 +176,6 @@ my_components = \
     pythonscript \
     res \
     sb \
-    sc \
-    scd \
     scn \
     scriptframe \
     sdbc2 \
@@ -188,7 +189,6 @@ my_components = \
     updatefeed \
     updchk \
     vbaevents \
-    vbaobj \
     xmlfa \
     xmlfd \
     xmx \

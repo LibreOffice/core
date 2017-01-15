@@ -21,39 +21,24 @@
 
 
 
-PRJ=..$/..$/..
+PRJ=..
+TARGET=prj
 
-PRJNAME=sc
-TARGET=html
+.INCLUDE : settings.mk
 
-AUTOSEG=true
+.IF "$(VERBOSE)"!=""
+VERBOSEFLAG :=
+.ELSE
+VERBOSEFLAG := -s
+.ENDIF
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=filt_pch
-PROJECTPCHSOURCE=..\pch\filt_pch
-ENABLE_EXCEPTIONS=TRUE
+.IF "$(DEBUG)"!=""
+DEBUG_ARGUMENT=DEBUG=$(DEBUG)
+.ELIF "$(debug)"!=""
+DEBUG_ARGUMENT=debug=$(debug)
+.ELSE
+DEBUG_ARGUMENT=
+.ENDIF
 
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-.INCLUDE :  scpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  sc.mk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =						\
-        $(SLO)$/htmlexp.obj		\
-        $(SLO)$/htmlexp2.obj	\
-        $(SLO)$/htmlimp.obj		\
-        $(SLO)$/htmlpars.obj
-
-EXCEPTIONSFILES =				\
-        $(SLO)$/htmlexp.obj		\
-        $(SLO)$/htmlpars.obj
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+all:
+    cd $(PRJ) && $(GNUMAKE) $(VERBOSEFLAG) -r -j$(MAXPROCESS) $(gb_MAKETARGET) $(DEBUG_ARGUMENT) && $(GNUMAKE) $(VERBOSEFLAG) -r deliverlog

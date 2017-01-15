@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
+#include "precompiled_scui.hxx"
 
 #if ! ENABLE_LAYOUT_EXPERIMENTAL
 #undef ENABLE_LAYOUT

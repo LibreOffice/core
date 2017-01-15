@@ -172,6 +172,10 @@ gb_Library_DLLFILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_DLLFILENAMES))
 
 endif # ifneq ($(USE_MINGW),)
 
+else  # ifeq ($(OS),WNT)
+
+gb_Library_FILENAMES := $(patsubst vbaobj:vbaobj.uno%,vbaobj:libvbaobj.uno%,$(gb_Library_FILENAMES))
+
 endif # ifeq ($(OS),WNT)
 
 ifeq ($(OS),OS2)

@@ -21,7 +21,7 @@
 
 
 
-#include "precompiled_sc.hxx"
+#include "precompiled_scfilt.hxx"
 #include "xiformula.hxx"
 #include "rangelst.hxx"
 #include "xistream.hxx"

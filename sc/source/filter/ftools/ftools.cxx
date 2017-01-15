@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
+#include "precompiled_scfilt.hxx"
 #include "ftools.hxx"
 #include <tools/color.hxx>
 #include <unotools/charclass.hxx>
@@ -398,7 +398,7 @@ ScFormatFilterPluginImpl::ScFormatFilterPluginImpl()
 {
 }
 
-ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
+SAL_DLLPUBLIC_EXPORT ScFormatFilterPlugin * SAL_CALL ScFilterCreate(void)
 {
     return new ScFormatFilterPluginImpl();
 }

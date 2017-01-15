@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
+#include "precompiled_scd.hxx"
 
 #include "scdetect.hxx"
 #include <com/sun/star/lang/XServiceInfo.hpp>

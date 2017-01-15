@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
+#include "precompiled_scfilt.hxx"
 //  Das geht:   Versionserkennung WKS, WK1 und WK3
 //              ...Rest steht in op.cpp
 

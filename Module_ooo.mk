@@ -62,6 +62,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     reportdesign \
     remotebridges \
     sax \
+    sc \
     sccomp \
     sd \
     sfx2 \

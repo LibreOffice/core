@@ -21,48 +21,22 @@
 
 
 
-PRJ=..
+$(eval $(call gb_JunitTest_JunitTest,sc_complex,SRCDIR))
 
-PRJNAME=sc
-TARGET=tests
+$(eval $(call gb_JunitTest_add_jars,sc_complex,\
+	$(OUTDIR)/bin/OOoRunner.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/test.jar \
+	$(OUTDIR)/bin/unoil.jar \
+	$(OUTDIR)/bin/jurt.jar \
+))
 
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_JunitTest_add_sourcefiles,sc_complex,\
+	sc/qa/complex/sc/CalcCRTL \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_JunitTest_add_classes,sc_complex,\
+	complex.sc.CalcRTL \
+))
 
-.INCLUDE :  settings.mk
-
-.IF "$(ENABLE_UNIT_TESTS)" != "YES"
-
-all:
-    @echo "unit tests are disabled. Nothing do do."
-
-.ELSE
-
-
-# --- Common ----------------------------------------------------------
-
-APP1OBJS=  \
-    $(SLO)$/main.obj           \
-    $(SLO)$/stringutiltests.obj	
-
-APP1TARGET= sc_tests
-APP1STDLIBS= \
-                $(ISCLIB) \
-                $(SALLIB) \
-                $(GTESTLIB)
-
-APP1RPATH = NONE
-APP1TEST = enabled
-
-# END ------------------------------------------------------------------
-
-# --- Targets ------------------------------------------------------
-
-.ENDIF # "$(ENABLE_UNIT_TESTS)" != "YES"
-
-.INCLUDE : target.mk
-
-.IF "$(verbose)"!="" || "$(VERBOSE)"!=""
-CDEFS+= -DVERBOSE
-.ENDIF
+# vim: set noet sw=4 ts=4:

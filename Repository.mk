@@ -105,6 +105,10 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     rptxml \
     sax \
     sb \
+    sc \
+    scd \
+    scfilt \
+    scui \
     sdbc \
     sdbt \
     sfx \
@@ -218,6 +222,7 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     ucpgvfs1 \
     ucptdoc1 \
     uuresolver \
+    vbaobj \
     writerfilter_debug \
 ))
 

@@ -33,7 +33,7 @@
 #include <sax/fshelper.hxx>
 #include <unotools/streamwrap.hxx>
 
-#include "precompiled_sc.hxx"
+#include "precompiled_scfilt.hxx"
 #include "docuno.hxx"
 #include "xestream.hxx"
 #include "xladdress.hxx"

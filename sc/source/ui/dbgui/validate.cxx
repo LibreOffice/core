@@ -22,7 +22,7 @@
 
 
 // MARKER(update_precomp.py): autogen include statement, do not remove
-#include "precompiled_sc.hxx"
+#include "precompiled_scui.hxx"
 
 #ifdef SC_DLLIMPLEMENTATION
 #undef SC_DLLIMPLEMENTATION

@@ -49,7 +49,6 @@
 #include "scmatrix.hxx"
 #include "globstr.hrc"
 #include "cellkeytranslator.hxx"
-#include "osversiondef.hxx"
 
 #include <string.h>
 #include <math.h>

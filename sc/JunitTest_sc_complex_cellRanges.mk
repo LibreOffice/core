@@ -21,40 +21,21 @@
 
 
 
-PRJ=..$/..$/..$/..$/
+$(eval $(call gb_JunitTest_JunitTest,sc_complex_cellRanges,SRCDIR))
 
-PRJNAME=sc
-TARGET=testvba
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_JunitTest_add_jars,sc_complex_cellRanges,\
+	$(OUTDIR)/bin/OOoRunner.jar \
+	$(OUTDIR)/bin/ridl.jar \
+	$(OUTDIR)/bin/test.jar \
+	$(OUTDIR)/bin/unoil.jar \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_JunitTest_add_sourcefiles,sc_complex_cellRanges,\
+	sc/qa/complex/cellRanges/CheckXCellRangesQuery \
+))
 
-.INCLUDE :  settings.mk
-DLLPRE =
+$(eval $(call gb_JunitTest_add_classes,sc_complex_cellRanges,\
+	complex.cellRanges.CheckXCellRangesQuery \
+))
 
-INCPRE=$(INCCOM)$/$(TARGET)
-CDEFS+=-DVBA_OOBUILD_HACK
-# ------------------------------------------------------------------
-
-SLOFILES= \
-        $(SLO)$/testvba.obj \
- 
-
-# --- Targets ------------------------------------------------------
-
-APP1TARGET=testclient
-APP1OBJS= $(SLOFILES)
-
-APP1STDLIBS=\
-        $(SALLIB) \
-        $(STDLIBCPP) \
-        $(CPPULIB) \
-        $(CPPUHELPERLIB) \
-        $(COMPHELPERLIB) \
-        $(TOOLSLIB) \
-        $(UNOTOOLSLIB) \
-
-#APP1OBJS= $(OBJ)$/testclient.obj
-.INCLUDE :	target.mk
-
-
+# vim: set noet sw=4 ts=4:

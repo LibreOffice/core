@@ -212,12 +212,14 @@ $(call gb_ResTarget_get_target,%) : $(gb_Helper_MISCDUMMY) | $(gb_ResTarget_RSCT
 		echo "-r -p \
 			-lg$(LANGUAGE) \
 			-fs=$@ \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/$(LIBRARY)) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst/$(LANGUAGE)) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/imglst) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res/$(LANGUAGE)) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)/res) \
-			-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION)) \
+			$(foreach IMAGELOCATION,$(RESLOCATION) $(IMAGELOCATIONS),\
+				-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(IMAGELOCATION)/$(LIBRARY)) \
+				-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(IMAGELOCATION)/imglst/$(LANGUAGE)) \
+				-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(IMAGELOCATION)/imglst) \
+				-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(IMAGELOCATION)/res/$(LANGUAGE)) \
+				-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(IMAGELOCATION)/res) \
+				-lip=$(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(IMAGELOCATION)) \
+			) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res/$(LANGUAGE) \
 			-lip=$(gb_ResTarget_DEFIMAGESLOCATION)res \
 			-subMODULE=$(dir $(realpath $(gb_ResTarget_DEFIMAGESLOCATION)$(RESLOCATION))) \
@@ -236,6 +238,7 @@ define gb_ResTarget_ResTarget
 $(call gb_ResTarget_get_target,$(1)) : LIBRARY = $(2)
 $(call gb_ResTarget_get_target,$(1)) : LANGUAGE = $(3)
 $(call gb_ResTarget_get_target,$(1)) : RESLOCATION = $(2)
+$(call gb_ResTarget_get_target,$(1)) : IMAGELOCATIONS =
 $(call gb_AllLangResTarget_get_target,$(2)) : $(call gb_ResTarget_get_outdir_target,$(1))
 $(call gb_AllLangResTarget_get_clean_target,$(2)) : $(call gb_ResTarget_get_clean_target,$(1))
 $(call gb_ResTarget_get_imagelist_target,$(1)) : $(call gb_ResTarget_get_target,$(1))
@@ -272,6 +275,11 @@ endef
 
 define gb_ResTarget_set_reslocation
 $(call gb_ResTarget_get_target,$(1)) : RESLOCATION = $(2)
+
+endef
+
+define gb_ResTarget_set_imagelocations
+$(call gb_ResTarget_get_target,$(1)) : IMAGELOCATIONS = $(2)
 
 endef
 
@@ -314,7 +322,11 @@ endef
 define gb_AllLangResTarget_set_reslocation
 $(foreach lang,$(gb_AllLangResTarget_LANGS),\
 	$(call gb_ResTarget_set_reslocation,$(1)$(lang),$(2)))
+endef
 
+define gb_AllLangResTarget_set_imagelocations
+$(foreach lang,$(gb_AllLangResTarget_LANGS),\
+	$(call gb_ResTarget_set_imagelocations,$(1)$(lang),$(2)))
 endef
 
 # vim: set noet sw=4 ts=4:

@@ -19,39 +19,14 @@
 #  
 #**************************************************************
 
+ifeq ($(strip $(SOLARENV)),)
+$(error No environment set!)
+endif
 
+gb_PARTIALBUILD := T
+GBUILDDIR := $(SOLARENV)/gbuild
+include $(GBUILDDIR)/gbuild.mk
 
-PRJ=..$/..$/..
+$(eval $(call gb_Module_make_global_targets,$(shell ls $(dir $(realpath $(firstword $(MAKEFILE_LIST))))/Module*.mk)))
 
-PRJNAME=sc
-TARGET=ftools
-
-AUTOSEG=true
-
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=filt_pch
-PROJECTPCHSOURCE=..\pch\filt_pch
-ENABLE_EXCEPTIONS=TRUE
-
-# --- Settings -----------------------------------------------------
-
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
-
-.INCLUDE :  scpre.mk
-.INCLUDE :  settings.mk
-.INCLUDE :  sc.mk
-
-# --- Files --------------------------------------------------------
-
-SLOFILES =	\
-        $(SLO)$/fapihelper.obj				\
-        $(SLO)$/fprogressbar.obj			\
-        $(SLO)$/ftools.obj
-
-EXCEPTIONSFILES = \
-        $(SLO)$/fapihelper.obj
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :  target.mk
-
+# vim: set noet sw=4 ts=4:

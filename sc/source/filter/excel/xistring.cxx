@@ -21,7 +21,7 @@
 
 
 
-#include "precompiled_sc.hxx"
+#include "precompiled_scfilt.hxx"
 #include "xistring.hxx"
 #include "xlstyle.hxx"
 #include "xistream.hxx"

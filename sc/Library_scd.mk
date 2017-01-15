@@ -21,39 +21,48 @@
 
 
 
-PRJ=..$/..$/..
+$(eval $(call gb_Library_Library,scd))
 
-PRJNAME=sc
-TARGET=xcl97
+$(eval $(call gb_Library_add_precompiled_header,scd,$(SRCDIR)/sc/inc/pch/precompiled_scd))
 
-AUTOSEG=true
+$(eval $(call gb_Library_set_componentfile,scd,sc/util/scd))
 
-PROJECTPCH4DLL=TRUE
-PROJECTPCH=filt_pch
-PROJECTPCHSOURCE=..\pch\filt_pch
-ENABLE_EXCEPTIONS=TRUE
+$(eval $(call gb_Library_set_include,scd,\
+        $$(INCLUDE) \
+	-I$(SRCDIR)/sc/inc \
+	-I$(SRCDIR)/sc/inc/pch \
+	-I$(SRCDIR)/sc/source/ui/inc \
+	-I$(SRCDIR)/sc/source/core/inc \
+	-I$(SRCDIR)/sc/source/filter/inc \
+))
 
-# --- Settings -----------------------------------------------------
+$(eval $(call gb_Library_add_defs,scd,\
+	-DSC_DLLIMPLEMENTATION \
+))
 
-.INCLUDE :  $(PRJ)$/util$/makefile.pmk
+$(eval $(call gb_Library_add_api,scd,\
+	offapi \
+	udkapi \
+))
 
-.INCLUDE :	scpre.mk
-.INCLUDE :	settings.mk
-.INCLUDE :	sc.mk
+$(eval $(call gb_Library_add_linked_libs,scd,\
+	cppu \
+	cppuhelper \
+	sal \
+	sfx \
+	sot \
+	stl \
+	svl \
+	svt \
+	tl \
+	ucbhelper \
+	vcl \
+	$(gb_STDLIBS) \
+))
 
-# --- Files --------------------------------------------------------
+$(eval $(call gb_Library_add_exception_objects,scd,\
+	sc/source/ui/unoobj/scdetect \
+	sc/source/ui/unoobj/detreg \
+))
 
-SLOFILES =									\
-        $(SLO)$/xcl97esc.obj				\
-        $(SLO)$/xcl97rec.obj				\
-        $(SLO)$/XclImpChangeTrack.obj		\
-        $(SLO)$/XclExpChangeTrack.obj
-
-EXCEPTIONSFILES =							\
-        $(SLO)$/xcl97esc.obj				\
-        $(SLO)$/xcl97rec.obj
-
-# --- Targets -------------------------------------------------------
-
-.INCLUDE :	target.mk
-
+# vim: set noet sw=4 ts=4:
