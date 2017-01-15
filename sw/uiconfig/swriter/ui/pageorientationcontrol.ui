@@ -53,7 +53,6 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
-            <property name="tooltip_text" translatable="yes">Single</property>
             <property name="image">image_landscape</property>
             <property name="relief">none</property>
             <property name="xalign">0</property>
