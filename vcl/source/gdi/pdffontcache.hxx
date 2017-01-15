@@ -45,8 +45,9 @@ namespace vcl
                 std::type_info *pType = rRight.m_typeFontFace;
 
                 return m_nFontId < rRight.m_nFontId ||
-                       m_typeFontFace->before( *pType ) ||
-                       m_bVertical < rRight.m_bVertical;
+                       ( m_nFontId == rRight.m_nFontId &&
+                       ( m_typeFontFace->before( *pType ) ||
+                       ( *m_typeFontFace == *pType && m_bVertical < rRight.m_bVertical ) ) );
             }
         };
         struct FontData
