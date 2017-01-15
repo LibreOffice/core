@@ -68,7 +68,7 @@ protected:
     SAL_DLLPRIVATE Rectangle    ImplGetTabRect( sal_uInt16 nPos, long nWidth = -1, long nHeight = -1 );
     SAL_DLLPRIVATE void         ImplChangeTabPage( sal_uInt16 nId, sal_uInt16 nOldId );
     SAL_DLLPRIVATE bool         ImplPosCurTabPage();
-    SAL_DLLPRIVATE void         ImplActivateTabPage( bool bNext );
+    virtual void                ImplActivateTabPage( bool bNext );
     SAL_DLLPRIVATE void         ImplShowFocus();
     SAL_DLLPRIVATE void         ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* pItem,
                                              const Rectangle& rCurRect, bool bFirstInGroup,
@@ -208,6 +208,7 @@ public:
 protected:
     virtual bool ImplPlaceTabs( long nWidth ) override;
     virtual void ImplPaint(vcl::RenderContext& rRenderContext, const Rectangle& rRect) override;
+    virtual void ImplActivateTabPage( bool bNext ) override;
 
 private:
     bool bLastContextWasSupported;

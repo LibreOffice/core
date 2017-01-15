@@ -2288,6 +2288,39 @@ void NotebookbarTabControl::SetCurPageId( sal_uInt16 nPageId )
         TabControl::SetCurPageId( nPageId );
 }
 
+void NotebookbarTabControl::ImplActivateTabPage( bool bNext )
+{
+    sal_uInt16 nCurPos = GetPagePos( GetCurPageId() );
+
+    if ( bNext && nCurPos + 1 < GetPageCount() )
+    {
+        sal_uInt16 nOldPos = nCurPos;
+        nCurPos++;
+
+        ImplTabItem* pItem = &mpTabCtrlData->maItemList[nCurPos];
+        while ( !pItem->mbEnabled && nCurPos + 1 < GetPageCount())
+        {
+            nCurPos++;
+            pItem = &mpTabCtrlData->maItemList[nCurPos];
+        }
+
+        if ( !pItem->mbEnabled )
+            nCurPos = nOldPos;
+    }
+    else if ( !bNext && nCurPos )
+    {
+        nCurPos--;
+        ImplTabItem* pItem = &mpTabCtrlData->maItemList[nCurPos];
+        while ( nCurPos && !pItem->mbEnabled )
+        {
+            nCurPos--;
+            pItem = &mpTabCtrlData->maItemList[nCurPos];
+        }
+    }
+
+    SelectTabPage( TabControl::GetPageId( nCurPos ) );
+}
+
 sal_uInt16 NotebookbarTabControl::GetHeaderHeight()
 {
     return m_nHeaderHeight;
