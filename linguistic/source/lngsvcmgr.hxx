@@ -30,6 +30,7 @@
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <unotools/configitem.hxx>
+#include <rtl/ref.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/idle.hxx>
 #include <vector>
@@ -65,19 +66,7 @@ class LngSvcMgr :
 {
     friend class LngSvcMgrListenerHelper;
 
-    ::comphelper::OInterfaceContainerHelper2                   aEvtListeners;
-
-    css::uno::Reference<
-        css::linguistic2::XSpellChecker >              xSpellDsp;
-    css::uno::Reference<
-        css::linguistic2::XProofreadingIterator >      xGrammarDsp;
-    css::uno::Reference<
-        css::linguistic2::XHyphenator >                xHyphDsp;
-    css::uno::Reference<
-        css::linguistic2::XThesaurus >                 xThesDsp;
-
-    css::uno::Reference<
-        css::lang::XEventListener >                    xListenerHelper;
+    ::comphelper::OInterfaceContainerHelper2            aEvtListeners;
 
     css::uno::Reference<
         css::util::XModifyBroadcaster>                  xMB;
@@ -94,12 +83,12 @@ class LngSvcMgr :
     css::uno::Sequence<
         css::lang::Locale >                             aAvailThesLocales;
 
-    SpellCheckerDispatcher *                            pSpellDsp;
-    GrammarCheckingIterator *                           pGrammarDsp;
-    HyphenatorDispatcher *                              pHyphDsp;
-    ThesaurusDispatcher *                               pThesDsp;
+    rtl::Reference<SpellCheckerDispatcher>              mxSpellDsp;
+    rtl::Reference<GrammarCheckingIterator>             mxGrammarDsp;
+    rtl::Reference<HyphenatorDispatcher>                mxHyphDsp;
+    rtl::Reference<ThesaurusDispatcher>                 mxThesDsp;
 
-    LngSvcMgrListenerHelper *                           pListenerHelper;
+    rtl::Reference<LngSvcMgrListenerHelper>             mxListenerHelper;
 
     typedef std::vector< std::unique_ptr<SvcInfo> >    SvcInfoArray;
     SvcInfoArray *                                      pAvailSpellSvcs;
