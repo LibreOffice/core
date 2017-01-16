@@ -129,7 +129,8 @@ namespace connectivity
             ONDXPagePtr     aParent,            // Parent page
                             aChild;             // Pointer to the right child page
             ODbaseIndex&    rIndex;
-            ONDXNode*       ppNodes;             // Array of nodes
+            std::unique_ptr<ONDXNode[]>
+                            ppNodes;             // Array of nodes
 
         public:
             // Node operations

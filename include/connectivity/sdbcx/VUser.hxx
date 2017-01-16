@@ -52,7 +52,7 @@ namespace connectivity
                         public ODescriptor
         {
         protected:
-            OGroups*        m_pGroups;
+            std::unique_ptr<OGroups>  m_pGroups;
 
             using OUser_BASE::rBHelper;
 

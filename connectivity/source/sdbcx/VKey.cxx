@@ -92,7 +92,6 @@ OKey::OKey(const OUString& Name,const std::shared_ptr<KeyProperties>& _rProps, b
 
 OKey::~OKey( )
 {
-    delete m_pColumns;
 }
 
 Any SAL_CALL OKey::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
@@ -171,7 +170,7 @@ Reference< css::container::XNameAccess > SAL_CALL OKey::getColumns(  ) throw(Run
         // allowed
     }
 
-    return m_pColumns;
+    return m_pColumns.get();
 }
 
 Reference< XPropertySet > SAL_CALL OKey::createDataDescriptor(  ) throw(RuntimeException, std::exception)

@@ -39,14 +39,13 @@ namespace connectivity
 ODatabaseMetaData::ODatabaseMetaData(OConnection* _pCon)
                         : ::connectivity::ODatabaseMetaDataBase(_pCon,_pCon->getConnectionInfo())
                         ,m_pConnection(_pCon)
+                        ,m_pMetaDataHelper(new MDatabaseMetaDataHelper)
 {
     OSL_ENSURE(m_pConnection,"ODatabaseMetaData::ODatabaseMetaData: No connection set!");
-    m_pMetaDataHelper = new MDatabaseMetaDataHelper();
 }
 
 ODatabaseMetaData::~ODatabaseMetaData()
 {
-    delete m_pMetaDataHelper;
 }
 
 
