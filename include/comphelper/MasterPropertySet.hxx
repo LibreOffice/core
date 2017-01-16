@@ -25,6 +25,7 @@
 #include <comphelper/PropertyInfoHash.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/solarmutex.hxx>
+#include <rtl/ref.hxx>
 #include <map>
 
 namespace comphelper
@@ -60,11 +61,10 @@ namespace comphelper
                               public css::beans::XMultiPropertySet
     {
     protected:
-        MasterPropertySetInfo *mpInfo;
         SolarMutex* mpMutex;
         sal_uInt8 mnLastId;
-        std::map < sal_uInt8, comphelper::SlaveData* >       maSlaveMap;
-        css::uno::Reference < css::beans::XPropertySetInfo > mxInfo;
+        std::map< sal_uInt8, comphelper::SlaveData* >  maSlaveMap;
+        rtl::Reference< MasterPropertySetInfo >        mxInfo;
 
         virtual void _preSetValues ()
             throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) = 0;
