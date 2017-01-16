@@ -40,7 +40,6 @@ SbiBuffer::SbiBuffer( SbiParser* p, short n )
 
 SbiBuffer::~SbiBuffer()
 {
-    delete[] pBuf;
 }
 
 // Reach out the buffer
@@ -48,8 +47,7 @@ SbiBuffer::~SbiBuffer()
 
 char* SbiBuffer::GetBuffer()
 {
-    char* p = pBuf;
-    pBuf = nullptr;
+    char* p = pBuf.release();
     pCur = nullptr;
     return p;
 }
@@ -88,15 +86,14 @@ bool SbiBuffer::Check( sal_Int32 n )
         {
             pParser->Error( ERRCODE_BASIC_PROG_TOO_LARGE );
             nInc = 0;
-            delete[] pBuf; pBuf = nullptr;
+            pBuf.reset();
             return false;
         }
         else
         {
-            if( nSize ) memcpy( p, pBuf, nSize );
-            delete[] pBuf;
-            pBuf = p;
-            pCur = pBuf + nOff;
+            if( nSize ) memcpy( p, pBuf.get(), nSize );
+            pBuf.reset(p);
+            pCur = pBuf.get() + nOff;
             nSize = nSize + nn;
         }
     }
@@ -111,7 +108,7 @@ void SbiBuffer::Patch( sal_uInt32 off, sal_uInt32 val )
     {
         sal_uInt16 val1 = static_cast<sal_uInt16>( val & 0xFFFF );
         sal_uInt16 val2 = static_cast<sal_uInt16>( val >> 16 );
-        sal_uInt8* p = reinterpret_cast<sal_uInt8*>(pBuf) + off;
+        sal_uInt8* p = reinterpret_cast<sal_uInt8*>(pBuf.get()) + off;
         *p++ = (char) ( val1 & 0xFF );
         *p++ = (char) ( val1 >> 8 );
         *p++ = (char) ( val2 & 0xFF );
@@ -133,7 +130,7 @@ void SbiBuffer::Chain( sal_uInt32 off )
         sal_uInt32 val2 = (nOff >> 16);
         do
         {
-            ip = reinterpret_cast<sal_uInt8*>(pBuf) + i;
+            ip = reinterpret_cast<sal_uInt8*>(pBuf.get()) + i;
             sal_uInt8* pTmp = ip;
                      i =  *pTmp++; i |= *pTmp++ << 8; i |= *pTmp++ << 16; i |= *pTmp++ << 24;
 

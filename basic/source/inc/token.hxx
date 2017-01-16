@@ -117,7 +117,7 @@ enum SbiToken {
 // #i109076
 class TokenLabelInfo
 {
-    bool* m_pTokenCanBeLabelTab;
+    std::unique_ptr<bool[]> m_pTokenCanBeLabelTab;
 
 public:
     TokenLabelInfo();
