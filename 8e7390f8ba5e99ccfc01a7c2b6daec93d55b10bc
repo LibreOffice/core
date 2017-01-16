@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_f81009ab",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000821
+      },
+      "writtenOn": "2017-01-16T16:19:03Z",
+      "side": 1,
+      "message": "For hFont that is possible, but for hAltFont I\u0027ll have to use GetObjectW and CreateFontIndirect to get font use for  LTR or RTL, by removing \u0027@\u0027 from the font name. Alternatively, do you think that Patch Set 1 is better ( which only modify ExTextOutRenderer::opeator() without touching CommonSalLayout ) ?",
+      "parentUuid": "fa48f94a_58ad9587",
+      "revId": "8e7390f8ba5e99ccfc01a7c2b6daec93d55b10bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_98b53dd2",
         "filename": "vcl/win/gdi/winlayout.cxx",
         "patchSetId": 4
