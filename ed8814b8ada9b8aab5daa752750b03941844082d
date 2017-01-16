@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_d81fc559",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000031
+      },
+      "writtenOn": "2017-01-16T08:58:50Z",
+      "side": 1,
+      "message": "At least in my opinion this is quite risky (which is also the reason that I did not implement a static instance). How do you make sure that the content has been flushed before we crash or abort? The old implementation made sure that each log output was directly flushed to the file.",
+      "revId": "ed8814b8ada9b8aab5daa752750b03941844082d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
