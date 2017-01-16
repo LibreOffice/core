@@ -194,8 +194,8 @@ void OStartMarker::initDefaultNodeImages()
 {
     if ( !s_pDefCollapsed )
     {
-        s_pDefCollapsed     = new Image( ModuleRes( RID_IMG_TREENODE_COLLAPSED      ) );
-        s_pDefExpanded      = new Image( ModuleRes( RID_IMG_TREENODE_EXPANDED       ) );
+        s_pDefCollapsed = new Image(BitmapEx(ModuleRes(RID_BMP_TREENODE_COLLAPSED)));
+        s_pDefExpanded = new Image(BitmapEx(ModuleRes(RID_BMP_TREENODE_EXPANDED)));
     }
 
     Image* pImage = m_bCollapsed ? s_pDefCollapsed : s_pDefExpanded;

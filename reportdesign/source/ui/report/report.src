@@ -92,14 +92,14 @@ String RID_STR_PROPTITLE_GROUP
     Text [ en-US ] = "Group";
 };
 
-Image RID_IMG_TREENODE_COLLAPSED
+Bitmap RID_BMP_TREENODE_COLLAPSED
 {
-    ImageBitmap = Bitmap { File = "plus.png"; } ;
+    File = "plus.png";
 };
 
-Image RID_IMG_TREENODE_EXPANDED
+Bitmap RID_BMP_TREENODE_EXPANDED
 {
-    ImageBitmap = Bitmap { File = "minus.png"; } ;
+    File = "minus.png";
 };
 
 String STR_SHOW_RULER
@@ -585,10 +585,12 @@ String RID_STR_FUNCTION
 {
     Text [ en-US ] = "Function" ;
 };
-Image REPORT_TREE_ICON
+
+Bitmap RID_BMP_REPORT_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "report_16"; };
+    File = "report_16";
 };
+
 String RID_STR_COULD_NOT_CREATE_REPORT
 {
     Text [ en-US ] = "An error occurred while creating the report." ;
