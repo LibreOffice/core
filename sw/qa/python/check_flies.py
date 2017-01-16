@@ -16,18 +16,8 @@
     the License at http://www.apache.org/licenses/LICENSE-2.0 .
 '''
 
-from com.sun.star.lang import XMultiServiceFactory
-from com.sun.star.text import XTextDocument
-from com.sun.star.text import XTextFramesSupplier
-from com.sun.star.text import XTextGraphicObjectsSupplier
-from com.sun.star.text import XTextEmbeddedObjectsSupplier
-from com.sun.star.container import XNameAccess
-from com.sun.star.container import NoSuchElementException
-from com.sun.star.container import XIndexAccess
 from org.libreoffice.unotest import UnoInProcess
 import unittest
-import unohelper
-import os
 
 
 class CheckFlies(unittest.TestCase):
@@ -65,11 +55,13 @@ class CheckFlies(unittest.TestCase):
             self.assertTrue(xEmbeddedFrames.hasByName(sFrameName),
                             "Could not find embedded frame by name.")
 
-        self.assertTrue(not(vExpectedEmbeddedFrames), "Missing expected embedded frames.")
+        self.assertTrue(not(vExpectedEmbeddedFrames),
+                        "Missing expected embedded frames.")
 
         xEmbeddedFramesIdx = xEmbeddedFrames
 
-        self.assertEqual(nEmbeddedFrames, len(xEmbeddedFramesIdx), "Unexpected number of embedded frames reported")
+        self.assertEqual(nEmbeddedFrames, len(xEmbeddedFramesIdx),
+                         "Unexpected number of embedded frames reported")
 
         for nCurrentFrameIdx in range(len(xEmbeddedFramesIdx)):
             xEmbeddedFramesIdx.getByIndex(nCurrentFrameIdx)
@@ -91,7 +83,8 @@ class CheckFlies(unittest.TestCase):
             "Missing expected graphics frames.")
 
         xGraphicFramesIdx = xGraphicFrames
-        self.assertEqual(nGraphicFrames, len(xGraphicFramesIdx), "Unexpected number of graphics frames reported")
+        self.assertEqual(nGraphicFrames, len(xGraphicFramesIdx),
+                         "Unexpected number of graphics frames reported")
 
         for nCurrentFrameIdx in range(len(xGraphicFramesIdx)):
             xGraphicFramesIdx.getByIndex(nCurrentFrameIdx)
@@ -115,7 +108,8 @@ class CheckFlies(unittest.TestCase):
 
         xTextFramesIdx = xTextFrames
 
-        self.assertEqual(nTextFrames, len(xTextFrames), "Unexpected number of text frames reported")
+        self.assertEqual(nTextFrames, len(xTextFrames),
+                         "Unexpected number of text frames reported")
 
         for nCurrentFrameIdx in range(len(xTextFramesIdx)):
             xTextFramesIdx.getByIndex(nCurrentFrameIdx)
