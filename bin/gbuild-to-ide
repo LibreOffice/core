@@ -87,15 +87,23 @@ class GbuildParser:
 
     def parse(self):
         # Relation between json object and file extension
-        # Missing relations: .hxx  .hpp .hrc  .src  .java  .py  .h  .s  .c  .pl  .S  .ui  .l  .cpp
-        jsonSrc = {'ASMOBJECTS':    '.asm',
+        jsonSrc = {
                    'CXXOBJECTS':    '.cxx',
-                   'GENCOBJECTS':   '?',
-                   'GENCXXOBJECTS': '.cxx', # this does not sound right
+                   'GENCXXOBJECTS': '.cxx', # remark is in workdir/GenCxxObject
                    'OBJCOBJECTS':   '.m',
                    'OBJCXXOBJECTS': '.mm',
-                   'YACCOBJECTS':   '.y'
-                   }
+
+                    # gbuildtojson defines but does not fill these:
+                   'ASMOBJECTS': '.s',
+                   'GENCOBJECTS': '.c',
+                   'YACCOBJECTS': '.y',
+
+                   # gbuildtojson need to be extended to fill these:
+                   'COBJECTS': '.c',
+                   'FLEXOBJECTS': '.l',
+                   'JAVAOBJECTS': '.java',
+                   'PYTHONOBJECTS': '.py'
+                  }
 
 
         moduleDict = {}

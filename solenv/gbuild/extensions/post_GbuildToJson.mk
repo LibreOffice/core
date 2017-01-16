@@ -7,6 +7,24 @@
 # file, You can obtain one at http://mozilla.org/MPL/2.0/.
 #
 
+
+# Outstanding work:
+#
+# fill files names in:
+#   --ASMOBJECTS
+#   --GENCOBJECTS
+#   --YACCOBJECTS
+#
+# add new arguments:
+#   --COBJECTS
+#   --FLEXOBJECTS
+#   --JAVAOBJECTS
+#   --PYTHONOBJECTS
+#
+# Add black listed modules a json files (--BLACKLIST)
+#
+# Reduce number of blacklisted modules
+
 ifneq ($(filter gbuildtojson,$(MAKECMDGOALS)),)
 
 ifeq ($(MAKE_VERSION),3.81)

@@ -17,30 +17,6 @@
 #include <stdio.h>
 
 using namespace std;
-static const list<string> validargs = {
-    "makefile",
-    "linktarget",
-    "ilibtarget",
-    "cxxobjects",
-    "yaccobjects",
-    "objcobjects",
-    "objcxxobjects",
-    "asmobjects",
-    "gencobjects",
-    "gencxxobjects",
-    "cflags",
-    "cflagsappend",
-    "cxxflags",
-    "cxxflagsappend",
-    "objcflags",
-    "objcflagsappend",
-    "objcxxflags",
-    "objcxxflagsappend",
-    "defs",
-    "include",
-    "linked_libs",
-    "linked_static_libs"
-};
 
 int main(int argc, char** argv)
 {
@@ -61,11 +37,6 @@ int main(int argc, char** argv)
             return 2;
         }
         const string argname(arg.substr(2, eqpos-2));
-        if(find(validargs.begin(), validargs.end(), argname) == validargs.end())
-        {
-            cerr << "Option" << argname << "invalid." << endl;
-            return 3;
-        }
         vartofile[argname] = arg.substr(eqpos+1, string::npos);
     }
     cout << "{";
