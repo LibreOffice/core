@@ -88,7 +88,6 @@ OIndex::OIndex( const OUString& Name,
 
 OIndex::~OIndex( )
 {
-    delete m_pColumns;
 }
 
 ::cppu::IPropertyArrayHelper* OIndex::createArrayHelper( sal_Int32 /*_nId*/ ) const
@@ -163,7 +162,7 @@ Reference< css::container::XNameAccess > SAL_CALL OIndex::getColumns(  ) throw(R
         OSL_FAIL( "OIndex::getColumns: caught an exception!" );
     }
 
-    return m_pColumns;
+    return m_pColumns.get();
 }
 
 Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(RuntimeException, std::exception)

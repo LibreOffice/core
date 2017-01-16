@@ -53,7 +53,6 @@ OUser::OUser(const OUString& Name, bool _bCase) :    OUser_BASE(m_aMutex)
 
 OUser::~OUser( )
 {
-    delete m_pGroups;
 }
 
 void OUser::disposing()
@@ -117,7 +116,7 @@ Reference< XNameAccess > SAL_CALL OUser::getGroups(  ) throw(RuntimeException, s
         // allowed
     }
 
-    return m_pGroups;
+    return m_pGroups.get();
 }
 
 

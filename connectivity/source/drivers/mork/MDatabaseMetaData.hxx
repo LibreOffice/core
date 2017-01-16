@@ -24,7 +24,8 @@ namespace connectivity
         class ODatabaseMetaData : public ODatabaseMetaDataBase
         {
             OConnection*               m_pConnection;
-            MDatabaseMetaDataHelper*   m_pMetaDataHelper;
+            std::unique_ptr<MDatabaseMetaDataHelper>
+                                       m_pMetaDataHelper;
 
             ODatabaseMetaDataResultSet::ORows& SAL_CALL getColumnRows( const OUString& tableNamePattern, const OUString& columnNamePattern ) throw( css::sdbc::SQLException );
 
