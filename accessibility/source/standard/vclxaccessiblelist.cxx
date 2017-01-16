@@ -74,7 +74,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
         {
             VclPtr< ComboBox > pBox = GetAs< ComboBox >();
             if ( pBox )
-                m_pListBoxHelper = new VCLListBoxHelper<ComboBox> (*pBox);
+                m_pListBoxHelper.reset( new VCLListBoxHelper<ComboBox> (*pBox) );
             break;
         }
 
@@ -82,7 +82,7 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
         {
             VclPtr< ListBox > pBox = GetAs< ListBox >();
             if ( pBox )
-                m_pListBoxHelper = new VCLListBoxHelper<ListBox> (*pBox);
+                m_pListBoxHelper.reset( new VCLListBoxHelper<ListBox> (*pBox) );
             break;
         }
     }
@@ -98,7 +98,6 @@ VCLXAccessibleList::VCLXAccessibleList (VCLXWindow* pVCLWindow, BoxType aBoxType
 
 VCLXAccessibleList::~VCLXAccessibleList()
 {
-    delete m_pListBoxHelper;
 }
 
 
@@ -115,8 +114,7 @@ void SAL_CALL VCLXAccessibleList::disposing()
     // Dispose all items in the list.
     clearItems();
 
-    delete m_pListBoxHelper;
-    m_pListBoxHelper = nullptr;
+    m_pListBoxHelper.reset();
 }
 
 
