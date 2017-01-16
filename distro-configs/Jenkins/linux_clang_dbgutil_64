@@ -1,3 +1,2 @@
 --enable-dbgutil
 --enable-compiler-plugins
---disable-firebird-sdbc
