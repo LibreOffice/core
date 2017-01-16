@@ -60,16 +60,16 @@ typedef std::vector<std::unique_ptr<ExternalImageItemDescriptor> > ExternalImage
 
 struct ImageListItemDescriptor
 {
-    ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color ),
-                                pImageItemList( nullptr ) {}
+    ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color ) {}
 
-    ~ImageListItemDescriptor() { delete pImageItemList; }
+    ~ImageListItemDescriptor() {}
 
     OUString                    aURL;               // an URL to a bitmap with several images inside
     Color                       aMaskColor;         // a color used as transparent
     OUString                    aMaskURL;           // an URL to an optional bitmap used as a mask
     ImageMaskMode               nMaskMode;            // an enum to describe the current mask mode
-    ImageItemListDescriptor*    pImageItemList;       // an array of ImageItemDescriptors that describes every image
+    std::unique_ptr<ImageItemListDescriptor>
+                                pImageItemList;       // an array of ImageItemDescriptors that describes every image
     OUString                    aHighContrastURL;       // an URL to an optional high contrast bitmap with serveral images inside
     OUString                    aHighContrastMaskURL;   // an URL to an optional high contrast bitmap as a mask
 };
