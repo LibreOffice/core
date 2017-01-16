@@ -213,6 +213,9 @@ private:
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
     bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
 
+    enum TriState               {undefined, yes, no};
+    TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
+
     bool                        CloseInternal();
 
     SAL_DLLPRIVATE void UpdateTime_Impl(const css::uno::Reference<
@@ -457,6 +460,9 @@ public:
 
     /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
     void                        AvoidRecentDocs(bool bAvoid) { mbAvoidRecentDocs = bAvoid; }
+
+    /// On first error ask user if import should continue; return saved answer.
+    bool                        IsContinueImportOnFilterExceptions(const OUString& aErrMessage);
 
     // Transfer IFace
     bool                        IsAbortingImport() const;
