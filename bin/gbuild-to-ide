@@ -20,6 +20,7 @@ import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 import traceback
 import collections
+import subprocess
 
 class GbuildLinkTarget:
     def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs,
@@ -141,10 +142,21 @@ class GbuildParser:
                         moduleDict[module] = {'targets': set()}
                     moduleDict[module]['targets'] |= set([newObj])
 
+        moduleDict['include']={'headers':self.find_all_headers_include_git(), 'targets': {}}
         for module in sorted(moduleDict):
             self.modules[module] = moduleDict[module]
         return self
 
+
+    def find_all_headers_include_git(self):
+        cmdResult1=subprocess.Popen(('git', 'ls-files', 'include'), cwd=self.srcdir,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        cmdResult2=subprocess.check_output(('grep', '-i', '-E', '".*\.hxx$|.*\.h$|.*\.hpp$"'),cwd=self.srcdir,stdin=cmdResult1.stdout)
+
+        #decode from byte to string
+        allfiles=[]
+        for file in cmdResult2.splitlines():
+            allfiles.append(file.decode()[8:])
+        return allfiles
 
 class IdeIntegrationGenerator:
 
@@ -161,6 +173,8 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 
     def create_include_paths(self):
         for module in self.gbuildparser.modules:
+            if module == 'include':
+                continue
             modulepath = os.path.join(self.gbuildparser.builddir, module)
             includedirfile = open(os.path.join(modulepath, '.eclipsesettingfile'), 'w')
             modulelibs = []
@@ -177,6 +191,8 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 
     def create_macros(self):
         for module in self.gbuildparser.modules:
+            if module == 'include':
+                continue
             modulepath = os.path.join(self.gbuildparser.builddir, module)
             macrofile = open(os.path.join(modulepath, '.macros'), 'w')
             modulelibs = []
@@ -233,6 +249,8 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 """
 
         for module in self.gbuildparser.modules:
+            if module == 'include':
+                continue
             tempxml = []
             modulepath = os.path.join(self.gbuildparser.builddir, module)
 
@@ -832,13 +850,14 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         for module in self.gbuildparser.modules:
             projects = []
             module_directory = os.path.join(self.solution_directory, module)
-            for target in self.gbuildparser.modules[module]['targets']:
-                project_path = os.path.join(module_directory, '%s.vcxproj' % target.target_name)
-                project_guid = self.write_project(project_path, target)
-                p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
-                projects.append(p)
-            self.write_solution(os.path.join(module_directory, '%s.sln' % module), projects)
-            all_projects += projects
+            if module != 'include': #FIXME
+                for target in self.gbuildparser.modules[module]['targets']:
+                    project_path = os.path.join(module_directory, '%s.vcxproj' % target.target_name)
+                    project_guid = self.write_project(project_path, target)
+                    p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
+                    projects.append(p)
+                self.write_solution(os.path.join(module_directory, '%s.sln' % module), projects)
+                all_projects += projects
 
         self.write_solution(os.path.join(self.solution_directory, 'LibreOffice.sln'), all_projects)
 
@@ -1683,6 +1702,9 @@ def get_options():
                         help='the IDE to generate project files for')
     parser.add_argument('--make', dest='makecmd', required=True,
                         help='the command to execute make')
+    #add to debug a new functions in the project keeping contributors
+    parser.add_argument('--debug',dest='debug',required=False,
+                        help='debug the new functions')
     return parser.parse_args()
 
 
@@ -1691,6 +1713,7 @@ if __name__ == '__main__':
     # FIXME: Hack
     if args.makecmd == 'make':
         args.makecmd = '/usr/bin/make'
+
 
     paths = {}
     generators = {
