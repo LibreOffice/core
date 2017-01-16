@@ -510,7 +510,7 @@ void OS2METReader::AddPointsToArea(const tools::Polygon & rPoly)
     else {
         tools::Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
         nOldSize=aLastPoly.GetSize();
-        if (aLastPoly.GetPoint(nOldSize-1)==rPoly.GetPoint(0)) nOldSize--;
+        if (nOldSize && aLastPoly.GetPoint(nOldSize-1)==rPoly.GetPoint(0)) nOldSize--;
         nNewSize=nOldSize+rPoly.GetSize();
         aLastPoly.SetSize(nNewSize);
         for (i=nOldSize; i<nNewSize; i++) {
@@ -531,7 +531,7 @@ void OS2METReader::AddPointsToPath(const tools::Polygon & rPoly)
     else {
         tools::Polygon aLastPoly(pPP->GetObject(pPP->Count()-1));
         nOldSize=aLastPoly.GetSize();
-        if (aLastPoly.GetPoint(nOldSize-1)!=rPoly.GetPoint(0)) pPP->Insert(rPoly);
+        if (nOldSize && aLastPoly.GetPoint(nOldSize-1)!=rPoly.GetPoint(0)) pPP->Insert(rPoly);
         else {
             nOldSize--;
             nNewSize=nOldSize+rPoly.GetSize();
