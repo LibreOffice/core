@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_15d116fc",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-01-16T02:34:31Z",
+      "side": 1,
+      "message": "That calls getValueFromLoggingIniFile() every time, perhaps not intended wrt the static char buffer above?",
+      "revId": "01bd1e2656e0ff21b85ea7fc7cf7b8dd901e13ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_35ce1a5b",
+        "filename": "sal/osl/all/log.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-01-16T02:34:31Z",
+      "side": 1,
+      "message": "Same here - also parses ini file every time",
+      "revId": "01bd1e2656e0ff21b85ea7fc7cf7b8dd901e13ce",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
