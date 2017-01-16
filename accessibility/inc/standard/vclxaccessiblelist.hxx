@@ -135,10 +135,10 @@ public:
 
     void UpdateFocus_Impl_Acc ( sal_Int32 nPos, bool b_IsDropDownList) ;
     static void NotifyListItem(css::uno::Any& val);
-    ::accessibility::IComboListBoxHelper* getListBoxHelper() { return m_pListBoxHelper; }
+    ::accessibility::IComboListBoxHelper* getListBoxHelper() { return m_pListBoxHelper.get(); }
 protected:
     BoxType     m_aBoxType;
-    ::accessibility::IComboListBoxHelper* m_pListBoxHelper;
+    std::unique_ptr<::accessibility::IComboListBoxHelper> m_pListBoxHelper;
     ListItems   m_aAccessibleChildren;
     sal_Int32   m_nVisibleLineCount;
     /// Index in parent.  This is settable from the outside.
