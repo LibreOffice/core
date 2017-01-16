@@ -1939,4 +1939,19 @@ void SfxObjectShell::StoreLog()
     }
 }
 
+bool SfxObjectShell::IsContinueImportOnFilterExceptions(const OUString& aErrMessage)
+{
+    if (mbContinueImportOnFilterExceptions == undefined)
+    {
+        // Ask the user to try to continue or abort loading
+        OUString aMessage = SfxResId(STR_QMSG_ERROR_OPENING_FILE).toString()
+            + SfxResId(STR_QMSG_ERROR_OPENING_FILE_DETAILS).toString()
+            + aErrMessage
+            + SfxResId(STR_QMSG_ERROR_OPENING_FILE_CONTINUE).toString();
+        ScopedVclPtrInstance< MessageDialog > aBox(nullptr, aMessage, VclMessageType::Question, VclButtonsType::YesNo);
+        mbContinueImportOnFilterExceptions = (aBox->Execute() == RET_YES) ? yes : no;
+    }
+    return mbContinueImportOnFilterExceptions == yes;
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
