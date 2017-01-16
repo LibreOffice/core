@@ -6989,6 +6989,20 @@ void DocxAttributeOutput::WriteFootnoteEndnotePr( ::sax_fastparser::FSHelperPtr 
     if( info.nFootnoteOffset != 0 )
         fs->singleElementNS( XML_w, XML_numStart, FSNS( XML_w, XML_val ),
             OString::number( info.nFootnoteOffset + 1).getStr(), FSEND );
+
+    const SwFootnoteInfo* pFootnoteInfo = dynamic_cast<const SwFootnoteInfo*>(&info);
+    if( pFootnoteInfo )
+    {
+        switch( pFootnoteInfo->eNum )
+        {
+            case FTNNUM_PAGE:       fmt = "eachPage"; break;
+            case FTNNUM_CHAPTER:    fmt = "eachSect"; break;
+            default:                fmt = nullptr;    break;
+        }
+        if( fmt != nullptr )
+            fs->singleElementNS( XML_w, XML_numRestart, FSNS( XML_w, XML_val ), fmt, FSEND );
+    }
+
     if( listtag != 0 ) // we are writing to settings.xml, write also special footnote/endnote list
     { // there are currently only two hardcoded ones ( see FootnotesEndnotes())
         fs->singleElementNS( XML_w, listtag, FSNS( XML_w, XML_id ), "0", FSEND );
