@@ -26,8 +26,8 @@
 #include "refupdat.hxx"
 #include "rechead.hxx"
 #include "compiler.hxx"
-#include <boost/checked_delete.hpp>
 #include <algorithm>
+#include <memory>
 
 using ::std::vector;
 using ::std::advance;
@@ -1091,7 +1091,7 @@ void ScRangeList::Remove(size_t nPos)
 
 void ScRangeList::RemoveAll()
 {
-    for_each(maRanges.begin(), maRanges.end(), boost::checked_deleter<ScRange>());
+    for_each(maRanges.begin(), maRanges.end(), std::default_delete<ScRange>());
     maRanges.clear();
 }
 
@@ -1222,7 +1222,7 @@ ScRangeList ScRangeList::GetIntersectedRange(const ScRange& rRange) const
 //  ScRangePairList
 ScRangePairList::~ScRangePairList()
 {
-    for_each( maPairs.begin(), maPairs.end(), boost::checked_deleter<ScRangePair>() );
+    for_each( maPairs.begin(), maPairs.end(), std::default_delete<ScRangePair>() );
     maPairs.clear();
 }
 

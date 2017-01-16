@@ -59,7 +59,6 @@
 #include "ViewSettingsSequenceDefines.hxx"
 #include <gridwin.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <boost/checked_delete.hpp>
 #include <comphelper/flagguard.hxx>
 #include <comphelper/lok.hxx>
 #include <comphelper/processfactory.hxx>
@@ -498,7 +497,7 @@ ScViewData::~ScViewData()
     KillEditView();
     delete pOptions;
     ::std::for_each(
-        maTabData.begin(), maTabData.end(), boost::checked_deleter<ScViewDataTable>());
+        maTabData.begin(), maTabData.end(), std::default_delete<ScViewDataTable>());
 }
 
 void ScViewData::UpdateCurrentTab()

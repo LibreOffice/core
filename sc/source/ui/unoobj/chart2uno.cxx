@@ -60,7 +60,6 @@
 #include <comphelper/sequence.hxx>
 
 #include <rtl/math.hxx>
-#include <boost/checked_delete.hpp>
 
 SC_SIMPLE_SERVICE_INFO( ScChart2DataProvider, "ScChart2DataProvider",
         "com.sun.star.chart2.data.DataProvider")
@@ -163,7 +162,7 @@ struct TokenTable
     }
     void clear()
     {
-        std::for_each(maTokens.begin(), maTokens.end(), boost::checked_deleter<FormulaToken>());
+        std::for_each(maTokens.begin(), maTokens.end(), std::default_delete<FormulaToken>());
     }
 
     void push_back( FormulaToken* pToken )

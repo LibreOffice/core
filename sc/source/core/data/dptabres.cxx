@@ -39,7 +39,6 @@
 #include <algorithm>
 #include <memory>
 #include <unordered_map>
-#include <boost/checked_delete.hpp>
 
 #include <com/sun/star/sheet/DataResultFlags.hpp>
 #include <com/sun/star/sheet/MemberResultFlags.hpp>
@@ -760,7 +759,7 @@ ScDPResultData::ScDPResultData( ScDPSource& rSrc ) :
 
 ScDPResultData::~ScDPResultData()
 {
-    std::for_each(maDimMembers.begin(), maDimMembers.end(), boost::checked_deleter<ResultMembers>());
+    std::for_each(maDimMembers.begin(), maDimMembers.end(), std::default_delete<ResultMembers>());
 }
 
 void ScDPResultData::SetMeasureData(
@@ -3545,7 +3544,7 @@ ScDPDataDimension::ScDPDataDimension( const ScDPResultData* pData ) :
 
 ScDPDataDimension::~ScDPDataDimension()
 {
-    std::for_each(maMembers.begin(), maMembers.end(), boost::checked_deleter<ScDPDataMember>());
+    std::for_each(maMembers.begin(), maMembers.end(), std::default_delete<ScDPDataMember>());
 }
 
 void ScDPDataDimension::InitFrom( const ScDPResultDimension* pDim )

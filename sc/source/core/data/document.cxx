@@ -104,7 +104,6 @@
 #include <limits>
 #include <map>
 #include <memory>
-#include <boost/checked_delete.hpp>
 
 #include <comphelper/lok.hxx>
 #include <LibreOfficeKit/LibreOfficeKitEnums.h>
@@ -832,7 +831,7 @@ bool ScDocument::DeleteTabs( SCTAB nTab, SCTAB nSheets )
 
                 TableContainer::iterator it = maTabs.begin() + nTab;
                 TableContainer::iterator itEnd = it + nSheets;
-                std::for_each(it, itEnd, boost::checked_deleter<ScTable>());
+                std::for_each(it, itEnd, std::default_delete<ScTable>());
                 maTabs.erase(it, itEnd);
                 // UpdateBroadcastAreas must be called between UpdateDeleteTab,
                 // which ends listening, and StartAllListeners, to not modify

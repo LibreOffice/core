@@ -19,7 +19,6 @@
 
 #include <StaticGeometry.h>
 #include "glm/gtc/matrix_inverse.hpp"
-#include <boost/checked_delete.hpp>
 #include <memory>
 
 #define DEBUG_FBO 0

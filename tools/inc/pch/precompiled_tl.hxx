@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <vector>
-#include <boost/checked_delete.hpp>
 #include <boost/optional/optional.hpp>
 #include <boost/rational.hpp>
 #include <osl/diagnose.h>

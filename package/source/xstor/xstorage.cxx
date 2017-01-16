@@ -57,8 +57,6 @@
 #include "switchpersistencestream.hxx"
 #include "ohierarchyholder.hxx"
 
-#include <boost/checked_delete.hpp>
-
 using namespace ::com::sun::star;
 
 #if OSL_DEBUG_LEVEL > 0
@@ -337,10 +335,10 @@ OStorage_Impl::~OStorage_Impl()
         m_pParent = nullptr;
     }
 
-    std::for_each(m_aChildrenList.begin(), m_aChildrenList.end(), boost::checked_deleter<SotElement_Impl>());
+    std::for_each(m_aChildrenList.begin(), m_aChildrenList.end(), std::default_delete<SotElement_Impl>());
     m_aChildrenList.clear();
 
-    std::for_each(m_aDeletedList.begin(), m_aDeletedList.end(), boost::checked_deleter<SotElement_Impl>());
+    std::for_each(m_aDeletedList.begin(), m_aDeletedList.end(), std::default_delete<SotElement_Impl>());
     m_aDeletedList.clear();
 
     if ( m_nStorageType == embed::StorageFormats::OFOPXML && m_pRelStorElement )
