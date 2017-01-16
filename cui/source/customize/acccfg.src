@@ -35,20 +35,6 @@ Resource RID_SVXPAGE_CONFIGGROUPBOX
     {
         Text [ en-US ] = "Styles" ;
     };
-    Image BMP_COLLAPSED
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "plus.bmp" ;
-        };
-    };
-    Image BMP_EXPANDED
-    {
-        ImageBitmap = Bitmap
-        {
-            File = "minus.bmp" ;
-        };
-    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

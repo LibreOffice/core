@@ -76,10 +76,10 @@ void ShowErrorDialog( const Any& aException )
 
 SFTreeListBox::SFTreeListBox(vcl::Window* pParent)
     : SvTreeListBox(pParent)
-    , m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK))
-    , m_libImage(CUI_RES(RID_CUIIMG_LIB))
-    , m_macImage(CUI_RES(RID_CUIIMG_MACRO))
-    , m_docImage(CUI_RES(RID_CUIIMG_DOC))
+    , m_hdImage(BitmapEx(CUI_RES(RID_CUIBMP_HARDDISK)))
+    , m_libImage(BitmapEx(CUI_RES(RID_CUIBMP_LIB)))
+    , m_macImage(BitmapEx(CUI_RES(RID_CUIBMP_MACRO)))
+    , m_docImage(BitmapEx(CUI_RES(RID_CUIBMP_DOC)))
     , m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS))
     , m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS))
 {
@@ -237,7 +237,7 @@ void SFTreeListBox::Init( const OUString& language  )
         Reference< browse::XBrowseNode > langEntries =
             getLangNodeFromRootNode( children[ n ], lang );
 
-        insertEntry( uiName, app ? RID_CUIIMG_HARDDISK : RID_CUIIMG_DOC,
+        insertEntry( uiName, app ? RID_CUIBMP_HARDDISK : RID_CUIBMP_DOC,
             nullptr, true, o3tl::make_unique< SFEntry >( OBJTYPE_SFROOT, langEntries, xDocumentModel ), factoryURL );
     }
 
@@ -319,11 +319,11 @@ void SFTreeListBox:: RequestSubEntries( SvTreeListEntry* pRootEntry, Reference< 
         OUString name( children[ n ]->getName() );
         if (  children[ n ]->getType() !=  browse::BrowseNodeTypes::SCRIPT)
         {
-            insertEntry( name, RID_CUIIMG_LIB, pRootEntry, true, o3tl::make_unique< SFEntry >( OBJTYPE_SCRIPTCONTAINER, children[ n ],model ));
+            insertEntry(name, RID_CUIBMP_LIB, pRootEntry, true, o3tl::make_unique< SFEntry >( OBJTYPE_SCRIPTCONTAINER, children[ n ],model));
         }
         else
         {
-            insertEntry( name, RID_CUIIMG_MACRO, pRootEntry, false, o3tl::make_unique< SFEntry >( OBJTYPE_METHOD, children[ n ],model ));
+            insertEntry(name, RID_CUIBMP_MACRO, pRootEntry, false, o3tl::make_unique< SFEntry >( OBJTYPE_METHOD, children[ n ],model));
         }
     }
 }
@@ -338,7 +338,7 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     bool bChildrenOnDemand, std::unique_ptr< SFEntry > && aUserData, const OUString& factoryURL )
 {
     SvTreeListEntry * p;
-    if( nBitmap == RID_CUIIMG_DOC && !factoryURL.isEmpty() )
+    if( nBitmap == RID_CUIBMP_DOC && !factoryURL.isEmpty() )
     {
         Image aImage = SvFileInformationManager::GetFileImage( INetURLObject(factoryURL) );
         p = InsertEntry(
@@ -357,19 +357,19 @@ SvTreeListEntry * SFTreeListBox::insertEntry(
     bool bChildrenOnDemand, std::unique_ptr< SFEntry > && aUserData )
 {
     Image aImage;
-    if( nBitmap == RID_CUIIMG_HARDDISK )
+    if( nBitmap == RID_CUIBMP_HARDDISK )
     {
         aImage = m_hdImage;
     }
-    else if( nBitmap == RID_CUIIMG_LIB )
+    else if( nBitmap == RID_CUIBMP_LIB )
     {
         aImage = m_libImage;
     }
-    else if( nBitmap == RID_CUIIMG_MACRO )
+    else if( nBitmap == RID_CUIBMP_MACRO )
     {
         aImage = m_macImage;
     }
-    else if( nBitmap == RID_CUIIMG_DOC )
+    else if( nBitmap == RID_CUIBMP_DOC )
     {
         aImage = m_docImage;
     }
@@ -956,12 +956,12 @@ void SvxScriptOrgDialog::createEntry( SvTreeListEntry* pEntry )
         if ( aChildNode->getType() == browse::BrowseNodeTypes::SCRIPT )
         {
             pNewEntry = m_pScriptsBox->insertEntry( aChildName,
-                    RID_CUIIMG_MACRO, pEntry, false, o3tl::make_unique< SFEntry >( OBJTYPE_METHOD, aChildNode,xDocumentModel ) );
+                    RID_CUIBMP_MACRO, pEntry, false, o3tl::make_unique< SFEntry >( OBJTYPE_METHOD, aChildNode,xDocumentModel ) );
         }
         else
         {
             pNewEntry = m_pScriptsBox->insertEntry( aChildName,
-                RID_CUIIMG_LIB, pEntry, false, o3tl::make_unique< SFEntry >( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) );
+                RID_CUIBMP_LIB, pEntry, false, o3tl::make_unique< SFEntry >( OBJTYPE_SCRIPTCONTAINER, aChildNode,xDocumentModel ) );
 
             // If the Parent is not loaded then set to
             // loaded, this will prevent RequestingChildren ( called

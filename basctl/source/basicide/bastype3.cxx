@@ -105,8 +105,8 @@ void TreeListBox::RequestingChildren( SvTreeListEntry* pEntry )
                 ImpCreateLibSubEntries( pEntry, aDocument, aOULibName );
 
                 // exchange image
-                bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
-                Image aImage( IDEResId( bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB ) );
+                const bool bDlgMode = (nMode & BROWSEMODE_DIALOGS) && !(nMode & BROWSEMODE_MODULES);
+                Image aImage(BitmapEx(IDEResId(bDlgMode ? RID_BMP_DLGLIB : RID_BMP_MODLIB)));
                 SetEntryBitmaps( pEntry, aImage );
             }
             else

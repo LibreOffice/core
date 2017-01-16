@@ -21,25 +21,6 @@
 
 #include <svl/solar.hrc>
 
-// chart types
-// Images:
-
-#define IMG_TYPE_COLUMN (RID_APP_START + 1)
-#define IMG_TYPE_BAR    (RID_APP_START + 2)
-#define IMG_TYPE_PIE    (RID_APP_START + 3)
-#define IMG_TYPE_AREA   (RID_APP_START + 4)
-#define IMG_TYPE_LINE   (RID_APP_START + 5)
-#define IMG_TYPE_XY     (RID_APP_START + 6)
-#define IMG_TYPE_BUBBLE (RID_APP_START + 7)
-#define IMG_TYPE_NET    (RID_APP_START + 8)
-#define IMG_TYPE_STOCK  (RID_APP_START + 9)
-#define IMG_TYPE_COLUMN_LINE  (RID_APP_START + 10)
-#define IMG_TYPE_GL3D_BAR (RID_APP_START + 11)
-#define IMG_STEP_START  (RID_APP_START + 12)
-#define IMG_STEP_END    (RID_APP_START + 13)
-#define IMG_STEP_CENTER_X (RID_APP_START + 14)
-#define IMG_STEP_CENTER_Y (RID_APP_START + 15)
-
 //Chart Subtypes
 // Bitmaps:
 
@@ -188,14 +169,6 @@
 
 //further Images:
 
-//SchStatisticTabPage and SchDataStatisticsDlg part 1
-#define BMP_INDICATE_BOTH_VERTI (RID_APP_START + 89)
-#define BMP_INDICATE_UP (RID_APP_START + 90)
-#define BMP_INDICATE_DOWN (RID_APP_START + 91)
-#define BMP_INDICATE_BOTH_HORI (RID_APP_START + 97)
-#define BMP_INDICATE_RIGHT (RID_APP_START + 98)
-#define BMP_INDICATE_LEFT (RID_APP_START + 99)
-
 //SchStatisticTabPage and SchDataStatisticsDlg part 2
 #define BMP_REGRESSION_NONE             (RID_APP_START + 92)
 #define BMP_REGRESSION_LINEAR           (RID_APP_START + 93)
@@ -204,6 +177,34 @@
 #define BMP_REGRESSION_POWER            (RID_APP_START + 96)
 #define BMP_REGRESSION_POLYNOMIAL       (RID_APP_START + 110)
 #define BMP_REGRESSION_MOVING_AVERAGE   (RID_APP_START + 111)
+
+// chart types
+// Images:
+
+#define BMP_TYPE_COLUMN (RID_APP_START + 112)
+#define BMP_TYPE_BAR    (RID_APP_START + 113)
+#define BMP_TYPE_PIE    (RID_APP_START + 114)
+#define BMP_TYPE_AREA   (RID_APP_START + 115)
+#define BMP_TYPE_LINE   (RID_APP_START + 116)
+#define BMP_TYPE_XY     (RID_APP_START + 117)
+#define BMP_TYPE_BUBBLE (RID_APP_START + 118)
+#define BMP_TYPE_NET    (RID_APP_START + 119)
+#define BMP_TYPE_STOCK  (RID_APP_START + 120)
+#define BMP_TYPE_COLUMN_LINE  (RID_APP_START + 131)
+#define BMP_TYPE_GL3D_BAR (RID_APP_START + 132)
+#define BMP_STEP_START  (RID_APP_START + 133)
+#define BMP_STEP_END    (RID_APP_START + 134)
+#define BMP_STEP_CENTER_X (RID_APP_START + 135)
+#define BMP_STEP_CENTER_Y (RID_APP_START + 136)
+
+//SchStatisticTabPage and SchDataStatisticsDlg part 1
+#define BMP_INDICATE_BOTH_VERTI (RID_APP_START + 137)
+#define BMP_INDICATE_UP (RID_APP_START + 138)
+#define BMP_INDICATE_DOWN (RID_APP_START + 139)
+#define BMP_INDICATE_BOTH_HORI (RID_APP_START + 140)
+#define BMP_INDICATE_RIGHT (RID_APP_START + 141)
+#define BMP_INDICATE_LEFT (RID_APP_START + 142)
+
 
 // CHART_BITMAPS_HRC
 #endif

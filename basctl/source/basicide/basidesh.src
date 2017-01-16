@@ -442,50 +442,59 @@ Bitmap RID_BMP_ERRORMARKER
     File = "im30841.png";
 };
 
-Image RID_IMG_LOCKED
+Bitmap RID_BMP_LOCKED
 {
-    ImageBitmap = Bitmap { File = "lock.png" ; };
+    File = "lock.png";
 };
 
-Image RID_IMG_INSTALLATION
+Bitmap RID_BMP_INSTALLATION
 {
-    ImageBitmap = Bitmap { File = "harddisk_16.png"; };
+    File = "harddisk_16.png";
 };
-Image RID_IMG_DOCUMENT
+
+Bitmap RID_BMP_DOCUMENT
 {
-    ImageBitmap = Bitmap { File = "im30826.png"; };
+    File = "im30826.png";
 };
-Image RID_IMG_MODLIB
+
+Bitmap RID_BMP_MODLIB
 {
-    ImageBitmap = Bitmap { File = "im30820.png"; };
+    File = "im30820.png";
 };
-Image RID_IMG_MODLIBNOTLOADED
+
+Bitmap RID_BMP_MODLIBNOTLOADED
 {
-    ImageBitmap = Bitmap { File = "im30827.png"; };
+    File = "im30827.png";
 };
-Image RID_IMG_MODULE
+
+Bitmap RID_BMP_MODULE
 {
-    ImageBitmap = Bitmap { File = "im30821.png"; };
+    File = "im30821.png";
 };
-Image RID_IMG_MACRO
+
+Bitmap RID_BMP_MACRO
 {
-    ImageBitmap = Bitmap { File = "im30822.png"; };
+    File = "im30822.png";
 };
-Image RID_IMG_DLGLIB
+
+Bitmap RID_BMP_DLGLIB
 {
-    ImageBitmap = Bitmap { File = "dialogfolder_16.png"; };
+    File = "dialogfolder_16.png";
 };
-Image RID_IMG_DLGLIBNOTLOADED
+
+Bitmap RID_BMP_DLGLIBNOTLOADED
 {
-    ImageBitmap = Bitmap { File = "dialogfoldernot_16.png"; };
+    File = "dialogfoldernot_16.png";
 };
-Image RID_IMG_DIALOG
+
+Bitmap RID_BMP_DIALOG
 {
-    ImageBitmap = Bitmap { File = "im30823.png"; };
+    File = "im30823.png";
 };
-Image RID_IMG_REMOVEWATCH
+
+Bitmap RID_BMP_REMOVEWATCH
 {
-    ImageBitmap = Bitmap { File = "baswatr.png" ; };
+    File = "baswatr.png";
 };
 
 String RID_STR_REMOVEWATCHTIP

@@ -1442,7 +1442,7 @@ SvTreeListEntry* LibPage::ImpInsertLibEntry( const OUString& rLibName, sal_uLong
 
     if (bProtected)
     {
-        Image aImage(IDEResId(RID_IMG_LOCKED));
+        Image aImage(BitmapEx(IDEResId(RID_BMP_LOCKED)));
         m_pLibBox->SetExpandedEntryBmp(pNewEntry, aImage);
         m_pLibBox->SetCollapsedEntryBmp(pNewEntry, aImage);
     }
@@ -1535,10 +1535,10 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
 
                     sal_uInt16 nMode = pBasicBox->GetMode();
                     bool bDlgMode = ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES );
-                    sal_uInt16 nId = bDlgMode ? RID_IMG_DLGLIB : RID_IMG_MODLIB;
+                    const sal_uInt16 nId = bDlgMode ? RID_BMP_DLGLIB : RID_BMP_MODLIB;
                     SvTreeListEntry* pNewLibEntry = pBasicBox->AddEntry(
                         aLibName,
-                        Image( IDEResId( nId ) ),
+                        Image(BitmapEx(IDEResId(nId))),
                         pRootEntry, false,
                         o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
                     DBG_ASSERT( pNewLibEntry, "InsertEntry fehlgeschlagen!" );
@@ -1547,7 +1547,7 @@ void createLibImpl( vcl::Window* pWin, const ScriptDocument& rDocument,
                     {
                         SvTreeListEntry* pEntry_ = pBasicBox->AddEntry(
                             aModName,
-                            Image( IDEResId( RID_IMG_MODULE ) ),
+                            Image(BitmapEx(IDEResId(RID_BMP_MODULE))),
                             pNewLibEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
                         DBG_ASSERT( pEntry_, "InsertEntry fehlgeschlagen!" );

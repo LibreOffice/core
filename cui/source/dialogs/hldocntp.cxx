@@ -105,7 +105,7 @@ SvxHyperlinkNewDocTp::SvxHyperlinkNewDocTp ( vcl::Window *pParent, IconChoiceDia
     get(m_pCbbPath, "path");
     m_pCbbPath->SetSmartProtocol(INetProtocol::File);
     get(m_pBtCreate, "create");
-    BitmapEx aBitmap = Image(CUI_RES(RID_SVXBMP_NEWDOC)).GetBitmapEx();
+    BitmapEx aBitmap(CUI_RES(RID_SVXBMP_NEWDOC));
     aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
     m_pBtCreate->SetModeImage(Image(aBitmap));
     get(m_pLbDocTypes, "types");

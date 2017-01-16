@@ -312,12 +312,12 @@ bool TrendlineResources::FillItemSet(SfxItemSet* rOutAttrs) const
 
 void TrendlineResources::FillValueSets()
 {
-    m_pFI_Linear->SetImage(       Image( SchResId( BMP_REGRESSION_LINEAR          ) ) );
-    m_pFI_Logarithmic->SetImage(  Image( SchResId( BMP_REGRESSION_LOG             ) ) );
-    m_pFI_Exponential->SetImage(  Image( SchResId( BMP_REGRESSION_EXP             ) ) );
-    m_pFI_Power->SetImage(        Image( SchResId( BMP_REGRESSION_POWER           ) ) );
-    m_pFI_Polynomial->SetImage(   Image( SchResId( BMP_REGRESSION_POLYNOMIAL      ) ) );
-    m_pFI_MovingAverage->SetImage(Image( SchResId( BMP_REGRESSION_MOVING_AVERAGE  ) ) );
+    m_pFI_Linear->SetImage(Image(BitmapEx(SchResId(BMP_REGRESSION_LINEAR))));
+    m_pFI_Logarithmic->SetImage(Image(BitmapEx(SchResId(BMP_REGRESSION_LOG))));
+    m_pFI_Exponential->SetImage(Image(BitmapEx(SchResId(BMP_REGRESSION_EXP))));
+    m_pFI_Power->SetImage(Image(BitmapEx(SchResId(BMP_REGRESSION_POWER))));
+    m_pFI_Polynomial->SetImage(Image(BitmapEx(SchResId(BMP_REGRESSION_POLYNOMIAL))));
+    m_pFI_MovingAverage->SetImage(Image(BitmapEx(SchResId(BMP_REGRESSION_MOVING_AVERAGE))));
 }
 
 void TrendlineResources::UpdateControlStates()

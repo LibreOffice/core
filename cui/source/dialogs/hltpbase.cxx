@@ -172,7 +172,7 @@ void SvxHyperlinkTabPageBase::InitStdControls ()
         get(mpEdIndication, "indication");
         get(mpEdText, "name");
         get(mpBtScript, "script");
-        BitmapEx aBitmap = Image(CUI_RES (RID_SVXBMP_SCRIPT)).GetBitmapEx();
+        BitmapEx aBitmap(CUI_RES(RID_SVXBMP_SCRIPT));
         aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
         mpBtScript->SetModeImage(Image(aBitmap));
 

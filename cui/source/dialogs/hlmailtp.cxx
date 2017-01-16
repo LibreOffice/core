@@ -44,7 +44,7 @@ SvxHyperlinkMailTp::SvxHyperlinkMailTp ( vcl::Window *pParent, IconChoiceDialog*
     get(m_pCbbReceiver, "receiver");
     m_pCbbReceiver->SetSmartProtocol(INetProtocol::Mailto);
     get(m_pBtAdrBook, "adressbook");
-    BitmapEx aBitmap = Image(CUI_RES(RID_SVXBMP_ADRESSBOOK)).GetBitmapEx();
+    BitmapEx aBitmap(CUI_RES(RID_SVXBMP_ADRESSBOOK));
     aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
     m_pBtAdrBook->SetModeImage(Image(aBitmap));
     get(m_pFtSubject, "subject_label");

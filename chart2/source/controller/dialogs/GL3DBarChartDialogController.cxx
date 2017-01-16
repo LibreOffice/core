@@ -32,7 +32,7 @@ OUString GL3DBarChartDialogController::getName()
 
 Image GL3DBarChartDialogController::getImage()
 {
-    return Image(SchResId(IMG_TYPE_GL3D_BAR));
+    return Image(BitmapEx(SchResId(BMP_TYPE_GL3D_BAR)));
 }
 
 const tTemplateServiceChartTypeParameterMap&

@@ -257,14 +257,14 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
             // create tree list box entry
             sal_uInt16 nId;
             if ( ( nMode & BROWSEMODE_DIALOGS ) && !( nMode & BROWSEMODE_MODULES ) )
-                nId = bLoaded ? RID_IMG_DLGLIB : RID_IMG_DLGLIBNOTLOADED;
+                nId = bLoaded ? RID_BMP_DLGLIB : RID_BMP_DLGLIBNOTLOADED;
             else
-                nId = bLoaded ? RID_IMG_MODLIB : RID_IMG_MODLIBNOTLOADED;
+                nId = bLoaded ? RID_BMP_MODLIB : RID_BMP_MODLIBNOTLOADED;
             SvTreeListEntry* pLibRootEntry = FindEntry( pDocumentRootEntry, aLibName, OBJ_TYPE_LIBRARY );
             if ( pLibRootEntry )
             {
-                SetEntryBitmaps( pLibRootEntry, Image( IDEResId( nId ) ) );
-                if ( IsExpanded( pLibRootEntry ) )
+                SetEntryBitmaps(pLibRootEntry, Image(BitmapEx(IDEResId(nId))));
+                if ( IsExpanded(pLibRootEntry))
                     ImpCreateLibSubEntries( pLibRootEntry, rDocument, aLibName );
             }
             else
@@ -307,7 +307,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                         {
                             pModuleEntry = AddEntry(
                                 aModName,
-                                Image( IDEResId( RID_IMG_MODULE ) ),
+                                Image(BitmapEx(IDEResId(RID_BMP_MODULE))),
                                 pLibRootEntry, false,
                                 o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
                         }
@@ -327,7 +327,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                                 {
                                     AddEntry(
                                         aName,
-                                        Image( IDEResId( RID_IMG_MACRO ) ),
+                                        Image(BitmapEx(IDEResId(RID_BMP_MACRO))),
                                         pModuleEntry, false,
                                         o3tl::make_unique<Entry>(
                                             OBJ_TYPE_METHOD));
@@ -366,7 +366,7 @@ void TreeListBox::ImpCreateLibSubEntries( SvTreeListEntry* pLibRootEntry, const 
                     {
                         AddEntry(
                             aDlgName,
-                            Image( IDEResId( RID_IMG_DIALOG ) ),
+                            Image(BitmapEx(IDEResId(RID_BMP_DIALOG))),
                             pLibRootEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_DIALOG));
                     }
@@ -394,7 +394,7 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntr
         SvTreeListEntry* pLibSubRootEntry = FindEntry( pLibRootEntry, aEntryName, eType );
         if( pLibSubRootEntry )
         {
-            SetEntryBitmaps( pLibSubRootEntry, Image( IDEResId( RID_IMG_MODLIB ) ) );
+            SetEntryBitmaps(pLibSubRootEntry, Image(BitmapEx(IDEResId(RID_BMP_MODLIB))));
             if ( IsExpanded( pLibSubRootEntry ) )
                 ImpCreateLibSubSubEntriesInVBAMode( pLibSubRootEntry, rDocument, rLibName );
         }
@@ -402,7 +402,7 @@ void TreeListBox::ImpCreateLibSubEntriesInVBAMode( SvTreeListEntry* pLibRootEntr
         {
             AddEntry(
                 aEntryName,
-                Image( IDEResId( RID_IMG_MODLIB ) ),
+                Image(BitmapEx(IDEResId(RID_BMP_MODLIB))),
                 pLibRootEntry, true, o3tl::make_unique<Entry>(eType));
         }
     }
@@ -463,7 +463,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
             {
                 pModuleEntry = AddEntry(
                     aEntryName,
-                    Image( IDEResId( RID_IMG_MODULE ) ),
+                    Image(BitmapEx(IDEResId(RID_BMP_MODULE))),
                     pLibSubRootEntry, false,
                     o3tl::make_unique<Entry>(OBJ_TYPE_MODULE));
             }
@@ -483,7 +483,7 @@ void TreeListBox::ImpCreateLibSubSubEntriesInVBAMode( SvTreeListEntry* pLibSubRo
                     {
                         AddEntry(
                             aName,
-                            Image( IDEResId( RID_IMG_MACRO ) ),
+                            Image(BitmapEx(IDEResId(RID_BMP_MACRO))),
                             pModuleEntry, false,
                             o3tl::make_unique<Entry>(OBJ_TYPE_METHOD));
                     }
@@ -771,12 +771,12 @@ void TreeListBox::GetRootEntryBitmaps( const ScriptDocument& rDocument, Image& r
         else
         {
             // default icon
-            rImage = Image( IDEResId( RID_IMG_DOCUMENT ) );
+            rImage = Image(BitmapEx(IDEResId(RID_BMP_DOCUMENT)));
         }
     }
     else
     {
-        rImage = Image( IDEResId( RID_IMG_INSTALLATION ) );
+        rImage = Image(BitmapEx(IDEResId(RID_BMP_INSTALLATION)));
     }
 }
 

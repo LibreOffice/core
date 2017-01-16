@@ -94,54 +94,54 @@ String RID_SVXSTR_HYPERDLG_QUERYOVERWRITE
     Text [ en-US ] = "The file already exists. Overwrite?" ;
 };
 
-Image RID_SVXBMP_HLINETTP
+Bitmap RID_SVXBMP_HLINETTP
 {
-    ImageBitmap = Bitmap { File = "hlinettp.png" ; };
+    File = "hlinettp.png";
 };
 
-Image RID_SVXBMP_HLMAILTP
+Bitmap RID_SVXBMP_HLMAILTP
 {
-    ImageBitmap = Bitmap { File = "hlmailtp.png" ; };
+    File = "hlmailtp.png";
 };
 
-Image RID_SVXBMP_HLDOCTP
+Bitmap RID_SVXBMP_HLDOCTP
 {
-    ImageBitmap = Bitmap { File = "hldoctp.png" ; };
+    File = "hldoctp.png";
 };
 
-Image RID_SVXBMP_HLDOCNTP
+Bitmap RID_SVXBMP_HLDOCNTP
 {
-    ImageBitmap = Bitmap { File = "hldocntp.png" ; };
+    File = "hldocntp.png";
 };
 
-Image RID_SVXBMP_BROWSE
+Bitmap RID_SVXBMP_BROWSE
 {
-    ImageBitmap = Bitmap { File = "browse.png" ; };
+    File = "browse.png";
 };
 
-Image RID_SVXBMP_SCRIPT
+Bitmap RID_SVXBMP_SCRIPT
 {
-    ImageBitmap = Bitmap { File = "script.png" ; };
+    File = "script.png";
 };
 
-Image RID_SVXBMP_ADRESSBOOK
+Bitmap RID_SVXBMP_ADRESSBOOK
 {
-    ImageBitmap = Bitmap { File = "adrbook.png" ; };
+    File = "adrbook.png";
 };
 
-Image RID_SVXBMP_FILEOPEN
+Bitmap RID_SVXBMP_FILEOPEN
 {
-    ImageBitmap = Bitmap { File = "fileopen.png" ; };
+    File = "fileopen.png";
 };
 
-Image RID_SVXBMP_TARGET
+Bitmap RID_SVXBMP_TARGET
 {
-    ImageBitmap = Bitmap { File = "target.png" ; };
+    File = "target.png";
 };
 
-Image RID_SVXBMP_NEWDOC
+Bitmap RID_SVXBMP_NEWDOC
 {
-    ImageBitmap = Bitmap { File = "newdoc.png" ; };
+    File = "newdoc.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

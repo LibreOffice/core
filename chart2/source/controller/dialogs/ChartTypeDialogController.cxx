@@ -439,10 +439,12 @@ OUString ColumnChartDialogController::getName()
 {
     return SCH_RESSTR( STR_TYPE_COLUMN );
 }
+
 Image ColumnChartDialogController::getImage()
 {
-    return Image( SchResId( IMG_TYPE_COLUMN ));
+    return Image(BitmapEx(SchResId(BMP_TYPE_COLUMN)));
 }
+
 const tTemplateServiceChartTypeParameterMap& ColumnChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
@@ -505,17 +507,21 @@ void ColumnChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const
 BarChartDialogController::BarChartDialogController()
 {
 }
+
 BarChartDialogController::~BarChartDialogController()
 {
 }
+
 OUString BarChartDialogController::getName()
 {
     return SCH_RESSTR( STR_TYPE_BAR );
 }
+
 Image BarChartDialogController::getImage()
 {
-    return Image( SchResId( IMG_TYPE_BAR ));
+    return Image(BitmapEx(SchResId(BMP_TYPE_BAR)));
 }
+
 const tTemplateServiceChartTypeParameterMap& BarChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
@@ -586,7 +592,7 @@ OUString PieChartDialogController::getName()
 }
 Image PieChartDialogController::getImage()
 {
-    return Image( SchResId( IMG_TYPE_PIE ));
+    return Image(BitmapEx(SchResId(BMP_TYPE_PIE)));
 }
 const tTemplateServiceChartTypeParameterMap& PieChartDialogController::getTemplateMap() const
 {
@@ -644,10 +650,12 @@ OUString LineChartDialogController::getName()
 {
     return SCH_RESSTR( STR_TYPE_LINE );
 }
+
 Image LineChartDialogController::getImage()
 {
-    return Image( SchResId( IMG_TYPE_LINE ));
+    return Image(BitmapEx(SchResId(BMP_TYPE_LINE)));
 }
+
 const tTemplateServiceChartTypeParameterMap& LineChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
@@ -779,21 +787,26 @@ void LineChartDialogController::adjustParameterToMainType( ChartTypeParameter& r
 
     ChartTypeDialogController::adjustParameterToMainType( rParameter );
 }
+
 XYChartDialogController::XYChartDialogController()
 {
     bSupportsXAxisWithValues = true;
 }
+
 XYChartDialogController::~XYChartDialogController()
 {
 }
+
 OUString XYChartDialogController::getName()
 {
     return SCH_RESSTR( STR_TYPE_XY );
 }
+
 Image XYChartDialogController::getImage()
 {
-    return Image( SchResId( IMG_TYPE_XY ));
+    return Image(BitmapEx(SchResId(BMP_TYPE_XY)));
 }
+
 const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
@@ -803,6 +816,7 @@ const tTemplateServiceChartTypeParameterMap& XYChartDialogController::getTemplat
     {"com.sun.star.chart2.template.ThreeDScatter" ,              ChartTypeParameter(4,true,true,GlobalStackMode_NONE,false,true)}};
     return s_aTemplateMap;
 }
+
 void XYChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
@@ -877,24 +891,30 @@ void XYChartDialogController::adjustParameterToSubType( ChartTypeParameter& rPar
             break;
     }
 }
+
 AreaChartDialogController::AreaChartDialogController()
 {
 }
+
 AreaChartDialogController::~AreaChartDialogController()
 {
 }
+
 OUString AreaChartDialogController::getName()
 {
     return SCH_RESSTR(STR_TYPE_AREA);
 }
+
 Image AreaChartDialogController::getImage()
 {
-    return Image( SchResId( IMG_TYPE_AREA ));
+    return Image(BitmapEx(SchResId(BMP_TYPE_AREA)));
 }
+
 bool AreaChartDialogController::shouldShow_3DLookControl() const
 {
     return true;
 }
+
 const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
@@ -906,6 +926,7 @@ const tTemplateServiceChartTypeParameterMap& AreaChartDialogController::getTempl
     {"com.sun.star.chart2.template.PercentStackedThreeDArea" , ChartTypeParameter(3,false,true,GlobalStackMode_STACK_Y_PERCENT)}};
     return s_aTemplateMap;
 }
+
 void AreaChartDialogController::fillSubTypeList( ValueSet& rSubTypeList, const ChartTypeParameter& rParameter )
 {
     rSubTypeList.Clear();
@@ -956,25 +977,31 @@ void AreaChartDialogController::adjustParameterToMainType( ChartTypeParameter& r
 
     ChartTypeDialogController::adjustParameterToMainType( rParameter );
 }
+
 NetChartDialogController::NetChartDialogController()
 {
     bSupports3D = false;
 }
+
 NetChartDialogController::~NetChartDialogController()
 {
 }
+
 OUString NetChartDialogController::getName()
 {
     return SCH_RESSTR(STR_TYPE_NET);
 }
+
 Image NetChartDialogController::getImage()
 {
-    return Image( SchResId( IMG_TYPE_NET ));
+    return Image(BitmapEx(SchResId(BMP_TYPE_NET)));
 }
+
 bool NetChartDialogController::shouldShow_StackingControl() const
 {
     return true;
 }
+
 const tTemplateServiceChartTypeParameterMap& NetChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap s_aTemplateMap{
@@ -1059,9 +1086,10 @@ OUString StockChartDialogController::getName()
 {
     return SCH_RESSTR(STR_TYPE_STOCK);
 }
+
 Image StockChartDialogController::getImage()
 {
-    return Image( SchResId( IMG_TYPE_STOCK ));
+    return Image(BitmapEx(SchResId(BMP_TYPE_STOCK)));
 }
 
 const tTemplateServiceChartTypeParameterMap& StockChartDialogController::getTemplateMap() const
@@ -1108,7 +1136,7 @@ OUString CombiColumnLineChartDialogController::getName()
 
 Image CombiColumnLineChartDialogController::getImage( )
 {
-    return Image( SchResId( IMG_TYPE_COLUMN_LINE ) );
+    return Image(BitmapEx(SchResId(BMP_TYPE_COLUMN_LINE)));
 }
 
 const tTemplateServiceChartTypeParameterMap& CombiColumnLineChartDialogController::getTemplateMap() const
@@ -1226,20 +1254,25 @@ void CombiColumnLineChartDialogController::adjustParameterToSubType( ChartTypePa
             break;
     }
 }
+
 BubbleChartDialogController::BubbleChartDialogController()
 {
 }
+
 BubbleChartDialogController::~BubbleChartDialogController()
 {
 }
+
 OUString BubbleChartDialogController::getName()
 {
     return SCH_RESSTR(STR_TYPE_BUBBLE);
 }
+
 Image BubbleChartDialogController::getImage()
 {
-    return Image( SchResId( IMG_TYPE_BUBBLE ));
+    return Image(BitmapEx(SchResId(BMP_TYPE_BUBBLE)));
 }
+
 const tTemplateServiceChartTypeParameterMap& BubbleChartDialogController::getTemplateMap() const
 {
     static tTemplateServiceChartTypeParameterMap s_aTemplateMap{

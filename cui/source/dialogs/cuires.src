@@ -70,24 +70,34 @@ String RID_SVXSTR_EDIT_GRAPHIC
     Text [ en-US ] = "Link" ;
 };
 
-Image RID_CUIIMG_HARDDISK
+Bitmap RID_CUIBMP_HARDDISK
 {
-    ImageBitmap = Bitmap { File = "harddisk_16.png" ; };
+    File = "harddisk_16.png";
 };
 
-Image RID_CUIIMG_LIB
+Bitmap RID_CUIBMP_LIB
 {
-    ImageBitmap = Bitmap { File = "im30820.png"; };
+    File = "im30820.png";
 };
 
-Image RID_CUIIMG_MACRO
+Bitmap RID_CUIBMP_MACRO
 {
-    ImageBitmap = Bitmap { File = "im30821.png"; };
+    File = "im30821.png";
 };
 
-Image RID_CUIIMG_DOC
+Bitmap RID_CUIBMP_DOC
 {
-    ImageBitmap = Bitmap { File = "im30826.png"; };
+    File = "im30826.png";
+};
+
+Bitmap RID_CUIBMP_COLLAPSED
+{
+    File = "plus.bmp" ;
+};
+
+Bitmap RID_CUIBMP_EXPANDED
+{
+    File = "minus.bmp" ;
 };
 
 String RID_SVXSTR_LOADACCELCONFIG

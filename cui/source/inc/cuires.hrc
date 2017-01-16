@@ -28,10 +28,12 @@
 // RID_SVX_START + 0 unused
 #define RID_SVXSTR_OPTIONS_RESTART          (RID_SVX_START + 1)
 
-#define RID_CUIIMG_HARDDISK                 (RID_SVX_START + 4)
-#define RID_CUIIMG_LIB                      (RID_SVX_START + 5)
-#define RID_CUIIMG_MACRO                    (RID_SVX_START + 6)
-#define RID_CUIIMG_DOC                      (RID_SVX_START + 7)
+#define RID_CUIBMP_HARDDISK                 (RID_SVX_START + 4)
+#define RID_CUIBMP_LIB                      (RID_SVX_START + 5)
+#define RID_CUIBMP_MACRO                    (RID_SVX_START + 6)
+#define RID_CUIBMP_DOC                      (RID_SVX_START + 7)
+#define RID_CUIBMP_COLLAPSED                (RID_SVX_START + 8)
+#define RID_CUIBMP_EXPANDED                 (RID_SVX_START + 9)
 
 // Gallery
 #define RID_CUI_GALLERY_START               (RID_SVX_START + 360)

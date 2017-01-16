@@ -1566,7 +1566,7 @@ WatchWindow::WatchWindow (Layout* pParent)
     aRemoveWatchButton->SetClickHdl( LINK( this, WatchWindow, ButtonHdl ) );
     aRemoveWatchButton->SetPosPixel( Point( nTextLen + aXEdit->GetSizePixel().Width() + 4, 2 ) );
     aRemoveWatchButton->SetHelpId(HID_BASICIDE_REMOVEWATCH);
-    aRemoveWatchButton->SetModeImage(Image(IDEResId(RID_IMG_REMOVEWATCH)));
+    aRemoveWatchButton->SetModeImage(Image(BitmapEx(IDEResId(RID_BMP_REMOVEWATCH))));
     aRemoveWatchButton->SetQuickHelpText(IDEResId(RID_STR_REMOVEWATCHTIP));
     Size aSz( aRemoveWatchButton->GetModeImage().GetSizePixel() );
     aSz.Width() += 6;

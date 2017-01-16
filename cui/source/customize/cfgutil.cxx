@@ -359,17 +359,17 @@ struct SvxConfigGroupBoxResource_Impl : public Resource
 
 SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
     Resource(CUI_RES(RID_SVXPAGE_CONFIGGROUPBOX)),
-    m_hdImage(CUI_RES(RID_CUIIMG_HARDDISK)),
-    m_libImage(CUI_RES(RID_CUIIMG_LIB)),
-    m_macImage(CUI_RES(RID_CUIIMG_MACRO)),
-    m_docImage(CUI_RES(RID_CUIIMG_DOC)),
+    m_hdImage(BitmapEx(CUI_RES(RID_CUIBMP_HARDDISK))),
+    m_libImage(BitmapEx(CUI_RES(RID_CUIBMP_LIB))),
+    m_macImage(BitmapEx(CUI_RES(RID_CUIBMP_MACRO))),
+    m_docImage(BitmapEx(CUI_RES(RID_CUIBMP_DOC))),
     m_sMyMacros(CUI_RESSTR(RID_SVXSTR_MYMACROS)),
     m_sProdMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
     m_sMacros(CUI_RESSTR(STR_BASICMACROS)),
     m_sDlgMacros(CUI_RESSTR(RID_SVXSTR_PRODMACROS)),
     m_aStrGroupStyles(CUI_RESSTR(STR_GROUP_STYLES)),
-    m_collapsedImage(CUI_RES(BMP_COLLAPSED)),
-    m_expandedImage(CUI_RES(BMP_EXPANDED))
+    m_collapsedImage(BitmapEx(CUI_RES(RID_CUIBMP_COLLAPSED))),
+    m_expandedImage(BitmapEx(CUI_RES(RID_CUIBMP_EXPANDED)))
 {
     FreeResource();
 }

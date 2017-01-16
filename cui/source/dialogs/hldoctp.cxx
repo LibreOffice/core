@@ -41,13 +41,13 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
     get(m_pCbbPath, "path");
     m_pCbbPath->SetSmartProtocol(INetProtocol::File);
     get(m_pBtFileopen, "fileopen");
-    BitmapEx aBitmap = Image(CUI_RES(RID_SVXBMP_FILEOPEN)).GetBitmapEx();
+    BitmapEx aBitmap(CUI_RES(RID_SVXBMP_FILEOPEN));
     aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality);
     m_pBtFileopen->SetModeImage(Image(aBitmap));
     get(m_pEdTarget, "target");
     get(m_pFtFullURL, "url");
     get(m_pBtBrowse, "browse");
-    aBitmap = Image(CUI_RES(RID_SVXBMP_TARGET)).GetBitmapEx();
+    aBitmap = BitmapEx(CUI_RES(RID_SVXBMP_TARGET));
     aBitmap.Scale(GetDPIScaleFactor(),GetDPIScaleFactor(),BmpScaleFlag::BestQuality );
     m_pBtBrowse->SetModeImage(Image(aBitmap));
 
