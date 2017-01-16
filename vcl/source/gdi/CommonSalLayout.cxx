@@ -448,6 +448,8 @@ bool CommonSalLayout::LayoutText(ImplLayoutArgs& rArgs)
 
     ParseFeatures(mrFontSelData.maTargetName);
 
+    SAL_DEBUG(mrFontSelData.maTargetName << "=>" << mrFontSelData.maSearchName << ": '" << rArgs.mrStr << "'");
+
     double nXScale = 0;
     double nYScale = 0;
     getScale(&nXScale, &nYScale);
