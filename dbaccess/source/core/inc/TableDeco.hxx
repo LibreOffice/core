@@ -73,7 +73,7 @@ namespace dbaccess
     // <properties>
         mutable sal_Int32                                         m_nPrivileges;
     // </properties>
-        ::connectivity::sdbcx::OCollection*                       m_pColumns;
+        std::unique_ptr<::connectivity::sdbcx::OCollection>       m_pColumns;
 
         // IColumnFactory
         virtual OColumn*    createColumn(const OUString& _rName) const override;

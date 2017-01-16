@@ -35,7 +35,7 @@ namespace dbaui
 */
 class OModuleImpl
 {
-    ResMgr* m_pResources;
+    std::unique_ptr<ResMgr> m_pResources;
 
 public:
     /// ctor
@@ -54,7 +54,6 @@ OModuleImpl::OModuleImpl()
 
 OModuleImpl::~OModuleImpl()
 {
-    delete m_pResources;
 }
 
 ResMgr* OModuleImpl::getResManager()
@@ -64,9 +63,9 @@ ResMgr* OModuleImpl::getResManager()
     if (!m_pResources)
     {
         // create a manager with a fixed prefix
-        m_pResources = ResMgr::CreateResMgr("dbu");
+        m_pResources.reset( ResMgr::CreateResMgr("dbu") );
     }
-    return m_pResources;
+    return m_pResources.get();
 }
 
 // OModule
