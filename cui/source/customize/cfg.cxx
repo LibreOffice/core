@@ -3685,7 +3685,6 @@ ToolbarSaveInData::ToolbarSaveInData(
 
 ToolbarSaveInData::~ToolbarSaveInData()
 {
-    delete pRootEntry;
 }
 
 void ToolbarSaveInData::SetSystemStyle(
@@ -3885,9 +3884,9 @@ SvxEntries* ToolbarSaveInData::GetEntries()
     if ( pRootEntry == nullptr )
     {
 
-        pRootEntry = new SvxConfigEntry(
+        pRootEntry.reset( new SvxConfigEntry(
             OUString("MainToolbars"),
-            OUString(), true);
+            OUString(), true) );
 
         uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
             GetConfigManager()->getUIElementsInfo(
@@ -4121,8 +4120,7 @@ void ToolbarSaveInData::Reset()
 
     // now delete the root SvxConfigEntry the next call to GetEntries()
     // causes it to be reinitialised
-    delete pRootEntry;
-    pRootEntry = nullptr;
+    pRootEntry.reset();
 
     // reset all icons to default
     try
