@@ -145,11 +145,6 @@ String RID_SVXSTR_BASICMACROS
     Text [ en-US ] = "BASIC Macros" ;
 };
 
-String RID_SVXSTR_HUMAN_APPNAME
-{
-    Text = "%PRODUCTNAME" ;
-};
-
 String RID_SVXSTR_GROUP_STYLES
 {
     Text [ en-US ] = "Styles" ;

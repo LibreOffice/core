@@ -410,7 +410,6 @@
 #define RID_SVXSTR_GRAMMAR_AUTO                             (RID_SVX_START + 1234)
 #define RID_SVXSTR_GROUP_STYLES                             (RID_SVX_START + 1235)
 #define RID_SVXSTR_BASICMACROS                              (RID_SVX_START + 1236)
-#define RID_SVXSTR_HUMAN_APPNAME                            (RID_SVX_START + 1237)
 // There is a gap here because of removed strings
 #define RID_SVXSTR_CHG_MATH                                 (RID_SVX_START + 1238)
 #define RID_SVXSTR_CHG_WRITER                               (RID_SVX_START + 1239)
