@@ -72,15 +72,16 @@ class CGMBitmapDescriptor
 class CGMBitmap
 {
     CGM*                    mpCGM;
-    CGMBitmapDescriptor*    pCGMBitmapDescriptor;
-    bool                ImplGetDimensions( CGMBitmapDescriptor& );
+    std::unique_ptr<CGMBitmapDescriptor>
+                            pCGMBitmapDescriptor;
+    bool                    ImplGetDimensions( CGMBitmapDescriptor& );
     void                    ImplSetCurrentPalette( CGMBitmapDescriptor& );
     void                    ImplGetBitmap( CGMBitmapDescriptor& );
     void                    ImplInsert( CGMBitmapDescriptor& rSource, CGMBitmapDescriptor& rDest );
 public:
     explicit CGMBitmap( CGM& rCGM );
     ~CGMBitmap();
-    CGMBitmapDescriptor*    GetBitmap() { return pCGMBitmapDescriptor;}
+    CGMBitmapDescriptor*    GetBitmap() { return pCGMBitmapDescriptor.get();}
     CGMBitmap*              GetNext();
 };
 #endif

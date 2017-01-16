@@ -3373,7 +3373,6 @@ PPTNumberFormatCreator::PPTNumberFormatCreator( PPTExtParaProv* pParaProv )
 
 PPTNumberFormatCreator::~PPTNumberFormatCreator()
 {
-    delete pExtParaProv;
 }
 
 bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManager,
@@ -3387,10 +3386,10 @@ bool PPTNumberFormatCreator::ImplGetExtNumberFormat( SdrPowerPointImport& rManag
     sal_uInt32  nAnmScheme = 0xFFFF0003;
     sal_uInt16  nBuBlip = 0xffff;
 
-    const PPTExtParaProv* pParaProv = pExtParaProv;
+    const PPTExtParaProv* pParaProv = pExtParaProv.get();
     if ( !pExtParaProv )
-        pParaProv = ( pPara ) ? pPara->mrStyleSheet.pExtParaProv
-                              : rManager.pPPTStyleSheet->pExtParaProv;
+        pParaProv = pPara ? pPara->mrStyleSheet.pExtParaProv.get()
+                          : rManager.pPPTStyleSheet->pExtParaProv.get();
     if ( pPara )
     {
         nBuFlags = pPara->pParaSet->mnExtParagraphMask;
@@ -4450,7 +4449,7 @@ PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet )
     mnParagraph = rCharPropSet.mnParagraph;
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
     maString = rCharPropSet.maString;
-    mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : nullptr;
+    mpFieldItem.reset( rCharPropSet.mpFieldItem ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : nullptr );
     mnLanguage[ 0 ] = rCharPropSet.mnLanguage[ 0 ];
     mnLanguage[ 1 ] = rCharPropSet.mnLanguage[ 1 ];
     mnLanguage[ 2 ] = rCharPropSet.mnLanguage[ 2 ];
@@ -4466,13 +4465,12 @@ PPTCharPropSet::PPTCharPropSet( const PPTCharPropSet& rCharPropSet, sal_uInt32 n
     mnParagraph = nParagraph;
     mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
     maString = rCharPropSet.maString;
-    mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : nullptr;
+    mpFieldItem.reset( rCharPropSet.mpFieldItem ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : nullptr );
     mnLanguage[ 0 ] = mnLanguage[ 1 ] = mnLanguage[ 2 ] = 0;
 }
 
 PPTCharPropSet::~PPTCharPropSet()
 {
-    delete mpFieldItem;
 }
 
 PPTCharPropSet& PPTCharPropSet::operator=( const PPTCharPropSet& rCharPropSet )
@@ -4483,7 +4481,7 @@ PPTCharPropSet& PPTCharPropSet::operator=( const PPTCharPropSet& rCharPropSet )
         mnOriginalTextPos = rCharPropSet.mnOriginalTextPos;
         mnParagraph = rCharPropSet.mnParagraph;
         maString = rCharPropSet.maString;
-        mpFieldItem = ( rCharPropSet.mpFieldItem ) ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : nullptr;
+        mpFieldItem.reset( rCharPropSet.mpFieldItem ? new SvxFieldItem( *rCharPropSet.mpFieldItem ) : nullptr );
     }
     return *this;
 }
@@ -4522,7 +4520,6 @@ PPTRuler::PPTRuler()
 
 PPTRuler::~PPTRuler()
 {
-    delete[] pTab;
 };
 
 
@@ -4580,7 +4577,7 @@ PPTTextRulerInterpreter::PPTTextRulerInterpreter( sal_uInt32 nFileOfs, DffRecord
                 if (nTCount && bRecordOk)
                 {
                     mpImplRuler->nTabCount = nTabCount;
-                    mpImplRuler->pTab = new PPTTabEntry[ mpImplRuler->nTabCount ];
+                    mpImplRuler->pTab.reset( new PPTTabEntry[ mpImplRuler->nTabCount ] );
                     for ( i = 0; i < nTCount; i++ )
                     {
                         rIn.ReadUInt16( mpImplRuler->pTab[ i ].nOffset )
@@ -6488,7 +6485,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
 
     if ( ( pObjData == nullptr ) || ( pObjData->bShapeType ) )
     {
-        PPTExtParaProv* pExtParaProv = rSdrPowerPointImport.pPPTStyleSheet->pExtParaProv;
+        PPTExtParaProv* pExtParaProv = rSdrPowerPointImport.pPPTStyleSheet->pExtParaProv.get();
         if ( pObjData )
         {
             mpImplTextObj->mnShapeId = pObjData->nShapeId;
@@ -6966,7 +6963,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                 if ( (*FE)->pField2 )
                                                 {
                                                     PPTCharPropSet* pNewCPS = new PPTCharPropSet( *pSet );
-                                                    pNewCPS->mpFieldItem = (*FE)->pField2;
+                                                    pNewCPS->mpFieldItem.reset( (*FE)->pField2 );
                                                     (*FE)->pField2 = nullptr;
                                                     aCharPropList.insert( aCharPropList.begin() + n + 1, pNewCPS );
 
@@ -6982,7 +6979,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                 }
                                                 if ( (*FE)->pField1 )
                                                 {
-                                                    pSet->mpFieldItem = (*FE)->pField1;
+                                                    pSet->mpFieldItem.reset( (*FE)->pField1 );
                                                     (*FE)->pField1 = nullptr;
                                                 }
                                                 else if ( (*FE)->pString )
@@ -7033,7 +7030,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             {
                                                                 if ( nNextStringLen <= nHyperLenLeft )
                                                                 {
-                                                                    pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), pCurrent->maString, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
+                                                                    pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), pCurrent->maString, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD ) );
                                                                     nHyperLenLeft -= nNextStringLen;
 
                                                                     if ( nHyperLenLeft )
@@ -7054,7 +7051,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                                     pNewCPS->maString = pCurrent->maString.copy( nHyperLenLeft,( nNextStringLen - nHyperLenLeft ) );
                                                                     aCharPropList.insert( aCharPropList.begin() + nIdx + 1, pNewCPS );
                                                                     OUString aRepresentation = pCurrent->maString.copy( 0, nHyperLenLeft );
-                                                                    pCurrent->mpFieldItem = new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
+                                                                    pCurrent->mpFieldItem.reset( new SvxFieldItem( SvxURLField( pField->GetURL(), aRepresentation, SVXURLFORMAT_REPR ), EE_FEATURE_FIELD ) );
                                                                     nHyperLenLeft = 0;
                                                                 }
                                                                 (pCurrent->maString).clear();

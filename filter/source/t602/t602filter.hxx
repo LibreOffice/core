@@ -95,7 +95,7 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
 >
 {
     css::lang::Locale meLocale;
-    ResMgr *mpResMgr;
+    std::unique_ptr<ResMgr> mpResMgr;
     bool OptionsDlg();
     ResMgr* getResMgr();
     OUString getResStr( sal_Int16 resid );

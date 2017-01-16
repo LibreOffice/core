@@ -223,7 +223,7 @@ DffPropertyReader::DffPropertyReader( const SvxMSDffManager& rMan )
 
 void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDgg ) const
 {
-    delete pDefaultPropSet;
+    const_cast<DffPropertyReader*>(this)->pDefaultPropSet.reset();
     sal_uInt32 nMerk = rStCtrl.Tell();
     rStCtrl.Seek( nOffsDgg );
     DffRecordHeader aRecHd;
@@ -232,7 +232,7 @@ void DffPropertyReader::SetDefaultPropSet( SvStream& rStCtrl, sal_uInt32 nOffsDg
     {
         if ( SvxMSDffManager::SeekToRec( rStCtrl, DFF_msofbtOPT, aRecHd.GetRecEndFilePos() ) )
         {
-            const_cast<DffPropertyReader*>(this)->pDefaultPropSet = new DffPropSet;
+            const_cast<DffPropertyReader*>(this)->pDefaultPropSet.reset( new DffPropSet );
             ReadDffPropSet( rStCtrl, *pDefaultPropSet );
         }
     }
@@ -375,7 +375,6 @@ sal_Int32 DffPropertyReader::Fix16ToAngle( sal_Int32 nContent )
 
 DffPropertyReader::~DffPropertyReader()
 {
-    delete pDefaultPropSet;
 }
 
 
@@ -2910,12 +2909,11 @@ DffRecordList::DffRecordList( DffRecordList* pList ) :
     pNext                   ( nullptr )
 {
     if ( pList )
-        pList->pNext = this;
+        pList->pNext.reset( this );
 }
 
 DffRecordList::~DffRecordList()
 {
-    delete pNext;
 }
 
 DffRecordManager::DffRecordManager() :
@@ -2946,7 +2944,7 @@ void DffRecordManager::Consume( SvStream& rIn, sal_uInt32 nStOfs )
     {
         pCList = static_cast<DffRecordList*>(this);
         while ( pCList->pNext )
-            pCList = pCList->pNext;
+            pCList = pCList->pNext.get();
         while (rIn.good() && ( ( rIn.Tell() + 8 ) <=  nStOfs ))
         {
             if ( pCList->nCount == DFF_RECORD_MANAGER_BUF_SIZE )
@@ -2964,8 +2962,7 @@ void DffRecordManager::Consume( SvStream& rIn, sal_uInt32 nStOfs )
 void DffRecordManager::Clear()
 {
     pCList = static_cast<DffRecordList*>(this);
-    delete pNext;
-    pNext = nullptr;
+    pNext.reset();
     nCurrent = 0;
     nCount = 0;
 }
@@ -3001,7 +2998,7 @@ DffRecordHeader* DffRecordManager::Next()
     }
     else if ( pCList->pNext )
     {
-        pCList = pCList->pNext;
+        pCList = pCList->pNext.get();
         pCList->nCurrent = 0;
         pRet = &pCList->mHd[ 0 ];
     }
@@ -3029,7 +3026,7 @@ DffRecordHeader* DffRecordManager::Last()
 {
     DffRecordHeader* pRet = nullptr;
     while ( pCList->pNext )
-        pCList = pCList->pNext;
+        pCList = pCList->pNext.get();
     sal_uInt32 nCnt = pCList->nCount;
     if ( nCnt-- )
     {

@@ -153,7 +153,7 @@ private:
     SVGExport&                              mrExport;
     SVGFontExport&                          mrFontExport;
     SVGState&                               mrCurrentState;
-    SvXMLElementExport*                     mpElemFont;
+    std::unique_ptr<SvXMLElementExport>     mpElemFont;
 
 
     static double           ImplRound( double fVal );

@@ -29,7 +29,8 @@ class Impl_OlePres
 {
     SotClipboardFormatId nFormat;
     sal_uInt16      nAspect;
-    GDIMetaFile *   pMtf;
+    std::unique_ptr<GDIMetaFile>
+                    pMtf;
 
     sal_uInt32      nAdvFlags;
     Size            aSize;      // Groesse in 100TH_MM
@@ -42,13 +43,10 @@ public:
     {}
     ~Impl_OlePres()
     {
-        delete pMtf;
     }
     void    SetMtf( const GDIMetaFile & rMtf )
             {
-                if( pMtf )
-                    delete pMtf;
-                pMtf = new GDIMetaFile( rMtf );
+                pMtf.reset( new GDIMetaFile( rMtf ) );
             }
     void                 SetAspect( sal_uInt16 nAsp ) { nAspect = nAsp; }
     void                 SetAdviseFlags( sal_uLong nAdv ) { nAdvFlags = nAdv; }

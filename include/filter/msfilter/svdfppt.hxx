@@ -809,7 +809,7 @@ protected:
 
 public:
 
-    PPTExtParaProv*  pExtParaProv;
+    std::unique_ptr<PPTExtParaProv>  pExtParaProv;
 
     void        GetNumberFormat(
                     SdrPowerPointImport& rMan,
@@ -930,7 +930,8 @@ struct PPTCharPropSet
     sal_uInt32          mnOriginalTextPos;
     sal_uInt32          mnParagraph;
     OUString            maString;
-    SvxFieldItem*       mpFieldItem;
+    std::unique_ptr<SvxFieldItem>
+                        mpFieldItem;
     sal_uInt16          mnLanguage[ 3 ];
 
     void                SetFont( sal_uInt16 nFont );
@@ -966,7 +967,8 @@ struct PPTRuler
         sal_uInt16          nDefaultTab;
         sal_uInt16          nTextOfs[nMaxPPTLevels];
         sal_uInt16          nBulletOfs[nMaxPPTLevels];
-        PPTTabEntry*        pTab;
+        std::unique_ptr<PPTTabEntry[]>
+                            pTab;
         sal_uInt16          nTabCount;
 
         PPTRuler();

@@ -423,7 +423,7 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
         {
             nCount = rDGR.GetI();
             if ( nCount )
-                pP = new DXFVector[ nCount ];
+                pP.reset( new DXFVector[ nCount ] );
         }
         break;
         case 70: nFlags = rDGR.GetI(); break;
@@ -448,7 +448,6 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
 
 DXFLWPolyLineEntity::~DXFLWPolyLineEntity()
 {
-    delete[] pP;
 }
 
 //--------------------------DXFHatchEntity-------------------------------------
@@ -680,7 +679,7 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
             bIsInBoundaryPathContext = true;
             nBoundaryPathCount = rDGR.GetI();
             if ( nBoundaryPathCount )
-                pBoundaryPathData = new DXFBoundaryPathData[ nBoundaryPathCount ];
+                pBoundaryPathData.reset( new DXFBoundaryPathData[ nBoundaryPathCount ] );
         }
         break;
         case 75 :
@@ -718,7 +717,6 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
 
 DXFHatchEntity::~DXFHatchEntity()
 {
-    delete[] pBoundaryPathData;
 }
 
 //--------------------------DXFVertexEntity-------------------------------------
