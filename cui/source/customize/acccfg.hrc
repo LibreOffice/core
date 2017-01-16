@@ -18,7 +18,6 @@
  */
 
 #define STR_GROUP_STYLES        58
-#define STR_PDF_EXPORT_SEND     59
 
 #define STR_BASICMACROS         67
 #define STR_HUMAN_APPNAME       69
