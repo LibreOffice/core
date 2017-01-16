@@ -34,10 +34,6 @@ $(eval $(call gb_Library_set_include,vbaobj,\
 	-I$(SRCDIR)/sc/source/filter/inc \
 ))
 
-$(eval $(call gb_Library_add_defs,vbaobj,\
-	-DSC_DLLIMPLEMENTATION \
-))
-
 $(eval $(call gb_Library_add_api,vbaobj,\
 	offapi \
 	oovbaapi \
@@ -56,6 +52,7 @@ $(eval $(call gb_Library_add_linked_libs,vbaobj,\
 	sb \
 	sc \
 	sfx \
+	sot \
 	stl \
 	svl \
 	svt \
