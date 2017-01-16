@@ -84,7 +84,7 @@ namespace extensions { namespace resource
         ::osl::Mutex                    m_aMutex;
         Reference< XResourceBundle >    m_xParent;
         Locale                          m_aLocale;
-        SimpleResMgr*                   m_pResourceManager;
+        std::unique_ptr<SimpleResMgr>   m_pResourceManager;
         ResourceTypes                   m_aResourceTypes;
 
     public:
@@ -177,13 +177,11 @@ namespace extensions { namespace resource
         :m_aLocale( _rLocale )
         ,m_pResourceManager( nullptr )
     {
-        m_pResourceManager = new SimpleResMgr( OUStringToOString( _rBaseName, RTL_TEXTENCODING_UTF8 ).getStr(),
-                LanguageTag( m_aLocale) );
+        m_pResourceManager.reset( new SimpleResMgr( OUStringToOString( _rBaseName, RTL_TEXTENCODING_UTF8 ).getStr(),
+                LanguageTag( m_aLocale) ) );
 
         if ( !m_pResourceManager->IsValid() )
         {
-            delete m_pResourceManager;
-            m_pResourceManager = nullptr;
             throw MissingResourceException();
         }
 
@@ -194,7 +192,6 @@ namespace extensions { namespace resource
 
     OpenOfficeResourceBundle::~OpenOfficeResourceBundle()
     {
-        delete m_pResourceManager;
     }
 
     Reference< XResourceBundle > SAL_CALL OpenOfficeResourceBundle::getParent() throw (RuntimeException, std::exception)
