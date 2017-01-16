@@ -118,7 +118,6 @@ public class ProcessHandler
     private int exitValue = -1;
     private boolean isFinished = false;
     private boolean isStarted = false;
-    private long mTimeOut = 0;
     private Pump stdout = null;
     private PrintStream stdIn = null;
     private Process m_aProcess = null;
@@ -129,23 +128,13 @@ public class ProcessHandler
     private ProcessWatcher m_aWatcher;
 
     /**
-     * Creates instance with specified external command.
-     * Debug info and output
-     * of external command is printed to stdout.
-     */
-    public ProcessHandler(String cmdLine)
-    {
-        this(cmdLine, null, null, null, 0);
-    }
-
-    /**
      * Creates instance with specified external command and
      * log stream where debug info and output
      * of external command is printed out.
      */
     public ProcessHandler(String cmdLine, PrintWriter log)
     {
-        this(cmdLine, log, null, null, 0);
+        this(cmdLine, log, null, null);
     }
 
     /**
@@ -171,12 +160,8 @@ public class ProcessHandler
      *                      timeOut = 0
      *                      Waits for the process to end regulary
      *
-     *                      timeOut < 0
-     *                      Kills the process immediately
-     *
-     *
      */
-    private ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars, long timeOut)
+    private ProcessHandler(String cmdLine, PrintWriter log, File workDir, String[] envVars)
     {
         this.cmdLine = cmdLine;
         this.workDir = workDir;
@@ -191,49 +176,6 @@ public class ProcessHandler
         {
             this.log = log;
         }
-        this.mTimeOut = timeOut;
-    }
-
-    /**
-     * Creates instance with specified external command which
-     * will be executed in the some work directory  and
-     * log stream where debug info and output of external command is printed.
-     * If log stream is null, logging is printed to stdout.
-     * From the <CODE>TestParameters</CODE> the <CODE>OfficeWachter</CODE> get a ping.
-     * @param shortWait If this parameter is true the <CODE>mTimeOut</CODE> is set to 5000 ms, else it is set to
-     *        half of time out from parameter timeout.
-     * @param param the TestParameters
-     * @see lib.TestParameters
-     * @see helper.OfficeWatcher
-     */
-    public ProcessHandler(String[] commands, PrintWriter log, File workDir, int shortWait, TestParameters param)
-    {
-        this(null, log, workDir, null, 0);
-        this.cmdLineArray = commands;
-        if (shortWait != 0)
-        {
-            this.mTimeOut = shortWait;
-        }
-        else
-        {
-            this.mTimeOut = (long) (param.getInt(PropertyName.TIME_OUT) / 1.3);
-        }
-        debug = param.getBool(PropertyName.DEBUG_IS_ACTIVE);
-
-    }
-
-    /**
-     * Executes the command and returns only when the process
-     * exits.
-     *
-     * @return <code>true</code> if process was successfully
-     * started and correctly exits (exit code doesn't affect
-     * to this result).
-     */
-    public boolean executeSynchronously()
-    {
-        execute();
-        return waitFor(mTimeOut);
     }
 
     /**
@@ -474,22 +416,6 @@ public class ProcessHandler
     }
 
     /**
-     * Returns the text output by external command to stdout.
-     * @return the text output by external command to stdout
-     */
-    public String getOutputText()
-    {
-        if (stdout == null)
-        {
-            return "";
-        }
-        else
-        {
-            return stdout.getStringBuffer();
-        }
-    }
-
-    /**
      * Returns information about was the command started or
      * not.
      *
@@ -538,11 +464,6 @@ public class ProcessHandler
         {
             log.println(utils.getDateTime() + "PH." + message);
         }
-    }
-
-    public void noOutput()
-    {
-        bUseOutput = false;
     }
 
     private static class ProcessWatcher extends Thread
