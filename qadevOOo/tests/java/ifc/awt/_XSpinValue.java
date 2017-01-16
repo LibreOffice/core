@@ -38,7 +38,6 @@ public class _XSpinValue extends MultiMethodTest {
     public void _addAdjustmentListener() throws Exception {
         util.FormTools.switchDesignOf(tParam.getMSF(),
                                  (XTextDocument) tEnv.getObjRelation("Document"));
-        waitForEventIdle();
         oObj.addAdjustmentListener(listener);
         adjustScrollBar();
 

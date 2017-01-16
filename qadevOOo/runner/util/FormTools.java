@@ -309,6 +309,7 @@ public class FormTools {
 
         com.sun.star.beans.PropertyValue[] noArgs = new com.sun.star.beans.PropertyValue[0];
         aDisp.dispatch(aURL, noArgs);
+        util.utils.waitForEventIdle(xMSF); // async dispatch
         } catch (Exception e) {
             System.out.println("******* Mist");
             e.printStackTrace();
