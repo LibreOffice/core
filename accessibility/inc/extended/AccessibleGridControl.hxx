@@ -164,14 +164,9 @@ class AccessibleGridControlAccess :
     ,public ::svt::table::IAccessibleTableControl
 {
 private:
-    css::uno::Reference< css::accessibility::XAccessible >
-                                        m_xParent;
-    ::svt::table::IAccessibleTable *    m_pTable;
-
-    css::uno::Reference< css::accessibility::XAccessibleContext >
-                                m_xContext;
-    AccessibleGridControl*      m_pContext;
-                                    // note that this pointer is valid as long as m_xContext is valid!
+    css::uno::Reference< css::accessibility::XAccessible > m_xParent;
+    ::svt::table::IAccessibleTable *                       m_pTable;
+    rtl::Reference<AccessibleGridControl>                  m_xContext;
 
 public:
     AccessibleGridControlAccess(
@@ -180,7 +175,7 @@ public:
     );
 
     /// returns the AccessibleContext belonging to this Accessible
-    inline AccessibleGridControl*            getContext()         { return m_pContext; }
+    inline AccessibleGridControl*            getContext()  { return m_xContext.get(); }
 
 protected:
     virtual ~AccessibleGridControlAccess() override;
@@ -198,7 +193,7 @@ protected:
     void DisposeAccessImpl() override;
     virtual bool isAlive() const override
     {
-        return m_pContext && m_pContext->isAlive();
+        return m_xContext.is() && m_xContext->isAlive();
     }
     virtual void commitCellEvent( sal_Int16 nEventId,
          const css::uno::Any& rNewValue, const css::uno::Any& rOldValue ) override
