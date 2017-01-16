@@ -75,7 +75,6 @@ class OMarkableOutputStream :
 {
 public:
     OMarkableOutputStream(  );
-    virtual ~OMarkableOutputStream() override;
 
 public: // XOutputStream
     virtual void SAL_CALL writeBytes(const Sequence< sal_Int8 >& aData)
@@ -138,7 +137,7 @@ private:
     Reference< XOutputStream >  m_output;
     bool m_bValidStream;
 
-    MemRingBuffer *m_pBuffer;
+    std::unique_ptr<MemRingBuffer> m_pBuffer;
     map<sal_Int32,sal_Int32,less< sal_Int32 > > m_mapMarks;
     sal_Int32 m_nCurrentPos;
     sal_Int32 m_nCurrentMark;
@@ -148,17 +147,11 @@ private:
 
 OMarkableOutputStream::OMarkableOutputStream( )
     : m_bValidStream(false)
+    , m_pBuffer( new MemRingBuffer )
     , m_nCurrentPos(0)
     , m_nCurrentMark(0)
 {
-    m_pBuffer = new MemRingBuffer;
 }
-
-OMarkableOutputStream::~OMarkableOutputStream()
-{
-    delete m_pBuffer;
-}
-
 
 // XOutputStream
 void OMarkableOutputStream::writeBytes(const Sequence< sal_Int8 >& aData)

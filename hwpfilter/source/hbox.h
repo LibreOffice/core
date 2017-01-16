@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <list>
+#include <memory>
 
 #include <sal/types.h>
 
@@ -73,7 +74,7 @@ struct SkipData: public HBox
 {
     uint data_block_len;
     hchar dummy;
-    char  *data_block;
+    std::unique_ptr<char[]> data_block;
 
     explicit SkipData(hchar);
     virtual ~SkipData() override;
@@ -385,27 +386,26 @@ struct TxtBox: public FBox
 
 struct Columns
 {
-     int *data;
+     std::unique_ptr<int[]> data;
      size_t nCount;
      size_t nTotal;
      Columns(){
           nCount = 0;
           nTotal = INIT_SIZE;
-          data = new int[nTotal];
+          data.reset(new int[nTotal]);
      }
-     ~Columns(){ delete[] data; }
+     ~Columns() {}
 
      void AddColumnsSize(){
-          int *tmp = data;
           if (nTotal + ADD_AMOUNT < nTotal) // overflow
           {
               throw ::std::bad_alloc();
           }
-          data = new int[nTotal + ADD_AMOUNT];
+          int* tmp = new int[nTotal + ADD_AMOUNT];
           for (size_t i = 0 ; i < nTotal ; i++)
-                data[i] = tmp[i];
+                tmp[i] = data[i];
           nTotal += ADD_AMOUNT;
-          delete[] tmp;
+          data.reset(tmp);
      }
 
      void insert(int pos){
@@ -446,27 +446,26 @@ struct Columns
 
 struct Rows
 {
-     int *data;
+     std::unique_ptr<int[]> data;
      size_t nCount;
      size_t nTotal;
      Rows(){
           nCount = 0;
           nTotal = INIT_SIZE;
-          data = new int[nTotal];
+          data.reset( new int[nTotal] );
      }
-     ~Rows(){ delete[] data; }
+     ~Rows() {}
 
      void AddRowsSize(){
-          int *tmp = data;
           if (nTotal + ADD_AMOUNT < nTotal) // overflow
           {
               throw ::std::bad_alloc();
           }
-          data = new int[nTotal + ADD_AMOUNT];
+          int* tmp = new int[nTotal + ADD_AMOUNT];
           for (size_t i = 0 ; i < nTotal ; i++)
-                data[i] = tmp[i];
+                tmp[i] = data[i];
           nTotal += ADD_AMOUNT;
-          delete[] tmp;
+          data.reset(tmp);
      }
 
      void insert(int pos){

@@ -97,7 +97,7 @@ public:
 
 protected:
     const Era *eraArray;
-    icu::Calendar *body;
+    std::unique_ptr<icu::Calendar> body;
     rtl::Reference<NativeNumberSupplierService> mxNatNum;
     const sal_Char* cCalendar;
     css::lang::Locale aLocale;
