@@ -47,24 +47,21 @@ class SortedDynamicResultSet: public cppu::WeakImplHelper <
     comphelper::OInterfaceContainerHelper2 *mpDisposeEventListeners;
 
     css::uno::Reference < css::ucb::XDynamicResultSetListener > mxListener;
-    css::uno::Reference < css::ucb::XDynamicResultSetListener > mxOwnListener;
 
-    css::uno::Reference < css::sdbc::XResultSet >            mxOne;
-    css::uno::Reference < css::sdbc::XResultSet >            mxTwo;
     css::uno::Reference < css::ucb::XDynamicResultSet >      mxOriginal;
     css::uno::Sequence  < css::ucb::NumberedSortingInfo >    maOptions;
     css::uno::Reference < css::ucb::XAnyCompareFactory >     mxCompFac;
     css::uno::Reference < css::uno::XComponentContext >      m_xContext;
 
-    SortedResultSet*                    mpOne;
-    SortedResultSet*                    mpTwo;
-    SortedDynamicResultSetListener*     mpOwnListener;
+    rtl::Reference<SortedResultSet>                          mxOne;
+    rtl::Reference<SortedResultSet>                          mxTwo;
+    rtl::Reference<SortedDynamicResultSetListener>           mxOwnListener;
 
     EventList                           maActions;
     osl::Mutex                          maMutex;
-    bool                            mbGotWelcome:1;
-    bool                            mbUseOne:1;
-    bool                            mbStatic:1;
+    bool                                mbGotWelcome:1;
+    bool                                mbUseOne:1;
+    bool                                mbStatic:1;
 
 private:
     void                SendNotify();

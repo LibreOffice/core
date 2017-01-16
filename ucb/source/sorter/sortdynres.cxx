@@ -63,17 +63,12 @@ SortedDynamicResultSet::SortedDynamicResultSet(
                         const Reference < XComponentContext > &rxContext )
 {
     mpDisposeEventListeners = nullptr;
-    mpOwnListener           = new SortedDynamicResultSetListener( this );
-
-    mxOwnListener.set( mpOwnListener );
+    mxOwnListener           = new SortedDynamicResultSetListener( this );
 
     mxOriginal  = xOriginal;
     maOptions   = aOptions;
     mxCompFac   = xCompFac;
     m_xContext  = rxContext;
-
-    mpOne = nullptr;
-    mpTwo = nullptr;
 
     mbGotWelcome    = false;
     mbUseOne        = true;
@@ -83,7 +78,7 @@ SortedDynamicResultSet::SortedDynamicResultSet(
 
 SortedDynamicResultSet::~SortedDynamicResultSet()
 {
-    mpOwnListener->impl_OwnerDies();
+    mxOwnListener->impl_OwnerDies();
     mxOwnListener.clear();
 
     delete mpDisposeEventListeners;
@@ -91,9 +86,6 @@ SortedDynamicResultSet::~SortedDynamicResultSet()
     mxOne.clear();
     mxTwo.clear();
     mxOriginal.clear();
-
-    mpOne = nullptr;
-    mpTwo = nullptr;
 }
 
 // XServiceInfo methods.
@@ -134,8 +126,6 @@ void SAL_CALL SortedDynamicResultSet::dispose()
     mxTwo.clear();
     mxOriginal.clear();
 
-    mpOne = nullptr;
-    mpTwo = nullptr;
     mbUseOne = true;
 }
 
@@ -178,12 +168,11 @@ SortedDynamicResultSet::getStaticResultSet()
 
     if ( mxOriginal.is() )
     {
-        mpOne = new SortedResultSet( mxOriginal->getStaticResultSet() );
-        mxOne = mpOne;
-        mpOne->Initialize( maOptions, mxCompFac );
+        mxOne = new SortedResultSet( mxOriginal->getStaticResultSet() );
+        mxOne->Initialize( maOptions, mxCompFac );
     }
 
-    return mxOne;
+    return mxOne.get();
 }
 
 
@@ -201,7 +190,7 @@ SortedDynamicResultSet::setListener( const Reference< XDynamicResultSetListener 
     mxListener = Listener;
 
     if ( mxOriginal.is() )
-        mxOriginal->setListener( mxOwnListener );
+        mxOriginal->setListener( mxOwnListener.get() );
 }
 
 
@@ -292,14 +281,14 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
         if ( mbUseOne )
         {
             mbUseOne = false;
-            mpTwo->CopyData( mpOne );
-            pCurSet = mpTwo;
+            mxTwo->CopyData( mxOne.get() );
+            pCurSet = mxTwo.get();
         }
         else
         {
             mbUseOne = true;
-            mpOne->CopyData( mpTwo );
-            pCurSet = mpOne;
+            mxOne->CopyData( mxTwo.get() );
+            pCurSet = mxOne.get();
         }
     }
 
@@ -330,17 +319,15 @@ void SortedDynamicResultSet::impl_notify( const ListEvent& Changes )
                     WelcomeDynamicResultSetStruct aWelcome;
                     if ( aAction.ActionInfo >>= aWelcome )
                     {
-                        mpTwo = new SortedResultSet( aWelcome.Old );
-                        mxTwo = mpTwo;
-                        mpOne = new SortedResultSet( aWelcome.New );
-                        mxOne = mpOne;
-                        mpOne->Initialize( maOptions, mxCompFac );
+                        mxTwo = new SortedResultSet( aWelcome.Old );
+                        mxOne = new SortedResultSet( aWelcome.New );
+                        mxOne->Initialize( maOptions, mxCompFac );
                         mbGotWelcome = true;
                         mbUseOne = true;
-                        pCurSet = mpOne;
+                        pCurSet = mxOne.get();
 
-                        aWelcome.Old = mxTwo;
-                        aWelcome.New = mxOne;
+                        aWelcome.Old = mxTwo.get();
+                        aWelcome.New = mxOne.get();
 
                         ListAction *pWelcomeAction = new ListAction;
                         pWelcomeAction->ActionInfo <<= aWelcome;
