@@ -16,6 +16,24 @@
       "revId": "325481533785e503d670837ee5b6a561cd2edeca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_b8e121d3",
+        "filename": "sc/source/ui/view/gridwin4.cxx",
+        "patchSetId": 7
+      },
+      "lineNbr": 827,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-16T15:29:24Z",
+      "side": 1,
+      "message": "As said, in a follow-up commit I want all occurrences of this mystical factor replaced with TwipsToHMM() calls.",
+      "parentUuid": "fa48f94a_f2a3c84d",
+      "revId": "325481533785e503d670837ee5b6a561cd2edeca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
