@@ -32,6 +32,7 @@
 
 #include <ucbhelper/content.hxx>
 #include <rtl/ref.hxx>
+#include <o3tl/make_unique.hxx>
 
 using namespace ::com::sun::star;
 
@@ -44,7 +45,6 @@ using namespace ::com::sun::star;
 OZipFileAccess::OZipFileAccess( const uno::Reference< uno::XComponentContext >& rxContext )
 : m_aMutexHolder( new SotMutexHolder )
 , m_xContext( rxContext )
-, m_pZipFile( nullptr )
 , m_pListenersContainer( nullptr )
 , m_bDisposed( false )
 , m_bOwnContent( false )
@@ -220,7 +220,7 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     }
 
     // TODO: in case xSeekable is implemented on separated XStream implementation a wrapper is required
-    m_pZipFile = new ZipFile(
+    m_pZipFile = o3tl::make_unique<ZipFile>(
                 m_xContentStream,
                 m_xContext,
                 true );
@@ -407,11 +407,7 @@ void SAL_CALL OZipFileAccess::dispose()
         m_pListenersContainer = nullptr;
     }
 
-    if ( m_pZipFile )
-    {
-        delete m_pZipFile;
-        m_pZipFile = nullptr;
-    }
+    m_pZipFile.reset();
 
     if ( m_xContentStream.is() && m_bOwnContent )
         try {
