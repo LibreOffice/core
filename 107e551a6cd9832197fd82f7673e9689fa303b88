@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_7855f91b",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 350,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-01-16T21:54:11Z",
+      "side": 1,
+      "message": "here you need a\n\u003e pPtr +\u003d 2;\nto fill the other ranges with \"don\u0027t care\" too\n\nnot sure this is still needed now.",
+      "revId": "107e551a6cd9832197fd82f7673e9689fa303b88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_7b1a5370",
+        "filename": "svl/source/items/itemset.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 385,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-01-16T21:54:11Z",
+      "side": 1,
+      "message": "continue;\nthe while{} loop is gone,\nbut we still want to search in parents with the do{} loop",
+      "range": {
+        "startLine": 385,
+        "startChar": 16,
+        "endLine": 385,
+        "endChar": 21
+      },
+      "revId": "107e551a6cd9832197fd82f7673e9689fa303b88",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
