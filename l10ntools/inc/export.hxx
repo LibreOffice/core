@@ -282,13 +282,13 @@ class MergeData
 public:
     OString sGID;
     OString sLID;
-    MergeEntrys* pMergeEntrys;
+    std::unique_ptr<MergeEntrys> pMergeEntrys;
 private:
     MergeDataHashMap::iterator m_aNextData;
 public:
     MergeData( const OString &rGID, const OString &rLID );
     ~MergeData();
-    MergeEntrys* GetMergeEntries() { return pMergeEntrys;}
+    MergeEntrys* GetMergeEntries() { return pMergeEntrys.get();}
 
 };
 

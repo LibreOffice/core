@@ -105,7 +105,6 @@ class SaxExpatParser
 
 public:
     SaxExpatParser();
-    virtual ~SaxExpatParser() override;
 
     // css::lang::XInitialization:
     virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments)
@@ -134,9 +133,7 @@ public: // XServiceInfo
     sal_Bool                     SAL_CALL supportsService(const OUString& ServiceName) throw (std::exception) override;
 
 private:
-
-    SaxExpatParser_Impl         *m_pImpl;
-
+    std::unique_ptr<SaxExpatParser_Impl>   m_pImpl;
 };
 
 
@@ -365,9 +362,9 @@ private:
 
 SaxExpatParser::SaxExpatParser(  )
 {
-    m_pImpl = new SaxExpatParser_Impl;
+    m_pImpl.reset( new SaxExpatParser_Impl );
 
-    LocatorImpl *pLoc = new LocatorImpl( m_pImpl );
+    LocatorImpl *pLoc = new LocatorImpl( m_pImpl.get() );
     m_pImpl->rDocumentLocator.set( pLoc );
 
     // Performance-improvement; handing out the same object with every call of
@@ -376,11 +373,6 @@ SaxExpatParser::SaxExpatParser(  )
 
     m_pImpl->bExceptionWasThrown = false;
     m_pImpl->bRTExceptionWasThrown = false;
-}
-
-SaxExpatParser::~SaxExpatParser()
-{
-    delete m_pImpl;
 }
 
 // css::lang::XInitialization:
@@ -440,7 +432,7 @@ void SaxExpatParser::parseStream(   const InputSource& structSource)
     }
 
     // set all necessary C-Callbacks
-    XML_SetUserData( entity.pParser , m_pImpl );
+    XML_SetUserData( entity.pParser, m_pImpl.get() );
     XML_SetElementHandler(  entity.pParser ,
                             call_callbackStartElement ,
                             call_callbackEndElement );

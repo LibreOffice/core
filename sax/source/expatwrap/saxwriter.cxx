@@ -884,10 +884,6 @@ public:
         , m_nLevel(0)
     {
     }
-    virtual ~SAXWriter() override
-    {
-        delete m_pSaxWriterHelper;
-    }
 
 public: // XActiveDataSource
     virtual void SAL_CALL setOutputStream(const Reference< XOutputStream > & aStream)
@@ -901,8 +897,7 @@ public: // XActiveDataSource
             else
             {
                 m_out = aStream;
-                delete m_pSaxWriterHelper;
-                m_pSaxWriterHelper = new SaxWriterHelper(m_out);
+                m_pSaxWriterHelper.reset( new SaxWriterHelper(m_out) );
                 m_bDocStarted = false;
                 m_nLevel = 0;
                 m_bIsCDATA = false;
@@ -965,8 +960,8 @@ public: // XServiceInfo
 private:
     sal_Int32 getIndentPrefixLength( sal_Int32 nFirstLineBreakOccurrence ) throw();
 
-    Reference< XOutputStream >  m_out;
-    SaxWriterHelper*            m_pSaxWriterHelper;
+    Reference< XOutputStream >        m_out;
+    std::unique_ptr<SaxWriterHelper>  m_pSaxWriterHelper;
 
     // Status information
     bool m_bDocStarted : 1;

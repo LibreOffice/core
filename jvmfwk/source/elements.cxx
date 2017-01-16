@@ -174,7 +174,6 @@ VersionInfo::VersionInfo(): arVersions(nullptr)
 
 VersionInfo::~VersionInfo()
 {
-    delete [] arVersions;
 }
 
 void VersionInfo::addExcludeVersion(const OUString& sVersion)
