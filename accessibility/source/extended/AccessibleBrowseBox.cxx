@@ -21,7 +21,6 @@
 #include "extended/AccessibleBrowseBoxTable.hxx"
 #include "extended/AccessibleBrowseBoxHeaderBar.hxx"
 #include <svtools/accessibletableprovider.hxx>
-#include <comphelper/types.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <sal/types.h>
 
@@ -43,16 +42,13 @@ public:
     css::uno::WeakReference< css::accessibility::XAccessible >  m_aCreator;
 
     /** The data table child. */
-    css::uno::Reference< css::accessibility::XAccessible >      mxTable;
-    AccessibleBrowseBoxTable*                                   m_pTable;
+    rtl::Reference<AccessibleBrowseBoxTable>                    mxTable;
 
     /** The header bar for rows ("handle column"). */
-    css::uno::Reference< css::accessibility::XAccessible >      mxRowHeaderBar;
-    AccessibleBrowseBoxHeaderBar*                               m_pRowHeaderBar;
+    rtl::Reference<AccessibleBrowseBoxHeaderBar>                mxRowHeaderBar;
 
     /** The header bar for columns (first row of the table). */
-    css::uno::Reference< css::accessibility::XAccessible >      mxColumnHeaderBar;
-    AccessibleBrowseBoxHeaderBar*                               m_pColumnHeaderBar;
+    rtl::Reference<AccessibleBrowseBoxHeaderBar>                mxColumnHeaderBar;
 };
 
 // Ctor/Dtor/disposing
@@ -87,21 +83,23 @@ void SAL_CALL AccessibleBrowseBox::disposing()
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
-    m_xImpl->m_pTable           = nullptr;
-    m_xImpl->m_pColumnHeaderBar = nullptr;
-    m_xImpl->m_pRowHeaderBar    = nullptr;
     m_xImpl->m_aCreator.clear();
 
-    css::uno::Reference< css::accessibility::XAccessible >  xTable = m_xImpl->mxTable;
-
-    css::uno::Reference< XComponent > xComp( m_xImpl->mxTable, UNO_QUERY );
-    if ( xComp.is() )
+    if ( m_xImpl->mxTable.is() )
     {
-        xComp->dispose();
-
+        m_xImpl->mxTable->dispose();
+        m_xImpl->mxTable.clear();
     }
-    ::comphelper::disposeComponent(m_xImpl->mxRowHeaderBar);
-    ::comphelper::disposeComponent(m_xImpl->mxColumnHeaderBar);
+    if ( m_xImpl->mxRowHeaderBar.is() )
+    {
+        m_xImpl->mxRowHeaderBar->dispose();
+        m_xImpl->mxRowHeaderBar.clear();
+    }
+    if ( m_xImpl->mxColumnHeaderBar.is() )
+    {
+        m_xImpl->mxColumnHeaderBar->dispose();
+        m_xImpl->mxColumnHeaderBar.clear();
+    }
 
     AccessibleBrowseBoxBase::disposing();
 }
@@ -218,11 +216,10 @@ css::uno::Reference< css::accessibility::XAccessible > AccessibleBrowseBox::impl
 {
     if( !m_xImpl->mxTable.is() )
     {
-        m_xImpl->m_pTable = createAccessibleTable();
-        m_xImpl->mxTable  = m_xImpl->m_pTable;
+        m_xImpl->mxTable = createAccessibleTable();
 
     }
-    return m_xImpl->mxTable;
+    return m_xImpl->mxTable.get();
 }
 
 
@@ -230,7 +227,7 @@ css::uno::Reference< css::accessibility::XAccessible >
 AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
 {
     css::uno::Reference< css::accessibility::XAccessible > xRet;
-    css::uno::Reference< css::accessibility::XAccessible >* pxMember = nullptr;
+    rtl::Reference< AccessibleBrowseBoxHeaderBar >* pxMember = nullptr;
 
     if( eObjType == BBTYPE_ROWHEADERBAR )
         pxMember = &m_xImpl->mxRowHeaderBar;
@@ -243,15 +240,9 @@ AccessibleBrowseBox::implGetHeaderBar( AccessibleBrowseBoxObjType eObjType )
         {
             AccessibleBrowseBoxHeaderBar* pHeaderBar = new AccessibleBrowseBoxHeaderBar(
                 m_xImpl->m_aCreator, *mpBrowseBox, eObjType );
-
-            if ( BBTYPE_COLUMNHEADERBAR == eObjType)
-                m_xImpl->m_pColumnHeaderBar = pHeaderBar;
-            else
-                m_xImpl->m_pRowHeaderBar    = pHeaderBar;
-
             *pxMember = pHeaderBar;
         }
-        xRet = *pxMember;
+        xRet = pxMember->get();
     }
     return xRet;
 }
@@ -287,7 +278,7 @@ void AccessibleBrowseBox::commitTableEvent(sal_Int16 _nEventId,const Any& _rNewV
 {
     if ( m_xImpl->mxTable.is() )
     {
-        m_xImpl->m_pTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
+        m_xImpl->mxTable->commitEvent(_nEventId,_rNewValue,_rOldValue);
     }
 }
 
@@ -295,10 +286,9 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
                                                 const Any& _rNewValue,
                                                 const Any& _rOldValue,bool _bColumnHeaderBar)
 {
-    css::uno::Reference< css::accessibility::XAccessible > xHeaderBar = _bColumnHeaderBar ? m_xImpl->mxColumnHeaderBar : m_xImpl->mxRowHeaderBar;
-    AccessibleBrowseBoxHeaderBar* pHeaderBar = _bColumnHeaderBar ? m_xImpl->m_pColumnHeaderBar : m_xImpl->m_pRowHeaderBar;
+    rtl::Reference< AccessibleBrowseBoxHeaderBar >& xHeaderBar = _bColumnHeaderBar ? m_xImpl->mxColumnHeaderBar : m_xImpl->mxRowHeaderBar;
     if ( xHeaderBar.is() )
-        pHeaderBar->commitEvent(_nEventId,_rNewValue,_rOldValue);
+        xHeaderBar->commitEvent(_nEventId,_rNewValue,_rOldValue);
 }
 
 
@@ -307,7 +297,6 @@ void AccessibleBrowseBox::commitHeaderBarEvent( sal_Int16 _nEventId,
 AccessibleBrowseBoxAccess::AccessibleBrowseBoxAccess( const css::uno::Reference< css::accessibility::XAccessible >& _rxParent, ::svt::IAccessibleTableProvider& _rBrowseBox )
         :m_xParent( _rxParent )
         ,m_rBrowseBox( _rBrowseBox )
-        ,m_pContext( nullptr )
 {
 }
 
@@ -321,8 +310,11 @@ void AccessibleBrowseBoxAccess::dispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    m_pContext = nullptr;
-    ::comphelper::disposeComponent( m_xContext );
+    if (m_xContext.is())
+    {
+        m_xContext->dispose();
+        m_xContext.clear();
+    }
 }
 
 
@@ -330,18 +322,15 @@ css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL Accessibl
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    OSL_ENSURE( ( m_pContext && m_xContext.is() ) || ( !m_pContext && !m_xContext.is() ),
-        "extended/AccessibleBrowseBoxAccess::getAccessibleContext: inconsistency!" );
-
     // if the context died meanwhile (there is no listener, so it won't tell us explicitly when this happens),
     // then reset and re-create.
-    if ( m_pContext && !m_pContext->isAlive() )
-        m_xContext = m_pContext = nullptr;
+    if ( m_xContext.is() && !m_xContext->isAlive() )
+        m_xContext = nullptr;
 
     if ( !m_xContext.is() )
-        m_xContext = m_pContext = new AccessibleBrowseBox( m_xParent, this, m_rBrowseBox );
+        m_xContext = new AccessibleBrowseBox( m_xParent, this, m_rBrowseBox );
 
-    return m_xContext;
+    return m_xContext.get();
 }
 
 

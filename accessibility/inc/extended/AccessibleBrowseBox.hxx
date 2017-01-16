@@ -195,15 +195,12 @@ class AccessibleBrowseBoxAccess:
     public ::svt::IAccessibleBrowseBox
 {
 private:
-    ::osl::Mutex                m_aMutex;
+    ::osl::Mutex                        m_aMutex;
     css::uno::Reference< css::accessibility::XAccessible >
                                         m_xParent;
     ::svt::IAccessibleTableProvider&    m_rBrowseBox;
 
-    css::uno::Reference< css::accessibility::XAccessibleContext >
-                                m_xContext;
-    AccessibleBrowseBox*        m_pContext;
-                                    // note that this pointer is valid as long as m_xContext is valid!
+    rtl::Reference<AccessibleBrowseBox> m_xContext;
 
 public:
     AccessibleBrowseBoxAccess(
@@ -212,7 +209,7 @@ public:
     );
 
     /// returns the AccessibleContext belonging to this Accessible
-    inline AccessibleBrowseBox*            getContext()         { return m_pContext; }
+    inline AccessibleBrowseBox*            getContext() { return m_xContext.get(); }
 
 protected:
     virtual ~AccessibleBrowseBoxAccess() override;
@@ -230,7 +227,7 @@ protected:
     void dispose() override;
     virtual bool isAlive() const override
     {
-        return m_pContext && m_pContext->isAlive();
+        return m_xContext.is() && m_xContext->isAlive();
     }
     virtual css::uno::Reference< css::accessibility::XAccessible >
         getHeaderBar( ::svt::AccessibleBrowseBoxObjType _eObjType ) override
