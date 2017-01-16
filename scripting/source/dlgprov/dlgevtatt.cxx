@@ -156,12 +156,12 @@ namespace dlgprov
         // key listeners by protocol when ScriptType = 'Script'
         // otherwise key is the ScriptType e.g. StarBasic
         if ( rxRTLListener.is() ) // set up handler for RTL_BASIC
-            listernersForTypes[ OUString("StarBasic") ] = rxRTLListener;
+            listenersForTypes[ OUString("StarBasic") ] = rxRTLListener;
         else
-            listernersForTypes[ OUString("StarBasic") ] = new DialogLegacyScriptListenerImpl( rxContext, rxModel );
+            listenersForTypes[ OUString("StarBasic") ] = new DialogLegacyScriptListenerImpl( rxContext, rxModel );
         // handler for Script & OUString("vnd.sun.star.UNO:")
-        listernersForTypes[ OUString("vnd.sun.star.UNO") ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
-        listernersForTypes[ OUString("vnd.sun.star.script") ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
+        listenersForTypes[ OUString("vnd.sun.star.UNO") ] = new DialogUnoScriptListenerImpl( rxContext, rxModel, rxControl, rxHandler, rxIntrospect, bProviderMode );
+        listenersForTypes[ OUString("vnd.sun.star.script") ] = new DialogSFScriptListenerImpl( rxContext, rxModel );
 
         // determine the VBA compatibility mode from the Basic library container
         try
@@ -175,7 +175,7 @@ namespace dlgprov
         {
         }
         if ( mbUseFakeVBAEvents )
-            listernersForTypes[ OUString("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
+            listenersForTypes[ OUString("VBAInterop") ] = new DialogVBAScriptListenerImpl( rxContext, rxControl, rxModel, sDialogLibName );
     }
 
 
@@ -187,8 +187,8 @@ namespace dlgprov
     Reference< script::XScriptListener >
     DialogEventsAttacherImpl::getScriptListenerForKey( const OUString& sKey ) throw ( RuntimeException )
     {
-        ListenerHash::iterator it = listernersForTypes.find( sKey );
-        if ( it == listernersForTypes.end() )
+        ListenerHash::iterator it = listenersForTypes.find( sKey );
+        if ( it == listenersForTypes.end() )
             throw RuntimeException(); // more text info here please
         return it->second;
     }

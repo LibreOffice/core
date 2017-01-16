@@ -49,7 +49,7 @@ namespace dlgprov
     {
     private:
         bool mbUseFakeVBAEvents;
-        ListenerHash listernersForTypes;
+        ListenerHash listenersForTypes;
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
         css::uno::Reference< css::script::XEventAttacher > m_xEventAttacher;
         css::uno::Reference< css::script::XScriptListener > getScriptListenerForKey( const OUString& sScriptName ) throw ( css::uno::RuntimeException );
