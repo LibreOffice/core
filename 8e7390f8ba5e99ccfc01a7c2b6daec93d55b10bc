@@ -16,6 +16,23 @@
       "revId": "8e7390f8ba5e99ccfc01a7c2b6daec93d55b10bc",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_98b53dd2",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 311,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-01-16T14:46:55Z",
+      "side": 1,
+      "message": "Nitpick, I personally prefer no spaces inside the parenthesis (I know this is not the style used on most of this code, but it is the style of this function at least).",
+      "revId": "8e7390f8ba5e99ccfc01a7c2b6daec93d55b10bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
