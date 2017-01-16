@@ -108,7 +108,7 @@ BoolOverloadKind isBoolOverloadOf(
 // encounter in practice:
 bool hasBoolOverload(FunctionDecl const * decl, bool mustBeDeleted) {
     auto ctx = decl->getDeclContext();
-    if (!ctx->isLookupContext()) {
+    if (!compat::isLookupContext(*ctx)) {
         return false;
     }
     auto res = ctx->lookup(decl->getDeclName());
