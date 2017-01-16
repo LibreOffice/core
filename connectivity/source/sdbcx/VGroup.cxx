@@ -52,7 +52,6 @@ OGroup::OGroup(const OUString& Name, bool _bCase) :  OGroup_BASE(m_aMutex)
 
 OGroup::~OGroup()
 {
-    delete m_pUsers;
 }
 
 Any SAL_CALL OGroup::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
@@ -108,7 +107,7 @@ Reference< XNameAccess > SAL_CALL OGroup::getUsers(  ) throw(RuntimeException, s
         // allowed
     }
 
-    return m_pUsers;
+    return m_pUsers.get();
 }
 
 
