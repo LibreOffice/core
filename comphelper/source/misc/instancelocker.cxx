@@ -38,8 +38,7 @@ using namespace ::com::sun::star;
 
 
 OInstanceLocker::OInstanceLocker()
-: m_pLockListener( nullptr )
-, m_pListenersContainer( nullptr )
+: m_pListenersContainer( nullptr )
 , m_bDisposed( false )
 , m_bInitialized( false )
 {
@@ -81,11 +80,7 @@ void SAL_CALL OInstanceLocker::dispose()
 
     if ( m_xLockListener.is() )
     {
-        if ( m_pLockListener )
-        {
-            m_pLockListener->Dispose();
-            m_pLockListener = nullptr;
-        }
+        m_xLockListener->Dispose();
         m_xLockListener.clear();
     }
 
@@ -169,12 +164,11 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
                     uno::Reference< uno::XInterface >(),
                     0 );
 
-        m_pLockListener = new OLockListener( uno::Reference< lang::XComponent > ( static_cast< lang::XComponent* >( this ) ),
+        m_xLockListener = new OLockListener( uno::Reference< lang::XComponent > ( static_cast< lang::XComponent* >( this ) ),
                                             xInstance,
                                             nModes,
                                             xApproval );
-        m_xLockListener.set( static_cast< OWeakObject* >( m_pLockListener ) );
-        m_pLockListener->Init();
+        m_xLockListener->Init();
     }
     catch( uno::Exception& )
     {
