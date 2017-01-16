@@ -403,6 +403,7 @@ StringArray STR_ARR_SVT_LANGUAGE_TABLE
         < "French (Mauritius)" ; LANGUAGE_USER_FRENCH_MAURITIUS ; > ;
         < "Silesian" ; LANGUAGE_USER_SILESIAN ; > ;
         < "Hungarian (Szekely-Hungarian Rovas)" ; LANGUAGE_USER_HUNGARIAN_ROVAS ; > ;
+        < "English (Malaysia)" ; LANGUAGE_ENGLISH_MALAYSIA ; > ;
     };
 };
 
