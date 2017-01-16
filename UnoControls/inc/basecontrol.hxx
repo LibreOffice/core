@@ -86,6 +86,7 @@
 #include <tools/colordata.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/component.hxx>
+#include <rtl/ref.hxx>
 
 #include "multiplexer.hxx"
 
@@ -383,8 +384,7 @@ private:
 
     css::uno::Reference< css::uno::XComponentContext >        m_xComponentContext;
     css::uno::Reference< css::uno::XInterface >               m_xDelegator;
-    OMRCListenerMultiplexerHelper*                            m_pMultiplexer;   // multiplex events
-    css::uno::Reference< css::uno::XInterface >               m_xMultiplexer;
+    rtl::Reference<OMRCListenerMultiplexerHelper>             m_xMultiplexer;   // multiplex events
     css::uno::Reference< css::uno::XInterface >               m_xContext;
     css::uno::Reference< css::awt::XWindowPeer >              m_xPeer;
     css::uno::Reference< css::awt::XWindow >                  m_xPeerWindow;
