@@ -106,8 +106,10 @@ private:
 
     SvStream*           mpPS;
     const GDIMetaFile*  pMTF;
-    GDIMetaFile*        pAMTF;              // only created if Graphics is not a Metafile
-    ScopedVclPtrInstance<VirtualDevice> pVDev;
+    std::unique_ptr<GDIMetaFile>
+                        pAMTF;              // only created if Graphics is not a Metafile
+    ScopedVclPtrInstance<VirtualDevice>
+                        pVDev;
 
     double              nBoundingX2;        // this represents the bounding box
     double              nBoundingY2;
@@ -279,7 +281,6 @@ PSWriter::PSWriter()
 
 PSWriter::~PSWriter()
 {
-    delete pAMTF;
 }
 
 bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* pFilterConfigItem )
@@ -386,17 +387,20 @@ bool PSWriter::WritePS( const Graphic& rGraphic, SvStream& rTargetStream, Filter
     if (rGraphic.GetType() == GraphicType::GdiMetafile)
         pMTF = &rGraphic.GetGDIMetaFile();
     else if (rGraphic.GetGDIMetaFile().GetActionSize())
-        pMTF = pAMTF = new GDIMetaFile( rGraphic.GetGDIMetaFile() );
+    {
+        pAMTF.reset( new GDIMetaFile( rGraphic.GetGDIMetaFile() ) );
+        pMTF = pAMTF.get();
+    }
     else
     {
         Bitmap aBmp( rGraphic.GetBitmap() );
-        pAMTF = new GDIMetaFile();
+        pAMTF.reset( new GDIMetaFile );
         ScopedVclPtrInstance< VirtualDevice > pTmpVDev;
         pAMTF->Record( pTmpVDev );
         pTmpVDev->DrawBitmap( Point(), aBmp );
         pAMTF->Stop();
         pAMTF->SetPrefSize( aBmp.GetSizePixel() );
-        pMTF = pAMTF;
+        pMTF = pAMTF.get();
     }
     pVDev->SetMapMode( pMTF->GetPrefMapMode() );
     nBoundingX2 = pMTF->GetPrefSize().Width();

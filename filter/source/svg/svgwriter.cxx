@@ -135,7 +135,6 @@ SVGAttributeWriter::SVGAttributeWriter( SVGExport& rExport, SVGFontExport& rFont
 
 SVGAttributeWriter::~SVGAttributeWriter()
 {
-    delete mpElemFont;
 }
 
 
@@ -396,22 +395,18 @@ void SVGAttributeWriter::startFontSettings()
     endFontSettings();
     if( mrExport.IsUsePositionedCharacters() )
     {
-        mpElemFont = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true );
+        mpElemFont.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemG, true, true ) );
     }
     else
     {
-        mpElemFont = new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, true, true );
+        mpElemFont.reset( new SvXMLElementExport( mrExport, XML_NAMESPACE_NONE, aXMLElemTspan, true, true ) );
     }
 }
 
 
 void SVGAttributeWriter::endFontSettings()
 {
-    if( mpElemFont )
-    {
-        delete mpElemFont;
-        mpElemFont = nullptr;
-    }
+    mpElemFont.reset();
 }
 
 

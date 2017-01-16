@@ -24,6 +24,7 @@
 #include <dxfvec.hxx>
 
 #include <deque>
+#include <memory>
 
 enum DXFEntityType {
     DXF_LINE,
@@ -331,7 +332,7 @@ class DXFLWPolyLineEntity : public DXFBasicEntity
         double      fStartWidth;    // 40
         double      fEndWidth;      // 41
 
-        DXFVector*  pP;
+        std::unique_ptr<DXFVector[]>  pP;
 
         DXFLWPolyLineEntity();
         virtual ~DXFLWPolyLineEntity() override;
@@ -440,7 +441,7 @@ class DXFHatchEntity : public DXFBasicEntity
         double      fPixelSize;                     // 47
         sal_Int32   nNumberOfSeedPoints;            // 98
 
-        DXFBoundaryPathData* pBoundaryPathData;
+        std::unique_ptr<DXFBoundaryPathData[]> pBoundaryPathData;
 
         DXFHatchEntity();
         virtual ~DXFHatchEntity() override;

@@ -42,7 +42,8 @@ private:
     sal_uLong           nWidth, nHeight;    // dimension in pixel
     sal_uInt16          nResX, nResY;       // resolution in pixel per inch oder 0,0
     sal_uInt16          nDestBitsPerPixel;  // bits per pixel in destination bitmap 1,4,8 or 24
-    sal_uInt8*          pPalette;
+    std::unique_ptr<sal_uInt8[]>
+                        pPalette;
     bool                bStatus;            // from now on do not read status from stream ( SJ )
 
 
@@ -72,14 +73,13 @@ PCXReader::PCXReader(SvStream &rStream)
     , nResX(0)
     , nResY(0)
     , nDestBitsPerPixel(0)
+    , pPalette(new sal_uInt8[ 768 ])
     , bStatus(false)
 {
-    pPalette = new sal_uInt8[ 768 ];
 }
 
 PCXReader::~PCXReader()
 {
-    delete[] pPalette;
 }
 
 bool PCXReader::ReadPCX(Graphic & rGraphic)
@@ -106,7 +106,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
         if ( nDestBitsPerPixel <= 8 )
         {
             sal_uInt16 nColors = 1 << nDestBitsPerPixel;
-            sal_uInt8* pPal = pPalette;
+            sal_uInt8* pPal = pPalette.get();
             pAcc->SetPaletteEntryCount( nColors );
             for ( sal_uInt16 i = 0; i < nColors; i++, pPal += 3 )
             {
@@ -120,7 +120,7 @@ bool PCXReader::ReadPCX(Graphic & rGraphic)
         // and write again in palette:
         if ( nDestBitsPerPixel == 8 && bStatus )
         {
-            sal_uInt8* pPal = pPalette;
+            sal_uInt8* pPal = pPalette.get();
             m_rPCX.SeekRel(1);
             ImplReadPalette(256);
             pAcc->SetPaletteEntryCount( 256 );
@@ -389,7 +389,7 @@ void PCXReader::ImplReadBody(BitmapWriteAccess * pAcc)
 void PCXReader::ImplReadPalette( sal_uLong nCol )
 {
     sal_uInt8   r, g, b;
-    sal_uInt8*  pPtr = pPalette;
+    sal_uInt8*  pPtr = pPalette.get();
     for ( sal_uLong i = 0; i < nCol; i++ )
     {
         m_rPCX.ReadUChar( r ).ReadUChar( g ).ReadUChar( b );

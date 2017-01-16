@@ -52,7 +52,8 @@ private:
     Bitmap                  aBitmap;
     BitmapWriteAccess*      pAcc;
     sal_uInt16              nDstBitsPerPixel;
-    AlphaMask*              pAlphaMask;
+    std::unique_ptr<AlphaMask>
+                            pAlphaMask;
     BitmapWriteAccess*      pMaskAcc;
 
     sal_uLong               nOrigPos;                   // start position in pTIFF
@@ -171,7 +172,6 @@ public:
 
     ~TIFFReader()
     {
-        delete pAlphaMask;
     }
 
     sal_uLong GetRowsPerStrip() const
@@ -1383,7 +1383,7 @@ bool TIFFReader::ReadTIFF(SvStream & rTIFF, Graphic & rGraphic )
 
                     if (bStatus && HasAlphaChannel())
                     {
-                        pAlphaMask = new AlphaMask( aTargetSize );
+                        pAlphaMask.reset( new AlphaMask( aTargetSize ) );
                         pMaskAcc = pAlphaMask->AcquireWriteAccess();
                     }
 

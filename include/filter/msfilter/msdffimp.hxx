@@ -72,8 +72,8 @@ namespace com { namespace sun { namespace star {
 
 class MSFILTER_DLLPUBLIC DffPropertyReader : public DffPropSet
 {
-    const SvxMSDffManager&  rManager;
-    DffPropSet*             pDefaultPropSet;
+    const SvxMSDffManager&       rManager;
+    std::unique_ptr<DffPropSet>  pDefaultPropSet;
 
     void ApplyCustomShapeTextAttributes( SfxItemSet& rSet ) const;
     void CheckAndCorrectExcelTextRotation( SvStream& rIn, SfxItemSet& rSet, DffObjData& rObjData ) const;
@@ -345,7 +345,8 @@ struct DffRecordList
     sal_uInt32          nCount;
     sal_uInt32          nCurrent;
     DffRecordList*      pPrev;
-    DffRecordList*      pNext;
+    std::unique_ptr<DffRecordList>
+                        pNext;
 
     DffRecordHeader     mHd[ DFF_RECORD_MANAGER_BUF_SIZE ];
 

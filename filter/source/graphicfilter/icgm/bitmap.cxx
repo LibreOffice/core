@@ -31,7 +31,6 @@ CGMBitmap::CGMBitmap( CGM& rCGM ) :
 
 CGMBitmap::~CGMBitmap()
 {
-    delete pCGMBitmapDescriptor;
 }
 
 
@@ -364,9 +363,7 @@ CGMBitmap* CGMBitmap::GetNext()
             return nullptr;
         }
 
-        CGMBitmapDescriptor* pTempBD = pCGMBitmapDescriptor;
-        pCGMBitmapDescriptor = pCGMTempBitmap->pCGMBitmapDescriptor;
-        pCGMTempBitmap->pCGMBitmapDescriptor = pTempBD;
+        pCGMBitmapDescriptor.swap(pCGMTempBitmap->pCGMBitmapDescriptor);
         return pCGMTempBitmap;
     }
     else

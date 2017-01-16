@@ -917,7 +917,6 @@ T602ImportFilterDialog::T602ImportFilterDialog() :
 
 T602ImportFilterDialog::~T602ImportFilterDialog()
 {
-    delete mpResMgr;
 }
 
 // XLocalizable
@@ -1118,14 +1117,14 @@ bool T602ImportFilterDialog::OptionsDlg()
 
 void T602ImportFilterDialog::initLocale()
 {
-    mpResMgr = ResMgr::CreateResMgr( "t602filter", LanguageTag( meLocale) );
+    mpResMgr.reset( ResMgr::CreateResMgr( "t602filter", LanguageTag( meLocale) ) );
 }
 
 ResMgr* T602ImportFilterDialog::getResMgr()
 {
     if( !mpResMgr )
         initLocale();
-    return mpResMgr;
+    return mpResMgr.get();
 }
 
 void SAL_CALL T602ImportFilterDialog::setTitle( const OUString& )
