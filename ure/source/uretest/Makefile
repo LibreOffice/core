@@ -62,7 +62,7 @@ test: test-cpptest test-javatest test-javanative test-clientserver
 .PHONY: test-cpptest
 test-cpptest: out.sdk/cppmain.uno.$(SHAREDLIB_EXT) out.sdk/types.rdb \
             out.sdk/services.rdb
-	$(GCCS_COMPAT) uno \
+	uno \
             -c test.cpp.cppmain.Component -l $(URLPREFIX)$(cwd)/$< \
             -ro "$(subst \,/,$(URLPREFIX)$(URE_TYPES))" -ro out.sdk/types.rdb \
             -ro "$(subst \,/,$(URLPREFIX)$(URE_SERVICES))" \
@@ -70,7 +70,7 @@ test-cpptest: out.sdk/cppmain.uno.$(SHAREDLIB_EXT) out.sdk/types.rdb \
 
 .PHONY: test-javatest
 test-javatest: out.sdk/javamain.uno.jar out.sdk/types.rdb out.sdk/services.rdb
-	$(GCCS_COMPAT) uno \
+	uno \
             -c test.java.javamain.Component -l $(URLPREFIX)$(cwd)/$< \
             -ro "$(subst \,/,$(URLPREFIX)$(URE_TYPES))" -ro out.sdk/types.rdb \
             -ro "$(subst \,/,$(URLPREFIX)$(URE_SERVICES))" \
@@ -79,11 +79,11 @@ test-javatest: out.sdk/javamain.uno.jar out.sdk/types.rdb out.sdk/services.rdb
 .PHONY: test-javanative
 test-javanative: out.sdk/runner.jar out.sdk/javanative.jar \
             out.sdk/javanative.rc out.sdk/services.rdb out.sdk/types.rdb
-	$(GCCS_COMPAT) $(SDK_JAVA) -jar out.sdk/runner.jar $(ure_java_url)/ \
+	$(SDK_JAVA) -jar out.sdk/runner.jar $(ure_java_url)/ \
             $(URLPREFIX)$(cwd)/out.sdk/javanative.jar \
             $(URLPREFIX)$(cwd)/out.sdk/javanative.rc
 
-do_server = $(GCCS_COMPAT) uno -c test.cpp.cppserver.Component \
+do_server = uno -c test.cpp.cppserver.Component \
     -l $(URLPREFIX)$(cwd)/out.sdk/cppserver.uno.$(SHAREDLIB_EXT) \
     -ro "$(subst \,/,$(URLPREFIX)$(URE_TYPES))" -ro out.sdk/types.rdb \
     -ro "$(subst \,/,$(URLPREFIX)$(URE_SERVICES))" -ro out.sdk/services.rdb \

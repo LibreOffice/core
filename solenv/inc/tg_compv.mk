@@ -78,9 +78,6 @@ COMNAME=msci
 
 .IF "$(COM)"=="GCC"
 
-SHORTSTDCPP3:=
-SHORTSTDC3:="1"
-
 .IF "$(CCNUMVER)">="000200910000"
 COMID=GCC
 COMNAME=gcc2
@@ -90,35 +87,6 @@ COMNAME=gcc2
 
 COMID=gcc3
 COMNAME=gcc3
-
-.IF "$(CCNUMVER)">="000300000001"
-SHORTSTDCPP3="3"
-.ENDIF
-
-.IF "$(CCNUMVER)">="000300010000"
-SHORTSTDCPP3="4"
-.ENDIF
-
-.IF "$(CCNUMVER)">="000300020000"
-SHORTSTDCPP3="5"
-.ENDIF
-
-.IF "$(CCNUMVER)">="000300040000"
-.IF "$(OS)$(CPU)" == "LINUX6" || "$(OS)$(CPU)" == "LINUXH"
-#for gcc >= 3.4.0 on m68k-linux this is libgcc_s.so.2.
-#for gcc >= 3.4.0 < 4.2.0 on hppa-linux this is libgcc_s.so.2.
-SHORTSTDC3:="2"
-.ENDIF
-SHORTSTDCPP3="6"
-.ENDIF
-
-.IF "$(CCNUMVER)">="000400020000"
-.IF "$(OS)$(CPU)" == "LINUXH"
-#for gcc >= 4.2.0 on hppa-linux this is libgcc_s.so.4.
-SHORTSTDC3:="4"
-.ENDIF
-SHORTSTDCPP3="6"
-.ENDIF
 
 .ENDIF
 .ENDIF

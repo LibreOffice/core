@@ -25,7 +25,6 @@
 # The following variables can be set, if necessary (see README):
 #URE_HOME := /opt/openoffice.org/ure
 #GXX_INCLUDE_PATH := /usr/include/g++
-#GCCS_COMPAT := LD_PRELOAD=/lib/libgcc_s.so.1
 
 
 URE_HOME ?= /opt/openoffice.org/ure
@@ -43,14 +42,14 @@ test-regview: out.pln/services.rdb
 
 .PHONY: test-cpptest
 test-cpptest: out.pln/cppmain.uno.so out.pln/types.rdb out.pln/services.rdb
-	$(GCCS_COMPAT) $(URE_HOME)/bin/uno \
+	$(URE_HOME)/bin/uno \
             -c test.cpp.cppmain.Component -l file://$(PWD)/$< \
             -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
             -ro $(URE_HOME)/share/misc/services.rdb -ro out.pln/services.rdb
 
 .PHONY: test-javatest
 test-javatest: out.pln/javamain.uno.jar out.pln/types.rdb out.pln/services.rdb
-	$(GCCS_COMPAT) $(URE_HOME)/bin/uno \
+	$(URE_HOME)/bin/uno \
             -c test.java.javamain.Component -l file://$(PWD)/$< \
             -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
             -ro $(URE_HOME)/share/misc/services.rdb -ro out.pln/services.rdb
@@ -58,7 +57,7 @@ test-javatest: out.pln/javamain.uno.jar out.pln/types.rdb out.pln/services.rdb
 .PHONY: test-javanative
 test-javanative: out.pln/runner.jar out.pln/javanative.jar \
             out.pln/javanative.rc out.pln/services.rdb out.pln/types.rdb
-	$(GCCS_COMPAT) LD_LIBRARY_PATH=$(URE_HOME)/lib java \
+	LD_LIBRARY_PATH=$(URE_HOME)/lib java \
             -jar out.pln/runner.jar file://$(URE_HOME)/share/java/ \
             file://$(PWD)/out.pln/javanative.jar \
             file://$(PWD)/out.pln/javanative.rc
@@ -66,7 +65,7 @@ test-javanative: out.pln/runner.jar out.pln/javanative.jar \
 .PHONY: test-clientserver
 test-clientserver: out.pln/cppserver.uno.so out.pln/runner.jar \
             out.pln/javaclient.jar
-	$(GCCS_COMPAT) $(URE_HOME)/bin/uno -c test.cpp.cppserver.Component \
+	$(URE_HOME)/bin/uno -c test.cpp.cppserver.Component \
             -l file://$(PWD)/out.pln/cppserver.uno.so \
             -ro $(URE_HOME)/share/misc/types.rdb -ro out.pln/types.rdb \
             -ro $(URE_HOME)/share/misc/services.rdb \
