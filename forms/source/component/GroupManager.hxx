@@ -159,7 +159,8 @@ typedef std::vector<OGroupArr::iterator> OActiveGroups;
 
 class OGroupManager : public ::cppu::WeakImplHelper< css::beans::XPropertyChangeListener, css::container::XContainerListener>
 {
-    OGroup*         m_pCompGroup;           // Sort all Components by TabIndices
+    std::unique_ptr<OGroup>
+                    m_pCompGroup;           // Sort all Components by TabIndices
     OGroupArr       m_aGroupArr;            // Sort all Components by group
     OActiveGroups   m_aActiveGroupMap;      // This map contains all indices of all groups with more than 1 element
 

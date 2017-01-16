@@ -49,7 +49,7 @@ namespace svt
 
     private:
         OUString                                               m_sURL;
-        ::ucbhelper::Content*                                  m_pContent;
+        std::unique_ptr<::ucbhelper::Content>                  m_pContent;
         State                                                  m_eState;
         css::uno::Reference < css::ucb::XCommandEnvironment >  m_xCmdEnv;
         css::uno::Reference < css::task::XInteractionHandler > m_xOwnInteraction;

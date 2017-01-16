@@ -388,22 +388,23 @@ public:
 class FORMULA_DLLPUBLIC FormulaJumpToken : public FormulaToken
 {
 private:
-            short*              pJump;
+            std::unique_ptr<short[]>
+                                pJump;
             bool                bIsInForceArray;
 public:
                                 FormulaJumpToken( OpCode e, short* p ) :
                                     FormulaToken( formula::svJump , e),
                                     bIsInForceArray( false)
                                 {
-                                    pJump = new short[ p[0] + 1 ];
-                                    memcpy( pJump, p, (p[0] + 1) * sizeof(short) );
+                                    pJump.reset( new short[ p[0] + 1 ] );
+                                    memcpy( pJump.get(), p, (p[0] + 1) * sizeof(short) );
                                 }
                                 FormulaJumpToken( const FormulaJumpToken& r ) :
                                     FormulaToken( r ),
                                     bIsInForceArray( r.bIsInForceArray)
                                 {
-                                    pJump = new short[ r.pJump[0] + 1 ];
-                                    memcpy( pJump, r.pJump, (r.pJump[0] + 1) * sizeof(short) );
+                                    pJump.reset( new short[ r.pJump[0] + 1 ] );
+                                    memcpy( pJump.get(), r.pJump.get(), (r.pJump[0] + 1) * sizeof(short) );
                                 }
     virtual                     ~FormulaJumpToken() override;
     virtual short*              GetJump() const override;

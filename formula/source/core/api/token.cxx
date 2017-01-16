@@ -365,18 +365,17 @@ bool FormulaFAPToken::operator==( const FormulaToken& r ) const
 }
 
 
-short*  FormulaJumpToken::GetJump() const               { return pJump; }
+short*  FormulaJumpToken::GetJump() const               { return pJump.get(); }
 bool    FormulaJumpToken::IsInForceArray() const        { return bIsInForceArray; }
 void    FormulaJumpToken::SetInForceArray( bool b )     { bIsInForceArray = b; }
 bool FormulaJumpToken::operator==( const FormulaToken& r ) const
 {
     return FormulaToken::operator==( r ) && pJump[0] == r.GetJump()[0] &&
-        memcmp( pJump+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0 &&
+        memcmp( pJump.get()+1, r.GetJump()+1, pJump[0] * sizeof(short) ) == 0 &&
         bIsInForceArray == r.IsInForceArray();
 }
 FormulaJumpToken::~FormulaJumpToken()
 {
-    delete [] pJump;
 }
 
 
