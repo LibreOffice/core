@@ -61,7 +61,6 @@ public:
     {}
     ~HelpLinker()
     {
-        delete m_pIndexerPreProcessor;
     }
 
 private:
@@ -82,7 +81,7 @@ private:
     std::string extensionDestination;
     bool bExtensionMode;
     fs::path indexDirParentName;
-    IndexerPreProcessor* m_pIndexerPreProcessor;
+    std::unique_ptr<IndexerPreProcessor> m_pIndexerPreProcessor;
     bool m_bUseLangRoot;
     bool m_bCreateIndex;
     void initIndexerPreProcessor();

@@ -21,6 +21,8 @@
 
 #include <indexentrysupplier_common.hxx>
 
+#include <memory>
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
 class Index;
@@ -53,7 +55,7 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
 private:
-    Index *index;
+    std::unique_ptr<Index> index;
 };
 
 struct IndexKey {
@@ -97,7 +99,7 @@ public:
     sal_Int16 mkeys[MAX_KEYS];
     sal_Int16 mkey_count;
     OUString skipping_chars;
-    CollatorImpl *collator;
+    std::unique_ptr<CollatorImpl> collator;
     sal_Int16 compare(sal_Unicode c1, sal_Unicode c2);
 };
 

@@ -30,13 +30,12 @@ namespace com { namespace sun { namespace star { namespace i18n {
 IndexEntrySupplier_Common::IndexEntrySupplier_Common(const Reference < uno::XComponentContext >& rxContext)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_Common";
-    collator = new CollatorImpl(rxContext);
+    collator.reset( new CollatorImpl(rxContext) );
     usePhonetic = false;
 }
 
 IndexEntrySupplier_Common::~IndexEntrySupplier_Common()
 {
-    delete collator;
 }
 
 Sequence < lang::Locale > SAL_CALL IndexEntrySupplier_Common::getLocaleList() throw (RuntimeException, std::exception)

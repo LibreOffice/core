@@ -168,14 +168,13 @@ Calendar_gregorian::init(const Era *_eraArray)
     icu::Locale aIcuLocale( "", nullptr, nullptr, "calendar=gregorian");
 
     UErrorCode status;
-    body = icu::Calendar::createInstance( aIcuLocale, status = U_ZERO_ERROR);
+    body.reset( icu::Calendar::createInstance( aIcuLocale, status = U_ZERO_ERROR) );
     if (!body || !U_SUCCESS(status)) throw ERROR;
     eraArray=_eraArray;
 }
 
 Calendar_gregorian::~Calendar_gregorian()
 {
-    delete body;
 }
 
 Calendar_hanja::Calendar_hanja()

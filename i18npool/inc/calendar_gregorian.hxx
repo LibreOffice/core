@@ -25,6 +25,8 @@
 #include <unicode/calendar.h>
 #include <rtl/ref.hxx>
 
+#include <memory>
+
 
 //  class Calendar_gregorian
 
@@ -97,7 +99,7 @@ public:
 
 protected:
     const Era *eraArray;
-    icu::Calendar *body;
+    std::unique_ptr<icu::Calendar> body;
     rtl::Reference<NativeNumberSupplierService> mxNatNum;
     const sal_Char* cCalendar;
     css::lang::Locale aLocale;

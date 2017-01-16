@@ -1323,11 +1323,10 @@ class OutlineNumbering : public cppu::WeakImplHelper < container::XIndexAccess >
 {
     // OutlineNumbering helper class
 
-    const OutlineNumberingLevel_Impl* m_pOutlineLevels;
+    std::unique_ptr<const OutlineNumberingLevel_Impl[]> m_pOutlineLevels;
     sal_Int16                         m_nCount;
 public:
     OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlineLevels, int nLevels);
-    virtual ~OutlineNumbering() override;
 
     //XIndexAccess
     virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException, std::exception) override;
@@ -1498,11 +1497,6 @@ OutlineNumbering::OutlineNumbering(const OutlineNumberingLevel_Impl* pOutlnLevel
 {
 }
 
-OutlineNumbering::~OutlineNumbering()
-{
-    delete [] m_pOutlineLevels;
-}
-
 sal_Int32 OutlineNumbering::getCount(  ) throw(RuntimeException, std::exception)
 {
     return m_nCount;
@@ -1513,7 +1507,7 @@ Any OutlineNumbering::getByIndex( sal_Int32 nIndex )
 {
     if(nIndex < 0 || nIndex >= m_nCount)
         throw IndexOutOfBoundsException();
-    const OutlineNumberingLevel_Impl* pTemp = m_pOutlineLevels;
+    const OutlineNumberingLevel_Impl* pTemp = m_pOutlineLevels.get();
     pTemp += nIndex;
     Any aRet;
 

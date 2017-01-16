@@ -273,7 +273,6 @@ DefaultNumberingProvider::DefaultNumberingProvider( const Reference < XComponent
 
 DefaultNumberingProvider::~DefaultNumberingProvider()
 {
-    delete translit;
 }
 
 Sequence< Reference<container::XIndexAccess> >
@@ -647,7 +646,7 @@ DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyVal
                     OUString transliteration;
                     getPropertyByName(aProperties, "Transliteration", true) >>= transliteration;
                     if ( !translit )
-                        translit = new TransliterationImpl(m_xContext);
+                        translit.reset( new TransliterationImpl(m_xContext) );
                     translit->loadModuleByImplName(transliteration, aLocale);
                     result += translit->transliterateString2String(tmp, 0, tmp.getLength());
                } catch (Exception& ) {
