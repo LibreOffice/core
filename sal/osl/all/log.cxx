@@ -178,18 +178,50 @@ void maybeOutputTimestamp(std::ostringstream &s) {
     return;
 }
 
-#endif
+char const * getLogLevel() {
+    // First check the environment variable, then the setting in logging.ini
+    static char const * env = getEnvironmentVariable_("SAL_LOG");
+    if (env != nullptr)
+        return env;
+
+    static char logLevel[1024];
+    if (getValueFromLoggingIniFile("LogLevel", logLevel)) {
+        return logLevel;
+    }
+
+    return nullptr;
+}
+
+char const * getLogFilePath() {
+    // First check the environment variable, then the setting in logging.ini
+    static char const * logFile = getEnvironmentVariable_("SAL_LOG_FILE");
+    if (logFile != nullptr)
+        return logFile;
+
+    static char logFilePath[1024];
+    if (getValueFromLoggingIniFile("LogFilePath", logFilePath)) {
+        return logFilePath;
+    }
+}
 
 bool isDebug(sal_detail_LogLevel level) {
     return level == SAL_DETAIL_LOG_LEVEL_DEBUG ||
         level == SAL_DETAIL_LOG_LEVEL_DEBUG_TRACE;
 }
 
+std::ofstream * getLogFile() {
+    static std::ofstream file(getLogFilePath(), std::ios::app | std::ios::out);
+
+    return &file;
+}
+
+#endif
+
 bool report(sal_detail_LogLevel level, char const * area) {
     if (isDebug(level))
         return true;
     assert(area != nullptr);
-    char const * env = getEnvironmentVariable();
+    static char const * env = getLogLevel();
     if (env == nullptr) {
         env = "+WARN";
     }
@@ -339,8 +371,14 @@ void log(
         syslog(prio, "%s", s.str().c_str());
 #endif
     } else {
-        std::fputs(s.str().c_str(), stderr);
-        std::fflush(stderr);
+        static std::ofstream * logFile = getLogFile();
+        if (logFile) {
+            *logFile << s.str();
+        }
+        else {
+            std::fputs(s.str().c_str(), stderr);
+            std::fflush(stderr);
+        }
     }
 #endif
 }
