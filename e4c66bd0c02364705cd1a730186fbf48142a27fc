@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_952a66e6",
+        "filename": "qadevOOo/runner/util/PropertyName.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-16T06:16:04Z",
+      "side": 1,
+      "message": "should be \"UnoRcName\"",
+      "revId": "e4c66bd0c02364705cd1a730186fbf48142a27fc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
