@@ -328,7 +328,7 @@ ScTable::ScTable( ScDocument* pDoc, SCTAB nNewTab, const OUString& rNewName,
         }
     }
 
-    for (SCCOL k=0; k<=MAXCOL; k++)
+    for (SCCOL k=0; k < aCol.size(); k++)
         aCol[k].Init( k, nTab, pDocument, true );
 }
 
@@ -1039,13 +1039,10 @@ bool ScTable::ShrinkToUsedDataArea( bool& o_bShrunk, SCCOL& rStartCol, SCROW& rS
 
 SCROW ScTable::GetLastDataRow( SCCOL nCol1, SCCOL nCol2, SCROW nLastRow ) const
 {
-    if (!ValidCol(nCol1) || !ValidCol(nCol2))
+    if ( !IsColValid( nCol1 ) || !ValidCol( nCol2 ) )
         return -1;
 
-    if ( nCol1 >= aCol.size() )
-        return -1;
-
-    nCol2 = std::min<SCCOL>( nCol2, aCol.size()-1 );
+    nCol2 = std::min<SCCOL>( nCol2, aCol.size() - 1 );
 
     SCROW nNewLastRow = 0;
     for (SCCOL i = nCol1; i <= nCol2; ++i)
@@ -1778,7 +1775,7 @@ void ScTable::SetTabNo(SCTAB nNewTab)
 void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                sc::UpdatedRangeNames& rIndexes) const
 {
-    for (SCCOL i = nCol1; i <= nCol2 && ValidCol(i); i++)
+    for (SCCOL i = nCol1; i <= nCol2 && IsColValid( i ); i++)
         aCol[i].FindRangeNamesInUse(nRow1, nRow2, rIndexes);
 }
 
@@ -2178,7 +2175,7 @@ sal_uLong ScTable::AddCondFormat( ScConditionalFormat* pNew )
 
 SvtScriptType ScTable::GetScriptType( SCCOL nCol, SCROW nRow ) const
 {
-    if (!ValidCol(nCol))
+    if ( !IsColValid( nCol ) )
         return SvtScriptType::NONE;
 
     return aCol[nCol].GetScriptType(nRow);
@@ -2195,7 +2192,7 @@ void ScTable::SetScriptType( SCCOL nCol, SCROW nRow, SvtScriptType nType )
 SvtScriptType ScTable::GetRangeScriptType(
     sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 )
 {
-    if (!ValidCol(nCol))
+    if ( !IsColValid( nCol ) )
         return SvtScriptType::NONE;
 
     sc::CellStoreType::iterator itr = aCol[nCol].maCells.begin();
@@ -2204,7 +2201,7 @@ SvtScriptType ScTable::GetRangeScriptType(
 
 size_t ScTable::GetFormulaHash( SCCOL nCol, SCROW nRow ) const
 {
-    if (!ValidCol(nCol))
+    if ( !IsColValid( nCol ) )
         return 0;
 
     return aCol[nCol].GetFormulaHash(nRow);
@@ -2212,7 +2209,7 @@ size_t ScTable::GetFormulaHash( SCCOL nCol, SCROW nRow ) const
 
 ScFormulaVectorState ScTable::GetFormulaVectorState( SCCOL nCol, SCROW nRow ) const
 {
-    if (!ValidCol(nCol))
+    if ( !IsColValid( nCol ) )
         return FormulaVectorUnknown;
 
     return aCol[nCol].GetFormulaVectorState(nRow);
@@ -2220,9 +2217,11 @@ ScFormulaVectorState ScTable::GetFormulaVectorState( SCCOL nCol, SCROW nRow ) co
 
 formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol, SCROW nRow )
 {
-    if (!ValidCol(nCol) || !ValidRow(nRow))
+    if ( !ValidCol( nCol ) || !ValidRow( nRow ) )
         return formula::FormulaTokenRef();
-
+    if ( nCol >= aCol.size() )
+        // Return a value of 0.0 if column not exists
+        return formula::FormulaTokenRef(new formula::FormulaDoubleToken(0.0));
     return aCol[nCol].ResolveStaticReference(nRow);
 }
 
@@ -2231,11 +2230,17 @@ formula::FormulaTokenRef ScTable::ResolveStaticReference( SCCOL nCol1, SCROW nRo
     if (nCol2 < nCol1 || nRow2 < nRow1)
         return formula::FormulaTokenRef();
 
-    if (!ValidCol(nCol1) || !ValidCol(nCol2) || !ValidRow(nRow1) || !ValidRow(nRow2))
+    if ( !ValidCol( nCol1 ) || !ValidCol( nCol2 ) || !ValidRow( nRow1 ) || !ValidRow( nRow2 ) )
         return formula::FormulaTokenRef();
 
+    SCCOL nMaxCol;
+    if ( nCol2 >= aCol.size() )
+        nMaxCol = aCol.size() - 1;
+    else
+        nMaxCol = nCol2;
+
     ScMatrixRef pMat(new ScFullMatrix(nCol2-nCol1+1, nRow2-nRow1+1, 0.0));
-    for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
+    for (SCCOL nCol = nCol1; nCol <= nMaxCol; ++nCol)
     {
         if (!aCol[nCol].ResolveStaticReference(*pMat, nCol2-nCol1, nRow1, nRow2))
             // Column contains non-static cell. Failed.
@@ -2250,7 +2255,7 @@ formula::VectorRefArray ScTable::FetchVectorRefArray( SCCOL nCol, SCROW nRow1, S
     if (nRow2 < nRow1)
         return formula::VectorRefArray();
 
-    if (!ValidCol(nCol) || !ValidRow(nRow1) || !ValidRow(nRow2))
+    if ( !IsColValid( nCol ) || !ValidRow( nRow1 ) || !ValidRow( nRow2 ) )
         return formula::VectorRefArray();
 
     return aCol[nCol].FetchVectorRefArray(nRow1, nRow2);
@@ -2258,7 +2263,7 @@ formula::VectorRefArray ScTable::FetchVectorRefArray( SCCOL nCol, SCROW nRow1, S
 
 ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
 {
-    if (!ValidColRow(nCol, nRow))
+    if ( !IsColRowValid( nCol, nRow ) )
         return ScRefCellValue();
 
     return aCol[nCol].GetCellValue(nRow);
@@ -2266,7 +2271,7 @@ ScRefCellValue ScTable::GetRefCellValue( SCCOL nCol, SCROW nRow )
 
 SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow )
 {
-    if (!ValidColRow(nCol, nRow))
+    if ( !IsColRowValid( nCol, nRow ) )
         return nullptr;
 
     return aCol[nCol].GetBroadcaster(nRow);
@@ -2275,7 +2280,7 @@ SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow )
 void ScTable::DeleteBroadcasters(
     sc::ColumnBlockPosition& rBlockPos, SCCOL nCol, SCROW nRow1, SCROW nRow2 )
 {
-    if (!ValidCol(nCol))
+    if ( !IsColValid( nCol ) )
         return;
 
     aCol[nCol].DeleteBroadcasters(rBlockPos, nRow1, nRow2);
@@ -2314,7 +2319,7 @@ void ScTable::SetFormulaResults(
 #if DUMP_COLUMN_STORAGE
 void ScTable::DumpColumnStorage( SCCOL nCol ) const
 {
-    if (!ValidCol(nCol))
+    if ( !IsColValid( nCol ) )
         return;
 
     aCol[nCol].DumpColumnStorage();
@@ -2323,7 +2328,7 @@ void ScTable::DumpColumnStorage( SCCOL nCol ) const
 
 const SvtBroadcaster* ScTable::GetBroadcaster( SCCOL nCol, SCROW nRow ) const
 {
-    if (!ValidColRow(nCol, nRow))
+    if ( !IsColRowValid( nCol, nRow ) )
         return nullptr;
 
     return aCol[nCol].GetBroadcaster(nRow);
