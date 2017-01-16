@@ -45,6 +45,7 @@
 #include <cppuhelper/weak.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <deque>
 #include <algorithm>
@@ -142,8 +143,7 @@ private:
 // only passes individual events of the general AllListeners.
 class AttacherAllListener_Impl : public WeakImplHelper< XAllListener >
 {
-    ImplEventAttacherManager*           mpManager;
-    Reference< XEventAttacherManager >  xManager;
+    rtl::Reference<ImplEventAttacherManager> mxManager;
     OUString                            aScriptType;
     OUString                            aScriptCode;
 
@@ -168,8 +168,7 @@ AttacherAllListener_Impl::AttacherAllListener_Impl
     const OUString &             rScriptType_,
     const OUString &             rScriptCode_
 )
-    : mpManager( pManager_ )
-    , xManager( pManager_ )
+    : mxManager( pManager_ )
     , aScriptType( rScriptType_ )
     , aScriptCode( rScriptCode_ )
 {
@@ -181,7 +180,7 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     throw( RuntimeException, std::exception )
 {
     ScriptEvent aScriptEvent;
-    aScriptEvent.Source         = static_cast<OWeakObject *>(mpManager); // get correct XInterface
+    aScriptEvent.Source         = static_cast<OWeakObject *>(mxManager.get()); // get correct XInterface
     aScriptEvent.ListenerType   = Event.ListenerType;
     aScriptEvent.MethodName     = Event.MethodName;
     aScriptEvent.Arguments      = Event.Arguments;
@@ -190,7 +189,7 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
     aScriptEvent.ScriptCode     = aScriptCode;
 
     // Iterate over all listeners and pass events.
-    OInterfaceIteratorHelper2 aIt( mpManager->aScriptListeners );
+    OInterfaceIteratorHelper2 aIt( mxManager->aScriptListeners );
     while( aIt.hasMoreElements() )
         static_cast<XScriptListener *>(aIt.next())->firing( aScriptEvent );
 }
@@ -234,8 +233,8 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
     }
     else if( !rRet.getValueType().equals( rRetType ) )
     {
-        if( mpManager->xConverter.is() )
-            rRet = mpManager->xConverter->convertTo( rRet, rRetType );
+        if( mxManager->xConverter.is() )
+            rRet = mxManager->xConverter->convertTo( rRet, rRetType );
         else
             throw CannotConvertException();
     }
@@ -246,7 +245,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
     throw( InvocationTargetException, RuntimeException, std::exception )
 {
     ScriptEvent aScriptEvent;
-    aScriptEvent.Source         = static_cast<OWeakObject *>(mpManager); // get correct XInterface
+    aScriptEvent.Source         = static_cast<OWeakObject *>(mxManager.get()); // get correct XInterface
     aScriptEvent.ListenerType   = Event.ListenerType;
     aScriptEvent.MethodName     = Event.MethodName;
     aScriptEvent.Arguments      = Event.Arguments;
@@ -256,13 +255,13 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
 
     Any aRet;
     // Iterate over all listeners and pass events.
-    OInterfaceIteratorHelper2 aIt( mpManager->aScriptListeners );
+    OInterfaceIteratorHelper2 aIt( mxManager->aScriptListeners );
     while( aIt.hasMoreElements() )
     {
         aRet = static_cast<XScriptListener *>(aIt.next())->approveFiring( aScriptEvent );
         try
         {
-            Reference< XIdlClass > xListenerType = mpManager->getReflection()->
+            Reference< XIdlClass > xListenerType = mxManager->getReflection()->
                         forName( Event.ListenerType.getTypeName() );
             Reference< XIdlMethod > xMeth = xListenerType->getMethod( Event.MethodName );
             if( xMeth.is() )
@@ -313,7 +312,7 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
         catch (const CannotConvertException&)
         {
             // silent ignore conversions errors from a script call
-            Reference< XIdlClass > xListenerType = mpManager->getReflection()->
+            Reference< XIdlClass > xListenerType = mxManager->getReflection()->
                         forName( Event.ListenerType.getTypeName() );
             Reference< XIdlMethod > xMeth = xListenerType->getMethod( Event.MethodName );
             if( xMeth.is() )
