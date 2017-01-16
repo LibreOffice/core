@@ -144,7 +144,7 @@ char const * getLogLevel() {
     return nullptr;
 }
 
-char const * getLogFile() {
+char const * getLogFilePath() {
     // First check the environment variable, then the setting in logging.ini
     static char const * logFile = getEnvironmentVariable_("SAL_LOG_FILE");
     if (logFile != nullptr)
@@ -158,13 +158,19 @@ char const * getLogFile() {
     return nullptr;
 }
 
+std::ofstream * getLogFile() {
+    static std::ofstream file(getLogFilePath(), std::ios::app | std::ios::out);
+
+    return &file;
+}
+
 #endif
 
 bool report(sal_detail_LogLevel level, char const * area) {
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
         return true;
     assert(area != 0);
-    char const * env = getLogLevel();
+    static char const * env = getLogLevel();
     if (env == 0) {
         env = "+WARN";
     }
@@ -295,10 +301,9 @@ void log(
         syslog(prio, "%s", s.str().c_str());
 #endif
     } else {
-        const char* logFile = getLogFile();
+        static std::ofstream * logFile = getLogFile();
         if (logFile) {
-            std::ofstream file(logFile, std::ios::app | std::ios::out);
-            file << s.str();
+            *logFile << s.str();
         }
         else {
             std::fputs(s.str().c_str(), stderr);
