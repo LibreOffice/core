@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_d534ee4b",
+        "filename": "accessibility/inc/extended/AccessibleBrowseBox.hxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-16T06:16:42Z",
+      "side": 1,
+      "message": "need to use rtl::Reference for this",
+      "revId": "e49fd4652aca1cdaab35ac49acb105bf3bd6bfec",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
