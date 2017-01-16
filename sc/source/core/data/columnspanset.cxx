@@ -15,9 +15,9 @@
 #include "markdata.hxx"
 #include "rangelst.hxx"
 #include <fstalgorithm.hxx>
-#include <boost/checked_delete.hpp>
 
 #include <algorithm>
+#include <memory>
 
 namespace sc {
 
@@ -67,7 +67,7 @@ ColumnSpanSet::~ColumnSpanSet()
         if (!pTab)
             continue;
 
-        std::for_each(pTab->begin(), pTab->end(), boost::checked_deleter<ColumnType>());
+        std::for_each(pTab->begin(), pTab->end(), std::default_delete<ColumnType>());
         delete pTab;
     }
 }

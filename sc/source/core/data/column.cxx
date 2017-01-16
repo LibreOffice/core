@@ -58,7 +58,6 @@
 #include <cstring>
 #include <map>
 #include <cstdio>
-#include <boost/checked_delete.hpp>
 #include <memory>
 
 using ::editeng::SvxBorderLine;
@@ -2254,7 +2253,7 @@ class UpdateRefOnNonCopy : public std::unary_function<sc::FormulaGroupEntry, voi
 
         if (!mpUndoDoc->SetFormulaCells(rOldPos, aCells))
             // Insertion failed.  Delete all formula cells.
-            std::for_each(aCells.begin(), aCells.end(), boost::checked_deleter<ScFormulaCell>());
+            std::for_each(aCells.begin(), aCells.end(), std::default_delete<ScFormulaCell>());
     }
 
 public:

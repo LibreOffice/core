@@ -36,7 +36,6 @@
 #include <unordered_map>
 #include <utility>
 #include <vector>
-#include <boost/checked_delete.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <osl/conditn.hxx>
 #include <osl/diagnose.h>

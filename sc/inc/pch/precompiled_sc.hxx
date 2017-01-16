@@ -56,7 +56,6 @@
 #include <unordered_set>
 #include <utility>
 #include <vector>
-#include <boost/checked_delete.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <boost/math/special_functions/log1p.hpp>
 #include <boost/optional/optional.hpp>

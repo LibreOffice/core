@@ -19,7 +19,6 @@
 
 #include <sal/config.h>
 
-#include <boost/checked_delete.hpp>
 #include <tools/urlobj.hxx>
 #include <tools/debug.hxx>
 #include <tools/inetmime.hxx>
@@ -564,7 +563,7 @@ namespace {
 std::unique_ptr<SvMemoryStream> memoryStream(
         void const * data, sal_Int32 length)
 {
-    std::unique_ptr<char, boost::checked_array_deleter<char> > b(
+    std::unique_ptr<char[]> b(
         new char[length]);
     memcpy(b.get(), data, length);
     std::unique_ptr<SvMemoryStream> s(

@@ -33,7 +33,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <string>
-#include <boost/checked_delete.hpp>
 #include <osl/diagnose.h>
 #include <osl/interlck.h>
 #include <osl/time.h>

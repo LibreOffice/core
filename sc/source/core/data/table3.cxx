@@ -69,7 +69,6 @@
 #include <memory>
 #include <unordered_set>
 #include <vector>
-#include <boost/checked_delete.hpp>
 #include <mdds/flat_segment_tree.hpp>
 #include <o3tl/make_unique.hxx>
 
@@ -300,7 +299,7 @@ public:
         }
 
         if (mpRows)
-            std::for_each(mpRows->begin(), mpRows->end(), boost::checked_deleter<Row>());
+            std::for_each(mpRows->begin(), mpRows->end(), std::default_delete<Row>());
     }
 
     void SetKeepQuery( bool b ) { mbKeepQuery = b; }

@@ -39,7 +39,6 @@
 #include <memory>
 #include <float.h>
 #include <vector>
-#include <boost/checked_delete.hpp>
 
 namespace {
 
@@ -374,7 +373,7 @@ const SmNode * SmNode::FindNodeWithAccessibleIndex(sal_Int32 nAccIdx) const
 
 SmStructureNode::~SmStructureNode()
 {
-    ForEachNonNull(this, boost::checked_deleter<SmNode>());
+    ForEachNonNull(this, std::default_delete<SmNode>());
 }
 
 

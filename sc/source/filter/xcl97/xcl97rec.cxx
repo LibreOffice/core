@@ -77,7 +77,6 @@
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
 
-#include <boost/checked_delete.hpp>
 #include <memory>
 
 using namespace ::com::sun::star;
@@ -108,7 +107,7 @@ XclExpObjList::XclExpObjList( const XclExpRoot& rRoot, XclEscherEx& rEscherEx ) 
 
 XclExpObjList::~XclExpObjList()
 {
-    std::for_each(maObjs.begin(), maObjs.end(), boost::checked_deleter<XclObj>());
+    std::for_each(maObjs.begin(), maObjs.end(), std::default_delete<XclObj>());
     delete pMsodrawingPerSheet;
     delete pSolverContainer;
 }
