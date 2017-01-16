@@ -325,11 +325,18 @@ void sal_detail_log(
         if (logFile) {
             *logFile << s.str() << std::endl;
         }
+#if (OSL_DEBUG_LEVEL == 0) && defined(WNT)
+        // on Windows deployments, no one reads console output
+        else {
+            OutputDebugStringA(s.str().c_str());
+        }
+#else
         else {
             s << '\n';
             std::fputs(s.str().c_str(), stderr);
             std::fflush(stderr);
         }
+#endif
     }
 #endif
 }
