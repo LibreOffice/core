@@ -236,7 +236,6 @@ UpdateCheckUI::getImplementationName() throw (uno::RuntimeException, std::except
     return ::getImplementationName();
 }
 
-
 uno::Sequence< OUString > SAL_CALL
 UpdateCheckUI::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
 {
@@ -248,7 +247,6 @@ UpdateCheckUI::supportsService( OUString const & serviceName ) throw (uno::Runti
 {
     return cppu::supportsService(this, serviceName);
 }
-
 
 Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
 {
@@ -264,9 +262,8 @@ Image UpdateCheckUI::GetMenuBarIcon( MenuBar* pMBar )
     else
         nResID = RID_UPDATE_AVAILABLE_16;
 
-    return Image( ResId( nResID, *mpUpdResMgr ) );
+    return Image(BitmapEx(ResId(nResID, *mpUpdResMgr)));
 }
-
 
 Image UpdateCheckUI::GetBubbleImage( OUString &rURL )
 {

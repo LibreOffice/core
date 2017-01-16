@@ -80,8 +80,8 @@
 
 // Image
 
-#define IMG_TABLE                   ( RID_DIALOG_START + 1 )
-#define IMG_QUERY                   ( RID_DIALOG_START + 2 )
+#define BMP_TABLE                   ( RID_DIALOG_START + 1 )
+#define BMP_QUERY                   ( RID_DIALOG_START + 2 )
 
 #define WINDOW_SIZE_X       260
 #define WINDOW_SIZE_Y       185

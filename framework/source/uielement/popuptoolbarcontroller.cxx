@@ -515,7 +515,7 @@ void SaveToolbarController::updateImage()
     }
     else if ( m_bModified )
     {
-        Image aResImage(eImageType == vcl::ImageType::Size16 ? FwkResId(IMG_SAVEMODIFIED_SMALL) : FwkResId(IMG_SAVEMODIFIED_LARGE));
+        Image aResImage(BitmapEx(eImageType == vcl::ImageType::Size16 ? FwkResId(BMP_SAVEMODIFIED_SMALL) : FwkResId(BMP_SAVEMODIFIED_LARGE)));
         aImage = aResImage;
     }
 

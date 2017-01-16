@@ -53,8 +53,8 @@
 #define STR_REMOTE_TITLE                        (RID_STR_START+26)
 #define STR_SAFEMODE_TITLE                      (RID_STR_START+27)
 
-#define IMG_SAVEMODIFIED_SMALL                  (RID_IMAGE_START+0)
-#define IMG_SAVEMODIFIED_LARGE                  (RID_IMAGE_START+1)
+#define BMP_SAVEMODIFIED_SMALL                  (RID_IMAGE_START+0)
+#define BMP_SAVEMODIFIED_LARGE                  (RID_IMAGE_START+1)
 
 #define POPUPMENU_TOOLBAR_QUICKCUSTOMIZATION    (RID_MENU_START+0)
 

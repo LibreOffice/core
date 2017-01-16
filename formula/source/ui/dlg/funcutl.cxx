@@ -525,8 +525,8 @@ IMPL_LINK_NOARG(RefEdit, UpdateHdl, Idle *, void)
 //class RefButton
 RefButton::RefButton( vcl::Window* _pParent, WinBits nStyle ) :
     ImageButton( _pParent, nStyle ),
-    aImgRefStart( ModuleRes( RID_BMP_REFBTN1 ) ),
-    aImgRefDone( ModuleRes( RID_BMP_REFBTN2 ) ),
+    aImgRefStart(BitmapEx(ModuleRes(RID_BMP_REFBTN1))),
+    aImgRefDone(BitmapEx(ModuleRes(RID_BMP_REFBTN2))),
     aShrinkQuickHelp( ModuleRes( RID_STR_SHRINK ).toString() ),
     aExpandQuickHelp( ModuleRes( RID_STR_EXPAND ).toString() ),
     pAnyRefDlg( nullptr ),

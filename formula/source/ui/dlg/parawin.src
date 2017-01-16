@@ -19,9 +19,9 @@
 
 #include "ForResId.hrc"
 
-Image BMP_FX
+Bitmap BMP_FX
 {
-    ImageBitmap = Bitmap { File = "fx.png" ; };
+    File = "fx.png";
 };
 
 String STR_OPTIONAL

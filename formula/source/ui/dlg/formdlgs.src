@@ -20,24 +20,24 @@
 #include "formdlgs.hrc"
 #include "ForResId.hrc"
 
-Image BMP_STR_CLOSE
+Bitmap BMP_STR_CLOSE
 {
-    ImageBitmap = Bitmap { File = "fapclose.png"; };
+    File = "fapclose.png";
 };
 
-Image BMP_STR_OPEN
+Bitmap BMP_STR_OPEN
 {
-    ImageBitmap = Bitmap { File = "fapopen.png"; };
+    File = "fapopen.png";
 };
 
-Image BMP_STR_END
+Bitmap BMP_STR_END
 {
-    ImageBitmap = Bitmap { File = "fapok.png"; };
+    File = "fapok.png";
 };
 
-Image BMP_STR_ERROR
+Bitmap BMP_STR_ERROR
 {
-    ImageBitmap = Bitmap { File = "faperror.png"; };
+    File = "faperror.png";
 };
 
 String STR_STRUCT_ERR1
@@ -65,12 +65,9 @@ String STR_END
     Text [ en-US ] = "~End" ;
 };
 
-Image RID_BMP_REFBTN1
+Bitmap RID_BMP_REFBTN1
 {
-    ImageBitmap = Bitmap
-    {
-        File = "refinp1.png";
-    };
+    File = "refinp1.png";
 };
 
 String RID_STR_SHRINK
@@ -78,12 +75,9 @@ String RID_STR_SHRINK
     Text [ en-US ] = "Shrink" ;
 };
 
-Image RID_BMP_REFBTN2
+Bitmap RID_BMP_REFBTN2
 {
-    ImageBitmap = Bitmap
-    {
-        File = "refinp2.png";
-    };
+    File = "refinp2.png";
 };
 
 String RID_STR_EXPAND

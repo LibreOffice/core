@@ -19,15 +19,14 @@
 
 #include "dbpresid.hrc"
 
-
-Image IMG_TABLE
+Bitmap BMP_TABLE
 {
-    ImageBitmap = Bitmap { File = "sx03188.png"; };
+    File = "sx03188.png";
 };
 
-Image IMG_QUERY
+Bitmap BMP_QUERY
 {
-    ImageBitmap = Bitmap { File = "sx03202.png"; };
+    File = "sx03202.png";
 };
 
 String RID_STR_OPTION_DB_FIELD_TITLE
