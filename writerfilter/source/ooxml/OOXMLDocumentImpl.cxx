@@ -41,6 +41,7 @@
 #include <unotools/mediadescriptor.hxx>
 
 #include <iostream>
+#include "sfx2/objsh.hxx"
 
 // this extern variable is declared in OOXMLStreamImpl.hxx
 OUString customTarget;
@@ -503,11 +504,14 @@ void OOXMLDocumentImpl::resolve(Stream & rStream)
         {
             xParser->parseStream(aParserInput);
         }
-        catch (xml::sax::SAXException const&)
+        catch (xml::sax::SAXException const& rErr)
         {
-            // don't swallow these - handlers may not have been executed,
+            // don't silently swallow these - handlers may not have been executed,
             // and the domain mapper is likely in an inconsistent state
-            throw;
+            // In case user chooses to try to continue loading, don't ask again for this file
+            SfxObjectShell* rShell = SfxObjectShell::GetShellFromComponent(mxModel);
+            if (!rShell || !rShell->IsContinueImportOnFilterExceptions("SAXException: " + rErr.Message))
+                throw;
         }
         catch (uno::RuntimeException const&)
         {
