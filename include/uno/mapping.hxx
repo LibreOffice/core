@@ -314,6 +314,7 @@ inline void * Mapping::mapInterface(
     @deprecated
 */
 template< class C >
+SAL_DEPRECATED("use uno_Mapping")
 inline bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI )
 {
     Mapping aMapping(
@@ -337,6 +338,7 @@ inline bool mapToCpp( Reference< C > * ppRet, uno_Interface * pUnoI )
     @deprecated
 */
 template< class C >
+SAL_DEPRECATED("use uno_Mapping")
 inline bool mapToUno( uno_Interface ** ppRet, const Reference< C > & x )
 {
     Mapping aMapping(
