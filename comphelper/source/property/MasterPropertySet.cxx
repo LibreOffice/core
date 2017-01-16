@@ -90,7 +90,7 @@ void MasterPropertySet::registerSlave ( ChainablePropertySet *pNewSet )
     throw()
 {
     maSlaveMap [ ++mnLastId ] = new SlaveData ( pNewSet );
-    mpInfo->add ( pNewSet->mpInfo->maMap, mnLastId );
+    mpInfo->add ( pNewSet->mxInfo->maMap, mnLastId );
 }
 
 void SAL_CALL MasterPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )

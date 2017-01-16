@@ -548,7 +548,7 @@ SwXViewSettings::SwXViewSettings(SwView* pVw)
 {
     // This property only exists if we have a view (ie, not at the module )
     if ( !pView )
-        mpInfo->remove ( "HelpURL" );
+        mxInfo->remove ( "HelpURL" );
 
 }
 

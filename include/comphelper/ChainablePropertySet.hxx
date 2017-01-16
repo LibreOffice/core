@@ -26,6 +26,7 @@
 #include <comphelper/PropertyInfoHash.hxx>
 #include <comphelper/comphelperdllapi.h>
 #include <comphelper/solarmutex.hxx>
+#include <rtl/ref.hxx>
 
 namespace comphelper
 {
@@ -59,9 +60,8 @@ namespace comphelper
     {
         friend class MasterPropertySet;
     protected:
-        ChainablePropertySetInfo *mpInfo;
         SolarMutex* mpMutex;
-        css::uno::Reference < css::beans::XPropertySetInfo > mxInfo;
+        rtl::Reference < ChainablePropertySetInfo > mxInfo;
 
         virtual void _preSetValues ()
             throw (css::beans::UnknownPropertyException,
