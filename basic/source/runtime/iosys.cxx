@@ -135,7 +135,6 @@ SbiStream::SbiStream()
 
 SbiStream::~SbiStream()
 {
-    delete pStrm;
 }
 
 // map an SvStream-error to StarBASIC-code
@@ -492,17 +491,17 @@ SbError SbiStream::Open
         if( (nStrmMode & (StreamMode::READ | StreamMode::WRITE)) == (StreamMode::READ | StreamMode::WRITE) )
         {
             Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
-            pStrm = new UCBStream( xIS );
+            pStrm.reset( new UCBStream( xIS ) );
         }
         else if( nStrmMode & StreamMode::WRITE )
         {
             Reference< XStream > xIS = xSFI->openFileReadWrite( aNameStr );
-            pStrm = new UCBStream( xIS );
+            pStrm.reset( new UCBStream( xIS ) );
         }
         else //if( nStrmMode & StreamMode::READ )
         {
             Reference< XInputStream > xIS = xSFI->openFileRead( aNameStr );
-            pStrm = new UCBStream( xIS );
+            pStrm.reset( new UCBStream( xIS ) );
         }
 
         }
@@ -514,7 +513,7 @@ SbError SbiStream::Open
 
     if( !pStrm )
     {
-        pStrm = new OslStream( aNameStr, nStrmMode );
+        pStrm.reset( new OslStream( aNameStr, nStrmMode ) );
     }
     if( IsAppend() )
     {
@@ -523,8 +522,7 @@ SbError SbiStream::Open
     MapError();
     if( nError )
     {
-        delete pStrm;
-        pStrm = nullptr;
+        pStrm.reset();
     }
     return nError;
 }
@@ -534,8 +532,7 @@ SbError SbiStream::Close()
     if( pStrm )
     {
         MapError();
-        delete pStrm;
-        pStrm = nullptr;
+        pStrm.reset();
     }
     nChan = 0;
     return nError;

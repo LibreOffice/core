@@ -47,7 +47,7 @@ namespace o3tl
 
 class SbiStream
 {
-    SvStream* pStrm;
+    std::unique_ptr<SvStream> pStrm;
     sal_uInt64  nExpandOnWriteTo;  // during writing access expand the stream to this size
     OString aLine;
     sal_uInt64  nLine;
@@ -76,7 +76,7 @@ public:
     sal_uInt64 GetLine() const            { return nLine;          }
     void SetExpandOnWriteTo( sal_uInt64 n ) { nExpandOnWriteTo = n;    }
     void ExpandFile();
-    SvStream* GetStrm()                { return pStrm;          }
+    SvStream* GetStrm()                { return pStrm.get();        }
 };
 
 class SbiIoSystem
