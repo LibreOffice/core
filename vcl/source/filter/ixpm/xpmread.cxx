@@ -213,7 +213,7 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
                                 mpAcc->SetPaletteColor( (sal_uInt8)i, Color( pPtr[1], pPtr[2], pPtr[3] ) );
                                 pPtr += ( mnCpp + 4 );
                             }
-                            // using 2 charakters per pixel and less than 257 Colors we speed up
+                            // using 2 characters per pixel and less than 257 Colors we speed up
                             if ( mnCpp == 2 )   // by using a 64kb indexing table
                             {
                                 const size_t nSize = 256 * 256;
