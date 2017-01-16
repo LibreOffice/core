@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_b5cbea1d",
+        "filename": "logerrit",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-01-16T06:57:34Z",
+      "side": 1,
+      "message": "the \" makes the statement more confusing. the exit 1 is a good idea, except the user should be told there is a problem",
+      "range": {
+        "startLine": 66,
+        "startChar": 11,
+        "endLine": 66,
+        "endChar": 43
+      },
+      "revId": "08359a2d6f425d7bb152f856a2c398786d5bd4a4",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
