@@ -75,12 +75,11 @@ ONDXPage::ONDXPage(ODbaseIndex& rInd, sal_uInt32 nPos, ONDXPage* pParent)
     , ppNodes(nullptr)
 {
     sal_uInt16 nT = rIndex.getHeader().db_maxkeys;
-    ppNodes = new ONDXNode[nT];
+    ppNodes.reset( new ONDXNode[nT] );
 }
 
 ONDXPage::~ONDXPage()
 {
-    delete[] ppNodes;
 }
 
 void ONDXPage::ReleaseRef()
