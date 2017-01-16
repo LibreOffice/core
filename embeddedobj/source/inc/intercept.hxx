@@ -26,6 +26,7 @@
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <com/sun/star/frame/XInterceptorInfo.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
+#include <memory>
 
 
 class StatusChangeListenerContainer;
@@ -140,7 +141,7 @@ private:
 
     static css::uno::Sequence< OUString > m_aInterceptedURL;
 
-    StatusChangeListenerContainer*    m_pStatCL;
+    std::unique_ptr<StatusChangeListenerContainer>    m_pStatCL;
 };
 
 #endif
