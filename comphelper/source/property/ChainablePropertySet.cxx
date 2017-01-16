@@ -33,8 +33,7 @@ using namespace ::com::sun::star::beans;
 
 ChainablePropertySet::ChainablePropertySet( comphelper::ChainablePropertySetInfo* pInfo, comphelper::SolarMutex* pMutex )
     throw()
-: mpInfo ( pInfo )
-, mpMutex ( pMutex )
+: mpMutex ( pMutex )
 , mxInfo ( pInfo )
 {
 }
@@ -48,7 +47,7 @@ ChainablePropertySet::~ChainablePropertySet()
 Reference< XPropertySetInfo > SAL_CALL ChainablePropertySet::getPropertySetInfo(  )
     throw(RuntimeException, std::exception)
 {
-    return mxInfo;
+    return mxInfo.get();
 }
 
 void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
@@ -59,9 +58,9 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyN
     if (mpMutex)
         xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
-    PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
+    PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
-    if( aIter == mpInfo->maMap.end())
+    if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
 
     _preSetValues();
@@ -77,9 +76,9 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const OUString& rPropertyNa
     if (mpMutex)
         xMutexGuard.reset( new osl::Guard< comphelper::SolarMutex >(mpMutex) );
 
-    PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
+    PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
-    if( aIter == mpInfo->maMap.end())
+    if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
 
     Any aAny;
@@ -135,11 +134,11 @@ void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >
 
         const Any * pAny = rValues.getConstArray();
         const OUString * pString = rPropertyNames.getConstArray();
-        PropertyInfoHash::const_iterator aEnd = mpInfo->maMap.end(), aIter;
+        PropertyInfoHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
         {
-            aIter = mpInfo->maMap.find ( *pString );
+            aIter = mxInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
                 throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
@@ -168,11 +167,11 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues(const Sequence<
 
         Any * pAny = aValues.getArray();
         const OUString * pString = rPropertyNames.getConstArray();
-        PropertyInfoHash::const_iterator aEnd = mpInfo->maMap.end(), aIter;
+        PropertyInfoHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pAny )
         {
-            aIter = mpInfo->maMap.find ( *pString );
+            aIter = mxInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
                 throw RuntimeException( *pString, static_cast< XPropertySet* >( this ) );
 
@@ -206,8 +205,8 @@ void SAL_CALL ChainablePropertySet::firePropertiesChangeEvent( const Sequence< O
 PropertyState SAL_CALL ChainablePropertySet::getPropertyState( const OUString& PropertyName )
     throw(UnknownPropertyException, RuntimeException, std::exception)
 {
-    PropertyInfoHash::const_iterator aIter =  mpInfo->maMap.find( PropertyName );
-    if( aIter == mpInfo->maMap.end())
+    PropertyInfoHash::const_iterator aIter =  mxInfo->maMap.find( PropertyName );
+    if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( PropertyName, static_cast< XPropertySet* >( this ) );
 
     PropertyState aState(PropertyState_AMBIGUOUS_VALUE);
@@ -229,12 +228,12 @@ Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( cons
     {
         PropertyState * pState = aStates.getArray();
         const OUString * pString = rPropertyNames.getConstArray();
-        PropertyInfoHash::const_iterator aEnd = mpInfo->maMap.end(), aIter;
+        PropertyInfoHash::const_iterator aEnd = mxInfo->maMap.end(), aIter;
         _preGetPropertyState();
 
         for ( sal_Int32 i = 0; i < nCount; ++i, ++pString, ++pState )
         {
-            aIter = mpInfo->maMap.find ( *pString );
+            aIter = mxInfo->maMap.find ( *pString );
             if ( aIter == aEnd )
                 throw UnknownPropertyException( *pString, static_cast< XPropertySet* >( this ) );
 
@@ -248,9 +247,9 @@ Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( cons
 void SAL_CALL ChainablePropertySet::setPropertyToDefault( const OUString& rPropertyName )
     throw(UnknownPropertyException, RuntimeException, std::exception)
 {
-    PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
+    PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
-    if( aIter == mpInfo->maMap.end())
+    if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
     _setPropertyToDefault( *((*aIter).second) );
 }
@@ -258,9 +257,9 @@ void SAL_CALL ChainablePropertySet::setPropertyToDefault( const OUString& rPrope
 Any SAL_CALL ChainablePropertySet::getPropertyDefault( const OUString& rPropertyName )
     throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
-    PropertyInfoHash::const_iterator aIter = mpInfo->maMap.find ( rPropertyName );
+    PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
-    if( aIter == mpInfo->maMap.end())
+    if( aIter == mxInfo->maMap.end())
         throw UnknownPropertyException( rPropertyName, static_cast< XPropertySet* >( this ) );
     return _getPropertyDefault( *((*aIter).second) );
 }
