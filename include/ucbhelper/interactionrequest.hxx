@@ -139,8 +139,6 @@ public:
 };
 
 
-struct InteractionContinuation_Impl;
-
 /**
   * This class is the base for implementations of the interface
   * XInteractionContinuation. Classes derived from this bas class work together
@@ -152,7 +150,7 @@ struct InteractionContinuation_Impl;
   */
 class UCBHELPER_DLLPUBLIC InteractionContinuation : public cppu::OWeakObject
 {
-    std::unique_ptr<InteractionContinuation_Impl> m_pImpl;
+    InteractionRequest* m_pRequest;
 
 protected:
     /**

@@ -187,23 +187,10 @@ InteractionRequest::getContinuations()
 
 // InteractionContinuation Implementation.
 
-namespace ucbhelper
-{
-
-struct InteractionContinuation_Impl
-{
-    InteractionRequest * m_pRequest;
-
-    explicit InteractionContinuation_Impl( InteractionRequest * pRequest )
-    : m_pRequest( pRequest ) {}
-};
-
-}
-
 
 InteractionContinuation::InteractionContinuation(
                         InteractionRequest * pRequest )
-: m_pImpl( new InteractionContinuation_Impl( pRequest ) )
+: m_pRequest( pRequest )
 {
 }
 
@@ -216,7 +203,7 @@ InteractionContinuation::~InteractionContinuation()
 
 void InteractionContinuation::recordSelection()
 {
-    m_pImpl->m_pRequest->setSelection( this );
+    m_pRequest->setSelection( this );
 }
 
 
