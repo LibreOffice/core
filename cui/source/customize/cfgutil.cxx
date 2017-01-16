@@ -373,10 +373,10 @@ SvxConfigGroupBoxResource_Impl::SvxConfigGroupBoxResource_Impl() :
 
 SfxConfigGroupListBox::SfxConfigGroupListBox(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
-    , pImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(nullptr), pStylesInfo(nullptr)
+    , xImp(new SvxConfigGroupBoxResource_Impl()), pFunctionListBox(nullptr), pStylesInfo(nullptr)
 {
     SetStyle( GetStyle() | WB_CLIPCHILDREN | WB_HSCROLL | WB_HASBUTTONS | WB_HASLINES | WB_HASLINESATROOT | WB_HASBUTTONSATROOT );
-    SetNodeBitmaps( pImp->m_collapsedImage, pImp->m_expandedImage );
+    SetNodeBitmaps(xImp->m_collapsedImage, xImp->m_expandedImage);
 }
 
 VCL_BUILDER_FACTORY_CONSTRUCTOR(SfxConfigGroupListBox, WB_TABSTOP)
@@ -556,7 +556,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
 
             aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_SCRIPTCONTAINER, 0,
                     static_cast<void *>(rootNode.get())));
-            OUString aTitle(pImp->m_sDlgMacros);
+            OUString aTitle(xImp->m_sDlgMacros);
             SvTreeListEntry *pNewEntry = InsertEntry( aTitle );
             pNewEntry->SetUserData( aArr.back().get() );
             pNewEntry->EnableChildrenOnDemand();
@@ -608,11 +608,11 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
                             {
                                 if ( uiName.equals( user ) )
                                 {
-                                    uiName = pImp->m_sMyMacros;
+                                    uiName = xImp->m_sMyMacros;
                                 }
                                 else if ( uiName.equals( share ) )
                                 {
-                                    uiName = pImp->m_sProdMacros;
+                                    uiName = xImp->m_sProdMacros;
                                 }
                             }
                         }
@@ -660,7 +660,7 @@ void SfxConfigGroupListBox::Init(const css::uno::Reference< css::uno::XComponent
     // add styles
     if ( m_xContext.is() )
     {
-        OUString sStyle( pImp->m_aStrGroupStyles );
+        OUString sStyle(xImp->m_aStrGroupStyles);
         SvTreeListEntry *pEntry = InsertEntry( sStyle );
         aArr.push_back( o3tl::make_unique<SfxGroupInfo_Impl>( SfxCfgKind::GROUP_STYLES, 0, nullptr ) ); // TODO last parameter should contain user data
         pEntry->SetUserData( aArr.back().get() );
@@ -684,7 +684,7 @@ Image SfxConfigGroupListBox::GetImage(
         OUString share("share");
         if (node->getName().equals( user ) || node->getName().equals(share ) )
         {
-            aImage = pImp->m_hdImage;
+            aImage = xImp->m_hdImage;
         }
         else
         {
@@ -721,16 +721,16 @@ Image SfxConfigGroupListBox::GetImage(
             }
             else
             {
-                aImage = pImp->m_docImage;
+                aImage = xImp->m_docImage;
             }
         }
     }
     else
     {
         if( node->getType() == browse::BrowseNodeTypes::SCRIPT )
-            aImage = pImp->m_macImage;
+            aImage = xImp->m_macImage;
         else
-            aImage = pImp->m_libImage;
+            aImage = xImp->m_libImage;
     }
     return aImage;
 }
@@ -1084,7 +1084,7 @@ void SfxConfigGroupListBox::SelectMacro( const SfxMacroInfoItem *pItem )
 void SfxConfigGroupListBox::SelectMacro( const OUString& rBasic,
          const OUString& rMacro )
 {
-    const OUString aBasicName( rBasic + " " + pImp->m_sMacros );
+    const OUString aBasicName(rBasic + " " + xImp->m_sMacros);
     const sal_Int32 nCount = comphelper::string::getTokenCount(rMacro, '.');
     const OUString aMethod( rMacro.getToken( nCount-1, '.' ) );
     OUString aLib;

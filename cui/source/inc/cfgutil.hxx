@@ -122,7 +122,7 @@ public:
 struct SvxConfigGroupBoxResource_Impl;
 class SfxConfigGroupListBox : public SvTreeListBox
 {
-    SvxConfigGroupBoxResource_Impl* pImp;
+    std::unique_ptr<SvxConfigGroupBoxResource_Impl> xImp;
     VclPtr<SfxConfigFunctionListBox>  pFunctionListBox;
     SfxGroupInfoArr_Impl            aArr;
 
