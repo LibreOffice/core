@@ -28,7 +28,6 @@
 #undef ENABLE_LAYOUT
 #endif
 
-#undef SC_DLLIMPLEMENTATION
 
 #include "scdlgfact.hxx"
 

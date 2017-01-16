@@ -24,9 +24,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_scui.hxx"
 
-#ifdef SC_DLLIMPLEMENTATION
-#undef SC_DLLIMPLEMENTATION
-#endif
 
 #include <vcl/svapp.hxx>
 #include <svl/aeitem.hxx>

@@ -34,10 +34,6 @@ $(eval $(call gb_Library_set_include,scfilt,\
 	-I$(SRCDIR)/sc/source/filter/inc \
 ))
 
-$(eval $(call gb_Library_add_defs,scfilt,\
-	-DSC_DLLIMPLEMENTATION \
-))
-
 $(eval $(call gb_Library_add_api,scfilt,\
 	offapi \
 	udkapi \

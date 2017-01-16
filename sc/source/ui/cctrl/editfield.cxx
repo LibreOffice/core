@@ -24,9 +24,6 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_scui.hxx"
 
-#ifdef SC_DLLIMPLEMENTATION
-#undef SC_DLLIMPLEMENTATION
-#endif
 #include "editfield.hxx"
 #include <rtl/math.hxx>
 #include <unotools/localedatawrapper.hxx>
