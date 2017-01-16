@@ -334,13 +334,12 @@ OPropertySetAggregationHelper::OPropertySetAggregationHelper( ::cppu::OBroadcast
     :OPropertyStateHelper( rBHlp )
     ,m_bListening( false )
 {
-    m_pForwarder = new PropertyForwarder( *this );
+    m_pForwarder.reset( new PropertyForwarder( *this ) );
 }
 
 
 OPropertySetAggregationHelper::~OPropertySetAggregationHelper()
 {
-    delete m_pForwarder;
 }
 
 
