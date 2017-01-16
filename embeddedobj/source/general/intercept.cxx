@@ -61,7 +61,6 @@ Interceptor::Interceptor( DocumentHolder* pDocHolder )
 
 Interceptor::~Interceptor()
 {
-    delete m_pStatCL;
 }
 
 //XDispatch
@@ -143,8 +142,7 @@ Interceptor::addStatusListener(
         {
             osl::MutexGuard aGuard(m_aMutex);
             if(!m_pStatCL)
-                m_pStatCL =
-                    new StatusChangeListenerContainer(m_aMutex);
+                m_pStatCL.reset(new StatusChangeListenerContainer(m_aMutex));
         }
 
         m_pStatCL->addInterface(URL.Complete,Control);
@@ -168,8 +166,7 @@ Interceptor::addStatusListener(
         {
             osl::MutexGuard aGuard(m_aMutex);
             if(!m_pStatCL)
-                m_pStatCL =
-                    new StatusChangeListenerContainer(m_aMutex);
+                m_pStatCL.reset(new StatusChangeListenerContainer(m_aMutex));
         }
 
         m_pStatCL->addInterface(URL.Complete,Control);
@@ -189,8 +186,7 @@ Interceptor::addStatusListener(
         {
             osl::MutexGuard aGuard(m_aMutex);
             if(!m_pStatCL)
-                m_pStatCL =
-                    new StatusChangeListenerContainer(m_aMutex);
+                m_pStatCL.reset(new StatusChangeListenerContainer(m_aMutex));
         }
 
         m_pStatCL->addInterface(URL.Complete,Control);
