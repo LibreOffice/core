@@ -3402,7 +3402,7 @@ sal_uLong ScTable::GetCellCount() const
 {
     sal_uLong nCellCount = 0;
 
-    for ( SCCOL nCol=0; nCol<=MAXCOL; nCol++ )
+    for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
         nCellCount += aCol[nCol].GetCellCount();
 
     return nCellCount;
@@ -3412,8 +3412,8 @@ sal_uLong ScTable::GetWeightedCount() const
 {
     sal_uLong nCellCount = 0;
 
-    for ( SCCOL nCol=0; nCol<=MAXCOL; nCol++ )
-        if ( aCol[nCol].GetCellCount() )                    // GetCellCount ist inline
+    for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
+        if ( aCol[nCol].GetCellCount() )
             nCellCount += aCol[nCol].GetWeightedCount();
 
     return nCellCount;
@@ -3423,8 +3423,8 @@ sal_uLong ScTable::GetCodeCount() const
 {
     sal_uLong nCodeCount = 0;
 
-    for ( SCCOL nCol=0; nCol<=MAXCOL; nCol++ )
-        if ( aCol[nCol].GetCellCount() )                    // GetCellCount ist inline
+    for ( SCCOL nCol=0; nCol < aCol.size(); nCol++ )
+        if ( aCol[nCol].GetCellCount() )
             nCodeCount += aCol[nCol].GetCodeCount();
 
     return nCodeCount;
@@ -3433,7 +3433,7 @@ sal_uLong ScTable::GetCodeCount() const
 sal_Int32 ScTable::GetMaxStringLen( SCCOL nCol, SCROW nRowStart,
         SCROW nRowEnd, rtl_TextEncoding eCharSet ) const
 {
-    if ( ValidCol(nCol) )
+    if ( IsColValid( nCol ) )
         return aCol[nCol].GetMaxStringLen( nRowStart, nRowEnd, eCharSet );
     else
         return 0;
@@ -3442,7 +3442,7 @@ sal_Int32 ScTable::GetMaxStringLen( SCCOL nCol, SCROW nRowStart,
 sal_Int32 ScTable::GetMaxNumberStringLen(
     sal_uInt16& nPrecision, SCCOL nCol, SCROW nRowStart, SCROW nRowEnd ) const
 {
-    if ( ValidCol(nCol) )
+    if ( IsColValid( nCol ) )
         return aCol[nCol].GetMaxNumberStringLen( nPrecision, nRowStart, nRowEnd );
     else
         return 0;
