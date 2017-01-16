@@ -31,6 +31,7 @@
 #include <android/log.h>
 #elif defined WNT
 #include <process.h>
+#include <windows.h>
 #define OSL_DETAIL_GETPID _getpid()
 #else
 #include <unistd.h>
@@ -375,10 +376,16 @@ void log(
         if (logFile) {
             *logFile << s.str();
         }
+#if defined WNT
+        else {
+            OutputDebugString(s.str().c_str());
+        }
+#else
         else {
             std::fputs(s.str().c_str(), stderr);
             std::fflush(stderr);
         }
+#endif
     }
 #endif
 }
