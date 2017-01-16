@@ -707,7 +707,7 @@ GalleryThemeEntry* GalleryTheme::CreateThemeEntry( const INetURLObject& rURL, bo
                 OString aTmpStr = read_uInt16_lenPrefixed_uInt8s_ToOString(*pIStm);
                 aThemeName = OStringToOUString(aTmpStr, RTL_TEXTENCODING_UTF8);
 
-                // execute a charakter conversion
+                // execute a character conversion
                 if( nVersion >= 0x0004 )
                 {
                     sal_uInt32  nCount;
