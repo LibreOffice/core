@@ -20,12 +20,9 @@
 #ifndef INCLUDED_HWPFILTER_SOURCE_FORMULA_H
 #define INCLUDED_HWPFILTER_SOURCE_FORMULA_H
 
-// DVO: remove DEBUG dependency
-// #ifndef DEBUG
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include "attributes.hxx"
-// DVO: remove DEBUG dependency
-// #endif
+#include <rtl/ref.hxx>
 
 class Node;
 
@@ -35,7 +32,6 @@ class Formula final
 {
 public:
     explicit Formula(char *_eq)
-        : pList(nullptr)
     {
         eq = _eq;
         trim();
@@ -48,8 +44,7 @@ public:
     }
     void setAttributeListImpl( AttributeListImpl *p )
     {
-        pList = p;
-        rList = static_cast<XAttributeList *>(pList);
+        mxList = p;
     }
     void parse();
 private:
@@ -73,8 +68,7 @@ private:
 
 private:
      Reference< XDocumentHandler >  m_rxDocumentHandler;
-     Reference< XAttributeList > rList;
-     AttributeListImpl *pList;
+     rtl::Reference<AttributeListImpl> mxList;
      char *eq;
 };
 
