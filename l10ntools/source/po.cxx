@@ -419,7 +419,6 @@ PoHeader::PoHeader( const OString& rExtSrc )
 
 PoHeader::~PoHeader()
 {
-    delete m_pGenPo;
 }
 
 PoOfstream::PoOfstream()

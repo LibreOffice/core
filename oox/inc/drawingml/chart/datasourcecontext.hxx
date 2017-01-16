@@ -45,11 +45,12 @@ public:
     virtual void        onCharacters( const OUString& rChars ) override;
 
 private:
-    SvNumberFormatter* getNumberFormatter();
+    SvNumberFormatter*  getNumberFormatter();
 
 private:
     sal_Int32           mnPtIndex;          /// Current data point index.
-    SvNumberFormatter*   mpNumberFormatter;
+    std::unique_ptr<SvNumberFormatter>
+                        mpNumberFormatter;
 };
 
 

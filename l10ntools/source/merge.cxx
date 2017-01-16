@@ -207,7 +207,6 @@ MergeData::MergeData(const OString &rGID,
 
 MergeData::~MergeData()
 {
-    delete pMergeEntrys;
 }
 
 

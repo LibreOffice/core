@@ -124,8 +124,8 @@ static inline sal_Int32 Minimum( sal_Int32 n1, sal_Int32 n2, sal_Int32 n3 )
 class IntArray2D
 {
 private:
-    sal_Int32  *pData;
-    int         n1, n2;
+    std::unique_ptr<sal_Int32[]>  pData;
+    int                           n1, n2;
 
 public:
     IntArray2D( int nDim1, int nDim2 );
@@ -138,12 +138,11 @@ IntArray2D::IntArray2D( int nDim1, int nDim2 )
 {
     n1 = nDim1;
     n2 = nDim2;
-    pData = new sal_Int32[n1 * n2];
+    pData.reset( new sal_Int32[n1 * n2] );
 }
 
 IntArray2D::~IntArray2D()
 {
-    delete[] pData;
 }
 
 sal_Int32 & IntArray2D::Value( int i, int k  )

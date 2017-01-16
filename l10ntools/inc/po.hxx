@@ -78,7 +78,7 @@ class PoHeader
 {
 private:
 
-    GenPoEntry* m_pGenPo;
+    std::unique_ptr<GenPoEntry> m_pGenPo;
     bool m_bIsInitialized;
 
 public:
