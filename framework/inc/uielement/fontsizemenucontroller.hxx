@@ -66,7 +66,7 @@ namespace framework
             void fillPopupMenu( css::uno::Reference< css::awt::XPopupMenu >& rPopupMenu );
             OUString retrievePrinterName( css::uno::Reference< css::frame::XFrame >& rFrame );
 
-            long*                                            m_pHeightArray;
+            std::unique_ptr<long[]>                          m_pHeightArray;
             css::awt::FontDescriptor                         m_aFontDescriptor;
             css::frame::status::FontHeight                   m_aFontHeight;
             css::uno::Reference< css::frame::XDispatch >     m_xCurrentFontDispatch;

@@ -76,7 +76,6 @@ namespace svt
            TODO: If there is real need for caching the content, it must
            be done here.
         */
-        delete m_pContent;
     }
 
 
@@ -145,7 +144,7 @@ namespace svt
             // nothing to do, regardless of the state
             return;
 
-        DELETEZ( m_pContent );
+        m_pContent.reset();
         m_eState = INVALID; // default to INVALID
         m_sURL = _rURL;
 
@@ -153,7 +152,7 @@ namespace svt
         {
             try
             {
-                m_pContent = new ::ucbhelper::Content( _rURL, m_xCmdEnv, comphelper::getProcessComponentContext() );
+                m_pContent.reset( new ::ucbhelper::Content( _rURL, m_xCmdEnv, comphelper::getProcessComponentContext() ) );
                 m_eState = UNKNOWN;
                     // from now on, the state is unknown -> we cannot know for sure if the content
                     // is really valid (some UCP's only tell this when asking for properties, not upon

@@ -302,7 +302,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 }
 
                 if ( !m_pImages->pImageItemList )
-                    m_pImages->pImageItemList = new ImageItemListDescriptor;
+                    m_pImages->pImageItemList.reset( new ImageItemListDescriptor );
 
                 m_bImageStartFound = true;
 
@@ -717,7 +717,7 @@ void OWriteImagesDocumentHandler::WriteImageList( const ImageListItemDescriptor*
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_IMAGES, xList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
 
-    ImageItemListDescriptor* pImageItemList = pImageList->pImageItemList;
+    ImageItemListDescriptor* pImageItemList = pImageList->pImageItemList.get();
     if ( pImageItemList )
     {
         for (std::unique_ptr<ImageItemDescriptor> & i : *pImageItemList)

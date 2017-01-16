@@ -403,7 +403,7 @@ bool ImageManagerImpl::implts_storeUserImages(
             ImageListItemDescriptor* pList = new ImageListItemDescriptor;
             aUserImageListInfo.pImageList->push_back( std::unique_ptr<ImageListItemDescriptor>(pList) );
 
-            pList->pImageItemList = new ImageItemListDescriptor;
+            pList->pImageItemList.reset( new ImageItemListDescriptor );
             for ( sal_uInt16 i=0; i < pImageList->GetImageCount(); i++ )
             {
                 ImageItemDescriptor* pItem = new ImageItemDescriptor;
