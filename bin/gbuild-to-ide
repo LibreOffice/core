@@ -117,9 +117,7 @@ class GbuildParser:
                     location = os.path.dirname(jsondata['MAKEFILE'])
                     filesSorted = {}
                     for i in jsonSrc:
-                        if len(jsondata[i]) > 0:
-                            if jsonSrc[i] == '?':
-                                raise Exception('type need conversion')
+                        if i in jsondata and len(jsondata[i]) > 0:
                             filesSorted[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
                         else:
                             filesSorted[i] = []
