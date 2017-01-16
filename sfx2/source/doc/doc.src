@@ -353,6 +353,21 @@ String STR_QMSG_SEL_TEMPLATE_DELETE
     Text [ en-US ] = "Do you want to delete the selected templates?";
 };
 
+String STR_QMSG_ERROR_OPENING_FILE
+{
+    Text [ en-US ] = "An error occured during opening the file. This may be caused by incorrect file contents.\n";
+};
+
+String STR_QMSG_ERROR_OPENING_FILE_DETAILS
+{
+    Text [ en-US ] = "The error details are:\n";
+};
+
+String STR_QMSG_ERROR_OPENING_FILE_CONTINUE
+{
+    Text [ en-US ] = "\nProceeding with import may cause data loss or corruption, and application may become unstable or crash.\n\nDo you want to ignore the error and attempt to continue loading the file?";
+};
+
 Image IMG_ACTION_SORT
 {
     ImageBitmap = Bitmap
