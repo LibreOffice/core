@@ -23,6 +23,7 @@
 #include <com/sun/star/io/XActiveDataSink.hpp>
 #include <com/sun/star/io/XStream.hpp>
 #include <com/sun/star/io/XSeekable.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <zipfileaccess.hxx>
@@ -182,8 +183,11 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     OUString aParamURL;
     uno::Reference< io::XStream > xStream;
     uno::Reference< io::XSeekable > xSeekable;
+    uno::Sequence<beans::NamedValue> aArgs;
 
-    if ( ( aArguments[0] >>= aParamURL ) )
+    bool bUseBufferedStream = false;
+
+    auto openInputStream = [&]()
     {
         ::ucbhelper::Content aContent(
             aParamURL,
@@ -196,6 +200,11 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
             m_bOwnContent = true;
             xSeekable.set( m_xContentStream, uno::UNO_QUERY );
         }
+    };
+
+    if ( ( aArguments[0] >>= aParamURL ) )
+    {
+        openInputStream();
     }
     else if ( (aArguments[0] >>= xStream ) )
     {
@@ -206,6 +215,25 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
     else if ( aArguments[0] >>= m_xContentStream )
     {
         xSeekable.set( m_xContentStream, uno::UNO_QUERY );
+    }
+    else if (aArguments[0] >>= aArgs)
+    {
+        for (sal_Int32 i = 0; i < aArgs.getLength(); ++i)
+        {
+            const beans::NamedValue& rArg = aArgs[i];
+
+            if (rArg.Name == "URL")
+                rArg.Value >>= aParamURL;
+            else if (rArg.Name == "UseBufferedStream")
+                rArg.Value >>= bUseBufferedStream;
+        }
+
+        if (aParamURL.isEmpty())
+            throw lang::IllegalArgumentException(
+                THROW_WHERE"required argument 'URL' is not given or invalid.",
+                uno::Reference<uno::XInterface>(), 1);
+
+        openInputStream();
     }
     else
         throw lang::IllegalArgumentException(THROW_WHERE, uno::Reference< uno::XInterface >(), 1 );
@@ -224,6 +252,8 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
                 m_xContentStream,
                 m_xContext,
                 true );
+
+    m_pZipFile->setUseBufferedStream(bUseBufferedStream);
 }
 
 // XNameAccess
