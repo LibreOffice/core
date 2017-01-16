@@ -59,14 +59,12 @@ DEFINE_XSERVICEINFO_MULTISERVICE_2      (   FontSizeMenuController              
 DEFINE_INIT_SERVICE                     (   FontSizeMenuController, {} )
 
 FontSizeMenuController::FontSizeMenuController( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
-    svt::PopupMenuControllerBase( xContext ),
-    m_pHeightArray( nullptr )
+    svt::PopupMenuControllerBase( xContext )
 {
 }
 
 FontSizeMenuController::~FontSizeMenuController()
 {
-    delete []m_pHeightArray;
 }
 
 // private function
@@ -155,7 +153,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         FontMetric aFontMetric = pFontList->Get( m_aFontDescriptor.Name, m_aFontDescriptor.StyleName );
 
         // setup font size array
-        delete m_pHeightArray;
+        m_pHeightArray.reset();
 
         const sal_IntPtr* pTempAry;
         const sal_IntPtr* pAry = pFontList->GetSizeAry( aFontMetric );
@@ -169,7 +167,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
         // first insert font size names (for simplified/traditional chinese)
         float           fPoint;
         FontSizeNames   aFontSizeNames( Application::GetSettings().GetUILanguageTag().getLanguageType() );
-        m_pHeightArray = new long[nSizeCount+aFontSizeNames.Count()];
+        m_pHeightArray.reset( new long[nSizeCount+aFontSizeNames.Count()] );
         OUString   aCommand;
 
         if ( !aFontSizeNames.IsEmpty() )
