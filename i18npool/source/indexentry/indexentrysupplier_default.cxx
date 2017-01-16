@@ -32,12 +32,11 @@ IndexEntrySupplier_Unicode::IndexEntrySupplier_Unicode(
     IndexEntrySupplier_Common(rxContext)
 {
     implementationName = "com.sun.star.i18n.IndexEntrySupplier_Unicode";
-    index = new Index(rxContext);
+    index.reset( new Index(rxContext) );
 }
 
 IndexEntrySupplier_Unicode::~IndexEntrySupplier_Unicode()
 {
-    delete index;
 }
 
 sal_Bool SAL_CALL IndexEntrySupplier_Unicode::loadAlgorithm( const lang::Locale& rLocale,
@@ -111,13 +110,12 @@ Index::Index(const css::uno::Reference < css::uno::XComponentContext >& rxContex
     : table_count(0)
     , key_count(0)
     , mkey_count(0)
+    , collator( new CollatorImpl(rxContext) )
 {
-    collator = new CollatorImpl(rxContext);
 }
 
 Index::~Index()
 {
-    delete collator;
 }
 
 sal_Int16 Index::compare(sal_Unicode c1, sal_Unicode c2)

@@ -85,7 +85,6 @@ SkipData::SkipData(hchar hch)
 
 SkipData::~SkipData()
 {
-    delete[]data_block;
 }
 
 

@@ -52,9 +52,9 @@ bool SkipData::Read(HWPFile & hwpf)
         return hwpf.SetState(HWP_InvalidFileFormat);
      }
 
-    data_block = new char[data_block_len];
+    data_block.reset(new char[data_block_len]);
 
-    return hwpf.Read1b(data_block, data_block_len);
+    return hwpf.Read1b(data_block.get(), data_block_len);
 }
 
 

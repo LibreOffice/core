@@ -25,6 +25,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <collatorImpl.hxx>
 
+#include <memory>
+
 namespace com { namespace sun { namespace star { namespace i18n {
 
 
@@ -90,7 +92,8 @@ public:
 protected:
     const sal_Char *   implementationName;
     bool               usePhonetic;
-    CollatorImpl*      collator;
+    std::unique_ptr<CollatorImpl>
+                       collator;
     css::lang::Locale  aLocale;
     OUString           aAlgorithm;
 
