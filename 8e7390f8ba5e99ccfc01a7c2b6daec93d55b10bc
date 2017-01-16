@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_58ad9587",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-01-16T14:45:24Z",
+      "side": 1,
+      "message": "You can get the current HFONT directly from hDC with GetCurrentObject(hDC, OBJ_FONT) (see other uses of it elsewhere in this file), which should simplify the code and allow for dropping the changes to CommonSalLayput.",
+      "revId": "8e7390f8ba5e99ccfc01a7c2b6daec93d55b10bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
