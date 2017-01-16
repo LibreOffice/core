@@ -82,9 +82,8 @@ class OCommandEnvironment;
 
 class OFileAccess : public FileAccessHelper
 {
-    Reference< XComponentContext > m_xContext;
-    Reference< XCommandEnvironment > mxEnvironment;
-    OCommandEnvironment* mpEnvironment;
+    Reference< XComponentContext >      m_xContext;
+    rtl::Reference<OCommandEnvironment> mxEnvironment;
 
     void transferImpl( const OUString& rSource, const OUString& rDest, bool bMoveData )
         throw(CommandAbortedException, Exception, RuntimeException);
@@ -95,7 +94,7 @@ class OFileAccess : public FileAccessHelper
 
 public:
     explicit OFileAccess( const Reference< XComponentContext > & xContext )
-        : m_xContext( xContext), mpEnvironment( nullptr ) {}
+        : m_xContext( xContext) {}
     // Methods
     virtual void SAL_CALL copy( const OUString& SourceURL, const OUString& DestURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL move( const OUString& SourceURL, const OUString& DestURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
@@ -271,8 +270,8 @@ void OFileAccess::transferImpl( const OUString& rSource,
 
     }
 
-    ucbhelper::Content aDestPath( aDestURL,   mxEnvironment, comphelper::getProcessComponentContext() );
-    ucbhelper::Content aSrc     ( aSourceURL, mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aDestPath( aDestURL,   mxEnvironment.get(), comphelper::getProcessComponentContext() );
+    ucbhelper::Content aSrc     ( aSourceURL, mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
     try
     {
@@ -306,7 +305,7 @@ void OFileAccess::kill( const OUString& FileURL )
 {
     // SfxContentHelper::Kill
     INetURLObject aDeleteObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aDeleteObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
     try
     {
         aCnt.executeCommand( "delete", makeAny( true ) );
@@ -324,7 +323,7 @@ sal_Bool OFileAccess::isFolder( const OUString& FileURL )
     try
     {
         INetURLObject aURLObj( FileURL, INetProtocol::File );
-        ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+        ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
         bRet = aCnt.isFolder();
     }
     catch (const Exception &) {}
@@ -335,7 +334,7 @@ sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
     Any aRetAny = aCnt.getPropertyValue("IsReadOnly");
     bool bRet = false;
     aRetAny >>= bRet;
@@ -346,7 +345,7 @@ void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
     aCnt.setPropertyValue("IsReadOnly", Any(bReadOnly) );
 }
 
@@ -372,7 +371,7 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
         }
     }
 
-    ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
     Sequence< ContentInfo > aInfo = aCnt.queryCreatableContentsInfo();
     sal_Int32 nCount = aInfo.getLength();
@@ -423,7 +422,7 @@ sal_Int32 OFileAccess::getSize( const OUString& FileURL )
     sal_Int32 nSize = 0;
     sal_Int64 nTemp = 0;
     INetURLObject aObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
     aCnt.getPropertyValue( "Size" ) >>= nTemp;
     nSize = (sal_Int32)nTemp;
     return nSize;
@@ -433,7 +432,7 @@ OUString OFileAccess::getContentType( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
     Reference< XContent > xContent = aCnt.get();
     OUString aTypeStr = xContent->getContentType();
@@ -462,7 +461,7 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
     StringList_Impl* pFiles = nullptr;
     INetURLObject aFolderObj( FolderURL, INetProtocol::File );
 
-    ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aFolderObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
     Reference< XResultSet > xResultSet;
     Sequence< OUString > aProps(0);
 
@@ -534,7 +533,7 @@ Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
 {
     Reference< XInputStream > xRet;
     INetURLObject aObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
     Reference< XActiveDataSink > xSink = static_cast<XActiveDataSink*>(new OActiveDataSink());
 
@@ -578,14 +577,14 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     aCmdArg <<= aArg;
 
     INetURLObject aFileObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aFileObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
     // Be silent...
     Reference< XInteractionHandler > xIH;
-    if ( mpEnvironment )
+    if ( mxEnvironment.is() )
     {
-        xIH = mpEnvironment->getInteractionHandler();
-        mpEnvironment->setHandler( nullptr );
+        xIH = mxEnvironment->getInteractionHandler();
+        mxEnvironment->setHandler( nullptr );
     }
 
     try
@@ -594,8 +593,8 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
     }
     catch ( InteractiveIOException const & e )
     {
-        if ( xIH.is() && mpEnvironment )
-            mpEnvironment->setHandler( xIH );
+        if ( xIH.is() && mxEnvironment.is() )
+            mxEnvironment->setHandler( xIH );
 
         if ( e.Code == IOErrorCode_NOT_EXISTING )
         {
@@ -617,8 +616,8 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
         throw;
     }
 
-    if ( xIH.is() && mpEnvironment )
-        mpEnvironment->setHandler( xIH );
+    if ( xIH.is() && mxEnvironment.is() )
+        mxEnvironment->setHandler( xIH );
 
     Reference< XStream > xRet = xSink->getStream();
     return xRet;
@@ -627,12 +626,11 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 void OFileAccess::setInteractionHandler( const Reference< XInteractionHandler >& Handler )
     throw(RuntimeException, std::exception)
 {
-    if( !mpEnvironment )
+    if( !mxEnvironment.is() )
     {
-        mpEnvironment = new OCommandEnvironment();
-        mxEnvironment = static_cast<XCommandEnvironment*>(mpEnvironment);
+        mxEnvironment = new OCommandEnvironment();
     }
-    mpEnvironment->setHandler( Handler );
+    mxEnvironment->setHandler( Handler );
 }
 
 bool OFileAccess::createNewFile( const OUString & rParentURL,
@@ -640,7 +638,7 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
                                  const Reference< XInputStream >& data )
     throw ( Exception )
 {
-    ucbhelper::Content aParentCnt( rParentURL, mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aParentCnt( rParentURL, mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
     Sequence< ContentInfo > aInfo = aParentCnt.queryCreatableContentsInfo();
     sal_Int32 nCount = aInfo.getLength();
@@ -698,7 +696,7 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
     try
     {
         ucbhelper::Content aCnt(
-            aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment,
+            aURL.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(),
             comphelper::getProcessComponentContext() );
 
         try
@@ -745,7 +743,7 @@ sal_Bool OFileAccess::isHidden( const OUString& FileURL )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
     Any aRetAny = aCnt.getPropertyValue("IsHidden");
     bool bRet = false;
     aRetAny >>= bRet;
@@ -756,7 +754,7 @@ void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
     throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
-    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment, comphelper::getProcessComponentContext() );
+    ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
     aCnt.setPropertyValue("IsHidden", Any(bHidden) );
 }
 
