@@ -30,6 +30,7 @@
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XLinguProperties.hpp>
 
+#include <rtl/ref.hxx>
 #include <rtl/string.hxx>
 #include <i18nlangtag/lang.h>
 
@@ -75,12 +76,10 @@ public:
 
 class SpellCache final
 {
-    css::uno::Reference< css::linguistic2::XDictionaryListEventListener >
-                        xFlushLstnr;
-    FlushListener      *pFlushLstnr;
+    rtl::Reference<FlushListener>  mxFlushLstnr;
 
-    typedef std::set< OUString >             WordList_t;
-    typedef std::map< LanguageType, WordList_t >    LangWordList_t;
+    typedef std::set< OUString >                  WordList_t;
+    typedef std::map< LanguageType, WordList_t >  LangWordList_t;
     LangWordList_t  aWordLists;
 
     SpellCache(const SpellCache &) = delete;

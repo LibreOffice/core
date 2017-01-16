@@ -189,20 +189,19 @@ void SAL_CALL FlushListener::propertyChange(
 
 SpellCache::SpellCache()
 {
-    pFlushLstnr = new FlushListener( *this );
-    xFlushLstnr = pFlushLstnr;
+    mxFlushLstnr = new FlushListener( *this );
     Reference<XSearchableDictionaryList> aDictionaryList(GetDictionaryList());
-    pFlushLstnr->SetDicList( aDictionaryList ); //! after reference is established
+    mxFlushLstnr->SetDicList( aDictionaryList ); //! after reference is established
     Reference<XLinguProperties> aPropertySet(GetLinguProperties());
-    pFlushLstnr->SetPropSet( aPropertySet );    //! after reference is established
+    mxFlushLstnr->SetPropSet( aPropertySet );    //! after reference is established
 }
 
 SpellCache::~SpellCache()
 {
     Reference<XSearchableDictionaryList>  aEmptyList;
     Reference<XLinguProperties>     aEmptySet;
-    pFlushLstnr->SetDicList( aEmptyList );
-    pFlushLstnr->SetPropSet( aEmptySet );
+    mxFlushLstnr->SetDicList( aEmptyList );
+    mxFlushLstnr->SetPropSet( aEmptySet );
 }
 
 void SpellCache::Flush()
