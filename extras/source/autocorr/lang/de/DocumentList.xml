@@ -810,6 +810,7 @@
   <block-list:block block-list:abbreviated-name=":Minidisc:" block-list:name="💽"/>
   <block-list:block block-list:abbreviated-name=":Minuten:" block-list:name="′"/>
   <block-list:block block-list:abbreviated-name=":Mond abnehmend:" block-list:name="☾"/>
+  <block-list:block block-list:abbreviated-name=":Mond Gesicht halb abnehmend:" block-list:name="🌜"/>
   <block-list:block block-list:abbreviated-name=":Mond Gesicht halb zunehmend:" block-list:name="🌛"/>
   <block-list:block block-list:abbreviated-name=":Mond Gesicht neu:" block-list:name="🌚"/>
   <block-list:block block-list:abbreviated-name=":Mond Gesicht voll:" block-list:name="🌝"/>
@@ -824,7 +825,6 @@
   <block-list:block block-list:abbreviated-name=":Mond Viertel 4:" block-list:name="🌘"/>
   <block-list:block block-list:abbreviated-name=":Mond voll:" block-list:name="🌕"/>
   <block-list:block block-list:abbreviated-name=":Mond zunehmend:" block-list:name="☽"/>
-  <block-list:block block-list:abbreviated-name=":Mon Gesicht halb abnehmend:" block-list:name="🌜"/>
   <block-list:block block-list:abbreviated-name=":Motorboot:" block-list:name="🚤"/>
   <block-list:block block-list:abbreviated-name=":Motorsport:" block-list:name="🏁"/>
   <block-list:block block-list:abbreviated-name=":Mountainbiker:" block-list:name="🚵"/>
