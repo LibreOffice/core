@@ -325,11 +325,18 @@ void sal_detail_log(
         if (logFile) {
             *logFile << s.str() << std::endl;
         }
+#if defined WNT
+        // no one reads console output on windows
+        else {
+            OutputDebugString(s.str().c_str());
+        }
+#else
         else {
             s << '\n';
             std::fputs(s.str().c_str(), stderr);
             std::fflush(stderr);
         }
+#endif
     }
 #endif
 }
