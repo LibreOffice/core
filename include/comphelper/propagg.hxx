@@ -25,6 +25,7 @@
 #include <comphelper/comphelperdllapi.h>
 
 #include <map>
+#include <memory>
 #include <vector>
 
 
@@ -204,7 +205,7 @@ protected:
     css::uno::Reference< css::beans::XMultiPropertySet>   m_xAggregateMultiSet;
     css::uno::Reference< css::beans::XFastPropertySet>    m_xAggregateFastSet;
 
-    internal::PropertyForwarder*    m_pForwarder;
+    std::unique_ptr<internal::PropertyForwarder>          m_pForwarder;
     bool                            m_bListening : 1;
 
 public:

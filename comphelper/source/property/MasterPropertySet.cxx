@@ -27,27 +27,25 @@
 #include <osl/diagnose.h>
 
 #include <memory>
+#include <vector>
 
 class AutoOGuardArray
 {
-    std::unique_ptr< osl::Guard< comphelper::SolarMutex > > *  mpGuardArray;
+    std::vector<std::unique_ptr< osl::Guard< comphelper::SolarMutex > >>  maGuardArray;
 
 public:
     explicit AutoOGuardArray( sal_Int32 nNumElements );
     ~AutoOGuardArray();
 
-    std::unique_ptr< osl::Guard< comphelper::SolarMutex > > &  operator[] ( sal_Int32 i ) { return mpGuardArray[i]; }
+    std::unique_ptr< osl::Guard< comphelper::SolarMutex > > &  operator[] ( sal_Int32 i ) { return maGuardArray[i]; }
 };
 
-AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements ) : mpGuardArray(new std::unique_ptr< osl::Guard< comphelper::SolarMutex > >[nNumElements])
+AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements ) : maGuardArray(nNumElements)
 {
 }
 
 AutoOGuardArray::~AutoOGuardArray()
 {
-    //!! release unique_ptr's and thus the mutexes locks
-    delete [] mpGuardArray;
-
 }
 
 
