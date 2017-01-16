@@ -817,6 +817,13 @@ DECLARE_OOXMLIMPORT_TEST(testOleAnchor, "ole-anchor.docx")
     CPPUNIT_ASSERT_EQUAL(text::WrapTextMode_THROUGHT, getProperty<text::WrapTextMode>(getShape(1), "Surround"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf48658_transparentOLEheader, "tdf48658_transparentOLEheader.docx")
+{
+    // The problem was that the shape in the header was hidden in the background.
+    // The round-tripped document was always fine (even before the fix) but the shape numbers change, so import-only test.
+    CPPUNIT_ASSERT_EQUAL(true, bool(getProperty<bool>(getShape(1), "Opaque")));
+}
+
 DECLARE_OOXMLIMPORT_TEST(testDMLGroupShapeParaAdjust, "dml-groupshape-paraadjust.docx")
 {
     // Paragraph adjustment inside a group shape was not imported
