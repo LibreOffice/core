@@ -90,7 +90,8 @@ public:
 protected:
     const sal_Char *   implementationName;
     bool               usePhonetic;
-    CollatorImpl*      collator;
+    std::unique_ptr<CollatorImpl>
+                       collator;
     css::lang::Locale  aLocale;
     OUString           aAlgorithm;
 

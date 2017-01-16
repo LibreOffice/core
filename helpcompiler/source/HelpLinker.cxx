@@ -266,9 +266,8 @@ void HelpLinker::addBookmark( FILE* pFile_DBHelp, std::string thishid,
 
 void HelpLinker::initIndexerPreProcessor()
 {
-    delete m_pIndexerPreProcessor;
-    m_pIndexerPreProcessor = new IndexerPreProcessor( indexDirParentName,
-         idxCaptionStylesheet, idxContentStylesheet );
+    m_pIndexerPreProcessor.reset( new IndexerPreProcessor( indexDirParentName,
+         idxCaptionStylesheet, idxContentStylesheet ) );
 }
 
 /**

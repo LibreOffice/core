@@ -91,7 +91,6 @@ SvTokenStream::SvTokenStream( const OUString & rFileName )
 
 SvTokenStream::~SvTokenStream()
 {
-    delete pInStream;
 }
 
 void SvTokenStream::FillTokenList()

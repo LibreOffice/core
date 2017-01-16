@@ -106,8 +106,8 @@ class SvTokenStream
     OString         aStrFalse;
     sal_uLong       nMaxPos;
 
-    SvFileStream *  pInStream;
-    OUString        aFileName;
+    std::unique_ptr<SvFileStream>          pInStream;
+    OUString                               aFileName;
     std::vector<std::unique_ptr<SvToken> > aTokList;
     std::vector<std::unique_ptr<SvToken> >::iterator pCurToken;
 

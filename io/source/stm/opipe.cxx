@@ -34,6 +34,7 @@
 #include <osl/mutex.hxx>
 
 #include <limits>
+#include <memory>
 #include <string.h>
 
 using namespace ::osl;
@@ -55,7 +56,6 @@ class OPipeImpl :
 {
 public:
     OPipeImpl( );
-    virtual ~OPipeImpl() override;
 
 public: // XInputStream
     virtual sal_Int32 SAL_CALL readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
@@ -118,24 +118,18 @@ private:
 
     osl::Condition m_conditionBytesAvail;
     Mutex          m_mutexAccess;
-    MemFIFO       *m_pFIFO;
+    std::unique_ptr<MemFIFO> m_pFIFO;
 };
 
 
 OPipeImpl::OPipeImpl()
+    : m_nBytesToSkip(0 )
+    , m_bOutputStreamClosed(false )
+    , m_bInputStreamClosed( false )
+    , m_pFIFO( new MemFIFO )
 {
-    m_nBytesToSkip  = 0;
-
-    m_bOutputStreamClosed   = false;
-    m_bInputStreamClosed    = false;
-
-    m_pFIFO = new MemFIFO;
 }
 
-OPipeImpl::~OPipeImpl()
-{
-    delete m_pFIFO;
-}
 
 
 sal_Int32 OPipeImpl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
@@ -261,8 +255,7 @@ void OPipeImpl::closeInput()
 
     m_bInputStreamClosed = true;
 
-    delete m_pFIFO;
-    m_pFIFO = nullptr;
+    m_pFIFO.reset();
 
     // readBytes may throw an exception
     m_conditionBytesAvail.set();
