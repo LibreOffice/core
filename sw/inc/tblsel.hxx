@@ -192,23 +192,23 @@ public:
 
 class FndLine_
 {
-    SwTableLine* pLine;
+    SwTableLine* m_pLine;
     FndBoxes_t m_Boxes;
-    FndBox_* pUpper;
+    FndBox_* m_pUpper;
 
     FndLine_(FndLine_ const&) = delete;
     FndLine_& operator=(FndLine_ const&) = delete;
 
 public:
-    FndLine_(SwTableLine* pL, FndBox_* pFB) : pLine(pL), pUpper(pFB) {}
+    FndLine_(SwTableLine* pL, FndBox_* pFB) : m_pLine(pL), m_pUpper(pFB) {}
     const FndBoxes_t&   GetBoxes() const    { return m_Boxes; }
         FndBoxes_t&     GetBoxes()          { return m_Boxes; }
-    const SwTableLine*  GetLine() const     { return pLine; }
-        SwTableLine*    GetLine()           { return pLine; }
-    const FndBox_*      GetUpper() const    { return pUpper; }
-        FndBox_*        GetUpper()          { return pUpper; }
+    const SwTableLine*  GetLine() const     { return m_pLine; }
+        SwTableLine*    GetLine()           { return m_pLine; }
+    const FndBox_*      GetUpper() const    { return m_pUpper; }
+        FndBox_*        GetUpper()          { return m_pUpper; }
 
-    void SetUpper( FndBox_* pUp ) { pUpper = pUp; }
+    void SetUpper( FndBox_* pUp ) { m_pUpper = pUp; }
 };
 
 struct FndPara
