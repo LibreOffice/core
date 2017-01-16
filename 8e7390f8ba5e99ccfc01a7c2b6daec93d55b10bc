@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_1854ed52",
+        "filename": "vcl/win/gdi/winlayout.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 304,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-01-16T17:12:32Z",
+      "side": 1,
+      "message": "Yes, patch set 1 is more or less what I had in mind.",
+      "parentUuid": "fa48f94a_f81009ab",
+      "revId": "8e7390f8ba5e99ccfc01a7c2b6daec93d55b10bc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_98b53dd2",
         "filename": "vcl/win/gdi/winlayout.cxx",
         "patchSetId": 4
