@@ -618,7 +618,7 @@ class ToolbarSaveInData : public SaveInData
 {
 private:
 
-    SvxConfigEntry*                                pRootEntry;
+    std::unique_ptr<SvxConfigEntry>           pRootEntry;
     OUString                                  m_aDescriptorContainer;
 
     css::uno::Reference
