@@ -69,8 +69,9 @@ public class OSpinButtonModel extends TestCase {
      * Adds spin button into text and retrieves it's control model.
      */
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
-
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log)
+        throws com.sun.star.uno.Exception
+    {
         XInterface oObj = null;
 
         XControlShape aShape = FormTools.createControlShape(

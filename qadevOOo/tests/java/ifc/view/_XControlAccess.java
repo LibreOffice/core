@@ -64,7 +64,9 @@ public class _XControlAccess extends MultiMethodTest {
      * is returned. <p>
      * @throws StatusException If the relation was not found.
      */
-    public void _getControl(){
+    public void _getControl()
+        throws com.sun.star.uno.Exception
+    {
         boolean bResult = true;
         try {
             XComponent oDoc = (XComponent)tEnv.getObjRelation("DOCUMENT");

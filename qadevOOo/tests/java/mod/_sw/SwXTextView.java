@@ -116,7 +116,9 @@ public class SwXTextView extends TestCase {
      */
     @Override
     public TestEnvironment createTestEnvironment( TestParameters tParam,
-                              PrintWriter log )throws StatusException {
+                              PrintWriter log )
+        throws com.sun.star.uno.Exception
+    {
 
 
         // creation of testobject here

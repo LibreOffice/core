@@ -64,7 +64,9 @@ public class OScrollBarModel extends TestCase {
     }
 
     @Override
-    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log) {
+    protected TestEnvironment createTestEnvironment(TestParameters Param, PrintWriter log)
+        throws com.sun.star.uno.Exception
+    {
 
         XInterface oObj = null;
 
