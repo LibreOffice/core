@@ -79,7 +79,6 @@ namespace frm
 
     RichTextEditSource::~RichTextEditSource()
     {
-        delete m_pTextForwarder;
     }
 
 
@@ -91,7 +90,7 @@ namespace frm
 
     SvxTextForwarder* RichTextEditSource::GetTextForwarder()
     {
-        return m_pTextForwarder;
+        return m_pTextForwarder.get();
     }
 
 

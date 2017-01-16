@@ -3153,17 +3153,16 @@ namespace detail
     class InfoHelperBuilder
     {
     private:
-        ::cppu::OPropertyArrayHelper *m_pInfoHelper;
+        std::unique_ptr<::cppu::OPropertyArrayHelper> m_pInfoHelper;
     public:
         explicit InfoHelperBuilder(const LayoutManager &rManager)
         {
             uno::Sequence< beans::Property > aProperties;
             rManager.describeProperties(aProperties);
-            m_pInfoHelper = new ::cppu::OPropertyArrayHelper(aProperties, true);
+            m_pInfoHelper.reset( new ::cppu::OPropertyArrayHelper(aProperties, true) );
         }
         ~InfoHelperBuilder()
         {
-            delete m_pInfoHelper;
         }
         InfoHelperBuilder(const InfoHelperBuilder&) = delete;
         InfoHelperBuilder& operator=(const InfoHelperBuilder&) = delete;

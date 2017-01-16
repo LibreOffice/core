@@ -205,8 +205,6 @@ OGroupManager::OGroupManager(const Reference< XContainer >& _rxContainer)
 
 OGroupManager::~OGroupManager()
 {
-    // delete all Components and CompGroup
-    delete m_pCompGroup;
 }
 
 // XPropertyChangeListener
@@ -215,7 +213,7 @@ void OGroupManager::disposing(const EventObject& evt) throw( RuntimeException, s
     Reference<XContainer>  xContainer(evt.Source, UNO_QUERY);
     if (xContainer.get() == m_xContainer.get())
     {
-        DELETEZ(m_pCompGroup);
+        m_pCompGroup.reset();
 
         // delete group
         m_aGroupArr.clear();

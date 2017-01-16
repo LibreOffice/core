@@ -54,7 +54,8 @@ namespace frm
     {
     private:
         EditEngine&                 m_rEngine;
-        SvxTextForwarder*           m_pTextForwarder;
+        std::unique_ptr<SvxTextForwarder>
+                                    m_pTextForwarder;
         IEngineTextChangeListener*  m_pTextChangeListener;
 
     public:
