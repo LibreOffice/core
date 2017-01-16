@@ -52,7 +52,7 @@ bool lcl_GetTextWithBreaks( const EditTextObject& rData, ScDocument* pDoc, OUStr
 bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
                          const ScMarkData& rMark, OUString& rUndoStr, ScDocument* pUndoDoc)
 {
-    if (!ValidColRow( nCol, nRow))
+    if ( !ValidMaxColRow( nCol, nRow, aCol.size() ) )
         return false;
 
     bool    bFound = false;
@@ -609,7 +609,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
 
     if (bRows)                                      // by row
     {
-        if (!ValidCol(nCol))
+        if ( !ValidMaxCol( nCol, aCol.size() ) )
         {
             SAL_WARN( "sc.core", "SearchStyle: bad column " << nCol);
             return false;
@@ -629,7 +629,7 @@ bool ScTable::SearchStyle(const SvxSearchItem& rSearchItem, SCCOL& rCol, SCROW& 
                 bFound = true;
             }
         }
-        while (!bFound && ValidCol(nCol));
+        while ( !bFound && ValidMaxCol( nCol, aCol.size() ) );
     }
     else                                    // by column
     {

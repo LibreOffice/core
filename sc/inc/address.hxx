@@ -90,6 +90,11 @@ SAL_WARN_UNUSED_RESULT inline bool ValidCol( SCCOL nCol )
     return nCol >= static_cast<SCCOL>(0) && nCol <= MAXCOL;
 }
 
+SAL_WARN_UNUSED_RESULT inline bool ValidMaxCol( SCCOL nCol, SCCOL nMaxCol )
+{
+    return nCol >= static_cast<SCCOL>(0) && nCol <= MAXCOL && nCol < nMaxCol;
+}
+
 SAL_WARN_UNUSED_RESULT inline bool ValidRow( SCROW nRow )
 {
     return nRow >= static_cast<SCROW>(0) && nRow <= MAXROW;
@@ -110,10 +115,21 @@ SAL_WARN_UNUSED_RESULT inline bool ValidColRow( SCCOL nCol, SCROW nRow )
     return ValidCol( nCol) && ValidRow( nRow);
 }
 
+SAL_WARN_UNUSED_RESULT inline bool ValidMaxColRow( SCCOL nCol, SCROW nRow, SCCOL nMaxCol )
+{
+    return ValidMaxCol( nCol, nMaxCol ) && ValidRow( nRow );
+}
+
 SAL_WARN_UNUSED_RESULT inline bool ValidColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab )
 {
     return ValidCol( nCol) && ValidRow( nRow) && ValidTab( nTab);
 }
+
+SAL_WARN_UNUSED_RESULT inline bool ValidMaxColRowTab( SCCOL nCol, SCROW nRow, SCTAB nTab, SCCOL nMaxCol )
+{
+    return ValidMaxCol( nCol,nMaxCol ) && ValidRow( nRow ) && ValidTab( nTab );
+}
+
 
 SAL_WARN_UNUSED_RESULT inline SCCOL SanitizeCol( SCCOL nCol )
 {
