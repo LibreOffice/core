@@ -192,15 +192,6 @@ public class OfficeDocument
         return UnoRuntime.queryInterface( i_interfaceClass, createInstance( i_serviceSpecifier ) );
     }
 
-    /* ------------------------------------------------------------------ */
-    /** creates a component at the service factory provided by the document
-    */
-    public XInterface createInstanceWithArguments( String serviceSpecifier, Object[] arguments ) throws com.sun.star.uno.Exception
-    {
-        XMultiServiceFactory xORB = UnoRuntime.queryInterface( XMultiServiceFactory.class, m_documentComponent );
-        return (XInterface) xORB.createInstanceWithArguments( serviceSpecifier, arguments );
-    }
-
     private final XMultiServiceFactory    m_orb;
     private XComponent              m_documentComponent;
 }

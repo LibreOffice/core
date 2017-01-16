@@ -38,24 +38,6 @@ class FlatFileDatabase extends AbstractDatabase
     }
 
 
-    protected FlatFileDatabase(final XMultiServiceFactory i_orb, final String i_existingDocumentURL,
-        final String i_urlSubScheme ) throws Exception
-    {
-        super( i_orb, i_existingDocumentURL );
-        m_urlSubScheme = i_urlSubScheme;
-
-        final XPropertySet dsProperties = UnoRuntime.queryInterface(XPropertySet.class, m_databaseDocument.getDataSource());
-        final String url = (String)dsProperties.getPropertyValue( "URL" );
-        final String expectedURLPrefix = "sdbc:" + m_urlSubScheme + ":";
-        if ( !url.startsWith( expectedURLPrefix ) )
-            throw new IllegalArgumentException( i_existingDocumentURL + " is of wrong type" );
-
-        final String location = url.substring( expectedURLPrefix.length() );
-        m_tableFileLocation = new File( location );
-        if ( m_tableFileLocation.isDirectory() )
-            throw new IllegalArgumentException( "unsupported table file location (must be a folder)" );
-    }
-
     /**
      * returns a {@link File} which represents the folder where the database's table files reside.
      */
