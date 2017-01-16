@@ -75,7 +75,6 @@ ODBTableDecorator::ODBTableDecorator( const Reference< XConnection >& _rxConnect
 
 ODBTableDecorator::~ODBTableDecorator()
 {
-    delete m_pColumns;
 }
 
 Sequence< sal_Int8 > ODBTableDecorator::getImplementationId() throw (RuntimeException, std::exception)
@@ -453,7 +452,7 @@ Reference< XNameAccess> ODBTableDecorator::getColumns() throw (RuntimeException,
     if(!m_pColumns)
         refreshColumns();
 
-    return m_pColumns;
+    return m_pColumns.get();
 }
 
 OUString SAL_CALL ODBTableDecorator::getName() throw(RuntimeException, std::exception)
@@ -577,7 +576,7 @@ void ODBTableDecorator::refreshColumns()
         OContainerMediator* pMediator = new OContainerMediator( pCol, m_xColumnDefinitions );
         m_xColumnMediator = pMediator;
         pCol->setMediator( pMediator );
-        m_pColumns  = pCol;
+        m_pColumns.reset( pCol );
     }
     else
         m_pColumns->reFill(aVector);
