@@ -92,14 +92,14 @@ class GbuildParser:
                    'GENCXXOBJECTS': '.cxx', # remark is in workdir/GenCxxObject
                    'OBJCOBJECTS':   '.m',
                    'OBJCXXOBJECTS': '.mm',
+                   'COBJECTS':      '.c',
 
-                    # gbuildtojson defines but does not fill these:
+            # gbuildtojson defines but does not fill these:
                    'ASMOBJECTS': '.s',
                    'GENCOBJECTS': '.c',
                    'YACCOBJECTS': '.y',
 
                    # gbuildtojson need to be extended to fill these:
-                   'COBJECTS': '.c',
                    'FLEXOBJECTS': '.l',
                    'JAVAOBJECTS': '.java',
                    'PYTHONOBJECTS': '.py'
@@ -122,6 +122,8 @@ class GbuildParser:
                         else:
                             filesSorted[i] = []
 
+                    # TODO: extend GbuildLinkTarget with new json keys
+                    # Find a better way instead on a zillion parameters
                     newObj = GbuildLinkTarget(match,
                                               location,
                                               foundincludes,

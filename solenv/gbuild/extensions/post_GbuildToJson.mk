@@ -14,9 +14,6 @@
 #   --ASMOBJECTS
 #   --GENCOBJECTS
 #   --YACCOBJECTS
-#
-# add new arguments:
-#   --COBJECTS
 #   --FLEXOBJECTS
 #   --JAVAOBJECTS
 #   --PYTHONOBJECTS
@@ -61,6 +58,10 @@ $(call gb_Executable_get_command,gbuildtojson) \
 --asmobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(ASMOBJECTS)) \
 --gencobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(GENCOBJECTS)) \
 --gencxxobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(GENCXXOBJECTS)) \
+--cobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(COBJECTS)) \
+--flexobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(FLEXOBJECTS)) \
+--javaobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(JAVAOBJECTS)) \
+--pythonobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(PYTHONOBJECTS)) \
 --cflags=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_CFLAGS)) \
 --cflagsappend=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_CFLAGS_APPEND)) \
 --cxxflags=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_CXXFLAGS)) \
