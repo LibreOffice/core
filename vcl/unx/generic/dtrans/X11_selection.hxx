@@ -31,8 +31,8 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/frame/XDesktop2.hpp>
 #include <osl/thread.h>
-
 #include <osl/conditn.hxx>
+#include <rtl/ref.hxx>
 
 #include <list>
 #include <unordered_map>
@@ -75,11 +75,10 @@ namespace x11 {
         bool                        m_bActive;
         sal_Int8                    m_nDefaultActions;
         ::Window                    m_aTargetWindow;
-        SelectionManager*           m_pSelectionManager;
-        css::uno::Reference< css::datatransfer::dnd::XDragSource >
+        rtl::Reference<SelectionManager>
                                     m_xSelectionManager;
         ::std::list< css::uno::Reference< css::datatransfer::dnd::XDropTargetListener > >
-                            m_aListeners;
+                                    m_aListeners;
 
         DropTarget();
         virtual ~DropTarget() override;

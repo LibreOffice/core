@@ -35,15 +35,14 @@ DropTarget::DropTarget() :
         >( m_aMutex ),
     m_bActive( false ),
     m_nDefaultActions( 0 ),
-    m_aTargetWindow( None ),
-    m_pSelectionManager( nullptr )
+    m_aTargetWindow( None )
 {
 }
 
 DropTarget::~DropTarget()
 {
-    if( m_pSelectionManager )
-        m_pSelectionManager->deregisterDropTarget( m_aTargetWindow );
+    if( m_xSelectionManager.is() )
+        m_xSelectionManager->deregisterDropTarget( m_aTargetWindow );
 }
 
 void DropTarget::initialize( const Sequence< Any >& arguments ) throw( css::uno::Exception, std::exception )
@@ -59,15 +58,14 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( css::uno:
             aIdentifier >>= aDisplayName;
         }
 
-        m_pSelectionManager = &SelectionManager::get( aDisplayName );
-        m_xSelectionManager = static_cast< XDragSource* >(m_pSelectionManager);
-        m_pSelectionManager->initialize( arguments );
+        m_xSelectionManager = &SelectionManager::get( aDisplayName );
+        m_xSelectionManager->initialize( arguments );
 
-        if( m_pSelectionManager->getDisplay() ) // #136582# sanity check
+        if( m_xSelectionManager->getDisplay() ) // #136582# sanity check
         {
             sal_IntPtr aWindow = None;
             arguments.getConstArray()[1] >>= aWindow;
-            m_pSelectionManager->registerDropTarget( aWindow, this );
+            m_xSelectionManager->registerDropTarget( aWindow, this );
             m_aTargetWindow = aWindow;
             m_bActive = true;
         }
