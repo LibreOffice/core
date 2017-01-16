@@ -393,8 +393,6 @@ void SvXMLExport::InitCtor_()
             GetXMLToken(XML_NP_CSS3TEXT), GetXMLToken(XML_N_CSS3TEXT), XML_NAMESPACE_CSS3TEXT );
     }
 
-    mxAttrList = static_cast<xml::sax::XAttributeList*>(mpAttrList);
-
     msGraphicObjectProtocol = "vnd.sun.star.GraphicObject:";
     msEmbeddedObjectProtocol = "vnd.sun.star.EmbeddedObject:";
 
@@ -434,7 +432,7 @@ SvXMLExport::SvXMLExport(
     const enum XMLTokenEnum eClass, SvXMLExportFlags nExportFlags )
 :   mpImpl( new SvXMLExport_Impl ),
     m_xContext(xContext), m_implementationName(implementationName),
-    mpAttrList( new SvXMLAttributeList ),
+    mxAttrList( new SvXMLAttributeList ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpUnitConv( new SvXMLUnitConverter( xContext,
                 util::MeasureUnit::MM_100TH, eDefaultMeasureUnit) ),
@@ -463,7 +461,7 @@ SvXMLExport::SvXMLExport(
     m_xContext(xContext), m_implementationName(implementationName),
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
-    mpAttrList( new SvXMLAttributeList ),
+    mxAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpUnitConv( new SvXMLUnitConverter( xContext,
@@ -500,7 +498,7 @@ SvXMLExport::SvXMLExport(
     mxHandler( rHandler ),
     mxExtHandler( rHandler, uno::UNO_QUERY ),
     mxNumberFormatsSupplier (rModel, uno::UNO_QUERY),
-    mpAttrList( new SvXMLAttributeList ),
+    mxAttrList( new SvXMLAttributeList ),
     msOrigFileName( rFileName ),
     mpNamespaceMap( new SvXMLNamespaceMap ),
     mpUnitConv( new SvXMLUnitConverter( xContext,
@@ -945,7 +943,7 @@ void SvXMLExport::AddAttributeASCII( sal_uInt16 nPrefixKey,
     OUString sName( OUString::createFromAscii( pName ) );
     OUString sValue( OUString::createFromAscii( pValue ) );
 
-    mpAttrList->AddAttribute(
+    mxAttrList->AddAttribute(
         GetNamespaceMap_().GetQNameByKey( nPrefixKey, sName ), sValue );
 }
 
@@ -954,14 +952,14 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const sal_Char *pName,
 {
     OUString sName( OUString::createFromAscii( pName ) );
 
-    mpAttrList->AddAttribute(
+    mxAttrList->AddAttribute(
         GetNamespaceMap_().GetQNameByKey( nPrefixKey, sName ), rValue );
 }
 
 void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey, const OUString& rName,
                               const OUString& rValue )
 {
-    mpAttrList->AddAttribute(
+    mxAttrList->AddAttribute(
         GetNamespaceMap_().GetQNameByKey( nPrefixKey, rName ), rValue );
 }
 
@@ -969,7 +967,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 enum XMLTokenEnum eName,
                                 const OUString& rValue )
 {
-    mpAttrList->AddAttribute(
+    mxAttrList->AddAttribute(
         GetNamespaceMap_().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
         rValue );
 }
@@ -978,7 +976,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
                                 enum XMLTokenEnum eName,
                                 enum XMLTokenEnum eValue)
 {
-    mpAttrList->AddAttribute(
+    mxAttrList->AddAttribute(
         GetNamespaceMap_().GetQNameByKey( nPrefixKey, GetXMLToken(eName) ),
         GetXMLToken(eValue) );
 }
@@ -986,7 +984,7 @@ void SvXMLExport::AddAttribute( sal_uInt16 nPrefixKey,
 void SvXMLExport::AddAttribute( const OUString& rQName,
                                 const OUString& rValue )
 {
-      mpAttrList->AddAttribute(
+      mxAttrList->AddAttribute(
         rQName,
         rValue );
 }
@@ -994,7 +992,7 @@ void SvXMLExport::AddAttribute( const OUString& rQName,
 void SvXMLExport::AddAttribute( const OUString& rQName,
                                 enum ::xmloff::token::XMLTokenEnum eValue )
 {
-      mpAttrList->AddAttribute(
+      mxAttrList->AddAttribute(
         rQName,
         GetXMLToken(eValue) );
 }
@@ -1061,18 +1059,18 @@ void SvXMLExport::AddLanguageTagAttributes( sal_uInt16 nPrefix, sal_uInt16 nPref
 void SvXMLExport::AddAttributeList( const uno::Reference< xml::sax::XAttributeList >& xAttrList )
 {
     if( xAttrList.is())
-        mpAttrList->AppendAttributeList( xAttrList );
+        mxAttrList->AppendAttributeList( xAttrList );
 }
 
 void SvXMLExport::ClearAttrList()
 {
-    mpAttrList->Clear();
+    mxAttrList->Clear();
 }
 
 #ifdef DBG_UTIL
 void SvXMLExport::CheckAttrList()
 {
-    SAL_WARN_IF( mpAttrList->getLength(), "xmloff.core", "XMLExport::CheckAttrList: list is not empty" );
+    SAL_WARN_IF( mxAttrList->getLength(), "xmloff.core", "XMLExport::CheckAttrList: list is not empty" );
 }
 #endif
 
@@ -1350,7 +1348,7 @@ sal_uInt32 SvXMLExport::exportDoc( enum ::xmloff::token::XMLTokenEnum eClass )
     sal_uInt16 nPos = mpNamespaceMap->GetFirstKey();
     while( USHRT_MAX != nPos )
     {
-        mpAttrList->AddAttribute( mpNamespaceMap->GetAttrNameByKey( nPos ),
+        mxAttrList->AddAttribute( mpNamespaceMap->GetAttrNameByKey( nPos ),
                                   mpNamespaceMap->GetNameByKey( nPos ) );
         nPos = mpNamespaceMap->GetNextKey( nPos );
     }

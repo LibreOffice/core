@@ -131,8 +131,7 @@ class XMLOFF_DLLPUBLIC SvXMLExport : public cppu::WeakImplHelper<
     css::uno::Reference< css::beans::XPropertySet > mxExportInfo;
     css::uno::Reference< css::lang::XEventListener > mxEventListener;
 
-    SvXMLAttributeList          *mpAttrList;        // a common attribute list
-    css::uno::Reference< css::xml::sax::XAttributeList >          mxAttrList;     // and an interface of it
+    rtl::Reference<SvXMLAttributeList>          mxAttrList;        // a common attribute list
 
     OUString     msOrigFileName; // the original URL
     OUString     msGraphicObjectProtocol;
@@ -377,8 +376,8 @@ public:
                                   css::xml::sax::XAttributeList >& xAttrList );
 
     // Get common attribute list as implementation or interface.
-    SvXMLAttributeList &GetAttrList() { return *mpAttrList; }
-    const css::uno::Reference< css::xml::sax::XAttributeList > & GetXAttrList() { return mxAttrList; }
+    SvXMLAttributeList &GetAttrList() { return *mxAttrList.get(); }
+    css::uno::Reference< css::xml::sax::XAttributeList > GetXAttrList() { return mxAttrList.get(); }
 
     // Get document handler. This methods are not const, because the
     // reference allowes modifications through the handler.
