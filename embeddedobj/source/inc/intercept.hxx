@@ -140,7 +140,7 @@ private:
 
     static css::uno::Sequence< OUString > m_aInterceptedURL;
 
-    StatusChangeListenerContainer*    m_pStatCL;
+    std::unique_ptr<StatusChangeListenerContainer>    m_pStatCL;
 };
 
 #endif
