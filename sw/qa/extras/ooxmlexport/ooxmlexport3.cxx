@@ -49,6 +49,7 @@
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
 #include <com/sun/star/drawing/Hatch.hpp>
+#include <ftninfo.hxx>
 
 #include <string>
 
@@ -108,6 +109,14 @@ DECLARE_OOXMLEXPORT_TEST(testFdo68787, "fdo68787.docx")
     uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
     // This was 25, the 'lack of w:separator' <-> '0 line width' mapping was missing.
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), getProperty<sal_Int32>(xPageStyle, "FootnoteLineRelativeWidth"));
+}
+
+DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart.docx")
+{
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT( pDoc );
+    CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote doesn't restart every Page", FTNNUM_PAGE, pDoc->GetFootnoteInfo().eNum );
 }
 
 DECLARE_OOXMLEXPORT_TEST(testCharacterBorder, "charborder.odt")
