@@ -9429,7 +9429,7 @@ dnl ===================================================================
 dnl Check for enabling chart XShape tests
 dnl ===================================================================
 AC_MSG_CHECKING([whether to execute chart XShape tests])
-if test "$enable_chart_tests" = "yes"; then
+if test "$enable_chart_tests" = "yes" -o '(' "$_os" = "WINNT" -a "$enable_chart_tests" != "no" ')'; then
     AC_MSG_RESULT([yes])
     ENABLE_CHART_TESTS=TRUE
     AC_SUBST(ENABLE_CHART_TESTS)
