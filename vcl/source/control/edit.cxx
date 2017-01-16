@@ -1240,7 +1240,10 @@ sal_Int32 Edit::ImplGetCharPos( const Point& rWindowPos ) const
         sal_Int32 nFinalIndex = 0;
         long nDiff = std::abs( pDX[0]-nX );
         sal_Int32 i = 0;
-        aText.iterateCodePoints(&i);    //skip the first character
+        if (!aText.isEmpty())
+        {
+            aText.iterateCodePoints(&i);    //skip the first character
+        }
         while (i < aText.getLength())
         {
             long nNewDiff = std::abs( pDX[2*i]-nX );
