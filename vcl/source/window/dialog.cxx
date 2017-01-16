@@ -1037,7 +1037,7 @@ void Dialog::SetModalInputMode( bool bModal )
         // Disable the prev Modal Dialog, because our dialog must close at first,
         // before the other dialog can be closed (because the other dialog
         // is on stack since our dialog returns)
-        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->isDisposed() && !mpPrevExecuteDlg->IsWindowOrChild( this, true ) )
+        if ( mpPrevExecuteDlg && !mpPrevExecuteDlg->IsWindowOrChild( this, true ) )
             mpPrevExecuteDlg->EnableInput( false, this );
 
         // determine next overlap dialog parent

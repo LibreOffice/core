@@ -148,6 +148,7 @@ GalleryBrowser1::~GalleryBrowser1()
 void GalleryBrowser1::dispose()
 {
     EndListening( *mpGallery );
+    mpThemePropertiesDialog.clear();
     mpThemes.disposeAndClear();
     delete mpExchangeData;
     mpExchangeData = nullptr;
@@ -265,24 +266,24 @@ void GalleryBrowser1::ImplGalleryThemeProperties( const OUString & rThemeName, b
 
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     assert(pFact && "Got no AbstractDialogFactory!");
-    VclPtr<VclAbstractDialog2> pThemeProps = pFact->CreateGalleryThemePropertiesDialog( mpExchangeData, mpThemePropsDlgItemSet );
-    assert(pThemeProps && "Got no GalleryThemePropertiesDialog!");
+    mpThemePropertiesDialog = pFact->CreateGalleryThemePropertiesDialog( mpExchangeData, mpThemePropsDlgItemSet );
+    assert(mpThemePropertiesDialog && "Got no GalleryThemePropertiesDialog!");
 
     if ( bCreateNew )
     {
-        pThemeProps->StartExecuteModal(
+        mpThemePropertiesDialog->StartExecuteModal(
             LINK( this, GalleryBrowser1, EndNewThemePropertiesDlgHdl ) );
     }
     else
     {
-        pThemeProps->StartExecuteModal(
+        mpThemePropertiesDialog->StartExecuteModal(
             LINK( this, GalleryBrowser1, EndThemePropertiesDlgHdl ) );
     }
 }
 
-void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* pDialog, bool bCreateNew)
+void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* /*pDialog*/, bool bCreateNew)
 {
-    long nRet = pDialog->GetResult();
+    long nRet = mpThemePropertiesDialog->GetResult();
 
     if( nRet == RET_OK )
     {
@@ -319,23 +320,22 @@ void GalleryBrowser1::ImplEndGalleryThemeProperties(Dialog* pDialog, bool bCreat
     }
 
     // destroy mpThemeProps asynchronously
-    Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ), pDialog, true );
+    Application::PostUserEvent( LINK( this, GalleryBrowser1, DestroyThemePropertiesDlgHdl ), nullptr, true );
 }
 
-IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, Dialog&, rDialog, void )
+IMPL_LINK( GalleryBrowser1, EndNewThemePropertiesDlgHdl, Dialog&, /*rDialog*/, void )
 {
-    ImplEndGalleryThemeProperties(&rDialog, true);
+    ImplEndGalleryThemeProperties(nullptr, true);
 }
 
-IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, Dialog&, rDialog, void )
+IMPL_LINK( GalleryBrowser1, EndThemePropertiesDlgHdl, Dialog&, /*rDialog*/, void )
 {
-    ImplEndGalleryThemeProperties(&rDialog, false);
+    ImplEndGalleryThemeProperties(nullptr, false);
 }
 
-IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, p, void )
+IMPL_LINK( GalleryBrowser1, DestroyThemePropertiesDlgHdl, void*, /*p*/, void )
 {
-    VclPtr<VclAbstractDialog2> pDialog = static_cast<VclAbstractDialog2*>(p);
-    pDialog.disposeAndClear();
+    mpThemePropertiesDialog.disposeAndClear();
     delete mpThemePropsDlgItemSet;
     mpThemePropsDlgItemSet = nullptr;
 }
