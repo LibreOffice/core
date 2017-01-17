@@ -233,7 +233,7 @@ SwTransferable::SwTransferable( SwWrtShell& rSh )
 
 SwTransferable::~SwTransferable()
 {
-    Application::GetSolarMutex().acquire();
+    SolarMutexGuard aSolarGuard;
 
     // the DDELink still needs the WrtShell!
     if( m_xDdeLink.Is() )
@@ -275,8 +275,6 @@ SwTransferable::~SwTransferable()
     delete m_pBookmark;
 
     m_eBufferType = TransferBufferType::NONE;
-
-    Application::GetSolarMutex().release();
 }
 
 static SwDoc * lcl_GetDoc(SwDocFac & rDocFac)
