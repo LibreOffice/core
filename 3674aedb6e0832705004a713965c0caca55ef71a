@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_26a34ea0",
+        "filename": "external/python3/python-3.3.3-py17797.patch.1",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000020
+      },
+      "writtenOn": "2017-01-17T19:29:21Z",
+      "side": 0,
+      "message": "Last coment here is:\n\n  In case someone else need it, here is a patch for python 3.5.0b1\n\nSo i guess i do not understand why this patch was removed.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 33
+      },
+      "revId": "3674aedb6e0832705004a713965c0caca55ef71a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
