@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_dbe7bfaa",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-01-17T09:05:28Z",
+      "side": 1,
+      "message": "this should be a set(), see in line 142",
+      "revId": "c43b1ff3686a701f5a3e3b6fd9c2cffbcd053a2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_fbec8391",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 1
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-01-17T09:05:28Z",
+      "side": 1,
+      "message": "hmm, you start a process for each module, that does not sound effective.",
+      "revId": "c43b1ff3686a701f5a3e3b6fd9c2cffbcd053a2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
