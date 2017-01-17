@@ -43,15 +43,15 @@
  	tramp[0] = 0xbb49;		/* mov <code>, %r11	*/
 -	*(void* volatile*)&tramp[1] = ffi_closure_unix64;
 +	tramp[1] = (unsigned short) ffi_closure_unix64;
-+	tramp[2] = (unsigned short) (ffi_closure_unix64 >> 16);
-+	tramp[3] = (unsigned short) (ffi_closure_unix64 >> 32);
-+	tramp[4] = (unsigned short) (ffi_closure_unix64 >> 48);
++	tramp[2] = (unsigned short) (((unsigned long)ffi_closure_unix64) >> 16);
++	tramp[3] = (unsigned short) (((unsigned long)ffi_closure_unix64) >> 32);
++	tramp[4] = (unsigned short) (((unsigned long)ffi_closure_unix64) >> 48);
  	tramp[5] = 0xba49;		/* mov <data>, %r10	*/
 -	*(void* volatile*)&tramp[6] = closure;
 +	tramp[6] = (unsigned short) closure;
-+	tramp[7] = (unsigned short) (closure >> 16);
-+	tramp[8] = (unsigned short) (closure >> 32);
-+	tramp[9] = (unsigned short) (closure >> 48);
++	tramp[7] = (unsigned short) (((unsigned long)closure) >> 16);
++	tramp[8] = (unsigned short) (((unsigned long)closure) >> 32);
++	tramp[9] = (unsigned short) (((unsigned long)closure) >> 48);
  
  	/*	Set the carry bit if the function uses any sse registers.
  		This is clc or stc, together with the first byte of the jmp.  */
