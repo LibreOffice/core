@@ -987,7 +987,8 @@ void DomainMapper::lcl_attribute(Id nName, Value & val)
                 m_pImpl->appendGrabBag(m_pImpl->m_aInteropGrabBag, "ooxml:CT_SdtDate_fullDate", sStringValue);
         break;
         case NS_ooxml::LN_CT_Background_color:
-            m_pImpl->m_oBackgroundColor.reset(nIntValue);
+            if (m_pImpl->GetSettingsTable()->GetDisplayBackgroundShape())
+                m_pImpl->m_oBackgroundColor.reset(nIntValue);
         break;
         case NS_ooxml::LN_CT_PageNumber_start:
             if (pSectionContext != nullptr)

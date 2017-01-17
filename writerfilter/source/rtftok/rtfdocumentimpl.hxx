@@ -424,6 +424,8 @@ public:
 
     /// If this is the first run of the document, starts the initial paragraph.
     void checkFirstRun();
+    /// Send NS_ooxml::LN_settings_settings to dmapper.
+    void outputSettingsTable();
     /// If the initial paragraph is started.
     bool getFirstRun()
     {
