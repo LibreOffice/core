@@ -55,12 +55,7 @@ public class CfgParser
             while (cfgEnum.hasMoreElements())
             {
                 String pName = (String) cfgEnum.nextElement();
-                Object pValue = cfg.getProperty(pName);
-
-                if (pValue instanceof String)
-                {
-                    pValue = ((String) pValue).trim();
-                }
+                String pValue = cfg.getProperty(pName).trim();
 
                 param.put(pName.trim(), pValue);
 
@@ -68,14 +63,12 @@ public class CfgParser
                 {
 
                     param.put("DOCPTH", pValue);
-                    System.setProperty("DOCPTH", (String) pValue);
+                    System.setProperty("DOCPTH", pValue);
 
                 }
                 else if (pName.equals(PropertyName.SRC_ROOT))
                 {
-
-                    System.setProperty(pName, (String) pValue);
-
+                    System.setProperty(pName, pValue);
                 }
             }
         }
