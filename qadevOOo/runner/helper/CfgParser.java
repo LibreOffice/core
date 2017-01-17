@@ -55,11 +55,11 @@ public class CfgParser
             while (cfgEnum.hasMoreElements())
             {
                 String pName = (String) cfgEnum.nextElement();
-                Object pValue = cfg.getProperty(pName);
+                String pValue = cfg.getProperty(pName);
 
-                if (pValue instanceof String)
+                if (pValue != null)
                 {
-                    pValue = ((String) pValue).trim();
+                    pValue = pValue.trim();
                 }
 
                 param.put(pName.trim(), pValue);
