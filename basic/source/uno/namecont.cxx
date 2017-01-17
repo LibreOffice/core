@@ -302,8 +302,7 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("addContainerListener called with null xListener",
-                                static_cast< cppu::OWeakObject * >(this));
+        throw RuntimeException("addContainerListener called with null xListener");
     }
     maContainerListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -313,8 +312,7 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("removeContainerListener called with null xListener",
-                                static_cast< cppu::OWeakObject * >(this));
+        throw RuntimeException("removeContainerListener called with null xListener");
     }
     maContainerListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -325,8 +323,7 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("addChangesListener called with null xListener",
-                                static_cast< cppu::OWeakObject * >(this));
+        throw RuntimeException("addChangesListener called with null xListener");
     }
     maChangesListeners.addInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -336,8 +333,7 @@ void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesLis
 {
     if( !xListener.is() )
     {
-        throw RuntimeException("removeChangesListener called with null xListener",
-                                static_cast< cppu::OWeakObject * >(this));
+        throw RuntimeException("removeChangesListener called with null xListener");
     }
     maChangesListeners.removeInterface( Reference<XInterface>(xListener, UNO_QUERY) );
 }
@@ -2107,7 +2103,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 "The stream must implement XPropertySet!");
             if ( !xProps.is() )
             {
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("InfoStream doesn't implement XPropertySet");
             }
             OUString aMime( "text/xml" );
             xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
@@ -2165,7 +2161,7 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 "The storage must implement XTransactedObject!");
             if ( !xTransact.is() )
             {
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("xTargetLibrariesStor doesn't implement XTransactedObject");
             }
             xTransact->commit();
         }
@@ -2401,7 +2397,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                      " storage!"));
                 if ( !xLibrariesStor.is() )
                 {
-                    throw uno::RuntimeException();
+                    throw uno::RuntimeException("null returned from openStorageElement");
                 }
 
                 xLibraryStor = xLibrariesStor->openStorageElement( Name, embed::ElementModes::READ );
@@ -2411,7 +2407,7 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                      " storage!"));
                 if ( !xLibrariesStor.is() )
                 {
-                    throw uno::RuntimeException();
+                    throw uno::RuntimeException("null returned from openStorageElement");
                 }
             }
             catch(const uno::Exception& )
