@@ -25,6 +25,7 @@
 #include <svl/itemprop.hxx>
 #include <svx/svxdllapi.h>
 #include <editeng/unoipset.hxx>
+#include <rtl/ref.hxx>
 
 
 class SvxItemPropertySet;
@@ -116,7 +117,7 @@ public:
     SVX_DLLPUBLIC static comphelper::PropertySetInfo* getOrCreate( sal_Int32 nServiceId ) throw();
 
 private:
-    static comphelper::PropertySetInfo* mpInfos[SVXUNO_SERVICEID_LASTID+1];
+    static rtl::Reference<comphelper::PropertySetInfo> mxInfos[SVXUNO_SERVICEID_LASTID+1];
 };
 
 #endif
