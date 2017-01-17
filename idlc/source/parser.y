@@ -56,9 +56,7 @@
 
 
 #define YYDEBUG 1
-#if !(defined MACOSX && defined PPC)
 #define YYERROR_VERBOSE 1
-#endif
 
 using ::rtl::OUString;
 using ::rtl::OString;

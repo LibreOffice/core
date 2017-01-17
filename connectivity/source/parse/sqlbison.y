@@ -78,9 +78,7 @@ inline connectivity::OSQLInternalNode* newNode(const OUString& _newValue,
 
 extern connectivity::OSQLParser* xxx_pGLOBAL_SQLPARSER;
 
-#if !(defined MACOSX && defined PPC)
 #define YYERROR_VERBOSE
-#endif
 
 #define SQLyyerror(s)						\
 {											\
