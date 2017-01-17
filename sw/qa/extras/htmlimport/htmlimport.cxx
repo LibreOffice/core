@@ -26,7 +26,7 @@ class HtmlImportTest : public SwModelTestBase
         HtmlImportTest() : SwModelTestBase("sw/qa/extras/htmlimport/data/", "HTML (StarWriter)") {}
 };
 
-#define DECLARE_HTMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, HtmlImportTest)
+#define DECLARE_HTMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, HtmlImportTest)
 
 DECLARE_HTMLIMPORT_TEST(testPictureImport, "picture.html")
 {
