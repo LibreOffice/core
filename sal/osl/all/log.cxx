@@ -243,8 +243,11 @@ bool isDebug(sal_detail_LogLevel level) {
 }
 
 std::ofstream * getLogFile() {
-    static std::ofstream file(getLogFilePath(), std::ios::app | std::ios::out);
+    static char const * logFilePath = getLogFilePath();
+    if (logFilePath == nullptr)
+        return nullptr;
 
+    static std::ofstream file(logFilePath, std::ios::app | std::ios::out);
     return &file;
 }
 
