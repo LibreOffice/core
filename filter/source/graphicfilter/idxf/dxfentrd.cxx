@@ -410,8 +410,7 @@ DXFLWPolyLineEntity::DXFLWPolyLineEntity() :
     nFlags( 0 ),
     fConstantWidth( 0.0 ),
     fStartWidth( 0.0 ),
-    fEndWidth( 0.0 ),
-    pP( nullptr )
+    fEndWidth( 0.0 )
 {
 }
 
@@ -554,8 +553,7 @@ DXFBoundaryPathData::DXFBoundaryPathData() :
     nSourceBoundaryObjects( 0 ),
     nEdgeCount( 0 ),
     bIsPolyLine( true ),
-    nPointIndex( 0 ),
-    pP( nullptr )
+    nPointIndex( 0 )
 {
 }
 
