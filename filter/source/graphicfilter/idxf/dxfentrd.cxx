@@ -446,10 +446,6 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
     }
 }
 
-DXFLWPolyLineEntity::~DXFLWPolyLineEntity()
-{
-}
-
 //--------------------------DXFHatchEntity-------------------------------------
 
 DXFEdgeTypeLine::DXFEdgeTypeLine() :
@@ -457,10 +453,7 @@ DXFEdgeTypeLine::DXFEdgeTypeLine() :
 {
 
 }
-DXFEdgeTypeLine::~DXFEdgeTypeLine()
-{
 
-}
 bool DXFEdgeTypeLine::EvaluateGroup( DXFGroupReader & rDGR )
 {
     bool bExecutingGroupCode = true;
@@ -483,9 +476,7 @@ DXFEdgeTypeCircularArc::DXFEdgeTypeCircularArc() :
     nIsCounterClockwiseFlag( 0 )
 {
 }
-DXFEdgeTypeCircularArc::~DXFEdgeTypeCircularArc()
-{
-}
+
 bool DXFEdgeTypeCircularArc::EvaluateGroup( DXFGroupReader & rDGR )
 {
     bool bExecutingGroupCode = true;
@@ -510,10 +501,7 @@ DXFEdgeTypeEllipticalArc::DXFEdgeTypeEllipticalArc() :
     nIsCounterClockwiseFlag( 0 )
 {
 }
-DXFEdgeTypeEllipticalArc::~DXFEdgeTypeEllipticalArc()
-{
 
-}
 bool DXFEdgeTypeEllipticalArc::EvaluateGroup( DXFGroupReader & rDGR )
 {
     bool bExecutingGroupCode = true;
@@ -541,10 +529,7 @@ DXFEdgeTypeSpline::DXFEdgeTypeSpline() :
     nControlCount( 0 )
 {
 }
-DXFEdgeTypeSpline::~DXFEdgeTypeSpline()
-{
 
-}
 bool DXFEdgeTypeSpline::EvaluateGroup( DXFGroupReader & rDGR )
 {
     bool bExecutingGroupCode = true;
@@ -711,10 +696,6 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
         }
         break;
     }
-}
-
-DXFHatchEntity::~DXFHatchEntity()
-{
 }
 
 //--------------------------DXFVertexEntity-------------------------------------
