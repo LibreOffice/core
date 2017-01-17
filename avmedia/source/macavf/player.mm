@@ -362,7 +362,7 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 ::rtl::OUString SAL_CALL Player::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME ) );
+    return ::rtl::OUString( AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME );
 }
 
 

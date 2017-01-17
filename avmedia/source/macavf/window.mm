@@ -268,7 +268,7 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 ::rtl::OUString SAL_CALL Window::getImplementationName(  )
     throw (uno::RuntimeException)
 {
-    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( AVMEDIA_MACAVF_WINDOW_IMPLEMENTATIONNAME ) );
+    return ::rtl::OUString( AVMEDIA_MACAVF_WINDOW_IMPLEMENTATIONNAME );
 }
 
 
