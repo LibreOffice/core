@@ -895,7 +895,6 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
     sal_uInt16 i,nPolySize;
     Point aP0;
 
-
     if (bGivenPos) {
         aP0=ReadPoint();
         if (bCoord32) nOrderLen-=8; else nOrderLen-=4;
@@ -905,15 +904,9 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
     if (nPolySize==0) return;
     tools::Polygon aPolygon(nPolySize);
     for (i=0; i<nPolySize; i++) {
-#if defined __sun && defined PPC
-        sal_uInt8 nunsignedbyte;
-        *pOS2MET >> nunsignedbyte; aP0.X()+=(sal_Int8)nunsignedbyte;
-        *pOS2MET >> nunsignedbyte; aP0.Y()+=(sal_Int8)nunsignedbyte;
-#else
         sal_Int8 nsignedbyte;
         pOS2MET->ReadSChar( nsignedbyte ); aP0.X()+=(long)nsignedbyte;
         pOS2MET->ReadSChar( nsignedbyte ); aP0.Y()-=(long)nsignedbyte;
-#endif
         aCalcBndRect.Union(Rectangle(aP0,Size(1,1)));
         aPolygon.SetPoint(aP0,i);
     }
