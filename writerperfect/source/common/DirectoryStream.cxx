@@ -32,6 +32,8 @@
 
 #include <comphelper/processfactory.hxx>
 
+#include <o3tl/make_unique.hxx>
+
 #include <rtl/ustring.hxx>
 
 #include <ucbhelper/content.hxx>
@@ -126,6 +128,42 @@ bool DirectoryStream::isDirectory(const css::uno::Reference<css::ucb::XContent> 
     {
         return false;
     }
+}
+
+std::unique_ptr<DirectoryStream> DirectoryStream::createForParent(const css::uno::Reference<css::ucb::XContent> &xContent)
+{
+    try
+    {
+        if (!xContent.is())
+            return nullptr;
+
+        std::unique_ptr<DirectoryStream> pDir;
+
+        const uno::Reference<css::container::XChild> xChild(xContent, uno::UNO_QUERY);
+        if (xChild.is())
+        {
+            const uno::Reference<ucb::XContent> xDirContent(xChild->getParent(), uno::UNO_QUERY);
+            if (xDirContent.is())
+            {
+                pDir = o3tl::make_unique<DirectoryStream>(xDirContent);
+                if (!pDir->isStructured())
+                    pDir.reset();
+            }
+        }
+
+        return pDir;
+    }
+    catch (...)
+    {
+        return nullptr;
+    }
+}
+
+const css::uno::Reference<css::ucb::XContent> DirectoryStream::getContent() const
+{
+    if (!m_pImpl)
+        return css::uno::Reference<css::ucb::XContent>();
+    return m_pImpl->xContent;
 }
 
 bool DirectoryStream::isStructured()

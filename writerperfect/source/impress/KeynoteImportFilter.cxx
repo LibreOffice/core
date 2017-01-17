@@ -10,7 +10,6 @@
 #include <memory>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/ucb/XContent.hpp>
@@ -48,7 +47,6 @@ using writerperfect::DocumentHandler;
 using writerperfect::WPXSvInputStream;
 
 namespace beans = com::sun::star::beans;
-namespace container = com::sun::star::container;
 namespace ucb = com::sun::star::ucb;
 
 bool KeynoteImportFilter::doImportDocument(librevenge::RVNGInputStream &rInput, OdpGenerator &rGenerator, utl::MediaDescriptor &)
@@ -159,25 +157,21 @@ OUString SAL_CALL KeynoteImportFilter::detect(css::uno::Sequence< css::beans::Pr
         if (bIsPackage)   // we passed a directory stream, but the filter claims it's APXL file?
             return OUString();
 
-        const Reference < container::XChild > xChild(xContent, UNO_QUERY);
-        if (xChild.is())
+        const std::shared_ptr<writerperfect::DirectoryStream> pDir = writerperfect::DirectoryStream::createForParent(xContent);
+        input = pDir;
+        if (bool(input))
         {
-            const Reference < ucb::XContent > xPackageContent(xChild->getParent(), UNO_QUERY);
-            if (xPackageContent.is())
+            if (libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT == libetonyek::EtonyekDocument::isSupported(input.get()))
             {
-                input.reset(new writerperfect::DirectoryStream(xPackageContent));
-                if (libetonyek::EtonyekDocument::CONFIDENCE_EXCELLENT == libetonyek::EtonyekDocument::isSupported(input.get()))
-                {
-                    xContent = xPackageContent;
-                    bUCBContentChanged = true;
-                    bIsPackage = true;
-                }
-                else
-                {
-                    // The passed stream has been detected as APXL file, but its parent dir is not a valid Keynote
-                    // package? Something is wrong here...
-                    return OUString();
-                }
+                xContent = pDir->getContent();
+                bUCBContentChanged = true;
+                bIsPackage = true;
+            }
+            else
+            {
+                // The passed stream has been detected as APXL file, but its parent dir is not a valid Keynote
+                // package? Something is wrong here...
+                return OUString();
             }
         }
     }
