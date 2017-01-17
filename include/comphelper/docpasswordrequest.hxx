@@ -22,13 +22,13 @@
 
 #include <comphelper/comphelperdllapi.h>
 #include <com/sun/star/task/PasswordRequestMode.hpp>
+#include <com/sun/star/task/XInteractionAbort.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <rtl/ref.hxx>
 
 namespace comphelper {
 
-class AbortContinuation;
 class PasswordContinuation;
 
 
@@ -58,7 +58,7 @@ private:
 
 private:
     css::uno::Any                         maRequest;
-    rtl::Reference<AbortContinuation>     mxAbort;
+    css::uno::Reference<css::task::XInteractionAbort> mxAbort;
     rtl::Reference<PasswordContinuation>  mxPassword;
 };
 
@@ -91,7 +91,7 @@ private:
 
 private:
     css::uno::Any                         maRequest;
-    rtl::Reference<AbortContinuation>     mxAbort;
+    css::uno::Reference<css::task::XInteractionAbort> mxAbort;
     rtl::Reference<PasswordContinuation>  mxPassword;
 };
 
