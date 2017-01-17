@@ -52,6 +52,9 @@ public:
     OUString     getPassword() const;
 
 private:
+    SimplePasswordRequest(SimplePasswordRequest const&) = delete;
+    SimplePasswordRequest& operator=(SimplePasswordRequest const&) = delete;
+
     // XInteractionRequest
     virtual css::uno::Any SAL_CALL getRequest() throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( css::uno::RuntimeException, std::exception ) override;
@@ -85,6 +88,9 @@ public:
     bool            getRecommendReadOnly() const;
 
 private:
+    DocPasswordRequest(DocPasswordRequest const&) = delete;
+    DocPasswordRequest& operator=(DocPasswordRequest const&) = delete;
+
     // XInteractionRequest
     virtual css::uno::Any SAL_CALL getRequest() throw( css::uno::RuntimeException, std::exception ) override;
     virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( css::uno::RuntimeException, std::exception ) override;
