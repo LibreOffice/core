@@ -1,4 +1,3 @@
-#====================================================================================
 cs	cosv	:  soltools stlport NULL
 cs	cosv								usr1	-	all	cs_mkout NULL
 cs	cosv\prj							get		-	all	cs_prj NULL
