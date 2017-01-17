@@ -261,7 +261,7 @@ class ScDPDimensions : public cppu::WeakImplHelper<
 private:
     ScDPSource*         pSource;
     long                nDimCount;
-    ScDPDimension**     ppDims;
+    rtl::Reference<ScDPDimension>* ppDims;
 
 public:
                             ScDPDimensions( ScDPSource* pSrc );
@@ -415,7 +415,7 @@ private:
     //  date columns have 3 hierarchies (flat/quarter/week), other columns only one
     // #i52547# don't offer the incomplete date hierarchy implementation
     static const long   nHierCount = 1;
-    ScDPHierarchy**     ppHiers;
+    rtl::Reference<ScDPHierarchy>* ppHiers;
 
 public:
                             ScDPHierarchies( ScDPSource* pSrc, long nD );
@@ -492,7 +492,7 @@ private:
     long            nDim;
     long            nHier;
     long            nLevCount;
-    ScDPLevel**     ppLevs;
+    rtl::Reference<ScDPLevel>* ppLevs;
 
 public:
                             ScDPLevels( ScDPSource* pSrc, long nD, long nH );

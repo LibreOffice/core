@@ -1212,9 +1212,6 @@ ScDPDimensions::~ScDPDimensions()
 
     if (ppDims)
     {
-        for (long i=0; i<nDimCount; i++)
-            if ( ppDims[i] )
-                ppDims[i]->release();           // ref-counted
         delete[] ppDims;
     }
 }
@@ -1227,15 +1224,12 @@ void ScDPDimensions::CountChanged()
     {
         long i;
         long nCopy = std::min( nNewCount, nDimCount );
-        ScDPDimension** ppNew = new ScDPDimension*[nNewCount];
+        rtl::Reference<ScDPDimension>* ppNew = new rtl::Reference<ScDPDimension>[nNewCount];
 
         for (i=0; i<nCopy; i++)             // copy existing dims
             ppNew[i] = ppDims[i];
         for (i=nCopy; i<nNewCount; i++)     // clear additional pointers
             ppNew[i] = nullptr;
-        for (i=nCopy; i<nDimCount; i++)     // delete old dims if count is decreased
-            if ( ppDims[i] )
-                ppDims[i]->release();       // ref-counted
 
         delete[] ppDims;
         ppDims = ppNew;
@@ -1307,17 +1301,16 @@ ScDPDimension* ScDPDimensions::getByIndex(long nIndex) const
     {
         if ( !ppDims )
         {
-            const_cast<ScDPDimensions*>(this)->ppDims = new ScDPDimension*[nDimCount];
+            const_cast<ScDPDimensions*>(this)->ppDims = new rtl::Reference<ScDPDimension>[nDimCount];
             for (long i=0; i<nDimCount; i++)
                 ppDims[i] = nullptr;
         }
-        if ( !ppDims[nIndex] )
+        if ( !ppDims[nIndex].is() )
         {
             ppDims[nIndex] = new ScDPDimension( pSource, nIndex );
-            ppDims[nIndex]->acquire();      // ref-counted
         }
 
-        return ppDims[nIndex];
+        return ppDims[nIndex].get();
     }
 
     return nullptr;    //TODO: exception?
@@ -1690,9 +1683,6 @@ ScDPHierarchies::~ScDPHierarchies()
 
     if (ppHiers)
     {
-        for (long i=0; i<nHierCount; i++)
-            if ( ppHiers[i] )
-                ppHiers[i]->release();      // ref-counted
         delete[] ppHiers;
     }
 }
@@ -1761,17 +1751,16 @@ ScDPHierarchy* ScDPHierarchies::getByIndex(long nIndex) const
     {
         if ( !ppHiers )
         {
-            const_cast<ScDPHierarchies*>(this)->ppHiers = new ScDPHierarchy*[nHierCount];
+            const_cast<ScDPHierarchies*>(this)->ppHiers = new rtl::Reference<ScDPHierarchy>[nHierCount];
             for (long i=0; i<nHierCount; i++)
                 ppHiers[i] = nullptr;
         }
-        if ( !ppHiers[nIndex] )
+        if ( !ppHiers[nIndex].is() )
         {
             ppHiers[nIndex] = new ScDPHierarchy( pSource, nDim, nIndex );
-            ppHiers[nIndex]->acquire();         // ref-counted
         }
 
-        return ppHiers[nIndex];
+        return ppHiers[nIndex].get();
     }
 
     return nullptr;    //TODO: exception?
@@ -1864,9 +1853,6 @@ ScDPLevels::~ScDPLevels()
 
     if (ppLevs)
     {
-        for (long i=0; i<nLevCount; i++)
-            if ( ppLevs[i] )
-                ppLevs[i]->release();   // ref-counted
         delete[] ppLevs;
     }
 }
@@ -1932,17 +1918,16 @@ ScDPLevel* ScDPLevels::getByIndex(long nIndex) const
     {
         if ( !ppLevs )
         {
-            const_cast<ScDPLevels*>(this)->ppLevs = new ScDPLevel*[nLevCount];
+            const_cast<ScDPLevels*>(this)->ppLevs = new rtl::Reference<ScDPLevel>[nLevCount];
             for (long i=0; i<nLevCount; i++)
                 ppLevs[i] = nullptr;
         }
-        if ( !ppLevs[nIndex] )
+        if ( !ppLevs[nIndex].is() )
         {
             ppLevs[nIndex] = new ScDPLevel( pSource, nDim, nHier, nIndex );
-            ppLevs[nIndex]->acquire();      // ref-counted
         }
 
-        return ppLevs[nIndex];
+        return ppLevs[nIndex].get();
     }
 
     return nullptr;    //TODO: exception?
