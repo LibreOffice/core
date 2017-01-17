@@ -23,7 +23,7 @@ import collections
 import subprocess
 
 class GbuildLinkTarget:
-    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs,
+    def __init__(self, name, location, sources, include, include_sys, defs, cxxobjects, cxxflags, linked_libs,
                  asmobjects, cflags, gencobjects, gencxxobjects, ilibtarget, linked_static_libs, linktarget,
                  objcflags, objcobjects, objcxxflags, objcxxobjects, yaccobjects, build_type):
         (self.name, self.location, self.include,
@@ -41,6 +41,7 @@ class GbuildLinkTarget:
                              objcflags, objcobjects, objcxxflags,
                              objcxxobjects, yaccobjects, build_type)
         self.target_name = self.build_type + '_' + self.name
+        self.sources = sources
 
 
 class GbuildParser:
@@ -92,14 +93,12 @@ class GbuildParser:
                    'GENCXXOBJECTS': '.cxx', # remark is in workdir/GenCxxObject
                    'OBJCOBJECTS':   '.m',
                    'OBJCXXOBJECTS': '.mm',
-                   'COBJECTS':      '.c',
-
-            # gbuildtojson defines but does not fill these:
                    'ASMOBJECTS': '.s',
-                   'GENCOBJECTS': '.c',
                    'YACCOBJECTS': '.y',
+                   'GENCOBJECTS': '.c',
 
-                   # gbuildtojson need to be extended to fill these:
+            # not in GbuildLinkTarget
+                   'COBJECTS':      '.c',
                    'FLEXOBJECTS': '.l',
                    'JAVAOBJECTS': '.java',
                    'PYTHONOBJECTS': '.py'
@@ -116,35 +115,36 @@ class GbuildParser:
                     (foundincludes, foundisystem) = GbuildParser.__split_includes(jsondata['INCLUDE'])
                     match = GbuildParser._buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
                     location = os.path.dirname(jsondata['MAKEFILE'])
-                    filesSorted = {}
+                    sources = {}
                     for i in jsonSrc:
                         if i in jsondata and len(jsondata[i]) > 0:
-                            filesSorted[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
+                            sources[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
                         else:
-                            filesSorted[i] = []
+                            sources[i] = []
 
                     # TODO: extend GbuildLinkTarget with new json keys
                     # Find a better way instead on a zillion parameters
                     newObj = GbuildLinkTarget(match,
                                               location,
+                                              sources,
                                               foundincludes,
                                               foundisystem,
                                               GbuildParser.__split_defs(jsondata['DEFS']),
-                                              filesSorted['CXXOBJECTS'],
+                                              sources['CXXOBJECTS'],
                                               GbuildParser.__split_flags(jsondata['CXXFLAGS'], jsondata['CXXFLAGSAPPEND']),
                                               jsondata['LINKED_LIBS'].strip().split(' '),
-                                              filesSorted['ASMOBJECTS'],
+                                              sources['ASMOBJECTS'],
                                               GbuildParser.__split_flags(jsondata['CFLAGS'], jsondata['CFLAGSAPPEND']),
-                                              filesSorted['GENCOBJECTS'],
-                                              filesSorted['GENCXXOBJECTS'],
+                                              sources['GENCOBJECTS'],
+                                              sources['GENCXXOBJECTS'],
                                               jsondata['ILIBTARGET'],
                                               jsondata['LINKED_STATIC_LIBS'],
                                               jsondata['LINKTARGET'],
                                               GbuildParser.__split_flags(jsondata['OBJCFLAGS'], jsondata['OBJCFLAGSAPPEND']),
-                                              filesSorted['OBJCOBJECTS'],
+                                              sources['OBJCOBJECTS'],
                                               GbuildParser.__split_flags(jsondata['OBJCXXFLAGS'], jsondata['OBJCXXFLAGSAPPEND']),
-                                              filesSorted['OBJCXXOBJECTS'],
-                                              filesSorted['YACCOBJECTS'],
+                                              sources['OBJCXXOBJECTS'],
+                                              sources['YACCOBJECTS'],
                                               jsontype)
                     module = location.split('/')[-1]
                     if not module in moduleDict:
@@ -655,8 +655,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                 self.write_object(key, file, 1)
                 file.write(',')
             file.write(')')
-        elif isinstance(object, GbuildLinkTarget):
-            file.write('""')
 
 
     def generate_target(self, modulename):
