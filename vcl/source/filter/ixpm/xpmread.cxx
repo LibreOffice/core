@@ -66,7 +66,7 @@ private:
     sal_uLong               mnWidth;
     sal_uLong               mnHeight;
     sal_uLong               mnColors;
-    sal_uLong               mnCpp;                              // characters per pix
+    sal_uInt32              mnCpp;                              // characters per pix
     bool                mbTransparent;
     bool                mbStatus;
     sal_uLong               mnStatus;
@@ -305,9 +305,12 @@ bool XPMReader::ImplGetColor( sal_uLong nNumb )
     sal_uInt8*  pPtr =  ( mpColMap + nNumb * ( 4 + mnCpp ) );
     bool    bStatus = ImplGetString();
 
-    if ( bStatus )
+    if (bStatus && mnStringSize < mnCpp)
+        bStatus = false;
+
+    if (bStatus)
     {
-        for ( sal_uLong i = 0; i < mnCpp; i++ )
+        for (sal_uInt32 i = 0; i < mnCpp; ++i)
             *pPtr++ = *pString++;
         bStatus = ImplGetColSub ( pPtr );
     }
