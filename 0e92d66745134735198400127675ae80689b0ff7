@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_e6af867b",
+        "filename": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000381
+      },
+      "writtenOn": "2017-01-17T20:11:47Z",
+      "side": 1,
+      "message": "This code started as a copy of https://gerrit.libreoffice.org/gitweb?p\u003dcore.git;a\u003dblob;f\u003di18npool/source/transliteration/transliteration_Ignore.cxx#l118 then gradually cleaned up, and the original code did not do any such checks so I assume it is safe to not do so.",
+      "parentUuid": "fa48f94a_e698666d",
+      "revId": "0e92d66745134735198400127675ae80689b0ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_86731a4d",
         "filename": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
         "patchSetId": 1
