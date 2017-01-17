@@ -354,16 +354,20 @@ void RTFDocumentImpl::resolveSubstream(std::size_t nPos, Id nId, OUString& rIgno
     Strm().Seek(nCurrent);
 }
 
+void RTFDocumentImpl::outputSettingsTable()
+{
+    writerfilter::Reference<Properties>::Pointer_t pProp = std::make_shared<RTFReferenceProperties>(m_aSettingsTableAttributes, m_aSettingsTableSprms);
+    RTFReferenceTable::Entries_t aSettingsTableEntries;
+    aSettingsTableEntries.insert(std::make_pair(0, pProp));
+    writerfilter::Reference<Table>::Pointer_t pTable = std::make_shared<RTFReferenceTable>(aSettingsTableEntries);
+    Mapper().table(NS_ooxml::LN_settings_settings, pTable);
+}
+
 void RTFDocumentImpl::checkFirstRun()
 {
     if (m_bFirstRun)
     {
-        // output settings table
-        writerfilter::Reference<Properties>::Pointer_t pProp = std::make_shared<RTFReferenceProperties>(m_aSettingsTableAttributes, m_aSettingsTableSprms);
-        RTFReferenceTable::Entries_t aSettingsTableEntries;
-        aSettingsTableEntries.insert(std::make_pair(0, pProp));
-        writerfilter::Reference<Table>::Pointer_t pTable = std::make_shared<RTFReferenceTable>(aSettingsTableEntries);
-        Mapper().table(NS_ooxml::LN_settings_settings, pTable);
+        outputSettingsTable();
         // start initial paragraph
         m_bFirstRun = false;
         assert(!m_bNeedSect);
