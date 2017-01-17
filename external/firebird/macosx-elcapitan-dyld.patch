@@ -6,9 +6,9 @@
   **************************************/
 -TEXT	cmd [140];
 +TEXT	cmd [8000];
- int status;
  
  if (argc > 1)
+     strcpy (Db_name, argv[1]);
 @@ -94,7 +94,9 @@
      }
  
@@ -17,9 +17,9 @@
 +if (!lp) lp = "";
 -sprintf (cmd, "gfix -write async %s", Db_name);
 +sprintf (cmd, "DYLD_LIBRARY_PATH=%s gfix -write async %s", lp, Db_name);
- if ((status = system (cmd)))
+ if (system (cmd))
      {
-     printf ("Couldn't turn forced writes off (%d)\n", status);
+     printf ("Couldn't turn forced writes off\n");
 @@ -104,7 +106,7 @@
      }
  
