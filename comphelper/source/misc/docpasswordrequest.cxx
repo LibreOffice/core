@@ -82,10 +82,8 @@ SimplePasswordRequest::SimplePasswordRequest( PasswordRequestMode eMode )
         InteractionClassification_QUERY, eMode );
     maRequest <<= aRequest;
 
-    maContinuations.realloc( 2 );
-    maContinuations[ 0 ].set( new AbortContinuation );
-    mpPassword = new PasswordContinuation;
-    maContinuations[ 1 ].set( mpPassword );
+    mxAbort = new AbortContinuation;
+    mxPassword = new PasswordContinuation;
 }
 
 SimplePasswordRequest::~SimplePasswordRequest()
@@ -94,12 +92,12 @@ SimplePasswordRequest::~SimplePasswordRequest()
 
 bool SimplePasswordRequest::isPassword() const
 {
-    return mpPassword->isSelected();
+    return mxPassword->isSelected();
 }
 
 OUString SimplePasswordRequest::getPassword() const
 {
-    return mpPassword->getPassword();
+    return mxPassword->getPassword();
 }
 
 Any SAL_CALL SimplePasswordRequest::getRequest() throw( RuntimeException, std::exception )
@@ -109,7 +107,7 @@ Any SAL_CALL SimplePasswordRequest::getRequest() throw( RuntimeException, std::e
 
 Sequence< Reference< XInteractionContinuation > > SAL_CALL SimplePasswordRequest::getContinuations() throw( RuntimeException, std::exception )
 {
-    return maContinuations;
+    return { mxAbort.get(), mxPassword.get() };
 }
 
 
@@ -136,10 +134,8 @@ DocPasswordRequest::DocPasswordRequest( DocPasswordRequestType eType,
             implementation of a new enum value. */
     }
 
-    maContinuations.realloc( 2 );
-    maContinuations[ 0 ].set( new AbortContinuation );
-    mpPassword = new PasswordContinuation;
-    maContinuations[ 1 ].set( mpPassword );
+    mxAbort = new AbortContinuation;
+    mxPassword = new PasswordContinuation;
 }
 
 DocPasswordRequest::~DocPasswordRequest()
@@ -148,22 +144,22 @@ DocPasswordRequest::~DocPasswordRequest()
 
 bool DocPasswordRequest::isPassword() const
 {
-    return mpPassword->isSelected();
+    return mxPassword->isSelected();
 }
 
 OUString DocPasswordRequest::getPassword() const
 {
-    return mpPassword->getPassword();
+    return mxPassword->getPassword();
 }
 
 OUString DocPasswordRequest::getPasswordToModify() const
 {
-    return mpPassword->getPasswordToModify();
+    return mxPassword->getPasswordToModify();
 }
 
 bool DocPasswordRequest::getRecommendReadOnly() const
 {
-    return mpPassword->getRecommendReadOnly();
+    return mxPassword->getRecommendReadOnly();
 }
 
 Any SAL_CALL DocPasswordRequest::getRequest() throw( RuntimeException, std::exception )
@@ -173,7 +169,7 @@ Any SAL_CALL DocPasswordRequest::getRequest() throw( RuntimeException, std::exce
 
 Sequence< Reference< XInteractionContinuation > > SAL_CALL DocPasswordRequest::getContinuations() throw( RuntimeException, std::exception )
 {
-    return maContinuations;
+    return { mxAbort.get(), mxPassword.get() };
 }
 
 

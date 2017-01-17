@@ -24,6 +24,7 @@
 #include <com/sun/star/task/PasswordRequestMode.hpp>
 #include <com/sun/star/task/XInteractionRequest.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 namespace comphelper {
 
@@ -56,9 +57,9 @@ private:
     virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    css::uno::Any      maRequest;
-    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > maContinuations;
-    PasswordContinuation *          mpPassword;
+    css::uno::Any                         maRequest;
+    rtl::Reference<AbortContinuation>     mxAbort;
+    rtl::Reference<PasswordContinuation>  mxPassword;
 };
 
 
@@ -89,9 +90,9 @@ private:
     virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations() throw( css::uno::RuntimeException, std::exception ) override;
 
 private:
-    css::uno::Any      maRequest;
-    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > maContinuations;
-    PasswordContinuation *          mpPassword;
+    css::uno::Any                         maRequest;
+    rtl::Reference<AbortContinuation>     mxAbort;
+    rtl::Reference<PasswordContinuation>  mxPassword;
 };
 
 
