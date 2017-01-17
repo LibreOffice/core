@@ -7,9 +7,10 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
+#include <rtl/ustrbuf.hxx>
 #include <transliteration_Ignore.hxx>
-#include <unicode/uchar.h>
 #include <unicode/translit.h>
+#include <unicode/uchar.h>
 
 namespace com { namespace sun { namespace star { namespace i18n {
 
@@ -56,37 +57,43 @@ ignoreDiacritics_CTL::folding(const OUString& rInStr, sal_Int32 nStartPos,
     if (!m_transliterator)
         throw css::uno::RuntimeException();
 
-    OUString aOutStr;
+    if (nStartPos < 0 || nStartPos + nCount > rInStr.getLength())
+        throw css::uno::RuntimeException();
 
-    sal_Int32 nPosition = nStartPos;
-    sal_Int32 nOffset = 0;
     if (useOffset)
+    {
+        OUStringBuffer aOutBuf(nCount);
         rOffset.realloc(nCount);
 
-    while (nPosition < nStartPos + nCount)
-    {
-        sal_Int32 nIndex = nPosition;
-        UChar32 nChar = rInStr.iterateCodePoints(&nIndex);
-        UnicodeString aChar(nChar);
-        m_transliterator->transliterate(aChar);
-
-        if (useOffset && nOffset + aChar.length() > rOffset.getLength())
-            rOffset.realloc(rOffset.getLength() + aChar.length());
-
-        for (int32_t i = 0; i < aChar.length(); i++)
+        sal_Int32 nPosition = nStartPos;
+        sal_Int32 nOffset = 0;
+        while (nPosition < nStartPos + nCount)
         {
-            aOutStr += OUStringLiteral1(aChar[i]);
-            if (useOffset)
+            sal_Int32 nIndex = nPosition;
+            UChar32 nChar = rInStr.iterateCodePoints(&nIndex);
+            UnicodeString aUStr(nChar);
+            m_transliterator->transliterate(aUStr);
+
+            if (nOffset + aUStr.length() > rOffset.getLength())
+                rOffset.realloc(rOffset.getLength() + aUStr.length());
+
+            aOutBuf.append(reinterpret_cast<const sal_Unicode*>(aUStr.getBuffer()), aUStr.length());
+
+            for (int32_t i = 0; i < aUStr.length(); i++)
                 rOffset[nOffset++] = nPosition;
+
+            nPosition = nIndex;
         }
 
-        nPosition = nIndex;
+        rOffset.realloc(aOutBuf.getLength());
+        return aOutBuf.makeStringAndClear();
     }
-
-    if (useOffset)
-        rOffset.realloc(aOutStr.getLength());
-
-    return aOutStr;
+    else
+    {
+        UnicodeString aUStr(reinterpret_cast<const UChar*>(rInStr.getStr()) + nStartPos, nCount);
+        m_transliterator->transliterate(aUStr);
+        return OUString(reinterpret_cast<const sal_Unicode*>(aUStr.getBuffer()), aUStr.length());
+    }
 }
 
 } } } }
