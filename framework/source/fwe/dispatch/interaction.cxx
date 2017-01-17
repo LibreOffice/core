@@ -96,9 +96,8 @@ public:
 
 private:
     css::uno::Any                                                                       m_aRequest;
-    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >    m_lContinuations;
-    comphelper::OInteractionAbort*                                                      m_pAbort;
-    ContinuationFilterSelect*                                                           m_pFilter;
+    rtl::Reference<comphelper::OInteractionAbort>                                       m_xAbort;
+    rtl::Reference<ContinuationFilterSelect>                                            m_xFilter;
 };
 
 // initialize instance with all necessary information
@@ -113,12 +112,8 @@ RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
                                                        sURL                                          );
     m_aRequest <<= aFilterRequest;
 
-    m_pAbort  = new comphelper::OInteractionAbort;
-    m_pFilter = new ContinuationFilterSelect;
-
-    m_lContinuations.realloc( 2 );
-    m_lContinuations[0].set( m_pAbort  );
-    m_lContinuations[1].set( m_pFilter );
+    m_xAbort  = new comphelper::OInteractionAbort;
+    m_xFilter = new ContinuationFilterSelect;
 }
 
 // return abort state of interaction
@@ -126,7 +121,7 @@ RequestFilterSelect_Impl::RequestFilterSelect_Impl( const OUString& sURL )
 
 bool RequestFilterSelect_Impl::isAbort() const
 {
-    return m_pAbort->wasSelected();
+    return m_xAbort->wasSelected();
 }
 
 // return user selected filter
@@ -134,7 +129,7 @@ bool RequestFilterSelect_Impl::isAbort() const
 
 OUString RequestFilterSelect_Impl::getFilter() const
 {
-    return m_pFilter->getFilter();
+    return m_xFilter->getFilter();
 }
 
 // handler call it to get type of request
@@ -152,7 +147,7 @@ css::uno::Any SAL_CALL RequestFilterSelect_Impl::getRequest() throw( css::uno::R
 
 css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL RequestFilterSelect_Impl::getContinuations() throw( css::uno::RuntimeException, std::exception )
 {
-    return m_lContinuations;
+    return { m_xAbort.get(), m_xFilter.get() };
 }
 
 RequestFilterSelect::RequestFilterSelect( const OUString& sURL )
