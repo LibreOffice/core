@@ -35,8 +35,8 @@ using rtl::OUString;
 using namespace ::com::sun::star::ui::dialogs::ExtendedFilePickerElementIds;
 using namespace ::com::sun::star::ui::dialogs::CommonFilePickerElementIds;
 
-static const char* RES_NAME = "fps_office";
-static const char* OTHER_RES_NAME = "svt";
+static const char* const RES_NAME = "fps_office";
+static const char* const OTHER_RES_NAME = "svt";
 
 // we have to translate control ids to resource ids
 
