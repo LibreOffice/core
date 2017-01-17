@@ -412,9 +412,8 @@ struct DXFBoundaryPathData
     bool                bIsPolyLine;
     sal_Int32           nPointIndex;
 
-    DXFVector*          pP;
-    std::deque< DXFEdgeType* >
-                        aEdges;
+    std::unique_ptr<DXFVector[]> pP;
+    std::deque<DXFEdgeType*> aEdges;
 
     DXFBoundaryPathData();
     ~DXFBoundaryPathData();

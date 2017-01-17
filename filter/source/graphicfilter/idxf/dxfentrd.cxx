@@ -576,10 +576,8 @@ DXFBoundaryPathData::DXFBoundaryPathData() :
 
 DXFBoundaryPathData::~DXFBoundaryPathData()
 {
-    sal_uInt32 i = 0;
-    for ( i = 0; i < aEdges.size(); i++ )
+    for (sal_uInt32 i = 0; i < aEdges.size(); ++i)
         delete aEdges[ i ];
-    delete[] pP;
 }
 
 bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
@@ -600,7 +598,7 @@ bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             {
                 nPointCount = rDGR.GetI();
                 if ( nPointCount )
-                    pP = new DXFVector[ nPointCount ];
+                    pP.reset( new DXFVector[ nPointCount ] );
             }
             break;
             case 72 : nHasBulgeFlag = rDGR.GetI(); break;
