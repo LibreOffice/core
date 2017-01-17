@@ -421,7 +421,8 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
         case 90 :
         {
             nCount = rDGR.GetI();
-            if ( nCount )
+            // limit alloc to max reasonable size based on remaining data in stream
+            if (nCount > 0 && static_cast<sal_uInt32>(nCount) <= rDGR.remainingSize())
                 pP.reset( new DXFVector[ nCount ] );
         }
         break;
