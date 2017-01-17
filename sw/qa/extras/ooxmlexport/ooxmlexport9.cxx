@@ -197,6 +197,13 @@ DECLARE_OOXMLEXPORT_TEST(testTdf104162, "tdf104162.docx")
     CPPUNIT_ASSERT(xTextFields->hasElements());
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf104150, "tdf104150.docx")
+{
+    uno::Reference<beans::XPropertySet> xPageStyle(getStyles("PageStyles")->getByName("Standard"), uno::UNO_QUERY);
+    // This was 0xff0000, i.e. red: background shape wasn't ignored.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), getProperty<sal_Int32>(xPageStyle, "BackColor"));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
