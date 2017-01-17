@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_664e36c3",
+        "filename": "cppuhelper/source/shlib.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-17T22:03:08Z",
+      "side": 1,
+      "message": "unfortunately Mapping only has methods to map interfaces, not Any... and what should be done if there\u0027s a struct in the Any, that may contain interfaces too...",
+      "revId": "6d1219ddce95e533cc9f25867224d35b37d7b8ad",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
