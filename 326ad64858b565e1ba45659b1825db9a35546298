@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_e6e786aa",
+        "filename": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-17T22:38:57Z",
+      "side": 1,
+      "message": "Hint: use makeStringAndClear() instead of toString() for efficiency, makeStringAndClear() does not copy the buffer but constructs an OUString with the underlying rtl_uString data structure.\n\nI\u0027ll change that in an amended commit.",
+      "range": {
+        "startLine": 89,
+        "startChar": 23,
+        "endLine": 89,
+        "endChar": 31
+      },
+      "revId": "326ad64858b565e1ba45659b1825db9a35546298",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
