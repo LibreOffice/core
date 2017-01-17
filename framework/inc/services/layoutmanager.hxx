@@ -292,8 +292,7 @@ namespace framework
             OUString                                                       m_aModuleIdentifier;
             Timer                                                          m_aAsyncLayoutTimer;
             ::cppu::OMultiTypeInterfaceContainerHelper                     m_aListenerContainer; // container for ALL Listener
-            ToolbarLayoutManager*                                          m_pToolbarManager;
-            css::uno::Reference< css::ui::XUIConfigurationListener >       m_xToolbarManager;
+            rtl::Reference< ToolbarLayoutManager >                         m_xToolbarManager;
 
         friend class detail::InfoHelperBuilder;
     };
