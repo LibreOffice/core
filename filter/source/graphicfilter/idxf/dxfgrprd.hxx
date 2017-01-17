@@ -59,6 +59,7 @@ public:
         // This read must have returned a group code for datatype String.
         // If not NULL is returend
 
+    sal_uInt64 remainingSize() const;
 private:
 
     long   ReadI();
