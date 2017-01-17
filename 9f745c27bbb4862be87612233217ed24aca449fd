@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_26950e40",
+        "filename": "bin/gbuild-to-ide",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1001121
+      },
+      "writtenOn": "2017-01-17T18:10:18Z",
+      "side": 1,
+      "message": "suggestion.\n\nx \u003d file.decode()\nallfiles[x.split(\u0027/\u0027)[0]].append(x)\n\nbecause then headers_of become a simple assignment.",
+      "revId": "9f745c27bbb4862be87612233217ed24aca449fd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
