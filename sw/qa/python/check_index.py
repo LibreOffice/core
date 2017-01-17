@@ -1,6 +1,5 @@
 import unittest
 import unohelper
-import os
 from org.libreoffice.unotest import UnoInProcess
 from com.sun.star.text.ControlCharacter import PARAGRAPH_BREAK
 from com.sun.star.util import XRefreshListener
@@ -93,5 +92,7 @@ class CheckIndex(unittest.TestCase):
 
     # close the document
         xDoc.dispose()
+
+
 if __name__ == "__main__":
     unittest.main()
