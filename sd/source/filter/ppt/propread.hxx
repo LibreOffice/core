@@ -85,13 +85,13 @@ typedef std::map<OUString,sal_uInt32> Dictionary;
 
 struct PropEntry
 {
-    sal_uInt32  mnId;
-    sal_uInt32  mnSize;
-    sal_uInt8*  mpBuf;
+    sal_uInt32                    mnId;
+    sal_uInt32                    mnSize;
+    std::unique_ptr<sal_uInt8[]>  mpBuf;
 
     PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize );
     PropEntry( const PropEntry& rProp );
-    ~PropEntry() { delete[] mpBuf; } ;
+    ~PropEntry() {}
 
     PropEntry& operator=(const PropEntry& rPropEntry);
 };

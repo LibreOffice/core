@@ -120,7 +120,8 @@ class PPTExBulletProvider
         SvMemoryStream          aBuExOutlineStream;
         SvMemoryStream          aBuExMasterStream;
 
-        EscherGraphicProvider*  pGraphicProv;
+        std::unique_ptr<EscherGraphicProvider>
+                                pGraphicProv;
 
     public:
 

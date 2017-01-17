@@ -155,7 +155,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
         }
     }
 
-    pFilter = new ImplSdPPTImport( pDocument, rStorage, rMedium, aParam );
+    pFilter.reset( new ImplSdPPTImport( pDocument, rStorage, rMedium, aParam ) );
 }
 
 bool SdPPTImport::Import()
@@ -165,7 +165,6 @@ bool SdPPTImport::Import()
 
 SdPPTImport::~SdPPTImport()
 {
-    delete pFilter;
 }
 
 ImplSdPPTImport::ImplSdPPTImport( SdDrawDocument* pDocument, SotStorage& rStorage_, SfxMedium& rMedium, PowerPointImportParam& rParam )

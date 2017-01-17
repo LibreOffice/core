@@ -97,13 +97,12 @@ using namespace ::com::sun::star;
 #define FIXED_PITCH             0x01
 
 PPTExBulletProvider::PPTExBulletProvider()
+    : pGraphicProv( new EscherGraphicProvider( EscherGraphicProviderFlags::UseInstances ) )
 {
-    pGraphicProv = new EscherGraphicProvider( EscherGraphicProviderFlags::UseInstances );
 }
 
 PPTExBulletProvider::~PPTExBulletProvider()
 {
-    delete pGraphicProv;
 }
 
 sal_uInt16 PPTExBulletProvider::GetId( const OString& rUniqueId, Size& rGraphicSize )
@@ -1266,7 +1265,10 @@ void PPTWriter::ImplWriteTextStyleAtom( SvStream& rOut, int nTextInstance, sal_u
             {
                 SvStream* pRuleOut = &rOut;
                 if ( pTextRule )
-                    pRuleOut = pTextRule->pOut = new SvMemoryStream( 0x100, 0x100 );
+                {
+                    pTextRule->pOut.reset( new SvMemoryStream( 0x100, 0x100 ) );
+                    pRuleOut = pTextRule->pOut.get();
+                }
 
                 sal_uInt32 nRulePos = pRuleOut->Tell();
                 pRuleOut->WriteUInt32( EPP_TextRulerAtom << 16 ).WriteUInt32( 0 );
@@ -2763,12 +2765,11 @@ void PPTWriter::ImplWritePage( const PHLayout& rLayout, EscherSolverContainer& a
                         ImplGetText();
                         ImplWriteTextStyleAtom( *pClientTextBox, nTextType, nPObjects, &aTextRule, aExtBu, nullptr );
                         ImplWriteExtParaHeader( aExtBu, nPObjects++, nTextType, nPageNumber + 0x100 );
-                        SvMemoryStream* pOut = aTextRule.pOut;
+                        SvMemoryStream* pOut = aTextRule.pOut.get();
                         if ( pOut )
                         {
                             pClientTextBox->WriteBytes(pOut->GetData(), pOut->Tell());
-                            delete pOut;
-                            aTextRule.pOut = nullptr;
+                            aTextRule.pOut.reset();
                         }
                         if ( aExtBu.Tell() )
                         {

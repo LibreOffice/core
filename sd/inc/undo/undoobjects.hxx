@@ -92,7 +92,7 @@ public:
     virtual void Redo() override;
 
 private:
-    SfxUndoAction* mpUndoAnimation;
+    std::unique_ptr<SfxUndoAction> mpUndoAnimation;
     bool            mbNewEmptyPresObj;
     SdrObjectWeakRef mxSdrObject;
 };

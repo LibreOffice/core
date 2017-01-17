@@ -28,7 +28,7 @@ PropEntry::PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize
     mnSize      ( nBufSize ),
     mpBuf       ( new sal_uInt8[ nBufSize ] )
 {
-    memcpy( static_cast<void*>(mpBuf), static_cast<void const *>(pBuf), nBufSize );
+    memcpy( mpBuf.get(), pBuf, nBufSize );
 };
 
 PropEntry::PropEntry( const PropEntry& rProp ) :
@@ -36,18 +36,17 @@ PropEntry::PropEntry( const PropEntry& rProp ) :
     mnSize      ( rProp.mnSize ),
     mpBuf       ( new sal_uInt8[ mnSize ] )
 {
-    memcpy( static_cast<void*>(mpBuf), static_cast<void const *>(rProp.mpBuf), mnSize );
+    memcpy( mpBuf.get(), rProp.mpBuf.get(), mnSize );
 };
 
 PropEntry& PropEntry::operator=(const PropEntry& rPropEntry)
 {
     if ( this != &rPropEntry )
     {
-        delete[] mpBuf;
         mnId = rPropEntry.mnId;
         mnSize = rPropEntry.mnSize;
-        mpBuf = new sal_uInt8[ mnSize ];
-        memcpy( static_cast<void*>(mpBuf), static_cast<void const *>(rPropEntry.mpBuf), mnSize );
+        mpBuf.reset( new sal_uInt8[ mnSize ] );
+        memcpy( mpBuf.get(), rPropEntry.mpBuf.get(), mnSize );
     }
     return *this;
 }
@@ -235,7 +234,7 @@ bool Section::GetProperty( sal_uInt32 nId, PropItem& rPropItem )
         {
             rPropItem.Clear();
             rPropItem.SetTextEncoding( mnTextEnc );
-            rPropItem.WriteBytes( (*iter)->mpBuf, (*iter)->mnSize );
+            rPropItem.WriteBytes( (*iter)->mpBuf.get(), (*iter)->mnSize );
             rPropItem.Seek( STREAM_SEEK_TO_BEGIN );
             return true;
         }
@@ -280,7 +279,7 @@ void Section::GetDictionary(Dictionary& rDict)
     if (iter == maEntries.end())
         return;
 
-    SvMemoryStream aStream( (*iter)->mpBuf, (*iter)->mnSize, StreamMode::READ );
+    SvMemoryStream aStream( (*iter)->mpBuf.get(), (*iter)->mnSize, StreamMode::READ );
     aStream.Seek( STREAM_SEEK_TO_BEGIN );
     sal_uInt32 nDictCount(0);
     aStream.ReadUInt32( nDictCount );

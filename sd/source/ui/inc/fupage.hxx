@@ -57,7 +57,8 @@ private:
 
     SfxRequest&                 mrReq;
     const SfxItemSet*           mpArgs;
-    SdBackgroundObjUndoAction*  mpBackgroundObjUndoAction;
+    std::unique_ptr<SdBackgroundObjUndoAction>
+                                mpBackgroundObjUndoAction;
     Size                        maSize;
     bool                        mbPageBckgrdDeleted;
     bool                        mbMasterPage;
