@@ -82,7 +82,7 @@ protected:
     TaskPriority       mePriority;      /// Task priority
     bool               mbActive;        /// Currently in the scheduler
 
-    void StartTimer( sal_uInt64 nMS );
+    static void StartTimer( sal_uInt64 nMS );
 
     virtual void SetDeletionFlags();
     /// Is this item ready to be dispatched at nTimeNow
