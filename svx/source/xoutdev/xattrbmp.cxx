@@ -73,7 +73,7 @@ void XOBitmap::Bitmap2Array()
     ScopedVclPtrInstance< VirtualDevice > pVDev;
     bool            bPixelColor = false;
     const Bitmap    aBitmap( GetBitmap() );
-    const sal_uInt16    nLines = 8; // type dependent
+    const sal_Int32 nLines = 8; // type dependent
 
     if( !pPixelArray )
         pPixelArray.reset( new sal_uInt16[ nLines * nLines ] );
@@ -83,9 +83,9 @@ void XOBitmap::Bitmap2Array()
     aPixelColor = aBckgrColor = pVDev->GetPixel( Point() );
 
     // create array and determine foreground and background color
-    for( sal_uInt16 i = 0; i < nLines; i++ )
+    for (sal_Int32 i = 0; i < nLines; ++i)
     {
-        for( sal_uInt16 j = 0; j < nLines; j++ )
+        for (sal_Int32 j = 0; j < nLines; ++j)
         {
             if ( pVDev->GetPixel( Point( j, i ) ) == aBckgrColor )
                 pPixelArray[ j + i * nLines ] = 0;
@@ -105,18 +105,18 @@ void XOBitmap::Bitmap2Array()
 /// convert array, fore- and background color into a bitmap
 void XOBitmap::Array2Bitmap()
 {
-    ScopedVclPtrInstance< VirtualDevice > pVDev;
-    sal_uInt16 nLines = 8; // type dependent
-
-    if( !pPixelArray )
+    if (!pPixelArray)
         return;
+
+    ScopedVclPtrInstance< VirtualDevice > pVDev;
+    const sal_Int32 nLines = 8; // type dependent
 
     pVDev->SetOutputSizePixel( Size( nLines, nLines ) );
 
     // create bitmap
-    for( sal_uInt16 i = 0; i < nLines; i++ )
+    for (sal_Int32 i = 0; i < nLines; ++i)
     {
-        for( sal_uInt16 j = 0; j < nLines; j++ )
+        for (sal_Int32 j = 0; j < nLines; ++j)
         {
             if( pPixelArray[ j + i * nLines ] == 0 )
                 pVDev->DrawPixel( Point( j, i ), aBckgrColor );
