@@ -30,14 +30,13 @@
 const sal_uInt16    TokenPool::nScTokenOff = 8192;
 
 TokenStack::TokenStack(  )
+    : pStack( new TokenId[ nSize ] )
 {
-    pStack = new TokenId[ nSize ];
     Reset();
 }
 
 TokenStack::~TokenStack()
 {
-    delete[] pStack;
 }
 
 // !ATTENTION!": to the outside the numbering starts with 1!

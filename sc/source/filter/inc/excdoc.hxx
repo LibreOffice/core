@@ -50,11 +50,11 @@ private:
     XclExpCellTableRef          mxCellTable;
 
     SCTAB                       mnScTab;    // table number SC document
-    sal_uInt16                      nExcTab;    // table number Excel document
+    sal_uInt16                  nExcTab;    // table number Excel document
 
-    NameBuffer*                 pTabNames;
+    std::unique_ptr<NameBuffer> pTabNames;
 
-    XclExpNoteListRef   mxNoteList;
+    XclExpNoteListRef           mxNoteList;
 
     // re-create and forget pRec; delete is done by ExcTable itself!
     void                        Add( XclExpRecordBase* pRec );

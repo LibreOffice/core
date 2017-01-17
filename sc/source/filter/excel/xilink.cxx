@@ -398,7 +398,7 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
             }
         break;
         case xlExtOLE:
-            mpMOper = new MOper(rSupbook.GetSharedStringPool(), rStrm);
+            mpMOper.reset( new MOper(rSupbook.GetSharedStringPool(), rStrm) );
         break;
         default:
             ;
@@ -407,7 +407,6 @@ XclImpExtName::XclImpExtName( XclImpSupbook& rSupbook, XclImpStream& rStrm, XclS
 
 XclImpExtName::~XclImpExtName()
 {
-    delete mpMOper;
 }
 
 void XclImpExtName::CreateDdeData( ScDocument& rDoc, const OUString& rApplic, const OUString& rTopic ) const

@@ -58,7 +58,6 @@ ScRTFExport::ScRTFExport( SvStream& rStrmP, ScDocument* pDocP, const ScRange& rR
 
 ScRTFExport::~ScRTFExport()
 {
-    delete [] pCellX;
 }
 
 void ScRTFExport::Write()

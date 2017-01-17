@@ -59,7 +59,7 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScRangeData* mpRangeData;
+    std::unique_ptr<ScRangeData> mpRangeData;
     SCTAB mnTab;
 };
 

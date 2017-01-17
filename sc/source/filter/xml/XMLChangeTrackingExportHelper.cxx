@@ -51,12 +51,11 @@ ScChangeTrackingExportHelper::ScChangeTrackingExportHelper(ScXMLExport& rTempExp
     sChangeIDPrefix(SC_CHANGE_ID_PREFIX)
 {
     pChangeTrack = rExport.GetDocument() ? rExport.GetDocument()->GetChangeTrack() : nullptr;
-    pDependings = new ScChangeActionMap();
+    pDependings.reset( new ScChangeActionMap );
 }
 
 ScChangeTrackingExportHelper::~ScChangeTrackingExportHelper()
 {
-    delete pDependings;
 }
 
 OUString ScChangeTrackingExportHelper::GetChangeID(const sal_uInt32 nActionNumber)

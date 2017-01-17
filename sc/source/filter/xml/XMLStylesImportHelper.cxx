@@ -47,7 +47,6 @@ ScMyStyleRanges::ScMyStyleRanges() :
 
 ScMyStyleRanges::~ScMyStyleRanges()
 {
-    delete pCurrencyList;
 }
 
 void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
@@ -114,7 +113,7 @@ void ScMyStyleRanges::AddRange(const ScRange& rRange, const sal_Int16 nType)
 void ScMyStyleRanges::AddCurrencyRange(const ScRange& rRange, const OUString* pCurrency)
 {
     if (!pCurrencyList)
-        pCurrencyList = new ScMyCurrencyStylesSet();
+        pCurrencyList.reset( new ScMyCurrencyStylesSet );
     ScMyCurrencyStyle aStyle;
     if (pCurrency)
         aStyle.sCurrency = *pCurrency;

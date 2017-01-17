@@ -1390,7 +1390,7 @@ void ScHTMLLayoutParser::Image( ImportInfo* pInfo )
         (pActEntry->aAltText).clear();
     }
     pImage->aFilterName = rFilter.GetImportFormatName( nFormat );
-    pImage->pGraphic = pGraphic;
+    pImage->pGraphic.reset( pGraphic );
     if ( !(pImage->aSize.Width() && pImage->aSize.Height()) )
     {
         OutputDevice* pDefaultDev = Application::GetDefaultDevice();

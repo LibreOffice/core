@@ -35,13 +35,14 @@ class ScCellSearchObj : public cppu::WeakImplHelper<
 {
 private:
     SfxItemPropertySet      aPropSet;
-    SvxSearchItem*          pSearchItem;
+    std::unique_ptr<SvxSearchItem>
+                            pSearchItem;
 
 public:
                             ScCellSearchObj();
     virtual                 ~ScCellSearchObj() override;
 
-    SvxSearchItem*          GetSearchItem() const       { return pSearchItem; }
+    SvxSearchItem*          GetSearchItem() const       { return pSearchItem.get(); }
 
                             // XReplaceDescriptor
     virtual OUString SAL_CALL getReplaceString() throw(css::uno::RuntimeException, std::exception) override;

@@ -154,12 +154,11 @@ ConverterBase::ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuff
     eStatus( ConvOK )
 {
     OSL_ENSURE( nNewBuffer > 0, "ConverterBase::ConverterBase - nNewBuffer == 0!" );
-    pBuffer = new sal_Char[ nNewBuffer ];
+    pBuffer.reset( new sal_Char[ nNewBuffer ] );
 }
 
 ConverterBase::~ConverterBase()
 {
-    delete[] pBuffer;
 }
 
 void ConverterBase::Reset()

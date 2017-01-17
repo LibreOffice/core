@@ -151,7 +151,8 @@ private:
     };
 
     LOTUS_ROOT*        m_pLotRoot;
-    ScTokenArray*      pScTokenArray;
+    std::unique_ptr<ScTokenArray>
+                       pScTokenArray;
     sal_uInt16         nIntCount;
     std::vector<Entry> maEntries;
 

@@ -1394,20 +1394,18 @@ ScDataPilotDescriptor::ScDataPilotDescriptor(ScDocShell* pDocSh) :
 
 ScDataPilotDescriptor::~ScDataPilotDescriptor()
 {
-    delete mpDPObject;
 }
 
 ScDPObject* ScDataPilotDescriptor::GetDPObject() const
 {
-    return mpDPObject;
+    return mpDPObject.get();
 }
 
 void ScDataPilotDescriptor::SetDPObject( ScDPObject* pDPObject )
 {
-    if (mpDPObject != pDPObject)
+    if (mpDPObject.get() != pDPObject)
     {
-        delete mpDPObject;
-        mpDPObject = pDPObject;
+        mpDPObject.reset( pDPObject );
         OSL_FAIL("replace DPObject should not happen");
     }
 }

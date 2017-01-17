@@ -77,7 +77,7 @@ class ScXMLDataPilotTableContext : public ScXMLImportContext
     ScDocument*     pDoc;
     ScDPObject*     pDPObject;
     std::unique_ptr<ScDPSaveData> pDPSave;
-    ScDPDimensionSaveData* pDPDimSaveData;
+    std::unique_ptr<ScDPDimensionSaveData> pDPDimSaveData;
     GrandTotalItem  maRowGrandTotal;
     GrandTotalItem  maColGrandTotal;
     OUString   sDataPilotTableName;
@@ -411,7 +411,7 @@ public:
 
 class ScXMLDataPilotSubTotalsContext : public ScXMLImportContext
 {
-    ScXMLDataPilotFieldContext* pDataPilotField;
+    ScXMLDataPilotFieldContext*  pDataPilotField;
 
     std::vector<sal_uInt16>      maFunctions;
     OUString                     maDisplayName;
