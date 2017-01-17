@@ -23,6 +23,7 @@
 
 #include "osl/thread.hxx"
 #include "rtl/string.h"
+#include "rtl/ustring.hxx"
 #include "sal/detail/log.h"
 #include "sal/log.hxx"
 #include "sal/types.h"
@@ -175,6 +176,36 @@ void maybeOutputTimestamp(std::ostringstream &s) {
             break;
         default:
             ; // nothing
+        }
+    }
+    return;
+}
+
+bool getValueFromLoggingIniFile(const char* key, char* value) {
+    rtl::OUString programDirectoryURL;
+    rtl::OUString programDirectoryPath;
+    osl_getProcessWorkingDir(&(programDirectoryURL.pData));
+    osl_getSystemPathFromFileURL(programDirectoryURL.pData, &programDirectoryPath.pData);
+    rtl::OUString aLogFile(programDirectoryPath + "/" + "logging.ini");
+    std::ifstream logFileStream(rtl::OUStringToOString( aLogFile, RTL_TEXTENCODING_ASCII_US).getStr());
+    if (!logFileStream.good())
+        return false;
+
+    std::size_t n;
+    std::string aKey;
+    std::string aValue;
+    std::string sWantedKey(key);
+    std::string sLine;
+    while (std::getline(logFileStream, sLine)) {
+        if (sLine.find('#') == 0)
+            continue;
+        if ( ( n = sLine.find('=') ) != std::string::npos) {
+            aKey = sLine.substr(0, n);
+            if (aKey != sWantedKey)
+                continue;
+            aValue = sLine.substr(n+1, sLine.length());
+            sprintf(value, "%s", aValue.c_str());
+            return true;
         }
     }
     return;
