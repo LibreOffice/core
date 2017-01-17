@@ -93,9 +93,9 @@ ScHTMLImport::ScHTMLImport( ScDocument* pDocP, const OUString& rBaseURL, const S
             SvxPaperInfo::GetPaperSize( PAPER_A4 ), MapMode( MapUnit::MapTwip ) );
     }
     if( bCalcWidthHeight )
-        mpParser = new ScHTMLLayoutParser( mpEngine, rBaseURL, aPageSize, pDocP );
+        mpParser = new ScHTMLLayoutParser( mpEngine.get(), rBaseURL, aPageSize, pDocP );
     else
-        mpParser = new ScHTMLQueryParser( mpEngine, pDocP );
+        mpParser = new ScHTMLQueryParser( mpEngine.get(), pDocP );
 }
 
 ScHTMLImport::~ScHTMLImport()

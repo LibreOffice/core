@@ -462,15 +462,13 @@ struct Sc10ColData
 // Cell-Attribute definition
 struct Sc10ColAttr
 {
-    sal_uInt16          Count;
-    Sc10ColData*    pData;
+    sal_uInt16                      Count;
+    std::unique_ptr<Sc10ColData[]>  pData;
 
     Sc10ColAttr()
         : Count(0)
-        , pData(nullptr)
     {
     }
-    ~Sc10ColAttr() { delete [] pData; }
 };
 
 // GraphHeader

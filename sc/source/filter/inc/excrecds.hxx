@@ -351,7 +351,8 @@ private:
     sal_uInt8               nType;
     sal_uInt8               nOper;
     double                  fVal;
-    XclExpString*           pText;
+    std::unique_ptr<XclExpString>
+                            pText;
 
 protected:
 public:

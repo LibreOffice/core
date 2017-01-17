@@ -147,9 +147,10 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
-    ScRange         aExtendedRange;
+    ScMarkData          aMarkData;
+    std::unique_ptr<ScDocument>
+                        pUndoDoc;
+    ScRange             aExtendedRange;
     sal_uLong           nStartChangeAction;
     sal_uLong           nEndChangeAction;
 
@@ -298,7 +299,8 @@ public:
 private:
     ScRange         aRange;
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;       // Block mark and deleted data
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;       // Block mark and deleted data
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
     InsertDeleteFlags nFlags;
@@ -406,7 +408,8 @@ public:
 private:
     ScRange         aSource;
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;
     FillDir         eFillDir;
     FillCmd         eFillCmd;
     FillDateCmd     eFillDateCmd;
@@ -459,7 +462,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScDocument*     pUndoDoc;       // deleted data
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;       // deleted data
     ScMarkData      aMarkData;
     bool            bSize;
     sal_uInt16      nFormatNo;
@@ -517,7 +521,8 @@ public:
 
 private:
     ScRange         aRange;
-    ScDocument*     pUndoDoc;       // Deleted data
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;       // Deleted data
     ScRefAddress    theFormulaCell;
     ScRefAddress    theFormulaEnd;
     ScRefAddress    theRowCell;
@@ -644,7 +649,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScDocument*     pUndoDoc;
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;
     ScRange         aRange;
     ScMarkData      aMarkData;
     OUString        aName;
@@ -670,7 +676,8 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;
     OUString        aStyleName;
     ScRange         aRange;
 
@@ -713,7 +720,8 @@ public:
     virtual OUString GetComment() const override;
 
 private:
-    ScDocument*     pUndoDoc;
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;
     OUString        aFormula;
     sal_uLong       nStartChangeAction;
     sal_uLong       nEndChangeAction;
@@ -832,7 +840,8 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;
     bool            bIsIncrement;
 };
 
@@ -852,7 +861,8 @@ public:
 
 private:
     ScMarkData      aMarkData;
-    ScDocument*     pUndoDoc;
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;
     sal_Int32       nTransliterationType;
 };
 
@@ -892,7 +902,8 @@ public:
 
 private:
     SCTAB           nTab;
-    ScDocument*     pUndoDoc;
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;
 };
 
 class ScUndoRemoveMerge: public ScBlockUndo
@@ -920,7 +931,7 @@ private:
     void            SetCurTab();
 
     std::vector<ScCellMergeOption> maOptions;
-    ScDocument*                    pUndoDoc;
+    std::unique_ptr<ScDocument>    pUndoDoc;
 };
 
 class ScUndoBorder: public ScBlockUndo

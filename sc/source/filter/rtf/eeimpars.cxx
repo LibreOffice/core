@@ -65,7 +65,7 @@ ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
 {
     const ScPatternAttr* pPattern = mpDoc->GetPattern(
         maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
-    mpEngine = new ScTabEditEngine(*pPattern, mpDoc->GetEditPool(), mpDoc->GetEditPool());
+    mpEngine.reset( new ScTabEditEngine(*pPattern, mpDoc->GetEditPool(), mpDoc->GetEditPool()) );
     mpEngine->SetUpdateMode( false );
     mpEngine->EnableUndo( false );
 }
@@ -74,7 +74,6 @@ ScEEImport::~ScEEImport()
 {
     // Sequence important, or else we crash in some dtor!
     // Is guaranteed as ScEEImport is base class
-    delete mpEngine; // After Parser!
 }
 
 sal_uLong ScEEImport::Read( SvStream& rStream, const OUString& rBaseURL )

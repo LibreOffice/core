@@ -34,7 +34,8 @@ protected:
     ScRange             aRange;
     ScDocument*         pDoc;
     SvNumberFormatter*  pFormatter;
-    ScFieldEditEngine*  pEditEngine;
+    std::unique_ptr<ScFieldEditEngine>
+                        pEditEngine;
 
 public:
 

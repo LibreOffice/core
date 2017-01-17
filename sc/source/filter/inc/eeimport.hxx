@@ -40,7 +40,8 @@ protected:
     ScRange             maRange;
     ScDocument*         mpDoc;
     ScEEParser*         mpParser;
-    ScTabEditEngine*    mpEngine;
+    std::unique_ptr<ScTabEditEngine>
+                        mpEngine;
     RowHeightMap        maRowHeights;
 
     bool                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,

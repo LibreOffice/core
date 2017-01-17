@@ -42,7 +42,6 @@ LotAttrCache::ENTRY::ENTRY (ScPatternAttr* p)
 
 LotAttrCache::ENTRY::~ENTRY ()
 {
-    delete pPattAttr;
 }
 
 LotAttrCache::LotAttrCache (LOTUS_ROOT* pLotRoot)

@@ -60,7 +60,7 @@ struct ScMyCellInfo
 struct ScMyDeleted
 {
     sal_uInt32 nID;
-    ScMyCellInfo* pCellInfo;
+    std::unique_ptr<ScMyCellInfo> pCellInfo;
 
     ScMyDeleted();
     ~ScMyDeleted();
@@ -72,7 +72,7 @@ struct ScMyGenerated
 {
     ScBigRange      aBigRange;
     sal_uInt32      nID;
-    ScMyCellInfo*   pCellInfo;
+    std::unique_ptr<ScMyCellInfo> pCellInfo;
 
     ScMyGenerated(ScMyCellInfo* pCellInfo, const ScBigRange& aBigRange);
     ~ScMyGenerated();
@@ -137,7 +137,7 @@ struct ScMyInsAction : public ScMyBaseAction
 struct ScMyDelAction : public ScMyBaseAction
 {
     ScMyGeneratedList aGeneratedList;
-    ScMyInsertionCutOff* pInsCutOff;
+    std::unique_ptr<ScMyInsertionCutOff> pInsCutOff;
     ScMyMoveCutOffs aMoveCutOffs;
     sal_Int32 nD;
 
@@ -148,7 +148,7 @@ struct ScMyDelAction : public ScMyBaseAction
 struct ScMyMoveAction : public ScMyBaseAction
 {
     ScMyGeneratedList aGeneratedList;
-    ScMyMoveRanges* pMoveRanges;
+    std::unique_ptr<ScMyMoveRanges> pMoveRanges;
 
     ScMyMoveAction();
     virtual ~ScMyMoveAction() override;
@@ -156,7 +156,7 @@ struct ScMyMoveAction : public ScMyBaseAction
 
 struct ScMyContentAction : public ScMyBaseAction
 {
-    ScMyCellInfo*   pCellInfo;
+    std::unique_ptr<ScMyCellInfo>  pCellInfo;
 
     ScMyContentAction();
     virtual ~ScMyContentAction() override;

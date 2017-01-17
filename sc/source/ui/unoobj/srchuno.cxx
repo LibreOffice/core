@@ -64,9 +64,9 @@ static const SfxItemPropertyMapEntry* lcl_GetSearchPropertyMap()
 #define SCREPLACEDESCRIPTOR_SERVICE     "com.sun.star.util.ReplaceDescriptor"
 
 ScCellSearchObj::ScCellSearchObj() :
-    aPropSet(lcl_GetSearchPropertyMap())
+    aPropSet(lcl_GetSearchPropertyMap()),
+    pSearchItem( new SvxSearchItem( SCITEM_SEARCHDATA ) )
 {
-    pSearchItem = new SvxSearchItem( SCITEM_SEARCHDATA );
     //  Defaults:
     pSearchItem->SetWordOnly(false);
     pSearchItem->SetExact(false);
@@ -91,7 +91,6 @@ ScCellSearchObj::ScCellSearchObj() :
 
 ScCellSearchObj::~ScCellSearchObj()
 {
-    delete pSearchItem;
 }
 
 // XSearchDescriptor

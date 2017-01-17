@@ -38,15 +38,13 @@ struct ScHTMLImage
     Size                aSize;
     Point               aSpace;
     OUString            aFilterName;
-    Graphic*            pGraphic;       // wird von WriteToDocument uebernommen
+    std::unique_ptr<Graphic>
+                        pGraphic;       // wird von WriteToDocument uebernommen
     sal_Char            nDir;           // 1==hori, 2==verti, 3==beides
 
     ScHTMLImage() :
-        aSize( 0, 0 ), aSpace( 0, 0 ), pGraphic( nullptr ),
-        nDir( nHorizontal )
+        aSize( 0, 0 ), aSpace( 0, 0 ), nDir( nHorizontal )
         {}
-
-    ~ScHTMLImage() { delete pGraphic; }
 };
 
 struct ScEEParseEntry

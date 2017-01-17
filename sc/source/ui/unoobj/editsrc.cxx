@@ -74,7 +74,6 @@ ScCellEditSource::ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP) :
 
 ScCellEditSource::~ScCellEditSource()
 {
-    delete pCellTextData;
 }
 
 SvxEditSource* ScCellEditSource::Clone() const

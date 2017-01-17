@@ -153,7 +153,6 @@ ExcTable::ExcTable( const XclExpRoot& rRoot, SCTAB nScTab ) :
 
 ExcTable::~ExcTable()
 {
-    delete pTabNames;
 }
 
 void ExcTable::Add( XclExpRecordBase* pRec )

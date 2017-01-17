@@ -289,14 +289,14 @@ public:
     const ScAddress&        GetStartPos() const     { return aStartPos; }
     const ScAddress&        GetEndPos() const       { return aEndPos; }
     const OUString&         GetString() const       { return aString; }
-    const EditTextObject*   GetEditData() const     { return pEditData; }
+    const EditTextObject*   GetEditData() const     { return pEditData.get(); }
 
 private:
     ScAddress       aCursorPos;
     ScAddress       aStartPos;
     ScAddress       aEndPos;
     OUString        aString;
-    EditTextObject* pEditData;
+    std::unique_ptr<EditTextObject> pEditData;
 };
 
 #endif
