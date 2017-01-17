@@ -562,8 +562,8 @@ DXFBoundaryPathData::DXFBoundaryPathData() :
 
 DXFBoundaryPathData::~DXFBoundaryPathData()
 {
-    for (sal_uInt32 i = 0; i < aEdges.size(); ++i)
-        delete aEdges[ i ];
+    for (auto i: aEdges)
+        delete i;
 }
 
 bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
