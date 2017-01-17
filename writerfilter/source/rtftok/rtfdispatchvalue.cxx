@@ -1432,6 +1432,14 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             m_aStates.top().aCharacterSprms.set(NS_ooxml::LN_EG_RPrBase_effect, std::make_shared<RTFValue>(nId));
         break;
     }
+    case RTF_VIEWBKSP:
+    {
+        m_aSettingsTableSprms.set(NS_ooxml::LN_CT_Settings_displayBackgroundShape, pIntValue);
+        // Send this token immediately, if it only appears before the first
+        // run, it will be too late, we ignored the background shape already by then.
+        outputSettingsTable();
+        break;
+    }
     default:
     {
         SAL_INFO("writerfilter", "TODO handle value '" << keywordToString(nKeyword) << "'");
