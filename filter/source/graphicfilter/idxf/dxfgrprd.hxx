@@ -65,6 +65,7 @@ public:
 
     void SetS(); // (will be copied)
 
+    sal_uInt64 remainingSize() const;
 private:
 
     long   ReadI();

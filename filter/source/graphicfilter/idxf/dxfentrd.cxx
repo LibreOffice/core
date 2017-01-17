@@ -422,8 +422,11 @@ void DXFLWPolyLineEntity::EvaluateGroup( DXFGroupReader & rDGR )
         case 90 :
         {
             nCount = rDGR.GetI();
-            if ( nCount )
+            // limit alloc to max reasonable size based on remaining data in stream
+            if (nCount > 0 && static_cast<sal_uInt32>(nCount) <= rDGR.remainingSize())
                 pP = new DXFVector[ nCount ];
+            else
+                nCount = 0;
         }
         break;
         case 70: nFlags = rDGR.GetI(); break;
@@ -600,8 +603,11 @@ bool DXFBoundaryPathData::EvaluateGroup( DXFGroupReader & rDGR )
             case 93 :
             {
                 nPointCount = rDGR.GetI();
-                if ( nPointCount )
+                // limit alloc to max reasonable size based on remaining data in stream
+                if (nPointCount > 0 && static_cast<sal_uInt32>(nPointCount) <= rDGR.remainingSize())
                     pP = new DXFVector[ nPointCount ];
+                else
+                    nPointCount = 0;
             }
             break;
             case 72 : nHasBulgeFlag = rDGR.GetI(); break;
@@ -679,8 +685,11 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
         {
             bIsInBoundaryPathContext = true;
             nBoundaryPathCount = rDGR.GetI();
-            if ( nBoundaryPathCount )
+            // limit alloc to max reasonable size based on remaining data in stream
+            if (nBoundaryPathCount > 0 && static_cast<sal_uInt32>(nBoundaryPathCount) <= rDGR.remainingSize())
                 pBoundaryPathData = new DXFBoundaryPathData[ nBoundaryPathCount ];
+            else
+                nBoundaryPathCount = 0;
         }
         break;
         case 75 :
