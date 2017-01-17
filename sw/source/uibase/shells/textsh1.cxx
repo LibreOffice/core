@@ -1192,73 +1192,21 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND:
-        {
-            Color aSet;
-            if(pItem)
-                aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
-            else
-                aSet = COL_TRANSPARENT;
-
-            SwEditWin& rEdtWin = GetView().GetEditWin();
-            rEdtWin.SetWaterCanTextBackColor(aSet);
-            SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
-
-            if(!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
-            {
-                rWrtSh.StartUndo( UNDO_INSATTR );
-                SvxBrushItem aBrushItem(RES_CHRATR_BACKGROUND);
-                aBrushItem.SetColor(aSet);
-                rWrtSh.SetAttrItem( aBrushItem );
-
-                // Remove MS specific highlight when background is set
-                rWrtSh.SetAttrItem( SvxBrushItem(RES_CHRATR_HIGHLIGHT) );
-
-                // Remove shading marker
-                SfxItemSet aCoreSet( rWrtSh.GetView().GetPool(), RES_CHRATR_GRABBAG, RES_CHRATR_GRABBAG );
-                rWrtSh.GetCurAttr( aCoreSet );
-
-                const SfxPoolItem *pTmpItem;
-                if( SfxItemState::SET == aCoreSet.GetItemState( RES_CHRATR_GRABBAG, false, &pTmpItem ) )
-                {
-                    SfxGrabBagItem aGrabBag(*static_cast<const SfxGrabBagItem*>(pTmpItem));
-                    std::map<OUString, css::uno::Any>& rMap = aGrabBag.GetGrabBag();
-                    auto aIterator = rMap.find("CharShadingMarker");
-                    if( aIterator != rMap.end() )
-                    {
-                        aIterator->second = uno::makeAny(false);
-                    }
-                    rWrtSh.SetAttrItem( aGrabBag );
-                }
-                rWrtSh.EndUndo( UNDO_INSATTR );
-            }
-            else if(!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
-            {
-                GetView().GetViewFrame()->GetDispatcher()->Execute(SID_ATTR_CHAR_COLOR_BACKGROUND_EXT);
-            }
-
-            rReq.Done();
-        }
-        break;
         case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT:
         case SID_ATTR_CHAR_COLOR_EXT:
         {
+            Color aSet = pItem ? static_cast<const SvxColorItem*>(pItem)->GetValue() : COL_TRANSPARENT;
             SwEditWin& rEdtWin = GetView().GetEditWin();
-            if (pItem)
-            {
-                // The reason we need this argument here is that when a toolbar is closed
-                // and reopened, its color resets, while SwEditWin still holds the old one.
-                Color aSet = static_cast<const SvxColorItem*>(pItem)->GetValue();
-                if( nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT )
-                    rEdtWin.SetWaterCanTextBackColor(aSet);
-                else
-                    rEdtWin.SetWaterCanTextColor(aSet);
-            }
+            if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
+                rEdtWin.SetWaterCanTextBackColor(aSet);
+            else if (pItem)
+                rEdtWin.SetWaterCanTextColor(aSet);
 
             SwApplyTemplate* pApply = rEdtWin.GetApplyTemplate();
             SwApplyTemplate aTempl;
-            if ( rWrtSh.HasSelection() )
+            if (!pApply && (rWrtSh.HasSelection() || rReq.IsAPI()))
             {
-                if(nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
+                if (nSlot != SID_ATTR_CHAR_COLOR_EXT)
                 {
                     rWrtSh.StartUndo( UNDO_INSATTR );
                     rWrtSh.SetAttrItem(
@@ -1288,6 +1236,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 else
                     rWrtSh.SetAttrItem(
                         SvxColorItem( rEdtWin.GetWaterCanTextColor(), RES_CHRATR_COLOR) );
+            }
+            else if (nSlot == SID_ATTR_CHAR_COLOR_BACKGROUND)
+            {
+                if (!pApply || pApply->nColor != SID_ATTR_CHAR_COLOR_BACKGROUND_EXT)
+                {
+                    aTempl.nColor = SID_ATTR_CHAR_COLOR_BACKGROUND_EXT;
+                    rEdtWin.SetApplyTemplate(aTempl);
+                }
             }
             else
             {
