@@ -2107,7 +2107,8 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 "The stream must implement XPropertySet!");
             if ( !xProps.is() )
             {
-                throw uno::RuntimeException();
+                throw uno::RuntimeException("null returned from uno::Reference< beans::XPropertySet > constructor",
+                                             static_cast< cppu::OWeakObject * >(this));
             }
             OUString aMime( "text/xml" );
             xProps->setPropertyValue("MediaType", uno::makeAny( aMime ) );
@@ -2165,7 +2166,9 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
                 "The storage must implement XTransactedObject!");
             if ( !xTransact.is() )
             {
-                throw uno::RuntimeException();
+                throw uno::RuntimeException(
+                          "null returned from uno::Reference< embed::XTransactedObject > constructor",
+                          static_cast< cppu::OWeakObject * >(this));
             }
             xTransact->commit();
         }
@@ -2401,7 +2404,8 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                      " storage!"));
                 if ( !xLibrariesStor.is() )
                 {
-                    throw uno::RuntimeException();
+                    throw uno::RuntimeException("null returned from openStorageElement",
+                                                 static_cast< cppu::OWeakObject * >(this));
                 }
 
                 xLibraryStor = xLibrariesStor->openStorageElement( Name, embed::ElementModes::READ );
@@ -2411,7 +2415,8 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
                      " storage!"));
                 if ( !xLibrariesStor.is() )
                 {
-                    throw uno::RuntimeException();
+                    throw uno::RuntimeException("null returned from openStorageElement",
+                                                 static_cast< cppu::OWeakObject * >(this));
                 }
             }
             catch(const uno::Exception& )
