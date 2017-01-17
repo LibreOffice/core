@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_e698666d",
+        "filename": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-17T19:37:15Z",
+      "side": 1,
+      "message": "As this is an API function it\u0027s probably a good idea to check nStartPos and nStartPos+nCount against rInStr.getLength() and if exceeding that adjust nCount or throw a RuntimeException.",
+      "revId": "0e92d66745134735198400127675ae80689b0ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_86731a4d",
+        "filename": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-17T19:37:15Z",
+      "side": 1,
+      "message": "Btw, it would be more efficient to use an OUStringBuffer here instead of OUString and OUString::operator+\u003d(), pre-allocating it with a size of nCount.",
+      "revId": "0e92d66745134735198400127675ae80689b0ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_069e4a56",
+        "filename": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-17T19:37:15Z",
+      "side": 1,
+      "message": "With an OUStringBuffer constructing via OUStringLiteral1 would be unnecessary.",
+      "revId": "0e92d66745134735198400127675ae80689b0ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
