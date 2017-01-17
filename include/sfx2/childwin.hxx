@@ -108,7 +108,7 @@ struct SFX2_DLLPUBLIC SfxChildWinFactory
     sal_uInt16                  nId;    // ChildWindow-Id ( SlotId )
     SfxChildWinInfo             aInfo;  // Configuration
     sal_uInt16                  nPos;   // Position in UI
-    SfxChildWinContextArr_Impl *pArr;   // Array for Contexts
+    std::unique_ptr<SfxChildWinContextArr_Impl> pArr;   // Array for Contexts
 
     SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID, sal_uInt16 n );
     ~SfxChildWinFactory();

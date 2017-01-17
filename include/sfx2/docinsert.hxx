@@ -45,7 +45,8 @@ private:
     FileDialogFlags const m_nDlgFlags;
     ErrCode                 m_nError;
 
-    sfx2::FileDialogHelper* m_pFileDlg;
+    std::unique_ptr<sfx2::FileDialogHelper>
+                            m_pFileDlg;
     SfxItemSet*             m_pItemSet;
     std::vector<OUString>   m_pURLList;
 

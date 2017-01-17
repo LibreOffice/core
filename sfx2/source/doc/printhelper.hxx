@@ -60,7 +60,7 @@ public:
 private:
 
     osl::Mutex m_aMutex;
-    IMPL_PrintListener_DataContainer* m_pData ;
+    std::unique_ptr<IMPL_PrintListener_DataContainer> m_pData ;
     void impl_setPrinter(const css::uno::Sequence< css::beans::PropertyValue >& rPrinter,
                          VclPtr<SfxPrinter>& pPrinter,
                          SfxPrinterChangeFlags& nChangeFlags,

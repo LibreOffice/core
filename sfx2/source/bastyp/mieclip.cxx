@@ -27,17 +27,12 @@
 
 MSE40HTMLClipFormatObj::~MSE40HTMLClipFormatObj()
 {
-    delete pStrm;
 }
 
 SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
 {
     bool bRet = false;
-    if( pStrm )
-    {
-        delete pStrm;
-        pStrm = nullptr;
-    }
+    pStrm.reset();
 
     OString sLine, sVersion;
     sal_Int32 nStt = -1, nEnd = -1, nFragStart = -1, nFragEnd = -1;
@@ -78,13 +73,13 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
     {
         rStream.Seek( nStt );
 
-        pStrm = new SvMemoryStream( ( nEnd - nStt < 0x10000l
+        pStrm.reset( new SvMemoryStream( ( nEnd - nStt < 0x10000l
                                         ? nEnd - nStt + 32
-                                        : 0 ));
+                                        : 0 )) );
         pStrm->WriteStream( rStream );
         pStrm->SetStreamSize( nEnd - nStt + 1L );
         pStrm->Seek( STREAM_SEEK_TO_BEGIN );
-        return pStrm;
+        return pStrm.get();
     }
 
     if (nFragStart > 0 && nFragEnd > 0 && nFragEnd > nFragStart)
@@ -93,11 +88,11 @@ SvStream* MSE40HTMLClipFormatObj::IsValid( SvStream& rStream )
         if (nSize < 0x10000L)
         {
             rStream.Seek(nFragStart);
-            pStrm = new SvMemoryStream(nSize);
+            pStrm.reset( new SvMemoryStream(nSize) );
             pStrm->WriteStream( rStream );
             pStrm->SetStreamSize(nSize);
             pStrm->Seek(STREAM_SEEK_TO_BEGIN);
-            return pStrm;
+            return pStrm.get();
         }
     }
 

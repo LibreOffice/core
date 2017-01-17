@@ -2165,11 +2165,10 @@ bool SfxDocTplService_Impl::renameTemplate( const OUString& rGroupName,
 
 class SfxDocTplService: public ::cppu::WeakImplHelper< css::lang::XLocalizable, css::frame::XDocumentTemplates, css::lang::XServiceInfo >
 {
-    SfxDocTplService_Impl       *pImp;
+    std::unique_ptr<SfxDocTplService_Impl>      pImp;
 
 public:
     explicit SfxDocTplService( const css::uno::Reference < uno::XComponentContext >& xContext );
-    virtual ~SfxDocTplService() override;
 
     virtual OUString SAL_CALL getImplementationName()
         throw (css::uno::RuntimeException, std::exception) override
@@ -2218,14 +2217,9 @@ public:
 
 SfxDocTplService::SfxDocTplService( const uno::Reference< XComponentContext >& xContext )
 {
-    pImp = new SfxDocTplService_Impl(xContext);
+    pImp.reset( new SfxDocTplService_Impl(xContext) );
 }
 
-
-SfxDocTplService::~SfxDocTplService()
-{
-    delete pImp;
-}
 
 
 //--- XLocalizable ---

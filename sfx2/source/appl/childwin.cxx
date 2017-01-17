@@ -51,7 +51,6 @@ SfxChildWinFactory::SfxChildWinFactory( SfxChildWinCtor pTheCtor, sal_uInt16 nID
 
 SfxChildWinFactory::~SfxChildWinFactory()
 {
-    delete pArr;
 }
 
 struct SfxChildWindow_Impl

@@ -196,7 +196,7 @@ private:
 
     DECL_LINK( CheckOutHandler, Button*, void );
 
-    IMPL_SfxBaseController_DataContainer*   m_pData ;
+    std::unique_ptr<IMPL_SfxBaseController_DataContainer>   m_pData ;
 
 } ; // class SfxBaseController
 
