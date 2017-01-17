@@ -1435,9 +1435,7 @@ ScXMLDataPilotSubTotalsContext::ScXMLDataPilotSubTotalsContext( ScXMLImport& rIm
                                       const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */,
                                       ScXMLDataPilotFieldContext* pTempDataPilotField) :
     ScXMLImportContext( rImport, nPrfx, rLName ),
-    pDataPilotField(pTempDataPilotField),
-    nFunctionCount(0),
-    pFunctions(nullptr)
+    pDataPilotField(pTempDataPilotField)
 {
 
     // has no attributes
@@ -1445,7 +1443,6 @@ ScXMLDataPilotSubTotalsContext::ScXMLDataPilotSubTotalsContext( ScXMLImport& rIm
 
 ScXMLDataPilotSubTotalsContext::~ScXMLDataPilotSubTotalsContext()
 {
-    delete[] pFunctions;
 }
 
 SvXMLImportContext *ScXMLDataPilotSubTotalsContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -1470,29 +1467,14 @@ SvXMLImportContext *ScXMLDataPilotSubTotalsContext::CreateChildContext( sal_uInt
 
 void ScXMLDataPilotSubTotalsContext::EndElement()
 {
-    pDataPilotField->SetSubTotals(pFunctions, nFunctionCount);
+    pDataPilotField->SetSubTotals(maFunctions);
     if (!maDisplayName.isEmpty())
         pDataPilotField->SetSubTotalName(maDisplayName);
 }
 
 void ScXMLDataPilotSubTotalsContext::AddFunction(sal_Int16 nFunction)
 {
-    if (nFunctionCount)
-    {
-        ++nFunctionCount;
-        sal_uInt16* pTemp = new sal_uInt16[nFunctionCount];
-        for (sal_Int16 i = 0; i < nFunctionCount - 1; ++i)
-            pTemp[i] = pFunctions[i];
-        pTemp[nFunctionCount - 1] = nFunction;
-        delete[] pFunctions;
-        pFunctions = pTemp;
-    }
-    else
-    {
-        nFunctionCount = 1;
-        pFunctions = new sal_uInt16[nFunctionCount];
-        pFunctions[0] = nFunction;
-    }
+    maFunctions.push_back(nFunction);
 }
 
 void ScXMLDataPilotSubTotalsContext::SetDisplayName(const OUString& rName)

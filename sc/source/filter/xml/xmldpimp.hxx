@@ -318,7 +318,7 @@ public:
 
     void SetShowEmpty(const bool bValue) { if (xDim) xDim->SetShowEmpty(bValue); }
     void SetRepeatItemLabels(const bool bSet) { if (xDim) xDim->SetRepeatItemLabels(bSet); }
-    void SetSubTotals(const sal_uInt16* pFunctions, const sal_Int16 nCount) { if (xDim) xDim->SetSubTotals(nCount, pFunctions); }
+    void SetSubTotals(std::vector<sal_uInt16> const & rFunctions) { if (xDim) xDim->SetSubTotals(rFunctions); }
     void AddMember(ScDPSaveMember* pMember);
     void SetSubTotalName(const OUString& rName);
     void SetFieldReference(const css::sheet::DataPilotFieldReference& aRef) { if (xDim) xDim->SetReferenceValue(&aRef); }
@@ -413,9 +413,8 @@ class ScXMLDataPilotSubTotalsContext : public ScXMLImportContext
 {
     ScXMLDataPilotFieldContext* pDataPilotField;
 
-    sal_Int16   nFunctionCount;
-    sal_uInt16* pFunctions;
-    OUString    maDisplayName;
+    std::vector<sal_uInt16>      maFunctions;
+    OUString                     maDisplayName;
 
 public:
     ScXMLDataPilotSubTotalsContext( ScXMLImport& rImport, sal_uInt16 nPrfx,

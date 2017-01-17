@@ -2173,13 +2173,12 @@ void ScDataPilotFieldObj::setFunction(sal_Int16 eNewFunc)
         if( pDim->GetOrientation() != DataPilotFieldOrientation_DATA )
         {
             // for non-data fields, property Function is the subtotals
-            if ( eNewFunc == GeneralFunction2::NONE )
-                pDim->SetSubTotals( 0, nullptr );
-            else
+            std::vector<sal_uInt16> nSubTotalFuncs;
+            if ( eNewFunc != GeneralFunction2::NONE )
             {
-                sal_uInt16 nFunc = sal::static_int_cast<sal_uInt16>( eNewFunc );
-                pDim->SetSubTotals( 1, &nFunc );
+                nSubTotalFuncs.push_back( sal::static_int_cast<sal_uInt16>( eNewFunc ) );
             }
+            pDim->SetSubTotals( nSubTotalFuncs );
         }
         else
             pDim->SetFunction( sal::static_int_cast<sal_uInt16>( eNewFunc ) );
@@ -2220,13 +2219,12 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< sal_Int16 >& rSubtotals 
             if( nCount == 1 )
             {
                 // count 1: all values are allowed (including NONE and AUTO)
-                if( rSubtotals[ 0 ] == GeneralFunction2::NONE )
-                    pDim->SetSubTotals( 0, nullptr );
-                else
+                std::vector<sal_uInt16> nTmpFuncs;
+                if( rSubtotals[ 0 ] != GeneralFunction2::NONE )
                 {
-                    sal_uInt16 nFunc = sal::static_int_cast<sal_uInt16>( rSubtotals[ 0 ] );
-                    pDim->SetSubTotals( 1, &nFunc );
+                    nTmpFuncs.push_back( sal::static_int_cast<sal_uInt16>( rSubtotals[ 0 ] ) );
                 }
+                pDim->SetSubTotals( nTmpFuncs );
             }
             else if( nCount > 1 )
             {
@@ -2244,10 +2242,7 @@ void ScDataPilotFieldObj::setSubtotals( const Sequence< sal_Int16 >& rSubtotals 
                     }
                 }
                 // set values from vector to ScDPSaveDimension
-                if ( aSubt.empty() )
-                    pDim->SetSubTotals( 0, nullptr );
-                else
-                    pDim->SetSubTotals( static_cast< long >( aSubt.size() ), &aSubt.front() );
+                pDim->SetSubTotals( aSubt );
             }
         }
         SetDPObject( pDPObj );

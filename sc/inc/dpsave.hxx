@@ -103,8 +103,7 @@ private:
     sal_uInt16 nShowEmptyMode; //! at level
     bool bRepeatItemLabels; //! at level
     bool bSubTotalDefault; //! at level
-    long nSubTotalCount;
-    sal_uInt16* pSubTotalFuncs; // GeneralFunction2
+    std::vector<sal_uInt16> maSubTotalFuncs; // GeneralFunction2
     css::sheet::DataPilotFieldReference* pReferenceValue;
     css::sheet::DataPilotFieldSortInfo* pSortInfo; // (level)
     css::sheet::DataPilotFieldAutoShowInfo* pAutoShowInfo; // (level)
@@ -146,12 +145,12 @@ public:
     void SetName( const OUString& rNew ); // used if the source dim was renamed (groups)
 
     void SetOrientation(sal_uInt16 nNew);
-    void SetSubTotals(long nCount, const sal_uInt16* pFuncs);
+    void SetSubTotals(std::vector<sal_uInt16> const & rFuncs);
     long GetSubTotalsCount() const
-        { return nSubTotalCount; }
+        { return maSubTotalFuncs.size(); }
 
     sal_uInt16 GetSubTotalFunc(long nIndex) const
-        { return pSubTotalFuncs[nIndex]; }
+        { return maSubTotalFuncs[nIndex]; }
 
     bool HasShowEmpty() const;
     void SetShowEmpty(bool bSet);

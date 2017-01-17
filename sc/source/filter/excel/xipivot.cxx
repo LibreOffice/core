@@ -1092,7 +1092,7 @@ ScDPSaveDimension* XclImpPTField::ConvertRCPField( ScDPSaveData& rSaveData ) con
     XclPTSubtotalVec aSubtotalVec;
     maFieldInfo.GetSubtotals( aSubtotalVec );
     if( !aSubtotalVec.empty() )
-        rSaveDim.SetSubTotals( static_cast< long >( aSubtotalVec.size() ), &aSubtotalVec[ 0 ] );
+        rSaveDim.SetSubTotals( aSubtotalVec );
 
     // sorting
     DataPilotFieldSortInfo aSortInfo;

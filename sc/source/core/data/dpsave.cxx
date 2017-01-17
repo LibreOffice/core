@@ -31,6 +31,7 @@
 #include <o3tl/make_unique.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/stl_types.hxx>
+#include <comphelper/sequence.hxx>
 
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 #include <com/sun/star/sheet/GeneralFunction2.hpp>
@@ -200,8 +201,6 @@ ScDPSaveDimension::ScDPSaveDimension(const OUString& rName, bool bDataLayout) :
     nShowEmptyMode( SC_DPSAVEMODE_DONTKNOW ),
     bRepeatItemLabels( false ),
     bSubTotalDefault( true ),
-    nSubTotalCount( 0 ),
-    pSubTotalFuncs( nullptr ),
     pReferenceValue( nullptr ),
     pSortInfo( nullptr ),
     pAutoShowInfo( nullptr ),
@@ -221,16 +220,8 @@ ScDPSaveDimension::ScDPSaveDimension(const ScDPSaveDimension& r) :
     nShowEmptyMode( r.nShowEmptyMode ),
     bRepeatItemLabels( r.bRepeatItemLabels ),
     bSubTotalDefault( r.bSubTotalDefault ),
-    nSubTotalCount( r.nSubTotalCount ),
-    pSubTotalFuncs( nullptr )
+    maSubTotalFuncs( r.maSubTotalFuncs )
 {
-    if ( nSubTotalCount && r.pSubTotalFuncs )
-    {
-        pSubTotalFuncs = new sal_uInt16[nSubTotalCount];
-        for (long nSub=0; nSub<nSubTotalCount; nSub++)
-            pSubTotalFuncs[nSub] = r.pSubTotalFuncs[nSub];
-    }
-
     for (MemberList::const_iterator i=r.maMemberList.begin(); i != r.maMemberList.end() ; ++i)
     {
         const OUString& rName =  (*i)->GetName();
@@ -268,7 +259,6 @@ ScDPSaveDimension::~ScDPSaveDimension()
     delete pSortInfo;
     delete pAutoShowInfo;
     delete pLayoutInfo;
-    delete [] pSubTotalFuncs;
 }
 
 bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
@@ -282,16 +272,8 @@ bool ScDPSaveDimension::operator== ( const ScDPSaveDimension& r ) const
          nShowEmptyMode   != r.nShowEmptyMode   ||
          bRepeatItemLabels!= r.bRepeatItemLabels||
          bSubTotalDefault != r.bSubTotalDefault ||
-         nSubTotalCount   != r.nSubTotalCount    )
+         maSubTotalFuncs  != r.maSubTotalFuncs   )
         return false;
-
-    if ( nSubTotalCount && ( !pSubTotalFuncs || !r.pSubTotalFuncs ) ) // should not happen
-        return false;
-
-    long i;
-    for (i=0; i<nSubTotalCount; i++)
-        if ( pSubTotalFuncs[i] != r.pSubTotalFuncs[i] )
-            return false;
 
     if (maMemberHash.size() != r.maMemberHash.size() )
         return false;
@@ -370,20 +352,9 @@ void ScDPSaveDimension::SetOrientation(sal_uInt16 nNew)
     nOrientation = nNew;
 }
 
-void ScDPSaveDimension::SetSubTotals(long nCount, const sal_uInt16* pFuncs)
+void ScDPSaveDimension::SetSubTotals(std::vector<sal_uInt16> const & rFuncs)
 {
-    if (pSubTotalFuncs)
-        delete [] pSubTotalFuncs;
-    nSubTotalCount = nCount;
-    if ( nCount && pFuncs )
-    {
-        pSubTotalFuncs = new sal_uInt16[nCount];
-        for (long i=0; i<nCount; i++)
-            pSubTotalFuncs[i] = pFuncs[i];
-    }
-    else
-        pSubTotalFuncs = nullptr;
-
+    maSubTotalFuncs = rFuncs;
     bSubTotalDefault = false;
 }
 
@@ -627,13 +598,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
             {
                 if ( !bSubTotalDefault )
                 {
-                    if ( !pSubTotalFuncs )
-                        nSubTotalCount = 0;
-
-                    uno::Sequence<sal_Int16> aSeq(nSubTotalCount);
-                    sal_Int16* pArray = aSeq.getArray();
-                    for (long i=0; i<nSubTotalCount; i++)
-                        pArray[i] = static_cast<sal_Int16>(pSubTotalFuncs[i]);
+                    uno::Sequence<sal_Int16> aSeq(comphelper::containerToSequence<sal_Int16>(maSubTotalFuncs));
                     xLevProp->setPropertyValue( SC_UNO_DP_SUBTOTAL2, uno::Any(aSeq) );
                 }
                 if ( nShowEmptyMode != SC_DPSAVEMODE_DONTKNOW )

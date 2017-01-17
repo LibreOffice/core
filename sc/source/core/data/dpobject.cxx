@@ -2698,16 +2698,16 @@ void ScDPObject::ConvertOrientation(
         {
             pDim->SetOrientation( nOrient );
 
-            sal_uInt16 nFuncArray[16];
-            sal_uInt16 nFuncCount = 0;
+            std::vector<sal_uInt16> nSubTotalFuncs;
+            nSubTotalFuncs.reserve(16);
             sal_uInt16 nMask = 1;
             for (sal_uInt16 nBit=0; nBit<16; nBit++)
             {
                 if ( nFuncs & (PivotFunc)nMask )
-                    nFuncArray[nFuncCount++] = sal::static_int_cast<sal_uInt16>(ScDataPilotConversion::FirstFunc( (PivotFunc)nMask ));
+                    nSubTotalFuncs.push_back( sal::static_int_cast<sal_uInt16>(ScDataPilotConversion::FirstFunc( (PivotFunc)nMask )) );
                 nMask *= 2;
             }
-            pDim->SetSubTotals( nFuncCount, nFuncArray );
+            pDim->SetSubTotals( nSubTotalFuncs );
 
             //  ShowEmpty was implicit in old tables,
             //  must be set for data layout dimension (not accessible in dialog)
