@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_bb4e7b94",
+        "filename": "vcl/source/helper/commandinfoprovider.cxx",
+        "patchSetId": 10
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-01-17T10:45:50Z",
+      "side": 1,
+      "message": "You still have the FrameListener and all these caching things.\nThey should be removed and only a set of static methods should remain.",
+      "revId": "af109fbc102ca9ed7124bb04a2c883a031829c15",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
