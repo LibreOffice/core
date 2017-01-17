@@ -13,9 +13,9 @@ diff -ru python3.orig/PCbuild/pcbuild.sln python3/PCbuild/pcbuild.sln
 -EndProject
 -Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ssleay", "ssleay.vcxproj", "{10615B24-73BF-4EFA-93AA-236916321317}"
 -EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pyshellext", "pyshellext.vcxproj", "{0F6EE4A4-C75F-4578-B4B3-2D64F4B9B782}"
+ EndProject
  Global
- 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
- 		Debug|Win32 = Debug|Win32
 diff -ru python3.orig/PCbuild/_ssl.vcxproj python3/PCbuild/_ssl.vcxproj
 --- python3.orig/PCbuild/_ssl.vcxproj   2015-08-11 02:52:36.000000000 +0200
 +++ python3/PCbuild/_ssl.vcxproj        2015-08-22 18:19:20.744299000 +0200
@@ -23,7 +23,7 @@ diff -ru python3.orig/PCbuild/_ssl.vcxproj python3/PCbuild/_ssl.vcxproj
    </PropertyGroup>
    <ItemDefinitionGroup>
      <ClCompile>
--      <AdditionalIncludeDirectories>$(opensslDir)include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+-      <AdditionalIncludeDirectories>$(opensslIncludeDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
 +      <AdditionalIncludeDirectories>$(WORKDIR)/UnpackedTarball/openssl/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
      </ClCompile>
      <Link>
