@@ -125,6 +125,8 @@ private:
     DECL_LINK( EventMultiplexerListener, tools::EventMultiplexerEvent&, void );
     DECL_LINK( lateInitCallback, Timer *, void );
     DECL_LINK( DurationModifiedHdl, Edit&, void );
+    DECL_LINK( DelayModifiedHdl, Edit&, void );
+    DECL_LINK( DelayLoseFocusHdl, Control&, void );
     DECL_LINK( UpdateAnimationLB, ListBox&, void );
     DECL_LINK( AnimationSelectHdl, ListBox&, void );
     void implControlHdl(Control*);
@@ -145,6 +147,8 @@ private:
     VclPtr<PushButton> mpPBPropertyMore;
     VclPtr<FixedText>  mpFTDuration;
     VclPtr<MetricBox>   mpCBXDuration;
+    VclPtr<FixedText>   mpFTStartDelay;
+    VclPtr<MetricField> mpMFStartDelay;
     VclPtr<CustomAnimationList>    mpCustomAnimationList;
     VclPtr<PushButton> mpPBMoveUp;
     VclPtr<PushButton> mpPBMoveDown;
