@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_e6e6a6e7",
+        "filename": "external/python3/ubsan.patch.0",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-17T20:19:09Z",
+      "side": 1,
+      "message": "that truncates before shifting; see \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003dd0f3363aa8db533ba6fe356053caaf79a1507d14\u003e \"Fix patch\" for the fix on master",
+      "revId": "c4029058c326831c08b6d7c9f405fe7beefb6876",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
