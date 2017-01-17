@@ -139,26 +139,32 @@ class GbuildParser:
                                               jsontype)
                     module = location.split('/')[-1]
                     if not module in moduleDict:
-                        moduleDict[module] = {'targets': set()}
+                        moduleDict[module] = {'targets': set(),'headers':{}}
                     moduleDict[module]['targets'] |= set([newObj])
+                    moduleDict[module]['headers'] =self.find_all_headers_in_module(module)
 
-        moduleDict['include']={'headers':self.find_all_headers_include_git(), 'targets': {}}
+
+        moduleDict['include']={ 'targets': {}, 'headers':self.find_all_headers_in_module('include')}
 
         # sort ['sources'] and ['headers'] for each module
         for module in sorted(moduleDict):
             self.modules[module] = moduleDict[module]
         return self
 
+    def find_all_headers_in_module(self,modulename):
 
-    def find_all_headers_include_git(self):
-        cmdResult1=subprocess.Popen(('git', 'ls-files', 'include'), cwd=self.srcdir,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        cmdResult2=subprocess.check_output(('grep', '-i', '-E', '".*\.hxx$|.*\.h$|.*\.hpp$"'),cwd=self.srcdir,stdin=cmdResult1.stdout)
+        cmdResult1=subprocess.Popen(('git', 'ls-files', modulename), cwd=self.srcdir,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        try:
+            cmdResult2=subprocess.check_output(('grep', '-i', '-E', '".*\.hxx$|.*\.h$|.*\.hpp$"'),cwd=self.srcdir,stdin=cmdResult1.stdout,stderr=subprocess.PIPE)
 
-        #decode from byte to string
-        allfiles=[]
-        for file in cmdResult2.splitlines():
-            allfiles.append(file.decode()[8:])
-        return allfiles
+            #decode from byte to string
+            allfiles=[]
+            for file in cmdResult2.splitlines():
+                allfiles.append(file.decode()[len(modulename)+1:])
+            return allfiles
+        except subprocess.CalledProcessError as e:
+            return[]
+            #catch the error when there aren't hxx,h,hpp files in that module (like smoketest)
 
 class IdeIntegrationGenerator:
 
@@ -290,13 +296,15 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         self.target_path = {}
         for m in self.gbuildparser.modules:
+            if m == 'include':
+                continue
             for target in self.gbuildparser.modules[m]['targets']:
                 for cxx in target.cxxobjects:
                     path = '/'.join(cxx.split('/')[:-1])
                     if path not in self.target_path:
                         self.target_path[path] = set()
                     self.target_path[path] |= set([target])
-        self.create_include_paths()
+        self.create_include_path()
         self.create_macros()
         self.create_settings_file()
 
@@ -531,6 +539,8 @@ VersionControl=kdevgit
         for path in self.target_path:
             self.write_includepaths(path)
         for modulename in self.gbuildparser.modules:
+            if modulename=='include':
+                continue
             location = self.gbuildparser.srcdir + '/' + modulename
             self.write_modulestub(location, modulename)
             self.write_modulebeef(location, modulename)
