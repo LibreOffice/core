@@ -161,9 +161,7 @@ namespace accessibility
         uno::Reference< XAccessible > mxThis;
 
         // implements our functionality, we're just an adapter (guarded by solar mutex)
-        mutable AccessibleEditableTextPara* mpTextParagraph;
-
-        uno::Reference< XAccessible > mxParagraph;
+        mutable rtl::Reference<AccessibleEditableTextPara> mxTextParagraph;
 
         // a wrapper for the text forwarders (guarded by solar mutex)
         mutable SvxEditSourceAdapter maEditSource;
@@ -182,8 +180,7 @@ namespace accessibility
 
     AccessibleStaticTextBase_Impl::AccessibleStaticTextBase_Impl() :
         mxThis( nullptr ),
-        mpTextParagraph( new AccessibleEditableTextPara(nullptr) ),
-        mxParagraph( mpTextParagraph ),
+        mxTextParagraph( new AccessibleEditableTextPara(nullptr) ),
         maEditSource(),
         maMutex(),
         maOffset(0,0)
@@ -201,8 +198,8 @@ namespace accessibility
     {
 
         maEditSource.SetEditSource( std::move(pEditSource) );
-        if( mpTextParagraph )
-            mpTextParagraph->SetEditSource( &maEditSource );
+        if( mxTextParagraph.is() )
+            mxTextParagraph->SetEditSource( &maEditSource );
     }
 
     void AccessibleStaticTextBase_Impl::SetOffset( const Point& rPoint )
@@ -214,43 +211,42 @@ namespace accessibility
             maOffset = rPoint;
         }
 
-        if( mpTextParagraph )
-            mpTextParagraph->SetEEOffset( rPoint );
+        if( mxTextParagraph.is() )
+            mxTextParagraph->SetEEOffset( rPoint );
     }
 
     void AccessibleStaticTextBase_Impl::Dispose()
     {
 
         // we're the owner of the paragraph, so destroy it, too
-        if( mpTextParagraph )
-            mpTextParagraph->Dispose();
+        if( mxTextParagraph.is() )
+            mxTextParagraph->Dispose();
 
         // drop references
-        mxParagraph = nullptr;
         mxThis = nullptr;
-        mpTextParagraph = nullptr;
+        mxTextParagraph.clear();
     }
 
     AccessibleEditableTextPara& AccessibleStaticTextBase_Impl::GetParagraph( sal_Int32 nPara ) const
     {
 
-        if( !mpTextParagraph )
+        if( !mxTextParagraph.is() )
             throw lang::DisposedException ("object has been already disposed", mxThis );
 
         // TODO: Have a different method on AccessibleEditableTextPara
         // that does not care about state changes
-        mpTextParagraph->SetParagraphIndex( nPara );
+        mxTextParagraph->SetParagraphIndex( nPara );
 
-        return *mpTextParagraph;
+        return *mxTextParagraph;
     }
 
     sal_Int32 AccessibleStaticTextBase_Impl::GetParagraphCount() const
     {
 
-        if( !mpTextParagraph )
+        if( !mxTextParagraph.is() )
             return 0;
         else
-            return mpTextParagraph->GetTextForwarder().GetParagraphCount();
+            return mxTextParagraph->GetTextForwarder().GetParagraphCount();
     }
 
     sal_Int32 AccessibleStaticTextBase_Impl::Internal2Index( EPosition nEEIndex ) const
@@ -332,12 +328,12 @@ namespace accessibility
                                                           sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
 
-        if( !mpTextParagraph )
+        if( !mxTextParagraph.is() )
             return false;
 
         try
         {
-            SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( true );
+            SvxEditViewForwarder& rCacheVF = mxTextParagraph->GetEditViewForwarder( true );
             return rCacheVF.SetSelection( MakeSelection(nStartPara, nStartIndex, nEndPara, nEndIndex) );
         }
         catch( const uno::RuntimeException& )
@@ -350,13 +346,13 @@ namespace accessibility
                                                       sal_Int32 nEndPara, sal_Int32 nEndIndex )
     {
 
-        if( !mpTextParagraph )
+        if( !mxTextParagraph.is() )
             return false;
 
         try
         {
-            SvxEditViewForwarder& rCacheVF = mpTextParagraph->GetEditViewForwarder( true );
-            mpTextParagraph->GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
+            SvxEditViewForwarder& rCacheVF = mxTextParagraph->GetEditViewForwarder( true );
+            mxTextParagraph->GetTextForwarder();    // MUST be after GetEditViewForwarder(), see method docs
             bool aRetVal;
 
             // save current selection
@@ -378,9 +374,9 @@ namespace accessibility
     Rectangle AccessibleStaticTextBase_Impl::GetParagraphBoundingBox() const
     {
         Rectangle aRect;
-        if( mpTextParagraph )
+        if( mxTextParagraph.is() )
         {
-            awt::Rectangle aAwtRect = mpTextParagraph->getBounds();
+            awt::Rectangle aAwtRect = mxTextParagraph->getBounds();
             aRect = Rectangle( Point( aAwtRect.X, aAwtRect.Y ), Size( aAwtRect.Width, aAwtRect.Height ) );
         }
         else
