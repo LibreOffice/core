@@ -2449,7 +2449,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
     {
         // copy the streams data
         // the destination stream must not be open
-        std::unique_ptr<BaseStorageStream> pOtherStream(pDest->OpenStream( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ));
+        tools::SvRef<BaseStorageStream> pOtherStream(pDest->OpenStream( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ));
         BaseStorageStream* pStream = nullptr;
         bool bDeleteStream = false;
 
@@ -2484,7 +2484,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
             pStorage = rElement.m_xStorage->m_pAntiImpl;
         if ( !pStorage )
         {
-            pStorage = ( const_cast < UCBStorage* > (this) )->OpenStorage( rElement.m_aName, pImp->m_nMode, pImp->m_bDirect );
+            pStorage = const_cast<UCBStorage*>(this)->OpenStorage( rElement.m_aName, pImp->m_nMode, pImp->m_bDirect );
             bDeleteStorage = true;
         }
 
@@ -2492,7 +2492,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
         UCBStorage* pUCBCopy =  dynamic_cast<UCBStorage*>( pStorage );
 
         bool bOpenUCBStorage = pUCBDest && pUCBCopy;
-        std::unique_ptr<BaseStorage> pOtherStorage(bOpenUCBStorage ?
+        tools::SvRef<BaseStorage> pOtherStorage(bOpenUCBStorage ?
                 pDest->OpenUCBStorage( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ) :
                 pDest->OpenOLEStorage( rNew, StreamMode::WRITE | StreamMode::SHARE_DENYALL, pImp->m_bDirect ));
 
