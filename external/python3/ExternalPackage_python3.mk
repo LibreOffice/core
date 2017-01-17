@@ -650,7 +650,6 @@ $(eval $(call gb_ExternalPackage_add_unpacked_files,python3,$(LIBO_BIN_FOLDER)/p
 	Lib/lib2to3/fixes/fix_asserts.py \
 	Lib/lib2to3/fixes/fix_basestring.py \
 	Lib/lib2to3/fixes/fix_buffer.py \
-	Lib/lib2to3/fixes/fix_callable.py \
 	Lib/lib2to3/fixes/fix_dict.py \
 	Lib/lib2to3/fixes/fix_except.py \
 	Lib/lib2to3/fixes/fix_execfile.py \
