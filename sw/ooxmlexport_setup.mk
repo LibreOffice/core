@@ -59,6 +59,7 @@ define sw_ooxmlexport_components
 	sw/util/swd \
 	sw/util/msword \
 	sfx2/util/sfx \
+	sot/util/sot \
 	starmath/util/sm \
 	svl/source/fsstor/fsstorage \
 	svl/util/svl \

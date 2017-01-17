@@ -32,6 +32,7 @@
 
 #include <test/bootstrapfixture.hxx>
 #include <test/xmltesttools.hxx>
+#include <test/testinteractionhandler.hxx>
 #include <unotest/macros_test.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <rtl/strbuf.hxx>
@@ -64,7 +65,7 @@ using namespace css;
  * }
  *
  */
-#define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, BaseClass) \
+#define DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
     virtual OUString getTestName() override { return OUString(#TestName); } \
@@ -75,25 +76,25 @@ using namespace css;
     CPPUNIT_TEST_SUITE_END(); \
     \
     void Import() { \
-        executeImportTest(filename);\
+        executeImportTest(filename, password);\
     }\
     void Import_Export_Import() {\
-        executeImportExportImportTest(filename);\
+        executeImportExportImportTest(filename, password);\
     }\
     void verify() override;\
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-#define DECLARE_OOXMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
-#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
-#define DECLARE_RTFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
-#define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
-#define DECLARE_ODFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, Test)
-#define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
-#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, Test)
+#define DECLARE_OOXMLIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_OOXMLEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_RTFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_RTFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_ODFIMPORT_TEST(TestName, filename) DECLARE_SW_IMPORT_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_ODFEXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
+#define DECLARE_WW8EXPORT_TEST(TestName, filename) DECLARE_SW_ROUNDTRIP_TEST(TestName, filename, nullptr, Test)
 
-#define DECLARE_SW_IMPORT_TEST(TestName, filename, BaseClass) \
+#define DECLARE_SW_IMPORT_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
     virtual OUString getTestName() override { return OUString(#TestName); } \
@@ -103,14 +104,14 @@ using namespace css;
     CPPUNIT_TEST_SUITE_END(); \
     \
     void Import() { \
-        executeImportTest(filename);\
+        executeImportTest(filename, password);\
     }\
     void verify() override;\
     }; \
     CPPUNIT_TEST_SUITE_REGISTRATION(TestName); \
     void TestName::verify()
 
-#define DECLARE_SW_EXPORT_TEST(TestName, filename, BaseClass) \
+#define DECLARE_SW_EXPORT_TEST(TestName, filename, password, BaseClass) \
     class TestName : public BaseClass { \
         protected:\
     virtual OUString getTestName() override { return OUString(#TestName); } \
@@ -120,7 +121,7 @@ using namespace css;
     CPPUNIT_TEST_SUITE_END(); \
     \
     void Import_Export() {\
-        executeImportExport(filename);\
+        executeImportExport(filename, password);\
     }\
     void verify() override;\
     }; \
@@ -135,6 +136,8 @@ private:
 
 protected:
     uno::Reference< lang::XComponent > mxComponent;
+
+    rtl::Reference<TestInteractionHandler> xInteractionHandler;
 
     xmlBufferPtr mpXmlBuffer;
     const char* mpTestDocumentPath;
@@ -211,7 +214,7 @@ protected:
      * Helper func used by each unit test to test the 'import' code.
      * (Loads the requested file and then calls 'verify' method)
      */
-    void executeImportTest(const char* filename)
+    void executeImportTest(const char* filename, const char* pPassword = nullptr)
     {
         // If the testcase is stored in some other format, it's pointless to test.
         if (mustTestImportOf(filename))
@@ -219,7 +222,7 @@ protected:
             maTempFile.EnableKillingFile(false);
             header();
             std::unique_ptr<Resetter> const pChanges(preTest(filename));
-            load(mpTestDocumentPath, filename);
+            load(mpTestDocumentPath, filename, pPassword);
             verify();
             finish();
             maTempFile.EnableKillingFile();
@@ -231,14 +234,14 @@ protected:
      * (Loads the requested file, save it to temp file, load the
      * temp file and then calls 'verify' method)
      */
-    void executeImportExportImportTest(const char* filename)
+    void executeImportExportImportTest(const char* filename, const char* pPassword = nullptr)
     {
         maTempFile.EnableKillingFile(false);
         header();
         std::unique_ptr<Resetter> const pChanges(preTest(filename));
-        load(mpTestDocumentPath, filename);
+        load(mpTestDocumentPath, filename, pPassword);
         postLoad(filename);
-        reload(mpFilter, filename);
+        reload(mpFilter, filename, pPassword);
         verify();
         finish();
         maTempFile.EnableKillingFile();
@@ -250,12 +253,12 @@ protected:
      * the initial document condition), exports with the desired
      * export filter and then calls 'verify' method)
      */
-    void executeImportExport(const char* filename)
+    void executeImportExport(const char* filename, const char* pPassword = nullptr)
     {
         maTempFile.EnableKillingFile(false);
         header();
         std::unique_ptr<Resetter> const pChanges(preTest(filename));
-        load(mpTestDocumentPath, filename);
+        load(mpTestDocumentPath, filename, pPassword);
         save(OUString::createFromAscii(mpFilter), maTempFile);
         maTempFile.EnableKillingFile(false);
         verify();
@@ -595,26 +598,50 @@ protected:
         std::cout << "File tested,Execution Time (ms)" << std::endl;
     }
 
-    void load(const char* pDir, const char* pName)
+    void load(const char* pDir, const char* pName, const char* pPassword = nullptr)
     {
-        return loadURL(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName);
+        return loadURL(m_directories.getURLFromSrc(pDir) + OUString::createFromAscii(pName), pName, pPassword);
     }
 
-    void loadURL(OUString const& rURL, const char* pName)
+    void setTestInteractionHandler(const char* pPassword, std::vector<beans::PropertyValue>& rFilterOptions)
+    {
+        OUString sPassword = OUString::createFromAscii(pPassword);
+        rFilterOptions.resize(rFilterOptions.size() + 1);
+        xInteractionHandler = rtl::Reference<TestInteractionHandler>(new TestInteractionHandler(sPassword));
+        uno::Reference<task::XInteractionHandler2> const xInteraction(xInteractionHandler.get());
+        rFilterOptions[0].Name = "InteractionHandler";
+        rFilterOptions[0].Value <<= xInteraction;
+    }
+
+    void loadURL(OUString const& rURL, const char* pName, const char* pPassword = nullptr)
     {
         if (mxComponent.is())
             mxComponent->dispose();
+
+        std::vector<beans::PropertyValue> aFilterOptions;
+
+        if (pPassword)
+        {
+            setTestInteractionHandler(pPassword, aFilterOptions);
+        }
+
         // Output name early, so in the case of a hang, the name of the hanging input file is visible.
         if (pName)
             std::cout << pName << ":\n";
         mnStartTime = osl_getGlobalTimer();
-        mxComponent = loadFromDesktop(rURL, "com.sun.star.text.TextDocument");
+        mxComponent = loadFromDesktop(rURL, "com.sun.star.text.TextDocument", comphelper::containerToSequence(aFilterOptions));
+
+        if (pPassword)
+        {
+            CPPUNIT_ASSERT_MESSAGE("Password set but not requested", xInteractionHandler->wasPasswordRequested());
+        }
+
         discardDumpedLayout();
         if (pName && mustCalcLayoutOf(pName))
             calcLayout();
     }
 
-    void reload(const char* pFilter, const char* filename)
+    void reload(const char* pFilter, const char* filename, const char* pPassword = nullptr)
     {
         uno::Reference<frame::XStorable> xStorable(mxComponent, uno::UNO_QUERY);
         OUString aFilterName = OUString::createFromAscii(pFilter);
@@ -622,11 +649,29 @@ protected:
         aMediaDescriptor["FilterName"] <<= aFilterName;
         if (!maFilterOptions.isEmpty())
             aMediaDescriptor["FilterOptions"] <<= maFilterOptions;
+        if (pPassword)
+        {
+            OUString sPassword = OUString::createFromAscii(pPassword);
+            css::uno::Sequence<css::beans::NamedValue> aEncryptionData {
+                { "OOXPassword", css::uno::makeAny(sPassword) }
+            };
+            aMediaDescriptor[utl::MediaDescriptor::PROP_ENCRYPTIONDATA()] <<= aEncryptionData;
+        }
         xStorable->storeToURL(maTempFile.GetURL(), aMediaDescriptor.getAsConstPropertyValueList());
         uno::Reference<lang::XComponent> xComponent(xStorable, uno::UNO_QUERY);
         xComponent->dispose();
         mbExported = true;
-        mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument");
+
+        std::vector<beans::PropertyValue> aFilterOptions;
+        if (pPassword)
+        {
+            setTestInteractionHandler(pPassword, aFilterOptions);
+        }
+        mxComponent = loadFromDesktop(maTempFile.GetURL(), "com.sun.star.text.TextDocument", comphelper::containerToSequence(aFilterOptions));
+        if (pPassword)
+        {
+            CPPUNIT_ASSERT_MESSAGE("Password set but not requested", xInteractionHandler->wasPasswordRequested());
+        }
         if (mustValidate(filename))
         {
             if(aFilterName == "Office Open XML Text")

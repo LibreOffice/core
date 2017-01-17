@@ -87,7 +87,7 @@ class FailTest : public Test
 {
 public:
     // UGLY: hacky manual override of MacrosTest::loadFromDesktop
-    void executeImportTest(const char* filename)
+    void executeImportTest(const char* filename, const char* /*password*/)
     {
         header();
         preTest(filename);
@@ -126,7 +126,7 @@ DECLARE_OOXMLIMPORT_TEST(testImageHyperlink, "image-hyperlink.docx")
 
 #if !defined(_WIN32)
 
-DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", FailTest)
+DECLARE_SW_IMPORT_TEST(testMathMalformedXml, "math-malformed_xml.docx", nullptr, FailTest)
 {
     CPPUNIT_ASSERT(!mxComponent.is());
 }
@@ -1234,8 +1234,7 @@ protected:
     }
 };
 
-DECLARE_SW_IMPORT_TEST(testHFLinkToPrev, "headerfooter-link-to-prev.docx",
-    testHFBase)
+DECLARE_SW_IMPORT_TEST(testHFLinkToPrev, "headerfooter-link-to-prev.docx", nullptr, testHFBase)
 {
     uno::Reference<container::XNameAccess> xPageStyles = getStyles("PageStyles");
 

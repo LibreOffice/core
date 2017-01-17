@@ -23,7 +23,7 @@ public:
     {}
 };
 
-#define DECLARE_DOCBOOKEXPORT_TEST(TestName, filename) DECLARE_SW_EXPORT_TEST(TestName, filename, DocbookExportTest)
+#define DECLARE_DOCBOOKEXPORT_TEST(TestName, filename) DECLARE_SW_EXPORT_TEST(TestName, filename, nullptr, DocbookExportTest)
 
 DECLARE_DOCBOOKEXPORT_TEST(testsimple, "simple.docx")
 {
