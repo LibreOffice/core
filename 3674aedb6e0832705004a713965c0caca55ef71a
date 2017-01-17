@@ -22,6 +22,30 @@
       "revId": "3674aedb6e0832705004a713965c0caca55ef71a",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_66db961c",
+        "filename": "external/python3/python-3.3.3-py17797.patch.1",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-17T20:29:09Z",
+      "side": 0,
+      "message": "well we don\u0027t build python 3.5 with MSVC2013, so it\u0027s \"someone else\" indeed :)",
+      "parentUuid": "fa48f94a_26a34ea0",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 33
+      },
+      "revId": "3674aedb6e0832705004a713965c0caca55ef71a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
