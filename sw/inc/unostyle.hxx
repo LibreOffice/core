@@ -151,7 +151,7 @@ class SwXAutoStyleFamily : public cppu::WeakImplHelper< css::style::XAutoStyleFa
     IStyleAccess::SwAutoStyleFamily m_eFamily;
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew) override;
 
 public:
     SwXAutoStyleFamily(SwDocShell* pDocShell, IStyleAccess::SwAutoStyleFamily eFamily);

@@ -62,7 +62,7 @@ public:
     virtual bool        PutValue( const css::uno::Any& rVal, sal_uInt16 nMId ) override;
 
 protected:
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 };
 
 inline bool SwUserFieldType::IsValid() const

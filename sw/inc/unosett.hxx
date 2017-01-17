@@ -140,8 +140,8 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
 >
 {
 private:
-   class Impl;
-   ::sw::UnoImplPtr<Impl> m_pImpl;
+    class Impl;
+    ::sw::UnoImplPtr<Impl> m_pImpl;
 
     OUString                    m_sNewCharStyleNames[MAXLEVEL];
     OUString                    m_sNewBulletFontNames[MAXLEVEL];

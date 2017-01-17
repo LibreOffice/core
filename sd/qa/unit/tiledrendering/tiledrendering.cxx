@@ -1493,7 +1493,7 @@ void SdTiledRenderingTest::testTdf81754()
     // now save, reload, and assert that we did not lose the edit
     ::sd::DrawDocShellRef xDocShRef = saveAndReload(pXImpressDocument->GetDocShell(), PPTX);
 
-    const SdrPage *pPage = GetPage(1, xDocShRef);
+    const SdrPage* pPage = GetPage(1, xDocShRef);
     SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
     CPPUNIT_ASSERT(pTextObject);
 
