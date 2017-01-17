@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_26f8ae7c",
+        "filename": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-17T20:34:48Z",
+      "side": 1,
+      "message": "If called internally from LibO maybe.. as a published API function not. I know, much if not most i18n published API lacks proper checks, just while at it why not add them. Or defer to a later \"sanitize all i18n code\" project..",
+      "parentUuid": "fa48f94a_e6af867b",
+      "revId": "0e92d66745134735198400127675ae80689b0ff7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_86731a4d",
         "filename": "i18npool/source/transliteration/ignoreDiacritics_CTL.cxx",
         "patchSetId": 1
