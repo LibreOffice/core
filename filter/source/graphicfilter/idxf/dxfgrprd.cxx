@@ -222,5 +222,9 @@ void DXFGroupReader::ReadS()
     S = DXFReadLine(rIS);
 }
 
+sal_uInt64 DXFGroupReader::remainingSize() const
+{
+    return rIS.remainingSize();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
