@@ -60,7 +60,8 @@ private:
     SCCOLROW        nStart;
     SCCOLROW        nEnd;
     SCTAB           nTab;
-    ScDocument*     pUndoDoc;
+    std::unique_ptr<ScDocument>
+                    pUndoDoc;
     bool            bColumns;
     sal_uInt16      nLevel;
     sal_uInt16      nEntry;
@@ -87,7 +88,8 @@ public:
 private:
     ScAddress       aBlockStart;
     ScAddress       aBlockEnd;
-    ScOutlineTable* pUndoTable;
+    std::unique_ptr<ScOutlineTable>
+                    pUndoTable;
     bool            bColumns;
     bool            bMake;
 };

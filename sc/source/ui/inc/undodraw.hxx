@@ -26,7 +26,7 @@ class ScDocShell;
 
 class ScUndoDraw: public SfxUndoAction
 {
-    SfxUndoAction*  pDrawUndo;
+    std::unique_ptr<SfxUndoAction>  pDrawUndo;
     ScDocShell*     pDocShell;
     sal_Int32       mnViewShellId;
 
@@ -36,8 +36,8 @@ public:
                             ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh );
     virtual                 ~ScUndoDraw() override;
 
-    SfxUndoAction*          GetDrawUndo()       { return pDrawUndo; }
-    void                    ForgetDrawUndo();
+    SfxUndoAction*          GetDrawUndo()       { return pDrawUndo.get(); }
+    SfxUndoAction*          ReleaseDrawUndo()   { return pDrawUndo.release(); }
 
     virtual void            Undo() override;
     virtual void            Redo() override;

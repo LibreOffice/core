@@ -445,14 +445,13 @@ void LotusRangeList::Append( LotusRange* pLR, const OUString& rName )
 
 RangeNameBufferWK3::RangeNameBufferWK3(LOTUS_ROOT* pLotRoot)
     : m_pLotRoot(pLotRoot)
+    , pScTokenArray( new ScTokenArray )
 {
-    pScTokenArray = new ScTokenArray;
     nIntCount = 1;
 }
 
 RangeNameBufferWK3::~RangeNameBufferWK3()
 {
-    delete pScTokenArray;
 }
 
 void RangeNameBufferWK3::Add( const OUString& rOrgName, const ScComplexRefData& rCRD )

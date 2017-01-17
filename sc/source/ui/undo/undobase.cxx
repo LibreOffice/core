@@ -38,7 +38,6 @@
 
 ScSimpleUndo::ScSimpleUndo( ScDocShell* pDocSh ) :
     pDocShell( pDocSh ),
-    pDetectiveUndo( nullptr ),
     mnViewShellId(-1)
 {
     if (ScTabViewShell* pViewShell = ScTabViewShell::GetActiveViewShell())
@@ -52,7 +51,6 @@ sal_Int32 ScSimpleUndo::GetViewShellId() const
 
 ScSimpleUndo::~ScSimpleUndo()
 {
-    delete pDetectiveUndo;
 }
 
 bool ScSimpleUndo::SetViewMarkData( const ScMarkData& rMarkData )
@@ -83,8 +81,7 @@ bool ScSimpleUndo::Merge( SfxUndoAction *pNextAction )
         // ScUndoDraw is later deleted by the UndoManager
 
         ScUndoDraw* pCalcUndo = static_cast<ScUndoDraw*>(pNextAction);
-        pDetectiveUndo = pCalcUndo->GetDrawUndo();
-        pCalcUndo->ForgetDrawUndo();
+        pDetectiveUndo.reset( pCalcUndo->ReleaseDrawUndo() );
         return true;
     }
 
@@ -610,7 +607,6 @@ ScUndoWrapper::ScUndoWrapper( SfxUndoAction* pUndo ) :
 
 ScUndoWrapper::~ScUndoWrapper()
 {
-    delete pWrappedUndo;
 }
 
 void ScUndoWrapper::ForgetWrappedUndo()

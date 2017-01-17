@@ -738,7 +738,6 @@ ScUndoCut::ScUndoCut( ScDocShell* pNewDocShell,
 
 ScUndoCut::~ScUndoCut()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoCut::GetComment() const
@@ -750,7 +749,7 @@ void ScUndoCut::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
-        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc,
+        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc.get(),
             nStartChangeAction, nEndChangeAction, SC_CACM_CUT );
     else
         nStartChangeAction = nEndChangeAction = 0;
@@ -1560,7 +1559,6 @@ ScUndoUseScenario::ScUndoUseScenario( ScDocShell* pNewDocShell,
 
 ScUndoUseScenario::~ScUndoUseScenario()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoUseScenario::GetComment() const
@@ -1676,7 +1674,6 @@ ScUndoSelectionStyle::ScUndoSelectionStyle( ScDocShell* pNewDocShell,
 
 ScUndoSelectionStyle::~ScUndoSelectionStyle()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoSelectionStyle::GetComment() const
@@ -1781,7 +1778,6 @@ ScUndoEnterMatrix::ScUndoEnterMatrix( ScDocShell* pNewDocShell, const ScRange& r
 
 ScUndoEnterMatrix::~ScUndoEnterMatrix()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoEnterMatrix::GetComment() const
@@ -1794,7 +1790,7 @@ void ScUndoEnterMatrix::SetChangeTrack()
     ScDocument& rDoc = pDocShell->GetDocument();
     ScChangeTrack* pChangeTrack = rDoc.GetChangeTrack();
     if ( pChangeTrack )
-        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc,
+        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc.get(),
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;
@@ -1875,7 +1871,6 @@ ScUndoIndent::ScUndoIndent( ScDocShell* pNewDocShell, const ScMarkData& rMark,
 
 ScUndoIndent::~ScUndoIndent()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoIndent::GetComment() const
@@ -1932,7 +1927,6 @@ ScUndoTransliterate::ScUndoTransliterate( ScDocShell* pNewDocShell, const ScMark
 
 ScUndoTransliterate::~ScUndoTransliterate()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoTransliterate::GetComment() const
@@ -2052,7 +2046,6 @@ ScUndoRemoveBreaks::ScUndoRemoveBreaks( ScDocShell* pNewDocShell,
 
 ScUndoRemoveBreaks::~ScUndoRemoveBreaks()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoRemoveBreaks::GetComment() const
@@ -2122,7 +2115,6 @@ ScUndoRemoveMerge::ScUndoRemoveMerge( ScDocShell* pNewDocShell,
 
 ScUndoRemoveMerge::~ScUndoRemoveMerge()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoRemoveMerge::GetComment() const
@@ -2132,7 +2124,7 @@ OUString ScUndoRemoveMerge::GetComment() const
 
 ScDocument* ScUndoRemoveMerge::GetUndoDoc()
 {
-    return pUndoDoc;
+    return pUndoDoc.get();
 }
 
 void ScUndoRemoveMerge::AddCellMergeOption( const ScCellMergeOption& rOption )

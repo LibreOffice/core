@@ -1722,7 +1722,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     // Font (Name, Size)
     nStart = 0;
     nLimit = aFont.Count;
-    pColData = aFont.pData;
+    pColData = aFont.pData.get();
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
         SCROW nEnd = static_cast<SCROW>(pColData->Row);
@@ -1755,7 +1755,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     // Font color
     nStart = 0;
     nLimit = aColor.Count;
-    pColData = aColor.pData;
+    pColData = aColor.pData.get();
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
         SCROW nEnd = static_cast<SCROW>(pColData->Row);
@@ -1773,7 +1773,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     // Font attributes (Bold, Italic...)
     nStart = 0;
     nLimit = aAttr.Count;
-    pColData = aAttr.pData;
+    pColData = aAttr.pData.get();
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
         SCROW nEnd = static_cast<SCROW>(pColData->Row);
@@ -1797,7 +1797,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     // Cell alignment
     nStart = 0;
     nLimit = aJustify.Count;
-    pColData = aJustify.pData;
+    pColData = aJustify.pData.get();
     for( i = 0 ; i < nLimit ; i++, pColData++ )
     {
         SCROW nEnd = static_cast<SCROW>(pColData->Row);
@@ -2069,7 +2069,7 @@ void Sc10Import::LoadColAttr(SCCOL Col, SCTAB Tab)
     // Number format
     nStart = 0;
     nLimit = aValue.Count;
-    pColData = aValue.pData;
+    pColData = aValue.pData.get();
     for (i=0; i<nLimit; i++, pColData++)
     {
         SCROW nEnd = static_cast<SCROW>(pColData->Row);
@@ -2140,7 +2140,7 @@ void Sc10Import::LoadAttr(Sc10ColAttr& rAttr)
     if (!rAttr.Count)
         return;
 
-    rAttr.pData = new (::std::nothrow) Sc10ColData[rAttr.Count];
+    rAttr.pData.reset( new (::std::nothrow) Sc10ColData[rAttr.Count] );
     if (rAttr.pData == nullptr)
     {
         nError = errOutOfMemory;

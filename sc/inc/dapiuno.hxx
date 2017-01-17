@@ -262,7 +262,7 @@ public:
 class ScDataPilotDescriptor : public ScDataPilotDescriptorBase
 {
 private:
-    ScDPObject*             mpDPObject;
+    std::unique_ptr<ScDPObject>  mpDPObject;
 
 public:
                             ScDataPilotDescriptor(ScDocShell* pDocSh);

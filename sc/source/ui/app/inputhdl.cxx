@@ -4014,7 +4014,6 @@ ScInputHdlState::ScInputHdlState( const ScInputHdlState& rCpy )
 
 ScInputHdlState::~ScInputHdlState()
 {
-    delete pEditData;
 }
 
 bool ScInputHdlState::operator==( const ScInputHdlState& r ) const
@@ -4023,18 +4022,16 @@ bool ScInputHdlState::operator==( const ScInputHdlState& r ) const
              && (aEndPos    == r.aEndPos)
              && (aCursorPos == r.aCursorPos)
              && (aString    == r.aString)
-             && ScGlobal::EETextObjEqual( pEditData, r.pEditData ) );
+             && ScGlobal::EETextObjEqual( pEditData.get(), r.pEditData.get() ) );
 }
 
 ScInputHdlState& ScInputHdlState::operator=( const ScInputHdlState& r )
 {
-    delete pEditData;
-
     aCursorPos  = r.aCursorPos;
     aStartPos   = r.aStartPos;
     aEndPos     = r.aEndPos;
     aString     = r.aString;
-    pEditData   = r.pEditData ? r.pEditData->Clone() : nullptr;
+    pEditData.reset( r.pEditData ? r.pEditData->Clone() : nullptr );
 
     return *this;
 }

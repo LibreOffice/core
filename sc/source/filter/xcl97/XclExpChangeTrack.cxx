@@ -540,23 +540,22 @@ XclExpChTrTabIdBuffer::XclExpChTrTabIdBuffer( sal_uInt16 nCount ) :
     nBufSize( nCount ),
     nLastId( nCount )
 {
-    pBuffer = new sal_uInt16[ nBufSize ];
-    memset( pBuffer, 0, sizeof(sal_uInt16) * nBufSize );
-    pLast = pBuffer + nBufSize - 1;
+    pBuffer.reset( new sal_uInt16[ nBufSize ] );
+    memset( pBuffer.get(), 0, sizeof(sal_uInt16) * nBufSize );
+    pLast = pBuffer.get() + nBufSize - 1;
 }
 
 XclExpChTrTabIdBuffer::XclExpChTrTabIdBuffer( const XclExpChTrTabIdBuffer& rCopy ) :
     nBufSize( rCopy.nBufSize ),
     nLastId( rCopy.nLastId )
 {
-    pBuffer = new sal_uInt16[ nBufSize ];
-    memcpy( pBuffer, rCopy.pBuffer, sizeof(sal_uInt16) * nBufSize );
-    pLast = pBuffer + nBufSize - 1;
+    pBuffer.reset( new sal_uInt16[ nBufSize ] );
+    memcpy( pBuffer.get(), rCopy.pBuffer.get(), sizeof(sal_uInt16) * nBufSize );
+    pLast = pBuffer.get() + nBufSize - 1;
 }
 
 XclExpChTrTabIdBuffer::~XclExpChTrTabIdBuffer()
 {
-    delete[] pBuffer;
 }
 
 void XclExpChTrTabIdBuffer::InitFill( sal_uInt16 nIndex )
@@ -564,7 +563,7 @@ void XclExpChTrTabIdBuffer::InitFill( sal_uInt16 nIndex )
     OSL_ENSURE( nIndex < nLastId, "XclExpChTrTabIdBuffer::Insert - out of range" );
 
     sal_uInt16 nFreeCount = 0;
-    for( sal_uInt16* pElem = pBuffer; pElem <= pLast; pElem++ )
+    for( sal_uInt16* pElem = pBuffer.get(); pElem <= pLast; pElem++ )
     {
         if( !*pElem )
             nFreeCount++;
@@ -579,7 +578,7 @@ void XclExpChTrTabIdBuffer::InitFill( sal_uInt16 nIndex )
 void XclExpChTrTabIdBuffer::InitFillup()
 {
     sal_uInt16 nFreeCount = 1;
-    for( sal_uInt16* pElem = pBuffer; pElem <= pLast; pElem++ )
+    for( sal_uInt16* pElem = pBuffer.get(); pElem <= pLast; pElem++ )
         if( !*pElem )
             *pElem = nFreeCount++;
     nLastId = nBufSize;
@@ -593,8 +592,8 @@ sal_uInt16 XclExpChTrTabIdBuffer::GetId( sal_uInt16 nIndex ) const
 
 void XclExpChTrTabIdBuffer::Remove()
 {
-    OSL_ENSURE( pBuffer <= pLast, "XclExpChTrTabIdBuffer::Remove - buffer empty" );
-    sal_uInt16* pElem = pBuffer;
+    OSL_ENSURE( pBuffer.get() <= pLast, "XclExpChTrTabIdBuffer::Remove - buffer empty" );
+    sal_uInt16* pElem = pBuffer.get();
     while( (pElem <= pLast) && (*pElem != nLastId) )
         pElem++;
     while( pElem < pLast )
@@ -685,7 +684,6 @@ XclExpChTrAction::XclExpChTrAction(
 
 XclExpChTrAction::~XclExpChTrAction()
 {
-    delete pAddAction;
 }
 
 void XclExpChTrAction::SetAddAction( XclExpChTrAction* pAction )
@@ -693,7 +691,7 @@ void XclExpChTrAction::SetAddAction( XclExpChTrAction* pAction )
     if( pAddAction )
         pAddAction->SetAddAction( pAction );
     else
-        pAddAction = pAction;
+        pAddAction.reset( pAction );
 }
 
 void XclExpChTrAction::AddDependentContents(

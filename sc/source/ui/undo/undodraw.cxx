@@ -35,12 +35,6 @@ ScUndoDraw::ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh ) :
 
 ScUndoDraw::~ScUndoDraw()
 {
-    delete pDrawUndo;
-}
-
-void ScUndoDraw::ForgetDrawUndo()
-{
-    pDrawUndo = nullptr;   // do not delete (DrawUndo has to be remembered from outside)
 }
 
 OUString ScUndoDraw::GetComment() const

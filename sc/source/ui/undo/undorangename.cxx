@@ -87,7 +87,6 @@ ScUndoAddRangeData::ScUndoAddRangeData(ScDocShell* pDocSh, ScRangeData* pRangeDa
 
 ScUndoAddRangeData::~ScUndoAddRangeData()
 {
-    delete mpRangeData;
 }
 
 void ScUndoAddRangeData::Undo()

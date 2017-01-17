@@ -65,7 +65,6 @@ ScUndoDoOutline::ScUndoDoOutline( ScDocShell* pNewDocShell,
 
 ScUndoDoOutline::~ScUndoDoOutline()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoDoOutline::GetComment() const
@@ -154,7 +153,6 @@ ScUndoMakeOutline::ScUndoMakeOutline( ScDocShell* pNewDocShell,
 
 ScUndoMakeOutline::~ScUndoMakeOutline()
 {
-    delete pUndoTable;
 }
 
 OUString ScUndoMakeOutline::GetComment() const
@@ -174,7 +172,7 @@ void ScUndoMakeOutline::Undo()
 
     ScUndoUtil::MarkSimpleBlock( pDocShell, aBlockStart, aBlockEnd );
 
-    rDoc.SetOutlineTable( nTab, pUndoTable );
+    rDoc.SetOutlineTable( nTab, pUndoTable.get() );
 
     SCTAB nVisTab = pViewShell->GetViewData().GetTabNo();
     if ( nVisTab != nTab )
