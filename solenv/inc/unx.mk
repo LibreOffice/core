@@ -198,8 +198,7 @@ DLLPOST!:=$(DLLPOST).$($(UNIXVERSIONNAMES)_MAJOR)
 .IF "$(ENABLE_KDE)" != ""
 .IF "$(KDE_ROOT)"!=""
 KDE_CFLAGS:=-I$(KDE_ROOT)/include -DQT_CLEAN_NAMESPACE
-KDE_LIBS:=-lkdeui -lkdecore -lqt-mt
-SOLARLIB+=-L$(KDE_ROOT)/lib
+KDE_LIBS:=-L$(KDE_ROOT)/lib -lkdeui -lkdecore -lqt-mt
 .IF "$(OS)$(CPU)" == "LINUXX"
 SOLARLIB+=-L$(KDE_ROOT)/lib64
 .ENDIF          # "$(OS)$(CPU)" == "LINUXX"
