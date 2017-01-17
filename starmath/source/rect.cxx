@@ -94,26 +94,6 @@ SmRect::SmRect()
 }
 
 
-SmRect::SmRect(const SmRect &rRect)
-    : aTopLeft(rRect.aTopLeft)
-    , aSize(rRect.aSize)
-    , nBaseline(rRect.nBaseline)
-    , nAlignT(rRect.nAlignT)
-    , nAlignM(rRect.nAlignM)
-    , nAlignB(rRect.nAlignB)
-    , nGlyphTop(rRect.nGlyphTop)
-    , nGlyphBottom(rRect.nGlyphBottom)
-    , nItalicLeftSpace(rRect.nItalicLeftSpace)
-    , nItalicRightSpace(rRect.nItalicRightSpace)
-    , nLoAttrFence(rRect.nLoAttrFence)
-    , nHiAttrFence(rRect.nHiAttrFence)
-    , nBorderWidth(rRect.nBorderWidth)
-    , bHasBaseline(rRect.bHasBaseline)
-    , bHasAlignInfo(rRect.bHasAlignInfo)
-{
-}
-
-
 void SmRect::CopyAlignInfo(const SmRect &rRect)
 {
     nBaseline     = rRect.nBaseline;
