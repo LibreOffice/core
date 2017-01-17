@@ -80,7 +80,7 @@ class SW_DLLPUBLIC SwTOXMark
 
 protected:
     // SwClient
-   virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
+    virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem* pNew ) override;
 
 public:
 
