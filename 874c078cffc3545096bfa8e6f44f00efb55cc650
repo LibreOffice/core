@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_9b2b7733",
+        "filename": "sw/source/filter/ww8/docxattributeoutput.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 6995,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-01-17T06:57:07Z",
+      "side": 1,
+      "message": "Is this the best way to handle converting the endnote to footnote? I looked up static_cast / dynamic_cast, but google wasn\u0027t completely helpful. Would it be better to do a \"const SwFootnote* pFootnoteInfo \u003d dynamic_cast\u003cconst SwFootnoteInfo*(\u0026info)\"? Then I could verify that I don\u0027t have a nullptr, and that the cast really did work.  Without this I am trusting that no one will send EndNoteInfo along with a XML_footnotePr tag.",
+      "range": {
+        "startLine": 6995,
+        "startChar": 16,
+        "endLine": 6995,
+        "endChar": 56
+      },
+      "revId": "874c078cffc3545096bfa8e6f44f00efb55cc650",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
