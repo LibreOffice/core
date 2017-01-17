@@ -57,7 +57,7 @@ class GbuildParser:
     _buildpattern = {'Library': re.compile('Library_(.*)\.mk'),
                      'Executable': re.compile('Executable_(.*)\.mk'),
                      'CppunitTest': re.compile('CppunitTest_(.*)\.mk')}
-
+    _allheaders=[]
     @staticmethod
     def __split_includes(includes):
         foundisystem = GbuildParser._isystempattern.findall(includes)
@@ -107,6 +107,7 @@ class GbuildParser:
 
 
         moduleDict = {}
+        self.find_all_headers()
         for jsontype in ['Library', 'Executable', 'CppunitTest']:
             for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', jsontype)):
                 with open(os.path.join(self.workdir, 'GbuildToJson', jsontype, jsonfilename), 'r') as f:
@@ -147,26 +148,32 @@ class GbuildParser:
                                               jsontype)
                     module = location.split('/')[-1]
                     if not module in moduleDict:
-                        moduleDict[module] = {'targets': set()}
+                        moduleDict[module] = {'targets': set(),'headers':{}}
                     moduleDict[module]['targets'] |= set([newObj])
+                    moduleDict[module]['headers'] =self.headers_of(module)
 
-        moduleDict['include']={'headers':self.find_all_headers_include_git(), 'targets': {}}
 
+        moduleDict['include']={ 'targets': set(), 'headers':self.headers_of('include')}
         # sort ['sources'] and ['headers'] for each module
         for module in sorted(moduleDict):
             self.modules[module] = moduleDict[module]
         return self
 
+    def find_all_headers(self):
 
-    def find_all_headers_include_git(self):
-        cmdResult1=subprocess.Popen(('git', 'ls-files', 'include'), cwd=self.srcdir,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        cmdResult2=subprocess.check_output(('grep', '-i', '-E', '".*\.hxx$|.*\.h$|.*\.hpp$"'),cwd=self.srcdir,stdin=cmdResult1.stdout)
+        cmdResult1=subprocess.Popen(('git', 'ls-files'), cwd=self.srcdir,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        cmdResult2=subprocess.check_output(('grep', '-i', '-E', '".*\.hxx$|.*\.h$|.*\.hpp$"'),cwd=self.srcdir,stdin=cmdResult1.stdout,stderr=subprocess.PIPE)
 
         #decode from byte to string
         allfiles=[]
         for file in cmdResult2.splitlines():
-            allfiles.append(file.decode()[8:])
-        return allfiles
+            allfiles.append(file.decode())
+        self._allheaders = allfiles
+
+    def headers_of(self,modulename):
+        modulename_lenght=len(modulename)
+        headersof = [element[modulename_lenght+1:] for element in self._allheaders if element.split('/')[0] == modulename]
+        return headersof
 
 class IdeIntegrationGenerator:
 
@@ -298,13 +305,15 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         self.target_path = {}
         for m in self.gbuildparser.modules:
+            if m == 'include':
+                continue
             for target in self.gbuildparser.modules[m]['targets']:
                 for cxx in target.cxxobjects:
                     path = '/'.join(cxx.split('/')[:-1])
                     if path not in self.target_path:
                         self.target_path[path] = set()
                     self.target_path[path] |= set([target])
-        self.create_include_paths()
+        self.create_include_path()
         self.create_macros()
         self.create_settings_file()
 
@@ -539,6 +548,8 @@ VersionControl=kdevgit
         for path in self.target_path:
             self.write_includepaths(path)
         for modulename in self.gbuildparser.modules:
+            if modulename=='include':
+                continue
             location = self.gbuildparser.srcdir + '/' + modulename
             self.write_modulestub(location, modulename)
             self.write_modulebeef(location, modulename)
@@ -1673,8 +1684,9 @@ if __name__ == '__main__':
     # FIXME: Hack
     if args.makecmd == 'make':
         args.makecmd = '/usr/bin/make'
-
-
+    if args.debug=='allheaders':
+        #headers=GbuildParser(args.makecmd).find_all_headers()
+        pass
     paths = {}
     generators = {
         # Supported platforms
