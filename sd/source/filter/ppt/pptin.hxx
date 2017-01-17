@@ -82,7 +82,7 @@ public:
 
 class SdPPTImport
 {
-    ImplSdPPTImport* pFilter;
+    std::unique_ptr<ImplSdPPTImport> pFilter;
 
     public:
 

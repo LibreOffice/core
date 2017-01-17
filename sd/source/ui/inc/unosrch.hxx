@@ -77,7 +77,7 @@ public:
 class SdUnoSearchReplaceDescriptor : public ::cppu::WeakImplHelper< css::lang::XUnoTunnel, css::util::XReplaceDescriptor > // public css::util::XSearchDescriptor, css::beans::XPropertySet
 {
 protected:
-    SvxItemPropertySet* mpPropSet;
+    std::unique_ptr<SvxItemPropertySet> mpPropSet;
 
     bool mbBackwards;
     bool mbCaseSensitive;

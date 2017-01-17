@@ -135,12 +135,7 @@ struct PPTExOleObjEntry
 
 struct TextRuleEntry
 {
-    SvMemoryStream*     pOut;
-
-    explicit TextRuleEntry() :
-        pOut ( nullptr ){};
-
-    ~TextRuleEntry() { delete pOut; };
+    std::unique_ptr<SvMemoryStream>  pOut;
 };
 
 class TextObjBinary : public TextObj

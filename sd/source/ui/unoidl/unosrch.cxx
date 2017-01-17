@@ -704,7 +704,7 @@ UNO3_GETIMPLEMENTATION_IMPL( SdUnoSearchReplaceDescriptor );
 
 SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( bool bReplace ) throw (css::uno::RuntimeException)
 {
-    mpPropSet = new SvxItemPropertySet(ImplGetSearchPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool());
+    mpPropSet.reset( new SvxItemPropertySet(ImplGetSearchPropertyMap(), SdrObject::GetGlobalDrawObjectItemPool()) );
 
     mbBackwards = false;
     mbCaseSensitive = false;
@@ -715,7 +715,6 @@ SdUnoSearchReplaceDescriptor::SdUnoSearchReplaceDescriptor( bool bReplace ) thro
 
 SdUnoSearchReplaceDescriptor::~SdUnoSearchReplaceDescriptor() throw()
 {
-    delete mpPropSet;
 }
 
 // XSearchDescriptor
