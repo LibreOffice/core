@@ -44,7 +44,7 @@ class LineListBox
 
 Description
 
-Allows selection of line styles and sizes. Not that before first insert,
+Allows selection of line styles and sizes. Note that before first insert,
 units and window size need to be set. Supported units are typographic point
 (pt) and millimeters (mm). For SourceUnit, pt, mm and twips are supported.
 All scalar numbers in 1/100 of the corresponding unit.

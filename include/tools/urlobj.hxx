@@ -892,7 +892,7 @@ public:
         @param eCharset  See the general discussion for get-methods.
 
         @return  For a hierarchical URL, the last segment (everything after
-        the last unencoded '/').  Not that this last segment may be empty.  If
+        the last unencoded '/').  Note that this last segment may be empty.  If
         the URL is not hierarchical, an empty string is returned.
      */
     OUString GetLastName(DecodeMechanism eMechanism = DecodeMechanism::ToIUri,
