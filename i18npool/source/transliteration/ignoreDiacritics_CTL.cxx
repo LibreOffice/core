@@ -56,37 +56,41 @@ ignoreDiacritics_CTL::folding(const OUString& rInStr, sal_Int32 nStartPos,
     if (!m_transliterator)
         throw css::uno::RuntimeException();
 
-    OUString aOutStr;
-
-    sal_Int32 nPosition = nStartPos;
-    sal_Int32 nOffset = 0;
     if (useOffset)
+    {
+        OUString aOutStr;
         rOffset.realloc(nCount);
 
-    while (nPosition < nStartPos + nCount)
-    {
-        sal_Int32 nIndex = nPosition;
-        UChar32 nChar = rInStr.iterateCodePoints(&nIndex);
-        UnicodeString aChar(nChar);
-        m_transliterator->transliterate(aChar);
-
-        if (useOffset && nOffset + aChar.length() > rOffset.getLength())
-            rOffset.realloc(rOffset.getLength() + aChar.length());
-
-        for (int32_t i = 0; i < aChar.length(); i++)
+        sal_Int32 nPosition = nStartPos;
+        sal_Int32 nOffset = 0;
+        while (nPosition < nStartPos + nCount)
         {
-            aOutStr += OUStringLiteral1(aChar[i]);
-            if (useOffset)
+            sal_Int32 nIndex = nPosition;
+            UChar32 nChar = rInStr.iterateCodePoints(&nIndex);
+            UnicodeString aChar(nChar);
+            m_transliterator->transliterate(aChar);
+
+            if (nOffset + aChar.length() > rOffset.getLength())
+                rOffset.realloc(rOffset.getLength() + aChar.length());
+
+            for (int32_t i = 0; i < aChar.length(); i++)
+            {
+                aOutStr += OUStringLiteral1(aChar[i]);
                 rOffset[nOffset++] = nPosition;
+            }
+
+            nPosition = nIndex;
         }
 
-        nPosition = nIndex;
-    }
-
-    if (useOffset)
         rOffset.realloc(aOutStr.getLength());
-
-    return aOutStr;
+        return aOutStr;
+    }
+    else
+    {
+        UnicodeString aUStr(reinterpret_cast<const UChar*>(rInStr.getStr()) + nStartPos, nCount);
+        m_transliterator->transliterate(aUStr);
+        return OUString(reinterpret_cast<const sal_Unicode *>(aUStr.getBuffer()), aUStr.length());
+    }
 }
 
 } } } }
