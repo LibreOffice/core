@@ -26,6 +26,7 @@
 
 #include <unordered_map>
 #include <vector>
+#include <memory>
 
 namespace pdfparse
 {
@@ -50,7 +51,7 @@ public:
 
 private:
     friend struct PDFEntry;
-    EmitImplData* m_pImplData;
+    std::unique_ptr<EmitImplData> m_pImplData;
 };
 
 struct PDFEntry
@@ -227,17 +228,13 @@ struct PDFFileImplData;
 struct PDFFile : public PDFContainer
 {
 private:
-    mutable PDFFileImplData*    m_pData;
+    mutable std::unique_ptr<PDFFileImplData> m_pData;
     PDFFileImplData*            impl_getData() const;
 public:
     unsigned int        m_nMajor;           // PDF major
     unsigned int        m_nMinor;           // PDF minor
 
-    PDFFile()
-    : PDFContainer(),
-      m_pData( nullptr ),
-      m_nMajor( 0 ), m_nMinor( 0 )
-    {}
+    PDFFile();
     virtual ~PDFFile() override;
 
     virtual bool emit( EmitContext& rWriteContext ) const override;

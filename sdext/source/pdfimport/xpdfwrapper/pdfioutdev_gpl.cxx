@@ -534,7 +534,6 @@ PDFOutDev::PDFOutDev( PDFDoc* pDoc ) :
 }
 PDFOutDev::~PDFOutDev()
 {
-    delete m_pUtf8Map;
 }
 
 void PDFOutDev::startPage(int /*pageNum*/, GfxState* state

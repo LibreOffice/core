@@ -97,12 +97,11 @@ EmitContext::EmitContext( const PDFContainer* pTop ) :
     m_pImplData( nullptr )
 {
     if( pTop )
-        m_pImplData = new EmitImplData( pTop );
+        m_pImplData.reset( new EmitImplData( pTop ) );
 }
 
 EmitContext::~EmitContext()
 {
-    delete m_pImplData;
 }
 
 PDFEntry::~PDFEntry()
@@ -111,14 +110,14 @@ PDFEntry::~PDFEntry()
 
 EmitImplData* PDFEntry::getEmitData( EmitContext& rContext )
 {
-    return rContext.m_pImplData;
+    return rContext.m_pImplData.get();
 }
 
 void PDFEntry::setEmitData( EmitContext& rContext, EmitImplData* pNewEmitData )
 {
-    if( rContext.m_pImplData && rContext.m_pImplData != pNewEmitData )
-        delete rContext.m_pImplData;
-    rContext.m_pImplData = pNewEmitData;
+    if( rContext.m_pImplData && rContext.m_pImplData.get() != pNewEmitData )
+        rContext.m_pImplData.reset();
+    rContext.m_pImplData.reset( pNewEmitData );
 }
 
 PDFValue::~PDFValue()
@@ -1051,9 +1050,13 @@ struct PDFFileImplData
 };
 }
 
+PDFFile::PDFFile()
+   : PDFContainer(), m_nMajor( 0 ), m_nMinor( 0 )
+{
+}
+
 PDFFile::~PDFFile()
 {
-    delete m_pData;
 }
 
 bool PDFFile::isEncrypted() const
@@ -1223,7 +1226,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
         m_pData->m_aDigest = rtl_digest_createMD5();
 
     // first try user password
-    bool bValid = check_user_password( rPwd, m_pData );
+    bool bValid = check_user_password( rPwd, m_pData.get() );
 
     if( ! bValid )
     {
@@ -1232,7 +1235,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
         sal_uInt8 aKey[ENCRYPTION_KEY_LEN];
         sal_uInt8 nPwd[ENCRYPTION_BUF_LEN];
         memset( nPwd, 0, sizeof(nPwd) );
-        sal_uInt32 nKeyLen = password_to_key( rPwd, aKey, m_pData, true );
+        sal_uInt32 nKeyLen = password_to_key( rPwd, aKey, m_pData.get(), true );
         if( m_pData->m_nStandardRevision == 2 )
         {
             rtl_cipher_initARCFOUR( m_pData->m_aCipher, rtl_Cipher_DirectionDecode,
@@ -1256,7 +1259,7 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
                                           nPwd, 32 ); // decrypt inplace
             }
         }
-        bValid = check_user_password( OString( reinterpret_cast<char*>(nPwd), 32 ), m_pData );
+        bValid = check_user_password( OString( reinterpret_cast<char*>(nPwd), 32 ), m_pData.get() );
     }
 
     return bValid;
@@ -1265,8 +1268,8 @@ bool PDFFile::setupDecryptionData( const OString& rPwd ) const
 PDFFileImplData* PDFFile::impl_getData() const
 {
     if( m_pData )
-        return m_pData;
-    m_pData = new PDFFileImplData();
+        return m_pData.get();
+    m_pData.reset( new PDFFileImplData );
     // check for encryption dict in a trailer
     unsigned int nElements = m_aSubElements.size();
     while( nElements-- > 0 )
@@ -1400,7 +1403,7 @@ PDFFileImplData* PDFFile::impl_getData() const
         }
     }
 
-    return m_pData;
+    return m_pData.get();
 }
 
 bool PDFFile::emit( EmitContext& rWriteContext ) const
