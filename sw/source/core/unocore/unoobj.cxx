@@ -2903,7 +2903,7 @@ SwXTextCursor::sort(const uno::Sequence< beans::PropertyValue >& rDescriptor)
         SwSortOptions aSortOpt;
         if (!SwUnoCursorHelper::ConvertSortProperties(rDescriptor, aSortOpt))
         {
-            throw uno::RuntimeException();
+            throw uno::RuntimeException("Bad sort properties");
         }
         UnoActionContext aContext( rUnoCursor.GetDoc() );
 
