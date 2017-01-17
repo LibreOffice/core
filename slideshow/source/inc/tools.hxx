@@ -292,20 +292,6 @@ namespace slideshow
             return comphelper::rng::uniform_size_distribution(0, n-1);
         }
 
-        /// To work around ternary operator in initializer lists
-        /// (Solaris compiler problems)
-#ifdef __sun
-        template <typename T>
-        inline T const & ternary_op(
-            const bool cond, T const & arg1, T const & arg2 )
-        {
-            if (cond)
-                return arg1;
-            else
-                return arg2;
-        }
-#endif
-
         template <typename ValueType>
         inline bool getPropertyValue(
             ValueType & rValue,
