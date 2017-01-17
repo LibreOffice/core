@@ -22,6 +22,7 @@
 
 #include "AccessibleContextBase.hxx"
 #include <editeng/svxenum.hxx>
+#include <rtl/ref.hxx>
 
 class ScPreviewShell;
 class EditTextObject;
@@ -83,8 +84,8 @@ private:
     ScPreviewShell*     mpViewShell;
     sal_Int32           mnIndex;
     bool                mbHeader;
-    typedef std::vector< ScAccessiblePageHeaderArea* > ScHFAreas;
-    ScHFAreas           maAreas;
+    std::vector< rtl::Reference<ScAccessiblePageHeaderArea> >
+                        maAreas;
     sal_Int32           mnChildCount;
 
     bool IsDefunc(

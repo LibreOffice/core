@@ -50,45 +50,13 @@ using namespace ::com::sun::star::accessibility;
 
 const sal_uInt8     MAX_AREAS = 3;
 
-//=====  internal  ============================================================
-struct Acquire
-{
-    void operator() (ScAccessiblePageHeaderArea* pArea)
-    {
-        if (pArea)
-            pArea->acquire();
-    }
-};
-
-struct Release
-{
-    void operator() (ScAccessiblePageHeaderArea*& pArea)
-    {
-        if (pArea)
-            pArea->release();
-    }
-};
-
-struct Dispose
-{
-    void operator() (ScAccessiblePageHeaderArea*& pArea)
-    {
-        if (pArea)
-        {
-            pArea->dispose();
-            pArea->release();
-        }
-        pArea = nullptr;
-    }
-};
-
 ScAccessiblePageHeader::ScAccessiblePageHeader( const css::uno::Reference<css::accessibility::XAccessible>& rxParent,
                             ScPreviewShell* pViewShell, bool bHeader, sal_Int32 nIndex ) :
 ScAccessibleContextBase( rxParent, bHeader ? AccessibleRole::HEADER : AccessibleRole::FOOTER ),
     mpViewShell( pViewShell ),
     mnIndex( nIndex ),
     mbHeader( bHeader ),
-    maAreas(MAX_AREAS, nullptr),
+    maAreas(MAX_AREAS, rtl::Reference<ScAccessiblePageHeaderArea>()),
     mnChildCount(-1)
 {
     if (mpViewShell)
@@ -113,7 +81,14 @@ void SAL_CALL ScAccessiblePageHeader::disposing()
         mpViewShell->RemoveAccessibilityObject(*this);
         mpViewShell = nullptr;
     }
-    std::for_each(maAreas.begin(), maAreas.end(), Dispose());
+    for (auto & i : maAreas)
+    {
+        if (i.is())
+        {
+            i->dispose();
+            i.clear();
+        }
+    }
 
     ScAccessibleContextBase::disposing();
 }
@@ -125,37 +100,35 @@ void ScAccessiblePageHeader::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     // only notify if child exist, otherwise it is not necessary
     if (rHint.GetId() == SfxHintId::ScDataChanged)
     {
-        ScHFAreas aOldAreas(maAreas);
-        std::for_each(aOldAreas.begin(), aOldAreas.end(), Acquire());
+        std::vector<rtl::Reference<ScAccessiblePageHeaderArea>> aOldAreas(maAreas);
         mnChildCount = -1;
         getAccessibleChildCount();
         for (sal_uInt8 i = 0; i < MAX_AREAS; ++i)
         {
-            if ((aOldAreas[i] && maAreas[i] && !ScGlobal::EETextObjEqual(aOldAreas[i]->GetEditTextObject(), maAreas[i]->GetEditTextObject())) ||
-                    (aOldAreas[i] && !maAreas[i]) || (!aOldAreas[i] && maAreas[i]))
+            if ((aOldAreas[i].is() && maAreas[i].is() && !ScGlobal::EETextObjEqual(aOldAreas[i]->GetEditTextObject(), maAreas[i]->GetEditTextObject())) ||
+                    (aOldAreas[i].is() && !maAreas[i].is()) || (!aOldAreas[i].is() && maAreas[i].is()))
             {
-                if (aOldAreas[i] && aOldAreas[i]->GetEditTextObject())
+                if (aOldAreas[i].is() && aOldAreas[i]->GetEditTextObject())
                 {
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
                     aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.OldValue = uno::makeAny(uno::Reference<XAccessible>(aOldAreas[i]));
+                    aEvent.OldValue = uno::makeAny(uno::Reference<XAccessible>(aOldAreas[i].get()));
 
                     CommitChange(aEvent); // child gone - event
                     aOldAreas[i]->dispose();
                 }
-                if (maAreas[i] && maAreas[i]->GetEditTextObject())
+                if (maAreas[i].is() && maAreas[i]->GetEditTextObject())
                 {
                     AccessibleEventObject aEvent;
                     aEvent.EventId = AccessibleEventId::CHILD;
                     aEvent.Source = uno::Reference< XAccessibleContext >(this);
-                    aEvent.NewValue = uno::makeAny(uno::Reference<XAccessible>(maAreas[i]));
+                    aEvent.NewValue = uno::makeAny(uno::Reference<XAccessible>(maAreas[i].get()));
 
                     CommitChange(aEvent); // new child - event
                 }
             }
         }
-        std::for_each(aOldAreas.begin(), aOldAreas.end(), Release());
     }
     else if (rHint.GetId() == SfxHintId::ScAccVisAreaChanged)
     {
@@ -188,8 +161,8 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleAtPo
             sal_uInt8 i(0);
             while(!xRet.is() && i < MAX_AREAS)
             {
-                if (maAreas[i])
-                    xRet = maAreas[i];
+                if (maAreas[i].is())
+                    xRet = maAreas[i].get();
                 else
                     ++i;
             }
@@ -254,14 +227,14 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePageHeader::getAccessibleChil
     if(mnChildCount < 0)
         getAccessibleChildCount();
 
-    ScHFAreas::iterator aItr = maAreas.begin();
-    ScHFAreas::iterator aEndItr = maAreas.end();
+    auto aItr = maAreas.begin();
+    auto aEndItr = maAreas.end();
     while (!xRet.is() && (nIndex >= 0) && (aItr != aEndItr))
     {
-        if (*aItr)
+        if (aItr->is())
         {
             if (nIndex == 0)
-                xRet = *aItr;
+                xRet = aItr->get();
             else
                 --nIndex;
         }
@@ -390,29 +363,22 @@ void ScAccessiblePageHeader::AddChild(const EditTextObject* pArea, sal_uInt32 nI
 {
     if (pArea && (!pArea->GetText(0).isEmpty() || (pArea->GetParagraphCount() > 1)))
     {
-        if (maAreas[nIndex])
+        if (maAreas[nIndex].is())
         {
             if (!ScGlobal::EETextObjEqual(maAreas[nIndex]->GetEditTextObject(), pArea))
             {
-                maAreas[nIndex]->release();
                 maAreas[nIndex] = new ScAccessiblePageHeaderArea(this, mpViewShell, pArea, mbHeader, eAdjust);
-                maAreas[nIndex]->acquire();
             }
         }
         else
         {
             maAreas[nIndex] = new ScAccessiblePageHeaderArea(this, mpViewShell, pArea, mbHeader, eAdjust);
-            maAreas[nIndex]->acquire();
         }
         ++mnChildCount;
     }
     else
     {
-        if (maAreas[nIndex])
-        {
-            maAreas[nIndex]->release();
-            maAreas[nIndex] = nullptr;
-        }
+        maAreas[nIndex].clear();
     }
 }
 
