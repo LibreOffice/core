@@ -62,10 +62,13 @@ $(eval $(call gb_Library_add_libs,avmediagst,\
 
 $(eval $(call gb_Library_add_exception_objects,avmediagst,\
 	avmedia/source/gstreamer/gstuno \
-	avmedia/source/gstreamer/gstmanager \
-	avmedia/source/gstreamer/gstwindow \
 	avmedia/source/gstreamer/gstplayer \
 	avmedia/source/gstreamer/gstframegrabber \
+))
+
+$(eval $(call gb_Library_add_noexception_objects,avmediagst,\
+	avmedia/source/gstreamer/gstmanager \
+	avmedia/source/gstreamer/gstwindow \
 ))
 
 # vim: set noet sw=4 ts=4:
