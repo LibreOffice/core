@@ -178,7 +178,8 @@ class ScXMLChangeTextPContext : public ScXMLImportContext
     OUString                    sLName;
     OUStringBuffer              sText;
     ScXMLChangeCellContext*     pChangeCellContext;
-    SvXMLImportContext*         pTextPContext;
+    std::unique_ptr<SvXMLImportContext>
+                                pTextPContext;
     sal_uInt16                  nPrefix;
 
 public:
@@ -187,8 +188,6 @@ public:
                        const OUString& rLName,
                        const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                         ScXMLChangeCellContext* pChangeCellContext);
-
-    virtual ~ScXMLChangeTextPContext() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 nPrefix,
                                      const OUString& rLocalName,
@@ -849,11 +848,6 @@ ScXMLChangeTextPContext::ScXMLChangeTextPContext( ScXMLImport& rImport,
     // here are no attributes
 }
 
-ScXMLChangeTextPContext::~ScXMLChangeTextPContext()
-{
-    delete pTextPContext;
-}
-
 SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTempPrefix,
                                             const OUString& rLName,
                                             const css::uno::Reference<css::xml::sax::XAttributeList>& xTempAttrList )
@@ -888,8 +882,8 @@ SvXMLImportContext *ScXMLChangeTextPContext::CreateChildContext( sal_uInt16 nTem
         if (!pTextPContext)
         {
             bWasContext = false;
-            pTextPContext = GetScImport().GetTextImport()->CreateTextChildContext(
-                                    GetScImport(), nPrefix, sLName, xAttrList);
+            pTextPContext.reset( GetScImport().GetTextImport()->CreateTextChildContext(
+                                    GetScImport(), nPrefix, sLName, xAttrList) );
         }
         if (pTextPContext)
         {

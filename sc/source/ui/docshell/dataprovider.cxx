@@ -71,7 +71,6 @@ ExternalDataMapper::ExternalDataMapper(ScDocShell* pDocShell, const OUString& rU
 
 ExternalDataMapper::~ExternalDataMapper()
 {
-    delete mpDataProvider;
 }
 
 void ExternalDataMapper::StartImport()
@@ -146,7 +145,6 @@ CSVFetchThread::CSVFetchThread(SvStream *pData, size_t nColCount):
 
 CSVFetchThread::~CSVFetchThread()
 {
-    delete mpStream;
 }
 
 bool CSVFetchThread::IsRequestedTerminate()

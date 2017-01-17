@@ -152,12 +152,12 @@ private:
     typedef ::std::unique_ptr< XclImpCachedMatrix > XclImpCachedMatrixPtr;
     typedef ::std::unique_ptr< ScTokenArray >       TokenArrayPtr;
 
-    XclImpCachedMatrixPtr mxDdeMatrix;      /// Cached results of the DDE link.
-    MOper*              mpMOper;            /// Cached values for OLE link
-    TokenArrayPtr       mxArray;            /// Formula tokens for external name.
-    OUString            maName;             /// The name of the external name.
-    sal_uInt32          mnStorageId;        /// Storage ID for OLE object storages.
-    XclImpExtNameType   meType;             /// Type of the external name.
+    XclImpCachedMatrixPtr  mxDdeMatrix;     /// Cached results of the DDE link.
+    std::unique_ptr<MOper> mpMOper;         /// Cached values for OLE link
+    TokenArrayPtr          mxArray;         /// Formula tokens for external name.
+    OUString               maName;          /// The name of the external name.
+    sal_uInt32             mnStorageId;     /// Storage ID for OLE object storages.
+    XclImpExtNameType      meType;          /// Type of the external name.
 };
 
 // Import link manager ========================================================

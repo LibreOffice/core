@@ -99,15 +99,14 @@ struct ScPrintState                         //  Save Variables from ScPrintFunc
 class ScPageRowEntry
 {
 private:
-    SCROW   nStartRow;
-    SCROW   nEndRow;
-    size_t  nPagesX;
-    bool*   pHidden;
+    SCROW                    nStartRow;
+    SCROW                    nEndRow;
+    size_t                   nPagesX;
+    std::unique_ptr<bool[]>  pHidden;
     //!     Cache Number of really visible?
 
 public:
-            ScPageRowEntry()    { nStartRow = nEndRow = 0; nPagesX = 0; pHidden = nullptr; }
-            ~ScPageRowEntry()   { delete[] pHidden; }
+            ScPageRowEntry()    { nStartRow = nEndRow = 0; nPagesX = 0; }
 
             ScPageRowEntry(const ScPageRowEntry& r);
     ScPageRowEntry& operator=(const ScPageRowEntry& r);

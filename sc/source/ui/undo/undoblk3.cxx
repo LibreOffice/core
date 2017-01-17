@@ -229,7 +229,6 @@ ScUndoFillTable::ScUndoFillTable( ScDocShell* pNewDocShell,
 
 ScUndoFillTable::~ScUndoFillTable()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoFillTable::GetComment() const
@@ -253,7 +252,7 @@ void ScUndoFillTable::SetChangeTrack()
             {
                 aWorkRange.aStart.SetTab(*itr);
                 aWorkRange.aEnd.SetTab(*itr);
-                pChangeTrack->AppendContentRange( aWorkRange, pUndoDoc,
+                pChangeTrack->AppendContentRange( aWorkRange, pUndoDoc.get(),
                     nTmpAction, nEndChangeAction );
                 if ( !nStartChangeAction )
                     nStartChangeAction = nTmpAction;
@@ -503,7 +502,6 @@ ScUndoAutoFill::ScUndoAutoFill( ScDocShell* pNewDocShell,
 
 ScUndoAutoFill::~ScUndoAutoFill()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoAutoFill::GetComment() const
@@ -515,7 +513,7 @@ void ScUndoAutoFill::SetChangeTrack()
 {
     ScChangeTrack* pChangeTrack = pDocShell->GetDocument().GetChangeTrack();
     if ( pChangeTrack )
-        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc,
+        pChangeTrack->AppendContentRange( aBlockRange, pUndoDoc.get(),
             nStartChangeAction, nEndChangeAction );
     else
         nStartChangeAction = nEndChangeAction = 0;
@@ -776,7 +774,6 @@ ScUndoAutoFormat::ScUndoAutoFormat( ScDocShell* pNewDocShell,
 
 ScUndoAutoFormat::~ScUndoAutoFormat()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoAutoFormat::GetComment() const
@@ -1113,7 +1110,6 @@ ScUndoTabOp::ScUndoTabOp( ScDocShell* pNewDocShell,
 
 ScUndoTabOp::~ScUndoTabOp()
 {
-    delete pUndoDoc;
 }
 
 OUString ScUndoTabOp::GetComment() const

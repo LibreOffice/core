@@ -215,7 +215,6 @@ ScXMLDataPilotTableContext::ScXMLDataPilotTableContext( ScXMLImport& rImport,
 
 ScXMLDataPilotTableContext::~ScXMLDataPilotTableContext()
 {
-    delete pDPDimSaveData;
 }
 
 SvXMLImportContext *ScXMLDataPilotTableContext::CreateChildContext( sal_uInt16 nPrefix,
@@ -453,14 +452,14 @@ void ScXMLDataPilotTableContext::AddDimension(ScDPSaveDimension* pDim)
 void ScXMLDataPilotTableContext::AddGroupDim(const ScDPSaveNumGroupDimension& aNumGroupDim)
 {
     if (!pDPDimSaveData)
-        pDPDimSaveData = new ScDPDimensionSaveData();
+        pDPDimSaveData.reset( new ScDPDimensionSaveData );
     pDPDimSaveData->AddNumGroupDimension(aNumGroupDim);
 }
 
 void ScXMLDataPilotTableContext::AddGroupDim(const ScDPSaveGroupDimension& aGroupDim)
 {
     if (!pDPDimSaveData)
-        pDPDimSaveData = new ScDPDimensionSaveData();
+        pDPDimSaveData.reset( new ScDPDimensionSaveData );
     pDPDimSaveData->AddGroupDimension(aGroupDim);
 }
 
@@ -545,7 +544,7 @@ void ScXMLDataPilotTableContext::EndElement()
     pDPSave->SetFilterButton(bShowFilter);
     pDPSave->SetDrillDown(bDrillDown);
     if (pDPDimSaveData)
-        pDPSave->SetDimensionData(pDPDimSaveData);
+        pDPSave->SetDimensionData(pDPDimSaveData.get());
     pDPObject->SetSaveData(*pDPSave);
 
     ScDPCollection* pDPCollection = pDoc->GetDPCollection();

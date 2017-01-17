@@ -64,12 +64,11 @@ ExportBiff5::ExportBiff5( XclExpRootData& rExpData, SvStream& rStrm ):
     pExcRoot = &GetOldRoot();
     pExcRoot->pER = this;   // ExcRoot -> XclExpRoot
     pExcRoot->eDateiTyp = Biff5;
-    pExcDoc = new ExcDocument( *this );
+    pExcDoc.reset( new ExcDocument( *this ) );
 }
 
 ExportBiff5::~ExportBiff5()
 {
-    delete pExcDoc;
 }
 
 FltError ExportBiff5::Write()

@@ -196,7 +196,7 @@ class ScEditFieldObj : public cppu::WeakImplHelper<
     const ScEditFieldObj& operator=(const ScEditFieldObj&) = delete;
 
     const SfxItemPropertySet* pPropSet;
-    ScEditSource* mpEditSource;
+    std::unique_ptr<ScEditSource> mpEditSource;
     ESelection aSelection;
 
     sal_Int32 meType;
