@@ -221,7 +221,7 @@ class TokenStack
 
 {
     private:
-        TokenId*                    pStack;       // Stack as Array
+        std::unique_ptr<TokenId[]>  pStack;       // Stack as Array
         sal_uInt16                  nPos;         // Write-mark
         static const sal_uInt16     nSize = 1024; // first Index outside of stack
     public:

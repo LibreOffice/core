@@ -113,7 +113,6 @@ ScXMLTableRowCellContext::Field::Field(SvxFieldData* pData) : mpData(pData) {}
 
 ScXMLTableRowCellContext::Field::~Field()
 {
-    delete mpData;
 }
 
 ScXMLTableRowCellContext::ScXMLTableRowCellContext( ScXMLImport& rImport,

@@ -165,16 +165,16 @@ enum ScUnoCollectMode
 class ScUnoEditEngine : public ScEditEngineDefaulter
 {
     ScUnoCollectMode    eMode;
-    sal_uInt16              nFieldCount;
+    sal_uInt16          nFieldCount;
     sal_Int32           mnFieldType;
-    SvxFieldData*       pFound;         // lokale Kopie
+    std::unique_ptr<SvxFieldData>
+                        pFound;         // lokale Kopie
     sal_Int32           nFieldPar;
     sal_Int32           nFieldPos;
-    sal_uInt16              nFieldIndex;
+    sal_uInt16          nFieldIndex;
 
 public:
     explicit ScUnoEditEngine(ScEditEngineDefaulter* pSource);
-    virtual ~ScUnoEditEngine() override;
 
     virtual OUString  CalcFieldValue( const SvxFieldItem& rField, sal_Int32 nPara, sal_Int32 nPos,
                                     Color*& rTxtColor, Color*& rFldColor ) override;
@@ -202,11 +202,6 @@ ScUnoEditEngine::ScUnoEditEngine(ScEditEngineDefaulter* pSource)
     delete pData;
 }
 
-ScUnoEditEngine::~ScUnoEditEngine()
-{
-    delete pFound;
-}
-
 OUString ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             sal_Int32 nPara, sal_Int32 nPos, Color*& rTxtColor, Color*& rFldColor )
 {
@@ -220,14 +215,14 @@ OUString ScUnoEditEngine::CalcFieldValue( const SvxFieldItem& rField,
             {
                 if ( eMode == SC_UNO_COLLECT_FINDINDEX && !pFound && nFieldCount == nFieldIndex )
                 {
-                    pFound = pFieldData->Clone();
+                    pFound.reset( pFieldData->Clone() );
                     nFieldPar = nPara;
                     nFieldPos = nPos;
                 }
                 if ( eMode == SC_UNO_COLLECT_FINDPOS && !pFound &&
                         nPara == nFieldPar && nPos == nFieldPos )
                 {
-                    pFound = pFieldData->Clone();
+                    pFound.reset( pFieldData->Clone() );
                     nFieldIndex = nFieldCount;
                 }
                 ++nFieldCount;
@@ -257,7 +252,7 @@ SvxFieldData* ScUnoEditEngine::FindByIndex(sal_uInt16 nIndex)
     UpdateFields();
     eMode = SC_UNO_COLLECT_NONE;
 
-    return pFound;
+    return pFound.get();
 }
 
 SvxFieldData* ScUnoEditEngine::FindByPos(sal_Int32 nPar, sal_Int32 nPos, sal_Int32 nType)
@@ -271,7 +266,7 @@ SvxFieldData* ScUnoEditEngine::FindByPos(sal_Int32 nPar, sal_Int32 nPos, sal_Int
     mnFieldType = text::textfield::Type::UNSPECIFIED;
     eMode = SC_UNO_COLLECT_NONE;
 
-    return pFound;
+    return pFound.get();
 }
 
 ScCellFieldsObj::ScCellFieldsObj(
@@ -1129,13 +1124,12 @@ void ScEditFieldObj::InitDoc(
         mpData.reset();
 
         aSelection = rSel;
-        mpEditSource = pEditSrc;
+        mpEditSource.reset( pEditSrc );
     }
 }
 
 ScEditFieldObj::~ScEditFieldObj()
 {
-    delete mpEditSource;
 }
 
 SvxFieldItem ScEditFieldObj::CreateFieldItem()

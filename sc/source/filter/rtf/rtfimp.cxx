@@ -43,7 +43,7 @@ ScEEAbsImport *ScFormatFilterPluginImpl::CreateRTFImport( ScDocument* pDoc, cons
 ScRTFImport::ScRTFImport( ScDocument* pDocP, const ScRange& rRange ) :
     ScEEImport( pDocP, rRange )
 {
-    mpParser = new ScRTFParser( mpEngine );
+    mpParser = new ScRTFParser( mpEngine.get() );
 }
 
 ScRTFImport::~ScRTFImport()

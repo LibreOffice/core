@@ -86,7 +86,8 @@ protected:
     TokenStack          aStack;
     ScAddress           aEingPos;
     ConvErr             eStatus;
-    sal_Char*           pBuffer;        // universal buffer
+    std::unique_ptr<sal_Char[]>
+                        pBuffer;        // universal buffer
 
     ConverterBase( svl::SharedStringPool& rSPool, sal_uInt16 nNewBuffer );
     virtual             ~ConverterBase();

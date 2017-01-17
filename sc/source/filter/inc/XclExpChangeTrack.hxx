@@ -289,7 +289,8 @@ public:
 class XclExpChTrTabIdBuffer
 {
 private:
-    sal_uInt16*                 pBuffer;
+    std::unique_ptr<sal_uInt16[]>
+                                pBuffer;
     sal_uInt16*                 pLast;
     sal_uInt16                  nBufSize;
     sal_uInt16                  nLastId;
@@ -306,9 +307,9 @@ public:
     void                        Remove();
 
     inline sal_uInt16           GetBufferCount() const
-                                    { return static_cast< sal_uInt16 >( (pLast - pBuffer) + 1 ); }
+                                    { return static_cast< sal_uInt16 >( (pLast - pBuffer.get()) + 1 ); }
     inline void                 GetBufferCopy( sal_uInt16* pDest ) const
-                                    { memcpy( pDest, pBuffer, sizeof(sal_uInt16) * GetBufferCount() ); }
+                                    { memcpy( pDest, pBuffer.get(), sizeof(sal_uInt16) * GetBufferCount() ); }
 };
 
 // XclExpChTrTabId - tab id record
@@ -343,7 +344,8 @@ private:
     OUString                    sUsername;
     DateTime                    aDateTime;
     sal_uInt32                  nIndex;         // action number
-    XclExpChTrAction*           pAddAction;     // additional record for this action
+    std::unique_ptr<XclExpChTrAction>
+                                pAddAction;     // additional record for this action
     bool                        bAccepted;
 
 protected:
@@ -402,7 +404,7 @@ public:
     virtual void                Save( XclExpStream& rStrm ) override;
     virtual std::size_t         GetLen() const override;
 
-    inline XclExpChTrAction*    GetAddAction() { return pAddAction; }
+    inline XclExpChTrAction*    GetAddAction() { return pAddAction.get(); }
     inline sal_uInt32           GetActionNumber() const { return nIndex; }
 };
 

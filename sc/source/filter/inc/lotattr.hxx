@@ -70,12 +70,12 @@ private:
 
     struct ENTRY
     {
-        ScPatternAttr*  pPattAttr;
-        sal_uInt32          nHash0;
+        std::unique_ptr<ScPatternAttr>  pPattAttr;
+        sal_uInt32                      nHash0;
 
-        ENTRY (ScPatternAttr* p);
+        ENTRY(ScPatternAttr* p);
 
-        ~ENTRY ();
+        ~ENTRY();
     };
 
     inline static void  MakeHash( const LotAttrWK3& rAttr, sal_uInt32& rOut )

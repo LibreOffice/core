@@ -568,7 +568,6 @@ ExcFilterCondition::ExcFilterCondition() :
 
 ExcFilterCondition::~ExcFilterCondition()
 {
-    delete pText;
 }
 
 std::size_t ExcFilterCondition::GetTextBytes() const
@@ -581,9 +580,7 @@ void ExcFilterCondition::SetCondition( sal_uInt8 nTp, sal_uInt8 nOp, double fV, 
     nType = nTp;
     nOper = nOp;
     fVal = fV;
-
-    delete pText;
-    (pT) ? pText = new XclExpString( *pT, EXC_STR_8BITLENGTH ) : pText =  nullptr;
+    pText.reset( pT ? new XclExpString( *pT, EXC_STR_8BITLENGTH ) : nullptr);
 }
 
 void ExcFilterCondition::Save( XclExpStream& rStrm )
@@ -639,7 +636,7 @@ void ExcFilterCondition::SaveXml( XclExpXmlStream& rStrm )
 
     rStrm.GetCurrentStream()->singleElement( XML_customFilter,
             XML_operator,   lcl_GetOperator( nOper ),
-            XML_val,        lcl_GetValue( nType, fVal, pText ).getStr(),
+            XML_val,        lcl_GetValue( nType, fVal, pText.get() ).getStr(),
             FSEND );
 }
 

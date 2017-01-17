@@ -74,7 +74,7 @@ public:
 class ScCellEditSource : public ScEditSource
 {
 private:
-    ScCellTextData* pCellTextData;
+    std::unique_ptr<ScCellTextData> pCellTextData;
 
 public:
     ScCellEditSource(ScDocShell* pDocSh, const ScAddress& rP);

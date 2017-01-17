@@ -34,7 +34,6 @@ ScExportBase::ScExportBase( SvStream& rStrmP, ScDocument* pDocP,
 
 ScExportBase::~ScExportBase()
 {
-    delete pEditEngine;
 }
 
 bool ScExportBase::GetDataArea( SCTAB nTab, SCCOL& nStartCol,
@@ -70,7 +69,7 @@ bool ScExportBase::IsEmptyTable( SCTAB nTab ) const
 ScFieldEditEngine& ScExportBase::GetEditEngine() const
 {
     if ( !pEditEngine )
-        const_cast<ScExportBase*>(this)->pEditEngine = new ScFieldEditEngine(pDoc, pDoc->GetEditPool());
+        const_cast<ScExportBase*>(this)->pEditEngine.reset( new ScFieldEditEngine(pDoc, pDoc->GetEditPool()) );
     return *pEditEngine;
 }
 

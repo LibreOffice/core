@@ -51,7 +51,8 @@ public:
 class ExportBiff5 : public ExportTyp, protected XclExpRoot
 {
 private:
-    ExcDocument*        pExcDoc;
+    std::unique_ptr<ExcDocument>
+                        pExcDoc;
 
 protected:
     RootData*           pExcRoot;

@@ -48,7 +48,7 @@ class ScInputStatusItem : public SfxPoolItem
     ScAddress           aStartPos;
     ScAddress           aEndPos;
     OUString            aString;
-    EditTextObject*     pEditData;
+    std::unique_ptr<EditTextObject>             pEditData;
     const std::vector<editeng::MisspellRanges>* mpMisspellRanges;
 
 public:
@@ -68,7 +68,7 @@ public:
     const ScAddress&        GetPos() const      { return aCursorPos; }
 
     const OUString&         GetString() const   { return aString; }
-    const EditTextObject*   GetEditData() const { return pEditData; }
+    const EditTextObject*   GetEditData() const { return pEditData.get(); }
 
     void SetMisspellRanges( const std::vector<editeng::MisspellRanges>* pRanges );
     const std::vector<editeng::MisspellRanges>* GetMisspellRanges() const { return mpMisspellRanges;}
@@ -210,10 +210,10 @@ public:
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
 
     void        SetUserList ( const ScUserList& rUserList );
-    ScUserList* GetUserList () const { return pUserList; }
+    ScUserList* GetUserList () const { return pUserList.get(); }
 
 private:
-    ScUserList* pUserList;
+    std::unique_ptr<ScUserList> pUserList;
 };
 
 class ScConsolidateItem : public SfxPoolItem
@@ -249,9 +249,9 @@ public:
     bool                IsNewSheet() const      { return bNewSheet; }
 
 private:
-    ScDPSaveData*   pSaveData;
-    ScRange         aDestRange;
-    bool            bNewSheet;
+    std::unique_ptr<ScDPSaveData>  pSaveData;
+    ScRange                        aDestRange;
+    bool                           bNewSheet;
 };
 
 class ScSolveItem : public SfxPoolItem

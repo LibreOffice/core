@@ -102,27 +102,23 @@ ScPageRowEntry::ScPageRowEntry(const ScPageRowEntry& r)
     nPagesX   = r.nPagesX;
     if (r.pHidden && nPagesX)
     {
-        pHidden = new bool[nPagesX];
-        memcpy( pHidden, r.pHidden, nPagesX * sizeof(bool) );
+        pHidden.reset( new bool[nPagesX] );
+        memcpy( pHidden.get(), r.pHidden.get(), nPagesX * sizeof(bool) );
     }
-    else
-        pHidden = nullptr;
 }
 
 ScPageRowEntry& ScPageRowEntry::operator=(const ScPageRowEntry& r)
 {
-    delete[] pHidden;
-
     nStartRow = r.nStartRow;
     nEndRow   = r.nEndRow;
     nPagesX   = r.nPagesX;
     if (r.pHidden && nPagesX)
     {
-        pHidden = new bool[nPagesX];
-        memcpy( pHidden, r.pHidden, nPagesX * sizeof(bool) );
+        pHidden.reset( new bool[nPagesX] );
+        memcpy( pHidden.get(), r.pHidden.get(), nPagesX * sizeof(bool) );
     }
     else
-        pHidden = nullptr;
+        pHidden.reset();
 
     return *this;
 }
@@ -132,8 +128,7 @@ void ScPageRowEntry::SetPagesX(size_t nNew)
     if (pHidden)
     {
         OSL_FAIL("SetPagesX nicht nach SetHidden");
-        delete[] pHidden;
-        pHidden = nullptr;
+        pHidden.reset();
     }
     nPagesX = nNew;
 }
@@ -148,8 +143,8 @@ void ScPageRowEntry::SetHidden(size_t nX)
         {
             if (!pHidden)
             {
-                pHidden = new bool[nPagesX];
-                memset( pHidden, false, nPagesX * sizeof(bool) );
+                pHidden.reset( new bool[nPagesX] );
+                memset( pHidden.get(), false, nPagesX * sizeof(bool) );
             }
             pHidden[nX] = true;
         }

@@ -44,7 +44,7 @@ class SC_DLLPUBLIC ExternalDataMapper
 {
     ScRange maRange;
     ScDocShell* mpDocShell;
-    DataProvider* mpDataProvider;
+    std::unique_ptr<DataProvider> mpDataProvider;
     ScDBCollection* mpDBCollection;
 
     OUString maURL;
@@ -88,7 +88,7 @@ typedef std::vector<Line> LinesType;
 
 class CSVFetchThread : public salhelper::Thread
 {
-    SvStream *mpStream;
+    std::unique_ptr<SvStream> mpStream;
     size_t mnColCount;
 
     bool mbTerminate;

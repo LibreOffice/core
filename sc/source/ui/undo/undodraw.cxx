@@ -35,7 +35,6 @@ ScUndoDraw::ScUndoDraw( SfxUndoAction* pUndo, ScDocShell* pDocSh ) :
 
 ScUndoDraw::~ScUndoDraw()
 {
-    delete pDrawUndo;
 }
 
 void ScUndoDraw::ForgetDrawUndo()

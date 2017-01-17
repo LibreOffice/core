@@ -51,7 +51,8 @@ public:
 
 protected:
     ScDocShell*     pDocShell;
-    SfxUndoAction*  pDetectiveUndo;
+    std::unique_ptr<SfxUndoAction>
+                    pDetectiveUndo;
     sal_Int32       mnViewShellId;
 
     bool            IsPaintLocked() const { return pDocShell->IsPaintLocked(); }
@@ -165,14 +166,14 @@ private:
 
 class ScUndoWrapper: public SfxUndoAction           // for manual merging of actions
 {
-    SfxUndoAction*  pWrappedUndo;
-    sal_Int32       mnViewShellId;
+    std::unique_ptr<SfxUndoAction>  pWrappedUndo;
+    sal_Int32                       mnViewShellId;
 
 public:
                             ScUndoWrapper( SfxUndoAction* pUndo );
     virtual                 ~ScUndoWrapper() override;
 
-    SfxUndoAction*          GetWrappedUndo()        { return pWrappedUndo; }
+    SfxUndoAction*          GetWrappedUndo()        { return pWrappedUndo.get(); }
     void                    ForgetWrappedUndo();
 
     virtual void            Undo() override;
