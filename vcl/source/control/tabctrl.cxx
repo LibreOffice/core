@@ -2286,6 +2286,8 @@ void NotebookbarTabControl::SetCurPageId( sal_uInt16 nPageId )
 {
     if ( nPageId != 1 )
         TabControl::SetCurPageId( nPageId );
+    if ( nPageId == GetPageCount() )
+        ImplActivateTabPage( true );
 }
 
 void NotebookbarTabControl::ImplActivateTabPage( bool bNext )
