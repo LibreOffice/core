@@ -25,6 +25,7 @@
 #include "osl/thread.hxx"
 #include "osl/process.h"
 #include "rtl/string.h"
+#include "rtl/ustring.hxx"
 #include "sal/detail/log.h"
 #include "sal/log.hxx"
 #include "sal/types.h"
@@ -103,12 +104,12 @@ char const * getEnvironmentVariable_(const char* env) {
 }
 
 bool getValueFromLoggingIniFile(const char* key, char* value) {
-    OUString programDirectoryURL;
-    OUString programDirectoryPath;
+    rtl::OUString programDirectoryURL;
+    rtl::OUString programDirectoryPath;
     osl_getProcessWorkingDir(&(programDirectoryURL.pData));
     osl_getSystemPathFromFileURL(programDirectoryURL.pData, &programDirectoryPath.pData);
-    OUString aLogFile(programDirectoryPath + "/" + "logging.ini");
-    std::ifstream logFileStream(OUStringToOString( aLogFile, RTL_TEXTENCODING_ASCII_US).getStr());
+    rtl::OUString aLogFile(programDirectoryPath + "/" + "logging.ini");
+    std::ifstream logFileStream(rtl::OUStringToOString( aLogFile, RTL_TEXTENCODING_ASCII_US).getStr());
     if (!logFileStream.good())
         return false;
 
