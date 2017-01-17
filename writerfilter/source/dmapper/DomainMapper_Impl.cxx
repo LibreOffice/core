@@ -1179,16 +1179,18 @@ void DomainMapper_Impl::finishParagraph( const PropertyMapPtr& pPropertyMap )
                 getTableManager( ).handle(xTextRange);
                 m_aSmartTagHandler.handle(xTextRange);
 
-                // Get the end of paragraph character inserted
-                uno::Reference< text::XTextCursor > xCur = xTextRange->getText( )->createTextCursor( );
-                if (rAppendContext.xInsertPosition.is())
-                    xCur->gotoRange( rAppendContext.xInsertPosition, false );
-                else
-                    xCur->gotoEnd( false );
-                xCur->goLeft( 1 , true );
-                uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
-                CheckParaMarkerRedline( xParaEnd );
-
+                if (xTextRange.is())
+                {
+                    // Get the end of paragraph character inserted
+                    uno::Reference< text::XTextCursor > xCur = xTextRange->getText( )->createTextCursor( );
+                    if (rAppendContext.xInsertPosition.is())
+                        xCur->gotoRange( rAppendContext.xInsertPosition, false );
+                    else
+                        xCur->gotoEnd( false );
+                    xCur->goLeft( 1 , true );
+                    uno::Reference< text::XTextRange > xParaEnd( xCur, uno::UNO_QUERY );
+                    CheckParaMarkerRedline( xParaEnd );
+                }
             }
             if( !bKeepLastParagraphProperties )
                 rAppendContext.pLastParagraphProperties = pToBeSavedProperties;
