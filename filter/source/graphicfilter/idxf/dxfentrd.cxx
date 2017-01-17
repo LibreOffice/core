@@ -659,8 +659,11 @@ void DXFHatchEntity::EvaluateGroup( DXFGroupReader & rDGR )
         {
             bIsInBoundaryPathContext = true;
             nBoundaryPathCount = rDGR.GetI();
-            if ( nBoundaryPathCount )
+            // limit alloc to max reasonable size based on remaining data in stream
+            if (nBoundaryPathCount > 0 && static_cast<sal_uInt32>(nBoundaryPathCount) <= rDGR.remainingSize())
                 pBoundaryPathData.reset( new DXFBoundaryPathData[ nBoundaryPathCount ] );
+            else
+                nBoundaryPathCount = 0;
         }
         break;
         case 75 :
