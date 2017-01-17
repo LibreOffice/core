@@ -2690,9 +2690,16 @@ bool SwUnoCursorHelper::ConvertSortProperties(
         else if ( rPropName == "Delimiter" )
         {
             sal_Unicode uChar;
+            sal_uInt16 nChar;
             if (aValue >>= uChar)
             {
                 rSortOpt.cDeli = uChar;
+            }
+            else if (aValue >>= nChar)
+            {
+                // For compatibility with BASIC, also accept an ANY containing
+                // an UNSIGNED SHORT:
+                rSortOpt.cDeli = nChar;
             }
             else
             {
