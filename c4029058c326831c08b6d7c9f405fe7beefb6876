@@ -16,6 +16,24 @@
       "revId": "c4029058c326831c08b6d7c9f405fe7beefb6876",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_e6fdc66f",
+        "filename": "external/python3/ubsan.patch.0",
+        "patchSetId": 2
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-17T20:30:07Z",
+      "side": 1,
+      "message": "argh, there i was afraid the dinner was going cold... reverting that...",
+      "parentUuid": "fa48f94a_e6e6a6e7",
+      "revId": "c4029058c326831c08b6d7c9f405fe7beefb6876",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
