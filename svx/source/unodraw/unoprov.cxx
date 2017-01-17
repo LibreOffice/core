@@ -1375,21 +1375,20 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
         return nullptr;
     }
 
-    if( mpInfos[ nServiceId ] == nullptr )
+    if( !mxInfos[ nServiceId ].is() )
     {
-        mpInfos[nServiceId] = new comphelper::PropertySetInfo();
-        mpInfos[nServiceId]->acquire();
+        mxInfos[nServiceId] = new comphelper::PropertySetInfo();
 
         switch( nServiceId )
         {
         case SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS:
-            mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
+            mxInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
             break;
         case SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER:
-            mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
-            mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->remove( UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION );
+            mxInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetSvxDrawingDefaultsPropertyMap() );
+            mxInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->remove( UNO_NAME_EDIT_PARA_IS_HANGING_PUNCTUATION );
             // OD 13.10.2003 #i18732# - add property map for writer item 'IsFollowingTextFlow'
-            mpInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetAdditionalWriterDrawingDefaultsPropertyMap() );
+            mxInfos[SVXUNO_SERVICEID_COM_SUN_STAR_DRAWING_DEFAULTS_WRITER]->add( ImplGetAdditionalWriterDrawingDefaultsPropertyMap() );
             break;
 
         default:
@@ -1397,9 +1396,9 @@ comphelper::PropertySetInfo* SvxPropertySetInfoPool::getOrCreate( sal_Int32 nSer
         }
     }
 
-    return mpInfos[ nServiceId ];
+    return mxInfos[ nServiceId ].get();
 }
 
-comphelper::PropertySetInfo* SvxPropertySetInfoPool::mpInfos[SVXUNO_SERVICEID_LASTID+1] = { nullptr };
+rtl::Reference<comphelper::PropertySetInfo> SvxPropertySetInfoPool::mxInfos[SVXUNO_SERVICEID_LASTID+1] = { nullptr };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
