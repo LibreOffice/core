@@ -198,9 +198,8 @@ void FilterCache::takeOver(const FilterCache& rClone)
     // <- SAFE ----------------------------------
 }
 
-
 void FilterCache::load(EFillState eRequired)
-    throw(css::uno::Exception)
+    throw(css::uno::Exception, std::exception)
 {
     // SAFE -> ----------------------------------
     ::osl::ResettableMutexGuard aLock(m_aLock);
@@ -239,7 +238,6 @@ void FilterCache::load(EFillState eRequired)
     impl_load(eRequired);
     // <- SAFE
 }
-
 
 bool FilterCache::isFillState(FilterCache::EFillState eState) const
     throw(css::uno::Exception)
@@ -1402,12 +1400,11 @@ void FilterCache::impl_load(EFillState eRequiredState)
     // <- SAFE
 }
 
-
 void FilterCache::impl_loadSet(const css::uno::Reference< css::container::XNameAccess >& xConfig,
                                      EItemType                                           eType  ,
                                      EReadOption                                         eOption,
                                      CacheItemList*                                      pCache )
-    throw(css::uno::Exception)
+    throw(css::uno::Exception, std::exception)
 {
     // get access to the right configuration set
     OUString sSetName;
@@ -1709,10 +1706,9 @@ CacheItem FilterCache::impl_loadItem(const css::uno::Reference< css::container::
     return aItem;
 }
 
-
 CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType        eType,
                                                            const OUString& sItem)
-    throw(css::uno::Exception)
+    throw (css::uno::Exception, std::exception)
 {
     CacheItemList*                              pList   = nullptr;
     css::uno::Reference< css::uno::XInterface > xConfig    ;
@@ -1782,7 +1778,6 @@ CacheItemList::iterator FilterCache::impl_loadItemOnDemand(      EItemType      
 
     return pList->find(sItem);
 }
-
 
 void FilterCache::impl_saveItem(const css::uno::Reference< css::container::XNameReplace >& xItem,
                                       EItemType                                            eType,

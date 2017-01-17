@@ -318,7 +318,7 @@ class FilterCache : public BaseLock
                         is already fully filled!
          */
         void load(EFillState eRequired)
-            throw(css::uno::Exception);
+            throw (css::uno::Exception, std::exception);
 
 
         /** @short      return the current fill state of this cache.
@@ -742,7 +742,7 @@ class FilterCache : public BaseLock
                                 EItemType                                           eType  ,
                                 EReadOption                                         eOption,
                                 CacheItemList*                                      pCache )
-            throw(css::uno::Exception);
+            throw (css::uno::Exception, std::exception);
 
 
         /** @short  read the specified container item from the given configuration set.
@@ -801,7 +801,7 @@ class FilterCache : public BaseLock
          */
         CacheItemList::iterator impl_loadItemOnDemand(      EItemType        eType,
                                                       const OUString& sItem)
-            throw(css::uno::Exception);
+            throw (css::uno::Exception, std::exception);
 
 
         /** TODO */
