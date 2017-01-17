@@ -112,6 +112,14 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
             }
         }
 
+        // There are more non-MIME-types reported that are not translated by
+        // aConversionTab, like "SAVE_TARGETS", "INTEGER", "ATOM"; just filter
+        // them out for now before they confuse this code's clients:
+        if (rtl_str_indexOfChar(pFinalName, '/') == -1)
+        {
+            continue;
+        }
+
         aFlavor.MimeType = OUString(pFinalName,
                                     rtl_str_getLength(pFinalName),
                                     RTL_TEXTENCODING_UTF8);
