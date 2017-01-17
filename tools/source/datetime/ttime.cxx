@@ -40,7 +40,7 @@
 #include <tools/time.hxx>
 #include <osl/diagnose.h>
 
-#if defined(SOLARIS) && defined(__GNUC__)
+#if defined(__sun) && defined(__GNUC__)
 extern long altzone;
 #endif
 
@@ -386,7 +386,7 @@ Time tools::Time::GetUTCOffset()
         nTime = time( nullptr );
         localtime_r( &nTime, &aTM );
         nLocalTime = mktime( &aTM );
-#if defined( SOLARIS )
+#if defined(__sun)
         // Solaris gmtime_r() seems not to handle daylight saving time
         // flags correctly
         nUTC = nLocalTime + ( aTM.tm_isdst == 0 ? timezone : altzone );

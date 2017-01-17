@@ -141,7 +141,7 @@ SalI18N_InputContext::SalI18N_InputContext ( SalFrame *pFrame ) :
         mpStatusAttributes( nullptr ),
         mpPreeditAttributes( nullptr )
 {
-#ifdef SOLARIS
+#ifdef __sun
     static const char* pIIIMPEnable = getenv( "SAL_DISABLE_OWN_IM_STATUS" );
     if( pIIIMPEnable && *pIIIMPEnable )
         mnSupportedStatusStyle &= ~XIMStatusCallbacks;

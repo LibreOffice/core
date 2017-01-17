@@ -38,7 +38,7 @@
 #include "osl/thread.h"
 #include "osl/file.h"
 
-#if defined LINUX || defined SOLARIS
+#if defined LINUX || defined __sun
 #include <crypt.h>
 #endif
 
@@ -352,7 +352,7 @@ static bool SAL_CALL osl_psz_getHomeDir(oslSecurity Security, sal_Char* pszDirec
     if (getuid() == pSecImpl->m_pPasswd.pw_uid)
     {
         sal_Char *pStr = nullptr;
-#ifdef SOLARIS
+#ifdef __sun
         char    buffer[8192];
 
         struct passwd pwd;

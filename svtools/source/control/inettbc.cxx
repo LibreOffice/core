@@ -1280,7 +1280,7 @@ bool SvtURLBox_Impl::TildeParsing(
             OUString aUserName = aText.copy( 1, ( nNameEnd != -1 ) ? nNameEnd : ( aText.getLength() - 1 ) );
 
             struct passwd* pPasswd = nullptr;
-#ifdef SOLARIS
+#ifdef __sun
             Sequence< sal_Int8 > sBuf( 1024 );
             struct passwd aTmp;
             sal_Int32 nRes = getpwnam_r( OUStringToOString( aUserName, RTL_TEXTENCODING_ASCII_US ).getStr(),

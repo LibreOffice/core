@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#if defined (SOLARIS) || defined (FREEBSD) || defined (NETBSD) || \
+#if defined (__sun) || defined (FREEBSD) || defined (NETBSD) || \
     defined (OPENBSD) || defined (DRAGONFLY) || defined (MACOSX)
 
 #ifdef __cplusplus
@@ -43,7 +43,7 @@ struct frame {
 } /* extern "C" */
 #endif
 
-#endif /* defined SOLARIS || FREEBSD || NETBSD || OPENBSD */
+#endif /* defined __sun || FREEBSD || NETBSD || OPENBSD */
 
 #if defined (LINUX)
 #include <execinfo.h>

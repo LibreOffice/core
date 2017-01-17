@@ -143,7 +143,7 @@ SetSystemLocale( const char* p_inlocale )
     return p_outlocale;
 }
 
-#ifdef SOLARIS
+#ifdef __sun
 static void
 SetSystemEnvironment( const OUString& rLocale )
 {
@@ -206,15 +206,15 @@ SalI18N_InputMethod::SetLocale()
         {
             osl_setThreadTextEncoding (RTL_TEXTENCODING_ISO_8859_1);
             locale = SetSystemLocale( "en_US" );
-            #ifdef SOLARIS
+#ifdef __sun
             SetSystemEnvironment( "en_US" );
-            #endif
+#endif
             if (! IsXWindowCompatibleLocale(locale))
             {
                 locale = SetSystemLocale( "C" );
-                #ifdef SOLARIS
+#ifdef __sun
                 SetSystemEnvironment( "C" );
-                #endif
+#endif
                 if (! IsXWindowCompatibleLocale(locale))
                     mbUseable = False;
             }

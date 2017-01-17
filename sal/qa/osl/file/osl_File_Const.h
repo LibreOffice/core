@@ -163,7 +163,7 @@ OUString aTypeURL3( FILE_PREFIX "" );
 
 #if ( defined UNX )                                     //          Unix
 OUString aVolURL1( FILE_PREFIX  "");            //ufs       Solaris/Linux
-#ifdef SOLARIS
+#ifdef __sun
 OUString aVolURL2( FILE_PREFIX  "dev/fd" );     //fd        Solaris
 #else
 OUString aVolURL2( FILE_PREFIX  "dev/floppy/0u1440" );  //fd0       Linux

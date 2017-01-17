@@ -322,7 +322,7 @@ void ScreenSaverInhibitor::inhibitXAutoLock( bool bInhibit, Display* pDisplay )
 
 void ScreenSaverInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
 {
-#if !defined(SOLARIS) && !defined(AIX)
+#if !defined(__sun) && !defined(AIX)
     int dummy;
     // This won't change while X11 is running, hence
     // we can evaluate only once and store as static
@@ -357,7 +357,7 @@ void ScreenSaverInhibitor::inhibitDPMS( bool bInhibit, Display* pDisplay )
                          mnDPMSSuspendTimeout,
                          mnDPMSOffTimeout );
     }
-#endif // !defined(SOLARIS) && !defined(AIX)
+#endif // !defined(__sun) && !defined(AIX)
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

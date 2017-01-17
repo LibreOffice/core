@@ -37,7 +37,7 @@
     defined(LINUX) || defined(OPENBSD) || defined(DRAGONFLY)
 #define STRUCT_TM_HAS_GMTOFF 1
 
-#elif defined(SOLARIS)
+#elif defined(__sun)
 #define HAS_ALTZONE 1
 #endif
 

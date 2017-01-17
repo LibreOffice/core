@@ -1605,7 +1605,7 @@ namespace osl_FileStatus
 
         void getFileType_007()
         {
-#if defined ( SOLARIS ) //Special file is differ in Windows
+#if defined(__sun) //Special file is differ in Windows
                 nError1 = ::osl::DirectoryItem::get( aTypeURL2, m_aSpecialItem );
             CPPUNIT_ASSERT_EQUAL( nError1, ::osl::FileBase::E_None );
 
@@ -4783,7 +4783,7 @@ namespace osl_Directory
             deleteTestDirectory( aTmpName3 );
             ::rtl::OString sError = "test for remove function: try to remove a directory that is not empty.";
             sError += errorToStr( nError1 ).getStr();
-#if defined ( SOLARIS )
+#if defined(__sun)
             //on UNX, the implementation uses rmdir(), which EEXIST is thrown on Solaris when the directory is not empty, refer to: 'man -s 2 rmdir', while on linux, ENOTEMPTY is thrown.
             //EEXIST The directory contains entries other than those for "." and "..".
             printf("#Solaris test\n");

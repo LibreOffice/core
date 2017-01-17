@@ -37,7 +37,7 @@ typedef unsigned char boolean;
 /* #undef RIGHT_SHIFT_IS_UNSIGNED */
 #ifdef _WIN32
 #define INLINE __inline
-#elif defined SOLARIS
+#elif defined __sun
 #define INLINE
 #else
 #define INLINE inline

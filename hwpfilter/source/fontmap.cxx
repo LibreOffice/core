@@ -18,7 +18,7 @@
  */
 
 #include <stdio.h>
-#ifdef SOLARIS
+#ifdef __sun
 #include <strings.h>
 #else
 #include <string.h>

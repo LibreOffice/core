@@ -1339,7 +1339,7 @@ namespace osl_Thread
             }
 
         CPPUNIT_TEST_SUITE(setPriority);
-#ifndef SOLARIS
+#ifndef __sun
         CPPUNIT_TEST(setPriority_002);
         CPPUNIT_TEST(setPriority_003);
         CPPUNIT_TEST(setPriority_004);
@@ -1374,7 +1374,7 @@ namespace osl_Thread
                 ThreadHelper::outputPriority(aPriority);
 
 // LLA: Priority settings may not work within some OS versions.
-#if defined(_WIN32) || defined(SOLARIS)
+#if defined(_WIN32) || defined(__sun)
                 CPPUNIT_ASSERT_MESSAGE(
                     "getPriority",
                     aPriority == osl_Thread_PriorityHighest

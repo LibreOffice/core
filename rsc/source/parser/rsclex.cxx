@@ -326,7 +326,7 @@ int yylex()
     return aKeyVal[ 0 ].nKeyWord;
 }
 
-#if defined SOLARIS
+#if defined __sun
 extern "C" void yyerror( const char* pMessage )
 #else
 void yyerror( char* pMessage )

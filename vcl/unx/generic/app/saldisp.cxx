@@ -26,7 +26,7 @@
 #include <unistd.h>
 #include <ctype.h>
 
-#if defined(SOLARIS) || defined(AIX)
+#if defined(__sun) || defined(AIX)
 #include <osl/module.h>
 #endif
 
@@ -37,7 +37,7 @@
 #include <X11/cursorfont.h>
 #include "unx/x11_cursors/salcursors.h"
 #include "unx/x11_cursors/invert50.h"
-#ifdef SOLARIS
+#ifdef __sun
 #define XK_KOREAN
 #endif
 #include <X11/keysym.h>

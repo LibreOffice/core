@@ -1119,7 +1119,7 @@ SAL_CALL rtl_machdep_alloc (
 
     assert(pArena == gp_machdep_arena);
 
-#if defined(SOLARIS) && defined(SPARC)
+#if defined(__sun) && defined(SPARC)
     /* see @ mmap(2) man pages */
     size += (pArena->m_quantum + pArena->m_quantum); /* "red-zone" pages */
     if (size > (4 << 20))

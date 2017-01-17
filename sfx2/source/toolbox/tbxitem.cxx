@@ -18,7 +18,7 @@
  */
 
 
-#ifdef SOLARIS
+#ifdef __sun
 #include <ctime>
 #endif
 

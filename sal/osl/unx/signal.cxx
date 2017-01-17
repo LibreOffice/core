@@ -41,12 +41,12 @@
 #define INCLUDE_BACKTRACE
 #endif
 
-#ifdef SOLARIS
+#ifdef __sun
 
 #include "backtrace.h"
 #define INCLUDE_BACKTRACE
 
-#endif /* defined SOLARIS */
+#endif /* defined __sun */
 
 #if defined INCLUDE_BACKTRACE
 #define MAX_STACK_FRAMES 256

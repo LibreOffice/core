@@ -488,7 +488,7 @@
 /* #undef SIZEOF_XML_SIZE */
 
 /* Define to 1 if you have the ANSI C header files. */
-#ifdef SOLARIS
+#ifdef __sun
 #define STDC_HEADERS 1
 #endif
 
@@ -530,7 +530,7 @@
 
 /* Define WORDS_BIGENDIAN to 1 if your processor stores words with the most
    significant byte first (like Motorola and SPARC, unlike Intel). */
-#if defined (SOLARIS) && defined (SPARC)
+#if defined (__sun) && defined (SPARC)
 #define WORDS_BIGENDIAN 1
 #endif
 
@@ -556,7 +556,7 @@
 /* Define to `__inline__' or `__inline' if that's what the C compiler
    calls it, or to nothing if 'inline' is not supported under any name.  */
 #ifndef __cplusplus
-#if defined (SOLARIS) && defined (__SUNPRO_C)
+#if defined (__sun) && defined (__SUNPRO_C)
 #define inline
 #endif
 #endif

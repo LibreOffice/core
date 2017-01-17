@@ -29,7 +29,7 @@
  *      - cleanup of resource transfer
  */
 
-#if defined(SOLARIS)
+#if defined(__sun)
   // The procfs may only be used without LFS in 32bits.
 # ifdef _FILE_OFFSET_BITS
 #   undef   _FILE_OFFSET_BITS
@@ -41,7 +41,7 @@
 #endif
 
 #include "system.hxx"
-#if defined(SOLARIS)
+#if defined(__sun)
 # include <sys/procfs.h>
 #endif
 #include <osl/diagnose.h>
@@ -1016,7 +1016,7 @@ oslProcessError SAL_CALL osl_getProcessInfo(oslProcess Process, oslProcessData F
     if (Fields & (osl_Process_HEAPUSAGE | osl_Process_CPUTIMES))
     {
 
-#if defined(SOLARIS)
+#if defined(__sun)
 
         int  fd;
         sal_Char name[PATH_MAX + 1];

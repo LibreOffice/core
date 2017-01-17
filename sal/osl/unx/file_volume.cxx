@@ -44,7 +44,7 @@
 #define FREEBSD 1
 #endif
 
-#if defined(SOLARIS)
+#if defined(__sun)
 
 #include <sys/mnttab.h>
 #include <sys/statvfs.h>
@@ -180,7 +180,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
 #   define OSL_detail_STATFS_IS_CASE_PRESERVING_FS(a) ((OSL_detail_MSDOS_SUPER_MAGIC != (a).f_type))
 #endif /* LINUX */
 
-#if defined(SOLARIS)
+#if defined(__sun)
 #   define OSL_detail_STATFS_STRUCT                   struct statvfs
 #   define OSL_detail_STATFS(dir, sfs)                statvfs((dir), (sfs))
 #   define OSL_detail_STATFS_BLKSIZ(a)                ((sal_uInt64)((a).f_frsize))
@@ -192,7 +192,7 @@ oslFileError osl_getVolumeInformation( rtl_uString* ustrDirectoryURL, oslVolumeI
    of the target platforms fix it!!!! */
 #   define OSL_detail_STATFS_IS_CASE_SENSITIVE_FS(a)  (true)
 #   define OSL_detail_STATFS_IS_CASE_PRESERVING_FS(a) (true)
-#endif /* SOLARIS */
+#endif /* __sun */
 
 #   define OSL_detail_STATFS_INIT(a)         (memset(&(a), 0, sizeof(OSL_detail_STATFS_STRUCT)))
 

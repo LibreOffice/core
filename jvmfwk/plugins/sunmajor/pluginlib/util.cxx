@@ -1174,7 +1174,7 @@ bool makeDriveLetterSame(OUString * fileURL)
 }
 
 #ifdef UNX
-#ifdef SOLARIS
+#ifdef __sun
 
 void addJavaInfosDirScan(
     std::vector<rtl::Reference<VendorBase>> & allInfos,
@@ -1327,7 +1327,7 @@ void addJavaInfosDirScan(
     }
 #endif // MACOSX
 }
-#endif // ifdef SOLARIS
+#endif // ifdef __sun
 #endif // ifdef UNX
 }
 

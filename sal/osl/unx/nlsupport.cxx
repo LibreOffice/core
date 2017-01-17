@@ -25,7 +25,7 @@
 
 #include "nlsupport.hxx"
 
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
+#if defined(LINUX) || defined(__sun) || defined(NETBSD) || \
     defined(FREEBSD) || defined(MACOSX)  || defined(IOS) || defined(OPENBSD) || \
     defined(DRAGONFLY)
 #include <pthread.h>
@@ -36,7 +36,7 @@
 #include <osl/module.h>
 #include <osl/thread.h>
 #endif  /* !MACOSX && !IOS */
-#endif  /* LINUX || SOLARIS || NETBSD || MACOSX || IOS */
+#endif  /* LINUX || __sun || NETBSD || MACOSX || IOS */
 
 #if defined(MACOSX) || defined(IOS)
 #include "system.hxx"
@@ -226,7 +226,7 @@ static rtl_Locale * parse_locale( const char * locale )
     return nullptr;
 }
 
-#if defined(LINUX) || defined(SOLARIS) || defined(NETBSD) || \
+#if defined(LINUX) || defined(__sun) || defined(NETBSD) || \
     defined(FREEBSD) || defined(OPENBSD) || defined(DRAGONFLY)
 
 /*
@@ -254,7 +254,7 @@ static rtl_Locale * parse_locale( const char * locale )
  * to be completely upper- , or lowercase.
  */
 
-#if defined(SOLARIS)
+#if defined(__sun)
 
 /* The values in the below list can be obtained with a script like
  *  #!/bin/sh
@@ -562,7 +562,7 @@ static const Pair nl_language_list[] = {
     { "UTF-8",         RTL_TEXTENCODING_UTF8           }  /* ISO-10646/UTF-8 */
 };
 
-#endif /* ifdef SOLARIS LINUX FREEBSD NETBSD OPENBSD */
+#endif /* ifdef __sun LINUX FREEBSD NETBSD OPENBSD */
 
 static pthread_mutex_t aLocalMutex = PTHREAD_MUTEX_INITIALIZER;
 
@@ -684,7 +684,7 @@ int imp_setProcessLocale( rtl_Locale * pLocale )
     return ret;
 }
 
-#else /* ifdef LINUX || SOLARIS || MACOSX || NETBSD */
+#else /* ifdef LINUX || __sun || MACOSX || NETBSD */
 
 /*
  * This implementation of osl_getTextEncodingFromLocale maps
@@ -943,6 +943,6 @@ int imp_setProcessLocale( rtl_Locale * pLocale )
     return 0;
 }
 
-#endif /* ifdef LINUX || SOLARIS || MACOSX || NETBSD || AIX */
+#endif /* ifdef LINUX || __sun || MACOSX || NETBSD || AIX */
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

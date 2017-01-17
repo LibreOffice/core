@@ -294,7 +294,7 @@ namespace slideshow
 
         /// To work around ternary operator in initializer lists
         /// (Solaris compiler problems)
-#ifdef SOLARIS
+#ifdef __sun
         template <typename T>
         inline T const & ternary_op(
             const bool cond, T const & arg1, T const & arg2 )

@@ -1093,8 +1093,8 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     Graphic aGraphic;
                     SotClipboardFormatId nGrFormat = SotClipboardFormatId::NONE;
 
-// (wg. Selection Manager bei Trustet Solaris)
-#ifndef SOLARIS
+// (for Selection Manager in Trusted Solaris)
+#ifndef __sun
                     if( aDataHelper.GetGraphic( SotClipboardFormatId::SVXB, aGraphic ) )
                         nGrFormat = SotClipboardFormatId::SVXB;
                     else if( aDataHelper.GetGraphic( SotClipboardFormatId::GDIMETAFILE, aGraphic ) )

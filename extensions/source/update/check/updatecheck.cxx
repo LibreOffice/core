@@ -103,7 +103,7 @@ inline OUString getBuildId()
 }
 
 
-#if defined LINUX || defined SOLARIS
+#if (defined LINUX || defined __sun)
 inline OUString getBaseInstallation()
 {
     OUString aPathVal("$BRAND_BASE_DIR");
@@ -889,7 +889,7 @@ UpdateCheck::install()
 
         OUString aParameter;
         sal_Int32 nFlags = c3s::SystemShellExecuteFlags::DEFAULTS;
-#if ( defined LINUX || defined SOLARIS )
+#if (defined LINUX || defined __sun)
         nFlags = 42;
         aParameter = getBaseInstallation();
         if( !aParameter.isEmpty() )

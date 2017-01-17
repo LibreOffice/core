@@ -309,7 +309,7 @@ oslProcessError SAL_CALL osl_setEnvironment(rtl_uString* pustrEnvVar, rtl_uStrin
 
     if (pstr_env_var != nullptr && pstr_val != nullptr)
     {
-#if defined (SOLARIS)
+#if defined (__sun)
         rtl_String * pBuffer = NULL;
 
         sal_Int32 nCapacity = rtl_stringbuffer_newFromStringBuffer( &pBuffer,
@@ -358,7 +358,7 @@ oslProcessError SAL_CALL osl_clearEnvironment(rtl_uString* pustrEnvVar)
 
     if (pstr_env_var)
     {
-#if defined (SOLARIS)
+#if defined (__sun)
         rtl_String * pBuffer = NULL;
 
         sal_Int32 nCapacity = rtl_stringbuffer_newFromStringBuffer( &pBuffer,

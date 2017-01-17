@@ -3629,7 +3629,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* pContext, gchar* pTex
             pThis->updateIMSpotLocation();
         }
     }
-#ifdef SOLARIS
+#ifdef __sun
     // #i51356# workaround a solaris IIIMP bug
     // in case of partial commits the preedit changed signal
     // and commit signal come in wrong order

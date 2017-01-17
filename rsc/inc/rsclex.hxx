@@ -92,7 +92,7 @@ class ObjectStack
 };
 
 /****************** F o r w a r d s **************************************/
-#if defined ( SOLARIS )
+#if defined(__sun)
 extern "C" int yyparse();   // forward Deklaration fuer erzeugte Funktion
 extern "C" void yyerror( const char * );
 extern "C" int  yylex();

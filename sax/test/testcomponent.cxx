@@ -42,7 +42,7 @@ using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
 
 // Needed to switch on solaris threads
-#ifdef SOLARIS
+#ifdef __sun
 extern "C" void ChangeGlobalInit();
 #endif
 
@@ -53,7 +53,7 @@ int main (int argc, char **argv)
         printf( "usage : testcomponent service dll [additional dlls]\n" );
         exit( 0 );
     }
-#ifdef SOLARIS
+#ifdef __sun
     // switch on threads in solaris
     ChangeGlobalInit();
 #endif

@@ -3406,7 +3406,7 @@ int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
   return rv;
 }
 
-#elif defined(SOLARIS)
+#elif defined(__sun)
 int add_dir_entries(const NS_tchar *dirpath, ActionList *list)
 {
   int rv = OK;

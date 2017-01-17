@@ -905,7 +905,7 @@ void OS2METReader::ReadRelLine(bool bGivenPos, sal_uInt16 nOrderLen)
     if (nPolySize==0) return;
     tools::Polygon aPolygon(nPolySize);
     for (i=0; i<nPolySize; i++) {
-#if defined SOLARIS && defined PPC
+#if defined __sun && defined PPC
         sal_uInt8 nunsignedbyte;
         *pOS2MET >> nunsignedbyte; aP0.X()+=(sal_Int8)nunsignedbyte;
         *pOS2MET >> nunsignedbyte; aP0.Y()+=(sal_Int8)nunsignedbyte;

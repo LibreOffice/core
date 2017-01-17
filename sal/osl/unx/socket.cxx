@@ -42,10 +42,10 @@
 #define HAVE_POLL_H
 #endif /* HAVE_POLL_H */
 
-#if defined(SOLARIS)
+#if defined(__sun)
 #include <poll.h>
 #define HAVE_POLL_H
-#endif /* SOLARIS */
+#endif /* __sun */
 
 #ifndef HAVE_POLL_H
 #define POLLIN  0x0001

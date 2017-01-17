@@ -63,7 +63,7 @@
 
 #include "levdis.hxx"
 
-#ifdef SOLARIS
+#ifdef __sun
 #undef min
 #endif
 

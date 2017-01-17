@@ -19,7 +19,7 @@
 
 #include "sal/types.h"
 
-#ifdef SOLARIS
+#ifdef __sun
 
 #include <dlfcn.h>
 #include <pthread.h>
@@ -128,7 +128,7 @@ void backtrace_symbols_fd( void **buffer, int size, int fd )
     }
 }
 
-#endif /* defined SOLARIS */
+#endif /* defined __sun */
 
 #if defined FREEBSD || defined NETBSD || defined OPENBSD || defined(DRAGONFLY)
 #include <dlfcn.h>

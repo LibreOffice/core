@@ -577,7 +577,7 @@ OString SelectionManager::convertToCompound( const OUString& rText )
     {
         aRet = reinterpret_cast<char*>(aProp.value);
         XFree( aProp.value );
-#ifdef SOLARIS
+#ifdef __sun
         /*
          *  for currently unknown reasons XmbTextListToTextProperty on Solaris returns
          *  no data in ISO8859-n encodings (at least for n = 1, 15)
