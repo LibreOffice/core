@@ -271,21 +271,21 @@ MetaAction* SvxFieldData::createEndComment()
 
 SvxFieldItem::SvxFieldItem( SvxFieldData* pFld, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
-    , pField( pFld )  // belongs directly to the item
+    , mxField( pFld )  // belongs directly to the item
 {
 }
 
 
 SvxFieldItem::SvxFieldItem( const SvxFieldData& rField, const sal_uInt16 nId ) :
     SfxPoolItem( nId )
-    , pField( rField.Clone() )
+    , mxField( rField.Clone() )
 {
 }
 
 
 SvxFieldItem::SvxFieldItem( const SvxFieldItem& rItem ) :
     SfxPoolItem ( rItem )
-    , pField( rItem.GetField() ? rItem.GetField()->Clone() : nullptr )
+    , mxField( rItem.GetField() ? rItem.GetField()->Clone() : nullptr )
 {
 }
 
@@ -319,19 +319,19 @@ SfxPoolItem* SvxFieldItem::Create( SvStream& rStrm, sal_uInt16 ) const
 
 SvStream& SvxFieldItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) const
 {
-    DBG_ASSERT( pField, "SvxFieldItem::Store: Field?!" );
+    DBG_ASSERT( mxField.get(), "SvxFieldItem::Store: Field?!" );
     SvPersistStream aPStrm( GetClassManager(), &rStrm );
     // The reset error in the above Create method did not exist in 3.1,
     // therefore newer items can not be saved for 3.x-exports!
-    if ( ( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_31 ) && pField &&
-            pField->GetClassId() == 50 /* SdrMeasureField */ )
+    if ( ( rStrm.GetVersion() <= SOFFICE_FILEFORMAT_31 ) && mxField.get() &&
+            mxField->GetClassId() == 50 /* SdrMeasureField */ )
     {
         // SvxFieldData not enough, because not registered on ClassMgr.
         SvxURLField aDummyData;
         WriteSvPersistBase( aPStrm , &aDummyData );
     }
     else
-        WriteSvPersistBase( aPStrm, pField.get() );
+        WriteSvPersistBase( aPStrm, mxField.get() );
 
     return rStrm;
 }
@@ -342,12 +342,12 @@ bool SvxFieldItem::operator==( const SfxPoolItem& rItem ) const
     assert(SfxPoolItem::operator==(rItem));
 
     const SvxFieldData* pOtherFld = static_cast<const SvxFieldItem&>(rItem).GetField();
-    if( pField.get() == pOtherFld )
+    if( mxField.get() == pOtherFld )
         return true;
-    if( pField == nullptr || pOtherFld == nullptr )
+    if( mxField == nullptr || pOtherFld == nullptr )
         return false;
-    return ( typeid(*pField) == typeid(*pOtherFld) )
-            && ( *pField == *pOtherFld );
+    return ( typeid(*mxField) == typeid(*pOtherFld) )
+            && ( *mxField == *pOtherFld );
 }
 
 
