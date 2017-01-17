@@ -278,8 +278,7 @@ namespace framework
             bool                                                           m_bMenuBarCloseButton;
             css::awt::Rectangle                                            m_aDockingArea;
             css::uno::Reference< css::ui::XDockingAreaAcceptor >           m_xDockingAreaAcceptor;
-            css::uno::Reference< css::lang::XComponent >                   m_xInplaceMenuBar;
-            MenuBarManager*                                                m_pInplaceMenuBar;
+            rtl::Reference< MenuBarManager >                               m_xInplaceMenuBar;
             css::uno::Reference< css::ui::XUIElement >                     m_xMenuBar;
             UIElement                                                      m_aStatusBarElement;
             UIElement                                                      m_aProgressBarElement;

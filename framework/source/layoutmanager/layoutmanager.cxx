@@ -123,7 +123,6 @@ LayoutManager::LayoutManager( const Reference< XComponentContext >& xContext ) :
         , m_bGlobalSettings( false )
         , m_bPreserveContentSize( false )
         , m_bMenuBarCloseButton( false )
-        , m_pInplaceMenuBar( nullptr )
         , m_xModuleManager( ModuleManager::create( xContext ))
         , m_xUIElementFactoryManager( ui::theUIElementFactoryManager::get(xContext) )
         , m_xPersistentWindowStateSupplier( ui::theWindowStateConfiguration::get( xContext ) )
@@ -172,7 +171,7 @@ void LayoutManager::impl_clearUpMenuBar()
         {
             MenuBar* pSetMenuBar = nullptr;
             if ( m_xInplaceMenuBar.is() )
-                pSetMenuBar = static_cast<MenuBar *>(m_pInplaceMenuBar->GetMenuBar());
+                pSetMenuBar = static_cast<MenuBar *>(m_xInplaceMenuBar->GetMenuBar());
             else
             {
                 Reference< awt::XMenuBar > xMenuBar;
@@ -205,13 +204,9 @@ void LayoutManager::impl_clearUpMenuBar()
 
     // reset inplace menubar manager
     VclPtr<Menu> pMenuBar;
-    if (m_pInplaceMenuBar)
+    if (m_xInplaceMenuBar.is())
     {
-        pMenuBar = m_pInplaceMenuBar->GetMenuBar();
-        m_pInplaceMenuBar = nullptr;
-    }
-    if ( m_xInplaceMenuBar.is() )
-    {
+        pMenuBar = m_xInplaceMenuBar->GetMenuBar();
         m_xInplaceMenuBar->dispose();
         m_xInplaceMenuBar.clear();
     }
@@ -761,8 +756,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
     SolarMutexResettableGuard aWriteLock;
     Reference< XUIElement >   xMenuBar( m_xMenuBar, UNO_QUERY );
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
-    Reference< XComponent >   xInplaceMenuBar( m_xInplaceMenuBar );
-    MenuBarManager*           pInplaceMenuBar( m_pInplaceMenuBar );
+    rtl::Reference< MenuBarManager > xInplaceMenuBar( m_xInplaceMenuBar );
     aWriteLock.clear();
 
     if (( xMenuBar.is() || xInplaceMenuBar.is() ) && xContainerWindow.is() )
@@ -771,7 +765,7 @@ void LayoutManager::implts_updateUIElementsVisibleState( bool bSetVisible )
 
         MenuBar* pMenuBar( nullptr );
         if ( xInplaceMenuBar.is() )
-            pMenuBar = static_cast<MenuBar *>(pInplaceMenuBar->GetMenuBar());
+            pMenuBar = static_cast<MenuBar *>(xInplaceMenuBar->GetMenuBar());
         else
         {
             MenuBarWrapper* pMenuBarWrapper = (static_cast< MenuBarWrapper* >(xMenuBar.get()) );
@@ -1151,13 +1145,9 @@ throw (uno::RuntimeException, std::exception)
 
         // Reset old inplace menubar!
         VclPtr<Menu> pOldMenuBar;
-        if (m_pInplaceMenuBar)
-        {
-            pOldMenuBar = m_pInplaceMenuBar->GetMenuBar();
-            m_pInplaceMenuBar = nullptr;
-        }
         if (m_xInplaceMenuBar.is())
         {
+            pOldMenuBar = m_xInplaceMenuBar->GetMenuBar();
             m_xInplaceMenuBar->dispose();
             m_xInplaceMenuBar.clear();
         }
@@ -1171,15 +1161,14 @@ throw (uno::RuntimeException, std::exception)
             Reference< XDispatchProvider > xDispatchProvider;
 
             VclPtr<MenuBar> pMenuBar = VclPtr<MenuBar>::Create();
-            m_pInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, true );
-            m_pInplaceMenuBar->SetItemContainer( xMergedMenuBar );
+            m_xInplaceMenuBar = new MenuBarManager( m_xContext, m_xFrame, m_xURLTransformer, xDispatchProvider, aModuleIdentifier, pMenuBar, true );
+            m_xInplaceMenuBar->SetItemContainer( xMergedMenuBar );
 
             SystemWindow* pSysWindow = getTopSystemWindow( m_xContainerWindow );
             if ( pSysWindow )
                 pSysWindow->SetMenuBar(pMenuBar);
 
             m_bInplaceMenuSet = true;
-            m_xInplaceMenuBar.set( static_cast<OWeakObject *>(m_pInplaceMenuBar), UNO_QUERY );
         }
 
         aWriteLock.clear();
@@ -1211,13 +1200,9 @@ throw (uno::RuntimeException)
 
     // Remove inplace menu bar
     VclPtr<Menu> pMenuBar;
-    if (m_pInplaceMenuBar)
-    {
-        pMenuBar = m_pInplaceMenuBar->GetMenuBar();
-        m_pInplaceMenuBar = nullptr;
-    }
     if (m_xInplaceMenuBar.is())
     {
+        pMenuBar = m_xInplaceMenuBar->GetMenuBar();
         m_xInplaceMenuBar->dispose();
         m_xInplaceMenuBar.clear();
     }
@@ -2588,7 +2573,7 @@ bool LayoutManager::implts_resetMenuBar()
 
     MenuBar* pSetMenuBar = nullptr;
     if ( m_xInplaceMenuBar.is() )
-        pSetMenuBar = static_cast<MenuBar *>(m_pInplaceMenuBar->GetMenuBar());
+        pSetMenuBar = static_cast<MenuBar *>(m_xInplaceMenuBar->GetMenuBar());
     else
     {
         MenuBarWrapper* pMenuBarWrapper = static_cast< MenuBarWrapper* >( m_xMenuBar.get() );
@@ -2831,13 +2816,9 @@ throw( RuntimeException, std::exception )
         impl_clearUpMenuBar();
         m_xMenuBar.clear();
         VclPtr<Menu> pMenuBar;
-        if (m_pInplaceMenuBar)
-        {
-            pMenuBar = m_pInplaceMenuBar->GetMenuBar();
-            m_pInplaceMenuBar = nullptr;
-        }
         if (m_xInplaceMenuBar.is())
         {
+            pMenuBar = m_xInplaceMenuBar->GetMenuBar();
             m_xInplaceMenuBar->dispose();
             m_xInplaceMenuBar.clear();
         }
@@ -2895,13 +2876,9 @@ throw( RuntimeException, std::exception )
         impl_clearUpMenuBar();
         m_xMenuBar.clear();
         VclPtr<Menu> pMenuBar;
-        if (m_pInplaceMenuBar)
-        {
-            pMenuBar = m_pInplaceMenuBar->GetMenuBar();
-            m_pInplaceMenuBar = nullptr;
-        }
         if (m_xInplaceMenuBar.is())
         {
+            pMenuBar = m_xInplaceMenuBar->GetMenuBar();
             m_xInplaceMenuBar->dispose();
             m_xInplaceMenuBar.clear();
         }
