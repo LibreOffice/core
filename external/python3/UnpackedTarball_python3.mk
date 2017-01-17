@@ -19,17 +19,14 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 	external/python3/i100492-freebsd.patch.1 \
 	external/python3/python-3.3.3-aix.patch.1 \
 	external/python3/python-3.3.0-darwin.patch.1 \
-	external/python3/python-3.3.0-msvc-disable.patch.1 \
 	external/python3/python-3.3.0-ssl.patch.1 \
-	external/python3/python-3.3.3-py17797.patch.1 \
+	external/python3/python-3.3.0-msvc-disable.patch.1 \
 	external/python3/python-3.3.0-i42553.patch.2 \
 	external/python3/python-3.3.0-pythreadstate.patch.1 \
 	external/python3/python-3.3.0-clang.patch.1 \
 	external/python3/python-3.3.5-pyexpat-symbols.patch.1 \
-	external/python3/python-lsan.patch.0 \
 	external/python3/ubsan.patch.0 \
 	external/python3/python-3.5.tweak.strip.soabi.patch \
-	external/python3/python-3.5.0-tcltk.disable.patch \
 ))
 
 ifneq ($(filter DRAGONFLY FREEBSD LINUX NETBSD OPENBSD SOLARIS,$(OS)),)
@@ -44,12 +41,10 @@ $(eval $(call gb_UnpackedTarball_add_patches,python3,\
 ))
 endif
 
-ifeq ($(OS)-$(COM),WNT-MSC)
-ifneq ($(filter 120,$(VCVER)),)
-$(eval $(call gb_UnpackedTarball_add_patches,python3,\
-	external/python3/python-vc2013.patch.1 \
+ifneq ($(SYSTEM_ZLIB),TRUE)
+$(eval $(call gb_UnpackedTarball_add_patches,python3, \
+    external/python3/internal-zlib.patch.0 \
 ))
-endif
 endif
 
 # vim: set noet sw=4 ts=4:
