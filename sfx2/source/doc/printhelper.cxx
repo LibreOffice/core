@@ -145,7 +145,7 @@ void SAL_CALL SfxPrintJob_Impl::cancelJob() throw (RuntimeException, std::except
 
 SfxPrintHelper::SfxPrintHelper()
 {
-    m_pData = new IMPL_PrintListener_DataContainer(m_aMutex);
+    m_pData.reset(new IMPL_PrintListener_DataContainer(m_aMutex));
 }
 
 void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
@@ -167,7 +167,6 @@ void SAL_CALL SfxPrintHelper::initialize( const css::uno::Sequence< css::uno::An
 
 SfxPrintHelper::~SfxPrintHelper()
 {
-    delete m_pData;
 }
 
 namespace

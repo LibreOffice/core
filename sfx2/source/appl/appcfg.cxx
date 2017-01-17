@@ -81,14 +81,13 @@ using namespace ::com::sun::star::beans;
 
 class SfxEventAsyncer_Impl : public SfxListener
 {
-    SfxEventHint        aHint;
-    Idle*               pIdle;
+    SfxEventHint           aHint;
+    std::unique_ptr<Idle>  pIdle;
 
 public:
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     explicit SfxEventAsyncer_Impl(const SfxEventHint& rHint);
-    virtual ~SfxEventAsyncer_Impl() override;
     DECL_LINK( IdleHdl, Idle*, void );
 };
 
@@ -108,16 +107,10 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
 {
     if( rHint.GetObjShell() )
         StartListening( *rHint.GetObjShell() );
-    pIdle = new Idle("SfxEventASyncer");
+    pIdle.reset( new Idle("SfxEventASyncer") );
     pIdle->SetIdleHdl( LINK(this, SfxEventAsyncer_Impl, IdleHdl) );
     pIdle->SetPriority( SchedulerPriority::HIGHEST );
     pIdle->Start();
-}
-
-
-SfxEventAsyncer_Impl::~SfxEventAsyncer_Impl()
-{
-    delete pIdle;
 }
 
 

@@ -46,7 +46,8 @@ struct BaseLink_Impl
     Link<SvBaseLink&,void> m_aEndEditLink;
     LinkManager*        m_pLinkMgr;
     VclPtr<vcl::Window> m_pParentWin;
-    FileDialogHelper*   m_pFileDlg;
+    std::unique_ptr<FileDialogHelper>
+                        m_pFileDlg;
     bool                m_bIsConnect;
 
     BaseLink_Impl() :
@@ -57,7 +58,7 @@ struct BaseLink_Impl
         {}
 
     ~BaseLink_Impl()
-        { delete m_pFileDlg; }
+        {}
 };
 
 // only for internal management
@@ -535,11 +536,9 @@ void SvBaseLink::Closed()
 
 FileDialogHelper & SvBaseLink::GetInsertFileDialog(const OUString& rFactory) const
 {
-    if ( pImpl->m_pFileDlg )
-        delete pImpl->m_pFileDlg;
-    pImpl->m_pFileDlg = new FileDialogHelper(
+    pImpl->m_pFileDlg.reset( new FileDialogHelper(
             ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-            FileDialogFlags::Insert, rFactory);
+            FileDialogFlags::Insert, rFactory) );
     return *pImpl->m_pFileDlg;
 }
 

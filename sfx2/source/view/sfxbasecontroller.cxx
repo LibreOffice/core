@@ -474,7 +474,6 @@ SfxBaseController::SfxBaseController( SfxViewShell* pViewShell )
 
 SfxBaseController::~SfxBaseController()
 {
-    delete m_pData;
 }
 
 

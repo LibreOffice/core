@@ -64,7 +64,8 @@ struct SfxRequest_Impl: public SfxListener
     bool            bCancelled;  // no longer notify
     SfxCallMode     nCallMode;   // Synch/Asynch/API/Record
     bool            bAllowRecording;
-    SfxAllItemSet*  pInternalArgs;
+    std::unique_ptr<SfxAllItemSet>
+                    pInternalArgs;
     SfxViewFrame*   pViewFrame;
 
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder;
@@ -81,10 +82,8 @@ struct SfxRequest_Impl: public SfxListener
         , bCancelled(false)
         , nCallMode( SfxCallMode::SYNCHRON )
         , bAllowRecording( false )
-        , pInternalArgs( nullptr )
         , pViewFrame(nullptr)
         {}
-    virtual ~SfxRequest_Impl() override { delete pInternalArgs; }
 
 
     void                SetPool( SfxItemPool *pNewPool );
@@ -146,7 +145,7 @@ SfxRequest::SfxRequest
     pImpl->nModifier = rOrig.pImpl->nModifier;
 
     // deep copy needed !
-    pImpl->pInternalArgs = (rOrig.pImpl->pInternalArgs ? new SfxAllItemSet(*rOrig.pImpl->pInternalArgs) : nullptr);
+    pImpl->pInternalArgs.reset( rOrig.pImpl->pInternalArgs ? new SfxAllItemSet(*rOrig.pImpl->pInternalArgs) : nullptr);
 
     if ( pArgs )
         pImpl->SetPool( pArgs->GetPool() );
@@ -301,13 +300,12 @@ void SfxRequest::SetSynchronCall( bool bSynchron )
 
 void SfxRequest::SetInternalArgs_Impl( const SfxAllItemSet& rArgs )
 {
-    delete pImpl->pInternalArgs;
-    pImpl->pInternalArgs = new SfxAllItemSet( rArgs );
+    pImpl->pInternalArgs.reset( new SfxAllItemSet( rArgs ) );
 }
 
 const SfxItemSet* SfxRequest::GetInternalArgs_Impl() const
 {
-    return pImpl->pInternalArgs;
+    return pImpl->pInternalArgs.get();
 }
 
 
@@ -495,7 +493,7 @@ void SfxRequest::Done( bool bRelease )
 void SfxRequest::ForgetAllArgs()
 {
     DELETEZ( pArgs );
-    DELETEZ( pImpl->pInternalArgs );
+    pImpl->pInternalArgs.reset();
 }
 
 
@@ -754,7 +752,7 @@ bool SfxRequest::AllowsRecording() const
 void SfxRequest::ReleaseArgs()
 {
     DELETEZ( pArgs );
-    DELETEZ( pImpl->pInternalArgs );
+    pImpl->pInternalArgs.reset();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

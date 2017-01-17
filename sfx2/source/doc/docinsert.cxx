@@ -63,7 +63,6 @@ DocumentInserter::DocumentInserter(
 
 DocumentInserter::~DocumentInserter()
 {
-    delete m_pFileDlg;
 }
 
 void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,void>& _rDialogClosedLink )
@@ -72,9 +71,9 @@ void DocumentInserter::StartExecuteModal( const Link<sfx2::FileDialogHelper*,voi
     m_nError = ERRCODE_NONE;
     if ( !m_pFileDlg )
     {
-        m_pFileDlg = new FileDialogHelper(
+        m_pFileDlg.reset( new FileDialogHelper(
                 ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE,
-                m_nDlgFlags, m_sDocFactory );
+                m_nDlgFlags, m_sDocFactory ) );
     }
     m_pFileDlg->StartExecuteModal( LINK( this, DocumentInserter, DialogClosedHdl ) );
 }
@@ -171,7 +170,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
 
     m_nError = m_pFileDlg->GetError();
     if ( ERRCODE_NONE == m_nError )
-        impl_FillURLList( m_pFileDlg, m_pURLList );
+        impl_FillURLList( m_pFileDlg.get(), m_pURLList );
 
     Reference < XFilePicker2 > xFP = m_pFileDlg->GetFilePicker();
     Reference < XFilePickerControlAccess > xCtrlAccess( xFP, UNO_QUERY );
@@ -267,7 +266,7 @@ IMPL_LINK_NOARG(DocumentInserter, DialogClosedHdl, sfx2::FileDialogHelper*, void
 
     m_sFilter = m_pFileDlg->GetRealFilter();
 
-    m_aDialogClosedLink.Call( m_pFileDlg );
+    m_aDialogClosedLink.Call( m_pFileDlg.get() );
 }
 
 } // namespace sfx2
