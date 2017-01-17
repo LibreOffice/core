@@ -177,6 +177,9 @@ void CustomAnimationPane::initialize()
     get(mpLBCategory, "categorylb");
     get(mpFTAnimation, "effectlabel");
     get(mpLBAnimation, "effect_list");
+    get(mpFTStartDelay, "delay_label");
+    get(mpMFStartDelay, "delay_value");
+
     mpLBAnimation->SetSelectHdl(LINK(this, CustomAnimationPane, AnimationSelectHdl));
     get(mpCustomAnimationList, "custom_animation_list");
     mpCustomAnimationList->setController( dynamic_cast<ICustomAnimationListController*> ( this ) );
@@ -212,6 +215,9 @@ void CustomAnimationPane::initialize()
     mpPBPlay->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpCBAutoPreview->SetClickHdl( LINK( this, CustomAnimationPane, implClickHdl ) );
     mpLBCategory->SetSelectHdl( LINK(this, CustomAnimationPane, UpdateAnimationLB) );
+    mpMFStartDelay->SetModifyHdl( LINK(this, CustomAnimationPane, DelayModifiedHdl) );
+    mpMFStartDelay->SetLoseFocusHdl(LINK( this, CustomAnimationPane, DelayLoseFocusHdl));
+
 
     if(!mbHorizontal)
       maStrModify = mpFTEffect->GetText();
@@ -267,6 +273,8 @@ void CustomAnimationPane::dispose()
     mpPBPropertyMore.clear();
     mpFTDuration.clear();
     mpCBXDuration.clear();
+    mpFTStartDelay.clear();
+    mpMFStartDelay.clear();
     mpCustomAnimationList.clear();
     mpPBMoveUp.clear();
     mpPBMoveDown.clear();
@@ -506,6 +514,8 @@ void CustomAnimationPane::updateControls()
         mpLBCategory->Disable();
         mpFTAnimation->Disable();
         mpLBAnimation->Disable();
+        mpFTStartDelay->Disable();
+        mpMFStartDelay->Disable();
         mpLBAnimation->Clear();
         mpCustomAnimationList->clear();
         return;
@@ -536,6 +546,8 @@ void CustomAnimationPane::updateControls()
     mpLBStart->Enable(nSelectionCount > 0);
     mpLBProperty->Enable(nSelectionCount > 0);
     mpPBPropertyMore->Enable(nSelectionCount > 0);
+    mpFTStartDelay->Enable(nSelectionCount > 0);
+    mpMFStartDelay->Enable(nSelectionCount > 0);
 
     mpFTProperty->SetText( maStrProperty );
 
@@ -600,6 +612,8 @@ void CustomAnimationPane::updateControls()
             mpFTProperty->Enable( false );
             mpLBProperty->Enable( false );
             mpPBPropertyMore->Enable( false );
+            mpFTStartDelay->Enable( false );
+            mpMFStartDelay->Enable( false );
         }
         sal_uInt32 nCategoryPos = LISTBOX_ENTRY_NOTFOUND;
         switch(pEffect->getPresetClass())
@@ -662,12 +676,19 @@ void CustomAnimationPane::updateControls()
         }
 
         mpPBPropertyMore->Enable();
+
+        mpFTStartDelay->Enable();
+        mpMFStartDelay->Enable();
+        double fBegin = pEffect->getBegin();
+        mpMFStartDelay->SetValue(fBegin*10.0);
     }
     else
     {
         mpLBProperty->setSubControl( nullptr );
         mpFTProperty->Enable( false );
         mpLBProperty->Enable( false );
+        mpFTStartDelay->Enable( false );
+        mpMFStartDelay->Enable( false );
         mpPBPropertyMore->Enable( false );
         mpFTDuration->Enable(false);
         mpCBXDuration->Enable(false);
@@ -1288,15 +1309,17 @@ void CustomAnimationPane::changeSelection( STLPropertySet* pResultSet, STLProper
             }
         }
 
+        double fBegin = 0.0;
+
         if( pResultSet->getPropertyState( nHandleBegin ) == STLPropertyState::Direct )
-        {
-            double fBegin = 0.0;
             pResultSet->getPropertyValue( nHandleBegin ) >>= fBegin;
-            if( pEffect->getBegin() != fBegin )
-            {
-                pEffect->setBegin( fBegin );
-                bChanged = true;
-            }
+        else
+            fBegin = pEffect->getBegin();
+
+        if( pEffect->getBegin() != fBegin && pResultSet->getPropertyState( nHandleBegin ) == STLPropertyState::Direct)
+        {
+            pEffect->setBegin( fBegin );
+            bChanged = true;
         }
 
         if( pResultSet->getPropertyState( nHandleDuration ) == STLPropertyState::Direct )
@@ -2009,6 +2032,32 @@ IMPL_LINK_NOARG(CustomAnimationPane, implPropertyHdl, LinkParamNone*, void)
 
         onPreview( false );
     }
+}
+
+IMPL_LINK_NOARG(CustomAnimationPane, DelayModifiedHdl, Edit&, void)
+{
+    addUndo();
+}
+
+IMPL_LINK_NOARG(CustomAnimationPane, DelayLoseFocusHdl, Control&, void)
+{
+    double fBegin = mpMFStartDelay->GetValue();
+
+    //sequence rebuild only when the control loses focus
+    MainSequenceRebuildGuard aGuard( mpMainSequence );
+
+    // change selected effect
+    EffectSequence::iterator aIter( maListSelection.begin() );
+    const EffectSequence::iterator aEnd( maListSelection.end() );
+    while( aIter != aEnd )
+    {
+        CustomAnimationEffectPtr pEffect = (*aIter++);
+        pEffect->setBegin( fBegin/10.0 );
+    }
+
+    mpMainSequence->rebuild();
+    updateControls();
+    mrBase.GetDocShell()->SetModified();
 }
 
 IMPL_LINK_NOARG(CustomAnimationPane, AnimationSelectHdl, ListBox&, void)
