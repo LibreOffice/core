@@ -292,8 +292,8 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
         aTmp.swap(m_aItems);
         for (auto & rPair : aTmp)
         {
-            // Due to the assertions in the sub calls, we need to do this
             const SfxPoolItem *pItemToClear = rPair.second;
+            nWhich = rPair.first;
 
             if ( !IsInvalidItem(pItemToClear) )
             {
