@@ -65,7 +65,7 @@ private:
     sal_uLong               mnWidth;
     sal_uLong               mnHeight;
     sal_uLong               mnColors;
-    sal_uLong               mnCpp;                              // characters per pix
+    sal_uInt32              mnCpp;                              // characters per pix
     bool                mbTransparent;
     bool                mbStatus;
     sal_uLong               mnStatus;
@@ -266,6 +266,9 @@ bool XPMReader::ImplGetColor()
 {
     sal_uInt8*  pString = mpStringBuf;
     if (!ImplGetString())
+        return false;
+
+    if (mnStringSize < mnCpp)
         return false;
 
     OString aKey(reinterpret_cast<sal_Char*>(pString), mnCpp);
