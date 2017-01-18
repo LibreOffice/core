@@ -523,7 +523,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
         nActions = 0;
     }
 
-    const size_t nMinActionSize = (sizeof(sal_uInt16) + sizeof(sal_Int32));
+    const size_t nMinActionSize = sizeof(sal_uInt16) + sizeof(sal_Int32);
     const size_t nMaxPossibleActions = rIStm.remainingSize() / nMinActionSize;
     if (static_cast<sal_uInt32>(nActions) > nMaxPossibleActions)
     {
