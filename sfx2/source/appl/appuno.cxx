@@ -1680,12 +1680,8 @@ RequestFilterOptions::RequestFilterOptions( uno::Reference< frame::XModel > cons
 
     m_aRequest <<= aOptionsRequest;
 
-    m_pAbort  = new comphelper::OInteractionAbort;
-    m_pOptions = new FilterOptionsContinuation;
-
-    m_lContinuations.realloc( 2 );
-    m_lContinuations[0].set( m_pAbort  );
-    m_lContinuations[1].set( m_pOptions );
+    m_xAbort  = new comphelper::OInteractionAbort;
+    m_xOptions = new FilterOptionsContinuation;
 }
 
 uno::Any SAL_CALL RequestFilterOptions::getRequest()
@@ -1698,7 +1694,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL RequestFilterOptions::getContinuations()
         throw( uno::RuntimeException, std::exception )
 {
-    return m_lContinuations;
+    return { m_xAbort.get(), m_xOptions.get() };
 }
 
 

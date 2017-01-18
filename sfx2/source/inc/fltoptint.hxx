@@ -23,6 +23,7 @@
 #include <com/sun/star/frame/XModel.hpp>
 #include <comphelper/interaction.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 class FilterOptionsContinuation : public comphelper::OInteraction< css::document::XInteractionFilterOptions >
 {
@@ -37,22 +38,18 @@ class RequestFilterOptions : public ::cppu::WeakImplHelper< css::task::XInteract
 {
     css::uno::Any m_aRequest;
 
-    css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > >
-                  m_lContinuations;
-
-    comphelper::OInteractionAbort*  m_pAbort;
-
-    FilterOptionsContinuation*  m_pOptions;
+    rtl::Reference<comphelper::OInteractionAbort>  m_xAbort;
+    rtl::Reference<FilterOptionsContinuation>      m_xOptions;
 
 public:
     RequestFilterOptions( css::uno::Reference< css::frame::XModel > const & rModel,
                               const css::uno::Sequence< css::beans::PropertyValue >& rProperties );
 
-    bool    isAbort() { return m_pAbort->wasSelected(); }
+    bool    isAbort() { return m_xAbort->wasSelected(); }
 
     css::uno::Sequence< css::beans::PropertyValue > getFilterOptions()
     {
-        return m_pOptions->getFilterOptions();
+        return m_xOptions->getFilterOptions();
     }
 
     virtual css::uno::Any SAL_CALL getRequest()
