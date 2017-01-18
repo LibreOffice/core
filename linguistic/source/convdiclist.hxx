@@ -25,6 +25,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <rtl/ref.hxx>
 
 #include "linguistic/misc.hxx"
 #include "lngopt.hxx"
@@ -51,18 +52,10 @@ class ConvDicList :
         virtual void    AtExit() override;
     };
 
-
-    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
-
-    ConvDicNameContainer                   *pNameContainer;
-    css::uno::Reference<
-        css::container::XNameContainer >   xNameContainer;
-
-    MyAppExitListener                      *pExitListener;
-    css::uno::Reference< css::frame::
-                XTerminateListener >        xExitListener;
-
-    bool                                    bDisposing;
+    ::comphelper::OInterfaceContainerHelper2  aEvtListeners;
+    rtl::Reference<ConvDicNameContainer>      mxNameContainer;
+    rtl::Reference<MyAppExitListener>         mxExitListener;
+    bool                                      bDisposing;
 
     ConvDicList( const ConvDicList & ) = delete;
     ConvDicList & operator = (const ConvDicList &) = delete;

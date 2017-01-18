@@ -348,38 +348,34 @@ void ConvDicList::MyAppExitListener::AtExit()
 ConvDicList::ConvDicList() :
     aEvtListeners( GetLinguMutex() )
 {
-    pNameContainer = nullptr;
     bDisposing = false;
 
-    pExitListener = new MyAppExitListener( *this );
-    xExitListener = pExitListener;
-    pExitListener->Activate();
+    mxExitListener = new MyAppExitListener( *this );
+    mxExitListener->Activate();
 }
 
 ConvDicList::~ConvDicList()
 {
+    if (!bDisposing && mxNameContainer.is())
+        mxNameContainer->FlushDics();
 
-    if (!bDisposing && pNameContainer)
-        pNameContainer->FlushDics();
-
-    pExitListener->Deactivate();
+    mxExitListener->Deactivate();
 }
 
 void ConvDicList::FlushDics()
 {
     // check only pointer to avoid creating the container when
     // the dictionaries were not accessed yet
-    if (pNameContainer)
-        pNameContainer->FlushDics();
+    if (mxNameContainer.is())
+        mxNameContainer->FlushDics();
 }
 
 ConvDicNameContainer & ConvDicList::GetNameContainer()
 {
-    if (!pNameContainer)
+    if (!mxNameContainer.is())
     {
-        pNameContainer = new ConvDicNameContainer;
-        pNameContainer->AddConvDics( GetDictionaryWriteablePath(), CONV_DIC_EXT  );
-        xNameContainer = pNameContainer;
+        mxNameContainer = new ConvDicNameContainer;
+        mxNameContainer->AddConvDics( GetDictionaryWriteablePath(), CONV_DIC_EXT  );
 
         // access list of text conversion dictionaries to activate
         SvtLinguOptions aOpt;
@@ -389,7 +385,7 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
         for (sal_Int32 i = 0;  i < nLen;  ++i)
         {
             uno::Reference< XConversionDictionary > xDic =
-                    pNameContainer->GetByName( pActiveConvDics[i] );
+                    mxNameContainer->GetByName( pActiveConvDics[i] );
             if (xDic.is())
                 xDic->setActive( true );
         }
@@ -397,24 +393,24 @@ ConvDicNameContainer & ConvDicList::GetNameContainer()
         // since there is no UI to active/deactivate the dictionaries
         // for chinese text conversion they should be activated by default
         uno::Reference< XConversionDictionary > xS2TDic(
-                    pNameContainer->GetByName( "ChineseS2T" ), UNO_QUERY );
+                    mxNameContainer->GetByName( "ChineseS2T" ), UNO_QUERY );
         uno::Reference< XConversionDictionary > xT2SDic(
-                    pNameContainer->GetByName( "ChineseT2S" ), UNO_QUERY );
+                    mxNameContainer->GetByName( "ChineseT2S" ), UNO_QUERY );
             if (xS2TDic.is())
                 xS2TDic->setActive( true );
             if (xT2SDic.is())
                 xT2SDic->setActive( true );
 
     }
-    return *pNameContainer;
+    return *mxNameContainer;
 }
 
 uno::Reference< container::XNameContainer > SAL_CALL ConvDicList::getDictionaryContainer(  ) throw (RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     GetNameContainer();
-    DBG_ASSERT( xNameContainer.is(), "missing name container" );
-    return xNameContainer;
+    DBG_ASSERT( mxNameContainer.is(), "missing name container" );
+    return mxNameContainer.get();
 }
 
 uno::Reference< XConversionDictionary > SAL_CALL ConvDicList::addNewDictionary(
