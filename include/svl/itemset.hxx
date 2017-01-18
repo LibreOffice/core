@@ -31,7 +31,7 @@ class SvStream;
 
 typedef std::map<sal_uInt16, SfxPoolItem const *> SfxItemMap;
 
-class SVL_DLLPUBLIC SfxItemSet
+class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;
 
@@ -162,7 +162,7 @@ inline void SfxItemSet::SetParent( const SfxItemSet* pNew )
     m_pParent = pNew;
 }
 
-class SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
+class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxAllItemSet: public SfxItemSet
 
 //  Handles all Ranges. Ranges are automatically modified by putting items.
 
