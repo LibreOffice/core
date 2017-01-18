@@ -245,7 +245,7 @@
 // bitmaps
 
 #define BMP_PLUGIN                      (RID_SVTOOLS_BITMAP_START +   3)
-#define BMP_LIST_ADD                    (RID_SVTOOLS_BITMAP_START +   4)
+// free
 #define BMP_CURRENT                     (RID_SVTOOLS_BITMAP_START +   5)
 #define BMP_MODIFIED                    (RID_SVTOOLS_BITMAP_START +   6)
 #define BMP_NEW                         (RID_SVTOOLS_BITMAP_START +   7)

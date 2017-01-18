@@ -517,14 +517,6 @@ Bitmap BMP_PLUGIN
     File = "plugin.png" ;
 };
 
-Image BMP_LIST_ADD
-{
-    ImageBitmap = Bitmap
-    {
-        File = "list_add.png" ;
-    };
-};
-
 // description strings
 
 String STR_DESCRIPTION_SOURCEFILE
