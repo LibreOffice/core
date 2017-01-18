@@ -884,8 +884,8 @@ void ThreeDHelper::convertXYZAngleRadToElevationRotationDeg(
             E+=F_PI;
     }
 
-    rnElevationDeg = ::basegfx::fround( BaseGFXHelper::Rad2Deg( E ) );
-    rnRotationDeg = ::basegfx::fround( BaseGFXHelper::Rad2Deg( R ) );
+    rnElevationDeg = basegfx::fround(basegfx::rad2deg(E));
+    rnRotationDeg = basegfx::fround(basegfx::rad2deg(R));
 }
 
 double ThreeDHelper::getValueClippedToRange( double fAngle, const double& fPositivLimit )
@@ -899,8 +899,8 @@ double ThreeDHelper::getValueClippedToRange( double fAngle, const double& fPosit
 
 void ThreeDHelper::adaptRadAnglesForRightAngledAxes( double& rfXAngleRad, double& rfYAngleRad )
 {
-    rfXAngleRad = ThreeDHelper::getValueClippedToRange(rfXAngleRad, BaseGFXHelper::Deg2Rad(ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes()) );
-    rfYAngleRad = ThreeDHelper::getValueClippedToRange(rfYAngleRad, BaseGFXHelper::Deg2Rad(ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes()) );
+    rfXAngleRad = ThreeDHelper::getValueClippedToRange(rfXAngleRad, basegfx::deg2rad(ThreeDHelper::getXDegreeAngleLimitForRightAngledAxes()) );
+    rfYAngleRad = ThreeDHelper::getValueClippedToRange(rfYAngleRad, basegfx::deg2rad(ThreeDHelper::getYDegreeAngleLimitForRightAngledAxes()) );
 }
 
 void ThreeDHelper::getRotationAngleFromDiagram(
@@ -1046,11 +1046,9 @@ void ThreeDHelper::getRotationFromDiagram( const uno::Reference< beans::XPropert
     }
     else
     {
-        rnHorizontalAngleDegree = basegfx::fround(
-            BaseGFXHelper::Rad2Deg(fXAngle));
-        rnVerticalAngleDegree = basegfx::fround(
-            -1.0 * BaseGFXHelper::Rad2Deg(fYAngle));
-        // nZRotation = basegfx::fround(-1.0 * BaseGFXHelper::Rad2Deg(fZAngle));
+        rnHorizontalAngleDegree = basegfx::fround(basegfx::rad2deg(fXAngle));
+        rnVerticalAngleDegree = basegfx::fround(-1.0 * basegfx::rad2deg(fYAngle));
+        // nZRotation = basegfx::fround(-1.0 * basegfx::rad2deg(fZAngle));
     }
 
     lcl_shiftAngleToIntervalMinus180To180( rnHorizontalAngleDegree );
@@ -1061,8 +1059,8 @@ void ThreeDHelper::setRotationToDiagram( const uno::Reference< beans::XPropertyS
             , sal_Int32 nHorizontalAngleDegree, sal_Int32 nVerticalYAngleDegree )
 {
     //todo: x and y is not equal to horz and vert in case of RightAngledAxes==false
-    double fXAngle = BaseGFXHelper::Deg2Rad( nHorizontalAngleDegree );
-    double fYAngle = BaseGFXHelper::Deg2Rad( -1*nVerticalYAngleDegree );
+    double fXAngle = basegfx::deg2rad(nHorizontalAngleDegree);
+    double fYAngle = basegfx::deg2rad(-1 * nVerticalYAngleDegree);
     double fZAngle = 0.0;
 
     if( !lcl_isRightAngledAxesSetAndSupported( xSceneProperties ) )

@@ -194,16 +194,6 @@ void ReduceToRotationMatrix( ::basegfx::B3DHomMatrix & rB3DMatrix )
     rB3DMatrix = aRotationMatrix;
 }
 
-double Deg2Rad( double fDegrees )
-{
-    return fDegrees * ( F_PI / 180.0 );
-}
-
-double Rad2Deg( double fRadians )
-{
-    return fRadians * ( 180.0 / F_PI );
-}
-
 } //  namespace BaseGFXHelper
 } //  namespace chart
 
