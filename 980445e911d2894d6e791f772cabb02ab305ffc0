@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_662f16a2",
+        "filename": "sw/source/core/layout/flowfrm.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 1859,
+      "author": {
+        "id": 1000994
+      },
+      "writtenOn": "2017-01-18T06:35:27Z",
+      "side": 1,
+      "message": "Oh, I suppose I overlooked that we already have added pNewUpper... so we cannot simply return false here?",
+      "range": {
+        "startLine": 1859,
+        "startChar": 12,
+        "endLine": 1859,
+        "endChar": 24
+      },
+      "revId": "980445e911d2894d6e791f772cabb02ab305ffc0",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
