@@ -48,8 +48,7 @@ WW8Glossary::WW8Glossary(tools::SvRef<SotStorageStream> &refStrm, sal_uInt8 nVer
         if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
         {
             xTableStream->SetEndian(SvStreamEndian::LITTLE);
-            pGlossary =
-                new WW8GlossaryFib(*refStrm, nVersion, *xTableStream, aWwFib);
+            pGlossary.reset( new WW8GlossaryFib(*refStrm, nVersion, *xTableStream, aWwFib) );
         }
     }
 }

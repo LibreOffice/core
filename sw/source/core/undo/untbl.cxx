@@ -102,7 +102,7 @@ class SaveTable
     friend class SaveBox;
     friend class SaveLine;
     SfxItemSet m_aTableSet;
-    SaveLine* m_pLine;
+    std::unique_ptr<SaveLine> m_pLine;
     const SwTable* m_pSwTable;
     SfxItemSets m_aSets;
     SwFrameFormatsV m_aFrameFormats;
@@ -195,13 +195,12 @@ struct SwTableToTextSave
     sal_uLong m_nSttNd;
     sal_uLong m_nEndNd;
     sal_Int32 m_nContent;
-    SwHistory* m_pHstry;
+    std::unique_ptr<SwHistory> m_pHstry;
     // metadata references for first and last paragraph in cell
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoStart;
     std::shared_ptr< ::sfx2::MetadatableUndo > m_pMetadataUndoEnd;
 
     SwTableToTextSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEndIdx, sal_Int32 nContent );
-    ~SwTableToTextSave() { delete m_pHstry; }
 
 private:
     SwTableToTextSave(const SwTableToTextSave&) = delete;
@@ -363,7 +362,7 @@ SwTableToTextSave::SwTableToTextSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEnd
     SwTextNode* pNd = rDoc.GetNodes()[ nNd ]->GetTextNode();
     if( pNd )
     {
-        m_pHstry = new SwHistory;
+        m_pHstry.reset( new SwHistory );
 
         m_pHstry->Add( pNd->GetTextColl(), nNd, SwNodeType::Text );
         if ( pNd->GetpSwpHints() )
@@ -376,8 +375,7 @@ SwTableToTextSave::SwTableToTextSave( SwDoc& rDoc, sal_uLong nNd, sal_uLong nEnd
 
         if( !m_pHstry->Count() )
         {
-            delete m_pHstry;
-            m_pHstry = nullptr;
+            m_pHstry.reset();
         }
 
         // METADATA: store
@@ -877,9 +875,9 @@ SaveTable::SaveTable( const SwTable& rTable, sal_uInt16 nLnCnt, bool bSaveFormul
     m_bModifyBox = false;
     m_bNewModel = rTable.IsNewModel();
     m_aTableSet.Put(rTable.GetFrameFormat()->GetAttrSet());
-    m_pLine = new SaveLine( nullptr, *rTable.GetTabLines()[ 0 ], *this );
+    m_pLine.reset( new SaveLine( nullptr, *rTable.GetTabLines()[ 0 ], *this ) );
 
-    SaveLine* pLn = m_pLine;
+    SaveLine* pLn = m_pLine.get();
     if( USHRT_MAX == nLnCnt )
         nLnCnt = rTable.GetTabLines().size();
     for( sal_uInt16 n = 1; n < nLnCnt; ++n )
@@ -891,7 +889,6 @@ SaveTable::SaveTable( const SwTable& rTable, sal_uInt16 nLnCnt, bool bSaveFormul
 
 SaveTable::~SaveTable()
 {
-    delete m_pLine;
 }
 
 sal_uInt16 SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )
@@ -961,7 +958,7 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
         ? rTable.GetTabLines().size()
         : m_nLineCount;
 
-    SaveLine* pLn = m_pLine;
+    SaveLine* pLn = m_pLine.get();
     for( size_t n = 0; n < nLnCnt; ++n, pLn = pLn->pNext )
     {
         if( !pLn )
@@ -1378,12 +1375,11 @@ SwUndoAttrTable::SwUndoAttrTable( const SwTableNode& rTableNd, bool bClearTabCol
     nSttNode( rTableNd.GetIndex() )
 {
     bClearTabCol = bClearTabCols;
-    pSaveTable = new SaveTable( rTableNd.GetTable() );
+    pSaveTable.reset( new SaveTable( rTableNd.GetTable() ) );
 }
 
 SwUndoAttrTable::~SwUndoAttrTable()
 {
-    delete pSaveTable;
 }
 
 void SwUndoAttrTable::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -1396,8 +1392,7 @@ void SwUndoAttrTable::UndoImpl(::sw::UndoRedoContext & rContext)
     {
         SaveTable* pOrig = new SaveTable( pTableNd->GetTable() );
         pSaveTable->RestoreAttr( pTableNd->GetTable() );
-        delete pSaveTable;
-        pSaveTable = pOrig;
+        pSaveTable.reset( pOrig );
     }
 
     if( bClearTabCol )
@@ -1418,7 +1413,7 @@ SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd,
     , bSaveContentAttr( false )
     , m_nRepeatHeading(rTableNd.GetTable().GetRowsToRepeat())
 {
-    pSaveTable = new SaveTable( rTableNd.GetTable() );
+    pSaveTable.reset( new SaveTable( rTableNd.GetTable() ) );
 
     if( rAFormat.IsFont() || rAFormat.IsJustify() )
     {
@@ -1431,7 +1426,6 @@ SwUndoTableAutoFormat::SwUndoTableAutoFormat( const SwTableNode& rTableNd,
 
 SwUndoTableAutoFormat::~SwUndoTableAutoFormat()
 {
-    delete pSaveTable;
 }
 
 void SwUndoTableAutoFormat::SaveBoxContent( const SwTableBox& rBox )
@@ -1471,8 +1465,7 @@ SwUndoTableAutoFormat::UndoRedo(bool const bUndo, ::sw::UndoRedoContext & rConte
     }
 
     pSaveTable->RestoreAttr( pTableNd->GetTable(), !bUndo );
-    delete pSaveTable;
-    pSaveTable = pOrig;
+    pSaveTable.reset( pOrig );
 }
 
 void SwUndoTableAutoFormat::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -1499,7 +1492,7 @@ SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
     bSameHeight( bSmHght )
 {
     const SwTable& rTable = rTableNd.GetTable();
-    pSaveTable = new SaveTable( rTable );
+    pSaveTable.reset( new SaveTable( rTable ) );
 
     // and remember selection
     ReNewBoxes( rBoxes );
@@ -1517,7 +1510,7 @@ SwUndoTableNdsChg::SwUndoTableNdsChg( SwUndoId nAction,
     bSameHeight( false )
 {
     const SwTable& rTable = rTableNd.GetTable();
-    pSaveTable = new SaveTable( rTable );
+    pSaveTable.reset( new SaveTable( rTable ) );
 
     // and remember selection
     ReNewBoxes( rBoxes );
@@ -1537,7 +1530,6 @@ void SwUndoTableNdsChg::ReNewBoxes( const SwSelBoxes& rBoxes )
 
 SwUndoTableNdsChg::~SwUndoTableNdsChg()
 {
-    delete pSaveTable;
 }
 
 void SwUndoTableNdsChg::SaveNewBoxes( const SwTableNode& rTableNd,
@@ -2844,7 +2836,6 @@ SwUndoCpyTable::SwUndoCpyTable(const SwDoc* pDoc)
 
 SwUndoCpyTable::~SwUndoCpyTable()
 {
-    delete pDel;
 }
 
 void SwUndoCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
@@ -2869,14 +2860,13 @@ void SwUndoCpyTable::UndoImpl(::sw::UndoRedoContext & rContext)
     }
 
     SwPaM aPam( *pTNd, *pTNd->EndOfSectionNode(), 0 , 1 );
-    pDel = new SwUndoDelete( aPam, true );
+    pDel.reset( new SwUndoDelete( aPam, true ) );
 }
 
 void SwUndoCpyTable::RedoImpl(::sw::UndoRedoContext & rContext)
 {
     pDel->UndoImpl(rContext);
-    delete pDel;
-    pDel = nullptr;
+    pDel.reset();
 }
 
 SwUndoSplitTable::SwUndoSplitTable( const SwTableNode& rTableNd,

@@ -70,7 +70,7 @@ public:
 
 class SW_DLLPUBLIC SwUINumRuleItem : public SfxPoolItem
 {
-    SwNumRule* pRule;
+    std::unique_ptr<SwNumRule> pRule;
 
 public:
     SwUINumRuleItem( const SwNumRule& rRule );
@@ -83,8 +83,8 @@ public:
     virtual bool             QueryValue( css::uno::Any& rVal, sal_uInt8 nMemberId = 0 ) const override;
     virtual bool             PutValue( const css::uno::Any& rVal, sal_uInt8 nMemberId ) override;
 
-    const SwNumRule* GetNumRule() const         { return pRule; }
-          SwNumRule* GetNumRule()               { return pRule; }
+    const SwNumRule* GetNumRule() const         { return pRule.get(); }
+          SwNumRule* GetNumRule()               { return pRule.get(); }
 };
 
 class SwBackgroundDestinationItem : public SfxUInt16Item

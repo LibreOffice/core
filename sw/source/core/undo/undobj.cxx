@@ -185,7 +185,6 @@ bool SwUndo::IsDelBox() const
 
 SwUndo::~SwUndo()
 {
-    delete pComment;
 }
 
 class UndoRedoRedlineGuard
@@ -266,7 +265,7 @@ OUString SwUndo::GetComment() const
     {
         if (! pComment)
         {
-            pComment = new OUString(SW_RES(UNDO_BASE + GetId()));
+            pComment.reset( new OUString(SW_RES(UNDO_BASE + GetId())) );
 
             SwRewriter aRewriter = GetRewriter();
 
@@ -305,7 +304,6 @@ SwUndoSaveContent::SwUndoSaveContent()
 
 SwUndoSaveContent::~SwUndoSaveContent()
 {
-    delete pHistory;
 }
 
 // This is needed when deleting content. For REDO all contents will be moved
@@ -504,7 +502,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 // deleted in the DTOR of SwFootnote!
                 SwTextNode* pTextNd = const_cast<SwTextNode*>(static_cast<const SwTextNode*>(pFootnoteNd));
                 if( !pHistory )
-                    pHistory = new SwHistory;
+                    pHistory.reset( new SwHistory );
                 SwTextAttr* const pFootnoteHint =
                     pTextNd->GetTextAttrForCharAt( nFootnoteSttIdx );
                 assert(pFootnoteHint);
@@ -529,7 +527,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                 // deleted in the DTOR of SwFootnote!
                 SwTextNode* pTextNd = const_cast<SwTextNode*>(static_cast<const SwTextNode*>(pFootnoteNd));
                 if( !pHistory )
-                    pHistory = new SwHistory;
+                    pHistory.reset( new SwHistory );
                 SwTextAttr* const pFootnoteHint =
                     pTextNd->GetTextAttrForCharAt( nFootnoteSttIdx );
                 assert(pFootnoteHint);
@@ -567,7 +565,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         : ( *pStt <= *pAPos && *pAPos < *pEnd )) )
                     {
                         if( !pHistory )
-                            pHistory = new SwHistory;
+                            pHistory.reset( new SwHistory );
                         SwTextNode *const pTextNd =
                             pAPos->nNode.GetNode().GetTextNode();
                         SwTextAttr* const pFlyHint = pTextNd->GetTextAttrForCharAt(
@@ -599,7 +597,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                             if (bTmp)
                             {
                                 if( !pHistory )
-                                    pHistory = new SwHistory;
+                                    pHistory.reset( new SwHistory );
 
                                 // Moving the anchor?
                                 if( !( DelContentType::CheckNoCntnt & nDelContentType ) &&
@@ -631,7 +629,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         ( pStt->nNode <= pAPos->nNode && pAPos->nNode <= pEnd->nNode ) )
                     {
                         if( !pHistory )
-                            pHistory = new SwHistory;
+                            pHistory.reset( new SwHistory );
                         if (IsDestroyFrameAnchoredAtChar(
                                 *pAPos, *pStt, *pEnd, pDoc, nDelContentType))
                         {
@@ -662,7 +660,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                         pStt->nNode == pAPos->nNode )
                     {
                         if( !pHistory )
-                            pHistory = new SwHistory;
+                            pHistory.reset( new SwHistory );
 
                         pHistory->Add( *static_cast<SwFlyFrameFormat *>(pFormat), nChainInsPos );
 
@@ -781,7 +779,7 @@ void SwUndoSaveContent::DelContentIndex( const SwPosition& rMark,
                     if( IDocumentMarkAccess::GetType(*pBkmk) != IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
                     {
                         if( !pHistory )
-                            pHistory = new SwHistory;
+                            pHistory.reset( new SwHistory );
                         pHistory->Add( *pBkmk, bSavePos, bSaveOtherPos );
                     }
                     if ( bSavePos

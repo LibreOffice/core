@@ -144,7 +144,7 @@ private:
 class SwUndoFormatColl : public SwUndo, private SwUndRng
 {
     OUString aFormatName;
-    SwHistory* pHistory;
+    std::unique_ptr<SwHistory> pHistory;
     SwFormatColl* pFormatColl;
     // for correct <ReDo(..)> and <Repeat(..)>
     // boolean, which indicates that the attributes are reseted at the nodes
@@ -181,7 +181,7 @@ public:
     */
     virtual SwRewriter GetRewriter() const override;
 
-    SwHistory* GetHistory() { return pHistory; }
+    SwHistory* GetHistory() { return pHistory.get(); }
 
 };
 
@@ -190,7 +190,7 @@ class SwUndoSetFlyFormat : public SwUndo, public SwClient
     SwFrameFormat* pFrameFormat;                  // saved FlyFormat
     SwFrameFormat* pOldFormat;
     SwFrameFormat* pNewFormat;
-    SfxItemSet* pItemSet;               // the re-/ set attributes
+    std::unique_ptr<SfxItemSet> pItemSet;               // the re-/ set attributes
     sal_uLong nOldNode, nNewNode;
     sal_Int32 nOldContent, nNewContent;
     sal_uInt16 nOldAnchorTyp, nNewAnchorTyp;

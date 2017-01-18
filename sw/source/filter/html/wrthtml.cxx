@@ -157,7 +157,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
 
 SwHTMLWriter::~SwHTMLWriter()
 {
-    delete m_pNumRuleInfo;
 }
 
 void SwHTMLWriter::SetupFilterOptions(SfxMedium& rMedium)

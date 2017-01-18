@@ -298,12 +298,12 @@ void SwContentType::Init(bool* pbInvalidateWindow)
             size_t nOldRegionCount = 0;
             bool bInvalidate = false;
             if(!pMember)
-                pMember = new SwContentArr;
+                pMember.reset( new SwContentArr );
             else if(!pMember->empty())
             {
-                pOldMember = pMember;
+                pOldMember = pMember.release();
                 nOldRegionCount = pOldMember->size();
-                pMember = new SwContentArr;
+                pMember.reset( new SwContentArr );
             }
             const Point aNullPt;
             nMemberCount = pWrtShell->GetSectionFormatCount();
@@ -372,11 +372,11 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         {
             nMemberCount = 0;
             if(!pMember)
-                pMember = new SwContentArr;
+                pMember.reset( new SwContentArr );
             else if(!pMember->empty())
                 pMember->DeleteAndDestroyAll();
 
-            nMemberCount = lcl_InsertURLFieldContent(pMember, pWrtShell, this);
+            nMemberCount = lcl_InsertURLFieldContent(pMember.get(), pWrtShell, this);
 
             bEdit = true;
             nOldMemberCount = nMemberCount;
@@ -387,7 +387,7 @@ void SwContentType::Init(bool* pbInvalidateWindow)
         {
             nMemberCount = 0;
             if(!pMember)
-                pMember = new SwContentArr;
+                pMember.reset( new SwContentArr );
             else if(!pMember->empty())
                 pMember->DeleteAndDestroyAll();
 
@@ -449,7 +449,6 @@ void SwContentType::Init(bool* pbInvalidateWindow)
 
 SwContentType::~SwContentType()
 {
-    delete pMember;
 }
 
 const SwContent* SwContentType::GetMember(size_t nIndex)
@@ -476,13 +475,13 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
     SwPtrMsgPoolItem aAskItem( RES_CONTENT_VISIBLE, nullptr );
     if(pMember && pbLevelOrVisibilityChanged)
     {
-        pOldMember = pMember;
+        pOldMember = pMember.release();
         nOldMemberCount = pOldMember->size();
-        pMember = new SwContentArr;
+        pMember.reset( new SwContentArr );
         *pbLevelOrVisibilityChanged = false;
     }
     else if(!pMember)
-        pMember = new SwContentArr;
+        pMember.reset( new SwContentArr );
     else if(!pMember->empty())
         pMember->DeleteAndDestroyAll();
     switch(nContentType)
@@ -659,7 +658,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         }
         break;
         case ContentTypeId::URLFIELD:
-            nMemberCount = lcl_InsertURLFieldContent(pMember, pWrtShell, this);
+            nMemberCount = lcl_InsertURLFieldContent(pMember.get(), pWrtShell, this);
         break;
         case ContentTypeId::INDEX:
         {
@@ -691,7 +690,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         {
             nMemberCount = 0;
             if(!pMember)
-                pMember = new SwContentArr;
+                pMember.reset( new SwContentArr );
             else if(!pMember->empty())
                 pMember->DeleteAndDestroyAll();
             SwPostItMgr* aMgr = pWrtShell->GetView().GetPostItMgr();
@@ -723,7 +722,7 @@ void SwContentType::FillMemberList(bool* pbLevelOrVisibilityChanged)
         {
             nMemberCount = 0;
             if(!pMember)
-                pMember = new SwContentArr;
+                pMember.reset( new SwContentArr );
             else if(!pMember->empty())
                 pMember->DeleteAndDestroyAll();
 

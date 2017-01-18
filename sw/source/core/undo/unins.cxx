@@ -607,7 +607,7 @@ SwUndoReplace::Impl::Impl(
     SwTextNode* pNd = pStt->nNode.GetNode().GetTextNode();
     OSL_ENSURE( pNd, "Dude, where's my TextNode?" );
 
-    pHistory = new SwHistory;
+    pHistory.reset( new SwHistory );
     DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
 
     m_nSetPos = pHistory->Count();
@@ -641,8 +641,7 @@ SwUndoReplace::Impl::Impl(
 
     if( !pHistory->Count() )
     {
-        delete pHistory;
-        pHistory = nullptr;
+        pHistory.reset();
     }
 
     const sal_Int32 nECnt = m_bSplitNext ? pNd->GetText().getLength()
@@ -719,14 +718,14 @@ void SwUndoReplace::Impl::UndoImpl(::sw::UndoRedoContext & rContext)
             {
                 // than save those attributes as well
                 SwHistory aHstr;
-                aHstr.Move( 0, pHistory, m_nSetPos );
+                aHstr.Move( 0, pHistory.get(), m_nSetPos );
                 pHistory->Rollback( pDoc );
                 pHistory->Move( 0, &aHstr );
             }
             else
             {
                 pHistory->Rollback( pDoc );
-                DELETEZ( pHistory );
+                pHistory.reset();
             }
         }
     }
@@ -755,24 +754,24 @@ void SwUndoReplace::Impl::RedoImpl(::sw::UndoRedoContext & rContext)
 
     if( pHistory )
     {
-        SwHistory* pSave = pHistory;
+        auto pSave = std::move(pHistory);
         SwHistory aHst;
-        pHistory = &aHst;
+        pHistory.reset( &aHst );
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
         m_nSetPos = pHistory->Count();
 
-        pHistory = pSave;
+        pHistory.release();
+        pHistory = std::move(pSave);
         pHistory->Move( 0, &aHst );
     }
     else
     {
-        pHistory = new SwHistory;
+        pHistory.reset( new SwHistory );
         DelContentIndex( *rPam.GetMark(), *rPam.GetPoint() );
         m_nSetPos = pHistory->Count();
         if( !m_nSetPos )
         {
-            delete pHistory;
-            pHistory = nullptr;
+            pHistory.reset();
         }
     }
 

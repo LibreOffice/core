@@ -1933,10 +1933,10 @@ WW8PLCFspecial::WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos,
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<std::size_t>(nPLCF)) : nValidMin;
 
     // Pointer to Pos- and Struct-array
-    pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];
+    pPLCF_PosArray.reset( new sal_Int32[ ( nPLCF + 3 ) / 4 ] );
     pPLCF_PosArray[0] = 0;
 
-    nPLCF = bValid ? pSt->ReadBytes(pPLCF_PosArray, nPLCF) : nValidMin;
+    nPLCF = bValid ? pSt->ReadBytes(pPLCF_PosArray.get(), nPLCF) : nValidMin;
 
     nPLCF = std::max(nPLCF, nValidMin);
 
@@ -2086,8 +2086,8 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
     if (bValid)
     {
         // Pointer to Pos-array
-        pPLCF_PosArray = new WW8_CP[ ( nPLCF + 3 ) / 4 ];
-        bValid = checkRead(rSt, pPLCF_PosArray, nPLCF);
+        pPLCF_PosArray.reset( new WW8_CP[ ( nPLCF + 3 ) / 4 ] );
+        bValid = checkRead(rSt, pPLCF_PosArray.get(), nPLCF);
     }
 
     if (bValid)
@@ -2114,8 +2114,7 @@ void WW8PLCF::ReadPLCF(SvStream& rSt, WW8_FC nFilePos, sal_uInt32 nPLCF)
 void WW8PLCF::MakeFailedPLCF()
 {
     nIMax = 0;
-    delete[] pPLCF_PosArray;
-    pPLCF_PosArray = new sal_Int32[2];
+    pPLCF_PosArray.reset( new sal_Int32[2] );
     pPLCF_PosArray[0] = pPLCF_PosArray[1] = WW8_CP_MAX;
     pPLCF_Contents = reinterpret_cast<sal_uInt8*>(&pPLCF_PosArray[nIMax + 1]);
 }
@@ -2149,7 +2148,7 @@ void WW8PLCF::GeneratePLCF(SvStream& rSt, sal_Int32 nPN, sal_Int32 ncpN)
     {
         size_t nSiz = 6 * nIMax + 4;
         size_t nElems = ( nSiz + 3 ) / 4;
-        pPLCF_PosArray = new sal_Int32[ nElems ]; // Pointer to Pos-array
+        pPLCF_PosArray.reset( new sal_Int32[ nElems ] ); // Pointer to Pos-array
 
         for (sal_Int32 i = 0; i < ncpN && !failure; ++i)
         {
@@ -2283,10 +2282,10 @@ WW8PLCFpcd::WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos,
         bValid = false;
     nPLCF = bValid ? std::min(nRemainingSize, static_cast<std::size_t>(nPLCF)) : nValidMin;
 
-    pPLCF_PosArray = new sal_Int32[ ( nPLCF + 3 ) / 4 ];    // Pointer to Pos-array
+    pPLCF_PosArray.reset( new sal_Int32[ ( nPLCF + 3 ) / 4 ] );    // Pointer to Pos-array
     pPLCF_PosArray[0] = 0;
 
-    nPLCF = bValid ? pSt->ReadBytes(pPLCF_PosArray, nPLCF) : nValidMin;
+    nPLCF = bValid ? pSt->ReadBytes(pPLCF_PosArray.get(), nPLCF) : nValidMin;
     nPLCF = std::max(nPLCF, nValidMin);
 
     nIMax = ( nPLCF - 4 ) / ( 4 + nStruct );
@@ -6853,8 +6852,8 @@ WW8Fonts::WW8Fonts( SvStream& rSt, WW8Fib& rFib )
     if( nMax )
     {
         // allocate Index Array
-        pFontA = new WW8_FFN[ nMax ];
-        WW8_FFN* p = pFontA;
+        pFontA.reset( new WW8_FFN[ nMax ] );
+        WW8_FFN* p = pFontA.get();
 
         if( eVersion <= ww::eWW2 )
         {

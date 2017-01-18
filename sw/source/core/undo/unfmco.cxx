@@ -43,7 +43,6 @@ SwUndoFormatColl::SwUndoFormatColl( const SwPaM& rRange,
 
 SwUndoFormatColl::~SwUndoFormatColl()
 {
-    delete pHistory;
 }
 
 void SwUndoFormatColl::UndoImpl(::sw::UndoRedoContext & rContext)

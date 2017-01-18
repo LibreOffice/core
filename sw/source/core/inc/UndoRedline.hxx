@@ -70,7 +70,7 @@ public:
 
 class SwUndoRedlineSort : public SwUndoRedline
 {
-    SwSortOptions* pOpt;
+    std::unique_ptr<SwSortOptions> pOpt;
     sal_uLong nSaveEndNode, nOffset;
     sal_Int32 nSaveEndContent;
 

@@ -144,7 +144,7 @@ class SwMasterUsrPref : public SwViewOption
     SwLayoutViewConfig  m_aLayoutConfig;
     SwGridConfig        m_aGridConfig;
     SwCursorConfig      m_aCursorConfig;
-    SwWebColorConfig*   m_pWebColorConfig;
+    std::unique_ptr<SwWebColorConfig>   m_pWebColorConfig;
 
     bool m_bApplyCharUnit; // apply_char_unit
 public:

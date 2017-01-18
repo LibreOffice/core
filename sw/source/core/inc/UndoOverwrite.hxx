@@ -34,7 +34,7 @@ namespace utl {
 class SwUndoOverwrite: public SwUndo, private SwUndoSaveContent
 {
     OUString aDelStr, aInsStr;
-    SwRedlineSaveDatas* pRedlSaveData;
+    std::unique_ptr<SwRedlineSaveDatas> pRedlSaveData;
     sal_uLong nSttNode;
     sal_Int32 nSttContent;
     bool bInsChar : 1;  // no Overwrite, but Insert

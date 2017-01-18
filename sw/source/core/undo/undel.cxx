@@ -134,7 +134,7 @@ SwUndoDelete::SwUndoDelete(
     }
 
     if( !pHistory )
-        pHistory = new SwHistory;
+        pHistory.reset( new SwHistory );
 
     // delete all footnotes for now
     const SwPosition *pStt = rPam.Start(),
@@ -196,7 +196,7 @@ SwUndoDelete::SwUndoDelete(
             // EndNode needs to be reset. Same for PageDesc and ColBreak.
             if( pEndTextNd->HasSwAttrSet() )
             {
-                SwRegHistory aRegHist( *pEndTextNd, pHistory );
+                SwRegHistory aRegHist( *pEndTextNd, pHistory.get() );
                 if( SfxItemState::SET == pEndTextNd->GetpSwAttrSet()->GetItemState(
                         RES_BREAK, false ) )
                     pEndTextNd->ResetAttr( RES_BREAK );
@@ -357,7 +357,7 @@ SwUndoDelete::SwUndoDelete(
 
     // is a history necessary here at all?
     if( pHistory && !pHistory->Count() )
-        DELETEZ( pHistory );
+        pHistory.reset();
 }
 
 bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
@@ -368,7 +368,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
     if( pSttTextNd )
     {
         bool bOneNode = nSttNode == nEndNode;
-        SwRegHistory aRHst( *pSttTextNd, pHistory );
+        SwRegHistory aRHst( *pSttTextNd, pHistory.get() );
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
         pHistory->CopyAttr( pSttTextNd->GetpSwpHints(), nNdIdx,
@@ -407,7 +407,7 @@ bool SwUndoDelete::SaveContent( const SwPosition* pStt, const SwPosition* pEnd,
     {
         SwIndex aEndIdx( pEndTextNd );
         nNdIdx = pEnd->nNode.GetIndex();
-        SwRegHistory aRHst( *pEndTextNd, pHistory );
+        SwRegHistory aRHst( *pEndTextNd, pHistory.get() );
 
         // always save all text atttibutes because of possibly overlapping
         // areas of on/off
@@ -920,14 +920,14 @@ void SwUndoDelete::UndoImpl(::sw::UndoRedoContext & rContext)
                 {
                     // if so save the attributes of the others
                     SwHistory aHstr;
-                    aHstr.Move( 0, pHistory, m_nSetPos );
+                    aHstr.Move( 0, pHistory.get(), m_nSetPos );
                     pHistory->Rollback(&rDoc);
                     pHistory->Move( 0, &aHstr );
                 }
                 else
                 {
                     pHistory->Rollback(&rDoc);
-                    DELETEZ( pHistory );
+                    pHistory.reset();
                 }
             }
         }
@@ -984,7 +984,7 @@ void SwUndoDelete::RedoImpl(::sw::UndoRedoContext & rContext)
     {
         pHistory->SetTmpEnd( pHistory->Count() );
         SwHistory aHstr;
-        aHstr.Move( 0, pHistory );
+        aHstr.Move( 0, pHistory.get() );
 
         if( m_bDelFullPara )
         {

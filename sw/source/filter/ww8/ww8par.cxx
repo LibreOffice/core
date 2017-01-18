@@ -1388,7 +1388,7 @@ void SwWW8ReferencedFltEndStack::SetAttrInDoc( const SwPosition& rTmpPos,
             // and which is not referenced.
             bool bInsertBookmarkIntoDoc = true;
 
-            SwFltBookmark* pFltBookmark = dynamic_cast<SwFltBookmark*>(rEntry.pAttr);
+            SwFltBookmark* pFltBookmark = dynamic_cast<SwFltBookmark*>(rEntry.pAttr.get());
             if ( pFltBookmark != nullptr && pFltBookmark->IsTOCBookmark() )
             {
                 const OUString& rName = pFltBookmark->GetName();
@@ -1429,7 +1429,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                 SwPaM aRegion(rTmpPos);
                 if (rEntry.MakeRegion(pDoc, aRegion, false))
                 {
-                    SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.pAttr) );
+                    SvxLRSpaceItem aNewLR( *static_cast<SvxLRSpaceItem*>(rEntry.pAttr.get()) );
                     sal_uLong nStart = aRegion.Start()->nNode.GetIndex();
                     sal_uLong nEnd   = aRegion.End()->nNode.GetIndex();
                     for(; nStart <= nEnd; ++nStart)
@@ -1502,7 +1502,7 @@ void SwWW8FltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
                     if (nullptr != (pFrame = SwWW8ImplReader::ContainsSingleInlineGraphic(aRegion)))
                     {
                         const SwFormatINetFormat *pAttr = static_cast<const SwFormatINetFormat *>(
-                            rEntry.pAttr);
+                            rEntry.pAttr.get());
                         SwFormatURL aURL;
                         aURL.SetURL(pAttr->GetValue(), false);
                         aURL.SetTargetFrameName(pAttr->GetTargetFrame());
@@ -1590,7 +1590,7 @@ const SfxPoolItem* SwWW8FltControlStack::GetStackAttr(const SwPosition& rPos,
                  * means props that end at 3 are not included
                  */
             {
-                return rEntry.pAttr;
+                return rEntry.pAttr.get();
             }
         }
     }
@@ -1637,7 +1637,7 @@ void SwWW8FltRefStack::SetAttrInDoc(const SwPosition& rTmpPos,
             SwNodeIndex aIdx(rEntry.m_aMkPos.m_nNode, 1);
             SwPaM aPaM(aIdx, rEntry.m_aMkPos.m_nContent);
 
-            SwFormatField& rFormatField   = *static_cast<SwFormatField*>(rEntry.pAttr);
+            SwFormatField& rFormatField   = *static_cast<SwFormatField*>(rEntry.pAttr.get());
             SwField* pField = rFormatField.GetField();
 
             if (!RefToVar(pField, rEntry))
