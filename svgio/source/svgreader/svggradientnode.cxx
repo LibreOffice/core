@@ -59,7 +59,6 @@ namespace svgio
 
         SvgGradientNode::~SvgGradientNode()
         {
-            delete mpaGradientTransform;
             // do NOT delete mpXLink, it's only referenced, not owned
         }
 
@@ -472,7 +471,7 @@ namespace svgio
         {
             if(mpaGradientTransform)
             {
-                return mpaGradientTransform;
+                return mpaGradientTransform.get();
             }
 
             const_cast< SvgGradientNode* >(this)->tryToFindLink();
@@ -487,15 +486,11 @@ namespace svgio
 
         void SvgGradientNode::setGradientTransform(const basegfx::B2DHomMatrix* pMatrix)
         {
-            if(mpaGradientTransform)
-            {
-                delete mpaGradientTransform;
-                mpaGradientTransform = nullptr;
-            }
+            mpaGradientTransform.reset();
 
             if(pMatrix)
             {
-                mpaGradientTransform = new basegfx::B2DHomMatrix(*pMatrix);
+                mpaGradientTransform.reset(new basegfx::B2DHomMatrix(*pMatrix) );
             }
         }
 

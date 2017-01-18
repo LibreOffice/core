@@ -21,6 +21,7 @@
 #define INCLUDED_SVGIO_INC_SVGSVGNODE_HXX
 
 #include <svgstyleattributes.hxx>
+#include <memory>
 
 namespace svgio
 {
@@ -33,7 +34,8 @@ namespace svgio
             SvgStyleAttributes      maSvgStyleAttributes;
 
             /// variable scan values, dependent of given XAttributeList
-            basegfx::B2DRange*      mpViewBox;
+            std::unique_ptr<basegfx::B2DRange>
+                                    mpViewBox;
             SvgAspectRatio          maSvgAspectRatio;
             SvgNumber               maX;
             SvgNumber               maY;
@@ -70,8 +72,8 @@ namespace svgio
             virtual const basegfx::B2DRange getCurrentViewPort() const override;
 
             /// viewBox content
-            const basegfx::B2DRange* getViewBox() const { return mpViewBox; }
-            void setViewBox(const basegfx::B2DRange* pViewBox) { if(mpViewBox) delete mpViewBox; mpViewBox = nullptr; if(pViewBox) mpViewBox = new basegfx::B2DRange(*pViewBox); }
+            const basegfx::B2DRange* getViewBox() const { return mpViewBox.get(); }
+            void setViewBox(const basegfx::B2DRange* pViewBox) { mpViewBox.reset(); if(pViewBox) mpViewBox.reset( new basegfx::B2DRange(*pViewBox) ); }
 
             /// SvgAspectRatio content
             const SvgAspectRatio& getSvgAspectRatio() const { return maSvgAspectRatio; }

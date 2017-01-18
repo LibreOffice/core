@@ -22,6 +22,7 @@
 
 #include <svgnode.hxx>
 #include <svgstyleattributes.hxx>
+#include <memory>
 
 namespace svgio
 {
@@ -38,7 +39,8 @@ namespace svgio
             SvgNumber                   maY;
             SvgNumber                   maWidth;
             SvgNumber                   maHeight;
-            basegfx::B2DHomMatrix*      mpaTransform;
+            std::unique_ptr<basegfx::B2DHomMatrix>
+                                        mpaTransform;
             SvgUnits                    maMaskUnits;
             SvgUnits                    maMaskContentUnits;
 
@@ -70,8 +72,8 @@ namespace svgio
             const SvgNumber& getHeight() const { return maHeight; }
 
             /// transform content
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset( new basegfx::B2DHomMatrix(*pMatrix) ); }
 
             /// MaskUnits content
             void setMaskUnits(const SvgUnits aMaskUnits) { maMaskUnits = aMaskUnits; }

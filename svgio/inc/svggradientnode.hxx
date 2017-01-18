@@ -23,6 +23,7 @@
 #include <svgnode.hxx>
 #include <svgstyleattributes.hxx>
 #include <drawinglayer/primitive2d/svggradientprimitive2d.hxx>
+#include <memory>
 
 namespace svgio
 {
@@ -50,7 +51,7 @@ namespace svgio
             /// variable scan values, dependent of given XAttributeList
             SvgUnits                    maGradientUnits;
             drawinglayer::primitive2d::SpreadMethod   maSpreadMethod;
-            basegfx::B2DHomMatrix*      mpaGradientTransform;
+            std::unique_ptr<basegfx::B2DHomMatrix>    mpaGradientTransform;
 
             /// link to another gradient used as style. If maXLink
             /// is set, the node can be fetched on demand by using

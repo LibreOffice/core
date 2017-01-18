@@ -22,6 +22,7 @@
 
 #include <svgnode.hxx>
 #include <svgstyleattributes.hxx>
+#include <memory>
 
 namespace svgio
 {
@@ -38,7 +39,7 @@ namespace svgio
             SvgNumber               maY1;
             SvgNumber               maX2;
             SvgNumber               maY2;
-            basegfx::B2DHomMatrix*  mpaTransform;
+            std::unique_ptr<basegfx::B2DHomMatrix>  mpaTransform;
 
         public:
             SvgLineNode(
@@ -63,8 +64,8 @@ namespace svgio
             const SvgNumber& getY2() const { return maY2; }
 
             /// transform content, set if found in current context
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset( new basegfx::B2DHomMatrix(*pMatrix) ); }
         };
     } // end of namespace svgreader
 } // end of namespace svgio
