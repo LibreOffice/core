@@ -68,16 +68,14 @@ String STR_SVT_GB
     Text [ en-US ] = "GB" ;
 };
 
-// Images ---------------------------------------------------------------------
-
-Image IMG_SVT_FOLDER
+Bitmap RID_BMP_FOLDER
 {
-    ImageBitmap = Bitmap { File = "folder.png" ; };
+    File = "folder.png";
 };
 
-Image IMG_SVT_FOLDER_OPEN
+Bitmap RID_BMP_FOLDER_OPEN
 {
-    ImageBitmap = Bitmap { File = "folderop.png" ; };
+    File = "folderop.png";
 };
 
 // Menus -----------------------------------------------------------------

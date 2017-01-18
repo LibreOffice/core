@@ -541,7 +541,7 @@ static Image GetImageFromList_Impl( sal_uInt16 nImageId, bool bBig )
             return Image(BitmapEx(SvtResId(bBig ? BMP_TABLE_LC : BMP_TABLE_SC)));
         case IMG_FOLDER:
             // if not bBig, then return our new small folder image (256 colors)
-            return bBig ? Image(BitmapEx(SvtResId(BMP_FOLDER_LC))) : Image(SvtResId(IMG_SVT_FOLDER));
+            return Image(BitmapEx(SvtResId(bBig ? BMP_FOLDER_LC : RID_BMP_FOLDER)));
         case IMG_DXF:
             return Image(BitmapEx(SvtResId(bBig ? BMP_DXF_LC : BMP_DXF_SC)));
         case IMG_MET:

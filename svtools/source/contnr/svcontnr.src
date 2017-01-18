@@ -19,14 +19,14 @@
 
 #include <svtools/svtools.hrc>
 
-Image RID_IMG_TREENODE_COLLAPSED
+Bitmap RID_BMP_TREENODE_COLLAPSED
 {
-    ImageBitmap = Bitmap { File = "plus.png"; } ;
+    File = "plus.png";
 };
 
-Image RID_IMG_TREENODE_EXPANDED
+Bitmap RID_BMP_TREENODE_EXPANDED
 {
-    ImageBitmap = Bitmap { File = "minus.png"; } ;
+    File = "minus.png";
 };
 
 // descriptions of accessible objects

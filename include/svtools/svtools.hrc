@@ -243,9 +243,11 @@
 #define DLG_ADDRESSBOOKSOURCE           (RID_SVTOOLS_START+114)
 
 // bitmaps
-
-#define BMP_PLUGIN                      (RID_SVTOOLS_BITMAP_START +   3)
-// free
+#define RID_BMP_TREENODE_COLLAPSED      (RID_SVTOOLS_BITMAP_START +   0)
+#define RID_BMP_TREENODE_EXPANDED       (RID_SVTOOLS_BITMAP_START +   1)
+#define RID_BMP_FOLDER                  (RID_SVTOOLS_BITMAP_START +   2)
+#define RID_BMP_FOLDER_OPEN             (RID_SVTOOLS_BITMAP_START +   3)
+#define BMP_PLUGIN                      (RID_SVTOOLS_BITMAP_START +   4)
 #define BMP_CURRENT                     (RID_SVTOOLS_BITMAP_START +   5)
 #define BMP_MODIFIED                    (RID_SVTOOLS_BITMAP_START +   6)
 #define BMP_NEW                         (RID_SVTOOLS_BITMAP_START +   7)
@@ -353,13 +355,6 @@
 #define BMP_OO_CALC_TEMPLATE_LC         (RID_SVTOOLS_BITMAP_START + 109)
 #define BMP_OO_WRITER_TEMPLATE_LC       (RID_SVTOOLS_BITMAP_START + 110)
 #define BMP_EXTENSION_LC                (RID_SVTOOLS_BITMAP_START + 111)
-
-// images
-#define RID_IMG_TREENODE_COLLAPSED      (RID_SVTOOLS_START +  0)
-#define RID_IMG_TREENODE_EXPANDED       (RID_SVTOOLS_START +  1)
-
-#define IMG_SVT_FOLDER                  (RID_SVTOOLS_START + 42)
-#define IMG_SVT_FOLDER_OPEN             (RID_SVTOOLS_START + 43)
 
 #define STR_PARAGRAPH_START                 (STR_SVT_PRNDLG_START + 50)
 #define STR_PARAGRAPH                       (STR_PARAGRAPH_START + 0)
