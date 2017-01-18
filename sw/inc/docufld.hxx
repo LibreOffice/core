@@ -444,14 +444,18 @@ class SW_DLLPUBLIC SwPostItField : public SwField
     DateTime    aDateTime;
     OutlinerParaObject* mpText;
     rtl::Reference<SwTextAPIObject> m_xTextObject;
+    sal_uInt32 m_nPostItId;
 
 public:
+    static sal_uInt32 m_nLastPostItId;
+
     SwPostItField( SwPostItFieldType*,
                    const OUString& rAuthor,
                    const OUString& rText,
                    const OUString& rInitials,
                    const OUString& rName,
-                   const DateTime& rDate);
+                   const DateTime& rDate,
+                   const sal_uInt32 nPostItId = 0);
 
     SwPostItField(const SwPostItField&) = delete;
     SwPostItField* operator=(const SwPostItField&) = delete;
@@ -464,6 +468,7 @@ public:
     const DateTime&         GetDateTime() const             { return aDateTime; }
     inline const Date       GetDate() const                 { return Date(aDateTime.GetDate()); }
     inline const tools::Time GetTime() const                 { return aDateTime.GetTime(); }
+    inline sal_uInt32 GetPostItId() const             { return m_nPostItId; }
 
     /// Author
     virtual OUString        GetPar1() const override;
