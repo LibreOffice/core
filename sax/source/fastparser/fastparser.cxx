@@ -811,6 +811,10 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
             } while (!done);
             xParser->join();
             deleteUsedEvents();
+
+            // callbacks used inside XML_Parse may have caught an exception
+            if( rEntity.maSavedException.hasValue() )
+                rEntity.throwException( mxDocumentLocator, true );
         }
         else
         {
