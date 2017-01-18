@@ -70,21 +70,14 @@ Menu RID_SBA_RTF_PKEYPOPUP
     };
 };
 
-
-Image IMG_UP
+Bitmap BMP_UP
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sortup.png" ;
-    };
+    File = "sortup.png" ;
 };
 
-Image IMG_DOWN
+Bitmap BMP_DOWN
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sortdown.png" ;
-    };
+    File = "sortdown.png" ;
 };
 
 String STR_WIZ_TABLE_COPY

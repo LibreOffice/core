@@ -603,7 +603,7 @@ UpdateDialog::CheckListBox::CheckListBox( vcl::Window* pParent, UpdateDialog & d
     m_enableUpdate( DPGUI_RESSTR( RID_DLG_UPDATE_ENABLE ) ),
     m_dialog(dialog)
 {
-    SetNormalStaticImage(Image(DpGuiResId(RID_DLG_UPDATE_NORMALALERT)));
+    SetNormalStaticImage(Image(BitmapEx(DpGuiResId(RID_DLG_UPDATE_NORMALALERT))));
 }
 
 sal_uInt16 UpdateDialog::CheckListBox::getItemCount() const {

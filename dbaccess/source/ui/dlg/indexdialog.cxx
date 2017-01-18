@@ -281,7 +281,7 @@ namespace dbaui
 
     void DbaIndexDialog::fillIndexList()
     {
-        Image aPKeyIcon(ModuleRes( IMG_PKEYICON ));
+        Image aPKeyIcon(BitmapEx(ModuleRes(BMP_PKEYICON)));
         // fill the list with the index names
         m_pIndexList->Clear();
         Indexes::const_iterator aIndexLoop = m_pIndexes->begin();

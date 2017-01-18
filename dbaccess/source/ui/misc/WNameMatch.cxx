@@ -33,8 +33,8 @@ using namespace ::dbaui;
 // OWizColumnSelect
 OWizNameMatching::OWizNameMatching( vcl::Window* pParent)
         :OWizardPage( pParent, "NameMatching", "dbaccess/ui/namematchingpage.ui" )
-        , m_aImgUp(ModuleRes(IMG_UP))
-        , m_aImgDown(ModuleRes(IMG_DOWN))
+        , m_aImgUp(BitmapEx(ModuleRes(BMP_UP)))
+        , m_aImgDown(BitmapEx(ModuleRes(BMP_DOWN)))
 {
     get(m_pTABLE_LEFT, "leftlabel");
     get(m_pTABLE_RIGHT, "rightlabel");

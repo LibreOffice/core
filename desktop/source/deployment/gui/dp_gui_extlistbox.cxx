@@ -189,10 +189,10 @@ ExtensionBox_Impl::ExtensionBox_Impl(vcl::Window* pParent) :
     m_nTopIndex( 0 ),
     m_nActiveHeight( 0 ),
     m_nExtraHeight( 2 ),
-    m_aSharedImage( DialogHelper::getResId( RID_IMG_SHARED ) ),
-    m_aLockedImage( DialogHelper::getResId( RID_IMG_LOCKED ) ),
-    m_aWarningImage( DialogHelper::getResId( RID_IMG_WARNING ) ),
-    m_aDefaultImage( DialogHelper::getResId( RID_IMG_EXTENSION ) ),
+    m_aSharedImage(BitmapEx(DialogHelper::getResId(RID_BMP_SHARED))),
+    m_aLockedImage(BitmapEx(DialogHelper::getResId(RID_BMP_LOCKED))),
+    m_aWarningImage(BitmapEx(DialogHelper::getResId(RID_BMP_WARNING))),
+    m_aDefaultImage(BitmapEx(DialogHelper::getResId(RID_BMP_EXTENSION))),
     m_pScrollBar( nullptr ),
     m_pManager( nullptr )
 {

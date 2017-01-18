@@ -80,8 +80,8 @@ OCollectionView::OCollectionView( vcl::Window * pParent
     m_pName->GrabFocus();
 
     m_pNewFolder->SetStyle( m_pNewFolder->GetStyle() | WB_NOPOINTERFOCUS );
-    m_pUp->SetModeImage(Image(ModuleRes(IMG_NAVIGATION_BTN_UP_SC)));
-    m_pNewFolder->SetModeImage(Image(ModuleRes(IMG_NAVIGATION_CREATEFOLDER_SC)));
+    m_pUp->SetModeImage(Image(BitmapEx(ModuleRes(BMP_NAVIGATION_BTN_UP_SC))));
+    m_pNewFolder->SetModeImage(Image(BitmapEx(ModuleRes(BMP_NAVIGATION_CREATEFOLDER_SC))));
 
     m_pView->SetDoubleClickHdl( LINK( this, OCollectionView, Dbl_Click_FileView ) );
     m_pView->EnableAutoResize();

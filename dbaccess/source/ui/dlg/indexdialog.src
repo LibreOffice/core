@@ -52,9 +52,9 @@ String STR_LOGICAL_INDEX_NAME
     Text [ en-US ] = "index";
 };
 
-Image IMG_PKEYICON
+Bitmap BMP_PKEYICON
 {
-    ImageBitmap = Bitmap { File = "pkey.png"; };
+    File = "pkey.png";
 };
 
 String STR_NEED_INDEX_FIELDS

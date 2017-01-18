@@ -140,7 +140,7 @@ namespace dbaui
                 lcl_getTableImageResourceID_nothrow( *m_pData, _rName, nImageResourceID );
 
                 if ( nImageResourceID && !_out_rImage )
-                    _out_rImage = Image( ModuleRes( nImageResourceID ) );
+                    _out_rImage = Image(BitmapEx(ModuleRes(nImageResourceID)));
             }
         }
     }
@@ -150,7 +150,7 @@ namespace dbaui
         Image aObjectImage;
         sal_uInt16 nImageResourceID( getDefaultImageResourceID( _nDatabaseObjectType) );
         if ( nImageResourceID )
-            aObjectImage = Image( ModuleRes( nImageResourceID ) );
+            aObjectImage = Image(BitmapEx(ModuleRes(nImageResourceID)));
         return aObjectImage;
     }
 
@@ -202,13 +202,13 @@ namespace dbaui
 
         Image aFolderImage;
         if ( nImageResourceID )
-            aFolderImage = Image( ModuleRes( nImageResourceID ) );
+            aFolderImage = Image(BitmapEx(ModuleRes(nImageResourceID)));
         return aFolderImage;
     }
 
     Image ImageProvider::getDatabaseImage()
     {
-        return Image( ModuleRes( DATABASE_TREE_ICON ) );
+        return Image(BitmapEx(ModuleRes(DATABASE_TREE_ICON)));
     }
 
 } // namespace dbaui

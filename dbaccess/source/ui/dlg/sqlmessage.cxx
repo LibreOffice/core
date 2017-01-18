@@ -71,7 +71,7 @@ namespace
         Image const & getImage() const
         {
             if ( !m_defaultImage )
-                m_defaultImage = Image( ModuleRes( m_defaultImageID ) );
+                m_defaultImage = Image(BitmapEx(ModuleRes(m_defaultImageID)));
             return m_defaultImage;
         }
     };

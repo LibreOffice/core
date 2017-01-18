@@ -713,9 +713,9 @@ void OAppDetailPageHelper::fillNames( const Reference< XNameAccess >& _xContaine
             {
                 pEntry = pList->InsertEntry( *pIter, _pParent );
 
-                Image aImage{ ModuleRes( _nImageId ) };
-                pList->SetExpandedEntryBmp(  pEntry, aImage );
-                pList->SetCollapsedEntryBmp( pEntry, aImage );
+                Image aImage{BitmapEx(ModuleRes(_nImageId))};
+                pList->SetExpandedEntryBmp(pEntry, aImage);
+                pList->SetCollapsedEntryBmp(pEntry, aImage);
             }
         }
     }
@@ -842,7 +842,7 @@ SvTreeListEntry* OAppDetailPageHelper::elementAdded(ElementType _eType,const OUS
         {
             pRet = pTreeView->InsertEntry( _rName, pEntry );
 
-            Image aImage{ ModuleRes( nImageId ) };
+            Image aImage{BitmapEx(ModuleRes(nImageId))};
             pTreeView->SetExpandedEntryBmp(  pRet, aImage );
             pTreeView->SetCollapsedEntryBmp( pRet, aImage );
         }

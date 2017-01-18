@@ -20,100 +20,100 @@
 #include "dbu_dlg.hrc"
 #include "browserids.hxx"
 
-Image IMG_FORMFOLDER_TREE_L
+Bitmap BMP_FORMFOLDER_TREE_L
 {
-    ImageBitmap = Bitmap { File = "forms_32"; };
+    File = "forms_32";
 };
 
-Image IMG_REPORTFOLDER_TREE_L
+Bitmap BMP_REPORTFOLDER_TREE_L
 {
-    ImageBitmap = Bitmap { File = "reports_32"; };
+    File = "reports_32";
 };
 
-Image IMG_QUERYFOLDER_TREE_L
+Bitmap BMP_QUERYFOLDER_TREE_L
 {
-    ImageBitmap = Bitmap { File = "queries_32"; };
+    File = "queries_32";
 };
 
-Image IMG_TABLEFOLDER_TREE_L
+Bitmap BMP_TABLEFOLDER_TREE_L
 {
-    ImageBitmap = Bitmap { File = "tables_32"; };
+    File = "tables_32";
 };
 
 // database object icons
 
 // the whole database
 
-Image DATABASE_TREE_ICON
+Bitmap DATABASE_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "db.png"; };
+    File = "db.png";
 };
 
 // tables and table folders
 
-Image TABLE_TREE_ICON
+Bitmap TABLE_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "sx03188.png"; };
+    File = "sx03188.png";
 };
 
-Image TABLEFOLDER_TREE_ICON
+Bitmap TABLEFOLDER_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "sx03187.png"; };
+    File = "sx03187.png";
 };
 
 // views
 
-Image VIEW_TREE_ICON
+Bitmap VIEW_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "sx16670.png"; };
+    File = "sx16670.png";
 };
 
 // queries and query folders
 
-Image QUERY_TREE_ICON
+Bitmap QUERY_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "sx03202.png"; };
+    File = "sx03202.png";
 };
 
-Image QUERYFOLDER_TREE_ICON
+Bitmap QUERYFOLDER_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "sx03201.png"; };
+    File = "sx03201.png";
 };
 
 // forms and form folders
 
-Image FORM_TREE_ICON
+Bitmap FORM_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "form_16"; };
+    File = "form_16";
 };
 
-Image FORMFOLDER_TREE_ICON
+Bitmap FORMFOLDER_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "forms_16"; };
+    File = "forms_16";
 };
 
 // reports and report folders
 
-Image REPORT_TREE_ICON
+Bitmap REPORT_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "report_16"; };
+    File = "report_16";
 };
 
-Image REPORTFOLDER_TREE_ICON
+Bitmap REPORTFOLDER_TREE_ICON
 {
-    ImageBitmap = Bitmap { File = "reports_16"; };
+    File = "reports_16";
 };
 
 // new folder and parent folder
 
-Image IMG_NAVIGATION_BTN_UP_SC
+Bitmap BMP_NAVIGATION_BTN_UP_SC
 {
-    ImageBitmap = Bitmap { File = "fp010"; };
+    File = "fp010";
 };
 
-Image IMG_NAVIGATION_CREATEFOLDER_SC
+Bitmap BMP_NAVIGATION_CREATEFOLDER_SC
 {
-    ImageBitmap = Bitmap { File = "fp015"; };
+    File = "fp015";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

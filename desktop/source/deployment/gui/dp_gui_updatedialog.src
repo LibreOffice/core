@@ -21,10 +21,9 @@
 
 #include "dp_gui.hrc"
 
-Image RID_DLG_UPDATE_NORMALALERT {
-    ImageBitmap = Bitmap {
-        File = "caution_12.png";
-    };
+Bitmap RID_DLG_UPDATE_NORMALALERT
+{
+    File = "caution_12.png";
 };
 
 String RID_DLG_UPDATE_NONE {

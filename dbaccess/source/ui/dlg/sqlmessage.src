@@ -20,19 +20,19 @@
 #include "dbaccess_helpid.hrc"
 #include "dbu_dlg.hrc"
 
-Image BMP_EXCEPTION_ERROR
+Bitmap BMP_EXCEPTION_ERROR
 {
-    ImageBitmap = Bitmap { File = "exerror.png"; };
+    File = "exerror.png";
 };
 
-Image BMP_EXCEPTION_WARNING
+Bitmap BMP_EXCEPTION_WARNING
 {
-    ImageBitmap = Bitmap { File = "exwarning.png"; };
+    File = "exwarning.png";
 };
 
-Image BMP_EXCEPTION_INFO
+Bitmap BMP_EXCEPTION_INFO
 {
-    ImageBitmap = Bitmap { File = "exinfo.png"; };
+    File = "exinfo.png";
 };
 
 String STR_EXCEPTION_STATUS
