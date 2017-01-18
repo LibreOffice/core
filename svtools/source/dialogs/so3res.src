@@ -185,10 +185,6 @@ String STR_FURTHER_OBJECT
     Text [ en-US ] = "Further objects" ;
 };
 
-Bitmap BMP_PLUGIN
-{
-    File = "plugin.png" ;
-};
 String STR_UNKNOWN_SOURCE
 {
     Text [ en-US ] = "Unknown source" ;

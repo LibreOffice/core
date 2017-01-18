@@ -27,11 +27,6 @@
 #define STR_FURTHER_OBJECT                      32026
 #define STR_UNKNOWN_SOURCE                      32027
 
-#ifdef BMP_PLUGIN
-#undef BMP_PLUGIN
-#endif
-#define BMP_PLUGIN                      32000
-
 // Sot Format Strings
 #define STR_FORMAT_START                        32100
 #define STR_FORMAT_STRING                       (STR_FORMAT_START + 1)

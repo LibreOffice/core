@@ -377,7 +377,6 @@ def filter_ignore(line, module):
         ignore_list += [
             'sdgslots.hxx', # special directives
             'sdslots.hxx',  # special directives
-            'svtools/sores.hxx', # redefines BMP_PLUGIN defined in svtools.hrc
            ]
     if module == 'sfx2':
         ignore_list += [
