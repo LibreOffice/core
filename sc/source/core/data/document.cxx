@@ -6484,7 +6484,7 @@ void ScDocument::CreateAllNoteCaptions()
     }
 }
 
-void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges )
+void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveData )
 {
     for (size_t i = 0, n = rRanges.size(); i < n; ++i)
     {
@@ -6497,7 +6497,7 @@ void ScDocument::ForgetNoteCaptions( const ScRangeList& rRanges )
             if (!pTab)
                 continue;
 
-            pTab->ForgetNoteCaptions(s.Col(), s.Row(), e.Col(), e.Row());
+            pTab->ForgetNoteCaptions(s.Col(), s.Row(), e.Col(), e.Row(), bPreserveData);
         }
     }
 }

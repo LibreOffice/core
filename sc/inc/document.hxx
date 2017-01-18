@@ -1110,7 +1110,7 @@ public:
      * code uses sdr objects to export note data.
      */
     void CreateAllNoteCaptions();
-    void ForgetNoteCaptions( const ScRangeList& rRanges );
+    void ForgetNoteCaptions( const ScRangeList& rRanges, bool bPreserveData );
 
     ScAddress GetNotePosition( size_t nIndex ) const;
     ScAddress GetNotePosition( size_t nIndex, SCTAB nTab ) const;
