@@ -223,6 +223,7 @@ public:
     void testTdf104425();
     void testTdf104814();
     void testTdf66405();
+    void testTdf35021_tabOverMarginDemo();
     void testTdf104492();
     void testTdf105417();
 
@@ -342,6 +343,7 @@ public:
     CPPUNIT_TEST(testTdf104425);
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf66405);
+    CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST_SUITE_END();
@@ -4211,6 +4213,28 @@ void SwUiWriterTest::testTdf66405()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nTopMargin);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), nBottomMargin);
 }
+
+void SwUiWriterTest::testTdf35021_tabOverMarginDemo()
+{
+    createDoc("tdf35021_tabOverMarginDemo.doc");
+    calcLayout();
+    xmlDocPtr pXmlDoc = parseLayoutDump();
+    // Tabs should go past the margin @ ~3381
+    sal_Int32 nMargin = getXPath(pXmlDoc, "//body/txt[1]/infos/prtBounds", "width").toInt32();
+    // left tab was 3381 because it got its own full line
+    sal_Int32 nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABLEFT']", "nWidth").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Left Tab width is ~4479", nMargin < nWidth);
+    // center tab was 842
+    nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABCENTER']", "nWidth").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Center Tab width is ~3521", nMargin < nWidth);
+    // right tab was probably the same as center tab.
+    nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABRIGHT']", "nWidth").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Right Tab width is ~2907", sal_Int32(2500) < nWidth);
+    // decimal tab was 266
+    nWidth = getXPath(pXmlDoc, "//Text[@nType='POR_TABDECIMAL']", "nWidth").toInt32();
+    CPPUNIT_ASSERT_MESSAGE("Decimal Tab width is ~4096", nMargin < nWidth);
+}
+
 void SwUiWriterTest::testTdf104492()
 {
     createDoc("tdf104492.docx");
