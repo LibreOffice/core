@@ -584,12 +584,32 @@ SdrCaptionObj* ScPostIt::GetOrCreateCaption( const ScAddress& rPos ) const
     return maNoteData.mpCaption;
 }
 
-void ScPostIt::ForgetCaption()
+void ScPostIt::ForgetCaption( bool bPreserveData )
 {
-    /*  This function is used in undo actions to give up the responsibility for
-        the caption object which is handled by separate drawing undo actions. */
-    maNoteData.mpCaption = nullptr;
-    maNoteData.mxInitData.reset();
+    if (bPreserveData)
+    {
+        // Used in clipboard when the originating document is destructed to be
+        // able to paste into another document. Caption size and relative
+        // position are not preserved but default created when pasted. Also the
+        // MergedItemSet can not be carried over or it had to be adapted to
+        // defaults and pool. At least preserve the text and outline object if
+        // possible.
+        ScCaptionInitData* pInitData = new ScCaptionInitData;
+        const OutlinerParaObject* pOPO = GetOutlinerObject();
+        if (pOPO)
+            pInitData->mxOutlinerObj.reset( new OutlinerParaObject(*pOPO));
+        pInitData->maSimpleText = GetText();
+
+        maNoteData.mxInitData.reset(pInitData);
+        maNoteData.mpCaption = nullptr;
+    }
+    else
+    {
+        /*  This function is used in undo actions to give up the responsibility for
+            the caption object which is handled by separate drawing undo actions. */
+        maNoteData.mpCaption = nullptr;
+        maNoteData.mxInitData.reset();
+    }
 }
 
 void ScPostIt::ShowCaption( const ScAddress& rPos, bool bShow )
@@ -629,13 +649,19 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
             to the clipboard/undo document, and when copying cells from the
             clipboard/undo document. The former should always be called first,
             so if called in an clipboard/undo document, the caption should have
-            been created already. */
-        OSL_ENSURE( !mrDoc.IsUndo() && !mrDoc.IsClipboard(), "ScPostIt::CreateCaptionFromInitData - note caption should not be created in undo/clip documents" );
+            been created already. Hovever, for clipboard in case the
+            originating document was destructed a new caption has to be
+            created. */
+        OSL_ENSURE( !mrDoc.IsUndo() && (!mrDoc.IsClipboard() || !maNoteData.mpCaption),
+                "ScPostIt::CreateCaptionFromInitData - note caption should not be created in undo/clip documents" );
 
         /*  #i104915# Never try to create notes in Undo document, leads to
             crash due to missing document members (e.g. row height array). */
         if( !maNoteData.mpCaption && !mrDoc.IsUndo() )
         {
+            if (mrDoc.IsClipboard())
+                mrDoc.InitDrawLayer();  // ensure there is a drawing layer
+
             // ScNoteCaptionCreator c'tor creates the caption and inserts it into the document and maNoteData
             ScNoteCaptionCreator aCreator( mrDoc, rPos, maNoteData );
             if( maNoteData.mpCaption )
