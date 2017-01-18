@@ -170,12 +170,15 @@ void SwTextPainter::DrawTextLine( const SwRect &rPaint, SwSaveClip &rClip,
         SwLinePortion* pPorIter = pPor;
         while( pPorIter )
         {
-            if( pPorIter->IsTabRightPortion() )
+            if( pPorIter->InTabGrp() )
             {
-               const SwTabRightPortion *pRightTabPor = static_cast<SwTabRightPortion*>(pPorIter);
-               const SwTwips nTabPos = nTmpLeft + pRightTabPor->GetTabPos();
+               const SwTabPortion* pTabPor = static_cast<SwTabPortion*>(pPorIter);
+               const SwTwips nTabPos = nTmpLeft + pTabPor->GetTabPos();
                 if( nMaxRight < nTabPos )
-                    nMaxRight = std::min( rPaint.Right(), nTabPos );
+                {
+                    nMaxRight = rPaint.Right();
+                    break;
+                }
             }
             pPorIter = pPorIter->GetPortion();
         }
