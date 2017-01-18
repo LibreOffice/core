@@ -63,9 +63,6 @@ public class CheckChangeColor {
         XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface(XPropertySet.class, xPageStyleCollection.getByName("Standard") );
 
         assertEquals(
-            "BackColor", new Any(Type.LONG, 0xFFFFFFFF),
-            Any.complete(xPropertySet.getPropertyValue("BackColor")));
-        assertEquals(
             "IsLandscape", new Any(Type.BOOLEAN, false),
             Any.complete(xPropertySet.getPropertyValue("IsLandscape")));
         assertEquals(
