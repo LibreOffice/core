@@ -21,64 +21,64 @@
 #include "newhelp.hrc"
 #include "helpid.hrc"
 
-Image IMG_HELP_TOOLBOX_INDEX_ON
+Bitmap BMP_HELP_TOOLBOX_INDEX_ON
 {
-    ImageBitmap = Bitmap { File = "indexon_small.png" ; };
+    File = "indexon_small.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_INDEX_OFF
+Bitmap BMP_HELP_TOOLBOX_INDEX_OFF
 {
-    ImageBitmap = Bitmap { File = "indexoff_small.png" ; };
+    File = "indexoff_small.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_START
+Bitmap BMP_HELP_TOOLBOX_START
 {
-    ImageBitmap = Bitmap { File = "sc06303.png" ; };
+    File = "sc06303.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_PREV
+Bitmap BMP_HELP_TOOLBOX_PREV
 {
-    ImageBitmap = Bitmap { File = "sc06301.png" ; };
+    File = "sc06301.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_NEXT
+Bitmap BMP_HELP_TOOLBOX_NEXT
 {
-    ImageBitmap = Bitmap { File = "sc06300.png" ; };
+    File = "sc06300.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_PRINT
+Bitmap BMP_HELP_TOOLBOX_PRINT
 {
-    ImageBitmap = Bitmap { File = "sc05504.png" ; };
+    File = "sc05504.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_BOOKMARKS
+Bitmap BMP_HELP_TOOLBOX_BOOKMARKS
 {
-    ImageBitmap = Bitmap { File = "favourite.png" ; };
+    File = "favourite.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_SEARCHDIALOG
+Bitmap BMP_HELP_TOOLBOX_SEARCHDIALOG
 {
-    ImageBitmap = Bitmap { File = "sc05961.png" ; };
+    File = "sc05961.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_COPY
+Bitmap BMP_HELP_TOOLBOX_COPY
 {
-    ImageBitmap = Bitmap { File = "sc05711.png" ; };
+    File = "sc05711.png" ;
 };
 
-Image IMG_HELP_CONTENT_BOOK_OPEN
+Bitmap BMP_HELP_CONTENT_BOOK_OPEN
 {
-    ImageBitmap = Bitmap { File = "hlpbookopen.png" ; };
+    File = "hlpbookopen.png" ;
 };
 
-Image IMG_HELP_CONTENT_BOOK_CLOSED
+Bitmap BMP_HELP_CONTENT_BOOK_CLOSED
 {
-    ImageBitmap = Bitmap { File = "hlpbookclosed.png" ; };
+    File = "hlpbookclosed.png" ;
 };
 
-Image IMG_HELP_CONTENT_DOC
+Bitmap BMP_HELP_CONTENT_DOC
 {
-    ImageBitmap = Bitmap { File = "hlpdoc.png" ; };
+    File = "hlpdoc.png" ;
 };
 
 String STR_HELP_WINDOW_TITLE
@@ -190,49 +190,49 @@ String STR_INFO_NOSEARCHTEXTFOUND
     Text [ en-US ] = "The text you entered was not found.";
 };
 
-Image IMG_HELP_TOOLBOX_L_INDEX_ON
+Bitmap BMP_HELP_TOOLBOX_L_INDEX_ON
 {
-    ImageBitmap = Bitmap { File = "indexon_big.png" ; };
+    File = "indexon_big.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_L_INDEX_OFF
+Bitmap BMP_HELP_TOOLBOX_L_INDEX_OFF
 {
-    ImageBitmap = Bitmap { File = "indexoff_big.png" ; };
+    File = "indexoff_big.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_L_START
+Bitmap BMP_HELP_TOOLBOX_L_START
 {
-    ImageBitmap = Bitmap { File = "lc06303.png" ; };
+    File = "lc06303.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_L_PREV
+Bitmap BMP_HELP_TOOLBOX_L_PREV
 {
-    ImageBitmap = Bitmap { File = "lc06301.png" ; };
+    File = "lc06301.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_L_NEXT
+Bitmap BMP_HELP_TOOLBOX_L_NEXT
 {
-    ImageBitmap = Bitmap { File = "lc06300.png" ; };
+    File = "lc06300.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_L_PRINT
+Bitmap BMP_HELP_TOOLBOX_L_PRINT
 {
-    ImageBitmap = Bitmap { File = "lc05504.png" ; };
+    File = "lc05504.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_L_BOOKMARKS
+Bitmap BMP_HELP_TOOLBOX_L_BOOKMARKS
 {
-    ImageBitmap = Bitmap { File = "favourite_big.png" ; };
+    File = "favourite_big.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_L_SEARCHDIALOG
+Bitmap BMP_HELP_TOOLBOX_L_SEARCHDIALOG
 {
-    ImageBitmap = Bitmap { File = "lc05961.png" ; };
+    File = "lc05961.png" ;
 };
 
-Image IMG_HELP_TOOLBOX_L_COPY
+Bitmap BMP_HELP_TOOLBOX_L_COPY
 {
-    ImageBitmap = Bitmap { File = "lc05711.png" ; };
+    File = "lc05711.png" ;
 };
 
 String RID_HELP_ONSTARTUP_TEXT
