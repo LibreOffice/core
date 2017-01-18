@@ -32,7 +32,7 @@ $(eval $(call gb_JunitTest_add_jars,sc_complex,\
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sc_complex,\
-	sc/qa/complex/sc/CalcCRTL \
+	sc/qa/complex/sc/CalcRTL \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,sc_complex,\
