@@ -36,7 +36,7 @@ StgInternalStream::StgInternalStream( BaseStorage& rStg, const OUString& rName, 
     StreamMode nMode = bWr
                  ? StreamMode::WRITE | StreamMode::SHARE_DENYALL
                  : StreamMode::READ | StreamMode::SHARE_DENYWRITE | StreamMode::NOCREATE;
-    m_pStrm = rStg.OpenStream( rName, nMode );
+    m_pStrm.reset( rStg.OpenStream( rName, nMode ) );
 
     // set the error code right here in the stream
     SetError( rStg.GetError() );
@@ -45,7 +45,6 @@ StgInternalStream::StgInternalStream( BaseStorage& rStg, const OUString& rName, 
 
 StgInternalStream::~StgInternalStream()
 {
-    delete m_pStrm;
 }
 
 std::size_t StgInternalStream::GetData(void* pData, std::size_t nSize)

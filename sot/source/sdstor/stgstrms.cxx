@@ -330,7 +330,6 @@ StgStrm::StgStrm( StgIo& r ) : m_rIo( r )
 
 StgStrm::~StgStrm()
 {
-    delete m_pFat;
 }
 
 // Attach the stream to the given entry.
@@ -558,7 +557,7 @@ bool StgStrm::SetSize( sal_Int32 nBytes )
 
 StgFATStrm::StgFATStrm( StgIo& r ) : StgStrm( r )
 {
-    m_pFat = new StgFAT( *this, true );
+    m_pFat.reset( new StgFAT( *this, true ) );
     m_nSize = m_rIo.m_aHdr.GetFATSize() * m_nPageSize;
 }
 
@@ -821,7 +820,7 @@ StgDataStrm::StgDataStrm( StgIo& r, StgDirEntry& p ) : StgStrm( r )
 void StgDataStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
 {
     if ( m_rIo.m_pFAT )
-        m_pFat = new StgFAT( *m_rIo.m_pFAT, true );
+        m_pFat.reset( new StgFAT( *m_rIo.m_pFAT, true ) );
 
     OSL_ENSURE( m_pFat, "The pointer should not be empty!" );
 
@@ -1027,7 +1026,7 @@ StgSmallStrm::StgSmallStrm( StgIo& r, StgDirEntry& p ) : StgStrm( r )
 void StgSmallStrm::Init( sal_Int32 nBgn, sal_Int32 nLen )
 {
     if ( m_rIo.m_pDataFAT )
-        m_pFat = new StgFAT( *m_rIo.m_pDataFAT, false );
+        m_pFat.reset( new StgFAT( *m_rIo.m_pDataFAT, false ) );
     m_pData = m_rIo.m_pDataStrm;
     OSL_ENSURE( m_pFat && m_pData, "The pointers should not be empty!" );
 
