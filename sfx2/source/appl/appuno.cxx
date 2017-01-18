@@ -1705,9 +1705,8 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
 class RequestPackageReparation_Impl : public ::cppu::WeakImplHelper< task::XInteractionRequest >
 {
     uno::Any m_aRequest;
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > m_lContinuations;
-    comphelper::OInteractionApprove* m_pApprove;
-    comphelper::OInteractionDisapprove*  m_pDisapprove;
+    rtl::Reference<comphelper::OInteractionApprove> m_xApprove;
+    rtl::Reference<comphelper::OInteractionDisapprove>  m_xDisapprove;
 
 public:
     explicit RequestPackageReparation_Impl( const OUString& aName );
@@ -1723,16 +1722,13 @@ RequestPackageReparation_Impl::RequestPackageReparation_Impl( const OUString& aN
     uno::Reference< uno::XInterface > temp2;
     document::BrokenPackageRequest aBrokenPackageRequest( temp, temp2, aName );
     m_aRequest <<= aBrokenPackageRequest;
-    m_pApprove = new comphelper::OInteractionApprove;
-    m_pDisapprove = new comphelper::OInteractionDisapprove;
-    m_lContinuations.realloc( 2 );
-    m_lContinuations[0].set( m_pApprove );
-    m_lContinuations[1].set( m_pDisapprove );
+    m_xApprove = new comphelper::OInteractionApprove;
+    m_xDisapprove = new comphelper::OInteractionDisapprove;
 }
 
 bool RequestPackageReparation_Impl::isApproved()
 {
-    return m_pApprove->wasSelected();
+    return m_xApprove->wasSelected();
 }
 
 uno::Any SAL_CALL RequestPackageReparation_Impl::getRequest()
@@ -1745,7 +1741,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL RequestPackageReparation_Impl::getContinuations()
         throw( uno::RuntimeException, std::exception )
 {
-    return m_lContinuations;
+    return { m_xApprove.get(), m_xDisapprove.get() };
 }
 
 RequestPackageReparation::RequestPackageReparation( const OUString& aName )
@@ -1771,8 +1767,7 @@ css::uno::Reference < task::XInteractionRequest > RequestPackageReparation::GetR
 class NotifyBrokenPackage_Impl : public ::cppu::WeakImplHelper< task::XInteractionRequest >
 {
     uno::Any m_aRequest;
-    uno::Sequence< uno::Reference< task::XInteractionContinuation > > m_lContinuations;
-    comphelper::OInteractionAbort*  m_pAbort;
+    rtl::Reference<comphelper::OInteractionAbort>  m_xAbort;
 
 public:
     explicit NotifyBrokenPackage_Impl(const OUString& rName);
@@ -1787,9 +1782,7 @@ NotifyBrokenPackage_Impl::NotifyBrokenPackage_Impl( const OUString& aName )
     uno::Reference< uno::XInterface > temp2;
     document::BrokenPackageRequest aBrokenPackageRequest( temp, temp2, aName );
     m_aRequest <<= aBrokenPackageRequest;
-    m_pAbort     = new comphelper::OInteractionAbort;
-    m_lContinuations.realloc( 1 );
-    m_lContinuations[0].set( m_pAbort  );
+    m_xAbort = new comphelper::OInteractionAbort;
 }
 
 uno::Any SAL_CALL NotifyBrokenPackage_Impl::getRequest()
@@ -1802,7 +1795,7 @@ uno::Sequence< uno::Reference< task::XInteractionContinuation > >
     SAL_CALL NotifyBrokenPackage_Impl::getContinuations()
         throw( uno::RuntimeException, std::exception )
 {
-    return m_lContinuations;
+    return { m_xAbort.get() };
 }
 
 NotifyBrokenPackage::NotifyBrokenPackage( const OUString& aName )
