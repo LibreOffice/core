@@ -80,7 +80,7 @@ SAL_DLLPUBLIC_EXPORT sal_Unicode **  SAL_CALL getAllCalendars_en_MY(sal_Int16& c
 extern sal_Unicode **  SAL_CALL getAllCurrencies_ms_MY(sal_Int16& count);
 SAL_DLLPUBLIC_EXPORT sal_Unicode **  SAL_CALL getAllCurrencies_en_MY(sal_Int16& count)
 {
-    return getAllCurrencies_ms_MY(count);
+    return getAllCurrencies_en_GB(count);
 }
 extern sal_Unicode **  SAL_CALL getTransliterations_en_GB(sal_Int16& count);
 SAL_DLLPUBLIC_EXPORT sal_Unicode **  SAL_CALL getTransliterations_en_MY(sal_Int16& count)
