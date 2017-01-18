@@ -26,6 +26,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
+#include <rtl/ref.hxx>
 
 #include <vector>
 
@@ -54,18 +55,13 @@ class DicList :
 
     LinguOptions    aOpt;
 
-    ::comphelper::OInterfaceContainerHelper2       aEvtListeners;
+    ::comphelper::OInterfaceContainerHelper2    aEvtListeners;
 
     typedef std::vector< css::uno::Reference< css::linguistic2::XDictionary > >   DictionaryVec_t;
-    DictionaryVec_t                          aDicList;
+    DictionaryVec_t                             aDicList;
 
-    css::uno::Reference< css::linguistic2::
-                XDictionaryEventListener >  xDicEvtLstnrHelper;
-    DicEvtListenerHelper                    *pDicEvtLstnrHelper;
-
-    css::uno::Reference< css::frame::
-                XTerminateListener >        xExitListener;
-    MyAppExitListener                       *pExitListener;
+    rtl::Reference<DicEvtListenerHelper>        mxDicEvtLstnrHelper;
+    rtl::Reference<MyAppExitListener>           mxExitListener;
 
     bool    bDisposing;
     bool    bInCreation;

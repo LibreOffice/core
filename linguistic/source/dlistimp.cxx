@@ -269,19 +269,17 @@ void DicList::MyAppExitListener::AtExit()
 DicList::DicList() :
     aEvtListeners   ( GetLinguMutex() )
 {
-    pDicEvtLstnrHelper  = new DicEvtListenerHelper( this );
-    xDicEvtLstnrHelper  = pDicEvtLstnrHelper;
+    mxDicEvtLstnrHelper  = new DicEvtListenerHelper( this );
     bDisposing = false;
     bInCreation = false;
 
-    pExitListener = new MyAppExitListener( *this );
-    xExitListener = pExitListener;
-    pExitListener->Activate();
+    mxExitListener = new MyAppExitListener( *this );
+    mxExitListener->Activate();
 }
 
 DicList::~DicList()
 {
-    pExitListener->Deactivate();
+    mxExitListener->Deactivate();
 }
 
 
@@ -434,7 +432,7 @@ sal_Bool SAL_CALL DicList::addDictionary(
         bRes = true;
 
         // add listener helper to the dictionaries listener lists
-        xDictionary->addDictionaryEventListener( xDicEvtLstnrHelper );
+        xDictionary->addDictionaryEventListener( mxDicEvtLstnrHelper.get() );
     }
     return bRes;
 }
@@ -461,7 +459,7 @@ sal_Bool SAL_CALL
             // deactivate dictionary if not already done
             xDic->setActive( false );
 
-            xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
+            xDic->removeDictionaryEventListener( mxDicEvtLstnrHelper.get() );
         }
 
         // remove element at nPos
@@ -486,7 +484,7 @@ sal_Bool SAL_CALL DicList::addDictionaryListEventListener(
     bool bRes = false;
     if (xListener.is()) //! don't add empty references
     {
-        bRes = pDicEvtLstnrHelper->
+        bRes = mxDicEvtLstnrHelper->
                         AddDicListEvtListener( xListener, bReceiveVerbose );
     }
     return bRes;
@@ -504,7 +502,7 @@ sal_Bool SAL_CALL DicList::removeDictionaryListEventListener(
     bool bRes = false;
     if(xListener.is())
     {
-        bRes = pDicEvtLstnrHelper->RemoveDicListEvtListener( xListener );
+        bRes = mxDicEvtLstnrHelper->RemoveDicListEvtListener( xListener );
     }
     return bRes;
 }
@@ -512,19 +510,19 @@ sal_Bool SAL_CALL DicList::removeDictionaryListEventListener(
 sal_Int16 SAL_CALL DicList::beginCollectEvents() throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-    return pDicEvtLstnrHelper->BeginCollectEvents();
+    return mxDicEvtLstnrHelper->BeginCollectEvents();
 }
 
 sal_Int16 SAL_CALL DicList::endCollectEvents() throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-    return pDicEvtLstnrHelper->EndCollectEvents();
+    return mxDicEvtLstnrHelper->EndCollectEvents();
 }
 
 sal_Int16 SAL_CALL DicList::flushEvents() throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
-    return pDicEvtLstnrHelper->FlushEvents();
+    return mxDicEvtLstnrHelper->FlushEvents();
 }
 
 uno::Reference< XDictionary > SAL_CALL
@@ -563,8 +561,8 @@ void SAL_CALL
         EventObject aEvtObj( static_cast<XDictionaryList *>(this) );
 
         aEvtListeners.disposeAndClear( aEvtObj );
-        if (pDicEvtLstnrHelper)
-            pDicEvtLstnrHelper->DisposeAndClear( aEvtObj );
+        if (mxDicEvtLstnrHelper.is())
+            mxDicEvtLstnrHelper->DisposeAndClear( aEvtObj );
 
         //! avoid creation of dictionaries if not already done
         if ( !aDicList.empty() )
@@ -592,10 +590,10 @@ void SAL_CALL
                 // release references to (members of) this object hold by
                 // dictionaries
                 if (xDic.is())
-                    xDic->removeDictionaryEventListener( xDicEvtLstnrHelper );
+                    xDic->removeDictionaryEventListener( mxDicEvtLstnrHelper.get() );
             }
         }
-        xDicEvtLstnrHelper.clear();
+        mxDicEvtLstnrHelper.clear();
     }
 }
 
@@ -650,7 +648,7 @@ void DicList::CreateDicList()
     //! to suppress overwriting the list of active dictionaries in the
     //! configuration with incorrect arguments during the following
     //! activation of the dictionaries
-    pDicEvtLstnrHelper->BeginCollectEvents();
+    mxDicEvtLstnrHelper->BeginCollectEvents();
     const uno::Sequence< OUString > aActiveDics( aOpt.GetActiveDics() );
     const OUString *pActiveDic = aActiveDics.getConstArray();
     sal_Int32 nLen = aActiveDics.getLength();
@@ -666,9 +664,9 @@ void DicList::CreateDicList()
 
     // suppress collected events during creation of the dictionary list.
     // there should be no events during creation.
-    pDicEvtLstnrHelper->ClearEvents();
+    mxDicEvtLstnrHelper->ClearEvents();
 
-    pDicEvtLstnrHelper->EndCollectEvents();
+    mxDicEvtLstnrHelper->EndCollectEvents();
 
     bInCreation = false;
 }
