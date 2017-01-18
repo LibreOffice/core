@@ -124,12 +124,11 @@ public:
 
     struct AsyncExecuteInfo
     {
-        AsyncExecuteInfo( AsyncExecuteCmd eCmd, uno::Reference< datatransfer::clipboard::XClipboardListener > const & xThis, SfxClipboardChangeListener* pListener ) :
-            m_eCmd( eCmd ), m_xThis( xThis ), m_pListener( pListener ) {}
+        AsyncExecuteInfo( AsyncExecuteCmd eCmd, SfxClipboardChangeListener* pListener ) :
+            m_eCmd( eCmd ), m_xListener( pListener ) {}
 
         AsyncExecuteCmd m_eCmd;
-        uno::Reference< datatransfer::clipboard::XClipboardListener > m_xThis;
-        SfxClipboardChangeListener* m_pListener;
+        rtl::Reference<SfxClipboardChangeListener> m_xListener;
     };
 
 private:
@@ -173,13 +172,12 @@ IMPL_STATIC_LINK( SfxClipboardChangeListener, AsyncExecuteHdl_Impl, void*, p, vo
     AsyncExecuteInfo* pAsyncExecuteInfo = static_cast<AsyncExecuteInfo*>(p);
     if ( pAsyncExecuteInfo )
     {
-        uno::Reference< datatransfer::clipboard::XClipboardListener > xThis( pAsyncExecuteInfo->m_xThis );
-        if ( pAsyncExecuteInfo->m_pListener )
+        if ( pAsyncExecuteInfo->m_xListener.is() )
         {
             if ( pAsyncExecuteInfo->m_eCmd == ASYNCEXECUTE_CMD_DISPOSING )
-                pAsyncExecuteInfo->m_pListener->DisconnectViewShell();
+                pAsyncExecuteInfo->m_xListener->DisconnectViewShell();
             else if ( pAsyncExecuteInfo->m_eCmd == ASYNCEXECUTE_CMD_CHANGEDCONTENTS )
-                pAsyncExecuteInfo->m_pListener->ChangedContents();
+                pAsyncExecuteInfo->m_xListener->ChangedContents();
         }
     }
     delete pAsyncExecuteInfo;
@@ -201,7 +199,7 @@ void SAL_CALL SfxClipboardChangeListener::disposing( const lang::EventObject& /*
     // Make asynchronous call to avoid locking SolarMutex which is the
     // root for many deadlocks, especially in conjunction with the "Windows"
     // based single thread apartment clipboard code!
-    AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_DISPOSING, xThis, this );
+    AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_DISPOSING, this );
     Application::PostUserEvent( LINK( nullptr, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo );
 }
 
@@ -211,8 +209,7 @@ void SAL_CALL SfxClipboardChangeListener::changedContents( const datatransfer::c
     // Make asynchronous call to avoid locking SolarMutex which is the
     // root for many deadlocks, especially in conjunction with the "Windows"
     // based single thread apartment clipboard code!
-    uno::Reference< datatransfer::clipboard::XClipboardListener > xThis( static_cast< datatransfer::clipboard::XClipboardListener* >( this ));
-    AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_CHANGEDCONTENTS, xThis, this );
+    AsyncExecuteInfo* pInfo = new AsyncExecuteInfo( ASYNCEXECUTE_CMD_CHANGEDCONTENTS, this );
     Application::PostUserEvent( LINK( nullptr, SfxClipboardChangeListener, AsyncExecuteHdl_Impl ), pInfo );
 }
 
