@@ -39,12 +39,8 @@ RTFValue::RTFValue(int nValue, const OUString& sValue,
 
 RTFValue::RTFValue()
     : m_nValue(0),
-      m_sValue(),
       m_pAttributes(std::make_shared<RTFSprms>()),
       m_pSprms(std::make_shared<RTFSprms>()),
-      m_xShape(),
-      m_xStream(),
-      m_xObject(),
       m_bForceString(false),
       m_pShape(std::make_shared<RTFShape>())
 {
@@ -52,12 +48,8 @@ RTFValue::RTFValue()
 
 RTFValue::RTFValue(int nValue)
     : m_nValue(nValue),
-      m_sValue(),
       m_pAttributes(std::make_shared<RTFSprms>()),
       m_pSprms(std::make_shared<RTFSprms>()),
-      m_xShape(),
-      m_xStream(),
-      m_xObject(),
       m_bForceString(false)
 {
     m_pShape.reset(new RTFShape());
@@ -68,9 +60,6 @@ RTFValue::RTFValue(const OUString& sValue, bool bForce)
       m_sValue(sValue),
       m_pAttributes(std::make_shared<RTFSprms>()),
       m_pSprms(std::make_shared<RTFSprms>()),
-      m_xShape(),
-      m_xStream(),
-      m_xObject(),
       m_bForceString(bForce),
       m_pShape(std::make_shared<RTFShape>())
 {
@@ -78,12 +67,8 @@ RTFValue::RTFValue(const OUString& sValue, bool bForce)
 
 RTFValue::RTFValue(RTFSprms rAttributes)
     : m_nValue(),
-      m_sValue(),
       m_pAttributes(std::make_shared<RTFSprms>(rAttributes)),
       m_pSprms(std::make_shared<RTFSprms>()),
-      m_xShape(),
-      m_xStream(),
-      m_xObject(),
       m_bForceString(false),
       m_pShape(std::make_shared<RTFShape>())
 {
@@ -91,12 +76,8 @@ RTFValue::RTFValue(RTFSprms rAttributes)
 
 RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
     : m_nValue(),
-      m_sValue(),
       m_pAttributes(std::make_shared<RTFSprms>(rAttributes)),
       m_pSprms(std::make_shared<RTFSprms>(rSprms)),
-      m_xShape(),
-      m_xStream(),
-      m_xObject(),
       m_bForceString(false),
       m_pShape(std::make_shared<RTFShape>())
 {
@@ -104,12 +85,9 @@ RTFValue::RTFValue(RTFSprms rAttributes, RTFSprms rSprms)
 
 RTFValue::RTFValue(uno::Reference<drawing::XShape> const& xShape)
     : m_nValue(),
-      m_sValue(),
       m_pAttributes(std::make_shared<RTFSprms>()),
       m_pSprms(std::make_shared<RTFSprms>()),
       m_xShape(xShape),
-      m_xStream(),
-      m_xObject(),
       m_bForceString(false),
       m_pShape(std::make_shared<RTFShape>())
 {
@@ -117,12 +95,9 @@ RTFValue::RTFValue(uno::Reference<drawing::XShape> const& xShape)
 
 RTFValue::RTFValue(uno::Reference<io::XInputStream> const& xStream)
     : m_nValue(),
-      m_sValue(),
       m_pAttributes(std::make_shared<RTFSprms>()),
       m_pSprms(std::make_shared<RTFSprms>()),
-      m_xShape(),
       m_xStream(xStream),
-      m_xObject(),
       m_bForceString(false),
       m_pShape(std::make_shared<RTFShape>())
 {
@@ -130,11 +105,8 @@ RTFValue::RTFValue(uno::Reference<io::XInputStream> const& xStream)
 
 RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> const& xObject)
     : m_nValue(),
-      m_sValue(),
       m_pAttributes(std::make_shared<RTFSprms>()),
       m_pSprms(std::make_shared<RTFSprms>()),
-      m_xShape(),
-      m_xStream(),
       m_xObject(xObject),
       m_bForceString(false),
       m_pShape(std::make_shared<RTFShape>())
@@ -143,12 +115,8 @@ RTFValue::RTFValue(uno::Reference<embed::XEmbeddedObject> const& xObject)
 
 RTFValue::RTFValue(const RTFShape& aShape)
     : m_nValue(),
-      m_sValue(),
       m_pAttributes(std::make_shared<RTFSprms>()),
       m_pSprms(std::make_shared<RTFSprms>()),
-      m_xShape(),
-      m_xStream(),
-      m_xObject(),
       m_bForceString(false),
       m_pShape(std::make_shared<RTFShape>(aShape))
 {
