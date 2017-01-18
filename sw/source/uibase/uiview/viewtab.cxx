@@ -1510,9 +1510,6 @@ void SwView::StateTabWin(SfxItemSet& rSet)
                     }
                     else
                     {
-                        SfxItemSet aCoreSet2( GetPool(),
-                                                RES_BOX, RES_BOX,
-                                                SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER, 0 );
                         SvxBoxInfoItem aBoxInfo( SID_ATTR_BORDER_INNER );
                         aCoreSet.Put( aBoxInfo );
                         rSh.GetFlyFrameAttr( aCoreSet );
