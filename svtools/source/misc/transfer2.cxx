@@ -110,7 +110,6 @@ DropTargetHelper::DropTargetListener::DropTargetListener( DropTargetHelper& rDro
 
 DropTargetHelper::DropTargetListener::~DropTargetListener()
 {
-    delete mpLastDragOverEvent;
 }
 
 
@@ -156,11 +155,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::drop( const DropTargetDropEv
 
         rDTDE.Context->dropComplete( DNDConstants::ACTION_NONE != nRet );
 
-        if( mpLastDragOverEvent )
-        {
-            delete mpLastDragOverEvent;
-            mpLastDragOverEvent = nullptr;
-        }
+        mpLastDragOverEvent.reset();
     }
     catch( const css::uno::Exception& )
     {
@@ -190,9 +185,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragOver( const DropTargetDr
 
     try
     {
-        delete mpLastDragOverEvent;
-
-        mpLastDragOverEvent = new AcceptDropEvent( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE );
+        mpLastDragOverEvent.reset( new AcceptDropEvent( rDTDE.DropAction & ~DNDConstants::ACTION_DEFAULT, Point( rDTDE.LocationX, rDTDE.LocationY ), rDTDE ) );
         mpLastDragOverEvent->mbDefault = ( ( rDTDE.DropAction & DNDConstants::ACTION_DEFAULT ) != 0 );
 
         const sal_Int8 nRet = mrParent.AcceptDrop( *mpLastDragOverEvent );
@@ -218,8 +211,7 @@ void SAL_CALL DropTargetHelper::DropTargetListener::dragExit( const DropTargetEv
         {
             mpLastDragOverEvent->mbLeaving = true;
             mrParent.AcceptDrop( *mpLastDragOverEvent );
-            delete mpLastDragOverEvent;
-            mpLastDragOverEvent = nullptr;
+            mpLastDragOverEvent.reset();
         }
 
         mrParent.ImplEndDrag();

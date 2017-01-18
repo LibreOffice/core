@@ -445,7 +445,7 @@ void AssignmentPersistentData::ImplCommit()
         /// the logical field names
         std::vector<OUString>     aLogicalFieldNames;
 
-        IAssigmentData* pConfigData;
+        std::unique_ptr<IAssigmentData> pConfigData;
 
 
         AddressBookSourceDialogData( )
@@ -474,7 +474,6 @@ void AssignmentPersistentData::ImplCommit()
 
         ~AddressBookSourceDialogData()
         {
-            delete pConfigData;
         }
 
         // Copy assignment is forbidden and not implemented.
@@ -1183,8 +1182,7 @@ void AssignmentPersistentData::ImplCommit()
                         sName = aFileNotation.get(OFileNotation::N_SYSTEM);
                     }
                     m_pDatasource->InsertEntry(sName);
-                    delete m_pImpl->pConfigData;
-                    m_pImpl->pConfigData = new AssignmentPersistentData();
+                    m_pImpl->pConfigData.reset( new AssignmentPersistentData );
                     loadConfiguration();
                     resetTables();
                     // will reset the fields implicitly

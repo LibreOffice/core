@@ -228,10 +228,10 @@ struct EmbeddedObjectRef_Impl
     uno::Reference <embed::XEmbeddedObject> mxObj;
 
     EmbedEventListener_Impl*                    xListener;
-    OUString                             aPersistName;
-    OUString                             aMediaType;
+    OUString                                    aPersistName;
+    OUString                                    aMediaType;
     comphelper::EmbeddedObjectContainer*        pContainer;
-    Graphic*                                    pGraphic;
+    std::unique_ptr<Graphic>                    pGraphic;
     sal_Int64                                   nViewAspect;
     bool                                        bIsLocked:1;
     bool                                        bNeedUpdate:1;
@@ -265,12 +265,11 @@ struct EmbeddedObjectRef_Impl
         aDefaultSizeForChart_In_100TH_MM(r.aDefaultSizeForChart_In_100TH_MM)
     {
         if (r.pGraphic && !r.bNeedUpdate)
-            pGraphic = new Graphic(*r.pGraphic);
+            pGraphic.reset( new Graphic(*r.pGraphic) );
     }
 
     ~EmbeddedObjectRef_Impl()
     {
-        delete pGraphic;
     }
 };
 
@@ -417,14 +416,14 @@ void EmbeddedObjectRef::GetReplacement( bool bUpdate )
 {
     if ( bUpdate )
     {
-        DELETEZ( mpImpl->pGraphic );
+        mpImpl->pGraphic.reset();
         (mpImpl->aMediaType).clear();
-        mpImpl->pGraphic = new Graphic;
+        mpImpl->pGraphic.reset( new Graphic );
         mpImpl->mnGraphicVersion++;
     }
     else if ( !mpImpl->pGraphic )
     {
-        mpImpl->pGraphic = new Graphic;
+        mpImpl->pGraphic.reset( new Graphic );
         mpImpl->mnGraphicVersion++;
     }
     else
@@ -458,7 +457,7 @@ const Graphic* EmbeddedObjectRef::GetGraphic() const
         SAL_WARN("svtools.misc", "Something went wrong on getting the graphic: " << ex.Message);
     }
 
-    return mpImpl->pGraphic;
+    return mpImpl->pGraphic.get();
 }
 
 Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
@@ -523,9 +522,7 @@ Size EmbeddedObjectRef::GetSize( MapMode* pTargetMapMode ) const
 void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream >& xInGrStream,
                                             const OUString& rMediaType )
 {
-    if ( mpImpl->pGraphic )
-        delete mpImpl->pGraphic;
-    mpImpl->pGraphic = new Graphic();
+    mpImpl->pGraphic.reset( new Graphic );
     mpImpl->aMediaType = rMediaType;
     mpImpl->mnGraphicVersion++;
 
@@ -552,9 +549,7 @@ void EmbeddedObjectRef::SetGraphicStream( const uno::Reference< io::XInputStream
 
 void EmbeddedObjectRef::SetGraphic( const Graphic& rGraphic, const OUString& rMediaType )
 {
-    if ( mpImpl->pGraphic )
-        delete mpImpl->pGraphic;
-    mpImpl->pGraphic = new Graphic( rGraphic );
+    mpImpl->pGraphic.reset( new Graphic( rGraphic ) );
     mpImpl->aMediaType = rMediaType;
     mpImpl->mnGraphicVersion++;
 
@@ -837,7 +832,7 @@ void EmbeddedObjectRef::UpdateReplacement()
 
 void EmbeddedObjectRef::UpdateReplacementOnDemand()
 {
-    DELETEZ( mpImpl->pGraphic );
+    mpImpl->pGraphic.reset();
     mpImpl->bNeedUpdate = true;
     mpImpl->mnGraphicVersion++;
 

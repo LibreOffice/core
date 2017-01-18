@@ -62,7 +62,8 @@ private:
     sal_uLong            lEnd;
     sal_uInt16           nId;
     ResMgr              *pMgr;
-    ResMgr              *pFreeMgr;
+    std::unique_ptr<ResMgr>
+                         pFreeMgr;
 
     SVT_DLLPRIVATE static void GetClassString(sal_uLong lErrId, OUString &);
     virtual bool          CreateString( const ErrorInfo *, OUString &, sal_uInt16 &) const override;

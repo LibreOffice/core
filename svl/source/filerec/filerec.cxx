@@ -497,9 +497,9 @@ bool SfxMultiRecordReader::ReadHeader_Impl()
                      _nContentCount << " claimed, truncating");
             _nContentCount = nMaxRecords;
         }
-        _pContentOfs = new sal_uInt32[_nContentCount]{};
+        _pContentOfs.reset( new sal_uInt32[_nContentCount]{} );
         #if defined(OSL_LITENDIAN)
-        _pStream->ReadBytes( _pContentOfs, sizeof(sal_uInt32)*_nContentCount );
+        _pStream->ReadBytes( _pContentOfs.get(), sizeof(sal_uInt32)*_nContentCount );
         #else
         // (loop without braces)
         for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
@@ -541,7 +541,6 @@ SfxMultiRecordReader::SfxMultiRecordReader( SvStream *pStream, sal_uInt16 nTag )
 
 SfxMultiRecordReader::~SfxMultiRecordReader()
 {
-    delete[] _pContentOfs;
 }
 
 /**

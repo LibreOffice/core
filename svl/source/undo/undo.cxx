@@ -223,7 +223,8 @@ typedef ::std::vector< SfxUndoListener* >   UndoListeners;
 struct SfxUndoManager_Data
 {
     ::osl::Mutex    aMutex;
-    SfxUndoArray*   pUndoArray;
+    std::unique_ptr<SfxUndoArray>
+                    pUndoArray;
     SfxUndoArray*   pActUndoArray;
     SfxUndoArray*   pFatherUndoArray;
 
@@ -245,12 +246,11 @@ struct SfxUndoManager_Data
         ,mbDoing( false )
         ,mbClearUntilTopLevel( false )
     {
-        pActUndoArray = pUndoArray;
+        pActUndoArray = pUndoArray.get();
     }
 
     ~SfxUndoManager_Data()
     {
-        delete pUndoArray;
     }
 
     // Copy assignment is forbidden and not implemented.
@@ -600,7 +600,7 @@ void SfxUndoManager::ImplClearUndo( UndoManagerGuard& i_guard )
 
 void SfxUndoManager::ImplClearRedo( UndoManagerGuard& i_guard, bool const i_currentLevel )
 {
-    SfxUndoArray* pUndoArray = ( i_currentLevel == IUndoManager::CurrentLevel ) ? m_xData->pActUndoArray : m_xData->pUndoArray;
+    SfxUndoArray* pUndoArray = ( i_currentLevel == IUndoManager::CurrentLevel ) ? m_xData->pActUndoArray : m_xData->pUndoArray.get();
 
     // clearance
     while ( pUndoArray->aUndoActions.size() > pUndoArray->nCurUndoAction )
@@ -643,7 +643,7 @@ bool SfxUndoManager::ImplAddUndoAction_NoNotify( SfxUndoAction *pAction, bool bT
         ImplClearRedo( i_guard, IUndoManager::CurrentLevel );
 
     // respect max number
-    if( m_xData->pActUndoArray == m_xData->pUndoArray )
+    if( m_xData->pActUndoArray == m_xData->pUndoArray.get() )
     {
         while(m_xData->pActUndoArray->aUndoActions.size() >= m_xData->pActUndoArray->nMaxUndoActions)
         {
@@ -684,7 +684,7 @@ void SfxUndoManager::AddUndoAction( SfxUndoAction *pAction, bool bTryMerge )
 size_t SfxUndoManager::GetUndoActionCount( bool const i_currentLevel ) const
 {
     UndoManagerGuard aGuard( *m_xData );
-    const SfxUndoArray* pUndoArray = i_currentLevel ? m_xData->pActUndoArray : m_xData->pUndoArray;
+    const SfxUndoArray* pUndoArray = i_currentLevel ? m_xData->pActUndoArray : m_xData->pUndoArray.get();
     return pUndoArray->nCurUndoAction;
 }
 
@@ -694,7 +694,7 @@ OUString SfxUndoManager::GetUndoActionComment( size_t nNo, bool const i_currentL
     UndoManagerGuard aGuard( *m_xData );
 
     OUString sComment;
-    const SfxUndoArray* pUndoArray = i_currentLevel ? m_xData->pActUndoArray : m_xData->pUndoArray;
+    const SfxUndoArray* pUndoArray = i_currentLevel ? m_xData->pActUndoArray : m_xData->pUndoArray.get();
     assert(nNo < pUndoArray->nCurUndoAction);
     if( nNo < pUndoArray->nCurUndoAction )
         sComment = pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction - 1 - nNo ].pAction->GetComment();
@@ -833,7 +833,7 @@ size_t SfxUndoManager::GetRedoActionCount( bool const i_currentLevel ) const
 
 size_t SfxUndoManager::ImplGetRedoActionCount_Lock( bool const i_currentLevel ) const
 {
-    const SfxUndoArray* pUndoArray = i_currentLevel ? m_xData->pActUndoArray : m_xData->pUndoArray;
+    const SfxUndoArray* pUndoArray = i_currentLevel ? m_xData->pActUndoArray : m_xData->pUndoArray.get();
     return pUndoArray->aUndoActions.size() - pUndoArray->nCurUndoAction;
 }
 
@@ -855,7 +855,7 @@ OUString SfxUndoManager::GetRedoActionComment( size_t nNo, bool const i_currentL
 {
     OUString sComment;
     UndoManagerGuard aGuard( *m_xData );
-    const SfxUndoArray* pUndoArray = i_currentLevel ? m_xData->pActUndoArray : m_xData->pUndoArray;
+    const SfxUndoArray* pUndoArray = i_currentLevel ? m_xData->pActUndoArray : m_xData->pUndoArray.get();
     if ( (pUndoArray->nCurUndoAction + nNo) < pUndoArray->aUndoActions.size() )
     {
         sComment = pUndoArray->aUndoActions[ pUndoArray->nCurUndoAction + nNo ].pAction->GetComment();
@@ -1038,7 +1038,7 @@ bool SfxUndoManager::IsInListAction() const
 
 bool SfxUndoManager::ImplIsInListAction_Lock() const
 {
-    return ( m_xData->pActUndoArray != m_xData->pUndoArray );
+    return ( m_xData->pActUndoArray != m_xData->pUndoArray.get() );
 }
 
 
@@ -1048,7 +1048,7 @@ size_t SfxUndoManager::GetListActionDepth() const
     size_t nDepth(0);
 
     SfxUndoArray* pLookup( m_xData->pActUndoArray );
-    while ( pLookup != m_xData->pUndoArray )
+    while ( pLookup != m_xData->pUndoArray.get() )
     {
         pLookup = pLookup->pFatherUndoArray;
         ++nDepth;

@@ -347,7 +347,7 @@ class StylePoolImpl
 private:
     std::map< const SfxItemSet*, Node > maRoot;
     // #i86923#
-    SfxItemSet* mpIgnorableItems;
+    std::unique_ptr<SfxItemSet> mpIgnorableItems;
 public:
     // #i86923#
     explicit StylePoolImpl( SfxItemSet* pIgnorableItems )
@@ -364,7 +364,6 @@ public:
 
     ~StylePoolImpl()
     {
-        delete mpIgnorableItems;
     }
 
     std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet );
