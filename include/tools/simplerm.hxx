@@ -27,13 +27,15 @@
 #include <tools/resid.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <tools/toolsdllapi.h>
+#include <memory>
 
 class InternalResMgr;
 
 class TOOLS_DLLPUBLIC SimpleResMgr final
 {
     osl::Mutex              m_aAccessSafety;
-    InternalResMgr*         m_pResImpl;
+    std::unique_ptr<InternalResMgr>
+                            m_pResImpl;
 
 public:
                             /** creates a new SimpleResManager

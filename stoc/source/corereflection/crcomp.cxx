@@ -277,7 +277,6 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
 
 CompoundIdlClassImpl::~CompoundIdlClassImpl()
 {
-    delete _pFields;
 }
 
 
@@ -374,7 +373,7 @@ Sequence< Reference< XIdlField > > CompoundIdlClassImpl::getFields()
             }
         }
 
-        _pFields = pFields;
+        _pFields.reset( pFields );
     }
     return *_pFields;
 }

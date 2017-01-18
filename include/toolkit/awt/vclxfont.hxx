@@ -42,7 +42,8 @@ private:
     ::osl::Mutex    maMutex;
     css::uno::Reference< css::awt::XDevice> mxDevice;
     vcl::Font       maFont;
-    FontMetric*     mpFontMetric;
+    std::unique_ptr<FontMetric>
+                    mpFontMetric;
 
 protected:
     bool            ImplAssertValidFontMetric();

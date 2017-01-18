@@ -27,7 +27,7 @@
 
 class StgInternalStream : public SvStream
 {
-    BaseStorageStream* m_pStrm;
+    std::unique_ptr<BaseStorageStream> m_pStrm;
     virtual std::size_t GetData(void* pData, std::size_t nSize) override;
     virtual std::size_t PutData(const void* pData, std::size_t nSize) override;
     virtual sal_uInt64 SeekPos( sal_uInt64 nPos ) override;

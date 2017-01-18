@@ -40,15 +40,13 @@ VCLXFont::VCLXFont()
 
 VCLXFont::~VCLXFont()
 {
-    delete mpFontMetric;
 }
 
 void VCLXFont::Init( css::awt::XDevice& rxDev, const vcl::Font& rFont )
 {
     mxDevice = &rxDev;
 
-    delete mpFontMetric;
-    mpFontMetric = nullptr;
+    mpFontMetric.reset();
 
     maFont = rFont;
 }
@@ -62,7 +60,7 @@ bool VCLXFont::ImplAssertValidFontMetric()
         {
             vcl::Font aOldFont = pOutDev->GetFont();
             pOutDev->SetFont( maFont );
-            mpFontMetric = new FontMetric( pOutDev->GetFontMetric() );
+            mpFontMetric.reset( new FontMetric( pOutDev->GetFontMetric() ) );
             pOutDev->SetFont( aOldFont );
         }
     }

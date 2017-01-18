@@ -210,7 +210,7 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
     bool mbUnoTunnel;
 
     // Original handles of FastPropertySets
-    sal_Int32* mpOrgPropertyHandleArray;
+    std::unique_ptr<sal_Int32[]> mpOrgPropertyHandleArray;
 
     // MethodSequence, that accepts all methods
     std::vector< Reference<XIdlMethod> > maAllMethodSeq;
@@ -231,10 +231,6 @@ class IntrospectionAccessStatic_Impl: public salhelper::SimpleReferenceObject
 
 public:
     explicit IntrospectionAccessStatic_Impl( Reference< XIdlReflection > const & xCoreReflection_ );
-    virtual ~IntrospectionAccessStatic_Impl() override
-    {
-        delete[] mpOrgPropertyHandleArray;
-    }
     sal_Int32 getPropertyIndex( const OUString& aPropertyName ) const;
     sal_Int32 getMethodIndex( const OUString& aMethodName ) const;
 
@@ -1786,7 +1782,7 @@ css::uno::Reference<css::beans::XIntrospectionAccess> Implementation::inspect(
 
             // For a FastPropertySet we must remember the original handles
             if( bFast )
-                pAccess->mpOrgPropertyHandleArray = new sal_Int32[ nLen ];
+                pAccess->mpOrgPropertyHandleArray.reset( new sal_Int32[ nLen ] );
 
             for( i = 0 ; i < nLen ; i++ )
             {
