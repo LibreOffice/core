@@ -7423,7 +7423,6 @@ void ApplyCellAttributes( const SdrObject* pObj, Reference< XCell >& xCell )
         {//vertical writing
             xPropSet->setPropertyValue(  "TextWritingMode" , Any( css::text::WritingMode_TB_RL ) );
         }
-        SfxItemSet aSet( pObj->GetMergedItemSet() );
         drawing::FillStyle eFillStyle(static_cast<const XFillStyleItem&>(pObj->GetMergedItem( XATTR_FILLSTYLE )).GetValue());
         css::drawing::FillStyle eFS( css::drawing::FillStyle_NONE );
         switch( eFillStyle )
@@ -7503,7 +7502,6 @@ void ApplyCellLineAttributes( const SdrObject* pLine, Reference< XTable >& xTabl
 {
     try
     {
-        SfxItemSet aSet( pLine->GetMergedItemSet() );
         drawing::LineStyle eLineStyle(static_cast<const XLineStyleItem&>(pLine->GetMergedItem( XATTR_LINESTYLE )).GetValue());
         css::table::BorderLine2 aBorderLine;
         switch( eLineStyle )

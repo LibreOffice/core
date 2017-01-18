@@ -299,7 +299,6 @@ void FuTemplate::DoExecute( SfxRequest& rReq )
                 ScopedVclPtr<SfxAbstractTabDialog> pPresDlg;
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 bool bOldDocInOtherLanguage = false;
-                SfxItemSet aOriSet( pStyleSheet->GetItemSet() );
 
                 SfxStyleFamily eFamily = pStyleSheet->GetFamily();
 
