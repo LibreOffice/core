@@ -80,7 +80,7 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
         CERTGeneralName* current = nameList;
 
         int size = GetNamesLength(nameList);
-        CertAltNameEntry* arrCertAltNameEntry = new CertAltNameEntry[size];
+        std::vector<CertAltNameEntry> arrCertAltNameEntry(size);
         for(int i = 0; i < size ; i++){
             switch (current->type) {
                 case certOtherName: {
@@ -146,13 +146,9 @@ css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl:
             current = CERT_GetNextGeneralName(current);
         }
 
-        m_Entries = ::comphelper::arrayToSequence< css::security::CertAltNameEntry >(arrCertAltNameEntry, size);
-
-        delete [] arrCertAltNameEntry;
+        m_Entries = ::comphelper::containerToSequence<css::security::CertAltNameEntry>(arrCertAltNameEntry);
 
         PORT_FreeArena(arena, PR_FALSE);
-
-
     }
 
     return m_Entries;
