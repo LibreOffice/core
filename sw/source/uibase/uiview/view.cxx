@@ -1261,14 +1261,12 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
         sal_Int16 nViewLayoutColumns = pVOpt->GetViewLayoutColumns();
 
         bool bSelectedFrame = ( m_pWrtShell->GetSelFrameType() != FrameTypeFlags::NONE ),
-             bMsWordCompTrailingBlanks = false,
                  bGotVisibleLeft = false,
                  bGotVisibleTop = false, bGotVisibleRight = false,
                  bGotVisibleBottom = false, bGotZoomType = false,
                  bGotZoomFactor = false, bGotIsSelectedFrame = false,
                  bGotViewLayoutColumns = false, bGotViewLayoutBookMode = false,
-                 bBrowseMode = false, bGotBrowseMode = false,
-                 bGotMsWordCompTrailingBlanks = false;
+                 bBrowseMode = false, bGotBrowseMode = false;
 
         for (sal_Int32 i = 0 ; i < nLength; i++)
         {
@@ -1335,11 +1333,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
             {
                pValue->Value >>= bBrowseMode;
                bGotBrowseMode = true;
-            }
-            else if ( pValue->Name == "MsWordCompTrailingBlanks" )
-            {
-                pValue->Value >>= bMsWordCompTrailingBlanks;
-                bGotMsWordCompTrailingBlanks = true;
             }
             // Fallback to common SdrModel processing
             else GetDocShell()->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->ReadUserDataSequenceValue(pValue);
@@ -1472,10 +1465,6 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                 m_pWrtShell->EnableSmooth( true );
             }
         }
-        if ( bGotMsWordCompTrailingBlanks )
-        {
-            GetDocShell()->GetDoc()->getIDocumentSettingAccess().set( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS, bMsWordCompTrailingBlanks );
-        }
     }
 }
 
@@ -1514,8 +1503,6 @@ void SwView::WriteUserDataSequence ( uno::Sequence < beans::PropertyValue >& rSe
     aVector.push_back(comphelper::makePropertyValue("ZoomFactor", static_cast < sal_Int16 > (m_pWrtShell->GetViewOptions()->GetZoom())));
 
     aVector.push_back(comphelper::makePropertyValue("IsSelectedFrame", FrameTypeFlags::NONE != m_pWrtShell->GetSelFrameType()));
-
-    aVector.push_back(comphelper::makePropertyValue("MsWordCompTrailingBlanks", GetDocShell()->GetDoc()->getIDocumentSettingAccess().get( DocumentSettingId::MS_WORD_COMP_TRAILING_BLANKS )));
 
     rSequence = comphelper::containerToSequence(aVector);
 
