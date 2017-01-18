@@ -62,7 +62,7 @@ public:
 class StgStrm {                         // base class for all streams
 protected:
     StgIo& m_rIo;                         // I/O system
-    StgFAT* m_pFat;                       // FAT stream for allocations
+    std::unique_ptr<StgFAT> m_pFat;       // FAT stream for allocations
     StgDirEntry* m_pEntry;                // dir entry (for ownership)
     sal_Int32 m_nStart;                       // 1st data page
     sal_Int32 m_nSize;                        // stream size in bytes
