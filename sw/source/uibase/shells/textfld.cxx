@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/lok.hxx>
 #include <chrdlgmodes.hxx>
 #include <hintids.hxx>
 #include <SidebarWin.hxx>
@@ -408,6 +409,11 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     pPostIt = static_cast<SwPostItField*>(aFieldMgr.GetCurField());
                     rSh.Pop(false); // Restore cursor position
                 }
+
+                // Client has disabled annotations rendering, no need to
+                // focus the postit field
+                if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+                    break;
 
                 if (pPostIt)
                 {
