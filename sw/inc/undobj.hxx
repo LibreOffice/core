@@ -55,7 +55,7 @@ class SwUndo
 
 protected:
     bool bCacheComment;
-    mutable OUString * pComment;
+    mutable std::unique_ptr<OUString> pComment;
 
     static void RemoveIdxFromSection( SwDoc&, sal_uLong nSttIdx, sal_uLong* pEndIdx = nullptr );
     static void RemoveIdxFromRange( SwPaM& rPam, bool bMoveNext );
@@ -150,7 +150,7 @@ class SwUndoSaveContent
 {
 protected:
 
-    SwHistory* pHistory;
+    std::unique_ptr<SwHistory> pHistory;
 
     // Needed for deletion of content. For Redo content is moved into the
     // UndoNodesArray. These methods always create a new node to insert
@@ -202,8 +202,8 @@ public:
     void RestoreSection( SwDoc* pDoc, SwNodeIndex* pIdx, sal_uInt16 nSectType );
     void RestoreSection( SwDoc* pDoc, const SwNodeIndex& rInsPos );
 
-    const SwHistory* GetHistory() const { return pHistory; }
-          SwHistory* GetHistory()       { return pHistory; }
+    const SwHistory* GetHistory() const { return pHistory.get(); }
+          SwHistory* GetHistory()       { return pHistory.get(); }
 };
 
 // This class saves the PaM as sal_uInt16's and is able to restore it

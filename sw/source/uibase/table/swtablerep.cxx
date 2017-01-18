@@ -66,7 +66,7 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol )
     bColsChanged(false)
 {
     nAllCols = nColCount = rTabCol.Count();
-    pTColumns = new TColumn[ nColCount + 1 ];
+    pTColumns.reset( new TColumn[ nColCount + 1 ] );
     SwTwips nStart = 0,
             nEnd;
     for( sal_uInt16 i = 0; i < nAllCols; ++i )
@@ -86,7 +86,6 @@ SwTableRep::SwTableRep( const SwTabCols& rTabCol )
 
 SwTableRep::~SwTableRep()
 {
-    delete[] pTColumns;
 }
 
 bool SwTableRep::FillTabCols( SwTabCols& rTabCols ) const

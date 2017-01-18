@@ -475,7 +475,6 @@ namespace sw
 
         CharStyleMapper::~CharStyleMapper()
         {
-            delete mpImpl;
         }
 
         CharStyleMapper::StyleResult CharStyleMapper::GetStyle(

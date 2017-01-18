@@ -1285,9 +1285,8 @@ SwFltStackEntry *SwWW8FltRefStack::RefToVar(const SwField* pField,
         {
             SwGetExpField aField( static_cast<SwGetExpFieldType*>(
                 pDoc->getIDocumentFieldsAccess().GetSysFieldType(RES_GETEXPFLD)), sName, nsSwGetSetExpType::GSE_STRING, 0);
-            delete rEntry.pAttr;
             SwFormatField aTmp(aField);
-            rEntry.pAttr = aTmp.Clone();
+            rEntry.pAttr.reset( aTmp.Clone() );
             pRet = &rEntry;
         }
     }

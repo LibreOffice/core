@@ -239,7 +239,7 @@ class WW8_WrPlcSepx : public MSWordSections
     std::vector< std::shared_ptr<WW8_PdAttrDesc> > m_SectionAttributes;
     // hack to prevent adding sections in endnotes
     bool m_bHeaderFooterWritten;
-    WW8_WrPlc0* pTextPos;        // Position of the headers/footers
+    std::unique_ptr<WW8_WrPlc0> pTextPos;        // Position of the headers/footers
 
     WW8_WrPlcSepx( const WW8_WrPlcSepx& ) = delete;
     WW8_WrPlcSepx& operator=( const WW8_WrPlcSepx& ) = delete;
@@ -1514,7 +1514,7 @@ class MSWordStyles
 {
     MSWordExportBase& m_rExport;
     sal_uInt16 m_aHeadingParagraphStyles[MAXLEVEL];
-    SwFormat** m_pFormatA; ///< Slot <-> Character and paragraph style array (0 for list styles).
+    std::unique_ptr<SwFormat*[]> m_pFormatA; ///< Slot <-> Character and paragraph style array (0 for list styles).
     sal_uInt16 m_nUsedSlots;
     bool m_bListStyles; ///< If list styles are requested to be exported as well.
     std::map<sal_uInt16, const SwNumRule*> m_aNumRules; ///< Slot <-> List style map.

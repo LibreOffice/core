@@ -729,7 +729,7 @@ namespace sw
             bool operator()(const SwFltStackEntry *pEntry) const
             {
                 const SwFltRedline *pTest = static_cast<const SwFltRedline *>
-                    (pEntry->pAttr);
+                    (pEntry->pAttr.get());
                 return (pEntry->bOpen && (pTest->eType == meType));
             }
         };
@@ -817,7 +817,7 @@ namespace sw
                 mrDoc.getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert |
                                          RedlineFlags::ShowDelete);
                 const SwFltRedline *pFltRedline = static_cast<const SwFltRedline*>
-                    (pEntry->pAttr);
+                    (pEntry->pAttr.get());
 
                 if (USHRT_MAX != pFltRedline->nAutorNoPrev)
                 {
@@ -847,9 +847,9 @@ namespace sw
             const SwFltStackEntry *pTwoE) const
         {
             const SwFltRedline *pOne= static_cast<const SwFltRedline*>
-                (pOneE->pAttr);
+                (pOneE->pAttr.get());
             const SwFltRedline *pTwo= static_cast<const SwFltRedline*>
-                (pTwoE->pAttr);
+                (pTwoE->pAttr.get());
 
             //Return the earlier time, if two have the same time, prioritize
             //inserts over deletes

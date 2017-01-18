@@ -335,10 +335,10 @@ SvXMLImportContext *SwXMLTextStyleContext_Impl::CreateChildContext(
 
 class SwXMLItemSetStyleContext_Impl : public SvXMLStyleContext
 {
-    OUString                sMasterPageName;
-    SfxItemSet              *pItemSet;
+    OUString                    sMasterPageName;
+    std::unique_ptr<SfxItemSet> pItemSet;
     SwXMLTextStyleContext_Impl *pTextStyle;
-    SvXMLStylesContext      &rStyles;
+    SvXMLStylesContext          &rStyles;
 
     OUString                sDataStyleName;
 
@@ -368,7 +368,6 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList,
             SvXMLStylesContext& rStylesC,
             sal_uInt16 nFamily);
-    virtual ~SwXMLItemSetStyleContext_Impl() override;
 
     virtual void CreateAndInsert( bool bOverwrite ) override;
 
@@ -378,7 +377,7 @@ public:
             const uno::Reference< xml::sax::XAttributeList > & xAttrList ) override;
 
     // The item set may be empty!
-    SfxItemSet *GetItemSet() { return pItemSet; }
+    SfxItemSet *GetItemSet() { return pItemSet.get(); }
 
     bool HasMasterPageName() const { return bHasMasterPageName; }
 
@@ -434,16 +433,16 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
     switch( GetFamily() )
     {
     case XML_STYLE_FAMILY_TABLE_TABLE:
-        pItemSet = new SfxItemSet( rItemPool, aTableSetRange );
+        pItemSet.reset( new SfxItemSet( rItemPool, aTableSetRange ) );
         break;
     case XML_STYLE_FAMILY_TABLE_COLUMN:
-        pItemSet = new SfxItemSet( rItemPool, RES_FRM_SIZE, RES_FRM_SIZE, 0 );
+        pItemSet.reset( new SfxItemSet( rItemPool, RES_FRM_SIZE, RES_FRM_SIZE, 0 ) );
         break;
     case XML_STYLE_FAMILY_TABLE_ROW:
-        pItemSet = new SfxItemSet( rItemPool, aTableLineSetRange );
+        pItemSet.reset( new SfxItemSet( rItemPool, aTableLineSetRange ) );
         break;
     case XML_STYLE_FAMILY_TABLE_CELL:
-        pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
+        pItemSet.reset( new SfxItemSet( rItemPool, aTableBoxSetRange ) );
         break;
     default:
         OSL_ENSURE( false,
@@ -456,8 +455,7 @@ SvXMLImportContext *SwXMLItemSetStyleContext_Impl::CreateItemSetContext(
                                 *pItemSet );
     if( !pContext )
     {
-        delete pItemSet;
-        pItemSet = nullptr;
+        pItemSet.reset();
     }
 
     return pContext;
@@ -477,11 +475,6 @@ SwXMLItemSetStyleContext_Impl::SwXMLItemSetStyleContext_Impl( SwXMLImport& rImpo
     bPageDescConnected( false ),
     bDataStyleIsResolved( true )
 {
-}
-
-SwXMLItemSetStyleContext_Impl::~SwXMLItemSetStyleContext_Impl()
-{
-    delete pItemSet;
 }
 
 void SwXMLItemSetStyleContext_Impl::CreateAndInsert( bool bOverwrite )
@@ -564,7 +557,7 @@ void SwXMLItemSetStyleContext_Impl::ConnectPageDesc()
     if( !pItemSet )
     {
         SfxItemPool& rItemPool = pDoc->GetAttrPool();
-        pItemSet = new SfxItemSet( rItemPool, aTableSetRange );
+        pItemSet.reset( new SfxItemSet( rItemPool, aTableSetRange ) );
     }
 
     const SfxPoolItem *pItem;
@@ -603,7 +596,7 @@ bool SwXMLItemSetStyleContext_Impl::ResolveDataStyleName()
                 SwDoc *pDoc = SwImport::GetDocFromXMLImport( GetSwImport() );
 
                 SfxItemPool& rItemPool = pDoc->GetAttrPool();
-                pItemSet = new SfxItemSet( rItemPool, aTableBoxSetRange );
+                pItemSet.reset( new SfxItemSet( rItemPool, aTableBoxSetRange ) );
             }
             SwTableBoxNumFormat aNumFormatItem(nFormat);
             pItemSet->Put(aNumFormatItem);

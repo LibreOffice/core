@@ -48,7 +48,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     SwTextNode* pTextNd = pDoc->GetNodes()[ nSttNode ]->GetTextNode();
     SwTextNode* pEndTextNd = pDoc->GetNodes()[ nEndNode ]->GetTextNode();
 
-    pHistory = new SwHistory;
+    pHistory.reset( new SwHistory );
 
     if( pTextNd )
     {
@@ -90,7 +90,7 @@ SwUndoMove::SwUndoMove( const SwPaM& rRange, const SwPosition& rMvPos )
     DelFootnote( rRange );
 
     if( pHistory && !pHistory->Count() )
-        DELETEZ( pHistory );
+        pHistory.reset();
 }
 
 SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
@@ -132,7 +132,7 @@ SwUndoMove::SwUndoMove( SwDoc* pDoc, const SwNodeRange& rRg,
         DelContentIndex( aMkPos, aPtPos, DelContentType::Ftn );
 
         if( pHistory && !pHistory->Count() )
-            DELETEZ( pHistory );
+            pHistory.reset();
     }
 
     nFootnoteStt = 0;
@@ -342,8 +342,7 @@ void SwUndoMove::DelFootnote( const SwPaM& rRange )
 
         if( pHistory && !pHistory->Count() )
         {
-            delete pHistory;
-            pHistory = nullptr;
+            pHistory.reset();
         }
     }
 }

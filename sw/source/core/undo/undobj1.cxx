@@ -459,7 +459,6 @@ SwRewriter SwUndoSetFlyFormat::GetRewriter() const
 
 SwUndoSetFlyFormat::~SwUndoSetFlyFormat()
 {
-    delete pItemSet;
 }
 
 void SwUndoSetFlyFormat::DeRegisterFromFormat( SwFormat& rFormat )

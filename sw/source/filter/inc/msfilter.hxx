@@ -239,7 +239,7 @@ namespace sw
         {
         private:
             //I hate these things stupid pImpl things, but its warranted here
-            ::myImplHelpers::StyleMapperImpl<SwCharFormat> *mpImpl;
+            std::unique_ptr<::myImplHelpers::StyleMapperImpl<SwCharFormat>> mpImpl;
         public:
             explicit CharStyleMapper(SwDoc &rDoc);
             ~CharStyleMapper();

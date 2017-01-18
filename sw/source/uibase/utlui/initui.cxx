@@ -227,7 +227,6 @@ ShellResource::ShellResource()
 
 ShellResource::~ShellResource()
 {
-    delete pAutoFormatNameLst;
 }
 
 OUString ShellResource::GetPageDescName(sal_uInt16 nNo, PageNameMode eMode)
@@ -278,7 +277,7 @@ struct ImpAutoFormatNameListLoader : public Resource
 void ShellResource::GetAutoFormatNameLst_() const
 {
     assert(!pAutoFormatNameLst);
-    pAutoFormatNameLst = new std::vector<OUString>;
+    pAutoFormatNameLst.reset( new std::vector<OUString> );
     pAutoFormatNameLst->reserve(STR_AUTOFMTREDL_END);
     ImpAutoFormatNameListLoader aTmp(*pAutoFormatNameLst);
 }

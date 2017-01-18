@@ -172,7 +172,7 @@ public:
 class SwXAutoStylesEnumerator : public cppu::WeakImplHelper< css::container::XEnumeration >,
     public SwClient
 {
-    SwAutoStylesEnumImpl *m_pImpl;
+    std::unique_ptr<SwAutoStylesEnumImpl> m_pImpl;
 public:
     SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwAutoStyleFamily eFam );
     virtual ~SwXAutoStylesEnumerator() override;

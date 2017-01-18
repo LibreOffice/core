@@ -231,7 +231,7 @@ public:
 class PlfAcd: public Tcg255SubStruct
 {
     sal_Int32 iMac;
-    Acd* rgacd;
+    std::unique_ptr<Acd[]> rgacd;
     PlfAcd(const PlfAcd&) = delete;
     PlfAcd& operator = ( const PlfAcd&) = delete;
 
@@ -268,7 +268,7 @@ public:
 class PlfKme : public Tcg255SubStruct
 {
     sal_Int32 iMac;
-    Kme* rgkme;
+    std::unique_ptr<Kme[]> rgkme;
     PlfKme(const PlfKme&) = delete;
     PlfKme& operator = ( const PlfKme&) = delete;
 

@@ -183,7 +183,6 @@ SwXMLBrushItemImportContext::SwXMLBrushItemImportContext(
 
 SwXMLBrushItemImportContext::~SwXMLBrushItemImportContext()
 {
-    delete pItem;
 }
 
 SwXMLBrushItemExport::SwXMLBrushItemExport( SwXMLExport& rExp ) :

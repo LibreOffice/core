@@ -79,7 +79,7 @@ static SwDoc* lcl_GetDocViaTunnel( Reference<XTextRange> const & rRange )
 class XTextRangeOrNodeIndexPosition
 {
     Reference<XTextRange> xRange;
-    SwNodeIndex* pIndex;    // pIndex will point to the *previous* node
+    std::unique_ptr<SwNodeIndex> pIndex;    // pIndex will point to the *previous* node
 
 public:
     XTextRangeOrNodeIndexPosition();
@@ -103,25 +103,17 @@ XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition() :
 
 XTextRangeOrNodeIndexPosition::~XTextRangeOrNodeIndexPosition()
 {
-    delete pIndex;
 }
 
 void XTextRangeOrNodeIndexPosition::Set( Reference<XTextRange> & rRange )
 {
     xRange = rRange->getStart();    // set bookmark
-    if (nullptr != pIndex)
-    {
-        delete pIndex;
-        pIndex = nullptr;
-    }
+    pIndex.reset();
 }
 
 void XTextRangeOrNodeIndexPosition::Set( SwNodeIndex& rIndex )
 {
-    if (nullptr != pIndex)
-        delete pIndex;
-
-    pIndex = new SwNodeIndex(rIndex);
+    pIndex.reset( new SwNodeIndex(rIndex) );
     (*pIndex)-- ;   // previous node!!!
     xRange = nullptr;
 }

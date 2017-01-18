@@ -35,7 +35,8 @@ class SW_DLLPUBLIC SwGlossaryHdl
     OUString        aCurGrp;
     SfxViewFrame*   pViewFrame;
     SwWrtShell*     pWrtShell;
-    SwTextBlocks*   pCurGrp;
+    std::unique_ptr<SwTextBlocks>
+                    pCurGrp;
 
     SAL_DLLPRIVATE bool  Expand( const OUString& rShortName,
                     SwGlossaries* pGlossaries,
