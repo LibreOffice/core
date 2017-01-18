@@ -35,6 +35,7 @@
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XSubToolbarController.hpp>
+#include <rtl/ref.hxx>
 
 
 class SfxToolBoxControl;
@@ -67,13 +68,12 @@ class SfxFrameStatusListener;
 class SFX2_DLLPUBLIC SfxPopupWindow: public FloatingWindow
 {
 friend class SfxFrameStatusListener;
-    bool                                                                             m_bFloating;
-    bool                                                                             m_bCascading;
-    Link<SfxPopupWindow*,void>                                                       m_aDeleteLink;
-    sal_uInt16                                                                       m_nId;
+    bool                                                   m_bFloating;
+    bool                                                   m_bCascading;
+    Link<SfxPopupWindow*,void>                             m_aDeleteLink;
+    sal_uInt16                                             m_nId;
     css::uno::Reference< css::frame::XFrame > const        m_xFrame;
-    SfxFrameStatusListener*                                                          m_pStatusListener;
-    css::uno::Reference< css::lang::XComponent >           m_xStatusListener;
+    rtl::Reference<SfxFrameStatusListener>                 m_xStatusListener;
 
 private:
     SfxPopupWindow(SfxPopupWindow &) = delete;

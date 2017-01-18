@@ -737,7 +737,6 @@ SfxPopupWindow::SfxPopupWindow(
     , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
-    , m_pStatusListener( nullptr )
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
@@ -751,7 +750,6 @@ SfxPopupWindow::SfxPopupWindow(sal_uInt16 nId, const OString& rID, const OUStrin
     , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
-    , m_pStatusListener( nullptr )
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
@@ -768,7 +766,6 @@ SfxPopupWindow::SfxPopupWindow(
     , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
-    , m_pStatusListener( nullptr )
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
@@ -785,7 +782,6 @@ SfxPopupWindow::SfxPopupWindow(
     , m_bCascading( false )
     , m_nId( nId )
     , m_xFrame( rFrame )
-    , m_pStatusListener( nullptr )
 {
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
     if ( pWindow )
@@ -803,7 +799,6 @@ void SfxPopupWindow::dispose()
     {
         m_xStatusListener->dispose();
         m_xStatusListener.clear();
-        m_pStatusListener = nullptr;
     }
 
     vcl::Window* pWindow = GetTopMostParentSystemWindow( this );
@@ -817,14 +812,13 @@ void SfxPopupWindow::AddStatusListener( const OUString& rCommandURL )
 {
     if ( !m_xStatusListener.is() )
     {
-        m_pStatusListener = new SfxFrameStatusListener(
+        m_xStatusListener = new SfxFrameStatusListener(
                                     ::comphelper::getProcessComponentContext(),
                                     m_xFrame,
                                     this );
-        m_xStatusListener.set( static_cast< cppu::OWeakObject* >( m_pStatusListener ), UNO_QUERY );
     }
     if ( m_xStatusListener.is() )
-        m_pStatusListener->addStatusListener( rCommandURL );
+        m_xStatusListener->addStatusListener( rCommandURL );
 }
 
 
