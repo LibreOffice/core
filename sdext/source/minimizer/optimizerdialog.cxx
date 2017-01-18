@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <sal/macros.h>
 #include <osl/time.h>
+#include <rtl/uri.hxx>
 
 
 using namespace ::com::sun::star::io;
@@ -527,7 +528,14 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
 
                             // adding .mini
                             aLocation = aLocation.concat( ".mini" );
-                            aFileOpenDialog.setDefaultName( aLocation );
+
+                            // tdf#105382 try to decode file name by assuming UTF-8,
+                            // but keep it as is if failed.
+                            auto aDecoded = rtl::Uri::decode( aLocation, rtl_UriDecodeStrict, RTL_TEXTENCODING_UTF8 );
+                            if ( aDecoded.isEmpty() )
+                                aFileOpenDialog.setDefaultName( aLocation );
+                            else
+                                aFileOpenDialog.setDefaultName( aDecoded );
                         }
                     }
                 }
