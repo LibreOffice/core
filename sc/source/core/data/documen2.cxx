@@ -372,6 +372,21 @@ ScDocument::~ScDocument()
         delete pRefreshTimerControl, pRefreshTimerControl = nullptr;
     }
 
+    if (IsClipboardSource())
+    {
+        // Notes copied to the clipboard have a raw SdrCaptionObj pointer
+        // copied from this document, forget it as it references this
+        // document's drawing layer pages and what not, which otherwise when
+        // pasting to another document after this document was destructed would
+        // attempt to access non-existing data.
+        /* XXX this is only a workaround to prevent a crash, the actual note
+         * content is lost, only a standard empty note caption will be pasted.
+         * TODO: come up with a solution. */
+        ScDocument* pClipDoc = ScModule::GetClipDoc();
+        if (pClipDoc)
+            pClipDoc->ForgetNoteCaptions( ScRangeList( ScRange( 0,0,0, MAXCOL, MAXROW, pClipDoc->GetTableCount()-1)));
+    }
+
     mxFormulaParserPool.reset();
     // Destroy the external ref mgr instance here because it has a timer
     // which needs to be stopped before the app closes.
