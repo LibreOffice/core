@@ -55,8 +55,7 @@ DynamicResultSetWrapper::DynamicResultSetWrapper(
                 , m_xMyResultTwo( nullptr )
                 , m_xListener( nullptr )
 {
-    m_pMyListenerImpl = new DynamicResultSetWrapperListener( this );
-    m_xMyListenerImpl.set( m_pMyListenerImpl );
+    m_xMyListenerImpl = new DynamicResultSetWrapperListener( this );
     //call impl_init() at the end of constructor of derived class
 };
 
@@ -86,7 +85,7 @@ void SAL_CALL DynamicResultSetWrapper::impl_deinit()
 {
     //call this at start of destructor of derived class
 
-    m_pMyListenerImpl->impl_OwnerDies();
+    m_xMyListenerImpl->impl_OwnerDies();
 }
 
 void SAL_CALL DynamicResultSetWrapper::impl_EnsureNotDisposed()
@@ -308,10 +307,10 @@ void SAL_CALL DynamicResultSetWrapper::setSource( const Reference< XInterface > 
         m_xSource = xSourceDynamic;
         xListener = m_xListener;
         bStatic = m_bStatic;
-        xMyListenerImpl = m_xMyListenerImpl;
+        xMyListenerImpl = m_xMyListenerImpl.get();
     }
     if( xListener.is() )
-        xSourceDynamic->setListener( m_xMyListenerImpl );
+        xSourceDynamic->setListener( m_xMyListenerImpl.get() );
     else if( bStatic )
     {
         Reference< XComponent > xSourceComponent( Source, UNO_QUERY );
@@ -338,7 +337,7 @@ Reference< XResultSet > SAL_CALL DynamicResultSetWrapper::getStaticResultSet()
 
         xSource = m_xSource;
         m_bStatic = true;
-        xMyListenerImpl.set( m_xMyListenerImpl, UNO_QUERY );
+        xMyListenerImpl.set( css::uno::Reference< css::ucb::XDynamicResultSetListener >(m_xMyListenerImpl.get()), UNO_QUERY );
     }
 
     if( xSource.is() )
@@ -373,7 +372,7 @@ void SAL_CALL DynamicResultSetWrapper::setListener( const Reference< XDynamicRes
         addEventListener( Reference< XEventListener >::query( Listener ) );
 
         xSource = m_xSource;
-        xMyListenerImpl = m_xMyListenerImpl;
+        xMyListenerImpl = m_xMyListenerImpl.get();
     }
     if ( xSource.is() )
         xSource->setListener( xMyListenerImpl );

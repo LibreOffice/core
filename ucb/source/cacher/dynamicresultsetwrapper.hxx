@@ -33,6 +33,7 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/ref.hxx>
 
 
 class DynamicResultSetWrapperListener;
@@ -49,10 +50,8 @@ private:
     comphelper::OInterfaceContainerHelper2*
                             m_pDisposeEventListeners;
 protected:
-    css::uno::Reference< css::ucb::XDynamicResultSetListener >
+    rtl::Reference<DynamicResultSetWrapperListener>
                             m_xMyListenerImpl;
-    DynamicResultSetWrapperListener*
-                            m_pMyListenerImpl;
 
     css::uno::Reference< css::uno::XComponentContext >
                             m_xContext;
