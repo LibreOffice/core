@@ -173,8 +173,8 @@ BackendImpl::BackendImpl(
       m_xTypeInfo( new Package::TypeInfo(
                        "application/vnd.sun.star.framework-script",
                        OUString() /* no file filter */,
-                       "Scripting Framework Script Library",
-                       RID_IMG_SCRIPTLIB ) )
+                       "Scripting Framework Script Library"
+                       ) )
 {
     if (! transientMode())
     {

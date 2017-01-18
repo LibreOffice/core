@@ -299,13 +299,13 @@ BackendImpl::BackendImpl(
       m_xBundleTypeInfo( new Package::TypeInfo(
                              "application/vnd.sun.star.package-bundle",
                              "*.oxt;*.uno.pkg",
-                             getResourceString(RID_STR_PACKAGE_BUNDLE),
-                             RID_IMG_DEF_PACKAGE_BUNDLE ) ),
+                             getResourceString(RID_STR_PACKAGE_BUNDLE)
+                             ) ),
       m_xLegacyBundleTypeInfo( new Package::TypeInfo(
                                    "application/vnd.sun.star.legacy-package-bundle",
                                    "*.zip",
-                                   m_xBundleTypeInfo->getShortDescription(),
-                                   RID_IMG_DEF_PACKAGE_BUNDLE ) ),
+                                   m_xBundleTypeInfo->getShortDescription()
+                                   ) ),
     m_typeInfos(2)
 {
     m_typeInfos[ 0 ] = m_xBundleTypeInfo;

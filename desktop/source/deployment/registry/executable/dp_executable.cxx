@@ -107,7 +107,7 @@ BackendImpl::BackendImpl(
     : PackageRegistryBackend( args, xComponentContext ),
       m_xExecutableTypeInfo(new Package::TypeInfo(
                                 "application/vnd.sun.star.executable",
-                                "", "Executable", RID_IMG_COMPONENT ) )
+                                "", "Executable" ) )
 {
     if (!transientMode())
     {

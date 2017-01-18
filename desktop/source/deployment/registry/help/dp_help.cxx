@@ -132,8 +132,8 @@ BackendImpl::BackendImpl(
     : PackageRegistryBackend( args, xComponentContext ),
       m_xHelpTypeInfo( new Package::TypeInfo("application/vnd.sun.star.help",
                                OUString(),
-                               getResourceString(RID_STR_HELP),
-                               RID_IMG_HELP ) ),
+                               getResourceString(RID_STR_HELP)
+                               ) ),
       m_typeInfos( 1 )
 {
     m_typeInfos[ 0 ] = m_xHelpTypeInfo;

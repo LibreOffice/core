@@ -808,27 +808,15 @@ OUString Package::TypeInfo::getShortDescription()
     return m_shortDescr;
 }
 
-
 OUString Package::TypeInfo::getFileFilter() throw (RuntimeException, std::exception)
 {
     return m_fileFilter;
 }
 
-
-/**************************
- * Get Icon
- *
- * @param highContrast NOTE: disabled the returning of high contrast icons.
- *                     This bool is a noop now.
- * @param smallIcon    Return the small version of the icon
- */
-Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool smallIcon )
+Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool /*smallIcon*/ )
     throw (RuntimeException, std::exception)
 {
-    if (! smallIcon)
-        return Any();
-    const sal_uInt16 nIconId = m_smallIcon;
-    return Any( &nIconId, cppu::UnoType<cppu::UnoUnsignedShortType>::get() );
+    return Any();
 }
 
 }

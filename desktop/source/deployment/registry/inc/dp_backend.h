@@ -107,16 +107,13 @@ public:
         const OUString m_mediaType;
         const OUString m_fileFilter;
         const OUString m_shortDescr;
-        const sal_uInt16 m_smallIcon;
     public:
         virtual ~TypeInfo() override;
         TypeInfo( OUString const & mediaType,
                   OUString const & fileFilter,
-                  OUString const & shortDescr,
-                  sal_uInt16 smallIcon)
+                  OUString const & shortDescr )
             : m_mediaType(mediaType), m_fileFilter(fileFilter),
-              m_shortDescr(shortDescr),
-              m_smallIcon(smallIcon)
+              m_shortDescr(shortDescr)
             {}
         // XPackageTypeInfo
         virtual OUString SAL_CALL getMediaType()

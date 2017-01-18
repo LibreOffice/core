@@ -147,13 +147,13 @@ BackendImpl::BackendImpl(
       m_xBasicLibTypeInfo( new Package::TypeInfo(
                                "application/vnd.sun.star.basic-library",
                                OUString() /* no file filter */,
-                               getResourceString(RID_STR_BASIC_LIB),
-                               RID_IMG_SCRIPTLIB) ),
+                               getResourceString(RID_STR_BASIC_LIB)
+                               ) ),
       m_xDialogLibTypeInfo( new Package::TypeInfo(
                                 "application/vnd.sun.star.dialog-library",
                                 OUString() /* no file filter */,
-                                getResourceString(RID_STR_DIALOG_LIB),
-                                RID_IMG_DIALOGLIB) ),
+                                getResourceString(RID_STR_DIALOG_LIB)
+                                ) ),
       m_typeInfos( 2 )
 {
     m_typeInfos[ 0 ] = m_xBasicLibTypeInfo;

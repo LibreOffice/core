@@ -496,34 +496,34 @@ BackendImpl::BackendImpl(
              "application/vnd.sun.star.uno-component;type=native;platform=" +
                                    getPlatformString(),
                                    "*" SAL_DLLEXTENSION,
-                                   getResourceString(RID_STR_DYN_COMPONENT),
-                                   RID_IMG_COMPONENT) ),
+                                   getResourceString(RID_STR_DYN_COMPONENT)
+                                   ) ),
       m_xJavaComponentTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-component;type=Java",
                                     "*.jar",
-                                    getResourceString(RID_STR_JAVA_COMPONENT),
-                                    RID_IMG_JAVA_COMPONENT) ),
+                                    getResourceString(RID_STR_JAVA_COMPONENT)
+                                    ) ),
       m_xPythonComponentTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-component;type=Python",
                                       "*.py",
                                       getResourceString(
-                                          RID_STR_PYTHON_COMPONENT),
-                                      RID_IMG_COMPONENT ) ),
+                                          RID_STR_PYTHON_COMPONENT)
+                                      ) ),
       m_xComponentsTypeInfo( new Package::TypeInfo(
                                  "application/vnd.sun.star.uno-components",
                                  "*.components",
-                                 getResourceString(RID_STR_COMPONENTS),
-                                 RID_IMG_COMPONENT ) ),
+                                 getResourceString(RID_STR_COMPONENTS)
+                                 ) ),
       m_xRDBTypelibTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-typelibrary;type=RDB",
                                  "*.rdb",
-                                 getResourceString(RID_STR_RDB_TYPELIB),
-                                 RID_IMG_TYPELIB ) ),
+                                 getResourceString(RID_STR_RDB_TYPELIB)
+                                 ) ),
       m_xJavaTypelibTypeInfo( new Package::TypeInfo(
              "application/vnd.sun.star.uno-typelibrary;type=Java",
                                   "*.jar",
-                                  getResourceString(RID_STR_JAVA_TYPELIB),
-                                  RID_IMG_JAVA_TYPELIB ) ),
+                                  getResourceString(RID_STR_JAVA_TYPELIB)
+                                  ) ),
       m_typeInfos( 6 )
 {
     m_typeInfos[ 0 ] = m_xDynComponentTypeInfo;
