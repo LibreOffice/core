@@ -170,12 +170,12 @@ void SwPageBreakWin::Paint(vcl::RenderContext& rRenderContext, const Rectangle&)
                                         aPolygon, aColor));
 
     // Create the primitive for the image
-    Image aImg(SW_RES(IMG_PAGE_BREAK));
+    BitmapEx aBmpEx(SW_RES(RID_BMP_PAGE_BREAK));
     double nImgOfstX = 3.0;
     if (bRtl)
-        nImgOfstX = aRect.Right() - aImg.GetSizePixel().Width() - 3.0;
+        nImgOfstX = aRect.Right() - aBmpEx.GetSizePixel().Width() - 3.0;
     aSeq[2].set(new drawinglayer::primitive2d::DiscreteBitmapPrimitive2D(
-                                        aImg.GetBitmapEx(), B2DPoint(nImgOfstX, 1.0)));
+                                        aBmpEx, B2DPoint(nImgOfstX, 1.0)));
 
     double nTop = double(aRect.getHeight()) / 2.0;
     double nBottom = nTop + 4.0;

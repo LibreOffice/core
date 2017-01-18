@@ -160,11 +160,11 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
     m_bOnlyFormatedRedlines( false ),
     m_bRedlnAutoFormat   (bAutoFormat),
     m_bInhibitActivate( false ),
-    m_aInserted       (SW_RES(IMG_REDLINE_INSERTED)),
-    m_aDeleted        (SW_RES(IMG_REDLINE_DELETED)),
-    m_aFormated       (SW_RES(IMG_REDLINE_FORMATED)),
-    m_aTableChgd      (SW_RES(IMG_REDLINE_TABLECHG)),
-    m_aFormatCollSet  (SW_RES(IMG_REDLINE_FMTCOLLSET))
+    m_aInserted       (BitmapEx(SW_RES(BMP_REDLINE_INSERTED))),
+    m_aDeleted        (BitmapEx(SW_RES(BMP_REDLINE_DELETED))),
+    m_aFormated       (BitmapEx(SW_RES(BMP_REDLINE_FORMATED))),
+    m_aTableChgd      (BitmapEx(SW_RES(BMP_REDLINE_TABLECHG))),
+    m_aFormatCollSet  (BitmapEx(SW_RES(BMP_REDLINE_FMTCOLLSET)))
 
 {
     m_aTabPagesCTRL->SetHelpId(HID_REDLINE_CTRL);

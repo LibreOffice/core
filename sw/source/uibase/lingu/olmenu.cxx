@@ -467,7 +467,7 @@ SwSpellPopup::SwSpellPopup(
     InsertSeparator(OString(), nPos++);
     InsertItem(MN_SHORT_COMMENT, aMessageText, MenuItemBits::NOSELECT, OString(), nPos++);
     if (bUseImagesInMenus)
-        SetItemImage(MN_SHORT_COMMENT, Image(SW_RES(IMG_INFO_16)));
+        SetItemImage(MN_SHORT_COMMENT, Image(BitmapEx(SW_RES(BMP_INFO_16))));
 
     // Add an item to show detailed infos if the FullCommentURL property is defined
     beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;

@@ -349,56 +349,39 @@ Bitmap RID_BMP_DBQUERY
     File = "sx03.png";
 };
 
-Image IMG_VIEWLAYOUT_AUTOMATIC
+Bitmap RID_BMP_VIEWLAYOUT_AUTOMATIC
 {
-    ImageBitmap = Bitmap
-    {
-        File = "twopages_10x24.png" ;
-    };
-};
-Image IMG_VIEWLAYOUT_AUTOMATIC_ACTIVE
-{
-    ImageBitmap = Bitmap
-    {
-        File = "twopages_a_10x24.png" ;
-    };
+    File = "twopages_10x24.png" ;
 };
 
-Image IMG_VIEWLAYOUT_BOOKMODE
+Bitmap RID_BMP_VIEWLAYOUT_AUTOMATIC_ACTIVE
 {
-    ImageBitmap = Bitmap
-    {
-        File = "doublepage_10x22.png" ;
-    };
-};
-Image IMG_VIEWLAYOUT_BOOKMODE_ACTIVE
-{
-    ImageBitmap = Bitmap
-    {
-        File = "doublepage_a_10x22.png" ;
-    };
+    File = "twopages_a_10x24.png" ;
 };
 
-Image IMG_VIEWLAYOUT_SINGLECOLUMN
+Bitmap RID_BMP_VIEWLAYOUT_BOOKMODE
 {
-    ImageBitmap = Bitmap
-    {
-        File = "emptypage_10x14.png" ;
-    };
+    File = "doublepage_10x22.png" ;
 };
-Image IMG_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
+
+Bitmap RID_BMP_VIEWLAYOUT_BOOKMODE_ACTIVE
 {
-    ImageBitmap = Bitmap
-    {
-        File = "emptypage_a_10x14.png" ;
-    };
+    File = "doublepage_a_10x22.png" ;
 };
-Image IMG_PAGE_BREAK
+
+Bitmap RID_BMP_VIEWLAYOUT_SINGLECOLUMN
 {
-    ImageBitmap = Bitmap
-    {
-        File = "page_break.png" ;
-    };
+    File = "emptypage_10x14.png" ;
+};
+
+Bitmap RID_BMP_VIEWLAYOUT_SINGLECOLUMN_ACTIVE
+{
+    File = "emptypage_a_10x14.png" ;
+};
+
+Bitmap RID_BMP_PAGE_BREAK
+{
+    File = "page_break.png" ;
 };
 
 String STR_HYPERCTRL_SEL

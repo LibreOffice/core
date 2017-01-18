@@ -71,33 +71,38 @@ String STR_REDLINE_AUTOFMT
         Text [ en-US ] = "AutoCorrect";
 };
 
-Image IMG_REDLINE_INSERTED
+Bitmap BMP_REDLINE_INSERTED
 {
-    ImageBitmap = Bitmap{File = "redline_inserted.png";};
+    File = "redline_inserted.png";
 };
-Image IMG_REDLINE_DELETED
+
+Bitmap BMP_REDLINE_DELETED
 {
-    ImageBitmap = Bitmap{File = "redline_deleted.png";};
+    File = "redline_deleted.png";
 };
-Image IMG_REDLINE_FORMATED
+
+Bitmap BMP_REDLINE_FORMATED
 {
     // FIXME
-    ImageBitmap = Bitmap{File = "redline_inserted.png";};
+    File = "redline_inserted.png";
 };
-Image IMG_REDLINE_TABLECHG
+
+Bitmap BMP_REDLINE_TABLECHG
 {
     // FIXME
-    ImageBitmap = Bitmap{File = "redline_inserted.png";};
+    File = "redline_inserted.png";
 };
-Image IMG_REDLINE_FMTCOLLSET
+
+Bitmap BMP_REDLINE_FMTCOLLSET
 {
     // FIXME
-    ImageBitmap = Bitmap{File = "redline_inserted.png";};
+    File = "redline_inserted.png";
 };
-Image IMG_REDLINE_AUTOFMT
+
+Bitmap BMP_REDLINE_AUTOFMT
 {
     // FIXME
-    ImageBitmap = Bitmap{File = "redline_inserted.png";};
+    File = "redline_inserted.png";
 };
 
 String STR_REDLINE_FORMATED
