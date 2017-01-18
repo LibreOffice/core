@@ -39,7 +39,6 @@ namespace svgio
 
         SvgCircleNode::~SvgCircleNode()
         {
-            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgCircleNode::getSvgStyleAttributes() const

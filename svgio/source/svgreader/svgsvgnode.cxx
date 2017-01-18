@@ -106,7 +106,6 @@ namespace svgio
 
         SvgSvgNode::~SvgSvgNode()
         {
-            delete mpViewBox;
         }
 
         const SvgStyleAttributes* SvgSvgNode::getSvgStyleAttributes() const

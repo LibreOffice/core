@@ -42,7 +42,6 @@ namespace svgio
 
         SvgClipPathNode::~SvgClipPathNode()
         {
-            delete mpaTransform;
         }
 
         const SvgStyleAttributes* SvgClipPathNode::getSvgStyleAttributes() const
