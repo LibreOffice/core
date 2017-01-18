@@ -154,7 +154,7 @@ class GbuildParser:
 
 
         moduleDict['include']={ 'targets': set(), 'headers':self.headers_of('include')}
-        # sort ['sources'] and ['headers'] for each module
+
         for module in sorted(moduleDict):
             self.modules[module] = moduleDict[module]
         return self
@@ -164,15 +164,21 @@ class GbuildParser:
         cmdResult1=subprocess.Popen(('git', 'ls-files'), cwd=self.srcdir,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
         cmdResult2=subprocess.check_output(('grep', '-i', '-E', '".*\.hxx$|.*\.h$|.*\.hpp$"'),cwd=self.srcdir,stdin=cmdResult1.stdout,stderr=subprocess.PIPE)
 
-        #decode from byte to string
-        allfiles=[]
+        allfiles={}
         for file in cmdResult2.splitlines():
-            allfiles.append(file.decode())
+            strfile=file.decode()
+            modulename=strfile.split('/')[0]
+            if not modulename in allfiles:
+                allfiles[modulename]=[]
+            modulename_len=len(modulename)
+            allfiles[modulename].append(strfile[modulename_len + 1:])
         self._allheaders = allfiles
 
     def headers_of(self,modulename):
-        modulename_lenght=len(modulename)
-        headersof = [element[modulename_lenght+1:] for element in self._allheaders if element.split('/')[0] == modulename]
+        if modulename in self._allheaders: #for the modules that not have headers
+            headersof = self._allheaders[modulename]
+        else:
+            headersof=[]
         return headersof
 
 class IdeIntegrationGenerator:
