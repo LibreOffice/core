@@ -785,7 +785,7 @@ bool SvXMLImportItemMapper::PutXMLValue(
                 sal_Int32 nVal;
                 bOk = ::sax::Converter::convertNumber(
                         nVal, rValue, 0, USHRT_MAX);
-                if( bOk )
+                if( bOk && nVal > 0 )
                     rPageDesc.SetNumOffset( (sal_uInt16)nVal );
             }
         }
