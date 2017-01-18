@@ -380,10 +380,11 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl, Button*, void )
 {
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
-        if((*itr)->IsSelected())
+        auto widget = *itr;
+        if (widget->IsSelected())
         {
-            itr->disposeAndClear();
             maEntries.erase(itr);
+            widget.disposeAndClear();
             break;
         }
     }
