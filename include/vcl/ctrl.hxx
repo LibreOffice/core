@@ -85,8 +85,13 @@ protected:
         returning.
     */
     Rectangle DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& _rRect,
-                                 const OUString& _rStr, DrawTextFlags _nStyle,
-                                 MetricVector* _pVector, OUString* _pDisplayText ) const;
+                               const OUString& _rStr, DrawTextFlags _nStyle,
+                               MetricVector* _pVector, OUString* _pDisplayText,
+                               const Size* i_pDeviceSize = nullptr ) const;
+
+    Rectangle GetControlTextRect( OutputDevice& _rTargetDevice, const Rectangle & rRect,
+                                  const OUString& _rStr, DrawTextFlags _nStyle,
+                                  Size* o_pDeviceSize = nullptr ) const;
 
     virtual const vcl::Font&
                 GetCanonicalFont( const StyleSettings& _rStyle ) const;

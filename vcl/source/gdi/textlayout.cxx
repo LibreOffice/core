@@ -84,7 +84,8 @@ namespace vcl
 
     public:
         // equivalents to the respective OutputDevice methods, which take the reference device into account
-        Rectangle   DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText );
+        Rectangle   DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize );
+        Rectangle   GetTextRect( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, Size* o_pDeviceSize );
 
     private:
         long        GetTextArray( const OUString& _rText, long* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
@@ -243,7 +244,8 @@ namespace vcl
         return true;
     }
 
-    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText )
+    Rectangle ReferenceDeviceTextLayout::DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle,
+                                                   MetricVector* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize )
     {
         if ( _rText.isEmpty() )
             return Rectangle();
@@ -258,6 +260,13 @@ namespace vcl
         // and the like in our ctor, we set the map mode of the target device from pixel to twip, but our caller doesn't know this,
         // but passed pixel coordinates. So, adjust the rect.
         Rectangle aRect( m_rTargetDevice.PixelToLogic( _rRect ) );
+        if (i_pDeviceSize)
+        {
+            //if i_pDeviceSize is passed in here, it was the original pre logic-to-pixel size of _rRect
+            SAL_WARN_IF(std::abs(_rRect.GetSize().Width() - m_rTargetDevice.LogicToPixel(*i_pDeviceSize).Width()) > 1, "vcl", "DeviceSize width was expected to match Pixel width");
+            SAL_WARN_IF(std::abs(_rRect.GetSize().Height() - m_rTargetDevice.LogicToPixel(*i_pDeviceSize).Height()) > 1, "vcl", "DeviceSize height was expected to match Pixel height");
+            aRect.SetSize(*i_pDeviceSize);
+        }
 
         m_aCompleteTextRect.SetEmpty();
         m_rTargetDevice.DrawText( aRect, _rText, _nStyle, _pVector, _pDisplayText, this );
@@ -293,6 +302,37 @@ namespace vcl
         return aTextRect;
     }
 
+    Rectangle ReferenceDeviceTextLayout::GetTextRect( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, Size* o_pDeviceSize )
+    {
+        if ( _rText.isEmpty() )
+            return Rectangle();
+
+        // determine text layout mode from the RTL-ness of the control whose text we render
+        ComplexTextLayoutFlags nTextLayoutMode = m_bRTLEnabled ? ComplexTextLayoutFlags::BiDiRtl : ComplexTextLayoutFlags::Default;
+        m_rReferenceDevice.SetLayoutMode( nTextLayoutMode );
+        m_rTargetDevice.SetLayoutMode( nTextLayoutMode | ComplexTextLayoutFlags::TextOriginLeft );
+
+        // ComplexTextLayoutFlags::TextOriginLeft is because when we do actually draw the text (in DrawText( Point, ... )), then
+        // our caller gives us the left border of the draw position, regardless of script type, text layout,
+        // and the like in our ctor, we set the map mode of the target device from pixel to twip, but our caller doesn't know this,
+        // but passed pixel coordinates. So, adjust the rect.
+        Rectangle aRect( m_rTargetDevice.PixelToLogic( _rRect ) );
+
+        Rectangle aTextRect = m_rTargetDevice.GetTextRect( aRect, _rText, _nStyle, nullptr, this );
+
+        //if o_pDeviceSize is available, stash the pre logic-to-pixel size in it
+        if (o_pDeviceSize)
+        {
+            *o_pDeviceSize = aTextRect.GetSize();
+        }
+
+        // similar to above, the text rect now contains TWIPs (or whatever unit the ref device has), but the caller
+        // expects pixel coordinates
+        aTextRect = m_rTargetDevice.LogicToPixel( aTextRect );
+
+        return aTextRect;
+    }
+
     ControlTextRenderer::ControlTextRenderer( const Control& _rControl, OutputDevice& _rTargetDevice, OutputDevice& _rReferenceDevice )
         :m_pImpl( new ReferenceDeviceTextLayout( _rControl, _rTargetDevice, _rReferenceDevice ) )
     {
@@ -303,9 +343,14 @@ namespace vcl
     }
 
     Rectangle ControlTextRenderer::DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle,
-        MetricVector* _pVector, OUString* _pDisplayText )
+        MetricVector* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize )
     {
-        return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText );
+        return m_pImpl->DrawText( _rRect, _rText, _nStyle, _pVector, _pDisplayText, i_pDeviceSize );
+    }
+
+    Rectangle ControlTextRenderer::GetTextRect( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, Size* o_pDeviceSize = nullptr )
+    {
+        return m_pImpl->GetTextRect( _rRect, _rText, _nStyle, o_pDeviceSize );
     }
 
 } // namespace vcl

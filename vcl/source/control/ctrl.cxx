@@ -413,7 +413,7 @@ void Control::ImplInitSettings(const bool, const bool)
 }
 
 Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& rRect, const OUString& _rStr,
-    DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText ) const
+    DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize ) const
 {
     OUString rPStr = _rStr;
     DrawTextFlags nPStyle = _nStyle;
@@ -435,7 +435,36 @@ Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangl
     }
 
     ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
-    return aRenderer.DrawText(rRect, rPStr, nPStyle, _pVector, _pDisplayText);
+    return aRenderer.DrawText(rRect, rPStr, nPStyle, _pVector, _pDisplayText, i_pDeviceSize);
+}
+
+Rectangle Control::GetControlTextRect( OutputDevice& _rTargetDevice, const Rectangle & rRect,
+                                       const OUString& _rStr, DrawTextFlags _nStyle, Size* o_pDeviceSize ) const
+{
+    OUString rPStr = _rStr;
+    DrawTextFlags nPStyle = _nStyle;
+
+    bool accel = ImplGetSVData()->maNWFData.mbEnableAccel;
+    bool autoacc = ImplGetSVData()->maNWFData.mbAutoAccel;
+
+    if (!accel || (autoacc && !mbShowAccelerator))
+    {
+        rPStr = GetNonMnemonicString( _rStr );
+        nPStyle &= ~DrawTextFlags::HideMnemonic;
+    }
+
+    if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
+    {
+        Rectangle aRet = _rTargetDevice.GetTextRect( rRect, rPStr, nPStyle );
+        if (o_pDeviceSize)
+        {
+            *o_pDeviceSize = aRet.GetSize();
+        }
+        return aRet;
+    }
+
+    ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
+    return aRenderer.GetTextRect(rRect, rPStr, nPStyle, o_pDeviceSize);
 }
 
 Font
