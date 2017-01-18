@@ -160,6 +160,8 @@ css::uno::Reference<css::uno::XInterface> invokeComponentFactory(
     }
 }
 
+#if !defined DISABLE_DYNLOADING
+
 extern "C" void getInstance(va_list * args) {
     cppuhelper::ImplementationConstructorFn * fn = va_arg(*args, cppuhelper::ImplementationConstructorFn *);
     void * ctxt = va_arg(*args, void *);
@@ -223,6 +225,8 @@ cppuhelper::WrapperConstructorFn mapConstructorFn(
             };
     }
 }
+
+#endif
 
 }
 
