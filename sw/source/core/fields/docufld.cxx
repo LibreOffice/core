@@ -1644,12 +1644,15 @@ SwFieldType* SwPostItFieldType::Copy() const
 
 // PostIt field
 
+sal_uInt32 SwPostItField::m_nLastPostItId = 1;
+
 SwPostItField::SwPostItField( SwPostItFieldType* pT,
         const OUString& rAuthor,
         const OUString& rText,
         const OUString& rInitials,
         const OUString& rName,
-        const DateTime& rDateTime )
+        const DateTime& rDateTime,
+        const sal_uInt32 nPostItId)
     : SwField( pT )
     , sText( rText )
     , sAuthor( rAuthor )
@@ -1658,6 +1661,7 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
     , aDateTime( rDateTime )
     , mpText( nullptr )
 {
+    m_nPostItId = nPostItId == 0 ? m_nLastPostItId++ : nPostItId;
 }
 
 SwPostItField::~SwPostItField()
@@ -1683,7 +1687,7 @@ OUString SwPostItField::GetDescription() const
 SwField* SwPostItField::Copy() const
 {
     SwPostItField* pRet = new SwPostItField( static_cast<SwPostItFieldType*>(GetTyp()), sAuthor, sText, sInitials, sName,
-                                aDateTime);
+                                             aDateTime, m_nPostItId);
     if (mpText)
         pRet->SetTextObject( new OutlinerParaObject(*mpText) );
 
