@@ -172,14 +172,11 @@ void SAL_CALL SfxClosePreventer_Impl::disposing( const lang::EventObject& ) thro
 
 class SfxInstanceCloseGuard_Impl
 {
-    SfxClosePreventer_Impl* m_pPreventer;
-    uno::Reference< util::XCloseListener > m_xPreventer;
+    rtl::Reference<SfxClosePreventer_Impl> m_xPreventer;
     uno::Reference< util::XCloseable > m_xCloseable;
 
 public:
-    SfxInstanceCloseGuard_Impl()
-    : m_pPreventer( nullptr )
-    {}
+    SfxInstanceCloseGuard_Impl() {}
 
     ~SfxInstanceCloseGuard_Impl();
 
@@ -195,9 +192,8 @@ bool SfxInstanceCloseGuard_Impl::Init_Impl( const uno::Reference< util::XCloseab
     {
         try
         {
-            m_pPreventer = new SfxClosePreventer_Impl();
-            m_xPreventer.set( m_pPreventer );
-            xCloseable->addCloseListener( m_xPreventer );
+            m_xPreventer = new SfxClosePreventer_Impl();
+            xCloseable->addCloseListener( m_xPreventer.get() );
             m_xCloseable = xCloseable;
             bResult = true;
         }
@@ -216,7 +212,7 @@ SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
     {
         try
         {
-            m_xCloseable->removeCloseListener( m_xPreventer );
+            m_xCloseable->removeCloseListener( m_xPreventer.get() );
         }
         catch( uno::Exception& )
         {
@@ -224,11 +220,11 @@ SfxInstanceCloseGuard_Impl::~SfxInstanceCloseGuard_Impl()
 
         try
         {
-            if ( m_pPreventer )
+            if ( m_xPreventer.is() )
             {
-                m_pPreventer->SetPreventClose( false );
+                m_xPreventer->SetPreventClose( false );
 
-                if ( m_pPreventer->HasOwnership() )
+                if ( m_xPreventer->HasOwnership() )
                     m_xCloseable->close( true ); // TODO: do it asynchronously
             }
         }
