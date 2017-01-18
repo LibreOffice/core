@@ -2628,6 +2628,7 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
         return FALSE;
     }
     priv->m_nLOKFeatures |= LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK;
+    priv->m_nLOKFeatures |= LOK_FEATURE_NO_TILED_ANNOTATIONS;
     priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
 
     return TRUE;
