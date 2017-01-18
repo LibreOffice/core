@@ -92,7 +92,10 @@ namespace vcl
 
         Rectangle   DrawText( const Rectangle& _rRect,
                               const OUString& _rText, DrawTextFlags _nStyle,
-                              MetricVector* _pVector, OUString* _pDisplayText );
+                              MetricVector* _pVector, OUString* _pDisplayText, const Size* i_pDeviceSize );
+
+        Rectangle   GetTextRect( const Rectangle& _rRect,
+                                 const OUString& _rText, DrawTextFlags _nStyle, Size* o_pDeviceSize );
 
     private:
         ControlTextRenderer( const ControlTextRenderer& ) = delete;
