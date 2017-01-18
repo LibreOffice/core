@@ -129,8 +129,14 @@ public:
     /** Returns the caption object of this note. Creates the caption object, if
         the note contains initial caption data instead of the caption. */
     SdrCaptionObj*      GetOrCreateCaption( const ScAddress& rPos ) const;
-    /** Forgets the pointer to the note caption object. */
-    void                ForgetCaption();
+
+    /** Forgets the pointer to the note caption object.
+
+        @param  bPreserveData
+                If true then the note text is remembered in maNoteData to be able
+                to later reconstruct a caption from it.
+     */
+    void                ForgetCaption( bool bPreserveData = false );
 
     /** Shows or hides the note caption object. */
     void                ShowCaption( const ScAddress& rPos, bool bShow );

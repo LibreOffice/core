@@ -598,11 +598,15 @@ public:
     }
 };
 
-struct NoteCaptionCleaner
+class NoteCaptionCleaner
 {
+    bool mbPreserveData;
+public:
+    explicit NoteCaptionCleaner( bool bPreserveData ) : mbPreserveData(bPreserveData) {}
+
     void operator() ( size_t /*nRow*/, ScPostIt* p )
     {
-        p->ForgetCaption();
+        p->ForgetCaption(mbPreserveData);
     }
 };
 
@@ -614,12 +618,12 @@ void ScColumn::CreateAllNoteCaptions()
     sc::ProcessNote(maCellNotes, aFunc);
 }
 
-void ScColumn::ForgetNoteCaptions( SCROW nRow1, SCROW nRow2 )
+void ScColumn::ForgetNoteCaptions( SCROW nRow1, SCROW nRow2, bool bPreserveData )
 {
     if (!ValidRow(nRow1) || !ValidRow(nRow2))
         return;
 
-    NoteCaptionCleaner aFunc;
+    NoteCaptionCleaner aFunc(bPreserveData);
     sc::CellNoteStoreType::iterator it = maCellNotes.begin();
     sc::ProcessNote(it, maCellNotes, nRow1, nRow2, aFunc);
 }

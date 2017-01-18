@@ -379,13 +379,11 @@ ScDocument::~ScDocument()
         // copied from this document, forget it as it references this
         // document's drawing layer pages and what not, which otherwise when
         // pasting to another document after this document was destructed would
-        // attempt to access non-existing data.
-        /* XXX this is only a workaround to prevent a crash, the actual note
-         * content is lost, only a standard empty note caption will be pasted.
-         * TODO: come up with a solution. */
+        // attempt to access non-existing data. Preserve the text data though.
         ScDocument* pClipDoc = ScModule::GetClipDoc();
         if (pClipDoc)
-            pClipDoc->ForgetNoteCaptions( ScRangeList( ScRange( 0,0,0, MAXCOL, MAXROW, pClipDoc->GetTableCount()-1)));
+            pClipDoc->ForgetNoteCaptions(
+                    ScRangeList( ScRange( 0,0,0, MAXCOL, MAXROW, pClipDoc->GetTableCount()-1)), true);
     }
 
     mxFormulaParserPool.reset();
