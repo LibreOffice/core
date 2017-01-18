@@ -147,8 +147,7 @@ private:
     css::uno::Reference<css::media::XPlayerWindow> mxPlayerWindow;
     MediaWindow* mpMediaWindow;
 
-    css::uno::Reference<css::uno::XInterface> mxEventsIf;
-    MediaEventListenersImpl* mpEvents;
+    rtl::Reference<MediaEventListenersImpl> mxEvents;
     bool mbEventTransparent;
     VclPtr<MediaChildWindow> mpChildWindow;
     VclPtr<MediaWindowControl> mpMediaWindowControl;
