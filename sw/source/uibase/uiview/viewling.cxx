@@ -717,7 +717,7 @@ bool SwView::ExecSpellPopup(const Point& rPt)
                 aEvent.SourceWindow = VCLUnoHelper::GetInterface( m_pEditWin );
                 aEvent.ExecutePosition.X = aPixPos.X();
                 aEvent.ExecutePosition.Y = aPixPos.Y();
-                VclPtr<Menu> pMenu;
+                ScopedVclPtr<Menu> pMenu;
 
                 OUString sMenuName  = bUseGrammarContext ?
                     OUString("private:resource/GrammarContextMenu") : OUString("private:resource/SpellContextMenu");
