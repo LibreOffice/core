@@ -301,7 +301,6 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     // Set the StyleSheetPool for HitTestOutliner.
     // The link to the StyleRequest handler of the document is set later, in
     // NewOrLoadCompleted, because only then do all the templates exist.
-    SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
     pHitTestOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()) );
 
     SetCalcFieldValueHdl( pHitTestOutliner );
