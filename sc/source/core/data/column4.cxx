@@ -620,6 +620,9 @@ void ScColumn::CreateAllNoteCaptions()
 
 void ScColumn::ForgetNoteCaptions( SCROW nRow1, SCROW nRow2, bool bPreserveData )
 {
+    if (maCellNotes.empty())
+        return;
+
     if (!ValidRow(nRow1) || !ValidRow(nRow2))
         return;
 
