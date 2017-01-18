@@ -303,8 +303,6 @@ void ShapeController::executeDispatch_FormatArea()
                     pFact->CreateSvxAreaTabDialog( pParent, &aAttr, &pDrawModelWrapper->getSdrModel(), true ) );
                 if ( pDlg.get() )
                 {
-                    SfxItemPool& rItemPool = pDrawViewWrapper->GetModel()->GetItemPool();
-                    SfxItemSet aSet( rItemPool, rItemPool.GetFirstWhich(), rItemPool.GetLastWhich() );
                     if ( pDlg->Execute() == RET_OK )
                     {
                         const SfxItemSet* pOutAttr = pDlg->GetOutputItemSet();
