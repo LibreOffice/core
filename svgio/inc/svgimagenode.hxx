@@ -22,6 +22,7 @@
 
 #include <svgnode.hxx>
 #include <svgstyleattributes.hxx>
+#include <memory>
 
 namespace svgio
 {
@@ -35,7 +36,8 @@ namespace svgio
 
             /// variable scan values, dependent of given XAttributeList
             SvgAspectRatio          maSvgAspectRatio;
-            basegfx::B2DHomMatrix*  mpaTransform;
+            std::unique_ptr<basegfx::B2DHomMatrix>
+                                    mpaTransform;
             SvgNumber               maX;
             SvgNumber               maY;
             SvgNumber               maWidth;
@@ -58,8 +60,8 @@ namespace svgio
             virtual void decomposeSvgNode(drawinglayer::primitive2d::Primitive2DContainer& rTarget, bool bReferenced) const override;
 
             /// transform content, set if found in current context
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset( new basegfx::B2DHomMatrix(*pMatrix) ); }
 
             /// x content, set if found in current context
             const SvgNumber& getX() const { return maX; }

@@ -22,6 +22,7 @@
 
 #include <svgnode.hxx>
 #include <svgstyleattributes.hxx>
+#include <memory>
 
 namespace svgio
 {
@@ -40,7 +41,7 @@ namespace svgio
             SvgNumber               maHeight;
             SvgNumber               maRx;
             SvgNumber               maRy;
-            basegfx::B2DHomMatrix*  mpaTransform;
+            std::unique_ptr<basegfx::B2DHomMatrix>  mpaTransform;
 
         public:
             SvgRectNode(
@@ -71,8 +72,8 @@ namespace svgio
             const SvgNumber& getRy() const { return maRy; }
 
             /// transform content, set if found in current context
-            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform; }
-            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { if(mpaTransform) delete mpaTransform; mpaTransform = nullptr; if(pMatrix) mpaTransform = new basegfx::B2DHomMatrix(*pMatrix); }
+            const basegfx::B2DHomMatrix* getTransform() const { return mpaTransform.get(); }
+            void setTransform(const basegfx::B2DHomMatrix* pMatrix) { mpaTransform.reset(); if(pMatrix) mpaTransform.reset( new basegfx::B2DHomMatrix(*pMatrix) ); }
         };
     } // end of namespace svgreader
 } // end of namespace svgio
