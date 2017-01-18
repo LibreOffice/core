@@ -44,12 +44,11 @@ StgPage::StgPage( short nSize, sal_Int32 nPage )
     OSL_ENSURE( mnSize >= 512, "Unexpected page size is provided!" );
     // We will write this data to a permanent file later
     // best to clear if first.
-    memset( mpData, 0, mnSize );
+    memset( mpData.get(), 0, mnSize );
 }
 
 StgPage::~StgPage()
 {
-    delete [] mpData;
 }
 
 rtl::Reference< StgPage > StgPage::Create( short nData, sal_Int32 nPage )
