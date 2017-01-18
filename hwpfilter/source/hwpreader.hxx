@@ -90,8 +90,7 @@ public:
     }
 private:
     Reference< XDocumentHandler > m_rxDocumentHandler;
-    Reference< XAttributeList > rList;
-    AttributeListImpl *pList;
+    rtl::Reference<AttributeListImpl> mxList;
     HWPFile hwpfile;
     HwpReaderPrivate *d;
 private:
