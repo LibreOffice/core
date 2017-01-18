@@ -1807,6 +1807,10 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
             SAL_WARN("sw.core", "Tables in footnotes are not truly supported");
             return false;
         }
+        // tdf#104181
+        assert(pOldBoss);
+        if (!pOldBoss)
+            return false;
         return static_cast<SwContentFrame&>(m_rThis).MoveFootnoteCntFwd( bMakePage, pOldBoss );
     }
 
@@ -1849,6 +1853,10 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 
     if ( pNewUpper )
     {
+        // tdf#104181
+        assert(pOldBoss);
+        if (!pOldBoss)
+            return false;
         PROTOCOL_ENTER( &m_rThis, PROT::MoveFwd, DbgAction::NONE, nullptr );
         SwPageFrame *pOldPage = pOldBoss->FindPageFrame();
         // We move ourself and all the direct successors before the
