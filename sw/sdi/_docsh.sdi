@@ -38,7 +38,7 @@ interface BaseTextDocument
     SID_STYLE_EDIT
     [
         ExecMethod = ExecStyleSheet ;
-        StateMethod = NoState ;
+        StateMethod = StateStyleSheet ;
     ]
 
     SID_STYLE_DELETE
