@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/FetchResult.hpp>
 #include <com/sun/star/ucb/XContentIdentifierMapping.hpp>
 #include <com/sun/star/ucb/XCachedContentResultSetFactory.hpp>
+#include <rtl/ref.hxx>
 
 #define CACHED_CONTENT_RESULTSET_SERVICE_NAME "com.sun.star.ucb.CachedContentResultSet"
 #define CACHED_CONTENT_RESULTSET_FACTORY_NAME "com.sun.star.ucb.CachedContentResultSetFactory"
@@ -119,10 +120,8 @@ class CachedContentResultSet
     css::uno::Reference< css::ucb::XFetchProviderForContentAccess >
                             m_xFetchProviderForContentAccess; //XFetchProviderForContentAccess-interface from m_xOrigin
 
-    //my PropertySetInfo
-    css::uno::Reference< css::beans::XPropertySetInfo >
-                            m_xMyPropertySetInfo;//holds m_pMyPropSetInfo alive
-    CCRS_PropertySetInfo*   m_pMyPropSetInfo;
+    rtl::Reference< CCRS_PropertySetInfo >
+                            m_xMyPropertySetInfo;
 
 
     css::uno::Reference< css::ucb::XContentIdentifierMapping >

@@ -667,9 +667,6 @@ CachedContentResultSet::CachedContentResultSet(
                 , m_xFetchProvider( nullptr )
                 , m_xFetchProviderForContentAccess( nullptr )
 
-                , m_xMyPropertySetInfo( nullptr )
-                , m_pMyPropSetInfo( nullptr )
-
                 , m_xContentIdentifierMapping( xContentIdentifierMapping )
                 , m_nRow( 0 ) // Position is one-based. Zero means: before first element.
                 , m_bAfterLast( false )
@@ -917,11 +914,10 @@ void SAL_CALL CachedContentResultSet
     ContentResultSetWrapper::impl_initPropertySetInfo();
 
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
-    if( m_pMyPropSetInfo )
+    if( m_xMyPropertySetInfo.is() )
         return;
-    m_pMyPropSetInfo = new CCRS_PropertySetInfo( m_xPropertySetInfo );
-    m_xMyPropertySetInfo = m_pMyPropSetInfo;
-    m_xPropertySetInfo = m_xMyPropertySetInfo;
+    m_xMyPropertySetInfo = new CCRS_PropertySetInfo( m_xPropertySetInfo );
+    m_xPropertySetInfo = m_xMyPropertySetInfo.get();
 }
 
 
@@ -1018,7 +1014,7 @@ void SAL_CALL CachedContentResultSet
         throw UnknownPropertyException();
     }
 
-    Property aProp = m_pMyPropSetInfo->getPropertyByName( aPropertyName );
+    Property aProp = m_xMyPropertySetInfo->getPropertyByName( aPropertyName );
         //throws UnknownPropertyException, if so
 
     if( aProp.Attributes & PropertyAttribute::READONLY )
@@ -1053,7 +1049,7 @@ void SAL_CALL CachedContentResultSet
             aEvt.Source =  static_cast< XPropertySet * >( this );
             aEvt.PropertyName = aPropertyName;
             aEvt.Further = false;
-            aEvt.PropertyHandle = m_pMyPropSetInfo->
+            aEvt.PropertyHandle = m_xMyPropertySetInfo->
                                     m_nFetchDirectionPropertyHandle;
             aEvt.OldValue <<= m_nFetchDirection;
             aEvt.NewValue <<= nNew;
@@ -1085,7 +1081,7 @@ void SAL_CALL CachedContentResultSet
             aEvt.Source =  static_cast< XPropertySet * >( this );
             aEvt.PropertyName = aPropertyName;
             aEvt.Further = false;
-            aEvt.PropertyHandle = m_pMyPropSetInfo->
+            aEvt.PropertyHandle = m_xMyPropertySetInfo->
                                     m_nFetchSizePropertyHandle;
             aEvt.OldValue <<= m_nFetchSize;
             aEvt.NewValue <<= nNew;
@@ -1127,7 +1123,7 @@ Any SAL_CALL CachedContentResultSet
         throw UnknownPropertyException();
     }
 
-    m_pMyPropSetInfo->getPropertyByName( rPropertyName );
+    m_xMyPropertySetInfo->getPropertyByName( rPropertyName );
         //throws UnknownPropertyException, if so
 
     Any aValue;
