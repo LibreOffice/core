@@ -80,7 +80,7 @@ class HTMLAttr
     bool bLikePara : 1; // Attribut ueber dem gesamten Absatz setzen
     bool bValid : 1;    // ist das Attribut gueltig?
 
-    SfxPoolItem* pItem;
+    std::unique_ptr<SfxPoolItem> pItem;
     HTMLAttr *pNext;   // noch zu schliessene Attrs mit unterschiedl. Werten
     HTMLAttr *pPrev;   // bereits geschlossene aber noch nicht gesetze Attrs
     HTMLAttr **ppHead; // der Listenkopf

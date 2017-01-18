@@ -3778,7 +3778,6 @@ SwXAutoStylesEnumerator::SwXAutoStylesEnumerator( SwDoc* pDoc, IStyleAccess::SwA
 
 SwXAutoStylesEnumerator::~SwXAutoStylesEnumerator()
 {
-    delete m_pImpl;
 }
 
 void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
@@ -3786,8 +3785,7 @@ void SwXAutoStylesEnumerator::Modify( const SfxPoolItem* pOld, const SfxPoolItem
     ClientModify(this, pOld, pNew);
     if(!GetRegisteredIn())
     {
-        delete m_pImpl;
-        m_pImpl = nullptr;
+        m_pImpl.reset();
     }
 }
 

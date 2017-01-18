@@ -37,7 +37,7 @@ SwUndoInserts::SwUndoInserts( SwUndoId nUndoId, const SwPaM& rPam )
     pTextFormatColl( nullptr ), pLastNdColl(nullptr), pFrameFormats( nullptr ), pRedlData( nullptr ),
     bSttWasTextNd( true ), nNdDiff( 0 ), nSetPos( 0 )
 {
-    pHistory = new SwHistory;
+    pHistory.reset( new SwHistory );
     SwDoc* pDoc = rPam.GetDoc();
 
     SwTextNode* pTextNd = rPam.GetPoint()->nNode.GetNode().GetTextNode();

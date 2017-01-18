@@ -209,7 +209,7 @@ struct WW8PLCFxSave1
 class WW8PLCFspecial        // iterator for PLCFs
 {
 private:
-    sal_Int32* pPLCF_PosArray;  ///< pointer to Pos-array and to the whole structure
+    std::unique_ptr<sal_Int32[]> pPLCF_PosArray;  ///< pointer to Pos-array and to the whole structure
     sal_uInt8*  pPLCF_Contents;  ///< pointer to content-array-part of Pos-array
     long nIMax;             ///< number of elements
     long nIdx;              ///< marker where we currently are
@@ -221,7 +221,6 @@ private:
 public:
     WW8PLCFspecial(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
         sal_uInt32 nStruct);
-    ~WW8PLCFspecial() { delete[] pPLCF_PosArray; }
     long GetIdx() const { return nIdx; }
     void SetIdx( long nI ) { nIdx = nI; }
     long GetIMax() const { return nIMax; }
@@ -283,7 +282,7 @@ private:
 class WW8PLCF                       // Iterator for PLCFs
 {
 private:
-    WW8_CP* pPLCF_PosArray; // pointer to Pos-array and the whole structure
+    std::unique_ptr<WW8_CP[]> pPLCF_PosArray; // pointer to Pos-array and the whole structure
     sal_uInt8* pPLCF_Contents;   // pointer to content-array-part of Pos-array
     sal_Int32 nIMax;            // number of elements
     sal_Int32 nIdx;
@@ -310,7 +309,6 @@ public:
     WW8PLCF(SvStream& rSt, WW8_FC nFilePos, sal_Int32 nPLCF, int nStruct,
         WW8_CP nStartPos, sal_Int32 nPN, sal_Int32 ncpN);
 
-    ~WW8PLCF(){ delete[] pPLCF_PosArray; }
     sal_Int32 GetIdx() const { return nIdx; }
     void SetIdx( sal_Int32 nI ) { nIdx = nI; }
     sal_Int32 GetIMax() const { return nIMax; }
@@ -331,7 +329,7 @@ class WW8PLCFpcd
 {
     friend class WW8PLCFpcd_Iter;
 
-    sal_Int32* pPLCF_PosArray;  // pointer to Pos-array and the whole structure
+    std::unique_ptr<sal_Int32[]> pPLCF_PosArray;  // pointer to Pos-array and the whole structure
     sal_uInt8*  pPLCF_Contents;  // pointer to content-array-part of Pos-array
     long nIMax;
     sal_uInt32 nStru;
@@ -342,7 +340,6 @@ class WW8PLCFpcd
 public:
     WW8PLCFpcd(SvStream* pSt, sal_uInt32 nFilePos, sal_uInt32 nPLCF,
         sal_uInt32 nStruct);
-    ~WW8PLCFpcd(){ delete[] pPLCF_PosArray; }
 };
 
 /* multiple WW8PLCFpcd_Iter may point to the same WW8PLCFpcd !!!  */
@@ -1560,12 +1557,11 @@ private:
     WW8Fonts(const WW8Fonts&) = delete;
     WW8Fonts& operator=(const WW8Fonts&) = delete;
 protected:
-    WW8_FFN* pFontA;    // Array of Pointers to Font Description
+    std::unique_ptr<WW8_FFN[]> pFontA;    // Array of Pointers to Font Description
     sal_uInt16 nMax;        // Array-Size
 
 public:
     WW8Fonts( SvStream& rSt, WW8Fib& rFib );
-    ~WW8Fonts() { delete[] pFontA; }
     const WW8_FFN* GetFont( sal_uInt16 nNum ) const;
     sal_uInt16 GetMax() const { return nMax; }
 };

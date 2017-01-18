@@ -981,7 +981,6 @@ PlfAcd::PlfAcd() :
 
 PlfAcd::~PlfAcd()
 {
-        delete[] rgacd;
 }
 
 bool PlfAcd::Read( SvStream &rS)
@@ -1000,7 +999,7 @@ bool PlfAcd::Read( SvStream &rS)
     }
     if (iMac)
     {
-        rgacd = new Acd[ iMac ];
+        rgacd.reset( new Acd[ iMac ] );
         for ( sal_Int32 index = 0; index < iMac; ++index )
         {
             if ( !rgacd[ index ].Read( rS ) )
@@ -1033,7 +1032,6 @@ PlfKme::PlfKme() :
 
 PlfKme::~PlfKme()
 {
-        delete[] rgkme;
 }
 
 bool PlfKme::Read(SvStream &rS)
@@ -1044,7 +1042,7 @@ bool PlfKme::Read(SvStream &rS)
     rS.ReadInt32( iMac );
     if ( iMac )
     {
-        rgkme = new Kme[ iMac ];
+        rgkme.reset( new Kme[ iMac ] );
         for( sal_Int32 index=0; index<iMac; ++index )
         {
             if ( !rgkme[ index ].Read( rS ) )

@@ -232,9 +232,8 @@ SwUINumRuleItem::SwUINumRuleItem( const SwUINumRuleItem& rItem )
 {
 }
 
- SwUINumRuleItem::~SwUINumRuleItem()
+SwUINumRuleItem::~SwUINumRuleItem()
 {
-    delete pRule;
 }
 
 SfxPoolItem*  SwUINumRuleItem::Clone( SfxItemPool * /*pPool*/ ) const

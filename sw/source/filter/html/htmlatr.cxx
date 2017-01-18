@@ -296,8 +296,8 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
 
     if( pReferenceFormat || nDeep==0 )
     {
-        pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                       pFormat->GetAttrSet().GetRanges() );
+        pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                       pFormat->GetAttrSet().GetRanges() ) );
         // if the differences to a different style are supposed to be
         // written, hard attribute is necessary. This is always true
         // for styles that are not derived from HTML-tag styles.
@@ -311,8 +311,7 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         // later on
         if( !pItemSet->Count() )
         {
-            delete pItemSet;
-            pItemSet = nullptr;
+            pItemSet.reset();
         }
     }
 
@@ -361,8 +360,8 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
                     if( rSet != rRef )
                     {
                         if( !pItemSet )
-                            pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                                       pFormat->GetAttrSet().GetRanges() );
+                            pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                                       pFormat->GetAttrSet().GetRanges() ) );
                         pItemSet->Put( rSet );
                     }
                 }
@@ -391,8 +390,8 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
         if( eLang != eDfltLang )
         {
             if( !pItemSet )
-                pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                           pFormat->GetAttrSet().GetRanges() );
+                pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                           pFormat->GetAttrSet().GetRanges() ) );
             pItemSet->Put( rLang );
         }
 
@@ -408,8 +407,8 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
                 if( rTmpLang.GetLanguage() != eLang )
                 {
                     if( !pItemSet )
-                        pItemSet = new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
-                                                   pFormat->GetAttrSet().GetRanges() );
+                        pItemSet.reset( new SfxItemSet( *pFormat->GetAttrSet().GetPool(),
+                                                   pFormat->GetAttrSet().GetRanges() ) );
                     pItemSet->Put( rTmpLang );
                 }
             }
@@ -419,7 +418,6 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
 
 SwHTMLFormatInfo::~SwHTMLFormatInfo()
 {
-    delete pItemSet;
 }
 
 void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
@@ -1027,14 +1025,14 @@ class HTMLStartEndPos
 {
     sal_Int32 nStart;
     sal_Int32 nEnd;
-    SfxPoolItem* pItem;
+    std::unique_ptr<SfxPoolItem> pItem;
 
 public:
 
     HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt, sal_Int32 nE );
     ~HTMLStartEndPos();
 
-    const SfxPoolItem *GetItem() const { return pItem; }
+    const SfxPoolItem *GetItem() const { return pItem.get(); }
 
     void SetStart( sal_Int32 nStt ) { nStart = nStt; }
     sal_Int32 GetStart() const { return nStart; }
@@ -1052,7 +1050,6 @@ HTMLStartEndPos::HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt,
 
 HTMLStartEndPos::~HTMLStartEndPos()
 {
-    delete pItem;
 }
 
 typedef std::vector<HTMLStartEndPos *> HTMLStartEndPositions;

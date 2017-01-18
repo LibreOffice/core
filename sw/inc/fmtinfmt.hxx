@@ -38,7 +38,7 @@ class SW_DLLPUBLIC SwFormatINetFormat: public SfxPoolItem
     OUString msINetFormatName;
     OUString msVisitedFormatName;
     OUString msHyperlinkName;        ///< Name of the link.
-    SvxMacroTableDtor* mpMacroTable;
+    std::unique_ptr<SvxMacroTableDtor> mpMacroTable;
     SwTextINetFormat* mpTextAttr;         ///< My TextAttribute.
     sal_uInt16 mnINetFormatId;
     sal_uInt16 mnVisitedFormatId;
@@ -126,7 +126,7 @@ public:
     void SetMacroTable( const SvxMacroTableDtor* pTable );
     const SvxMacroTableDtor* GetMacroTable() const
     {
-        return mpMacroTable;
+        return mpMacroTable.get();
     }
 
     /// Macro getter and setter.

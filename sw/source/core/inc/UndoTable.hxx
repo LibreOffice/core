@@ -124,7 +124,7 @@ public:
 class SwUndoAttrTable : public SwUndo
 {
     sal_uLong nSttNode;
-    SaveTable* pSaveTable;
+    std::unique_ptr<SaveTable> pSaveTable;
     bool bClearTabCol : 1;
 
 public:
@@ -142,7 +142,7 @@ class SwUndoTableAutoFormat : public SwUndo
 {
     OUString m_TableStyleName;
     sal_uLong nSttNode;
-    SaveTable* pSaveTable;
+    std::unique_ptr<SaveTable> pSaveTable;
     std::vector< std::shared_ptr<SwUndoTableNumFormat> > m_Undos;
     bool bSaveContentAttr;
     sal_uInt16 m_nRepeatHeading;
@@ -164,7 +164,7 @@ using SwUndoSaveSections = std::vector<std::unique_ptr<SwUndoSaveSection>>;
 
 class SwUndoTableNdsChg : public SwUndo
 {
-    SaveTable* pSaveTable;
+    std::unique_ptr<SaveTable> pSaveTable;
     std::set<sal_uLong> m_Boxes;
     struct BoxMove
     {
@@ -306,7 +306,7 @@ public:
 
 class SwUndoCpyTable : public SwUndo
 {
-    SwUndoDelete* pDel;
+    std::unique_ptr<SwUndoDelete> pDel;
     sal_uLong nTableNode;
 
 public:

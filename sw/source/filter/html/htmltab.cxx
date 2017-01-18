@@ -107,7 +107,7 @@ class HTMLTableContext
 
     SwTableNode *pTableNd;            // table node
     SwFrameFormat *pFrameFormat;              // der Fly frame::Frame, containing the table
-    SwPosition *pPos;               // position behind the table
+    std::unique_ptr<SwPosition> pPos;               // position behind the table
 
     size_t nContextStAttrMin;
     size_t nContextStMin;
@@ -145,7 +145,7 @@ public:
     void SavePREListingXMP( SwHTMLParser& rParser );
     void RestorePREListingXMP( SwHTMLParser& rParser );
 
-    SwPosition *GetPos() const { return pPos; }
+    SwPosition *GetPos() const { return pPos.get(); }
 
     void SetTableNode( SwTableNode *pNd ) { pTableNd = pNd; }
     SwTableNode *GetTableNode() const { return pTableNd; }
@@ -2715,7 +2715,6 @@ void HTMLTable::MakeParentContents()
 
 HTMLTableContext::~HTMLTableContext()
 {
-    delete pPos;
 }
 
 void HTMLTableContext::SavePREListingXMP( SwHTMLParser& rParser )
@@ -3026,7 +3025,7 @@ class CellSaveStruct : public SectionSaveStruct
 
     HTMLTableCnts* m_pCnts;           // Liste aller Inhalte
     HTMLTableCnts* m_pCurrCnts;   // der aktuelle Inhalt oder 0
-    SwNodeIndex *m_pNoBreakEndNodeIndex;// Absatz-Index eines </NOBR>
+    std::unique_ptr<SwNodeIndex> m_pNoBreakEndNodeIndex;// Absatz-Index eines </NOBR>
 
     double m_nValue;
 
@@ -3050,8 +3049,6 @@ public:
 
     CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable, bool bHd,
                      bool bReadOpt );
-
-    virtual ~CellSaveStruct() override;
 
     void AddContents( HTMLTableCnts *pNewCnts );
     HTMLTableCnts *GetFirstContents() { return m_pCnts; }
@@ -3222,11 +3219,6 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
     rParser.PushContext( pCntxt );
 }
 
-CellSaveStruct::~CellSaveStruct()
-{
-    delete m_pNoBreakEndNodeIndex;
-}
-
 void CellSaveStruct::AddContents( HTMLTableCnts *pNewCnts )
 {
     if( m_pCnts )
@@ -3295,8 +3287,7 @@ void CellSaveStruct::EndNoBreak( const SwPosition& rPos )
 {
     if( m_bNoBreak )
     {
-        delete m_pNoBreakEndNodeIndex;
-        m_pNoBreakEndNodeIndex = new SwNodeIndex( rPos.nNode );
+        m_pNoBreakEndNodeIndex.reset( new SwNodeIndex( rPos.nNode ) );
         m_nNoBreakEndContentPos = rPos.nContent.GetIndex();
         m_bNoBreak = false;
     }

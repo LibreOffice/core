@@ -138,7 +138,8 @@ public:
 class SwContentType : public SwTypeNumber
 {
     SwWrtShell*         pWrtShell;
-    SwContentArr*       pMember;            // array for content
+    std::unique_ptr<SwContentArr>
+                        pMember;            // array for content
     OUString            sContentTypeName;   // name of content type
     OUString            sSingleContentTypeName; // name of content type, singular
     OUString            sTypeToken;         // attachment for URL

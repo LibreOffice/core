@@ -79,7 +79,6 @@ SwMasterUsrPref::SwMasterUsrPref(bool bWeb) :
 
 SwMasterUsrPref::~SwMasterUsrPref()
 {
-    delete m_pWebColorConfig;
 }
 
 Sequence<OUString> SwContentViewConfig::GetPropertyNames()

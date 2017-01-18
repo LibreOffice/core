@@ -2808,7 +2808,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 {
                 case RES_FLTR_BOOKMARK: // insert bookmark
                     {
-                        const OUString sName( static_cast<SfxStringItem*>(pAttr->pItem)->GetValue() );
+                        const OUString sName( static_cast<SfxStringItem*>(pAttr->pItem.get())->GetValue() );
                         IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
                         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
                         if( ppBkmk != pMarkAccess->getAllMarksEnd() &&
@@ -2834,7 +2834,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     {
                         sal_uInt16 nFieldWhich =
                             pPostIts
-                            ? static_cast<const SwFormatField *>(pAttr->pItem)->GetField()->GetTyp()->Which()
+                            ? static_cast<const SwFormatField *>(pAttr->pItem.get())->GetField()->GetTyp()->Which()
                             : 0;
                         if( pPostIts && (RES_POSTITFLD == nFieldWhich ||
                                          RES_SCRIPTFLD == nFieldWhich) )
@@ -2882,7 +2882,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     // ggfs. ein Bookmark anspringen
                     if( RES_TXTATR_INETFMT == nWhich &&
                         JUMPTO_MARK == m_eJumpTo &&
-                        m_sJmpMark == static_cast<SwFormatINetFormat*>(pAttr->pItem)->GetName() )
+                        m_sJmpMark == static_cast<SwFormatINetFormat*>(pAttr->pItem.get())->GetName() )
                     {
                         m_bChkJumpMark = true;
                         m_eJumpTo = JUMPTO_NONE;
@@ -5427,11 +5427,11 @@ HTMLAttr::HTMLAttr( const SwPosition& rPos, const SfxPoolItem& rItem,
     bInsAtStart( true ),
     bLikePara( false ),
     bValid( true ),
+    pItem( rItem.Clone() ),
     pNext( nullptr ),
     pPrev( nullptr ),
     ppHead( ppHd )
 {
-    pItem = rItem.Clone();
 }
 
 HTMLAttr::HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
@@ -5443,16 +5443,15 @@ HTMLAttr::HTMLAttr( const HTMLAttr &rAttr, const SwNodeIndex &rEndPara,
     bInsAtStart( rAttr.bInsAtStart ),
     bLikePara( rAttr.bLikePara ),
     bValid( rAttr.bValid ),
+    pItem( rAttr.pItem->Clone() ),
     pNext( nullptr ),
     pPrev( nullptr ),
     ppHead( ppHd )
 {
-    pItem = rAttr.pItem->Clone();
 }
 
 HTMLAttr::~HTMLAttr()
 {
-    delete pItem;
 }
 
 HTMLAttr *HTMLAttr::Clone(const SwNodeIndex& rEndPara, sal_Int32 nEndCnt) const

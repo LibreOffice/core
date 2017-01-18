@@ -75,7 +75,8 @@ struct SpellState
     bool                m_bOtherSpelled; // frames, footnotes, headers and footers spelled
     bool                m_bStartedInOther; // started the spelling inside of the _other_ area
     bool                m_bStartedInSelection; // there was an initial text selection
-    SwPaM*              pOtherCursor; // position where the spelling inside the _other_ area started
+    std::unique_ptr<SwPaM>
+                        pOtherCursor; // position where the spelling inside the _other_ area started
     bool                m_bDrawingsSpelled; // all drawings spelled
     Reference<XTextRange> m_xStartRange; // text range that marks the start of spelling
     const SdrObject*    m_pStartDrawing; // draw text object spelling started in
@@ -118,8 +119,6 @@ struct SpellState
         m_bTextObjectsCollected(false)
         {}
 
-    ~SpellState() {delete pOtherCursor;}
-
     // reset state in ::InvalidateSpellDialog
     void    Reset()
             {   m_bInitialCall = true;
@@ -130,8 +129,7 @@ struct SpellState
                 m_bTextObjectsCollected = false;
                 m_aTextObjects.clear();
                 m_bStartedInOther = false;
-                delete pOtherCursor;
-                pOtherCursor = nullptr;
+                pOtherCursor.reset();
             }
 };
 
@@ -230,7 +228,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                 m_pSpellState->m_SpellStartPosition = bOtherText ? SPELL_START_OTHER : SPELL_START_BODY;
                 if(bOtherText)
                 {
-                    m_pSpellState->pOtherCursor = new SwPaM(*pWrtShell->GetCursor()->GetPoint());
+                    m_pSpellState->pOtherCursor.reset( new SwPaM(*pWrtShell->GetCursor()->GetPoint()) );
                     m_pSpellState->m_bStartedInOther = true;
                     pWrtShell->SpellStart( SwDocPositions::OtherStart, SwDocPositions::OtherEnd, SwDocPositions::Curr );
                 }
@@ -329,8 +327,7 @@ The code below would only be part of the solution.
                         m_pSpellState->m_bStartedInOther = false;
                         pWrtShell->SetSelection(*m_pSpellState->pOtherCursor);
                         pWrtShell->SpellEnd();
-                        delete m_pSpellState->pOtherCursor;
-                        m_pSpellState->pOtherCursor = nullptr;
+                        m_pSpellState->pOtherCursor.reset();
                         pWrtShell->SpellStart(SwDocPositions::OtherStart, SwDocPositions::Curr, SwDocPositions::OtherStart );
                         (void)pWrtShell->SpellSentence(aRet, m_bIsGrammarCheckingOn);
                     }

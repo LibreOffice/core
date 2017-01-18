@@ -194,18 +194,16 @@ SwFormatINetFormat::SwFormatINetFormat( const SwFormatINetFormat& rAttr )
     , msINetFormatName( rAttr.msINetFormatName )
     , msVisitedFormatName( rAttr.msVisitedFormatName )
     , msHyperlinkName( rAttr.msHyperlinkName )
-    , mpMacroTable( nullptr )
     , mpTextAttr( nullptr )
     , mnINetFormatId( rAttr.mnINetFormatId )
     , mnVisitedFormatId( rAttr.mnVisitedFormatId )
 {
     if ( rAttr.GetMacroTable() )
-        mpMacroTable = new SvxMacroTableDtor( *rAttr.GetMacroTable() );
+        mpMacroTable.reset( new SvxMacroTableDtor( *rAttr.GetMacroTable() ) );
 }
 
 SwFormatINetFormat::~SwFormatINetFormat()
 {
-    delete mpMacroTable;
 }
 
 bool SwFormatINetFormat::operator==( const SfxPoolItem& rAttr ) const
@@ -223,7 +221,7 @@ bool SwFormatINetFormat::operator==( const SfxPoolItem& rAttr ) const
     if( !bRet )
         return false;
 
-    const SvxMacroTableDtor* pOther = static_cast<const SwFormatINetFormat&>(rAttr).mpMacroTable;
+    const SvxMacroTableDtor* pOther = static_cast<const SwFormatINetFormat&>(rAttr).mpMacroTable.get();
     if( !mpMacroTable )
         return ( !pOther || pOther->empty() );
     if( !pOther )
@@ -247,19 +245,18 @@ void SwFormatINetFormat::SetMacroTable( const SvxMacroTableDtor* pNewTable )
         if( mpMacroTable )
             *mpMacroTable = *pNewTable;
         else
-            mpMacroTable = new SvxMacroTableDtor( *pNewTable );
+            mpMacroTable.reset( new SvxMacroTableDtor( *pNewTable ) );
     }
     else
     {
-        delete mpMacroTable;
-        mpMacroTable = nullptr;
+        mpMacroTable.reset();
     }
 }
 
 void SwFormatINetFormat::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
     if( !mpMacroTable )
-        mpMacroTable = new SvxMacroTableDtor;
+        mpMacroTable.reset( new SvxMacroTableDtor );
 
     mpMacroTable->Insert( nEvent, rMacro );
 }

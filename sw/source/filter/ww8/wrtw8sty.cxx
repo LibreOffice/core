@@ -155,8 +155,8 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
                                          (bListStyles ? m_rExport.m_pDoc->GetNumRuleTable().size() - 1 : 0);
 
     // somewhat generous ( free for up to 15 )
-    m_pFormatA = new SwFormat*[ nAlloc ];
-    memset( m_pFormatA, 0, nAlloc * sizeof( SwFormat* ) );
+    m_pFormatA.reset( new SwFormat*[ nAlloc ] );
+    memset( m_pFormatA.get(), 0, nAlloc * sizeof( SwFormat* ) );
     memset( m_aHeadingParagraphStyles, -1 , MAXLEVEL * sizeof( sal_uInt16));
 
     BuildStylesTable();
@@ -165,7 +165,6 @@ MSWordStyles::MSWordStyles( MSWordExportBase& rExport, bool bListStyles )
 
 MSWordStyles::~MSWordStyles()
 {
-    delete[] m_pFormatA;
 }
 
 // Sty_SetWWSlot() dependencies for the styles -> zero is allowed
@@ -1029,7 +1028,6 @@ MSWordSections::~MSWordSections()
 
 WW8_WrPlcSepx::~WW8_WrPlcSepx()
 {
-    delete pTextPos;
 }
 
 bool MSWordSections::HeaderFooterWritten()
@@ -1763,7 +1761,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
     sal_uLong nCpStart = rWrt.Fc2Cp( rWrt.Strm().Tell() );
 
     OSL_ENSURE( !pTextPos, "who set the pointer?" );
-    pTextPos = new WW8_WrPlc0( nCpStart );
+    pTextPos.reset( new WW8_WrPlc0( nCpStart ) );
 
     WriteFootnoteEndText( rWrt, nCpStart );
     CheckForFacinPg( rWrt );
@@ -1803,8 +1801,7 @@ bool WW8_WrPlcSepx::WriteKFText( WW8Export& rWrt )
     }
     else
     {
-        delete pTextPos;
-        pTextPos = nullptr;
+        pTextPos.reset();
     }
 
     return rWrt.pFib->m_ccpHdr != 0;

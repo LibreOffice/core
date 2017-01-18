@@ -97,7 +97,7 @@ public:
     SwFltPosition m_aMkPos;
     SwFltPosition m_aPtPos;
 
-    SfxPoolItem * pAttr;// Format Attribute
+    std::unique_ptr<SfxPoolItem> pAttr;// Format Attribute
 
     bool bOld;          // to mark Attributes *before* skipping field results
     bool bOpen;     //Entry open, awaiting being closed
@@ -193,7 +193,7 @@ class SwFltAnchorClient;
 class SW_DLLPUBLIC SwFltAnchor : public SfxPoolItem
 {
     SwFrameFormat* pFrameFormat;
-    SwFltAnchorClient * pClient;
+    std::unique_ptr<SwFltAnchorClient> pClient;
 
 public:
     SwFltAnchor(SwFrameFormat* pFlyFormat);

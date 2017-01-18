@@ -211,7 +211,7 @@ struct SwHTMLFormatInfo
     OString aToken;          // das auszugebende Token
     OUString aClass;          // die auszugebende Klasse
 
-    SfxItemSet *pItemSet;   // der auszugebende Attribut-Set
+    std::unique_ptr<SfxItemSet> pItemSet;   // der auszugebende Attribut-Set
 
     sal_Int32 nLeftMargin;      // ein par default-Werte fuer
     sal_Int32 nRightMargin; // Absatz-Vorlagen
@@ -256,7 +256,7 @@ class IDocumentStylePoolAccess;
 class SwHTMLWriter : public Writer
 {
     SwHTMLPosFlyFrames *m_pHTMLPosFlyFrames;
-    SwHTMLNumRuleInfo *m_pNumRuleInfo;// aktuelle Numerierung
+    std::unique_ptr<SwHTMLNumRuleInfo> m_pNumRuleInfo;// aktuelle Numerierung
     SwHTMLNumRuleInfo *m_pNextNumRuleInfo;
     sal_uInt32 m_nHTMLMode;               // Beschreibung der Export-Konfiguration
 

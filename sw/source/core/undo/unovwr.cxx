@@ -49,11 +49,10 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     {
         SwPaM aPam( rPos.nNode, rPos.nContent.GetIndex(),
                     rPos.nNode, rPos.nContent.GetIndex()+1 );
-        pRedlSaveData = new SwRedlineSaveDatas;
+        pRedlSaveData.reset( new SwRedlineSaveDatas );
         if( !FillSaveData( aPam, *pRedlSaveData, false ))
         {
-            delete pRedlSaveData;
-            pRedlSaveData = nullptr;
+            pRedlSaveData.reset();
         }
     }
 
@@ -69,8 +68,8 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
     {
         aDelStr += OUStringLiteral1( pTextNd->GetText()[nSttContent] );
         if( !pHistory )
-            pHistory = new SwHistory;
-        SwRegHistory aRHst( *pTextNd, pHistory );
+            pHistory.reset( new SwHistory );
+        SwRegHistory aRHst( *pTextNd, pHistory.get() );
         pHistory->CopyAttr( pTextNd->GetpSwpHints(), nSttNode, 0,
                             nTextNdLen, false );
         ++rPos.nContent;
@@ -96,7 +95,6 @@ SwUndoOverwrite::SwUndoOverwrite( SwDoc* pDoc, SwPosition& rPos,
 
 SwUndoOverwrite::~SwUndoOverwrite()
 {
-    delete pRedlSaveData;
 }
 
 bool SwUndoOverwrite::CanGrouping( SwDoc* pDoc, SwPosition& rPos,

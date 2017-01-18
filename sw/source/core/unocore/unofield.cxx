@@ -1088,7 +1088,7 @@ struct SwFieldProperties_Impl
     double          fDouble;
     uno::Sequence<beans::PropertyValue> aPropSeq;
     uno::Sequence<OUString> aStrings;
-    util::DateTime* pDateTime;
+    std::unique_ptr<util::DateTime> pDateTime;
 
     sal_Int32       nSubType;
     sal_Int32       nFormat;
@@ -1118,9 +1118,6 @@ struct SwFieldProperties_Impl
         bBool3(false),
         bBool4(true) //Automatic language
         {}
-    ~SwFieldProperties_Impl()
-        {delete pDateTime;}
-
 };
 
 class SwXTextField::Impl
@@ -2277,7 +2274,7 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
         case FIELD_PROP_DATE_TIME :
             if (!m_pImpl->m_pProps->pDateTime)
-                m_pImpl->m_pProps->pDateTime = new util::DateTime;
+                m_pImpl->m_pProps->pDateTime.reset( new util::DateTime );
             rValue >>= (*m_pImpl->m_pProps->pDateTime);
             break;
         case FIELD_PROP_PROP_SEQ:
