@@ -473,12 +473,12 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
     char    aCode[ 5 ];
     Size    aPrefSz;
-    sal_Int16   nSize;
-    sal_Int16   nVersion;
 
     // read header
     rIStm.ReadBytes(aCode, sizeof(aCode));  // Identifier
+    sal_Int16 nSize(0);
     rIStm.ReadInt16( nSize );                                 // Size
+    sal_Int16 nVersion(0);
     rIStm.ReadInt16( nVersion );                              // Version
     sal_Int32 nTmp32(0);
     rIStm.ReadInt32( nTmp32 );
@@ -509,25 +509,39 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
     Point       aPt, aPt1;
     Size        aSz;
     Color       aActionColor;
-    sal_Int32       nTmp, nTmp1, nActionSize;
-    sal_Int32       nActions;
-    sal_Int16       nType;
 
     sal_uInt32  nUnicodeCommentStreamPos = 0;
     sal_Int32       nUnicodeCommentActionNumber = 0;
 
     ImplReadMapMode( rIStm, aMapMode );             // MapMode
-    rIStm.ReadInt32( nActions );                              // Action count
+
+    sal_Int32 nActions(0);
+    rIStm.ReadInt32(nActions);                      // Action count
+    if (nActions < 0)
+    {
+        SAL_WARN("vcl.gdi", "svm claims negative action count (" << nActions << ")");
+        nActions = 0;
+    }
+
+    const size_t nMinActionSize = (sizeof(sal_uInt16) + sizeof(sal_Int32));
+    const size_t nMaxPossibleActions = rIStm.remainingSize() / nMinActionSize;
+    if (static_cast<sal_uInt32>(nActions) > nMaxPossibleActions)
+    {
+        SAL_WARN("vcl.gdi", "svm claims more actions (" << nActions << ") than stream could provide, truncating");
+        nActions = nMaxPossibleActions;
+    }
 
     rMtf.SetPrefSize( aPrefSz );
     rMtf.SetPrefMapMode( aMapMode );
     size_t nLastPolygonAction(0);
 
-    for (sal_Int32 i = 0; i < nActions; ++i)
+    for (sal_Int32 i = 0; i < nActions && rIStm.good(); ++i)
     {
-        rIStm.ReadInt16( nType );
+        sal_Int16 nType(0);
+        rIStm.ReadInt16(nType);
         sal_Int32 nActBegin = rIStm.Tell();
-        rIStm.ReadInt32( nActionSize );
+        sal_Int32 nActionSize(0);
+        rIStm.ReadInt32(nActionSize);
 
         SAL_WARN_IF( ( nType > 33 ) && ( nType < 1024 ), "vcl.gdi", "Unknown GDIMetaAction while converting!" );
 
@@ -663,6 +677,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
             case GDI_RECT_ACTION:
             {
                 ImplReadRect( rIStm, aRect );
+                sal_Int32 nTmp(0), nTmp1(0);
                 rIStm.ReadInt32( nTmp ).ReadInt32( nTmp1 );
 
                 if( nTmp || nTmp1 )
@@ -854,7 +869,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_TEXT_ACTION:
             {
-                sal_Int32       nIndex, nLen;
+                sal_Int32 nIndex(0), nLen(0), nTmp(0);
 
                 ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp );
                 if (nTmp > 0)
@@ -875,7 +890,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_TEXTARRAY_ACTION:
             {
-                sal_Int32   nIndex, nLen, nAryLen;
+                sal_Int32 nIndex(0), nLen(0), nAryLen(0), nTmp(0);
 
                 ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp ).ReadInt32( nAryLen );
                 if (nTmp > 0)
@@ -934,7 +949,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_STRETCHTEXT_ACTION:
             {
-                sal_Int32       nIndex, nLen, nWidth;
+                sal_Int32 nIndex(0), nLen(0), nWidth(0), nTmp(0);
 
                 ReadPair( rIStm, aPt ).ReadInt32( nIndex ).ReadInt32( nLen ).ReadInt32( nTmp ).ReadInt32( nWidth );
                 if (nTmp > 0)
@@ -1087,6 +1102,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
             case GDI_MOVECLIPREGION_ACTION:
             {
+                sal_Int32 nTmp(0), nTmp1(0);
                 rIStm.ReadInt32( nTmp ).ReadInt32( nTmp1 );
                 rMtf.AddAction( new MetaMoveClipRegionAction( nTmp, nTmp1 ) );
             }
