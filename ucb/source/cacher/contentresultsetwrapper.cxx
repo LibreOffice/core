@@ -55,8 +55,7 @@ ContentResultSetWrapper::ContentResultSetWrapper(
                 , m_pPropertyChangeListeners( nullptr )
                 , m_pVetoableChangeListeners( nullptr )
 {
-    m_pMyListenerImpl = new ContentResultSetWrapperListener( this );
-    m_xMyListenerImpl.set( m_pMyListenerImpl );
+    m_xMyListenerImpl = new ContentResultSetWrapperListener( this );
 
     OSL_ENSURE( m_xResultSetOrigin.is(), "XResultSet is required" );
 
@@ -127,7 +126,7 @@ void SAL_CALL ContentResultSetWrapper::impl_init()
     //listen to disposing from Origin:
     Reference< XComponent > xComponentOrigin( m_xResultSetOrigin, UNO_QUERY );
     OSL_ENSURE( xComponentOrigin.is(), "interface XComponent is required" );
-    xComponentOrigin->addEventListener( static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
+    xComponentOrigin->addEventListener( static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
 }
 
 ContentResultSetWrapper::~ContentResultSetWrapper()
@@ -143,7 +142,7 @@ void SAL_CALL ContentResultSetWrapper::impl_deinit()
 {
     //call this at start of destructor of derived class
 
-    m_pMyListenerImpl->impl_OwnerDies();
+    m_xMyListenerImpl->impl_OwnerDies();
 }
 
 //virtual
@@ -361,7 +360,7 @@ void SAL_CALL ContentResultSetWrapper::dispose()
         try
         {
             m_xPropertySetOrigin->removePropertyChangeListener(
-                OUString(), static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
+                OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
         }
         catch( Exception& )
         {
@@ -370,7 +369,7 @@ void SAL_CALL ContentResultSetWrapper::dispose()
         try
         {
             m_xPropertySetOrigin->removeVetoableChangeListener(
-                OUString(), static_cast< XVetoableChangeListener * >( m_pMyListenerImpl ) );
+                OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
         }
         catch( Exception& )
         {
@@ -379,7 +378,7 @@ void SAL_CALL ContentResultSetWrapper::dispose()
 
         Reference< XComponent > xComponentOrigin( m_xResultSetOrigin, UNO_QUERY );
         OSL_ENSURE( xComponentOrigin.is(), "interface XComponent is required" );
-        xComponentOrigin->removeEventListener( static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
+        xComponentOrigin->removeEventListener( static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
     }
 
     if (isCleared)
@@ -595,7 +594,7 @@ void SAL_CALL ContentResultSetWrapper::addPropertyChangeListener( const OUString
         try
         {
             m_xPropertySetOrigin->addPropertyChangeListener(
-                OUString(), static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
+                OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
         }
         catch( Exception& )
         {
@@ -643,7 +642,7 @@ void SAL_CALL ContentResultSetWrapper::addVetoableChangeListener( const OUString
         try
         {
             m_xPropertySetOrigin->addVetoableChangeListener(
-                OUString(), static_cast< XVetoableChangeListener * >( m_pMyListenerImpl ) );
+                OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
         }
         catch( Exception& )
         {
@@ -700,7 +699,7 @@ void SAL_CALL ContentResultSetWrapper::removePropertyChangeListener( const OUStr
         try
         {
             m_xPropertySetOrigin->removePropertyChangeListener(
-                OUString(), static_cast< XPropertyChangeListener * >( m_pMyListenerImpl ) );
+                OUString(), static_cast< XPropertyChangeListener * >( m_xMyListenerImpl.get() ) );
         }
         catch( Exception& )
         {
@@ -756,7 +755,7 @@ void SAL_CALL ContentResultSetWrapper::removeVetoableChangeListener( const OUStr
         try
         {
             m_xPropertySetOrigin->removeVetoableChangeListener(
-                OUString(), static_cast< XVetoableChangeListener * >( m_pMyListenerImpl ) );
+                OUString(), static_cast< XVetoableChangeListener * >( m_xMyListenerImpl.get() ) );
         }
         catch( Exception& )
         {

@@ -21,6 +21,7 @@
 #define INCLUDED_UCB_SOURCE_CACHER_CONTENTRESULTSETWRAPPER_HXX
 
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <ucbhelper/macros.hxx>
 #include <osl/mutex.hxx>
 #include <cppuhelper/weak.hxx>
@@ -76,10 +77,8 @@ protected:
     sal_Int32               m_nForwardOnly;
 
 private:
-    css::uno::Reference< css::beans::XPropertyChangeListener >
+    rtl::Reference<ContentResultSetWrapperListener>
                             m_xMyListenerImpl;
-    ContentResultSetWrapperListener*
-                            m_pMyListenerImpl;
 
     css::uno::Reference< css::sdbc::XResultSetMetaData >
                             m_xMetaDataFromOrigin; //XResultSetMetaData from m_xOrigin
