@@ -21,63 +21,63 @@ Overview of URE installation
 
 ELF platforms (Linux, Solaris, *BSD):
 
-/opt/openoffice.org/ure/LICENSE
-/opt/openoffice.org/ure/THIRDPARTYLICENSEREADME.html
-/opt/openoffice.org/ure/README
-/opt/openoffice.org/ure/bin/uno
-/opt/openoffice.org/ure/bin/regmerge
-/opt/openoffice.org/ure/bin/regview
-/opt/openoffice.org/ure/bin/javaldx
-/opt/openoffice.org/ure/lib/libuno_cppu.so.3
-/opt/openoffice.org/ure/lib/libuno_cppuhelpergcc3.so.3
-/opt/openoffice.org/ure/lib/libuno_purpenvhelpergcc3.so.3
-/opt/openoffice.org/ure/lib/libuno_sal.so.3
-/opt/openoffice.org/ure/lib/libuno_salhelpergcc3.so.3
-/opt/openoffice.org/ure/share/java/unoloader.jar
-/opt/openoffice.org/ure/share/java/juh.jar
-/opt/openoffice.org/ure/share/java/jurt.jar
-/opt/openoffice.org/ure/share/java/ridl.jar
-/opt/openoffice.org/ure/share/misc/types.rdb
-/opt/openoffice.org/ure/share/misc/services.rdb
-/opt/openoffice.org/ure/lib/libxml2.so.2  [external]
-/opt/openoffice.org/ure/bin/uno.bin  [private]
-/opt/openoffice.org/ure/lib/unorc  [private]
-/opt/openoffice.org/ure/lib/libreglo.so  [private]
-/opt/openoffice.org/ure/lib/libstorelo.so  [private]
-/opt/openoffice.org/ure/lib/libunoidllo.so  [private]
-/opt/openoffice.org/ure/lib/libxmlreaderlo.so  [private]
-/opt/openoffice.org/ure/lib/libjvmaccesslo.so  [private]
-/opt/openoffice.org/ure/lib/libjvmfwklo.so  [private]
-/opt/openoffice.org/ure/lib/JREProperties.class  [private]
-/opt/openoffice.org/ure/lib/jvmfwk3rc  [private]
-/opt/openoffice.org/ure/lib/libgcc3_uno.so  [private]
-/opt/openoffice.org/ure/lib/libjava_uno.so  [private]
-/opt/openoffice.org/ure/lib/libunsafe_uno_uno.so  [private]
-/opt/openoffice.org/ure/lib/libaffine_uno_uno.so  [private]
-/opt/openoffice.org/ure/lib/liblog_uno_uno.so  [private]
-/opt/openoffice.org/ure/lib/libjpipe.so  [private]
-/opt/openoffice.org/ure/lib/libjuh.so  [private]
-/opt/openoffice.org/ure/lib/libjuhx.so  [private]
-/opt/openoffice.org/ure/lib/libsal_textenclo.so  [private]
-/opt/openoffice.org/ure/lib/libacceptorlo.so  [private]
-/opt/openoffice.org/ure/lib/libbinaryurplo.so  [private]
-/opt/openoffice.org/ure/lib/libbootstraplo.so  [private]
-/opt/openoffice.org/ure/lib/libconnectorlo.so  [private]
-/opt/openoffice.org/ure/lib/libintrospectionlo.so  [private]
-/opt/openoffice.org/ure/lib/libinvocadaptlo.so  [private]
-/opt/openoffice.org/ure/lib/libinvocationlo.so  [private]
-/opt/openoffice.org/ure/lib/libjavaloaderlo.so  [private]
-/opt/openoffice.org/ure/lib/libjavavmlo.so  [private]
-/opt/openoffice.org/ure/lib/libnamingservicelo.so  [private]
-/opt/openoffice.org/ure/lib/libproxyfaclo.so  [private]
-/opt/openoffice.org/ure/lib/libreflectionlo.so  [private]
-/opt/openoffice.org/ure/lib/libstreamslo.so  [private]
-/opt/openoffice.org/ure/lib/libtextinstreamlo.so  [private]
-/opt/openoffice.org/ure/lib/libtextoutstreamlo.so  [private]
-/opt/openoffice.org/ure/lib/libstocserviceslo.so  [private]
-/opt/openoffice.org/ure/lib/libuuresolverlo.so  [private]
-/opt/openoffice.org/ure/share/java/java_uno.jar  [private]
-/opt/openoffice.org/ure/share/misc/javavendors.xml  [private]
+/opt/libreoffice/ure/LICENSE
+/opt/libreoffice/ure/THIRDPARTYLICENSEREADME.html
+/opt/libreoffice/ure/README
+/opt/libreoffice/ure/bin/uno
+/opt/libreoffice/ure/bin/regmerge
+/opt/libreoffice/ure/bin/regview
+/opt/libreoffice/ure/bin/javaldx
+/opt/libreoffice/ure/lib/libuno_cppu.so.3
+/opt/libreoffice/ure/lib/libuno_cppuhelpergcc3.so.3
+/opt/libreoffice/ure/lib/libuno_purpenvhelpergcc3.so.3
+/opt/libreoffice/ure/lib/libuno_sal.so.3
+/opt/libreoffice/ure/lib/libuno_salhelpergcc3.so.3
+/opt/libreoffice/ure/share/java/unoloader.jar
+/opt/libreoffice/ure/share/java/juh.jar
+/opt/libreoffice/ure/share/java/jurt.jar
+/opt/libreoffice/ure/share/java/ridl.jar
+/opt/libreoffice/ure/share/misc/types.rdb
+/opt/libreoffice/ure/share/misc/services.rdb
+/opt/libreoffice/ure/lib/libxml2.so.2  [external]
+/opt/libreoffice/ure/bin/uno.bin  [private]
+/opt/libreoffice/ure/lib/unorc  [private]
+/opt/libreoffice/ure/lib/libreglo.so  [private]
+/opt/libreoffice/ure/lib/libstorelo.so  [private]
+/opt/libreoffice/ure/lib/libunoidllo.so  [private]
+/opt/libreoffice/ure/lib/libxmlreaderlo.so  [private]
+/opt/libreoffice/ure/lib/libjvmaccesslo.so  [private]
+/opt/libreoffice/ure/lib/libjvmfwklo.so  [private]
+/opt/libreoffice/ure/lib/JREProperties.class  [private]
+/opt/libreoffice/ure/lib/jvmfwk3rc  [private]
+/opt/libreoffice/ure/lib/libgcc3_uno.so  [private]
+/opt/libreoffice/ure/lib/libjava_uno.so  [private]
+/opt/libreoffice/ure/lib/libunsafe_uno_uno.so  [private]
+/opt/libreoffice/ure/lib/libaffine_uno_uno.so  [private]
+/opt/libreoffice/ure/lib/liblog_uno_uno.so  [private]
+/opt/libreoffice/ure/lib/libjpipe.so  [private]
+/opt/libreoffice/ure/lib/libjuh.so  [private]
+/opt/libreoffice/ure/lib/libjuhx.so  [private]
+/opt/libreoffice/ure/lib/libsal_textenclo.so  [private]
+/opt/libreoffice/ure/lib/libacceptorlo.so  [private]
+/opt/libreoffice/ure/lib/libbinaryurplo.so  [private]
+/opt/libreoffice/ure/lib/libbootstraplo.so  [private]
+/opt/libreoffice/ure/lib/libconnectorlo.so  [private]
+/opt/libreoffice/ure/lib/libintrospectionlo.so  [private]
+/opt/libreoffice/ure/lib/libinvocadaptlo.so  [private]
+/opt/libreoffice/ure/lib/libinvocationlo.so  [private]
+/opt/libreoffice/ure/lib/libjavaloaderlo.so  [private]
+/opt/libreoffice/ure/lib/libjavavmlo.so  [private]
+/opt/libreoffice/ure/lib/libnamingservicelo.so  [private]
+/opt/libreoffice/ure/lib/libproxyfaclo.so  [private]
+/opt/libreoffice/ure/lib/libreflectionlo.so  [private]
+/opt/libreoffice/ure/lib/libstreamslo.so  [private]
+/opt/libreoffice/ure/lib/libtextinstreamlo.so  [private]
+/opt/libreoffice/ure/lib/libtextoutstreamlo.so  [private]
+/opt/libreoffice/ure/lib/libstocserviceslo.so  [private]
+/opt/libreoffice/ure/lib/libuuresolverlo.so  [private]
+/opt/libreoffice/ure/share/java/java_uno.jar  [private]
+/opt/libreoffice/ure/share/misc/javavendors.xml  [private]
 
 Windows:
 
@@ -198,7 +198,7 @@ For more details, see the "Deploying a URE" section of this README.
 Deploying a URE
 ---------------
 
-By default, the URE is installed in /opt/openoffice.org/ure on Linux,
+By default, the URE is installed in /opt/libreoffice/ure on Linux,
 Solaris, and *BSD, and in Program Files\URE on Windows. If you
 want, you can override this location when you install the URE, for example, with
 rpm --relocate on Linux.  The URE is designed so that multiple instances of the

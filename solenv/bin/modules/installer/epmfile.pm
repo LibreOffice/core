@@ -1504,7 +1504,7 @@ sub contains_extension_dir
 
     my $contains_extension_dir = 0;
 
-    # d none opt/openoffice.org3/share/extensions/
+    # d none opt/libreoffice/share/extensions/
 
     for ( my $i = 0; $i <= $#{$prototypefile}; $i++ )
     {
@@ -2478,7 +2478,7 @@ sub analyze_rootpath
     if ( $installer::globals::isdebbuild )
     {
         $$relocatablepathref = "";
-        # $$staticpathref is already "/opt/openoffice.org3", no additional $rootpath required.
+        # $$staticpathref is already "/opt/libreoffice", no additional $rootpath required.
     }
 
 }

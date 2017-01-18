@@ -52,7 +52,7 @@ contains the java, javac, and jar executables.  For the minimum version
 requirements, see the SDK Installation Guide ($SDK_HOME/docs/install.html).
 
 - URE_HOME (optional)
-Overwrites the default URE location, that is, /opt/openoffice.org.
+Overwrites the default URE location, that is, /opt/libreoffice.
 
 - GCCS_COMPAT (optional)
 Fixes incompatibility issues between the GCC that was used to build the URE and

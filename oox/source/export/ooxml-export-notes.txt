@@ -183,19 +183,19 @@ Old binary filters (export)
 - odp export
     #0  ZipPackage (this=0x1805e80, xNewFactory=@0x7fffe284e990) at /home/rodo/git/ooxml/package/source/zippackage/ZipPackage.cxx:279
     #1  0x00002aaaadd3dc94 in ZipPackage_createInstance (xMgr=@0x7fffe284e990) at /home/rodo/git/ooxml/package/source/zippackage/ZipPackage.cxx:1546
-    #2  0x00002b0fca7ab6b3 in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
-    #3  0x00002b0fca7a7fda in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
-    #4  0x00002b0fca7a811e in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
-    #5  0x00002b0fca7aa7cc in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
-    #6  0x00002b0fca7aacbe in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
-    #7  0x00002b0fca7aa035 in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
-    #8  0x00002aaaaadae1b3 in ?? () from /opt/openoffice.org/ure/lib/bootstrap.uno.so
-    #9  0x00002aaaaadaa84c in ?? () from /opt/openoffice.org/ure/lib/bootstrap.uno.so
+    #2  0x00002b0fca7ab6b3 in ?? () from /opt/libreoffice/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #3  0x00002b0fca7a7fda in ?? () from /opt/libreoffice/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #4  0x00002b0fca7a811e in ?? () from /opt/libreoffice/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #5  0x00002b0fca7aa7cc in ?? () from /opt/libreoffice/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #6  0x00002b0fca7aacbe in ?? () from /opt/libreoffice/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #7  0x00002b0fca7aa035 in ?? () from /opt/libreoffice/program/../basis-link/program/../ure-link/lib/libuno_cppuhelpergcc3.so.3
+    #8  0x00002aaaaadae1b3 in ?? () from /opt/libreoffice/ure/lib/bootstrap.uno.so
+    #9  0x00002aaaaadaa84c in ?? () from /opt/libreoffice/ure/lib/bootstrap.uno.so
     #10 0x00002aaab5c7a7e5 in OStorage_Impl::OpenOwnPackage (this=0x185cac0) at /home/rodo/git/ooxml/package/source/xstor/xstorage.cxx:549
     #11 0x00002aaab5c7ab3e in OStorage_Impl::ReadContents (this=0x185cac0) at /home/rodo/git/ooxml/package/source/xstor/xstorage.cxx:649
     #12 0x00002aaab5c7d32f in OStorage_Impl::FindElement (this=0x185cac0, rName=@0x7fffe284f280) at /home/rodo/git/ooxml/package/source/xstor/xstorage.cxx:1387
     #13 0x00002aaab5c7dc45 in OStorage::hasByName (this=0x1808880, aName=@0x7fffe284f280) at /home/rodo/git/ooxml/package/source/xstor/xstorage.cxx:4045
-    #14 0x00002aaab1fde8c5 in XMLVersionListPersistence::load () from /opt/openoffice.org3.0/program/../basis-link/program/libxolx.so
+    #14 0x00002aaab1fde8c5 in XMLVersionListPersistence::load () from /opt/libreoffice/program/../basis-link/program/libxolx.so
     #15 0x00002b0fcb058bb2 in SfxMedium::GetVersionList (this=0x1750050, _bNoReload=false) at /home/rodo/git/ooxml/sfx2/source/doc/docfile.cxx:3247
     #16 0x00002b0fcb0571b5 in SfxMedium::GetStorage (this=0x1750050) at /home/rodo/git/ooxml/sfx2/source/doc/docfile.cxx:1328
     #17 0x00002b0fcb05d0d7 in SfxMedium::GetOutputStorage (this=0x1750050) at /home/rodo/git/ooxml/sfx2/source/doc/docfile.cxx:1068
@@ -225,17 +225,17 @@ Old binary filters (export)
     #33 0x00002b0fcb1a9773 in SfxHintPoster::Event (this=0x11488e0, pPostedHint=0x1484f20) at /home/rodo/git/ooxml/sfx2/source/notify/hintpost.cxx:98
     #34 0x00002b0fcb1a9984 in SfxHintPoster::DoEvent_Impl (this=0x11488e0, pPostedHint=0x1484f20) at /home/rodo/git/ooxml/sfx2/source/notify/hintpost.cxx:88
     #35 0x00002b0fcb1a974f in SfxHintPoster::LinkStubDoEvent_Impl (pThis=0x11488e0, pCaller=0x1484f20) at /home/rodo/git/ooxml/sfx2/source/notify/hintpost.cxx:92
-    #36 0x00002b0fccef69f8 in ImplWindowFrameProc () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
-    #37 0x00002b0fd3f91f8f in SalDisplay::DispatchInternalEvent () from /opt/openoffice.org/basis3.0/program/libvclplug_genlx.so
-    #38 0x00002b0fd0fa4a84 in GtkXLib::userEventFn () from /opt/openoffice.org/basis3.0/program/libvclplug_gtklx.so
+    #36 0x00002b0fccef69f8 in ImplWindowFrameProc () from /opt/libreoffice/program/../basis-link/program/libvcllx.so
+    #37 0x00002b0fd3f91f8f in SalDisplay::DispatchInternalEvent () from /opt/libreoffice/basis3.0/program/libvclplug_genlx.so
+    #38 0x00002b0fd0fa4a84 in GtkXLib::userEventFn () from /opt/libreoffice/basis3.0/program/libvclplug_gtklx.so
     #39 0x00002b0fd3cb0204 in g_main_context_dispatch () from /usr/lib64/libglib-2.0.so.0
     #40 0x00002b0fd3cb34fd in ?? () from /usr/lib64/libglib-2.0.so.0
     #41 0x00002b0fd3cb39ce in g_main_context_iteration () from /usr/lib64/libglib-2.0.so.0
-    #42 0x00002b0fd0fa4fd9 in GtkXLib::Yield () from /opt/openoffice.org/basis3.0/program/libvclplug_gtklx.so
-    #43 0x00002b0fccd1859e in Application::Yield () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
-    #44 0x00002b0fccd18677 in Application::Execute () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
-    #45 0x00002b0fc86fd803 in ?? () from /opt/openoffice.org3.0/program/../basis-link/program/libsoffice.so
-    #46 0x00002b0fccd1da24 in ImplSVMain () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
-    #47 0x00002b0fccd1db15 in SVMain () from /opt/openoffice.org3.0/program/../basis-link/program/libvcllx.so
-    #48 0x00002b0fc872fe6c in soffice_main () from /opt/openoffice.org3.0/program/../basis-link/program/libsoffice.so
+    #42 0x00002b0fd0fa4fd9 in GtkXLib::Yield () from /opt/libreoffice/basis3.0/program/libvclplug_gtklx.so
+    #43 0x00002b0fccd1859e in Application::Yield () from /opt/libreoffice/program/../basis-link/program/libvcllx.so
+    #44 0x00002b0fccd18677 in Application::Execute () from /opt/libreoffice/program/../basis-link/program/libvcllx.so
+    #45 0x00002b0fc86fd803 in ?? () from /opt/libreoffice/program/../basis-link/program/libsoffice.so
+    #46 0x00002b0fccd1da24 in ImplSVMain () from /opt/libreoffice/program/../basis-link/program/libvcllx.so
+    #47 0x00002b0fccd1db15 in SVMain () from /opt/libreoffice/program/../basis-link/program/libvcllx.so
+    #48 0x00002b0fc872fe6c in soffice_main () from /opt/libreoffice/program/../basis-link/program/libsoffice.so
     #49 0x000000000040114b in main ()

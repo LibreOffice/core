@@ -17,14 +17,14 @@
 #
 
 # The following variable must be set (see README):
-#SDK_HOME := /opt/openoffice.org/basis3.1/sdk
+#SDK_HOME := /opt/libreoffice/basis3.1/sdk
 
 # The following variables can be set, if necessary (see README):
-#URE_HOME := /opt/openoffice.org
+#URE_HOME := /opt/libreoffice
 #GCCS_COMPAT := LD_PRELOAD=/lib/libgcc_s.so.1
 
 
-URE_HOME ?= /opt/openoffice.org
+URE_HOME ?= /opt/libreoffice
 
 .DELETE_ON_ERROR:
 
