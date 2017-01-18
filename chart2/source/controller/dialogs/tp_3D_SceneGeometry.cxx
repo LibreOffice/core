@@ -79,9 +79,9 @@ ThreeD_SceneGeometry_TabPage::ThreeD_SceneGeometry_TabPage( vcl::Window* pWindow
     double fXAngle, fYAngle, fZAngle;
     ThreeDHelper::getRotationAngleFromDiagram( m_xSceneProperties, fXAngle, fYAngle, fZAngle );
 
-    fXAngle = BaseGFXHelper::Rad2Deg( fXAngle );
-    fYAngle = BaseGFXHelper::Rad2Deg( fYAngle );
-    fZAngle = BaseGFXHelper::Rad2Deg( fZAngle );
+    fXAngle = basegfx::rad2deg(fXAngle);
+    fYAngle = basegfx::rad2deg(fYAngle);
+    fZAngle = basegfx::rad2deg(fZAngle);
 
     OSL_ENSURE( fZAngle>=-90 && fZAngle<=90, "z angle is out of valid range" );
 
@@ -186,9 +186,9 @@ void ThreeD_SceneGeometry_TabPage::applyAnglesToModel()
     fYAngle = double(-1.0*m_nYRotation)/double(pow(10.0,m_pMFYRotation->GetDecimalDigits()));
     fZAngle = double(-1.0*m_nZRotation)/double(pow(10.0,m_pMFZRotation->GetDecimalDigits()));
 
-    fXAngle = BaseGFXHelper::Deg2Rad( fXAngle );
-    fYAngle = BaseGFXHelper::Deg2Rad( fYAngle );
-    fZAngle = BaseGFXHelper::Deg2Rad( fZAngle );
+    fXAngle = basegfx::deg2rad(fXAngle);
+    fYAngle = basegfx::deg2rad(fYAngle);
+    fZAngle = basegfx::deg2rad(fZAngle);
 
     ThreeDHelper::setRotationAngleToDiagram( m_xSceneProperties, fXAngle, fYAngle, fZAngle );
 
