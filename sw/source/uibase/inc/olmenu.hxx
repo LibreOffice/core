@@ -56,8 +56,6 @@ class SW_DLLPUBLIC SwSpellPopup : public PopupMenu
     OUString  m_aDicNameSingle;
     bool      m_bGrammarResults;    // show grammar results? Or show spellcheck results?
 
-    Image     m_aInfo16;
-
     static void fillLangPopupMenu( PopupMenu *pPopupMenu, sal_uInt16 nLangStart,
             const css::uno::Sequence< OUString >& aSeq, SwWrtShell* pWrtSh,
             std::map< sal_Int16, OUString > &rLangTable );

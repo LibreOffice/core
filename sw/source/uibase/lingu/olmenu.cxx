@@ -450,14 +450,13 @@ SwSpellPopup::SwSpellPopup(
     const linguistic2::ProofreadingResult &rResult,
     sal_Int32 nErrorInResult,
     const uno::Sequence< OUString > &rSuggestions,
-    const OUString &rParaText ) :
-PopupMenu( SW_RES(MN_SPELL_POPUP) ),
-m_pSh( pWrtSh ),
-m_xGrammarResult( rResult ),
-m_aSuggestions( rSuggestions ),
-m_sExplanationLink( ),
-m_bGrammarResults( true ),
-m_aInfo16( SW_RES(IMG_INFO_16) )
+    const OUString &rParaText )
+    : PopupMenu(SW_RES(MN_SPELL_POPUP))
+    , m_pSh(pWrtSh)
+    , m_xGrammarResult(rResult)
+    , m_aSuggestions(rSuggestions)
+    , m_sExplanationLink()
+    , m_bGrammarResults(true)
 {
     m_nCheckedLanguage = LanguageTag::convertToLanguageType( rResult.aLocale );
     m_nGrammarError = nErrorInResult;
@@ -468,7 +467,7 @@ m_aInfo16( SW_RES(IMG_INFO_16) )
     InsertSeparator(OString(), nPos++);
     InsertItem(MN_SHORT_COMMENT, aMessageText, MenuItemBits::NOSELECT, OString(), nPos++);
     if (bUseImagesInMenus)
-        SetItemImage( MN_SHORT_COMMENT, m_aInfo16 );
+        SetItemImage(MN_SHORT_COMMENT, Image(SW_RES(IMG_INFO_16)));
 
     // Add an item to show detailed infos if the FullCommentURL property is defined
     beans::PropertyValues  aProperties = rResult.aErrors[ nErrorInResult ].aProperties;
