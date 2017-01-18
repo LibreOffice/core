@@ -84,10 +84,11 @@ namespace vcl
 
     public:
         // equivalents to the respective OutputDevice methods, which take the reference device into account
-        long        GetTextArray( const OUString& _rText, long* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
         Rectangle   DrawText( const Rectangle& _rRect, const OUString& _rText, DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText );
 
     private:
+        long        GetTextArray( const OUString& _rText, long* _pDXAry, sal_Int32 _nStartIndex, sal_Int32 _nLength ) const;
+
         OutputDevice&   m_rTargetDevice;
         OutputDevice&   m_rReferenceDevice;
         Font            m_aUnzoomedPointFont;
