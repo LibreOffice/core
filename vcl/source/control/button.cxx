@@ -300,6 +300,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
 
     Size aTextSize;
     Size aSymbolSize;
+    Size aDeviceTextSize;
     Size aMax;
     Point aImagePos = rPos;
     Point aTextPos = rPos;
@@ -359,7 +360,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
                 aRect.Bottom() -= (aImageSize.Height() + nImageSep);
             }
 
-            aRect = pDev->GetTextRect(aRect, aText, nTextStyle);
+            aRect = GetControlTextRect(*pDev, aRect, aText, nTextStyle, &aDeviceTextSize);
             aTextSize = aRect.GetSize();
 
             aTSSize.Width()  += aTextSize.Width();
@@ -513,7 +514,7 @@ void Button::ImplDrawAlignedImage(OutputDevice* pDev, Point& rPos,
     {
         const Rectangle aTOutRect(aTextPos, aTextSize);
         ImplSetFocusRect(aTOutRect);
-        DrawControlText(*pDev, aTOutRect, aText, nTextStyle, nullptr, nullptr);
+        DrawControlText(*pDev, aTOutRect, aText, nTextStyle, nullptr, nullptr, &aDeviceTextSize);
     }
     else
     {
