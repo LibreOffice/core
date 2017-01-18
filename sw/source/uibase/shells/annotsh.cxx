@@ -893,8 +893,6 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
         return;
 
     OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
-    SfxItemSet aEditAttr(pOLV->GetAttribs());
-    SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
     long aOldHeight = pPostItMgr->GetActiveSidebarWin()->GetPostItTextHeight();
     sal_uInt16 nSlot = rReq.GetSlot();
@@ -1229,7 +1227,6 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
         return;
 
     OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
-    SfxItemSet aEditAttr(pOLV->GetAttribs());
     sal_uInt16 nSlot = rReq.GetSlot();
     SwWrtShell &rSh = rView.GetWrtShell();
     bool bRestoreSelection = false;
@@ -1353,7 +1350,6 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
         return;
 
     OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
-    SfxItemSet aEditAttr(pOLV->GetAttribs());
 
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();

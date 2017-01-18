@@ -31,7 +31,7 @@ class SvStream;
 
 typedef std::map<sal_uInt16, SfxPoolItem const *> SfxItemMap;
 
-class SVL_DLLPUBLIC SfxItemSet
+class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
     friend class SfxItemIter;
 
