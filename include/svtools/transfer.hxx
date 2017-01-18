@@ -419,10 +419,8 @@ private:
     {
     private:
 
-        DropTargetHelper&   mrParent;
-        AcceptDropEvent*    mpLastDragOverEvent;
-
-    private:
+        DropTargetHelper&                  mrParent;
+        std::unique_ptr<AcceptDropEvent>   mpLastDragOverEvent;
 
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;

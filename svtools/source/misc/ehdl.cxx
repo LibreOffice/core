@@ -150,14 +150,14 @@ SfxErrorHandler::SfxErrorHandler(sal_uInt16 nIdP, sal_uLong lStartP, sal_uLong l
     RegisterDisplay(&aWndFunc);
     if( ! pMgr )
     {
-        pFreeMgr = pMgr = ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() );
+        pMgr = ResMgr::CreateResMgr("ofa", Application::GetSettings().GetUILanguageTag() );
+        pFreeMgr.reset(pMgr);
     }
 }
 
 
 SfxErrorHandler::~SfxErrorHandler()
 {
-    delete pFreeMgr;
 }
 
 

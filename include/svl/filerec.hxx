@@ -516,7 +516,8 @@ public:
 class SVL_DLLPUBLIC SfxMultiRecordReader: public SfxSingleRecordReader
 {
     sal_uInt32          _nStartPos;     //  start position of this record
-    sal_uInt32*         _pContentOfs;   //  offsets of the start positions
+    std::unique_ptr<sal_uInt32[]>
+                        _pContentOfs;   //  offsets of the start positions
     sal_uInt32          _nContentSize;  //  size of each record or table position
     sal_uInt16          _nContentCount; //  number of content items
     sal_uInt16          _nContentNo;    /*  the index of the current content

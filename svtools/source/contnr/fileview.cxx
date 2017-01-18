@@ -286,7 +286,7 @@ const OUString* NameTranslationList::Translate( const OUString& rName ) const
 class NameTranslator_Impl : public ::svt::IContentTitleTranslation
 {
 private:
-    NameTranslationList*    mpActFolder;
+    std::unique_ptr<NameTranslationList> mpActFolder;
 public:
                             explicit NameTranslator_Impl( const INetURLObject& rActualFolder );
                             virtual ~NameTranslator_Impl();
@@ -1399,13 +1399,12 @@ void SvtFileView::StateChanged( StateChangedType nStateChange )
 
 
 NameTranslator_Impl::NameTranslator_Impl( const INetURLObject& rActualFolder )
+    : mpActFolder( new NameTranslationList( rActualFolder ) )
 {
-    mpActFolder = new NameTranslationList( rActualFolder );
 }
 
 NameTranslator_Impl::~NameTranslator_Impl()
 {
-    delete mpActFolder;
 }
 
 void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )
@@ -1414,12 +1413,11 @@ void NameTranslator_Impl::SetActualFolder( const INetURLObject& rActualFolder )
     {
         if (mpActFolder->GetHashedURL() != rActualFolder.GetMainURL(INetURLObject::DecodeMechanism::NONE))
         {
-            delete mpActFolder;
-            mpActFolder = new NameTranslationList( rActualFolder );
+            mpActFolder.reset( new NameTranslationList( rActualFolder ) );
         }
     }
     else
-        mpActFolder = new NameTranslationList( rActualFolder );
+        mpActFolder.reset( new NameTranslationList( rActualFolder ) );
 }
 
 bool NameTranslator_Impl::GetTranslation( const OUString& rOrg, OUString& rTrans ) const

@@ -138,7 +138,8 @@ class OnDemandCalendarWrapper
 {
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
             css::lang::Locale  aLocale;
-    mutable CalendarWrapper*    pPtr;
+    mutable std::unique_ptr<CalendarWrapper>
+                                pPtr;
     mutable bool                bValid;
             bool                bInitialized;
 
@@ -150,7 +151,6 @@ public:
                                     {}
                                 ~OnDemandCalendarWrapper()
                                     {
-                                        delete pPtr;
                                     }
 
             void                init(
@@ -160,11 +160,7 @@ public:
                                     {
                                         m_xContext = rxContext;
                                         changeLocale( rLocale );
-                                        if ( pPtr )
-                                        {
-                                            delete pPtr;
-                                            pPtr = nullptr;
-                                        }
+                                        pPtr.reset();
                                         bInitialized = true;
                                     }
 
@@ -179,11 +175,11 @@ public:
                                         if ( !bValid )
                                         {
                                             if ( !pPtr )
-                                                pPtr = new CalendarWrapper( m_xContext );
+                                                pPtr.reset(new CalendarWrapper( m_xContext ));
                                             pPtr->loadDefaultCalendar( aLocale );
                                             bValid = true;
                                         }
-                                        return pPtr;
+                                        return pPtr.get();
                                     }
 
 };
@@ -198,7 +194,8 @@ class OnDemandTransliterationWrapper
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
             LanguageType        eLanguage;
             css::i18n::TransliterationModules  nType;
-    mutable ::utl::TransliterationWrapper*  pPtr;
+    mutable std::unique_ptr<::utl::TransliterationWrapper>
+                                pPtr;
     mutable bool                bValid;
             bool                bInitialized;
 
@@ -212,7 +209,6 @@ public:
                                     {}
                                 ~OnDemandTransliterationWrapper()
                                     {
-                                        delete pPtr;
                                     }
 
             bool                isInitialized() const   { return bInitialized; }
@@ -225,11 +221,7 @@ public:
                                         m_xContext = rxContext;
                                         nType = css::i18n::TransliterationModules_IGNORE_CASE;
                                         changeLocale( eLang );
-                                        if ( pPtr )
-                                        {
-                                            delete pPtr;
-                                            pPtr = nullptr;
-                                        }
+                                        pPtr.reset();
                                         bInitialized = true;
                                     }
 
@@ -244,11 +236,11 @@ public:
                                         if ( !bValid )
                                         {
                                             if ( !pPtr )
-                                                pPtr = new ::utl::TransliterationWrapper( m_xContext, nType );
+                                                pPtr.reset( new ::utl::TransliterationWrapper( m_xContext, nType ) );
                                             pPtr->loadModuleIfNeeded( eLanguage );
                                             bValid = true;
                                         }
-                                        return pPtr;
+                                        return pPtr.get();
                                     }
 
     const   ::utl::TransliterationWrapper*  operator->() const  { return get(); }
@@ -264,7 +256,8 @@ public:
 class OnDemandNativeNumberWrapper
 {
             css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    mutable NativeNumberWrapper*    pPtr;
+    mutable std::unique_ptr<NativeNumberWrapper>
+                                    pPtr;
             bool                    bInitialized;
 
 public:
@@ -274,7 +267,6 @@ public:
                                     {}
                                 ~OnDemandNativeNumberWrapper()
                                     {
-                                        delete pPtr;
                                     }
 
             void                init(
@@ -282,19 +274,15 @@ public:
                                     )
                                     {
                                         m_xContext = rxContext;
-                                        if ( pPtr )
-                                        {
-                                            delete pPtr;
-                                            pPtr = nullptr;
-                                        }
+                                        pPtr.reset();
                                         bInitialized = true;
                                     }
 
             NativeNumberWrapper*    get() const
                                     {
                                         if ( !pPtr )
-                                            pPtr = new NativeNumberWrapper( m_xContext );
-                                        return pPtr;
+                                            pPtr.reset(new NativeNumberWrapper( m_xContext ));
+                                        return pPtr.get();
                                     }
 
 };

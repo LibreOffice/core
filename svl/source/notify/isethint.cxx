@@ -32,7 +32,6 @@ SfxItemSetHint::SfxItemSetHint( const SfxItemSet &rItemSet )
 
 SfxItemSetHint::~SfxItemSetHint()
 {
-    delete _pItemSet;
 }
 
 
