@@ -80,10 +80,11 @@ protected:
         If no reference device is set, the draw request will simply be forwarded to OutputDevice::DrawText. Otherwise,
         the text will be rendered according to the metrics at the reference device.
 
-        Note that the given rectangle might be modified, it will contain the result of a GetTextRect call (either
-        directly at the target device, or taking the reference device into account) when returning.
+        return will contain the result of a GetTextRect call (either directly
+        at the target device, or taking the reference device into account) when
+        returning.
     */
-    void        DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect,
+    Rectangle DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& _rRect,
                                  const OUString& _rStr, DrawTextFlags _nStyle,
                                  MetricVector* _pVector, OUString* _pDisplayText ) const;
 

@@ -412,7 +412,7 @@ void Control::ImplInitSettings(const bool, const bool)
     ApplySettings(*this);
 }
 
-void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRect, const OUString& _rStr,
+Rectangle Control::DrawControlText( OutputDevice& _rTargetDevice, const Rectangle& rRect, const OUString& _rStr,
     DrawTextFlags _nStyle, MetricVector* _pVector, OUString* _pDisplayText ) const
 {
     OUString rPStr = _rStr;
@@ -429,14 +429,13 @@ void Control::DrawControlText( OutputDevice& _rTargetDevice, Rectangle& _io_rRec
 
     if ( !mpControlData->mpReferenceDevice || ( mpControlData->mpReferenceDevice == &_rTargetDevice ) )
     {
-        _io_rRect = _rTargetDevice.GetTextRect( _io_rRect, rPStr, nPStyle );
-        _rTargetDevice.DrawText( _io_rRect, rPStr, nPStyle, _pVector, _pDisplayText );
+        const Rectangle aRet = _rTargetDevice.GetTextRect(rRect, rPStr, nPStyle);
+        _rTargetDevice.DrawText(aRet, rPStr, nPStyle, _pVector, _pDisplayText);
+        return aRet;
     }
-    else
-    {
-        ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
-        _io_rRect = aRenderer.DrawText( _io_rRect, rPStr, nPStyle, _pVector, _pDisplayText );
-    }
+
+    ControlTextRenderer aRenderer( *this, _rTargetDevice, *mpControlData->mpReferenceDevice );
+    return aRenderer.DrawText(rRect, rPStr, nPStyle, _pVector, _pDisplayText);
 }
 
 Font

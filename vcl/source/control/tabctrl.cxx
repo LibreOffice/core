@@ -940,8 +940,8 @@ void TabControl::ImplDrawItem(vcl::RenderContext& rRenderContext, ImplTabItem* p
         Color aOldColor(rRenderContext.GetTextColor());
         rRenderContext.SetTextColor(aColor);
 
-        Rectangle aOutRect(nXPos + aImageSize.Width(), nYPos,
-                           nXPos + aImageSize.Width() + nTextWidth, nYPos + nTextHeight);
+        const Rectangle aOutRect(nXPos + aImageSize.Width(), nYPos,
+                                 nXPos + aImageSize.Width() + nTextWidth, nYPos + nTextHeight);
         DrawControlText(rRenderContext, aOutRect, pItem->maFormatText, nStyle,
                         nullptr, nullptr);
 

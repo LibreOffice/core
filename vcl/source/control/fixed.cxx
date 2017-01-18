@@ -182,7 +182,7 @@ void FixedText::ImplDraw(OutputDevice* pDev, DrawFlags nDrawFlags,
     if( bFillLayout )
         (mpControlData->mpLayoutData->m_aDisplayText).clear();
 
-    Rectangle aRect( Rectangle( aPos, rSize ) );
+    const Rectangle aRect(aPos, rSize);
     DrawControlText(*pDev, aRect, aText, nTextStyle,
         bFillLayout ? &mpControlData->mpLayoutData->m_aUnicodeBoundRects : nullptr,
         bFillLayout ? &mpControlData->mpLayoutData->m_aDisplayText : nullptr);
@@ -557,7 +557,7 @@ void FixedLine::ImplDraw(vcl::RenderContext& rRenderContext)
         if (rStyleSettings.GetOptions() & StyleSettingsOptions::Mono)
             nStyle |= DrawTextFlags::Mono;
 
-        DrawControlText(*this, aRect, aText, nStyle, nullptr, nullptr);
+        aRect = DrawControlText(*this, aRect, aText, nStyle, nullptr, nullptr);
 
         long nTop = aRect.Top() + ((aRect.GetHeight() - 1) / 2);
         aDecoView.DrawSeparator(Point(aRect.Right() + FIXEDLINE_TEXT_BORDER, nTop), Point(aOutSize.Width() - 1, nTop), false);
