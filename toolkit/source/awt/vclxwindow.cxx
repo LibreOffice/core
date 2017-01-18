@@ -118,11 +118,12 @@ public:
     bool                                mbSynthesizingVCLEvent  : 1;
     bool                                mbWithDefaultProps      : 1;
 
-    sal_uLong                               mnListenerLockLevel;
+    sal_uLong                           mnListenerLockLevel;
     sal_Int16                           mnWritingMode;
     sal_Int16                           mnContextWritingMode;
 
-    UnoPropertyArrayHelper*             mpPropHelper;
+    std::unique_ptr<UnoPropertyArrayHelper>
+                                        mpPropHelper;
 
     css::uno::Reference< css::awt::XPointer >
                                         mxPointer;
@@ -224,7 +225,6 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps 
 
 VCLXWindowImpl::~VCLXWindowImpl()
 {
-    delete mpPropHelper;
 }
 
 
@@ -2551,9 +2551,9 @@ VCLXWindow::GetPropHelper()
     {
         std::vector< sal_uInt16 > aIDs;
         GetPropertyIds( aIDs );
-        mpImpl->mpPropHelper = new UnoPropertyArrayHelper( aIDs );
+        mpImpl->mpPropHelper.reset( new UnoPropertyArrayHelper( aIDs ) );
     }
-    return mpImpl->mpPropHelper;
+    return mpImpl->mpPropHelper.get();
 }
 
 css::uno::Sequence< css::beans::Property > SAL_CALL

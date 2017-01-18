@@ -94,7 +94,6 @@ class InternalResMgr
                                             const OUString& aPrefix,
                                             const OUString& aResName,
                                             const LanguageTag& rLocale );
-                            ~InternalResMgr();
     bool                    Create();
 
     bool                    IsGlobalAvailable( RESOURCE_TYPE nRT, sal_uInt32 nId ) const;
@@ -102,6 +101,7 @@ class InternalResMgr
                                            void **pResHandle );
 public:
     static void             FreeGlobalRes( void const *, void * );
+                            ~InternalResMgr();
 };
 
 class ResMgrContainer
@@ -1414,13 +1414,12 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
     if( aLocale.isSystemLocale() )
         aLocale = ResMgrContainer::get().getDefLocale();
 
-    m_pResImpl = ResMgrContainer::get().getResMgr( aPrefix, aLocale, true );
+    m_pResImpl.reset(ResMgrContainer::get().getResMgr( aPrefix, aLocale, true ));
     DBG_ASSERT( m_pResImpl, "SimpleResMgr::SimpleResMgr : have no impl class !" );
 }
 
 SimpleResMgr::~SimpleResMgr()
 {
-    delete m_pResImpl;
 }
 
 SimpleResMgr* SimpleResMgr::Create(const sal_Char* pPrefixName, const LanguageTag& rLocale)
@@ -1451,7 +1450,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
         return sReturn;
 
     void* pResHandle = nullptr;
-    InternalResMgr* pFallback = m_pResImpl;
+    InternalResMgr* pFallback = m_pResImpl.get();
     RSHEADER_TYPE* pResHeader = static_cast<RSHEADER_TYPE*>(m_pResImpl->LoadGlobalRes( RSC_STRING, nId, &pResHandle ));
     if ( !pResHeader )
     {
@@ -1462,7 +1461,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
         {
             InternalResMgr* pOldFallback = pFallback;
             pFallback = ResMgrContainer::get().getNextFallback( pFallback );
-            if( pOldFallback != m_pResImpl )
+            if( pOldFallback != m_pResImpl.get() )
                 ResMgrContainer::get().freeResMgr( pOldFallback );
             if( pFallback )
             {
@@ -1489,7 +1488,7 @@ OUString SimpleResMgr::ReadString( sal_uInt32 nId )
     // not necessary with the current implementation which holds the string table permanently, but to be sure ....
     // note: pFallback cannot be NULL here and is either the fallback or m_pResImpl
     InternalResMgr::FreeGlobalRes( pResHeader, pResHandle );
-    if( m_pResImpl != pFallback )
+    if( m_pResImpl.get() != pFallback )
     {
         osl::Guard<osl::Mutex> aGuard2( getResMgrMutex() );
 

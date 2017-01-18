@@ -165,7 +165,6 @@ void IdlEnumFieldImpl::set( Any &, const Any & )
 
 EnumIdlClassImpl::~EnumIdlClassImpl()
 {
-    delete _pFields;
 }
 
 // IdlClassImpl modifications
@@ -203,7 +202,7 @@ Sequence< Reference< XIdlField > > EnumIdlClassImpl::getFields()
                     getReflection(), aName, IdlClassImpl::getTypeDescr(), getTypeDescr()->pEnumValues[nFields] );
             }
 
-            _pFields = pFields;
+            _pFields.reset( pFields );
         }
     }
     return *_pFields;
