@@ -21,8 +21,7 @@ RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes, RTFSprms aS
 }
 
 RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes)
-    : m_aAttributes(aAttributes),
-      m_aSprms()
+    : m_aAttributes(aAttributes)
 {
 }
 
