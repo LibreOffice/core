@@ -87,22 +87,22 @@ const SCROW SCROW_REPEAT_NONE = SCROW_MAX;
 
 SAL_WARN_UNUSED_RESULT inline bool ValidCol( SCCOL nCol )
 {
-    return nCol >= static_cast<SCCOL>(0) && nCol <= MAXCOL;
+    return nCol >= 0 && nCol <= MAXCOL;
 }
 
 SAL_WARN_UNUSED_RESULT inline bool ValidRow( SCROW nRow )
 {
-    return nRow >= static_cast<SCROW>(0) && nRow <= MAXROW;
+    return nRow >= 0 && nRow <= MAXROW;
 }
 
 SAL_WARN_UNUSED_RESULT inline bool ValidTab( SCTAB nTab )
 {
-    return nTab >= static_cast<SCTAB>(0) && nTab <= MAXTAB;
+    return nTab >= 0 && nTab <= MAXTAB;
 }
 
 SAL_WARN_UNUSED_RESULT inline bool ValidTab( SCTAB nTab, SCTAB nMaxTab )
 {
-    return nTab >= static_cast<SCTAB>(0) && nTab <= nMaxTab;
+    return nTab >= 0 && nTab <= nMaxTab;
 }
 
 SAL_WARN_UNUSED_RESULT inline bool ValidColRow( SCCOL nCol, SCROW nRow )
