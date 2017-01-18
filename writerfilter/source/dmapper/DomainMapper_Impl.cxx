@@ -67,6 +67,7 @@
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
+
 #include <oox/mathml/import.hxx>
 #include <GraphicHelpers.hxx>
 #include <dmapper/GraphicZOrderHelper.hxx>
@@ -5034,18 +5035,21 @@ void DomainMapper_Impl::ApplySettingsTable()
                 xTextDefaults->setPropertyValue(getPropertyName(PROP_PARA_LINE_SPACING), uno::makeAny(aSpacing));
             }
 
-            if (m_pSettingsTable->GetZoomFactor())
+            if (m_pSettingsTable->GetZoomFactor() || m_pSettingsTable->GetView())
             {
-                uno::Sequence<beans::PropertyValue> aViewProps(3);
-                aViewProps[0].Name = "ZoomFactor";
-                aViewProps[0].Value <<= m_pSettingsTable->GetZoomFactor();
-                aViewProps[1].Name = "VisibleBottom";
-                aViewProps[1].Value <<= sal_Int32(0);
-                aViewProps[2].Name = "ZoomType";
-                aViewProps[2].Value <<= sal_Int16(0);
-
+                std::vector<beans::PropertyValue> aViewProps;
+                if (m_pSettingsTable->GetZoomFactor())
+                {
+                    aViewProps.push_back(beans::PropertyValue("ZoomFactor", -1, uno::makeAny(m_pSettingsTable->GetZoomFactor()), beans::PropertyState_DIRECT_VALUE));
+                    aViewProps.push_back(beans::PropertyValue("VisibleBottom", -1, uno::makeAny(sal_Int32(0)), beans::PropertyState_DIRECT_VALUE));
+                    aViewProps.push_back(beans::PropertyValue("ZoomType", -1, uno::makeAny(sal_Int16(0)), beans::PropertyState_DIRECT_VALUE));
+                }
+                if (m_pSettingsTable->GetView())
+                {
+                    aViewProps.push_back(beans::PropertyValue("ShowOnlineLayout", -1, uno::makeAny(m_pSettingsTable->GetView() == NS_ooxml::LN_Value_doc_ST_View_web), beans::PropertyState_DIRECT_VALUE));
+                }
                 uno::Reference<container::XIndexContainer> xBox = document::IndexedPropertyValues::create(m_xComponentContext);
-                xBox->insertByIndex(sal_Int32(0), uno::makeAny(aViewProps));
+                xBox->insertByIndex(sal_Int32(0), uno::makeAny(comphelper::containerToSequence(aViewProps)));
                 uno::Reference<container::XIndexAccess> xIndexAccess(xBox, uno::UNO_QUERY);
                 uno::Reference<document::XViewDataSupplier> xViewDataSupplier(m_xTextDocument, uno::UNO_QUERY);
                 xViewDataSupplier->setViewData(xIndexAccess);
@@ -5059,9 +5063,6 @@ void DomainMapper_Impl::ApplySettingsTable()
             if( m_pSettingsTable->GetEmbedSystemFonts())
                 xSettings->setPropertyValue( getPropertyName( PROP_EMBED_SYSTEM_FONTS ), uno::makeAny(true) );
             xSettings->setPropertyValue("AddParaTableSpacing", uno::makeAny(m_pSettingsTable->GetDoNotUseHTMLParagraphAutoSpacing()));
-            // Web Layout.
-            if (m_pSettingsTable->GetView() == NS_ooxml::LN_Value_doc_ST_View_web)
-                xSettings->setPropertyValue("InBrowseMode", uno::makeAny(true));
             if( m_pSettingsTable->GetProtectForm() )
                 xSettings->setPropertyValue("ProtectForm", uno::makeAny( true ));
         }

@@ -1268,7 +1268,8 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                  bGotVisibleTop = false, bGotVisibleRight = false,
                  bGotVisibleBottom = false, bGotZoomType = false,
                  bGotZoomFactor = false, bGotIsSelectedFrame = false,
-                 bGotViewLayoutColumns = false, bGotViewLayoutBookMode = false;
+                 bGotViewLayoutColumns = false, bGotViewLayoutBookMode = false,
+                 bBrowseMode = false, bGotBrowseMode = false;
 
         for (sal_Int32 i = 0 ; i < nLength; i++)
         {
@@ -1331,7 +1332,17 @@ void SwView::ReadUserDataSequence ( const uno::Sequence < beans::PropertyValue >
                pValue->Value >>= bSelectedFrame;
                bGotIsSelectedFrame = true;
             }
+            else if (pValue->Name == "ShowOnlineLayout")
+            {
+               pValue->Value >>= bBrowseMode;
+               bGotBrowseMode = true;
+            }
             pValue++;
+        }
+        if (bGotBrowseMode)
+        {
+            // delegate further
+            GetViewImpl()->GetUNOObject_Impl()->getViewSettings()->setPropertyValue("ShowOnlineLayout", uno::Any(bBrowseMode));
         }
         if (bGotVisibleBottom)
         {

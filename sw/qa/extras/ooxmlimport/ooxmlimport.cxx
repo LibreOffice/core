@@ -65,6 +65,7 @@
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/PageStyleLayout.hpp>
 #include <com/sun/star/util/DateTime.hpp>
+#include <com/sun/star/view/XViewSettingsSupplier.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
 #include <vcl/bitmapaccess.hxx>
@@ -3256,10 +3257,13 @@ DECLARE_SW_IMPORT_TEST(testHFLinkToPrev, "headerfooter-link-to-prev.docx",
 
 DECLARE_OOXMLIMPORT_TEST(testTdf99074, "tdf99074.docx")
 {
-    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
-    uno::Reference<uno::XInterface> xSettings = xFactory->createInstance("com.sun.star.document.Settings");
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<view::XViewSettingsSupplier> const xController(
+        xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> const xViewSettings(
+        xController->getViewSettings());
     // This was false, Web Layout was ignored on import.
-    CPPUNIT_ASSERT(getProperty<bool>(xSettings, "InBrowseMode"));
+    CPPUNIT_ASSERT(getProperty<bool>(xViewSettings, "ShowOnlineLayout"));
 }
 
 DECLARE_OOXMLIMPORT_TEST(testTdf103664, "tdf103664.docx")
