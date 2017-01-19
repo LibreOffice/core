@@ -223,7 +223,6 @@ HierarchyDataSource::HierarchyDataSource(
 // virtual
 HierarchyDataSource::~HierarchyDataSource()
 {
-    delete m_pDisposeEventListeners;
 }
 
 
@@ -314,8 +313,8 @@ void SAL_CALL HierarchyDataSource::addEventListener(
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners
-            = new comphelper::OInterfaceContainerHelper2( m_aMutex );
+        m_pDisposeEventListeners.reset(
+            new comphelper::OInterfaceContainerHelper2( m_aMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

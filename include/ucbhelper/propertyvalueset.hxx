@@ -29,6 +29,7 @@
 #include <osl/mutex.hxx>
 #include <ucbhelper/macros.hxx>
 #include <ucbhelper/ucbhelperdllapi.h>
+#include <memory>
 
 namespace com { namespace sun { namespace star { namespace script {
     class XTypeConverter;
@@ -60,7 +61,7 @@ class UCBHELPER_DLLPUBLIC PropertyValueSet :
     css::uno::Reference< css::uno::XComponentContext >   m_xContext;
     css::uno::Reference< css::script::XTypeConverter >   m_xTypeConverter;
     osl::Mutex      m_aMutex;
-    PropertyValues* m_pValues;
+    std::unique_ptr<PropertyValues>                      m_pValues;
     bool        m_bWasNull;
     bool        m_bTriedToGetTypeConverter;
 

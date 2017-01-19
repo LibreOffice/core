@@ -77,8 +77,6 @@ void SAL_CALL DynamicResultSetWrapper::impl_init()
 DynamicResultSetWrapper::~DynamicResultSetWrapper()
 {
     //call impl_deinit() at start of destructor of derived class
-
-    delete m_pDisposeEventListeners;
 };
 
 void SAL_CALL DynamicResultSetWrapper::impl_deinit()
@@ -173,8 +171,8 @@ void SAL_CALL DynamicResultSetWrapper::addEventListener( const Reference< XEvent
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners =
-                    new OInterfaceContainerHelper2( m_aContainerMutex );
+        m_pDisposeEventListeners.reset(
+                    new OInterfaceContainerHelper2( m_aContainerMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

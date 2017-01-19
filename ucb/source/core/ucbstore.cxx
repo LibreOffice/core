@@ -113,12 +113,12 @@ PropertySetMap_Impl;
 // class PropertySetInfo_Impl
 class PropertySetInfo_Impl : public cppu::WeakImplHelper < XPropertySetInfo >
 {
-    Sequence< Property >*             m_pProps;
+    std::unique_ptr<Sequence< Property >>
+                                      m_pProps;
     PersistentPropertySet*            m_pOwner;
 
 public:
     explicit PropertySetInfo_Impl(PersistentPropertySet* pOwner);
-    virtual ~PropertySetInfo_Impl() override;
 
     // XPropertySetInfo
     virtual Sequence< Property > SAL_CALL getProperties()
@@ -129,7 +129,7 @@ public:
         throw( RuntimeException, std::exception ) override;
 
     // Non-interface methods.
-    void reset() { delete m_pProps; m_pProps = nullptr; }
+    void reset() { m_pProps.reset(); }
 };
 
 
@@ -2170,14 +2170,6 @@ PropertySetInfo_Impl::PropertySetInfo_Impl(
 }
 
 
-// virtual
-PropertySetInfo_Impl::~PropertySetInfo_Impl()
-{
-    delete m_pProps;
-
-    // !!! Do not delete m_pOwner !!!
-}
-
 // XPropertySetInfo methods.
 
 
@@ -2310,7 +2302,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
                     }
 
                     // Success.
-                    m_pProps = pPropSeq;
+                    m_pProps.reset( pPropSeq );
                     return *m_pProps;
                 }
             }
@@ -2321,7 +2313,7 @@ Sequence< Property > SAL_CALL PropertySetInfo_Impl::getProperties()
         }
 
         OSL_FAIL( "PropertySetInfo_Impl::getProperties - Error!" );
-        m_pProps = new Sequence< Property >( 0 );
+        m_pProps.reset( new Sequence< Property >( 0 ) );
     }
 
     return *m_pProps;

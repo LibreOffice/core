@@ -112,7 +112,6 @@ ContentProvider::ContentProvider(
 // virtual
 ContentProvider::~ContentProvider()
 {
-    delete m_pPackages;
 }
 
 // XInterface methods.
@@ -234,7 +233,7 @@ ContentProvider::createPackage( const PackageUri & rURI )
         }
     }
     else
-        m_pPackages = new Packages;
+        m_pPackages.reset( new Packages );
 
     // Create new package...
     uno::Sequence< uno::Any > aArguments( 1 );
