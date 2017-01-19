@@ -144,9 +144,9 @@ namespace chelp {
         // Non-interface methods.
 
     private:
-        bool           isInitialized;
-        OUString  m_aScheme;
-        Databases*     m_pDatabases;
+        bool                           isInitialized;
+        OUString                       m_aScheme;
+        std::unique_ptr<Databases>     m_pDatabases;
         css::uno::Reference<css::container::XContainer> m_xContainer;
 
         // private methods

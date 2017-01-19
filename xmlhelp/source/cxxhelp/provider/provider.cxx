@@ -54,7 +54,6 @@ ContentProvider::ContentProvider( const uno::Reference< uno::XComponentContext >
 // virtual
 ContentProvider::~ContentProvider()
 {
-    delete m_pDatabases;
 }
 
 // XInterface methods.
@@ -206,7 +205,7 @@ ContentProvider::queryContent(
     if ( xContent.is() )
         return xContent;
 
-    xContent = new Content( m_xContext, this, xCanonicId, m_pDatabases );
+    xContent = new Content( m_xContext, this, xCanonicId, m_pDatabases.get() );
 
     // register new content
     registerNewContent( xContent );
@@ -283,12 +282,12 @@ void ContentProvider::init()
 
     bool showBasic = officecfg::Office::Common::Help::ShowBasic::get(
         m_xContext);
-    m_pDatabases = new Databases( showBasic,
+    m_pDatabases.reset( new Databases( showBasic,
                                   instPath,
                                   utl::ConfigManager::getProductName(),
                                   productversion,
                                   stylesheet,
-                                  m_xContext );
+                                  m_xContext ) );
 }
 
 void ContentProvider::subst( OUString& instpath )

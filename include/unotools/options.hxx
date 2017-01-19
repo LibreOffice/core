@@ -24,6 +24,7 @@
 #include <unotools/unotoolsdllapi.h>
 #include <o3tl/typed_flags_set.hxx>
 #include <vector>
+#include <memory>
 
 // bits for broadcasting hints of changes in ConfigurationListener::ConfigurationChanged, may be combined
 enum class ConfigurationHints {
@@ -66,7 +67,7 @@ namespace utl {
     // complete broadcasting implementation
     class UNOTOOLS_DLLPUBLIC ConfigurationBroadcaster
     {
-        IMPL_ConfigurationListenerList* mpList;
+        std::unique_ptr<IMPL_ConfigurationListenerList> mpList;
         sal_Int32               m_nBroadcastBlocked;     // broadcast only if this is 0
         ConfigurationHints      m_nBlockedHint;
 

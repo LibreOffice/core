@@ -180,7 +180,7 @@ class FilterPropertiesInfo_Impl
     FilterPropertyInfoList_Impl             aPropInfos;
     FilterPropertyInfoList_Impl::iterator   aLastItr;
 
-    Sequence <OUString>                     *pApiNames;
+    std::unique_ptr<Sequence<OUString>>     pApiNames;
 
 public:
     FilterPropertiesInfo_Impl();
@@ -206,7 +206,6 @@ FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
 
 FilterPropertiesInfo_Impl::~FilterPropertiesInfo_Impl()
 {
-    delete pApiNames;
 }
 
 void FilterPropertiesInfo_Impl::AddProperty(
@@ -216,11 +215,7 @@ void FilterPropertiesInfo_Impl::AddProperty(
     nCount++;
 
     OSL_ENSURE( !pApiNames, "performance warning: API names already retrieved" );
-    if( pApiNames )
-    {
-        delete pApiNames;
-        pApiNames = nullptr;
-    }
+    pApiNames.reset();
 }
 
 const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
@@ -265,7 +260,7 @@ const uno::Sequence<OUString>& FilterPropertiesInfo_Impl::GetApiNames()
         }
 
         // construct sequence
-        pApiNames = new Sequence < OUString >( nCount );
+        pApiNames.reset( new Sequence < OUString >( nCount ) );
         OUString *pNames = pApiNames->getArray();
         FilterPropertyInfoList_Impl::iterator aItr = aPropInfos.begin();
         FilterPropertyInfoList_Impl::iterator aEnd = aPropInfos.end();
