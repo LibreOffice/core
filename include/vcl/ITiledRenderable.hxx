@@ -219,6 +219,13 @@ public:
     {
         return OUString();
     }
+
+    /// Implementation for
+    /// lok::Document::getCommandValues(".uno:ViewAnnotations");
+    virtual OUString getPostIts()
+    {
+        return OUString();
+    }
 };
 
 } // namespace vcl
