@@ -50,7 +50,7 @@ class PropertySetInfo :
 {
     css::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
-    css::uno::Sequence< css::beans::Property >*
+    std::unique_ptr<css::uno::Sequence< css::beans::Property >>
                                 m_pProps;
     osl::Mutex                  m_aMutex;
     ContentImplHelper*          m_pContent;
@@ -113,7 +113,7 @@ class CommandProcessorInfo :
 {
     css::uno::Reference< css::ucb::XCommandEnvironment >
                                 m_xEnv;
-    css::uno::Sequence< css::ucb::CommandInfo >*
+    std::unique_ptr<css::uno::Sequence< css::ucb::CommandInfo >>
                                 m_pCommands;
     osl::Mutex                  m_aMutex;
     ContentImplHelper*          m_pContent;

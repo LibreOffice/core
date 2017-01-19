@@ -30,6 +30,8 @@
 #include <com/sun/star/ucb/XCachedContentResultSetFactory.hpp>
 #include <rtl/ref.hxx>
 
+#include <memory>
+
 #define CACHED_CONTENT_RESULTSET_SERVICE_NAME "com.sun.star.ucb.CachedContentResultSet"
 #define CACHED_CONTENT_RESULTSET_FACTORY_NAME "com.sun.star.ucb.CachedContentResultSetFactory"
 
@@ -50,7 +52,8 @@ class CachedContentResultSet
     class CCRS_Cache
     {
     private:
-        css::ucb::FetchResult*           m_pResult;
+        std::unique_ptr<css::ucb::FetchResult>
+                                         m_pResult;
         css::uno::Reference< css::ucb::XContentIdentifierMapping >
                                          m_xContentIdentifierMapping;
         css::uno::Sequence< sal_Bool >*  m_pMappedReminder;

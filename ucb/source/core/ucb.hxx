@@ -208,7 +208,7 @@ private:
     css::uno::Sequence< css::uno::Any > m_aArguments;
     ProviderMap_Impl m_aProviders;
     osl::Mutex m_aMutex;
-    comphelper::OInterfaceContainerHelper2* m_pDisposeEventListeners;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2> m_pDisposeEventListeners;
     sal_Int32 m_nCommandId;
 };
 

@@ -83,7 +83,7 @@ class PropertySetInfo :
         public lang::XTypeProvider,
         public beans::XPropertySetInfo
 {
-    uno::Sequence< beans::Property >*            m_pProps;
+    std::unique_ptr<uno::Sequence< beans::Property >>  m_pProps;
 
 private:
     bool queryProperty(
@@ -93,7 +93,6 @@ public:
     PropertySetInfo(
         const PropertyInfo* pProps,
         sal_Int32 nProps );
-    virtual ~PropertySetInfo() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
@@ -1527,8 +1526,8 @@ namespace ucbhelper_impl {
 PropertySetInfo::PropertySetInfo(
     const PropertyInfo* pProps,
     sal_Int32 nProps )
+    : m_pProps( new uno::Sequence< beans::Property >( nProps ) )
 {
-    m_pProps = new uno::Sequence< beans::Property >( nProps );
 
     if ( nProps )
     {
@@ -1549,12 +1548,6 @@ PropertySetInfo::PropertySetInfo(
     }
 }
 
-
-// virtual
-PropertySetInfo::~PropertySetInfo()
-{
-    delete m_pProps;
-}
 
 
 // XInterface methods.
