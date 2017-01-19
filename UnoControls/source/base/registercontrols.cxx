@@ -31,6 +31,7 @@
 
 namespace {
 
+/// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL FrameControl_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &
         rServiceManager)
@@ -41,6 +42,7 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL FrameControl_createInstance(
             comphelper::getComponentContext(rServiceManager)));
 }
 
+/// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL ProgressBar_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &
         rServiceManager)
@@ -51,6 +53,7 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL ProgressBar_createInstance(
             comphelper::getComponentContext(rServiceManager)));
 }
 
+/// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL
 ProgressMonitor_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &
@@ -62,6 +65,7 @@ ProgressMonitor_createInstance(
             comphelper::getComponentContext(rServiceManager)));
 }
 
+/// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL
 StatusIndicator_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &
