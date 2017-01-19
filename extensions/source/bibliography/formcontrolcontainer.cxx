@@ -35,7 +35,6 @@ namespace bib
 
     FormControlContainer::FormControlContainer( )
         :OLoadListener( m_aMutex )
-        ,m_pFormAdapter( nullptr )
     {
     }
 
@@ -52,9 +51,8 @@ namespace bib
         SAL_WARN_IF( !isFormConnected(), "extensions.biblio", "FormControlContainer::connectForm: not connected!" );
         if ( isFormConnected() )
         {
-            m_pFormAdapter->dispose();
-            m_pFormAdapter->release();
-            m_pFormAdapter = nullptr;
+            m_xFormAdapter->dispose();
+            m_xFormAdapter.clear();
         }
     }
 
@@ -65,9 +63,8 @@ namespace bib
         SAL_WARN_IF( !_rxForm.is(), "extensions.biblio", "FormControlContainer::connectForm: invalid form!" );
         if ( !isFormConnected() && _rxForm.is() )
         {
-            m_pFormAdapter = new OLoadListenerAdapter( _rxForm );
-            m_pFormAdapter->acquire();
-            m_pFormAdapter->Init( this );
+            m_xFormAdapter = new OLoadListenerAdapter( _rxForm );
+            m_xFormAdapter->Init( this );
 
             implSetDesignMode( !m_xForm.is() || !m_xForm->isLoaded() );
         }

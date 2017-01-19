@@ -23,6 +23,7 @@
 #include <cppuhelper/basemutex.hxx>
 #include "loadlisteneradapter.hxx"
 #include <com/sun/star/awt/XControlContainer.hpp>
+#include <rtl/ref.hxx>
 
 
 namespace bib
@@ -33,7 +34,7 @@ namespace bib
             ,public ::bib::OLoadListener
     {
     private:
-        OLoadListenerAdapter*                        m_pFormAdapter;
+        rtl::Reference<OLoadListenerAdapter>         m_xFormAdapter;
         css::uno::Reference< css::form::XLoadable >  m_xForm;
     private:
         void    implSetDesignMode( bool _bDesign );
@@ -42,7 +43,7 @@ namespace bib
         FormControlContainer( );
         virtual ~FormControlContainer( ) override;
 
-        bool        isFormConnected() const { return nullptr != m_pFormAdapter; }
+        bool        isFormConnected() const { return m_xFormAdapter.is(); }
         void        connectForm( const css::uno::Reference< css::form::XLoadable >& _rxForm );
         void        disconnectForm();
 
