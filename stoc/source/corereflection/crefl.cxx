@@ -406,7 +406,7 @@ uno_Interface * IdlReflectionServiceImpl::mapToUno(
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
 }
 
-
+/// @throws css::uno::Exception
 Reference< XInterface > SAL_CALL IdlReflectionServiceImpl_create(
     const Reference< XComponentContext > & xContext )
     throw(css::uno::Exception)

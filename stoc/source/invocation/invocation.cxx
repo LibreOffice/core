@@ -1139,7 +1139,7 @@ Reference<XInterface> InvocationService::createInstanceWithArguments(
     }
 }
 
-
+/// @throws RuntimeException
 Reference<XInterface> SAL_CALL InvocationService_CreateInstance( const Reference<XComponentContext> & xCtx )
     throw( RuntimeException )
 {

@@ -894,7 +894,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     return invadp_getSupportedServiceNames();
 }
 
-
+/// @throws Exception
 static Reference< XInterface > SAL_CALL FactoryImpl_create(
     const Reference< XComponentContext > & xContext )
     throw (Exception)

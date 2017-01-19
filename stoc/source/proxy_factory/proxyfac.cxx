@@ -438,7 +438,7 @@ Sequence< OUString > FactoryImpl::getSupportedServiceNames()
     return proxyfac_getSupportedServiceNames();
 }
 
-
+/// @throws Exception
 Reference< XInterface > SAL_CALL proxyfac_create(
     SAL_UNUSED_PARAMETER Reference< XComponentContext > const & )
     throw (Exception)

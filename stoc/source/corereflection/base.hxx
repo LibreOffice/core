@@ -97,8 +97,11 @@ class IdlReflectionServiceImpl
     inline css::uno::Reference< css::reflection::XIdlClass > constructClass( typelib_TypeDescription * pTypeDescr );
 
 public:
+    /// @throws css::uno::RuntimeException
     const css::uno::Mapping & getCpp2Uno() throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     const css::uno::Mapping & getUno2Cpp() throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     uno_Interface * mapToUno( const css::uno::Any & rObj, typelib_InterfaceTypeDescription * pTo ) throw(css::uno::RuntimeException);
 
     // ctor/ dtor
@@ -130,7 +133,9 @@ public:
     virtual css::uno::Any SAL_CALL getByHierarchicalName( const OUString & rName ) throw(css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
     virtual sal_Bool SAL_CALL hasByHierarchicalName( const OUString & rName ) throw(css::uno::RuntimeException, std::exception) override;
 
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::reflection::XIdlClass > forType( typelib_TypeDescription * pTypeDescr ) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::reflection::XIdlClass > forType( typelib_TypeDescriptionReference * pRef ) throw(css::uno::RuntimeException);
 };
 

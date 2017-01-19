@@ -100,6 +100,7 @@ class JavaComponentLoader : public WeakImplHelper<XImplementationLoader, XServic
 
 
 public:
+    /// @throws RuntimeException
     explicit JavaComponentLoader(const css::uno::Reference<XComponentContext> & xCtx)
         throw(RuntimeException);
 
@@ -356,6 +357,7 @@ static Mutex & getInitMutex()
     return *pMutex;
 }
 
+/// @throws Exception
 css::uno::Reference<XInterface> SAL_CALL JavaComponentLoader_CreateInstance(const css::uno::Reference<XComponentContext> & xCtx) throw(Exception)
 {
     css::uno::Reference<XInterface> xRet;

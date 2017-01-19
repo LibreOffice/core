@@ -265,6 +265,7 @@ bool askForRetry(css::uno::Any const & rException)
 
 // Only gets the properties if the "Proxy Server" entry in the option dialog is
 // set to manual (i.e. not to none)
+/// @throws css::uno::Exception
 void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
                             const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
                             const css::uno::Reference<css::uno::XComponentContext> &xCtx ) throw (css::uno::Exception)
@@ -346,6 +347,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
     xConfRegistry_simple->close();
 }
 
+/// @throws css::uno::Exception
 void getDefaultLocaleFromConfig(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
@@ -449,7 +451,7 @@ void getDefaultLocaleFromConfig(
     xConfRegistry_simple->close();
 }
 
-
+/// @throws css::uno::Exception
 void getJavaPropsFromSafetySettings(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
@@ -536,6 +538,7 @@ void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
         pjvm->pushProp("user.timezone=ECT");
 }
 
+/// @throws css::uno::Exception
 void initVMConfiguration(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
