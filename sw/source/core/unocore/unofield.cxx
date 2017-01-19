@@ -1130,9 +1130,9 @@ public:
     uno::WeakReference<uno::XInterface> m_wThis;
     ::comphelper::OInterfaceContainerHelper2 m_EventListeners;
 
-    SwFormatField const*     m_pFormatField;
-    SwDoc *             m_pDoc;
-    SwTextAPIObject *   m_pTextObject;
+    SwFormatField const*            m_pFormatField;
+    SwDoc *                         m_pDoc;
+    rtl::Reference<SwTextAPIObject> m_xTextObject;
 
     bool                m_bIsDescriptor;
     // required to access field master of not yet inserted fields
@@ -1148,7 +1148,6 @@ public:
         , m_EventListeners(m_Mutex)
         , m_pFormatField(pFormat)
         , m_pDoc(pDoc)
-        , m_pTextObject(nullptr)
         , m_bIsDescriptor(pFormat == nullptr)
         , m_bCallUpdate(false)
         , m_nServiceId((pFormat)
@@ -1159,10 +1158,9 @@ public:
 
     virtual ~Impl() override
     {
-        if (m_pTextObject)
+        if (m_xTextObject.is())
         {
-            m_pTextObject->DisposeEditSource();
-            m_pTextObject->release();
+            m_xTextObject->DisposeEditSource();
         }
     }
 
@@ -1362,10 +1360,10 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
                     m_pImpl->m_pProps->sPar3, // author's initials
                     m_pImpl->m_pProps->sPar4, // name
                     aDateTime );
-                if ( m_pImpl->m_pTextObject )
+                if ( m_pImpl->m_xTextObject.is() )
                 {
-                    pPostItField->SetTextObject( m_pImpl->m_pTextObject->CreateText() );
-                    pPostItField->SetPar2(m_pImpl->m_pTextObject->GetText());
+                    pPostItField->SetTextObject( m_pImpl->m_xTextObject->CreateText() );
+                    pPostItField->SetPar2(m_pImpl->m_xTextObject->GetText());
                 }
                 pField = pPostItField;
             }
@@ -2095,11 +2093,10 @@ void SAL_CALL SwXTextField::dispose() throw (uno::RuntimeException, std::excepti
         SwTextField::DeleteTextField(*(m_pImpl->m_pFormatField->GetTextField()));
     }
 
-    if (m_pImpl->m_pTextObject)
+    if (m_pImpl->m_xTextObject.is())
     {
-        m_pImpl->m_pTextObject->DisposeEditSource();
-        m_pImpl->m_pTextObject->release();
-        m_pImpl->m_pTextObject = nullptr;
+        m_pImpl->m_xTextObject->DisposeEditSource();
+        m_pImpl->m_xTextObject.clear();
     }
 }
 
@@ -2406,15 +2403,14 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
             {
             case FIELD_PROP_TEXT:
                 {
-                    if (!m_pImpl->m_pTextObject)
+                    if (!m_pImpl->m_xTextObject.is())
                     {
                         SwTextAPIEditSource* pObj =
                             new SwTextAPIEditSource(m_pImpl->m_pDoc);
-                        m_pImpl->m_pTextObject = new SwTextAPIObject( pObj );
-                        m_pImpl->m_pTextObject->acquire();
+                        m_pImpl->m_xTextObject = new SwTextAPIObject( pObj );
                     }
 
-                    uno::Reference<text::XText> xText(m_pImpl->m_pTextObject);
+                    uno::Reference<text::XText> xText(m_pImpl->m_xTextObject.get());
                     aRet <<= xText;
                     break;
                 }
