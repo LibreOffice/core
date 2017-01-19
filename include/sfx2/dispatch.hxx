@@ -148,8 +148,7 @@ public:
     SfxViewFrame*       GetFrame() const;
     SfxModule*          GetModule() const;
 
-    void                ExecutePopup( const OUString &rResName, vcl::Window *pWin = nullptr, const Point *pPos = nullptr,
-                                      PopupMenuFlags nFlags = PopupMenuFlags::ExecuteDown );
+    void                ExecutePopup( const OUString &rResName, vcl::Window *pWin = nullptr, const Point *pPos = nullptr );
     static void         ExecutePopup( vcl::Window *pWin = nullptr, const Point *pPosPixel = nullptr );
 
     bool                IsAppDispatcher() const;

@@ -11,11 +11,13 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <unotools/viewoptions.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <vcl/notebookbar.hxx>
 #include <vcl/syswin.hxx>
 #include <vcl/tabctrl.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/propertyvalue.hxx>
 #include <com/sun/star/ui/ContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/ui/XContextChangeEventMultiplexer.hpp>
 #include <com/sun/star/util/URLTransformer.hpp>
@@ -23,6 +25,7 @@
 #include <officecfg/Office/UI/Notebookbar.hxx>
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/frame/ModuleManager.hpp>
+#include <com/sun/star/frame/XPopupMenuController.hpp>
 #include <unotools/confignode.hxx>
 #include <comphelper/types.hxx>
 
@@ -336,12 +339,32 @@ void SfxNotebookBar::RemoveListeners(SystemWindow* pSysWindow)
 IMPL_STATIC_LINK(SfxNotebookBar, OpenNotebookbarPopupMenu, NotebookBar*, pNotebookbar, void)
 {
     SfxViewFrame* pViewFrame = SfxViewFrame::Current();
-    SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : nullptr;
-    if (pNotebookbar && pDispatcher)
+    if (pNotebookbar && pViewFrame)
     {
+        css::uno::Sequence<css::uno::Any> aArgs {
+            css::uno::makeAny(comphelper::makePropertyValue("Value", OUString("notebookbar"))),
+            css::uno::makeAny(comphelper::makePropertyValue("Frame", pViewFrame->GetFrame().GetFrameInterface())) };
+
+        css::uno::Reference<css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+        css::uno::Reference<css::frame::XPopupMenuController> xPopupController(
+            xContext->getServiceManager()->createInstanceWithArgumentsAndContext(
+            "com.sun.star.comp.framework.ResourceMenuController", aArgs, xContext), css::uno::UNO_QUERY);
+
+        css::uno::Reference<css::awt::XPopupMenu> xPopupMenu(xContext->getServiceManager()->createInstanceWithContext(
+            "com.sun.star.awt.PopupMenu", xContext), css::uno::UNO_QUERY);
+
+        if (!xPopupController.is() || !xPopupMenu.is())
+            return;
+
+        xPopupController->setPopupMenu(xPopupMenu);
+        VCLXMenu* pAwtMenu = VCLXMenu::GetImplementation(xPopupMenu);
+        PopupMenu* pVCLMenu = static_cast<PopupMenu*>(pAwtMenu->GetMenu());
         Point aPos(0, NotebookbarTabControl::GetHeaderHeight());
-        pDispatcher->ExecutePopup("notebookbar", pNotebookbar, &aPos,
-                                  PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
+        pVCLMenu->Execute(pNotebookbar, Rectangle(aPos, aPos),PopupMenuFlags::ExecuteDown|PopupMenuFlags::NoMouseUpClose);
+
+        css::uno::Reference<css::lang::XComponent> xComponent(xPopupController, css::uno::UNO_QUERY);
+        if (xComponent.is())
+            xComponent->dispose();
     }
 }
 
