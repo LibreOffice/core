@@ -7435,6 +7435,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     if (!aCertHashContext.get())
     {
         SAL_WARN("vcl.pdfwriter", "HASH_Create() failed");
+        free(pass);
         return false;
     }
     HASH_Begin(aCertHashContext.get());
@@ -7459,6 +7460,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     if (!pEncodedCertificate)
     {
         SAL_WARN("vcl.pdfwriter", "SEC_ASN1EncodeItem() failed");
+        free(pass);
         return false;
     }
 
@@ -7483,6 +7485,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     if (my_SEC_StringToOID(&aOidData.oid, "1.2.840.113549.1.9.16.2.47", 0) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "my_SEC_StringToOID() failed");
+        free(pass);
         return false;
     }
     aOidData.offset = SEC_OID_UNKNOWN;
@@ -7496,6 +7499,7 @@ bool PDFWriter::Sign(PDFSignContext& rContext)
     if (my_NSS_CMSSignerInfo_AddAuthAttr(cms_signer, &aAttribute) != SECSuccess)
     {
         SAL_WARN("vcl.pdfwriter", "my_NSS_CMSSignerInfo_AddAuthAttr() failed");
+        free(pass);
         return false;
     }
 
