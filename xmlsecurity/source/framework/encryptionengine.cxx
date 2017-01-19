@@ -19,9 +19,10 @@
 
 
 #include "encryptionengine.hxx"
-#include <com/sun/star/xml/crypto/XMLEncryptionTemplate.hpp>
 #include <com/sun/star/xml/wrapper/XXMLElementWrapper.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <rtl/ref.hxx>
+#include <xmlencryptiontemplateimpl.hxx>
 
 using namespace com::sun::star::uno;
 namespace cssxc = com::sun::star::xml::crypto;
@@ -93,15 +94,14 @@ void EncryptionEngine::tryToPerform( )
 {
     if (checkReady())
     {
-        Reference < cssxc::XXMLEncryptionTemplate > xEncryptionTemplate =
-            cssxc::XMLEncryptionTemplate::create( m_xContext );
+        rtl::Reference<XMLEncryptionTemplateImpl> xEncryptionTemplate = new XMLEncryptionTemplateImpl();
 
         Reference< cssxw::XXMLElementWrapper > xXMLElement
             = m_xSAXEventKeeper->getElement( m_nIdOfTemplateEC );
 
         xEncryptionTemplate->setTemplate(xXMLElement);
 
-        startEngine( xEncryptionTemplate );
+        startEngine(Reference<cssxc::XXMLEncryptionTemplate>(xEncryptionTemplate.get()));
 
         /*
          * done
