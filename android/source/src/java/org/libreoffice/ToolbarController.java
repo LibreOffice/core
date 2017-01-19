@@ -8,7 +8,6 @@
  */
 package org.libreoffice;
 
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,13 +21,11 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
     private static final String LOGTAG = ToolbarController.class.getSimpleName();
     private final Toolbar mToolbarTop;
 
-    private final ActionBar mActionBar;
-    private LibreOfficeMainActivity mContext;
-    private Menu mMainMenu;
+    private final LibreOfficeMainActivity mContext;
+    private final Menu mMainMenu;
 
-    public ToolbarController(LibreOfficeMainActivity context, ActionBar actionBar, Toolbar toolbarTop) {
+    public ToolbarController(LibreOfficeMainActivity context, Toolbar toolbarTop) {
         mToolbarTop = toolbarTop;
-        mActionBar = actionBar;
         mContext = context;
 
         mToolbarTop.inflateMenu(R.menu.main);
@@ -38,7 +35,7 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
         mMainMenu = mToolbarTop.getMenu();
     }
 
-    public void disableMenuItem(final int menuItemId, final boolean disabled) {
+    private void disableMenuItem(final int menuItemId, final boolean disabled) {
         LOKitShell.getMainHandler().post(new Runnable() {
             public void run() {
                 MenuItem menuItem = mMainMenu.findItem(menuItemId);
@@ -64,7 +61,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
             public void run() {
                 mMainMenu.setGroupVisible(R.id.group_edit_actions, true);
                 mToolbarTop.setNavigationIcon(R.drawable.ic_check);
-                mToolbarTop.setTitle(null);
                 mToolbarTop.setLogo(null);
 
             }
@@ -84,7 +80,6 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
             public void run() {
                 mMainMenu.setGroupVisible(R.id.group_edit_actions, false);
                 mToolbarTop.setNavigationIcon(R.drawable.lo_icon);
-                mToolbarTop.setTitle(null);
                 mToolbarTop.setLogo(null);
             }
         });
@@ -124,13 +119,12 @@ public class ToolbarController implements Toolbar.OnMenuItemClickListener {
         return false;
     }
 
-    public void setupToolbars() {
-        LibreOfficeMainActivity activity = mContext;
-        if (activity.usesTemporaryFile()) {
+    void setupToolbars() {
+        if (mContext.usesTemporaryFile()) {
             disableMenuItem(R.id.action_save, true);
-            Toast.makeText(activity, activity.getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getString(R.string.temp_file_saving_disabled), Toast.LENGTH_LONG).show();
         }
-        mMainMenu.findItem(R.id.action_parts).setVisible(activity.isDrawerEnabled());
+        mMainMenu.findItem(R.id.action_parts).setVisible(mContext.isDrawerEnabled());
     }
 
 }

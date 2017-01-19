@@ -116,10 +116,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Toolbar toolbarTop = (Toolbar) findViewById(R.id.toolbar);
-
         hideBottomToolbar();
 
-        mToolbarController = new ToolbarController(this, getSupportActionBar(), toolbarTop);
+        mToolbarController = new ToolbarController(this, toolbarTop);
         mFormattingController = new FormattingController(this);
         toolbarTop.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,6 +152,9 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
         } else {
             mInputFile = new File(DEFAULT_DOC_PATH);
         }
+
+        toolbarTop.setTitle(mInputFile.getName());
+
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 

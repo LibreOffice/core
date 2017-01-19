@@ -3,10 +3,6 @@
     <style name="LibreOfficeTheme" parent="LibreOfficeTheme.Base"/>
 
     <style name="LibreOfficeTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowNoTitle">true</item>
-    </style>
-
-    <style name="BrowserTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
 
     <style name="ListItemText">
