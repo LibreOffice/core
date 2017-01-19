@@ -20,6 +20,7 @@
 #ifndef INCLUDED_SW_INC_ANNOTATIONWIN_HXX
 #define INCLUDED_SW_INC_ANNOTATIONWIN_HXX
 
+#include <docufld.hxx>
 #include <SidebarWin.hxx>
 
 class PopupMenu;
@@ -43,6 +44,8 @@ class SwAnnotationWin : public sw::sidebarwindows::SwSidebarWin
         virtual void    SetPostItText() override;
         virtual void    Delete() override;
         virtual void    GotoPos() override;
+        inline SwPostItField* GetPostItField() { return mpField; }
+        inline sal_uInt32      GetAnnotationId() { return mpField->GetPostItId(); }
 
         virtual OUString GetAuthor() override;
         virtual Date    GetDate() override;

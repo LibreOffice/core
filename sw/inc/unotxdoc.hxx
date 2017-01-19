@@ -440,7 +440,8 @@ public:
     virtual Pointer getPointer() override;
     /// @see vcl::ITiledRenderable::getTrackedChangeAuthors().
     OUString getTrackedChangeAuthors() override;
-
+    /// @see vcl::ITiledRenderable::getPostIts().
+    OUString getPostIts() override;
     // css::tiledrendering::XTiledRenderable
     virtual void SAL_CALL paintTile( const ::css::uno::Any& Parent, ::sal_Int32 nOutputWidth, ::sal_Int32 nOutputHeight, ::sal_Int32 nTilePosX, ::sal_Int32 nTilePosY, ::sal_Int32 nTileWidth, ::sal_Int32 nTileHeight ) throw (::css::uno::RuntimeException, std::exception) override;
 

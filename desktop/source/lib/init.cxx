@@ -1867,6 +1867,20 @@ static void doc_registerCallback(LibreOfficeKitDocument* pThis,
         pViewShell->registerLibreOfficeKitViewCallback(CallbackFlushHandler::callback, pDocument->mpCallbackFlushHandlers[nView].get());
 }
 
+/// Returns the JSON representation of all the comments in the document
+static char* getPostIts(LibreOfficeKitDocument* pThis)
+{
+    ITiledRenderable* pDoc = getTiledRenderable(pThis);
+    if (!pDoc)
+    {
+        gImpl->maLastExceptionMsg = "Document doesn't support tiled rendering";
+        return nullptr;
+    }
+    OUString aComments = pDoc->getPostIts();
+    return strdup(aComments.toUtf8().getStr());
+}
+
+
 static void doc_postKeyEvent(LibreOfficeKitDocument* pThis, int nType, int nCharCode, int nKeyCode)
 {
     SolarMutexGuard aGuard;
@@ -2416,6 +2430,7 @@ static char* getTrackedChanges(LibreOfficeKitDocument* pThis)
     return pJson;
 }
 
+
 /// Returns the JSON representation of the redline author table.
 static char* getTrackedChangeAuthors(LibreOfficeKitDocument* pThis)
 {
@@ -2461,6 +2476,10 @@ static char* doc_getCommandValues(LibreOfficeKitDocument* pThis, const char* pCo
     else if (aCommand == ".uno:TrackedChangeAuthors")
     {
         return getTrackedChangeAuthors(pThis);
+    }
+    else if (aCommand == ".uno:ViewAnnotations")
+    {
+        return getPostIts(pThis);
     }
     else if (aCommand.startsWith(aViewRowColumnHeaders))
     {
