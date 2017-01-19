@@ -402,7 +402,7 @@ PasswordContainerInteractionHandler::handleInteractionRequest(
 
 // Service factory implementation.
 
-
+/// @throws uno::Exception
 static uno::Reference< uno::XInterface > SAL_CALL
 PasswordContainerInteractionHandler_CreateInstance(
         const uno::Reference< lang::XMultiServiceFactory> & rSMgr )
