@@ -414,10 +414,10 @@ private:
             TheModelRef& operator=(const TheModelRef& rTheModel);
             ~TheModelRef();
             bool is() const;
-                TheModel* operator->() const { return m_pTheModel; }
+            TheModel* operator->() const { return m_xTheModel.get(); }
         private:
-            TheModel*               m_pTheModel;
-            ::osl::Mutex&   m_rModelMutex;
+            rtl::Reference<TheModel>  m_xTheModel;
+            ::osl::Mutex&             m_rModelMutex;
     };
 
 private:

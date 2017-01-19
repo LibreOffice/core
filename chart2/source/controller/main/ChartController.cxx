@@ -221,55 +221,37 @@ void ChartController::TheModel::tryTermination()
 }
 
 ChartController::TheModelRef::TheModelRef( TheModel* pTheModel, osl::Mutex& rMutex ) :
-    m_pTheModel(pTheModel),
     m_rModelMutex(rMutex)
 {
     osl::Guard< osl::Mutex > aGuard( m_rModelMutex );
-    if(m_pTheModel)
-        m_pTheModel->acquire();
+    m_xTheModel = pTheModel;
 }
 ChartController::TheModelRef::TheModelRef( const TheModelRef& rTheModel, ::osl::Mutex& rMutex ) :
     m_rModelMutex(rMutex)
 {
     osl::Guard< osl::Mutex > aGuard( m_rModelMutex );
-    m_pTheModel=rTheModel.operator->();
-    if(m_pTheModel)
-        m_pTheModel->acquire();
+    m_xTheModel = rTheModel.m_xTheModel;
 }
 ChartController::TheModelRef& ChartController::TheModelRef::operator=(TheModel* pTheModel)
 {
     osl::Guard< osl::Mutex > aGuard( m_rModelMutex );
-    if(m_pTheModel==pTheModel)
-        return *this;
-    if(m_pTheModel)
-        m_pTheModel->release();
-    m_pTheModel=pTheModel;
-    if(m_pTheModel)
-        m_pTheModel->acquire();
+    m_xTheModel = pTheModel;
     return *this;
 }
 ChartController::TheModelRef& ChartController::TheModelRef::operator=(const TheModelRef& rTheModel)
 {
     osl::Guard< osl::Mutex > aGuard( m_rModelMutex );
-    TheModel* pNew=rTheModel.operator->();
-    if(m_pTheModel==pNew)
-        return *this;
-    if(m_pTheModel)
-        m_pTheModel->release();
-    m_pTheModel=pNew;
-    if(m_pTheModel)
-        m_pTheModel->acquire();
+    m_xTheModel = rTheModel.operator->();
     return *this;
 }
 ChartController::TheModelRef::~TheModelRef()
 {
     osl::Guard< osl::Mutex > aGuard( m_rModelMutex );
-    if(m_pTheModel)
-        m_pTheModel->release();
+    m_xTheModel.clear();
 }
 bool ChartController::TheModelRef::is() const
 {
-    return (m_pTheModel != nullptr);
+    return m_xTheModel.is();
 }
 
 namespace {
