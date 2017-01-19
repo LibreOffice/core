@@ -53,7 +53,7 @@ void CrashReportDialog::dispose()
     Dialog::dispose();
 }
 
-IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn)
+IMPL_LINK_TYPED(CrashReportDialog, BtnHdl, Button*, pBtn, void)
 {
     if (pBtn == mpBtnSend.get())
     {
@@ -94,7 +94,6 @@ IMPL_LINK(CrashReportDialog, BtnHdl, Button*, pBtn)
     {
         Close();
     }
-    return 0;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

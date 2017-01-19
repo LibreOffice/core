@@ -25,7 +25,6 @@ $(eval $(call gb_Library_add_libs,sofficeapp,\
 
 $(eval $(call gb_Library_use_externals,sofficeapp, \
 	$(if $(ENABLE_BREAKPAD),breakpad) \
-	$(if $(filter OPENCL,$(BUILD_TYPE)),clew) \
     boost_headers \
     dbus \
 ))

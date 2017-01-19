@@ -20,7 +20,7 @@ class CrashReportDialog : public Dialog
 {
 public:
 
-    explicit CrashReportDialog(vcl::Window* pParent);
+    CrashReportDialog(vcl::Window* pParent);
 
     virtual ~CrashReportDialog() override;
 
@@ -37,7 +37,7 @@ private:
 
     OUString maSuccessMsg;
 
-    DECL_LINK(BtnHdl, Button*);
+    DECL_LINK_TYPED(BtnHdl, Button*, void);
 };
 
 #endif
