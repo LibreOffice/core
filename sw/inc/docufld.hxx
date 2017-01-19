@@ -452,6 +452,10 @@ public:
                    const OUString& rInitials,
                    const OUString& rName,
                    const DateTime& rDate);
+
+    SwPostItField(const SwPostItField&) = delete; // fix for MSVC2013
+    SwPostItField(SwPostItField&&) = delete; // fix for MSVC2013
+
     virtual ~SwPostItField() override;
 
     virtual OUString        Expand() const override;
