@@ -32,6 +32,7 @@ private:
     SwVbaListHelperRef pListHelper;
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaListLevels( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, SwVbaListHelperRef const & pHelper ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaListLevels() override {}
 

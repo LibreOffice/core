@@ -51,6 +51,9 @@ public:
     SwSearchProperties_Impl();
     ~SwSearchProperties_Impl();
 
+    /// @throws beans::UnknownPropertyException
+    /// @throws lang::IllegalArgumentException
+    /// @throws uno::RuntimeException
     void    SetProperties(const uno::Sequence< beans::PropertyValue >& aSearchAttribs)
         throw( beans::UnknownPropertyException, lang::IllegalArgumentException, uno::RuntimeException );
     const uno::Sequence< beans::PropertyValue > GetProperties() const;

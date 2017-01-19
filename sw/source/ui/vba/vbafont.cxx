@@ -87,6 +87,7 @@ public:
         return theMapper;
     }
 
+    /// @throws lang::IllegalArgumentException
     sal_Int32 getOOOFromMSO( sal_Int32 nMSOConst ) throw( lang::IllegalArgumentException )
     {
         ConstToConst::iterator it = MSO2OOO.find( nMSOConst );
@@ -94,6 +95,7 @@ public:
             throw lang::IllegalArgumentException();
         return it->second;
     }
+    /// @throws lang::IllegalArgumentException
     sal_Int32 getMSOFromOOO( sal_Int32 nOOOConst ) throw( lang::IllegalArgumentException )
     {
         ConstToConst::iterator it = OOO2MSO.find( nOOOConst );

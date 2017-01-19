@@ -206,6 +206,8 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
     }
 }
 
+/// @throws lang::IllegalArgumentException
+/// @throws uno::RuntimeException
 static void
 lcl_setCharStyle(SwDoc *const pDoc, const uno::Any & rValue, SfxItemSet & rSet)
     throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
@@ -232,6 +234,7 @@ lcl_setCharStyle(SwDoc *const pDoc, const uno::Any & rValue, SfxItemSet & rSet)
     }
 };
 
+/// @throws lang::IllegalArgumentException
 static void
 lcl_setAutoStyle(IStyleAccess & rStyleAccess, const uno::Any & rValue,
         SfxItemSet & rSet, const bool bPara)

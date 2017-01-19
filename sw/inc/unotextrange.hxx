@@ -99,6 +99,7 @@ private:
 
     void    SetPositions(SwPaM const& rPam);
     //TODO: new exception type for protected content
+    /// @throws css::uno::RuntimeException
     void    DeleteAndInsert(
                 const OUString& rText, const bool bForceExpandHints)
         throw (css::uno::RuntimeException);

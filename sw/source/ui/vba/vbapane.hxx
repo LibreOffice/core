@@ -30,6 +30,7 @@ private:
     css::uno::Reference< css::frame::XModel > mxModel;
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaPane( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::frame::XModel >& xModel ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaPane() override;

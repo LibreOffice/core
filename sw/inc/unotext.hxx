@@ -63,6 +63,8 @@ private:
     virtual void PrepareForAttach(
             css::uno::Reference< css::text::XTextRange > & xRange,
             SwPaM const & rPam);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     virtual bool CheckForOwnMemberMeta(
             const SwPaM & rPam, const bool bAbsorb)
         throw (css::lang::IllegalArgumentException,
@@ -86,6 +88,7 @@ public:
     const SwDoc*    GetDoc() const;
           SwDoc*    GetDoc();
 
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Reference< css::text::XTextCursor >
         CreateCursor()
         throw (css::uno::RuntimeException);

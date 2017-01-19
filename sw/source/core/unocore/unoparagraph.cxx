@@ -94,6 +94,8 @@ SwParaSelection::~SwParaSelection()
     }
 }
 
+/// @throws beans::UnknownPropertyException
+/// @throws uno::RuntimeException
 static beans::PropertyState lcl_SwXParagraph_getPropertyState(
                             const SwTextNode& rTextNode,
                             const SwAttrSet** ppSet,
@@ -147,6 +149,11 @@ public:
 
     bool IsDescriptor() const { return m_bIsDescriptor; }
 
+    /// @throws beans::UnknownPropertyException
+    /// @throws beans::PropertyVetoException
+    /// @throws lang::IllegalArgumentException
+    /// @throws lang::WrappedTargetException
+    /// @throws uno::RuntimeException
     void SetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames,
             const uno::Sequence< uno::Any >& rValues)
@@ -154,6 +161,9 @@ public:
                 lang::IllegalArgumentException, lang::WrappedTargetException,
                 uno::RuntimeException);
 
+    /// @throws beans::UnknownPropertyException
+    /// @throws lang::WrappedTargetException
+    /// @throws uno::RuntimeException
     uno::Sequence< uno::Any >
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames)
@@ -161,12 +171,14 @@ public:
                 uno::RuntimeException, std::exception);
 
     //UUUU
+    /// @throws uno::RuntimeException
     void GetSinglePropertyValue_Impl(
         const SfxItemPropertySimpleEntry& rEntry,
         const SfxItemSet& rSet,
         uno::Any& rAny ) const
     throw(uno::RuntimeException);
 
+    /// @throws uno::RuntimeException
     uno::Sequence< beans::GetDirectPropertyTolerantResult >
         GetPropertyValuesTolerant_Impl(
             const uno::Sequence< OUString >& rPropertyNames,

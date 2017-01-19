@@ -37,12 +37,14 @@ private:
     css::uno::Reference< css::text::XBookmarksSupplier > mxBookmarksSupplier;
 
 private:
+    /// @throws css::uno::RuntimeException
     void removeBookmarkByName( const OUString& rName ) throw (css::uno::RuntimeException);
 
 public:
     SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, const css::uno::Reference< css::frame::XModel >& xModel );
     virtual ~SwVbaBookmarks() override {}
 
+    /// @throws css::uno::RuntimeException
     static void addBookmarkByName( const css::uno::Reference< css::frame::XModel >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange ) throw (css::uno::RuntimeException);
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

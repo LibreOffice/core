@@ -34,6 +34,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > mxParaProps;
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaTabStops( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaTabStops() override {}
 

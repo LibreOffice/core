@@ -31,6 +31,7 @@ private:
     css::uno::Reference< css::beans::XPropertySet > mxPageProps;
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaSection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaSection() override;
 

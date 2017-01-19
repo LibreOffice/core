@@ -115,6 +115,8 @@ public:
     inline Int32Set_Impl::const_iterator GetRowIter( sal_Int32 nRow ) const;
     inline Int32Set_Impl::const_iterator GetColumnIter( sal_Int32 nCol ) const;
 
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws  uno::RuntimeException
     const SwFrame *GetCell( sal_Int32 nRow, sal_Int32 nColumn, SwAccessibleTable *pThis ) const
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception);
     const SwFrame *GetCellAtPos( sal_Int32 nLeft, sal_Int32 nTop ) const;
@@ -127,6 +129,7 @@ public:
                           SwAccTableSelHander_Impl& rSelHdl,
                        bool bColumns ) const;
 
+    /// @throws lang::IndexOutOfBoundsException
     void CheckRowAndCol( sal_Int32 nRow, sal_Int32 nCol,
                          SwAccessibleTable *pThis ) const
         throw(lang::IndexOutOfBoundsException );

@@ -36,10 +36,13 @@ private:
     sal_Int32 mnEndColumnIndex;
 
 private:
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< ooo::vba::word::XColumn > getColumnAtIndex( sal_Int32 index ) throw (css::uno::RuntimeException);
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaColumns( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, const css::uno::Reference< css::table::XTableColumns >& xTableColumns ) throw ( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     SwVbaColumns( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, const css::uno::Reference< css::table::XTableColumns >& xTableColumns, sal_Int32 nStartCol, sal_Int32 nEndCol ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaColumns() override {}
 

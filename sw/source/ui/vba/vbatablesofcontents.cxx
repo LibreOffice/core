@@ -60,6 +60,7 @@ private:
     std::vector< uno::Reference< text::XDocumentIndex > > maToc;
 
 public:
+    /// @throws uno::RuntimeException
     TableOfContentsCollectionHelper( const uno::Reference< ov::XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xDoc ) throw ( uno::RuntimeException ): mxParent( xParent ), mxContext( xContext ), mxTextDocument( xDoc )
     {
         uno::Reference< text::XDocumentIndexesSupplier > xDocIndexSupp( mxTextDocument, uno::UNO_QUERY_THROW );

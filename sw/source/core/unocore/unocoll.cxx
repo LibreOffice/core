@@ -1038,6 +1038,7 @@ namespace
     }
 
     // runtime adapter for lcl_UnoWrapFrame
+    /// @throws uno::RuntimeException
     uno::Any lcl_UnoWrapFrame(SwFrameFormat* pFormat, FlyCntType eType) throw(uno::RuntimeException)
     {
         switch(eType)

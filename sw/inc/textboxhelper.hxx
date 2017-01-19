@@ -94,6 +94,8 @@ public:
     /// Count number of shapes on the page, excluding TextBoxes.
     static sal_Int32 getCount(SdrPage* pPage);
     /// Get a shape by index, excluding TextBoxes.
+    ///
+    /// @throws css::lang::IndexOutOfBoundsException
     static css::uno::Any getByIndex(SdrPage* pPage, sal_Int32 nIndex) throw(css::lang::IndexOutOfBoundsException);
     /// Get the order of the shape, excluding TextBoxes.
     static sal_Int32 getOrdNum(const SdrObject* pObject);

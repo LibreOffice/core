@@ -126,6 +126,7 @@ static CloseResult CloseModelAndDocSh(
     return eResult;
 }
 
+/// @throws RuntimeException
 static bool LoadFromURL_impl(
         Reference< frame::XModel > &rxModel,
         SfxObjectShellRef &rxDocSh,

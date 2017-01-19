@@ -35,6 +35,7 @@ class BookmarksEnumeration : public EnumerationHelperImpl
 {
     uno::Reference< frame::XModel > mxModel;
 public:
+    /// @throws uno::RuntimeException
     BookmarksEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mxModel( xModel ) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
@@ -55,6 +56,7 @@ private:
     uno::Reference< container::XIndexAccess > mxIndexAccess;
     uno::Any cachePos;
 public:
+    /// @throws uno::RuntimeException
     explicit BookmarkCollectionHelper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) throw (uno::RuntimeException) : mxIndexAccess( xIndexAccess )
     {
         mxNameAccess.set( mxIndexAccess, uno::UNO_QUERY_THROW );

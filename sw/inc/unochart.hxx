@@ -135,10 +135,14 @@ class SwChartDataProvider :
     SwChartDataProvider( const SwChartDataProvider & ) = delete;
     SwChartDataProvider & operator = ( const SwChartDataProvider & ) = delete;
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL Impl_createDataSource( const css::uno::Sequence< css::beans::PropertyValue >& aArguments, bool bTestOnly = false )
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException,
                std::exception);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL Impl_createDataSequenceByRangeRepresentation( const OUString& aRangeRepresentation, bool bTestOnly = false )
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException,

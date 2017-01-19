@@ -79,6 +79,7 @@ class ParagraphCollectionHelper : public ::cppu::WeakImplHelper< container::XInd
 private:
     uno::Reference< text::XTextDocument > mxTextDocument;
 
+    /// @throws uno::RuntimeException
     uno::Reference< container::XEnumeration > getEnumeration() throw (uno::RuntimeException)
     {
         uno::Reference< container::XEnumerationAccess > xParEnumAccess( mxTextDocument->getText(), uno::UNO_QUERY_THROW );
@@ -86,6 +87,7 @@ private:
     }
 
 public:
+    /// @throws uno::RuntimeException
     explicit ParagraphCollectionHelper( const uno::Reference< text::XTextDocument >& xDocument ) throw (uno::RuntimeException): mxTextDocument( xDocument )
     {
     }

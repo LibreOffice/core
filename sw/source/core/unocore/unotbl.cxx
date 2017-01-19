@@ -207,6 +207,8 @@ static bool lcl_LineToSvxLine(const table::BorderLine& rLine, SvxBorderLine& rSv
     return rLine.InnerLineWidth > 0 || rLine.OuterLineWidth > 0;
 }
 
+/// @throws lang::IllegalArgumentException
+/// @throws uno::RuntimeException
 static void lcl_SetSpecialProperty(SwFrameFormat* pFormat,
                                    const SfxItemPropertySimpleEntry* pEntry,
                                    const uno::Any& aValue)

@@ -40,16 +40,26 @@ private:
     css::uno::Reference< css::text::XTextViewCursor > mxTextViewCursor;
 
 private:
+    /// @throws css::script::BasicErrorException
+    /// @throws css::uno::RuntimeException
     void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    /// @throws css::script::BasicErrorException
+    /// @throws css::uno::RuntimeException
     void NextCell( sal_Int32 nCount, ooo::vba::word::E_DIRECTION eDirection )
         throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::text::XTextRange > GetSelectedRange() throw ( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     void GetSelectedCellRange( OUString& sTLName, OUString& sBRName ) throw ( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::text::XTextTable > GetXTextTable() throw ( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     bool IsInTable() throw ( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     bool HasSelection() throw ( css::uno::RuntimeException );
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaSelection() override;
 

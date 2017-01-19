@@ -35,6 +35,7 @@ private:
     sal_Int32 mnIndex;
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaRow( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nIndex ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaRow() override;
 
@@ -48,6 +49,7 @@ public:
     virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException, std::exception) override;
 
+    /// @throws css::uno::RuntimeException
     static void SelectRow( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow ) throw (css::uno::RuntimeException);
 
     // XHelperInterface

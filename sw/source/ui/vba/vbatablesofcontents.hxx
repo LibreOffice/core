@@ -34,6 +34,7 @@ private:
     css::uno::Reference< css::text::XTextDocument > mxTextDocument;
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaTablesOfContents( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextDocument >& xDoc ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaTablesOfContents() override {}
 

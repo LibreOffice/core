@@ -140,12 +140,20 @@ public:
         return *pFormat;
     }
 
+    /// @throws beans::UnknownPropertyException
+    /// @throws beans::PropertyVetoException,
+    /// @throws lang::IllegalArgumentException
+    /// @throws lang::WrappedTargetException,
+    /// @throws uno::RuntimeException
     void SAL_CALL SetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames,
             const uno::Sequence< uno::Any >& aValues)
         throw (beans::UnknownPropertyException, beans::PropertyVetoException,
                 lang::IllegalArgumentException, lang::WrappedTargetException,
                 uno::RuntimeException, std::exception);
+    /// @throws beans::UnknownPropertyException
+    /// @throws lang::WrappedTargetException,
+    /// @throws uno::RuntimeException
     uno::Sequence< uno::Any > SAL_CALL
         GetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames)

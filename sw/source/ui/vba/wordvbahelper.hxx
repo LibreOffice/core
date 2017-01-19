@@ -38,13 +38,21 @@ namespace ooo
         //css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException);
         SwDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel );
         SwView* getView( const css::uno::Reference< css::frame::XModel>& xModel );
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::text::XTextViewCursor > getXTextViewCursor( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::style::XStyle > getCurrentPageStyle( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::style::XStyle > getCurrentPageStyle( const css::uno::Reference< css::frame::XModel>& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         sal_Int32 getPageCount( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::style::XStyle > getDefaultParagraphStyle( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::text::XTextRange > getFirstObjectPosition( const css::uno::Reference< css::text::XText >& xText ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::text::XText > getCurrentXText( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         bool gotoSelectedObjectAnchor( const css::uno::Reference< css::frame::XModel>& xModel ) throw (css::uno::RuntimeException);
 
     enum E_DIRECTION

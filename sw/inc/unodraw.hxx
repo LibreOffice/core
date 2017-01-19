@@ -203,6 +203,10 @@ class SwXShape : public SwXShapeBaseClass,
     /** method to get property from aggregation object
 
         @author OD
+
+        @throws css::beans::UnknownPropertyException
+        @throws css::lang::WrappedTargetException
+        @throws css::uno::RuntimeException
     */
     css::uno::Any _getPropAtAggrObj( const OUString& _rPropertyName )
             throw( css::beans::UnknownPropertyException,

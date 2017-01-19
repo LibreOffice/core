@@ -99,6 +99,7 @@ uno::Sequence< OUString > SAL_CALL DocxExport_getSupportedServiceNames() throw()
     return uno::Sequence< OUString > { "com.sun.star.document.ExportFilter" };
 }
 
+/// @throws uno::Exception
 uno::Reference< uno::XInterface > SAL_CALL DocxExport_createInstance(const uno::Reference< uno::XComponentContext > & xCtx ) throw( uno::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new DocxExportFilter( xCtx ));

@@ -36,6 +36,7 @@ private:
     uno::Reference< frame::XModel > mxModel;
     sal_Int32 nCurrentPos;
 public:
+    /// @throws uno::RuntimeException
     FramesEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess,  const uno::Reference< frame::XModel >& xModel  ) throw ( uno::RuntimeException ) : mxParent( xParent ), mxContext( xContext), mxIndexAccess( xIndexAccess ), mxModel( xModel ), nCurrentPos(0)
     {
     }

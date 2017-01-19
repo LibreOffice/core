@@ -52,6 +52,7 @@ class RevisionCollectionHelper : public ::cppu::WeakImplHelper< container::XInde
 {
     RevisionMap mRevisionMap;
 public:
+/// @throws css::uno::RuntimeException
 RevisionCollectionHelper( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextRange >& xTextRange ) throw (uno::RuntimeException);
 
     // XElementAccess
@@ -94,6 +95,7 @@ class RevisionsEnumeration : public EnumerationHelperImpl
 {
     uno::Reference< frame::XModel > m_xModel;
 public:
+    /// @throws uno::RuntimeException
     RevisionsEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel( xModel ) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override

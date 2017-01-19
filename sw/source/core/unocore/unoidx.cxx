@@ -65,6 +65,7 @@
 
 using namespace ::com::sun::star;
 
+/// @throws lang::IllegalArgumentException
 static OUString
 lcl_AnyToString(uno::Any const& rVal) throw (lang::IllegalArgumentException)
 {
@@ -76,6 +77,7 @@ lcl_AnyToString(uno::Any const& rVal) throw (lang::IllegalArgumentException)
     return sRet;
 }
 
+/// @throws lang::IllegalArgumentException
 static sal_Int16
 lcl_AnyToInt16(uno::Any const& rVal) throw (lang::IllegalArgumentException)
 {
@@ -87,6 +89,7 @@ lcl_AnyToInt16(uno::Any const& rVal) throw (lang::IllegalArgumentException)
     return nRet;
 }
 
+/// @throws lang::IllegalArgumentException
 static bool
 lcl_AnyToBool(uno::Any const& rVal) throw (lang::IllegalArgumentException)
 {
@@ -98,6 +101,7 @@ lcl_AnyToBool(uno::Any const& rVal) throw (lang::IllegalArgumentException)
     return bRet;
 }
 
+/// @throws lang::IllegalArgumentException
 template<typename T>
 void lcl_AnyToBitMask(uno::Any const& rValue,
         T & rBitMask, const T nBit)

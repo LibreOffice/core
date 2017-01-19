@@ -508,6 +508,9 @@ struct SwXParagraphEnumerationImpl final : public SwXParagraphEnumeration
 
     SwUnoCursor& GetCursor()
         { return *m_pCursor; }
+    /// @throws container::NoSuchElementException
+    /// @throws lang::WrappedTargetException
+    /// @throws uno::RuntimeException
     uno::Reference< text::XTextContent > NextElement_Impl()
         throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException);
 };

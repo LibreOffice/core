@@ -122,11 +122,18 @@ private:
     void init(const SwUnoCursor* pPortionCursor);
 
 protected:
-
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @trhows css::uno::RuntimeException
     void SAL_CALL SetPropertyValues_Impl(
         const css::uno::Sequence< OUString >& aPropertyNames,
         const css::uno::Sequence< css::uno::Any >& aValues )
             throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @trhows css::uno::RuntimeException
     css::uno::Sequence< css::uno::Any > SAL_CALL GetPropertyValues_Impl(
         const css::uno::Sequence< OUString >& aPropertyNames )
             throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
@@ -134,6 +141,7 @@ protected:
     void GetPropertyValue( css::uno::Any &rVal,
                 const SfxItemPropertySimpleEntry& rEntry, SwUnoCursor *pUnoCursor, SfxItemSet *&pSet );
 
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence<css::beans::GetDirectPropertyTolerantResult> SAL_CALL GetPropertyValuesTolerant_Impl(
         const css::uno::Sequence< OUString >& rPropertyNames, bool bDirectValuesOnly )
             throw (css::uno::RuntimeException, std::exception);
@@ -277,6 +285,7 @@ class SwXRedlinePortion : public SwXTextPortion
 private:
     SwRangeRedline const& m_rRedline;
 
+    /// @throws css::uno::RuntimeException
     void Validate() throw (css::uno::RuntimeException);
 
     using SwXTextPortion::GetPropertyValue;
@@ -290,8 +299,10 @@ public:
         css::uno::Reference< css::text::XText > const& xParent,
         bool const bIsStart);
 
+    /// @throws std::exception
     static css::uno::Any  GetPropertyValue(
             OUString const& PropertyName, SwRangeRedline const& rRedline) throw (std::exception);
+    /// @throws std::exception
     static css::uno::Sequence< css::beans::PropertyValue > CreateRedlineProperties(
                 SwRangeRedline const& rRedline, bool const bIsStart) throw (std::exception);
 

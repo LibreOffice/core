@@ -28,6 +28,7 @@ typedef CollTestImplHelper< ooo::vba::word::XAddins > SwVbaAddins_BASE;
 class SwVbaAddins : public SwVbaAddins_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaAddins( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext ) throw (css::uno::RuntimeException);
     virtual ~SwVbaAddins() override {}
 

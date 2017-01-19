@@ -24,6 +24,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+/// @throws uno::RuntimeException
 uno::Reference< container::XIndexAccess > createVariablesAccess( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< beans::XPropertyAccess >& xUserDefined ) throw ( uno::RuntimeException )
 {
     // FIXME: the performance is poor?

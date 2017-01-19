@@ -69,6 +69,8 @@ protected:
 
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL AttachImpl(
             const css::uno::Reference< css::text::XTextRange > & xTextRange,
             const sal_uInt16 nWhich)
@@ -102,6 +104,8 @@ public:
     bool SetContentRange( SwTextNode *& rpNode, sal_Int32 & rStart, sal_Int32 & rEnd) const;
     css::uno::Reference< css::text::XText > GetParentText() const;
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     bool CheckForOwnMemberMeta(const SwPaM & rPam, const bool bAbsorb)
         throw (css::lang::IllegalArgumentException,
                css::uno::RuntimeException);

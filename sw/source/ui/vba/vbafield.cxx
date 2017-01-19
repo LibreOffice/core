@@ -259,6 +259,7 @@ class FieldCollectionHelper : public ::cppu::WeakImplHelper< container::XIndexAc
     uno::Reference< frame::XModel > mxModel;
     uno::Reference< container::XEnumerationAccess > mxEnumerationAccess;
 public:
+    /// @throws css::uno::RuntimeException
     FieldCollectionHelper( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< frame::XModel >& xModel ) throw (css::uno::RuntimeException) : mxParent( xParent ), mxContext( xContext ), mxModel( xModel )
     {
         uno::Reference< text::XTextFieldsSupplier > xSupp( xModel, uno::UNO_QUERY_THROW );

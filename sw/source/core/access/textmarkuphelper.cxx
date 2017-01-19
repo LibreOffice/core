@@ -33,6 +33,8 @@ using namespace com::sun::star;
 
 // helper functions
 namespace {
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     const SwWrongList* getTextMarkupList( const SwTextNode& rTextNode,
                                           const sal_Int32 nTextMarkupType )
         throw (css::lang::IllegalArgumentException,

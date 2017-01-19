@@ -31,9 +31,11 @@ typedef cppu::ImplInheritanceHelper< VbaPageSetupBase, ooo::vba::word::XPageSetu
 class SwVbaPageSetup :  public SwVbaPageSetup_BASE
 {
 private:
+    /// @throws css::uno::RuntimeException
     OUString getStyleOfFirstPage() throw (css::uno::RuntimeException);
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaPageSetup( const css::uno::Reference< ooo::vba::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::frame::XModel >& xModel,

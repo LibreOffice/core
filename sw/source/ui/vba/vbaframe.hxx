@@ -32,6 +32,7 @@ private:
     css::uno::Reference< css::text::XTextFrame > mxTextFrame;
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaFrame( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel, const css::uno::Reference< css::text::XTextFrame >& xTextFrame ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaFrame() override;
 

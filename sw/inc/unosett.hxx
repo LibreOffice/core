@@ -194,6 +194,8 @@ public:
 
     css::uno::Sequence< css::beans::PropertyValue>
             GetNumberingRuleByIndex(const SwNumRule& rNumRule, sal_Int32 nIndex)const;
+    /// @throws css::uno::RuntimeException
+    /// @throws css::lang::IllegalArgumentException
     void    SetNumberingRuleByIndex(SwNumRule& rNumRule,
                 const css::uno::Sequence< css::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
                 throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);

@@ -35,9 +35,12 @@ private:
     css::uno::Reference< css::text::XTextViewCursor > mxViewCursor;
     css::uno::Reference< css::beans::XPropertySet >   mxViewSettings;
 
+    /// @throws css::uno::RuntimeException
+    /// @throws css::script::BasicErrorException
     css::uno::Reference< css::text::XTextRange > getHFTextRange( sal_Int32 nType ) throw (css::uno::RuntimeException, css::script::BasicErrorException, std::exception);
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaView( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::frame::XModel >& rModel ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaView() override;

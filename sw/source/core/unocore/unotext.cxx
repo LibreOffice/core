@@ -92,6 +92,8 @@ public:
     {
     }
 
+    /// @throws lang::IllegalArgumentException
+    /// @throws uno::RuntimeException
     uno::Reference< text::XTextRange >
         finishOrAppendParagraph(
             const uno::Sequence< beans::PropertyValue >&
@@ -99,11 +101,15 @@ public:
             const uno::Reference< text::XTextRange >& xInsertPosition)
         throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception);
 
+    /// @throws lang::IllegalArgumentException
+    /// @throws uno::RuntimeException
     sal_Int16 ComparePositions(
             const uno::Reference<text::XTextRange>& xPos1,
             const uno::Reference<text::XTextRange>& xPos2)
         throw (lang::IllegalArgumentException, uno::RuntimeException);
 
+    /// @throws lang::IllegalArgumentException
+    /// @throws uno::RuntimeException
     bool CheckForOwnMember(const SwPaM & rPaM)
         throw (lang::IllegalArgumentException, uno::RuntimeException);
 

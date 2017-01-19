@@ -32,6 +32,7 @@ private:
     sal_Int32 mnType;
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaListGallery( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nType ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaListGallery() override;
 

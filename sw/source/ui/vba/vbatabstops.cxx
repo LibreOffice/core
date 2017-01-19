@@ -29,6 +29,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+/// @throws uno::RuntimeException
 static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< beans::XPropertySet >& xParaProps ) throw (uno::RuntimeException)
 {
     uno::Sequence< style::TabStop > aSeq;
@@ -36,6 +37,7 @@ static uno::Sequence< style::TabStop > lcl_getTabStops( const uno::Reference< be
     return aSeq;
 }
 
+/// @throws uno::RuntimeException
 static void lcl_setTabStops( const uno::Reference< beans::XPropertySet >& xParaProps, const uno::Sequence< style::TabStop >& aSeq ) throw (uno::RuntimeException)
 {
     xParaProps->setPropertyValue("ParaTabStops", uno::makeAny( aSeq ) );
@@ -74,6 +76,7 @@ private:
     sal_Int32 mnTabStops;
 
 public:
+    /// @throws css::uno::RuntimeException
     TabStopCollectionHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& xParaProps ) throw ( css::uno::RuntimeException ): mxParent( xParent ), mxContext( xContext )
     {
         mnTabStops = lcl_getTabStops( xParaProps ).getLength();

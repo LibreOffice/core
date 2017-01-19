@@ -32,6 +32,7 @@ class SwVbaField : public SwVbaField_BASE
 {
     css::uno::Reference< css::text::XTextField > mxTextField;
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaField( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextField >& xTextField) throw ( css::uno::RuntimeException);
 
     virtual sal_Bool SAL_CALL Update() throw ( css::uno::RuntimeException, std::exception) override;
@@ -47,8 +48,11 @@ class SwVbaFields : public SwVbaFields_BASE
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
 private:
+    /// @throws css::uno::RuntimeException
+    /// @throws css::script::BasicErrorException
     css::uno::Reference< css::text::XTextField > Create_Field_FileName(const OUString& rText)
         throw (css::uno::RuntimeException, css::script::BasicErrorException);
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::text::XTextField > Create_Field_DocProperty( const OUString& _text ) throw (css::uno::RuntimeException);
 
 public:

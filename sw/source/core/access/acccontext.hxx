@@ -178,6 +178,7 @@ protected:
 
      bool IsEditableState();
 
+    /// @throws css::uno::RuntimeException
     css::awt::Rectangle SAL_CALL
         getBoundsImpl(bool bRelative)
         throw (css::uno::RuntimeException, std::exception);

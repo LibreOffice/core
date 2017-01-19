@@ -31,6 +31,7 @@ private:
     css::uno::Reference< css::util::XPropertyReplace> mxPropertyReplace;
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaReplacement( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::util::XPropertyReplace >& xPropertyReplace ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaReplacement() override;
 

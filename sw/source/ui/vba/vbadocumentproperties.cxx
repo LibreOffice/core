@@ -31,6 +31,7 @@
 using namespace ::ooo::vba;
 using namespace css;
 
+/// @throws lang::IllegalArgumentException
 static sal_Int8 lcl_toMSOPropType( const uno::Type& aType ) throw ( lang::IllegalArgumentException )
 {
     sal_Int16 msoType = office::MsoDocProperties::msoPropertyTypeString;

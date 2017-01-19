@@ -55,12 +55,15 @@ private:
     ::sw::UnoImplPtr<Impl> m_pImpl;
 
 protected:
-
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void attachToRangeEx(
             const css::uno::Reference< css::text::XTextRange > & xTextRange,
             IDocumentMarkAccess::MarkType eType)
         throw (css::lang::IllegalArgumentException,
                 css::uno::RuntimeException );
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     virtual void attachToRange(
             const css::uno::Reference< css::text::XTextRange > & xTextRange)
         throw (css::lang::IllegalArgumentException,
@@ -203,6 +206,7 @@ class SwXFieldmarkParameters
         //SwClient
     virtual void Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew ) override;
     private:
+        /// @throws css::uno::RuntimeException
         ::sw::mark::IFieldmark::parameter_map_t* getCoreParameters() throw (css::uno::RuntimeException);
 };
 

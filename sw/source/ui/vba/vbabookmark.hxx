@@ -35,9 +35,11 @@ private:
     bool mbValid;
 
 private:
+    /// @throws css::uno::RuntimeException
     void checkVality() throw ( css::uno::RuntimeException );
 
 public:
+    /// @throws css::uno::RuntimeException
     SwVbaBookmark( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::frame::XModel >& rModel, const OUString& rName ) throw ( css::uno::RuntimeException );
     virtual ~SwVbaBookmark() override;

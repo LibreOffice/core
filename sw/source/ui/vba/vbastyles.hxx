@@ -29,6 +29,8 @@ class SwVbaStyles: public SwVbaStyles_BASE
     css::uno::Reference< css::frame::XModel > mxModel;
     css::uno::Reference< css::lang::XMultiServiceFactory > mxMSF;
 public:
+    /// @throws css::script::BasicErrorException
+    /// @throws css::uno::RuntimeException
     SwVbaStyles( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel )
         throw ( css::script::BasicErrorException, css::uno::RuntimeException );
 

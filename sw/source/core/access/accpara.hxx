@@ -181,6 +181,7 @@ protected:
     // handling of data for the text portions
 
     // force update of new portion data
+    /// @throws css::uno::RuntimeException
     void UpdatePortionData()
         throw( css::uno::RuntimeException );
 
@@ -188,6 +189,7 @@ protected:
     void ClearPortionData();
 
     // get portion data; update if necessary
+    /// @throws css::uno::RuntimeException
     SwAccessiblePortionData& GetPortionData()
         throw( css::uno::RuntimeException )
     {
@@ -222,6 +224,9 @@ protected:
 
     // get boundaries of word/sentence/etc. for specified text type
     // Does all argument checking, and then delegates to helper methods above.
+    /// @throws css::lang::IndexOutOfBoundsException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     bool GetTextBoundary( css::i18n::Boundary& rBound,
                               const OUString& rText,
                               sal_Int32 nPos,
