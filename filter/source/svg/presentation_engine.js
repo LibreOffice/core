@@ -5168,6 +5168,7 @@ CHECKERBOARDWIPE_TRANSITION = 11; // 39
 DISSOLVE_TRANSITION         = 12; // 40
 SNAKEWIPE_TRANSITION        = 13; // 30
 IRISWIPE_TRANSITION         = 14; // 12
+BARNDOORWIPE_TRANSITION     = 15; // 4
 
 aTransitionTypeInMap = {
     'barWipe'           : BARWIPE_TRANSITION,
@@ -5183,7 +5184,8 @@ aTransitionTypeInMap = {
     'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION,
     'dissolve'          : DISSOLVE_TRANSITION,
     'snakeWipe'         : SNAKEWIPE_TRANSITION,
-    'irisWipe'          : IRISWIPE_TRANSITION
+    'irisWipe'          : IRISWIPE_TRANSITION,
+    'barnDoorWipe'      : BARNDOORWIPE_TRANSITION
 };
 
 /*
@@ -5236,6 +5238,8 @@ TOPCENTER_TRANS_SUBTYPE             = 40; // 7
 RIGHTCENTER_TRANS_SUBTYPE           = 41; // 8
 BOTTOMCENTER_TRANS_SUBTYPE          = 42; // 9
 LEFTCENTER_TRANS_SUBTYPE            = 43; // 10
+DIAGONALBOTTOMLEFT_TRANS_SUBTYPE    = 36; // 15
+DIAGONALTOPLEFT_TRANS_SUBTYPE       = 37; // 16
 
 aTransitionSubtypeInMap = {
     'default'           : DEFAULT_TRANS_SUBTYPE,
@@ -5281,7 +5285,9 @@ aTransitionSubtypeInMap = {
     'topCenter'         : TOPCENTER_TRANS_SUBTYPE,
     'rightCenter'       : RIGHTCENTER_TRANS_SUBTYPE,
     'bottomCenter'      : BOTTOMCENTER_TRANS_SUBTYPE,
-    'leftCenter'        : LEFTCENTER_TRANS_SUBTYPE
+    'leftCenter'        : LEFTCENTER_TRANS_SUBTYPE,
+    'diagonalBottomLeft': DIAGONALBOTTOMLEFT_TRANS_SUBTYPE,
+    'diagonalTopLeft'   : DIAGONALTOPLEFT_TRANS_SUBTYPE
 };
 
 // Transition Modes
@@ -5393,6 +5399,48 @@ aTransitionInfoTable[SNAKEWIPE_TRANSITION][BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE] =
     'reverseMethod' : REVERSEMETHOD_ROTATE_180,
     'outInvertSweep' : true,
     'scaleIsotropically' : false
+}
+
+aTransitionInfoTable[BARNDOORWIPE_TRANSITION] = {};
+aTransitionInfoTable[BARNDOORWIPE_TRANSITION][VERTICAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': 0.0,
+    'scaleX': 1.0,
+    'scaleY': 1.0,
+    'reverseMethod': REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
+};
+aTransitionInfoTable[BARNDOORWIPE_TRANSITION][HORIZONTAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': 90.0,
+    'scaleX': 1.0,
+    'scaleY': 1.0,
+    'reverseMethod': REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
+};
+aTransitionInfoTable[BARNDOORWIPE_TRANSITION][DIAGONALBOTTOMLEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': 45.0,
+    'scaleX': Math.SQRT2,
+    'scaleY': Math.SQRT2,
+    'reverseMethod': REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
+};
+aTransitionInfoTable[BARNDOORWIPE_TRANSITION][DIAGONALTOPLEFT_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle': -45.0,
+    'scaleX': Math.SQRT2,
+    'scaleY': Math.SQRT2,
+    'reverseMethod': REVERSEMETHOD_SUBTRACT_AND_INVERT,
+    'outInvertsSweep': true,
+    'scaleIsotropically': false
 };
 
 aTransitionInfoTable[IRISWIPE_TRANSITION] = {};
@@ -9341,6 +9389,8 @@ function createClipPolyPolygon( nType, nSubtype )
                     log( 'createClipPolyPolygon: unknown subtype: ' + nSubtype );
                     return null;
             }
+        case BARNDOORWIPE_TRANSITION:
+            return new BarnDoorWipePath(true);
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
         case SNAKEWIPE_TRANSITION:
@@ -9639,6 +9689,33 @@ PinWheelWipePath.prototype.perform = function( nT )
 
     return aPolyPath;
 };
+
+/** Class BarnDoorWipe
+  *
+  * @param doubled
+  */
+function BarnDoorWipePath(doubled) {
+    this.aBasePath = createUnitSquarePath();
+    this.doubled   = doubled;
+}
+
+BarnDoorWipePath.prototype.perform = function( nT ) {
+    if(this.doubled)
+        nT /= 2.0;
+    var aTransform = SVGIdentityMatrix.translate(-0.5, -0.5);
+    aTransform = aTransform.scaleNonUniform(pruneScaleValue(nT), 1.0).translate(0.5, 0.5);
+    var aPath = this.aBasePath.cloneNode(true);
+    aPath.matrixTransform(aTransform);
+    var res = aPath;
+
+    if(this.doubled) {
+        aTransform = SVGIdentityMatrix.translate(-0.5, -0.5);
+        aTransform = aTransform.rotate(Math.PI / 2).translate(0.5, 0.5);
+        aPath.matrixTransform(aTransform);
+        res.appendPath(aPath);
+    }
+    return res;
+}
 
 /** Class Iriswipe
   *
