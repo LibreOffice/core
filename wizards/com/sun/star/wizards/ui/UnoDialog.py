@@ -369,4 +369,4 @@ class UnoDialog(object):
         return nBlue
 
     def getWizardImageUrl(self, _nResId):
-        return "private:resource/wzi/image/" + str(_nResId)
+        return "private:resource/wzi/bitmapex/" + str(_nResId)
