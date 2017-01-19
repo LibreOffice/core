@@ -61,6 +61,7 @@
 #include "datman.hxx"
 #include <bibconfig.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -76,8 +77,7 @@ class BibliographyLoader : public cppu::WeakImplHelper
                             < XServiceInfo, XNameAccess, XPropertySet, XFrameLoader >
 {
     HdlBibModul                                     m_pBibMod;
-    Reference< XLoadable >                          m_xDatMan;
-    BibDataManager*                                 m_pDatMan;
+    rtl::Reference<BibDataManager>                  m_xDatMan;
     Reference< XNameAccess >                        m_xColumns;
     Reference< XResultSet >                         m_xCursor;
 
@@ -139,8 +139,7 @@ public:
 };
 
 BibliographyLoader::BibliographyLoader() :
-    m_pBibMod(nullptr),
-    m_pDatMan(nullptr)
+    m_pBibMod(nullptr)
 {
 }
 
@@ -253,8 +252,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     if(!m_pBibMod)
         m_pBibMod = OpenBibModul();
 
-    m_pDatMan = BibModul::createDataManager();
-    m_xDatMan = m_pDatMan;
+    m_xDatMan = BibModul::createDataManager();
     BibDBDescriptor aBibDesc = BibModul::GetConfig()->GetBibliographyURL();
 
     if(aBibDesc.sDataSource.isEmpty())
@@ -265,7 +263,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
             aBibDesc.sDataSource = aSources.getConstArray()[0];
     }
 
-    Reference< XForm > xForm = m_pDatMan->createDatabaseForm( aBibDesc );
+    Reference< XForm > xForm = m_xDatMan->createDatabaseForm( aBibDesc );
 
     Reference< awt::XWindow >  aWindow = rFrame->getContainerWindow();
     VCLXWindow* pParentComponent = VCLXWindow::GetImplementation(aWindow);
@@ -276,11 +274,11 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
     VclPtrInstance<BibBookContainer> pMyWindow( pParent );
     pMyWindow->Show();
 
-    VclPtrInstance< ::bib::BibView> pView( pMyWindow, m_pDatMan, WB_VSCROLL | WB_HSCROLL | WB_3DLOOK );
+    VclPtrInstance< ::bib::BibView> pView( pMyWindow, m_xDatMan.get(), WB_VSCROLL | WB_HSCROLL | WB_3DLOOK );
     pView->Show();
-    m_pDatMan->SetView( pView );
+    m_xDatMan->SetView( pView );
 
-    VclPtrInstance< ::bib::BibBeamer> pBeamer( pMyWindow, m_pDatMan );
+    VclPtrInstance< ::bib::BibBeamer> pBeamer( pMyWindow, m_xDatMan.get() );
     pBeamer->Show();
     pMyWindow->createTopFrame(pBeamer);
 
@@ -288,7 +286,7 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
 
     Reference< awt::XWindow >  xWin ( pMyWindow->GetComponentInterface(), UNO_QUERY );
 
-    Reference< XController >  xCtrRef( new BibFrameController_Impl( xWin, m_pDatMan ) );
+    Reference< XController >  xCtrRef( new BibFrameController_Impl( xWin, m_xDatMan.get() ) );
 
     xCtrRef->attachFrame(rFrame);
     rFrame->setComponent( xWin, xCtrRef);
@@ -300,8 +298,8 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
         pParentComponent->setVisible(true);
     }
 
-    m_xDatMan->load();
-    m_pDatMan->RegisterInterceptor(pBeamer);
+    Reference<XLoadable>(m_xDatMan.get())->load();
+    m_xDatMan->RegisterInterceptor(pBeamer);
 
     if ( rListener.is() )
         rListener->loadFinished( this );
@@ -327,14 +325,13 @@ void BibliographyLoader::loadView(const Reference< XFrame > & rFrame, const OUSt
 
 BibDataManager* BibliographyLoader::GetDataManager()const
 {
-    if(!m_pDatMan)
+    if(!m_xDatMan.is())
     {
         if(!m_pBibMod)
             const_cast< BibliographyLoader* >( this )->m_pBibMod = OpenBibModul();
-        const_cast< BibliographyLoader* >( this )->m_pDatMan = BibModul::createDataManager();
-        const_cast< BibliographyLoader* >( this )->m_xDatMan = m_pDatMan;
+        const_cast< BibliographyLoader* >( this )->m_xDatMan = BibModul::createDataManager();
     }
-    return m_pDatMan;
+    return m_xDatMan.get();
 }
 
 Reference< XNameAccess > const & BibliographyLoader::GetDataColumns() const
