@@ -68,7 +68,7 @@ public:
 protected:
     virtual ~SvtRulerAccessible() override;
 public:
-
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL
         isVisible() throw( css::uno::RuntimeException );
 
@@ -166,9 +166,13 @@ public:
 protected:
 
     /// @Return the object's current bounding box relative to the desktop.
+    ///
+    /// @throws css::uno::RuntimeException
     Rectangle GetBoundingBoxOnScreen() throw( css::uno::RuntimeException );
 
     /// @Return the object's current bounding box relative to the parent object.
+    ///
+    /// @throws css::uno::RuntimeException
     Rectangle GetBoundingBox() throw( css::uno::RuntimeException );
 
 
@@ -177,7 +181,7 @@ protected:
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;
 
-    /// throws the exception DisposedException if it's not alive
+    /// @throws DisposedException if it's not alive
     void ThrowExceptionIfNotAlive() throw( css::lang::DisposedException );
 
 private:

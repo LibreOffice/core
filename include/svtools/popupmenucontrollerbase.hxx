@@ -98,6 +98,7 @@ namespace svt
             void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget = OUString() );
 
     protected:
+            /// @throws css::uno::RuntimeException
             void throwIfDisposed() throw ( css::uno::RuntimeException );
 
             /** helper method to cause statusChanged is called once for the given command url */

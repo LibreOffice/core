@@ -134,6 +134,7 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
     }
 }
 
+/// @throws IllegalArgumentException
 void getMacroFromAny(
     SvxMacro& rMacro,
     const Any& rAny)

@@ -113,6 +113,7 @@ public:
     css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
 
 private:
+    /// @throws css::lang::IllegalArgumentException
     UnoTreeListEntry* getEntry( const css::uno::Reference< css::awt::tree::XTreeNode >& xNode, bool bThrow = true ) throw (css::lang::IllegalArgumentException );
 
     void disposeControl();
@@ -132,7 +133,10 @@ private:
 
     static OUString getEntryString( const css::uno::Any& rValue );
 
+    /// @throws css::uno::RuntimeException
     UnoTreeListBoxImpl& getTreeListBoxOrThrow() const throw (css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    /// @throws css::lang::IllegalArgumentException
     void ChangeNodesSelection( const css::uno::Any& rSelection, bool bSelect, bool bSetSelection ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
     void onChangeDataModel( UnoTreeListBoxImpl& rTree, const css::uno::Reference< css::awt::tree::XTreeDataModel >& xDataModel );

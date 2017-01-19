@@ -516,6 +516,7 @@ public:
     virtual ~SvUnoImageMap() override;
 
     bool fillImageMap( ImageMap& rMap ) const;
+    /// @throws IllegalArgumentException
     static SvUnoImageMapObject* getObject( const Any& aElement ) throw( IllegalArgumentException );
 
     UNO3_GETIMPLEMENTATION_DECL( SvUnoImageMap )

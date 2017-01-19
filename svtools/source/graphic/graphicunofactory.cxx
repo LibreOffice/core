@@ -39,6 +39,7 @@ class GObjectImpl : public GObjectAccess_BASE
      ::osl::Mutex m_aMutex;
      std::unique_ptr< GraphicObject > mpGObject;
 public:
+    /// @throws uno::RuntimeException
     explicit GObjectImpl(uno::Sequence< uno::Any > const & args) throw (uno::RuntimeException, std::exception);
 
      // XGraphicObject

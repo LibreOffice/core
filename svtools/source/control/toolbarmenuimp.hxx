@@ -86,7 +86,10 @@ public:
 
     const css::uno::Reference< css::accessibility::XAccessibleContext >& GetAccessible();
 
+    /// @throws css::uno::RuntimeException
     sal_Int32 getAccessibleChildCount() throw (css::uno::RuntimeException);
+    /// @throws css::lang::IndexOutOfBoundsException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
     bool HasCheck() const
@@ -174,6 +177,8 @@ private:
         state of being disposed).  If that is the case then
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
+
+        @throws css::lang::DisposedException
     */
     void ThrowIfDisposed() throw (css::lang::DisposedException);
 };
@@ -261,11 +266,20 @@ struct ToolbarMenu_Impl
 
     void fireAccessibleEvent( short nEventId, const css::uno::Any& rOldValue, const css::uno::Any& rNewValue );
 
+    /// @throws css::uno::RuntimeException
     sal_Int32 getAccessibleChildCount() throw (css::uno::RuntimeException);
+    /// @throws css::lang::IndexOutOfBoundsException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( sal_Int32 index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    /// @throws css::lang::IndexOutOfBoundsException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::accessibility::XAccessible > getAccessibleChild( Control* pControl, sal_Int32 childIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
 
+    /// @throws css::lang::IndexOutOfBoundsException
+    /// @throws css::uno::RuntimeException
     void selectAccessibleChild( sal_Int32 nChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    /// @throws css::lang::IndexOutOfBoundsException
+    /// @throws css::uno::RuntimeException
     bool isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
     void clearAccessibleSelection();
 

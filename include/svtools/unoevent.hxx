@@ -127,6 +127,11 @@ public:
 protected:
 
     /// Must be implemented in subclass.
+    ///
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual void replaceByName(
         const sal_uInt16 nEvent,        /// item ID of event
         const SvxMacro& rMacro)     /// event (will be copied)
@@ -137,6 +142,10 @@ protected:
                 css::uno::RuntimeException) = 0;
 
     /// Must be implemented in subclass.
+    ///
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual void getByName(
         SvxMacro& rMacro,
         const sal_uInt16 nEvent )
@@ -262,7 +271,7 @@ protected:
     /// do we have an event?
     /// return true: we have a macro for the event
     /// return false: no macro; getByName() will return an empty macro
-    /// IllegalArgumentException: the event is not supported
+    /// @throws css::lang::IllegalArgumentException if the event is not supported
     bool hasById(
         const sal_uInt16 nEvent ) const     /// item ID of event
              throw(
