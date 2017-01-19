@@ -788,6 +788,7 @@ public:
     virtual sal_Bool SAL_CALL canCancelCheckOut( ) throw ( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL canCheckIn( ) throw ( css::uno::RuntimeException, std::exception ) override;
 
+    /// @throws css::uno::RuntimeException
     bool getBoolPropertyValue( const OUString& rName ) throw ( css::uno::RuntimeException );
 
 
@@ -837,7 +838,7 @@ protected:
 
 
 private:
-
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2() throw ( css::uno::RuntimeException );
     bool impl_getPrintHelper();
     SAL_DLLPRIVATE void ListenForStorage_Impl( const css::uno::Reference< css::embed::XStorage >& xStorage );

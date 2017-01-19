@@ -51,6 +51,8 @@ class SfxMacroLoader : public cppu::WeakImplHelper<
     SfxObjectShell* GetObjectShell_Impl();
 
 public:
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 
@@ -63,6 +65,8 @@ public:
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
         throw (css::uno::RuntimeException, std::exception) override;
 
+    /// @throws css::uno::RuntimeException
+    /// @throws css::ucb::ContentCreationException
     static ErrCode loadMacro( const OUString& aURL, css::uno::Any& rRetval, SfxObjectShell* pDoc ) throw( css::uno::RuntimeException, css::ucb::ContentCreationException, std::exception );
 
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(

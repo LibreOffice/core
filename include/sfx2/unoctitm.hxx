@@ -141,10 +141,12 @@ public:
     void                StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState, SfxSlotServer* pServ );
     virtual void        StateChanged( sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState ) override;
     void                setMasterSlaveCommand( bool bSet );
+    /// @throws css::uno::RuntimeException
     void SAL_CALL       dispatch( const css::util::URL& aURL,
                                   const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
                                   const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
         throw (css::uno::RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
     void SAL_CALL       addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException );
     void                UnBindController();
     SfxDispatcher*      GetDispatcher();

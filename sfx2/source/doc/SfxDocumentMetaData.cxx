@@ -652,6 +652,7 @@ SfxDocumentMetaData::getURLProperties(
 
 // return the text of the (hopefully unique, i.e., normalize first!) text
 // node _below_ the given node
+/// @throws css::uno::RuntimeException
 OUString SAL_CALL
 getNodeText(const css::uno::Reference<css::xml::dom::XNode>& i_xNode)
         throw (css::uno::RuntimeException)

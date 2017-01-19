@@ -42,6 +42,8 @@ class OwnSubFilterService : public cppu::WeakImplHelper < document::XFilter
     SfxObjectShell* m_pObjectShell;
 
 public:
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     explicit OwnSubFilterService(const css::uno::Sequence< css::uno::Any >& aArguments)
         throw (uno::Exception, uno::RuntimeException);
 

@@ -63,6 +63,8 @@ class IFrameObject : public ::cppu::WeakImplHelper <
     SfxFrameDescriptor  maFrmDescr;
 
 public:
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     IFrameObject(const css::uno::Reference < css::uno::XComponentContext>& rxContext, const css::uno::Sequence< css::uno::Any >& aArguments)
         throw (css::uno::Exception, css::uno::RuntimeException);
 

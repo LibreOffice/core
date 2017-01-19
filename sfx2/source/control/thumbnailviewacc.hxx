@@ -153,6 +153,8 @@ private:
         state of being disposed).  If that is the case then
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
+
+        @throws css::lang::DisposedException
     */
     void ThrowIfDisposed()
         throw (css::lang::DisposedException);

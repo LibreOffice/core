@@ -42,6 +42,7 @@ class DocTemplLocaleHelper : public cppu::WeakImplHelper < css::xml::sax::XDocum
     DocTemplLocaleHelper();
     std::vector< css::beans::StringPair > const & GetParsingResult();
 
+    /// @throws css::uno::Exception
     static std::vector< css::beans::StringPair > SAL_CALL ReadLocalizationSequence_Impl( const css::uno::Reference< css::io::XInputStream >& xInStream, const OUString& aStringID, const css::uno::Reference< css::uno::XComponentContext >& xContext )
     throw( css::uno::Exception );
 
@@ -49,6 +50,7 @@ public:
     virtual ~DocTemplLocaleHelper() override;
 
     // returns sequence of pairs ( GroupName, GroupUIName )
+    /// @throws css::uno::Exception
     static
     std::vector< css::beans::StringPair >
     ReadGroupLocalizationSequence(
@@ -57,6 +59,7 @@ public:
             throw( css::uno::Exception );
 
     // writes sequence of elements ( GroupName, GroupUIName )
+    /// @throws css::uno::Exception
     static
     void SAL_CALL WriteGroupLocalizationSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
