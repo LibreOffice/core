@@ -560,14 +560,6 @@
           <value xml:lang="en-US">Update Chart</value>
         </prop>
       </node>
-      <node oor:name=".uno:ToggleTitle" oor:op="replace">
-        <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Title On/Off</value>
-        </prop>
-        <prop oor:name="Properties" oor:type="xs:int">
-          <value>1</value>
-        </prop>
-      </node>
       <node oor:name=".uno:ToggleLegend" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Legend On/Off</value>
