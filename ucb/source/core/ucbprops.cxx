@@ -195,11 +195,22 @@ UcbPropertiesManager::~UcbPropertiesManager()
 
 // XServiceInfo methods.
 
-
-XSERVICEINFO_IMPL_1( UcbPropertiesManager,
-                     OUString( "com.sun.star.comp.ucb.UcbPropertiesManager" ),
-                     PROPERTIES_MANAGER_SERVICE_NAME );
-
+XSERVICEINFO_COMMOM_IMPL( UcbPropertiesManager,
+                          OUString( "com.sun.star.comp.ucb.UcbPropertiesManager" ) )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+UcbPropertiesManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new UcbPropertiesManager( rSMgr ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
+css::uno::Sequence< OUString >
+UcbPropertiesManager::getSupportedServiceNames_Static()
+{
+    return { PROPERTIES_MANAGER_SERVICE_NAME };
+}
 
 // Service factory implementation.
 

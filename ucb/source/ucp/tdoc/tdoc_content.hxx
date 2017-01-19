@@ -120,6 +120,9 @@ private:
     static bool loadData( ContentProvider* pProvider,
                           const Uri & rUri,
                           ContentProperties& rProps );
+    /// @throws css::ucb::CommandFailedException
+    /// @throws css::task::DocumentPasswordRequest
+    /// @throws css::uno::RuntimeException
     bool storeData( const css::uno::Reference< css::io::XInputStream >& xData,
                     const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw ( css::ucb::CommandFailedException,
@@ -144,25 +147,30 @@ private:
     css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
     css::uno::Sequence< css::uno::Any >
+    /// @throws css::uno::Exception
     setPropertyValues(
             const css::uno::Sequence< css::beans::PropertyValue >& rValues,
             const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw( css::uno::Exception, std::exception );
 
+    /// @throws css::uno::Exception
     css::uno::Any
     open( const css::ucb::OpenCommandArgument2& rArg,
           const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     void insert( const css::uno::Reference< css::io::XInputStream >& xData,
                  sal_Int32 nNameClashResolve,
                  const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     void destroy( bool bDeletePhysical,
                   const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw( css::uno::Exception, std::exception );
 
+    /// @throws css::uno::Exception
     void transfer( const css::ucb::TransferInfo& rInfo,
                    const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw( css::uno::Exception, std::exception );
@@ -181,12 +189,18 @@ private:
     static bool closeOutputStream(
         const css::uno::Reference< css::io::XOutputStream > & xOut );
 
+    /// @throws css::ucb::CommandFailedException
+    /// @throws css::task::DocumentPasswordRequest
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::io::XInputStream >
     getInputStream( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( css::ucb::CommandFailedException,
                 css::task::DocumentPasswordRequest,
                 css::uno::RuntimeException );
 
+    /// @throws css::ucb::CommandFailedException
+    /// @throws css::task::DocumentPasswordRequest
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::io::XOutputStream >
     getTruncatedOutputStream(
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
@@ -197,6 +211,9 @@ private:
     css::uno::Reference< css::ucb::XContent >
     queryChildContent( const OUString & rRelativeChildUri );
 
+    /// @throws css::ucb::CommandFailedException
+    /// @throws css::task::DocumentPasswordRequest
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::io::XStream >
     getStream( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( css::ucb::CommandFailedException,

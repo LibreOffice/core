@@ -56,6 +56,8 @@ class CachedContentResultSet
         css::uno::Sequence< sal_Bool >*  m_pMappedReminder;
 
     private:
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         css::uno::Any& SAL_CALL
         getRowAny( sal_Int32 nRow )
             throw( css::sdbc::SQLException,
@@ -89,20 +91,24 @@ class CachedContentResultSet
         bool SAL_CALL
         hasKnownLast();
 
-
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         const css::uno::Any& SAL_CALL
         getAny( sal_Int32 nRow, sal_Int32 nColumnIndex )
             throw( css::sdbc::SQLException,
             css::uno::RuntimeException );
 
+        /// @throws css::uno::RuntimeException
         OUString SAL_CALL
         getContentIdentifierString( sal_Int32 nRow )
             throw( css::uno::RuntimeException );
 
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
         getContentIdentifier( sal_Int32 nRow )
             throw( css::uno::RuntimeException );
 
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::ucb::XContent > SAL_CALL
         getContent( sal_Int32 nRow )
             throw( css::uno::RuntimeException );
@@ -155,12 +161,14 @@ private:
     //helping XPropertySet methods.
     virtual void SAL_CALL impl_initPropertySetInfo() override;
 
-
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL
     applyPositionToOrigin( sal_Int32 nRow )
         throw( css::sdbc::SQLException,
         css::uno::RuntimeException );
 
+    /// @throws css::uno::RuntimeException
     void SAL_CALL
     impl_fetchData( sal_Int32 nRow, sal_Int32 nCount
                     , sal_Int32 nFetchDirection )

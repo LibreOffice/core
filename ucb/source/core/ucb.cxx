@@ -332,11 +332,24 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 
 // XServiceInfo methods.
 
+XSERVICEINFO_COMMOM_IMPL( UniversalContentBroker,
+                          OUString( "com.sun.star.comp.ucb.UniversalContentBroker" ) )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+UniversalContentBroker_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new UniversalContentBroker( ucbhelper::getComponentContext(rSMgr) ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
 
-XSERVICEINFO_IMPL_1_CTX( UniversalContentBroker,
-                     OUString( "com.sun.star.comp.ucb.UniversalContentBroker" ),
-                     UCB_SERVICE_NAME );
-
+css::uno::Sequence< OUString >
+UniversalContentBroker::getSupportedServiceNames_Static()
+{
+    css::uno::Sequence< OUString > aSNS { UCB_SERVICE_NAME };
+    return aSNS;
+}
 
 // Service factory implementation.
 

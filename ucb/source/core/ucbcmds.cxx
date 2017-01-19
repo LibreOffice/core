@@ -453,7 +453,7 @@ NameClashContinuation interactiveNameClashResolve(
     return NOT_HANDLED;
 }
 
-
+/// @throws uno::RuntimeException
 bool setTitle(
         const uno::Reference< ucb::XCommandProcessor > & xCommandProcessor,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv,
@@ -500,7 +500,7 @@ bool setTitle(
     return true;
 }
 
-
+/// @throws uno::Exception
 uno::Reference< ucb::XContent > createNew(
                     const TransferCommandContext & rContext,
                     const uno::Reference< ucb::XContent > & xTarget,
@@ -725,7 +725,7 @@ uno::Reference< ucb::XContent > createNew(
     return xNew;
 }
 
-
+/// @throws uno::Exception
 void transferProperties(
     const TransferCommandContext & rContext,
     const uno::Reference< ucb::XCommandProcessor > & xCommandProcessorS,
@@ -884,7 +884,7 @@ void transferProperties(
     //     new object? addProperty ???
 }
 
-
+/// @throws uno::Exception
 uno::Reference< io::XInputStream > getInputStream(
     const TransferCommandContext & rContext,
     const uno::Reference< ucb::XCommandProcessor > & xCommandProcessorS )
@@ -962,7 +962,7 @@ uno::Reference< io::XInputStream > getInputStream(
     return xInputStream;
 }
 
-
+/// @throws uno::Exception
 uno::Reference< sdbc::XResultSet > getResultSet(
     const TransferCommandContext & rContext,
     const uno::Reference< ucb::XCommandProcessor > & xCommandProcessorS )
@@ -1008,7 +1008,7 @@ uno::Reference< sdbc::XResultSet > getResultSet(
     return xResultSet;
 }
 
-
+/// @throws uno::Exception
 void handleNameClashRename(
         const TransferCommandContext & rContext,
         const uno::Reference< ucb::XContent > & xNew,
@@ -1181,7 +1181,7 @@ void handleNameClashRename(
     }
 }
 
-
+/// @throws uno::Exception
 void globalTransfer_(
         const TransferCommandContext & rContext,
         const uno::Reference< ucb::XContent > & xSource,

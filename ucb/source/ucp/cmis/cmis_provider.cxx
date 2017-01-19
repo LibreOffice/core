@@ -118,9 +118,24 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
                       lang::XServiceInfo,
                       css::ucb::XContentProvider );
 
-XSERVICEINFO_IMPL_1_CTX( ContentProvider,
-                     OUString("com.sun.star.comp.CmisContentProvider"),
-                     "com.sun.star.ucb.CmisContentProvider" );
+XSERVICEINFO_COMMOM_IMPL( ContentProvider,
+                          OUString("com.sun.star.comp.CmisContentProvider") )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new ContentProvider( ucbhelper::getComponentContext(rSMgr) ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
+
+css::uno::Sequence< OUString >
+ContentProvider::getSupportedServiceNames_Static()
+{
+    css::uno::Sequence< OUString > aSNS { "com.sun.star.ucb.CmisContentProvider" };
+    return aSNS;
+}
 
 ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 

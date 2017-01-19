@@ -179,6 +179,9 @@ class XStream_impl :  public cppu::WeakImplHelper<
 
         // Implementation methods
 
+        /// @throws css::io::NotConnectedException
+        /// @throws css::io::IOException
+        /// @throws css::uno::RuntimeException
         void SAL_CALL
         closeStream()
             throw( css::io::NotConnectedException,

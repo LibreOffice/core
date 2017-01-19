@@ -2720,7 +2720,8 @@ bool Content::closeOutputStream(
     return false;
 }
 
-
+/// @throws ucb::CommandFailedException
+/// @throws task::DocumentPasswordRequest
 static OUString obtainPassword(
         const OUString & rName,
         task::PasswordRequestMode eMode,
@@ -2819,7 +2820,9 @@ uno::Reference< io::XInputStream > Content::getInputStream(
     }
 }
 
-
+/// @throws ucb::CommandFailedException
+/// @throws task::DocumentPasswordRequest
+/// @throws uno::RuntimeException
 static uno::Reference< io::XOutputStream > lcl_getTruncatedOutputStream(
                 const OUString & rUri,
                 ContentProvider * pProvider,

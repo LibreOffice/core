@@ -86,26 +86,33 @@ private:
     typedef rtl::Reference< Content > ContentRef;
     typedef std::list< ContentRef > ContentRefList;
 
+    /// @throws css::uno::Exception
+    /// @throws libcmis::Exception
     css::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
             throw( css::uno::Exception, libcmis::Exception );
 
+    /// @throws css::uno::Exception
     void transfer( const css::ucb::TransferInfo& rTransferInfo,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
             throw( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
         bool bReplaceExisting, const OUString & rMimeType,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
             throw (css::uno::Exception, std::exception);
 
+    /// @throws css::uno::Exception
     OUString checkIn( const css::ucb::CheckinArgument& rArg,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
             throw( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     OUString checkOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
             throw( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     OUString cancelCheckOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
             throw( css::uno::Exception );
 
@@ -116,6 +123,7 @@ private:
         setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
+    /// @throws css::uno::Exception
     css::uno::Sequence< css::document::CmisVersion >
         getAllVersions( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
             throw(css::uno::Exception,
@@ -125,12 +133,14 @@ private:
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 public:
+    /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
         libcmis::ObjectPtr const & pObject = libcmis::ObjectPtr( ) )
             throw ( css::ucb::ContentCreationException );
 
+    /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
@@ -193,12 +203,16 @@ public:
         SAL_CALL createNewContent( const css::ucb::ContentInfo& Info )
             throw( css::uno::RuntimeException, std::exception ) override;
 
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
                 throw( css::uno::RuntimeException );
 
     virtual std::list< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
 
+    /// @throws css::uno::RuntimeException
+    /// @throws css::ucb::CommandFailedException
+    /// @throws libcmis::Exception
     libcmis::ObjectPtr const & getObject( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception);
 };
 

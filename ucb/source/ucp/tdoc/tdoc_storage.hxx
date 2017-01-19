@@ -48,11 +48,18 @@ namespace tdoc_ucp {
             const rtl::Reference< OfficeDocumentsManager > & xDocsMgr );
         virtual ~StorageElementFactory() override;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         createTemporaryStorage()
             throw ( css::uno::Exception,
                     css::uno::RuntimeException );
 
+        /// @throws css::embed::InvalidStorageException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::io::IOException
+        /// @throws css::embed::StorageWrappedTargetException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         createStorage( const OUString & rUri, StorageAccessMode eMode )
             throw ( css::embed::InvalidStorageException,
@@ -61,6 +68,12 @@ namespace tdoc_ucp {
                     css::embed::StorageWrappedTargetException,
                     css::uno::RuntimeException );
 
+        /// @throws css::embed::InvalidStorageException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::io::IOException
+        /// @throws css::embed::StorageWrappedTargetException
+        /// @throws css::packages::WrongPasswordException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::io::XInputStream >
         createInputStream( const OUString & rUri,
                            const OUString & rPassword )
@@ -71,6 +84,12 @@ namespace tdoc_ucp {
                     css::packages::WrongPasswordException,
                     css::uno::RuntimeException );
 
+        /// @throws css::embed::InvalidStorageException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::io::IOException
+        /// @throws css::embed::StorageWrappedTargetException
+        /// @throws css::packages::WrongPasswordException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::io::XOutputStream >
         createOutputStream( const OUString & rUri,
                             const OUString & rPassword,
@@ -82,6 +101,12 @@ namespace tdoc_ucp {
                     css::packages::WrongPasswordException,
                     css::uno::RuntimeException );
 
+        /// @throws css::embed::InvalidStorageException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::io::IOException
+        /// @throws css::embed::StorageWrappedTargetException
+        /// @throws css::packages::WrongPasswordException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::io::XStream >
         createStream( const OUString & rUri,
                       const OUString & rPassword,
@@ -98,6 +123,11 @@ namespace tdoc_ucp {
 
         void releaseElement( Storage * pElement );
 
+        /// @throws css::embed::InvalidStorageException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::io::IOException
+        /// @throws css::embed::StorageWrappedTargetException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         queryParentStorage( const OUString & rUri,
                             StorageAccessMode eMode )
@@ -107,6 +137,11 @@ namespace tdoc_ucp {
                     css::embed::StorageWrappedTargetException,
                     css::uno::RuntimeException );
 
+        /// @throws css::embed::InvalidStorageException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::io::IOException
+        /// @throws css::embed::StorageWrappedTargetException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         queryStorage( const css::uno::Reference<
                         css::embed::XStorage > & xParentStorage,
@@ -118,6 +153,12 @@ namespace tdoc_ucp {
                     css::embed::StorageWrappedTargetException,
                     css::uno::RuntimeException );
 
+        /// @throws css::embed::InvalidStorageException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::io::IOException
+        /// @throws css::embed::StorageWrappedTargetException
+        /// @throws css::packages::WrongPasswordException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::io::XStream >
         queryStream( const css::uno::Reference<
                         css::embed::XStorage > & xParentStorage,

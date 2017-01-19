@@ -251,6 +251,7 @@ namespace fileaccess
                FileProvider* pProvider, bool bWithConfig );
         ~TaskManager();
 
+        /// @throws css::ucb::DuplicateCommandIdentifierException
         void SAL_CALL startTask(
             sal_Int32 CommandId,
             const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv )
@@ -312,6 +313,10 @@ namespace fileaccess
          *  Used to associate and deassociate a new property with
          *  the content belonging to URL UnqPath.
          *  The default value and the attributes are input
+         *
+         *  @throws css::beans::PropertyExistException
+         *  @throws css::beans::IllegalTypeException
+         *  @throws css::uno::RuntimeException
          */
 
         void SAL_CALL associate( const OUString& UnqPath,
@@ -322,7 +327,9 @@ namespace fileaccess
                    css::beans::IllegalTypeException,
                    css::uno::RuntimeException);
 
-
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::beans::NotRemoveableException
+        /// @throws css::uno::RuntimeException
         void SAL_CALL deassociate( const OUString& UnqPath,
                                    const OUString& PropertyName )
             throw( css::beans::UnknownPropertyException,

@@ -473,6 +473,7 @@ public:
         throw ( css::uno::RuntimeException, std::exception ) override;
 
 private:
+    /// @throws css::io::IOException
     void commitChanges()
         throw( css::io::IOException );
 

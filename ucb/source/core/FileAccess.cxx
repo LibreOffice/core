@@ -85,8 +85,12 @@ class OFileAccess : public FileAccessHelper
     Reference< XComponentContext >      m_xContext;
     rtl::Reference<OCommandEnvironment> mxEnvironment;
 
+    /// @throws CommandAbortedException
+    /// @throws Exception
+    /// @throws RuntimeException
     void transferImpl( const OUString& rSource, const OUString& rDest, bool bMoveData )
         throw(CommandAbortedException, Exception, RuntimeException);
+    /// @throws Exception
     bool createNewFile( const OUString & rParentURL,
                         const OUString & rTitle,
                         const Reference< XInputStream >& data )

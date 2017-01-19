@@ -122,6 +122,7 @@ public:
         throw (css::lang::NoSupportException,
                css::uno::RuntimeException, std::exception) override;
 
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence< css::ucb::ContentInfo > queryCreatableContentsInfo_Static()
         throw (css::uno::RuntimeException);
 

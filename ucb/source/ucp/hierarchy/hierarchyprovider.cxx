@@ -95,11 +95,24 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 
 // XServiceInfo methods.
 
+XSERVICEINFO_COMMOM_IMPL( HierarchyContentProvider,
+                          OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ) )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+HierarchyContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new HierarchyContentProvider( ucbhelper::getComponentContext(rSMgr) ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
 
-XSERVICEINFO_IMPL_1_CTX( HierarchyContentProvider,
-                     OUString( "com.sun.star.comp.ucb.HierarchyContentProvider" ),
-                     "com.sun.star.ucb.HierarchyContentProvider" );
-
+css::uno::Sequence< OUString >
+HierarchyContentProvider::getSupportedServiceNames_Static()
+{
+    css::uno::Sequence< OUString > aSNS { "com.sun.star.ucb.HierarchyContentProvider" };
+    return aSNS;
+}
 
 // Service factory implementation.
 

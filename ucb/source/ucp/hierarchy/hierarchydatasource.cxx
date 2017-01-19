@@ -264,9 +264,20 @@ XTYPEPROVIDER_IMPL_4( HierarchyDataSource,
 
 // XServiceInfo methods.
 
+XSERVICEINFO_COMMOM_IMPL( HierarchyDataSource,
+                          OUString( "com.sun.star.comp.ucb.HierarchyDataSource" ) )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+HierarchyDataSource_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new HierarchyDataSource( ucbhelper::getComponentContext(rSMgr) ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
 
-XSERVICEINFO_IMPL_0_CTX( HierarchyDataSource,
-                     OUString( "com.sun.star.comp.ucb.HierarchyDataSource" ) )
+css::uno::Sequence< OUString >
+HierarchyDataSource::getSupportedServiceNames_Static()
 {
     uno::Sequence< OUString > aSNS( 2 );
     aSNS[ 0 ] = "com.sun.star.ucb.DefaultHierarchyDataSource";

@@ -50,7 +50,8 @@ private:
     const OUString     m_aPropertyNameForFetchSize;
     const OUString     m_aPropertyNameForFetchDirection;
 
-
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL
     impl_getCurrentRowContent(
         css::uno::Any& rRowContent,
@@ -61,24 +62,28 @@ private:
     sal_Int32 SAL_CALL
     impl_getColumnCount();
 
+    /// @throws css::uno::RuntimeException
     static void SAL_CALL
     impl_getCurrentContentIdentifierString(
             css::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess )
             throw ( css::uno::RuntimeException );
 
+    /// @throws css::uno::RuntimeException
     static void SAL_CALL
     impl_getCurrentContentIdentifier(
             css::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess )
             throw ( css::uno::RuntimeException );
 
+    /// @throws css::uno::RuntimeException
     static void SAL_CALL
     impl_getCurrentContent(
             css::uno::Any& rAny
             , const css::uno::Reference< css::ucb::XContentAccess >& xContentAccess )
             throw ( css::uno::RuntimeException );
 
+    /// @throws css::uno::RuntimeException
     void SAL_CALL
     impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
         throw ( css::uno::RuntimeException );

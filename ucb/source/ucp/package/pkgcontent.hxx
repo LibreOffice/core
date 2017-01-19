@@ -131,6 +131,7 @@ private:
 
     css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties );
+    /// @throws css::uno::Exception
     css::uno::Sequence< css::uno::Any >
     setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
                        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
@@ -172,21 +173,25 @@ private:
     exchangeIdentity( const css::uno::Reference<
                         css::ucb::XContentIdentifier >& xNewId );
 
+    /// @throws css::uno::Exception
     css::uno::Any
     open( const css::ucb::OpenCommandArgument2& rArg,
           const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw( css::uno::Exception, std::exception );
 
+    /// @throws css::uno::Exception
     void insert( const css::uno::Reference< css::io::XInputStream >& xStream,
                  sal_Int32 nNameClashResolve,
                  const css::uno::Reference<
                     css::ucb::XCommandEnvironment > & xEnv )
         throw( css::uno::Exception, std::exception );
 
+    /// @throws css::uno::Exception
     void destroy( bool bDeletePhysical,
                   const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw( css::uno::Exception, std::exception );
 
+    /// @throws css::uno::Exception
     void transfer( const css::ucb::TransferInfo& rInfo,
                    const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw( css::uno::Exception, std::exception );

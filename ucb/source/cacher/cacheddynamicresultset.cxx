@@ -198,11 +198,24 @@ XTYPEPROVIDER_IMPL_3( CachedDynamicResultSetFactory,
 
 // CachedDynamicResultSetFactory XServiceInfo methods.
 
+XSERVICEINFO_COMMOM_IMPL( CachedDynamicResultSetFactory,
+                         OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ) )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+CachedDynamicResultSetFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new CachedDynamicResultSetFactory( ucbhelper::getComponentContext(rSMgr) ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
 
-XSERVICEINFO_IMPL_1_CTX( CachedDynamicResultSetFactory,
-                         OUString( "com.sun.star.comp.ucb.CachedDynamicResultSetFactory" ),
-                         CACHED_DRS_FACTORY_NAME );
-
+css::uno::Sequence< OUString >
+CachedDynamicResultSetFactory::getSupportedServiceNames_Static()
+{
+    css::uno::Sequence< OUString > aSNS { CACHED_DRS_FACTORY_NAME };
+    return aSNS;
+}
 
 // Service factory implementation.
 

@@ -55,7 +55,9 @@ class NeonUri
         void calculateURI ();
 
     public:
+        /// @throws DAVException
         explicit NeonUri( const OUString & inUri ) throw ( DAVException );
+        /// @throws DAVException
         explicit NeonUri( const ne_uri * inUri ) throw ( DAVException );
         ~NeonUri( );
 

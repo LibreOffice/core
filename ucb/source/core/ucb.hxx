@@ -179,16 +179,19 @@ private:
     static css::uno::Reference< css::ucb::XCommandInfo >
     getCommandInfo();
 
+    /// @throws css::uno::Exception
     void
     globalTransfer(
             const css::ucb::GlobalTransferCommandArgument2 & rArg,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw( css::uno::Exception, std::exception );
 
+    /// @throws css::uno::Exception
     css::uno::Any checkIn( const css::ucb::CheckinArgument& rArg,
             const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv ) throw( css::uno::Exception );
 
 
+    /// @throws css::uno::RuntimeException
     void configureUcb()
         throw ( css::uno::RuntimeException);
 

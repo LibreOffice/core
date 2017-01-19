@@ -125,7 +125,7 @@ DocumentContentFactory::createDocumentContent(
 
 // Service factory implementation.
 
-
+/// @throws uno::Exception
 static uno::Reference< uno::XInterface > SAL_CALL
 DocumentContentFactory_CreateInstance(
     const uno::Reference< lang::XMultiServiceFactory> & rSMgr )

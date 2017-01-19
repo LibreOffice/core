@@ -100,12 +100,24 @@ XTYPEPROVIDER_IMPL_4( ContentProvider,
 
 // XServiceInfo methods.
 
+XSERVICEINFO_COMMOM_IMPL( ContentProvider,
+                          OUString( "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ) )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new ContentProvider( ucbhelper::getComponentContext(rSMgr) ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
 
-XSERVICEINFO_IMPL_1_CTX(
-    ContentProvider,
-    OUString( "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ),
-    "com.sun.star.ucb.TransientDocumentsContentProvider" );
-
+css::uno::Sequence< OUString >
+ContentProvider::getSupportedServiceNames_Static()
+{
+    css::uno::Sequence< OUString > aSNS { "com.sun.star.ucb.TransientDocumentsContentProvider" };
+    return aSNS;
+}
 
 // Service factory implementation.
 

@@ -45,11 +45,22 @@ UcbContentProviderProxyFactory::~UcbContentProviderProxyFactory()
 
 // XServiceInfo methods.
 
-
-XSERVICEINFO_IMPL_1( UcbContentProviderProxyFactory,
-                     OUString( "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ),
-                     "com.sun.star.ucb.ContentProviderProxyFactory" );
-
+XSERVICEINFO_COMMOM_IMPL( UcbContentProviderProxyFactory,
+                          OUString( "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" ) )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+UcbContentProviderProxyFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new UcbContentProviderProxyFactory( rSMgr ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
+css::uno::Sequence< OUString >
+UcbContentProviderProxyFactory::getSupportedServiceNames_Static()
+{
+    return { "com.sun.star.ucb.ContentProviderProxyFactory" };
+}
 
 // Service factory implementation.
 

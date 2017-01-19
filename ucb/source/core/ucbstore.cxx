@@ -159,11 +159,24 @@ UcbStore::~UcbStore()
 {
 }
 
+XSERVICEINFO_COMMOM_IMPL( UcbStore,
+                          OUString( "com.sun.star.comp.ucb.UcbStore" ) )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+UcbStore_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new UcbStore( ucbhelper::getComponentContext(rSMgr) ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
 
-XSERVICEINFO_IMPL_1_CTX( UcbStore,
-                     OUString( "com.sun.star.comp.ucb.UcbStore" ),
-                     STORE_SERVICE_NAME );
-
+css::uno::Sequence< OUString >
+UcbStore::getSupportedServiceNames_Static()
+{
+    css::uno::Sequence< OUString > aSNS { STORE_SERVICE_NAME };
+    return aSNS;
+}
 
 // Service factory implementation.
 

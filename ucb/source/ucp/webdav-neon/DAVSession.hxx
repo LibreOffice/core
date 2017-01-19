@@ -75,12 +75,14 @@ public:
 
     // DAV methods
 
+    /// @throws std::exception
     virtual void OPTIONS( const OUString & inPath,
                           DAVOptions& rOptions,
                           const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
     // allprop & named
+    /// @throws std::exception
     virtual void PROPFIND( const OUString & inPath,
                            const Depth inDepth,
                            const std::vector< OUString > & inPropertyNames,
@@ -89,33 +91,39 @@ public:
         throw( std::exception ) = 0;
 
     // propnames
+    /// @throws std::exception
     virtual void PROPFIND( const OUString & inPath,
                            const Depth inDepth,
                            std::vector< DAVResourceInfo > & ioResInfo,
                            const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void PROPPATCH( const OUString & inPath,
                             const std::vector< ProppatchValue > & inValues,
                             const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void HEAD( const OUString &  inPath,
                        const std::vector< OUString > & inHeaderNames,
                        DAVResource & ioResource,
                        const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual css::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void GET( const OUString & inPath,
                       css::uno::Reference< css::io::XOutputStream >& o,
                       const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual css::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const std::vector< OUString > & inHeaderNames,
@@ -124,6 +132,7 @@ public:
         throw( std::exception ) = 0;
 
     // used as HEAD substitute when HEAD is not implemented on server
+    /// @throws std::exception
     virtual void
     GET0( const OUString & inPath,
           const std::vector< OUString > & inHeaderNames,
@@ -131,6 +140,7 @@ public:
           const DAVRequestEnvironment & rEnv )
          throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void
     GET( const OUString & inPath,
          css::uno::Reference< css::io::XOutputStream >& o,
@@ -139,11 +149,13 @@ public:
          const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void PUT( const OUString & inPath,
                       const css::uno::Reference< css::io::XInputStream >& s,
                       const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual css::uno::Reference< css::io::XInputStream >
     POST( const OUString & inPath,
           const OUString & rContentType,
@@ -152,6 +164,7 @@ public:
           const DAVRequestEnvironment & rEnv )
         throw ( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void POST( const OUString & inPath,
                        const OUString & rContentType,
                        const OUString & rReferer,
@@ -160,36 +173,43 @@ public:
                        const DAVRequestEnvironment & rEnv )
         throw ( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void MKCOL( const OUString & inPath,
                         const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void COPY( const OUString & inSource,
                        const OUString & inDestination,
                        const DAVRequestEnvironment & rEnv,
                        bool inOverwrite )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void MOVE( const OUString & inSource,
                        const OUString & inDestination,
                        const DAVRequestEnvironment & rEnv,
                        bool inOverwrite )
         throw( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void DESTROY( const OUString & inPath,
                           const DAVRequestEnvironment & rEnv )
         throw( std::exception ) = 0;
 
     // set new lock.
+    /// @throws std::exception
     virtual void LOCK( const OUString & inPath,
                        css::ucb::Lock & inLock,
                        const DAVRequestEnvironment & rEnv )
         throw ( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void UNLOCK( const OUString & inPath,
                          const DAVRequestEnvironment & rEnv )
         throw ( std::exception ) = 0;
 
+    /// @throws std::exception
     virtual void abort()
         throw( std::exception ) = 0;
 

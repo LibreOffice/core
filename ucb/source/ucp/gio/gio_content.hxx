@@ -55,6 +55,8 @@ namespace gio
 
 css::uno::Any convertToException(GError *pError,
     const css::uno::Reference< css::uno::XInterface >& rContext, bool bThrow=true);
+/// @throws css::io::IOException
+/// @throws css::uno::RuntimeException
 void convertToIOException(GError *pError,
     const css::uno::Reference< css::uno::XInterface >& rContext)
         throw (css::io::IOException, css::uno::RuntimeException, std::exception);
@@ -87,18 +89,22 @@ private:
 
     bool doSetFileInfo ( GFileInfo *pNewInfo );
 
+    /// @throws css::uno::Exception
     css::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
             throw( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     void transfer( const css::ucb::TransferInfo& rTransferInfo,
         const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
             throw( css::uno::Exception, std::exception );
 
+    /// @throws css::uno::Exception
     void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
         bool bReplaceExisting, const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
             throw( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     void destroy( bool bDeletePhysical ) throw( css::uno::Exception, std::exception );
 
     static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
@@ -116,11 +122,13 @@ private:
     bool exchangeIdentity(const css::uno::Reference< css::ucb::XContentIdentifier >&  xNewId);
 
 public:
+    /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference<
         css::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier)
             throw ( css::ucb::ContentCreationException );
 
+    /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference<
         css::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
@@ -185,6 +193,7 @@ public:
         SAL_CALL createNewContent( const css::ucb::ContentInfo& Info )
             throw( css::uno::RuntimeException, std::exception ) override;
 
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::ucb::ContentInfo >
         queryCreatableContentsInfo(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv)

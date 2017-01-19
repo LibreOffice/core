@@ -569,6 +569,8 @@ class XResultSet_impl : public Notifier,
         sal_Int32                                          m_nMinorErrorCode;
 
         // Methods
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         bool SAL_CALL OneMore()
             throw( css::sdbc::SQLException,
                    css::uno::RuntimeException,

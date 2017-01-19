@@ -553,11 +553,22 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
 
 // CachedContentResultSetStubFactory XServiceInfo methods.
 
-
-XSERVICEINFO_IMPL_1( CachedContentResultSetStubFactory,
-                     OUString( "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ),
-                     CACHED_CRS_STUB_FACTORY_NAME );
-
+XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetStubFactory,
+                          OUString( "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" ) )
+/// @throws css::uno::Exception
+static css::uno::Reference< css::uno::XInterface > SAL_CALL
+CachedContentResultSetStubFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
+    throw( css::uno::Exception )
+{
+    css::lang::XServiceInfo* pX =
+        static_cast<css::lang::XServiceInfo*>(new CachedContentResultSetStubFactory( rSMgr ));
+    return css::uno::Reference< css::uno::XInterface >::query( pX );
+}
+css::uno::Sequence< OUString >
+CachedContentResultSetStubFactory::getSupportedServiceNames_Static()
+{
+    return { CACHED_CRS_STUB_FACTORY_NAME };
+}
 
 // Service factory implementation.
 

@@ -123,6 +123,8 @@ protected:
 
     virtual void SAL_CALL impl_initPropertySetInfo(); //helping XPropertySet
 
+    /// @throws css::lang::DisposedException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL
     impl_EnsureNotDisposed()
         throw( css::lang::DisposedException,
@@ -132,6 +134,8 @@ protected:
     impl_notifyPropertyChangeListeners(
             const css::beans::PropertyChangeEvent& rEvt );
 
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL
     impl_notifyVetoableChangeListeners(
             const css::beans::PropertyChangeEvent& rEvt )
@@ -232,14 +236,18 @@ public:
 
     // own methods
 
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL
         impl_disposing( const css::lang::EventObject& Source )
         throw( css::uno::RuntimeException );
 
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL
     impl_propertyChange( const css::beans::PropertyChangeEvent& evt )
         throw( css::uno::RuntimeException );
 
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL
     impl_vetoableChange( const css::beans::PropertyChangeEvent& aEvent )
         throw( css::beans::PropertyVetoException,

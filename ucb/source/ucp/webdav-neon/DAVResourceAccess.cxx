@@ -592,6 +592,7 @@ void DAVResourceAccess::abort()
 
 namespace {
 
+    /// @throws DAVException
     void resetInputStream( const uno::Reference< io::XInputStream > & rStream )
         throw( DAVException )
     {

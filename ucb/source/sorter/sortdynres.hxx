@@ -120,9 +120,11 @@ public:
 
     // own methods:
 
+    /// @throws css::uno::RuntimeException
     void impl_disposing( const css::lang::EventObject& Source )
         throw( css::uno::RuntimeException );
 
+    /// @throws css::uno::RuntimeException
     void impl_notify( const css::ucb::ListEvent& Changes )
         throw( css::uno::RuntimeException );
 };

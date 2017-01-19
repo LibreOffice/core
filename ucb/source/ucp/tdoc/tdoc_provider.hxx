@@ -108,12 +108,16 @@ public:
     css::uno::Reference< css::embed::XStorage >
     queryStorageClone( const OUString & rUri ) const;
 
+    /// @throws css::packages::WrongPasswordException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::io::XInputStream >
     queryInputStream( const OUString & rUri,
                       const OUString & rPassword ) const
         throw ( css::packages::WrongPasswordException,
                 css::uno::RuntimeException );
 
+    /// @throws css::packages::WrongPasswordException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::io::XOutputStream >
     queryOutputStream( const OUString & rUri,
                        const OUString & rPassword,
@@ -121,6 +125,8 @@ public:
         throw ( css::packages::WrongPasswordException,
                 css::uno::RuntimeException );
 
+    /// @throws css::packages::WrongPasswordException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::io::XStream >
     queryStream( const OUString & rUri,
                  const OUString & rPassword,

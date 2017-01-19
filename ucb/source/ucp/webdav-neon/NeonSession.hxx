@@ -71,6 +71,7 @@ protected:
     virtual ~NeonSession() override;
 
 public:
+    /// @throws std::exception
     NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,
                  const OUString& inUri,
                  const css::uno::Sequence< css::beans::NamedValue >& rFlags,
@@ -227,13 +228,16 @@ public:
 private:
     friend class NeonLockStore;
 
+    /// @throws css::uno::RuntimeException
     void Init()
         throw (css::uno::RuntimeException, std::exception);
 
+    /// @throws css::uno::RuntimeException
     void Init( const DAVRequestEnvironment & rEnv )
         throw (css::uno::RuntimeException, std::exception);
 
     // ret: true => retry request.
+    /// @throws std::exception
     void HandleError( int nError,
                       const OUString & inPath,
                       const DAVRequestEnvironment & rEnv )

@@ -272,15 +272,18 @@ namespace fileaccess {
 
 
         // Private Methods
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::ucb::XCommandInfo > SAL_CALL
         getCommandInfo()
             throw( css::uno::RuntimeException );
 
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
         getPropertySetInfo(
             sal_Int32 nMyCommandIdentifier )
             throw( css::uno::RuntimeException );
 
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::sdbc::XRow > SAL_CALL
         getPropertyValues(
             sal_Int32 nMyCommandIdentifier,

@@ -464,6 +464,7 @@ css::uno::Sequence< OUString > SAL_CALL SortedDynamicResultSetFactory::getSuppor
     return getSupportedServiceNames_Static();
 }
 
+/// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
 SortedDynamicResultSetFactory_CreateInstance( const css::uno::Reference<
                                               css::lang::XMultiServiceFactory> & rSMgr )

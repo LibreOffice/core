@@ -61,6 +61,7 @@ class DAVSessionFactory : public salhelper::SimpleReferenceObject
 public:
     virtual ~DAVSessionFactory() override;
 
+    /// @throws DAVException
     rtl::Reference< DAVSession >
         createDAVSession( const OUString & inUri,
                           const ::uno::Sequence< css::beans::NamedValue >& rFlags,

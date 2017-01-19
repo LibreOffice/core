@@ -72,6 +72,7 @@ private:
     libcmis::RepositoryPtr getRepository( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
 public:
+    /// @throws css::ucb::ContentCreationException
     RepoContent( const css::uno::Reference<
         css::uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
