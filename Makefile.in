@@ -415,6 +415,7 @@ $(1)-ide-integration: gbuildtojson $(if $(filter MACOSX,$(OS_FOR_BUILD)),python3
 endef
 
 $(foreach ide,\
+	codelite \
 	debug \
 	kdevelop \
 	vs2013 \
