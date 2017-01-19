@@ -91,7 +91,6 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL )
     , m_eCSS1Unit(FUNIT_NONE)
     , m_pFootEndNotes(nullptr)
     , mxFormComps()
-    , m_pTemplate(nullptr)
     , m_pDfltColor(nullptr)
     , m_pStartNdIdx(nullptr)
     , m_pCurrPageDesc(nullptr)
@@ -262,16 +261,15 @@ sal_uLong SwHTMLWriter::WriteStream()
     SwTextFormatColls::size_type nOldTextFormatCollCnt = 0;
     SwCharFormats::size_type nOldCharFormatCnt = 0;
 
-    OSL_ENSURE( !m_pTemplate, "Wo kommt denn die HTML-Vorlage hier her?" );
-    m_pTemplate = static_cast<HTMLReader*>(ReadHTML)->GetTemplateDoc();
-    if( m_pTemplate )
+    OSL_ENSURE( !m_xTemplate.is(), "Wo kommt denn die HTML-Vorlage hier her?" );
+    m_xTemplate = static_cast<HTMLReader*>(ReadHTML)->GetTemplateDoc();
+    if( m_xTemplate.is() )
     {
-        m_pTemplate->acquire();
-        bOldHTMLMode = m_pTemplate->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
-        m_pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
+        bOldHTMLMode = m_xTemplate->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
+        m_xTemplate->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
-        nOldTextFormatCollCnt = m_pTemplate->GetTextFormatColls()->size();
-        nOldCharFormatCnt = m_pTemplate->GetCharFormats()->size();
+        nOldTextFormatCollCnt = m_xTemplate->GetTextFormatColls()->size();
+        nOldCharFormatCnt = m_xTemplate->GetCharFormats()->size();
     }
 
     if( bShowProgress )
@@ -298,7 +296,7 @@ sal_uLong SwHTMLWriter::WriteStream()
     m_nWhishLineLen = 70;
     m_nLastLFPos = 0;
     m_nDefListLvl = 0;
-    m_nDefListMargin = ((m_pTemplate && !m_bCfgOutStyles) ? m_pTemplate : pDoc)
+    m_nDefListMargin = ((m_xTemplate.is() && !m_bCfgOutStyles) ? m_xTemplate.get() : pDoc)
         ->getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_HTML_DD, false )
         ->GetLRSpace().GetTextLeft();
     m_nHeaderFooterSpace = 0;
@@ -488,29 +486,26 @@ sal_uLong SwHTMLWriter::WriteStream()
     if( bShowProgress )
         ::EndProgress( pDoc->GetDocShell() );
 
-    if( m_pTemplate )
+    if( m_xTemplate.is() )
     {
         // Waehrend des Exports angelegte Zeichen- und Abastzvorlagen
         // loeschen
-        auto nTextFormatCollCnt = m_pTemplate->GetTextFormatColls()->size();
+        auto nTextFormatCollCnt = m_xTemplate->GetTextFormatColls()->size();
         while( nTextFormatCollCnt > nOldTextFormatCollCnt )
-            m_pTemplate->DelTextFormatColl( --nTextFormatCollCnt );
-        OSL_ENSURE( m_pTemplate->GetTextFormatColls()->size() == nOldTextFormatCollCnt,
+            m_xTemplate->DelTextFormatColl( --nTextFormatCollCnt );
+        OSL_ENSURE( m_xTemplate->GetTextFormatColls()->size() == nOldTextFormatCollCnt,
                 "falsche Anzahl TextFormatColls geloescht" );
 
-        auto nCharFormatCnt = m_pTemplate->GetCharFormats()->size();
+        auto nCharFormatCnt = m_xTemplate->GetCharFormats()->size();
         while( nCharFormatCnt > nOldCharFormatCnt )
-            m_pTemplate->DelCharFormat( --nCharFormatCnt );
-        OSL_ENSURE( m_pTemplate->GetCharFormats()->size() == nOldCharFormatCnt,
+            m_xTemplate->DelCharFormat( --nCharFormatCnt );
+        OSL_ENSURE( m_xTemplate->GetCharFormats()->size() == nOldCharFormatCnt,
                 "falsche Anzahl CharFormats geloescht" );
 
         // HTML-Modus wieder restaurieren
-        m_pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, bOldHTMLMode);
+        m_xTemplate->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, bOldHTMLMode);
 
-        if( 0 == m_pTemplate->release() )
-            delete m_pTemplate;
-
-        m_pTemplate = nullptr;
+        m_xTemplate.clear();
     }
 
     return m_nWarn;
@@ -832,9 +827,9 @@ static void OutBodyColor( const sal_Char* pTag, const SwFormat *pFormat,
 {
     const SwFormat *pRefFormat = nullptr;
 
-    if( rHWrt.m_pTemplate )
+    if( rHWrt.m_xTemplate.is() )
         pRefFormat = SwHTMLWriter::GetTemplateFormat( pFormat->GetPoolFormatId(),
-                                                &rHWrt.m_pTemplate->getIDocumentStylePoolAccess() );
+                                                &rHWrt.m_xTemplate->getIDocumentStylePoolAccess() );
 
     const SvxColorItem *pColorItem = nullptr;
 

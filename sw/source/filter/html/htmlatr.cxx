@@ -499,7 +499,7 @@ void OutHTML_SwFormat( Writer& rWrt, const SwFormat& rFormat,
     }
     else
     {
-        pFormatInfo = new SwHTMLFormatInfo( &rFormat, rWrt.pDoc, rHWrt.m_pTemplate,
+        pFormatInfo = new SwHTMLFormatInfo( &rFormat, rWrt.pDoc, rHWrt.m_xTemplate.get(),
                                       rHWrt.m_bCfgOutStyles, rHWrt.m_eLang,
                                       rHWrt.m_nCSS1Script );
         rHWrt.m_TextCollInfos.insert(std::unique_ptr<SwHTMLFormatInfo>(pFormatInfo));
@@ -2257,7 +2257,7 @@ Writer& OutHTML_SwTextNode( Writer& rWrt, const SwContentNode& rNode )
 
     // are there any hard attributes that must be written as tags?
     aFullText += rStr;
-    HTMLEndPosLst aEndPosLst( rWrt.pDoc, rHTMLWrt.m_pTemplate,
+    HTMLEndPosLst aEndPosLst( rWrt.pDoc, rHTMLWrt.m_xTemplate.get(),
                               rHTMLWrt.m_pDfltColor, rHTMLWrt.m_bCfgOutStyles,
                               rHTMLWrt.GetHTMLMode(), aFullText,
                                  rHTMLWrt.m_aScriptTextStyles );

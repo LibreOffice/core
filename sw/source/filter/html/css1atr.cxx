@@ -513,7 +513,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
         {
             // The document is one-sided; no matter what page, we do not create a 2-sided doc.
             // The attribute is exported relative to the HTML page template.
-          OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, m_pTemplate,
+          OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, m_xTemplate.get(),
                                 RES_POOLPAGE_HTML, true, false );
             nFirstRefPoolId = pFollow->GetPoolFormatId();
         }
@@ -523,9 +523,9 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
                   RES_POOLPAGE_LEFT == pFollow->GetPoolFormatId()) )
         {
             // the document is double-sided
-          OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, m_pTemplate,
+          OutCSS1_SwPageDesc( *this, *pPageDesc, pStylePoolAccess, m_xTemplate.get(),
                                 RES_POOLPAGE_HTML, true );
-          OutCSS1_SwPageDesc( *this, *pFollow, pStylePoolAccess, m_pTemplate,
+          OutCSS1_SwPageDesc( *this, *pFollow, pStylePoolAccess, m_xTemplate.get(),
                                 RES_POOLPAGE_HTML, true );
             nFirstRefPoolId = RES_POOLPAGE_RIGHT;
             m_bCSS1IgnoreFirstPageDesc = false;
@@ -533,7 +533,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
         // other cases we miss
 
         if( pFirstPageDesc )
-          OutCSS1_SwPageDesc( *this, *pFirstPageDesc, pStylePoolAccess, m_pTemplate,
+          OutCSS1_SwPageDesc( *this, *pFirstPageDesc, pStylePoolAccess, m_xTemplate.get(),
                                 nFirstRefPoolId, false );
     }
 
@@ -550,7 +550,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
         const SwTextFormatColl* pColl = (*pDoc->GetTextFormatColls())[i];
         sal_uInt16 nPoolId = pColl->GetPoolFormatId();
         if( nPoolId == RES_POOLCOLL_TEXT || pDoc->IsUsed( *pColl ) )
-            OutCSS1_SwFormat( *this, *pColl, &pDoc->getIDocumentStylePoolAccess(), m_pTemplate );
+            OutCSS1_SwFormat( *this, *pColl, &pDoc->getIDocumentStylePoolAccess(), m_xTemplate.get() );
     }
 
     // the Default-TextStyle is not also exported !!
@@ -562,7 +562,7 @@ void SwHTMLWriter::OutStyleSheet( const SwPageDesc& rPageDesc )
         if( nPoolId == RES_POOLCHR_INET_NORMAL ||
             nPoolId == RES_POOLCHR_INET_VISIT ||
             pDoc->IsUsed( *pCFormat ) )
-            OutCSS1_SwFormat( *this, *pCFormat, &pDoc->getIDocumentStylePoolAccess(), m_pTemplate );
+            OutCSS1_SwFormat( *this, *pCFormat, &pDoc->getIDocumentStylePoolAccess(), m_xTemplate.get() );
     }
 
     bool bHasEndNotes {false};
@@ -1756,9 +1756,9 @@ static Writer& OutCSS1_SwFootnoteInfo( Writer& rWrt, const SwEndNoteInfo& rInfo,
         // exported, so that Netscape displays the document correctly.
         // Otherwise it is sufficient, to export the differences to the
         // footnote and endnote template.
-        if( !bHasNotes && rHTMLWrt.m_pTemplate )
+        if( !bHasNotes && rHTMLWrt.m_xTemplate.is() )
         {
-            SwFormat *pRefFormat = rHTMLWrt.m_pTemplate->getIDocumentStylePoolAccess().GetCharFormatFromPool(
+            SwFormat *pRefFormat = rHTMLWrt.m_xTemplate->getIDocumentStylePoolAccess().GetCharFormatFromPool(
                         static_cast< sal_uInt16 >(bEndNote ? RES_POOLCHR_ENDNOTE : RES_POOLCHR_FOOTNOTE) );
             if( pRefFormat )
                 SwHTMLWriter::SubtractItemSet( aItemSet, pRefFormat->GetAttrSet(),

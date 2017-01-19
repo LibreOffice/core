@@ -30,6 +30,7 @@
 #include <comphelper/stl_types.hxx>
 #include <o3tl/sorted_vector.hxx>
 #include <o3tl/typed_flags_set.hxx>
+#include <rtl/ref.hxx>
 
 #include "shellio.hxx"
 #include "wrt_fn.hxx"
@@ -293,7 +294,7 @@ public:
 
     css::uno::Reference<css::container::XIndexContainer> mxFormComps; // die aktuelle Form
 
-    SwDoc *m_pTemplate;               // die HTML-Vorlage
+    rtl::Reference<SwDoc> m_xTemplate;               // die HTML-Vorlage
     Color *m_pDfltColor;              // default Farbe
     SwNodeIndex *m_pStartNdIdx;       // Index des ersten Absatz
     const SwPageDesc *m_pCurrPageDesc;// Die aktuelle Seiten-Vorlage
