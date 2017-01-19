@@ -238,7 +238,6 @@ UniversalContentBroker::UniversalContentBroker(
 // virtual
 UniversalContentBroker::~UniversalContentBroker()
 {
-    delete m_pDisposeEventListeners;
 }
 
 
@@ -312,7 +311,7 @@ void SAL_CALL UniversalContentBroker::addEventListener(
     throw( css::uno::RuntimeException, std::exception )
 {
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners = new OInterfaceContainerHelper2( m_aMutex );
+        m_pDisposeEventListeners.reset( new OInterfaceContainerHelper2( m_aMutex ) );
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

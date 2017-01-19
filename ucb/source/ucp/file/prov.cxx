@@ -92,14 +92,13 @@ FileProvider::FileProvider( const Reference< XComponentContext >& rxContext )
 
 FileProvider::~FileProvider()
 {
-    delete m_pMyShell;
 }
 
 // XInitialization
 void SAL_CALL FileProvider::init()
 {
     if( ! m_pMyShell )
-        m_pMyShell = new TaskManager( m_xContext, this, true );
+        m_pMyShell.reset( new TaskManager( m_xContext, this, true ) );
 }
 
 
@@ -113,9 +112,9 @@ FileProvider::initialize(
         if( aArguments.getLength() > 0 &&
             (aArguments[0] >>= config) &&
             config == "NoConfig" )
-            m_pMyShell = new TaskManager( m_xContext, this, false );
+            m_pMyShell.reset( new TaskManager( m_xContext, this, false ) );
         else
-            m_pMyShell = new TaskManager( m_xContext, this, true );
+            m_pMyShell.reset( new TaskManager( m_xContext, this, true ) );
     }
 }
 
@@ -177,7 +176,7 @@ FileProvider::queryContent(
     if(  err )
         throw IllegalIdentifierException( THROW_WHERE );
 
-    return Reference< XContent >( new BaseContent( m_pMyShell,xIdentifier,aUnc ) );
+    return Reference< XContent >( new BaseContent( m_pMyShell.get(), xIdentifier, aUnc ) );
 }
 
 

@@ -30,6 +30,7 @@
 #include <string.h>
 #include <ne_xml.h>
 #include "LockEntrySequence.hxx"
+#include <memory>
 
 using namespace webdav_ucp;
 using namespace com::sun::star;
@@ -37,13 +38,13 @@ using namespace com::sun::star;
 
 struct LockEntrySequenceParseContext
 {
-    ucb::LockEntry * pEntry;
+    std::unique_ptr<ucb::LockEntry> pEntry;
     bool hasScope;
     bool hasType;
 
     LockEntrySequenceParseContext()
     : pEntry( nullptr ), hasScope( false ), hasType( false ) {}
-    ~LockEntrySequenceParseContext() { delete pEntry; }
+    ~LockEntrySequenceParseContext() { }
 };
 
 #define STATE_TOP (1)
@@ -140,7 +141,7 @@ extern "C" int LockEntrySequence_endelement_callback(
     LockEntrySequenceParseContext * pCtx
                 = static_cast< LockEntrySequenceParseContext * >( userdata );
     if ( !pCtx->pEntry )
-        pCtx->pEntry = new ucb::LockEntry;
+        pCtx->pEntry.reset( new ucb::LockEntry );
 
     switch ( state )
     {

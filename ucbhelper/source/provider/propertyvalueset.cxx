@@ -249,7 +249,6 @@ PropertyValueSet::PropertyValueSet(
 // virtual
 PropertyValueSet::~PropertyValueSet()
 {
-    delete m_pValues;
 }
 
 

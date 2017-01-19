@@ -56,7 +56,7 @@ class UCBHELPER_DLLPUBLIC ResultSetImplHelper :
                 public css::lang::XServiceInfo,
                 public css::ucb::XDynamicResultSet
 {
-    cppu::OInterfaceContainerHelper* m_pDisposeEventListeners;
+    std::unique_ptr<cppu::OInterfaceContainerHelper> m_pDisposeEventListeners;
     bool                         m_bStatic;
     bool                         m_bInitDone;
 

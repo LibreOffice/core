@@ -34,6 +34,7 @@
 #include <com/sun/star/ucb/XDynamicResultSetListener.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <memory>
 
 class DynamicResultSetWrapperListener;
 class DynamicResultSetWrapper
@@ -46,7 +47,7 @@ private:
     bool                    m_bDisposed; ///Dispose call ready.
     bool                    m_bInDispose;///In dispose call
     osl::Mutex              m_aContainerMutex;
-    comphelper::OInterfaceContainerHelper2*
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2>
                             m_pDisposeEventListeners;
 protected:
     css::uno::Reference< css::ucb::XDynamicResultSetListener >

@@ -58,7 +58,6 @@ ContentProvider::ContentProvider(
 // virtual
 ContentProvider::~ContentProvider()
 {
-    delete m_pProps;
 }
 
 

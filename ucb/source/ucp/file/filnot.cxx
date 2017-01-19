@@ -206,7 +206,6 @@ PropertyChangeNotifier::PropertyChangeNotifier(
 
 PropertyChangeNotifier::~PropertyChangeNotifier()
 {
-    delete m_pListeners;
 }
 
 

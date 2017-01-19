@@ -129,17 +129,12 @@ CachedContentResultSet::CCRS_Cache::CCRS_Cache(
 
 CachedContentResultSet::CCRS_Cache::~CCRS_Cache()
 {
-    delete m_pResult;
 }
 
 void SAL_CALL CachedContentResultSet::CCRS_Cache
     ::clear()
 {
-    if( m_pResult )
-    {
-        delete m_pResult;
-        m_pResult = nullptr;
-    }
+    m_pResult.reset();
     clearMappedReminder();
 }
 
@@ -147,7 +142,7 @@ void SAL_CALL CachedContentResultSet::CCRS_Cache
     ::loadData( const FetchResult& rResult )
 {
     clear();
-    m_pResult = new FetchResult( rResult );
+    m_pResult.reset( new FetchResult( rResult ) );
 }
 
 bool SAL_CALL CachedContentResultSet::CCRS_Cache
@@ -378,7 +373,7 @@ class CCRS_PropertySetInfo :
     friend class CachedContentResultSet;
 
     //my Properties
-    Sequence< css::beans::Property >*
+    std::unique_ptr<Sequence< css::beans::Property >>
                             m_pProperties;
 
     long                    m_nFetchSizePropertyHandle;
@@ -401,8 +396,6 @@ private:
 public:
     explicit CCRS_PropertySetInfo(   Reference<
             XPropertySetInfo > const & xPropertySetInfoOrigin );
-
-    virtual ~CCRS_PropertySetInfo() override;
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
@@ -453,12 +446,12 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
     if( xInfo.is() )
     {
         Sequence<Property> aProps = xInfo->getProperties();
-        m_pProperties = new Sequence<Property> ( aProps );
+        m_pProperties.reset( new Sequence<Property> ( aProps ) );
     }
     else
     {
         OSL_FAIL( "The received XPropertySetInfo doesn't contain required properties" );
-        m_pProperties = new Sequence<Property>;
+        m_pProperties.reset( new Sequence<Property> );
     }
 
     //ensure, that we haven't got the Properties 'FetchSize' and 'Direction' twice:
@@ -509,12 +502,6 @@ CCRS_PropertySetInfo::CCRS_PropertySetInfo(
         m_nFetchDirectionPropertyHandle = rMyProp.Handle;
     }
 }
-
-CCRS_PropertySetInfo::~CCRS_PropertySetInfo()
-{
-    delete m_pProperties;
-}
-
 
 // XInterface methods.
 

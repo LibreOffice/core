@@ -28,6 +28,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/weak.hxx>
 #include <ucbhelper/macros.hxx>
+#include <memory>
 
 namespace comphelper { class OInterfaceContainerHelper2; }
 
@@ -41,9 +42,9 @@ class HierarchyDataSource : public cppu::OWeakObject,
                             public css::lang::XMultiServiceFactory
 {
     osl::Mutex m_aMutex;
-    css::uno::Reference< css::uno::XComponentContext > m_xContext;
-    css::uno::Reference< css::lang::XMultiServiceFactory > m_xConfigProvider;
-    comphelper::OInterfaceContainerHelper2 * m_pDisposeEventListeners;
+    css::uno::Reference< css::uno::XComponentContext >     m_xContext;
+    css::uno::Reference< css::lang::XMultiServiceFactory >  m_xConfigProvider;
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2> m_pDisposeEventListeners;
 
 public:
     explicit HierarchyDataSource( const css::uno::Reference< css::uno::XComponentContext > & rxContext );

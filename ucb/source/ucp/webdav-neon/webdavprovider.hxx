@@ -73,7 +73,7 @@ namespace webdav_ucp {
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
     rtl::Reference< DAVSessionFactory > m_xDAVSessionFactory;
-    PropertyMap * m_pProps;
+    std::unique_ptr<PropertyMap> m_pProps;
 
 public:
     explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
