@@ -117,17 +117,21 @@ protected:
     const static sal_Int32 UNIQUE_NUMBER_NEEDS_INITIALISATION = -1;
 
     // Checks read only status and throws exception if it's true
+    /// @throws css::lang::NoSupportException
     void implCheckReadOnly( const sal_Char* pExceptionMsg )
         throw (css::lang::NoSupportException);
 
     // Returns the LocalItem for a given locale, if it exists, otherwise NULL
     // This method compares the locales exactly, no closest match search is performed
+    /// @throws css::lang::IllegalArgumentException
     LocaleItem* getItemForLocale( const css::lang::Locale& locale, bool bException )
         throw (css::lang::IllegalArgumentException);
 
     // Returns the LocalItem for a given locale, if it exists, otherwise NULL
     // This method performs a closest match search, at least the language must match
     LocaleItem* getClosestMatchItemForLocale( const css::lang::Locale& locale );
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void implSetCurrentLocale( const css::lang::Locale& locale,
         bool FindClosestMatch, bool bUseDefaultIfNoMatch )
             throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
@@ -136,12 +140,14 @@ protected:
     void implNotifyListeners();
 
     //=== Impl methods for ...ForLocale methods ===
+    /// @throws css::resource::MissingResourceException
     OUString SAL_CALL implResolveString( const OUString& ResourceID, LocaleItem* pLocaleItem )
         throw (css::resource::MissingResourceException);
     bool implHasEntryForId( const OUString& ResourceID, LocaleItem* pLocaleItem );
     css::uno::Sequence< OUString > implGetResourceIDs( LocaleItem* pLocaleItem );
     void implSetString( const OUString& ResourceID,
         const OUString& Str, LocaleItem* pLocaleItem );
+    /// @throws css::resource::MissingResourceException
     void implRemoveId( const OUString& ResourceID, LocaleItem* pLocaleItem )
         throw (css::resource::MissingResourceException);
 
@@ -237,6 +243,8 @@ protected:
     OUString                                                             m_aNameBase;
     OUString                                                             m_aComment;
 
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     void SAL_CALL implInitializeCommonParameters( const css::uno::Sequence< css::uno::Any >& aArguments )
             throw (css::uno::Exception, css::uno::RuntimeException);
 
@@ -265,6 +273,8 @@ protected:
 
     void implWriteLocaleBinary( LocaleItem* pLocaleItem, BinaryOutput& rOut );
 
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     void implStoreAtStorage
     (
         const OUString& aNameBase,
@@ -275,6 +285,8 @@ protected:
     )
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     void implKillRemovedLocaleFiles
     (
         const OUString& Location,
@@ -283,6 +295,8 @@ protected:
     )
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     void implKillChangedDefaultFiles
     (
         const OUString& Location,
@@ -291,6 +305,8 @@ protected:
     )
     throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
 
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     void implStoreAtLocation
     (
         const OUString& Location,

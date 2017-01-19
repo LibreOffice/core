@@ -620,6 +620,7 @@ protected:
 
 private:
     void setShellFromModel();
+    /// @throws RuntimeException
     void firing_Impl( const  ScriptEvent& evt, Any *pSyncRet ) throw( RuntimeException, std::exception );
 
     Reference< frame::XModel > m_xModel;

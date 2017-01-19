@@ -52,6 +52,7 @@ namespace dlgprov
         ListenerHash listenersForTypes;
         css::uno::Reference< css::uno::XComponentContext > m_xContext;
         css::uno::Reference< css::script::XEventAttacher > m_xEventAttacher;
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::script::XScriptListener > getScriptListenerForKey( const OUString& sScriptName ) throw ( css::uno::RuntimeException );
         css::uno::Reference< css::script::XScriptEventsSupplier > getFakeVbaEventsSupplier( const css::uno::Reference< css::awt::XControl>& xControl, OUString& sCodeName );
         void nestedAttachEvents( const css::uno::Sequence< css::uno::Reference< css::uno::XInterface > >& Objects, const css::uno::Any& Helper, OUString& sDialogCodeName );

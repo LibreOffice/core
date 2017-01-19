@@ -67,6 +67,7 @@ public:
         createView( sal_Int16 viewType )
             throw ( css::uno::RuntimeException, std::exception ) override;
 private:
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::script::browse::XBrowseNode >
         getOrganizerHierarchy()
             throw ( css::uno::RuntimeException );

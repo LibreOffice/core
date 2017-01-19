@@ -54,6 +54,7 @@ namespace dlgprov
 
     css::uno::Reference< css::container::XNameContainer > lcl_createControlModel(const css::uno::Reference< css::uno::XComponentContext >& i_xContext);
     css::uno::Reference< css::resource::XStringResourceManager > lcl_getStringResourceManager(const css::uno::Reference< css::uno::XComponentContext >& i_xContext,const OUString& i_sURL);
+    /// @throws css::uno::Exception
     css::uno::Reference< css::container::XNameContainer > lcl_createDialogModel(
                 const css::uno::Reference< css::uno::XComponentContext >& i_xContext,
                 const css::uno::Reference< css::io::XInputStream >& xInput,
@@ -94,13 +95,17 @@ namespace dlgprov
         css::uno::Reference< css::beans::XIntrospectionAccess > inspectHandler(
             const css::uno::Reference< css::uno::XInterface >& rxHandler );
     // helper methods
+            /// @throws css::uno::Exception
             css::uno::Reference< css::container::XNameContainer > createDialogModel(
                 const css::uno::Reference< css::io::XInputStream >& xInput,
                 const css::uno::Reference< css::resource::XStringResourceManager >& xStringResourceManager,
                 const css::uno::Any &aDialogSourceURL) throw ( css::uno::Exception );
+            /// @throws css::uno::Exception
             css::uno::Reference< css::awt::XControlModel > createDialogModelForBasic() throw ( css::uno::Exception );
 
         // XDialogProvider / XDialogProvider2 impl method
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference < css::awt::XControl > SAL_CALL createDialogImpl(
             const OUString& URL,
             const css::uno::Reference< css::uno::XInterface >& xHandler,

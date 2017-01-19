@@ -49,6 +49,7 @@ class MasterScriptProvider :
             public t_helper
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit MasterScriptProvider(
         const css::uno::Reference< css::uno::XComponentContext >
         & xContext ) throw( css::uno::RuntimeException );

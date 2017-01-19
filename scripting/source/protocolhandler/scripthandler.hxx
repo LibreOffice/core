@@ -91,6 +91,7 @@ public:
     static OUString impl_getStaticImplementationName();
 
     /* Helper for registry */
+    /// @throws css::uno::RuntimeException
     static css::uno::Reference < css::uno::XInterface > SAL_CALL
     impl_createInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )
