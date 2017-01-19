@@ -33,9 +33,8 @@ namespace helpdatafileproxy {
 void HDFData::copyToBuffer( const char* pSrcData, int nSize )
 {
     m_nSize = nSize;
-    delete [] m_pBuffer;
-    m_pBuffer = new char[m_nSize+1];
-    memcpy( m_pBuffer, pSrcData, m_nSize );
+    m_pBuffer.reset( new char[m_nSize+1] );
+    memcpy( m_pBuffer.get(), pSrcData, m_nSize );
     m_pBuffer[m_nSize] = 0;
 }
 

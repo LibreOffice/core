@@ -159,7 +159,6 @@ XMLFootnoteConfigurationImportContext::XMLFootnoteConfigurationImportContext(
 }
 XMLFootnoteConfigurationImportContext::~XMLFootnoteConfigurationImportContext()
 {
-    delete pAttrTokenMap;
 }
 
 enum XMLFtnConfigToken
@@ -201,9 +200,9 @@ static const SvXMLTokenMapEntry aTextFieldAttrTokenMap[] =
 const SvXMLTokenMap&
     XMLFootnoteConfigurationImportContext::GetFtnConfigAttrTokenMap()
 {
-    if (nullptr == pAttrTokenMap)
+    if (!pAttrTokenMap)
     {
-        pAttrTokenMap = new SvXMLTokenMap(aTextFieldAttrTokenMap);
+        pAttrTokenMap.reset( new SvXMLTokenMap(aTextFieldAttrTokenMap) );
     }
 
     return *pAttrTokenMap;

@@ -26,6 +26,7 @@
 #include <tools/fontenum.hxx>
 #include <salhelper/simplereferenceobject.hxx>
 #include <set>
+#include <memory>
 
 class XMLFontAutoStylePool_Impl;
 class SvXMLExport;
@@ -34,7 +35,7 @@ class XMLOFF_DLLPUBLIC XMLFontAutoStylePool : public salhelper::SimpleReferenceO
 {
     SvXMLExport& rExport;
 
-    XMLFontAutoStylePool_Impl *pPool;
+    std::unique_ptr<XMLFontAutoStylePool_Impl> pPool;
     std::set<OUString> m_aNames;
     bool tryToEmbedFonts;
 

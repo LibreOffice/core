@@ -87,8 +87,8 @@ static SvXMLTokenMapEntry aStyleStylesElemTokenMap[] =
 const SvXMLTokenMap& SvXMLStylesContext::GetStyleStylesElemTokenMap()
 {
     if( !mpStyleStylesElemTokenMap )
-        mpStyleStylesElemTokenMap =
-            new SvXMLTokenMap( aStyleStylesElemTokenMap );
+        mpStyleStylesElemTokenMap.reset(
+            new SvXMLTokenMap( aStyleStylesElemTokenMap ) );
 
     return *mpStyleStylesElemTokenMap;
 }
@@ -754,7 +754,6 @@ SvXMLStylesContext::SvXMLStylesContext( SvXMLImport& rImport, sal_uInt16 nPrfx,
 
 SvXMLStylesContext::~SvXMLStylesContext()
 {
-    delete mpStyleStylesElemTokenMap;
 }
 
 SvXMLImportContext *SvXMLStylesContext::CreateChildContext( sal_uInt16 nPrefix,

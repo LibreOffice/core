@@ -198,7 +198,7 @@ void LibrariesElement::endElement()
     throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     sal_Int32 nLibCount = mxImport->mpLibArray->mnLibCount = (sal_Int32)mLibDescriptors.size();
-    mxImport->mpLibArray->mpLibs = new LibDescriptor[ nLibCount ];
+    mxImport->mpLibArray->mpLibs.reset( new LibDescriptor[ nLibCount ] );
 
     for( sal_Int32 i = 0 ; i < nLibCount ; i++ )
     {
@@ -264,12 +264,11 @@ SAL_CALL importLibrary( LibDescriptor& rLib )
 LibDescriptorArray::LibDescriptorArray( sal_Int32 nLibCount )
 {
     mnLibCount = nLibCount;
-    mpLibs = new LibDescriptor[ mnLibCount ];
+    mpLibs.reset( new LibDescriptor[ mnLibCount ] );
 }
 
 LibDescriptorArray::~LibDescriptorArray()
 {
-    delete[] mpLibs;
 }
 
 }

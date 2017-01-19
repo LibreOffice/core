@@ -23,6 +23,7 @@
 #include <comphelper/fileurl.hxx>
 #include <osl/diagnose.h>
 #include <rtl/string.hxx>
+#include <memory>
 #include <unordered_map>
 
 namespace helpdatafileproxy {
@@ -31,23 +32,18 @@ namespace helpdatafileproxy {
     {
         friend class        Hdf;
 
-        int                 m_nSize;
-        char*               m_pBuffer;
+        int                     m_nSize;
+        std::unique_ptr<char[]> m_pBuffer;
 
         void copyToBuffer( const char* pSrcData, int nSize );
 
     public:
-        HDFData()
-            : m_nSize( 0 )
-            , m_pBuffer( nullptr )
-        {}
-        ~HDFData()
-            { delete [] m_pBuffer; }
+        HDFData() : m_nSize( 0 ) {}
 
-          int getSize() const
+        int getSize() const
             { return m_nSize; }
-          const char* getData() const
-            { return m_pBuffer; }
+        const char* getData() const
+            { return m_pBuffer.get(); }
     };
 
     typedef std::unordered_map< OString,std::pair<int,int>,OStringHash >   StringToValPosMap;
