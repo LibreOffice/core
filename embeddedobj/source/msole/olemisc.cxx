@@ -67,7 +67,6 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bGotStatus( false )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
-, m_pOwnView( nullptr )
 , m_bFromClipboard( false )
 , m_bTriedConversion( false )
 {
@@ -99,7 +98,6 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bGotStatus( false )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
-, m_pOwnView( nullptr )
 , m_bFromClipboard( false )
 , m_bTriedConversion( false )
 {
@@ -265,11 +263,10 @@ void OleEmbeddedObject::Dispose()
         m_pInterfaceContainer = nullptr;
     }
 
-    if ( m_pOwnView )
+    if ( m_xOwnView.is() )
     {
-        m_pOwnView->Close();
-        m_pOwnView->release();
-        m_pOwnView = nullptr;
+        m_xOwnView->Close();
+        m_xOwnView.clear();
     }
 
     if ( m_pOleComponent )

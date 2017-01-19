@@ -37,6 +37,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XCloseListener.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <osl/thread.h>
 
@@ -177,7 +178,7 @@ class OleEmbeddedObject : public ::cppu::WeakImplHelper
     OUString m_aLinkURL; // ???
 
     // points to own view provider if the object has no server
-    OwnView_Impl*   m_pOwnView;
+    rtl::Reference<OwnView_Impl> m_xOwnView;
 
     // whether the object should be initialized from clipboard in case of default initialization
     bool m_bFromClipboard;

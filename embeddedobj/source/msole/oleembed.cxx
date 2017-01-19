@@ -894,15 +894,14 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 }
             }
 
-            if ( !m_pOwnView && m_xObjectStream.is() && m_aFilterName != "Text" )
+            if ( !m_xOwnView.is() && m_xObjectStream.is() && m_aFilterName != "Text" )
             {
                 try {
                     uno::Reference< io::XSeekable > xSeekable( m_xObjectStream, uno::UNO_QUERY );
                     if ( xSeekable.is() )
                         xSeekable->seek( 0 );
 
-                    m_pOwnView = new OwnView_Impl( m_xFactory, m_xObjectStream->getInputStream() );
-                    m_pOwnView->acquire();
+                    m_xOwnView = new OwnView_Impl( m_xFactory, m_xObjectStream->getInputStream() );
                 }
                 catch( uno::RuntimeException& )
                 {
@@ -915,7 +914,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                 }
             }
 
-            if (!m_pOwnView || !m_pOwnView->Open())
+            if (!m_xOwnView.is() || !m_xOwnView->Open())
             {
                 //Make a RO copy and see if the OS can find something to at
                 //least display the content for us
