@@ -55,7 +55,11 @@ namespace framework
             virtual ~NewMenuController() override;
 
             // XServiceInfo
-            DECLARE_XSERVICEINFO
+            DECLARE_XSERVICEINFO_NOFACTORY
+            /* Helper for registry */
+            /// @throws css::uno::Exception
+            static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
+            static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
             // XInitialization
             virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;

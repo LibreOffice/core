@@ -67,7 +67,11 @@ class MailToDispatcher : public  ::cppu::WeakImplHelper<
         virtual ~MailToDispatcher(                                                                     ) override;
 
         // XInterface, XTypeProvider, XServiceInfo
-        DECLARE_XSERVICEINFO
+        DECLARE_XSERVICEINFO_NOFACTORY
+        /* Helper for registry */
+        /// @throws css::uno::Exception
+        static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
+        static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
         // XDispatchProvider
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL        ,
@@ -90,7 +94,7 @@ class MailToDispatcher : public  ::cppu::WeakImplHelper<
 
     /* internal */
     private:
-
+        /// @throws css::uno::RuntimeException
         bool implts_dispatch( const css::util::URL&                                  aURL       ,
                                   const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException );
 

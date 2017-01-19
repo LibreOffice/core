@@ -259,9 +259,13 @@ class FWE_DLLPUBLIC OWriteMenuDocumentHandler final
             bool bIsMenuBar );
         ~OWriteMenuDocumentHandler();
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteMenuDocument() throw
             ( css::xml::sax::SAXException, css::uno::RuntimeException );
     private:
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteMenu( const css::uno::Reference< css::container::XIndexAccess >& rSubMenuContainer ) throw
             ( css::xml::sax::SAXException, css::uno::RuntimeException );
 

@@ -104,6 +104,7 @@ private:
     OUString        m_aGuessedTextLang;     // the 'guessed' language for the selection, "" if none could be guessed
     LanguageGuessingHelper      m_aLangGuessHelper;
 
+    /// @throws css::uno::RuntimeException
     void LangMenu( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception);
 };
 

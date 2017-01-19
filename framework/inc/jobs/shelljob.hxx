@@ -77,7 +77,11 @@ class ShellJob : public ::cppu::WeakImplHelper< css::lang::XServiceInfo,css::tas
     public:
 
         // css.lang.XServiceInfo
-        DECLARE_XSERVICEINFO
+        DECLARE_XSERVICEINFO_NOFACTORY
+        /* Helper for registry */
+        /// @throws css::uno::Exception
+        static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
+        static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
         // css.task.XJob
         virtual css::uno::Any SAL_CALL execute(const css::uno::Sequence< css::beans::NamedValue >& lArguments)

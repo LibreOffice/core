@@ -301,6 +301,7 @@ class Desktop : private cppu::BaseMutex,
 
         // we need this wrapped terminate()-call to terminate even the QuickStarter
         // non-virtual and non-UNO for now
+        /// @throws css::uno::RuntimeException
         bool SAL_CALL terminateQuickstarterToo()
             throw( css::uno::RuntimeException );
 

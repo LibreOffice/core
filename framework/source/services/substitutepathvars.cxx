@@ -175,10 +175,15 @@ protected:
     OUString   GetHomeVariableValue() const;
 
     // XStringSubstitution implementation methods
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::uno::RuntimeException
     OUString impl_substituteVariable( const OUString& aText, bool bSustRequired )
         throw (css::container::NoSuchElementException, css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     OUString impl_reSubstituteVariables( const OUString& aText )
         throw (css::uno::RuntimeException);
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::uno::RuntimeException
     OUString const & impl_getSubstituteVariableValue( const OUString& variable )
         throw (css::container::NoSuchElementException, css::uno::RuntimeException);
 

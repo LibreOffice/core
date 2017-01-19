@@ -39,7 +39,11 @@ class UriAbbreviation:    public ::cppu::WeakImplHelper< css::util::XStringAbbre
 public:
     explicit UriAbbreviation(css::uno::Reference< css::uno::XComponentContext > const & context);
 
-    DECLARE_XSERVICEINFO
+    DECLARE_XSERVICEINFO_NOFACTORY
+    /* Helper for registry */
+    /// @throws css::uno::Exception
+    static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
+    static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
     // css::util::XStringAbbreviation:
     virtual OUString SAL_CALL abbreviateString(const css::uno::Reference< css::util::XStringWidth > & xStringWidth, ::sal_Int32 nWidth, const OUString & aString) throw (css::uno::RuntimeException, std::exception) override;

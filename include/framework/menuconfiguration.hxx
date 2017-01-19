@@ -103,10 +103,14 @@ public:
 
         ~MenuConfiguration();
 
+        /// @throws css::lang::WrappedTargetException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::container::XIndexAccess > CreateMenuBarConfigurationFromXML(
             css::uno::Reference< css::io::XInputStream >& rInputStream )
             throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
 
+        /// @throws css::lang::WrappedTargetException
+        /// @throws css::uno::RuntimeException
         void StoreMenuBarConfigurationToXML(
                       css::uno::Reference< css::container::XIndexAccess >& rMenuBarConfiguration,
                       css::uno::Reference< css::io::XOutputStream >& rOutputStream,

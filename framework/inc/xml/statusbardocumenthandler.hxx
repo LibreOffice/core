@@ -125,11 +125,15 @@ class FWE_DLLPUBLIC OWriteStatusBarDocumentHandler final
             const css::uno::Reference< css::xml::sax::XDocumentHandler >& rWriteDocHandler );
         ~OWriteStatusBarDocumentHandler();
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteStatusBarDocument() throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
     private:
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteStatusBarItem(
             const OUString& rCommandURL,
             const OUString& rHelpURL,

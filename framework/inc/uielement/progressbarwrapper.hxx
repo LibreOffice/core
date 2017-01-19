@@ -46,10 +46,15 @@ class ProgressBarWrapper : public UIElementWrapperBase
         css::uno::Reference< css::awt::XWindow > getStatusBar() const;
 
         // wrapped methods of css::task::XStatusIndicator
+        /// @throws css::uno::RuntimeException
         void start( const OUString& Text, ::sal_Int32 Range ) throw (css::uno::RuntimeException, std::exception);
+        /// @throws css::uno::RuntimeException
         void end() throw (css::uno::RuntimeException, std::exception);
+        /// @throws css::uno::RuntimeException
         void setText( const OUString& Text ) throw (css::uno::RuntimeException, std::exception);
+        /// @throws css::uno::RuntimeException
         void setValue( ::sal_Int32 Value ) throw (css::uno::RuntimeException, std::exception);
+        /// @throws css::uno::RuntimeException
         void reset() throw (css::uno::RuntimeException, std::exception);
 
         // UNO interfaces

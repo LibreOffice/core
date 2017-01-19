@@ -108,7 +108,11 @@ class FWI_DLLPUBLIC TransactionManager
         TransactionManager&        operator=(const TransactionManager&) = delete;
         void               setWorkingMode               ( EWorkingMode eMode                           );
         EWorkingMode       getWorkingMode               (                                              ) const;
+        /// @throws css::uno::RuntimeException
+        /// @throws css::lang::DisposedException
         void               registerTransaction          ( EExceptionMode eMode ) throw( css::uno::RuntimeException, css::lang::DisposedException );
+        /// @throws css::uno::RuntimeException
+        /// @throws css::lang::DisposedException
         void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException );
 
     private:

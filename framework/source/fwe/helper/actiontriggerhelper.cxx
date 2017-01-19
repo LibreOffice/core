@@ -236,6 +236,7 @@ void InsertSubMenuItems( Menu* pSubMenu, sal_uInt16& nItemId, const Reference< X
 
 // implementation helper ( ActionTrigger => menu )
 
+/// @throws RuntimeException
 Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* pMenu, const Reference< XIndexContainer >& rActionTriggerContainer ) throw ( RuntimeException )
 {
     Reference< XPropertySet > xPropSet;
@@ -282,6 +283,7 @@ Reference< XPropertySet > CreateActionTrigger( sal_uInt16 nItemId, const Menu* p
     return xPropSet;
 }
 
+/// @throws RuntimeException
 Reference< XPropertySet > CreateActionTriggerSeparator( const Reference< XIndexContainer >& rActionTriggerContainer ) throw ( RuntimeException )
 {
     Reference< XMultiServiceFactory > xMultiServiceFactory( rActionTriggerContainer, UNO_QUERY );
@@ -295,6 +297,7 @@ Reference< XPropertySet > CreateActionTriggerSeparator( const Reference< XIndexC
     return Reference< XPropertySet >();
 }
 
+/// @throws RuntimeException
 Reference< XIndexContainer > CreateActionTriggerContainer( const Reference< XIndexContainer >& rActionTriggerContainer ) throw ( RuntimeException )
 {
     Reference< XMultiServiceFactory > xMultiServiceFactory( rActionTriggerContainer, UNO_QUERY );

@@ -42,7 +42,6 @@ namespace framework{
     macros for declaration and definition of XServiceInfo
     Please use follow public macros only!
 
-    1)  DECLARE_XSERVICEINFO                                                                                => use it to declare XServiceInfo in your header
     2)  DEFINE_XSERVICEINFO_MULTISERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )          => use it to define XServiceInfo for multi service mode
     3)  DEFINE_XSERVICEINFO_ONEINSTANCESERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )    => use it to define XServiceInfo for one instance service mode
     4)  DEFINE_INIT_SERVICE( CLASS )                                                                        => use it to implement your own impl_initService() method, which is necessary for initializing object by using his own reference!
@@ -150,12 +149,6 @@ namespace framework{
     static OUString                                         SAL_CALL impl_getStaticImplementationName   (                                   );                                                                    \
     /* Helper for initialization of service by using own reference! */                                                                                                                                            \
     void                                                    SAL_CALL impl_initService                   (                                   );                                                                    \
-
-#define DECLARE_XSERVICEINFO                                                                                                                                                                                                            \
-    DECLARE_XSERVICEINFO_NOFACTORY \
-    /* Helper for registry */                                                                                                                                                                                                           \
-    static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );          \
-    static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );                                       \
 
 #define DEFINE_XSERVICEINFO_MULTISERVICE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \
     PRIVATE_DEFINE_XSERVICEINFO_OLDSTYLE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )              \

@@ -87,6 +87,8 @@ class ActionTriggerSeparatorPropertySet :   private cppu::BaseMutex,
 
         //  helper
 
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::uno::RuntimeException
         bool impl_tryToChangeProperty(  sal_Int16                           aCurrentValue   ,
                                             const   css::uno::Any&   aNewValue       ,
                                             css::uno::Any&           aOldValue       ,

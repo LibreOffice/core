@@ -105,6 +105,7 @@ namespace framework
             virtual sal_Bool SAL_CALL isReadOnly() throw (css::uno::RuntimeException, std::exception) override;
 
             // Non-UNO methods
+            /// @throws css::uno::RuntimeException
             void setStorage( const css::uno::Reference< css::embed::XStorage >& Storage ) throw (css::uno::RuntimeException);
 
         private:

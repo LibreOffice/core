@@ -356,9 +356,11 @@ public:
 private:
     virtual void SAL_CALL disposing() final override;
 
+    /// @throws css::uno::RuntimeException
     OUString getStringProperty(const OUString& p1)
         throw(css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     void setStringProperty(const OUString& p1, const OUString& p2)
         throw(css::uno::RuntimeException);
 

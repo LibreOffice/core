@@ -139,23 +139,33 @@ class OWriteImagesDocumentHandler final
                 rWriteDocumentHandler);
         ~OWriteImagesDocumentHandler();
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteImagesDocument() throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
     private:
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteImageList( const ImageListItemDescriptor* ) throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteExternalImageList( const ExternalImageItemListDescriptor* ) throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteImage( const ImageItemDescriptor* ) throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteExternalImage( const ExternalImageItemDescriptor* ) throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );

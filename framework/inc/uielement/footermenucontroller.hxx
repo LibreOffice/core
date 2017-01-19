@@ -38,6 +38,7 @@ namespace framework
             static css::uno::Sequence< OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                                                               );
             static OUString                                         SAL_CALL impl_getStaticImplementationName   (                                                                               );
             /* Helper for registry */
+            /// @throws css::uno::Exception
             static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance                ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
             static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory                 ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
     };

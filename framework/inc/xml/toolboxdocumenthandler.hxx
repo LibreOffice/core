@@ -144,24 +144,34 @@ class FWE_DLLPUBLIC OWriteToolBoxDocumentHandler final
                 css::uno::Reference< css::xml::sax::XDocumentHandler >& rDocumentHandler );
             ~OWriteToolBoxDocumentHandler();
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteToolBoxDocument() throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
     private:
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteToolBoxItem( const OUString& aCommandURL, const OUString& aLabel, const OUString& aHelpURL,
                                sal_Int16 nStyle, bool bVisible ) throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteToolBoxSpace() throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteToolBoxBreak() throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
 
+        /// @throws css::xml::sax::SAXException
+        /// @throws css::uno::RuntimeException
         void WriteToolBoxSeparator() throw
             ( css::xml::sax::SAXException,
               css::uno::RuntimeException );
