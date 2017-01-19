@@ -3300,6 +3300,10 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
     // disable word auto-completion suggestions, the tooltips are not visible,
     // and the editeng-like auto-completion is annoying
     SvxAutoCorrCfg::Get().GetAutoCorrect()->GetSwFlags().bAutoCompleteWords = false;
+
+    // don't change the whitespace at the beginning of paragraphs, this is
+    // annoying when taking minutes without further formatting
+    pDocShell->GetWrtShell()->GetAutoFormatFlags()->bAFormatByInpDelSpacesAtSttEnd = false;
 }
 
 void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
