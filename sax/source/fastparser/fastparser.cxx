@@ -209,14 +209,27 @@ public:
     ~FastSaxParserImpl();
 
     // XFastParser
+    /// @throws css::xml::sax::SAXException
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void parseStream( const css::xml::sax::InputSource& aInputSource ) throw (css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
     void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) throw (css::uno::RuntimeException);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     OUString getNamespaceURL( const OUString& rPrefix ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setLocale( const css::lang::Locale& rLocale ) throw (css::uno::RuntimeException);
 
     // called by the C callbacks of the expat parser
@@ -245,7 +258,9 @@ private:
     void sendPendingCharacters();
 
     sal_Int32 GetToken( const xmlChar* pName, sal_Int32 nameLen );
+    /// @throws css::xml::sax::SAXException
     sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int prefixLen, const xmlChar* pName, int nameLen ) throw (css::xml::sax::SAXException);
+    /// @throws css::xml::sax::SAXException
     OUString GetNamespaceURL( const OString& rPrefix ) throw (css::xml::sax::SAXException);
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen );
@@ -338,6 +353,7 @@ public:
     explicit FastLocatorImpl(FastSaxParserImpl *p) : mpParser(p) {}
 
     void dispose() { mpParser = nullptr; }
+    /// @throws RuntimeException
     void checkDispose() throw (RuntimeException) { if( !mpParser ) throw DisposedException(); }
 
     //XLocator

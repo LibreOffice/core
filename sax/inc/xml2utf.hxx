@@ -88,6 +88,10 @@ public:
 
     // @param nMaxToRead The number of chars, that should be read. Note that this is no exact number. There
     //                   may be returned less or more bytes than ordered.
+    /// @throws css::io::IOException
+    /// @throws css::io::NotConnectedException
+    /// @throws css::io::BufferSizeExceededException
+    /// @throws css::uno::RuntimeException
     sal_Int32 readAndConvert( css::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead )
         throw ( css::io::IOException,
                 css::io::NotConnectedException ,

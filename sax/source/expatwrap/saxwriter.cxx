@@ -92,19 +92,23 @@ private:
     sal_uInt32                  nCurrentPos;
     bool                    m_bStartElementFinished;
 
+    /// @throws SAXException
     inline sal_uInt32 writeSequence() throw( SAXException );
 
     // use only if to insert the bytes more space in the sequence is needed and
     // so the sequence has to write out and reset rPos to 0
     // writes sequence only on overflow, sequence could be full on the end (rPos == SEQUENCESIZE)
+    /// @throws SAXException
     inline void AddBytes(sal_Int8* pTarget, sal_uInt32& rPos,
                 const sal_Int8* pBytes, sal_uInt32 nBytesCount) throw( SAXException );
+    /// @throws SAXException
     inline bool convertToXML(const sal_Unicode * pStr,
                         sal_Int32 nStrLen,
                         bool bDoNormalization,
                         bool bNormalizeWhitespace,
                         sal_Int8 *pTarget,
                         sal_uInt32& rPos) throw( SAXException );
+    /// @throws SAXException
     inline void FinishStartElement() throw( SAXException );
 public:
     explicit SaxWriterHelper(Reference< XOutputStream > const & m_TempOut)
@@ -124,11 +128,13 @@ public:
         OSL_ENSURE(m_bStartElementFinished, "StartElement not completely written");
     }
 
+    /// @throws SAXException
     inline void insertIndentation(sal_uInt32 m_nLevel)  throw( SAXException );
 
 // returns whether it works correct or invalid characters were in the string
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
+    /// @throws SAXException
     inline bool writeString(const OUString& rWriteOutString,
                         bool bDoNormalization,
                         bool bNormalizeWhitespace) throw( SAXException );
@@ -136,32 +142,42 @@ public:
     sal_uInt32 GetLastColumnCount() const throw()
         { return (sal_uInt32)(nCurrentPos - nLastLineFeedPos); }
 
+    /// @throws SAXException
     inline void startDocument() throw( SAXException );
 
 // returns whether it works correct or invalid characters were in the strings
 // If there are invalid characters in one of the strings it returns sal_False.
 // Than the calling method has to throw the needed Exception.
+    /// @throws SAXException
     inline SaxInvalidCharacterError startElement(const OUString& rName, const Reference< XAttributeList >& xAttribs) throw( SAXException );
+    /// @throws SAXException
     inline bool FinishEmptyElement() throw( SAXException );
 
 // returns whether it works correct or invalid characters were in the string
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
+    /// @throws SAXException
     inline bool endElement(const OUString& rName) throw( SAXException );
+    /// @throws SAXException
     inline void endDocument() throw( SAXException );
 
 // returns whether it works correct or invalid characters were in the strings
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
+    /// @throws SAXException
     inline bool processingInstruction(const OUString& rTarget, const OUString& rData) throw( SAXException );
+    /// @throws SAXException
     inline void startCDATA() throw( SAXException );
+    /// @throws SAXException
     inline void endCDATA() throw( SAXException );
 
 // returns whether it works correct or invalid characters were in the strings
 // If there are invalid characters in the string it returns sal_False.
 // Than the calling method has to throw the needed Exception.
+    /// @throws SAXException
     inline bool comment(const OUString& rComment) throw( SAXException );
 
+    /// @throws SAXException
     inline void clearBuffer() throw( SAXException );
 };
 
