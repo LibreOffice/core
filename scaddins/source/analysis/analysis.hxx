@@ -61,13 +61,18 @@ private:
 
     sca::analysis::ScaAnyConverter aAnyConv;
 
+    /// @throws css::uno::RuntimeException
     ResMgr&                     GetResMgr() throw( css::uno::RuntimeException, std::exception );
+    /// @throws css::uno::RuntimeException
     OUString                    GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException, std::exception );
     void                        InitDefLocales();
     inline const css::lang::Locale& GetLocale( sal_uInt32 nInd );
     void                        InitData();
 
                                 /// Converts an Any to sal_Int32 in the range from 0 to 4 (date calculation mode).
+                                ///
+                                /// @throws css::uno::RuntimeException
+                                /// @throws css::lang::IllegalArgumentException
     sal_Int32                   getDateMode(
                                     const css::uno::Reference< css::beans::XPropertySet >& xPropSet,
                                     const css::uno::Any& rAny )
@@ -78,6 +83,8 @@ public:
                                     const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual                     ~AnalysisAddIn() override;
 
+    /// @throws css::uno::RuntimeException
+    /// @throws css::lang::IllegalArgumentException
     double                      FactDouble( sal_Int32 nNum ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException );
 
     static OUString               getImplementationName_Static();

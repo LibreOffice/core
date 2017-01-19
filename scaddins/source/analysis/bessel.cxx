@@ -222,7 +222,8 @@ double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConve
     return fResult;
 }
 
-
+/// @throws IllegalArgumentException
+/// @throws NoConvergenceException
 double Besselk0( double fNum ) throw( IllegalArgumentException, NoConvergenceException )
 {
     double  fRet;
@@ -248,7 +249,8 @@ double Besselk0( double fNum ) throw( IllegalArgumentException, NoConvergenceExc
     return fRet;
 }
 
-
+/// @throws IllegalArgumentException
+/// @throws NoConvergenceException
 double Besselk1( double fNum ) throw( IllegalArgumentException, NoConvergenceException )
 {
     double  fRet;
@@ -319,6 +321,8 @@ double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException,
     http://www.openoffice.org/nonav/issues/showattachment.cgi/63609/Comments%20to%20the%20implementation%20of%20the%20Bessel%20functions.odt
 */
 
+/// @throws IllegalArgumentException
+/// @throws NoConvergenceException
 double Bessely0( double fX ) throw( IllegalArgumentException, NoConvergenceException )
 {
     if (fX <= 0)
@@ -371,6 +375,8 @@ double Bessely0( double fX ) throw( IllegalArgumentException, NoConvergenceExcep
 
 // See #i31656# for a commented version of this implementation, attachment #desc6
 // http://www.openoffice.org/nonav/issues/showattachment.cgi/63609/Comments%20to%20the%20implementation%20of%20the%20Bessel%20functions.odt
+/// @throws IllegalArgumentException
+/// @throws NoConvergenceException
 double Bessely1( double fX ) throw( IllegalArgumentException, NoConvergenceException )
 {
     if (fX <= 0)

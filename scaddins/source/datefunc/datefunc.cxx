@@ -449,6 +449,8 @@ sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
  * is the number of days between 01/01/0001 and the date
  * this function converts this internal Date value
  * to a Day , Month, Year representation of a Date.
+ *
+ * @throws lang::IllegalArgumentException
  */
 
 void DaysToDate( sal_Int32 nDays,
@@ -504,6 +506,7 @@ void DaysToDate( sal_Int32 nDays,
  * is the number of days between 01/01/0001 and the date
  * this function returns this internal Date value for the document null date
  *
+ * @throws uno::RuntimeException
  */
 sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOptions )
         throw( uno::RuntimeException )
