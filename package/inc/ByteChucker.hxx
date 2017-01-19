@@ -42,9 +42,15 @@ public:
     ByteChucker (css::uno::Reference<css::io::XOutputStream> const & xOstream);
     ~ByteChucker();
 
+    /// @throws css::io::NotConnectedException
+    /// @throws css::io::BufferSizeExceededException
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void WriteBytes( const css::uno::Sequence< sal_Int8 >& aData )
         throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
 
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     sal_Int64 GetPosition()
         throw(css::io::IOException, css::uno::RuntimeException);
 

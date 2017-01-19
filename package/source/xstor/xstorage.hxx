@@ -221,6 +221,7 @@ struct OStorage_Impl
     void Commit();
     void Revert();
 
+    /// @throws css::packages::NoEncryptionException
     ::comphelper::SequenceAsHashMap GetCommonRootEncryptionData() throw ( css::packages::NoEncryptionException );
 
     void CopyToStorage( const css::uno::Reference< css::embed::XStorage >& xDest,
@@ -247,6 +248,14 @@ struct OStorage_Impl
     void RemoveElement( SotElement_Impl* pElement );
     static void ClearElement( SotElement_Impl* pElement );
 
+    /// @throws css::embed::InvalidStorageException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::packages::WrongPasswordException
+    /// @throws css::packages::NoEncryptionException
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::io::IOException
+    /// @throws css::embed::StorageWrappedTargetException
+    /// @throws css::uno::RuntimeException
     void CloneStreamElement(
                     const OUString& aStreamName,
                     bool bPassProvided,

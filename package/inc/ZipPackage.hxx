@@ -154,6 +154,7 @@ public:
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
         throw(css::uno::RuntimeException, std::exception) override;
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId()
         throw(css::uno::RuntimeException);
     // XPropertySet

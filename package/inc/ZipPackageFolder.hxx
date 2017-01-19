@@ -56,6 +56,10 @@ public:
 
     void setChildStreamsTypeByExtension( const css::beans::StringPair& aPair );
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::container::ElementExistException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void doInsertByName ( ZipPackageEntry *pEntry, bool bSetParent )
         throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
@@ -74,6 +78,7 @@ public:
                             const rtlRandomPool &rRandomPool ) override;
 
     // Recursive functions
+    /// @throws css::uno::RuntimeException
     void saveContents(
             const OUString &rPath,
             std::vector < css::uno::Sequence < css::beans::PropertyValue > > &rManList,

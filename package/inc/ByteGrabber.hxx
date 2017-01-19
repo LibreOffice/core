@@ -48,13 +48,24 @@ public:
 
     void setInputStream (const css::uno::Reference < css::io::XInputStream >& xNewStream);
     // XInputStream
+    /// @throws css::io::NotConnectedException
+    /// @throws css::io::BufferSizeExceededException
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
         throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
     // XSeekable
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL seek( sal_Int64 location )
         throw(css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException);
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     sal_Int64 SAL_CALL getPosition(  )
         throw(css::io::IOException, css::uno::RuntimeException);
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     sal_Int64 SAL_CALL getLength(  )
         throw(css::io::IOException, css::uno::RuntimeException);
 

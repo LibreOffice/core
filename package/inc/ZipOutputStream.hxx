@@ -49,13 +49,21 @@ public:
 
     void addDeflatingThread( ZipOutputEntry *pEntry, comphelper::ThreadTask *pThreadTask );
 
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void writeLOC( ZipEntry *pEntry, bool bEncrypt = false )
         throw(css::io::IOException, css::uno::RuntimeException);
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void rawWrite( const css::uno::Sequence< sal_Int8 >& rBuffer )
         throw(css::io::IOException, css::uno::RuntimeException);
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void rawCloseEntry( bool bEncrypt = false )
         throw(css::io::IOException, css::uno::RuntimeException);
 
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void finish()
         throw(css::io::IOException, css::uno::RuntimeException, std::exception);
     const css::uno::Reference< css::io::XOutputStream >& getStream();
@@ -64,10 +72,16 @@ public:
     static void setEntry( ZipEntry *pEntry );
 
 private:
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
         throw(css::io::IOException, css::uno::RuntimeException);
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void writeCEN( const ZipEntry &rEntry )
         throw(css::io::IOException, css::uno::RuntimeException);
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void writeEXT( const ZipEntry &rEntry )
         throw(css::io::IOException, css::uno::RuntimeException);
 

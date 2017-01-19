@@ -41,6 +41,10 @@ public:
 
     // XInputStream chained
 
+    /// @throws css::io::NotConnectedException
+    /// @throws css::io::BufferSizeExceededException
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
         throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException)
     {

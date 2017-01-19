@@ -137,10 +137,15 @@ public:
     virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
         throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
 private:
+    /// @throws css::uno::RuntimeException
     void doFileEntry(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void doEncryptionData(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void doAlgorithm(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void doKeyDerivation(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void doStartKeyAlg(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
 };
 #endif

@@ -132,6 +132,7 @@ private:
     css::uno::Reference< css::io::XStream > GetStream_Impl( sal_Int32 nStreamMode,
                                                                                         bool bHierarchyAccess );
 
+    /// @throws css::packages::NoEncryptionException
     ::comphelper::SequenceAsHashMap GetCommonRootEncryptionData() throw ( css::packages::NoEncryptionException );
 
     css::uno::Sequence< css::beans::PropertyValue > ReadPackageStreamProperties();
