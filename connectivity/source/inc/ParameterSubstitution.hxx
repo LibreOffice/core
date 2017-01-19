@@ -41,8 +41,9 @@ namespace connectivity
         ParameterSubstitution( const ParameterSubstitution& ) = delete;
         ParameterSubstitution& operator=( const ParameterSubstitution& ) = delete;
     public:
-
+        /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
         static css::uno::Reference< css::uno::XInterface > create( const css::uno::Reference< css::uno::XComponentContext >  & xContext);
     protected:

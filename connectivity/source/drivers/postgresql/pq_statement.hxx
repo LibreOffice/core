@@ -175,7 +175,10 @@ public: // XResultSetMetaDataSupplier (is required by framework (see
         throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
 private:
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     void checkClosed() throw (css::sdbc::SQLException, css::uno::RuntimeException);
+    /// @throws css::sdbc::SQLException
     void raiseSQLException( const OUString & sql, const char * errorMsg )
         throw ( css::sdbc::SQLException );
 };

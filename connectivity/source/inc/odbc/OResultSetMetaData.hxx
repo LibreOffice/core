@@ -48,7 +48,11 @@ namespace connectivity
             sal_Int32       m_nColCount;
             bool        m_bUseODBC2Types;
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             OUString getCharColAttrib(sal_Int32 column,sal_Int32 ident) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getNumColAttrib(sal_Int32 column,sal_Int32 ident) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         public:
             // A ctor that is needed for returning the object
@@ -68,12 +72,16 @@ namespace connectivity
             virtual ~OResultSetMetaData() override;
 
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             static SQLLEN getNumColAttrib(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 _column
                                               ,sal_Int32 ident) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             static SQLSMALLINT getColumnODBCType(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface

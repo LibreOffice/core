@@ -68,6 +68,7 @@ namespace dbtools
     namespace DBTypeConversion
     {
         OOO_DLLPUBLIC_DBTOOLS css::util::Date const & getStandardDate();
+        /// @throws css::lang::IllegalArgumentException
         OOO_DLLPUBLIC_DBTOOLS void setValue(const css::uno::Reference< css::sdb::XColumnUpdate>& xVariant,
                                     const css::uno::Reference< css::util::XNumberFormatter>& xFormatter,
                                     const css::util::Date& rNullDate,
@@ -76,6 +77,7 @@ namespace dbtools
                                     sal_Int16 nFieldType,
                                     sal_Int16 nKeyType) throw(css::lang::IllegalArgumentException);
 
+        /// @throws css::lang::IllegalArgumentException
         OOO_DLLPUBLIC_DBTOOLS void setValue(const css::uno::Reference< css::sdb::XColumnUpdate>& xVariant,
                              const css::util::Date& rNullDate,
                              const double& rValue,

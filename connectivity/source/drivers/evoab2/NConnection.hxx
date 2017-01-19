@@ -65,6 +65,7 @@ namespace connectivity
 
         public:
             explicit OEvoabConnection( OEvoabDriver& _rDriver );
+            /// @throws css::sdbc::SQLException
             virtual void construct(const OUString& _rUrl,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo ) throw( css::sdbc::SQLException);
 
             inline OString const & getPassword() { return m_aPassword; }

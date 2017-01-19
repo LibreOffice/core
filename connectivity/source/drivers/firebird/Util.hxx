@@ -55,6 +55,8 @@ namespace connectivity
         /**
          * Evaluate a firebird status vector and throw exceptions as necessary.
          * The content of the status vector is included in the thrown exception.
+         *
+         * @throws css::sdbc::SQLException
          */
         void evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
                                   const ::rtl::OUString& aCause,

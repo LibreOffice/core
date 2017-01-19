@@ -53,6 +53,8 @@ namespace connectivity
 
             XSQLDA*         m_pOutSqlda;
             XSQLDA*         m_pInSqlda;
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void checkParameterIndex(sal_Int32 nParameterIndex)
                 throw(css::sdbc::SQLException,
                       css::uno::RuntimeException);
@@ -60,12 +62,17 @@ namespace connectivity
             /**
              * Set a numeric value in the input SQLDA. If the destination
              * parameter is not of nType then an Exception will be thrown.
+             *
+             * @throws css::sdbc::SQLException
+             * @throws css::uno::RuntimeException
              */
             template <typename T> void setValue(sal_Int32 nIndex, T& nValue, ISC_SHORT nType)
                 throw(css::sdbc::SQLException,
                       css::uno::RuntimeException);
             void setParameterNull(sal_Int32 nParameterIndex, bool bSetNull = true);
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void ensurePrepared()
                 throw(css::sdbc::SQLException,
                       css::uno::RuntimeException);

@@ -70,6 +70,7 @@ namespace connectivity
 
             // XInterface
             virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+            /// @throws css::uno::RuntimeException
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception);
 
             // css::lang::XUnoTunnel

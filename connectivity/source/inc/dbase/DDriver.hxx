@@ -28,7 +28,7 @@ namespace connectivity
 {
     namespace dbase
     {
-
+        /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface > SAL_CALL ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception );
 
         class ODriver : public file::OFileDriver
@@ -37,6 +37,7 @@ namespace connectivity
             ODriver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext) : file::OFileDriver(_rxContext){}
 
             // XInterface
+            /// @throws css::uno::RuntimeException
             static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
             //  static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
 

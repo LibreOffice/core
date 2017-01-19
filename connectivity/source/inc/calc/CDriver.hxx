@@ -28,6 +28,7 @@ namespace connectivity
 {
     namespace calc
     {
+        /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface > SAL_CALL
             ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
                     throw( css::uno::Exception );
@@ -39,6 +40,7 @@ namespace connectivity
                                 css::uno::XComponentContext >& _rxContext) :
                 file::OFileDriver(_rxContext) {}
 
+            /// @throws css::uno::RuntimeException
             static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
             OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
 

@@ -65,6 +65,7 @@ namespace connectivity
 
         protected:
             virtual void disposeResultSet();
+            /// @throws css::sdbc::SQLException
             void freeStatementHandle()
                 throw (css::sdbc::SQLException);
 
@@ -87,15 +88,19 @@ namespace connectivity
                                                                 sal_Int32 nHandle) const override;
             virtual ~OStatementCommonBase() override;
 
+            /// @throws css::sdbc::SQLException
             void prepareAndDescribeStatement(const OUString& sqlIn,
                                              XSQLDA*& pOutSqlda,
                                              XSQLDA* pInSqlda=nullptr)
                 throw (css::sdbc::SQLException);
 
+            /// @throws css::sdbc::SQLException
             short getSqlInfoItem(char aInfoItem)
                 throw (css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             bool isDDLStatement()
                 throw (css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             sal_Int32 getStatementChangeCount()
                 throw (css::sdbc::SQLException);
 

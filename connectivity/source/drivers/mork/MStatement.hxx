@@ -104,6 +104,9 @@ namespace connectivity
 
             enum StatementType { eSelect, eCreateTable };
             /** called to do the parsing of a to-be-executed SQL statement, and set all members as needed
+
+                @throws css::sdbc::SQLException
+                @throws css::uno::RuntimeException
             */
             virtual StatementType
                             parseSql( const OUString& sql , bool bAdjusted = false) throw ( css::sdbc::SQLException, css::uno::RuntimeException, std::exception );

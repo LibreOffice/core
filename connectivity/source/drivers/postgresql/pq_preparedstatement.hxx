@@ -250,7 +250,10 @@ public: // OComponentHelper
 
 private:
     void checkColumnIndex( sal_Int32 parameterIndex );
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     void checkClosed() throw (css::sdbc::SQLException, css::uno::RuntimeException);
+    /// @throws css::sdbc::SQLException
     void raiseSQLException( const char * errorMsg )
         throw ( css::sdbc::SQLException );
 //     PGresult *pgExecute( OString *pQuery );

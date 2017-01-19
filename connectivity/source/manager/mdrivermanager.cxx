@@ -49,6 +49,7 @@ using namespace ::osl;
 
 #define SERVICE_SDBC_DRIVER     "com.sun.star.sdbc.Driver"
 
+/// @throws NoSuchElementException
 void throwNoSuchElementException() throw(NoSuchElementException)
 {
     throw NoSuchElementException();

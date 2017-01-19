@@ -51,6 +51,8 @@ namespace pq_sdbc_driver
         ColumnMetaDataVector m_columnData;
         sal_Int32 m_colCount;
 
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         void checkColumnIndex( sal_Int32 columnIndex )
             throw (css::sdbc::SQLException, css::uno::RuntimeException);
 

@@ -65,13 +65,27 @@ namespace connectivity
         java::sql::ConnectionLog                              m_aLogger;
         java_sql_Connection*                                  m_pConnection;
 
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         sal_Int32 getResultSetConcurrency() const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         sal_Int32 getResultSetType()        const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         sal_Int32 getFetchDirection()       const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         sal_Int32 getFetchSize()            const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         OUString getCursorName()     const throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         void setFetchDirection(sal_Int32 _par0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         void setFetchSize(sal_Int32 _par0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
     protected:
         // Static data for the class

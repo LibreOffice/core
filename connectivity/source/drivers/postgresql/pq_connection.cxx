@@ -658,7 +658,7 @@ Reference< XNameAccess > Connection::getUsers()
     return m_settings.users;
 }
 
-
+/// @throws Exception
 Reference< XInterface >  ConnectionCreateInstance(
     const Reference< XComponentContext > & ctx ) throw (Exception, std::exception)
 {

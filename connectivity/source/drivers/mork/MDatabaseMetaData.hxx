@@ -27,6 +27,7 @@ namespace connectivity
             std::unique_ptr<MDatabaseMetaDataHelper>
                                        m_pMetaDataHelper;
 
+            /// @throws css::sdbc::SQLException
             ODatabaseMetaDataResultSet::ORows& SAL_CALL getColumnRows( const OUString& tableNamePattern, const OUString& columnNamePattern ) throw( css::sdbc::SQLException );
 
         protected:

@@ -276,7 +276,7 @@ sal_Int32 Statement::executeUpdate( const OUString& sql )
     return m_multipleResultUpdateCount;
 }
 
-
+/// @throws SQLException
 static void raiseSQLException(
     ConnectionSettings *pSettings,
     const Reference< XInterface> & owner,

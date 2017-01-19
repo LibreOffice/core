@@ -107,6 +107,8 @@ namespace connectivity
 
             virtual void initializeResultSet(OResultSet* _pResult);
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void closeResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
 
             void disposeResultSet();
@@ -135,6 +137,8 @@ namespace connectivity
 
             using OStatement_BASE::operator css::uno::Reference< css::uno::XInterface >;
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             virtual void construct(const OUString& sql)  throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
 
             // OComponentHelper

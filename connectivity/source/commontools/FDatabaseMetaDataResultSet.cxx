@@ -873,6 +873,7 @@ void SAL_CALL ODatabaseMetaDataResultSet::initialize( const Sequence< Any >& _aA
 
     namespace connectivity
     {
+        /// @throws Exception
         Reference< XInterface >  SAL_CALL ODatabaseMetaDataResultSet_CreateInstance(const Reference< XComponentContext >& ) throw( Exception )
         {
             return *(new ODatabaseMetaDataResultSet());

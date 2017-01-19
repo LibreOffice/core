@@ -156,6 +156,7 @@ namespace connectivity
             /** Statements owned by this connection. */
             OWeakRefArray       m_aStatements;
 
+            /// @throws css::sdbc::SQLException
             void buildTypeInfo()
                 throw (css::sdbc::SQLException);
 
@@ -163,6 +164,8 @@ namespace connectivity
              * Creates a new transaction with the desired parameters, if
              * necessary discarding an existing transaction. This has to be done
              * anytime we change the transaction isolation, or autocommiting.
+             *
+             * @throws css::sdbc::SQLException
              */
             void setupTransaction()
                 throw(css::sdbc::SQLException);
@@ -180,6 +183,8 @@ namespace connectivity
             explicit Connection(FirebirdDriver* _pDriver);
             virtual ~Connection() override;
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void construct( const ::rtl::OUString& url,
                                     const css::uno::Sequence< css::beans::PropertyValue >& info)
             throw(css::sdbc::SQLException,
@@ -189,6 +194,7 @@ namespace connectivity
             const OUString& getConnectionURL()  const   {return m_sConnectionURL;}
             bool            isEmbedded()        const   {return m_bIsEmbedded;}
             isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
+            /// @throws css::sdbc::SQLException
             isc_tr_handle&  getTransaction()
                 throw(css::sdbc::SQLException);
 
@@ -206,11 +212,16 @@ namespace connectivity
              * Create a new Blob tied to this connection. Blobs are tied to a
              * transaction and not to a statement, hence the connection should
              * deal with their management.
+             *
+             * @throws css::sdbc::SQLException
+             * @throws css::uno::RuntimeException
              */
             css::uno::Reference< css::sdbc::XBlob>
                 createBlob(ISC_QUAD* pBlobID)
                 throw(css::sdbc::SQLException,
                       css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             css::uno::Reference< css::sdbc::XClob>
                 createClob(ISC_QUAD* pBlobID)
                 throw(css::sdbc::SQLException,

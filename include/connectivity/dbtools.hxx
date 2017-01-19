@@ -179,6 +179,8 @@ namespace dbtools
     );
 
     /** returns the connection the RowSet is currently working with (which is the ActiveConnection property)
+
+        @throws css::uno::RuntimeException
     */
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XConnection> getConnection(const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet) throw (css::uno::RuntimeException);
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XConnection> getConnection_withFeedback(
@@ -570,6 +572,8 @@ namespace dbtools
         @param  x               the value to set
         @param  sqlType         the corresponding sql type @see css::sdbc::DataType
         @param  scale           the scale of the sql type can be 0
+        @throws css::sdbc::SQLException
+        @throws css::uno::RuntimeException
     */
     OOO_DLLPUBLIC_DBTOOLS
     void setObjectWithInfo( const css::uno::Reference< css::sdbc::XParameters>& _xParameters,
@@ -584,6 +588,8 @@ namespace dbtools
         @param  x               the value to set
         @param  sqlType         the corresponding sql type @see css::sdbc::DataType
         @param  scale           the scale of the sql type can be 0
+        @throws css::sdbc::SQLException
+        @throws css::uno::RuntimeException
     */
     OOO_DLLPUBLIC_DBTOOLS
     void setObjectWithInfo( const css::uno::Reference< css::sdbc::XParameters>& _xParameters,

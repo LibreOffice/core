@@ -76,6 +76,9 @@ namespace connectivity
 
             OConnection(OFileDriver*    _pDriver);
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
+            /// @throws css::uno::DeploymentException
             virtual void construct(const OUString& _rUrl, const css::uno::Sequence< css::beans::PropertyValue >& _rInfo )
                 throw( css::sdbc::SQLException,
                        css::uno::RuntimeException,

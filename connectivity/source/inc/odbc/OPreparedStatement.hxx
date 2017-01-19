@@ -59,12 +59,17 @@ namespace connectivity
             bool                                                                        m_bPrepared;
 
             void FreeParams();
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void putParamData (sal_Int32 index)
                 throw (css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setStream (sal_Int32 ParameterIndex,const css::uno::Reference< css::io::XInputStream>& x,
                                                         SQLLEN length,sal_Int32 SQLtype) throw (css::sdbc::SQLException, css::uno::RuntimeException);
             SQLLEN* getLengthBuf (sal_Int32 index);
             void* allocBindBuf (    sal_Int32 index,    sal_Int32 bufLen);
+            /// @throws css::sdbc::SQLException
             void initBoundParam () throw(css::sdbc::SQLException);
             void setParameterPre(sal_Int32 parameterIndex);
             template <typename T> void setScalarParameter(sal_Int32 parameterIndex, sal_Int32 _nType, SQLULEN _nColumnSize, const T i_Value);

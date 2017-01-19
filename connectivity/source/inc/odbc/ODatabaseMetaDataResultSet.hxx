@@ -84,7 +84,11 @@ namespace connectivity
             // set the columncount of the driver
             void checkColumnCount();
             static sal_Int32 getFetchDirection()       { return css::sdbc::FetchDirection::FORWARD; }
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             static sal_Int32 getFetchSize()     throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             static OUString getCursorName()     throw(css::sdbc::SQLException, css::uno::RuntimeException);
             SWORD                               impl_getColumnType_nothrow(sal_Int32 columnIndex);
 
@@ -184,34 +188,70 @@ namespace connectivity
             // XColumnLocate
             virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openTablesTypes( ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openTypeInfo() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openCatalogs() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openSchemas() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openTables(const css::uno::Any& catalog, const OUString& schemaPattern,
                                             const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types )
                                             throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openColumnPrivileges(      const css::uno::Any& catalog,    const OUString& schema,
                                                                     const OUString& table,   const OUString& columnNamePattern )throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openColumns(       const css::uno::Any& catalog,                            const OUString& schemaPattern,
                                                     const OUString& tableNamePattern,        const OUString& columnNamePattern )throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openProcedureColumns(      const css::uno::Any& catalog,            const OUString& schemaPattern,
                                                             const OUString& procedureNamePattern,const OUString& columnNamePattern )throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openProcedures(    const css::uno::Any& catalog,            const OUString& schemaPattern,
                                                             const OUString& procedureNamePattern)throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openVersionColumns(const css::uno::Any& catalog, const OUString& schema,
                                                             const OUString& table)throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openBestRowIdentifier( const css::uno::Any& catalog, const OUString& schema,
                                                                     const OUString& table,sal_Int32 scope, bool nullable )throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openForeignKeys( const css::uno::Any& catalog, const OUString* schema,const OUString* table,
                                                               const css::uno::Any& catalog2, const OUString* schema2,const OUString* table2)throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openExportedKeys(const css::uno::Any& catalog, const OUString& schema,const OUString& table)throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openImportedKeys(const css::uno::Any& catalog, const OUString& schema,const OUString& table)throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openPrimaryKeys(const css::uno::Any& catalog, const OUString& schema,const OUString& table)throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openTablePrivileges(const css::uno::Any& catalog, const OUString& schemaPattern,
                                                               const OUString& tableNamePattern)throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openSpecialColumns(bool _bRowVer,const css::uno::Any& catalog, const OUString& schema,
                                                                     const OUString& table,sal_Int32 scope,   bool nullable )throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void openIndexInfo( const css::uno::Any& catalog, const OUString& schema,
                                                     const OUString& table,bool unique,bool approximate )throw(css::sdbc::SQLException, css::uno::RuntimeException);
 

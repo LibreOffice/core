@@ -43,6 +43,8 @@ namespace connectivity
             ::rtl::Reference<connectivity::OSQLColumns> m_xColumns;
             OFileTable*         m_pTable;
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void checkColumnIndex(sal_Int32 column) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         protected:
             virtual ~OResultSetMetaData() override;

@@ -238,6 +238,8 @@ protected:
             ::rtl::Reference<connectivity::OSQLColumns>  m_xParamColumns;
 
             void parseParameter( const OSQLParseNode* pNode, OUString& rMatchString );
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void fillRowData() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
             void analyseWhereClause( const OSQLParseNode*                 parseTree,
                                      MQueryExpression                    &queryExpression);
@@ -252,8 +254,12 @@ protected:
 
             sal_uInt32  currentRowCount();
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             bool fetchRow(sal_Int32 rowIndex,bool bForceReload=false) throw( css::sdbc::SQLException,
                                                           css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             bool fetchCurrentRow() throw( css::sdbc::SQLException,
                                                           css::uno::RuntimeException);
             static bool pushCard(sal_uInt32 ) { return true; }
@@ -262,16 +268,24 @@ protected:
             sal_Int32 deletedCount();
             bool fillKeySet(sal_Int32 nMaxCardNumber);  //When we get new rows, fill the m_pKeySet items for them
             sal_Int32 getRowForCardNumber(sal_Int32 nCardNum);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             const ORowSetValue& getValue(sal_Int32 rowIndex, sal_Int32 columnIndex)
                 throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             static void checkPendingUpdate() throw(css::sdbc::SQLException, css::uno::RuntimeException);
             sal_Int32 getCurrentCardNumber();
 
 public:
              bool determineReadOnly();
             // MozAddressbook Specific methods
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void SAL_CALL executeQuery() throw(css::sdbc::SQLException,
                                                css::uno::RuntimeException,
                                                std::exception);
@@ -295,6 +309,7 @@ public:
 
             inline sal_Int32 mapColumn(sal_Int32 column);
 
+            /// @throws css::sdbc::SQLException
             void checkIndex(sal_Int32 columnIndex ) throw(css::sdbc::SQLException);
 
             static void setBoundedColumns(

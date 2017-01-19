@@ -35,6 +35,8 @@ namespace connectivity
 
             static OUString getPrivilegeString(sal_Int32 nRights);
             // return the privileges and additional the grant rights
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void findPrivilegesAndGrantPrivileges(const OUString& objName, sal_Int32 objType,sal_Int32& nRights,sal_Int32& nRightsWithGrant) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         public:
             virtual void refreshGroups() override;

@@ -43,6 +43,7 @@ namespace connectivity
             virtual ~OEvoabResultSetMetaData() override;
         public:
           explicit OEvoabResultSetMetaData(const OUString& _aTableName);
+          /// @throws css::sdbc::SQLException
           void setEvoabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(css::sdbc::SQLException);
           inline sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
                         { return m_aEvoabFields[columnIndex - 1]; }

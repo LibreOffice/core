@@ -80,9 +80,14 @@ protected:
 
 protected:
     /** mutex should be locked before called
+
+        @throws css::sdbc::SQLException
+        @throws css::uno::RuntimeException
      */
     virtual void checkClosed()
         throw ( css::sdbc::SQLException, css::uno::RuntimeException ) = 0;
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     void checkColumnIndex( sal_Int32 index )
         throw ( css::sdbc::SQLException, css::uno::RuntimeException );
     void checkRowIndex();

@@ -78,6 +78,7 @@ namespace connectivity
 
         public:
             oslGenericFunction  getOdbcFunction(ODBC3SQLFunctionId _nIndex)  const;
+            /// @throws css::sdbc::SQLException
             SQLRETURN       Construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info) throw(css::sdbc::SQLException, std::exception);
 
             OConnection(const SQLHANDLE _pDriverHandle,ODBCDriver*  _pDriver);

@@ -45,11 +45,14 @@ namespace connectivity
 
             ISC_STATUS_ARRAY    m_statusVector;
 
+            /// @throws css::sdbc::SQLException
             void ensureBlobIsOpened()
                 throw(css::sdbc::SQLException);
             /**
              * Closes the blob and cleans up resources -- can be used to reset
              * the blob if we e.g. want to read from the beginning again.
+             *
+             * @throws css::sdbc::SQLException
              */
             void closeBlob()
                 throw(css::sdbc::SQLException);

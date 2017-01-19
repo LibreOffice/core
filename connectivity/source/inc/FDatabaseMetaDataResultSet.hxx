@@ -122,6 +122,7 @@ namespace connectivity
         sal_Int32                       m_nResultSetConcurrency;
 
         void construct();
+        /// @throws css::sdbc::SQLException
         void checkIndex(sal_Int32 columnIndex ) throw(css::sdbc::SQLException);
         void setType(MetaDataResultSetType _eType);
 
@@ -153,7 +154,9 @@ namespace connectivity
 
         // XServiceInfo
 
+        /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
 
     protected:

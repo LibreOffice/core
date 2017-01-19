@@ -48,6 +48,7 @@ namespace connectivity
             css::uno::Reference< css::sdbcx::XTablesSupplier> m_xCatalog;
 
         public:
+            /// @throws css::sdbc::SQLException
             void construct( const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info) throw(css::sdbc::SQLException);
             explicit OConnection(MorkDriver* const driver);
             virtual ~OConnection() override;

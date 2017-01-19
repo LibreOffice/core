@@ -136,10 +136,15 @@ namespace connectivity
 
             // return true when the select statement is "select count(*) from table"
             inline bool isCount() const { return m_bIsCount; }
+            /// @throws css::sdbc::SQLException
             void checkIndex(sal_Int32 columnIndex ) throw(css::sdbc::SQLException);
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             const ORowSetValue& getValue(sal_Int32 columnIndex)
                 throw (css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
             // clear insert row
             void clearInsertRow();

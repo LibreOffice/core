@@ -137,6 +137,8 @@ namespace connectivity
 
         // delete all refs
         void clear(bool _bDispose);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         // XEventListener
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;

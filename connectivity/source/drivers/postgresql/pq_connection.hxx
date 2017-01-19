@@ -165,6 +165,8 @@ class Connection : public ConnectionBase
     WeakHashMap m_myStatements;
 
 private:
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     void checkClosed()
         throw ( css::sdbc::SQLException, css::uno::RuntimeException );
 

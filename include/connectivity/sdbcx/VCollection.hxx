@@ -101,6 +101,7 @@ namespace connectivity
             bool                                    m_bUseIndexOnly;    // is only TRUE when only an indexaccess is needed
 
             // the implementing class should refresh their elements
+            /// @throws css::uno::RuntimeException
             virtual void impl_refresh() throw(css::uno::RuntimeException) = 0;
 
             // will be called when a object was requested by one of the accessing methods like getByIndex

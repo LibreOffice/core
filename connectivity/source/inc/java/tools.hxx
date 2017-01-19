@@ -41,6 +41,8 @@ namespace connectivity
     OUString JavaString2String(JNIEnv *pEnv,jstring Str);
     class java_util_Properties;
 
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     java_util_Properties* createStringPropertyArray(const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
     jobject convertTypeMapToJavaMap(JNIEnv *pEnv,const css::uno::Reference< css::container::XNameAccess > & _rMap);

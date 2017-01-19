@@ -132,6 +132,7 @@ namespace connectivity
                                         const OUString& _rVal,
                                         const ::comphelper::UStringMixEqual& _rCase);
 
+    /// @throws css::lang::DisposedException
     OOO_DLLPUBLIC_DBTOOLS void checkDisposed(bool _bThrow) throw ( css::lang::DisposedException );
 
 #if HAVE_FEATURE_JAVA

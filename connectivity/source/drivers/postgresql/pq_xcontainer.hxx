@@ -160,6 +160,7 @@ public: // XAppend
                css::uno::RuntimeException, std::exception) override;
 
     // helper method !
+    /// @throws css::container::ElementExistException
     void append(
         const OUString & str,
         const css::uno::Reference< css::beans::XPropertySet >& descriptor )

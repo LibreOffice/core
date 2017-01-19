@@ -163,7 +163,7 @@ public: // XRowUpdate
     virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
 
 public:
-
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence< css::uno::Type > getStaticTypes( bool updateable )
         throw( css::uno::RuntimeException );
 

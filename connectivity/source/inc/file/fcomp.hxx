@@ -68,12 +68,26 @@ namespace connectivity
             void  setOrigColumns(const css::uno::Reference< css::container::XNameAccess>& rCols) { m_orgColumns = rCols; }
             const css::uno::Reference< css::container::XNameAccess>& getOrigColumns() const { return m_orgColumns; }
         protected:
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void execute_COMPARE(connectivity::OSQLParseNode* pPredicateNode) throw( css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void execute_LIKE(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void execute_BETWEEN(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void execute_ISNULL(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             OOperand* execute_Operand(connectivity::OSQLParseNode* pPredicateNode) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void execute_Fold(OSQLParseNode* pPredicateNode) throw( css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void executeFunction(OSQLParseNode* pPredicateNode) throw( css::sdbc::SQLException, css::uno::RuntimeException);
         };
 

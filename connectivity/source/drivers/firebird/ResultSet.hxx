@@ -113,9 +113,13 @@ namespace connectivity
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
             virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void SAL_CALL checkColumnIndex( sal_Int32 index )
                 throw (css::sdbc::SQLException,
                        css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void SAL_CALL checkRowIndex()
                 throw (css::sdbc::SQLException,
                        css::uno::RuntimeException);

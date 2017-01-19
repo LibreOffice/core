@@ -56,9 +56,17 @@ class DatabaseMetaData :
     css::uno::Reference< css::sdbc::XPreparedStatement > m_getTablePrivs_stmt;
     css::uno::Reference< css::sdbc::XPreparedStatement > m_getColumnPrivs_stmt;
 
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     sal_Int32 getIntSetting(const OUString& settingName) throw (css::sdbc::SQLException, css::uno::RuntimeException);
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     sal_Int32 getMaxIndexKeys()  throw (css::sdbc::SQLException, css::uno::RuntimeException);
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     sal_Int32 getMaxNameLength() throw (css::sdbc::SQLException, css::uno::RuntimeException);
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::sdbc::XResultSet > getImportedExportedKeys(
         const css::uno::Any& primaryCatalog, const OUString& primarySchema, const OUString& primaryTable,
         const css::uno::Any& foreignCatalog, const OUString& foreignSchema, const OUString& foreignTable )

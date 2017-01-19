@@ -50,7 +50,9 @@ namespace connectivity
             // OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface
+            /// @throws css::uno::DeploymentException
             static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+            /// @throws css::uno::DeploymentException
             static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
 
             // XServiceInfo

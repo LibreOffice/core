@@ -38,6 +38,7 @@ namespace connectivity
 
     namespace hsqldb
     {
+        /// @throws css::uno::Exception
         css::uno::Reference< css::uno::XInterface > SAL_CALL ODriverDelegator_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception );
 
         typedef ::cppu::WeakComponentImplHelper<   css::sdbc::XDriver
@@ -87,7 +88,9 @@ namespace connectivity
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();
+            /// @throws css::uno::RuntimeException
             static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+            /// @throws css::uno::RuntimeException
             static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
 
             // XDriver

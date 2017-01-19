@@ -102,11 +102,21 @@ namespace connectivity
             void setResultSetType(sal_Int32 _par0)          ;
             void setUsingBookmarks(bool _bUseBookmark)  ;
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void reset() throw (css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void clearMyResultSet() throw (css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setWarning (const css::sdbc::SQLWarning &ex)
                 throw (css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             bool lockIfNecessary (const OUString& sql) throw (css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getColumnCount() throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
 
@@ -114,6 +124,8 @@ namespace connectivity
             // getResultSet returns the current result as a ResultSet.  It
             // returns NULL if the current result is not a ResultSet.
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             css::uno::Reference<css::sdbc::XResultSet> getResultSet(bool checkCount)
                 throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
             /**
@@ -121,6 +133,8 @@ namespace connectivity
             */
             virtual OResultSet* createResulSet();
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             SQLLEN getRowCount() throw (css::sdbc::SQLException, css::uno::RuntimeException);
 
 

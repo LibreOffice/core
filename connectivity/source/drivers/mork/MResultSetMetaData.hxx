@@ -57,7 +57,8 @@ namespace connectivity
                  ,m_bReadOnly(aReadOnly)
                  {}
 
-
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void checkColumnIndex(sal_Int32 column)  throw(css::sdbc::SQLException, css::uno::RuntimeException);
             virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
             virtual sal_Bool SAL_CALL isAutoIncrement( sal_Int32 column ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;

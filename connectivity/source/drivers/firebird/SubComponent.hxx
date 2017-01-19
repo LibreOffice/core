@@ -55,6 +55,7 @@ namespace connectivity
                      css::uno::Reference< css::uno::XInterface >& _xInterface,
                      css::lang::XComponent* _pObject);
 
+        /// @throws css::lang::DisposedException
         void checkDisposed(bool _bThrow) throw ( css::lang::DisposedException );
 
 

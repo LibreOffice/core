@@ -43,6 +43,7 @@ namespace connectivity
 
             virtual ~OResultSetMetaData() override;
 
+            /// @throws css::sdbc::SQLException
             void verifyValidColumn(sal_Int32 column) throw(css::sdbc::SQLException);
         public:
             // a constructor, which is required for returning objects:

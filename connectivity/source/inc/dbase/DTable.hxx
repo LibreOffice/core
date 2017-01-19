@@ -114,6 +114,9 @@ namespace connectivity
             bool AllocBuffer();
 
             void throwInvalidDbaseFormat();
+            /// @throws css::sdbc::SQLException
+            /// @throws css::container::ElementExistException
+            /// @throws css::uno::RuntimeException
             void SAL_CALL renameImpl( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception);
             void throwInvalidColumnType(const sal_uInt16 _nErrorId,const OUString& _sColumnName);
 

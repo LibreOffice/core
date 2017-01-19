@@ -29,6 +29,7 @@
 
 namespace connectivity
 {
+    /// @throws css::uno::Exception
     css::uno::Reference< css::uno::XInterface > SAL_CALL java_sql_Driver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception );
 
     class java_sql_Driver : public ::cppu::WeakImplHelper< css::sdbc::XDriver,css::lang::XServiceInfo>
@@ -42,7 +43,9 @@ namespace connectivity
     public:
         java_sql_Driver(const css::uno::Reference< css::uno::XComponentContext >& _rxContext);
 
+        /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
 
         // XServiceInfo
