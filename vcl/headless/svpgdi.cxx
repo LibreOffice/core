@@ -409,7 +409,7 @@ sal_uInt16 SvpSalGraphics::GetBitCount() const
 
 long SvpSalGraphics::GetGraphicsWidth() const
 {
-    return m_pSurface ? cairo_image_surface_get_width(m_pSurface) : 0;
+    return m_pSurface ? cairo_image_surface_get_width(m_pSurface) / m_fScale : 0;
 }
 
 void SvpSalGraphics::ResetClipRegion()
