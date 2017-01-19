@@ -639,12 +639,12 @@ void SbiRuntime::SetParameters( SbxArray* pParams )
                 SbxDimArray* pArray = new SbxDimArray( SbxVARIANT );
                 sal_uInt16 nParamArrayParamCount = nParamCount - i;
                 pArray->unoAddDim( 0, nParamArrayParamCount - 1 );
-                for( sal_uInt16 j = i ; j < nParamCount ; j++ )
+                for (sal_uInt16 j = i; j < nParamCount ; ++j)
                 {
                     SbxVariable* v = pParams->Get( j );
-                    short nDimIndex = j - i;
-                    // coverity[callee_ptr_arith]
-                    pArray->Put( v, &nDimIndex );
+                    short aDimIndex[1];
+                    aDimIndex[0] = j - i;
+                    pArray->Put(v, aDimIndex);
                 }
                 SbxVariable* pArrayVar = new SbxVariable( SbxVARIANT );
                 pArrayVar->SetFlag( SbxFlagBits::ReadWrite );

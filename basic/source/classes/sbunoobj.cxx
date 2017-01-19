@@ -883,11 +883,11 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
                     bool bNeedsInit = true;
 
                     sal_Int32 nSize = nUpper - nLower + 1;
-                    sal_Int32 nIdx = nLower;
-                    for( sal_Int32 i = 0 ; i < nSize ; i++,nIdx++ )
+                    sal_Int32 aIdx[1];
+                    aIdx[0] = nLower;
+                    for (sal_Int32 i = 0; i < nSize; ++i, ++aIdx[0])
                     {
-                        // coverity[callee_ptr_arith]
-                        SbxVariableRef xVar = pArray->Get32( &nIdx );
+                        SbxVariableRef xVar = pArray->Get32(aIdx);
                         Type aType = getUnoTypeForSbxValue( xVar.get() );
                         if( bNeedsInit )
                         {
@@ -1324,11 +1324,11 @@ Any sbxToUnoValue( const SbxValue* pVar, const Type& rType, Property* pUnoProper
                     Type aElemType( reinterpret_cast<typelib_IndirectTypeDescription *>(pSeqTD)->pType );
 
                     // convert all array member and register them
-                    sal_Int32 nIdx = nLower;
-                    for( sal_Int32 i = 0 ; i < nSeqSize ; i++,nIdx++ )
+                    sal_Int32 aIdx[1];
+                    aIdx[0] = nLower;
+                    for (sal_Int32 i = 0 ; i < nSeqSize; ++i, ++aIdx[0])
                     {
-                        // coverity[callee_ptr_arith]
-                        SbxVariableRef xVar = pArray->Get32( &nIdx );
+                        SbxVariableRef xVar = pArray->Get32(aIdx);
 
                         // Convert the value of Sbx to Uno
                         Any aAnyValue = sbxToUnoValue( xVar.get(), aElemType );

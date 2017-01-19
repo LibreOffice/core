@@ -4359,13 +4359,13 @@ RTLFUNC(StrConv)
             pNew->PutByte(*pChar);
             pChar++;
             pNew->SetFlag( SbxFlagBits::Write );
-            short index = i;
+            short aIdx[1];
+            aIdx[0] = i;
             if( bIncIndex )
             {
-                ++index;
+                ++aIdx[0];
             }
-            // coverity[callee_ptr_arith]
-            pArray->Put( pNew, &index );
+            pArray->Put(pNew, aIdx);
         }
 
         SbxVariableRef refVar = rPar.Get(0);

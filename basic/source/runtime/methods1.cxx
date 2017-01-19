@@ -832,13 +832,13 @@ RTLFUNC(Array)
         SbxVariable* pVar = rPar.Get(i+1);
         SbxVariable* pNew = new SbxEnsureParentVariable(*pVar);
         pNew->SetFlag( SbxFlagBits::Write );
-        short index = static_cast< short >(i);
+        short aIdx[1];
+        aIdx[0] = static_cast< short >(i);
         if ( bIncIndex )
         {
-            ++index;
+            ++aIdx[0];
         }
-        // coverity[callee_ptr_arith]
-        pArray->Put( pNew, &index );
+        pArray->Put(pNew, aIdx);
     }
 
     // return array
@@ -1724,12 +1724,12 @@ RTLFUNC(Join)
         OUString aRetStr;
         short nLower, nUpper;
         pArr->GetDim( 1, nLower, nUpper );
-        for (short i = nLower; i <= nUpper; ++i)
+        short aIdx[1];
+        for (aIdx[0] = nLower; aIdx[0] <= nUpper; ++aIdx[0])
         {
-            // coverity[callee_ptr_arith]
-            OUString aStr = pArr->Get( &i )->GetOUString();
+            OUString aStr = pArr->Get(aIdx)->GetOUString();
             aRetStr += aStr;
-            if( i != nUpper )
+            if (aIdx[0] != nUpper)
             {
                 aRetStr += aDelim;
             }
