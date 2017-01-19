@@ -56,9 +56,9 @@ class PeerConfig(object):
 
             for aImageUrlTask in self.aImageUrlTasks:
                 if isinstance(aImageUrlTask.oResource, int):
-                    sImageUrl = self.oUnoDialog.getWizardImageUrl(aImageUrlTask.oResource, aImageUrlTask.oHCResource)
+                    sImageUrl = self.oUnoDialog.getWizardImageUrl(aImageUrlTask.oResource)
                 elif isinstance(aImageUrlTask.oResource, str):
-                    sImageUrl = self.oUnoDialog.getImageUrl(aImageUrlTask.oResource, aImageUrlTask.oHCResource)
+                    sImageUrl = self.oUnoDialog.getImageUrl(aImageUrlTask.oResource)
                 if sImageUrl != "":
                     aImageUrlTask.oModel.ImageURL = sImageUrl
 

@@ -368,14 +368,8 @@ class UnoDialog(object):
         nBlue = nGreenModulo
         return nBlue
 
-    def getWizardImageUrl(self, _nResId, _nHCResId):
-        if (self.isHighContrastModeActivated()):
-            return "private:resource/wzi/image/" + str(_nHCResId)
-        else:
-            return "private:resource/wzi/image/" + str(_nResId)
+    def getWizardImageUrl(self, _nResId):
+        return "private:resource/wzi/image/" + str(_nResId)
 
-    def getImageUrl(self, _surl, _shcurl):
-        if (self.isHighContrastModeActivated()):
-            return _shcurl
-        else:
-            return _surl
+    def getImageUrl(self, _surl):
+        return _surl

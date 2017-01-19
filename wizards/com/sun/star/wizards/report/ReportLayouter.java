@@ -267,7 +267,7 @@ public class ReportLayouter
                         catch (com.sun.star.lang.IllegalArgumentException e)
                         {
                         }
-                        Helper.setUnoPropertyValue(aOrientationImage, PropertyNames.PROPERTY_IMAGEURL, CurUnoDialog.getWizardImageUrl(1002, 1003));
+                        Helper.setUnoPropertyValue(aOrientationImage, PropertyNames.PROPERTY_IMAGEURL, CurUnoDialog.getWizardImageUrl(1002));
 
                         break;
 
@@ -282,7 +282,7 @@ public class ReportLayouter
                         }
 
                         CurUnoDialog.setControlProperty("imgOrientation", PropertyNames.PROPERTY_IMAGEURL, Desktop.getBitmapPath(m_xMSF) + "/portrait.gif");
-                        Helper.setUnoPropertyValue(aOrientationImage, PropertyNames.PROPERTY_IMAGEURL, CurUnoDialog.getWizardImageUrl(1000, 1001));
+                        Helper.setUnoPropertyValue(aOrientationImage, PropertyNames.PROPERTY_IMAGEURL, CurUnoDialog.getWizardImageUrl(1000));
                         break;
 
                     default:
