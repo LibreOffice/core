@@ -271,7 +271,7 @@ void TreeListBox::ImpCreateLibEntries( SvTreeListEntry* pDocumentRootEntry, cons
             {
                 AddEntry(
                     aLibName,
-                    Image( IDEResId( nId ) ),
+                    Image(BitmapEx(IDEResId(nId))),
                     pDocumentRootEntry, true,
                     o3tl::make_unique<Entry>(OBJ_TYPE_LIBRARY));
             }
