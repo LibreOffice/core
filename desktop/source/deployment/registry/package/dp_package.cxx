@@ -129,6 +129,10 @@ class BackendImpl : public ImplBaseT
             // throws css::uno::RuntimeException,
             // css::deployment::DeploymentException
 
+        /// @throws deployment::DeploymentException
+        /// @throws ucb::CommandFailedException
+        /// @throws ucb::CommandAbortedException
+        /// @throws RuntimeException
         bool checkLicense(
             Reference< ucb::XCommandEnvironment > const & xCmdEnv,
             DescriptionInfoset const & description, bool bNoLicenseChecking)

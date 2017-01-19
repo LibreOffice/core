@@ -67,6 +67,7 @@ public:
 
 }
 
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL UnxSplash_createInstance(const css::uno::Reference< css::uno::XComponentContext > & xCtx ) throw( css::uno::Exception );
 OUString UnxSplash_getImplementationName();
 css::uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw ();

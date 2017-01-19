@@ -63,6 +63,7 @@ class CommandEnvironmentImpl
     Reference< XComponentContext > m_xComponentContext;
     Reference< XProgressHandler > m_xLogFile;
 
+    /// @throws RuntimeException
     void update_( Any const & Status ) throw (RuntimeException);
     void printLicense(const OUString & sName,const OUString& sLicense,
                       bool & accept, bool & decline);

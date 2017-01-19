@@ -128,6 +128,7 @@ class ProgressCmdEnv
 
     void updateProgress();
 
+    /// @throws uno::RuntimeException
     void update_( uno::Any const & Status ) throw ( uno::RuntimeException );
 
 public:
