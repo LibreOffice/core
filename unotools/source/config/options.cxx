@@ -34,13 +34,12 @@ ConfigurationBroadcaster::ConfigurationBroadcaster()
 
 ConfigurationBroadcaster::~ConfigurationBroadcaster()
 {
-    delete mpList;
 }
 
 void ConfigurationBroadcaster::AddListener( utl::ConfigurationListener* pListener )
 {
     if ( !mpList )
-        mpList = new IMPL_ConfigurationListenerList;
+        mpList.reset(new IMPL_ConfigurationListenerList);
     mpList->push_back( pListener );
 }
 

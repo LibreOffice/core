@@ -25,6 +25,8 @@
 #include <xmlscript/xmlns.h>
 #include <xmlscript/xmlscriptdllapi.h>
 
+#include <memory>
+
 namespace xmlscript
 {
 
@@ -46,7 +48,7 @@ struct XMLSCRIPT_DLLPUBLIC LibDescriptor
 
 struct XMLSCRIPT_DLLPUBLIC LibDescriptorArray
 {
-    LibDescriptor* mpLibs;
+    std::unique_ptr<LibDescriptor[]> mpLibs;
     sal_Int32 mnLibCount;
 
     LibDescriptorArray() { mpLibs = nullptr; mnLibCount = 0; }

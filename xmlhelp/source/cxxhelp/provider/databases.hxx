@@ -179,7 +179,7 @@ namespace chelp {
          */
 
         void cascadingStylesheet( const OUString& Language,
-                                  char** buffer,
+                                  std::unique_ptr<char[]>& buffer,
                                   int* byteCount );
 
         /**
@@ -195,7 +195,7 @@ namespace chelp {
         void setActiveText( const OUString& Module,
                             const OUString& Language,
                             const OUString& Id,
-                            char** buffer,
+                            std::unique_ptr<char[]>& buffer,
                             int* byteCount );
 
         /**

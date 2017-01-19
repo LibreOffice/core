@@ -31,7 +31,7 @@ namespace chelp {
 
     class DynamicResultSet : public ::ucbhelper::ResultSetImplHelper
     {
-        ResultSetFactory*                    m_pFactory;
+        std::unique_ptr<ResultSetFactory>   m_pFactory;
 
     private:
         virtual void initStatic() override;
