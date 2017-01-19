@@ -189,6 +189,7 @@ hyper_link_get_type()
 
 // ---------------------- AtkHyperText ----------------------
 
+/// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleHypertext>
     getHypertext( AtkHypertext *pHypertext ) throw (uno::RuntimeException)
 {

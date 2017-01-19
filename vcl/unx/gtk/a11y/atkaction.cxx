@@ -43,6 +43,7 @@ getAsConst( const OString& rString )
     return aUgly[ nIdx ].getStr();
 }
 
+/// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleAction>
         getAction( AtkAction *action ) throw (uno::RuntimeException)
 {

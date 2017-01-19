@@ -25,6 +25,7 @@
 
 using namespace ::com::sun::star;
 
+/// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleValue>
     getValue( AtkValue *pValue ) throw (uno::RuntimeException)
 {

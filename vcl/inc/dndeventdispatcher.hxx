@@ -46,22 +46,28 @@ class DNDEventDispatcher: public ::cppu::WeakImplHelper<
      * fire the events on the dnd listener container of the specified window
      */
 
+    /// @throws css::uno::RuntimeException
     static sal_Int32 fireDragEnterEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
         const css::uno::Sequence< css::datatransfer::DataFlavor >& aFlavorList ) throw(css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     static sal_Int32 fireDragOverEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction ) throw(css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     static sal_Int32 fireDragExitEvent( vcl::Window *pWindow ) throw(css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     static sal_Int32 fireDropActionChangedEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDragContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction ) throw(css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     static sal_Int32 fireDropEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDropTargetDropContext >& xContext,
         const sal_Int8 nDropAction, const Point& rLocation, const sal_Int8 nSourceAction,
         const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable ) throw(css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     static sal_Int32 fireDragGestureEvent( vcl::Window *pWindow, const css::uno::Reference< css::datatransfer::dnd::XDragSource >& xSource,
         const css::uno::Any& event, const Point& rOrigin, const sal_Int8 nDragAction )throw(css::uno::RuntimeException);
 

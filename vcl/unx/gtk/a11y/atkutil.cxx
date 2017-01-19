@@ -139,36 +139,50 @@ class DocumentFocusListener :
     std::set< uno::Reference< uno::XInterface > > m_aRefList;
 
 public:
+    /// @trhows lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
     void attachRecursive(
         const uno::Reference< accessibility::XAccessible >& xAccessible
     ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 
+    /// @trhows lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
     void attachRecursive(
         const uno::Reference< accessibility::XAccessible >& xAccessible,
         const uno::Reference< accessibility::XAccessibleContext >& xContext
     ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 
+    /// @trhows lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
     void attachRecursive(
         const uno::Reference< accessibility::XAccessible >& xAccessible,
         const uno::Reference< accessibility::XAccessibleContext >& xContext,
         const uno::Reference< accessibility::XAccessibleStateSet >& xStateSet
     ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 
+    /// @trhows lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
     void detachRecursive(
         const uno::Reference< accessibility::XAccessible >& xAccessible
     ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 
+    /// @trhows lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
     void detachRecursive(
         const uno::Reference< accessibility::XAccessible >& xAccessible,
         const uno::Reference< accessibility::XAccessibleContext >& xContext
     ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 
+    /// @trhows lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
     void detachRecursive(
         const uno::Reference< accessibility::XAccessible >& xAccessible,
         const uno::Reference< accessibility::XAccessibleContext >& xContext,
         const uno::Reference< accessibility::XAccessibleStateSet >& xStateSet
     ) throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 
+    /// @trhows lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
     static uno::Reference< accessibility::XAccessible > getAccessible(const lang::EventObject& aEvent )
         throw (lang::IndexOutOfBoundsException, uno::RuntimeException);
 

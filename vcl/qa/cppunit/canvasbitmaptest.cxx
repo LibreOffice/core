@@ -315,6 +315,7 @@ private:
         return uno::Sequence< sal_Int8 >();
     }
 
+    // @throws uno::RuntimeException
     uno::Reference< rendering::XBitmapPalette > SAL_CALL getPalette(  ) throw (uno::RuntimeException)
     {
         uno::Reference< XBitmapPalette > aRet;

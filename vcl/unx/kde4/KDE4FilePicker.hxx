@@ -134,6 +134,7 @@ public:
     virtual void SAL_CALL cancel( ) throw( css::uno::RuntimeException, std::exception ) override;
 
     // XEventListener
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL disposing( const css::lang::EventObject &rEvent ) throw( css::uno::RuntimeException );
     using cppu::WeakComponentImplHelperBase::disposing;
 
@@ -144,35 +145,57 @@ public:
 
 private Q_SLOTS:
     // XExecutableDialog functions
+    /// @throws css::uno::RuntimeException
     void setTitleSlot( const OUString &rTitle ) throw( css::uno::RuntimeException ) { return setTitle( rTitle ); }
+    /// @throws css::uno::RuntimeException
     sal_Int16 executeSlot() throw( css::uno::RuntimeException ) { return execute(); }
 
     // XFilePicker functions
+    /// @throws css::uno::RuntimeException
     void setMultiSelectionModeSlot( bool bMode ) throw( css::uno::RuntimeException ) { return setMultiSelectionMode( bMode ); }
+    /// @throws css::uno::RuntimeException
     void setDefaultNameSlot( const OUString &rName ) throw( css::uno::RuntimeException ) { return setDefaultName( rName ); }
+    /// @throws css::uno::RuntimeException
     void setDisplayDirectorySlot( const OUString &rDirectory ) throw( css::uno::RuntimeException ) { return setDisplayDirectory( rDirectory ); }
+    /// @throws css::uno::RuntimeException
     OUString getDisplayDirectorySlot() throw( css::uno::RuntimeException ) { return getDisplayDirectory(); }
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > getFilesSlot() throw( css::uno::RuntimeException ) { return getFiles(); }
 
     // XFilterManager functions
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void appendFilterSlot( const OUString &rTitle, const OUString &rFilter ) throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) { return appendFilter( rTitle, rFilter ); }
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void setCurrentFilterSlot( const OUString &rTitle ) throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) { return setCurrentFilter( rTitle ); }
+    /// @throws css::uno::RuntimeException
     OUString getCurrentFilterSlot() throw( css::uno::RuntimeException ) { return getCurrentFilter(); }
 
     // XFilterGroupManager functions
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void appendFilterGroupSlot( const OUString &rGroupTitle, const css::uno::Sequence< css::beans::StringPair > &rFilters ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException) { return appendFilterGroup( rGroupTitle, rFilters ); }
 
     // XFilePickerControlAccess functions
+    /// @throws css::uno::RuntimeException
     void setValueSlot( sal_Int16 nControlId, sal_Int16 nControlAction, const css::uno::Any &rValue ) throw (css::uno::RuntimeException) { return setValue( nControlId, nControlAction, rValue ); }
+    /// @throws css::uno::RuntimeException
     css::uno::Any getValueSlot( sal_Int16 nControlId, sal_Int16 nControlAction ) throw (css::uno::RuntimeException) { return getValue( nControlId, nControlAction ); }
+    /// @throws css::uno::RuntimeException
     void enableControlSlot( sal_Int16 nControlId, bool bEnable ) throw( css::uno::RuntimeException ) { return enableControl( nControlId, bEnable ); }
+    /// @throws css::uno::RuntimeException
     void setLabelSlot( sal_Int16 nControlId, const OUString &rLabel ) throw (css::uno::RuntimeException) { return setLabel( nControlId, rLabel ); }
+    /// @throws css::uno::RuntimeException
     OUString getLabelSlot( sal_Int16 nControlId ) throw (css::uno::RuntimeException) { return getLabel( nControlId ); }
 
     // XFilePicker2 functions
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > getSelectedFilesSlot() throw (css::uno::RuntimeException) { return getSelectedFiles(); }
 
     // XInitialization
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     void initializeSlot( const css::uno::Sequence< css::uno::Any > &rArguments ) throw( css::uno::Exception, css::uno::RuntimeException ) { return initialize( rArguments ); }
 
 Q_SIGNALS:

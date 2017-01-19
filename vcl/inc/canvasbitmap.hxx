@@ -70,6 +70,7 @@ namespace unotools
         // XIntegerReadOnlyBitmap
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerRectangle2D& rect ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerPoint2D& pos ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override;
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::rendering::XBitmapPalette > SAL_CALL getPalette(  ) throw (css::uno::RuntimeException);
         virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) throw (css::uno::RuntimeException, std::exception) override;
 

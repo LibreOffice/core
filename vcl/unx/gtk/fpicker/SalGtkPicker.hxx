@@ -49,12 +49,16 @@ class SalGtkPicker
         osl::Mutex m_rbHelperMtx;
         GtkWidget  *m_pDialog;
     protected:
+        /// @throws css::uno::RuntimeException
         void SAL_CALL implsetTitle( const OUString& aTitle )
             throw( css::uno::RuntimeException );
 
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::uno::RuntimeException
         void SAL_CALL implsetDisplayDirectory( const OUString& rDirectory )
             throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
+        /// @throws css::uno::RuntimeException
         OUString SAL_CALL implgetDisplayDirectory(  )
             throw( css::uno::RuntimeException );
         OUString uritounicode(const gchar *pIn);

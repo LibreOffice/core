@@ -23,6 +23,7 @@
 
 using namespace ::com::sun::star;
 
+/// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleComponent>
     getComponent( AtkComponent *pComponent ) throw (uno::RuntimeException)
 {

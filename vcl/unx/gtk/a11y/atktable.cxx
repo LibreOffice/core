@@ -48,6 +48,7 @@ getAsConst( const OUString& rString )
 
 /*****************************************************************************/
 
+/// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleTable>
     getTable( AtkTable *pTable ) throw (uno::RuntimeException)
 {

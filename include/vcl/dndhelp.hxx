@@ -56,25 +56,31 @@ public:
     virtual ~DragAndDropClient();
 
     // css::datatransfer::dnd::XDragGestureListener
+    /// @throws css::uno::RuntimeException
     virtual void dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge )
         throw (css::uno::RuntimeException,
                std::exception);
 
     // css::datatransfer::dnd::XDragSourceListener
+    /// @throws css::uno::RuntimeException
     virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde )
         throw (css::uno::RuntimeException,
                std::exception);
 
     // css::datatransfer::dnd::XDropTargetListener
+    /// @throws css::uno::RuntimeException
     virtual void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde )
         throw (css::uno::RuntimeException,
                std::exception);
+    /// @throws css::uno::RuntimeException
     virtual void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee )
         throw (css::uno::RuntimeException,
                std::exception);
+    /// @throws css::uno::RuntimeException
     virtual void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte )
         throw (css::uno::RuntimeException,
                std::exception);
+    /// @throws css::uno::RuntimeException
     virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde )
         throw (css::uno::RuntimeException,
                std::exception);
