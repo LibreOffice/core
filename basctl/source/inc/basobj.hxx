@@ -81,6 +81,8 @@ namespace basctl
         bool bChooseOnly, const OUString& rMacroDesc )
     { return ChooseMacro(rxLimitToDocument, css::uno::Reference< css::frame::XFrame >(), bChooseOnly, rMacroDesc); }
 
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > GetMethodNames(
         const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
         throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
@@ -93,6 +95,10 @@ namespace basctl
     /** renames a dialog
 
         Will show an error message when renaming fails because the new name is already used.
+
+        @throws css::container::ElementExistException
+        @throws css::container::NoSuchElementException
+        @throws css::uno::RuntimeException
     */
     bool            RenameDialog(
         vcl::Window* pErrorParent, const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rOldName, const OUString& rNewName )

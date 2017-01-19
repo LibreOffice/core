@@ -28,6 +28,7 @@ namespace basctl
 class SIDEModel : public SfxBaseModel,
                 public com::sun::star::lang::XServiceInfo
 {
+    /// @throws css::io::IOException
     static void notImplemented() throw ( css::io::IOException );
 public:
     explicit SIDEModel(SfxObjectShell *pObjSh = nullptr);
@@ -64,6 +65,7 @@ public:
     static OUString getImplementationName_Static();
 };
 
+/// @throws com::sun::star::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL SIDEModel_createInstance(
                 const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr )
                     throw( com::sun::star::uno::Exception );

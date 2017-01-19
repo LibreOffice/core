@@ -115,15 +115,22 @@ public:
     css::uno::Reference< css::awt::XControl > GetControl() const;
 
     virtual void PositionAndSizeChange( const css::beans::PropertyChangeEvent& evt );
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL NameChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::container::NoSuchElementException, css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void SAL_CALL TabIndexChange( const  css::beans::PropertyChangeEvent& evt ) throw( css::uno::RuntimeException);
 
     // PropertyChangeListener
+    /// @throws css::uno::RuntimeException
     void SAL_CALL _propertyChange(const css::beans::PropertyChangeEvent& evt) throw (css::uno::RuntimeException, std::exception);
 
     // ContainerListener
+    /// @throws css::uno::RuntimeException
     void SAL_CALL _elementInserted( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void SAL_CALL _elementReplaced( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void SAL_CALL _elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
 
     virtual void SetLayer(SdrLayerID nLayer) override;
