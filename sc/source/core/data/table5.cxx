@@ -1169,6 +1169,8 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
         // Special case: only process the "from" cell.
         SCCOL nCol = pAdrFrom->Col();
         SCROW nRow = pAdrFrom->Row();
+        if ( nCol >= aCol.size() )
+            return;
         ScColumn& rCol = aCol[nCol];
         ScRefCellValue aCell = rCol.GetCellValue(nRow);
         if (aCell.isEmpty())
@@ -1201,7 +1203,7 @@ void ScTable::InvalidateTextWidth( const ScAddress* pAdrFrom, const ScAddress* p
 
     const SCCOL nCol1 = pAdrFrom ? pAdrFrom->Col() : 0;
     const SCROW nRow1 = pAdrFrom ? pAdrFrom->Row() : 0;
-    const SCCOL nCol2 = pAdrTo   ? pAdrTo->Col()   : MAXCOL;
+    const SCCOL nCol2 = pAdrTo   ? pAdrTo->Col()   : aCol.size() - 1;
     const SCROW nRow2 = pAdrTo   ? pAdrTo->Row()   : MAXROW;
 
     for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol)
