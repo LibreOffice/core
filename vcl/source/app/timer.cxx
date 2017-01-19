@@ -25,15 +25,12 @@ void Timer::SetDeletionFlags()
 {
     // If no AutoTimer, then stop.
     if ( !mbAuto )
-    {
-        mpSchedulerData->mbDelete = true;
-        mbActive = false;
-    }
+        Task::SetDeletionFlags();
 }
 
 bool Timer::ReadyForSchedule( bool /* bIdle */, sal_uInt64 nTimeNow ) const
 {
-    return (mpSchedulerData->mnUpdateTime + mnTimeout) <= nTimeNow;
+    return (GetSchedulerData()->mnUpdateTime + mnTimeout) <= nTimeNow;
 }
 
 bool Timer::IsIdle() const
@@ -43,7 +40,7 @@ bool Timer::IsIdle() const
 
 sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const
 {
-    sal_uInt64 nWakeupTime = mpSchedulerData->mnUpdateTime + mnTimeout;
+    sal_uInt64 nWakeupTime = GetSchedulerData()->mnUpdateTime + mnTimeout;
     if( nWakeupTime <= nTimeNow )
         return Scheduler::ImmediateTimeoutMs;
     else
@@ -53,12 +50,38 @@ sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) 
     }
 }
 
-Timer::Timer(const sal_Char *pDebugName)
+Timer::Timer( bool bAuto, const sal_Char *pDebugName )
     : Task( pDebugName )
     , mnTimeout( Scheduler::ImmediateTimeoutMs )
-    , mbAuto( false )
+    , mbAuto( bAuto )
 {
-    mePriority = TaskPriority::HIGHEST;
+    SetPriority( TaskPriority::HIGHEST );
+}
+
+Timer::Timer( const sal_Char *pDebugName )
+    : Timer( false, pDebugName )
+{
+}
+
+Timer::Timer( const Timer& rTimer )
+    : Timer( rTimer.mbAuto, rTimer.GetDebugName() )
+{
+    maInvokeHandler = rTimer.maInvokeHandler;
+    mnTimeout = rTimer.mnTimeout;
+}
+
+Timer::~Timer()
+{
+}
+
+Timer& Timer::operator=( const Timer& rTimer )
+{
+    Task::operator=( rTimer );
+    maInvokeHandler = rTimer.maInvokeHandler;
+    mnTimeout = rTimer.mnTimeout;
+    SAL_WARN_IF( mbAuto != rTimer.mbAuto, "vcl.schedule",
+        "Copying Timer with different mbAuto value!" );
+    return *this;
 }
 
 void Timer::Invoke()
@@ -81,14 +104,13 @@ void Timer::SetTimeout( sal_uInt64 nNewTimeout )
 {
     mnTimeout = nNewTimeout;
     // If timer is active, then renew clock.
-    if ( mbActive )
+    if ( IsActive() )
         StartTimer( mnTimeout );
 }
 
 AutoTimer::AutoTimer( const sal_Char *pDebugName )
-    : Timer( pDebugName )
+    : Timer( true, pDebugName )
 {
-    mbAuto = true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

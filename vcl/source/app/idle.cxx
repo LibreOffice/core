@@ -20,8 +20,14 @@
 #include <vcl/idle.hxx>
 #include "saltimer.hxx"
 
+Idle::Idle( bool bAuto, const sal_Char *pDebugName )
+    : Timer( bAuto, pDebugName )
+{
+    SetPriority( TaskPriority::DEFAULT_IDLE );
+}
+
 Idle::Idle( const sal_Char *pDebugName )
-    : Timer( pDebugName )
+    : Idle( false, pDebugName )
 {
 }
 
@@ -32,7 +38,7 @@ void Idle::Start()
     sal_uInt64 nPeriod = Scheduler::ImmediateTimeoutMs;
     if (Scheduler::GetDeterministicMode())
     {
-        switch (mePriority)
+        switch ( GetPriority() )
         {
             case TaskPriority::LOW:
             case TaskPriority::LOWER:
