@@ -30,6 +30,7 @@
 
 #include <vcl/lineinfo.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <editeng/editstat.hxx>
 
 class SwPostItMgr;
@@ -80,6 +81,7 @@ class SwSidebarWin : public vcl::Window
         void CheckMetaText();
 
         inline Point GetAnchorPos() { return mAnchorRect.Pos(); }
+        inline const std::vector<basegfx::B2DRange>& GetAnnotationTextRanges() { return maAnnotationTextRanges; }
         SwEditWin& EditWin();
 
         inline OutlinerView* GetOutlinerView() { return mpOutlinerView;}
@@ -239,6 +241,8 @@ class SwSidebarWin : public vcl::Window
         Rectangle       mPosSize;
         SwRect          mAnchorRect;
         long            mPageBorder;
+
+        std::vector<basegfx::B2DRange> maAnnotationTextRanges;
 
         bool            mbMouseOver;
         SwPostItHelper::SwLayoutStatus mLayoutStatus;
