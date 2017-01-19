@@ -156,9 +156,9 @@ SvxZoomSliderControl::SvxZoomSliderControl( sal_uInt16 _nSlotId,  sal_uInt16 _nI
     SfxStatusBarControl( _nSlotId, _nId, rStatusBar ),
     mxImpl( new SvxZoomSliderControl_Impl )
 {
-    mxImpl->maSliderButton   = Image( SVX_RES( RID_SVXBMP_SLIDERBUTTON   ) );
-    mxImpl->maIncreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERINCREASE ) );
-    mxImpl->maDecreaseButton = Image( SVX_RES( RID_SVXBMP_SLIDERDECREASE ) );
+    mxImpl->maSliderButton   = Image(BitmapEx(SVX_RES(RID_SVXBMP_SLIDERBUTTON)));
+    mxImpl->maIncreaseButton = Image(BitmapEx(SVX_RES(RID_SVXBMP_SLIDERINCREASE)));
+    mxImpl->maDecreaseButton = Image(BitmapEx(SVX_RES(RID_SVXBMP_SLIDERDECREASE)));
 }
 
 SvxZoomSliderControl::~SvxZoomSliderControl()

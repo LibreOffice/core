@@ -45,29 +45,29 @@ String RID_SVXSTR_ALIGN_STRETCH
     Text [ en-US ] = "S~tretch Justify";
 };
 
-Image RID_SVXIMG_FONTWORK_ALIGN_LEFT
+Bitmap RID_SVXBMP_FONTWORK_ALIGN_LEFT
 {
-    ImageBitmap = Bitmap { File = "fontworkalignleft_16.png"; };
+    File = "fontworkalignleft_16.png";
 };
 
-Image RID_SVXIMG_FONTWORK_ALIGN_CENTER
+Bitmap RID_SVXBMP_FONTWORK_ALIGN_CENTER
 {
-    ImageBitmap = Bitmap { File = "fontworkaligncentered_16.png"; };
+    File = "fontworkaligncentered_16.png";
 };
 
-Image RID_SVXIMG_FONTWORK_ALIGN_RIGHT
+Bitmap RID_SVXBMP_FONTWORK_ALIGN_RIGHT
 {
-    ImageBitmap = Bitmap { File = "fontworkalignright_16.png"; };
+    File = "fontworkalignright_16.png";
 };
 
-Image RID_SVXIMG_FONTWORK_ALIGN_WORD
+Bitmap RID_SVXBMP_FONTWORK_ALIGN_WORD
 {
-    ImageBitmap = Bitmap { File = "fontworkalignjustified_16.png"; };
+    File = "fontworkalignjustified_16.png";
 };
 
-Image RID_SVXIMG_FONTWORK_ALIGN_STRETCH
+Bitmap RID_SVXBMP_FONTWORK_ALIGN_STRETCH
 {
-    ImageBitmap = Bitmap { File = "fontworkalignstretch_16.png"; };
+    File = "fontworkalignstretch_16.png";
 };
 
 String RID_SVXSTR_CHARS_SPACING_VERY_TIGHT

@@ -20,13 +20,14 @@
 #include "helpid.hrc"
 #include <svx/dialogs.hrc>
 
-Image IMG_SPACE3
+Bitmap BMP_SPACE3
 {
-    ImageBitmap = Bitmap{File = "symphony/spacing3.png";};
+    File = "symphony/spacing3.png";
 };
-Image IMG_INDENT_HANG
+
+Bitmap BMP_INDENT_HANG
 {
-    ImageBitmap = Bitmap{File = "symphony/Indent_Hanging.png";};
+    File = "symphony/Indent_Hanging.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

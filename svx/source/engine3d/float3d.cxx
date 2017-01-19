@@ -87,8 +87,8 @@ namespace {
 Svx3DWin::Svx3DWin(SfxBindings* pInBindings, SfxChildWindow *pCW, vcl::Window* pParent)
     : SfxDockingWindow (pInBindings, pCW, pParent,
         "Docking3DEffects", "svx/ui/docking3deffects.ui")
-    , aImgLightOn(SVX_RES(RID_SVXIMAGE_LIGHT_ON))
-    , aImgLightOff(SVX_RES(RID_SVXIMAGE_LIGHT_OFF))
+    , aImgLightOn(BitmapEx(SVX_RES(RID_SVXBMP_LAMP_ON)))
+    , aImgLightOff(BitmapEx(SVX_RES(RID_SVXBMP_LAMP_OFF)))
     , bUpdate(false)
     , eViewType(ViewType3D::Geo)
     , pModel(nullptr)

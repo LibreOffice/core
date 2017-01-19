@@ -54,9 +54,9 @@ struct SvxModifyControl::ImplData
     ImplData():
         mnModState(MODIFICATION_STATE_NO)
     {
-        maImages[MODIFICATION_STATE_NO]       = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_NO));
-        maImages[MODIFICATION_STATE_YES]      = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_YES));
-        maImages[MODIFICATION_STATE_FEEDBACK] = Image(SVX_RES(RID_SVXBMP_DOC_MODIFIED_FEEDBACK));
+        maImages[MODIFICATION_STATE_NO]       = Image(BitmapEx(SVX_RES(RID_SVXBMP_DOC_MODIFIED_NO)));
+        maImages[MODIFICATION_STATE_YES]      = Image(BitmapEx(SVX_RES(RID_SVXBMP_DOC_MODIFIED_YES)));
+        maImages[MODIFICATION_STATE_FEEDBACK] = Image(BitmapEx(SVX_RES(RID_SVXBMP_DOC_MODIFIED_FEEDBACK)));
 
         maIdle.SetPriority(TaskPriority::LOWEST);
     }

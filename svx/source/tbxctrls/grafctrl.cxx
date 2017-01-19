@@ -190,13 +190,13 @@ static sal_uInt16 ImplGetRID( const OUString& aCommand )
 {
     static const CommandToRID aImplCommandToResMap[] =
     {
-        { ".uno:GrafRed",           RID_SVXIMG_GRAF_RED             },
-        { ".uno:GrafGreen",         RID_SVXIMG_GRAF_GREEN           },
-        { ".uno:GrafBlue",          RID_SVXIMG_GRAF_BLUE            },
-        { ".uno:GrafLuminance",     RID_SVXIMG_GRAF_LUMINANCE       },
-        { ".uno:GrafContrast",      RID_SVXIMG_GRAF_CONTRAST        },
-        { ".uno:GrafGamma",         RID_SVXIMG_GRAF_GAMMA           },
-        { ".uno:GrafTransparence",  RID_SVXIMG_GRAF_TRANSPARENCE    },
+        { ".uno:GrafRed",           RID_SVXBMP_GRAF_RED             },
+        { ".uno:GrafGreen",         RID_SVXBMP_GRAF_GREEN           },
+        { ".uno:GrafBlue",          RID_SVXBMP_GRAF_BLUE            },
+        { ".uno:GrafLuminance",     RID_SVXBMP_GRAF_LUMINANCE       },
+        { ".uno:GrafContrast",      RID_SVXBMP_GRAF_CONTRAST        },
+        { ".uno:GrafGamma",         RID_SVXBMP_GRAF_GAMMA           },
+        { ".uno:GrafTransparence",  RID_SVXBMP_GRAF_TRANSPARENCE    },
         { nullptr, 0 }
     };
 
@@ -247,13 +247,13 @@ ImplGrafControl::ImplGrafControl(
     , maField( VclPtr<ImplGrafMetricField>::Create(this, rCmd, rFrame) )
 {
     ResId   aResId( ImplGetRID( rCmd ), DIALOG_MGR() ) ;
-    Image   aImage( aResId );
+    BitmapEx aBitmapEx(aResId);
 
-    Size    aImgSize( aImage.GetSizePixel() );
-    Size    aFldSize( maField->GetSizePixel() );
+    Size    aImgSize(aBitmapEx.GetSizePixel());
+    Size    aFldSize(maField->GetSizePixel());
     long    nFldY, nImgY;
 
-    maImage->SetImage( aImage );
+    maImage->SetImage(Image(aBitmapEx));
     maImage->SetSizePixel( aImgSize );
     // we want to see the background of the toolbox, not of the FixedImage or Control
     maImage->SetBackground( Wallpaper( COL_TRANSPARENT ) );

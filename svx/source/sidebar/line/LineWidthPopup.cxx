@@ -38,8 +38,8 @@ LineWidthPopup::LineWidthPopup(LinePropertyPanelBase& rParent)
     , m_bCloseByEdit(false)
     , m_nCustomWidth(0)
     , m_nTmpCustomWidth(0)
-    , m_aIMGCus(SVX_RES(RID_SVXIMG_WIDTH_CUSTOM))
-    , m_aIMGCusGray(SVX_RES(RID_SVXIMG_WIDTH_CUSTOM_GRAY))
+    , m_aIMGCus(BitmapEx(SVX_RES(RID_SVXBMP_WIDTH_CUSTOM)))
+    , m_aIMGCusGray(BitmapEx(SVX_RES(RID_SVXBMP_WIDTH_CUSTOM_GRAY)))
 {
     get(m_xMFWidth, "spin");
 

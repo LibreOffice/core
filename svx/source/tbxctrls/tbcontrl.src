@@ -168,33 +168,39 @@ String RID_SVXSTR_PAGES
     Text [ en-US ] = "Pages";
 };
 
-Image RID_SVXIMG_GRAF_RED
+Bitmap RID_SVXBMP_GRAF_RED
 {
-    ImageBitmap = Bitmap { File = "sc10865.png" ; };
+    File = "sc10865.png";
 };
-Image RID_SVXIMG_GRAF_GREEN
+
+Bitmap RID_SVXBMP_GRAF_GREEN
 {
-    ImageBitmap = Bitmap { File = "sc10866.png" ; };
+    File = "sc10866.png";
 };
-Image RID_SVXIMG_GRAF_BLUE
+
+Bitmap RID_SVXBMP_GRAF_BLUE
 {
-    ImageBitmap = Bitmap { File = "sc10867.png" ; };
+    File = "sc10867.png";
 };
-Image RID_SVXIMG_GRAF_LUMINANCE
+
+Bitmap RID_SVXBMP_GRAF_LUMINANCE
 {
-    ImageBitmap = Bitmap { File = "sc10863.png" ; };
+    File = "sc10863.png";
 };
-Image RID_SVXIMG_GRAF_CONTRAST
+
+Bitmap RID_SVXBMP_GRAF_CONTRAST
 {
-    ImageBitmap = Bitmap { File = "sc10864.png" ; };
+    File = "sc10864.png";
 };
-Image RID_SVXIMG_GRAF_GAMMA
+
+Bitmap RID_SVXBMP_GRAF_GAMMA
 {
-    ImageBitmap = Bitmap { File = "sc10868.png" ; };
+    File = "sc10868.png";
 };
-Image RID_SVXIMG_GRAF_TRANSPARENCE
+
+Bitmap RID_SVXBMP_GRAF_TRANSPARENCE
 {
-    ImageBitmap = Bitmap { File = "sc10869.png" ; };
+    File = "sc10869.png";
 };
 
 String RID_SVXSTR_CLEARFORM

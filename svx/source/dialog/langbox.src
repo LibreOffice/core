@@ -19,14 +19,14 @@
 
 #include <svx/dialogs.hrc>
 
-Image RID_SVXIMG_NOTCHECKED
+Bitmap RID_SVXBMP_NOTCHECKED
 {
-    ImageBitmap = Bitmap { File = "notcheck.png" ; } ;
+    File = "notcheck.png";
 };
 
-Image RID_SVXIMG_CHECKED
+Bitmap RID_SVXBMP_CHECKED
 {
-    ImageBitmap = Bitmap { File = "lngcheck.png" ; } ;
+    File = "lngcheck.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

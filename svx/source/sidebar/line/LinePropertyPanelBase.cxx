@@ -169,7 +169,7 @@ LinePropertyPanelBase::LinePropertyPanelBase(
     mpStartItem(),
     mpEndItem(),
     mxLineWidthPopup(VclPtr<LineWidthPopup>::Create(*this)),
-    maIMGNone(SVX_RES(IMG_NONE_ICON)),
+    maIMGNone(BitmapEx(SVX_RES(BMP_NONE_ICON))),
     mpIMGWidthIcon(),
     mbWidthValuable(true),
     mbArrowSupported(true)
@@ -221,14 +221,14 @@ void LinePropertyPanelBase::dispose()
 void LinePropertyPanelBase::Initialize()
 {
     mpIMGWidthIcon.reset(new Image[8]);
-    mpIMGWidthIcon[0] = Image(SVX_RES(IMG_WIDTH1_ICON));
-    mpIMGWidthIcon[1] = Image(SVX_RES(IMG_WIDTH2_ICON));
-    mpIMGWidthIcon[2] = Image(SVX_RES(IMG_WIDTH3_ICON));
-    mpIMGWidthIcon[3] = Image(SVX_RES(IMG_WIDTH4_ICON));
-    mpIMGWidthIcon[4] = Image(SVX_RES(IMG_WIDTH5_ICON));
-    mpIMGWidthIcon[5] = Image(SVX_RES(IMG_WIDTH6_ICON));
-    mpIMGWidthIcon[6] = Image(SVX_RES(IMG_WIDTH7_ICON));
-    mpIMGWidthIcon[7] = Image(SVX_RES(IMG_WIDTH8_ICON));
+    mpIMGWidthIcon[0] = Image(BitmapEx(SVX_RES(BMP_WIDTH1_ICON)));
+    mpIMGWidthIcon[1] = Image(BitmapEx(SVX_RES(BMP_WIDTH2_ICON)));
+    mpIMGWidthIcon[2] = Image(BitmapEx(SVX_RES(BMP_WIDTH3_ICON)));
+    mpIMGWidthIcon[3] = Image(BitmapEx(SVX_RES(BMP_WIDTH4_ICON)));
+    mpIMGWidthIcon[4] = Image(BitmapEx(SVX_RES(BMP_WIDTH5_ICON)));
+    mpIMGWidthIcon[5] = Image(BitmapEx(SVX_RES(BMP_WIDTH6_ICON)));
+    mpIMGWidthIcon[6] = Image(BitmapEx(SVX_RES(BMP_WIDTH7_ICON)));
+    mpIMGWidthIcon[7] = Image(BitmapEx(SVX_RES(BMP_WIDTH8_ICON)));
 
     FillLineStyleList();
     SelectLineStyle();

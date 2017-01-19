@@ -68,12 +68,9 @@ Menu RID_SVXMENU_SELECTION
     };
 };
 
-Image RID_SVXBMP_SELECTION
+Bitmap RID_SVXBMP_SELECTION
 {
-    ImageBitmap = Bitmap
-    {
-        File = "selection_10x22.png" ;
-    };
+    File = "selection_10x22.png" ;
 };
 
 String RID_SVXSTR_XMLSEC_SIG_OK
@@ -309,92 +306,64 @@ Menu RID_SVXMNU_XMLSECSTATBAR
     };
 };
 
-// Images ----------------------------------------------------------------
-
-Image RID_SVXBMP_POSITION
+Bitmap RID_SVXBMP_POSITION
 {
-    ImageBitmap = Bitmap
-    {
-        File = "sc10223.png" ;
-    };
-};
-Image RID_SVXBMP_SIZE
-{
-    ImageBitmap = Bitmap
-    {
-        File = "sc10224.png" ;
-    };
-};
-Image RID_SVXBMP_SIGNET
-{
-    ImageBitmap = Bitmap
-    {
-        File = "signet_11x16.png" ;
-    };
-};
-Image RID_SVXBMP_SIGNET_BROKEN
-{
-    ImageBitmap = Bitmap
-    {
-        File = "caution_11x16.png" ;
-    };
-};
-Image RID_SVXBMP_SIGNET_NOTVALIDATED
-{
-    ImageBitmap = Bitmap
-    {
-        File = "notcertificate_16.png" ;
-    };
+    File = "sc10223.png" ;
 };
 
-Image RID_SVXBMP_SLIDERBUTTON
+Bitmap RID_SVXBMP_SIZE
 {
-    ImageBitmap = Bitmap
-    {
-        File = "slidezoombutton_10.png" ;
-    };
+    File = "sc10224.png" ;
 };
-Image RID_SVXBMP_SLIDERDECREASE
+
+Bitmap RID_SVXBMP_SIGNET
 {
-    ImageBitmap = Bitmap
-    {
-        File = "slidezoomout_10.png" ;
-    };
+    File = "signet_11x16.png" ;
 };
-Image RID_SVXBMP_SLIDERINCREASE
+
+Bitmap RID_SVXBMP_SIGNET_BROKEN
 {
-    ImageBitmap = Bitmap
-    {
-        File = "slidezoomin_10.png" ;
-    };
+    File = "caution_11x16.png" ;
 };
-Image RID_SVXBMP_DOC_MODIFIED_YES
+
+Bitmap RID_SVXBMP_SIGNET_NOTVALIDATED
 {
-    ImageBitmap = Bitmap
-    {
-        File = "doc_modified_yes_14.png" ;
-    };
+    File = "notcertificate_16.png" ;
 };
-Image RID_SVXBMP_DOC_MODIFIED_NO
+
+Bitmap RID_SVXBMP_SLIDERBUTTON
 {
-    ImageBitmap = Bitmap
-    {
-        File = "doc_modified_no_14.png" ;
-    };
+    File = "slidezoombutton_10.png" ;
 };
-Image RID_SVXBMP_DOC_MODIFIED_FEEDBACK
+
+Bitmap RID_SVXBMP_SLIDERDECREASE
 {
-    ImageBitmap = Bitmap
-    {
-        File = "doc_modified_feedback.png" ;
-    };
+    File = "slidezoomout_10.png" ;
 };
-Image RID_SVXBMP_ZOOM_PAGE
+
+Bitmap RID_SVXBMP_SLIDERINCREASE
 {
-    ImageBitmap = Bitmap
-    {
-        File = "zoom_page_statusbar.png" ;
-    };
+    File = "slidezoomin_10.png" ;
+};
+
+Bitmap RID_SVXBMP_DOC_MODIFIED_YES
+{
+    File = "doc_modified_yes_14.png" ;
+};
+
+Bitmap RID_SVXBMP_DOC_MODIFIED_NO
+{
+    File = "doc_modified_no_14.png" ;
+};
+
+Bitmap RID_SVXBMP_DOC_MODIFIED_FEEDBACK
+{
+    File = "doc_modified_feedback.png" ;
+};
+
+Bitmap RID_SVXBMP_ZOOM_PAGE
+{
+    File = "zoom_page_statusbar.png" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

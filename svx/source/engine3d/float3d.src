@@ -21,19 +21,19 @@
 #include "float3d.hrc"
 #include <svx/svxcommands.h>
 
-Image RID_SVXIMAGE_LIGHT_ON
+Bitmap RID_SVXBMP_LAMP_ON
 {
-    ImageBitmap = Bitmap { File = "lighton.png" ; };
+    File = "lighton.png";
 };
 
-Image RID_SVXIMAGE_LIGHT_OFF
+Bitmap RID_SVXBMP_LAMP_OFF
 {
-    ImageBitmap = Bitmap { File = "light.bmp" ; };
+    File = "light.bmp";
 };
 
-Image RID_SVXIMAGE_COLORDLG
+Bitmap RID_SVXBMP_COLORDLG
 {
-    ImageBitmap = Bitmap { File = "colordlg.bmp" ; };
+    File = "colordlg.bmp";
 };
 
 String RID_SVXFLOAT3D_FAVORITE

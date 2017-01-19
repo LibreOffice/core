@@ -42,7 +42,7 @@ LightButton::LightButton( vcl::Window* pParent)
             : ImageButton( pParent)
             , m_bLightOn(false)
 {
-    SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF)   ) );
+    SetModeImage(Image(BitmapEx(SVX_RES(RID_SVXBMP_LAMP_OFF))));
 }
 
 VCL_BUILDER_FACTORY(LightButton)
@@ -54,11 +54,11 @@ void LightButton::switchLightOn(bool bOn)
     m_bLightOn = bOn;
     if(m_bLightOn)
     {
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_ON) ) );
+        SetModeImage(Image(BitmapEx(SVX_RES(RID_SVXBMP_LAMP_ON))));
     }
     else
     {
-        SetModeImage( Image( SVX_RES(RID_SVXIMAGE_LIGHT_OFF) ) );
+        SetModeImage(Image(BitmapEx(SVX_RES(RID_SVXBMP_LAMP_OFF))));
     }
 }
 
@@ -97,9 +97,9 @@ void LightSourceInfo::initButtonFromSource()
 {
     if(!pButton)
         return;
-    pButton->SetModeImage( Image( SVX_RES(
-        aLightSource.bIsEnabled ? RID_SVXIMAGE_LIGHT_ON : RID_SVXIMAGE_LIGHT_OFF
-    ) ) );
+    pButton->SetModeImage(Image(BitmapEx(SVX_RES(
+        aLightSource.bIsEnabled ? RID_SVXBMP_LAMP_ON : RID_SVXBMP_LAMP_OFF
+    ) ) ));
 }
 
 namespace

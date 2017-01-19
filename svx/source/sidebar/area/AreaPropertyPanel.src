@@ -20,29 +20,34 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-Image IMG_AXIAL
+Bitmap BMP_AXIAL
 {
-    ImageBitmap = Bitmap{File = "symphony/axial.png";};
+    File = "symphony/axial.png";
 };
-Image IMG_ELLI
+
+Bitmap BMP_ELLI
 {
-    ImageBitmap = Bitmap{File = "symphony/ellipsoid.png";};
+    File = "symphony/ellipsoid.png";
 };
-Image IMG_QUAD
+
+Bitmap BMP_QUAD
 {
-    ImageBitmap = Bitmap{File = "symphony/Quadratic.png";};
+    File = "symphony/Quadratic.png";
 };
-Image IMG_RADIAL
+
+Bitmap BMP_RADIAL
 {
-    ImageBitmap = Bitmap{File = "symphony/radial.png";};
+    File = "symphony/radial.png";
 };
-Image IMG_SQUARE
+
+Bitmap BMP_SQUARE
 {
-    ImageBitmap = Bitmap{File = "symphony/Square.png";};
+    File = "symphony/Square.png";
 };
-Image IMG_LINEAR
+
+Bitmap BMP_LINEAR
 {
-    ImageBitmap = Bitmap{File = "symphony/linear.png";};
+    File = "symphony/linear.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

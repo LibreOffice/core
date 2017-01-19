@@ -140,8 +140,8 @@ SvxLanguageBoxBase::SvxLanguageBoxBase()
 
 void SvxLanguageBoxBase::ImplLanguageBoxBaseInit()
 {
-    m_aNotCheckedImage = Image( SVX_RES( RID_SVXIMG_NOTCHECKED ) );
-    m_aCheckedImage = Image( SVX_RES( RID_SVXIMG_CHECKED ) );
+    m_aNotCheckedImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_NOTCHECKED)));
+    m_aCheckedImage = Image(BitmapEx(SVX_RES(RID_SVXBMP_CHECKED)));
     m_aAllString            = SVX_RESSTR( RID_SVXSTR_LANGUAGE_ALL );
     m_nLangList             = SvxLanguageListFlags::EMPTY;
     m_bHasLangNone          = false;

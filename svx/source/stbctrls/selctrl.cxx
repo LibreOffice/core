@@ -75,11 +75,10 @@ SvxSelectionModeControl::SvxSelectionModeControl( sal_uInt16 _nSlotId,
                                                   StatusBar& rStb ) :
     SfxStatusBarControl( _nSlotId, _nId, rStb ),
     mnState( 0 ),
-    maImage( SVX_RES( RID_SVXBMP_SELECTION ) )
+    maImage(BitmapEx(SVX_RES(RID_SVXBMP_SELECTION)))
 {
     GetStatusBar().SetItemText( GetId(), "" );
 }
-
 
 void SvxSelectionModeControl::StateChanged( sal_uInt16, SfxItemState eState,
                                             const SfxPoolItem* pState )

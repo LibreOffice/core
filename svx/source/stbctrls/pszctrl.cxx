@@ -174,14 +174,13 @@ SvxPosSizeStatusBarControl::SvxPosSizeStatusBarControl( sal_uInt16 _nSlotId,
     pImpl->bTable = false;
     pImpl->bHasMenu = false;
     pImpl->nFunctionSet = 0;
-    pImpl->aPosImage = Image( ResId( RID_SVXBMP_POSITION, DIALOG_MGR() ) );
-    pImpl->aSizeImage = Image( ResId( RID_SVXBMP_SIZE, DIALOG_MGR() ) );
+    pImpl->aPosImage = Image(BitmapEx(ResId(RID_SVXBMP_POSITION, DIALOG_MGR())));
+    pImpl->aSizeImage = Image(BitmapEx(ResId(RID_SVXBMP_SIZE, DIALOG_MGR())));
 
     addStatusListener( STR_POSITION);         // SID_ATTR_POSITION
     addStatusListener( STR_TABLECELL);   // SID_TABLE_CELL
     addStatusListener( STR_FUNC);    // SID_PSZ_FUNCTION
 }
-
 
 /*  [Description]
 

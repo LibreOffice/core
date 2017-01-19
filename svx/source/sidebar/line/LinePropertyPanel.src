@@ -20,50 +20,59 @@
 #include <svx/dialogs.hrc>
 #include "helpid.hrc"
 
-Image IMG_NONE_ICON
+Bitmap BMP_NONE_ICON
 {
-    ImageBitmap = Bitmap{File = "symphony/blank.png";};
+    File = "symphony/blank.png";
 };
 
-Image IMG_WIDTH1_ICON
+Bitmap BMP_WIDTH1_ICON
 {
-    ImageBitmap = Bitmap{File = "symphony/width1.png";};
+    File = "symphony/width1.png";
 };
-Image IMG_WIDTH2_ICON
+
+Bitmap BMP_WIDTH2_ICON
 {
-    ImageBitmap = Bitmap{File = "symphony/width2.png";};
+    File = "symphony/width2.png";
 };
-Image IMG_WIDTH3_ICON
+
+Bitmap BMP_WIDTH3_ICON
 {
-    ImageBitmap = Bitmap{File = "symphony/width3.png";};
+    File = "symphony/width3.png";
 };
-Image IMG_WIDTH4_ICON
+
+Bitmap BMP_WIDTH4_ICON
 {
-    ImageBitmap = Bitmap{File = "symphony/width4.png";};
+    File = "symphony/width4.png";
 };
-Image IMG_WIDTH5_ICON
+
+Bitmap BMP_WIDTH5_ICON
 {
-    ImageBitmap = Bitmap{File = "symphony/width5.png";};
+    File = "symphony/width5.png";
 };
-Image IMG_WIDTH6_ICON
+
+Bitmap BMP_WIDTH6_ICON
 {
-    ImageBitmap = Bitmap{File = "symphony/width6.png";};
+    File = "symphony/width6.png";
 };
-Image IMG_WIDTH7_ICON
+
+Bitmap BMP_WIDTH7_ICON
 {
-    ImageBitmap = Bitmap{File = "symphony/width7.png";};
+    File = "symphony/width7.png";
 };
-Image IMG_WIDTH8_ICON
+
+Bitmap BMP_WIDTH8_ICON
 {
-    ImageBitmap = Bitmap{File = "symphony/width8.png";};
+    File = "symphony/width8.png";
 };
-Image RID_SVXIMG_WIDTH_CUSTOM
+
+Bitmap RID_SVXBMP_WIDTH_CUSTOM
 {
-    ImageBitmap = Bitmap{File = "symphony/last_custom_common.png";};
+    File = "symphony/last_custom_common.png";
 };
-Image RID_SVXIMG_WIDTH_CUSTOM_GRAY
+
+Bitmap RID_SVXBMP_WIDTH_CUSTOM_GRAY
 {
-    ImageBitmap = Bitmap{File = "symphony/last_custom_common_grey.png";};
+    File = "symphony/last_custom_common_grey.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
