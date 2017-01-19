@@ -62,6 +62,8 @@ Reference< XInterface > SAL_CALL DocumentPropertiesImport_createInstance( const 
 
 namespace {
 
+/// @throws RuntimeException
+/// @throws css::io::IOException
 Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxStorage, const OUString& rStreamType ) throw (RuntimeException, css::io::IOException)
 {
     Reference< XRelationshipAccess > xRelation( rxStorage, UNO_QUERY_THROW );

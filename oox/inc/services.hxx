@@ -22,23 +22,57 @@
 
 #include <sal/config.h>
 
-#define DECLARE_FUNCTIONS( className )                                                  \
-extern OUString SAL_CALL className##_getImplementationName();                   \
-extern css::uno::Sequence< OUString > SAL_CALL className##_getSupportedServiceNames(); \
-extern css::uno::Reference< css::uno::XInterface > SAL_CALL className##_createInstance(                     \
-const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::Exception)
-
 namespace oox {
-    namespace core {    DECLARE_FUNCTIONS( FastTokenHandler );          }
-    namespace core {    DECLARE_FUNCTIONS( FilterDetect );              }
-    namespace docprop { DECLARE_FUNCTIONS( DocumentPropertiesImport );  }
-    namespace ppt {     DECLARE_FUNCTIONS( PowerPointImport );          }
-    namespace ppt {     DECLARE_FUNCTIONS( QuickDiagrammingImport );    }
-    namespace ppt {     DECLARE_FUNCTIONS( QuickDiagrammingLayout );    }
-    namespace shape {   DECLARE_FUNCTIONS( ShapeContextHandler );       }
+    namespace core {
+        extern OUString SAL_CALL FastTokenHandler_getImplementationName();
+        extern css::uno::Sequence< OUString > SAL_CALL FastTokenHandler_getSupportedServiceNames();
+        /// @throws css::uno::Exception
+        extern css::uno::Reference< css::uno::XInterface > SAL_CALL FastTokenHandler_createInstance(
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::Exception);
+    }
+    namespace core {
+        extern OUString SAL_CALL FilterDetect_getImplementationName();
+        extern css::uno::Sequence< OUString > SAL_CALL FilterDetect_getSupportedServiceNames();
+        /// @throws css::uno::Exception
+        extern css::uno::Reference< css::uno::XInterface > SAL_CALL FilterDetect_createInstance(
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::Exception);
+    }
+    namespace docprop {
+        extern OUString SAL_CALL DocumentPropertiesImport_getImplementationName();
+        extern css::uno::Sequence< OUString > SAL_CALL DocumentPropertiesImport_getSupportedServiceNames();
+        /// @throws css::uno::Exception
+        extern css::uno::Reference< css::uno::XInterface > SAL_CALL DocumentPropertiesImport_createInstance(
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::Exception);
+    }
+    namespace ppt {
+        extern OUString SAL_CALL PowerPointImport_getImplementationName();
+        extern css::uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames();
+        /// @throws css::uno::Exception
+        extern css::uno::Reference< css::uno::XInterface > SAL_CALL PowerPointImport_createInstance(
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::Exception);
+    }
+    namespace ppt {
+        extern OUString SAL_CALL QuickDiagrammingImport_getImplementationName();
+        extern css::uno::Sequence< OUString > SAL_CALL QuickDiagrammingImport_getSupportedServiceNames();
+        /// @throws css::uno::Exception
+        extern css::uno::Reference< css::uno::XInterface > SAL_CALL QuickDiagrammingImport_createInstance(
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::Exception);
+    }
+    namespace ppt {
+        extern OUString SAL_CALL QuickDiagrammingLayout_getImplementationName();
+        extern css::uno::Sequence< OUString > SAL_CALL QuickDiagrammingLayout_getSupportedServiceNames();
+        /// @throws css::uno::Exception
+        extern css::uno::Reference< css::uno::XInterface > SAL_CALL QuickDiagrammingLayout_createInstance(
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::Exception);
+    }
+    namespace shape {
+        extern OUString SAL_CALL ShapeContextHandler_getImplementationName();
+        extern css::uno::Sequence< OUString > SAL_CALL ShapeContextHandler_getSupportedServiceNames();
+        /// @throws css::uno::Exception
+        extern css::uno::Reference< css::uno::XInterface > SAL_CALL ShapeContextHandler_createInstance(
+            const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::Exception);
+    }
 }
-
-#undef DECLARE_FUNCTIONS
 
 #endif
 

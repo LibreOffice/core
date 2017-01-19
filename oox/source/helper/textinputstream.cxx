@@ -55,6 +55,7 @@ public:
                         throw (NotConnectedException, IOException, RuntimeException, std::exception) override;
 
 private:
+    /// @throws NotConnectedException
     void                ensureConnected() const throw (NotConnectedException);
 
 private:

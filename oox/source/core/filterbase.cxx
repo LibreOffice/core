@@ -151,8 +151,10 @@ struct FilterBaseImpl
 
     bool mbExportVBA;
 
+    /// @throws RuntimeException
     explicit            FilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
 
+    /// @throws IllegalArgumentException
     void                setDocumentModel( const Reference< XComponent >& rxComponent ) throw( IllegalArgumentException );
 
     void                initializeFilter();

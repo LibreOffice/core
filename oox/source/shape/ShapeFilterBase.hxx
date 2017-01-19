@@ -35,6 +35,7 @@ class ShapeFilterBase : public core::XmlFilterBase
 public:
     typedef std::shared_ptr<ShapeFilterBase> Pointer_t;
 
+    /// @throws css::uno::RuntimeException
     explicit            ShapeFilterBase(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext )
                             throw( css::uno::RuntimeException );

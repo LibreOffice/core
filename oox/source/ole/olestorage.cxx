@@ -68,7 +68,9 @@ public:
     virtual void SAL_CALL closeOutput() throw( NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception ) override;
 
 private:
+    /// @throws IOException
     void                ensureSeekable() const throw( IOException );
+    /// @throws NotConnectedException
     void                ensureConnected() const throw( NotConnectedException );
 
 private:

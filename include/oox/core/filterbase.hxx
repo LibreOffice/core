@@ -95,6 +95,7 @@ typedef ::cppu::WeakImplHelper<
 class OOX_DLLPUBLIC FilterBase : public FilterBase_BASE, public ::cppu::BaseMutex
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit            FilterBase(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext )
                             throw( css::uno::RuntimeException );

@@ -42,6 +42,7 @@ public:
     inline explicit         Locator( RecordParser* pParser ) : mpParser( pParser ) {}
 
     void                    dispose();
+    /// @throws css::uno::RuntimeException
     void                    checkDispose() throw( RuntimeException );
 
     // com.sun.star.sax.XLocator interface

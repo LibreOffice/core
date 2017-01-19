@@ -80,8 +80,14 @@ public:
                         throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
 
 private:
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void                updateBuffer() throw (css::io::IOException, css::uno::RuntimeException);
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     OString      readToElementBegin() throw (css::io::IOException, css::uno::RuntimeException);
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     OString      readToElementEnd() throw (css::io::IOException, css::uno::RuntimeException);
 
 private:

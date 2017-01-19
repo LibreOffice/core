@@ -57,6 +57,9 @@ public:
 
     void                setFragmentHandler( const ::rtl::Reference< FragmentHandler >& rxHandler );
 
+    /// @throws css::xml::sax::SAXException
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void                parseStream( const RecordInputSource& rInputSource )
                             throw(  css::xml::sax::SAXException,
                                     css::io::IOException,

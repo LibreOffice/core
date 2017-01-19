@@ -83,6 +83,7 @@ struct XmlFilterBaseImpl;
 class OOX_DLLPUBLIC XmlFilterBase : public FilterBase
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit            XmlFilterBase(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext )
                             throw( css::uno::RuntimeException );

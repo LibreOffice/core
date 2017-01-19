@@ -181,6 +181,7 @@ struct XmlFilterBaseImpl
     TextFieldStack                 maTextFieldStack;
     const NamespaceMap&             mrNamespaceMap;
 
+    /// @throws RuntimeException
     explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
     ~XmlFilterBaseImpl();
 };
