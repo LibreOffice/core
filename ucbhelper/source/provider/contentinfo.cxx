@@ -51,7 +51,6 @@ PropertySetInfo::PropertySetInfo(
 // virtual
 PropertySetInfo::~PropertySetInfo()
 {
-    delete m_pProps;
 }
 
 
@@ -105,7 +104,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
             {
                 uno::Sequence< beans::Property > aProps
                     = m_pContent->getProperties( m_xEnv );
-                m_pProps = new uno::Sequence< beans::Property >( aProps );
+                m_pProps.reset(new uno::Sequence< beans::Property >( aProps ));
             }
             catch ( uno::RuntimeException const & )
             {
@@ -113,7 +112,7 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
             }
             catch ( uno::Exception const & )
             {
-                m_pProps = new uno::Sequence< beans::Property >( 0 );
+                m_pProps.reset(new uno::Sequence< beans::Property >( 0 ));
             }
 
 
@@ -182,8 +181,7 @@ sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
 void PropertySetInfo::reset()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    delete m_pProps;
-    m_pProps = nullptr;
+    m_pProps.reset();
 }
 
 
@@ -226,7 +224,6 @@ CommandProcessorInfo::CommandProcessorInfo(
 // virtual
 CommandProcessorInfo::~CommandProcessorInfo()
 {
-    delete m_pCommands;
 }
 
 
@@ -284,7 +281,7 @@ CommandProcessorInfo::getCommands()
             {
                 uno::Sequence< css::ucb::CommandInfo > aCmds
                     = m_pContent->getCommands( m_xEnv );
-                m_pCommands = new uno::Sequence< css::ucb::CommandInfo >( aCmds );
+                m_pCommands.reset(new uno::Sequence< css::ucb::CommandInfo >( aCmds ));
             }
             catch ( uno::RuntimeException const & )
             {
@@ -292,7 +289,7 @@ CommandProcessorInfo::getCommands()
             }
             catch ( uno::Exception const & )
             {
-                m_pCommands = new uno::Sequence< css::ucb::CommandInfo >( 0 );
+                m_pCommands.reset(new uno::Sequence< css::ucb::CommandInfo >( 0 ));
             }
         }
     }
@@ -354,8 +351,7 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
 void CommandProcessorInfo::reset()
 {
     osl::MutexGuard aGuard( m_aMutex );
-    delete m_pCommands;
-    m_pCommands = nullptr;
+    m_pCommands.reset();
 }
 
 

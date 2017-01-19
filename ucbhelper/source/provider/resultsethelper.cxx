@@ -60,7 +60,6 @@ ResultSetImplHelper::ResultSetImplHelper(
 // virtual
 ResultSetImplHelper::~ResultSetImplHelper()
 {
-    delete m_pDisposeEventListeners;
 }
 
 
@@ -144,8 +143,7 @@ void SAL_CALL ResultSetImplHelper::addEventListener(
     osl::MutexGuard aGuard( m_aMutex );
 
     if ( !m_pDisposeEventListeners )
-        m_pDisposeEventListeners
-            = new cppu::OInterfaceContainerHelper( m_aMutex );
+        m_pDisposeEventListeners.reset(new cppu::OInterfaceContainerHelper( m_aMutex ));
 
     m_pDisposeEventListeners->addInterface( Listener );
 }

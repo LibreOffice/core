@@ -196,7 +196,7 @@ namespace fileaccess {
 
         css::uno::Reference< css::beans::XPropertySetInfo >     m_xPropertySetInfo;
 
-        TaskManager*                                                  m_pMyShell;
+        std::unique_ptr<TaskManager>                            m_pMyShell;
     };
 
 }       // end namespace fileaccess

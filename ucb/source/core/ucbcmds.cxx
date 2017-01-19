@@ -198,11 +198,10 @@ uno::Reference< io::XInputStream > SAL_CALL ActiveDataSink::getInputStream()
 class CommandProcessorInfo :
     public cppu::WeakImplHelper< ucb::XCommandInfo >
 {
-    uno::Sequence< ucb::CommandInfo > * m_pInfo;
+    std::unique_ptr< uno::Sequence< ucb::CommandInfo > > m_pInfo;
 
 public:
     CommandProcessorInfo();
-    virtual ~CommandProcessorInfo() override;
 
     // XCommandInfo methods
     virtual uno::Sequence< ucb::CommandInfo > SAL_CALL getCommands()
@@ -222,7 +221,7 @@ public:
 
 CommandProcessorInfo::CommandProcessorInfo()
 {
-    m_pInfo = new uno::Sequence< ucb::CommandInfo >( 2 );
+    m_pInfo.reset( new uno::Sequence< ucb::CommandInfo >( 2 ) );
 
     (*m_pInfo)[ 0 ]
         = ucb::CommandInfo(
@@ -239,13 +238,6 @@ CommandProcessorInfo::CommandProcessorInfo()
             OUString( CHECKIN_NAME ), // Name
             CHECKIN_HANDLE, // Handle
             cppu::UnoType<ucb::CheckinArgument>::get() ); // ArgType
-}
-
-
-// virtual
-CommandProcessorInfo::~CommandProcessorInfo()
-{
-    delete m_pInfo;
 }
 
 

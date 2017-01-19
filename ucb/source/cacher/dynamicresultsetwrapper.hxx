@@ -47,7 +47,7 @@ private:
     bool                    m_bDisposed; ///Dispose call ready.
     bool                    m_bInDispose;///In dispose call
     osl::Mutex              m_aContainerMutex;
-    comphelper::OInterfaceContainerHelper2*
+    std::unique_ptr<comphelper::OInterfaceContainerHelper2>
                             m_pDisposeEventListeners;
 protected:
     rtl::Reference<DynamicResultSetWrapperListener>
