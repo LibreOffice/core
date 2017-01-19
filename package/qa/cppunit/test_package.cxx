@@ -11,7 +11,8 @@
 #include <unotest/filters-test.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
 #include <comphelper/threadpool.hxx>
-#include "com/sun/star/packages/zip/ZipFileAccess.hpp"
+#include <com/sun/star/packages/zip/ZipFileAccess.hpp>
+#include <com/sun/star/beans/NamedValue.hpp>
 
 #include <iterator>
 
@@ -96,14 +97,22 @@ namespace
 
         OUString aURL = m_directories.getURLFromSrc("/package/qa/cppunit/data/a2z.zip");
 
-        uno::Sequence<beans::NamedValue> aArgs(2);
-        aArgs[0].Name = "URL";
-        aArgs[0].Value <<= aURL;
-        aArgs[1].Name = "UseBufferedStream";
-        aArgs[1].Value <<= true;
+        uno::Sequence<beans::NamedValue> aNVs(2);
+        aNVs[0].Name = "URL";
+        aNVs[0].Value <<= aURL;
+        aNVs[1].Name = "UseBufferedStream";
+        aNVs[1].Value <<= true;
+
+        uno::Sequence<uno::Any> aArgs(1);
+        aArgs[0] <<= aNVs;
+
+        uno::Reference<uno::XComponentContext> xCxt = comphelper::getProcessComponentContext();
+        uno::Reference<lang::XMultiComponentFactory> xSvcMgr = xCxt->getServiceManager();
 
         uno::Reference<packages::zip::XZipFileAccess2> xZip(
-            packages::zip::ZipFileAccess::createWithArguments(comphelper::getProcessComponentContext(), aArgs));
+            xSvcMgr->createInstanceWithArgumentsAndContext(
+                "com.sun.star.packages.zip.ZipFileAccess", aArgs, xCxt),
+            uno::UNO_QUERY);
 
         CPPUNIT_ASSERT(xZip.is());
 
