@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#! /usr/local/bin/python3
 # -*- Mode: python; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
@@ -1624,6 +1624,71 @@ DEFINES += %(defines)s
 SUBDIRS = %(subdirs)s
 """
 
+class CodeliteIntegrationGenerator(IdeIntegrationGenerator):
+
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+        self.target_by_location = {}
+        for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
+            if target.location not in self.target_by_location:
+                self.target_by_location[target.location] = set()
+            self.target_by_location[target.location] |= set([target])
+
+
+    def emit(self):
+        # create main workspace file
+        codelite_workspace_file = 'lo.workspace1'
+        with open(codelite_workspace_file, 'w+') as f:
+            f.write(self.generate_workspace_content())
+
+    def generate_workspace_content(self):
+        projects1 = ''
+        projects2 = ''
+        projects3 = ''
+        for module in self.gbuildparser.modulenamelist:
+            projects1 += CodeliteIntegrationGenerator.codelite_projects1_template.format(
+                name = module
+            )
+            projects2 += CodeliteIntegrationGenerator.codelite_projects2_template.format(
+                name = module,
+                config = 'Debug'
+            )
+            projects3 += CodeliteIntegrationGenerator.codelite_projects2_template.format(
+                name = module,
+                config = 'Release'
+            )
+        xml = CodeliteIntegrationGenerator.codelite_workspace_template.format(
+            projects1,
+            projects2,
+            projects3
+        )
+        return xml
+
+
+    codelite_workspace_template = """<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Workspace Name="lo" Database="" SWTLW="Yes">
+  <WorkspaceParserMacros/>
+  <WorkspaceParserPaths>
+    <Include Path="${{WorkspacePath}}/include"/>
+  </WorkspaceParserPaths>
+    {0}
+  <BuildMatrix>
+    <WorkspaceConfiguration Name="Debug" Selected="yes">
+      <Environment/>
+      {1}
+    </WorkspaceConfiguration>
+    <WorkspaceConfiguration Name="Release" Selected="yes">
+      <Environment/>
+      {2}
+    </WorkspaceConfiguration>
+  </BuildMatrix>
+</CodeLite_Workspace>
+"""
+    codelite_projects1_template = """<Project Name="{name}" Path="{name}/{name}.project" Active="No"/>
+"""
+
+    codelite_projects2_template = """<Project Name="{name}" ConfigName="{config}"/>
+"""
 
 def get_options():
     parser = argparse.ArgumentParser(
@@ -1659,6 +1724,7 @@ if __name__ == '__main__':
         'vs2015': VisualStudioIntegrationGenerator,
         'vim': VimIntegrationGenerator,
         'qtcreator': QtCreatorIntegrationGenerator,
+        'codelite'  : CodeliteIntegrationGenerator,
     }
 
     if args.ide not in generators.keys():
