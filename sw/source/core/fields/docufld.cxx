@@ -1657,16 +1657,14 @@ SwPostItField::SwPostItField( SwPostItFieldType* pT,
     , sName( rName )
     , aDateTime( rDateTime )
     , mpText( nullptr )
-    , m_pTextObject( nullptr )
 {
 }
 
 SwPostItField::~SwPostItField()
 {
-    if ( m_pTextObject != nullptr )
+    if ( m_xTextObject.is() )
     {
-        m_pTextObject->DisposeEditSource();
-        m_pTextObject->release();
+        m_xTextObject->DisposeEditSource();
     }
 
     delete mpText;
@@ -1689,7 +1687,7 @@ SwField* SwPostItField::Copy() const
     if (mpText)
         pRet->SetTextObject( new OutlinerParaObject(*mpText) );
 
-    // Note: member <m_pTextObject> not copied.
+    // Note: member <m_xTextObject> not copied.
 
     return pRet;
 }
@@ -1756,21 +1754,20 @@ bool SwPostItField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         break;
     case FIELD_PROP_TEXT:
         {
-            if ( !m_pTextObject )
+            if ( !m_xTextObject.is() )
             {
                 SwPostItFieldType* pGetType = static_cast<SwPostItFieldType*>(GetTyp());
                 SwDoc* pDoc = pGetType->GetDoc();
                 SwTextAPIEditSource* pObj = new SwTextAPIEditSource( pDoc );
-                const_cast <SwPostItField*> (this)->m_pTextObject = new SwTextAPIObject( pObj );
-                m_pTextObject->acquire();
+                const_cast <SwPostItField*> (this)->m_xTextObject = new SwTextAPIObject( pObj );
             }
 
             if ( mpText )
-                m_pTextObject->SetText( *mpText );
+                m_xTextObject->SetText( *mpText );
             else
-                m_pTextObject->SetString( sText );
+                m_xTextObject->SetString( sText );
 
-            uno::Reference < text::XText > xText( m_pTextObject );
+            uno::Reference < text::XText > xText( m_xTextObject.get() );
             rAny <<= xText;
             break;
         }
