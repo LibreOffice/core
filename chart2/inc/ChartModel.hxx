@@ -179,16 +179,20 @@ private:
     bool
         impl_isControllerConnected( const css::uno::Reference< com::sun::star::frame::XController >& xController );
 
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::frame::XController >
         impl_getCurrentController()
                             throw( css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     void SAL_CALL
         impl_notifyModifiedListeners()
                             throw( css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void SAL_CALL
         impl_notifyCloseListeners()
                             throw( css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void SAL_CALL
         impl_notifyStorageChangeListeners()
                             throw(css::uno::RuntimeException);

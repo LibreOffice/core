@@ -66,8 +66,16 @@ public:
                         throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
 protected: //methods
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void setPropertyValue( tScaleProperty eScaleProperty, const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     css::uno::Any getPropertyValue( tScaleProperty eScaleProperty, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 

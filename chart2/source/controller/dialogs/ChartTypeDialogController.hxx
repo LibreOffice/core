@@ -111,6 +111,7 @@ public:
     virtual void    fillExtraControls( const ChartTypeParameter& rParameter
                                      , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
                                      , const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const;
+    /// @throws css::uno::RuntimeException
     virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const throw (css::uno::RuntimeException);
 
     bool                isSubType( const OUString& rServiceName );

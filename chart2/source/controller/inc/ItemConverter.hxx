@@ -145,6 +145,8 @@ protected:
         false.
 
         The default implementation does nothing except showing an assertion
+
+        @throws css::uno::Exception
      */
     virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
         throw (css::uno::Exception, std::exception);
@@ -157,6 +159,8 @@ protected:
         The default implementation returns just false and shows an assertion
 
         @return true if the item changed a property, false otherwise.
+
+        @throws css::uno::Exception
      */
     virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
         throw( css::uno::Exception );

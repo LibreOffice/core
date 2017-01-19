@@ -114,6 +114,7 @@ protected:
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
         throw (css::uno::RuntimeException, std::exception) override;
 
+    /// @throws css::uno::RuntimeException
     void SAL_CALL applyStyles(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram )
         throw (css::uno::RuntimeException);

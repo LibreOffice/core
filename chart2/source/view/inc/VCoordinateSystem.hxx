@@ -50,6 +50,7 @@ public:
     static VCoordinateSystem* createCoordinateSystem( const css::uno::Reference<
                                 css::chart2::XCoordinateSystem >& xCooSysModel );
 
+    /// @throws css::uno::RuntimeException
     void initPlottingTargets(
                   const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
                 , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget

@@ -113,6 +113,7 @@ protected:
                object is already disposed
         @return true, if the component is already disposed and bThrowException is false,
                 false otherwise
+        @throws css::lang::DisposedException
      */
     bool             CheckDisposeState( bool bThrowException = true ) const throw (css::lang::DisposedException);
 
@@ -132,11 +133,15 @@ protected:
     bool     NotifyEvent( EventType eType, const AccessibleUniqueId & rId );
 
     /** Adds a state to the set.
+
+        @throws css::uno::RuntimeException
     */
     void             AddState( sal_Int16 aState ) throw (css::uno::RuntimeException);
 
     /** Removes a state from the set if the set contains the state, otherwise
         nothing is done.
+
+        @throws css::uno::RuntimeException
     */
     void             RemoveState( sal_Int16 aState ) throw (css::uno::RuntimeException);
 
@@ -200,6 +205,9 @@ protected:
 
     /** Is called from getAccessibleChild(). Before this method is called, an
         update of children is done if necessary.
+
+        @throws css::lang::IndexOutOfBoundsException
+        @throws css::uno::RuntimeException
      */
     virtual css::uno::Reference< css::accessibility::XAccessible >
         ImplGetAccessibleChildById( sal_Int32 i ) const
@@ -208,6 +216,8 @@ protected:
 
     /** Is called from getAccessibleChildCount(). Before this method is called,
         an update of children is done if necessary.
+
+        @throws css::uno::RuntimeException
      */
     virtual sal_Int32 ImplGetAccessibleChildCount() const
         throw (css::uno::RuntimeException);

@@ -40,18 +40,33 @@ public:
     const OUString& getOuterName() const { return m_aOuterName;}
     virtual OUString getInnerName() const;
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
                         throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     virtual void setPropertyToDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     virtual css::beans::PropertyState getPropertyState( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
                         throw (css::beans::UnknownPropertyException, css::uno::RuntimeException);
 

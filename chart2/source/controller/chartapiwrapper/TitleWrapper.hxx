@@ -91,6 +91,7 @@ protected:
 
     // character properties have to be handled differently (via the XFormattedString elements)
     void getFastCharacterPropertyValue( sal_Int32 nHandle, css::uno::Any& rValue );
+    /// @throws css::uno::Exception
     void setFastCharacterPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue )
         throw (css::uno::Exception);
 

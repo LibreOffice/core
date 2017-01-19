@@ -40,6 +40,7 @@ public:
     virtual ~VAxisOrGridBase() override;
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix ) override;
+    /// @throws css::uno::RuntimeException
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
           , const ExplicitIncrementData& rIncrement )

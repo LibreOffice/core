@@ -43,6 +43,7 @@ public:
     virtual ~LifeTimeManager();
 
     bool        impl_isDisposed( bool bAssert=true );
+    /// @throws css::uno::RuntimeException
     bool    dispose() throw(css::uno::RuntimeException);
 
 public:
@@ -89,12 +90,15 @@ OOO_DLLPUBLIC_CHARTTOOLS    CloseableLifeTimeManager( css::util::XCloseable* pCl
 OOO_DLLPUBLIC_CHARTTOOLS    virtual ~CloseableLifeTimeManager() override;
 
 OOO_DLLPUBLIC_CHARTTOOLS    bool        impl_isDisposedOrClosed( bool bAssert=true );
+/// @throws css::uno::Exception
 OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_startTryClose(bool bDeliverOwnership)
                     throw ( css::uno::Exception );
+/// @throws css::util::CloseVetoException
 OOO_DLLPUBLIC_CHARTTOOLS    bool    g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, css::util::CloseVetoException& ex )
                     throw ( css::util::CloseVetoException );
 OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose(bool bDeliverOwnership, bool bMyVeto );
 OOO_DLLPUBLIC_CHARTTOOLS    void        g_close_endTryClose_doClose();
+/// @throws css::uno::RuntimeException
 OOO_DLLPUBLIC_CHARTTOOLS    void    g_addCloseListener( const css::uno::Reference< css::util::XCloseListener > & xListener )
                     throw(css::uno::RuntimeException);
 

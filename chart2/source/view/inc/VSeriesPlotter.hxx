@@ -152,6 +152,8 @@ public:
     The parameter nAxisIndex matches this DataSeries property 'AttachedAxisIndex'.
     nAxisIndex must be greater than 0. nAxisIndex==1 referres to the first secondary axis.
     )
+
+    @throws css::uno::RuntimeException
     */
 
     void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )

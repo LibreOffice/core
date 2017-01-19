@@ -64,6 +64,9 @@ protected:
     /** implement this method to provide default values for all properties
         supporting defaults.  If a property does not have a default value, you
         may throw an UnknownPropertyException.
+
+        @throws css::beans::UnknownPropertyException
+        @throws css::uno::RuntimeException
      */
     virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
         throw (css::beans::UnknownPropertyException,

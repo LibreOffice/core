@@ -80,6 +80,7 @@ public:
 
     css::uno::Reference< css::drawing::XShapes > getAdditionalShapes() const;
 
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::drawing::XDrawPage > impl_getDrawPage() const
         throw (css::uno::RuntimeException);
 
