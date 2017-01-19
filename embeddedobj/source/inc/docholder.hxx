@@ -98,12 +98,13 @@ private:
                 const OUString& aContModuleName );
 
 public:
-
+    /// @throws css::uno::Exception
     static void FindConnectPoints(
         const css::uno::Reference< css::container::XIndexAccess >& xMenu,
         sal_Int32 nConnectPoints[2] )
             throw ( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     static css::uno::Reference< css::container::XIndexAccess > MergeMenusForInplace(
         const css::uno::Reference< css::container::XIndexAccess >& xContMenu,
         const css::uno::Reference< css::frame::XDispatchProvider >& xContDisp,

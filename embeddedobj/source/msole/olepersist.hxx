@@ -34,6 +34,8 @@ namespace com { namespace sun { namespace star {
 
 OUString GetNewTempFileURL_Impl( const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory );
 
+/// @throws css::io::IOException
+/// @throws css::uno::RuntimeException
 OUString GetNewFilledTempFile_Impl(
     css::uno::Reference<css::io::XInputStream > const & xInStream,
     css::uno::Reference<css::lang::XMultiServiceFactory> const & xFactory)
