@@ -76,13 +76,15 @@ class VCL_DLLPUBLIC Task
     friend class Scheduler;
     friend struct ImplSchedulerData;
 
-protected:
     ImplSchedulerData *mpSchedulerData; /// Pointer to the element in scheduler list
     const sal_Char    *mpDebugName;     /// Useful for debugging
     TaskPriority       mePriority;      /// Task priority
     bool               mbActive;        /// Currently in the scheduler
 
-    void StartTimer( sal_uInt64 nMS );
+protected:
+    static void StartTimer( sal_uInt64 nMS );
+
+    inline const ImplSchedulerData* GetSchedulerData() const { return mpSchedulerData; }
 
     virtual void SetDeletionFlags();
     /// Is this item ready to be dispatched at nTimeNow
@@ -99,12 +101,13 @@ public:
     Task( const sal_Char *pDebugName );
     Task( const Task& rTask );
     virtual ~Task();
+    Task& operator=( const Task& rTask );
 
     void            SetPriority(TaskPriority ePriority) { mePriority = ePriority; }
     TaskPriority    GetPriority() const { return mePriority; }
 
     void            SetDebugName( const sal_Char *pDebugName ) { mpDebugName = pDebugName; }
-    const char     *GetDebugName() { return mpDebugName; }
+    const char     *GetDebugName() const { return mpDebugName; }
 
     // Call handler
     virtual void    Invoke() = 0;
@@ -113,8 +116,6 @@ public:
     void            Stop();
 
     bool            IsActive() const { return mbActive; }
-
-    Task&      operator=( const Task& rTask );
 };
 
 #endif // INCLUDED_VCL_SCHEDULER_HXX

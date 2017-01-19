@@ -327,19 +327,19 @@ Task& Task::operator=( const Task& rTask )
     return *this;
 }
 
-Task::Task(const sal_Char *pDebugName):
-    mpSchedulerData(nullptr),
-    mpDebugName(pDebugName),
-    mePriority(TaskPriority::HIGH),
-    mbActive(false)
+Task::Task( const sal_Char *pDebugName )
+    : mpSchedulerData( nullptr )
+    , mpDebugName( pDebugName )
+    , mePriority( TaskPriority::HIGH )
+    , mbActive( false )
 {
 }
 
-Task::Task( const Task& rTask ):
-    mpSchedulerData(nullptr),
-    mpDebugName(rTask.mpDebugName),
-    mePriority(rTask.mePriority),
-    mbActive(false)
+Task::Task( const Task& rTask )
+    : mpSchedulerData( nullptr )
+    , mpDebugName( rTask.mpDebugName )
+    , mePriority( rTask.mePriority )
+    , mbActive( false )
 {
     if ( rTask.IsActive() )
         Start();

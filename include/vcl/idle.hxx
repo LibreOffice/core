@@ -39,6 +39,8 @@ protected:
     virtual bool IsIdle() const override;
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const override;
 
+    Idle( bool bAuto, const sal_Char *pDebugName = nullptr );
+
 public:
     Idle( const sal_Char *pDebugName = nullptr );
 
