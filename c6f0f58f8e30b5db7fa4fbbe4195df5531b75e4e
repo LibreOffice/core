@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_6762b0da",
+        "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001510
+      },
+      "writtenOn": "2017-01-19T22:43:02Z",
+      "side": 1,
+      "message": "The reverse-DNS name is explicitly demanded by the spec: https://www.freedesktop.org/software/appstream/docs/chap-Metadata.html#tag-id-generic\n\nThe only exception currently exists for desktop-application components, which do not have their .desktop file renamed to follow the reverse-DNS scheme (see https://specifications.freedesktop.org/desktop-entry-spec/latest/ar01s02.html ).\n\nAny non-desktop-application component which doesn\u0027t follow the scheme, will fail to validate (check with appstreamcli validate \u003cfile\u003e)",
+      "parentUuid": "fa48f94a_cc670324",
+      "revId": "c6f0f58f8e30b5db7fa4fbbe4195df5531b75e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_ec9e8706",
         "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
         "patchSetId": 1
