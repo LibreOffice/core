@@ -78,7 +78,11 @@ public:
 protected:
     void init();
 
+    /// @throws css::beans::UnknownPropertyException
     static void getAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     virtual void putAny( SfxItemPool* pPool, const comphelper::PropertyMapEntry* pEntry, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
 protected:

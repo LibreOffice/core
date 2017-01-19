@@ -81,9 +81,11 @@ public:
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
     )   throw (css::uno::RuntimeException, std::exception) = 0;
     //Add this method to support Form Controls
+    /// @throws css::uno::RuntimeException
     virtual AccessibleControlShape* GetAccControlShapeFromModel
         (css::beans::XPropertySet*)
         throw (css::uno::RuntimeException){return nullptr;};
+    /// @throws css::uno::RuntimeException
     virtual  css::uno::Reference<
             css::accessibility::XAccessible>
         GetAccessibleCaption (const css::uno::Reference<

@@ -423,6 +423,8 @@ protected:
     virtual void SAL_CALL disposing() override;
 
     /** Create a base name string that contains the accessible name.
+
+        @throws css::uno::RuntimeException
     */
     virtual OUString
         CreateAccessibleBaseName()
@@ -439,6 +441,7 @@ protected:
     virtual OUString
         CreateAccessibleDescription()
         throw (css::uno::RuntimeException, std::exception) override;
+    /// @throws css::uno::RuntimeException
     OUString
        GetFullAccessibleName(AccessibleShape *shape)
        throw (css::uno::RuntimeException, std::exception);

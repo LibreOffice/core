@@ -101,6 +101,7 @@ public:
     virtual css::awt::Size SAL_CALL
         getSize() throw( css::uno::RuntimeException, std::exception ) override;
 
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL
         isVisible() throw( css::uno::RuntimeException );
 
@@ -200,6 +201,7 @@ public:
 
 protected:
     // internals
+    /// @throws css::lang::IndexOutOfBoundsException
     void checkChildIndex( long nIndexOfChild ) throw( css::lang::IndexOutOfBoundsException );
 
     /** Selects a new child by index.
@@ -227,9 +229,13 @@ public:
 protected:
 
     /// @Return the object's current bounding box relative to the desktop.
+    ///
+    /// @throws css::uno::RuntimeException
     Rectangle GetBoundingBoxOnScreen() throw( css::uno::RuntimeException );
 
     /// @Return the object's current bounding box relative to the parent object.
+    ///
+    /// @throws css::uno::RuntimeException
     Rectangle GetBoundingBox() throw( css::uno::RuntimeException );
 
     virtual void SAL_CALL disposing() override;
@@ -237,7 +243,7 @@ protected:
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;
 
-    /// throws the exception DisposedException if it's not alive
+    /// @throws css::lang::DisposedException if it's not alive
     void ThrowExceptionIfNotAlive() throw( css::lang::DisposedException );
 
 private:
@@ -410,8 +416,10 @@ public:
     void FireFocusEvent();
 
 protected:
+    /// @throws css::uno::RuntimeException
     Rectangle GetBoundingBoxOnScreen() throw( css::uno::RuntimeException );
 
+    /// @throws css::uno::RuntimeException
     Rectangle const & GetBoundingBox() throw( css::uno::RuntimeException );
 
     void CommitChange( const css::accessibility::AccessibleEventObject& rEvent );
@@ -421,7 +429,7 @@ protected:
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;
 
-    /// throws the exception DisposedException if it's not alive
+    /// @throws css::lang::DisposedException if it's not alive
     void ThrowExceptionIfNotAlive() throw( css::lang::DisposedException );
 
     /// Mutex guarding this object.

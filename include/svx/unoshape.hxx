@@ -164,14 +164,29 @@ protected:
     void endSetPropertyValues();
 
     // override these for special property handling in subcasses. Return true if property is handled
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual bool setPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     virtual bool getPropertyStateImpl( const SfxItemPropertySimpleEntry* pProperty, css::beans::PropertyState& rState ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     virtual bool setPropertyToDefaultImpl( const SfxItemPropertySimpleEntry* pProperty ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
 
 public:
+    /// @throws css::uno::RuntimeException
     SvxShape( SdrObject* pObj ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     SvxShape( SdrObject* pObject, const SfxItemPropertyMapEntry* pEntries, const SvxItemPropertySet* pPropertySet ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     SvxShape() throw (css::uno::RuntimeException);
     virtual ~SvxShape() throw () override;
 
@@ -191,6 +206,7 @@ public:
     void InvalidateSdrObject() { mpObj.reset( nullptr ); };
     SdrObject* GetSdrObject() const {return mpObj.get();}
     void SetShapeType( const OUString& ShapeType ) { maShapeType = ShapeType; }
+    /// @throws css::uno::RuntimeException
     css::uno::Any GetBitmap( bool bMetaFile = false ) const
         throw (css::uno::RuntimeException, std::exception);
 
@@ -211,16 +227,34 @@ public:
     UNO3_GETIMPLEMENTATION_DECL( SvxShape )
 
     // access methods for master objects
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL _getPropertySetInfo(  ) throw(css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL _setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     css::uno::Any SAL_CALL _getPropertyValue( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     css::beans::PropertyState SAL_CALL _getPropertyState( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL _setPropertyToDefault( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     css::uno::Any SAL_CALL _getPropertyDefault( const OUString& aPropertyName )     throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > SAL_CALL _getSupportedServiceNames() throw(css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::uno::Type > SAL_CALL _getTypes(  ) throw(css::uno::RuntimeException);
 
     void setMaster( SvxShapeMaster* pMaster );
@@ -585,10 +619,13 @@ protected:
     virtual bool getPropertyValueImpl( const OUString& rName, const SfxItemPropertySimpleEntry* pProperty, css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
 
 public:
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::beans::PropertyVetoException
     SvxShapePolyPolygon( SdrObject* pObj , css::drawing::PolygonKind eNew ) throw(css::lang::IllegalArgumentException, css::beans::PropertyVetoException);
     virtual ~SvxShapePolyPolygon() throw() override;
 
     // Local support functions
+    /// @throws css::uno::RuntimeException
     void SetPolygon(const basegfx::B2DPolyPolygon& rNew) throw(css::uno::RuntimeException);
     basegfx::B2DPolyPolygon GetPolygon() const throw();
 };
@@ -615,6 +652,7 @@ public:
     virtual ~SvxShapePolyPolygonBezier() throw() override;
 
     // Local support functions
+    /// @throws css::uno::RuntimeException
     void SetPolygon(const basegfx::B2DPolyPolygon & rNew) throw(css::uno::RuntimeException);
     basegfx::B2DPolyPolygon GetPolygon() const throw();
 };

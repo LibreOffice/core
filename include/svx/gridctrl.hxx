@@ -351,6 +351,7 @@ protected:
     */
     virtual void PostExecuteRowContextMenu(sal_uInt16 nRow, const PopupMenu& rMenu, sal_uInt16 nExecutionResult);
 
+    /// @throws css::uno::RuntimeException
     void DataSourcePropertyChanged(const css::beans::PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception);
 
     void FieldValueChanged(sal_uInt16 _nId, const css::beans::PropertyChangeEvent& _evt);

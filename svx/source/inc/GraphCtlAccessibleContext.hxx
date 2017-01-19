@@ -158,6 +158,7 @@ public:
     virtual Size LogicToPixel (const Size& rSize) const override;
 
 protected:
+    /// @throws css::lang::IndexOutOfBoundsException
     void checkChildIndexOnSelection( long nIndexOfChild ) throw (css::lang::IndexOutOfBoundsException );
 
 public:
@@ -181,11 +182,15 @@ protected:
      Rectangle GetBoundingBoxOnScreen() throw (css::uno::RuntimeException);
 
     /// Return the object's current bounding box relative to the parent object.
+    ///
+    /// @throws css::uno::RuntimeException
     Rectangle GetBoundingBox() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL disposing() final override;
 
 private:
+    /// @throws css::uno::RuntimeException
+    /// @throws css::lang::IndexOutOfBoundsException
     SdrObject* getSdrObject( sal_Int32 nIndex )
         throw( css::uno::RuntimeException, css::lang::IndexOutOfBoundsException );
 

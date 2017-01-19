@@ -69,7 +69,10 @@ public:
     void init( const Reference< XAccessible>& xAccessible, const Reference< XTable >& xTable );
     void dispose();
 
+    /// @throws IndexOutOfBoundsException
+    /// @throws RuntimeException
     Reference< XAccessible > getAccessibleChild(sal_Int32 i) throw (IndexOutOfBoundsException, RuntimeException);
+    /// @throws IndexOutOfBoundsException
     void getColumnAndRow( sal_Int32 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow ) throw (IndexOutOfBoundsException );
 
     // XModifyListener
@@ -85,6 +88,8 @@ public:
     sal_Int32 mRowCount, mColCount;
     //get the cached AccessibleCell from XCell
     rtl::Reference< AccessibleCell > getAccessibleCell (const Reference< XCell >& xCell);
+    /// @throws IndexOutOfBoundsException
+    /// @throws RuntimeException
     rtl::Reference< AccessibleCell > getAccessibleCell (sal_Int32 nRow, sal_Int32 nColumn) throw (IndexOutOfBoundsException, RuntimeException);
 };
 

@@ -43,6 +43,7 @@ public:
 
     virtual ~SvxXMLXTableExportComponent() override;
 
+    /// @throws css::uno::RuntimeException
     static bool save( const OUString& rURL,
                       const css::uno::Reference< css::container::XNameContainer >& xTable,
                       const css::uno::Reference< css::embed::XStorage > &xStorage,

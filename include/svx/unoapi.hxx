@@ -38,6 +38,8 @@ enum class SdrInventor : sal_uInt32;
 /**
  * Creates a StarOffice API wrapper with the given type and inventor
  * Deprecated: This will be replaced with a function returning XShape.
+ *
+ * @throws css::uno::RuntimeException
  */
 SVX_DLLPUBLIC SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer)
     throw (css::uno::RuntimeException, std::exception);
@@ -75,6 +77,8 @@ SVX_DLLPUBLIC bool SvxFieldUnitToMeasureUnit( const FieldUnit nVcl, short& eApi 
 /**
  * If the given name is a predefined name for the current language it is replaced by
  * the corresponding API name.
+ *
+ * @throws std::exception
 */
 SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
     SvxUnogetApiNameForItem(const sal_Int16 nWhich, const OUString& rInternalName) throw(std::exception);
@@ -82,6 +86,8 @@ SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
 /**
  * If the given name is a predefined API name it is replaced by the predefined name
  * for the current language.
+ *
+ * @throws std::exception
 */
 SVX_DLLPUBLIC SAL_WARN_UNUSED_RESULT OUString
     SvxUnogetInternalNameForItem(const sal_Int16 nWhich, const OUString& rApiName) throw(std::exception);

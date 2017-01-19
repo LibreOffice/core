@@ -35,6 +35,7 @@ public:
     virtual ~TableColumns() override;
 
     void dispose();
+    /// @throws css::uno::RuntimeException
     void throwIfDisposed() const throw (css::uno::RuntimeException);
 
     // XTableColumns

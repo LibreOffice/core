@@ -130,13 +130,15 @@ public:
     void FireAccessibleEvent (short nEventId, const css::uno::Any& rOld, const css::uno::Any& rNew);
     virtual void SAL_CALL disposing() override;
 
+    /// @throws css::uno::RuntimeException
     Rectangle GetBoundingBoxOnScreen() throw( css::uno::RuntimeException );
 
+    /// @throws css::uno::RuntimeException
     Rectangle const & GetBoundingBox() throw( css::uno::RuntimeException );
 
     /// @returns true if it's disposed or in disposing
     inline bool IsAlive() const;
-    /// throws the exception DisposedException if it's not alive
+    /// @throws css::lang::DisposedException if it's not alive
     void ThrowExceptionIfNotAlive() throw( css::lang::DisposedException );
 
 

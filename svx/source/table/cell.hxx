@@ -198,6 +198,7 @@ protected:
     SVX_DLLPRIVATE static css::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap );
 
 private:
+    /// @throws css::uno::RuntimeException
     SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw(css::uno::RuntimeException);
     SVX_DLLPRIVATE virtual ~Cell() throw() override;
 

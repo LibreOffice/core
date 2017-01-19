@@ -126,7 +126,10 @@ public:
         GetChild (long nIndex)
         throw (css::uno::RuntimeException,
                css::lang::IndexOutOfBoundsException);
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::accessibility::XAccessible> GetChild (const css::uno::Reference< css::drawing::XShape>& xShape) throw (css::uno::RuntimeException);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::drawing::XShape> GetChildShape (long nIndex)
             throw (css::lang::IndexOutOfBoundsException,
                    css::uno::RuntimeException);

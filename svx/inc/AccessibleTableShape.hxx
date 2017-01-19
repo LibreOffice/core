@@ -125,6 +125,7 @@ public:
     using AccessibleShape::disposing;
     friend class AccessibleTableHeaderShape;
 
+    /// @throws css::lang::IndexOutOfBoundsException
     void getColumnAndRow( sal_Int32 nChildIndex, sal_Int32& rnColumn, sal_Int32& rnRow ) throw (css::lang::IndexOutOfBoundsException );
     // overwrite the SetState & ResetState to do special operation for table cell's internal text
     virtual bool SetState (sal_Int16 aState) override;
@@ -140,6 +141,7 @@ protected:
 
     sdr::table::SvxTableController* getTableController();
 
+    /// @throws css::lang::IndexOutOfBoundsException
     void checkCellPosition( sal_Int32 nCol, sal_Int32 nRow ) throw ( css::lang::IndexOutOfBoundsException );
 
 private:

@@ -35,7 +35,13 @@ class SvxShapeMaster
 public:
     virtual bool queryAggregation( const css::uno::Type & rType, css::uno::Any& aAny ) = 0;
 
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException) = 0;
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue )
         throw (css::beans::UnknownPropertyException,
                css::beans::PropertyVetoException,
@@ -43,18 +49,30 @@ public:
                css::lang::WrappedTargetException,
                css::uno::RuntimeException,
                std::exception) = 0;
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName )
         throw (css::beans::UnknownPropertyException,
                css::lang::WrappedTargetException,
                css::uno::RuntimeException,
                std::exception) = 0;
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     virtual css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException) = 0;
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException) = 0;
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName )  throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) = 0;
 
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException) = 0;
 
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException) = 0;
 
     virtual void dispose() = 0;

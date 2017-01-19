@@ -78,6 +78,7 @@ using namespace ::dbtools;
 class ScriptEventListenerWrapper : public cppu::WeakImplHelper< XScriptListener >
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException )
         :m_rModel( _rModel )
         ,m_attemptedListenerCreation( false )

@@ -250,6 +250,7 @@ public:
     virtual void SAL_CALL disjunctiveTermAdded( const FilterEvent& Event ) throw (RuntimeException, std::exception) override;
 
 // helpers
+    /// @throws RuntimeException
     void dispose() throw( RuntimeException );
 
     void AddOrRemoveListener( const Reference< XIndexAccess >& _rxControllers, const bool _bAdd );

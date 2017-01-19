@@ -136,6 +136,8 @@ public:
         ShapeTypeDescriptor aDescriptorList[]);
 
     /// get the accessible base name for an object
+    ///
+    /// @throws css::uno::RuntimeException
     static OUString CreateAccessibleBaseName (
         const css::uno::Reference< css::drawing::XShape >& rxShape)
             throw (css::uno::RuntimeException, std::exception);

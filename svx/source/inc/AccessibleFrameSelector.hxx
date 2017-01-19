@@ -103,6 +103,7 @@ protected:
     DECL_LINK( WindowEventListener, VclWindowEvent&, void );
 
 private:
+    /// @throws css::uno::RuntimeException
     void                IsValid() throw (css::uno::RuntimeException);
     void                RemoveFrameSelEventListener();
 

@@ -118,6 +118,8 @@ public:
     */
     long GetChildCount() const throw ();
 
+    /// @throws css::uno::RuntimeException
+    /// @throws css::lang::IndexOutOfBoundsException
     css::uno::Reference<css::drawing::XShape> GetChildShape(long nIndex)
         throw (css::uno::RuntimeException,
                css::lang::IndexOutOfBoundsException);
@@ -149,6 +151,7 @@ public:
             Returns a reference to the requested accessible child.  This
             reference is empty if it has not been possible to create the
             accessible object of the corresponding shape.
+        @throws css::uno::RuntimeException
     */
     css::uno::Reference<css::accessibility::XAccessible>
         GetChild (ChildDescriptor& aChildDescriptor,sal_Int32 _nIndex)
@@ -165,6 +168,7 @@ public:
             Returns a reference to the requested accessible child.  The
             reference is empty if there is no shape descriptor that
             associates the shape with an accessible object.
+        @throws css::uno::RuntimeException
     */
     css::uno::Reference<css::accessibility::XAccessible>
         GetChild (const css::uno::Reference<css::drawing::XShape>& xShape)

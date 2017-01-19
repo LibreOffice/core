@@ -40,6 +40,8 @@ public:
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::uno::XInterface > SAL_CALL createTextField( const OUString& aServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException);
     // internal
     static css::uno::Sequence< OUString >

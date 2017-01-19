@@ -125,9 +125,13 @@ public:
     const css::uno::Reference< css::beans::XPropertySet >&        getPropertySet() const      { return m_xPropertyAccess; }
 
     // css::uno::Reference< css::sdbcx::XRowLocate>
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     css::uno::Any getBookmark()
         throw( css::sdbc::SQLException, css::uno::RuntimeException )
     { return m_xBookmarkOperations->getBookmark(); }
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     bool moveToBookmark(const css::uno::Any& bookmark) throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
 
     // css::sdbc::XResultSet
@@ -146,6 +150,7 @@ public:
     void refreshRow()                       { m_xMoveOperations->refreshRow(); }
     bool rowDeleted()                       { return m_xMoveOperations->rowDeleted(); }
     // css::sdbcx::XColumnsSupplier
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::container::XNameAccess> getColumns() const throw( css::uno::RuntimeException ) { return m_xColumnsSupplier->getColumns(); }
 private:
     void ImplConstruct(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned);
@@ -163,6 +168,7 @@ class SAL_WARN_UNUSED FmXDisposeListener
 public:
     virtual ~FmXDisposeListener();
 
+    /// @throws css::uno::RuntimeException
     virtual void disposing(const css::lang::EventObject& _rEvent, sal_Int16 _nId) throw( css::uno::RuntimeException ) = 0;
 
 protected:

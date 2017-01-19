@@ -33,6 +33,7 @@ namespace svxform
     class DispatchInterceptor
     {
     public:
+        /// @throws css::uno::RuntimeException
         virtual css::uno::Reference< css::frame::XDispatch> interceptedQueryDispatch(
             const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( css::uno::RuntimeException ) = 0;
 

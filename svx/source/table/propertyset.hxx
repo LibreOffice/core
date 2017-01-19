@@ -44,6 +44,7 @@ public:
 
     void addProperties( const PropertyVector& rProps );
 
+    /// @throws css::beans::UnknownPropertyException
     const css::beans::Property& getProperty( const OUString& aName ) throw (css::beans::UnknownPropertyException );
     const css::beans::Property* hasProperty( const OUString& aName );
 

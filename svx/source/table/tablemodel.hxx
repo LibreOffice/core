@@ -162,7 +162,9 @@ private:
     */
     virtual void SAL_CALL disposing() override;
 
+    /// @throws css::lang::IndexOutOfBoundsException
     TableRowRef getRow( sal_Int32 nRow ) const throw (css::lang::IndexOutOfBoundsException);
+    /// @throws css::lang::IndexOutOfBoundsException
     TableColumnRef getColumn( sal_Int32 nColumn ) const throw (css::lang::IndexOutOfBoundsException);
 
     void updateRows();

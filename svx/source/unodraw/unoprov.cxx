@@ -1116,6 +1116,7 @@ bool SvxUnoGetResourceRanges( const short nWhich, int& nApiResIds, int& nIntResI
     return true;
 }
 
+/// @throws std::exception
 bool SvxUnoConvertResourceString( int nSourceResIds, int nDestResIds, int nCount, OUString& rString ) throw(std::exception)
 {
     // first, calculate the search string length without an optional number behind the name
@@ -1269,7 +1270,7 @@ static const sal_uInt16 SvxUnoColorNameResId[] =
     RID_SVXSTR_COLOR_TANGO_ALUMINIUM
 };
 
-
+/// @throws std::exception
 bool SvxUnoConvertResourceString( const sal_uInt16* pSourceResIds, const sal_uInt16* pDestResIds, int nCount, OUString& rString ) throw (std::exception)
 {
     //We replace e.g. "Gray 10%" with the translation of Gray, but we shouldn't

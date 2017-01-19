@@ -41,6 +41,7 @@ public:
     virtual ~TableRow() override;
 
     void dispose();
+    /// @throws css::uno::RuntimeException
     void throwIfDisposed() const throw (css::uno::RuntimeException);
 
     TableRow& operator=( const TableRow& );

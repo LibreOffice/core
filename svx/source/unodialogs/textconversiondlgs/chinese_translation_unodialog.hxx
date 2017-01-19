@@ -79,6 +79,7 @@ public:
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
+    /// @throws css::uno::Exception
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
             create( css::uno::Reference< css::uno::XComponentContext > const & ) throw(css::uno::Exception)
     {
