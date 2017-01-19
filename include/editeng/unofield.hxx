@@ -38,6 +38,8 @@ class SvxUnoFieldData_Impl;
 class SfxItemPropertySet;
 class SvxFieldData;
 
+/// @throws css::uno::Exception
+/// @throws css::uno::RuntimeException
 css::uno::Reference< css::uno::XInterface > EDITENG_DLLPUBLIC SAL_CALL SvxUnoTextCreateTextField(
     const OUString& ServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException);
 

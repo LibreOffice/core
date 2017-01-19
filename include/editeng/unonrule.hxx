@@ -33,6 +33,7 @@
 
 EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( const SvxNumRule* pRule ) throw();
 EDITENG_DLLPUBLIC css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule() throw();
+/// @throws css::lang::IllegalArgumentException
 const SvxNumRule& SvxGetNumRule( css::uno::Reference< css::container::XIndexReplace > const & xRule ) throw( css::lang::IllegalArgumentException );
 EDITENG_DLLPUBLIC css::uno::Reference< css::ucb::XAnyCompare > SvxCreateNumRuleCompare() throw();
 
@@ -72,8 +73,11 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // internal
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence<css::beans::PropertyValue> getNumberingRuleByIndex( sal_Int32 nIndex) const
         throw (css::uno::RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
+    /// @throws css::lang::IllegalArgumentException
     void setNumberingRuleByIndex(const css::uno::Sequence<css::beans::PropertyValue>& rProperties, sal_Int32 nIndex)
         throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception);
 

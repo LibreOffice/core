@@ -205,10 +205,14 @@ namespace accessibility
         virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getRunAttributes( sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
 
         // child-related methods from XAccessibleContext
+        /// @throws css::uno::RuntimeException
         virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw (css::uno::RuntimeException, std::exception);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::uno::RuntimeException
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception);
 
         // child-related methods from XAccessibleComponent
+        /// @throws css::uno::RuntimeException
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception);
 
     protected:

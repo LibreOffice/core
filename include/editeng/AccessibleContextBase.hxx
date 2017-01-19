@@ -102,6 +102,7 @@ public:
             whether the given description overrules the existing one.  An
             origin with a lower numerical value overrides one with a higher
             value.
+        @throws css::uno::RuntimeException
     */
     void SetAccessibleDescription (
         const OUString& rsDescription,
@@ -116,6 +117,7 @@ public:
             The origin of the name.  This is used to determine whether the
             given name overrules the existing one.  An origin with a lower
             numerical value overrides one with a higher value.
+        @throws css::uno::RuntimeException
     */
     void SetAccessibleName (
         const OUString& rsName,
@@ -162,6 +164,8 @@ public:
 
         @param rRelationSet
             The new relation set that replaces the old one.
+
+        @throws css::uno::RuntimeException
     */
     void SetRelationSet (
         const css::uno::Reference< css::accessibility::XAccessibleRelationSet>& rxRelationSet)
@@ -290,6 +294,7 @@ protected:
         @return
             The returned string is a unique (among the accessible object's
             siblings) name.
+        @throws css::uno::RuntimeException
     */
     virtual OUString CreateAccessibleName()
         throw (css::uno::RuntimeException, std::exception);
@@ -298,6 +303,7 @@ protected:
         more than once.
         @return
             Descriptive string.  Not necessarily unique.
+        @throws css::uno::RuntimeException
     */
     virtual OUString
         CreateAccessibleDescription()
@@ -309,6 +315,7 @@ protected:
         state of being disposed).  If that is the case then
         DisposedException is thrown to inform the (indirect) caller of the
         foul deed.
+        @throws css::lang::DisposedException
     */
     void ThrowIfDisposed()
         throw (css::lang::DisposedException);

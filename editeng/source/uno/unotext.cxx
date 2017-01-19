@@ -2037,6 +2037,9 @@ void SAL_CALL SvxUnoTextBase::moveTextRange( const uno::Reference< text::XTextRa
 {
 }
 
+/// @throws lang::IllegalArgumentException
+/// @throws beans::UnknownPropertyException
+/// @throws uno::RuntimeException
 void SvxPropertyValuesToItemSet(
         SfxItemSet &rItemSet,
         const uno::Sequence< beans::PropertyValue >& rPropertyVaules,

@@ -114,6 +114,7 @@ public:
 
     //=====  XTypeProvider  ===================================================
 
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Sequence< css::uno::Type> SAL_CALL
         getTypes()
         throw (css::uno::RuntimeException, std::exception);

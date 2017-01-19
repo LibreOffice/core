@@ -256,24 +256,51 @@ protected:
     ESelection              maSelection;
     const SvxItemPropertySet* mpPropSet;
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL _setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue, sal_Int32 nPara = -1 ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     css::uno::Any SAL_CALL _getPropertyValue( const OUString& PropertyName, sal_Int32 nPara = -1 ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL _setPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Sequence< css::uno::Any >& aValues, sal_Int32 nPara = -1 ) throw (css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::uno::Any > SAL_CALL _getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames, sal_Int32 nPara = -1 ) throw (css::uno::RuntimeException);
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     css::beans::PropertyState SAL_CALL _getPropertyState( const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara = -1 ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     css::beans::PropertyState SAL_CALL _getPropertyState( const OUString& PropertyName, sal_Int32 nPara = -1 ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::beans::PropertyState > SAL_CALL _getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName, sal_Int32 nPara = -1  ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
     // returns true if property found or false if unknown property
     static bool _getOnePropertyStates(const SfxItemSet* pSet, const SfxItemPropertySimpleEntry* pMap, css::beans::PropertyState& rState);
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL _setPropertyToDefault( const OUString& PropertyName, sal_Int32 nPara = -1 ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     void _setPropertyToDefault( SvxTextForwarder* pForwarder, const SfxItemPropertySimpleEntry* pMap, sal_Int32 nPara ) throw( css::beans::UnknownPropertyException, css::uno::RuntimeException );
     void SetEditSource( SvxEditSource* _pEditSource ) throw();
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     void getPropertyValue( const SfxItemPropertySimpleEntry* pMap, css::uno::Any& rAny, const SfxItemSet& rSet )
         throw(css::beans::UnknownPropertyException, css::uno::RuntimeException);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::IllegalArgumentException
     void setPropertyValue( const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& rValue, const ESelection& rSelection, const SfxItemSet& rOldSet, SfxItemSet& rNewSet ) throw(css::beans::UnknownPropertyException, css::lang::IllegalArgumentException );
 
     SvxUnoTextRangeBase( const SvxItemPropertySet* _pSet ) throw();
@@ -299,6 +326,7 @@ public:
     SvxEditSource*              GetEditSource() const throw() { return mpEditSource; }
 
     static bool SetPropertyValueHelper( const SfxItemSet& rOldSet, const SfxItemPropertySimpleEntry* pMap, const css::uno::Any& aValue, SfxItemSet& rNewSet, const ESelection* pSelection = nullptr, SvxEditSource* pEditSource = nullptr );
+    /// @throws css::uno::RuntimeException
     static bool GetPropertyValueHelper(  SfxItemSet& rSet, const SfxItemPropertySimpleEntry* pMap, css::uno::Any& aAny, const ESelection* pSelection = nullptr,  SvxEditSource* pEditSource = nullptr  ) throw( css::uno::RuntimeException );
 
     void attachField( const SvxFieldData* pData ) throw();
@@ -404,6 +432,7 @@ public:
     css::uno::Reference< css::text::XTextCursor > createTextCursorBySelection( const ESelection& rSel );
 
     // css::uno::XInterface
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception);
 
     // css::text::XSimpleText
