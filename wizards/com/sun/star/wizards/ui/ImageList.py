@@ -230,7 +230,7 @@ class ImageList(ListDataListener):
                     item.Model.ImageURL = oResources[0]
                 elif len(oResources) == 2:
                     self.oUnoDialog.getPeerConfiguration().setImageUrl(
-                        item.Model, oResources[0], oResources[1])
+                        item.Model, oResources[0])
 
                 item.Model.Tabstop = bool(focusable)
                 if self.refreshOverNull:

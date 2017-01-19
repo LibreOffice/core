@@ -130,7 +130,7 @@ public class UnoDialog2 extends UnoDialog
                 {
                     Short.valueOf((short) 0), 10, UIConsts.INFOIMAGEURL, Integer.valueOf(_posx), Integer.valueOf(_posy), Boolean.FALSE, Integer.valueOf(_iStep), 10
                 });
-        super.getPeerConfiguration().setImageUrl(getModel(xImgControl), UIConsts.INFOIMAGEURL, UIConsts.INFOIMAGEURL_HC);
+        super.getPeerConfiguration().setImageUrl(getModel(xImgControl), UIConsts.INFOIMAGEURL);
         return xImgControl;
     }
 

@@ -30,7 +30,6 @@ public interface UIConsts
     int RID_IMG_FORM = 1100;
     Integer INVISIBLESTEP = 99;
     String INFOIMAGEURL = "private:resource/dbu/image/19205";
-    String INFOIMAGEURL_HC = "private:resource/dbu/image/19230";
     /**
      * The tabindex of the navigation buttons in a wizard must be assigned a very
      * high tabindex because on every step their taborder must appear at the end

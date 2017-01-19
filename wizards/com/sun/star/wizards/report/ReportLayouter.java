@@ -191,11 +191,11 @@ public class ReportLayouter
                     });
             if (m_nLandscapeState == 1)
             {
-                CurUnoDialog.getPeerConfiguration().setImageUrl(aOrientationImage, 1002, 1003);
+                CurUnoDialog.getPeerConfiguration().setImageUrl(aOrientationImage, 1002);
             }
             else
             {
-                CurUnoDialog.getPeerConfiguration().setImageUrl(aOrientationImage, 1000, 1001);
+                CurUnoDialog.getPeerConfiguration().setImageUrl(aOrientationImage, 1000);
             }
         }
         catch (Exception exception)

@@ -62,12 +62,10 @@ public class PeerConfig implements XWindowListener
 
         Object oModel;
         Object oResource;
-        Object oHCResource;
 
-        public ImageUrlTask(Object _oModel, Object _oResource, Object _oHCResource)
+        public ImageUrlTask(Object _oModel, Object _oResource)
         {
             oResource = _oResource;
-            oHCResource = _oHCResource;
             oModel = _oModel;
         }
     }
@@ -154,9 +152,9 @@ public class PeerConfig implements XWindowListener
      * Assigns an image to the property 'ImageUrl' of a dialog control. The image ids that the Resource urls point to
      * may be assigned in a Resource file outside the wizards project
      */
-    public void setImageUrl(Object _ocontrolmodel, String _sResourceUrl, String _sHCResourceUrl)
+    public void setImageUrl(Object _ocontrolmodel, String _sResourceUrl)
     {
-        ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, _sResourceUrl, _sHCResourceUrl);
+        ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, _sResourceUrl);
         this.aImageUrlTasks.add(oImageUrlTask);
     }
 
@@ -165,9 +163,9 @@ public class PeerConfig implements XWindowListener
      * within the wizards project
      * wizards project
      */
-    public void setImageUrl(Object _ocontrolmodel, Object _oResource, Object _oHCResource)
+    public void setImageUrl(Object _ocontrolmodel, Object _oResource)
     {
-        ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, _oResource, _oHCResource);
+        ImageUrlTask oImageUrlTask = new ImageUrlTask(_ocontrolmodel, _oResource);
         this.aImageUrlTasks.add(oImageUrlTask);
     }
 }

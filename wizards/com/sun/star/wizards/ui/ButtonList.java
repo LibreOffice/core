@@ -297,7 +297,7 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             }
             else if (oResources.length == 2)
             {
-                oUnoDialog.getPeerConfiguration().setImageUrl(m_aButtons[i].getModel(), oResources[0], oResources[1]);
+                oUnoDialog.getPeerConfiguration().setImageUrl(m_aButtons[i].getModel(), oResources[0]);
             }
             boolean bTabStop = Boolean.TRUE; // focusable ? Boolean.TRUE : Boolean.FALSE;
             Helper.setUnoPropertyValue(m_aButtons[i].getModel(), "Tabstop", bTabStop);
