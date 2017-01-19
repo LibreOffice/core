@@ -181,6 +181,7 @@ public:
     Reference< XImporter > rImporter;
 };
 
+/// @throws Exception
 Reference< XInterface > HwpImportFilter_CreateInstance(
     const Reference< XMultiServiceFactory >& rSMgr ) throw( Exception )
 {
