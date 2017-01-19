@@ -58,6 +58,7 @@ public:
     virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (uno::RuntimeException, std::exception) override;
 
     // Helper method
+    /// @throws css::uno::RuntimeException
     void setData( const uno::Any& Number, const uno::Any& Source, const uno::Any& Description,
         const uno::Any& HelpFile, const uno::Any& HelpContext ) throw (uno::RuntimeException);
 };

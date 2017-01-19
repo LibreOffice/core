@@ -93,7 +93,9 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
     Reference< XTypeProvider > m_xAggregateTypeProv;
     Sequence< Type >           m_Types;
     SbModule*                m_pMod;
+    /// @throws css::uno::RuntimeException
     SbMethodRef getMethod( const OUString& aName ) throw (RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
     SbPropertyRef getProperty( const OUString& aName ) throw (RuntimeException, std::exception);
 
 public:

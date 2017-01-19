@@ -94,12 +94,19 @@ public:
     void setEventSource( css::uno::XInterface* pxEventSource )
         { mpxEventSource = pxEventSource; }
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::container::ElementExistException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void insertCheck(const OUString& aName, const css::uno::Any& aElement)
         throw (css::lang::IllegalArgumentException,
                css::container::ElementExistException,
                css::lang::WrappedTargetException,
                css::uno::RuntimeException, std::exception);
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void insertNoCheck(const OUString& aName, const css::uno::Any& aElement)
         throw (css::lang::IllegalArgumentException,
                css::lang::WrappedTargetException,
@@ -287,6 +294,7 @@ protected:
           const OUString& StorageURL, bool ReadOnly ) = 0;
     virtual css::uno::Any SAL_CALL createEmptyLibraryElement() = 0;
     virtual bool SAL_CALL isLibraryElementValid(const css::uno::Any& rElement) const = 0;
+    /// @throws css::uno::Exception
     virtual void SAL_CALL writeLibraryElement
     (
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
@@ -313,6 +321,8 @@ protected:
                         const OUString& aTargetURL,
                         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const css::uno::Reference< css::task::XInteractionHandler >& Handler );
 
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
                                           bool bVerifyPasswordOnly=false )
             throw(css::lang::WrappedTargetException,
@@ -346,6 +356,7 @@ protected:
         OUString& aStorageURL,
         OUString& aUnexpandedStorageURL
     );
+    /// @throws css::uno::RuntimeException
     OUString expand_url( const OUString& url )
         throw(css::uno::RuntimeException);
 
