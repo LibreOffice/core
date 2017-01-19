@@ -50,7 +50,11 @@ using namespace ::ooo::vba;
 namespace {
 
 /** Extracts a sheet index from the specified element of the passed sequence.
-    The element may be an integer, a Calc range or ranges object, or a VBA Range object. */
+    The element may be an integer, a Calc range or ranges object, or a VBA Range object.
+
+    @throws lang::IllegalArgumentException
+    @throws uno::RuntimeException
+*/
 SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     VbaEventsHelperBase::checkArgument( rArgs, nIndex );

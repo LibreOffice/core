@@ -23,6 +23,7 @@ class MenuEnumeration : public MenuEnumeration_BASE
     uno::Reference< uno::XComponentContext > m_xContext;
     uno::Reference< container::XEnumeration > m_xEnumeration;
 public:
+    /// @throws uno::RuntimeException
     MenuEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration) throw ( uno::RuntimeException ) : m_xParent( xParent ), m_xContext( xContext ), m_xEnumeration( xEnumeration )
     {
     }

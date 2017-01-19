@@ -59,11 +59,13 @@ protected:
     Components::const_iterator m_it;
 
 public:
+    /// @throws uno::RuntimeException
     WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, const Components& components ) throw ( uno::RuntimeException ) :  m_xContext( xContext ), m_components( components )
     {
         m_it = m_components.begin();
     }
 
+    /// @throws uno::RuntimeException
     explicit WindowComponentEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create(m_xContext);

@@ -44,6 +44,7 @@ class ScVbaChartObject : public ChartObjectImpl_BASE
     std::unique_ptr<ov::ShapeHelper> oShapeHelper;
     css::uno::Reference< css::container::XNamed > xNamedShape;
     OUString const & getPersistName();
+    /// @throws css::script::BasicErrorException
     css::uno::Reference< css::drawing::XShape > setShape() throw ( css::script::BasicErrorException );
 public:
     ScVbaChartObject( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableChart >& _xTableChart, const css::uno::Reference< css::drawing::XDrawPageSupplier >& _xDrawPageSupplier );
@@ -51,6 +52,7 @@ public:
     virtual void SAL_CALL setName( const OUString& sName ) throw (css::uno::RuntimeException, std::exception) override;
     virtual css::uno::Reference< ov::excel::XChart > SAL_CALL getChart() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL Delete() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
+    /// @throws css::script::BasicErrorException
     void Activate() throw ( css::script::BasicErrorException );
     // XHelperInterface
     virtual OUString getServiceImplName() override;

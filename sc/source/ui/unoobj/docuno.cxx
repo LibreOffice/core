@@ -2961,6 +2961,7 @@ uno::Sequence< sheet::opencl::OpenCLPlatform > ScModelObj::getOpenCLPlatforms()
 
 namespace {
 
+/// @throws css::uno::RuntimeException
 void setOpcodeSubsetTest(bool bFlag)
     throw (uno::RuntimeException, std::exception)
 {

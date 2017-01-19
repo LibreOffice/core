@@ -109,22 +109,26 @@ class PasteCellsWarningReseter
 {
 private:
     bool bInitialWarningState;
+    /// @throws uno::RuntimeException
     static uno::Reference< sheet::XGlobalSheetSettings > const & getGlobalSheetSettings() throw ( uno::RuntimeException )
     {
         static uno::Reference< sheet::XGlobalSheetSettings > xProps = sheet::GlobalSheetSettings::create( comphelper::getProcessComponentContext() );
         return xProps;
     }
 
+    /// @throws uno::RuntimeException
     static bool getReplaceCellsWarning() throw ( uno::RuntimeException )
     {
         return getGlobalSheetSettings()->getReplaceCellsWarning();
     }
 
+    /// @throws uno::RuntimeException
     static void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )
     {
         getGlobalSheetSettings()->setReplaceCellsWarning( bState );
     }
 public:
+    /// @throws uno::RuntimeException
     PasteCellsWarningReseter() throw ( uno::RuntimeException )
     {
         bInitialWarningState = getReplaceCellsWarning();

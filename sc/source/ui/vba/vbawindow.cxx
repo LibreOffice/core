@@ -69,6 +69,7 @@ public:
     uno::Reference< frame::XModel > m_xModel;
     Sheets::const_iterator m_it;
 
+    /// @throws uno::RuntimeException
     SelectedSheetsEnum( const uno::Reference< uno::XComponentContext >& xContext, const Sheets& sheets, const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException ) :  m_xContext( xContext ), m_sheets( sheets ), m_xModel( xModel )
     {
         m_it = m_sheets.begin();

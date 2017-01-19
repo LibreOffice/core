@@ -46,10 +46,15 @@ class ScVbaFormatConditions: public CollTestImplHelper< ov::excel::XFormatCondit
     css::uno::Reference< ov::excel::XRange > mxRangeParent;
     css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
 public:
+    /// @throws css::script::BasicErrorException
     void notifyRange() throw ( css::script::BasicErrorException );
+    /// @throws css::script::BasicErrorException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< ov::excel::XFormatCondition > Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    /// @throws css::script::BasicErrorException
     static OUString getA1Formula(const css::uno::Any& _aFormula) throw ( css::script::BasicErrorException );
     OUString getStyleName();
+    /// @throws css::script::BasicErrorException
     void removeFormatCondition( const OUString& _sStyleName, bool _bRemoveStyle) throw ( css::script::BasicErrorException );
     const css::uno::Reference< css::sheet::XSheetConditionalEntries >& getSheetConditionalEntries() const { return mxSheetConditionalEntries; }
     // XFormatConditions

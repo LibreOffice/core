@@ -30,6 +30,7 @@ class WorkbookGlobals;
 class ExcelFilter : public ::oox::core::XmlFilterBase
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit            ExcelFilter(
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext )
                             throw( css::uno::RuntimeException );

@@ -39,6 +39,7 @@ typedef CollTestImplHelper< ov::excel::XHPageBreaks > ScVbaHPageBreaks_BASE;
 class ScVbaHPageBreaks : public ScVbaHPageBreaks_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaHPageBreaks( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     css::uno::Reference< css::sheet::XSheetPageBreak >& xSheetPageBreak) throw (css::uno::RuntimeException);
@@ -63,6 +64,7 @@ typedef CollTestImplHelper< ov::excel::XVPageBreaks > ScVbaVPageBreaks_BASE;
 class ScVbaVPageBreaks : public ScVbaVPageBreaks_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaVPageBreaks( const css::uno::Reference< ov::XHelperInterface >& xParent,
                       const css::uno::Reference< css::uno::XComponentContext >& xContext,
                       css::uno::Reference< css::sheet::XSheetPageBreak >& xSheetPageBreak ) throw ( css::uno::RuntimeException );

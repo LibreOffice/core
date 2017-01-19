@@ -51,16 +51,31 @@ protected:
 
 private:
     /** Checks if selection has been changed compared to selection of last call.
-        @return true, if the selection has been changed. */
+        @return true, if the selection has been changed.
+        @throws css::lang::IllegalArgumentException
+        @throws css::uno::RuntimeException
+    */
     bool isSelectionChanged( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
-    /** Creates a VBA Worksheet object (the argument must contain a sheet index). */
+    /** Creates a VBA Worksheet object (the argument must contain a sheet index).
+        @throws css::lang::IllegalArgumentException
+        @throws css::uno::RuntimeException
+    */
     css::uno::Any createWorksheet( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
-    /** Creates a VBA Range object (the argument must contain a UNO range or UNO range list). */
+    /** Creates a VBA Range object (the argument must contain a UNO range or UNO range list).
+        @throws css::lang::IllegalArgumentException
+        @throws css::uno::RuntimeException
+    */
     css::uno::Any createRange( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
-    /** Creates a VBA Hyperlink object (the argument must contain a UNO cell). */
+    /** Creates a VBA Hyperlink object (the argument must contain a UNO cell).
+        @throws css::lang::IllegalArgumentException
+        @throws css::uno::RuntimeException
+    */
     css::uno::Any createHyperlink( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
-    /** Creates a VBA Window object (the argument must contain a model controller). */
+    /** Creates a VBA Window object (the argument must contain a model controller).
+        @throws css::lang::IllegalArgumentException
+        @throws css::uno::RuntimeException
+    */
     css::uno::Any createWindow( const css::uno::Sequence< css::uno::Any >& rArgs, sal_Int32 nIndex ) const throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception);
 
 private:

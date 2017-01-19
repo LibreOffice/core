@@ -90,14 +90,17 @@ protected:
 
     /** Returns whether the object is alive. Must be called with locked mutex. */
     inline bool implIsAlive() const { return !rBHelper.bDisposed && !rBHelper.bInDispose && mpControl; }
-    /** Throws an exception, if the object is disposed/disposing or any pointer
+    /** @throws css::lang::DisposedException if the object is disposed/disposing or any pointer
         is missing. Should be used with locked mutex! */
     void ensureAlive() const throw( css::lang::DisposedException );
 
     /** Returns the VCL control. Assumes a living object. */
     ScCsvControl& implGetControl() const;
 
-    /** Returns the first child of rxParentObj, which has the role nRole. */
+    /** Returns the first child of rxParentObj, which has the role nRole.
+
+        @throws css::uno::RuntimeException
+    */
     static css::uno::Reference< css::accessibility::XAccessible > implGetChildByRole( const css::uno::Reference< css::accessibility::XAccessible >& rxParentObj, sal_uInt16 nRole )
         throw( css::uno::RuntimeException );
     /** Creates a StateSetHelper and fills it with DEFUNC, OPAQUE, ENABLED, SHOWING and VISIBLE. */
@@ -246,13 +249,13 @@ private:
     virtual OUString SAL_CALL createAccessibleDescription()
         throw( css::uno::RuntimeException, std::exception ) override;
 
-    /** Throws an exception, if the specified character position is invalid (outside 0..len-1). */
+    /** @throws css::lang::IndexOutOfBoundsException if the specified character position is invalid (outside 0..len-1). */
     void ensureValidIndex( sal_Int32 nIndex ) const
         throw( css::lang::IndexOutOfBoundsException );
-    /** Throws an exception, if the specified character position is invalid (outside 0..len). */
+    /** @throws css::lang::IndexOutOfBoundsException if the specified character position is invalid (outside 0..len). */
     void ensureValidIndexWithEnd( sal_Int32 nIndex ) const
         throw( css::lang::IndexOutOfBoundsException );
-    /** Throws an exception, if the specified character range [Start,End) is invalid.
+    /** @throws css::lang::IndexOutOfBoundsException if the specified character range [Start,End) is invalid.
         @descr  If Start>End, swaps Start and End before checking. */
     void ensureValidRange( sal_Int32& rnStartIndex, sal_Int32& rnEndIndex ) const
         throw( css::lang::IndexOutOfBoundsException );
@@ -260,7 +263,10 @@ private:
     /** Returns the VCL ruler control. Assumes a living object. */
     ScCsvRuler& implGetRuler() const;
 
-    /** Builds the entire string buffer. */
+    /** Builds the entire string buffer.
+
+        @throws css::uno::RuntimeException
+    */
     void constructStringBuffer() throw( css::uno::RuntimeException );
     /** Returns the character count of the text. */
     sal_Int32 implGetTextLength() const;
@@ -482,10 +488,10 @@ private:
     virtual OUString SAL_CALL createAccessibleDescription()
         throw( css::uno::RuntimeException, std::exception ) override;
 
-    /** Throws an exception, if nIndex is not a valid child index. */
+    /** @throws css::lang::IndexOutOfBoundsException if nIndex is not a valid child index. */
     void ensureValidIndex( sal_Int32 nIndex ) const
         throw( css::lang::IndexOutOfBoundsException );
-    /** Throws an exception, if the specified position is invalid. */
+    /** @Throws css::lang::IndexOutOfBoundsException if the specified position is invalid. */
     void ensureValidPosition( sal_Int32 nRow, sal_Int32 nColumn ) const
         throw( css::lang::IndexOutOfBoundsException );
 

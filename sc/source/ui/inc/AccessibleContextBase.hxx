@@ -78,9 +78,11 @@ protected:
     virtual ~ScAccessibleContextBase() override;
 public:
 
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL isShowing(  )
         throw (css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     virtual bool SAL_CALL isVisible()
         throw (css::uno::RuntimeException, std::exception);
 
@@ -255,21 +257,29 @@ public:
 
 protected:
     /// Return this object's description.
+    ///
+    /// @throws css::uno::RuntimeException
     virtual OUString SAL_CALL
         createAccessibleDescription()
         throw (css::uno::RuntimeException, std::exception);
 
     /// Return the object's current name.
+    ///
+    /// @throws css::uno::RuntimeException
     virtual OUString SAL_CALL
         createAccessibleName()
         throw (css::uno::RuntimeException,
                std::exception);
 
     /// Return the object's current bounding box relative to the desktop.
+    ///
+    /// @throws css::uno::RuntimeException
     virtual Rectangle GetBoundingBoxOnScreen() const
         throw (css::uno::RuntimeException, std::exception);
 
     /// Return the object's current bounding box relative to the parent object.
+    ///
+    /// @throws css::uno::RuntimeException
     virtual Rectangle GetBoundingBox() const
         throw (css::uno::RuntimeException, std::exception);
 
@@ -287,6 +297,7 @@ protected:
 
     bool IsDefunc() const { return rBHelper.bDisposed; }
 
+    /// @throws css::lang::DisposedException
     void IsObjectValid() const
         throw (css::lang::DisposedException);
 

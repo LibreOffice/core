@@ -50,14 +50,23 @@ friend class ScVbaAxis;
     css::uno::Reference< css::chart::XTwoAxisYSupplier > xTwoAxisYSupplier;
 
     static css::uno::Sequence< OUString > getDefaultSeriesDescriptions( sal_Int32 nCount );
+    /// @throws css::script::BasicErrorException
     void setDefaultChartType()throw ( css::script::BasicErrorException ) ;
+    /// @throws css::script::BasicErrorException
     void setDiagram( const OUString& _sDiagramType) throw( css::script::BasicErrorException );
+    /// @throws css::uno::RuntimeException
     bool isStacked() throw ( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     bool is100PercentStacked() throw ( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     sal_Int32 getStackedType( sal_Int32 _nStacked, sal_Int32 _n100PercentStacked, sal_Int32 _nUnStacked ) throw ( css::uno::RuntimeException );
+    /// @throws css::script::BasicErrorException
     sal_Int32 getSolidType(sal_Int32 _nDeep, sal_Int32 _nVertiStacked, sal_Int32 _nVerti100PercentStacked, sal_Int32 _nVertiUnStacked, sal_Int32 _nHoriStacked, sal_Int32 _nHori100PercentStacked, sal_Int32 _nHoriUnStacked) throw ( css::script::BasicErrorException );
+    /// @throws css::script::BasicErrorException
     sal_Int32 getStockUpDownValue(sal_Int32 _nUpDown, sal_Int32 _nNotUpDown) throw (css::script::BasicErrorException);
+    /// @throws css::script::BasicErrorException
     bool hasMarkers() throw ( css::script::BasicErrorException );
+    /// @throws css::script::BasicErrorException
     sal_Int32 getMarkerType(sal_Int32 _nWithMarkers, sal_Int32 _nWithoutMarkers) throw ( css::script::BasicErrorException );
     void assignDiagramAttributes();
 public:
@@ -65,7 +74,10 @@ public:
 
     // Non-interface
     const css::uno::Reference< css::beans::XPropertySet >& xDiagramPropertySet() const { return mxDiagramPropertySet; }
+    /// @throws css::uno::RuntimeException
     bool is3D() throw ( css::uno::RuntimeException );
+    /// @throws css::script::BasicErrorException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::beans::XPropertySet > getAxisPropertySet(sal_Int32 _nAxisType, sal_Int32 _nAxisGroup) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
     // Methods
     virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;

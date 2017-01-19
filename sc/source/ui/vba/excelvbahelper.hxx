@@ -47,15 +47,23 @@ ScDocShell* getDocShell( const css::uno::Reference< css::frame::XModel>& xModel 
 ScTabViewShell* getCurrentBestViewShell( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 SfxViewFrame* getViewFrame( const css::uno::Reference< css::frame::XModel >& xModel );
 
+/// @throws css::uno::RuntimeException
 css::uno::Reference< css::sheet::XUnnamedDatabaseRanges > GetUnnamedDataBaseRanges( ScDocShell* pShell ) throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 css::uno::Reference< css::sheet::XDatabaseRange > GetAutoFiltRange( ScDocShell* pShell, sal_Int16 nSheet ) throw ( css::uno::RuntimeException );
+/// @throws css::uno::RuntimeException
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet ) throw ( css::uno::RuntimeException, std::exception );
+/// @throws css::uno::RuntimeException
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::sheet::XSheetCellRangeContainer >& xRanges ) throw ( css::uno::RuntimeException, std::exception );
+/// @throws css::uno::RuntimeException
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::uno::RuntimeException, std::exception );
+/// @throws css::uno::RuntimeException
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::table::XCell >& xCell ) throw ( css::uno::RuntimeException, std::exception );
+/// @throws css::uno::RuntimeException
 css::uno::Reference< ooo::vba::XHelperInterface > getUnoSheetModuleObj( const css::uno::Reference< css::frame::XModel >& xModel, SCTAB nTab ) throw ( css::uno::RuntimeException, std::exception );
 
+/// @throws css::uno::RuntimeException
 ScDocShell* GetDocShellFromRange( const css::uno::Reference< css::uno::XInterface >& xRange ) throw ( css::uno::RuntimeException );
 void setUpDocumentModules( const css::uno::Reference< css::sheet::XSpreadsheetDocument >& xDoc );
 
@@ -67,6 +75,7 @@ public:
 
 // Extracts a implementation object ( via XUnoTunnel ) from an uno object
 // by default will throw if unsuccessful.
+/// @throws css::uno::RuntimeException
 template < typename ImplObject >
     ImplObject* getImplFromDocModuleWrapper( const css::uno::Reference< css::uno::XInterface >& rxWrapperIf, bool bThrow = true ) throw (css::uno::RuntimeException)
     {

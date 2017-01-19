@@ -78,6 +78,7 @@ getWorkbook( uno::Reference< uno::XComponentContext >& xContext, const uno::Refe
 class WorkBookEnumImpl : public EnumerationHelperImpl
 {
 public:
+    /// @throws uno::RuntimeException
     WorkBookEnumImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override

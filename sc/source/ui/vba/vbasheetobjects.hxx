@@ -42,10 +42,14 @@ typedef CollTestImplHelper< ov::XCollection > ScVbaSheetObjects_BASE;
 class ScVbaSheetObjectsBase : public ScVbaSheetObjects_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit ScVbaSheetObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (css::uno::RuntimeException);
     virtual ~ScVbaSheetObjectsBase() override;
 
-    /** Updates the collection by fetching all shapes from the draw page. */
+    /** Updates the collection by fetching all shapes from the draw page.
+
+        @throws css::uno::RuntimeException
+    */
     void collectShapes() throw (css::uno::RuntimeException);
 
     // XEnumerationAccess
@@ -70,6 +74,7 @@ typedef ::cppu::ImplInheritanceHelper< ScVbaSheetObjectsBase, ov::excel::XGraphi
 class ScVbaGraphicObjectsBase : public ScVbaGraphicObjects_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (css::uno::RuntimeException);
 
     // XGraphicObjects
@@ -84,6 +89,7 @@ public:
 class ScVbaButtons : public ScVbaGraphicObjectsBase
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit ScVbaButtons(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,

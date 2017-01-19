@@ -57,17 +57,22 @@ class ScVbaWorksheet : public WorksheetImpl_BASE
     ::rtl::Reference< ScVbaSheetObjectsBase > mxButtons;
     bool mbVeryHidden;
 
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< ov::excel::XWorksheet > getSheetAtOffset(SCTAB offset) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< ov::excel::XRange > getSheetRange() throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::container::XNameAccess > getFormControls();
     css::uno::Any getControlShape( const OUString& sName );
 
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaWorksheet( const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::sheet::XSpreadsheet >& xSheet,
         const css::uno::Reference< css::frame::XModel >& xModel )throw (css::uno::RuntimeException)  ;
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     ScVbaWorksheet( css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
     virtual ~ScVbaWorksheet() override;
@@ -154,6 +159,7 @@ public:
     virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
     // CodeName
     virtual OUString SAL_CALL getCodeName() throw (css::uno::RuntimeException, std::exception) override;
+    /// @throws css::uno::RuntimeException
     sal_Int16 getSheetID() throw (css::uno::RuntimeException);
 
     virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName, const css::uno::Any& IgnorePrintAreas ) throw (css::uno::RuntimeException, std::exception) override;

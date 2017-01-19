@@ -32,10 +32,13 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XHyperlink > HyperlinkImpl_
 class ScVbaHyperlink : public HyperlinkImpl_BASE
 {
 public:
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     ScVbaHyperlink(
         const css::uno::Sequence< css::uno::Any >& rArgs,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     ScVbaHyperlink(
         const css::uno::Reference< ov::XHelperInterface >& rxAnchor,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -65,8 +68,11 @@ public:
 private:
     typedef ::std::pair< OUString, OUString > UrlComponents;
 
+    /// @throws css::uno::RuntimeException
     void ensureTextField() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     UrlComponents getUrlComponents() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setUrlComponents( const UrlComponents& rUrlComp ) throw (css::uno::RuntimeException);
 
 private:

@@ -25,6 +25,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
+/// @throws css::script::BasicErrorException
 static ScVbaFormatConditions*
 lcl_getScVbaFormatConditionsPtr( const uno::Reference< excel::XFormatConditions >& xFormatConditions ) throw ( script::BasicErrorException )
 {

@@ -216,10 +216,13 @@ protected:
     virtual const SfxItemPropertyMap& GetItemPropertyMap();
     css::beans::PropertyState GetOnePropertyState(
                                 sal_uInt16 nItemWhich, const SfxItemPropertySimpleEntry* pEntry );
+    /// @throws css::uno::RuntimeException
     virtual void            GetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                 css::uno::Any& )
                                 throw(css::uno::RuntimeException,
                                       std::exception);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     virtual void            SetOnePropertyValue( const SfxItemPropertySimpleEntry* pEntry,
                                                 const css::uno::Any& aValue )
                                 throw(css::lang::IllegalArgumentException,
@@ -623,11 +626,14 @@ protected:
                                       css::uno::RuntimeException,
                                       std::exception) override;
 
+    /// @throws css::lang::IndexOutOfBoundsException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::table::XCell >
                             GetCellByPosition_Impl( sal_Int32 nColumn, sal_Int32 nRow )
                                 throw(css::lang::IndexOutOfBoundsException,
                                     css::uno::RuntimeException);
 
+            /// @throws css::uno::RuntimeException
             void            SetArrayFormula_Impl( const OUString& rFormula,
                                 const OUString& rFormulaNmsp,
                                 const formula::FormulaGrammar::Grammar eGrammar )
@@ -775,6 +781,7 @@ public:
     virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
                             getCellRangeByName( const OUString& aRange )
                                 throw(css::uno::RuntimeException, std::exception) override;
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::table::XCellRange >
                             getCellRangeByName( const OUString& aRange,  const ScAddress::Details& rDetails )
                                 throw(css::uno::RuntimeException);

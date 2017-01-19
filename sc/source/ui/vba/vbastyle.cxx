@@ -34,6 +34,8 @@ ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xMode
     return xStylesAccess;
 }
 
+/// @throws script::BasicErrorException
+/// @throws uno::RuntimeException
 static uno::Reference< beans::XPropertySet >
 lcl_getStyleProps( const OUString& sStyleName, const uno::Reference< frame::XModel >& xModel ) throw ( script::BasicErrorException, uno::RuntimeException )
 {

@@ -135,13 +135,17 @@ private:
     virtual bool IsEditable(
         const css::uno::Reference<css::accessibility::XAccessibleStateSet>& rxParentStates);
 protected:
+    /// @throw css::uno::RuntimeException
     OUString SAL_CALL GetNote()
         throw (css::uno::RuntimeException);
 
+    /// @throw css::uno::RuntimeException
     OUString SAL_CALL GetAllDisplayNote()
         throw (css::uno::RuntimeException, std::exception);
+    /// @throw css::uno::RuntimeException
     OUString SAL_CALL getShadowAttrs()
         throw (css::uno::RuntimeException, std::exception);
+    /// @throw css::uno::RuntimeException
     OUString SAL_CALL getBorderAttrs()
         throw (css::uno::RuntimeException, std::exception);
 public:

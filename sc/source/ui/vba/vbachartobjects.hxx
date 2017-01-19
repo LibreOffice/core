@@ -41,6 +41,7 @@ class ScVbaChartObjects : public ChartObjects_BASE
 public:
     ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, const css::uno::Reference< css::drawing::XDrawPageSupplier >&  _xDrawPageSupplier );
 
+    /// @throws css::script::BasicErrorException
     css::uno::Sequence< OUString > getChartObjectNames() throw( css::script::BasicErrorException );
     void removeByName(const OUString& _sChartName);
 

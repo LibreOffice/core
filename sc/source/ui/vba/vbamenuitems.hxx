@@ -23,6 +23,7 @@ private:
     css::uno::Reference< ov::XCommandBarControls > m_xCommandBarControls;
 
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaMenuItems( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< ov::XCommandBarControls >& xCommandBarControls ) throw( css::uno::RuntimeException );
 
     // XEnumerationAccess

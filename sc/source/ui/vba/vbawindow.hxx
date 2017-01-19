@@ -41,23 +41,29 @@ private:
     css::uno::Reference< ov::excel::XPane > m_xPane;
 
     void init();
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::beans::XPropertySet > getControllerProps() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::beans::XPropertySet > getFrameProps() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::awt::XDevice > getDevice() throw (css::uno::RuntimeException);
 
 protected:
     void SplitAtDefinedPosition( sal_Int32 nColumns, sal_Int32 nRows );
 
 public:
+    /// @throws css::uno::RuntimeException
     void Scroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft, bool bLargeScroll ) throw (css::uno::RuntimeException);
 
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaWindow(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::frame::XModel >& xModel,
         const css::uno::Reference< css::frame::XController >& xController )
         throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     ScVbaWindow(
         const css::uno::Sequence< css::uno::Any >& aArgs,
         const css::uno::Reference< css::uno::XComponentContext >& xContext )

@@ -98,10 +98,12 @@ typedef CollTestImplHelper< ov::excel::XHyperlinks > ScVbaHyperlinks_BASE;
 class ScVbaHyperlinks : private detail::ScVbaHlinkContainerMember, public ScVbaHyperlinks_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit ScVbaHyperlinks(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     explicit ScVbaHyperlinks(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,

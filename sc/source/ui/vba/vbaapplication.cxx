@@ -850,6 +850,7 @@ ScVbaApplication::Calculate() throw(  script::BasicErrorException , uno::Runtime
     xCalculatable->calculateAll();
 }
 
+/// @throws uno::RuntimeException
 static uno::Reference< util::XPathSettings > const & lcl_getPathSettingsService( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException )
 {
     static uno::Reference< util::XPathSettings >  xPathSettings;
@@ -921,7 +922,11 @@ namespace {
 
 typedef ::std::list< ScRange > ListOfScRange;
 
-/** Appends all ranges of a VBA Range object in the passed Any to the list of ranges. */
+/** Appends all ranges of a VBA Range object in the passed Any to the list of ranges.
+
+    @throws script::BasicErrorException
+    @throws uno::RuntimeException
+*/
 void lclAddToListOfScRange( ListOfScRange& rList, const uno::Any& rArg )
         throw (script::BasicErrorException, uno::RuntimeException)
 {
@@ -1024,7 +1029,11 @@ void lclJoinRanges( ListOfScRange& rList )
     }
 }
 
-/** Intersects the passed list with all ranges of a VBA Range object in the passed Any. */
+/** Intersects the passed list with all ranges of a VBA Range object in the passed Any.
+
+    @throws script::BasicErrorException
+    @throws uno::RuntimeException
+*/
 void lclIntersectRanges( ListOfScRange& rList, const uno::Any& rArg )
         throw (script::BasicErrorException, uno::RuntimeException)
 {
@@ -1062,7 +1071,10 @@ void lclIntersectRanges( ListOfScRange& rList, const uno::Any& rArg )
     }
 }
 
-/** Creates a VBA Range object from the passed list of ranges. */
+/** Creates a VBA Range object from the passed list of ranges.
+
+    @throws uno::RuntimeException
+*/
 uno::Reference< excel::XRange > lclCreateVbaRange(
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,

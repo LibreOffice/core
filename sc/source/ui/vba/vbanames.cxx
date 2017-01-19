@@ -43,6 +43,7 @@ class NamesEnumeration : public EnumerationHelperImpl
     uno::Reference< frame::XModel > m_xModel;
     uno::Reference< sheet::XNamedRanges > m_xNames;
 public:
+    /// @throws uno::RuntimeException
     NamesEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel , const uno::Reference< sheet::XNamedRanges >& xNames ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), m_xModel( xModel ), m_xNames( xNames ) {}
 
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override

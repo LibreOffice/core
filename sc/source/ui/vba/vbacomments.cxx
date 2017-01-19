@@ -41,6 +41,7 @@ class CommentEnumeration : public EnumerationHelperImpl
 {
     css::uno::Reference< css::frame::XModel > mxModel;
 public:
+    /// @throws uno::RuntimeException
     CommentEnumeration(
             const uno::Reference< XHelperInterface >& xParent,
             const uno::Reference< uno::XComponentContext >& xContext,

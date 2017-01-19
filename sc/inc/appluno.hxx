@@ -46,28 +46,34 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL
 // Calc document
 css::uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw();
 OUString SAL_CALL ScDocument_getImplementationName() throw();
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL ScDocument_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr, SfxModelFlags _nCreationFlags ) throw( css::uno::Exception, std::exception );
 
 // Calc XML import
 css::uno::Sequence< OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw();
 OUString SAL_CALL ScXMLImport_getImplementationName() throw();
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr ) throw( css::uno::Exception );
 css::uno::Sequence< OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() throw();
 OUString SAL_CALL ScXMLImport_Meta_getImplementationName() throw();
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr ) throw( css::uno::Exception );
 css::uno::Sequence< OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames() throw();
 OUString SAL_CALL ScXMLImport_Styles_getImplementationName() throw();
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr ) throw( css::uno::Exception );
 css::uno::Sequence< OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames() throw();
 OUString SAL_CALL ScXMLImport_Content_getImplementationName() throw();
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr ) throw( css::uno::Exception );
 css::uno::Sequence< OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames() throw();
 OUString SAL_CALL ScXMLImport_Settings_getImplementationName() throw();
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
             const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr ) throw( css::uno::Exception );
 
@@ -79,10 +85,14 @@ class ScSpreadsheetSettings : public cppu::WeakImplHelper<
 private:
     SfxItemPropertySet      aPropSet;
 
+    /// @throws css::uno::RuntimeException
     bool getPropertyBool(const OUString& aPropertyName) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     sal_Int16 getPropertyInt16(const OUString& aPropertyName) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, bool p1) throw (css::uno::RuntimeException)
         { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
+    /// @throws css::uno::RuntimeException
     void setProperty(const OUString& aPropertyName, sal_Int16 p1) throw (css::uno::RuntimeException)
         { setPropertyValue( aPropertyName, css::uno::Any(p1) ); }
 public:

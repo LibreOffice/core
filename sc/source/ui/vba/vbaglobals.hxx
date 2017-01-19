@@ -37,6 +37,7 @@ typedef ::cppu::ImplInheritanceHelper< VbaGlobalsBase, ov::excel::XGlobals > ScV
 class ScVbaGlobals : public ScVbaGlobals_BASE
 {
     css::uno::Reference< ov::excel::XApplication > mxApplication;
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< ov::excel::XApplication > const & SAL_CALL getApplication()
                         throw (css::uno::RuntimeException);
 public:

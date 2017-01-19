@@ -38,6 +38,7 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XCharacters > ScVbaButtonCh
 class ScVbaButtonCharacters : public ScVbaButtonCharacters_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit ScVbaButtonCharacters(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -64,7 +65,9 @@ public:
     VBAHELPER_DECL_XHELPERINTERFACE
 
 private:
+    /// @throws css::uno::RuntimeException
     OUString getFullString() const throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setFullString( const OUString& rString ) throw (css::uno::RuntimeException);
 
 private:
@@ -80,6 +83,7 @@ typedef InheritedHelperInterfaceWeakImpl< ov::excel::XSheetObject > ScVbaSheetOb
 class ScVbaSheetObjectBase : public ScVbaSheetObject_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit ScVbaSheetObjectBase(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -102,13 +106,19 @@ public:
     virtual sal_Bool SAL_CALL getPrintObject() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setPrintObject( sal_Bool bPrintObject ) throw (css::uno::RuntimeException, std::exception) override;
 
-    /** Sets default properties after a new object has been created. */
+    /** Sets default properties after a new object has been created.
+
+        @throws css::uno::RuntimeException
+    */
     void setDefaultProperties( sal_Int32 nIndex ) throw (css::uno::RuntimeException);
 
 protected:
     /** Derived classes return the base name used for new objects. */
     virtual OUString implGetBaseName() const = 0;
-    /** Derived classes set default properties for new drawing objects. */
+    /** Derived classes set default properties for new drawing objects.
+
+        @throws css::uno::RuntimeException
+    */
     virtual void implSetDefaultProperties() throw (css::uno::RuntimeException);
 
 protected:
@@ -133,6 +143,7 @@ public:
         LISTENER_CHANGE         /// XChangeListener.changed
     };
 
+    /// @throws css::uno::RuntimeException
     explicit ScVbaControlObjectBase(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -154,6 +165,7 @@ public:
     virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException, std::exception) override;
 
 protected:
+    /// @throws css::uno::RuntimeException
     sal_Int32 getModelIndexInForm() const throw (css::uno::RuntimeException);
 
 protected:
@@ -168,6 +180,7 @@ typedef ::cppu::ImplInheritanceHelper< ScVbaControlObjectBase, ov::excel::XButto
 class ScVbaButton : public ScVbaButton_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit ScVbaButton(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,

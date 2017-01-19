@@ -40,6 +40,7 @@ public:
     {
     }
 
+    /// @throws css::uno::RuntimeException
     sal_Int32 getAPIStartofRange( const uno::Reference< excel::XRange >& xRange ) throw (css::uno::RuntimeException)
     {
         if( m_bColumn )
@@ -47,6 +48,7 @@ public:
         return xRange->getRow() - 1;
     }
 
+    /// @throws uno::RuntimeException
     sal_Int32 getAPIEndIndexofRange( const uno::Reference< excel::XRange >& xRange, sal_Int32 nUsedStart ) throw (uno::RuntimeException)
     {
         if( m_bColumn )
@@ -54,6 +56,7 @@ public:
         return nUsedStart + xRange->Rows( uno::Any() )->getCount();
     }
 
+    /// @throws uno::RuntimeException
     uno::Sequence<sheet::TablePageBreakData> getAllPageBreaks() throw (uno::RuntimeException)
     {
         if( m_bColumn )
@@ -61,6 +64,7 @@ public:
         return mxSheetPageBreak->getRowPageBreaks();
     }
 
+    /// @throws uno::RuntimeException
     uno::Reference<container::XIndexAccess> getRowColContainer() throw (uno::RuntimeException)
     {
         uno::Reference< table::XColumnRowRange > xColumnRowRange( mxSheetPageBreak, uno::UNO_QUERY_THROW );
@@ -72,7 +76,10 @@ public:
         return xIndexAccess;
     }
 
+    /// @throws uno::RuntimeException
     sheet::TablePageBreakData getTablePageBreakData( sal_Int32 nAPIItemIndex ) throw (uno::RuntimeException);
+    /// @throws css::script::BasicErrorException
+    /// @throws css::uno::RuntimeException
     uno::Any Add( const css::uno::Any& Before ) throw ( css::script::BasicErrorException, css::uno::RuntimeException);
 
     // XIndexAccess

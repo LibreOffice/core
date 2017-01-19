@@ -687,7 +687,9 @@ public:
                                 throw(css::uno::RuntimeException, std::exception) override;
 
     // implementation
+    /// @throws css::uno::RuntimeException
     ScFieldGroup&       getFieldGroup( const OUString& rName ) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void                renameFieldGroup( const OUString& rOldName, const OUString& rNewName ) throw(css::uno::RuntimeException);
 
 private:

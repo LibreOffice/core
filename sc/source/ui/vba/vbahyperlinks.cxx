@@ -31,7 +31,10 @@ using namespace ::com::sun::star;
 
 namespace {
 
-/** Returns true, if every range of rxInner is contained in any range of rScOuter. */
+/** Returns true, if every range of rxInner is contained in any range of rScOuter.
+
+    @throws css::uno::RuntimeException
+*/
 bool lclContains( const ScRangeList& rScOuter, const uno::Reference< excel::XRange >& rxInner ) throw (uno::RuntimeException)
 {
     const ScRangeList& rScInner = ScVbaRange::getScRangeList( rxInner );
@@ -50,7 +53,9 @@ struct EqualAnchorFunctor
     uno::Reference< excel::XRange > mxAnchorRange;
     uno::Reference< msforms::XShape > mxAnchorShape;
     sal_Int32 mnType;
+    /// @throws uno::RuntimeException
     explicit EqualAnchorFunctor( const uno::Reference< excel::XHyperlink >& rxHlink ) throw (uno::RuntimeException);
+    /// @throws uno::RuntimeException
     bool operator()( const uno::Reference< excel::XHyperlink >& rxHlink ) const throw (uno::RuntimeException);
 };
 
@@ -104,11 +109,16 @@ namespace detail {
 class ScVbaHlinkContainer : public ::cppu::WeakImplHelper< container::XIndexAccess >
 {
 public:
+    /// @throws uno::RuntimeException
     explicit ScVbaHlinkContainer() throw (uno::RuntimeException);
+    /// @throws uno::RuntimeException
     explicit ScVbaHlinkContainer( const ScVbaHlinkContainerRef& rxSheetContainer, const ScRangeList& rScRanges ) throw (uno::RuntimeException);
 
     /** Inserts the passed hyperlink into the collection. Will remove a
-        Hyperlink object with the same anchor as the passed Hyperlink object. */
+        Hyperlink object with the same anchor as the passed Hyperlink object.
+
+        @throws uno::RuntimeException
+    */
     void insertHyperlink( const uno::Reference< excel::XHyperlink >& rxHlink ) throw (uno::RuntimeException);
 
     // XIndexAccess

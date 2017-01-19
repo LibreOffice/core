@@ -32,7 +32,9 @@ class ScVbaAxis : public ScVbaAxis_BASE
     sal_Int32 mnType;
     sal_Int32 mnGroup;
     bool bCrossesAreCustomized;
+    /// @throws css::uno::RuntimeException
     ScVbaChart* getChartPtr() throw( css::uno::RuntimeException );
+    /// @throws css::script::BasicErrorException
     bool isValueAxis() throw( css::script::BasicErrorException );
     std::unique_ptr<ov::ShapeHelper> oShapeHelper;
 

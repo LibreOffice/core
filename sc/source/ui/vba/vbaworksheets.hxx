@@ -62,6 +62,8 @@ public:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     static bool nameExists( css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 };
 

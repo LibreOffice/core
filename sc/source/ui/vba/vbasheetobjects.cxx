@@ -53,7 +53,10 @@ inline bool lclGetProperty( Type& orValue, const uno::Reference< beans::XPropert
     return false;
 }
 
-/** Rounds the passed value to a multiple of 0.75 and converts it to 1/100 mm. */
+/** Rounds the passed value to a multiple of 0.75 and converts it to 1/100 mm.
+
+    @throws uno::RuntimeException
+*/
 inline double lclPointsToHmm( const uno::Any& rPoints ) throw (uno::RuntimeException)
 {
     return PointsToHmm( ::rtl::math::approxFloor( rPoints.get< double >() / 0.75 ) * 0.75 );
@@ -71,6 +74,7 @@ inline double lclPointsToHmm( const uno::Any& rPoints ) throw (uno::RuntimeExcep
 class ScVbaObjectContainer : public ::cppu::WeakImplHelper< container::XIndexAccess >
 {
 public:
+    /// @throws uno::RuntimeException
     explicit ScVbaObjectContainer(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -86,17 +90,35 @@ public:
     inline const uno::Type& getVbaType() const { return maVbaType; }
 
     /** Collects all shapes supported by this instance and inserts them into
-        the internal shape vector. */
+        the internal shape vector.
+
+        @throws uno::RuntimeException
+    */
     void collectShapes() throw (uno::RuntimeException);
-    /** Creates and returns a new UNO shape. */
+    /** Creates and returns a new UNO shape.
+
+        @throws uno::RuntimeException
+    */
     uno::Reference< drawing::XShape > createShape( const awt::Point& rPos, const awt::Size& rSize ) throw (uno::RuntimeException);
-    /** Inserts the passed shape into the draw page and into this container, and returns its index in the draw page. */
+    /** Inserts the passed shape into the draw page and into this container, and returns its index in the draw page.
+
+        @throws uno::RuntimeException
+    */
     sal_Int32 insertShape( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException);
-    /** Creates and returns a new VBA implementation object for the passed shape. */
+    /** Creates and returns a new VBA implementation object for the passed shape.
+
+        @throws uno::RuntimeException
+    */
     ::rtl::Reference< ScVbaSheetObjectBase > createVbaObject( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException);
-    /** Creates and returns a new VBA implementation object for the passed shape in an Any. */
+    /** Creates and returns a new VBA implementation object for the passed shape in an Any.
+
+        @throws uno::RuntimeException
+    */
     uno::Any createCollectionObject( const uno::Any& rSource ) throw (uno::RuntimeException);
-    /** Returns the VBA implementation object with the specified name. */
+    /** Returns the VBA implementation object with the specified name.
+
+        @throws uno::RuntimeException
+    */
     uno::Any getItemByStringIndex( const OUString& rIndex ) throw (uno::RuntimeException);
 
     // XIndexAccess
@@ -110,14 +132,23 @@ public:
 protected:
     /** Derived classes return true, if the passed shape is supported by the instance. */
     virtual bool implPickShape( const uno::Reference< drawing::XShape >& rxShape ) const = 0;
-    /** Derived classes create and return a new VBA implementation object for the passed shape. */
+    /** Derived classes create and return a new VBA implementation object for the passed shape.
+
+        @throws uno::RuntimeException
+    */
     virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException) = 0;
     /** Derived classes return the service name of the UNO shape. */
     virtual OUString implGetShapeServiceName() const = 0;
 
-    /** Returns the shape name via 'Name' property of the UNO shape. May be overwritten. */
+    /** Returns the shape name via 'Name' property of the UNO shape. May be overwritten.
+
+        @throws uno::RuntimeException
+    */
     virtual OUString implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException);
-    /** Is called when a new UNO shape has been created but not yet inserted into the drawing page. */
+    /** Is called when a new UNO shape has been created but not yet inserted into the drawing page.
+
+        @throws uno::RuntimeException
+    */
     virtual void implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException);
 
 protected:
@@ -334,6 +365,7 @@ uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno
 class ScVbaControlContainer : public ScVbaObjectContainer
 {
 public:
+    /// @throws uno::RuntimeException
     explicit ScVbaControlContainer(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
@@ -343,6 +375,7 @@ public:
         const OUString& rModelServiceName ) throw (uno::RuntimeException);
 
 protected:
+    /// @throws uno::RuntimeException
     uno::Reference< container::XIndexContainer > const & createForm() throw (uno::RuntimeException);
 
     virtual bool implPickShape( const uno::Reference< drawing::XShape >& rxShape ) const override;
@@ -441,6 +474,7 @@ void ScVbaControlContainer::implOnShapeCreated( const uno::Reference< drawing::X
 class ScVbaButtonContainer : public ScVbaControlContainer
 {
 public:
+    /// @throws uno::RuntimeException
     explicit ScVbaButtonContainer(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,

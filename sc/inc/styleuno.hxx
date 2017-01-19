@@ -108,6 +108,8 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
                                 throw(css::uno::RuntimeException, std::exception) override;
 private:
+    /// @throws css::io::IOException
+    /// @throws css::uno::RuntimeException
     void loadStylesFromDocShell( ScDocShell* pSource,
                               const css::uno::Sequence< css::beans::PropertyValue>& aOptions )
                                 throw(css::io::IOException,
@@ -225,12 +227,22 @@ private:
 
     SfxStyleSheetBase*      GetStyle_Impl( bool bUseCachedValue = false );
     const SfxItemSet*       GetStyleItemSet_Impl( const OUString& rPropName, const SfxItemPropertySimpleEntry*& rpEntry );
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     css::beans::PropertyState getPropertyState_Impl( const OUString& PropertyName )
                                 throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     css::uno::Any           getPropertyDefault_Impl( const OUString& aPropertyName )
                                 throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     css::uno::Any           getPropertyValue_Impl( const OUString& aPropertyName )
                                 throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void                    setPropertyValue_Impl( const OUString& rPropertyName,
                                                  const SfxItemPropertySimpleEntry* pEntry,
                                                  const css::uno::Any* pValue )

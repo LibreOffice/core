@@ -708,6 +708,7 @@ public:
     const ScDPItemData*     GetSrcItemDataByIndex(  SCROW nIndex);
 
 private:
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > getElementNames( bool bLocaleIndependent ) const
                                 throw(css::uno::RuntimeException, std::exception);
 };

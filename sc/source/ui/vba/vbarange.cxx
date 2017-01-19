@@ -298,7 +298,7 @@ class SingleRangeEnumeration : public EnumerationHelper_BASE
     uno::Reference< table::XCellRange > m_xRange;
     bool bHasMore;
 public:
-
+    /// @throws uno::RuntimeException
     explicit SingleRangeEnumeration( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException ) : m_xRange( xRange ), bHasMore( true ) { }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override { return bHasMore; }
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
@@ -342,7 +342,7 @@ class RangesEnumerationImpl : public EnumerationHelperImpl
     bool mbIsRows;
     bool mbIsColumns;
 public:
-
+    /// @throws uno::RuntimeException
     RangesEnumerationImpl( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, bool bIsRows, bool bIsColumns ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mbIsRows( bIsRows ), mbIsColumns( bIsColumns ) {}
     virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
     {
@@ -385,6 +385,7 @@ ScVbaRangeAreas::createCollectionObject( const uno::Any& aSource )
 }
 
 // assume that xIf is infact a ScCellRangesBase
+/// @throws uno::RuntimeException
 ScDocShell*
 getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf ) throw ( uno::RuntimeException )
 {
@@ -394,6 +395,7 @@ getDocShellFromIf( const uno::Reference< uno::XInterface >& xIf ) throw ( uno::R
     return pUno->GetDocShell();
 }
 
+/// @throws uno::RuntimeException
 ScDocShell*
 getDocShellFromRange( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
 {
@@ -402,6 +404,7 @@ getDocShellFromRange( const uno::Reference< table::XCellRange >& xRange ) throw 
     return getDocShellFromIf(xIf );
 }
 
+/// @throws uno::RuntimeException
 ScDocShell*
 getDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& xRanges ) throw ( uno::RuntimeException )
 {
@@ -410,12 +413,14 @@ getDocShellFromRanges( const uno::Reference< sheet::XSheetCellRangeContainer >& 
     return getDocShellFromIf(xIf );
 }
 
+/// @throws uno::RuntimeException
 uno::Reference< frame::XModel > getModelFromXIf( const uno::Reference< uno::XInterface >& xIf ) throw ( uno::RuntimeException )
 {
     ScDocShell* pDocShell = getDocShellFromIf(xIf );
     return pDocShell->GetModel();
 }
 
+/// @throws uno::RuntimeException
 uno::Reference< frame::XModel > getModelFromRange( const uno::Reference< table::XCellRange >& xRange ) throw ( uno::RuntimeException )
 {
     // the XInterface for getImplementation can be any derived interface, no need for queryInterface
@@ -640,6 +645,7 @@ class CellsEnumeration : public CellsEnumeration_BASE
     vCellPos m_CellPositions;
     vCellPos::const_iterator m_it;
 
+    /// @throws uno::RuntimeException
     uno::Reference< table::XCellRange > getArea( sal_Int32 nVBAIndex ) throw ( uno::RuntimeException )
     {
         if ( nVBAIndex < 1 || nVBAIndex > m_xAreas->getCount() )
@@ -1090,35 +1096,42 @@ class RangeHelper
     uno::Reference< table::XCellRange > m_xCellRange;
 
 public:
+    /// @throws uno::RuntimeException
     explicit RangeHelper( const uno::Reference< table::XCellRange >& xCellRange ) throw (uno::RuntimeException) : m_xCellRange( xCellRange )
     {
         if ( !m_xCellRange.is() )
             throw uno::RuntimeException();
     }
+    /// @throws uno::RuntimeException
     explicit RangeHelper( const uno::Any& rCellRange ) throw (uno::RuntimeException)
     {
         m_xCellRange.set(rCellRange, uno::UNO_QUERY_THROW);
     }
+    /// @throws uno::RuntimeException
     uno::Reference< sheet::XSheetCellRange > getSheetCellRange() throw (uno::RuntimeException)
     {
         return uno::Reference< sheet::XSheetCellRange >(m_xCellRange, uno::UNO_QUERY_THROW);
     }
+    /// @throws uno::RuntimeException
     uno::Reference< sheet::XSpreadsheet >  getSpreadSheet() throw (uno::RuntimeException)
     {
         return getSheetCellRange()->getSpreadsheet();
     }
 
+    /// @throws uno::RuntimeException
     uno::Reference< table::XCellRange > getCellRangeFromSheet() throw (uno::RuntimeException)
     {
         return uno::Reference< table::XCellRange >(getSpreadSheet(), uno::UNO_QUERY_THROW );
     }
 
+    /// @throws uno::RuntimeException
     uno::Reference< sheet::XCellRangeAddressable >  getCellRangeAddressable() throw (uno::RuntimeException)
     {
         return uno::Reference< sheet::XCellRangeAddressable >(m_xCellRange, ::uno::UNO_QUERY_THROW);
 
     }
 
+    /// @throws uno::RuntimeException
     uno::Reference< sheet::XSheetCellCursor > getSheetCellCursor() throw ( uno::RuntimeException )
     {
         return  uno::Reference< sheet::XSheetCellCursor >( getSpreadSheet()->createCursorByRange( getSheetCellRange() ), uno::UNO_QUERY_THROW );
@@ -1226,6 +1239,7 @@ bool getScRangeListForAddress( const OUString& sName, ScDocShell* pDocSh, ScRang
     return true;
 }
 
+/// @throws uno::RuntimeException
 ScVbaRange*
 getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const OUString& sName, ScDocShell* pDocSh, table::CellRangeAddress& pAddr, formula::FormulaGrammar::AddressConvention eConv = formula::FormulaGrammar::CONV_XL_A1 ) throw ( uno::RuntimeException, std::exception )
 {
@@ -1249,12 +1263,14 @@ getRangeForName( const uno::Reference< uno::XComponentContext >& xContext, const
 
 namespace {
 
+/// @throws uno::RuntimeException
 template< typename RangeType >
 inline table::CellRangeAddress lclGetRangeAddress( const uno::Reference< RangeType >& rxCellRange ) throw (uno::RuntimeException)
 {
     return uno::Reference< sheet::XCellRangeAddressable >( rxCellRange, uno::UNO_QUERY_THROW )->getRangeAddress();
 }
 
+/// @throws uno::RuntimeException
 void lclClearRange( const uno::Reference< table::XCellRange >& rxCellRange ) throw (uno::RuntimeException)
 {
     using namespace ::com::sun::star::sheet::CellFlags;
@@ -1263,6 +1279,7 @@ void lclClearRange( const uno::Reference< table::XCellRange >& rxCellRange ) thr
     xSheetOperation->clearContents( nFlags );
 }
 
+/// @throws uno::RuntimeException
 uno::Reference< sheet::XSheetCellRange > lclExpandToMerged( const uno::Reference< table::XCellRange >& rxCellRange, bool bRecursive ) throw (uno::RuntimeException)
 {
     uno::Reference< sheet::XSheetCellRange > xNewCellRange( rxCellRange, uno::UNO_QUERY_THROW );
@@ -1282,6 +1299,7 @@ uno::Reference< sheet::XSheetCellRange > lclExpandToMerged( const uno::Reference
     return xNewCellRange;
 }
 
+/// @throws uno::RuntimeException
 uno::Reference< sheet::XSheetCellRangeContainer > lclExpandToMerged( const uno::Reference< sheet::XSheetCellRangeContainer >& rxCellRanges, bool bRecursive ) throw (uno::RuntimeException)
 {
     if( !rxCellRanges.is() )
@@ -1302,6 +1320,7 @@ uno::Reference< sheet::XSheetCellRangeContainer > lclExpandToMerged( const uno::
     return new ScCellRangesObj( getDocShellFromRanges( rxCellRanges ), aScRanges );
 }
 
+/// @throws uno::RuntimeException
 void lclExpandAndMerge( const uno::Reference< table::XCellRange >& rxCellRange, bool bMerge ) throw (uno::RuntimeException)
 {
     uno::Reference< util::XMergeable > xMerge( lclExpandToMerged( rxCellRange, true ), uno::UNO_QUERY_THROW );
@@ -1324,6 +1343,7 @@ void lclExpandAndMerge( const uno::Reference< table::XCellRange >& rxCellRange, 
     }
 }
 
+/// @throws uno::RuntimeException
 util::TriState lclGetMergedState( const uno::Reference< table::XCellRange >& rxCellRange ) throw (uno::RuntimeException)
 {
     /*  1) Check if range is completely inside one single merged range. To do
@@ -1360,6 +1380,7 @@ ScVbaRange::getRangeObjectForName(
     return getRangeForName( xContext, sRangeName, pDocSh, refAddr, eConv );
 }
 
+/// @throws uno::RuntimeException
 table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, ScDocShell* pDocSh ) throw ( uno::RuntimeException )
 {
     uno::Reference< table::XCellRange > xRangeParam;
@@ -1398,6 +1419,7 @@ table::CellRangeAddress getCellRangeAddressForVBARange( const uno::Any& aParam, 
     return lclGetRangeAddress( xRangeParam );
 }
 
+/// @throws uno::RuntimeException
 static uno::Reference< XCollection >
 lcl_setupBorders( const uno::Reference< excel::XRange >& xParentRange, const uno::Reference<uno::XComponentContext>& xContext,  const uno::Reference< table::XCellRange >& xRange  ) throw( uno::RuntimeException )
 {
@@ -2944,6 +2966,7 @@ ScVbaRange::getComment() throw (uno::RuntimeException, std::exception)
 
 }
 
+/// @throws uno::RuntimeException
 uno::Reference< beans::XPropertySet >
 getRowOrColumnProps( const uno::Reference< table::XCellRange >& xCellRange, bool bRows ) throw ( uno::RuntimeException )
 {
@@ -3296,6 +3319,7 @@ uno::Reference< table::XCellRange > processKey( const uno::Any& Key, uno::Refere
 }
 
 // helper method for Sort
+/// @throws uno::RuntimeException
 sal_Int32 findSortPropertyIndex( const uno::Sequence< beans::PropertyValue >& props,
 const OUString& sPropName ) throw( uno::RuntimeException )
 {
@@ -3312,6 +3336,7 @@ const OUString& sPropName ) throw( uno::RuntimeException )
 }
 
 // helper method for Sort
+/// @throws uno::RuntimeException
 void updateTableSortField( const uno::Reference< table::XCellRange >& xParentRange,
     const uno::Reference< table::XCellRange >& xColRowKey, sal_Int16 nOrder,
     table::TableSortField& aTableField, bool bIsSortColumn, bool bMatchCase ) throw ( uno::RuntimeException )
@@ -4714,6 +4739,7 @@ ScVbaRange::getValidation() throw (css::uno::RuntimeException, std::exception)
 
 namespace {
 
+/// @throws uno::RuntimeException
 sal_Unicode lclGetPrefixChar( const uno::Reference< table::XCell >& rxCell ) throw (uno::RuntimeException)
 {
     /*  TODO/FIXME: We need an apostroph-prefix property at the cell to
@@ -4727,6 +4753,7 @@ sal_Unicode lclGetPrefixChar( const uno::Reference< table::XCell >& rxCell ) thr
     return (rxCell->getType() == table::CellContentType_TEXT) ? '\'' : 0;
 }
 
+/// @throws uno::RuntimeException
 sal_Unicode lclGetPrefixChar( const uno::Reference< table::XCellRange >& rxRange ) throw (uno::RuntimeException)
 {
     /*  This implementation is able to handle different prefixes (needed if
@@ -4754,6 +4781,7 @@ sal_Unicode lclGetPrefixChar( const uno::Reference< table::XCellRange >& rxRange
     return cCurrPrefix;
 }
 
+/// @throws uno::RuntimeException
 sal_Unicode lclGetPrefixChar( const uno::Reference< sheet::XSheetCellRangeContainer >& rxRanges ) throw (uno::RuntimeException)
 {
     sal_Unicode cCurrPrefix = 0;
@@ -5177,6 +5205,7 @@ ScVbaRange::Ungroup(  ) throw (script::BasicErrorException, uno::RuntimeExceptio
     groupUnGroup(true);
 }
 
+/// @throws uno::RuntimeException
 static void lcl_mergeCellsOfRange( const uno::Reference< table::XCellRange >& xCellRange, bool _bMerge ) throw ( uno::RuntimeException )
 {
         uno::Reference< util::XMergeable > xMergeable( xCellRange, uno::UNO_QUERY_THROW );
@@ -5392,6 +5421,7 @@ ScVbaRange::SpecialCells( const uno::Any& _oType, const uno::Any& _oValue)
     return pRangeToUse->SpecialCellsImpl( nType, _oValue );
 }
 
+/// @throws script::BasicErrorException
 static sal_Int32 lcl_getFormulaResultFlags(const uno::Any& aType) throw ( script::BasicErrorException )
 {
     sal_Int32 nType = excel::XlSpecialCellsValue::xlNumbers;
