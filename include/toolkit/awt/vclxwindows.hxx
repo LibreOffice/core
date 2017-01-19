@@ -463,6 +463,7 @@ public:
     // css::awt::XVclWindowPeer
     void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
 
+    /// @throws css::uno::RuntimeException
     TabPage*  getTabPage() const throw ( css::uno::RuntimeException);
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -512,6 +513,7 @@ public:
     virtual void SAL_CALL addTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL removeTabListener( const css::uno::Reference< css::awt::XTabListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
     // C++
+    /// @throws css::uno::RuntimeException
     TabControl*  getTabControl() const throw ( css::uno::RuntimeException);
     sal_uInt16 insertTab( TabPage*, OUString& sTitle );
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
@@ -656,7 +658,9 @@ public:
     sal_Int32 SAL_CALL getOrientation(  ) throw(css::uno::RuntimeException, std::exception) override;
 
     // why isn't this part of the XScrollbar?
+    /// @throws css::uno::RuntimeException
     void SAL_CALL setMinimum( sal_Int32 n ) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     sal_Int32 SAL_CALL getMinimum(  ) throw(css::uno::RuntimeException);
 
     // css::awt::VclWindowPeer
@@ -665,6 +669,7 @@ public:
 
     // css::awt::XLayoutConstrains
     css::awt::Size SAL_CALL getMinimumSize() throw(css::uno::RuntimeException, std::exception) override;
+    /// @throws css::uno::RuntimeException
     static css::awt::Size SAL_CALL implGetMinimumSize( vcl::Window* p ) throw(css::uno::RuntimeException);
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
@@ -1093,7 +1098,9 @@ class MetricField;
 class VCLXMetricField : public css::awt::XMetricField,
                         public VCLXFormattedSpinField
 {
+    /// @throws css::uno::RuntimeException
     MetricFormatter *GetMetricFormatter() throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     MetricField     *GetMetricField() throw(css::uno::RuntimeException);
     void CallListeners();
 public:

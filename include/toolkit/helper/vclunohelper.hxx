@@ -129,6 +129,7 @@ public:
     static sal_Int16                                ConvertToMeasurementUnit( FieldUnit _nFieldUnit, sal_Int16 _rFieldToUNOValueFactor );
     static FieldUnit                                ConvertToFieldUnit( sal_Int16 _nMeasurementUnit, sal_Int16& _rFieldToUNOValueFactor );
 
+    /// @throws css::lang::IllegalArgumentException
     static MapUnit /* MapModeUnit */ ConvertToMapModeUnit(sal_Int16 /* com.sun.star.util.MeasureUnit.* */ _nMeasureUnit) throw (css::lang::IllegalArgumentException);
 
     static ::Size /* VCLSize */ ConvertToVCLSize(css::awt::Size const& _aSize);

@@ -98,6 +98,10 @@ protected:
 
     UnoControlModelHolderList::iterator         ImplFindElement( const OUString& rName );
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::container::ElementExistException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void updateUserFormChildren(  const css::uno::Reference< css::container::XNameContainer >& xAllChildren, const OUString& aName, ChildOperation Operation,  const css::uno::Reference< css::awt::XControlModel >& xTarget ) throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException);
 public:
                         ControlModelContainerBase( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
