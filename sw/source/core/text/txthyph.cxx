@@ -197,6 +197,11 @@ bool SwTextFormatter::Hyphenate( SwInterHyphInfo &rHyphInf )
         if( !pPos )
             nWrdStart = 0;
     }
+    else
+        // In case the whole line is zero-length, that's the same situation as
+        // above when the portion iteration ends without explicitly breaking
+        // from the loop.
+        nWrdStart = 0;
 
     // Das alte LineLayout wird wieder eingestellt ...
     delete m_pCurr;
