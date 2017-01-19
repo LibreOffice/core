@@ -39,6 +39,7 @@ protected:
     css::uno::Reference< css::lang::XComponent > mxDoc;
     OUString msFilterName;
 
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL importImpl(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor)
     throw (css::uno::RuntimeException, std::exception);
 
@@ -75,6 +76,7 @@ public:
 
 };
 
+/// @throws css::uno::RuntimeException
 bool SAL_CALL WordPerfectImportFilter_supportsService(const OUString &ServiceName)
 throw (css::uno::RuntimeException);
 
