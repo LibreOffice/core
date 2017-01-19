@@ -49,6 +49,7 @@ protected:
     sal_Int32 mnOrientLandscape;
     sal_Int32 mnOrientPortrait;
 
+    /// @throws css::uno::RuntimeException
     VbaPageSetupBase( const css::uno::Reference< ov::XHelperInterface >& xParent,
                     const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
 public:
@@ -63,9 +64,13 @@ public:
     virtual void SAL_CALL setRightMargin( double margin ) throw (css::uno::RuntimeException, std::exception) override;
     virtual double SAL_CALL getLeftMargin() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setLeftMargin( double margin ) throw (css::uno::RuntimeException, std::exception) override;
+    /// @throws css::uno::RuntimeException
     virtual double SAL_CALL getHeaderMargin() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL setHeaderMargin( double margin ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     virtual double SAL_CALL getFooterMargin() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL setFooterMargin( double margin ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getOrientation() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setOrientation( sal_Int32 orientation ) throw (css::uno::RuntimeException, std::exception) override;

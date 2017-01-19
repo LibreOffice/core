@@ -70,6 +70,7 @@ typedef ::cppu::WeakImplHelper< css::container::XEnumeration > EnumerationHelper
 class VBAHELPER_DLLPUBLIC SimpleIndexAccessToEnumeration : public EnumerationHelper_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit SimpleIndexAccessToEnumeration(
             const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) throw (css::uno::RuntimeException) :
         mxIndexAccess( rxIndexAccess ), mnIndex( 0 ) {}
@@ -102,6 +103,7 @@ private:
 class VBAHELPER_DLLPUBLIC SimpleEnumerationBase : public EnumerationHelper_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     explicit SimpleEnumerationBase(
             const css::uno::Reference< css::container::XIndexAccess >& rxIndexAccess ) throw (css::uno::RuntimeException) :
         mxEnumeration( new SimpleIndexAccessToEnumeration( rxIndexAccess ) ) {}
@@ -133,7 +135,7 @@ protected:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;
     css::uno::Reference< css::container::XEnumeration > m_xEnumeration;
 public:
-
+    /// @throws css::uno::RuntimeException
     EnumerationHelperImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XEnumeration >& xEnumeration ) throw ( css::uno::RuntimeException ) : m_xParent( xParent ), m_xContext( xContext ),  m_xEnumeration( xEnumeration ) { }
     virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (css::uno::RuntimeException, std::exception) override { return m_xEnumeration->hasMoreElements(); }
 };
@@ -240,6 +242,7 @@ protected:
     css::uno::Reference< css::container::XNameAccess > m_xNameAccess;
     bool mbIgnoreCase;
 
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Any getItemByStringIndex( const OUString& sIndex ) throw (css::uno::RuntimeException)
     {
         if ( !m_xNameAccess.is() )
@@ -260,6 +263,8 @@ protected:
         return createCollectionObject( m_xNameAccess->getByName( sIndex ) );
     }
 
+    /// @throws css::uno::RuntimeException
+    /// @throws css::lang::IndexOutOfBoundsException
     virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException)
     {
         if ( !m_xIndexAccess.is() )
@@ -334,6 +339,7 @@ typedef ScVbaCollectionBase< XCollection_InterfacesBASE > CollImplBase;
 class VBAHELPER_DLLPUBLIC ScVbaCollectionBaseImpl : public CollImplBase
 {
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaCollectionBaseImpl( const css::uno::Reference< ov::XHelperInterface > & xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess ) throw( css::uno::RuntimeException ) : CollImplBase( xParent, xContext, xIndexAccess){}
 
 };
@@ -344,6 +350,7 @@ class CollTestImplHelper :  public ScVbaCollectionBase< ::cppu::WeakImplHelper< 
 typedef ScVbaCollectionBase< ::cppu::WeakImplHelper< Ifc... >  > ImplBase;
 
 public:
+    /// @throws css::uno::RuntimeException
     CollTestImplHelper( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, bool bIgnoreCase = false ) throw( css::uno::RuntimeException ) : ImplBase( xParent, xContext, xIndexAccess, bIgnoreCase ) {}
 };
 

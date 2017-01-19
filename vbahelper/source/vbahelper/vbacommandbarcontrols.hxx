@@ -45,6 +45,7 @@ private:
     static css::uno::Sequence< css::beans::PropertyValue > CreateToolbarItemData( const OUString& sCommandURL, const OUString& sHelpURL, const OUString& sLabel, sal_uInt16 nType, const css::uno::Any& aSubMenu, bool isVisible, sal_Int32 nStyle );
 
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaCommandBarControls( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, VbaCommandBarHelperRef const & pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) throw( css::uno::RuntimeException );
 
     // XEnumerationAccess
@@ -63,6 +64,7 @@ public:
 class VbaDummyCommandBarControls : public CommandBarControls_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     VbaDummyCommandBarControls(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw( css::uno::RuntimeException );

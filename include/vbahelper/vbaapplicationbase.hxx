@@ -56,6 +56,7 @@ protected:
     VbaApplicationBase( const css::uno::Reference< css::uno::XComponentContext >& xContext );
     virtual ~VbaApplicationBase() override;
 
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException) = 0;
 public:
     // XHelperInterface ( parent is itself )

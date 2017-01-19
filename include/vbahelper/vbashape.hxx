@@ -68,16 +68,21 @@ protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Any m_aRange;
     void addListeners();
+    /// @throws css::uno::RuntimeException
     void removeShapeListener() throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     void removeShapesListener() throw( css::uno::RuntimeException );
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 public:
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nType )
         throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
     virtual ~ScVbaShape() override;
     void setRange( css::uno::Any aRange ) { m_aRange = aRange; };
 
+    /// @throws css::uno::RuntimeException
     static sal_Int32 getType( const css::uno::Reference< css::drawing::XShape >& rShape ) throw (css::uno::RuntimeException);
 
     // Attributes

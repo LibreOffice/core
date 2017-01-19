@@ -58,25 +58,35 @@ private:
     css::uno::Reference< css::container::XNameAccess > m_xWindowState;
     OUString maModuleId;
 
+    /// @throws css::uno::RuntimeException
     void Init() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     bool hasToolbar( const OUString& sResourceUrl, const OUString& sName )  throw (css::uno::RuntimeException);
 public:
+    /// @throws css::uno::RuntimeException
     VbaCommandBarHelper( const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException );
 
     const css::uno::Reference< css::frame::XModel >& getModel() const { return mxModel; }
 
+    /// @throws css::uno::RuntimeException
     const css::uno::Reference< css::container::XNameAccess >& getPersistentWindowState() const throw (css::uno::RuntimeException)
     {
         return m_xWindowState;
     }
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::container::XIndexAccess > getSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void removeSettings( const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void ApplyTempChange( const OUString& sResourceUrl, const css::uno::Reference< css::container::XIndexAccess >& xSettings) throw (css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::frame::XLayoutManager > getLayoutManager() throw (css::uno::RuntimeException);
 
     const OUString& getModuleId() const { return maModuleId; }
+    /// @throws css::uno::RuntimeException
     OUString findToolbarByName( const css::uno::Reference< css::container::XNameAccess >& xNameAccess, const OUString& sName ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static sal_Int32 findControlByName( const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess, const OUString& sName, bool bMenu ) throw (css::uno::RuntimeException);
     static OUString generateCustomURL();
 };

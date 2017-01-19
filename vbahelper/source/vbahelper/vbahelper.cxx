@@ -234,6 +234,7 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
     return xModel;
 }
 
+/// @throws uno::RuntimeException
  uno::Reference< frame::XModel >
 getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
 {

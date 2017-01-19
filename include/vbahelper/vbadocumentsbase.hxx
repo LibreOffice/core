@@ -59,6 +59,7 @@ private:
     DOCUMENT_TYPE meDocType;
 
 public:
+    /// @throws css::uno::RuntimeException
     VbaDocumentsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType ) throw (css::uno::RuntimeException);
     virtual ~VbaDocumentsBase() override {}
 
@@ -70,7 +71,9 @@ public:
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override = 0;
 
 protected:
+    /// @throws css::uno::RuntimeException
     css::uno::Any createDocument() throw (css::uno::RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
     css::uno::Any openDocument( const OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
 };
 

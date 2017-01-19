@@ -70,10 +70,12 @@ class DocumentsEnumImpl : public ::cppu::WeakImplHelper< container::XEnumeration
     Documents::const_iterator m_it;
 
 public:
+    /// @throws uno::RuntimeException
     DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, const Documents& docs ) throw ( uno::RuntimeException ) :  m_xContext( xContext ), m_documents( docs )
     {
         m_it = m_documents.begin();
     }
+    /// @throws uno::RuntimeException
     explicit DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
@@ -120,6 +122,7 @@ class DocumentsAccessImpl : public DocumentsAccessImpl_BASE
     NameIndexHash namesToIndices;
     VbaDocumentsBase::DOCUMENT_TYPE meDocType;
 public:
+    /// @throws uno::RuntimeException
     DocumentsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) throw (uno::RuntimeException, std::exception) :m_xContext( xContext ), meDocType( eDocType )
     {
         uno::Reference< container::XEnumeration > xEnum = new DocumentsEnumImpl( m_xContext );

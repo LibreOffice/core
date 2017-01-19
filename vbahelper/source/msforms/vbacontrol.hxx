@@ -51,6 +51,7 @@ protected:
     css::uno::Reference< css::uno::XInterface > m_xControl;
     css::uno::Reference< css::frame::XModel > m_xModel;
 
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::awt::XWindowPeer > getWindowPeer() throw (css::uno::RuntimeException);
     void fireChangeEvent();
     void fireClickEvent();
@@ -97,29 +98,39 @@ public:
     virtual ::sal_Int32 SAL_CALL getMousePointer() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) throw (css::uno::RuntimeException, std::exception) override;
     //remove resource because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
+    /// @throws css::uno::RuntimeException
     void removeResource() throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     virtual ::sal_Int32 SAL_CALL getForeColor() throw (css::uno::RuntimeException);
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     //General helper methods for properties (may or may not be relevant for all
     //controls)
+    /// @throws css::uno::RuntimeException
     sal_Int32 getBackColor() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     bool getAutoSize() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setAutoSize( bool bAutoSize ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     bool getLocked() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void setLocked( bool bAutoSize ) throw (css::uno::RuntimeException);
 };
 
 
 namespace ScVbaControlFactory
 {
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< ov::msforms::XControl > createShapeControl(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::drawing::XControlShape >& xControlShape,
         const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< ov::msforms::XControl > createUserformControl(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::awt::XControl >& xControl,

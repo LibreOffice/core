@@ -51,12 +51,14 @@ typedef InheritedHelperInterfaceWeakImpl< ov::XWindowBase > WindowBaseImpl_BASE;
 class VBAHELPER_DLLPUBLIC VbaWindowBase : public WindowBaseImpl_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     VbaWindowBase(
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::frame::XModel >& xModel,
         const css::uno::Reference< css::frame::XController >& xController )
         throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     VbaWindowBase(
         css::uno::Sequence< css::uno::Any > const& aArgs,
         css::uno::Reference< css::uno::XComponentContext > const& xContext )
@@ -79,13 +81,17 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
 protected:
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::frame::XController > getController() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::awt::XWindow > getWindow() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::awt::XWindow2 > getWindow2() throw (css::uno::RuntimeException);
 
     css::uno::Reference< css::frame::XModel > m_xModel;
 
 private:
+    /// @throws css::uno::RuntimeException
     void construct( const css::uno::Reference< css::frame::XController >& xController ) throw (css::uno::RuntimeException);
 
     css::uno::WeakReference< css::frame::XController > m_xController;

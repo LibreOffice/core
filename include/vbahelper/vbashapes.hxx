@@ -63,10 +63,15 @@ protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::container::XIndexAccess > getShapesByArrayIndices( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::drawing::XShape > createShape( const OUString& service ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const css::uno::Any& rRange ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const css::uno::Any& rRange ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Any AddTextboxInWriter( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (css::uno::RuntimeException);
     OUString createName( const OUString& sName );
     //TODO helperapi using a writer document
@@ -74,6 +79,7 @@ protected:
 
 public:
     ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
+    /// @throws css::uno::RuntimeException
     static void setDefaultShapeProperties( const css::uno::Reference< css::drawing::XShape >& xShape ) throw (css::uno::RuntimeException);
     static void setShape_NameProperty( const css::uno::Reference< css::drawing::XShape >& xShape, const OUString& sName );
     //XEnumerationAccess

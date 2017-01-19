@@ -56,6 +56,7 @@ namespace ooo
 {
     namespace vba
     {
+        /// @throws css::lang::IllegalArgumentException
         template < class T >
         css::uno::Reference< T > getXSomethingFromArgs( css::uno::Sequence< css::uno::Any > const & args, sal_Int32 nPos, bool bCanBeNull = true ) throw (css::lang::IllegalArgumentException)
         {
@@ -72,15 +73,23 @@ namespace ooo
         /** Returns the VBA document implementation object representing the passed UNO document model. */
         VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getVBADocument( const css::uno::Reference< css::frame::XModel >& xModel );
         VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, SfxObjectShell* pShell );
+        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw ( css::uno::RuntimeException);
 
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::frame::XModel > getCurrentDoc( const OUString& sKey ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getCurrentWordDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
 
+        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::beans::XIntrospectionAccess > getIntrospectionAccess( const css::uno::Any& aObject ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::script::XTypeConverter > const & getTypeConverter( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
 
         VBAHELPER_DLLPUBLIC void dispatchRequests( const css::uno::Reference< css::frame::XModel>& xModel, const OUString& aUrl );
@@ -99,16 +108,18 @@ namespace ooo
         VBAHELPER_DLLPUBLIC void WaitUntilPreviewIsClosed( SfxViewFrame* );
 
         /** Extracts a boolean value from the passed Any, which may contain a Boolean or an integer or floating-point value.
-            Throws, if the Any is empty or contains an incompatible type. */
+            @throws css::uno::RuntimeException if the Any is empty or contains an incompatible type. */
         VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const css::uno::Any& rAny ) throw (css::uno::RuntimeException);
 
         /** Extracts a string from the passed Any, which may contain a Boolean, a value, or a string.
-            Throws, if the Any is empty or contains an incompatible type. */
+            @throws css::uno::RuntimeException if the Any is empty or contains an incompatible type. */
         VBAHELPER_DLLPUBLIC OUString extractStringFromAny( const css::uno::Any& rAny, bool bUppercaseBool = false ) throw (css::uno::RuntimeException);
         /** Extracts a string from the passed Any, which may contain a Boolean, a value, or a string.
-            Returns rDefault, if rAny is empty. Throws, if the Any contains an incompatible type. */
+            Returns rDefault, if rAny is empty.
+            @throws css::uno::RuntimeException if the Any contains an incompatible type. */
         VBAHELPER_DLLPUBLIC OUString extractStringFromAny( const css::uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool ) throw (css::uno::RuntimeException);
 
+        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC OUString getAnyAsString( const css::uno::Any& pvargItem ) throw ( css::uno::RuntimeException );
         VBAHELPER_DLLPUBLIC OUString VBAToRegexp(const OUString &rIn); // needs to be in an uno service ( already this code is duplicated in basic )
         VBAHELPER_DLLPUBLIC double getPixelTo100thMillimeterConversionFactor( const css::uno::Reference< css::awt::XDevice >& xDevice, bool bVertical);
@@ -118,6 +129,7 @@ namespace ooo
         VBAHELPER_DLLPUBLIC double HmmToPoints( sal_Int32 nHmm );
         VBAHELPER_DLLPUBLIC PointerStyle getPointerStyle( const css::uno::Reference< css::frame::XModel >& );
         VBAHELPER_DLLPUBLIC void setCursorHelper( const css::uno::Reference< css::frame::XModel >& xModel, const Pointer& rPointer, bool bOverWrite );
+        /// @throws css::uno::RuntimeException
         VBAHELPER_DLLPUBLIC void setDefaultPropByIntrospection( const css::uno::Any& aObj, const css::uno::Any& aValue  ) throw ( css::uno::RuntimeException );
         VBAHELPER_DLLPUBLIC css::uno::Any getPropertyValue( const css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName );
         VBAHELPER_DLLPUBLIC bool setPropertyValue( css::uno::Sequence< css::beans::PropertyValue >& aProp, const OUString& aName, const css::uno::Any& aValue );
@@ -166,6 +178,8 @@ class VBAHELPER_DLLPUBLIC ShapeHelper
 protected:
     css::uno::Reference< css::drawing::XShape > xShape;
 public:
+    /// @throws css::script::BasicErrorException
+    /// @throws css::uno::RuntimeException
     ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape)
         throw (css::script::BasicErrorException, css::uno::RuntimeException);
 
@@ -248,12 +262,16 @@ public:
 class VBAHELPER_DLLPUBLIC DebugHelper
 {
 public:
+    /// @throws css::script::BasicErrorException
     static void basicexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException );
 
+    /// @throws css::script::BasicErrorException
     static void basicexception( int err,  const OUString& additionalArgument ) throw( css::script::BasicErrorException );
 
+    /// @throws css::script::BasicErrorException
     static void basicexception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException );
 
+    /// @throws css::script::BasicErrorException
     static void runtimeexception( int err,  const OUString& additionalArgument ) throw( css::uno::RuntimeException );
 };
 

@@ -43,9 +43,11 @@ protected:
     bool                m_bTemporary;
 
 private:
+    /// @throws css::uno::RuntimeException
     void ApplyChange() throw (css::uno::RuntimeException);
 
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
 
     // Attributes
@@ -77,6 +79,7 @@ typedef cppu::ImplInheritanceHelper< ScVbaCommandBarControl, ov::XCommandBarPopu
 class ScVbaCommandBarPopup : public CommandBarPopup_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary ) throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override
@@ -92,6 +95,7 @@ typedef cppu::ImplInheritanceHelper< ScVbaCommandBarControl, ov::XCommandBarButt
 class ScVbaCommandBarButton : public CommandBarButton_BASE
 {
 public:
+    /// @throws css::uno::RuntimeException
     ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary ) throw (css::uno::RuntimeException);
 
     virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override

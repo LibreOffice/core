@@ -36,6 +36,7 @@ private:
     sal_Int32 m_nForeColor;
     sal_Int16 m_nGradientAngle;
 private:
+    /// @throws css::uno::RuntimeException
     void setFillStyle( css::drawing::FillStyle nFillStyle ) throw (css::uno::RuntimeException);
 protected:
     virtual OUString getServiceImplName() override;
@@ -44,6 +45,7 @@ protected:
 public:
     ScVbaFillFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
 
+    /// @throws css::uno::RuntimeException
     void setForeColorAndInternalStyle( sal_Int32 nForeColor ) throw (css::uno::RuntimeException);
     // Attributes
     virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
