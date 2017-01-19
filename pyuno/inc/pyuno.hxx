@@ -215,6 +215,8 @@ public:
         throw ( css::uno::RuntimeException, std::exception );
 
     /** Checks, whether the uno runtime is already initialized in the current python interpreter.
+
+        @throws css::uno::RuntimeException
      */
     static bool SAL_CALL isInitialized() throw (css::uno::RuntimeException);
 
@@ -223,6 +225,10 @@ public:
         preconditions: python has been initialized before,
         the global interpreter lock is held and pyuno::Runtime
         has been initialized.
+
+        @throws css::script::CannotConvertException
+        @throws css::lang::IllegalArgumentException
+        @throws css::uno::RuntimeException
     */
     PyRef any2PyObject (const css::uno::Any &source ) const
         throw ( css::script::CannotConvertException,
@@ -234,6 +240,8 @@ public:
         preconditions: python has been initialized before,
         the global interpreter lock is held and pyuno
         has been initialized
+
+        @throws css::uno::RuntimeException
     */
     css::uno::Any pyObject2Any (
         const PyRef & source , enum ConversionMode mode = REJECT_UNO_ANY ) const
@@ -313,6 +321,8 @@ public:
 
        precondition: The current thread MUST hold the global interpreter lock.
        postcondition: The current thread does not hold the global interpreter lock anymore.
+
+       @throws css::uno::RuntimeException
     */
     PyThreadDetach() throw ( css::uno::RuntimeException );
     /** Acquires the global interpreter lock again

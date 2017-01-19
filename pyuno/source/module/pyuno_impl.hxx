@@ -260,7 +260,8 @@ PyRef ustring2PyUnicode( const OUString &source );
 PyRef ustring2PyString( const OUString & source );
 OUString pyString2ustring( PyObject *str );
 
-
+/// @throws css::reflection::InvocationTargetException
+/// @throws css::uno::RuntimeException
 void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
     throw (css::reflection::InvocationTargetException, css::uno::RuntimeException);
 
@@ -284,16 +285,20 @@ PyRef getClass( const OUString & name , const Runtime & runtime );
 PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
+/// @throws css::uno::RuntimeException
 css::uno::Any PyEnum2Enum( PyObject *obj )
     throw ( css::uno::RuntimeException );
+/// @throws css::uno::RuntimeException
 sal_Unicode PyChar2Unicode( PyObject *o )
     throw ( css::uno::RuntimeException );
+/// @throws css::uno::RuntimeException
 css::uno::Type PyType2Type( PyObject * o )
     throw( css::uno::RuntimeException );
 
 void raisePyExceptionWithAny( const css::uno::Any &a );
 const char *typeClassToString( css::uno::TypeClass t );
 
+/// @throws css::uno::RuntimeException
 PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object )
     throw ( css::uno::RuntimeException );
 
@@ -328,6 +333,7 @@ struct stRuntimeImpl
 public:
     static void del( PyObject *self );
 
+    /// @throws css::uno::RuntimeException
     static PyRef create(
         const css::uno::Reference< css::uno::XComponentContext > & xContext )
         throw ( css::uno::RuntimeException, std::exception );

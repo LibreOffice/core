@@ -74,7 +74,7 @@ void raisePyExceptionWithAny( const css::uno::Any &anyExc )
     }
 }
 
-
+/// @throws RuntimeException
 static PyRef createClass( const OUString & name, const Runtime &runtime )
     throw ( RuntimeException )
 {

@@ -128,6 +128,7 @@ static PyTypeObject RuntimeImpl_Type =
 /*----------------------------------------------------------------------
   Runtime implementation
  -----------------------------------------------------------------------*/
+/// @throws css::uno::RuntimeException
 static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
     throw ( css::uno::RuntimeException )
 {
@@ -153,6 +154,7 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
     runtimeImpl = PyDict_GetItemString( globalDict.get() , "pyuno_runtime" );
 }
 
+/// @throws RuntimeException
 static PyRef importUnoModule( ) throw ( RuntimeException )
 {
     // import the uno module

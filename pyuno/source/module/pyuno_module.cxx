@@ -137,6 +137,7 @@ public:
     }
 };
 
+/// @throws RuntimeException
 void fillStruct(
     const Reference< XInvocation2 > &inv,
     typelib_CompoundTypeDescription *pCompType,
