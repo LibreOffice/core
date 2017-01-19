@@ -219,6 +219,7 @@ private:
     css::uno::Reference< css::lang::XComponent > mComponent;
     SysCredentialsConfig mUrlContainer;
 
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::task::UserRecord > CopyToUserRecordSequence(
                                         const ::std::list< NamePassRecord >& original,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler )
@@ -229,11 +230,13 @@ private:
                                         bool& io_bTryToDecode,
                                         const css::uno::Reference< css::task::XInteractionHandler >& aHandler );
 
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::task::UserRecord > FindUsr(
                                         const ::std::list< NamePassRecord >& userlist,
                                         const OUString& name,
                                         const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
+/// @throws css::uno::RuntimeException
 bool createUrlRecord(
     const PassMap::iterator & rIter,
     bool bName,
@@ -242,6 +245,7 @@ bool createUrlRecord(
     css::task::UrlRecord & rRec  )
         throw( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 css::task::UrlRecord find(
     const OUString& aURL,
     const OUString& aName,
@@ -254,12 +258,15 @@ css::task::UrlRecord find(
                     css::task::PasswordRequestMode aRMode,
                     const css::uno::Reference< css::task::XInteractionHandler >& xHandler );
 
+    /// @throws css::uno::RuntimeException
     OUString const & GetMasterPassword( const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 
+    /// @throws css::uno::RuntimeException
     void UpdateVector( const OUString& url, ::std::list< NamePassRecord >& toUpdate, NamePassRecord& rec, bool writeFile )
                                                         throw(css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     void PrivateAdd( const OUString& aUrl,
                               const OUString& aUserName,
                               const css::uno::Sequence< OUString >& aPasswords,
@@ -267,9 +274,11 @@ css::task::UrlRecord find(
                               const css::uno::Reference< css::task::XInteractionHandler >& Handler )
                                                         throw(css::uno::RuntimeException, std::exception);
 
+    /// @throws css::uno::RuntimeException
     static ::std::vector< OUString > DecodePasswords( const OUString& aLine, const OUString& aMasterPassword )
                                                         throw(css::uno::RuntimeException, std::exception);
 
+    /// @throws css::uno::RuntimeException
     static OUString EncodePasswords(const std::vector< OUString >& lines, const OUString& aMasterPassword )
                                                         throw(css::uno::RuntimeException);
 
@@ -315,11 +324,15 @@ public:
 
 
     // provide factory
+    /// @throws css::uno::RuntimeException
     static OUString SAL_CALL        impl_getStaticImplementationName( ) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence< OUString > SAL_CALL
                     impl_getStaticSupportedServiceNames(  ) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
                     impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& ServiceManager ) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
                     impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::RuntimeException, std::exception );
 

@@ -96,6 +96,7 @@ public:
 
     const SfxItemPropertySimpleEntry*  getByName( const OUString &rName ) const;
     css::uno::Sequence< css::beans::Property > getProperties() const;
+    /// @throws css::beans::UnknownPropertyException
     css::beans::Property getPropertyByName( const OUString & rName ) const
         throw( css::beans::UnknownPropertyException );
     bool hasPropertyByName( const OUString& rName ) const;
@@ -116,25 +117,35 @@ public:
                                 m_aMap(pMap) {}
                             ~SfxItemPropertySet();
 
+    /// @throws css::uno::RuntimeException
     void getPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
                                           const SfxItemSet& rSet,
                                           css::uno::Any& rAny) const
                                           throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    /// @throws css::beans::UnknownPropertyException
     void getPropertyValue( const OUString &rName,
                                             const SfxItemSet& rSet,
                                             css::uno::Any& rAny) const
                                             throw(css::uno::RuntimeException,
                                                     css::beans::UnknownPropertyException);
+    /// @throws css::uno::RuntimeException
+    /// @throws css::beans::UnknownPropertyException
     css::uno::Any
         getPropertyValue( const OUString &rName,
                                             const SfxItemSet& rSet ) const
                                             throw(css::uno::RuntimeException,
                                                     css::beans::UnknownPropertyException);
+    /// @throws css::uno::RuntimeException
+    /// @throws css::lang::IllegalArgumentException
     void                setPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
                                           const css::uno::Any& aVal,
                                           SfxItemSet& rSet ) const
                                           throw(css::uno::RuntimeException,
                                                   css::lang::IllegalArgumentException);
+    /// @throws css::uno::RuntimeException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::beans::UnknownPropertyException
     void                  setPropertyValue( const OUString& rPropertyName,
                                             const css::uno::Any& aVal,
                                             SfxItemSet& rSet ) const
@@ -142,6 +153,7 @@ public:
                                                     css::lang::IllegalArgumentException,
                                                     css::beans::UnknownPropertyException);
 
+    /// @throws css::beans::UnknownPropertyException
     css::beans::PropertyState
         getPropertyState(const OUString& rName, const SfxItemSet& rSet)const
                                     throw(css::beans::UnknownPropertyException);
