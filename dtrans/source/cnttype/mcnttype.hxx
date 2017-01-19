@@ -50,6 +50,7 @@ public:
         throw(css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
 
 private:
+    /// @throws css::lang::IllegalArgumentException
     void SAL_CALL init( const OUString& aCntType ) throw( css::lang::IllegalArgumentException );
     void SAL_CALL getSym();
     void SAL_CALL acceptSym( const OUString& pSymTlb );
