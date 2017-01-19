@@ -289,6 +289,11 @@ public:
                                                                bool bFirst);
 
     OUString const & GetPageStyleName( bool bFirstPage = false ) { return bFirstPage ? m_sFirstPageStyleName : m_sFollowPageStyleName; }
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl )
         throw ( css::beans::UnknownPropertyException,
                 css::beans::PropertyVetoException,

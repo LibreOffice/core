@@ -45,6 +45,7 @@ public:
     uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
 };
 
+/// @throws uno::RuntimeException
 uno::Sequence<OUString> SAL_CALL WriterFilterDetection_getSupportedServiceNames() throw (uno::RuntimeException);
 
 WriterFilterDetection::WriterFilterDetection() = default;
