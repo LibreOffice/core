@@ -381,6 +381,7 @@ private:
 
     /** @short  the timer, which is used to be informed about the next
                 saving time ...
+        @remark must lock SolarMutex to use
      */
     Timer m_aTimer;
 
@@ -1253,12 +1254,13 @@ void AutoRecovery::initListeners()
 
     // establish callback for our internal used timer.
     // Note: Its only active, if the timer will be started ...
+    SolarMutexGuard g;
     m_aTimer.SetTimeoutHdl(LINK(this, AutoRecovery, implts_timerExpired));
 }
 
 AutoRecovery::~AutoRecovery()
 {
-    disposing();
+    assert(!m_aTimer.IsActive());
 }
 
 void AutoRecovery::disposing()
@@ -1296,7 +1298,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
     bool bAsync;
     DispatchParams aParams;
     /* SAFE */ {
-    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    osl::ClearableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
     // still running operation ... ignoring AUTO_SAVE.
     // All other requests has higher prio!
@@ -1332,6 +1334,7 @@ void SAL_CALL AutoRecovery::dispatch(const css::util::URL&                      
             // don't enable AutoSave hardly !
             // reload configuration to know the current state.
             implts_readAutoSaveConfig();
+            g.clear();
             implts_updateTimer();
             // can it happen that might be the listener was stopped ? .-)
             // make sure it runs always ... even if AutoSave itself was disabled temporarly.
@@ -2146,21 +2149,28 @@ void AutoRecovery::implts_startListening()
     css::uno::Reference< css::util::XChangesNotifier > xCFG;
     css::uno::Reference< css::frame::XGlobalEventBroadcaster > xBroadcaster;
     bool bListenForDocEvents;
+    bool bListenForConfigChanges;
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
     xCFG.set              (m_xRecoveryCFG, css::uno::UNO_QUERY);
     xBroadcaster        = m_xNewDocBroadcaster;
     bListenForDocEvents = m_bListenForDocEvents;
+    bListenForConfigChanges = m_bListenForConfigChanges;
     } /* SAFE */
 
     if (
         (  xCFG.is()                ) &&
-        (! m_bListenForConfigChanges)
+        (! bListenForConfigChanges)
        )
     {
-        m_xRecoveryCFGListener = new WeakChangesListener(this);
-        xCFG->addChangesListener(m_xRecoveryCFGListener);
+        css::uno::Reference<css::util::XChangesListener> const xListener(
+                new WeakChangesListener(this));
+        xCFG->addChangesListener(xListener);
+        /* SAFE */ {
+        osl::MutexGuard g2(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+        m_xRecoveryCFGListener = xListener;
         m_bListenForConfigChanges = true;
+        } /* SAFE */
     }
 
     if (!xBroadcaster.is())
@@ -2177,10 +2187,12 @@ void AutoRecovery::implts_startListening()
         (! bListenForDocEvents)
        )
     {
-        m_xNewDocBroadcasterListener = new WeakDocumentEventListener(this);
-        xBroadcaster->addDocumentEventListener(m_xNewDocBroadcasterListener);
+        css::uno::Reference<css::document::XDocumentEventListener> const
+            xListener(new WeakDocumentEventListener(this));
+        xBroadcaster->addDocumentEventListener(xListener);
         /* SAFE */ {
         osl::MutexGuard g2(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+        m_xNewDocBroadcasterListener = xListener;
         m_bListenForDocEvents = true;
         } /* SAFE */
     }
@@ -2250,6 +2262,8 @@ void AutoRecovery::implts_updateTimer()
 {
     implts_stopTimer();
 
+    sal_Int32 nMilliSeconds = 0;
+
     /* SAFE */ {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
@@ -2259,7 +2273,6 @@ void AutoRecovery::implts_updateTimer()
        )
         return;
 
-    sal_Int32 nMilliSeconds = 0;
     if (m_eTimerType == AutoRecovery::E_NORMAL_AUTOSAVE_INTERVALL)
     {
         nMilliSeconds = (m_nAutoSaveTimeIntervall*60000); // [min] => 60.000 ms
@@ -2271,15 +2284,17 @@ void AutoRecovery::implts_updateTimer()
     else if (m_eTimerType == AutoRecovery::E_POLL_TILL_AUTOSAVE_IS_ALLOWED)
         nMilliSeconds = 300; // there is a minimum time frame, where the user can lose some key input data!
 
-    m_aTimer.SetTimeout(nMilliSeconds);
-    m_aTimer.Start();
 
     } /* SAFE */
+
+    SolarMutexGuard g;
+    m_aTimer.SetTimeout(nMilliSeconds);
+    m_aTimer.Start();
 }
 
 void AutoRecovery::implts_stopTimer()
 {
-    osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+    SolarMutexGuard g;
 
     if (!m_aTimer.IsActive())
         return;
@@ -2327,13 +2342,14 @@ IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired, Timer *, void)
         // If we poll for an user idle period, may be we must
         // do nothing here and start the timer again.
         /* SAFE */ {
-        osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
+        osl::ClearableMutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
         if (m_eTimerType == AutoRecovery::E_POLL_FOR_USER_IDLE)
         {
             bool bUserIdle = (Application::GetLastInputInterval()>MIN_TIME_FOR_USER_IDLE);
             if (!bUserIdle)
             {
+                g.clear();
                 implts_updateTimer();
                 return;
             }
