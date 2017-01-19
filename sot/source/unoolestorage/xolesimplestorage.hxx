@@ -54,9 +54,11 @@ class OLESimpleStorage : public cppu::WeakImplHelper<css::embed::XOLESimpleStora
 
     void UpdateOriginal_Impl();
 
+    /// @throws css::uno::Exception
     static void InsertInputStreamToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const css::uno::Reference< css::io::XInputStream >& xInputStream )
     throw ( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     static void InsertNameAccessToStorage_Impl( BaseStorage* pStorage, const OUString & aName, const css::uno::Reference< css::container::XNameAccess >& xNameAccess )
     throw ( css::uno::Exception );
 
