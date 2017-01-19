@@ -501,6 +501,8 @@ public:
     {
     }
 
+    /// @throws css::xml::sax::SAXException
+    /// @throws css::uno::RuntimeException
     inline void finish() throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception)
     {
         try
