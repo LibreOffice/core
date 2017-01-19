@@ -102,8 +102,12 @@ public:
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,const css::uno::Reference<css::beans::XVetoableChangeListener>&aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
 
 private:
+    /// @throws css::uno::RuntimeException
     void throwIfDisposed() const throw(css::uno::RuntimeException);
+    /// @throws css::lang::IllegalArgumentException
     SdStyleSheet* GetValidNewSheet( const css::uno::Any& rElement ) throw(css::lang::IllegalArgumentException);
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::lang::WrappedTargetException
     SdStyleSheet* GetSheetByName( const OUString& rName ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException );
 
     SfxStyleFamily mnFamily;

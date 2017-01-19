@@ -91,6 +91,7 @@ private:
 
     void Shutdown();
 
+    /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };

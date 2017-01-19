@@ -174,6 +174,8 @@ private:
 
     /** When the called object has already been disposed this method throws
         an exception and does not return.
+
+        @throws css::lang::DisposedException
     */
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);

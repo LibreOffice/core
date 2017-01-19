@@ -97,6 +97,7 @@ private:
     css::uno::Reference<css::uno::XInterface> create(
         OUString const & aServiceSpecifier, OUString const & referer);
 
+    /// @throws css::uno::RuntimeException
     SdPage* InsertSdPage( sal_uInt16 nPage, bool bDuplicate )
         throw (css::uno::RuntimeException, std::exception);
 
@@ -391,6 +392,7 @@ public:
     virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
 
     // intern
+    /// @throws std::exception
     SdPage* FindPage( const OUString& rName ) const throw(std::exception);
 };
 

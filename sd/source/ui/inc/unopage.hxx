@@ -71,7 +71,9 @@ protected:
 
     const SvxItemPropertySet*   mpPropSet;
 
+    /// @throws css::lang::IllegalArgumentException
     virtual void setBackground( const css::uno::Any& rValue ) throw(css::lang::IllegalArgumentException, std::exception);
+    /// @throws std::exception
     virtual void getBackground( css::uno::Any& rValue ) throw(std::exception);
 
     OUString getBookmarkURL() const;
@@ -92,6 +94,7 @@ protected:
     css::uno::Any getNavigationOrder();
     void setNavigationOrder( const css::uno::Any& rValue );
 
+    /// @throws css::uno::RuntimeException
     void throwIfDisposed() const throw (css::uno::RuntimeException );
 
 public:

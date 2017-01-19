@@ -45,13 +45,19 @@ private:
     const SfxItemPropertyMapEntry* mpMap;
     SdXImpressDocument* mpModel;
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     void SetStyleSheet( const css::uno::Any& rAny )
         throw( css::lang::IllegalArgumentException, css::beans::UnknownPropertyException, css::uno::RuntimeException );
+    /// @throws css::beans::UnknownPropertyException
     css::uno::Any GetStyleSheet() const throw( css::beans::UnknownPropertyException  );
 
     // Intern
+    /// @throws std::exception
     SdAnimationInfo* GetAnimationInfo( bool bCreate = false ) const
         throw (std::exception);
+    /// @throws std::exception
     bool IsPresObj() const
         throw (std::exception);
 

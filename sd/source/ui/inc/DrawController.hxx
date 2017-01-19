@@ -281,6 +281,8 @@ protected:
 
     /** When the called object has been disposed already this method throws
         a Disposed exception and does not return.
+
+        @throws css::lang::DisposedException
     */
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);

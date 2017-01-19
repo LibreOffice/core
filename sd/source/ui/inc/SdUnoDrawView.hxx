@@ -114,6 +114,7 @@ protected:
     /** Make the specified object the active layer.
         @param rxLayer
             The new layer object.
+        @throws css::uno::RuntimeException
     */
     void setActiveLayer (const css::uno::Reference< css::drawing::XLayer>& rxLayer) throw (css::uno::RuntimeException, std::exception);
 

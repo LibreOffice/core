@@ -84,6 +84,7 @@ private:
         mxConfigurationController;
     css::uno::Reference<css::frame::XController> mxController;
 
+    /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };

@@ -97,7 +97,7 @@ private:
     std::shared_ptr<PresenterCacheContext> mpCacheContext;
     std::shared_ptr<sd::slidesorter::cache::PageCache> mpCache;
 
-    /** This method throws a DisposedException when the object has already been
+    /** @throws css::lang::DisposedException when the object has already been
         disposed.
     */
     void ThrowIfDisposed() throw (css::lang::DisposedException);

@@ -89,13 +89,14 @@ public:
 private:
     PreviewRenderer maPreviewRenderer;
 
+    /// @throws css::uno::RuntimeException
     BitmapEx CreatePreview (
         const css::uno::Reference<css::drawing::XDrawPage>& rxSlide,
         const css::awt::Size& rMaximumPreviewPixelSize,
         sal_Int16 nSuperSampleFactor)
         throw (css::uno::RuntimeException, std::exception);
 
-    /** This method throws a DisposedException when the object has already been
+    /** @throws css::lang::DisposedException when the object has already been
         disposed.
     */
     void ThrowIfDisposed() throw (css::lang::DisposedException);

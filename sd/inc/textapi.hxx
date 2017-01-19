@@ -42,6 +42,7 @@ public:
 
     virtual             ~TextApiObject() throw() override;
 
+    /// @throws css::uno::RuntimeException
     void SAL_CALL dispose() throw(css::uno::RuntimeException);
 
     OutlinerParaObject* CreateText();

@@ -1993,6 +1993,7 @@ bool stl_CustomAnimationEffect_search_node_predict::operator()( const CustomAnim
     return pEffect->getNode() == mxSearchNode;
 }
 
+/// @throws Exception
 static bool implFindNextContainer( Reference< XTimeContainer >& xParent, Reference< XTimeContainer >& xCurrent, Reference< XTimeContainer >& xNext )
  throw(Exception)
 {

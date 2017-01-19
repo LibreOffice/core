@@ -133,6 +133,7 @@ private:
                 css::drawing::framework::XResourceId>& rxPaneId,
             const PaneDescriptor& rDescriptor);
 
+    /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };

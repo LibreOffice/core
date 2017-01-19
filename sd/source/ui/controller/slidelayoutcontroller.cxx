@@ -308,22 +308,26 @@ void LayoutToolbarMenu::SelectHdl(void* pControl)
     mrController.dispatchCommand( sCommandURL, aArgs );
 }
 
+/// @throws css::uno::RuntimeException
 OUString SlideLayoutController_getImplementationName() throw (css::uno::RuntimeException)
 {
     return OUString( "com.sun.star.comp.sd.SlideLayoutController" );
 }
 
+/// @throws RuntimeException
 Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
+/// @throws css::uno::RuntimeException
 OUString InsertSlideController_getImplementationName() throw (css::uno::RuntimeException)
 {
     return OUString( "com.sun.star.comp.sd.InsertSlideController" );
 }
 
+/// @throws RuntimeException
 Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( RuntimeException )
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };

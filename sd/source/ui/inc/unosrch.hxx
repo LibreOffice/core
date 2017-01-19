@@ -89,6 +89,7 @@ protected:
     OUString maReplaceStr;
 
 public:
+    /// @throws css::uno::RuntimeException
     SdUnoSearchReplaceDescriptor(bool bReplace) throw (css::uno::RuntimeException);
     virtual ~SdUnoSearchReplaceDescriptor() throw() override;
 

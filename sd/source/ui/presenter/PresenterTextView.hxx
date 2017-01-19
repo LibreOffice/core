@@ -68,7 +68,7 @@ private:
     class Implementation;
     std::unique_ptr<Implementation> mpImplementation;
 
-    /** This method throws a DisposedException when the object has already been
+    /** @throws css::lang::DisposedException when the object has already been
         disposed.
     */
     void ThrowIfDisposed() throw (css::lang::DisposedException);

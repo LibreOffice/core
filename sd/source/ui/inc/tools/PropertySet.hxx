@@ -125,7 +125,7 @@ private:
         const OUString& rsPropertyName,
         const css::beans::PropertyChangeEvent& rEvent);
 
-    /** This method throws a DisposedException when the object has already been
+    /** @throws css::lang::DisposedException when the object has already been
         disposed.
     */
     void ThrowIfDisposed()

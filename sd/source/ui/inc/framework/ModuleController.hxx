@@ -90,6 +90,7 @@ private:
     class LoadedFactoryContainer;
     std::unique_ptr<LoadedFactoryContainer> mpLoadedFactories;
 
+    /// @throws std::exception
     ModuleController (
         const css::uno::Reference<css::uno::XComponentContext>& rxContext)
         throw (std::exception);

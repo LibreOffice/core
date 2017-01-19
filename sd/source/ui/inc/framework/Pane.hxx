@@ -135,6 +135,8 @@ protected:
 
     /** Override this method, not getCanvas(), when you want to provide a
         different canvas.
+
+        @throws css::uno::RuntimeException
     */
     virtual css::uno::Reference<css::rendering::XCanvas>
         CreateCanvas()
@@ -143,6 +145,8 @@ protected:
     /** Throw DisposedException when the object has already been disposed or
         is currently being disposed.  Otherwise this method returns
         normally.
+
+        @throws css::lang::DisposedException
     */
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);

@@ -127,6 +127,7 @@ public:
     void notifyModifyListener();
 
 protected:
+    /// @throws css::uno::RuntimeException
     static const SfxItemPropertySimpleEntry* getPropertyMapEntry( const OUString& rPropertyName ) throw (css::uno::RuntimeException);
 
     virtual void Load (SvStream& rIn, sal_uInt16 nVersion) override;
@@ -134,6 +135,7 @@ protected:
     virtual void Notify(SfxBroadcaster& rBC, const SfxHint& rHint) override;
     virtual             ~SdStyleSheet() override;
 
+    /// @throws css::uno::RuntimeException
     void throwIfDisposed() throw (css::uno::RuntimeException);
 
     void disposing();

@@ -371,7 +371,7 @@ private:
 
     css::rendering::ViewState MergeViewState (const css::rendering::ViewState& rViewState);
 
-    /** This method throws a DisposedException when the object has already been
+    /** @throws css::lang::DisposedException when the object has already been
         disposed.
     */
     void ThrowIfDisposed()

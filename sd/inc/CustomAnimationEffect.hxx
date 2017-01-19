@@ -158,6 +158,7 @@ public:
     SAL_DLLPRIVATE EffectSequenceHelper*   getEffectSequence() const { return mpEffectSequence; }
 
     // helper
+    /// @throws css::uno::Exception
     SAL_DLLPRIVATE css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNode() const throw (css::uno::Exception);
     SAL_DLLPRIVATE css::uno::Reference< css::drawing::XShape > getTargetShape() const;
 

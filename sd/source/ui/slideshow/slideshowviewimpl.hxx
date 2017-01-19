@@ -105,6 +105,7 @@ public:
 
     void    addListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener );
     void    removeListener( const css::uno::Reference< css::util::XModifyListener >& _rxListener );
+    /// @throws css::uno::Exception
     void    notify( const css::lang::EventObject& _rEvent ) throw( css::uno::Exception );
     void    disposing( const css::lang::EventObject& _rEventSource );
 
@@ -181,6 +182,7 @@ public:
     /// Disposing our broadcaster
     virtual void SAL_CALL disposing( const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception) override;
 
+    /// @throws css::uno::RuntimeException
     void SAL_CALL paint( const css::awt::PaintEvent& e ) throw (css::uno::RuntimeException);
 
     // XSlideShowView methods

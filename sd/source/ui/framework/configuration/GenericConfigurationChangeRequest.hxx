@@ -59,6 +59,7 @@ public:
         @param eMode
             The mode specifies whether to activate or to deactivate the
             resource.
+        @throws css::css::lang::IllegalArgumentException
     */
     GenericConfigurationChangeRequest (
         const css::uno::Reference<css::drawing::framework::XResourceId>&

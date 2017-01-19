@@ -100,8 +100,10 @@ struct PresentationSettingsEx : public PresentationSettings
     PresentationSettingsEx( const PresentationSettingsEx& );
     explicit PresentationSettingsEx( PresentationSettings& );
 
+    /// @throws css::lang::IllegalArgumentException
     void SetArguments( const css::uno::Sequence< css::beans::PropertyValue >& rArguments ) throw (css::lang::IllegalArgumentException, std::exception);
 
+    /// @throws css::lang::IllegalArgumentException
     void SetPropertyValue( const OUString& rProperty, const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException, std::exception);
 };
 
@@ -179,6 +181,7 @@ public:
     virtual void SAL_CALL setPenColor( ::sal_Int32 _pencolor ) throw (css::uno::RuntimeException, std::exception) override;
     virtual double SAL_CALL getPenWidth() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setPenWidth( double dStrokeWidth ) throw (css::uno::RuntimeException, std::exception) override;
+    /// @throws css::uno::RuntimeException
     void SAL_CALL setEraseAllInk( bool bEraseAllInk ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL isRunning(  ) throw (css::uno::RuntimeException, std::exception) override;
     virtual ::sal_Int32 SAL_CALL getSlideCount(  ) throw (css::uno::RuntimeException, std::exception) override;
@@ -217,6 +220,7 @@ public:
 
     // will be called from the SlideShowListenerProxy when this event is fired from the XSlideShow
     void slideEnded(const bool bReverse);
+    /// @throws css::uno::RuntimeException
     void hyperLinkClicked(const OUString & hyperLink) throw (css::uno::RuntimeException, std::exception);
     void click(const css::uno::Reference< css::drawing::XShape > & xShape, const css::awt::MouseEvent & aOriginalEvent);
     bool swipe(const CommandSwipeData &rSwipeData);
@@ -299,6 +303,7 @@ private:
 
     void removeShapeEvents();
     void registerShapeEvents( sal_Int32 nSlideNumber );
+    /// @throws css::uno::Exception
     void registerShapeEvents( css::uno::Reference< css::drawing::XShapes >& xShapes ) throw (css::uno::Exception, std::exception);
 
     static css::uno::Reference< css::presentation::XSlideShow > createSlideShow();

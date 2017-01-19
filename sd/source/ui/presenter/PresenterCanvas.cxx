@@ -99,6 +99,7 @@ private:
     geometry::RealPoint2D maPosition;
     geometry::RealSize2D maSpriteSize;
 
+    /// @throws css::lang::DisposedException
     void ThrowIfDisposed()
         throw (css::lang::DisposedException);
 };

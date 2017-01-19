@@ -183,7 +183,7 @@ private:
 
     void Resize();
 
-    /** This method throws a DisposedException when the object has already been
+    /** @throws css::lang::DisposedException when the object has already been
         disposed.
     */
     void ThrowIfDisposed() throw (css::lang::DisposedException);

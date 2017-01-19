@@ -291,10 +291,16 @@ public:
     bool setAlienAttributes( const css::uno::Any& rAttributes );
     void getAlienAttributes( css::uno::Any& rAttributes );
 
-    /** @return the main animation node */
+    /** @return the main animation node
+
+        @throws css::uno::RuntimeException
+    */
     css::uno::Reference< css::animations::XAnimationNode > const & getAnimationNode() throw (css::uno::RuntimeException);
 
-    /** sets the main animation node */
+    /** sets the main animation node
+
+        @throws css::uno::RuntimeException
+    */
     void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode >& xNode ) throw (css::uno::RuntimeException);
 
     /// @return a helper class to manipulate effects inside the main sequence

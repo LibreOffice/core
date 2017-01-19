@@ -95,6 +95,7 @@ public:
     static void setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i, SvxNumberFormat &rNumberFormat);
 
 public:
+    /// @throws css::uno::RuntimeException
     void throwIfDisposed() throw(css::uno::RuntimeException);
 
     // XServiceInfo

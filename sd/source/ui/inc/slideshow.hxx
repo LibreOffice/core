@@ -187,6 +187,7 @@ private:
     void StartInPlacePresentation();
     void StartFullscreenPresentation();
 
+    /// @throws css::uno::RuntimeException
     void ThrowIfDisposed() const throw (css::uno::RuntimeException);
 
     void CreateController( ViewShell* pViewSh, ::sd::View* pView, vcl::Window* pParentWindow );
