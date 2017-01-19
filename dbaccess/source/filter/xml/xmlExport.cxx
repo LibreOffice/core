@@ -67,14 +67,18 @@ namespace dbaxml
     class ODBExportHelper
     {
     public:
+        /// @throws RuntimeException
         static OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
+        /// @throws RuntimeException
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
         static Reference< XInterface > SAL_CALL Create(const Reference< css::lang::XMultiServiceFactory >&);
     };
     class ODBFullExportHelper
     {
     public:
+        /// @throws RuntimeException
         static OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
+        /// @throws RuntimeException
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
         static Reference< XInterface > SAL_CALL Create(const Reference< css::lang::XMultiServiceFactory >&);
     };

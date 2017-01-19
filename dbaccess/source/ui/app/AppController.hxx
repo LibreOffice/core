@@ -386,7 +386,9 @@ namespace dbaui
         virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
         // need by registration
+        /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
         static css::uno::Reference< css::uno::XInterface >
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);

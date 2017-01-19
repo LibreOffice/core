@@ -150,7 +150,9 @@ namespace dbaui
         virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) override;
 
         // XServiceInfo - static methods
+        /// @throws RuntimeException
         static Sequence< OUString >  getSupportedServiceNames_Static() throw( RuntimeException );
+        /// @throws RuntimeException
         static OUString              getImplementationName_Static() throw( RuntimeException );
         static Reference< XInterface >      Create( const Reference< XMultiServiceFactory >& );
 

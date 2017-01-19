@@ -210,6 +210,8 @@ class ODatabaseDocument :public ModelDependentComponent             // ModelDepe
             notify the proper events for this type.
         @param _rGuard
             the instance lock to be released before doing synchronous notifications
+        @throws css::io::IOException
+        @throws css::uno::RuntimeException
     */
     void impl_storeAs_throw(
             const OUString& _rURL,
@@ -466,6 +468,7 @@ public:
     }
 
 private:
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::ui::XUIConfigurationManager2 > const & getUIConfigurationManager2() throw (css::uno::RuntimeException);
 
     /** returns whether the model is currently being initialized

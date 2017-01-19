@@ -57,7 +57,9 @@ public:
     explicit DatabaseDataProvider(css::uno::Reference< css::uno::XComponentContext > const & context);
 
     // css::lang::XServiceInfo - static methods
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
     static css::uno::Reference< css::uno::XInterface >
         SAL_CALL Create(css::uno::Reference< css::uno::XComponentContext > const & context);

@@ -112,10 +112,12 @@ namespace dbaui
         explicit OViewController(const Reference< XComponentContext >& _rM) : OQueryController(_rM){}
 
         // need by registration
+        /// @throws RuntimeException
         static OUString getImplementationName_Static() throw( RuntimeException )
         {
             return OUString("org.openoffice.comp.dbu.OViewDesign");
         }
+        /// @throws RuntimeException
         static Sequence< OUString > getSupportedServiceNames_Static() throw( RuntimeException )
         {
             Sequence<OUString> aSupported { "com.sun.star.sdb.ViewDesign" };

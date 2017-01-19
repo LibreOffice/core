@@ -197,6 +197,7 @@ public:
     virtual void refresh(const css::uno::Reference< css::container::XNameAccess >& _rToBeRefreshed) override;
 
 protected:
+    /// @throws css::lang::DisposedException
     inline  void checkDisposed() throw (css::lang::DisposedException)
     {
         if ( rBHelper.bDisposed || !m_xConnection.is() )

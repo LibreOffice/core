@@ -195,6 +195,8 @@ namespace dbaccess
                         impl_prepareAndExecute_throw();
         void            impl_ensureStatement_throw();
 
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::sdbc::XConnection >  calcConnection(const css::uno::Reference< css::task::XInteractionHandler >& _rxHandler) throw( css::sdbc::SQLException, css::uno::RuntimeException, std::exception );
         // free clones and ParseTree. Plus, if _bComplete is <TRUE/>, *all* other associated resources
         void freeResources( bool _bComplete );
@@ -395,7 +397,8 @@ namespace dbaccess
         void    execute_NoApprove_NoNewConn(::osl::ResettableMutexGuard& _rClearForNotification);
 
         /** call the RowSetApproveListeners<p/>
-            throws an RowSetVetoException if one of the listeners vetoed
+            @throws css::sdb::RowSetVetoException if one of the listeners vetoed
+            @throws css::uno::RuntimeException
         */
         void    approveExecution() throw (css::sdb::RowSetVetoException, css::uno::RuntimeException);
 

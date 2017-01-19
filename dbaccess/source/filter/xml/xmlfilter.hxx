@@ -83,6 +83,7 @@ private:
     Reference<XPropertySet>                         m_xDataSource;
     bool                                            m_bNewFormat;
 
+    /// @throws RuntimeException
     bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
 
     /** fills the map with the Properties
@@ -110,9 +111,11 @@ public:
     // XFilter
     virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception) override;
 
+    /// @throws css::uno::RuntimeException
     static OUString SAL_CALL getImplementationName_Static()
         throw (css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence<OUString> SAL_CALL
     getSupportedServiceNames_Static() throw (css::uno::RuntimeException);
 

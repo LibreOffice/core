@@ -319,6 +319,7 @@ private:
     //- commands
 
     void onCommandGetDocumentProperties( css::uno::Any& _rProps );
+    /// @throws css::uno::Exception
     void onCommandInsert( const OUString& _sURL, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) throw( css::uno::Exception );
     void onCommandPreview( css::uno::Any& _rImage );
     css::uno::Any
