@@ -589,15 +589,13 @@ static void SAL_CALL typelib_callback(
                     *ppRet = createCTD( access, xTD );
                 }
             }
-            catch (container::NoSuchElementException & exc)
+            catch (const container::NoSuchElementException & exc)
             {
-                (void) exc; // avoid warning about unused variable
-                SAL_WARN("cppuhelper", "typelibrary type not available: " << exc.Message );
+                SAL_INFO("cppuhelper", "typelibrary type not available: " << exc.Message );
             }
-            catch (Exception & exc)
+            catch (const Exception & exc)
             {
-                (void) exc; // avoid warning about unused variable
-                SAL_WARN("cppuhelper", exc.Message );
+                SAL_INFO("cppuhelper", exc.Message );
             }
         }
     }

@@ -560,7 +560,7 @@ void SfxDispatcher::Pop(SfxShell& rShell, SfxDispatcherPopFlags nMode)
         xImp->aToDoStack.push_front( SfxToDo_Impl(bPush, bDelete, bUntil, rShell) );
         if (xImp->bFlushed)
         {
-            SAL_WARN("sfx.control", "Unflushed dispatcher!");
+            SAL_INFO("sfx.control", "Unflushed dispatcher!");
             xImp->bFlushed = false;
             xImp->bUpdated = false;
 
