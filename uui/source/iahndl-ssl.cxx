@@ -28,6 +28,7 @@
 #include <com/sun/star/ucb/CertificateValidationRequest.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
+#include <comphelper/sequence.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 #include <svl/zforlist.hxx>
@@ -272,27 +273,33 @@ handleCertificateValidationRequest_(
     }
 
     uno::Sequence< uno::Reference< security::XCertificateExtension > > extensions = rRequest.Certificate->getExtensions();
-    uno::Sequence< security::CertAltNameEntry > altNames;
-    for (sal_Int32 i = 0 ; i < extensions.getLength(); i++){
+    uno::Reference< security::XSanExtension > sanExtension;
+    for (sal_Int32 i = 0 ; i < extensions.getLength(); ++i)
+    {
         uno::Reference< security::XCertificateExtension >element = extensions[i];
-
         OString aId ( reinterpret_cast<const char *>(element->getExtensionId().getConstArray()), element->getExtensionId().getLength());
         if (aId.equals(OID_SUBJECT_ALTERNATIVE_NAME))
         {
-           uno::Reference< security::XSanExtension > sanExtension ( element, uno::UNO_QUERY );
-           altNames =  sanExtension->getAlternativeNames();
+           sanExtension = uno::Reference<security::XSanExtension>(element, uno::UNO_QUERY);
            break;
         }
     }
 
+    std::vector<security::CertAltNameEntry> altNames;
+    if (sanExtension.is())
+    {
+        altNames = comphelper::sequenceToContainer<std::vector<security::CertAltNameEntry>>(sanExtension->getAlternativeNames());
+    }
+
     OUString certHostName = getContentPart( rRequest.Certificate->getSubjectName() );
-    uno::Sequence< OUString > certHostNames(altNames.getLength() + 1);
+    uno::Sequence< OUString > certHostNames(altNames.size() + 1);
 
     certHostNames[0] = certHostName;
 
-    for(int n = 0; n < altNames.getLength(); ++n)
+    for (size_t n = 0; n < altNames.size(); ++n)
     {
-        if (altNames[n].Type ==  security::ExtAltNameType_DNS_NAME){
+        if (altNames[n].Type ==  security::ExtAltNameType_DNS_NAME)
+        {
            altNames[n].Value >>= certHostNames[n+1];
         }
     }

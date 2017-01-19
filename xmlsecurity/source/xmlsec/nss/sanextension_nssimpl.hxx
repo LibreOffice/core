@@ -30,13 +30,14 @@
 #include <com/sun/star/security/XSanExtension.hpp>
 #include <com/sun/star/security/CertAltNameEntry.hpp>
 #include "certificateextension_certextn.hxx"
+#include <vector>
 
 class SanExtensionImpl : public ::cppu::WeakImplHelper<
     css::security::XSanExtension >
 {
     private:
         CertificateExtension_CertExtn m_Extn;
-        css::uno::Sequence< css::security::CertAltNameEntry > m_Entries;
+        std::vector<css::security::CertAltNameEntry> m_Entries;
 
         static OString removeOIDFromString( const OString &oid);
 
