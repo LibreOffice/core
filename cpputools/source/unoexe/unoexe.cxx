@@ -84,6 +84,7 @@ static const char arUsingText[] =
 "    [--quiet]\n"
 "    [-- Argument1 Argument2 ...]\n";
 
+/// @throws RuntimeException
 static bool readOption( OUString * pValue, const sal_Char * pOpt,
                         sal_uInt32 * pnIndex, const OUString & aArg)
     throw (RuntimeException)
@@ -140,6 +141,7 @@ static bool readOption( bool * pbOpt, const sal_Char * pOpt,
     return false;
 }
 
+/// @throws Exception
 template< class T >
 void createInstance(
     Reference< T > & rxOut,
@@ -166,6 +168,7 @@ void createInstance(
     }
 }
 
+/// @throws Exception
 static Reference< XInterface > loadComponent(
     const Reference< XComponentContext > & xContext,
     const OUString & rImplName, const OUString & rLocation )
@@ -251,6 +254,7 @@ class OInstanceProvider
 
     OUString                          _aInstanceName;
 
+    /// @throws Exception
     inline Reference< XInterface > createInstance() throw (Exception);
 
 public:
