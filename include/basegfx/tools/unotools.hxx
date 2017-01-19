@@ -25,7 +25,7 @@ class B2DPolyPolygon;
 
 namespace unotools
 {
-
+    /// @throws css::lang::IllegalArgumentException
     BASEGFX_DLLPUBLIC B2DPolyPolygon polyPolygonBezierToB2DPolyPolygon(const css::drawing::PolyPolygonBezierCoords& rSourcePolyPolygon)
         throw( css::lang::IllegalArgumentException );
 
