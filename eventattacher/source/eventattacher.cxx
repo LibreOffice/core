@@ -241,6 +241,7 @@ public:
             throw( IllegalArgumentException, ServiceNotRegisteredException, CannotCreateAdapterException, IntrospectionException, RuntimeException, std::exception ) override;
 
     // used by FilterAllListener_Impl
+    /// @throws Exception
     Reference< XTypeConverter > getConverter() throw( Exception );
 
     friend class FilterAllListenerImpl;
@@ -271,8 +272,11 @@ private:
     Reference< XInvocationAdapterFactory2 >  m_xInvocationAdapterFactory;
 
     // needed services
+    /// @throws Exception
     Reference< XIntrospection >             getIntrospection() throw( Exception );
+    /// @throws Exception
     Reference< XIdlReflection >             getReflection() throw( Exception );
+    /// @throws Exception
     Reference< XInvocationAdapterFactory2 >  getInvocationAdapterService() throw( Exception );
 };
 
@@ -282,6 +286,7 @@ EventAttacherImpl::EventAttacherImpl( const Reference< XComponentContext >& rxCo
 {
 }
 
+/// @throws Exception
 Reference< XInterface > SAL_CALL EventAttacherImpl_CreateInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( Exception )
 {
     XEventAttacher *pEventAttacher = static_cast<XEventAttacher*>(new EventAttacherImpl( comphelper::getComponentContext(rSMgr) ));
@@ -431,6 +436,8 @@ public:
 
 private:
     // convert
+    /// @throws CannotConvertException
+    /// @throws RuntimeException
     void convertToEventReturn( Any & rRet, const Type& rRetType )
             throw (CannotConvertException, RuntimeException);
 
