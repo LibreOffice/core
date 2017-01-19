@@ -1141,7 +1141,7 @@ static uno::Sequence< OUString > GrammarCheckingIterator_getSupportedServiceName
     return aSNS;
 }
 
-
+/// @throws uno::Exception
 static uno::Reference< uno::XInterface > SAL_CALL GrammarCheckingIterator_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & /*rxSMgr*/ )
 throw(uno::Exception)

@@ -56,6 +56,7 @@ using namespace i18n;
 #define SCRIPT_HANGUL   2
 
 // from i18npool/source/textconversion/textconversion_ko.cxx
+/// @throws RuntimeException
 sal_Int16 SAL_CALL checkScriptType(sal_Unicode c) throw (RuntimeException)
 {
   UErrorCode status = U_ZERO_ERROR;

@@ -209,6 +209,7 @@ void LinguProps::launchEvent( const PropertyChangeEvent &rEvt ) const
     }
 }
 
+/// @throws Exception
 Reference< XInterface > SAL_CALL LinguProps_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)

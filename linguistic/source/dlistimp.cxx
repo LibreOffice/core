@@ -367,7 +367,7 @@ sal_Int32 DicList::GetDicPos(const uno::Reference< XDictionary > &xDic)
     return nPos;
 }
 
-
+/// @throws Exception
 uno::Reference< XInterface > SAL_CALL
     DicList_CreateInstance( const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
             throw(Exception)

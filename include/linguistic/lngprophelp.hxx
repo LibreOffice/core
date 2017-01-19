@@ -237,9 +237,11 @@ public:
     bool    IsSpellUpperCase() const;
     bool    IsSpellWithDigits() const;
     bool    IsSpellCapitalization() const;
+    /// @throws css::uno::RuntimeException
     bool addLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     bool removeLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(css::uno::RuntimeException);
@@ -308,9 +310,11 @@ public:
     sal_Int16   GetMinLeading() const;
     sal_Int16   GetMinTrailing() const;
     sal_Int16   GetMinWordLength() const;
+    /// @throws css::uno::RuntimeException
     bool addLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     bool removeLinguServiceEventListener(
                 const css::uno::Reference< css::linguistic2::XLinguServiceEventListener >& rxListener )
             throw(css::uno::RuntimeException);

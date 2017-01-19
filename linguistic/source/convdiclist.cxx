@@ -575,6 +575,7 @@ uno::Sequence< OUString > ConvDicList::getSupportedServiceNames_Static()
     return aSNS;
 }
 
+/// @throws css::uno::Exception
 uno::Reference< uno::XInterface > SAL_CALL ConvDicList_CreateInstance(
         const uno::Reference< XMultiServiceFactory > & /*rSMgr*/ )
     throw(Exception)

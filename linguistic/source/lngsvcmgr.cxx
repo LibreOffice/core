@@ -2004,7 +2004,7 @@ uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
     return aSNS;
 }
 
-
+/// @throws uno::Exception
 uno::Reference< uno::XInterface > SAL_CALL LngSvcMgr_CreateInstance(
             const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/ )
         throw(uno::Exception, std::exception)
