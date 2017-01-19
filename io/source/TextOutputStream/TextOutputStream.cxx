@@ -61,6 +61,7 @@ class OTextOutputStream : public WeakImplHelper< XTextOutputStream2, XServiceInf
     rtl_UnicodeToTextContext    mContextUnicode2Text;
 
     Sequence<sal_Int8> implConvert( const OUString& rSource );
+    /// @throws IOException
     void checkOutputStream() throw(IOException);
 
 public:

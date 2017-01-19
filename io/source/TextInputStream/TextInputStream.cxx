@@ -71,9 +71,13 @@ class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo 
     bool mbReachedEOF;
 
     void implResizeBuffer();
+    /// @throws IOException
+    /// @throws RuntimeException
     OUString implReadString( const Sequence< sal_Unicode >& Delimiters,
         bool bRemoveDelimiter, bool bFindLineEnd )
             throw(IOException, RuntimeException);
+    /// @throws IOException
+    /// @throws RuntimeException
     sal_Int32 implReadNext() throw(IOException, RuntimeException);
 
 public:

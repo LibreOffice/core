@@ -130,6 +130,8 @@ public: // XServiceInfo
 
 private:
     // helper methods
+    /// @throws NotConnectedException
+    /// @throws BufferSizeExceededException
     void checkMarksAndFlush() throw( NotConnectedException, BufferSizeExceededException);
 
     Reference< XConnectable > m_succ;

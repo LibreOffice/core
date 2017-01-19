@@ -100,6 +100,7 @@ namespace io_acceptor
 
     struct BeingInAccept
     {
+        /// @throws AlreadyAcceptingException
         BeingInAccept( bool *pFlag,const OUString & sConnectionDescription  ) throw( AlreadyAcceptingException)
             : m_pFlag( pFlag )
             {
