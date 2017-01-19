@@ -131,6 +131,7 @@ public:
      * throw a SAXParseException that describes the first error that matches
      * the given mask
      */
+    /// @throws css::xml::sax::SAXParseException
     void ThrowErrorAsSAXException( sal_Int32 nIdMask )
         throw( css::xml::sax::SAXParseException );
 };

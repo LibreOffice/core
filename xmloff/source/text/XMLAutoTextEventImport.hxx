@@ -75,6 +75,7 @@ css::uno::Sequence< OUString > SAL_CALL
 OUString SAL_CALL XMLAutoTextEventImport_getImplementationName()
     throw();
 
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL
     XMLAutoTextEventImport_createInstance(
         const css::uno::Reference< css::lang::XMultiServiceFactory > & )

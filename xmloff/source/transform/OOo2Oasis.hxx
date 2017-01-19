@@ -89,6 +89,8 @@ public:
     virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL cancel(  ) throw (css::uno::RuntimeException, std::exception) override;
 
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     void SAL_CALL Initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException);
 
     // css::xml::sax::XDocumentHandler

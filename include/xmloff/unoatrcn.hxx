@@ -77,6 +77,7 @@ public:
     virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
     virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
 
+    /// @throws css::uno::Exception
     friend  css::uno::Reference< css::uno::XInterface > SvUnoAttributeContainer_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr ) throw( css::uno::Exception );
 };
 
