@@ -29,18 +29,16 @@ namespace comphelper
     using namespace ::com::sun::star::container;
 
     OContainerListener::OContainerListener(::osl::Mutex& _rMutex)
-        :m_pAdapter(nullptr)
-        ,m_rMutex(_rMutex)
+        :m_rMutex(_rMutex)
     {
     }
 
 
     OContainerListener::~OContainerListener()
     {
-        if (m_pAdapter)
+        if (m_xAdapter.is())
         {
-            m_pAdapter->dispose();
-            m_pAdapter = nullptr;
+            m_xAdapter->dispose();
         }
     }
 
@@ -71,19 +69,8 @@ namespace comphelper
 
     void OContainerListener::setAdapter(OContainerListenerAdapter* pAdapter)
     {
-        if (m_pAdapter)
-        {
-            ::osl::MutexGuard aGuard(m_rMutex);
-            m_pAdapter->release();
-            m_pAdapter = nullptr;
-        }
-
-        if (pAdapter)
-        {
-            ::osl::MutexGuard aGuard(m_rMutex);
-            m_pAdapter = pAdapter;
-            m_pAdapter->acquire();
-        }
+        ::osl::MutexGuard aGuard(m_rMutex);
+        m_xAdapter = pAdapter;
     }
 
     OContainerListenerAdapter::OContainerListenerAdapter(OContainerListener* _pListener,

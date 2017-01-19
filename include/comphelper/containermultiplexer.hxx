@@ -24,6 +24,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <osl/mutex.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ref.hxx>
 
 
 namespace comphelper
@@ -43,8 +44,8 @@ namespace comphelper
     {
         friend class OContainerListenerAdapter;
     protected:
-        OContainerListenerAdapter*  m_pAdapter;
-        ::osl::Mutex&               m_rMutex;
+        rtl::Reference<OContainerListenerAdapter>  m_xAdapter;
+        ::osl::Mutex&                              m_rMutex;
 
     public:
         OContainerListener(::osl::Mutex& _rMutex);
