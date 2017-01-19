@@ -2307,9 +2307,7 @@ bool SwWW8ImplReader::IsDropCap()
     return false;
 }
 
-bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
-    const WW8_TablePos *pTabPos,
-    SvxULSpaceItem* pULSpaceItem)
+bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos)
 {
     if (nullptr == (m_pWFlyPara = ConstructApo(rApo, pTabPos)))
         return false;
@@ -2344,22 +2342,6 @@ bool SwWW8ImplReader::StartApo(const ApoTestResults &rApo,
         if (pTabPos && pTabPos->bNoFly)
         {
             m_pSFlyPara->pFlyFormat = nullptr;
-            if (pULSpaceItem)
-            {
-                // Word positioned tables can have a position (like a
-                // fly-frame), but they also support flowing across multiple
-                // pages. If we decide to import this as a normal table (so it
-                // can flow across multiple pages), then turn the vertical
-                // orientation position of the fly into a table upper margin.
-                const SfxPoolItem* pItem = nullptr;
-                if (aFlySet.HasItem(RES_VERT_ORIENT, &pItem))
-                {
-                    const SwFormatVertOrient* pOrient = static_cast<const SwFormatVertOrient*>(pItem);
-                    SwTwips nPos = pOrient->GetPos();
-                    if( 0 < nPos && nPos <= SAL_MAX_UINT16 )
-                        pULSpaceItem->SetUpper( sal_uInt16(nPos) );
-                }
-            }
         }
         else
         {
