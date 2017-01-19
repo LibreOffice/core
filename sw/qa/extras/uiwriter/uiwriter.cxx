@@ -88,6 +88,7 @@
 #include <paratr.hxx>
 #include <drawfont.hxx>
 #include <txtfrm.hxx>
+#include <hyp.hxx>
 #include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -96,6 +97,7 @@
 #include <sfx2/dispatch.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/configurationhelper.hxx>
+#include <editeng/unolingu.hxx>
 #include <config_features.h>
 
 static const char* const DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
@@ -222,6 +224,7 @@ public:
     void testTdf104814();
     void testTdf66405();
     void testTdf104492();
+    void testTdf105417();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -340,6 +343,7 @@ public:
     CPPUNIT_TEST(testTdf104814);
     CPPUNIT_TEST(testTdf66405);
     CPPUNIT_TEST(testTdf104492);
+    CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -4209,6 +4213,29 @@ void SwUiWriterTest::testTdf104492()
     xmlDocPtr pXmlDoc = parseLayoutDump();
     // The document should split table over 3 pages.
     assertXPath(pXmlDoc, "//page", 3);
+}
+
+void SwUiWriterTest::testTdf105417()
+{
+    SwDoc* pDoc = createDoc("tdf105417.odt");
+    CPPUNIT_ASSERT(pDoc);
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    CPPUNIT_ASSERT(xHyphenator.is());
+    // If there are no English hyphenation rules installed, we can't test
+    // hyphenation.
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    uno::Reference<linguistic2::XLinguProperties> xLinguProperties(LinguMgr::GetLinguPropertySet());
+    // Automatic hyphenation means not opening a dialog, but going ahead
+    // non-interactively.
+    xLinguProperties->setIsHyphAuto(true);
+    SwHyphWrapper aWrap(pView, xHyphenator, /*bStart=*/false, /*bOther=*/true, /*bSelection=*/false);
+    // This never returned, it kept trying to hyphenate the last word
+    // (greenbacks) again and again.
+    aWrap.SpellDocument();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
