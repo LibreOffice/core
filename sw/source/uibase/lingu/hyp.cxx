@@ -119,7 +119,7 @@ SwHyphWrapper::~SwHyphWrapper()
 {
     if( nPageCount )
         ::EndProgress( pView->GetDocShell() );
-    if( bInfoBox )
+    if( bInfoBox && !Application::IsHeadlessModeEnabled() )
         ScopedVclPtrInstance<InfoBox>(&pView->GetEditWin(), SW_RESSTR(STR_HYP_OK))->Execute();
 }
 
