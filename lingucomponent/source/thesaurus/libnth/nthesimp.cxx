@@ -511,6 +511,7 @@ Sequence < Reference < css::linguistic2::XMeaning > > SAL_CALL Thesaurus::queryM
     return noMeanings;
 }
 
+/// @throws Exception
 Reference< XInterface > SAL_CALL Thesaurus_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)

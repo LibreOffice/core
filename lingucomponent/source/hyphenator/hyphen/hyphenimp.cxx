@@ -740,6 +740,7 @@ OUString SAL_CALL Hyphenator::makeInitCap(const OUString& aTerm, CharClass * pCC
     return aTerm;
 }
 
+/// @throws Exception
 Reference< XInterface > SAL_CALL Hyphenator_CreateInstance(
         const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)

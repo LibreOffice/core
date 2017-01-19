@@ -102,6 +102,7 @@ public:
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL getDisabledLanguages(  ) throw (css::uno::RuntimeException, std::exception) override;
 
     // implementation specific
+    /// @throws RuntimeException
     void SetFingerPrintsDB( const OUString &fileName ) throw (RuntimeException);
 };
 
