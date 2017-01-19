@@ -428,6 +428,8 @@ public:
         throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
 
     /** eases implementing XTypeProvider::getTypes, returns the types of XMultiPropertySet, XFastPropertySet, XPropertySet
+
+        @throws css::uno::RuntimeException
      */
     css::uno::Sequence< css::uno::Type > getTypes()
         throw(css::uno::RuntimeException);
@@ -572,6 +574,9 @@ protected:
        @param nHandle the handle of the proberty.
        @param rValue the value to be converted
        @return true if the value converted.
+       @throws css::lang::IllegalArgumentException
+       @throws css::beans::UnknownPropertyException,
+       @thrwos css::uno::RuntimeException
      */
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
         css::uno::Any & rConvertedValue,
@@ -599,6 +604,7 @@ protected:
                handle
         @param rValue
                value
+        @throws css::uno::Exception
     */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,

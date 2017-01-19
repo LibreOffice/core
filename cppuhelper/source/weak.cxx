@@ -74,6 +74,8 @@ public:
     void SAL_CALL removeReference( const css::uno::Reference< css::uno::XReference >& xRef ) throw(css::uno::RuntimeException, std::exception) override;
 
     /// Called from the weak object if the reference count goes to zero.
+    ///
+    /// @throws css::uno::RuntimeException
     void SAL_CALL dispose() throw(css::uno::RuntimeException);
 
 private:
