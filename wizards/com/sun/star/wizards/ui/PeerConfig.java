@@ -103,7 +103,7 @@ public class PeerConfig implements XWindowListener
                 }
                 else if (AnyConverter.isString(aImageUrlTask.oResource))
                 {
-                    sImageUrl = oUnoDialog.getImageUrl(((String) aImageUrlTask.oResource));
+                    sImageUrl = (String) aImageUrlTask.oResource;
                 }
                 if (!sImageUrl.equals(PropertyNames.EMPTY_STRING))
                 {

@@ -834,11 +834,6 @@ public class UnoDialog
         return "private:resource/wzi/image/" + _nResId;
     }
 
-    public String getImageUrl(String _surl)
-    {
-        return _surl;
-    }
-
     public static short getListBoxLineCount()
     {
         return (short)20;
