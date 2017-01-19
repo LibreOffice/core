@@ -728,6 +728,8 @@ void FmGridHeader::PreExecuteColumnContextMenu(sal_uInt16 nColId, PopupMenu& rMe
         pControlMenu->EnableItem(SID_FM_FORMATTEDFIELD + nChangeTypeOffset, bDesignMode && (nColType != TYPE_FORMATTEDFIELD));
         rMenu.SetPopupMenu(SID_FM_CHANGECOL, pControlMenu);
     }
+    else
+        pControlMenu.disposeAndClear();
 
     rMenu.EnableItem(SID_FM_INSERTCOL, bDesignMode && xCols.is());
     rMenu.EnableItem(SID_FM_DELETECOL, bDesignMode && bMarked && xCols.is());
