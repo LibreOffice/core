@@ -84,6 +84,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <editeng/outlobj.hxx>
 #include <svx/svdpage.hxx>
+#include <rtl/ref.hxx>
 
 using namespace ::com::sun::star;
 
@@ -643,7 +644,7 @@ public:
     SdrEmbedObjectLink* mpObjectLink;
     OUString maLinkURL;
 
-    SvxUnoShapeModifyListener* mpModifyListener;
+    rtl::Reference<SvxUnoShapeModifyListener> mxModifyListener;
 
     explicit SdrOle2ObjImpl( bool bFrame ) :
         mpGraphic(nullptr),
@@ -656,8 +657,7 @@ public:
         mbIsChart(false),
         mbLoadingOLEObjectFailed(false),
         mbConnected(false),
-        mpObjectLink(nullptr),
-        mpModifyListener(nullptr)
+        mpObjectLink(nullptr)
     {
         mxObjRef.Lock();
     }
@@ -674,8 +674,7 @@ public:
         mbIsChart(false),
         mbLoadingOLEObjectFailed(false),
         mbConnected(false),
-        mpObjectLink(nullptr),
-        mpModifyListener(nullptr)
+        mpObjectLink(nullptr)
     {
         mxObjRef.Lock();
     }
@@ -685,10 +684,9 @@ public:
         delete mpGraphic;
         delete mpGraphicObject;
 
-        if (mpModifyListener)
+        if (mxModifyListener.is())
         {
-            mpModifyListener->invalidate();
-            mpModifyListener->release();
+            mxModifyListener->invalidate();
         }
     }
 };
@@ -1099,16 +1097,15 @@ void SdrOle2Obj::AddListeners_Impl()
     if( mpImpl->mxObjRef.is() && mpImpl->mxObjRef->getCurrentState() != embed::EmbedStates::LOADED )
     {
         // register modify listener
-        if (!mpImpl->mpModifyListener)
+        if (!mpImpl->mxModifyListener.is())
         {
-            mpImpl->mpModifyListener = new SvxUnoShapeModifyListener(this);
-            mpImpl->mpModifyListener->acquire();
+            mpImpl->mxModifyListener = new SvxUnoShapeModifyListener(this);
         }
 
         uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
-        if (xBC.is() && mpImpl->mpModifyListener)
+        if (xBC.is())
         {
-            uno::Reference<util::XModifyListener> xListener(mpImpl->mpModifyListener);
+            uno::Reference<util::XModifyListener> xListener(mpImpl->mxModifyListener.get());
             xBC->addModifyListener( xListener );
         }
     }
@@ -1139,9 +1136,9 @@ void SdrOle2Obj::RemoveListeners_Impl()
             if ( nState != embed::EmbedStates::LOADED )
             {
                 uno::Reference< util::XModifyBroadcaster > xBC( getXModel(), uno::UNO_QUERY );
-                if (xBC.is() && mpImpl->mpModifyListener)
+                if (xBC.is() && mpImpl->mxModifyListener.is())
                 {
-                    uno::Reference<util::XModifyListener> xListener(mpImpl->mpModifyListener);
+                    uno::Reference<util::XModifyListener> xListener(mpImpl->mxModifyListener.get());
                     xBC->removeModifyListener( xListener );
                 }
             }
