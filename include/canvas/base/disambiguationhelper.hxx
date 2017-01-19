@@ -61,6 +61,7 @@ namespace canvas
 
         virtual void disposeThis()
         {}
+        /// @throws css::uno::RuntimeException
         virtual void disposeEventSource( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
         {}
 
