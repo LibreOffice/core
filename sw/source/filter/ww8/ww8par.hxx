@@ -1468,7 +1468,7 @@ private:
     //Apo == Absolutely Positioned Object, MSWord's old-style frames
     WW8FlyPara *ConstructApo(const ApoTestResults &rApo,
         const WW8_TablePos *pTabPos);
-    bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos, SvxULSpaceItem* pULSpaceItem);
+    bool StartApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     void StopApo();
     bool TestSameApo(const ApoTestResults &rApo, const WW8_TablePos *pTabPos);
     ApoTestResults TestApo(int nCellLevel, bool bTableRowEnd,
@@ -1519,7 +1519,7 @@ private:
 
     void ReadDocVars();
 
-    bool StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem);
+    bool StartTable(WW8_CP nStartCp);
     bool InEqualApo(int nLvl) const;
     bool InLocalApo() const { return InEqualApo(m_nInTable); }
     bool InEqualOrHigherApo(int nLvl) const;

@@ -191,7 +191,7 @@ public:
 
     WW8TabDesc( SwWW8ImplReader* pIoClass, WW8_CP nStartCp );
     bool Ok() const { return m_bOk; }
-    void CreateSwTable(SvxULSpaceItem* pULSpaceItem);
+    void CreateSwTable();
     void UseSwTable();
     void SetSizePosition(SwFrameFormat* pFrameFormat);
     void TableCellEnd();
@@ -2340,7 +2340,7 @@ void wwSectionManager::PrependedInlineNode(const SwPosition &rPos,
         maSegments.back().maStart.Assign(rNode);
 }
 
-void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
+void WW8TabDesc::CreateSwTable()
 {
     ::SetProgressState(m_pIo->m_nProgress, m_pIo->m_pDocShell);   // Update
 
@@ -2395,9 +2395,6 @@ void WW8TabDesc::CreateSwTable(SvxULSpaceItem* pULSpaceItem)
     OSL_ENSURE(m_pTable && m_pTable->GetFrameFormat(), "insert table failed");
     if (!m_pTable || !m_pTable->GetFrameFormat())
         return;
-
-    if (pULSpaceItem && pULSpaceItem->GetUpper() != 0)
-        m_aItemSet.Put(*pULSpaceItem);
 
     SwTableNode* pTableNode = m_pTable->GetTableNode();
     OSL_ENSURE(pTableNode, "no table node!");
@@ -3345,7 +3342,7 @@ void WW8TabDesc::SetNumRuleName( const OUString& rName )
     m_aNumRuleNames[nCol] = rName;
 }
 
-bool SwWW8ImplReader::StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem)
+bool SwWW8ImplReader::StartTable(WW8_CP nStartCp)
 {
     // Entering a table so make sure the FirstPara flag gets set
     m_bFirstPara = true;
@@ -3428,7 +3425,7 @@ bool SwWW8ImplReader::StartTable(WW8_CP nStartCp, SvxULSpaceItem* pULSpaceItem)
                    "Not the anchor type requested!" );
             MoveInsideFly(m_pTableDesc->m_pFlyFormat);
         }
-        m_pTableDesc->CreateSwTable(pULSpaceItem);
+        m_pTableDesc->CreateSwTable();
         if (m_pTableDesc->m_pFlyFormat)
         {
             m_pTableDesc->SetSizePosition(m_pTableDesc->m_pFlyFormat);

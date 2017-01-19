@@ -44,6 +44,19 @@ DECLARE_WW8EXPORT_TEST(testTdf89377, "tdf89377_tableWithBreakBeforeParaStyle.doc
     CPPUNIT_ASSERT_EQUAL( 2, getPages() );
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf96277, "tdf96277.doc")
+{
+    // mismatch between anchoring at paragraph and ULSpacing to Page
+    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
+}
+
+DECLARE_WW8EXPORT_TEST(testBnc863018b, "bnc863018b.doc")
+{
+    // The whitespace above the table should allow text to flow between the table anchor and the table.
+    // Since it doesn't, don't add the whitespace.
+    CPPUNIT_ASSERT_EQUAL( 1, getPages() );
+}
+
 DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")
 {
     uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WW8Num1"), uno::UNO_QUERY);
