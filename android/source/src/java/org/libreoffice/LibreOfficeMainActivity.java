@@ -55,6 +55,7 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private static final String ASSETS_EXTRACTED_PREFS_KEY = "ASSETS_EXTRACTED";
 
     public static LibreOfficeMainActivity mAppContext;
+    public static LOKitThread loKitThread;
 
     private GeckoLayerClient mLayerClient;
 
@@ -164,13 +165,15 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
         }
 
-        LibreOfficeApplication.getLoKitThread().clearQueue();
-
         mLayerClient = new GeckoLayerClient(this);
         mLayerClient.setZoomConstraints(new ZoomConstraints(true));
         LayerView layerView = (LayerView) findViewById(R.id.layer_view);
         mLayerClient.setView(layerView);
         layerView.setInputConnectionHandler(new LOKitInputConnectionHandler());
+
+        loKitThread = new LOKitThread(this);
+        loKitThread.start();
+
         mLayerClient.notifyReady();
 
         layerView.setOnKeyListener(new View.OnKeyListener() {

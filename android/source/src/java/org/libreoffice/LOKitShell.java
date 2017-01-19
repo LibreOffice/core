@@ -69,7 +69,7 @@ public class LOKitShell {
      * Make sure LOKitThread is running and send event to it.
      */
     public static void sendEvent(LOEvent event) {
-        LibreOfficeApplication.getLoKitThread().queueEvent(event);
+        LibreOfficeMainActivity.loKitThread.queueEvent(event);
     }
 
     public static void sendThumbnailEvent(ThumbnailCreator.ThumbnailCreationTask task) {
