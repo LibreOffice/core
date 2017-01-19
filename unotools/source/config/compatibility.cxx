@@ -25,13 +25,10 @@
 #include <com/sun/star/uno/Any.hxx>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <vector>
-
 #include "itemholder1.hxx"
 
 #include <algorithm>
-
-//  namespaces
+#include <vector>
 
 using namespace ::std;
 using namespace ::utl;
@@ -43,196 +40,87 @@ using namespace ::com::sun::star::beans;
 #define PATHDELIMITER           "/"
 #define SETNODE_ALLFILEFORMATS  "AllFileFormats"
 
-#define PROPERTYNAME_NAME               COMPATIBILITY_PROPERTYNAME_NAME
-#define PROPERTYNAME_MODULE             COMPATIBILITY_PROPERTYNAME_MODULE
-#define PROPERTYNAME_USEPRTMETRICS      COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS
-#define PROPERTYNAME_ADDSPACING         COMPATIBILITY_PROPERTYNAME_ADDSPACING
-#define PROPERTYNAME_ADDSPACINGATPAGES  COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES
-#define PROPERTYNAME_USEOURTABSTOPS     COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS
-#define PROPERTYNAME_NOEXTLEADING       COMPATIBILITY_PROPERTYNAME_NOEXTLEADING
-#define PROPERTYNAME_USELINESPACING     COMPATIBILITY_PROPERTYNAME_USELINESPACING
-#define PROPERTYNAME_ADDTABLESPACING    COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING
-#define PROPERTYNAME_USEOBJPOS          COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING
-#define PROPERTYNAME_USEOURTEXTWRAP     COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING
-#define PROPERTYNAME_CONSIDERWRAPSTYLE  COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE
-#define PROPERTYNAME_EXPANDWORDSPACE    COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE
-#define PROPERTYNAME_PROTECTFORM        COMPATIBILITY_PROPERTYNAME_PROTECTFORM
-#define PROPERTYNAME_MSWORDTRAILINGBLANKS COMPATIBILITY_PROPERTYNAME_MSWORDTRAILINGBLANKS
-
-#define PROPERTYCOUNT                   15
-
-#define OFFSET_NAME                     0
-#define OFFSET_MODULE                   1
-#define OFFSET_USEPRTMETRICS            2
-#define OFFSET_ADDSPACING               3
-#define OFFSET_ADDSPACINGATPAGES        4
-#define OFFSET_USEOURTABSTOPS           5
-#define OFFSET_NOEXTLEADING             6
-#define OFFSET_USELINESPACING           7
-#define OFFSET_ADDTABLESPACING          8
-#define OFFSET_USEOBJPOS                9
-#define OFFSET_USEOURTEXTWRAPPING       10
-#define OFFSET_CONSIDERWRAPPINGSTYLE    11
-#define OFFSET_EXPANDWORDSPACE          12
-#define OFFSET_PROTECTFORM              13
-#define OFFSET_MSWORDTRAILINGBLANKS     14
-
-//  private declarations!
-
-/*-****************************************************************************************************************
-    @descr  struct to hold information about one compatibility entry
-****************************************************************************************************************-*/
-struct SvtCompatibilityEntry
+SvtCompatibilityEntry::SvtCompatibilityEntry()
+    : m_aPropertyValue( SvtCompatibilityEntry::getElementCount() )
 {
-    public:
-        SvtCompatibilityEntry() :
-            bUsePrtMetrics( false ), bAddSpacing( false ),
-            bAddSpacingAtPages( false ), bUseOurTabStops( false ),
-            bNoExtLeading( false ), bUseLineSpacing( false ),
-            bAddTableSpacing( false ), bUseObjPos( false ),
-            bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-            bExpandWordSpace( true ), bProtectForm( false ),
-            bMsWordCompTrailingBlanks ( false ) {}
+    /* Should be in the start. Do not remove it. */
+    setValue<OUString>( Index::Name, OUString("") );
+    setValue<OUString>( Index::Module, OUString("") );
 
-        SvtCompatibilityEntry(
-            const OUString& _rName, const OUString& _rNewModule ) :
-                sName( _rName ), sModule( _rNewModule ),
-                bUsePrtMetrics( false ), bAddSpacing( false ),
-                bAddSpacingAtPages( false ), bUseOurTabStops( false ),
-                bNoExtLeading( false ), bUseLineSpacing( false ),
-                bAddTableSpacing( false ), bUseObjPos( false ),
-                bUseOurTextWrapping( false ), bConsiderWrappingStyle( false ),
-                bExpandWordSpace( true ), bProtectForm( false ),
-                bMsWordCompTrailingBlanks( false ) {}
+    /* Editable list of default values. Sync it with the SvtCompatibilityEntry::Index enum class. */
+    setValue<bool>( Index::UsePrtMetrics, false );
+    setValue<bool>( Index::AddSpacing, false );
+    setValue<bool>( Index::AddSpacingAtPages, false );
+    setValue<bool>( Index::UseOurTabStops, false );
+    setValue<bool>( Index::NoExtLeading, false );
+    setValue<bool>( Index::UseLineSpacing, false );
+    setValue<bool>( Index::AddTableSpacing, false );
+    setValue<bool>( Index::UseObjectPositioning, false );
+    setValue<bool>( Index::UseOurTextWrapping, false );
+    setValue<bool>( Index::ConsiderWrappingStyle, false );
+    setValue<bool>( Index::ExpandWordSpace, true );
+    setValue<bool>( Index::ProtectForm, false );
+    setValue<bool>( Index::MsWordTrailingBlanks, false );
 
-        inline void     SetUsePrtMetrics( bool _bSet ) { bUsePrtMetrics = _bSet; }
-        inline void     SetAddSpacing( bool _bSet ) { bAddSpacing = _bSet; }
-        inline void     SetAddSpacingAtPages( bool _bSet ) { bAddSpacingAtPages = _bSet; }
-        inline void     SetUseOurTabStops( bool _bSet ) { bUseOurTabStops = _bSet; }
-        inline void     SetNoExtLeading( bool _bSet ) { bNoExtLeading = _bSet; }
-        inline void     SetUseLineSpacing( bool _bSet ) { bUseLineSpacing = _bSet; }
-        inline void     SetAddTableSpacing( bool _bSet ) { bAddTableSpacing = _bSet; }
-        inline void     SetUseObjPos( bool _bSet ) { bUseObjPos = _bSet; }
-        inline void     SetUseOurTextWrapping( bool _bSet ) { bUseOurTextWrapping = _bSet; }
-        inline void     SetConsiderWrappingStyle( bool _bSet ) { bConsiderWrappingStyle = _bSet; }
-        inline void     SetExpandWordSpace( bool _bSet ) { bExpandWordSpace = _bSet; }
-        inline void     SetProtectForm( bool _bSet ) { bProtectForm = _bSet; }
-        inline void     SetMsWordCompTrailingBlanks( bool _bSet ) { bMsWordCompTrailingBlanks = _bSet; }
+    setDefaultEntry( false );
+}
 
-    public:
-        OUString    sName;
-        OUString    sModule;
-        bool        bUsePrtMetrics;
-        bool        bAddSpacing;
-        bool        bAddSpacingAtPages;
-        bool        bUseOurTabStops;
-        bool        bNoExtLeading;
-        bool        bUseLineSpacing;
-        bool        bAddTableSpacing;
-        bool        bUseObjPos;
-        bool        bUseOurTextWrapping;
-        bool        bConsiderWrappingStyle;
-        bool        bExpandWordSpace;
-        bool        bProtectForm;
-        bool        bMsWordCompTrailingBlanks;
-};
+SvtCompatibilityEntry::~SvtCompatibilityEntry()
+{
+}
+
+OUString SvtCompatibilityEntry::getName( const Index rIdx )
+{
+    static const char* sPropertyName[] =
+    {
+        /* Should be in the start. Do not remove it. */
+        "Name",
+        "Module",
+
+        /* Editable list of compatibility option names. Sync it with the SvtCompatibilityEntry::Index enum class. */
+        "UsePrinterMetrics",
+        "AddSpacing",
+        "AddSpacingAtPages",
+        "UseOurTabStopFormat",
+        "NoExternalLeading",
+        "UseLineSpacing",
+        "AddTableSpacing",
+        "UseObjectPositioning",
+        "UseOurTextWrapping",
+        "ConsiderWrappingStyle",
+        "ExpandWordSpace",
+        "ProtectForm",
+        "MsWordCompTrailingBlanks"
+    };
+
+    /* Size of sPropertyName array not equal size of the SvtCompatibilityEntry::Index enum class */
+    assert( SAL_N_ELEMENTS(sPropertyName) == static_cast<int>( SvtCompatibilityEntry::getElementCount() ) );
+
+    return OUString::createFromAscii( sPropertyName[ static_cast<int>(rIdx) ] );
+}
 
 /*-****************************************************************************************************************
     @descr  support simple menu structures and operations on it
 ****************************************************************************************************************-*/
-class SvtCompatibility
-{
-    public:
 
-        // append one entry
-        void AppendEntry( const SvtCompatibilityEntry& rEntry )
-        {
-            lEntries.push_back( rEntry );
-        }
-
-        // the only way to free memory!
-        void Clear()
-        {
-            lEntries.clear();
-        }
-
-        // convert internal list to external format
-        Sequence< Sequence< PropertyValue > > GetList() const
-        {
-            sal_Int32 nCount = (sal_Int32)lEntries.size();
-            sal_Int32 nStep = 0;
-            Sequence< PropertyValue > lProperties( PROPERTYCOUNT );
-            Sequence< Sequence< PropertyValue > > lResult( nCount );
-            const vector< SvtCompatibilityEntry >* pList = &lEntries;
-
-            lProperties[ OFFSET_NAME ].Name = PROPERTYNAME_NAME;
-            lProperties[ OFFSET_MODULE ].Name = PROPERTYNAME_MODULE;
-            lProperties[ OFFSET_USEPRTMETRICS ].Name = PROPERTYNAME_USEPRTMETRICS;
-            lProperties[ OFFSET_ADDSPACING ].Name = PROPERTYNAME_ADDSPACING;
-            lProperties[ OFFSET_ADDSPACINGATPAGES ].Name = PROPERTYNAME_ADDSPACINGATPAGES;
-            lProperties[ OFFSET_USEOURTABSTOPS ].Name = PROPERTYNAME_USEOURTABSTOPS;
-            lProperties[ OFFSET_NOEXTLEADING ].Name = PROPERTYNAME_NOEXTLEADING;
-            lProperties[ OFFSET_USELINESPACING ].Name = PROPERTYNAME_USELINESPACING;
-            lProperties[ OFFSET_ADDTABLESPACING ].Name = PROPERTYNAME_ADDTABLESPACING;
-            lProperties[ OFFSET_USEOBJPOS ].Name = PROPERTYNAME_USEOBJPOS;
-            lProperties[ OFFSET_USEOURTEXTWRAPPING ].Name = PROPERTYNAME_USEOURTEXTWRAP;
-            lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Name = PROPERTYNAME_CONSIDERWRAPSTYLE;
-            lProperties[ OFFSET_EXPANDWORDSPACE ].Name = PROPERTYNAME_EXPANDWORDSPACE;
-            lProperties[ OFFSET_MSWORDTRAILINGBLANKS ].Name = PROPERTYNAME_MSWORDTRAILINGBLANKS;
-
-            for ( vector< SvtCompatibilityEntry >::const_iterator pItem = pList->begin();
-                  pItem != pList->end(); ++pItem )
-            {
-                lProperties[ OFFSET_NAME ].Value <<= pItem->sName;
-                lProperties[ OFFSET_MODULE ].Value <<= pItem->sModule;
-                lProperties[ OFFSET_USEPRTMETRICS ].Value <<= pItem->bUsePrtMetrics;
-                lProperties[ OFFSET_ADDSPACING ].Value <<= pItem->bAddSpacing;
-                lProperties[ OFFSET_ADDSPACINGATPAGES ].Value <<= pItem->bAddSpacingAtPages;
-                lProperties[ OFFSET_USEOURTABSTOPS ].Value <<= pItem->bUseOurTabStops;
-                lProperties[ OFFSET_NOEXTLEADING ].Value <<= pItem->bNoExtLeading;
-                lProperties[ OFFSET_USELINESPACING ].Value <<= pItem->bUseLineSpacing;
-                lProperties[ OFFSET_ADDTABLESPACING ].Value <<= pItem->bAddTableSpacing;
-                lProperties[ OFFSET_USEOBJPOS ].Value <<= pItem->bUseObjPos;
-                lProperties[ OFFSET_USEOURTEXTWRAPPING ].Value <<= pItem->bUseOurTextWrapping;
-                lProperties[ OFFSET_CONSIDERWRAPPINGSTYLE ].Value <<= pItem->bConsiderWrappingStyle;
-                lProperties[ OFFSET_EXPANDWORDSPACE ].Value <<= pItem->bExpandWordSpace;
-                lProperties[ OFFSET_MSWORDTRAILINGBLANKS ].Value <<= pItem->bMsWordCompTrailingBlanks;
-                lResult[ nStep ] = lProperties;
-                ++nStep;
-            }
-
-            return lResult;
-        }
-
-        int size() const
-        {
-            return lEntries.size();
-        }
-
-        const SvtCompatibilityEntry& operator[]( int i ) const
-        {
-            return lEntries[i];
-        }
-
-    private:
-        vector< SvtCompatibilityEntry > lEntries;
-};
-
+/*-****************************************************************************************************
+    @short      base implementation of public interface for "SvtCompatibilityOptions"!
+    @descr      These class is used as static member of "SvtCompatibilityOptions" ...
+                => The code exist only for one time and isn't duplicated for every instance!
+*//*-*****************************************************************************************************/
 class SvtCompatibilityOptions_Impl : public ConfigItem
 {
-
-    //  public methods
-
     public:
-
-        //  constructor / destructor
-
-         SvtCompatibilityOptions_Impl();
+        SvtCompatibilityOptions_Impl();
         virtual ~SvtCompatibilityOptions_Impl() override;
 
-        void SetDefault( const OUString & sName, bool bValue );
+        void AppendItem( const SvtCompatibilityEntry& aItem );
+        void Clear();
 
-        //  override methods of baseclass
+        void SetDefault( SvtCompatibilityEntry::Index rIdx, bool rValue );
+        bool GetDefault( SvtCompatibilityEntry::Index rIdx ) const;
+
+        Sequence< Sequence< PropertyValue > > GetList() const;
 
         /*-****************************************************************************************************
             @short      called for notify of configmanager
@@ -244,52 +132,9 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
 
             @param      "lPropertyNames" is the list of properties which should be updated.
         *//*-*****************************************************************************************************/
-
         virtual void Notify( const Sequence< OUString >& lPropertyNames ) override;
 
-        //  public interface
-
-        /*-****************************************************************************************************
-            @short      base implementation of public interface for "SvtCompatibilityOptions"!
-            @descr      These class is used as static member of "SvtCompatibilityOptions" ...
-                        => The code exist only for one time and isn't duplicated for every instance!
-        *//*-*****************************************************************************************************/
-
-        void                                    Clear();
-        Sequence< Sequence< PropertyValue > >   GetList() const;
-        void                                    AppendItem( const OUString& _sName,
-                                                            const OUString& _sModule,
-                                                            bool _bUsePrtMetrics,
-                                                            bool _bAddSpacing,
-                                                            bool _bAddSpacingAtPages,
-                                                            bool _bUseOurTabStops,
-                                                            bool _bNoExtLeading,
-                                                            bool _bUseLineSpacing,
-                                                            bool _bAddTableSpacing,
-                                                            bool _bUseObjPos,
-                                                            bool _bUseOurTextWrapping,
-                                                            bool _bConsiderWrappingStyle,
-                                                            bool _bExpandWordSpace,
-                                                            bool _bProtectForm,
-                                                            bool _bMsWordCompTrailingBlanks );
-
-        inline bool IsUsePrtDevice() const { return m_aDefOptions.bUsePrtMetrics; }
-        inline bool IsAddSpacing() const { return m_aDefOptions.bAddSpacing; }
-        inline bool IsAddSpacingAtPages() const { return m_aDefOptions.bAddSpacingAtPages; }
-        inline bool IsUseOurTabStops() const { return m_aDefOptions.bUseOurTabStops; }
-        inline bool IsNoExtLeading() const { return m_aDefOptions.bNoExtLeading; }
-        inline bool IsUseLineSpacing() const { return m_aDefOptions.bUseLineSpacing; }
-        inline bool IsAddTableSpacing() const { return m_aDefOptions.bAddTableSpacing; }
-        inline bool IsUseObjPos() const { return m_aDefOptions.bUseObjPos; }
-        inline bool IsUseOurTextWrapping() const { return m_aDefOptions.bUseOurTextWrapping; }
-        inline bool IsConsiderWrappingStyle() const { return m_aDefOptions.bConsiderWrappingStyle; }
-        inline bool IsExpandWordSpace() const { return m_aDefOptions.bExpandWordSpace; }
-        inline bool IsMsWordCompTrailingBlanks() const { return m_aDefOptions.bMsWordCompTrailingBlanks; }
-
-    //  private methods
-
     private:
-
         virtual void ImplCommit() override;
 
         /*-****************************************************************************************************
@@ -298,7 +143,6 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
                         configuration management and support dynamical menu item lists!
             @return     A list of configuration key names is returned.
         *//*-*****************************************************************************************************/
-
         Sequence< OUString > impl_GetPropertyNames( Sequence< OUString >& rItems );
 
         /*-****************************************************************************************************
@@ -309,68 +153,48 @@ class SvtCompatibilityOptions_Impl : public ConfigItem
             @param      "lDestination" ,   destination of operation
             @return     A list of configuration key names is returned.
         *//*-*****************************************************************************************************/
-
         static void impl_ExpandPropertyNames( const Sequence< OUString >& lSource,
                                               Sequence< OUString >& lDestination );
 
-    //  private member
-
     private:
-
-        SvtCompatibility        m_aOptions;
-        SvtCompatibilityEntry   m_aDefOptions;
+        std::vector< SvtCompatibilityEntry > m_aOptions;
+        SvtCompatibilityEntry                m_aDefOptions;
 };
 
-//  constructor
-
-SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
-    // Init baseclasses first
-    :   ConfigItem( ROOTNODE_OPTIONS )
-    // Init member then...
+SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl() : ConfigItem( ROOTNODE_OPTIONS )
 {
     // Get names and values of all accessible menu entries and fill internal structures.
     // See impl_GetPropertyNames() for further information.
     Sequence< OUString > lNodes;
-    Sequence< OUString > lNames = impl_GetPropertyNames( lNodes );
-    sal_uInt32 nCount = lNodes.getLength();
-    Sequence< Any > lValues = GetProperties( lNames );
+    Sequence< OUString > lNames  = impl_GetPropertyNames( lNodes );
+    sal_uInt32           nCount  = lNodes.getLength();
+    Sequence< Any >      lValues = GetProperties( lNames );
 
     // Safe impossible cases.
     // We need values from ALL configuration keys.
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !( lNames.getLength()!=lValues.getLength() ), "SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    SvtCompatibilityEntry aItem;
-    sal_uInt32 nItem = 0;
-    sal_uInt32 nPosition = 0;
-
     // Get names/values for new menu.
     // 4 subkeys for every item!
     bool bDefaultFound = false;
-    for( nItem = 0; nItem < nCount; ++nItem )
+    for ( sal_uInt32 nItem = 0; nItem < nCount; ++nItem )
     {
-        aItem.sName = lNodes[ nItem ];
-        lValues[ nPosition++ ] >>= aItem.sModule;
-        lValues[ nPosition++ ] >>= aItem.bUsePrtMetrics;
-        lValues[ nPosition++ ] >>= aItem.bAddSpacing;
-        lValues[ nPosition++ ] >>= aItem.bAddSpacingAtPages;
-        lValues[ nPosition++ ] >>= aItem.bUseOurTabStops;
-        lValues[ nPosition++ ] >>= aItem.bNoExtLeading;
-        lValues[ nPosition++ ] >>= aItem.bUseLineSpacing;
-        lValues[ nPosition++ ] >>= aItem.bAddTableSpacing;
-        lValues[ nPosition++ ] >>= aItem.bUseObjPos;
-        lValues[ nPosition++ ] >>= aItem.bUseOurTextWrapping;
-        lValues[ nPosition++ ] >>= aItem.bConsiderWrappingStyle;
-        lValues[ nPosition++ ] >>= aItem.bExpandWordSpace;
-        lValues[ nPosition++ ] >>= aItem.bMsWordCompTrailingBlanks;
-        m_aOptions.AppendEntry( aItem );
+        SvtCompatibilityEntry aItem;
 
-        if ( !bDefaultFound && aItem.sName == COMPATIBILITY_DEFAULT_NAME )
+        aItem.setValue<OUString>( SvtCompatibilityEntry::Index::Name, lNodes[ nItem ] );
+
+        for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
+            aItem.setValue( SvtCompatibilityEntry::Index(i), lValues[ i - 1 ] );
+
+        m_aOptions.push_back( aItem );
+
+        if ( !bDefaultFound && aItem.getValue<OUString>( SvtCompatibilityEntry::Index::Name ) == SvtCompatibilityEntry::getDefaultEntryName() )
         {
             SvtSysLocale aSysLocale;
             css::lang::Locale aLocale = aSysLocale.GetLanguageTag().getLocale();
             if ( aLocale.Language == "zh" || aLocale.Language == "ja" || aLocale.Language == "ko" )
-                aItem.bExpandWordSpace = false;
+                aItem.setValue<bool>( SvtCompatibilityEntry::Index::ExpandWordSpace, false );
 
             m_aDefOptions = aItem;
             bDefaultFound = true;
@@ -378,49 +202,68 @@ SvtCompatibilityOptions_Impl::SvtCompatibilityOptions_Impl()
     }
 }
 
-//  destructor
-
 SvtCompatibilityOptions_Impl::~SvtCompatibilityOptions_Impl()
 {
-    assert(!IsModified()); // should have been committed
+    assert( !IsModified() ); // should have been committed
 }
 
-void SvtCompatibilityOptions_Impl::SetDefault( const OUString & sName, bool bValue )
+void SvtCompatibilityOptions_Impl::AppendItem( const SvtCompatibilityEntry& aItem )
 {
-    if ( sName == COMPATIBILITY_PROPERTYNAME_USEPRTMETRICS )
-        m_aDefOptions.SetUsePrtMetrics( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_ADDSPACING )
-        m_aDefOptions.SetAddSpacing( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_ADDSPACINGATPAGES )
-        m_aDefOptions.SetAddSpacingAtPages( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_USEOURTABSTOPS )
-        m_aDefOptions.SetUseOurTabStops( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_NOEXTLEADING )
-        m_aDefOptions.SetNoExtLeading( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_USELINESPACING )
-        m_aDefOptions.SetUseLineSpacing( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_ADDTABLESPACING )
-        m_aDefOptions.SetAddTableSpacing( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_USEOBJECTPOSITIONING )
-        m_aDefOptions.SetUseObjPos( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_USEOURTEXTWRAPPING )
-        m_aDefOptions.SetUseOurTextWrapping( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_CONSIDERWRAPPINGSTYLE )
-        m_aDefOptions.SetConsiderWrappingStyle( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_EXPANDWORDSPACE )
-        m_aDefOptions.SetExpandWordSpace( bValue );
-    else if ( sName == COMPATIBILITY_PROPERTYNAME_MSWORDTRAILINGBLANKS )
-        m_aDefOptions.SetExpandWordSpace( bValue );
+    m_aOptions.push_back( aItem );
+
+    // default item reset?
+    if ( aItem.getValue<OUString>( SvtCompatibilityEntry::Index::Name ) == SvtCompatibilityEntry::getDefaultEntryName() )
+        m_aDefOptions = aItem;
+
+    SetModified();
 }
 
-//  public method
+void SvtCompatibilityOptions_Impl::Clear()
+{
+    m_aOptions.clear();
+
+    SetModified();
+}
+
+void SvtCompatibilityOptions_Impl::SetDefault( SvtCompatibilityEntry::Index rIdx, bool rValue )
+{
+    /* Are not set Name and Module */
+    assert( rIdx != SvtCompatibilityEntry::Index::Name && rIdx != SvtCompatibilityEntry::Index::Module );
+
+    m_aDefOptions.setValue<bool>( rIdx, rValue );
+}
+
+bool SvtCompatibilityOptions_Impl::GetDefault( SvtCompatibilityEntry::Index rIdx ) const
+{
+    /* Are not set Name and Module */
+    assert( rIdx != SvtCompatibilityEntry::Index::Name && rIdx != SvtCompatibilityEntry::Index::Module );
+
+    return m_aDefOptions.getValue<bool>( rIdx );
+}
+
+Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() const
+{
+    Sequence< PropertyValue >             lProperties( SvtCompatibilityEntry::getElementCount() );
+    Sequence< Sequence< PropertyValue > > lResult( m_aOptions.size() );
+
+    for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Name); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
+        lProperties[i].Name = SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
+
+    sal_Int32 j = 0;
+    for ( std::vector< SvtCompatibilityEntry >::const_iterator pItem = m_aOptions.begin(); pItem != m_aOptions.end(); ++pItem )
+    {
+        for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Name); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
+            lProperties[i].Value = pItem->getValue( SvtCompatibilityEntry::Index(i) );
+        lResult[ j++ ] = lProperties;
+    }
+
+    return lResult;
+}
 
 void SvtCompatibilityOptions_Impl::Notify( const Sequence< OUString >& )
 {
     SAL_WARN( "unotools.config", "SvtCompatibilityOptions_Impl::Notify()\nNot implemented yet! I don't know how I can handle a dynamical list of unknown properties ...\n" );
 }
-
-//  public method
 
 void SvtCompatibilityOptions_Impl::ImplCommit()
 {
@@ -428,183 +271,55 @@ void SvtCompatibilityOptions_Impl::ImplCommit()
     // Delete complete set first.
     ClearNodeSet( SETNODE_ALLFILEFORMATS );
 
-    SvtCompatibilityEntry aItem;
-    OUString sNode;
-    Sequence< PropertyValue > lPropertyValues( PROPERTYCOUNT - 1 );
-    sal_uInt32 nItem = 0;
+    Sequence< PropertyValue > lPropertyValues( SvtCompatibilityEntry::getElementCount() - 1 );
     sal_uInt32 nNewCount = m_aOptions.size();
-    for( nItem = 0; nItem < nNewCount; ++nItem )
+    for ( sal_uInt32 nItem = 0; nItem < nNewCount; ++nItem )
     {
-        aItem = m_aOptions[ nItem ];
-        sNode = SETNODE_ALLFILEFORMATS PATHDELIMITER + aItem.sName + PATHDELIMITER;
+        SvtCompatibilityEntry aItem = m_aOptions[ nItem ];
+        OUString              sNode = SETNODE_ALLFILEFORMATS PATHDELIMITER + aItem.getValue<OUString>( SvtCompatibilityEntry::Index::Name ) + PATHDELIMITER;
 
-        lPropertyValues[ OFFSET_MODULE - 1                  ].Name = sNode + PROPERTYNAME_MODULE;
-        lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Name = sNode + PROPERTYNAME_USEPRTMETRICS;
-        lPropertyValues[ OFFSET_ADDSPACING - 1              ].Name = sNode + PROPERTYNAME_ADDSPACING;
-        lPropertyValues[ OFFSET_ADDSPACINGATPAGES - 1       ].Name = sNode + PROPERTYNAME_ADDSPACINGATPAGES;
-        lPropertyValues[ OFFSET_USEOURTABSTOPS - 1          ].Name = sNode + PROPERTYNAME_USEOURTABSTOPS;
-        lPropertyValues[ OFFSET_NOEXTLEADING - 1            ].Name = sNode + PROPERTYNAME_NOEXTLEADING;
-        lPropertyValues[ OFFSET_USELINESPACING - 1          ].Name = sNode + PROPERTYNAME_USELINESPACING;
-        lPropertyValues[ OFFSET_ADDTABLESPACING - 1         ].Name = sNode + PROPERTYNAME_ADDTABLESPACING;
-        lPropertyValues[ OFFSET_USEOBJPOS - 1               ].Name = sNode + PROPERTYNAME_USEOBJPOS;
-        lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Name = sNode + PROPERTYNAME_USEOURTEXTWRAP;
-        lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Name = sNode + PROPERTYNAME_CONSIDERWRAPSTYLE;
-        lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Name = sNode + PROPERTYNAME_EXPANDWORDSPACE;
-        lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Name = sNode + PROPERTYNAME_PROTECTFORM;
-        lPropertyValues[ OFFSET_MSWORDTRAILINGBLANKS - 1    ].Name = sNode + PROPERTYNAME_MSWORDTRAILINGBLANKS;
-
-        lPropertyValues[ OFFSET_MODULE - 1                  ].Value <<= aItem.sModule;
-        lPropertyValues[ OFFSET_USEPRTMETRICS - 1           ].Value <<= aItem.bUsePrtMetrics;
-        lPropertyValues[ OFFSET_ADDSPACING - 1              ].Value <<= aItem.bAddSpacing;
-        lPropertyValues[ OFFSET_ADDSPACINGATPAGES - 1       ].Value <<= aItem.bAddSpacingAtPages;
-        lPropertyValues[ OFFSET_USEOURTABSTOPS - 1          ].Value <<= aItem.bUseOurTabStops;
-        lPropertyValues[ OFFSET_NOEXTLEADING - 1            ].Value <<= aItem.bNoExtLeading;
-        lPropertyValues[ OFFSET_USELINESPACING - 1          ].Value <<= aItem.bUseLineSpacing;
-        lPropertyValues[ OFFSET_ADDTABLESPACING - 1         ].Value <<= aItem.bAddTableSpacing;
-        lPropertyValues[ OFFSET_USEOBJPOS - 1               ].Value <<= aItem.bUseObjPos;
-        lPropertyValues[ OFFSET_USEOURTEXTWRAPPING - 1      ].Value <<= aItem.bUseOurTextWrapping;
-        lPropertyValues[ OFFSET_CONSIDERWRAPPINGSTYLE - 1   ].Value <<= aItem.bConsiderWrappingStyle;
-        lPropertyValues[ OFFSET_EXPANDWORDSPACE - 1         ].Value <<= aItem.bExpandWordSpace;
-        lPropertyValues[ OFFSET_PROTECTFORM - 1             ].Value <<= aItem.bProtectForm;
-        lPropertyValues[ OFFSET_MSWORDTRAILINGBLANKS - 1    ].Value <<= aItem.bMsWordCompTrailingBlanks;
+        for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
+        {
+            lPropertyValues[ i - 1 ].Name  = sNode + SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
+            lPropertyValues[ i - 1 ].Value = aItem.getValue( SvtCompatibilityEntry::Index(i) );
+        }
 
         SetSetProperties( SETNODE_ALLFILEFORMATS, lPropertyValues );
     }
 }
-
-//  public method
-
-void SvtCompatibilityOptions_Impl::Clear()
-{
-    m_aOptions.Clear();
-    SetModified();
-}
-
-//  public method
-
-Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions_Impl::GetList() const
-{
-    Sequence< Sequence< PropertyValue > > lReturn;
-    lReturn = m_aOptions.GetList();
-    return lReturn;
-}
-
-//  public method
-
-void SvtCompatibilityOptions_Impl::AppendItem(  const OUString& _sName,
-                                                const OUString& _sModule,
-                                                bool _bUsePrtMetrics,
-                                                bool _bAddSpacing,
-                                                bool _bAddSpacingAtPages,
-                                                bool _bUseOurTabStops,
-                                                bool _bNoExtLeading,
-                                                bool _bUseLineSpacing,
-                                                bool _bAddTableSpacing,
-                                                bool _bUseObjPos,
-                                                bool _bUseOurTextWrapping,
-                                                bool _bConsiderWrappingStyle,
-                                                bool _bExpandWordSpace,
-                                                bool _bProtectForm,
-                                                bool _bMsWordCompTrailingBlanks )
-{
-    SvtCompatibilityEntry aItem( _sName, _sModule );
-    aItem.SetUsePrtMetrics( _bUsePrtMetrics );
-    aItem.SetAddSpacing( _bAddSpacing );
-    aItem.SetAddSpacingAtPages( _bAddSpacingAtPages );
-    aItem.SetUseOurTabStops( _bUseOurTabStops );
-    aItem.SetNoExtLeading( _bNoExtLeading );
-    aItem.SetUseLineSpacing( _bUseLineSpacing );
-    aItem.SetAddTableSpacing( _bAddTableSpacing );
-    aItem.SetUseObjPos( _bUseObjPos );
-    aItem.SetUseOurTextWrapping( _bUseOurTextWrapping );
-    aItem.SetConsiderWrappingStyle( _bConsiderWrappingStyle );
-    aItem.SetExpandWordSpace( _bExpandWordSpace );
-    aItem.SetProtectForm( _bProtectForm );
-    aItem.SetMsWordCompTrailingBlanks( _bMsWordCompTrailingBlanks );
-    m_aOptions.AppendEntry( aItem );
-
-    // default item reset?
-    if ( _sName == COMPATIBILITY_DEFAULT_NAME )
-        m_aDefOptions = aItem;
-
-    SetModified();
-}
-
-//  private method
 
 Sequence< OUString > SvtCompatibilityOptions_Impl::impl_GetPropertyNames( Sequence< OUString >& rItems )
 {
     // First get ALL names of current existing list items in configuration!
     rItems = GetNodeNames( SETNODE_ALLFILEFORMATS );
     // expand list to result list ...
-    Sequence< OUString > lProperties( rItems.getLength() * ( PROPERTYCOUNT - 1 ) );
+    Sequence< OUString > lProperties( rItems.getLength() * ( SvtCompatibilityEntry::getElementCount() - 1 ) );
     impl_ExpandPropertyNames( rItems, lProperties );
     // Return result.
     return lProperties;
 }
 
-//  private method
-
 void SvtCompatibilityOptions_Impl::impl_ExpandPropertyNames(
     const Sequence< OUString >& lSource, Sequence< OUString >& lDestination )
 {
-    OUString sFixPath;
-    sal_Int32 nDestStep = 0;
     sal_Int32 nSourceCount = lSource.getLength();
     // Copy entries to destination and expand every item with 2 supported sub properties.
-    for( sal_Int32 nSourceStep = 0; nSourceStep < nSourceCount; ++nSourceStep )
+    for ( sal_Int32 nSourceStep = 0; nSourceStep < nSourceCount; ++nSourceStep )
     {
+        OUString sFixPath;
         sFixPath = SETNODE_ALLFILEFORMATS;
         sFixPath += PATHDELIMITER;
         sFixPath += lSource[ nSourceStep ];
         sFixPath += PATHDELIMITER;
 
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_MODULE;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_USEPRTMETRICS;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_ADDSPACING;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_ADDSPACINGATPAGES;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_USEOURTABSTOPS;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_NOEXTLEADING;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_USELINESPACING;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_ADDTABLESPACING;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_USEOBJPOS;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_USEOURTEXTWRAP;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_CONSIDERWRAPSTYLE;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_EXPANDWORDSPACE;
-        ++nDestStep;
-        lDestination[nDestStep] = sFixPath;
-        lDestination[nDestStep] += PROPERTYNAME_MSWORDTRAILINGBLANKS;
-        ++nDestStep;
+        for ( int i = static_cast<int>(SvtCompatibilityEntry::Index::Module); i < static_cast<int>(SvtCompatibilityEntry::Index::INVALID); ++i )
+            lDestination[ i - 1 ] = sFixPath + SvtCompatibilityEntry::getName( SvtCompatibilityEntry::Index(i) );
     }
 }
 
-namespace {
-
-std::weak_ptr<SvtCompatibilityOptions_Impl> theOptions;
-
+namespace
+{
+    std::weak_ptr<SvtCompatibilityOptions_Impl> theOptions;
 }
 
 SvtCompatibilityOptions::SvtCompatibilityOptions()
@@ -613,11 +328,11 @@ SvtCompatibilityOptions::SvtCompatibilityOptions()
     MutexGuard aGuard( GetOwnStaticMutex() );
 
     m_pImpl = theOptions.lock();
-    if( !m_pImpl )
+    if ( !m_pImpl )
     {
-        m_pImpl = std::make_shared<SvtCompatibilityOptions_Impl>();
+        m_pImpl    = std::make_shared<SvtCompatibilityOptions_Impl>();
         theOptions = m_pImpl;
-        ItemHolder1::holdConfigItem(E_COMPATIBILITY);
+        ItemHolder1::holdConfigItem( E_COMPATIBILITY );
     }
 }
 
@@ -628,112 +343,28 @@ SvtCompatibilityOptions::~SvtCompatibilityOptions()
     m_pImpl.reset();
 }
 
+void SvtCompatibilityOptions::AppendItem( const SvtCompatibilityEntry& aItem )
+{
+    MutexGuard aGuard( GetOwnStaticMutex() );
+    m_pImpl->AppendItem( aItem );
+}
+
 void SvtCompatibilityOptions::Clear()
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pImpl->Clear();
 }
 
-void SvtCompatibilityOptions::SetDefault( const OUString & sName, bool bValue )
-{
-    m_pImpl->SetDefault( sName, bValue );
-}
-
-void SvtCompatibilityOptions::AppendItem( const OUString& sName,
-                                          const OUString& sModule,
-                                          bool bUsePrtMetrics,
-                                          bool bAddSpacing,
-                                          bool bAddSpacingAtPages,
-                                          bool bUseOurTabStops,
-                                          bool bNoExtLeading,
-                                          bool bUseLineSpacing,
-                                          bool bAddTableSpacing,
-                                          bool bUseObjPos,
-                                          bool bUseOurTextWrapping,
-                                          bool bConsiderWrappingStyle,
-                                          bool bExpandWordSpace,
-                                          bool bProtectForm,
-                                          bool bMsWordCompTrailingBlanks )
+void SvtCompatibilityOptions::SetDefault( SvtCompatibilityEntry::Index rIdx, bool rValue )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    m_pImpl->AppendItem(
-        sName, sModule, bUsePrtMetrics, bAddSpacing,
-        bAddSpacingAtPages, bUseOurTabStops, bNoExtLeading,
-        bUseLineSpacing, bAddTableSpacing, bUseObjPos,
-        bUseOurTextWrapping, bConsiderWrappingStyle, bExpandWordSpace,
-        bProtectForm, bMsWordCompTrailingBlanks );
+    m_pImpl->SetDefault( rIdx, rValue );
 }
 
-bool SvtCompatibilityOptions::IsUsePrtDevice() const
+bool SvtCompatibilityOptions::GetDefault( SvtCompatibilityEntry::Index rIdx ) const
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsUsePrtDevice();
-}
-
-bool SvtCompatibilityOptions::IsAddSpacing() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsAddSpacing();
-}
-
-bool SvtCompatibilityOptions::IsAddSpacingAtPages() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsAddSpacingAtPages();
-}
-
-bool SvtCompatibilityOptions::IsUseOurTabStops() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsUseOurTabStops();
-}
-
-bool SvtCompatibilityOptions::IsNoExtLeading() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsNoExtLeading();
-}
-
-bool SvtCompatibilityOptions::IsUseLineSpacing() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsUseLineSpacing();
-}
-
-bool SvtCompatibilityOptions::IsAddTableSpacing() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsAddTableSpacing();
-}
-
-bool SvtCompatibilityOptions::IsUseObjectPositioning() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsUseObjPos();
-}
-
-bool SvtCompatibilityOptions::IsUseOurTextWrapping() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsUseOurTextWrapping();
-}
-
-bool SvtCompatibilityOptions::IsConsiderWrappingStyle() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsConsiderWrappingStyle();
-}
-
-bool SvtCompatibilityOptions::IsExpandWordSpace() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsExpandWordSpace();
-}
-
-bool SvtCompatibilityOptions::IsMsWordCompTrailingBlanks() const
-{
-    MutexGuard aGuard( GetOwnStaticMutex() );
-    return m_pImpl->IsMsWordCompTrailingBlanks();
+    return m_pImpl->GetDefault( rIdx );
 }
 
 Sequence< Sequence< PropertyValue > > SvtCompatibilityOptions::GetList() const

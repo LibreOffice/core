@@ -98,18 +98,18 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     if (!utl::ConfigManager::IsAvoidConfig())
     {
         const SvtCompatibilityOptions aOptions;
-        mbParaSpaceMax                      = aOptions.IsAddSpacing();
-        mbParaSpaceMaxAtPages               = aOptions.IsAddSpacingAtPages();
-        mbTabCompat                         = !aOptions.IsUseOurTabStops();
-        mbUseVirtualDevice                  = !aOptions.IsUsePrtDevice();
-        mbAddExternalLeading                = !aOptions.IsNoExtLeading();
-        mbOldLineSpacing                    = aOptions.IsUseLineSpacing();
-        mbAddParaSpacingToTableCells        = aOptions.IsAddTableSpacing();
-        mbUseFormerObjectPos                = aOptions.IsUseObjectPositioning();
-        mbUseFormerTextWrapping             = aOptions.IsUseOurTextWrapping();
-        mbConsiderWrapOnObjPos              = aOptions.IsConsiderWrappingStyle();
-        mbDoNotJustifyLinesWithManualBreak  = !aOptions.IsExpandWordSpace();
-        mbMsWordCompTrailingBlanks          = aOptions.IsMsWordCompTrailingBlanks();
+        mbParaSpaceMax                      = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddSpacing );
+        mbParaSpaceMaxAtPages               = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddSpacingAtPages );
+        mbTabCompat                         = !aOptions.GetDefault( SvtCompatibilityEntry::Index::UseOurTabStops );
+        mbUseVirtualDevice                  = !aOptions.GetDefault( SvtCompatibilityEntry::Index::UsePrtMetrics );
+        mbAddExternalLeading                = !aOptions.GetDefault( SvtCompatibilityEntry::Index::NoExtLeading );
+        mbOldLineSpacing                    = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseLineSpacing );
+        mbAddParaSpacingToTableCells        = aOptions.GetDefault( SvtCompatibilityEntry::Index::AddTableSpacing );
+        mbUseFormerObjectPos                = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseObjectPositioning );
+        mbUseFormerTextWrapping             = aOptions.GetDefault( SvtCompatibilityEntry::Index::UseOurTextWrapping );
+        mbConsiderWrapOnObjPos              = aOptions.GetDefault( SvtCompatibilityEntry::Index::ConsiderWrappingStyle );
+        mbDoNotJustifyLinesWithManualBreak  = !aOptions.GetDefault( SvtCompatibilityEntry::Index::ExpandWordSpace );
+        mbMsWordCompTrailingBlanks          = aOptions.GetDefault( SvtCompatibilityEntry::Index::MsWordTrailingBlanks );
     }
     else
     {
