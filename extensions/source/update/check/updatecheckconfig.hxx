@@ -200,7 +200,7 @@ private:
     const ::rtl::Reference< UpdateCheckConfigListener > m_rListener;
 };
 
-
+/// @throws css::uno::RuntimeException
 template <typename T>
 T getValue( const css::uno::Sequence< css::beans::NamedValue >& rNamedValues, const sal_Char * pszName )
     throw (css::uno::RuntimeException)

@@ -162,7 +162,9 @@ public:
 
     const rtl::Reference<BibGeneralPageFocusListener>& GetFocusListener() { return mxBibGeneralPageFocusListener; }
 
+    /// @throws css::uno::RuntimeException
     void focusGained(const css::awt::FocusEvent& rEvent) throw( css::uno::RuntimeException, std::exception );
+    /// @throws css::uno::RuntimeException
     void focusLost(const css::awt::FocusEvent& rEvent) throw( css::uno::RuntimeException, std::exception );
 
 };

@@ -71,7 +71,9 @@ namespace pcr
         virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
 
         // XServiceInfo - static versions
+        /// @throws RuntimeException
         static OUString getImplementationName_static(  ) throw(RuntimeException);
+        /// @throws RuntimeException
         static Sequence< OUString > getSupportedServiceNames_static(  ) throw(RuntimeException);
         static Reference< XInterface > SAL_CALL
                         Create(const Reference< XComponentContext >&);

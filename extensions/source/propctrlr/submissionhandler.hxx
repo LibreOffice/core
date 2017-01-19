@@ -76,7 +76,9 @@ namespace pcr
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
 
+        /// @throws css::uno::RuntimeException
         static OUString SAL_CALL getImplementationName_static(  ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
 
         virtual ~SubmissionPropertyHandler() override;

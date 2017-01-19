@@ -143,8 +143,11 @@ namespace pcr
         bool                        IsModified( ) const;
         void                        CommitModified( );
 
+        /// @throws css::uno::RuntimeException
         void SAL_CALL               focusGained( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         void SAL_CALL               valueChanged( const css::uno::Reference< css::inspection::XPropertyControl >& Control ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         void SAL_CALL               activateNextControl( const css::uno::Reference< css::inspection::XPropertyControl >& CurrentControl ) throw (css::uno::RuntimeException);
 
     protected:

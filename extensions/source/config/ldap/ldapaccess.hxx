@@ -82,7 +82,10 @@ public:
     LdapConnection() : mConnection(nullptr),mLdapDefinition() {}
     /** Destructor, releases the connection */
     ~LdapConnection() ;
-    /** Make connection to LDAP server */
+    /** Make connection to LDAP server
+        @throws ldap::LdapConnectionException
+        @throws ldap::LdapGenericException
+    */
     void  connectSimple(const LdapDefinition& aDefinition)
         throw (ldap::LdapConnectionException,
                 ldap::LdapGenericException);
@@ -103,6 +106,9 @@ public:
 
     /** finds DN of user
         @return  DN of User
+        @throws lang::IllegalArgumentException
+        @throws ldap::LdapConnectionException
+        @throws ldap::LdapGenericException
     */
     OUString findUserDn(const OUString& aUser)
         throw (lang::IllegalArgumentException,
@@ -110,7 +116,7 @@ public:
                 ldap::LdapGenericException);
 
 private:
-
+    /// @throws ldap::LdapConnectionException
     void initConnection()
          throw (ldap::LdapConnectionException);
     void disconnect();
@@ -120,6 +126,8 @@ private:
       */
     bool isValid() const { return mConnection != nullptr ; }
 
+    /// @throws ldap::LdapConnectionException
+    /// @throws ldap::LdapGenericException
     void  connectSimple()
         throw (ldap::LdapConnectionException,
                 ldap::LdapGenericException);

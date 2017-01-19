@@ -86,6 +86,7 @@ public:
     void                                    SetData( void* pData ) { ReleaseData(); mpData = pData; }
  };
 
+/// @throws Exception
 Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& rxFactory ) throw( Exception );
 
 #endif

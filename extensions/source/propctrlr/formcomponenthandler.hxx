@@ -103,7 +103,9 @@ namespace pcr
         // XPropertySet
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
 
+        /// @throws css::uno::RuntimeException
         static OUString SAL_CALL getImplementationName_static(  ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
 
     protected:

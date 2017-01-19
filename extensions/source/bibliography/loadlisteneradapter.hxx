@@ -94,6 +94,7 @@ namespace bib
 
     protected:
     // XEventListener
+        /// @throws css::uno::RuntimeException
         virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception);
     };
 

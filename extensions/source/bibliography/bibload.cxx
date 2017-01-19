@@ -128,6 +128,7 @@ public:
 
     static Sequence<OUString>  SAL_CALL getSupportedServiceNames_Static() throw(  );
 
+    /// @throws Exception
     friend  Reference< XInterface >     SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception );
 
     // XLoader

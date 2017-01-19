@@ -66,11 +66,13 @@ namespace dbp
         }
 
         // XServiceInfo - static methods
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException )
         {
             return SERVICEINFO::getServiceNames();
         }
 
+        /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException )
         {
             return SERVICEINFO::getImplementationName();

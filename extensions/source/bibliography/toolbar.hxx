@@ -175,6 +175,7 @@ class BibToolBar:   public ToolBox
         sal_uInt16  InsertFilterItem(const OUString& );
         void    SelectFilterItem(sal_uInt16 nId);
 
+        /// @throws css::uno::RuntimeException
         void    statusChanged(const css::frame::FeatureStateEvent& Event)
                                             throw( css::uno::RuntimeException );
 

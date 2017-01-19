@@ -74,10 +74,15 @@ namespace pcr
         virtual void setModified() { m_bModified = true; }
 
         // XPropertyControl
+        /// @throws css::uno::RuntimeException
         ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) { return m_nControlType; }
+        /// @throws css::uno::RuntimeException
         const css::uno::Reference< css::inspection::XPropertyControlContext >& SAL_CALL getControlContext() throw (css::uno::RuntimeException) { return m_xContext; }
+        /// @throws css::uno::RuntimeException
         void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException) { return m_bModified; }
+        /// @throws css::uno::RuntimeException
         void SAL_CALL notifyModifiedValue(  ) throw (css::uno::RuntimeException);
 
         /** (fail-safe) wrapper around calling our context's activateNextControl
