@@ -388,6 +388,9 @@ void lcl_formatChars3( const sal_Unicode table_capital[], const sal_Unicode tabl
 /** Returns number's representation in persian words up to 999999999999
     respectively limited by sal_Int32 >=0.
     The caller assures that nNumber is not negative.
+
+    @throws IllegalArgumentException
+    @throws RuntimeException
  */
 static
 void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )

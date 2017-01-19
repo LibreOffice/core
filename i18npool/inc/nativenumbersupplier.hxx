@@ -65,10 +65,12 @@ public:
                 throw( css::uno::RuntimeException, std::exception ) override;
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
+        /// @throws css::uno::RuntimeException
         OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode,
                 css::uno::Sequence< sal_Int32 >& offset  )
                 throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         sal_Unicode SAL_CALL getNativeNumberChar( const sal_Unicode inChar,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
                 throw(css::uno::RuntimeException) ;

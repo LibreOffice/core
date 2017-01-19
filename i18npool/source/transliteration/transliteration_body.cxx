@@ -258,6 +258,7 @@ Transliteration_titlecase::Transliteration_titlecase()
     implementationName = "com.sun.star.i18n.Transliteration.Transliteration_titlecase";
 }
 
+/// @throws RuntimeException
 static OUString transliterate_titlecase_Impl(
     const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
     const Locale &rLocale,

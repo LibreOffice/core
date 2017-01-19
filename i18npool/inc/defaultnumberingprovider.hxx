@@ -86,8 +86,10 @@ private:
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     css::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     std::unique_ptr<TransliterationImpl> translit;
+    /// @throws css::uno::RuntimeException
     OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )
         throw(css::uno::RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL isScriptFlagEnabled(const OUString& aName )
         throw(css::uno::RuntimeException);
 };

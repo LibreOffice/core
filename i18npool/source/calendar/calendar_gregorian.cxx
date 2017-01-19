@@ -397,6 +397,7 @@ void Calendar_gregorian::mapToGregorian() throw(RuntimeException)
     }
 }
 
+/// @throws RuntimeException
 static UCalendarDateFields fieldNameConverter(sal_Int16 fieldIndex) throw(RuntimeException)
 {
     UCalendarDateFields f;

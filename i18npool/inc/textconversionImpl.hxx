@@ -83,6 +83,7 @@ private:
     css::uno::Reference < css::i18n::XExtendedTextConversion > xTC;
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
+    /// @throws css::lang::NoSupportException
     void SAL_CALL getLocaleSpecificTextConversion( const css::lang::Locale& rLocale )
             throw( css::lang::NoSupportException );
 };

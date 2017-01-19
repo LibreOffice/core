@@ -72,10 +72,12 @@ class TextSearch: public cppu::WeakImplHelper
     void MakeBackwardTab();
     void MakeBackwardTab2();
     sal_Int32 GetDiff( const sal_Unicode ) const;
+    /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         NSrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         NSrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
@@ -83,10 +85,12 @@ class TextSearch: public cppu::WeakImplHelper
 
     // Members and methods for the regular expression search
     RegexMatcher* pRegexMatcher;
+    /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         RESrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         RESrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
@@ -97,10 +101,12 @@ class TextSearch: public cppu::WeakImplHelper
     int nLimit;
     WLevDistance* pWLD;
     css::uno::Reference < css::i18n::XBreakIterator > xBreak;
+    /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         ApproxSrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         ApproxSrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
@@ -111,10 +117,12 @@ class TextSearch: public cppu::WeakImplHelper
     OUString    maWildcardReversePattern2;
     sal_uInt32  mcWildcardEscapeChar;
     bool        mbWildcardAllowSubstring;
+    /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         WildcardSrchFrwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
                             throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::util::SearchResult SAL_CALL
         WildcardSrchBkwrd( const OUString& searchStr,
                                 sal_Int32 startPos, sal_Int32 endPos )
@@ -123,6 +131,7 @@ class TextSearch: public cppu::WeakImplHelper
     bool IsDelimiter( const OUString& rStr, sal_Int32 nPos ) const;
 
     bool checkCTLStart, checkCTLEnd;
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL isCellStart(const OUString& searchStr, sal_Int32 nPos)
                             throw(css::uno::RuntimeException);
 

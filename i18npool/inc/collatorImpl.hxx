@@ -98,8 +98,10 @@ private:
     // lang::Locale Data
     css::uno::Reference < XLocaleData4 >                mxLocaleData;
 
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL createCollator(const lang::Locale& rLocale, const OUString& serviceName,
         const OUString& rSortAlgorithm) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     void SAL_CALL loadCachedCollator(const lang::Locale& rLocale, const OUString& rSortAlgorithm)
         throw(css::uno::RuntimeException);
 };

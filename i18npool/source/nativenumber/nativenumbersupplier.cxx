@@ -61,6 +61,7 @@ OUString SAL_CALL getHebrewNativeNumberString(const OUString& aNumberString, boo
 
 OUString SAL_CALL getCyrillicNativeNumberString(const OUString& aNumberString);
 
+/// @throws RuntimeException
 OUString SAL_CALL AsciiToNativeChar( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, bool useOffset, sal_Int16 number ) throw(RuntimeException)
 {
@@ -161,6 +162,7 @@ bool SAL_CALL AsciiToNative_numberMaker(const sal_Unicode *str, sal_Int32 begin,
     }
 }
 
+/// @throws RuntimeException
 OUString SAL_CALL AsciiToNative( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount,
         Sequence< sal_Int32 >& offset, bool useOffset, const Number* number ) throw(RuntimeException)
 {
@@ -297,6 +299,7 @@ static void SAL_CALL NativeToAscii_numberMaker(sal_Int16 max, sal_Int16 prev, co
     }
 }
 
+/// @throws RuntimeException
 static OUString SAL_CALL NativeToAscii(const OUString& inStr,
         sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset, bool useOffset ) throw(RuntimeException)
 {

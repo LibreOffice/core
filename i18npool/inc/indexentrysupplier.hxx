@@ -88,7 +88,9 @@ public:
 private:
     css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > xIES;
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL createLocaleSpecificIndexEntrySupplier(const OUString& name) throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     css::uno::Reference < css::i18n::XExtendedIndexEntrySupplier > const & SAL_CALL getLocaleSpecificIndexEntrySupplier(
         const css::lang::Locale& rLocale, const OUString& rSortAlgorithm) throw (css::uno::RuntimeException);
 

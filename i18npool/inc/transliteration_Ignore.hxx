@@ -58,6 +58,7 @@ public:
            throw(css::uno::RuntimeException,
             css::i18n::MultipleCharsOutputException, std::exception) override;
 
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > SAL_CALL
         transliterateRange( const OUString& str1, const OUString& str2, XTransliteration& t1, XTransliteration& t2 )
             throw(css::uno::RuntimeException);

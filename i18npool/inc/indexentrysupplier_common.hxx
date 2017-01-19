@@ -97,6 +97,7 @@ protected:
     css::lang::Locale  aLocale;
     OUString           aAlgorithm;
 
+    /// @throws css::uno::RuntimeException
     const OUString& SAL_CALL getEntry( const OUString& IndexEntry,
         const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
         throw (css::uno::RuntimeException);

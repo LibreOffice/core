@@ -100,16 +100,19 @@ private:
     css::uno::Reference< XLocaleData4 > mxLocaledata;
     css::uno::Reference< css::i18n::XExtendedTransliteration > caseignore;
 
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL loadModuleByName( const OUString& implName,
         css::uno::Reference<css::i18n::XExtendedTransliteration> & body, const css::lang::Locale& rLocale)
         throw(css::uno::RuntimeException);
 
     void clear();
 
+    /// @throws css::uno::RuntimeException
     void loadBody( OUString &implName,
         css::uno::Reference< css::i18n::XExtendedTransliteration >& body )
         throw (css::uno::RuntimeException);
 
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > SAL_CALL getRange(
         const css::uno::Sequence< OUString > &inStrs,
         sal_Int32 length, const sal_Int16 _nCascade)

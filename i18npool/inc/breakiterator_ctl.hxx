@@ -48,6 +48,7 @@ protected:
     sal_Int32* previousCellIndex;
     sal_Int32 cellIndexSize;
 
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL makeIndex(const OUString& text, sal_Int32 pos) throw(css::uno::RuntimeException);
 };
 
