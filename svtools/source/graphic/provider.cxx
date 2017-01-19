@@ -284,16 +284,6 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadResource( const O
                         aBmpEx = BitmapEx( aResId );
                     }
                 }
-                else if( aResourceType == "image" )
-                {
-                    aResId.SetRT( RSC_IMAGE );
-
-                    if( pResMgr->IsAvailable( aResId ) )
-                    {
-                        const Image aImage( aResId );
-                        aBmpEx = aImage.GetBitmapEx();
-                    }
-                }
 
                 if( !aBmpEx.IsEmpty() )
                 {
