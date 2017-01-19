@@ -723,6 +723,7 @@ signalKey (GtkWidget* pWidget, GdkEventKey* pEvent)
         nKeyCode = com::sun::star::awt::Key::DELETE;
         break;
     case GDK_KEY_Return:
+    case GDK_KEY_KP_Enter:
         nKeyCode = com::sun::star::awt::Key::RETURN;
         break;
     case GDK_KEY_Escape:
