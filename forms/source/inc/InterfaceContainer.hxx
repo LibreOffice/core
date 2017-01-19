@@ -117,6 +117,7 @@ public:
     OInterfaceContainer( ::osl::Mutex& _rMutex, const OInterfaceContainer& _cloneSource );
 
     // late constructor for cloning
+    /// @throws css::uno::RuntimeException
     void clonedFrom(const OInterfaceContainer& _cloneSource) throw(css::uno::RuntimeException, std::exception);
 
 protected:
@@ -209,6 +210,7 @@ protected:
             is done within implInsert.
         @param _bFire
             if <TRUE/>, a notification about the insertion will be fired
+        @throws css::lang::IllegalArgumentException
     */
             void implInsert(
                 sal_Int32 _nIndex,

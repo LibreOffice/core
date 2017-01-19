@@ -73,7 +73,10 @@ namespace frm
             css::uno::Sequence< css::beans::Property >& /* [out] */ _rProps );
 
         void     getFastPropertyValue            ( css::uno::Any& _rValue, sal_Int32 _nHandle ) const;
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::uno::RuntimeException
         bool     convertFastPropertyValue        ( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception );
+        /// @throws css::uno::Exception
         void     setFastPropertyValue_NoBroadcast_impl(
                      ::cppu::OPropertySetHelper & rBase,
                      void (::cppu::OPropertySetHelper::*pSet)( sal_Int32, css::uno::Any const&),

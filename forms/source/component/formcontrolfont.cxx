@@ -347,7 +347,7 @@ namespace frm
         return bModified;
     }
 
-
+    /// @throws Exception
     static void setFastPropertyValue_NoBroadcast_implimpl(
             FontDescriptor & rFont,
             sal_Int32 nHandle, const Any& rValue) throw (Exception)

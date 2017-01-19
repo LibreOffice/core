@@ -60,7 +60,9 @@ namespace frm
         ControlFeatureInterception( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         // XDispatchProviderInterception
+        /// @throws css::uno::RuntimeException
         void SAL_CALL registerDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException );
+        /// @throws css::uno::RuntimeException
         void SAL_CALL releaseDispatchProviderInterceptor( const css::uno::Reference< css::frame::XDispatchProviderInterceptor >& Interceptor ) throw (css::uno::RuntimeException );
 
         // XComponent

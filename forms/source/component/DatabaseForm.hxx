@@ -447,9 +447,11 @@ private:
     bool    hasValidParent() const;
 
     // impl methods
+    /// @throws css::uno::RuntimeException
     void    load_impl(bool bCausedByParentForm, bool bMoveToFirst = true,
         const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler = css::uno::Reference< css::task::XInteractionHandler >())
         throw(css::uno::RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
     void    reload_impl(bool bMoveToFirst,
         const css::uno::Reference< css::task::XInteractionHandler >& _rxCompletionHandler = css::uno::Reference< css::task::XInteractionHandler >())
         throw(css::uno::RuntimeException, std::exception);

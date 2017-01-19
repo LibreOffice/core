@@ -78,6 +78,7 @@ namespace frm
         virtual ~OFormNavigationHelper();
 
         // XComponent
+        /// @throws css::uno::RuntimeException
         void SAL_CALL dispose(  ) throw( css::uno::RuntimeException );
 
         // XDispatchProviderInterception
