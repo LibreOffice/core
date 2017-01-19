@@ -85,6 +85,7 @@
 #include <paratr.hxx>
 #include <drawfont.hxx>
 #include <txtfrm.hxx>
+#include <hyp.hxx>
 #include <editeng/svxenum.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <sfx2/classificationhelper.hxx>
@@ -92,6 +93,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/dispatch.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <editeng/unolingu.hxx>
 
 static const char* DATA_DIRECTORY = "/sw/qa/extras/uiwriter/data/";
 
@@ -201,6 +203,7 @@ public:
     void testTdf95699();
     void testTdf104440();
     void testTdf104425();
+    void testTdf105417();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -303,6 +306,7 @@ public:
     CPPUNIT_TEST(testTdf95699);
     CPPUNIT_TEST(testTdf104440);
     CPPUNIT_TEST(testTdf104425);
+    CPPUNIT_TEST(testTdf105417);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3514,6 +3518,29 @@ void SwUiWriterTest::testTdf104425()
     sal_Int32 nHeight3 = getXPath(pXmlDoc, "//page[3]/body/tab/row/infos/bounds", "height").toInt32();
     double fSumHeight_mm = (nHeight1 + nHeight2 + nHeight3) * 25.4 / 1440.0;
     CPPUNIT_ASSERT_DOUBLES_EQUAL(700.0, fSumHeight_mm, 0.05);
+}
+
+void SwUiWriterTest::testTdf105417()
+{
+    SwDoc* pDoc = createDoc("tdf105417.odt");
+    CPPUNIT_ASSERT(pDoc);
+    SwView* pView = pDoc->GetDocShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
+    CPPUNIT_ASSERT(xHyphenator.is());
+    // If there are no English hyphenation rules installed, we can't test
+    // hyphenation.
+    if (!xHyphenator->hasLocale(lang::Locale("en", "US", OUString())))
+        return;
+
+    uno::Reference<linguistic2::XLinguProperties> xLinguProperties(LinguMgr::GetLinguPropertySet());
+    // Automatic hyphenation means not opening a dialog, but going ahead
+    // non-interactively.
+    xLinguProperties->setIsHyphAuto(true);
+    SwHyphWrapper aWrap(pView, xHyphenator, /*bStart=*/false, /*bOther=*/true, /*bSelection=*/false);
+    // This never returned, it kept trying to hyphenate the last word
+    // (greenbacks) again and again.
+    aWrap.SpellDocument();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
