@@ -69,7 +69,7 @@ namespace xmlscript
 void EventElement::endElement()
     throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
-    static_cast< ControlElement * >( _pParent )->_events.push_back( this );
+    static_cast< ControlElement * >( m_xParent.get() )->_events.push_back( this );
 }
 
 ControlElement::ControlElement(
@@ -79,11 +79,11 @@ ControlElement::ControlElement(
     : ElementBase(
         pImport->XMLNS_DIALOGS_UID, rLocalName, xAttributes, pParent, pImport )
 {
-    if (_pParent)
+    if (m_xParent.is())
     {
         // inherit position
-        _nBasePosX = static_cast< ControlElement * >( _pParent )->_nBasePosX;
-        _nBasePosY = static_cast< ControlElement * >( _pParent )->_nBasePosY;
+        _nBasePosX = static_cast< ControlElement * >( m_xParent.get() )->_nBasePosX;
+        _nBasePosY = static_cast< ControlElement * >( m_xParent.get() )->_nBasePosY;
     }
     else
     {
@@ -95,10 +95,10 @@ ControlElement::ControlElement(
 Reference< xml::input::XElement > ControlElement::getStyle(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
-    OUString aStyleId( xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID,"style-id" ) );
+    OUString aStyleId( xAttributes->getValueByUidName( m_xImport->XMLNS_DIALOGS_UID,"style-id" ) );
     if (!aStyleId.isEmpty())
     {
-        return _pImport->getStyle( aStyleId );
+        return m_xImport->getStyle( aStyleId );
     }
     return Reference< xml::input::XElement >();
 }
@@ -106,7 +106,7 @@ Reference< xml::input::XElement > ControlElement::getStyle(
 OUString ControlElement::getControlId(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
-    OUString aId( xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "id" ) );
+    OUString aId( xAttributes->getValueByUidName( m_xImport->XMLNS_DIALOGS_UID, "id" ) );
     if (aId.isEmpty())
     {
         throw xml::sax::SAXException( "missing id attribute!", Reference< XInterface >(), Any() );
@@ -119,7 +119,7 @@ OUString ControlElement::getControlModelName(
     Reference< xml::input::XAttributes > const & xAttributes )
 {
     OUString aModel;
-    aModel = xAttributes->getValueByUidName( _pImport->XMLNS_DIALOGS_UID, "control-implementation");
+    aModel = xAttributes->getValueByUidName( m_xImport->XMLNS_DIALOGS_UID, "control-implementation");
     if (aModel.isEmpty())
         aModel = rDefaultModel;
     return aModel;
@@ -138,7 +138,7 @@ void StyleElement::importTextColorStyle(
     }
     _inited |= 0x2;
 
-    if (getLongAttr( &_textColor, "text-color", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getLongAttr( &_textColor, "text-color", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x2;
         xProps->setPropertyValue( "TextColor", makeAny( _textColor ) );
@@ -159,7 +159,7 @@ void StyleElement::importTextLineColorStyle(
     }
     _inited |= 0x20;
 
-    if (getLongAttr( &_textLineColor, "textline-color", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getLongAttr( &_textLineColor, "textline-color", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x20;
         xProps->setPropertyValue( "TextLineColor", makeAny( _textLineColor ) );
@@ -179,7 +179,7 @@ void StyleElement::importFillColorStyle(
     }
     _inited |= 0x10;
 
-    if (getLongAttr( &_fillColor, "fill-color", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getLongAttr( &_fillColor, "fill-color", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x10;
         xProps->setPropertyValue( "FillColor", makeAny( _fillColor ) );
@@ -199,7 +199,7 @@ void StyleElement::importBackgroundColorStyle(
     }
     _inited |= 0x1;
 
-    if (getLongAttr( &_backgroundColor, "background-color", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getLongAttr( &_backgroundColor, "background-color", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         _hasValue |= 0x1;
         xProps->setPropertyValue( "BackgroundColor", makeAny( _backgroundColor ) );
@@ -222,7 +222,7 @@ void StyleElement::importBorderStyle(
     _inited |= 0x4;
 
     OUString aValue;
-    if (getStringAttr(&aValue, "border", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr(&aValue, "border", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
         {
         if ( aValue == "none" )
             _border = BORDER_NONE;
@@ -254,7 +254,7 @@ void StyleElement::importVisualEffectStyle(
     _inited |= 0x40;
 
     OUString aValue;
-    if (getStringAttr( &aValue, "look", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "look", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "none" )
         {
@@ -301,25 +301,25 @@ void StyleElement::importFontStyle(
     bool bFontImport;
 
     // dialog:font-name CDATA #IMPLIED
-    bFontImport = getStringAttr( &_descr.Name, "font-name", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
+    bFontImport = getStringAttr( &_descr.Name, "font-name", _xAttributes, m_xImport->XMLNS_DIALOGS_UID );
 
     // dialog:font-height %numeric; #IMPLIED
-    if (getStringAttr( &aValue, "font-height", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-height", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Height = (sal_Int16)toInt32( aValue );
         bFontImport = true;
     }
     // dialog:font-width %numeric; #IMPLIED
-    if (getStringAttr(&aValue, "font-width", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr(&aValue, "font-width", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Width = (sal_Int16)toInt32( aValue );
         bFontImport = true;
     }
     // dialog:font-stylename CDATA #IMPLIED
-    bFontImport |= getStringAttr( &_descr.StyleName, "font-stylename", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
+    bFontImport |= getStringAttr( &_descr.StyleName, "font-stylename", _xAttributes, m_xImport->XMLNS_DIALOGS_UID );
 
     // dialog:font-family "(decorative|modern|roman|script|swiss|system)" #IMPLIED
-    if (getStringAttr(&aValue, "font-family", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr(&aValue, "font-family", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "decorative" )
         {
@@ -353,7 +353,7 @@ void StyleElement::importFontStyle(
     }
 
     // dialog:font-charset "(ansi|mac|ibmpc_437|ibmpc_850|ibmpc_860|ibmpc_861|ibmpc_863|ibmpc_865|system|symbol)" #IMPLIED
-    if (getStringAttr(&aValue, "font-charset", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr(&aValue, "font-charset", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "ansi" )
         {
@@ -403,7 +403,7 @@ void StyleElement::importFontStyle(
     }
 
     // dialog:font-pitch "(fixed|variable)" #IMPLIED
-    if (getStringAttr( &aValue, "font-pitch", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-pitch", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "fixed" )
         {
@@ -421,20 +421,20 @@ void StyleElement::importFontStyle(
     }
 
     // dialog:font-charwidth CDATA #IMPLIED
-    if (getStringAttr( &aValue, "font-charwidth", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-charwidth", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         _descr.CharacterWidth = aValue.toFloat();
         bFontImport = true;
     }
     // dialog:font-weight CDATA #IMPLIED
-    if (getStringAttr( &aValue, "font-weight", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-weight", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Weight = aValue.toFloat();
         bFontImport = true;
     }
 
     // dialog:font-slant "(oblique|italic|reverse_oblique|reverse_italic)" #IMPLIED
-    if (getStringAttr( &aValue, "font-slant", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-slant", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "oblique" )
         {
@@ -460,7 +460,7 @@ void StyleElement::importFontStyle(
     }
 
     // dialog:font-underline "(single|double|dotted|dash|longdash|dashdot|dashdotdot|smallwave|wave|doublewave|bold|bolddotted|bolddash|boldlongdash|bolddashdot|bolddashdotdot|boldwave)" #IMPLIED
-    if (getStringAttr( &aValue, "font-underline", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-underline", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "single" )
         {
@@ -538,7 +538,7 @@ void StyleElement::importFontStyle(
     }
 
     // dialog:font-strikeout "(single|double|bold|slash|x)" #IMPLIED
-    if (getStringAttr( &aValue, "font-strikeout", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-strikeout", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "single" )
         {
@@ -568,18 +568,18 @@ void StyleElement::importFontStyle(
     }
 
     // dialog:font-orientation CDATA #IMPLIED
-    if (getStringAttr( &aValue, "font-orientation", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-orientation", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         _descr.Orientation = aValue.toFloat();
         bFontImport = true;
     }
     // dialog:font-kerning %boolean; #IMPLIED
-    bFontImport |= getBoolAttr( &_descr.Kerning, "font-kerning", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
+    bFontImport |= getBoolAttr( &_descr.Kerning, "font-kerning", _xAttributes, m_xImport->XMLNS_DIALOGS_UID );
     // dialog:font-wordlinemode %boolean; #IMPLIED
-    bFontImport |= getBoolAttr( &_descr.WordLineMode,"font-wordlinemode", _xAttributes, _pImport->XMLNS_DIALOGS_UID );
+    bFontImport |= getBoolAttr( &_descr.WordLineMode,"font-wordlinemode", _xAttributes, m_xImport->XMLNS_DIALOGS_UID );
 
     // dialog:font-type "(raster|device|scalable)" #IMPLIED
-    if (getStringAttr( &aValue, "font-type", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-type", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "raster" )
         {
@@ -602,7 +602,7 @@ void StyleElement::importFontStyle(
 
     // additional properties which are not part of the FontDescriptor struct
     // dialog:font-relief (none|embossed|engraved) #IMPLIED
-    if (getStringAttr( &aValue, "font-relief", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr( &aValue, "font-relief", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "none" )
         {
@@ -623,7 +623,7 @@ void StyleElement::importFontStyle(
         bFontImport = true;
     }
     // dialog:font-emphasismark (none|dot|circle|disc|accent|above|below) #IMPLIED
-    if (getStringAttr(&aValue, "font-emphasismark", _xAttributes, _pImport->XMLNS_DIALOGS_UID ))
+    if (getStringAttr(&aValue, "font-emphasismark", _xAttributes, m_xImport->XMLNS_DIALOGS_UID ))
     {
         if ( aValue == "none" )
         {
@@ -1616,7 +1616,7 @@ void ImportContext::importDefaults(
 Reference< xml::input::XElement > ElementBase::getParent()
     throw (RuntimeException, std::exception)
 {
-    return static_cast< xml::input::XElement * >( _pParent );
+    return static_cast< xml::input::XElement * >( m_xParent.get() );
 }
 
 OUString ElementBase::getLocalName()
@@ -1673,29 +1673,16 @@ ElementBase::ElementBase(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes,
     ElementBase * pParent, DialogImport * pImport )
-    : _pImport( pImport )
-    , _pParent( pParent )
+    : m_xImport( pImport )
+    , m_xParent( pParent )
     , _nUid( nUid )
     , _aLocalName( rLocalName )
     , _xAttributes( xAttributes )
 {
-    _pImport->acquire();
-
-    if (_pParent)
-    {
-        _pParent->acquire();
-    }
 }
 
 ElementBase::~ElementBase()
 {
-    _pImport->release();
-
-    if (_pParent)
-    {
-        _pParent->release();
-    }
-
     SAL_INFO("xmlscript.xmldlg", "ElementBase::~ElementBase(): " << _aLocalName );
 }
 

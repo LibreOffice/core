@@ -41,6 +41,7 @@
 #include <com/sun/star/container/ElementExistException.hpp>
 #include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <osl/diagnose.h>
+#include <rtl/ref.hxx>
 #include <memory>
 #include <vector>
 
@@ -203,8 +204,8 @@ class ElementBase
     : public ::cppu::WeakImplHelper< css::xml::input::XElement >
 {
 protected:
-    DialogImport * const _pImport;
-    ElementBase * const _pParent;
+    rtl::Reference<DialogImport> const m_xImport;
+    rtl::Reference<ElementBase> const m_xParent;
 private:
     const sal_Int32 _nUid;
     const OUString _aLocalName;
@@ -1027,7 +1028,7 @@ public:
         ElementBase * pParent, DialogImport * pImport )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {
-            m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoMultiPageModel" ), css::uno::UNO_QUERY );
+            m_xContainer.set( m_xImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoMultiPageModel" ), css::uno::UNO_QUERY );
         }
 private:
     css::uno::Reference< css::container::XNameContainer > m_xContainer;
@@ -1074,7 +1075,7 @@ public:
         ElementBase * pParent, DialogImport * pImport )
         : ControlElement( rLocalName, xAttributes, pParent, pImport )
         {
-            m_xContainer.set( _pImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoPageModel" ), css::uno::UNO_QUERY );
+            m_xContainer.set( m_xImport->_xDialogModelFactory->createInstance( "com.sun.star.awt.UnoPageModel" ), css::uno::UNO_QUERY );
         }
 private:
     css::uno::Reference< css::container::XNameContainer > m_xContainer;
