@@ -1094,7 +1094,7 @@ class LetterWizardDialog(WizardDialog):
                 PropertyNames.PROPERTY_TABINDEX,
                 PropertyNames.PROPERTY_WIDTH),
             (0, 10,
-                "private:resource/dbu/image/19205",
+                UIConsts.INFOIMAGEURL,
                 "ImageControl2", 92, 145,  False, 6, 66, 10))
         self.insertLabel("lblTemplateName",
             (PropertyNames.PROPERTY_HEIGHT,
