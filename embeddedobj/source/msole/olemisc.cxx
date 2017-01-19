@@ -128,7 +128,6 @@ OleEmbeddedObject::OleEmbeddedObject( const uno::Reference< lang::XMultiServiceF
 , m_bGotStatus( false )
 , m_nStatus( 0 )
 , m_nStatusAspect( 0 )
-, m_pOwnView( nullptr )
 , m_bFromClipboard( true )
 , m_bTriedConversion( false )
 {
