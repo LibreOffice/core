@@ -248,7 +248,7 @@ void Theme::InitializeIcon (const IconType eType, sal_uInt16 nResourceId)
 {
     if (eType>=0 && size_t(eType)<maIcons.size())
     {
-        const BitmapEx aIcon (Image(SdResId(nResourceId)).GetBitmapEx());
+        const BitmapEx aIcon((SdResId(nResourceId)));
         maIcons[eType] = aIcon;
     }
     else

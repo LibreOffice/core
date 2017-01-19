@@ -21,24 +21,24 @@
 
 Resource RID_SLIDESORTER_ICONS
 {
-    Image IMAGE_SHADOW
+    Bitmap IMAGE_SHADOW
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_shadow.png" ; };
+        File = "slide_sorter_shadow.png";
     };
 
-    Image IMAGE_INSERT_SHADOW
+    Bitmap IMAGE_INSERT_SHADOW
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_insert_shadow.png" ; };
+        File = "slide_sorter_insert_shadow.png";
     };
 
-    Image IMAGE_HIDE_SLIDE_OVERLAY
+    Bitmap IMAGE_HIDE_SLIDE_OVERLAY
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_hide_slide_overlay.png" ; };
+        File = "slide_sorter_hide_slide_overlay.png";
     };
 
-    Image IMAGE_FOCUS_BORDER
+    Bitmap IMAGE_FOCUS_BORDER
     {
-        ImageBitmap = Bitmap { File = "slide_sorter_focus_border.png" ; };
+        File = "slide_sorter_focus_border.png";
     };
 };
 
