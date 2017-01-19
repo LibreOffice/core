@@ -32,7 +32,7 @@ $(call gb_ExternalProject_get_state_target,libvisio,build) :
 			--disable-shared \
 			--without-docs \
 			--disable-tools \
-			$(if $(ENABLE_DEBUG),--enable-debug,--disable-debug) \
+			$(if $(or $(ENABLE_DEBUG),$(ENABLE_DBGUTIL)),--enable-debug,--disable-debug) \
 			--disable-werror \
 			$(if $(verbose),--disable-silent-rules,--enable-silent-rules) \
 			CXXFLAGS="$(CXXFLAGS) $(BOOST_CPPFLAGS)" \
