@@ -47,6 +47,8 @@
 #include "urlparameter.hxx"
 #include "databases.hxx"
 
+#include <memory>
+
 using namespace cppu;
 using namespace com::sun::star::io;
 using namespace com::sun::star::uno;
@@ -303,8 +305,6 @@ public:
                             Databases*    pDatatabases,
                             bool isRoot );
 
-    virtual ~InputStreamTransformer() override;
-
     virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception ) override;
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
@@ -344,7 +344,7 @@ public:
 
     void addToBuffer( const char* buffer,int len );
 
-    sal_Int8 const * getData() const { return reinterpret_cast<sal_Int8 const *>(buffer); }
+    sal_Int8 const * getData() const { return reinterpret_cast<sal_Int8 const *>(buffer.get()); }
 
     sal_Int32 getLen() const { return sal_Int32( len ); }
 
@@ -353,7 +353,7 @@ private:
     osl::Mutex m_aMutex;
 
     int len,pos;
-    char *buffer;
+    std::unique_ptr<char[]> buffer;
 };
 
 
@@ -739,18 +739,18 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 {
     if( isRoot )
     {
-        delete[] buffer;
+        buffer.reset();
         pDatabases->cascadingStylesheet( urlParam->get_language(),
-                                         &buffer,
+                                         buffer,
                                          &len );
     }
     else if( urlParam->isActive() )
     {
-        delete[] buffer;
+        buffer.reset();
         pDatabases->setActiveText( urlParam->get_module(),
                                    urlParam->get_language(),
                                    urlParam->get_id(),
-                                   &buffer,
+                                   buffer,
                                    &len );
     }
     else
@@ -909,12 +909,6 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 }
 
 
-InputStreamTransformer::~InputStreamTransformer()
-{
-    delete[] buffer;
-}
-
-
 Any SAL_CALL InputStreamTransformer::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
 {
     Any aRet = ::cppu::queryInterface( rType,
@@ -1032,11 +1026,10 @@ void InputStreamTransformer::addToBuffer( const char* buffer_,int len_ )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
-    char* tmp = buffer;
-    buffer = new char[ len+len_ ];
-    memcpy( static_cast<void*>(buffer),static_cast<void*>(tmp),sal_uInt32( len ) );
-    memcpy( static_cast<void*>(buffer+len),static_cast<void const *>(buffer_),sal_uInt32( len_ ) );
-    delete[] tmp;
+    std::unique_ptr<char[]> tmp(buffer.release());
+    buffer.reset( new char[ len+len_ ] );
+    memcpy( static_cast<void*>(buffer.get()),static_cast<void*>(tmp.get()),sal_uInt32( len ) );
+    memcpy( static_cast<void*>(buffer.get()+len),static_cast<void const *>(buffer_),sal_uInt32( len_ ) );
     len += len_;
 }
 

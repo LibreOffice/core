@@ -143,7 +143,6 @@ XMLFontAutoStylePool::XMLFontAutoStylePool( SvXMLExport& rExp, bool _tryToEmbedF
 
 XMLFontAutoStylePool::~XMLFontAutoStylePool()
 {
-    delete pPool;
 }
 
 OUString XMLFontAutoStylePool::Add(

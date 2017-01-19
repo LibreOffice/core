@@ -39,12 +39,10 @@ class UUIInteractionHandler:
                                   css::task::XInteractionHandler2 >
 {
 private:
-    UUIInteractionHelper * m_pImpl;
+    std::unique_ptr<UUIInteractionHelper> m_pImpl;
 
 public:
     explicit UUIInteractionHandler(css::uno::Reference< css::uno::XComponentContext > const & rxContext);
-
-    virtual ~UUIInteractionHandler() override;
 
     UUIInteractionHandler(const UUIInteractionHandler&) = delete;
     UUIInteractionHandler& operator=(const UUIInteractionHandler&) = delete;
@@ -80,11 +78,6 @@ UUIInteractionHandler::UUIInteractionHandler(
 {
 }
 
-UUIInteractionHandler::~UUIInteractionHandler()
-{
-    delete m_pImpl;
-}
-
 OUString SAL_CALL UUIInteractionHandler::getImplementationName()
     throw (uno::RuntimeException, std::exception)
 {
@@ -117,7 +110,7 @@ UUIInteractionHandler::initialize(
     throw (uno::Exception, std::exception)
 {
     uno::Reference<uno::XComponentContext> xContext = m_pImpl->getORB();
-    delete m_pImpl;
+    m_pImpl.reset();
 
     // The old-style InteractionHandler service supported a sequence of
     // PropertyValue, while the new-style service now uses constructors to pass
@@ -140,7 +133,7 @@ UUIInteractionHandler::initialize(
         }
     }
 
-    m_pImpl = new UUIInteractionHelper(xContext, xWindow, aContext);
+    m_pImpl.reset( new UUIInteractionHelper(xContext, xWindow, aContext) );
 }
 
 void SAL_CALL
