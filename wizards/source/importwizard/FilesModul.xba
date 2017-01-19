@@ -327,7 +327,7 @@ Dim sPrevMimeTypeorExtension as String
 			CurFiltername =	GetFilterName(sMimeTypeorExtension, sFilterName(), sExtension, FilterIndex)
 			ApplIndex = FilesList(i,2)
 			If sMimeTypeorExtension &lt;&gt; sPrevMimeTypeorExtension Then
-				CreateLogTable(ApplIndex, sMimeTypeOrExtension, sFiltername()
+				CreateLogTable(ApplIndex, sMimeTypeOrExtension, sFiltername())
 			End If
 			If ApplIndex &gt; Ubound(Applications) or (ApplIndex &lt; 0) Then
 				Msgbox &quot;Applicationindex out of bounds:&quot; &amp; sSourcUrl
