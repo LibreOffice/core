@@ -23,10 +23,11 @@
 #include <tools/link.hxx>
 #include <editeng/splwrap.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
+#include <swdllapi.h>
 
 class SwView;
 
-class SwHyphWrapper : public SvxSpellWrapper {
+class SW_DLLPUBLIC SwHyphWrapper : public SvxSpellWrapper {
 private:
     SwView* pView;
     sal_uInt16      nPageCount;     // page count for progress view
