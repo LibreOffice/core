@@ -21,7 +21,7 @@
 
 #include <tools/date.hxx>
 #include <tools/datetime.hxx>
-
+#include <rtl/ref.hxx>
 #include <svl/macitem.hxx>
 
 #include "fldbas.hxx"
@@ -443,7 +443,7 @@ class SW_DLLPUBLIC SwPostItField : public SwField
     OUString sName;     ///< Name of the comment.
     DateTime    aDateTime;
     OutlinerParaObject* mpText;
-    SwTextAPIObject* m_pTextObject;
+    rtl::Reference<SwTextAPIObject> m_xTextObject;
 
 public:
     SwPostItField( SwPostItFieldType*,
