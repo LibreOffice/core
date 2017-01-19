@@ -33,6 +33,7 @@
 
 #include <math.h>
 #include <vector>
+#include <map>
 #include <algorithm>
 #include <boost/math/special_functions/log1p.hpp>
 #include <comphelper/random.hxx>
@@ -3450,6 +3451,54 @@ void ScInterpreter::ScModalValue()
             PushDouble(nOldVal);
         else
             PushDouble(aSortArray[nMaxIndex]);
+    }
+}
+
+void ScInterpreter::ScModalExcelValue()
+{
+    sal_uInt8 nParamCount = GetByte();
+    if ( !MustHaveParamCountMin( nParamCount, 1) )
+        return;
+    vector<double> aNumberSequenceArray;
+    GetNumberSequenceArray( nParamCount, aNumberSequenceArray, false );
+    SCSIZE nSize = aNumberSequenceArray.size();
+    if (aNumberSequenceArray.empty() || nSize == 0 || nGlobalError != FormulaError::NONE)
+        PushNoValue();
+    else
+    {
+        ::std::map<double, sal_uInt16> nFreq;
+        SCSIZE i;
+        for ( i = 0; i < nSize; i++)
+        {
+            double nPos = aNumberSequenceArray[i];
+            //SAL_(nPos);
+            if ( nFreq[nPos] < 1 )
+                nFreq[nPos] = 1;
+            else
+                nFreq[nPos]++;
+        }
+//         sal_uInt16 nMax = 1;
+//         double nModeVal = aNumberSequenceArray[0];
+//         SAL_("-----");
+//         for ( i = 0; i < nSize; i++)
+//         {
+//             double nPos = aNumberSequenceArray[i];
+//             SAL_(nPos);
+//             SAL_(nFreq[nPos]);
+//             SAL_(nMax);
+//             if( nFreq[nPos] > nMax )
+//             {
+//                 nMax = nFreq[nPos];
+//                 nModeVal = aNumberSequenceArray[i];
+//                 SAL_(nModeVal);
+//                 SAL_("<<----->>");
+//             }
+//         }
+//         SAL_("========");
+//         if(nMax == 1 && nSize != 1)
+//             PushNoValue();
+//         else
+//             PushDouble(nModeVal);
     }
 }
 

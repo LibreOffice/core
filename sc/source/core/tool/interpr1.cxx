@@ -6767,7 +6767,7 @@ void ScInterpreter::ScAggregate()
                 case AGGREGATE_FUNC_VAR     : ScVar();     break;
                 case AGGREGATE_FUNC_VARP    : ScVarP();    break;
                 case AGGREGATE_FUNC_MEDIAN  : ScMedian();            break;
-                case AGGREGATE_FUNC_MODSNGL : ScModalValue();        break;
+                case AGGREGATE_FUNC_MODSNGL : ScModalExcelValue();        break;
                 case AGGREGATE_FUNC_LARGE   : ScLarge();             break;
                 case AGGREGATE_FUNC_SMALL   : ScSmall();             break;
                 case AGGREGATE_FUNC_PERCINC : ScPercentile( true );  break;
