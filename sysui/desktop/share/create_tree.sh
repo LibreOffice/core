@@ -83,7 +83,7 @@ for i in `cat launcherlist`; do
 done
 
 mkdir -p "${DESTDIR}/${PREFIXDIR}/share/appdata"
-for i in base calc draw impress writer; do
+for i in base calc draw impress writer kde; do
     cp "${APPDATA_SOURCE_DIR}/libreoffice-${i}.appdata.xml" "${DESTDIR}/${PREFIXDIR}/share/appdata/${PREFIX}-${i}.appdata.xml"
 done
 
