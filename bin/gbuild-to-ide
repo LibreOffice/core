@@ -782,7 +782,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
         self.toolset = self.retrieve_toolset()
-        self.solution_directory = './'
+        self.solution_directory = './windows'
         self.configurations = {
             'Build': {
                 'build': self.module_make_command('%(target)s'),
