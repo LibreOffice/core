@@ -905,6 +905,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         OUString aStr(OStringToOUString(aByteStr, eActualCharSet));
 
                         std::unique_ptr<long[]> pDXAry;
+                        sal_Int32 nDXAryLen = 0;
                         if (nAryLen > 0)
                         {
                             const size_t nMinRecordSize = sizeof(sal_Int32);
@@ -918,36 +919,49 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
 
                             sal_Int32 nStrLen( aStr.getLength() );
 
-                            pDXAry.reset(new long[ std::max( nAryLen, nStrLen ) ]);
+                            nDXAryLen = std::max(nAryLen, nStrLen);
+                            pDXAry.reset(new long[nDXAryLen]);
 
-                            for (sal_Int32 j = 0; j < nAryLen; ++j)
-                                rIStm.ReadInt32( nTmp ), pDXAry[ j ] = nTmp;
-
-                            // #106172# Add last DX array elem, if missing
-                            if( nAryLen != nStrLen )
+                            if (nDXAryLen < nLen)
                             {
-                                if( nAryLen+1 == nStrLen )
+                                //MetaTextArrayAction ctor expects pDXAry to be >= nLen if set, so if this can't
+                                //be achieved, don't read it, it's utterly broken.
+                                SAL_WARN("vcl.gdi", "dxary too short, discarding completely");
+                                rIStm.SeekRel(sizeof(sal_Int32) * nDXAryLen);
+                                nLen = 0;
+                                nIndex = 0;
+                            }
+                            else
+                            {
+                                for (sal_Int32 j = 0; j < nAryLen; ++j)
+                                    rIStm.ReadInt32( nTmp ), pDXAry[ j ] = nTmp;
+
+                                // #106172# Add last DX array elem, if missing
+                                if( nAryLen != nStrLen )
                                 {
-                                    std::unique_ptr<long[]> pTmpAry(new long[nStrLen]);
+                                    if( nAryLen+1 == nStrLen )
+                                    {
+                                        std::unique_ptr<long[]> pTmpAry(new long[nStrLen]);
 
-                                    aFontVDev->GetTextArray( aStr, pTmpAry.get(), nIndex, nLen );
+                                        aFontVDev->GetTextArray( aStr, pTmpAry.get(), nIndex, nLen );
 
-                                    // now, the difference between the
-                                    // last and the second last DX array
-                                    // is the advancement for the last
-                                    // glyph. Thus, to complete our meta
-                                    // action's DX array, just add that
-                                    // difference to last elem and store
-                                    // in very last.
-                                    if( nStrLen > 1 )
-                                        pDXAry[ nStrLen-1 ] = pDXAry[ nStrLen-2 ] + pTmpAry[ nStrLen-1 ] - pTmpAry[ nStrLen-2 ];
+                                        // now, the difference between the
+                                        // last and the second last DX array
+                                        // is the advancement for the last
+                                        // glyph. Thus, to complete our meta
+                                        // action's DX array, just add that
+                                        // difference to last elem and store
+                                        // in very last.
+                                        if( nStrLen > 1 )
+                                            pDXAry[ nStrLen-1 ] = pDXAry[ nStrLen-2 ] + pTmpAry[ nStrLen-1 ] - pTmpAry[ nStrLen-2 ];
+                                        else
+                                            pDXAry[ nStrLen-1 ] = pTmpAry[ nStrLen-1 ]; // len=1: 0th position taken to be 0
+                                    }
+        #ifdef DBG_UTIL
                                     else
-                                        pDXAry[ nStrLen-1 ] = pTmpAry[ nStrLen-1 ]; // len=1: 0th position taken to be 0
+                                        OSL_FAIL("More than one DX array element missing on SVM import");
+        #endif
                                 }
-    #ifdef DBG_UTIL
-                                else
-                                    OSL_FAIL("More than one DX array element missing on SVM import");
-    #endif
                             }
                         }
                         if ( nUnicodeCommentActionNumber == i )
