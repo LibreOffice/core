@@ -36,13 +36,16 @@ namespace com { namespace sun { namespace star {
 
 namespace pwp {
 
+/// @throws css::uno::RuntimeException
 OUString PlaceWareExportFilter_getImplementationName()
     throw (css::uno::RuntimeException);
 
+/// @throws css::uno::RuntimeException
 css::uno::Sequence<OUString> SAL_CALL
 PlaceWareExportFilter_getSupportedServiceNames()
     throw (css::uno::RuntimeException);
 
+/// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL
 PlaceWareExportFilter_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const & rSMgr)

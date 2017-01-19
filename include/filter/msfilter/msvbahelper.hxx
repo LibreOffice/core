@@ -63,7 +63,9 @@ MSFILTER_DLLPUBLIC OUString getDefaultProjectName( SfxObjectShell* pShell );
 MSFILTER_DLLPUBLIC OUString resolveVBAMacro( SfxObjectShell* pShell, const OUString& rLibName, const OUString& rModuleName, const OUString& rMacroName );
 MSFILTER_DLLPUBLIC MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const OUString& rMacroName, bool bSearchGlobalTemplates = false );
 MSFILTER_DLLPUBLIC bool executeMacro( SfxObjectShell* pShell, const OUString& sMacroName, css::uno::Sequence< css::uno::Any >& aArgs, css::uno::Any& aRet, const css::uno::Any& aCaller );
+/// @throws css::uno::RuntimeException
 MSFILTER_DLLPUBLIC css::awt::KeyEvent parseKeyEvent( const OUString& sKey ) throw (css::uno::RuntimeException);
+/// @throws css::uno::RuntimeException
 MSFILTER_DLLPUBLIC void applyShortCutKeyBinding ( const css::uno::Reference< css::frame::XModel >& rxDoc, const css::awt::KeyEvent& rKeyEvent, const OUString& sMacro ) throw (css::uno::RuntimeException, std::exception);
 
 
@@ -117,6 +119,7 @@ OUString SAL_CALL VBAMacroResolver_getImplementationName();
 css::uno::Sequence<OUString> SAL_CALL
 VBAMacroResolver_getSupportedServiceNames();
 
+/// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL
 VBAMacroResolver_createInstance(
     css::uno::Reference<css::uno::XComponentContext > const & rxContext)

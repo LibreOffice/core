@@ -615,6 +615,7 @@ bool getModifier( char c, sal_uInt16& mod )
     return false;
 }
 
+/// @throws uno::RuntimeException
 sal_uInt16 parseChar( char c ) throw ( uno::RuntimeException )
 {
     sal_uInt16 nVclKey = 0;

@@ -162,18 +162,20 @@ void SAL_CALL XMLFilterDialogComponent::release() throw ()
     OComponentHelper::release();
 }
 
-
+/// @throws RuntimeException
 OUString XMLFilterDialogComponent_getImplementationName() throw ( RuntimeException )
 {
     return OUString( "com.sun.star.comp.ui.XSLTFilterDialog" );
 }
 
+/// @throws RuntimeException
 Sequence< OUString > SAL_CALL XMLFilterDialogComponent_getSupportedServiceNames()  throw ( RuntimeException )
 {
     Sequence< OUString > aSupported { "com.sun.star.ui.dialogs.XSLTFilterDialog" };
     return aSupported;
 }
 
+/// @throws Exception
 Reference< XInterface > SAL_CALL XMLFilterDialogComponent_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw ( Exception )
 {
     return static_cast<OWeakObject*>(new XMLFilterDialogComponent( comphelper::getComponentContext(rSMgr) ));

@@ -171,6 +171,8 @@ class BaseContainer : public BaseLock
 
             @descr  If no exception occurs, its guaranteed, that the member m_rFlushCache
                     was initialized right and can be used further.
+
+            @throws css::uno::RuntimeException
          */
         void impl_initFlushMode()
             throw (css::uno::RuntimeException);

@@ -72,19 +72,19 @@ public:
     virtual     ~SVGDialog() override;
 };
 
-
+/// @throws css::uno::RuntimeException
 OUString SVGDialog_getImplementationName ()
     throw ( css::uno::RuntimeException );
 
-
+/// @throws css::uno::RuntimeException
 bool SAL_CALL SVGDialog_supportsService( const OUString& ServiceName )
     throw ( css::uno::RuntimeException );
 
-
+/// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL SVGDialog_getSupportedServiceNames(  )
     throw ( css::uno::RuntimeException );
 
-
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
     SAL_CALL SVGDialog_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
         throw ( css::uno::Exception );

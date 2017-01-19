@@ -102,7 +102,7 @@ PageEntry::~PageEntry()
 {
 }
 
-
+/// @throws css::uno::Exception
 static void encodeFile( osl::File& rSourceFile, Reference< XOutputStream > const & xOutputStream ) throw( css::uno::Exception )
 {
     if( xOutputStream.is() )
@@ -178,6 +178,7 @@ static OString convertString( const OUString& aInput )
     return aRet;
 }
 
+/// @throws css::uno::Exception
 static void createSlideFile( const Reference< XComponent >& xDoc, PlacewareZipFile& rZipFile, const OUString& rURL, std::vector< PageEntry* >& rPageEntries  ) throw( css::uno::Exception, std::exception )
 {
     OString aInfo;

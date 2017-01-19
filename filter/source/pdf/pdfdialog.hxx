@@ -65,9 +65,11 @@ public:
     virtual     ~PDFDialog() override;
 };
 
-
+/// @throws RuntimeException
 OUString PDFDialog_getImplementationName () throw (RuntimeException);
+/// @throws RuntimeException
 Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames() throw (RuntimeException);
+/// @throws Exception
 Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
 
 #endif // INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX

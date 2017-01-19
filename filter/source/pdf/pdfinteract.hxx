@@ -52,19 +52,19 @@ public:
     virtual     ~PDFInteractionHandler() override;
 };
 
-
+/// @throws RuntimeException
 OUString PDFInteractionHandler_getImplementationName ()
     throw ( RuntimeException );
 
-
+/// @throws RuntimeException
 bool SAL_CALL PDFInteractionHandler_supportsService( const OUString& ServiceName )
     throw ( RuntimeException );
 
-
+/// @throws RuntimeException
 Sequence< OUString > SAL_CALL PDFInteractionHandler_getSupportedServiceNames(  )
     throw ( RuntimeException );
 
-
+/// @throws Exception
 Reference< XInterface >
 SAL_CALL PDFInteractionHandler_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw ( Exception );

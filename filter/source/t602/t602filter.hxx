@@ -53,13 +53,15 @@ typedef enum {
 
 enum class tnode {START,READCH,EOL,POCMD,EXPCMD,SETCMD,SETCH,WRITE,EEND,QUIT};
 
+/// @throws css::uno::RuntimeException
 OUString getImplementationName()
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 css::uno::Sequence < OUString > getSupportedServiceNames()
     throw ( css::uno::RuntimeException );
 
-
+/// @throws css::uno::Exception
 css::uno::Reference < css::uno::XInterface > SAL_CALL
     CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &r)
     throw ( css::uno::Exception );
@@ -247,6 +249,7 @@ private:
     void setfnt(fonts fnt,bool mustwrite);
     void wrtfnt();
 
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
         throw (css::uno::RuntimeException);
 
@@ -285,28 +288,36 @@ private:
         bool SAL_CALL test();
 };
 
+/// @throws css::uno::RuntimeException
 OUString T602ImportFilter_getImplementationName()
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 bool SAL_CALL T602ImportFilter_supportsService( const OUString& ServiceName )
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 SAL_CALL T602ImportFilter_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
     throw ( css::uno::Exception );
 
+/// @throws css::uno::RuntimeException
 OUString T602ImportFilterDialog_getImplementationName()
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 bool SAL_CALL T602ImportFilterDialog_supportsService( const OUString& ServiceName )
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  )
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 SAL_CALL T602ImportFilterDialog_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
     throw ( css::uno::Exception );

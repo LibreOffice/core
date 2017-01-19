@@ -81,19 +81,19 @@ public:
     virtual     ~PDFFilter() override;
 };
 
-
+/// @throws RuntimeException
 OUString PDFFilter_getImplementationName ()
     throw ( RuntimeException );
 
-
+/// @throws RuntimeException
 bool SAL_CALL PDFFilter_supportsService( const OUString& ServiceName )
     throw ( RuntimeException );
 
-
+/// @throws RuntimeException
 Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  )
     throw ( RuntimeException );
 
-
+/// @throws Exception
 Reference< XInterface >
 SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
     throw ( Exception );
