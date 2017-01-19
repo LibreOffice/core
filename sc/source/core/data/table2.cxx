@@ -313,13 +313,13 @@ void ScTable::InsertCol(
     if ((nStartRow == 0) && (nEndRow == MAXROW))
     {
         for (SCSIZE i=0; i < nSize; i++)
-            for (SCCOL nCol = MAXCOL; nCol > nStartCol; nCol--)
+            for (SCCOL nCol = aCol.size() - 1; nCol > nStartCol; nCol--)
                 aCol[nCol].SwapCol(aCol[nCol-1]);
     }
     else
     {
-        for (SCSIZE i=0; static_cast<SCCOL>(i+nSize)+nStartCol <= MAXCOL; i++)
-            aCol[MAXCOL - nSize - i].MoveTo(nStartRow, nEndRow, aCol[MAXCOL - i]);
+        for (SCSIZE i=0; static_cast<SCCOL>(i+nSize)+nStartCol < aCol.size(); i++)
+            aCol[aCol.size() - 1 - nSize - i].MoveTo(nStartRow, nEndRow, aCol[aCol.size() - 1 - i]);
     }
 
     std::vector<SCCOL> aRegroupCols;
@@ -400,12 +400,12 @@ void ScTable::DeleteCol(
     if ((nStartRow == 0) && (nEndRow == MAXROW))
     {
         for (SCSIZE i=0; i < nSize; i++)
-            for (SCCOL nCol = nStartCol; nCol < MAXCOL; nCol++)
+            for (SCCOL nCol = nStartCol; nCol < aCol.size() - 1; nCol++)
                 aCol[nCol].SwapCol(aCol[nCol+1]);
     }
     else
     {
-        for (SCSIZE i=0; static_cast<SCCOL>(i+nSize)+nStartCol <= MAXCOL; i++)
+        for (SCSIZE i=0; static_cast<SCCOL>(i+nSize)+nStartCol < aCol.size(); i++)
             aCol[nStartCol + nSize + i].MoveTo(nStartRow, nEndRow, aCol[nStartCol + i]);
     }
 
@@ -425,7 +425,7 @@ void ScTable::DeleteArea(
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, InsertDeleteFlags nDelFlag,
     bool bBroadcast, sc::ColumnSpanSet* pBroadcastSpans )
 {
-    if (nCol2 > MAXCOL) nCol2 = MAXCOL;
+    if ( nCol2 >= aCol.size() ) nCol2 = aCol.size() - 1;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
     {
@@ -458,7 +458,7 @@ void ScTable::DeleteSelection( InsertDeleteFlags nDelFlag, const ScMarkData& rMa
 {
     {   // scope for bulk broadcast
         ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM(), SfxHintId::ScDataChanged);
-        for (SCCOL i=0; i<=MAXCOL; i++)
+        for (SCCOL i=0; i < aCol.size(); i++)
             aCol[i].DeleteSelection(nDelFlag, rMark, bBroadcast);
     }
 
@@ -648,9 +648,8 @@ void ScTable::CopyFromClip(
     sc::CopyFromClipContext& rCxt, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     SCsCOL nDx, SCsROW nDy, ScTable* pTable )
 {
-
-    if (nCol2 > MAXCOL)
-        nCol2 = MAXCOL;
+    if (nCol2 > aCol.size() - 1)
+        nCol2 = aCol.size() - 1;
     if (nRow2 > MAXROW)
         nRow2 = MAXROW;
 
@@ -1068,6 +1067,7 @@ void ScTable::DetachFormulaCells(
 void ScTable::SetDirtyFromClip(
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sc::ColumnSpanSet& rBroadcastSpans )
 {
+    if ( nCol2 >= aCol.size() ) nCol2 = aCol.size() - 1;
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
@@ -1079,6 +1079,7 @@ void ScTable::StartListeningFormulaCells(
     sc::StartListeningContext& rStartCxt, sc::EndListeningContext& rEndCxt,
     SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2 )
 {
+    if ( nCol2 >= aCol.size() ) nCol2 = aCol.size() - 1;
     if (nCol2 > MAXCOL) nCol2 = MAXCOL;
     if (nRow2 > MAXROW) nRow2 = MAXROW;
     if (ValidColRow(nCol1, nRow1) && ValidColRow(nCol2, nRow2))
@@ -1591,7 +1592,7 @@ void ScTable::ForgetNoteCaptions( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
 {
     if (!ValidCol(nCol1) || !ValidCol(nCol2))
         return;
-
+    if ( nCol2 >= aCol.size() ) nCol2 = aCol.size() - 1;
     for (SCCOL i = nCol1; i <= nCol2; ++i)
         aCol[i].ForgetNoteCaptions(nRow1, nRow2, bPreserveData);
 }
@@ -1916,6 +1917,11 @@ const ScPatternAttr* ScTable::GetMostUsedPattern( SCCOL nCol, SCROW nStartRow, S
 
 bool ScTable::HasAttrib( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, HasAttrFlags nMask ) const
 {
+    if ( nCol1 >= aCol.size() )
+         return false;
+    if ( nCol2 >= aCol.size() )
+         nCol2 = aCol.size() - 1; // Rows above range, doesn't contains flags
+
     bool bFound = false;
     for (SCCOL i=nCol1; i<=nCol2 && !bFound; i++)
         bFound |= aCol[i].HasAttrib( nRow1, nRow2, nMask );
@@ -3328,7 +3334,7 @@ SCCOL ScTable::GetLastChangedCol() const
         return 0;
 
     SCCOL nLastFound = 0;
-    for (SCCOL nCol = 1; nCol <= MAXCOL; nCol++)
+    for ( SCCOL nCol = 1; nCol < aCol.size(); nCol++ )
         if ((pColFlags[nCol] & CRFlags::All) || (pColWidth[nCol] != STD_COL_WIDTH))
             nLastFound = nCol;
 
