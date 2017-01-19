@@ -91,6 +91,7 @@ namespace salhelper
             timedout & operator =(timedout const &);
         };
 
+        /// @throws timedout
         ConditionWaiter(Condition& aCond,sal_uInt32 milliSec)
             throw(
                 timedout
