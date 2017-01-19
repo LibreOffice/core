@@ -24,6 +24,7 @@
 #include <sfx2/sfxhtml.hxx>
 #include <svl/macitem.hxx>
 #include <editeng/svxenum.hxx>
+#include <rtl/ref.hxx>
 #include <fmtornt.hxx>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/form/XFormComponent.hpp>
@@ -397,7 +398,7 @@ class SwHTMLParser : public SfxHTMLParser, public SwClient
     SwHTMLNumRuleInfo *m_pNumRuleInfo;
     SwPendingStack  *m_pPendStack;
 
-    SwDoc           *m_pDoc;
+    rtl::Reference<SwDoc> m_xDoc;
     SwPaM           *m_pPam;      // SwPosition duerfte doch reichen, oder ??
     SwViewShell       *m_pActionViewShell;  // SwViewShell, an der das StartAction
                                         // gerufen wurde.

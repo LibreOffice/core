@@ -71,8 +71,8 @@ void SwHTMLParser::NewNumBulList( int nToken )
     // ggf. ein Regelwerk anlegen
     if( !rInfo.GetNumRule() )
     {
-        sal_uInt16 nPos = m_pDoc->MakeNumRule( m_pDoc->GetUniqueNumRuleName() );
-        rInfo.SetNumRule( m_pDoc->GetNumRuleTable()[nPos] );
+        sal_uInt16 nPos = m_xDoc->MakeNumRule( m_xDoc->GetUniqueNumRuleName() );
+        rInfo.SetNumRule( m_xDoc->GetNumRuleTable()[nPos] );
     }
 
     // das Format anpassen, falls es fuer den Level noch nicht
@@ -261,7 +261,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
@@ -305,7 +305,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
             if( bChangeNumFormat )
             {
                 rInfo.GetNumRule()->Set( nLevel, aNumFormat );
-                m_pDoc->ChgNumRuleFormats( *rInfo.GetNumRule() );
+                m_xDoc->ChgNumRuleFormats( *rInfo.GetNumRule() );
                 bChangeNumFormat = false;
             }
 
@@ -318,7 +318,7 @@ void SwHTMLParser::NewNumBulList( int nToken )
     if( bChangeNumFormat )
     {
         rInfo.GetNumRule()->Set( nLevel, aNumFormat );
-        m_pDoc->ChgNumRuleFormats( *rInfo.GetNumRule() );
+        m_xDoc->ChgNumRuleFormats( *rInfo.GetNumRule() );
     }
 
     PushContext( pCntxt );
@@ -394,7 +394,7 @@ void SwHTMLParser::EndNumBulList( int nToken )
                 }
             }
             if( bChanged )
-                m_pDoc->ChgNumRuleFormats( *rInfo.GetNumRule() );
+                m_xDoc->ChgNumRuleFormats( *rInfo.GetNumRule() );
 
             // Beim letzen Append wurde das NumRule-Item und das
             // NodeNum-Objekt mit kopiert. Beides muessen wir noch
@@ -480,7 +480,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     }
     else
     {
-        aNumRuleName = m_pDoc->GetUniqueNumRuleName();
+        aNumRuleName = m_xDoc->GetUniqueNumRuleName();
         SwNumRule aNumRule( aNumRuleName,
                             SvxNumberFormat::LABEL_WIDTH_AND_POSITION );
         SwNumFormat aNumFormat( aNumRule.Get( 0 ) );
@@ -495,7 +495,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
         aNumFormat.SetFirstLineOffset( HTML_NUMBUL_INDENT );
         aNumRule.Set( 0, aNumFormat );
 
-        m_pDoc->MakeNumRule( aNumRuleName, &aNumRule );
+        m_xDoc->MakeNumRule( aNumRuleName, &aNumRule );
 
         OSL_ENSURE( !m_nOpenParaToken,
                 "Jetzt geht ein offenes Absatz-Element verloren" );
@@ -531,7 +531,7 @@ void SwHTMLParser::NewNumBulListItem( int nToken )
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )

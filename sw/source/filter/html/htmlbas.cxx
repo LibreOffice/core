@@ -93,7 +93,7 @@ void SwHTMLParser::EndScript()
     if( bInsSrcIntoField && !m_bIgnoreHTMLComments )
     {
         SwScriptFieldType *pType =
-            static_cast<SwScriptFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_SCRIPTFLD ));
+            static_cast<SwScriptFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_SCRIPTFLD ));
 
         SwScriptField aField( pType, m_aScriptType,
                             !m_aScriptURL.isEmpty() ? m_aScriptURL : m_aScriptSource,
@@ -101,7 +101,7 @@ void SwHTMLParser::EndScript()
         InsertAttr( SwFormatField( aField ), false );
     }
 
-    SwDocShell *pDocSh = m_pDoc->GetDocShell();
+    SwDocShell *pDocSh = m_xDoc->GetDocShell();
     if( !m_aScriptSource.isEmpty() && pDocSh &&
         bInsIntoBasic && IsNewDoc() )
     {
@@ -240,7 +240,7 @@ void SwHTMLParser::InsertBasicDocEvent( const OUString& aEvent, const OUString& 
     if( rName.isEmpty() )
         return;
 
-    SwDocShell *pDocSh = m_pDoc->GetDocShell();
+    SwDocShell *pDocSh = m_xDoc->GetDocShell();
     OSL_ENSURE( pDocSh, "Wo ist die DocShell?" );
     if( !pDocSh )
         return;

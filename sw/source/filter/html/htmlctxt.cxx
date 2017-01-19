@@ -423,7 +423,7 @@ bool SwHTMLParser::DoPositioning( SfxItemSet &rItemSet,
     // - es wurde eine Breite angegeben (in beiden Faellen noetig)
     if( SwCSS1Parser::MayBePositioned( rPropInfo ) )
     {
-        SfxItemSet aFrameItemSet( m_pDoc->GetAttrPool(),
+        SfxItemSet aFrameItemSet( m_xDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs(aFrameItemSet );
@@ -462,7 +462,7 @@ bool SwHTMLParser::CreateContainer( const OUString& rClass,
         SwCSS1Parser::MayBePositioned( rPropInfo ) )
     {
         // Container-Klasse
-        SfxItemSet *pFrameItemSet = pContext->GetFrameItemSet( m_pDoc );
+        SfxItemSet *pFrameItemSet = pContext->GetFrameItemSet( m_xDoc.get() );
         if( !IsNewDoc() )
             Reader::ResetFrameFormatAttrs( *pFrameItemSet );
 

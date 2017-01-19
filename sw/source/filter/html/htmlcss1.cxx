@@ -1711,8 +1711,8 @@ bool SwHTMLParser::FileDownload( const OUString& rURL,
     }
 
     // wurde abgebrochen?
-    if( ( m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->IsAbortingImport() )
-        || 1 == m_pDoc->getReferenceCount() )
+    if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+        || 1 == m_xDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
         eState = SVPAR_ERROR;

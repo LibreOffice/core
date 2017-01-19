@@ -247,7 +247,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_pCSS1Parser( nullptr ),
     m_pNumRuleInfo( new SwHTMLNumRuleInfo ),
     m_pPendStack( nullptr ),
-    m_pDoc( pD ),
+    m_xDoc( pD ),
     m_pActionViewShell( nullptr ),
     m_pSttNdIdx( nullptr ),
     m_pTable(nullptr),
@@ -324,23 +324,23 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
         //CJK has different defaults, so a different object should be used for this
         //RES_CHARTR_CJK_FONTSIZE is a valid value
         SvxFontHeightItem aFontHeight(m_aFontHeights[2], 100, RES_CHRATR_FONTSIZE);
-        m_pDoc->SetDefault( aFontHeight );
+        m_xDoc->SetDefault( aFontHeight );
         SvxFontHeightItem aFontHeightCJK(m_aFontHeights[2], 100, RES_CHRATR_CJK_FONTSIZE);
-        m_pDoc->SetDefault( aFontHeightCJK );
+        m_xDoc->SetDefault( aFontHeightCJK );
         SvxFontHeightItem aFontHeightCTL(m_aFontHeights[2], 100, RES_CHRATR_CTL_FONTSIZE);
-        m_pDoc->SetDefault( aFontHeightCTL );
+        m_xDoc->SetDefault( aFontHeightCTL );
 
         // #i18732# - adjust default of option 'FollowTextFlow'
         // TODO: not sure what the appropriate default for HTML should be?
-        m_pDoc->SetDefault( SwFormatFollowTextFlow(true) );
+        m_xDoc->SetDefault( SwFormatFollowTextFlow(true) );
     }
 
     // Waehrend des Imports in den HTML-Modus schalten, damit die
     // richrigen Vorlagen angelegt werden
-    m_bOldIsHTMLMode = m_pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
-    m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
+    m_bOldIsHTMLMode = m_xDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE);
+    m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, true);
 
-    m_pCSS1Parser = new SwCSS1Parser( m_pDoc, m_aFontHeights, m_sBaseURL, IsNewDoc() );
+    m_pCSS1Parser = new SwCSS1Parser( m_xDoc.get(), m_aFontHeights, m_sBaseURL, IsNewDoc() );
     m_pCSS1Parser->SetIgnoreFontFamily( rHtmlOptions.IsIgnoreFontFamily() );
 
     if( bReadUTF8 )
@@ -349,7 +349,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     }
     else
     {
-        SwDocShell *pDocSh = m_pDoc->GetDocShell();
+        SwDocShell *pDocSh = m_xDoc->GetDocShell();
         SvKeyValueIterator *pHeaderAttrs =
             pDocSh->GetHeaderAttributes();
         if( pHeaderAttrs )
@@ -358,7 +358,7 @@ SwHTMLParser::SwHTMLParser( SwDoc* pD, SwPaM& rCursor, SvStream& rIn,
     m_pCSS1Parser->SetDfltEncoding( osl_getThreadTextEncoding() );
 
     // Timer nur bei ganz normalen Dokumenten aufsetzen!
-    SwDocShell* pDocSh = m_pDoc->GetDocShell();
+    SwDocShell* pDocSh = m_xDoc->GetDocShell();
     if( pDocSh )
     {
         m_bViewCreated = true;            // nicht, synchron laden
@@ -414,27 +414,27 @@ SwHTMLParser::~SwHTMLParser()
 #ifdef DBG_UTIL
     OSL_ENSURE( !m_nContinue, "DTOR im Continue!" );
 #endif
-    bool bAsync = m_pDoc->IsInLoadAsynchron();
-    m_pDoc->SetInLoadAsynchron( false );
-    m_pDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, m_bOldIsHTMLMode);
+    bool bAsync = m_xDoc->IsInLoadAsynchron();
+    m_xDoc->SetInLoadAsynchron( false );
+    m_xDoc->getIDocumentSettingAccess().set(DocumentSettingId::HTML_MODE, m_bOldIsHTMLMode);
 
-    if( m_pDoc->GetDocShell() && m_nEventId )
+    if( m_xDoc->GetDocShell() && m_nEventId )
         Application::RemoveUserEvent( m_nEventId );
 
     // das DocumentDetected kann ggfs. die DocShells loeschen, darum nochmals
     // abfragen
-    if( m_pDoc->GetDocShell() )
+    if( m_xDoc->GetDocShell() )
     {
         // Gelinkte Bereiche updaten
-        sal_uInt16 nLinkMode = m_pDoc->getIDocumentSettingAccess().getLinkUpdateMode( true );
+        sal_uInt16 nLinkMode = m_xDoc->getIDocumentSettingAccess().getLinkUpdateMode( true );
         if( nLinkMode != NEVER && bAsync &&
-            SfxObjectCreateMode::INTERNAL!=m_pDoc->GetDocShell()->GetCreateMode() )
-            m_pDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL );
+            SfxObjectCreateMode::INTERNAL!=m_xDoc->GetDocShell()->GetCreateMode() )
+            m_xDoc->getIDocumentLinksAdministration().GetLinkManager().UpdateAllLinks( nLinkMode == MANUAL );
 
-        if ( m_pDoc->GetDocShell()->IsLoading() )
+        if ( m_xDoc->GetDocShell()->IsLoading() )
         {
             // #i59688#
-            m_pDoc->GetDocShell()->LoadingFinished();
+            m_xDoc->GetDocShell()->LoadingFinished();
         }
     }
 
@@ -467,20 +467,15 @@ SwHTMLParser::~SwHTMLParser()
         delete pTmp;
     }
 
-    if( !m_pDoc->release() )
-    {
-        // keiner will mehr das Doc haben, also weg damit
-        delete m_pDoc;
-        m_pDoc = nullptr;
-    }
+    m_xDoc.clear();
 
     if ( m_pTempViewFrame )
     {
         m_pTempViewFrame->DoClose();
 
         // the temporary view frame is hidden, so the hidden flag might need to be removed
-        if ( m_bRemoveHidden && m_pDoc && m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->GetMedium() )
-            m_pDoc->GetDocShell()->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
+        if ( m_bRemoveHidden && m_xDoc.is() && m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->GetMedium() )
+            m_xDoc->GetDocShell()->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
     }
 }
 
@@ -490,8 +485,8 @@ IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback, void*, void )
 
     // #i47907# - If the document has already been destructed,
     // the parser should be aware of this:
-    if( ( m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->IsAbortingImport() )
-        || 1 == m_pDoc->getReferenceCount() )
+    if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+        || 1 == m_xDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
         eState = SVPAR_ERROR;
@@ -503,15 +498,15 @@ IMPL_LINK_NOARG( SwHTMLParser, AsyncCallback, void*, void )
 SvParserState SwHTMLParser::CallParser()
 {
     // einen temporaeren Index anlegen, auf Pos 0 so wird er nicht bewegt!
-    m_pSttNdIdx = new SwNodeIndex( m_pDoc->GetNodes() );
+    m_pSttNdIdx = new SwNodeIndex( m_xDoc->GetNodes() );
     if( !IsNewDoc() )       // in ein Dokument einfuegen ?
     {
         const SwPosition* pPos = m_pPam->GetPoint();
 
-        m_pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
+        m_xDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
 
         *m_pSttNdIdx = pPos->nNode.GetIndex()-1;
-        m_pDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
+        m_xDoc->getIDocumentContentOperations().SplitNode( *pPos, false );
 
         SwPaM aInsertionRangePam( *pPos );
 
@@ -521,9 +516,9 @@ SvParserState SwHTMLParser::CallParser()
         aInsertionRangePam.SetMark();
         *aInsertionRangePam.GetPoint() = *m_pPam->GetPoint();
         aInsertionRangePam.Move( fnMoveBackward );
-        m_pDoc->getIDocumentRedlineAccess().SplitRedline( aInsertionRangePam );
+        m_xDoc->getIDocumentRedlineAccess().SplitRedline( aInsertionRangePam );
 
-        m_pDoc->SetTextFormatColl( *m_pPam,
+        m_xDoc->SetTextFormatColl( *m_pPam,
                 m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
     }
 
@@ -546,12 +541,12 @@ SvParserState SwHTMLParser::CallParser()
         rInput.Seek(STREAM_SEEK_TO_END);
         rInput.ResetError();
         ::StartProgress( STR_STATSTR_W4WREAD, 0, rInput.Tell(),
-                         m_pDoc->GetDocShell() );
+                         m_xDoc->GetDocShell() );
         rInput.Seek(STREAM_SEEK_TO_BEGIN);
         rInput.ResetError();
     }
 
-    m_pDoc->GetPageDesc( 0 ).Add( this );
+    m_xDoc->GetPageDesc( 0 ).Add( this );
 
     SvParserState eRet = HTMLParser::CallParser();
     return eRet;
@@ -569,7 +564,7 @@ void SwHTMLParser::Continue( int nToken )
     // aufgeraeumt wird.
     OSL_ENSURE( SVPAR_ERROR!=eState,
             "SwHTMLParser::Continue: bereits ein Fehler gesetzt" );
-    if( m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->IsAbortingImport() )
+    if( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
         eState = SVPAR_ERROR;
 
     // Die SwViewShell vom Dokument holen, merken und als aktuelle setzen.
@@ -583,7 +578,7 @@ void SwHTMLParser::Continue( int nToken )
         // gelesen und ein SaveState(0) gerufen.
         eState = SVPAR_PENDING;
         m_bViewCreated = true;
-        m_pDoc->SetInLoadAsynchron( true );
+        m_xDoc->SetInLoadAsynchron( true );
 
 #ifdef DBG_UTIL
         m_nContinue--;
@@ -593,22 +588,22 @@ void SwHTMLParser::Continue( int nToken )
     }
 
     m_bSetModEnabled = false;
-    if( m_pDoc->GetDocShell() )
+    if( m_xDoc->GetDocShell() )
     {
-        m_bSetModEnabled = m_pDoc->GetDocShell()->IsEnableSetModified();
+        m_bSetModEnabled = m_xDoc->GetDocShell()->IsEnableSetModified();
         if( m_bSetModEnabled )
         {
-            m_pDoc->GetDocShell()->EnableSetModified( false );
+            m_xDoc->GetDocShell()->EnableSetModified( false );
         }
     }
 
     // waehrend des einlesens kein OLE-Modified rufen
-    Link<bool,void> aOLELink( m_pDoc->GetOle2Link() );
-    m_pDoc->SetOle2Link( Link<bool,void>() );
+    Link<bool,void> aOLELink( m_xDoc->GetOle2Link() );
+    m_xDoc->SetOle2Link( Link<bool,void>() );
 
-    bool bModified = m_pDoc->getIDocumentState().IsModified();
-    bool const bWasUndo = m_pDoc->GetIDocumentUndoRedo().DoesUndo();
-    m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
+    bool bModified = m_xDoc->getIDocumentState().IsModified();
+    bool const bWasUndo = m_xDoc->GetIDocumentUndoRedo().DoesUndo();
+    m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
 
     // Wenn der Import abgebrochen wird, kein Continue mehr rufen.
     // Falls ein Pending-Stack existiert aber durch einen Aufruf
@@ -629,7 +624,7 @@ void SwHTMLParser::Continue( int nToken )
     }
 
     // Laufbalken wieder abschalten
-    EndProgress( m_pDoc->GetDocShell() );
+    EndProgress( m_xDoc->GetDocShell() );
 
     bool bLFStripped = false;
     if( SVPAR_PENDING != GetStatus() )
@@ -639,7 +634,7 @@ void SwHTMLParser::Continue( int nToken )
             if( !m_aScriptSource.isEmpty() )
             {
                 SwScriptFieldType *pType =
-                    static_cast<SwScriptFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_SCRIPTFLD ));
+                    static_cast<SwScriptFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_SCRIPTFLD ));
 
                 SwScriptField aField( pType, m_aScriptType, m_aScriptSource,
                                     false );
@@ -750,7 +745,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
 
             if( IsNewDoc() )
             {
-                const SwNode *pPrev = m_pDoc->GetNodes()[nNodeIdx -1];
+                const SwNode *pPrev = m_xDoc->GetNodes()[nNodeIdx -1];
                 if( !m_pPam->GetPoint()->nContent.GetIndex() &&
                     ( pPrev->IsContentNode() ||
                       (pPrev->IsEndNode() &&
@@ -774,11 +769,11 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
                         }
                         m_pPam->GetBound().nContent.Assign( nullptr, 0 );
                         m_pPam->GetBound(false).nContent.Assign( nullptr, 0 );
-                        m_pDoc->GetNodes().Delete( m_pPam->GetPoint()->nNode );
+                        m_xDoc->GetNodes().Delete( m_pPam->GetPoint()->nNode );
                     }
                 }
             }
-            else if( nullptr != ( pAktNd = m_pDoc->GetNodes()[ nNodeIdx ]->GetTextNode()) && !bHasFlysOrMarks )
+            else if( nullptr != ( pAktNd = m_xDoc->GetNodes()[ nNodeIdx ]->GetTextNode()) && !bHasFlysOrMarks )
             {
                 if( pAktNd->CanJoinNext( &pPos->nNode ))
                 {
@@ -791,7 +786,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
                 {
                     pPos->nContent.Assign( nullptr, 0 );
                     m_pPam->SetMark(); m_pPam->DeleteMark();
-                    m_pDoc->GetNodes().Delete( pPos->nNode );
+                    m_xDoc->GetNodes().Delete( pPos->nNode );
                     m_pPam->Move( fnMoveBackward );
                 }
             }
@@ -833,7 +828,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
         // adjust AutoLoad in DocumentProperties
         if( IsNewDoc() )
         {
-            SwDocShell *pDocShell(m_pDoc->GetDocShell());
+            SwDocShell *pDocShell(m_xDoc->GetDocShell());
             OSL_ENSURE(pDocShell, "no SwDocShell");
             if (pDocShell) {
                 uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -851,7 +846,7 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
 
         if( m_bUpdateDocStat )
         {
-            m_pDoc->getIDocumentStatistics().UpdateDocStat( false, true );
+            m_xDoc->getIDocumentStatistics().UpdateDocStat( false, true );
         }
     }
 
@@ -863,12 +858,12 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
 
     // sollte der Parser der Letzte sein, der das Doc haelt, dann braucht
     // man hier auch nichts mehr tun, Doc wird gleich zerstoert!
-    if( 1 < m_pDoc->getReferenceCount() )
+    if( 1 < m_xDoc->getReferenceCount() )
     {
         if( bWasUndo )
         {
-            m_pDoc->GetIDocumentUndoRedo().DelAllUndoObj();
-            m_pDoc->GetIDocumentUndoRedo().DoUndo(true);
+            m_xDoc->GetIDocumentUndoRedo().DelAllUndoObj();
+            m_xDoc->GetIDocumentUndoRedo().DoUndo(true);
         }
         else if( !pInitVSh )
         {
@@ -879,16 +874,16 @@ if( m_pSttNdIdx->GetIndex()+1 == m_pPam->GetBound( false ).nNode.GetIndex() )
             SwViewShell *pTmpVSh = CheckActionViewShell();
             if( pTmpVSh )
             {
-                m_pDoc->GetIDocumentUndoRedo().DoUndo(true);
+                m_xDoc->GetIDocumentUndoRedo().DoUndo(true);
             }
         }
 
-        m_pDoc->SetOle2Link( aOLELink );
+        m_xDoc->SetOle2Link( aOLELink );
         if( !bModified )
-            m_pDoc->getIDocumentState().ResetModified();
-        if( m_bSetModEnabled && m_pDoc->GetDocShell() )
+            m_xDoc->getIDocumentState().ResetModified();
+        if( m_bSetModEnabled && m_xDoc->GetDocShell() )
         {
-            m_pDoc->GetDocShell()->EnableSetModified();
+            m_xDoc->GetDocShell()->EnableSetModified();
             m_bSetModEnabled = false; // this is unnecessary here
         }
     }
@@ -930,7 +925,7 @@ void SwHTMLParser::DocumentDetected()
 
         CallEndAction( true );
 
-        m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
+        m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
         // Durch das DocumentDetected wurde im allgemeinen eine
         // SwViewShell angelegt. Es kann aber auch sein, dass sie
         // erst spaeter angelegt wird, naemlich dann, wenn die UI
@@ -942,15 +937,15 @@ void SwHTMLParser::DocumentDetected()
 // is called for every token that is recognised in CallParser
 void SwHTMLParser::NextToken( int nToken )
 {
-    if( ( m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->IsAbortingImport() )
-        || 1 == m_pDoc->getReferenceCount() )
+    if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+        || 1 == m_xDoc->getReferenceCount() )
     {
         // Was the import cancelled by SFX? If a pending stack
         // exists, clean it.
         eState = SVPAR_ERROR;
         OSL_ENSURE( !m_pPendStack || m_pPendStack->nToken,
                 "SwHTMLParser::NextToken: Pending-Stack without token" );
-        if( 1 == m_pDoc->getReferenceCount() || !m_pPendStack )
+        if( 1 == m_xDoc->getReferenceCount() || !m_pPendStack )
             return ;
     }
 
@@ -989,9 +984,9 @@ void SwHTMLParser::NextToken( int nToken )
             case HTML_TITLE_OFF:
                 if( IsNewDoc() && !m_sTitle.isEmpty() )
                 {
-                    if( m_pDoc->GetDocShell() ) {
+                    if( m_xDoc->GetDocShell() ) {
                         uno::Reference<document::XDocumentPropertiesSupplier>
-                            xDPS(m_pDoc->GetDocShell()->GetModel(),
+                            xDPS(m_xDoc->GetDocShell()->GetModel(),
                             uno::UNO_QUERY_THROW);
                         uno::Reference<document::XDocumentProperties> xDocProps(
                             xDPS->getDocumentProperties());
@@ -1000,7 +995,7 @@ void SwHTMLParser::NextToken( int nToken )
                             xDocProps->setTitle(m_sTitle);
                         }
 
-                        m_pDoc->GetDocShell()->SetTitle( m_sTitle );
+                        m_xDoc->GetDocShell()->SetTitle( m_sTitle );
                     }
                 }
                 m_bInTitle = false;
@@ -1219,7 +1214,7 @@ void SwHTMLParser::NextToken( int nToken )
             {
                 if( !m_bDocInitalized )
                     DocumentDetected();
-                m_pDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken );
+                m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken );
 
                 // if there are temporary paragraph attributes and the
                 // paragraph isn't empty then the paragraph attributes
@@ -1274,7 +1269,7 @@ void SwHTMLParser::NextToken( int nToken )
 
             if( pPageDesc )
             {
-                m_pDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatPageDesc( pPageDesc ) );
+                m_xDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatPageDesc( pPageDesc ) );
             }
         }
         break;
@@ -1297,7 +1292,7 @@ void SwHTMLParser::NextToken( int nToken )
                 case HTML_O_TARGET:
                     if( IsNewDoc() )
                     {
-                        SwDocShell *pDocShell(m_pDoc->GetDocShell());
+                        SwDocShell *pDocShell(m_xDoc->GetDocShell());
                         OSL_ENSURE(pDocShell, "no SwDocShell");
                         if (pDocShell) {
                             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -1322,11 +1317,11 @@ void SwHTMLParser::NextToken( int nToken )
             SvKeyValueIterator *pHTTPHeader = nullptr;
             if( IsNewDoc() )
             {
-                SwDocShell *pDocSh = m_pDoc->GetDocShell();
+                SwDocShell *pDocSh = m_xDoc->GetDocShell();
                 if( pDocSh )
                     pHTTPHeader = pDocSh->GetHeaderAttributes();
             }
-            SwDocShell *pDocShell(m_pDoc->GetDocShell());
+            SwDocShell *pDocShell(m_xDoc->GetDocShell());
             OSL_ENSURE(pDocShell, "no SwDocShell");
             if (pDocShell)
             {
@@ -1426,22 +1421,22 @@ void SwHTMLParser::NextToken( int nToken )
             }
             // progress bar
             if( !GetMedium() || !GetMedium()->IsRemote() )
-                ::SetProgressState( rInput.Tell(), m_pDoc->GetDocShell() );
+                ::SetProgressState( rInput.Tell(), m_xDoc->GetDocShell() );
         }
         break;
 
     case HTML_NONBREAKSPACE:
-        m_pDoc->getIDocumentContentOperations().InsertString( *m_pPam, OUString(CHAR_HARDBLANK) );
+        m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, OUString(CHAR_HARDBLANK) );
         break;
 
     case HTML_SOFTHYPH:
-        m_pDoc->getIDocumentContentOperations().InsertString( *m_pPam, OUString(CHAR_SOFTHYPHEN) );
+        m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, OUString(CHAR_SOFTHYPHEN) );
         break;
 
     case HTML_LINEFEEDCHAR:
         if( m_pPam->GetPoint()->nContent.GetIndex() )
             AppendTextNode();
-        if( !m_pTable && !m_pDoc->IsInHeaderFooter( m_pPam->GetPoint()->nNode ) )
+        if( !m_pTable && !m_xDoc->IsInHeaderFooter( m_pPam->GetPoint()->nNode ) )
         {
             NewAttr( &m_aAttrTab.pBreak, SvxFormatBreakItem(SvxBreak::PageBefore, RES_BREAK) );
             EndAttr( m_aAttrTab.pBreak, false );
@@ -1475,7 +1470,7 @@ void SwHTMLParser::NextToken( int nToken )
         {
             if( !m_bDocInitalized )
                 DocumentDetected();
-            m_pDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken );
+            m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aToken );
 
             // if there are temporary paragraph attributes and the
             // paragraph isn't empty then the paragraph attributes
@@ -1495,7 +1490,7 @@ void SwHTMLParser::NextToken( int nToken )
         InsertImage();
         // if only the parser references the doc, we can break and set
         // an error code
-        if( 1 == m_pDoc->getReferenceCount() )
+        if( 1 == m_xDoc->getReferenceCount() )
         {
             eState = SVPAR_ERROR;
         }
@@ -1682,7 +1677,7 @@ void SwHTMLParser::NextToken( int nToken )
             OSL_ENSURE( !m_pTable, "table in table not allowed here" );
             if( !m_pTable && (IsNewDoc() || !m_pPam->GetNode().FindTableNode()) &&
                 (m_pPam->GetPoint()->nNode.GetIndex() >
-                            m_pDoc->GetNodes().GetEndOfExtras().GetIndex() ||
+                            m_xDoc->GetNodes().GetEndOfExtras().GetIndex() ||
                 !m_pPam->GetNode().FindFootnoteStartNode() ) )
             {
                 if ( m_nParaCnt < 5 )
@@ -1905,7 +1900,7 @@ void SwHTMLParser::NextToken( int nToken )
                 if( HTML_O_DIR == rOption.GetToken() )
                 {
                     const OUString& rDir = rOption.GetString();
-                    SfxItemSet aItemSet( m_pDoc->GetAttrPool(),
+                    SfxItemSet aItemSet( m_xDoc->GetAttrPool(),
                                          m_pCSS1Parser->GetWhichMap() );
                     SvxCSS1PropertyInfo aPropInfo;
                     OUString aDummy;
@@ -2134,7 +2129,7 @@ bool SwHTMLParser::AppendTextNode( SwHTMLAppendMode eMode, bool bUpdateNum )
 
     SwPosition aOldPos( *m_pPam->GetPoint() );
 
-    bool bRet = m_pDoc->getIDocumentContentOperations().AppendTextNode( *m_pPam->GetPoint() );
+    bool bRet = m_xDoc->getIDocumentContentOperations().AppendTextNode( *m_pPam->GetPoint() );
 
     // Zeichen-Attribute aufspalten und ggf keine setzen, die ueber den
     // ganzen Absatz gesetzt sind
@@ -2402,7 +2397,7 @@ void SwHTMLParser::AddParSpace()
 
     sal_uLong nNdIdx = m_pPam->GetPoint()->nNode.GetIndex() - 1;
 
-    SwTextNode *pTextNode = m_pDoc->GetNodes()[nNdIdx]->GetTextNode();
+    SwTextNode *pTextNode = m_xDoc->GetNodes()[nNdIdx]->GetTextNode();
     if( !pTextNode )
         return;
 
@@ -2483,8 +2478,8 @@ void SwHTMLParser::Show()
 
     Application::Reschedule();
 
-    if( ( m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->IsAbortingImport() )
-        || 1 == m_pDoc->getReferenceCount() )
+    if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+        || 1 == m_xDoc->getReferenceCount() )
     {
         // wurde der Import vom SFX abgebrochen?
         eState = SVPAR_ERROR;
@@ -2515,15 +2510,15 @@ void SwHTMLParser::ShowStatline()
     // Laufbalkenanzeige
     if( !GetMedium() || !GetMedium()->IsRemote() )
     {
-        ::SetProgressState( rInput.Tell(), m_pDoc->GetDocShell() );
+        ::SetProgressState( rInput.Tell(), m_xDoc->GetDocShell() );
         CheckActionViewShell();
     }
     else
     {
         Application::Reschedule();
 
-        if( ( m_pDoc->GetDocShell() && m_pDoc->GetDocShell()->IsAbortingImport() )
-            || 1 == m_pDoc->getReferenceCount() )
+        if( ( m_xDoc->GetDocShell() && m_xDoc->GetDocShell()->IsAbortingImport() )
+            || 1 == m_xDoc->getReferenceCount() )
             // wurde der Import vom SFX abgebrochen?
             eState = SVPAR_ERROR;
 
@@ -2545,7 +2540,7 @@ SwViewShell *SwHTMLParser::CallStartAction( SwViewShell *pVSh, bool bChkPtr )
 #if OSL_DEBUG_LEVEL > 0
         SwViewShell *pOldVSh = pVSh;
 #endif
-        pVSh = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+        pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
 #if OSL_DEBUG_LEVEL > 0
         OSL_ENSURE( !pVSh || !pOldVSh || pOldVSh == pVSh, "CallStartAction: Wer hat die SwViewShell ausgetauscht?" );
         if( pOldVSh && !pVSh )
@@ -2569,7 +2564,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
 {
     if( bChkPtr )
     {
-        SwViewShell *pVSh = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+        SwViewShell *pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
         OSL_ENSURE( !pVSh || m_pActionViewShell == pVSh,
                 "CallEndAction: Wer hat die SwViewShell ausgetauscht?" );
 #if OSL_DEBUG_LEVEL > 0
@@ -2609,7 +2604,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
 
     // sollte der Parser der Letzte sein, der das Doc haelt, dann kann
     // man hier abbrechen und einen Fehler setzen.
-    if( 1 == m_pDoc->getReferenceCount() )
+    if( 1 == m_xDoc->getReferenceCount() )
     {
         eState = SVPAR_ERROR;
     }
@@ -2622,7 +2617,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
 
 SwViewShell *SwHTMLParser::CheckActionViewShell()
 {
-    SwViewShell *pVSh = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell *pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     OSL_ENSURE( !pVSh || m_pActionViewShell == pVSh,
             "CheckActionViewShell: Wer hat die SwViewShell ausgetauscht?" );
 #if OSL_DEBUG_LEVEL > 0
@@ -2678,7 +2673,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
             // Attribute im Content-Bereich duerfen nicht gesetzt
             // werden, wenn wir in einem Sonderbereich stehen, aber
             // umgekekehrt schon.
-            sal_uLong nEndOfIcons = m_pDoc->GetNodes().GetEndOfExtras().GetIndex();
+            sal_uLong nEndOfIcons = m_xDoc->GetNodes().GetEndOfExtras().GetIndex();
             bSetAttr = nEndParaIdx < rEndIdx.GetIndex() ||
                        rEndIdx.GetIndex() > nEndOfIcons ||
                        nEndParaIdx <= nEndOfIcons;
@@ -2724,7 +2719,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         pAttr = pPrev;
                         continue;
                     }
-                    pCNd = m_pDoc->GetNodes().GoNext( &(pAttr->nSttPara) );
+                    pCNd = m_xDoc->GetNodes().GoNext( &(pAttr->nSttPara) );
                     if( pCNd )
                         pAttr->nSttContent = 0;
                     else
@@ -2809,7 +2804,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 case RES_FLTR_BOOKMARK: // insert bookmark
                     {
                         const OUString sName( static_cast<SfxStringItem*>(pAttr->pItem.get())->GetValue() );
-                        IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
+                        IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
                         IDocumentMarkAccess::const_iterator_t ppBkmk = pMarkAccess->findMark( sName );
                         if( ppBkmk != pMarkAccess->getAllMarksEnd() &&
                             ppBkmk->get()->GetMarkStart() == *pAttrPam->GetPoint() )
@@ -2871,10 +2866,10 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                 case RES_BACKGROUND:
                 {
                     const SvxBrushItem& rBrush = static_cast< SvxBrushItem& >(*pAttr->pItem);
-                    SfxItemSet aNewSet(m_pDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
+                    SfxItemSet aNewSet(m_xDoc->GetAttrPool(), XATTR_FILL_FIRST, XATTR_FILL_LAST);
 
                     setSvxBrushItemAsFillAttributesToTargetSet(rBrush, aNewSet);
-                    m_pDoc->getIDocumentContentOperations().InsertItemSet(*pAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
+                    m_xDoc->getIDocumentContentOperations().InsertItemSet(*pAttrPam, aNewSet, SetAttrMode::DONTREPLACE);
                     break;
                 }
                 default:
@@ -2888,7 +2883,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                         m_eJumpTo = JUMPTO_NONE;
                     }
 
-                    m_pDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem, SetAttrMode::DONTREPLACE );
+                    m_xDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem, SetAttrMode::DONTREPLACE );
                 }
                 pAttrPam->DeleteMark();
 
@@ -2916,7 +2911,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
         }
         else
         {
-            sal_uLong nEndOfIcons = m_pDoc->GetNodes().GetEndOfExtras().GetIndex();
+            sal_uLong nEndOfIcons = m_xDoc->GetNodes().GetEndOfExtras().GetIndex();
             bMoveFly = nFlyParaIdx < rEndIdx.GetIndex() ||
                        rEndIdx.GetIndex() > nEndOfIcons ||
                        nFlyParaIdx <= nEndOfIcons;
@@ -2970,7 +2965,7 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
             pAttrPam->Move( fnMoveBackward );
         }
 
-        m_pDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem );
+        m_xDoc->getIDocumentContentOperations().InsertPoolItem( *pAttrPam, *pAttr->pItem );
 
         aFields.pop_front();
         delete pAttr;
@@ -3272,10 +3267,10 @@ void SwHTMLParser::SplitAttrTab( HTMLAttrTable& rNewAttrTab,
     {
         sal_uLong nOldEnd = nEndIdx.GetIndex();
         sal_uLong nTmpIdx;
-        if( ( nTmpIdx = m_pDoc->GetNodes().GetEndOfExtras().GetIndex()) >= nOldEnd ||
-            ( nTmpIdx = m_pDoc->GetNodes().GetEndOfAutotext().GetIndex()) >= nOldEnd )
+        if( ( nTmpIdx = m_xDoc->GetNodes().GetEndOfExtras().GetIndex()) >= nOldEnd ||
+            ( nTmpIdx = m_xDoc->GetNodes().GetEndOfAutotext().GetIndex()) >= nOldEnd )
         {
-            nTmpIdx = m_pDoc->GetNodes().GetEndOfInserts().GetIndex();
+            nTmpIdx = m_xDoc->GetNodes().GetEndOfInserts().GetIndex();
         }
         SwContentNode* pCNd = SwNodes::GoPrevious(&nEndIdx);
 
@@ -3440,7 +3435,7 @@ void SwHTMLParser::NewStdAttr( int nToken )
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
@@ -3493,7 +3488,7 @@ void SwHTMLParser::NewStdAttr( int nToken,
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         aItemSet.Put( rItem );
@@ -3582,7 +3577,7 @@ void SwHTMLParser::NewBasefontAttr()
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         //CJK has different defaults
@@ -3741,7 +3736,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     if( !aFace.isEmpty() && !m_pCSS1Parser->IsIgnoreFontFamily() )
     {
         const FontList *pFList = nullptr;
-        SwDocShell *pDocSh = m_pDoc->GetDocShell();
+        SwDocShell *pDocSh = m_xDoc->GetDocShell();
         if( pDocSh )
         {
             const SvxFontListItem *pFListItem =
@@ -3785,7 +3780,7 @@ void SwHTMLParser::NewFontAttr( int nToken )
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( nFontHeight )
@@ -3900,7 +3895,7 @@ void SwHTMLParser::NewPara()
     // keine der CSS1-Properties der Klasse hart formatiert werden muss!!!)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
@@ -4034,7 +4029,7 @@ void SwHTMLParser::NewHeading( int nToken )
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
@@ -4168,7 +4163,7 @@ void SwHTMLParser::NewTextFormatColl( int nToken, sal_uInt16 nColl )
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
@@ -4315,7 +4310,7 @@ void SwHTMLParser::NewDefList()
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
@@ -4448,7 +4443,7 @@ bool SwHTMLParser::HasCurrentParaFlys( bool bNoSurroundOnly,
     // sonst:               Der Absatz enthaelt irgendeinen Rahmen
     SwNodeIndex& rNodeIdx = m_pPam->GetPoint()->nNode;
 
-    const SwFrameFormats& rFrameFormatTable = *m_pDoc->GetSpzFrameFormats();
+    const SwFrameFormats& rFrameFormatTable = *m_xDoc->GetSpzFrameFormats();
 
     bool bFound = false;
     for ( size_t i=0; i<rFrameFormatTable.size(); i++ )
@@ -4703,7 +4698,7 @@ void SwHTMLParser::SetTextCollAttrs( HTMLAttrContext *pContext )
     }
 
     // Die Vorlage setzen
-    m_pDoc->SetTextFormatColl( *m_pPam, pCollToSet );
+    m_xDoc->SetTextFormatColl( *m_pPam, pCollToSet );
 
     // ggf. noch den Absatz-Einzug korrigieren
     const SvxLRSpaceItem& rLRItem = pCollToSet->GetLRSpace();
@@ -4777,7 +4772,7 @@ void SwHTMLParser::NewCharFormat( int nToken )
     // Styles parsen (zu Class siehe auch NewPara)
     if( HasStyleOptions( aStyle, aId, aEmptyOUStr, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aEmptyOUStr, aItemSet, aPropInfo, &aLang, &aDir ) )
@@ -4855,7 +4850,7 @@ void SwHTMLParser::InsertSpacer()
             // einen leeren Textrahmen anlegen
 
             // den Itemset holen
-            SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
+            SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
                                 RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
             if( !IsNewDoc() )
                 Reader::ResetFrameFormatAttrs( aFrameSet );
@@ -4866,7 +4861,7 @@ void SwHTMLParser::InsertSpacer()
             // und noch die Groesse des Rahmens
             Size aDfltSz( MINFLY, MINFLY );
             Size aSpace( 0, 0 );
-            SfxItemSet aDummyItemSet( m_pDoc->GetAttrPool(),
+            SfxItemSet aDummyItemSet( m_xDoc->GetAttrPool(),
                                  m_pCSS1Parser->GetWhichMap() );
             SvxCSS1PropertyInfo aDummyPropInfo;
 
@@ -4882,7 +4877,7 @@ void SwHTMLParser::InsertSpacer()
             // der Rahmen anlegen
             RndStdIds eAnchorId =
                 static_cast<const SwFormatAnchor &>(aFrameSet.Get(RES_ANCHOR)).GetAnchorId();
-            SwFrameFormat *pFlyFormat = m_pDoc->MakeFlySection( eAnchorId,
+            SwFrameFormat *pFlyFormat = m_xDoc->MakeFlySection( eAnchorId,
                                             m_pPam->GetPoint(), &aFrameSet );
             // Ggf Frames anlegen und auto-geb. Rahmen registrieren
             RegisterFlyFrame( pFlyFormat );
@@ -4907,7 +4902,7 @@ void SwHTMLParser::InsertSpacer()
 
                 SetAttr();  // noch offene Absatz-Attribute setzen
 
-                pTextNode = m_pDoc->GetNodes()[m_pPam->GetPoint()->nNode.GetIndex()-1]
+                pTextNode = m_xDoc->GetNodes()[m_pPam->GetPoint()->nNode.GetIndex()-1]
                                ->GetTextNode();
 
                 // Wenn der Abstz davor kein Textenode ist, dann wird jetzt
@@ -4966,7 +4961,7 @@ void SwHTMLParser::InsertSpacer()
             {
                 NewAttr( &m_aAttrTab.pKerning, SvxKerningItem( (short)nSize, RES_CHRATR_KERNING ) );
                 OUString aTmp( ' ' );
-                m_pDoc->getIDocumentContentOperations().InsertString( *m_pPam, aTmp );
+                m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, aTmp );
                 EndAttr( m_aAttrTab.pKerning );
             }
         }
@@ -4987,7 +4982,7 @@ sal_uInt16 SwHTMLParser::ToTwips( sal_uInt16 nPixel )
 
 SwTwips SwHTMLParser::GetCurrentBrowseWidth()
 {
-    const SwTwips nWidth = SwHTMLTableLayout::GetBrowseWidth( *m_pDoc );
+    const SwTwips nWidth = SwHTMLTableLayout::GetBrowseWidth( *m_xDoc );
     if( nWidth )
         return nWidth;
 
@@ -5090,7 +5085,7 @@ void SwHTMLParser::InsertLineBreak()
         SwTextNode* pTextNd = rNodeIdx.GetNode().GetTextNode();
         if( pTextNd )
         {
-            const SwFrameFormats& rFrameFormatTable = *m_pDoc->GetSpzFrameFormats();
+            const SwFrameFormats& rFrameFormatTable = *m_xDoc->GetSpzFrameFormats();
 
             for( size_t i=0; i<rFrameFormatTable.size(); i++ )
             {
@@ -5139,7 +5134,7 @@ void SwHTMLParser::InsertLineBreak()
     bool bBreakItem = false;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo ) )
@@ -5165,7 +5160,7 @@ void SwHTMLParser::InsertLineBreak()
         // wenn kein CLEAR ausgefuehrt werden sollte oder konnte, wird
         // ein Zeilenumbruch eingef?gt
         OUString sTmp( (sal_Unicode)0x0a );   // make the Mac happy :-)
-        m_pDoc->getIDocumentContentOperations().InsertString( *m_pPam, sTmp );
+        m_xDoc->getIDocumentContentOperations().InsertString( *m_pPam, sTmp );
     }
     else if( m_pPam->GetPoint()->nContent.GetIndex() )
     {
@@ -5412,7 +5407,7 @@ void SwHTMLParser::ParseMoreMetaOptions()
     sText.append("\">");
 
     SwPostItField aPostItField(
-        static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
+        static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
         aEmptyOUStr, sText.makeStringAndClear(), aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
     SwFormatField aFormatField( aPostItField );
     InsertAttr( aFormatField,  false );

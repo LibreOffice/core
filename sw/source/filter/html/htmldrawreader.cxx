@@ -80,9 +80,9 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     // always on top of text.
     // but in invisible layer. <ConnectToLayout> will move the object
     // to the visible layer.
-    pNewDrawObj->SetLayer( m_pDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
+    pNewDrawObj->SetLayer( m_xDoc->getIDocumentDrawModelAccess().GetInvisibleHeavenId() );
 
-    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
+    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
@@ -198,7 +198,7 @@ void SwHTMLParser::InsertDrawObject( SdrObject* pNewDrawObj,
     }
     aFrameSet.Put( aAnchor );
 
-    m_pDoc->getIDocumentContentOperations().InsertDrawObj( *m_pPam, *pNewDrawObj, aFrameSet );
+    m_xDoc->getIDocumentContentOperations().InsertDrawObj( *m_pPam, *pNewDrawObj, aFrameSet );
 }
 
 static void PutEEPoolItem( SfxItemSet &rEEItemSet,
@@ -356,7 +356,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // Ein DrawTextobj anlegen
     // #i52858# - method name changed
-    SwDrawModel* pModel = m_pDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
+    SwDrawModel* pModel = m_xDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
     SdrPage* pPg = pModel->GetPage( 0 );
     m_pMarquee = SdrObjFactory::MakeNewObject( SdrInventor::Default,
                                              OBJ_TEXT, pPg, pModel );
@@ -444,7 +444,7 @@ void SwHTMLParser::NewMarquee( HTMLTable *pCurTable )
 
     // Styles parsen (funktioniert hier nur fuer Attribute, die auch
     // am Zeichen-Objekt gesetzt werden koennen)
-    SfxItemSet aStyleItemSet( m_pDoc->GetAttrPool(),
+    SfxItemSet aStyleItemSet( m_xDoc->GetAttrPool(),
                               m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass )  &&

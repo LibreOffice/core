@@ -373,7 +373,7 @@ void SwHTMLParser::InsertEmbed()
         aCmdLst.Append( rOption.GetTokenString(), rOption.GetString() );
     }
 
-    SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+    SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
@@ -430,7 +430,7 @@ void SwHTMLParser::InsertEmbed()
         }
     }
 
-    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
+    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
@@ -458,7 +458,7 @@ void SwHTMLParser::InsertEmbed()
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet );
+        m_xDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet );
 
     // Namen am FrameFormat setzen
     if( !aName.isEmpty() )
@@ -466,7 +466,7 @@ void SwHTMLParser::InsertEmbed()
 
     // den alternativen Text setzen
     SwNoTextNode *pNoTextNd =
-        m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+        m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                           ->GetIndex()+1 ]->GetNoTextNode();
     pNoTextNd->SetTitle( aAlt );
 
@@ -494,7 +494,7 @@ void SwHTMLParser::NewObject()
              bDeclare = false;
     // Eine neue Command-List anlegen
     delete m_pAppletImpl;
-    m_pAppletImpl = new SwApplet_Impl( m_pDoc->GetAttrPool() );
+    m_pAppletImpl = new SwApplet_Impl( m_xDoc->GetAttrPool() );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -598,7 +598,7 @@ void SwHTMLParser::NewObject()
 
     m_pAppletImpl->SetAltText( aStandBy );
 
-    SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+    SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
@@ -629,13 +629,13 @@ void SwHTMLParser::EndObject()
 
         // und in das Dok einfuegen
         SwFrameFormat* pFlyFormat =
-            m_pDoc->getIDocumentContentOperations().Insert( *m_pPam,
+            m_xDoc->getIDocumentContentOperations().Insert( *m_pPam,
                     ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                     &m_pAppletImpl->GetItemSet() );
 
         // den alternativen Namen setzen
         SwNoTextNode *pNoTextNd =
-            m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+            m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                               ->GetIndex()+1 ]->GetNoTextNode();
         pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
 
@@ -662,7 +662,7 @@ void SwHTMLParser::InsertApplet()
 
     // Eine neue Command-List anlegen
     delete m_pAppletImpl;
-    m_pAppletImpl = new SwApplet_Impl( m_pDoc->GetAttrPool() );
+    m_pAppletImpl = new SwApplet_Impl( m_xDoc->GetAttrPool() );
 
     const HTMLOptions& rHTMLOptions = GetOptions();
     for (size_t i = rHTMLOptions.size(); i; )
@@ -731,7 +731,7 @@ void SwHTMLParser::InsertApplet()
     m_pAppletImpl->CreateApplet( aCode, aName, bMayScript, aCodeBase, m_sBaseURL );//, aAlt );
     m_pAppletImpl->SetAltText( aAlt );
 
-    SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+    SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
@@ -761,13 +761,13 @@ void SwHTMLParser::EndApplet()
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam,
+        m_xDoc->getIDocumentContentOperations().Insert( *m_pPam,
                     ::svt::EmbeddedObjectRef( m_pAppletImpl->GetApplet(), embed::Aspects::MSOLE_CONTENT ),
                     &m_pAppletImpl->GetItemSet());
 
     // den alternativen Namen setzen
     SwNoTextNode *pNoTextNd =
-        m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+        m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                           ->GetIndex()+1 ]->GetNoTextNode();
     pNoTextNd->SetTitle( m_pAppletImpl->GetAltText() );
 
@@ -910,13 +910,13 @@ void SwHTMLParser::InsertFloatingFrame()
     {
     }
 
-    SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+    SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
     // den Itemset holen
-    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
+    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
@@ -932,11 +932,11 @@ void SwHTMLParser::InsertFloatingFrame()
 
     // und in das Dok einfuegen
     SwFrameFormat* pFlyFormat =
-        m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet );
+        m_xDoc->getIDocumentContentOperations().Insert( *m_pPam, ::svt::EmbeddedObjectRef( xObj, embed::Aspects::MSOLE_CONTENT ), &aFrameSet );
 
     // den alternativen Namen setzen
     SwNoTextNode *pNoTextNd =
-        m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+        m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                           ->GetIndex()+1 ]->GetNoTextNode();
     pNoTextNd->SetTitle( aAlt );
 

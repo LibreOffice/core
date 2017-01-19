@@ -2763,13 +2763,13 @@ const SwStartNode *SwHTMLParser::InsertTableSection
         else
             pNd = pPrevStNd->EndOfSectionNode();
         SwNodeIndex nIdx( *pNd, 1 );
-        pStNd = m_pDoc->GetNodes().MakeTextSection( nIdx, SwTableBoxStartNode,
+        pStNd = m_xDoc->GetNodes().MakeTextSection( nIdx, SwTableBoxStartNode,
                                                   pColl );
         m_pTable->IncBoxCount();
     }
 
     //Added defaults to CJK and CTL
-    SwContentNode *pCNd = m_pDoc->GetNodes()[pStNd->GetIndex()+1] ->GetContentNode();
+    SwContentNode *pCNd = m_xDoc->GetNodes()[pStNd->GetIndex()+1] ->GetContentNode();
     SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
     pCNd->SetAttr( aFontHeight );
     SvxFontHeightItem aFontHeightCJK( 40, 100, RES_CHRATR_CJK_FONTSIZE );
@@ -2815,7 +2815,7 @@ const SwStartNode *SwHTMLParser::InsertTableSection( sal_uInt16 nPoolId )
             } while( pOutTable && pTableNd->GetTable().GetHTMLTableLayout() );
         }
         SwNodeIndex aIdx( *pTableNd->EndOfSectionNode() );
-        pStNd = m_pDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
+        pStNd = m_xDoc->GetNodes().MakeTextSection( aIdx, SwTableBoxStartNode,
                                                   pColl );
 
         m_pPam->GetPoint()->nNode = pStNd->GetIndex() + 1;
@@ -2831,8 +2831,8 @@ SwStartNode *SwHTMLParser::InsertTempTableCaptionSection()
 {
     SwTextFormatColl *pColl = m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TEXT );
     SwNodeIndex& rIdx = m_pPam->GetPoint()->nNode;
-    rIdx = m_pDoc->GetNodes().GetEndOfExtras();
-    SwStartNode *pStNd = m_pDoc->GetNodes().MakeTextSection( rIdx,
+    rIdx = m_xDoc->GetNodes().GetEndOfExtras();
+    SwStartNode *pStNd = m_xDoc->GetNodes().MakeTextSection( rIdx,
                                           SwNormalStartNode, pColl );
 
     rIdx = pStNd->GetIndex() + 1;
@@ -2894,7 +2894,7 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
 
     if( !rStyle.isEmpty() || !rId.isEmpty() || !rClass.isEmpty() )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), RES_BACKGROUND,
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), RES_BACKGROUND,
                                                   RES_BACKGROUND );
         SvxCSS1PropertyInfo aPropInfo;
 
@@ -3173,7 +3173,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
         LanguageType eLang;
         m_nValue = SfxHTMLParser::GetTableDataOptionsValNum(
                             m_nNumFormat, eLang, aValue, aNumFormat,
-                            *rParser.m_pDoc->GetNumberFormatter() );
+                            *rParser.m_xDoc->GetNumberFormatter() );
     }
 
     // einen neuen Kontext anlegen, aber das drawing::Alignment-Attribut
@@ -3197,7 +3197,7 @@ CellSaveStruct::CellSaveStruct( SwHTMLParser& rParser, HTMLTable *pCurTable,
 
     if( SwHTMLParser::HasStyleOptions( m_aStyle, m_aId, m_aClass, &m_aLang, &m_aDir ) )
     {
-        SfxItemSet aItemSet( rParser.m_pDoc->GetAttrPool(),
+        SfxItemSet aItemSet( rParser.m_xDoc->GetAttrPool(),
                              rParser.m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
@@ -3429,7 +3429,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 0
             };
 
-            SfxItemSet aItemSet( m_pDoc->GetAttrPool(), aWhichIds );
+            SfxItemSet aItemSet( m_xDoc->GetAttrPool(), aWhichIds );
             SvxCSS1PropertyInfo aPropInfo;
 
             bool bStyleParsed = ParseStyleOptions( pCurTable->GetStyle(),
@@ -3507,7 +3507,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     if( !m_pPam->GetPoint()->nContent.GetIndex() )
                     {
                         //Set default to CJK and CTL
-                        m_pDoc->SetTextFormatColl( *m_pPam,
+                        m_xDoc->SetTextFormatColl( *m_pPam,
                             m_pCSS1Parser->GetTextCollFromPool(RES_POOLCOLL_STANDARD) );
                         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
 
@@ -3610,7 +3610,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 {
                     // Die Tabelle soll in einen Rahmen geschaufelt werden.
 
-                    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
+                    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
                                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
                     if( !pCurTable->IsNewDoc() )
                         Reader::ResetFrameFormatAttrs( aFrameSet );
@@ -3652,14 +3652,14 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                     RndStdIds eAnchorId = static_cast<const SwFormatAnchor&>(aFrameSet.
                                                 Get( RES_ANCHOR )).
                                                 GetAnchorId();
-                    SwFrameFormat *pFrameFormat =  m_pDoc->MakeFlySection(
+                    SwFrameFormat *pFrameFormat =  m_xDoc->MakeFlySection(
                                 eAnchorId, m_pPam->GetPoint(), &aFrameSet );
 
                     pTCntxt->SetFrameFormat( pFrameFormat );
                     const SwFormatContent& rFlyContent = pFrameFormat->GetContent();
                     m_pPam->GetPoint()->nNode = *rFlyContent.GetContentIdx();
                     SwContentNode *pCNd =
-                        m_pDoc->GetNodes().GoNext( &(m_pPam->GetPoint()->nNode) );
+                        m_xDoc->GetNodes().GoNext( &(m_pPam->GetPoint()->nNode) );
                     m_pPam->GetPoint()->nContent.Assign( pCNd, 0 );
 
                 }
@@ -3670,7 +3670,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 // gesetzt)
                 OSL_ENSURE( !m_pPam->GetPoint()->nContent.GetIndex(),
                         "Der Absatz hinter der Tabelle ist nicht leer!" );
-                const SwTable* pSwTable = m_pDoc->InsertTable(
+                const SwTable* pSwTable = m_xDoc->InsertTable(
                         SwInsertTableOptions( tabopts::HEADLINE_NO_BORDER, 1 ),
                         *m_pPam->GetPoint(), 1, 1, text::HoriOrientation::LEFT );
 
@@ -3678,7 +3678,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                 {
                     SwNodeIndex aDstIdx( m_pPam->GetPoint()->nNode );
                     m_pPam->Move( fnMoveBackward );
-                    m_pDoc->GetNodes().Delete( aDstIdx );
+                    m_xDoc->GetNodes().Delete( aDstIdx );
                 }
                 else
                 {
@@ -4025,7 +4025,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
                                         ? RES_POOLCOLL_TABLE_HDLN
                                         : RES_POOLCOLL_TABLE ));
         const SwEndNode *pEndNd = pStNd->EndOfSectionNode();
-        SwContentNode *pCNd = m_pDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetContentNode();
+        SwContentNode *pCNd = m_xDoc->GetNodes()[pEndNd->GetIndex()-1] ->GetContentNode();
         //Added defaults to CJK and CTL
         SvxFontHeightItem aFontHeight( 40, 100, RES_CHRATR_FONTSIZE );
         pCNd->SetAttr( aFontHeight );
@@ -4040,7 +4040,7 @@ void SwHTMLParser::BuildTableCell( HTMLTable *pCurTable, bool bReadOptions,
 
     if( pSaveStruct->IsInSection() )
     {
-        pSaveStruct->CheckNoBreak( *m_pPam->GetPoint(), m_pDoc );
+        pSaveStruct->CheckNoBreak( *m_pPam->GetPoint(), m_xDoc.get() );
 
         // Alle noch offenen Kontexte beenden. Wir nehmen hier
         // AttrMin, weil nContxtStMin evtl. veraendert wurde.
@@ -5290,7 +5290,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                         pNd = pTableStNd->EndOfSectionNode();
                     SwNodeIndex aDstIdx( *pNd, bTop ? 0 : 1 );
 
-                    m_pDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx,
+                    m_xDoc->getIDocumentContentOperations().MoveNodeRange( aSrcRg, aDstIdx,
                         SwMoveFlags::DEFAULT );
 
                     // Wenn die Caption vor der Tabelle eingefuegt wurde muss
@@ -5308,13 +5308,13 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
                 // Die Section wird jetzt nicht mehr gebraucht.
                 m_pPam->SetMark();
                 m_pPam->DeleteMark();
-                m_pDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
+                m_xDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
                 m_pTable->SetCaption( nullptr, false );
             }
 
             // SwTable aufbereiten
             sal_uInt16 nBrowseWidth = (sal_uInt16)GetCurrentBrowseWidth();
-            pSaveStruct->MakeTable( nBrowseWidth, *m_pPam->GetPoint(), m_pDoc );
+            pSaveStruct->MakeTable( nBrowseWidth, *m_pPam->GetPoint(), m_xDoc.get() );
         }
 
         GetNumInfo().Set( pTCntxt->GetNumInfo() );
@@ -5358,7 +5358,7 @@ HTMLTable *SwHTMLParser::BuildTable( SvxAdjust eParentAdjust,
         {
             m_pPam->SetMark();
             m_pPam->DeleteMark();
-            m_pDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
+            m_xDoc->getIDocumentContentOperations().DeleteSection( const_cast<SwStartNode *>(pCapStNd) );
             pCurTable->SetCaption( nullptr, false );
         }
     }

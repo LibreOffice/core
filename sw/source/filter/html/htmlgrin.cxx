@@ -110,7 +110,7 @@ ImageMap *SwHTMLParser::FindImageMap( const OUString& rName ) const
 
 void SwHTMLParser::ConnectImageMaps()
 {
-    SwNodes& rNds = m_pDoc->GetNodes();
+    SwNodes& rNds = m_xDoc->GetNodes();
     // auf den Start-Node der 1. Section
     sal_uLong nIdx = rNds.GetEndOfAutotext().StartOfSectionIndex() + 1;
     sal_uLong nEndIdx = rNds.GetEndOfAutotext().GetIndex();
@@ -291,7 +291,7 @@ void SwHTMLParser::RegisterFlyFrame( SwFrameFormat *pFlyFormat )
 void SwHTMLParser::GetDefaultScriptType( ScriptType& rType,
                                          OUString& rTypeStr ) const
 {
-    SwDocShell *pDocSh = m_pDoc->GetDocShell();
+    SwDocShell *pDocSh = m_xDoc->GetDocShell();
     SvKeyValueIterator* pHeaderAttrs = pDocSh ? pDocSh->GetHeaderAttributes()
                                               : nullptr;
     rType = GetScriptType( pHeaderAttrs );
@@ -489,12 +489,12 @@ IMAGE_SETEVENT:
             nHeight = aPixelSize.Height();
     }
 
-    SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+    SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aPropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
         ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo );
 
-    SfxItemSet aFrameSet( m_pDoc->GetAttrPool(),
+    SfxItemSet aFrameSet( m_xDoc->GetAttrPool(),
                         RES_FRMATR_BEGIN, RES_FRMATR_END-1 );
     if( !IsNewDoc() )
         Reader::ResetFrameFormatAttrs( aFrameSet );
@@ -516,7 +516,7 @@ IMAGE_SETEVENT:
                 static_cast<const SwFormatINetFormat&>(m_aAttrTab.pINetFormat->GetItem()).GetValue();
 
             m_pCSS1Parser->SetATagStyles();
-            sal_uInt16 nPoolId =  static_cast< sal_uInt16 >(m_pDoc->IsVisitedURL( rURL )
+            sal_uInt16 nPoolId =  static_cast< sal_uInt16 >(m_xDoc->IsVisitedURL( rURL )
                                     ? RES_POOLCHR_INET_VISIT
                                     : RES_POOLCHR_INET_NORMAL);
             const SwCharFormat *pCharFormat = m_pCSS1Parser->GetCharFormatFromPool( nPoolId );
@@ -527,7 +527,7 @@ IMAGE_SETEVENT:
         {
             const SvxColorItem& rColorItem = m_aAttrTab.pFontColor ?
               static_cast<const SvxColorItem &>(m_aAttrTab.pFontColor->GetItem()) :
-              static_cast<const SvxColorItem &>(m_pDoc->GetDefault(RES_CHRATR_COLOR));
+              static_cast<const SvxColorItem &>(m_xDoc->GetDefault(RES_CHRATR_COLOR));
             aHBorderLine.SetColor( rColorItem.GetValue() );
             aVBorderLine.SetColor( aHBorderLine.GetColor() );
         }
@@ -723,9 +723,9 @@ IMAGE_SETEVENT:
     aFrameSet.Put( aFrameSize );
 
     // passing empty sGrfNm here, means we don't want the graphic to be linked
-    SwFrameFormat *pFlyFormat = m_pDoc->getIDocumentContentOperations().Insert( *m_pPam, sGrfNm, aEmptyOUStr, &aGraphic,
+    SwFrameFormat *pFlyFormat = m_xDoc->getIDocumentContentOperations().Insert( *m_pPam, sGrfNm, aEmptyOUStr, &aGraphic,
                                       &aFrameSet, nullptr, nullptr );
-    SwGrfNode *pGrfNd = m_pDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
+    SwGrfNode *pGrfNd = m_xDoc->GetNodes()[ pFlyFormat->GetContent().GetContentIdx()
                                   ->GetIndex()+1 ]->GetGrfNode();
 
     if( !sHTMLGrfName.isEmpty() )
@@ -827,7 +827,7 @@ IMAGE_SETEVENT:
 
 void SwHTMLParser::InsertBodyOptions()
 {
-    m_pDoc->SetTextFormatColl( *m_pPam,
+    m_xDoc->SetTextFormatColl( *m_pPam,
                          m_pCSS1Parser->GetTextCollFromPool( RES_POOLCOLL_TEXT ) );
 
     OUString aBackGround, aId, aStyle, aLang, aDir;
@@ -971,7 +971,7 @@ void SwHTMLParser::InsertBodyOptions()
 
     if( !aStyle.isEmpty() || !aDir.isEmpty() )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
         OUString aDummy;
         ParseStyleOptions( aStyle, aDummy, aDummy, aItemSet, aPropInfo, nullptr, &aDir );
@@ -1046,7 +1046,7 @@ void SwHTMLParser::InsertBodyOptions()
             {
                 SvxLanguageItem aLanguage( eLang, nWhich );
                 aLanguage.SetWhich( nWhich );
-                m_pDoc->SetDefault( aLanguage );
+                m_xDoc->SetDefault( aLanguage );
             }
         }
     }
@@ -1209,7 +1209,7 @@ ANCHOR_SETEVENT:
     // Styles parsen
     if( HasStyleOptions( aStyle, aId, aStrippedClass, &aLang, &aDir ) )
     {
-        SfxItemSet aItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+        SfxItemSet aItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
         SvxCSS1PropertyInfo aPropInfo;
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
@@ -1310,7 +1310,7 @@ bool SwHTMLParser::HasCurrentParaBookmarks( bool bIgnoreStack ) const
     if( !bHasMarks )
     {
         // second step: when we didn't find a bookmark, check if there is one set already
-        IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
+        IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
         for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
             ppMark != pMarkAccess->getAllMarksEnd();
             ++ppMark)
@@ -1345,7 +1345,7 @@ void SwHTMLParser::StripTrailingPara()
         {
             sal_uLong nNodeIdx = m_pPam->GetPoint()->nNode.GetIndex();
 
-            const SwFrameFormats& rFrameFormatTable = *m_pDoc->GetSpzFrameFormats();
+            const SwFrameFormats& rFrameFormatTable = *m_xDoc->GetSpzFrameFormats();
 
             for( auto pFormat : rFrameFormatTable )
             {
@@ -1368,7 +1368,7 @@ void SwHTMLParser::StripTrailingPara()
             {
                 // es wurden Felder in den Node eingefuegt, die muessen
                 // wir jetzt verschieben
-                SwTextNode *pPrvNd = m_pDoc->GetNodes()[nNodeIdx-1]->GetTextNode();
+                SwTextNode *pPrvNd = m_xDoc->GetNodes()[nNodeIdx-1]->GetTextNode();
                 if( pPrvNd )
                 {
                     SwIndex aSrc( pCNd, 0 );
@@ -1377,7 +1377,7 @@ void SwHTMLParser::StripTrailingPara()
             }
 
             // jetz muessen wir noch eventuell vorhandene Bookmarks verschieben
-            IDocumentMarkAccess* const pMarkAccess = m_pDoc->getIDocumentMarkAccess();
+            IDocumentMarkAccess* const pMarkAccess = m_xDoc->getIDocumentMarkAccess();
             for(IDocumentMarkAccess::const_iterator_t ppMark = pMarkAccess->getAllMarksBegin();
                 ppMark != pMarkAccess->getAllMarksEnd();
                 ++ppMark)
@@ -1410,7 +1410,7 @@ void SwHTMLParser::StripTrailingPara()
             m_pPam->GetPoint()->nContent.Assign( nullptr, 0 );
             m_pPam->SetMark();
             m_pPam->DeleteMark();
-            m_pDoc->GetNodes().Delete( m_pPam->GetPoint()->nNode );
+            m_xDoc->GetNodes().Delete( m_pPam->GetPoint()->nNode );
             m_pPam->Move( fnMoveBackward, GoInNode );
         }
         else if( pCNd && pCNd->IsTextNode() && m_pTable )

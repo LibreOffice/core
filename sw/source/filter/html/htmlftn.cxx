@@ -123,14 +123,14 @@ sal_Int32 lcl_html_getEndNoteInfo( SwEndNoteInfo& rInfo,
 
 void SwHTMLParser::FillEndNoteInfo( const OUString& rContent )
 {
-    SwEndNoteInfo aInfo( m_pDoc->GetEndNoteInfo() );
+    SwEndNoteInfo aInfo( m_xDoc->GetEndNoteInfo() );
     lcl_html_getEndNoteInfo( aInfo, rContent, true );
-    m_pDoc->SetEndNoteInfo( aInfo );
+    m_xDoc->SetEndNoteInfo( aInfo );
 }
 
 void SwHTMLParser::FillFootNoteInfo( const OUString& rContent )
 {
-    SwFootnoteInfo aInfo( m_pDoc->GetFootnoteInfo() );
+    SwFootnoteInfo aInfo( m_xDoc->GetFootnoteInfo() );
 
     sal_Int32 nStrPos = lcl_html_getEndNoteInfo( aInfo, rContent, false );
 
@@ -177,7 +177,7 @@ void SwHTMLParser::FillFootNoteInfo( const OUString& rContent )
         }
     }
 
-    m_pDoc->SetFootnoteInfo( aInfo );
+    m_xDoc->SetFootnoteInfo( aInfo );
 }
 
 void SwHTMLParser::InsertFootEndNote( const OUString& rName, bool bEndNote,
@@ -204,7 +204,7 @@ void SwHTMLParser::FinishFootEndNote()
     if( m_pFootEndNoteImpl->bFixed )
         aFootnote.SetNumStr( m_pFootEndNoteImpl->sContent );
 
-    m_pDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, aFootnote );
+    m_xDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, aFootnote );
     SwTextFootnote * const pTextFootnote = static_cast<SwTextFootnote *>(
         m_pPam->GetNode().GetTextNode()->GetTextAttrForCharAt(
             m_pPam->GetPoint()->nContent.GetIndex() - 1, RES_TXTATR_FTN ) );

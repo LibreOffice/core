@@ -264,7 +264,7 @@ void SwHTMLParser::NewField()
     {
         SvtUserOptions aOpt;
         const OUString& rUser = aOpt.GetFullName();
-        SwDocShell *pDocShell(m_pDoc->GetDocShell());
+        SwDocShell *pDocShell(m_xDoc->GetDocShell());
         OSL_ENSURE(pDocShell, "no SwDocShell");
         if (pDocShell) {
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
@@ -284,7 +284,7 @@ void SwHTMLParser::NewField()
     if( RES_DATEFLD==nType || RES_TIMEFLD==nType )
         nWhich = RES_DATETIMEFLD;
 
-    SwFieldType* pType = m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( nWhich );
+    SwFieldType* pType = m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( nWhich );
     SwField *pNewField = nullptr;
     bool bInsOnEndTag = false;
 
@@ -347,7 +347,7 @@ void SwHTMLParser::NewField()
             if( !aValue.isEmpty() )
                 nSub |= FIXEDFLD;
 
-            SvNumberFormatter *pFormatter = m_pDoc->GetNumberFormatter();
+            SvNumberFormatter *pFormatter = m_xDoc->GetNumberFormatter();
             if( pFormatOption )
             {
                 const OUString& rFormat = pFormatOption->GetString();
@@ -378,12 +378,12 @@ void SwHTMLParser::NewField()
         {
             sal_uInt16 nSub = 0;
 
-            SvNumberFormatter *pFormatter = m_pDoc->GetNumberFormatter();
+            SvNumberFormatter *pFormatter = m_xDoc->GetNumberFormatter();
             sal_uInt32 nNumFormat;
             LanguageType eLang;
             double dValue = GetTableDataOptionsValNum(
                                 nNumFormat, eLang, aNumValue, aNumFormat,
-                                *m_pDoc->GetNumberFormatter() );
+                                *m_xDoc->GetNumberFormatter() );
             short nFormatType = pFormatter->GetType( nNumFormat );
             switch( nFormatType )
             {
@@ -456,7 +456,7 @@ void SwHTMLParser::NewField()
                     LanguageType eLang;
                     dValue = GetTableDataOptionsValNum(
                                     nNumFormat, eLang, aNumValue, aNumFormat,
-                                    *m_pDoc->GetNumberFormatter() );
+                                    *m_xDoc->GetNumberFormatter() );
                     bFixed &= bHasNumValue;
                 }
                 else
@@ -524,7 +524,7 @@ void SwHTMLParser::NewField()
         }
         else
         {
-            m_pDoc->getIDocumentContentOperations().InsertPoolItem(*m_pPam, SwFormatField(*pNewField));
+            m_xDoc->getIDocumentContentOperations().InsertPoolItem(*m_pPam, SwFormatField(*pNewField));
             delete pNewField;
         }
         m_bInField = true;
@@ -562,7 +562,7 @@ void SwHTMLParser::EndField()
             break;
         }
 
-        m_pDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatField(*m_pField) );
+        m_xDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatField(*m_pField) );
         delete m_pField;
         m_pField = nullptr;
     }
@@ -636,7 +636,7 @@ void SwHTMLParser::InsertComment( const OUString& rComment, const sal_Char *pTag
     }
 
     SwPostItField aPostItField(
-                    static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
+                    static_cast<SwPostItFieldType*>(m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( RES_POSTITFLD )),
                     aEmptyOUStr, aComment, aEmptyOUStr, aEmptyOUStr, DateTime( DateTime::SYSTEM ) );
     InsertAttr( SwFormatField( aPostItField ), false );
 

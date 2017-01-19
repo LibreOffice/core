@@ -641,13 +641,13 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
     // das auch vom SwXShape implementiert wird.
     uno::Reference< beans::XPropertySet > xPropSet( rShape, UNO_QUERY );
 
-    SwViewShell *pVSh = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+    SwViewShell *pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
     if( !pVSh && !m_nEventId )
     {
         // If there is no view shell by now and the doc shell is an internal
         // one, no view shell will be created. That for, we have to do that of
         // our own. This happens if a linked section is inserted or refreshed.
-        SwDocShell *pDocSh = m_pDoc->GetDocShell();
+        SwDocShell *pDocSh = m_xDoc->GetDocShell();
         if( pDocSh )
         {
             if ( pDocSh->GetMedium() )
@@ -659,9 +659,9 @@ void SwHTMLParser::SetControlSize( const uno::Reference< drawing::XShape >& rSha
 
             m_pTempViewFrame = SfxViewFrame::LoadHiddenDocument( *pDocSh, 0 );
             CallStartAction();
-            pVSh = m_pDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
+            pVSh = m_xDoc->getIDocumentLayoutAccess().GetCurrentViewShell();
             // this ridiculous hack also enables Undo, so turn it off again
-            m_pDoc->GetIDocumentUndoRedo().DoUndo(false);
+            m_xDoc->GetIDocumentUndoRedo().DoUndo(false);
         }
     }
 
@@ -1236,7 +1236,7 @@ void SwHTMLParser::NewForm( bool bAppend )
     }
 
     if( !m_pFormImpl )
-        m_pFormImpl = new SwHTMLForm_Impl( m_pDoc->GetDocShell() );
+        m_pFormImpl = new SwHTMLForm_Impl( m_xDoc->GetDocShell() );
 
     OUString aAction( m_sBaseURL );
     OUString sName, sTarget;
@@ -1784,7 +1784,7 @@ void SwHTMLParser::InsertInput()
         }
     }
 
-    SfxItemSet aCSS1ItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+    SfxItemSet aCSS1ItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aCSS1PropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
@@ -2047,7 +2047,7 @@ void SwHTMLParser::NewTextArea()
 
     Size aTextSz( nCols, nRows );
 
-    SfxItemSet aCSS1ItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+    SfxItemSet aCSS1ItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aCSS1PropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
@@ -2315,7 +2315,7 @@ void SwHTMLParser::NewSelect()
         bMinHeight = false;
     }
 
-    SfxItemSet aCSS1ItemSet( m_pDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
+    SfxItemSet aCSS1ItemSet( m_xDoc->GetAttrPool(), m_pCSS1Parser->GetWhichMap() );
     SvxCSS1PropertyInfo aCSS1PropInfo;
     if( HasStyleOptions( aStyle, aId, aClass ) )
     {
