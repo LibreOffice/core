@@ -115,7 +115,9 @@ public:
     virtual void dispose() override;
 
     // XContainerListener
+    /// @throws css::uno::RuntimeException
     void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
     void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception);
 
     virtual Size GetOptimalSize() const override;

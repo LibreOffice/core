@@ -88,7 +88,9 @@ namespace reportdesign
         virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
         virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
 
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
         static css::uno::Reference< css::uno::XInterface > SAL_CALL
             create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
@@ -115,6 +117,10 @@ namespace reportdesign
             // Methods
         virtual css::uno::Reference< css::frame::XModel > SAL_CALL createDocumentModel(  ) throw (css::lang::DisposedException, css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException, std::exception) override ;
         virtual css::uno::Reference< css::frame::XModel > SAL_CALL createDocumentAlive( const css::uno::Reference< css::frame::XFrame >& _frame ) throw (css::lang::DisposedException, css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException, std::exception) override ;
+        /// @throws css::lang::DisposedException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::frame::XModel > SAL_CALL createDocumentAlive( const css::uno::Reference< css::frame::XFrame >& _frame ,bool _bHidden) throw (css::lang::DisposedException, css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException, std::exception) ;
         virtual css::util::URL SAL_CALL createDocument(  ) throw (css::lang::DisposedException, css::lang::IllegalArgumentException, css::uno::Exception, css::uno::RuntimeException, std::exception) override ;
         virtual void SAL_CALL interrupt(  ) throw (css::lang::DisposedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override ;

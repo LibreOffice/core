@@ -76,10 +76,12 @@ public:
     css::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception  ) override;
 
     // static methods
+    /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static() throw( css::uno::RuntimeException )
     {
         return OUString("com.sun.star.comp.report.ORptTypeDetection");
     }
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
     create(css::uno::Reference< css::uno::XComponentContext > const & xContext);

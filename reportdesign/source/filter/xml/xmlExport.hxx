@@ -157,7 +157,9 @@ public:
 
     ORptExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag);
 
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
@@ -177,7 +179,9 @@ public:
 class ORptExportHelper
 {
 public:
+    /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
@@ -190,7 +194,9 @@ public:
 class ORptContentExportHelper
 {
 public:
+    /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
@@ -203,7 +209,9 @@ public:
 class ORptStylesExportHelper
 {
 public:
+    /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
@@ -216,7 +224,9 @@ public:
 class ORptMetaExportHelper
 {
 public:
+    /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
@@ -228,7 +238,9 @@ public:
 class ODBFullExportHelper
 {
 public:
+    /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static Sequence< OUString > getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
         create(css::uno::Reference< css::uno::XComponentContext > const & xContext);

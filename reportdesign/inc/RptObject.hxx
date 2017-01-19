@@ -101,6 +101,7 @@ public:
     void StartListening();
     void EndListening(bool bRemoveListener = true);
     // PropertyChangeListener
+    /// @throws css::uno::RuntimeException
     virtual void _propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException);
     virtual void initializeOle() {}
 

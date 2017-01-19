@@ -177,7 +177,9 @@ namespace reportdesign
                                   ,const css::uno::Reference< css::lang::XMultiServiceFactory > & _xFactory
                                   ,css::uno::Reference< css::drawing::XShape >& _xShape);
 
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
         static css::uno::Reference< css::uno::XInterface > SAL_CALL
             create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
@@ -395,6 +397,7 @@ namespace reportdesign
         virtual bool isEnableSetModified() const override;
         virtual OUString getDocumentBaseURL() const override;
 
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::ui::XUIConfigurationManager2 > getUIConfigurationManager2(  ) throw (css::uno::RuntimeException);
       };
 

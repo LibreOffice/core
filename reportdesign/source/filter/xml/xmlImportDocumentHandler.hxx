@@ -42,7 +42,9 @@ class ImportDocumentHandler : public ImportDocumentHandler_BASE
 {
 public:
     // XServiceInfo - static versions
+    /// @throws css::uno::RuntimeException
     static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(css::uno::RuntimeException);
     static css::uno::Reference< css::uno::XInterface > SAL_CALL
                     create(const css::uno::Reference< css::uno::XComponentContext >&);
