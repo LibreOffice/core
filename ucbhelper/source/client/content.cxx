@@ -201,7 +201,8 @@ public:
 
 // Helpers.
 
-
+/// @throws ContentCreationException
+/// @throws RuntimeException
 static void ensureContentProviderForURL( const Reference< XUniversalContentBroker >& rBroker,
                                          const OUString & rURL )
     throw ( ContentCreationException, RuntimeException )
@@ -217,7 +218,8 @@ static void ensureContentProviderForURL( const Reference< XUniversalContentBroke
     }
 }
 
-
+/// @throws ContentCreationException
+/// @throws RuntimeException
 static Reference< XContentIdentifier > getContentIdentifierThrow(
                                     const Reference< XUniversalContentBroker > & rBroker,
                                     const OUString & rURL)
@@ -239,6 +241,7 @@ static Reference< XContentIdentifier > getContentIdentifierThrow(
     return xId;
 }
 
+/// @throws RuntimeException
 static Reference< XContentIdentifier > getContentIdentifierNoThrow(
                                     const Reference< XUniversalContentBroker > & rBroker,
                                     const OUString & rURL)
@@ -247,6 +250,8 @@ static Reference< XContentIdentifier > getContentIdentifierNoThrow(
     return rBroker->createContentIdentifier(rURL);
 }
 
+/// @throws ContentCreationException
+/// @throws RuntimeException
 static Reference< XContent > getContentThrow(
                                     const Reference< XUniversalContentBroker > & rBroker,
                                     const Reference< XContentIdentifier > & xId)
@@ -277,7 +282,7 @@ static Reference< XContent > getContentThrow(
     return xContent;
 }
 
-
+/// @throws RuntimeException
 static Reference< XContent > getContentNoThrow(
                                     const Reference< XUniversalContentBroker > & rBroker,
                                     const Reference< XContentIdentifier > & xId)

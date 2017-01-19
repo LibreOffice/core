@@ -80,6 +80,8 @@ typedef std::vector< ContentProviderData > ContentProviderDataList;
 
     @param pInfo  If not null, this output parameter is filled with
     information about the (attemptively) registered provider.
+
+    @throws css::uno::RuntimeException
  */
 
 UCBHELPER_DLLPUBLIC bool registerAtUcb(
