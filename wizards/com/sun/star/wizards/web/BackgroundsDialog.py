@@ -64,12 +64,12 @@ class BackgroundsDialog(ImageListDialog):
     def other(self):
         filename = self.sd.callOpenDialog(
             False, self.settings.cp_DefaultSession.cp_InDirectory)
-        if filename is not None and filename.length > 0 and filename[0] is not None:
+        if filename is not None and len(filename) > 0 and filename[0] is not None:
             self.settings.cp_DefaultSession.cp_InDirectory = \
                 FileAccess.getParentDir(filename[0])
             i = self.add(filename[0])
-            il.setSelected(i)
-            il.display(i)
+            self.il.setSelected(i)
+            self.il.display(i)
 
     '''
     adds the given image to the image list (to the model)
@@ -81,24 +81,24 @@ class BackgroundsDialog(ImageListDialog):
     def add(self, s):
         #first i check the item does not already exists in the list...
         i = 0
-        while i < il.getListModel().getSize():
-            if il.getListModel().getElementAt(i) == s:
+        while i < self.il.listModel.getSize():
+            if self.il.listModel.getElementAt(i) == s:
                 return i
-
             i += 1
-        il.getListModel().addElement(s)
+
+        self.il.listModel.add1(s)
         try:
             configView = Configuration.getConfigurationRoot(
                 self.xMSF, FileAccess.connectURLs(
                     CONFIG_PATH, "BackgroundImages"), True)
-            i = Configuration.getChildrenNames(configView).length + 1
-            o = Configuration.addConfigNode(configView, "" + i)
+            i = len(Configuration.getChildrenNames(configView)) + 1
+            o = Configuration.addConfigNode(configView, "" + str(i))
             Configuration.set(s, "Href", o)
             Configuration.commit(configView)
         except Exception:
             traceback.print_exc()
 
-        return il.getListModel().getSize() - 1
+        return self.il.listModel.getSize() - 1
 
     '''
     an ImageList Imagerenderer implemtation.
