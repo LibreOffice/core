@@ -45,7 +45,7 @@ class Packages;
 
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
-    Packages* m_pPackages;
+    std::unique_ptr<Packages> m_pPackages;
 
 public:
     explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rxContext );

@@ -29,6 +29,7 @@
 #include <config_lgpl.h>
 #include <string.h>
 #include <ne_xml.h>
+#include <memory>
 
 #include "LinkSequence.hxx"
 
@@ -38,13 +39,13 @@ using namespace com::sun::star;
 
 struct LinkSequenceParseContext
 {
-    ucb::Link * pLink;
+    std::unique_ptr<ucb::Link> pLink;
     bool hasSource;
     bool hasDestination;
 
     LinkSequenceParseContext()
     : pLink( nullptr ), hasSource( false ), hasDestination( false ) {}
-    ~LinkSequenceParseContext() { delete pLink; }
+    ~LinkSequenceParseContext() {}
 };
 
 #define STATE_TOP (1)
@@ -91,7 +92,7 @@ extern "C" int LinkSequence_chardata_callback(
     LinkSequenceParseContext * pCtx
                     = static_cast< LinkSequenceParseContext * >( userdata );
     if ( !pCtx->pLink )
-        pCtx->pLink = new ucb::Link;
+        pCtx->pLink.reset( new ucb::Link );
 
     switch ( state )
     {
@@ -120,7 +121,7 @@ extern "C" int LinkSequence_endelement_callback(
     LinkSequenceParseContext * pCtx
                     = static_cast< LinkSequenceParseContext * >( userdata );
     if ( !pCtx->pLink )
-        pCtx->pLink = new ucb::Link;
+        pCtx->pLink.reset( new ucb::Link );
 
     switch ( state )
     {

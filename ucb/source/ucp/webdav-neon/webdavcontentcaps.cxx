@@ -69,7 +69,7 @@ bool ContentProvider::getProperty(
         osl::MutexGuard aGuard( m_aMutex );
         if ( !m_pProps )
         {
-            m_pProps = new PropertyMap;
+            m_pProps.reset( new PropertyMap );
 
 
             // Fill map of known properties...
