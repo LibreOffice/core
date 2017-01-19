@@ -485,7 +485,7 @@ const SfxItemSet* FuPage::ExecuteDialog( vcl::Window* pParent )
             // BackgroundFill of Masterpage: no hard attributes allowed
             SdrPage& rUsedMasterPage = mpPage->IsMasterPage() ? *mpPage : mpPage->TRG_GetMasterPage();
             OSL_ENSURE(rUsedMasterPage.IsMasterPage(), "No MasterPage (!)");
-            rUsedMasterPage.getSdrPageProperties().ClearItem();
+            rUsedMasterPage.getSdrPageProperties().ClearAllItems();
             OSL_ENSURE(nullptr != rUsedMasterPage.getSdrPageProperties().GetStyleSheet(),
                 "MasterPage without StyleSheet detected (!)");
         }
@@ -612,7 +612,7 @@ void FuPage::ApplyItemSet( const SfxItemSet* pArgs )
                 *mpDoc, *mpPage, mpPage->getSdrPageProperties().GetItemSet()) );
             SfxItemSet aSet( *pArgs );
             sdr::properties::CleanupFillProperties(aSet);
-            mpPage->getSdrPageProperties().ClearItem();
+            mpPage->getSdrPageProperties().ClearAllItems();
             mpPage->getSdrPageProperties().PutItemSet(aSet);
         }
     }

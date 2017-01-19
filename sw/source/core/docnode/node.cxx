@@ -223,6 +223,20 @@ bool Put_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
     return bRet;
 }
 
+void ClearAllItems_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
+                     const SwContentNode& rNode,
+                     SwAttrSet* pOld, SwAttrSet* pNew )
+{
+    SwAttrSet aNewSet( static_cast<const SwAttrSet&>(*rpAttrSet) );
+    if (rNode.GetModifyAtAttr())
+        aNewSet.SetModifyAtAttr( &rNode );
+    if (aNewSet.Count())
+    {
+        aNewSet.ClearAllItems_BC( pOld, pNew );
+        GetNewAutoStyle( rpAttrSet, rNode, aNewSet );
+    }
+}
+
 sal_uInt16 ClearItem_BC( std::shared_ptr<const SfxItemSet>& rpAttrSet,
                      const SwContentNode& rNode, sal_uInt16 nWhich,
                      SwAttrSet* pOld, SwAttrSet* pNew )
@@ -1644,12 +1658,11 @@ sal_uInt16 SwContentNode::ResetAllAttr()
         return nDel;
     }
 
-    SwAttrSet aOld( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() ),
-              aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
-    bool bRet = 0 != AttrSetHandleHelper::ClearItem_BC( mpAttrSet, *this, 0, &aOld, &aNew );
-
-    if( bRet )
+    SwAttrSet aNew( *GetpSwAttrSet()->GetPool(), GetpSwAttrSet()->GetRanges() );
+    if (mpAttrSet->Count())
     {
+        SwAttrSet aOld( aNew );
+        AttrSetHandleHelper::ClearAllItems_BC( mpAttrSet, *this, &aOld, &aNew );
         SwAttrSetChg aChgOld( *GetpSwAttrSet(), aOld );
         SwAttrSetChg aChgNew( *GetpSwAttrSet(), aNew );
         ModifyNotification( &aChgOld, &aChgNew ); // All changed ones are sent
@@ -1663,7 +1676,7 @@ sal_uInt16 SwContentNode::ResetAllAttr()
 bool SwContentNode::GetAttr( SfxItemSet& rSet ) const
 {
     if( rSet.Count() )
-        rSet.ClearItem();
+        rSet.ClearAllItems();
 
     const SwAttrSet& rAttrSet = GetSwAttrSet();
     return rSet.Set( rAttrSet );

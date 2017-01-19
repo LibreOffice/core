@@ -1576,7 +1576,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         // A stylesheet of the same name already exists -> overwrite contents
                         bool bTest = pMySheet->SetName(pHisSheet->GetName());
                         DBG_ASSERT(bTest, "Renaming StyleSheet failed.");
-                        pMySheet->GetItemSet().ClearItem();  // Delete all
+                        pMySheet->GetItemSet().ClearAllItems();  // Delete all
 
                         if (bUndo)
                         {
@@ -1593,7 +1593,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         OUString aHelpFile;
                         pMySheet = static_cast<SfxStyleSheet*>( &mxStyleSheetPool->Make(aName, SD_STYLE_FAMILY_MASTERPAGE, pHisSheet->GetMask()) );
                         pMySheet->SetHelpId( aHelpFile, pHisSheet->GetHelpId(aHelpFile) );
-                        pMySheet->GetItemSet().ClearItem();  // Delete all
+                        pMySheet->GetItemSet().ClearAllItems();  // Delete all
                         pMySheet->GetItemSet().Put(pHisSheet->GetItemSet());
 
                         aCreatedStyles.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pMySheet ) ) );

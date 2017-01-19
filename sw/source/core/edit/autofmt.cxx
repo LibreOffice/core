@@ -1649,7 +1649,7 @@ void SwAutoFormat::BuildEnum( sal_uInt16 nLvl, sal_uInt16 nDigitLevel )
                 m_pDoc->SetFormatItemByAutoFormat( m_aDelPam, aSet );
                 m_aDelPam.DeleteMark();
                 nAutoCorrPos = 2;
-                aSet.ClearItem();
+                aSet.ClearAllItems();
             }
             SvxTabStopItem aTStops( RES_PARATR_TABSTOP );
             aTStops.Insert( SvxTabStop( 0 ) );

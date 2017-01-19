@@ -931,7 +931,7 @@ void SaveTable::RestoreAttr( SwTable& rTable, bool bMdfyBox )
     // first, get back attributes of TableFrameFormat
     SwFrameFormat* pFormat = rTable.GetFrameFormat();
     SfxItemSet& rFormatSet  = (SfxItemSet&)pFormat->GetAttrSet();
-    rFormatSet.ClearItem();
+    rFormatSet.ClearAllItems();
     rFormatSet.Put(m_aTableSet);
 
     if( pFormat->IsInCache() )
@@ -988,7 +988,7 @@ void SaveTable::CreateNew( SwTable& rTable, bool bCreateFrames,
     // first, get back attributes of TableFrameFormat
     SwFrameFormat* pFormat = rTable.GetFrameFormat();
     SfxItemSet& rFormatSet  = (SfxItemSet&)pFormat->GetAttrSet();
-    rFormatSet.ClearItem();
+    rFormatSet.ClearAllItems();
     rFormatSet.Put(m_aTableSet);
 
     if( pFormat->IsInCache() )

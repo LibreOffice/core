@@ -91,7 +91,7 @@ SdPresLayoutTemplateDlg::SdPresLayoutTemplateDlg( SfxObjectShell* pDocSh,
             aInputSet.SetParent( pParentItemSet );
 
         pOutSet = new SfxItemSet( rStyleBase.GetItemSet() );
-        pOutSet->ClearItem();
+        pOutSet->ClearAllItems();
 
         const SfxPoolItem *pItem = nullptr;
 

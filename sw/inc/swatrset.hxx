@@ -188,6 +188,7 @@ public:
     bool Put_BC( const SfxItemSet& rSet, SwAttrSet* pOld, SwAttrSet* pNew );
 
     // Delete an item or a range.
+    void ClearAllItems_BC( SwAttrSet* pOld, SwAttrSet* pNew );
     sal_uInt16 ClearItem_BC( sal_uInt16 nWhich, SwAttrSet* pOld, SwAttrSet* pNew );
     sal_uInt16 ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
                         SwAttrSet* pOld = nullptr, SwAttrSet* pNew = nullptr );

@@ -48,7 +48,7 @@ SdBackgroundObjUndoAction::SdBackgroundObjUndoAction(
 void SdBackgroundObjUndoAction::ImplRestoreBackgroundObj()
 {
     std::unique_ptr<SfxItemSet> pNew = o3tl::make_unique<SfxItemSet>(mrPage.getSdrPageProperties().GetItemSet());
-    mrPage.getSdrPageProperties().ClearItem();
+    mrPage.getSdrPageProperties().ClearAllItems();
     if (bool(mpFillBitmapItem))
         restoreFillBitmap(*mpItemSet);
     mpFillBitmapItem.reset();

@@ -542,7 +542,7 @@ void SwGrfShell::ExecAttr( SfxRequest &rReq )
                                                 break;
                     }
                 aMirror.SetValue( nMirror );
-                aGrfSet.ClearItem();
+                aGrfSet.ClearAllItems();
                 aGrfSet.Put( aMirror );
             }
             break;

@@ -207,7 +207,7 @@ void ScEditWindow::SetCharAttributes()
         pDlg->SetText( ScGlobal::GetRscString( STR_TEXTATTRS ) );
         if ( pDlg->Execute() == RET_OK )
         {
-            aSet.ClearItem();
+            aSet.ClearAllItems();
             aSet.Put( *pDlg->GetOutputItemSet() );
             pEdView->SetAttribs( aSet );
         }

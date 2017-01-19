@@ -385,7 +385,7 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
 
         if (nEndNd - nSttNd >= nMaxLookup)
         {
-            rSet.ClearItem();
+            rSet.ClearAllItems();
             rSet.InvalidateAllItems();
             return;// uno::Any();
         }
@@ -428,7 +428,7 @@ void SwUnoCursorHelper::GetCursorAttr(SwPaM & rPam,
 
             if (aSet.Count())
             {
-                aSet.ClearItem();
+                aSet.ClearAllItems();
             }
         }
     }

@@ -173,7 +173,7 @@ void SfxModalDialog::CreateOutputItemSet( const SfxItemSet& rSet )
     if (!pOutputSet)
     {
         pOutputSet = new SfxItemSet( rSet );
-        pOutputSet->ClearItem();
+        pOutputSet->ClearAllItems();
     }
 }
 

@@ -250,7 +250,7 @@ SfxItemSet::~SfxItemSet()
 }
 
 /**
- * Delete single Items or all Items (nWhich == 0)
+ * Delete single Item
  */
 sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
 {
@@ -259,69 +259,68 @@ sal_uInt16 SfxItemSet::ClearItem( sal_uInt16 nWhich )
 
     sal_uInt16 nDel = 0;
 
-    if( nWhich )
+    assert(nWhich);
+
+    auto it = m_aItems.find(nWhich);
+    if (it != m_aItems.end())
     {
-        auto it = m_aItems.find(nWhich);
-        if (it != m_aItems.end())
+        const SfxPoolItem *pItemToClear = it->second;
+        m_aItems.erase(it);
+        // Due to the assertions in the sub calls, we need to do the following
+
+        if ( !IsInvalidItem(pItemToClear) )
         {
-            const SfxPoolItem *pItemToClear = it->second;
-            m_aItems.erase(it);
-            // Due to the assertions in the sub calls, we need to do the following
-
-            if ( !IsInvalidItem(pItemToClear) )
-            {
-                if (SfxItemPool::IsWhich(nWhich))
+            if (SfxItemPool::IsWhich(nWhich))
                 {
-                    const SfxPoolItem& rNew = m_pParent
-                            ? m_pParent->Get( nWhich )
-                            : m_pPool->GetDefaultItem( nWhich );
+                const SfxPoolItem& rNew = m_pParent
+                        ? m_pParent->Get( nWhich )
+                        : m_pPool->GetDefaultItem( nWhich );
 
-                    Changed( *pItemToClear, rNew );
-                }
-                if ( pItemToClear->Which() )
-                    m_pPool->Remove( *pItemToClear );
+                Changed( *pItemToClear, rNew );
             }
-            ++nDel;
+            if ( pItemToClear->Which() )
+                m_pPool->Remove( *pItemToClear );
         }
-    }
-    else
-    {
-        nDel = m_aItems.size();
-
-        SfxItemMap aTmp;
-        aTmp.swap(m_aItems);
-        for (auto & rPair : aTmp)
-        {
-            const SfxPoolItem *pItemToClear = rPair.second;
-            nWhich = rPair.first;
-
-            if ( !IsInvalidItem(pItemToClear) )
-            {
-                if (SfxItemPool::IsWhich(nWhich))
-                {
-                    const SfxPoolItem& rNew = m_pParent
-                            ? m_pParent->Get( nWhich )
-                             : m_pPool->GetDefaultItem( nWhich );
-
-                     Changed( *pItemToClear, rNew );
-                 }
-
-                 // #i32448#
-                 // Take care of disabled items, too.
-                 if (!pItemToClear->m_nWhich)
-                 {
-                     // item is disabled, delete it
-                     delete pItemToClear;
-                 }
-                 else
-                 {
-                     // remove item from pool
-                     m_pPool->Remove( *pItemToClear );
-                 }
-            }
-        }
+        ++nDel;
     }
     return nDel;
+}
+
+void SfxItemSet::ClearAllItems()
+{
+    SfxItemMap aTmp;
+    aTmp.swap(m_aItems);
+
+    for (auto & rPair : aTmp)
+    {
+        // Due to the assertions in the sub calls, we need to do this
+        const SfxPoolItem *pItemToClear = rPair.second;
+        if (!IsInvalidItem(pItemToClear))
+        {
+            const sal_uInt16 nWhich = rPair.first;
+            if (SfxItemPool::IsWhich(nWhich))
+            {
+                const SfxPoolItem& rNew = m_pParent
+                        ? m_pParent->Get(nWhich)
+                        : m_pPool->GetDefaultItem(nWhich);
+
+                Changed(*pItemToClear, rNew);
+            }
+
+            // #i32448#
+            // Take care of disabled items, too.
+            if (!pItemToClear->m_nWhich)
+            {
+                // item is disabled, delete it
+                delete pItemToClear;
+            }
+            else
+            {
+                // remove item from pool
+                m_pPool->Remove(*pItemToClear);
+            }
+        }
+    }
 }
 
 void SfxItemSet::ClearInvalidItems()
@@ -790,7 +789,7 @@ bool SfxItemSet::Set
 {
     bool bRet = false;
     if (!m_aItems.empty())
-        ClearItem();
+        ClearAllItems();
     if ( bDeep )
     {
         SfxWhichIter aIter(*this);
@@ -891,7 +890,7 @@ void SfxItemSet::Intersect( const SfxItemSet& rSet )
     // Delete all Items not contained in rSet
     if( !rSet.Count() )
     {
-        ClearItem(); // Delete everything
+        ClearAllItems(); // Delete everything
         return;
     }
 

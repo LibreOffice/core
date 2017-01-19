@@ -710,13 +710,17 @@ sal_uInt16 SwFormat::ResetAllFormatAttr()
 
     // if Modify is locked then no modifications will be sent
     if( IsModifyLocked() )
-        return m_aSet.ClearItem();
-
-    SwAttrSet aOld( *m_aSet.GetPool(), m_aSet.GetRanges() ),
-              aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
-    bool bRet = 0 != m_aSet.ClearItem_BC( 0, &aOld, &aNew );
-    if( bRet )
     {
+        const sal_uInt16 nClearedItems = m_aSet.Count();
+        m_aSet.ClearAllItems();
+        return nClearedItems;
+    }
+
+    SwAttrSet aNew( *m_aSet.GetPool(), m_aSet.GetRanges() );
+    if ( m_aSet.Count() )
+    {
+        SwAttrSet aOld( aNew );
+        m_aSet.ClearAllItems_BC( &aOld, &aNew );
         SwAttrSetChg aChgOld( m_aSet, aOld );
         SwAttrSetChg aChgNew( m_aSet, aNew );
         ModifyNotification( &aChgOld, &aChgNew ); // send all modified ones

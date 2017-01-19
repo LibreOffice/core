@@ -180,7 +180,7 @@ EditTextObject* lclCreateTextObject( const XclImpRoot& rRoot,
                 rEE.QuickSetAttribs( aItemSet, aSelection );
 
                 // start new item set
-                aItemSet.ClearItem();
+                aItemSet.ClearAllItems();
                 rFontBuffer.FillToItemSet( aItemSet, eType, aNextRun.mnFontIdx );
 
                 // read new formatting information

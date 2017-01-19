@@ -234,6 +234,16 @@ sal_uInt16 SwAttrSet::ClearItem_BC( sal_uInt16 nWhich1, sal_uInt16 nWhich2,
     return nRet;
 }
 
+void SwAttrSet::ClearAllItems_BC( SwAttrSet* pOld, SwAttrSet* pNew )
+{
+
+    m_pNewSet = pNew;
+    m_pOldSet = pOld;
+    SfxItemSet::ClearAllItems();    // uses overwritten Changed(..) to change
+                                    // m_pNewSet and m_pOldSet objects
+    m_pOldSet = m_pNewSet = nullptr;
+}
+
 int SwAttrSet::Intersect_BC( const SfxItemSet& rSet,
                              SwAttrSet* pOld, SwAttrSet* pNew )
 {

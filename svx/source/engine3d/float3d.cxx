@@ -464,7 +464,7 @@ void Svx3DWin::Update( SfxItemSet& rAttrs )
 {
     // remember 2d attributes
     if(mpRemember2DAttributes)
-        mpRemember2DAttributes->ClearItem();
+        mpRemember2DAttributes->ClearAllItems();
     else
         mpRemember2DAttributes = new SfxItemSet(*rAttrs.GetPool(),
             SDRATTR_START, SDRATTR_SHADOW_LAST,

@@ -791,7 +791,7 @@ void SvxGrafAttrHelper::ExecuteGrafAttr( SfxRequest& rReq, SdrView& rView )
 
                                     if( bUndo )
                                         rView.EndUndo();
-                                    aSet.ClearItem();
+                                    aSet.ClearAllItems();
                                 }
                             }
                         }

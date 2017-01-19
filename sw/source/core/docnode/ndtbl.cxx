@@ -500,7 +500,7 @@ const SwTable* SwDoc::InsertTable( const SwInsertTableOptions& rInsTableOpts,
                 // Set the Paragraph/Character Attributes if needed
                 if( pTAFormat->IsFont() || pTAFormat->IsJustify() )
                 {
-                    aCharSet.ClearItem();
+                    aCharSet.ClearAllItems();
                     pTAFormat->UpdateToSet( nId, aCharSet,
                                         SwTableAutoFormat::UPDATE_CHAR, nullptr );
                     if( aCharSet.Count() )
@@ -799,7 +799,7 @@ const SwTable* SwDoc::TextToTable( const SwInsertTableOptions& rInsTableOpts,
                     // Set Paragraph/Character Attributes if needed
                     if( pTAFormat->IsFont() || pTAFormat->IsJustify() )
                     {
-                        aCharSet.ClearItem();
+                        aCharSet.ClearAllItems();
                         pTAFormat->UpdateToSet( nId, aCharSet,
                                             SwTableAutoFormat::UPDATE_CHAR, nullptr );
                         if( aCharSet.Count() )

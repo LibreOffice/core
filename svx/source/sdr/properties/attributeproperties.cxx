@@ -221,7 +221,11 @@ namespace sdr
                 // clear item if ItemSet exists
                 if(mpItemSet)
                 {
-                    mpItemSet->ClearItem(nWhich);
+                    // clear all items for nWhich 0
+                    if (nWhich)
+                        mpItemSet->ClearItem(nWhich);
+                    else
+                        mpItemSet->ClearAllItems();
                 }
             }
         }

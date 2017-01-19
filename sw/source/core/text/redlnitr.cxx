@@ -237,7 +237,7 @@ short SwRedlineItr::Seek_(SwFont& rFnt, sal_Int32 nNew, sal_Int32 nOld)
                     const SwRangeRedline *pRed = rDoc.getIDocumentRedlineAccess().GetRedlineTable()[ nAct ];
 
                     if (pSet)
-                        pSet->ClearItem();
+                        pSet->ClearAllItems();
                     else
                     {
                         SwAttrPool& rPool =

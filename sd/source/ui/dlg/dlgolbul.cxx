@@ -61,7 +61,7 @@ OutlineBulletDlg::OutlineBulletDlg(
     aInputSet.Put( *pAttr );
 
     pOutputSet = new SfxItemSet( *pAttr );
-    pOutputSet->ClearItem();
+    pOutputSet->ClearAllItems();
 
     bool bOutliner = false;
 

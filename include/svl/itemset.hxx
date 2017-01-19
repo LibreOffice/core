@@ -117,7 +117,8 @@ public:
 
     void                        DisableItem(sal_uInt16 nWhich);
     void                        InvalidateItem( sal_uInt16 nWhich );
-    sal_uInt16                  ClearItem( sal_uInt16 nWhich = 0);
+    void                        ClearAllItems();
+    sal_uInt16                  ClearItem( sal_uInt16 nWhich );
     void                        ClearInvalidItems();
     void                        InvalidateAllItems(); // HACK(via nWhich = 0) ???
 

@@ -1138,8 +1138,15 @@ void SdrPageProperties::PutItem(const SfxPoolItem& rItem)
     ImpPageChange(*mpSdrPage);
 }
 
+void SdrPageProperties::ClearAllItems()
+{
+    mpProperties->ClearAllItems();
+    ImpPageChange(*mpSdrPage);
+}
+
 void SdrPageProperties::ClearItem(const sal_uInt16 nWhich)
 {
+    assert(nWhich);
     mpProperties->ClearItem(nWhich);
     ImpPageChange(*mpSdrPage);
 }
