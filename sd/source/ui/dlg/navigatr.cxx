@@ -619,11 +619,11 @@ sal_uInt16 SdNavigatorWin::GetDragTypeSdResId( NavigatorDragType eDT, bool bImag
         case NAVIGATOR_DRAGTYPE_NONE:
                 return( bImage ? 0 : STR_NONE );
         case NAVIGATOR_DRAGTYPE_URL:
-                return( bImage ? IMG_HYPERLINK : STR_DRAGTYPE_URL );
+                return( bImage ? BMP_HYPERLINK : STR_DRAGTYPE_URL );
         case NAVIGATOR_DRAGTYPE_EMBEDDED:
-                return( bImage ? IMG_EMBEDDED : STR_DRAGTYPE_EMBEDDED );
+                return( bImage ? BMP_EMBEDDED : STR_DRAGTYPE_EMBEDDED );
         case NAVIGATOR_DRAGTYPE_LINK:
-                return( bImage ? IMG_LINK : STR_DRAGTYPE_LINK );
+                return( bImage ? BMP_LINK : STR_DRAGTYPE_LINK );
         default: OSL_FAIL( "No resource for DragType available!" );
     }
     return 0;
@@ -717,7 +717,7 @@ void SdNavigatorWin::KeyInput( const KeyEvent& rKEvt )
 void SdNavigatorWin::SetDragImage()
 {
     const sal_uInt16 nDragTypeId = maToolbox->GetItemId("dragmode");
-    maToolbox->SetItemImage(nDragTypeId, Image(SdResId(GetDragTypeSdResId(meDragType, true))));
+    maToolbox->SetItemImage(nDragTypeId, Image(BitmapEx(SdResId(GetDragTypeSdResId(meDragType, true)))));
 }
 
 /**

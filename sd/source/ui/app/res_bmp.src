@@ -845,28 +845,19 @@ Bitmap BMP_PRESENTATION_MINIMIZER
     File = "minimize_presi_80.png";
 };
 
-Image IMG_EMBEDDED
+Bitmap BMP_EMBEDDED
 {
-    ImageBitmap = Bitmap
-    {
-        File = "nv08.png" ;
-    };
+    File = "nv08.png" ;
 };
 
-Image IMG_LINK
+Bitmap BMP_LINK
 {
-    ImageBitmap = Bitmap
-    {
-        File = "nv09.png" ;
-    };
+    File = "nv09.png" ;
 };
 
-Image IMG_HYPERLINK
+Bitmap BMP_HYPERLINK
 {
-    ImageBitmap = Bitmap
-    {
-        File = "nv010.png" ;
-    };
+    File = "nv010.png" ;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

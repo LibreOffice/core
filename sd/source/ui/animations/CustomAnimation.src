@@ -384,60 +384,59 @@ String STR_CUSTOMANIMATION_MOTION_PATHS
     Text [ en-US ] = "Motion Paths: %1";
 };
 
-
 String STR_SLIDETRANSITION_NONE
 {
     Text [ en-US ] = "None";
 };
 
-Image IMG_CUSTOMANIMATION_ON_CLICK
+Bitmap BMP_CUSTOMANIMATION_ON_CLICK
 {
-    ImageBitmap = Bitmap { File = "click_16.png" ; };
+    File = "click_16.png";
 };
 
-Image IMG_CUSTOMANIMATION_AFTER_PREVIOUS
+Bitmap BMP_CUSTOMANIMATION_AFTER_PREVIOUS
 {
-    ImageBitmap = Bitmap { File = "time_16.png" ; };
+    File = "time_16.png";
 };
 
-Image IMG_CUSTOMANIMATION_ENTRANCE_EFFECT
+Bitmap BMP_CUSTOMANIMATION_ENTRANCE_EFFECT
 {
-    ImageBitmap = Bitmap { File = "effect_16.png" ; };
+    File = "effect_16.png";
 };
 
-Image IMG_CUSTOMANIMATION_EMPHASIS_EFFECT
+Bitmap BMP_CUSTOMANIMATION_EMPHASIS_EFFECT
 {
-    ImageBitmap = Bitmap { File = "effectshape_16.png" ; };
+    File = "effectshape_16.png";
 };
 
-Image IMG_CUSTOMANIMATION_EXIT_EFFECT
+Bitmap BMP_CUSTOMANIMATION_EXIT_EFFECT
 {
-    ImageBitmap = Bitmap { File = "effectfade_16.png" ; };
+    File = "effectfade_16.png";
 };
 
-Image IMG_CUSTOMANIMATION_MOTION_PATH
+Bitmap BMP_CUSTOMANIMATION_MOTION_PATH
 {
-    ImageBitmap = Bitmap { File = "effectpath_16.png" ; };
+    File = "effectpath_16.png";
 };
 
-Image IMG_CUSTOMANIMATION_OLE
+Bitmap BMP_CUSTOMANIMATION_OLE
 {
-    ImageBitmap = Bitmap { File = "effectole_16.png"; } ;
+    File = "effectole_16.png";
 };
 
-Image IMG_CUSTOMANIMATION_MEDIA_PLAY
+Bitmap BMP_CUSTOMANIMATION_MEDIA_PLAY
 {
-    ImageBitmap = Bitmap { File = "playblue_16.png"; } ;
+    File = "playblue_16.png";
 };
 
-Image IMG_CUSTOMANIMATION_MEDIA_PAUSE
+Bitmap BMP_CUSTOMANIMATION_MEDIA_PAUSE
 {
-    ImageBitmap = Bitmap { File = "breakplayingblue_16.png"; } ;
+    File = "breakplayingblue_16.png";
 };
 
-Image IMG_CUSTOMANIMATION_MEDIA_STOP
+Bitmap BMP_CUSTOMANIMATION_MEDIA_STOP
 {
-    ImageBitmap = Bitmap { File = "stopplayingblue_16.png"; } ;
+    File = "stopplayingblue_16.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

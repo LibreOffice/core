@@ -105,7 +105,7 @@ private:
 
     MainSequencePtr mpMainSequence;
 
-    Image maImages[ IMG_CUSTOMANIMATION_MEDIA_STOP - IMG_CUSTOMANIMATION_ON_CLICK + 1];
+    Image maImages[ BMP_CUSTOMANIMATION_MEDIA_STOP - BMP_CUSTOMANIMATION_ON_CLICK + 1];
 
     css::uno::Reference< css::drawing::XShape > mxLastTargetShape;
     sal_Int32 mnLastGroupId;
