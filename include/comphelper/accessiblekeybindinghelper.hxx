@@ -57,7 +57,9 @@ namespace comphelper
         OAccessibleKeyBindingHelper();
         OAccessibleKeyBindingHelper( const OAccessibleKeyBindingHelper& rHelper );
 
+        /// @throws css::uno::RuntimeException
         void AddKeyBinding( const css::uno::Sequence< css::awt::KeyStroke >& rKeyBinding ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         void AddKeyBinding( const css::awt::KeyStroke& rKeyStroke ) throw (css::uno::RuntimeException);
 
         // XAccessibleKeyBinding

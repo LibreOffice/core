@@ -127,6 +127,7 @@ public:
     virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) throw( IOException, RuntimeException, std::exception ) override;
 
 private:
+    /// @throws Exception
     Reference< XIdlReflection > getReflection() throw( Exception );
 
     /** checks if <arg>_nIndex</arg> is a valid index, throws an <type>IllegalArgumentException</type> if not
@@ -147,6 +148,7 @@ class AttacherAllListener_Impl : public WeakImplHelper< XAllListener >
     OUString                            aScriptType;
     OUString                            aScriptCode;
 
+    /// @throws CannotConvertException
     void convertToEventReturn( Any & rRet, const Type & rRetType )
         throw( CannotConvertException );
 public:

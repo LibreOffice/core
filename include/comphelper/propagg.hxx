@@ -312,6 +312,8 @@ protected:
     virtual void forwardedPropertyValue( sal_Int32 _nHandle );
 
     /// must be called before aggregation, if aggregation is used
+    ///
+    /// @throws css::lang::IllegalArgumentException
     void setAggregation(const css::uno::Reference< css::uno::XInterface >&) throw( css::lang::IllegalArgumentException );
     void startListening();
 };

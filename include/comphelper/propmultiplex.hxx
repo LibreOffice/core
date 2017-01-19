@@ -50,8 +50,10 @@ namespace comphelper
             : m_pAdapter(nullptr), m_rMutex(_rMutex) { }
         virtual ~OPropertyChangeListener();
 
+        /// @throws css::uno::RuntimeException
         virtual void _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent)
             throw (css::uno::RuntimeException, std::exception) = 0;
+        /// @throws css::uno::RuntimeException
         virtual void _disposing(const css::lang::EventObject& _rSource)
             throw( css::uno::RuntimeException, std::exception);
 

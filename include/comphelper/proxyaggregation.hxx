@@ -105,7 +105,9 @@ namespace comphelper
         );
 
         // XInterface and XTypeProvider
+        /// @throws css::uno::RuntimeException
         css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException);
 
     private:
@@ -166,6 +168,7 @@ namespace comphelper
         virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
         // XComponent
+        /// @throws css::uno::RuntimeException
         virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) = 0;
 
     private:

@@ -36,6 +36,7 @@ namespace OFOPXMLHelper {
     // returns sequence of elements, where each element is described by sequence of tags,
     // where each tag is described by StringPair ( First - name, Second - value )
     // the first tag of each element sequence must be "Id"
+    /// @throws css::uno::Exception
     COMPHELPER_DLLPUBLIC
     css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
     ReadRelationsInfoSequence(
@@ -49,6 +50,7 @@ namespace OFOPXMLHelper {
     // by StringPair object ( First - Extension, Second - ContentType )
     // the second sequence describes "Override" elements, where each element is described
     // by StringPair object ( First - PartName, Second - ContentType )
+    /// @throws css::uno::Exception
     COMPHELPER_DLLPUBLIC
     css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
     ReadContentTypeSequence(
@@ -59,6 +61,7 @@ namespace OFOPXMLHelper {
     // writes sequence of elements, where each element is described by sequence of tags,
     // where each tag is described by StringPair ( First - name, Second - value )
     // the first tag of each element sequence must be "Id"
+    /// @throws css::uno::Exception
     COMPHELPER_DLLPUBLIC
     void WriteRelationsInfoSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
@@ -71,6 +74,7 @@ namespace OFOPXMLHelper {
     // by StringPair object ( First - Extension, Second - ContentType )
     // the second sequence describes "Override" elements, where each element is described
     // by StringPair object ( First - PartName, Second - ContentType )
+    /// @throws css::uno::Exception
     COMPHELPER_DLLPUBLIC
     void WriteContentSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,

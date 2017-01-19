@@ -50,15 +50,19 @@ namespace comphelper
         OContainerListener(::osl::Mutex& _rMutex);
         virtual ~OContainerListener();
 
+        /// @throws css::uno::RuntimeException
         virtual void _elementInserted( const css::container::ContainerEvent& _rEvent )
             throw (css::uno::RuntimeException,
                    std::exception);
+        /// @throws css::uno::RuntimeException
         virtual void _elementRemoved( const css::container::ContainerEvent& _rEvent )
             throw (css::uno::RuntimeException,
                    std::exception);
+        /// @throws css::uno::RuntimeException
         virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent )
             throw (css::uno::RuntimeException,
                    std::exception);
+        /// @throws css::uno::RuntimeException
         virtual void _disposing(const css::lang::EventObject& _rSource)
             throw (css::uno::RuntimeException,
                    std::exception);

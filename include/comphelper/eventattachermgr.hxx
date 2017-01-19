@@ -40,6 +40,7 @@ namespace beans {
 namespace comphelper
 {
 
+/// @throws css::uno::Exception
 COMPHELPER_DLLPUBLIC css::uno::Reference< css::script::XEventAttacherManager >
 createEventAttacherManager(
         const css::uno::Reference< css::uno::XComponentContext > & rxContext )

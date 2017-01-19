@@ -50,16 +50,19 @@ namespace comphelper
     protected:
 
         // access to context - still waiting to be overwritten
+        /// @throws css::uno::RuntimeException
         virtual css::uno::Reference< css::accessibility::XAccessibleContext >
             implGetAccessibleContext()
             throw ( css::uno::RuntimeException ) = 0;
 
         // return if the specified child is visible => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
+        /// @throws css::uno::RuntimeException
         virtual bool
             implIsSelected( sal_Int32 nAccessibleChildIndex )
             throw (css::uno::RuntimeException) = 0;
 
         // select the specified child => watch for special ChildIndexes (ACCESSIBLE_SELECTION_CHILD_xxx)
+        /// @throws css::uno::RuntimeException
         virtual void
             implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect )
             throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) = 0;
@@ -67,13 +70,25 @@ namespace comphelper
     protected:
 
         /** non-virtual versions of the methods which can be implemented using <method>implIsSelected</method> and <method>implSelect</method>
+
+            @throws css::lang::IndexOutOfBoundsException
+            @throws css::uno::RuntimeException
         */
         void SAL_CALL selectAccessibleChild( sal_Int32 nChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::uno::RuntimeException
         bool SAL_CALL isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         void SAL_CALL clearAccessibleSelection(  ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         void SAL_CALL selectAllAccessibleChildren(  ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         sal_Int32 SAL_CALL getSelectedAccessibleChildCount(  ) throw (css::uno::RuntimeException);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::uno::RuntimeException
         void SAL_CALL deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
     };
 

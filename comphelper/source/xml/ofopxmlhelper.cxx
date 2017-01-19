@@ -85,6 +85,7 @@ public:
 
 namespace OFOPXMLHelper {
 
+/// @throws css::uno::Exception
 static uno::Sequence<uno::Sequence< beans::StringPair>> ReadSequence_Impl(
     const uno::Reference<io::XInputStream>& xInStream,
     const OUString& aStringID, sal_uInt16 nFormat,

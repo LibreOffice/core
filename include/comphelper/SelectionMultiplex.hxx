@@ -51,7 +51,9 @@ namespace comphelper
             : m_pAdapter(nullptr), m_rMutex(_rMutex) { }
         virtual ~OSelectionChangeListener();
 
+        /// @throws css::uno::RuntimeException
         virtual void _selectionChanged( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException) = 0;
+        /// @throws css::uno::RuntimeException
         virtual void _disposing(const css::lang::EventObject& _rSource)
             throw (css::uno::RuntimeException, std::exception);
 

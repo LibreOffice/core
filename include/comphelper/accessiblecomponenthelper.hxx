@@ -46,17 +46,25 @@ namespace comphelper
 
     protected:
         /// implements the calculation of the bounding rectangle - still waiting to be overwritten
+        ///
+        /// @throws css::uno::RuntimeException
         virtual css::awt::Rectangle implGetBounds(  ) throw (css::uno::RuntimeException, std::exception) = 0;
 
     protected:
         /** non-virtual versions of the methods which can be implemented using <method>implGetBounds</method>
             note: getLocationOnScreen relies on a valid parent (XAccessibleContext::getParent()->getAccessibleContext()),
                  which itself implements XAccessibleComponent
+
+            @throws css::uno::RuntimeException
         */
         bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::awt::Point SAL_CALL getLocation(  ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::awt::Point SAL_CALL getLocationOnScreen(  ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::awt::Size SAL_CALL getSize(  ) throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         css::awt::Rectangle SAL_CALL getBounds(  ) throw (css::uno::RuntimeException);
     };
 

@@ -40,11 +40,26 @@ private:
     std::unique_ptr<PropertySetHelperImpl> mpImpl;
 
 protected:
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::beans::PropertyVetoException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual void _setPropertyValues( const comphelper::PropertyMapEntry** ppEntries, const css::uno::Any* pValues ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) = 0;
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual void _getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, css::uno::Any* pValue ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) = 0;
 
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     virtual void _getPropertyStates( const comphelper::PropertyMapEntry** ppEntries, css::beans::PropertyState* pStates ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException );
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::uno::RuntimeException
     virtual void _setPropertyToDefault( const comphelper::PropertyMapEntry* pEntry )  throw(css::beans::UnknownPropertyException, css::uno::RuntimeException );
+    /// @throws css::beans::UnknownPropertyException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Any _getPropertyDefault( const comphelper::PropertyMapEntry* pEntry ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException );
 
 public:

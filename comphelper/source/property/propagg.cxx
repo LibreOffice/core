@@ -272,6 +272,8 @@ namespace internal
         bool    isResponsibleFor( sal_Int32 _nHandle );
 
         /// actually forwards a property value to the aggregate
+        ///
+        /// @throws Exception
         void    doForward( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception );
 
         sal_Int32 getCurrentlyForwardedProperty( ) const { return m_nCurrentlyForwarding; }

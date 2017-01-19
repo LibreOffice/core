@@ -63,16 +63,35 @@ namespace comphelper
         virtual void                     implGetLineBoundary( css::i18n::Boundary& rBoundary, sal_Int32 nIndex );
 
         /** non-virtual versions of the methods
+
+            @throws css::lang::IndexOutOfBoundsException
+            @throws css::uno::RuntimeException
         */
         sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         sal_Int32 SAL_CALL getCharacterCount() throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         OUString SAL_CALL getSelectedText() throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         sal_Int32 SAL_CALL getSelectionStart() throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         sal_Int32 SAL_CALL getSelectionEnd() throw (css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         OUString SAL_CALL getText() throw (css::uno::RuntimeException);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::uno::RuntimeException
         OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::uno::RuntimeException
         css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::uno::RuntimeException
         css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::uno::RuntimeException
         css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException);
 
     public:

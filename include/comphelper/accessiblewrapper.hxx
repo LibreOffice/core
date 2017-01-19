@@ -199,8 +199,12 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleContext
+        /// @throws css::uno::RuntimeException
         sal_Int32 baseGetAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception);
+        /// @throws css::lang::IndexOutOfBoundsException
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::accessibility::XAccessible > baseGetAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception);
+        /// @throws css::uno::RuntimeException
         css::uno::Reference< css::accessibility::XAccessibleRelationSet > baseGetAccessibleRelationSet(  ) throw (css::uno::RuntimeException, std::exception);
 
         // XAccessibleEventListener
@@ -220,6 +224,8 @@ namespace comphelper
 
             <p>The mutex of the BroadcastHelper passed to the instance's ctor is <em>not</em> locked when calling
             into this method</p>
+
+            @throws css::uno::RuntimeException
         */
         virtual void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) throw (css::uno::RuntimeException) = 0;
 

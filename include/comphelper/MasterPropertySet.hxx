@@ -66,33 +66,69 @@ namespace comphelper
         std::map< sal_uInt8, comphelper::SlaveData* >  maSlaveMap;
         rtl::Reference< MasterPropertySetInfo >        mxInfo;
 
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::beans::PropertyVetoException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::lang::WrappedTargetException
         virtual void _preSetValues ()
             throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) = 0;
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::beans::PropertyVetoException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::lang::WrappedTargetException
+        /// @throws css::uno::RuntimeException
         virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const css::uno::Any &rValue )
             throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
                    css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
                    css::uno::RuntimeException, std::exception) = 0;
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::beans::PropertyVetoException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::lang::WrappedTargetException
         virtual void _postSetValues ()
             throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) = 0;
 
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::beans::PropertyVetoException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::lang::WrappedTargetException
         virtual void _preGetValues ()
             throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) = 0;
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::lang::WrappedTargetException
+        /// @throws css::uno::RuntimeException
         virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue )
             throw (css::beans::UnknownPropertyException,
                    css::lang::WrappedTargetException,
                    css::uno::RuntimeException) = 0;
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::beans::PropertyVetoException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::lang::WrappedTargetException
         virtual void _postGetValues ()
             throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) = 0;
 
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::beans::PropertyVetoException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::lang::WrappedTargetException
         static void _preGetPropertyState ()
             throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException );
+        /// @throws css::beans::UnknownPropertyException
         static void _getPropertyState( const comphelper::PropertyInfo& rInfo, css::beans::PropertyState& rState )
             throw(css::beans::UnknownPropertyException );
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::beans::PropertyVetoException
+        /// @throws css::lang::IllegalArgumentException
+        /// @throws css::lang::WrappedTargetException
         static void _postGetPropertyState ()
             throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException );
 
+        /// @throws css::beans::UnknownPropertyException
         static void _setPropertyToDefault( const comphelper::PropertyInfo& rEntry )
             throw(css::beans::UnknownPropertyException );
+        /// @throws css::beans::UnknownPropertyException
+        /// @throws css::lang::WrappedTargetException
         static css::uno::Any _getPropertyDefault( const comphelper::PropertyInfo& rEntry )
             throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException );
 

@@ -44,6 +44,7 @@ public:
 
     const PropertyMap& getPropertyMap() const throw() { return maPropertyMap;}
 
+        /// @throws UnknownPropertyException
     Property getPropertyByName( const OUString& aName ) throw( UnknownPropertyException );
     bool hasPropertyByName( const OUString& aName ) throw();
 
