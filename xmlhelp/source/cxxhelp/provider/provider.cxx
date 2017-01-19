@@ -141,6 +141,7 @@ ContentProvider::getSupportedServiceNames()
     return getSupportedServiceNames_Static();
 }
 
+/// @throws uno::Exception
 static uno::Reference< uno::XInterface > SAL_CALL
 ContentProvider_CreateInstance(
          const uno::Reference< lang::XMultiServiceFactory> & rSMgr )

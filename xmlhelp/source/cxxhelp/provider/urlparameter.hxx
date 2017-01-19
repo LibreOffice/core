@@ -109,7 +109,7 @@ namespace chelp {
     class URLParameter
     {
     public:
-
+        /// @throws css::ucb::IllegalIdentifierException
         URLParameter( const OUString& aURL,
                       Databases* pDatabases )
             throw( css::ucb::IllegalIdentifierException );
@@ -218,6 +218,7 @@ namespace chelp {
 
         void readHelpDataFile();
 
+        /// @throws css::ucb::IllegalIdentifierException
         void parse() throw( css::ucb::IllegalIdentifierException );
 
         bool scheme();
