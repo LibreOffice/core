@@ -24,7 +24,8 @@
 #include <SidebarWin.hxx>
 #include <SidebarWinAcc.hxx>
 #include <PostItMgr.hxx>
-
+#include <basegfx/range/b2drange.hxx>
+#include <comphelper/string.hxx>
 #include <SidebarTxtControl.hxx>
 #include <SidebarScrollBar.hxx>
 #include <AnchorOverlayObject.hxx>
@@ -356,6 +357,7 @@ void SwSidebarWin::PaintTile(vcl::RenderContext& rRenderContext, const Rectangle
         pProcessor->process(mpAnchor->getOverlayObjectPrimitive2DSequence());
     if (mpTextRangeOverlay)
         pProcessor->process(mpTextRangeOverlay->getOverlayObjectPrimitive2DSequence());
+
     rRenderContext.Push(PushFlags::NONE);
     pProcessor.reset();
     rRenderContext.Push(PushFlags::NONE);
@@ -868,62 +870,65 @@ void SwSidebarWin::SetPosAndSize()
         }
     }
 
+
     // text range overlay
-    if ( mrMgr.ShowNotes()
-         && mrSidebarItem.maLayoutInfo.mnStartNodeIdx != 0
+    maAnnotationTextRanges.clear();
+    if ( mrSidebarItem.maLayoutInfo.mnStartNodeIdx != 0
          && mrSidebarItem.maLayoutInfo.mnStartContent != -1 )
     {
-        std::vector< basegfx::B2DRange > aAnnotationTextRanges;
+        const SwTextAnnotationField* pTextAnnotationField =
+            dynamic_cast< const SwTextAnnotationField* >( mrSidebarItem.GetFormatField().GetTextField() );
+        SwTextNode* pTextNode = pTextAnnotationField ? pTextAnnotationField->GetpTextNode() : nullptr;
+        SwContentNode* pContentNd = nullptr;
+        if (pTextNode)
         {
-            const SwTextAnnotationField* pTextAnnotationField =
-                dynamic_cast< const SwTextAnnotationField* >( mrSidebarItem.GetFormatField().GetTextField() );
-            SwTextNode* pTextNode = pTextAnnotationField ? pTextAnnotationField->GetpTextNode() : nullptr;
-            SwContentNode* pContentNd = nullptr;
-            if (pTextNode)
+            SwNodes& rNds = pTextNode->GetDoc()->GetNodes();
+            pContentNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetContentNode();
+        }
+        if (pContentNd)
+        {
+            SwPosition aStartPos( *pContentNd, mrSidebarItem.maLayoutInfo.mnStartContent );
+            SwShellCursor* pTmpCursor = nullptr;
+            const bool bTableCursorNeeded = pTextNode->FindTableBoxStartNode() != pContentNd->FindTableBoxStartNode();
+            if ( bTableCursorNeeded )
             {
-                SwNodes& rNds = pTextNode->GetDoc()->GetNodes();
-                pContentNd = rNds[mrSidebarItem.maLayoutInfo.mnStartNodeIdx]->GetContentNode();
+                SwShellTableCursor* pTableCursor = new SwShellTableCursor( DocView().GetWrtShell(), aStartPos );
+                pTableCursor->SetMark();
+                pTableCursor->GetMark()->nNode = *pTextNode;
+                pTableCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
+                pTableCursor->NewTableSelection();
+                pTmpCursor = pTableCursor;
             }
-            if (pContentNd)
+            else
             {
-                SwPosition aStartPos( *pContentNd, mrSidebarItem.maLayoutInfo.mnStartContent );
-                SwShellCursor* pTmpCursor = nullptr;
-                const bool bTableCursorNeeded = pTextNode->FindTableBoxStartNode() != pContentNd->FindTableBoxStartNode();
-                if ( bTableCursorNeeded )
-                {
-                    SwShellTableCursor* pTableCursor = new SwShellTableCursor( DocView().GetWrtShell(), aStartPos );
-                    pTableCursor->SetMark();
-                    pTableCursor->GetMark()->nNode = *pTextNode;
-                    pTableCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
-                    pTableCursor->NewTableSelection();
-                    pTmpCursor = pTableCursor;
-                }
-                else
-                {
-                    SwShellCursor* pCursor = new SwShellCursor( DocView().GetWrtShell(), aStartPos );
-                    pCursor->SetMark();
-                    pCursor->GetMark()->nNode = *pTextNode;
-                    pCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
-                    pTmpCursor = pCursor;
-                }
-                std::unique_ptr<SwShellCursor> pTmpCursorForAnnotationTextRange( pTmpCursor );
+                SwShellCursor* pCursor = new SwShellCursor( DocView().GetWrtShell(), aStartPos );
+                pCursor->SetMark();
+                pCursor->GetMark()->nNode = *pTextNode;
+                pCursor->GetMark()->nContent.Assign( pTextNode, pTextAnnotationField->GetStart()+1 );
+                pTmpCursor = pCursor;
+            }
+            std::unique_ptr<SwShellCursor> pTmpCursorForAnnotationTextRange( pTmpCursor );
 
-                pTmpCursorForAnnotationTextRange->FillRects();
-                SwRects* pRects(pTmpCursorForAnnotationTextRange.get());
-                for(SwRect & rNextRect : *pRects)
-                {
-                    const Rectangle aPntRect(rNextRect.SVRect());
+            pTmpCursorForAnnotationTextRange->FillRects();
+            SwRects* pRects(pTmpCursorForAnnotationTextRange.get());
+            std::vector<OString> aRects;
+            for(SwRect & rNextRect : *pRects)
+            {
+                aRects.push_back(rNextRect.SVRect().toString());
+                const Rectangle aPntRect(rNextRect.SVRect());
 
-                    aAnnotationTextRanges.push_back(basegfx::B2DRange(
-                        aPntRect.Left(), aPntRect.Top(),
-                        aPntRect.Right() + 1, aPntRect.Bottom() + 1));
-                }
+                maAnnotationTextRanges.push_back(basegfx::B2DRange(
+                    aPntRect.Left(), aPntRect.Top(),
+                    aPntRect.Right() + 1, aPntRect.Bottom() + 1));
             }
         }
+    }
 
+    if (mrMgr.ShowNotes() && !maAnnotationTextRanges.empty())
+    {
         if ( mpTextRangeOverlay != nullptr )
         {
-            mpTextRangeOverlay->setRanges( aAnnotationTextRanges );
+            mpTextRangeOverlay->setRanges( maAnnotationTextRanges );
             if ( mpAnchor != nullptr && mpAnchor->getLineSolid() )
             {
                 mpTextRangeOverlay->ShowSolidBorder();
@@ -940,7 +945,7 @@ void SwSidebarWin::SetPosAndSize()
                 sw::overlay::OverlayRanges::CreateOverlayRange(
                     DocView(),
                     mColorAnchor,
-                    aAnnotationTextRanges,
+                    maAnnotationTextRanges,
                     mpAnchor && mpAnchor->getLineSolid() );
         }
     }

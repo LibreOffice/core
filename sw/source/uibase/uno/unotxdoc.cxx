@@ -17,8 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include <sal/config.h>
 
+#include <comphelper/string.hxx>
+#include <AnnotationWin.hxx>
 #include <o3tl/any.hxx>
 #include <osl/mutex.hxx>
 #include <vcl/image.hxx>
@@ -64,6 +68,7 @@
 #include <unodraw.hxx>
 #include <svl/eitem.hxx>
 #include <pagedesc.hxx>
+#include <unotools/datetime.hxx>
 #include <unotools/textsearch.hxx>
 #include <unocrsr.hxx>
 #include <unofieldcoll.hxx>
@@ -3230,6 +3235,45 @@ Pointer SwXTextDocument::getPointer()
 OUString SwXTextDocument::getTrackedChangeAuthors()
 {
     return SW_MOD()->GetRedlineAuthorInfo();
+}
+
+OUString SwXTextDocument::getPostIts()
+{
+    SolarMutexGuard aGuard;
+    boost::property_tree::ptree aAnnotations;
+    for (std::list<SwSidebarItem*>::const_iterator i = pDocShell->GetView()->GetPostItMgr()->begin();
+         i != pDocShell->GetView()->GetPostItMgr()->end(); i++ )
+    {
+        sw::annotation::SwAnnotationWin* pWin = static_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt.get());
+
+        const SwPostItField* pField = pWin->GetPostItField();
+        const std::string aAnchorPos = std::to_string(pWin->GetAnchorPos().X()) + ", " + std::to_string(pWin->GetAnchorPos().Y());
+        std::vector<OString> aRects;
+        for (const basegfx::B2DRange& aRange : pWin->GetAnnotationTextRanges())
+        {
+            const SwRect rect(aRange.getMinX(), aRange.getMinY(), aRange.getWidth(), aRange.getHeight());
+            aRects.push_back(rect.SVRect().toString());
+        }
+        const OString sRects = comphelper::string::join("; ", aRects);
+
+        boost::property_tree::ptree aAnnotation;
+        aAnnotation.put("id", pField->GetPostItId());
+        aAnnotation.put("reply", pWin->IsFollow());
+        aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
+        aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
+        aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
+        aAnnotation.put("anchorPos", aAnchorPos.c_str());
+        aAnnotation.put("textRange", sRects.getStr());
+
+        aAnnotations.push_back(std::make_pair("", aAnnotation));
+    }
+
+    boost::property_tree::ptree aTree;
+    aTree.add_child("comments", aAnnotations);
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+
+    return OUString::createFromAscii(aStream.str().c_str());
 }
 
 int SwXTextDocument::getPart()
