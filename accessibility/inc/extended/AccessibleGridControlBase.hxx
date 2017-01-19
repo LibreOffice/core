@@ -260,12 +260,15 @@ protected:
 
     /** Locks all mutex's and calculates the bounding box relative to the
         parent window.
-        @return  The bounding box (VCL rect.) relative to the parent object. */
+        @return  The bounding box (VCL rect.) relative to the parent object.
+        @throws css::lang::DisposedException
+    */
     Rectangle getBoundingBox()
         throw ( css::lang::DisposedException );
     ///** Locks all mutex's and calculates the bounding box in screen
     //    coordinates.
     //    @return  The bounding box (VCL rect.) in screen coordinates. */
+    /// @throws css::lang::DisposedException
     Rectangle getBoundingBoxOnScreen()
         throw ( css::lang::DisposedException );
 

@@ -41,6 +41,7 @@ using namespace ::accessibility;
 
 namespace
 {
+    /// @throws css::lang::IndexOutOfBoundsException
     void checkSelection_Impl( sal_Int32 _nIndex, const IComboListBoxHelper& _rListBox, bool bSelected )
         throw (css::lang::IndexOutOfBoundsException)
     {

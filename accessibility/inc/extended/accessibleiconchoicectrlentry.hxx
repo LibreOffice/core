@@ -78,12 +78,17 @@ namespace accessibility
         bool                IsAlive_Impl() const;
         bool                IsShowing_Impl() const;
 
+        /// @throws css::lang::DisposedException
+        /// @throws css::uno::RuntimeException
         Rectangle               GetBoundingBox()
             throw (css::lang::DisposedException,
                    css::uno::RuntimeException);
+        /// @throws css::lang::DisposedException
+        /// @throws css::uno::RuntimeException
         Rectangle               GetBoundingBoxOnScreen()
             throw (css::lang::DisposedException,
                    css::uno::RuntimeException);
+        /// @throws css::lang::DisposedException
         void                    EnsureIsAlive() const throw ( css::lang::DisposedException );
 
     protected:

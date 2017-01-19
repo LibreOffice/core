@@ -94,12 +94,17 @@ namespace accessibility
         bool                IsAlive_Impl() const;
         bool                IsShowing_Impl() const;
 
+        /// @throws css::lang::DisposedException
+        /// @throws css::uno::RuntimeException
         Rectangle               GetBoundingBox()
                                     throw (css::lang::DisposedException,
                                            css::uno::RuntimeException);
+        /// @throws css::lang::DisposedException
+        /// @throws css::uno::RuntimeException
         Rectangle               GetBoundingBoxOnScreen()
                                     throw (css::lang::DisposedException,
                                            css::uno::RuntimeException);
+        /// @throws css::lang::DisposedException
         void                    EnsureIsAlive() const throw ( css::lang::DisposedException );
 
         void                    NotifyAccessibleEvent( sal_Int16 _nEventId, const css::uno::Any& _aOldValue, const css::uno::Any& _aNewValue );

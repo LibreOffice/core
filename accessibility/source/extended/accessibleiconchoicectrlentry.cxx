@@ -42,6 +42,7 @@
 
 namespace
 {
+    /// @throws css::lang::IndexOutOfBoundsException
     void checkActionIndex_Impl( sal_Int32 _nIndex ) throw (css::lang::IndexOutOfBoundsException)
     {
         if ( _nIndex < 0 || _nIndex >= ACCESSIBLE_ACTION_COUNT )

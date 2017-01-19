@@ -57,6 +57,8 @@ namespace accessibility
 
             <p>Usually, you derive your class from both ListBoxAccessibleBase and XComponent,
             and call XComponent::dispose here.</p>
+
+            @throws css::uno::RuntimeException
         */
         virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) = 0;
 

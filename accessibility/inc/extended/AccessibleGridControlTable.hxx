@@ -195,6 +195,7 @@ protected:
     //// internal helper methods
     ///** @attention  This method requires a locked mutex.
     //    @return  The XAccessibleTable interface of the specified header bar. */
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::accessibility::XAccessibleTable >
     implGetHeaderBar( sal_Int32 nChildIndex )
         throw ( css::uno::RuntimeException );
