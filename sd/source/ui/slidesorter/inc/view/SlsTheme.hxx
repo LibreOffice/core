@@ -142,7 +142,7 @@ private:
 
     GradientDescriptor& GetGradient (const GradientColorType eType);
     /** Guarded initialization of the specified icon in the maIcons
-        container.  Call only while a LocalResource object is active.
+        container.
     */
     void InitializeIcon (const IconType eType, sal_uInt16 nResourceId);
 };

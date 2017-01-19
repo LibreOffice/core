@@ -134,13 +134,17 @@
 #define STR_CUSTOMANIMATIONPANE                 RID_GLOB_START+227
 #define STR_SLIDE_TRANSITION_PANE               RID_GLOB_START+228
 
-#define RID_SLIDESORTER_ICONS                   RID_GLOB_START+227
 #define STR_DEAUTHORISE_CLIENT                  RID_GLOB_START+229
 #define STR_MASTERSLIDE_NAME                    RID_GLOB_START+230
 #define STR_MASTERPAGE_NAME                     RID_GLOB_START+231
 
 #define STR_SHRINK_FONT_SIZE                    RID_GLOB_START+232
 #define STR_GROW_FONT_SIZE                      RID_GLOB_START+233
+
+#define IMAGE_SHADOW                            RID_GLOB_START+234
+#define IMAGE_INSERT_SHADOW                     RID_GLOB_START+235
+#define IMAGE_HIDE_SLIDE_OVERLAY                RID_GLOB_START+236
+#define IMAGE_FOCUS_BORDER                      RID_GLOB_START+237
 
 #endif
 

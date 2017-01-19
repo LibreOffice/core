@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include "glob.hrc"
 #include "view/SlsTheme.hxx"
-#include "SlsResource.hxx"
 #include "controller/SlsProperties.hxx"
 #include "sdresid.hxx"
 #include <tools/color.hxx>
@@ -66,18 +66,14 @@ Theme::Theme (const std::shared_ptr<controller::Properties>& rpProperties)
       maIcons(),
       maColor()
 {
-    {
-        LocalResource aResource (RID_SLIDESORTER_ICONS);
-
-        maColor.resize(ColorType_Size_);
-        maColor[Color_Background] = maBackgroundColor;
-        maColor[Color_PageNumberDefault] = 0x0808080;
-        maColor[Color_PageNumberHover] = 0x4c4c4c;
-        maColor[Color_PageNumberHighContrast] = White;
-        maColor[Color_PageNumberBrightBackground] = 0x333333;
-        maColor[Color_PageNumberDarkBackground] = 0xcccccc;
-        maColor[Color_PreviewBorder] = 0x949599;
-    }
+    maColor.resize(ColorType_Size_);
+    maColor[Color_Background] = maBackgroundColor;
+    maColor[Color_PageNumberDefault] = 0x0808080;
+    maColor[Color_PageNumberHover] = 0x4c4c4c;
+    maColor[Color_PageNumberHighContrast] = White;
+    maColor[Color_PageNumberBrightBackground] = 0x333333;
+    maColor[Color_PageNumberDarkBackground] = 0xcccccc;
+    maColor[Color_PreviewBorder] = 0x949599;
 
     Update(rpProperties);
 }
@@ -118,7 +114,6 @@ void Theme::Update (const std::shared_ptr<controller::Properties>& rpProperties)
     // Set up icons.
     if (maIcons.empty())
     {
-        LocalResource aResource (RID_SLIDESORTER_ICONS);
         maIcons.resize(IconType_Size_);
 
         InitializeIcon(Icon_RawShadow, IMAGE_SHADOW);

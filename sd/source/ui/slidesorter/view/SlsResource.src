@@ -17,29 +17,26 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "view/SlsResource.hrc"
+#include "glob.hrc"
 
-Resource RID_SLIDESORTER_ICONS
+Bitmap IMAGE_SHADOW
 {
-    Bitmap IMAGE_SHADOW
-    {
-        File = "slide_sorter_shadow.png";
-    };
+    File = "slide_sorter_shadow.png";
+};
 
-    Bitmap IMAGE_INSERT_SHADOW
-    {
-        File = "slide_sorter_insert_shadow.png";
-    };
+Bitmap IMAGE_INSERT_SHADOW
+{
+    File = "slide_sorter_insert_shadow.png";
+};
 
-    Bitmap IMAGE_HIDE_SLIDE_OVERLAY
-    {
-        File = "slide_sorter_hide_slide_overlay.png";
-    };
+Bitmap IMAGE_HIDE_SLIDE_OVERLAY
+{
+    File = "slide_sorter_hide_slide_overlay.png";
+};
 
-    Bitmap IMAGE_FOCUS_BORDER
-    {
-        File = "slide_sorter_focus_border.png";
-    };
+Bitmap IMAGE_FOCUS_BORDER
+{
+    File = "slide_sorter_focus_border.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
