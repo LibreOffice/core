@@ -198,7 +198,7 @@ private:
     void GotoSlide (const sal_Int32 nSlideIndex);
     bool ProvideCanvas();
 
-    /** This method throws a DisposedException when the object has already been
+    /** @throws css::lang::DisposedException when the object has already been
         disposed.
     */
     void ThrowIfDisposed()

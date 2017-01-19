@@ -60,6 +60,7 @@ public:
     void execute();
     void endExecute( bool bStatus );
 
+    /// @throws css::uno::Exception
     css::uno::Reference< css::awt::XWindowPeer > createWindowPeer( css::uno::Reference< css::awt::XWindowPeer > const & xParentPeer )
         throw ( css::uno::Exception );
 

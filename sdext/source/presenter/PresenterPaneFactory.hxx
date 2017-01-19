@@ -112,6 +112,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XPane>& rxParentPane,
         const bool bIsSpritePane);
 
+    /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const throw (css::lang::DisposedException);
 };
 

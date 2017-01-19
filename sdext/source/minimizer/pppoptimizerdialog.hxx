@@ -90,6 +90,7 @@ public:
 
 OUString PPPOptimizerDialog_getImplementationName();
 css::uno::Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames();
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > PPPOptimizerDialog_createInstance( const css::uno::Reference< css::uno::XComponentContext > & rSMgr )
     throw( css::uno::Exception );
 

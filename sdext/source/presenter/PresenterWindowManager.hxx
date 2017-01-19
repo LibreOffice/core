@@ -212,6 +212,7 @@ private:
 
     void NotifyDisposing();
 
+    /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const throw (css::lang::DisposedException);
 };
 

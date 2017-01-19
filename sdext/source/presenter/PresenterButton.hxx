@@ -160,6 +160,7 @@ private:
         const css::uno::Reference<css::uno::XComponentContext>& rxComponentContext,
         const OUString& rsConfgurationName);
 
+    /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };

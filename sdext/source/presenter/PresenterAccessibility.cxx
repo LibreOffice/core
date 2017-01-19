@@ -215,6 +215,7 @@ protected:
 
     void UpdateState (const sal_Int16 aState, const bool bValue);
 
+    /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const
         throw (css::lang::DisposedException);
 };

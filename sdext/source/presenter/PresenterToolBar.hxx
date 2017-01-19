@@ -207,7 +207,7 @@ private:
         const css::uno::Reference<css::beans::XPropertySet>& rProperties,
         Context& rContext);
 
-    /** This method throws a DisposedException when the object has already been
+    /** @throws css::lang::DisposedException when the object has already been
         disposed.
     */
     void ThrowIfDisposed() const

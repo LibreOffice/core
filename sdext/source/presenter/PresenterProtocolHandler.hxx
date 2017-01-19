@@ -87,6 +87,7 @@ private:
     class Dispatch;
     ::rtl::Reference<PresenterController> mpPresenterController;
 
+    /// @throws css::lang::DisposedException
     void ThrowIfDisposed() const throw (css::lang::DisposedException);
 };
 
