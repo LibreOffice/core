@@ -448,7 +448,6 @@ namespace frm
         ,OPropertyChangeListener(m_aMutex)
         ,m_xGraphicObject()
         ,m_pMedium(nullptr)
-        ,m_pProducer( nullptr )
         ,m_bDispatchUrlInternal(false)
         ,m_bDownloading(false)
         ,m_bProdStarted(false)
@@ -463,7 +462,6 @@ namespace frm
         ,OPropertyChangeListener( m_aMutex )
         ,m_xGraphicObject( _pOriginal->m_xGraphicObject )
         ,m_pMedium( nullptr )
-        ,m_pProducer( nullptr )
         ,m_bDispatchUrlInternal(false)
         ,m_bDownloading( false )
         ,m_bProdStarted( false )
@@ -493,12 +491,10 @@ namespace frm
 
     void OClickableImageBaseModel::implConstruct()
     {
-        m_pProducer = new ImageProducer;
-        m_pProducer->SetDoneHdl( LINK( this, OClickableImageBaseModel, OnImageImportDone ) );
+        m_xProducer = new ImageProducer;
+        m_xProducer->SetDoneHdl( LINK( this, OClickableImageBaseModel, OnImageImportDone ) );
         osl_atomic_increment( &m_refCount );
         {
-            m_xProducer = m_pProducer;
-
             if ( m_xAggregateSet.is() )
             {
                 OPropertyChangeMultiplexer* pMultiplexer = new OPropertyChangeMultiplexer( this, m_xAggregateSet );
@@ -578,8 +574,7 @@ namespace frm
             m_pMedium = nullptr;
         }
 
-        m_xProducer = nullptr;
-        m_pProducer = nullptr;
+        m_xProducer.clear();
     }
 
 

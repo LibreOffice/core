@@ -64,11 +64,10 @@ namespace frm
         OUString                         m_sTargetFrame;       // TargetFrame to open
 
         // ImageProducer stuff
-        css::uno::Reference< css::awt::XImageProducer>    m_xProducer;
         // Store the image in a graphic object to make it accessible via graphic cache using graphic ID.
         css::uno::Reference< css::graphic::XGraphicObject > m_xGraphicObject;
         SfxMedium*                          m_pMedium;     // Download medium
-        ImageProducer*                      m_pProducer;
+        rtl::Reference<ImageProducer>       m_xProducer;
         bool                                m_bDispatchUrlInternal; // property: is not allowed to set : 1
         bool                                m_bDownloading : 1;     // Is a download in progress?
         bool                                m_bProdStarted : 1;
@@ -79,7 +78,7 @@ namespace frm
 
         DECL_LINK( DownloadDoneLink, void*, void );
 
-        inline ImageProducer* GetImageProducer() { return m_pProducer; }
+        inline ImageProducer* GetImageProducer() { return m_xProducer.get(); }
 
         void StartProduction();
         void SetURL(const OUString& rURL);
@@ -108,7 +107,7 @@ namespace frm
         virtual void SAL_CALL disposing() override;
 
         // css::form::XImageProducerSupplier
-        virtual css::uno::Reference< css::awt::XImageProducer> SAL_CALL getImageProducer() throw (css::uno::RuntimeException, std::exception) override { return m_xProducer; }
+        virtual css::uno::Reference< css::awt::XImageProducer> SAL_CALL getImageProducer() throw (css::uno::RuntimeException, std::exception) override { return m_xProducer.get(); }
 
         // OPropertySetHelper
         virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
@@ -143,7 +142,7 @@ namespace frm
     public:
         struct GuardAccess { friend class ImageModelMethodGuard; private: GuardAccess() { } };
         ::osl::Mutex&   getMutex( GuardAccess ) { return m_aMutex; }
-        ImageProducer*  getImageProducer( GuardAccess ) { return m_pProducer; }
+        ImageProducer*  getImageProducer( GuardAccess ) { return m_xProducer.get(); }
 
     protected:
         using OControlModel::getMutex;
