@@ -32,6 +32,7 @@
 #include <tools/time.hxx>
 #include <tools/datetime.hxx>
 #include <tools/ref.hxx>
+#include <rtl/ref.hxx>
 #include <swdllapi.h>
 #include <swtypes.hxx>
 #include <docfac.hxx>
@@ -184,7 +185,7 @@ class SW_DLLPUBLIC Reader
     friend class SwReader;
     friend bool TestImportDOC(const OUString &rUrl, const OUString &rFltName);
     friend bool TestImportRTF(const OUString &rUrl);
-    SwDoc* pTemplate;
+    rtl::Reference<SwDoc> mxTemplate;
     OUString aTemplateNm;
 
     Date aDStamp;

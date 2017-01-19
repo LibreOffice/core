@@ -105,7 +105,7 @@ sal_uLong SwReader::Read( const Reader& rOptions )
         // For Web documents the default template was set already by InitNew,
         // unless the filter is not HTML,
         // or a SetTemplateName was called in ConvertFrom.
-        if( !pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) || ReadHTML != po || !po->pTemplate  )
+        if( !pDoc->getIDocumentSettingAccess().get(DocumentSettingId::HTML_MODE) || ReadHTML != po || !po->mxTemplate.is()  )
             po->SetTemplate( *pDoc );
     }
 
@@ -429,8 +429,7 @@ SwReader::SwReader( const uno::Reference < embed::XStorage > &rStg, const OUStri
 }
 
 Reader::Reader()
-    : pTemplate(nullptr),
-    aDStamp( Date::EMPTY ),
+  : aDStamp( Date::EMPTY ),
     aTStamp( tools::Time::EMPTY ),
     aChkDateTime( DateTime::EMPTY ),
     pStrm(nullptr), pMedium(nullptr), bInsertMode(false),
@@ -441,7 +440,6 @@ Reader::Reader()
 
 Reader::~Reader()
 {
-    delete pTemplate;
 }
 
 OUString Reader::GetTemplateName() const
@@ -469,14 +467,14 @@ SwDoc* Reader::GetTemplateDoc()
         bool bLoad = false;
 
         // if the template is already loaded, check once-a-minute if it has changed
-        if( !pTemplate || aCurrDateTime >= aChkDateTime )
+        if( !mxTemplate.is() || aCurrDateTime >= aChkDateTime )
         {
             Date aTstDate( Date::EMPTY );
             tools::Time aTstTime( tools::Time::EMPTY );
             if( FStatHelper::GetModifiedDateTimeOfFile(
                             aTDir.GetMainURL( INetURLObject::DecodeMechanism::NONE ),
                             &aTstDate, &aTstTime ) &&
-                ( !pTemplate || aDStamp != aTstDate || aTStamp != aTstTime ))
+                ( !mxTemplate.is() || aDStamp != aTstDate || aTStamp != aTstTime ))
             {
                 bLoad = true;
                 aDStamp = aTstDate;
@@ -491,7 +489,7 @@ SwDoc* Reader::GetTemplateDoc()
         if( bLoad )
         {
             ClearTemplate();
-            OSL_ENSURE( !pTemplate, "Who holds the template doc?" );
+            OSL_ENSURE( !mxTemplate.is(), "Who holds the template doc?" );
 
                 // If the writer module is not installed,
                 // we cannot create a SwDocShell. We could create a
@@ -505,29 +503,27 @@ SwDoc* Reader::GetTemplateDoc()
                     SfxObjectShellLock xDocSh = pDocSh;
                     if( pDocSh->DoInitNew() )
                     {
-                        pTemplate = pDocSh->GetDoc();
-                        pTemplate->SetOle2Link( Link<bool,void>() );
+                        mxTemplate = pDocSh->GetDoc();
+                        mxTemplate->SetOle2Link( Link<bool,void>() );
                         // always FALSE
-                        pTemplate->GetIDocumentUndoRedo().DoUndo( false );
-                        pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
-                        pTemplate->RemoveAllFormatLanguageDependencies();
+                        mxTemplate->GetIDocumentUndoRedo().DoUndo( false );
+                        mxTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
+                        mxTemplate->RemoveAllFormatLanguageDependencies();
 
                         ReadXML->SetOrganizerMode( true );
                         SfxMedium aMedium( aFileName, StreamMode::NONE );
-                        SwReader aRdr( aMedium, OUString(), pTemplate );
+                        SwReader aRdr( aMedium, OUString(), mxTemplate.get() );
                         aRdr.Read( *ReadXML );
                         ReadXML->SetOrganizerMode( false );
-
-                        pTemplate->acquire();
                     }
                 }
         }
 
-        OSL_ENSURE( !pTemplate || FStatHelper::IsDocument( aFileName ) || aTemplateNm=="$$Dummy$$",
+        OSL_ENSURE( !mxTemplate.is() || FStatHelper::IsDocument( aFileName ) || aTemplateNm=="$$Dummy$$",
                 "TemplatePtr but no template exist!" );
     }
 
-    return pTemplate;
+    return mxTemplate.get();
 }
 
 bool Reader::SetTemplate( SwDoc& rDoc )
@@ -535,10 +531,10 @@ bool Reader::SetTemplate( SwDoc& rDoc )
     bool bRet = false;
 
     GetTemplateDoc();
-    if( pTemplate )
+    if( mxTemplate.is() )
     {
         rDoc.RemoveAllFormatLanguageDependencies();
-        rDoc.ReplaceStyles( *pTemplate );
+        rDoc.ReplaceStyles( *mxTemplate );
         rDoc.getIDocumentFieldsAccess().SetFixFields(nullptr);
         bRet = true;
     }
@@ -548,12 +544,7 @@ bool Reader::SetTemplate( SwDoc& rDoc )
 
 void Reader::ClearTemplate()
 {
-    if( pTemplate )
-    {
-        if( 0 == pTemplate->release() )
-            delete pTemplate;
-        pTemplate = nullptr;
-    }
+    mxTemplate.clear();
 }
 
 void Reader::SetTemplateName( const OUString& rDir )
@@ -568,11 +559,10 @@ void Reader::SetTemplateName( const OUString& rDir )
 void Reader::MakeHTMLDummyTemplateDoc()
 {
     ClearTemplate();
-    pTemplate = new SwDoc;
-    pTemplate->acquire();
-    pTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
-    pTemplate->getIDocumentDeviceAccess().getPrinter( true );
-    pTemplate->RemoveAllFormatLanguageDependencies();
+    mxTemplate = new SwDoc;
+    mxTemplate->getIDocumentSettingAccess().set(DocumentSettingId::BROWSE_MODE, bTmplBrowseMode );
+    mxTemplate->getIDocumentDeviceAccess().getPrinter( true );
+    mxTemplate->RemoveAllFormatLanguageDependencies();
     aChkDateTime = Date( 1, 1, 2300 );  // year 2300 should be sufficient
     aTemplateNm = "$$Dummy$$";
 }
