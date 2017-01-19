@@ -34,6 +34,24 @@
       "revId": "2224e378c19de6eaf33243ddecabab4704af7124",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_ec5767c8",
+        "filename": "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-01-19T10:07:50Z",
+      "side": 1,
+      "message": "Ah, indeed. :-)\n\nI always write that as \"getPages() \u003c\u003d 3\"; if it is not a big problem for you, can you please change? Perhaps it\u0027ll help the next reader of this code.",
+      "parentUuid": "fa48f94a_0c466b23",
+      "revId": "2224e378c19de6eaf33243ddecabab4704af7124",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
