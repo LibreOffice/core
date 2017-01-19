@@ -2709,13 +2709,9 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
             m_aApos[m_nInTable] = false;
         }
 
-        // So that SwWW8ImplReader::StartApo() can write into this, and
-        // WW8TabDesc::CreateSwTable() can read it, if necessary.
-        SvxULSpaceItem aULSpaceItem(RES_UL_SPACE);
-
         if (aApo.mbStartApo)
         {
-            m_aApos[m_nInTable] = StartApo(aApo, pTabPos, &aULSpaceItem);
+            m_aApos[m_nInTable] = StartApo(aApo, pTabPos);
             // We need an ReSync after StartApo
             // (actually only if the Apo extends past a FKP border)
             rbReSync = true;
@@ -2731,7 +2727,7 @@ bool SwWW8ImplReader::ProcessSpecial(bool &rbReSync, WW8_CP nStartCp)
 
             if(m_nInTable < nCellLevel)
             {
-                if (StartTable(nStartCp, &aULSpaceItem))
+                if (StartTable(nStartCp))
                     ++m_nInTable;
                 else
                     break;
