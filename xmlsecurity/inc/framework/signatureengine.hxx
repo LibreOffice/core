@@ -96,6 +96,8 @@ protected:
      * For a SignatureCreator, it performs signing operation;
      * for a SignatureVerifier, verification operation is performed.
      */
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     virtual void startEngine( const css::uno::Reference<
                               css::xml::crypto::XXMLSignatureTemplate >&)
         throw (css::uno::Exception, css::uno::RuntimeException)

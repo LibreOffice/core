@@ -79,6 +79,8 @@ protected:
      * For a Encryptor, it performs encryption operation;
      * for a Decryptor, decryption operation is performed.
      */
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     virtual void startEngine( const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >&)
         throw (css::uno::Exception, css::uno::RuntimeException)
         {};

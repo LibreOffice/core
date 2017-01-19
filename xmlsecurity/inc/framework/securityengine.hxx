@@ -104,6 +104,8 @@ protected:
      * perform the security operation.
      * Any derived class will implement this method respectively.
      */
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     virtual void tryToPerform( )
         throw (css::uno::Exception, css::uno::RuntimeException){};
 
@@ -121,6 +123,8 @@ protected:
          * be transferred to a listener by this method.
      * Any derived class will implement this method respectively.
          */
+    /// @throws css::uno::Exception
+    /// @throws css::uno::RuntimeException
     virtual void notifyResultListener() const
         throw (css::uno::Exception, css::uno::RuntimeException)
         {};

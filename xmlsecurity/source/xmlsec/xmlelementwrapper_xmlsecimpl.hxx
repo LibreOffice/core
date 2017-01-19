@@ -61,6 +61,7 @@ public:
     /* css::lang::XUnoTunnel */
     virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
         throw (css::uno::RuntimeException, std::exception) override;
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId()
         throw(css::uno::RuntimeException);
 
@@ -87,12 +88,15 @@ public:
     void setNativeElement(const xmlNodePtr pNode);
 };
 
+/// @throws css::uno::RuntimeException
 OUString XMLElementWrapper_XmlSecImpl_getImplementationName()
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 SAL_CALL XMLElementWrapper_XmlSecImpl_createInstance(
     const css::uno::Reference< css::uno::XComponentContext > &)

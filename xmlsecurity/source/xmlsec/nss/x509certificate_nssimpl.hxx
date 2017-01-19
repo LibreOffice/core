@@ -91,6 +91,7 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
         //Helper methods
         void setCert( CERTCertificate* cert ) ;
         const CERTCertificate* getNssCert() const ;
+        /// @throws css::uno::RuntimeException
         void setRawCert( const css::uno::Sequence< sal_Int8 >& rawCert ) throw ( css::uno::RuntimeException) ;
 } ;
 

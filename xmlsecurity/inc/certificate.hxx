@@ -21,6 +21,8 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_RTTI Certificate
 public:
 
     /// Returns the SHA-256 thumbprint.
+    ///
+    /// @throws css::uno::RuntimeException
     virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() throw (css::uno::RuntimeException, std::exception) = 0;
 
 protected:

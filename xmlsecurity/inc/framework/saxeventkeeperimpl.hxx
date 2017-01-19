@@ -306,12 +306,15 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 };
 
+/// @throws css::uno::RuntimeException
 OUString SAXEventKeeperImpl_getImplementationName()
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  )
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 SAL_CALL SAXEventKeeperImpl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
     throw ( css::uno::Exception );

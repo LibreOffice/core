@@ -69,9 +69,11 @@ class XMLSignature_NssImpl : public ::cppu::WeakImplHelper<
         //Helper for XServiceInfo
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
+        /// @throws css::uno::RuntimeException
         static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
 
         //Helper for registry
+        /// @throws css::uno::RuntimeException
         static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) throw( css::uno::RuntimeException ) ;
 
         static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;

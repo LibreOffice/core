@@ -80,9 +80,11 @@ private:
         //Helper for XServiceInfo
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
+        /// @throws css::uno::RuntimeException
         static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
 
         //Helper for registry
+        /// @throws css::uno::RuntimeException
         static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) throw( css::uno::RuntimeException ) ;
 
         static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
@@ -105,13 +107,23 @@ private:
 
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         void setCertDb( CERTCertDBHandle* aCertDb ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         void adoptSymKey( PK11SymKey* aSymKey ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         PK11SymKey* getSymKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         SECKEYPublicKey* getPubKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         SECKEYPrivateKey* getPriKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
         virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() throw(  css::uno::SecurityException , css::uno::RuntimeException, std::exception ) override ;
@@ -125,12 +137,17 @@ private:
 
 
         //Native methods
+        /// @throws css::uno::RuntimeException
         xmlSecKeysMngrPtr createKeysManager() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         static void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
 private:
         void updateSlots();
 
+          /// @throws css::uno::Exception
+          /// @throws css::uno::RuntimeException
           void addCryptoSlot( PK11SlotInfo* aSlot ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 } ;
 

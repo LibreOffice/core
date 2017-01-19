@@ -97,12 +97,15 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 };
 
+/// @throws css::uno::RuntimeException
 OUString SignatureCreatorImpl_getImplementationName()
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceNames(  )
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 SAL_CALL SignatureCreatorImpl_createInstance(
     const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)

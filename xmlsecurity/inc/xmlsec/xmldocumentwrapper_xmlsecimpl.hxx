@@ -89,18 +89,21 @@ private:
 private:
     void getNextSAXEvent();
 
+    /// @throws css::xml::sax::SAXException
     static void sendStartElement(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler2,
         const xmlNodePtr pNode)
         throw (css::xml::sax::SAXException);
 
+    /// @throws css::xml::sax::SAXException
     static void sendEndElement(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler2,
         const xmlNodePtr pNode)
         throw (css::xml::sax::SAXException);
 
+    /// @throws css::xml::sax::SAXException
     static void sendNode(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler2,
@@ -241,13 +244,16 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 };
 
+/// @throws css::uno::RuntimeException
 OUString XMLDocumentWrapper_XmlSecImpl_getImplementationName()
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL
     XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames(  )
     throw ( css::uno::RuntimeException );
 
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
     const css::uno::Reference< css::uno::XComponentContext > &)

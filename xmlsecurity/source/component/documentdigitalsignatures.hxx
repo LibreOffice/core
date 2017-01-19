@@ -54,8 +54,11 @@ private:
     //Indicates if the document already contains a document signature
     bool m_bHasDocumentSignature;
 
+    /// @throws css::uno::RuntimeException
     bool ImplViewSignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const css::uno::Reference< css::io::XStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (css::uno::RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
     void ImplViewSignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const css::uno::Reference< css::io::XInputStream >& xSignStream, DocumentSignatureMode eMode, bool bReadOnly ) throw (css::uno::RuntimeException, std::exception);
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::security::DocumentSignatureInformation > ImplVerifySignatures( const css::uno::Reference< css::embed::XStorage >& rxStorage, const ::com::sun::star::uno::Reference< css::io::XInputStream >& xSignStream, DocumentSignatureMode eMode ) throw (css::uno::RuntimeException);
 
 public:
@@ -63,7 +66,9 @@ public:
     virtual ~DocumentDigitalSignatures() override;
 
     // for service registration...
+    /// @throws css::uno::RuntimeException
     static OUString GetImplementationName() throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static css::uno::Sequence < OUString > GetSupportedServiceNames() throw (css::uno::RuntimeException);
 
     //XInitialization
@@ -102,6 +107,7 @@ public:
     css::uno::Reference< css::security::XCertificate > SAL_CALL chooseCertificate(OUString& rDescription) throw (css::uno::RuntimeException, std::exception) override;
 };
 
+/// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface > SAL_CALL DocumentDigitalSignatures_CreateInstance(
     const css::uno::Reference< css::uno::XComponentContext >& rCtx) throw ( css::uno::Exception );
 

@@ -40,7 +40,9 @@ class CertificateContainer : public ::cppu::WeakImplHelper< css::lang::XServiceI
         Map certTrustMap;
 
         static bool SAL_CALL searchMap( const OUString & url, const OUString & certificate_name, Map &_certMap  );
+        /// @throws css::uno::RuntimeException
         bool SAL_CALL isTemporaryCertificate( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException);
+        /// @throws css::uno::RuntimeException
         bool SAL_CALL isCertificateTrust( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException);
 
     public:
@@ -52,11 +54,14 @@ class CertificateContainer : public ::cppu::WeakImplHelper< css::lang::XServiceI
         virtual css::security::CertificateContainerStatus SAL_CALL hasCertificate( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException, std::exception) override;
 
         // provide factory
+        /// @throws css::uno::RuntimeException
         static OUString SAL_CALL impl_getStaticImplementationName( ) throw(css::uno::RuntimeException);
 
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > SAL_CALL
                     impl_getStaticSupportedServiceNames(  ) throw(css::uno::RuntimeException);
 
+        /// @throws css::uno::RuntimeException
         static css::uno::Reference< css::uno::XInterface > SAL_CALL
                     impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::RuntimeException );
 
