@@ -24,16 +24,6 @@
  * Bitmaps for SvxFrameWindow
  */
 
-Image RID_SVX_RELOAD_NORMAL
-{
-    ImageBitmap = Bitmap { File = "reload.png" ; };
-};
-
-Image RID_SVX_RELOAD_SPECIAL
-{
-    ImageBitmap = Bitmap { File = "reloads.png" ; };
-};
-
 Bitmap RID_SVXBMP_FRAME1
 {
     File = "fr01.png";

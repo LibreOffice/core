@@ -353,16 +353,13 @@
 #define RID_SVX_CONTOUR_START               (RID_SVX_START + 461)
 //      RID_SVX_CONTOUR_END                 (RID_SVX_START + 471)
 
-#define RID_SVXIMG_GRAF_RED                 (RID_SVX_START + 472)
-#define RID_SVXIMG_GRAF_GREEN               (RID_SVX_START + 473)
-#define RID_SVXIMG_GRAF_BLUE                (RID_SVX_START + 474)
-#define RID_SVXIMG_GRAF_LUMINANCE           (RID_SVX_START + 475)
-#define RID_SVXIMG_GRAF_CONTRAST            (RID_SVX_START + 476)
-#define RID_SVXIMG_GRAF_GAMMA               (RID_SVX_START + 477)
-#define RID_SVXIMG_GRAF_TRANSPARENCE        (RID_SVX_START + 478)
-
-#define RID_SVX_RELOAD_NORMAL               (RID_SVX_START + 480)
-#define RID_SVX_RELOAD_SPECIAL              (RID_SVX_START + 481)
+#define RID_SVXBMP_GRAF_RED                 (RID_SVX_START + 472)
+#define RID_SVXBMP_GRAF_GREEN               (RID_SVX_START + 473)
+#define RID_SVXBMP_GRAF_BLUE                (RID_SVX_START + 474)
+#define RID_SVXBMP_GRAF_LUMINANCE           (RID_SVX_START + 475)
+#define RID_SVXBMP_GRAF_CONTRAST            (RID_SVX_START + 476)
+#define RID_SVXBMP_GRAF_GAMMA               (RID_SVX_START + 477)
+#define RID_SVXBMP_GRAF_TRANSPARENCE        (RID_SVX_START + 478)
 
 #define RID_SVXIMG_DEPTH_INFINITY           (RID_SVX_START + 482)
 #define RID_SVXIMG_DEPTH_0                  (RID_SVX_START + 483)
