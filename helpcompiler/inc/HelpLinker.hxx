@@ -47,6 +47,7 @@ public:
 class L10N_DLLPUBLIC HelpLinker
 {
 public:
+    /// @throws HelpProcessingException
     void main(std::vector<std::string> &args,
               std::string* pExtensionPath = nullptr,
               std::string* pDestination = nullptr,
@@ -85,6 +86,8 @@ private:
     bool m_bUseLangRoot;
     bool m_bCreateIndex;
     void initIndexerPreProcessor();
+    /// @throws HelpProcessingException
+    /// @throws BasicCodeTagger::TaggerException
     void link() throw(HelpProcessingException, BasicCodeTagger::TaggerException, std::exception);
     static void addBookmark( FILE* pFile_DBHelp, std::string thishid,
         const std::string& fileB, const std::string& anchorB,

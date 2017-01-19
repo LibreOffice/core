@@ -218,6 +218,8 @@ public:
                 const std::string &in_module,
                 const std::string &in_lang,
                 bool in_bExtensionMode);
+    /// @throws HelpProcessingException
+    /// @throws BasicCodeTagger::TaggerException
     bool compile() throw (HelpProcessingException, BasicCodeTagger::TaggerException, std::exception);
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
