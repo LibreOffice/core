@@ -4558,6 +4558,12 @@ SVGPathElement.prototype.appendPath = function( aPath )
     this.setAttribute( 'd', sPathData );
 };
 
+var flipOnYAxis = function( aPath )
+{
+    var aMatrix = SVGIdentityMatrix.translate(-1, 1).scale(1, 1);
+    aPath.matrixTransform(aMatrix);
+    return aPath;
+}
 /** SVGPathElement.matrixTransform
  *  Apply the transformation defined by the passed matrix to the referenced
  *  svg <path> element.
@@ -5146,6 +5152,7 @@ FADE_TRANSITION             = 9; // 37
 RANDOMBARWIPE_TRANSITION    = 10; // 38
 CHECKERBOARDWIPE_TRANSITION = 11; // 39
 DISSOLVE_TRANSITION         = 12; // 40
+SNAKEWIPE_TRANSITION        = 13; // 30
 IRISWIPE_TRANSITION         = 14; // 12
 
 aTransitionTypeInMap = {
@@ -5161,17 +5168,19 @@ aTransitionTypeInMap = {
     'randomBarWipe'     : RANDOMBARWIPE_TRANSITION,
     'checkerBoardWipe'  : CHECKERBOARDWIPE_TRANSITION,
     'dissolve'          : DISSOLVE_TRANSITION,
+    'snakeWipe'         : SNAKEWIPE_TRANSITION,
     'irisWipe'          : IRISWIPE_TRANSITION
 };
 
 aTransitionTypeOutMap = [ '', 'barWipe', 'boxWipe', 'fourBoxWipe', 'ellipseWipe',
                           'clockWipe', 'pinWheelWipe', 'pushWipe', 'slideWipe',
-                          'fade', 'randomBarWipe', 'checkerBoardWipe', 'dissolve' , 'irisWipe'];
+                          'fade', 'randomBarWipe', 'checkerBoardWipe', 'dissolve',
+                          'snakeWipe', 'irisWipe'];
 
 
 /*
  * All Transition subtypes should be in sync with aTransitionSubtypeInMap:
- * Comments '//' followed by integers represent the transition values in their 
+ * Comments '//' followed by integers represent the transition values in their
  * C++ implementations.
  */
 // Transition Subtypes
@@ -5203,6 +5212,12 @@ THREEBLADE_TRANS_SUBTYPE            = 24;
 EIGHTBLADE_TRANS_SUBTYPE            = 25;
 ONEBLADE_TRANS_SUBTYPE              = 26; // 107
 ACROSS_TRANS_SUBTYPE                = 27;
+TOPLEFTVERTICAL_TRANS_SUBTYPE       = 28; // 109
+TOPLEFTHORIZONTAL_TRANS_SUBTYPE     = 29; // 64
+TOPLEFTDIAGONAL_TRANS_SUBTYPE       = 30; // 65
+TOPRIGHTDIAGONAL_TRANS_SUBTYPE      = 31; // 66
+BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE   = 32; // 67
+BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE    = 33; // 68
 RECTANGLE_TRANS_SUBTYPE             = 34; // 101
 DIAMOND_TRANS_SUBTYPE               = 35; // 102
 
@@ -5235,6 +5250,12 @@ aTransitionSubtypeInMap = {
     'eightBlade'        : EIGHTBLADE_TRANS_SUBTYPE,
     'oneBlade'          : ONEBLADE_TRANS_SUBTYPE,
     'across'            : ACROSS_TRANS_SUBTYPE,
+    'topLeftVertical'   : TOPLEFTVERTICAL_TRANS_SUBTYPE,
+    'topLeftHorizontal' : TOPLEFTHORIZONTAL_TRANS_SUBTYPE,
+    'topLeftDiagonal'   : TOPLEFTDIAGONAL_TRANS_SUBTYPE,
+    'topRightDiagonal'  : TOPRIGHTDIAGONAL_TRANS_SUBTYPE,
+    'bottomRightDiagonal': BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE,
+    'bottomLeftDiagonal': BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE,
     'rectangle'         : RECTANGLE_TRANS_SUBTYPE,
     'diamond'           : DIAMOND_TRANS_SUBTYPE
 };
@@ -5246,7 +5267,9 @@ aTransitionSubtypeOutMap = [ 'default', 'leftToRight', 'topToBottom', 'cornersIn
                              'fourBlade', 'fromLeft', 'fromTop', 'fromRight',
                              'fromBottom', 'crossfade', 'fadeToColor', 'fadeFromColor',
                              'fadeOverColor', 'threeBlade', 'eightBlade', 'oneBlade',
-                             'across', 'rectangle', 'diamond' ];
+                             'across', 'rectangle', 'diamond' ,'topLeftVerical',
+                             'topLeftHorizontal', 'topLeftDiagonal', 'topRightDiagonal',
+                             'bottomRightDiagonal', 'bottonLeftDiagonal' ];
 
 
 // Transition Modes
@@ -5295,6 +5318,68 @@ aTransitionInfoTable[0][0] =
     'scaleY' : 0.0,
     'reverseMethod' : REVERSEMETHOD_IGNORE,
     'outInvertsSweep' : false,
+    'scaleIsotropically' : false
+};
+
+aTransitionInfoTable[SNAKEWIPE_TRANSITION] = {};
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][TOPLEFTVERTICAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : -90.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertsSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][TOPLEFTHORIZONTAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][TOPLEFTDIAGONAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][TOPRIGHTDIAGONAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 0.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
+    'scaleIsotropically' : false
+};
+aTransitionInfoTable[SNAKEWIPE_TRANSITION][BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE] =
+{
+    'class' : TRANSITION_CLIP_POLYPOLYGON,
+    'rotationAngle' : 180.0,
+    'scaleX' : 1.0,
+    'scaleY' : 1.0,
+    'reverseMethod' : REVERSEMETHOD_ROTATE_180,
+    'outInvertSweep' : true,
     'scaleIsotropically' : false
 };
 
@@ -9159,6 +9244,17 @@ function createClipPolyPolygon( nType, nSubtype )
             }
         case DISSOLVE_TRANSITION:
             return new RandomWipePath( 16 * 16, false /* dissolve */ );
+        case SNAKEWIPE_TRANSITION:
+            return new SnakeWipePath( 8 * 8, // diagonal
+                                             nSubtype == TOPLEFTDIAGONAL_TRANS_SUBTYPE     ||
+                                             nSubtype == TOPRIGHTDIAGONAL_TRANS_SUBTYPE    ||
+                                             nSubtype == BOTTOMRIGHTDIAGONAL_TRANS_SUBTYPE ||
+                                             nSubtype == BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE   ,
+                                             // flipOnYAxis
+                                             nSubtype == TOPLEFTVERTICAL_TRANS_SUBTYPE     ||
+                                             nSubtype == TOPRIGHTDIAGONAL_TRANS_SUBTYPE    ||
+                                             nSubtype == BOTTOMLEFTDIAGONAL_TRANS_SUBTYPE
+                                             );
     }
 }
 
@@ -9554,6 +9650,210 @@ function RandomWipePath( nElements, bRandomBars )
         this.aPositionArray[nPos2] = tmp;
     }
 }
+
+/** Class SnakeWipeSlide
+ *
+ *  @param nElements
+ *  @param bDiagonal
+ *  @param bFlipOnYaxis
+ */
+function SnakeWipePath(nElements, bDiagonal, bflipOnYAxis)
+{
+    this.sqrtElements = Math.floor(Math.sqrt(nElements));
+    this.elementEdge  = (1.0 / this.sqrtElements);
+    this.diagonal     = bDiagonal;
+    this.flipOnYAxis  = bflipOnYAxis;
+    this.aBasePath    = createUnitSquarePath();
+}
+
+SnakeWipePath.prototype.calcSnake = function(t)
+{
+    var aPolyPath = createEmptyPath();
+    var res = this.aBasePath.cloneNode(true);
+    var area   = (t * this.sqrtElements * this.sqrtElements);
+    var line_  = Math.floor(area / this.sqrtElements);
+    var line   = pruneScaleValue(line_ / this.sqrtElements);
+    var col    = pruneScaleValue((area - (line_ * this.sqrtElements)) / this.sqrtElements);
+    var aTransform;
+
+    if(line != 0) {
+        var aPath = this.aBasePath.cloneNode(true);
+        aTransform = SVGIdentityMatrix.translate(0, 0);
+        aPath.matrixTransform(aTransform);
+        aPolyPath.appendPath(aPath);
+        aTransform = SVGIdentityMatrix.translate(0, line);
+        aPath.matrixTransform(aTransform);
+        aPolyPath.appendPath(aPath);
+        aTransform = SVGIdentityMatrix.translate(1, line);
+        aPath.matrixTransform(aTransform);
+        aPolyPath.appendPath(aPath);
+    }
+    if(col != 0) {
+        var offset = 0.0;
+        if((line_ & 1) == 1) {
+            // odd line: => right to left
+            offset = (1.0 - col);
+        }
+        var poly = this.aBasePath.cloneNode(true);
+        aTransform = SVGIdentityMatrix.translate(offset, line);
+        aPath.matrixTransform(aTransform);
+        aPolyPath.appendPath(aPath);
+        aTransform = SVGIdentityMatrix.translate(offset, line+ this.elementEdge);
+        aPath.matrixTransform(aTransform);
+        aPolyPath.appendPath(aPath);
+        aTransform = SVGIdentityMatrix.translate(offset + col, line+ this.elementEdge);
+        aPath.matrixTransform(aTransform);
+        aPolyPath.appendPath(aPath);
+        aTransform = SVGIdentityMatrix.translate(offset + col, line);
+        aPath.matrixTransform(aTransform);
+        aPolyPath.appendPath(aPath);
+    }
+
+    return aPolyPath;
+}
+
+SnakeWipePath.prototype.calcHalfDiagonalSnake = function(nT, bIn) {
+    var res = createEmptyPath(), aTransform;
+
+    if(bIn) {
+        var sqrtArea2 = Math.sqrt(nT * this.sqrtElements * this.sqrtElements);
+        var a = (Math.SQRT1_2 / this.sqrtElements);
+        var d = (sqrtArea2 - Math.floor(sqrtArea2));
+        var edge = pruneScaleValue(sqrtArea2 / this.sqrtElements);
+        var len = (nT * Math.SQRT1_2 * d);
+        var height = pruneScaleValue(Math.SQRT1_2 / this.sqrtElements);
+
+        if(edge) {
+            var aPath = this.aBasePath.cloneNode(true), aPoint = {x: 0, y: 0};
+            aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+            aPath.matrixTransform(aTransform);
+            res.appendPath(aPath);
+            aPoint.y = height;
+            aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+            aPath.matrixTransform(aTransform);
+            res.appendPath(aPath);
+            aPoint.x = len + a;
+            aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+            aPath.matrixTransform(aTransform);
+            res.appendPath(aPath);
+            aPoint.y = 0.0;
+            aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+            aPath.matrixTransform(aTransform);
+            res.appendPath(aPath);
+        }
+        var poly = this.aBasePath.cloneNode(true), aPoint = {x: 0, y: 0};
+        aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+        aPoint.y = height;
+        aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+        aPoint.x = len + a;
+        aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+        aPoint.y = 0.0;
+        aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+
+        var aTransform;
+
+        if((Math.floor(sqrtArea2) & 1) == 1) {
+            // odd line
+            aTransform = SVGIdentityMatrix.rotate((Math.PI)/2 + (Math.PI)/4);
+                aTransform.translate(edge + this.elementEdge, 0.0);
+        }
+        else {
+            aTransform = SVGIdentityMatrix.translate(-a, 0.0);
+            aTransform.rotate(-(Math.PI/4));
+            aTransform.translate(0.0, edge);
+        }
+
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+    }
+    else { //out
+        var sqrtArea2 = Math.sqrt(nT * this.sqrtElements * this.sqrtElements);
+        var edge = pruneScaleValue(Math.floor(sqrtArea2)/this.sqrtElements);
+
+        var poly = this.aBasePath.cloneNode(true);
+        if(edge) {
+            var aPoint = {x: 0, y: 1};
+            aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+            poly.matrixTransform(aTransform);
+            res.appendPath(poly);
+            aPoint.x = edge;
+            aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+            poly.matrixTransform(aTransform);
+            res.appendPath(poly);
+            aPoint.y = edge;
+            aPoint.x = 1.0;
+            aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+            poly.matrixTransform(aTransform);
+            res.appendPath(poly);
+            aPoint.y = 0.0;
+            aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+            poly.matrixTransform(aTransform);
+            res.appendPath(poly);
+        }
+        var a = (Math.SQRT1_2 / this.sqrtElements);
+        var d = (sqrtArea2 - Math.floor(sqrtArea2));
+        var len = ((1.0 - nT) * Math.SQRT2 * d);
+        var height = pruneScaleValue(Math.SQRT1_2 / this.sqrtElements);
+
+        poly = this.aBasePath.cloneNode(true);
+        var aPoint = {x: 0, y: 0};
+        aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+        aPoint.y = height;
+        aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+        aPoint.x = len + a;
+        aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+        aPoint.y = 0.0;
+        aTransform = SVGIdentityMatrix.translate(aPoint.x, aPoint.y);
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+
+        if((Math.floor(sqrtArea2) & 1) == 1) {
+            // odd line
+            aTransform = SVGIdentityMatrix.translate(0.0, -height);
+            aTransform.rotate(Math.PI/2 + Math.PI/4);
+            aTransform.translate(1.0, edge);
+        }
+        else {
+            aTransform = SVGIdentityMatrix.rotate(-(Math.PI/4));
+            aTransform = aTransform.translate(edge, 1.0);
+        }
+        poly = this.aBasePath.cloneNode(true);
+        poly.matrixTransform(aTransform);
+        res.appendPath(poly);
+    }
+    return res;
+}
+
+SnakeWipePath.prototype.perform = function(nT) {
+    var res = createEmptyPath();
+    if(this.diagonal) {
+        if(nT >= 0.5) {
+            res.appendPath(this.calcHalfDiagonalSnake(1.0, true));
+            res.appendPath(this.calcHalfDiagonalSnake(2.0*(nT-0.5), false));
+        }
+        else
+            res.appendPath(this.calcHalfDiagonalSnake(2.0*nT, true));
+    }
+    else
+        res = this.calcSnake(nT);
+
+    return this.flipOnYAxis ? flipOnYAxis(res): res;
+}
+
 
 /** perform
  *
