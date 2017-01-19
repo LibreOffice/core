@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<component type="addon">
+  <id>org.libreoffice.kde</id>
+
+  <extends>libreoffice-base.desktop</extends>
+  <extends>libreoffice-calc.desktop</extends>
+  <extends>libreoffice-draw.desktop</extends>
+  <extends>libreoffice-impress.desktop</extends>
+  <extends>libreoffice-writer.desktop</extends>
+
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MPL-2.0</project_license>
+  <name>LibreOffice KDE Integration</name>
+  <summary>Improves LibreOffice integration within the KDE Plasma desktop environment</summary>
+
+  <url type="homepage">http://www.libreoffice.org/discover/writer/</url>
+  <url type="bugtracker">https://bugs.documentfoundation.org/</url>
+  <url type="donation">https://donate.libreoffice.org/</url>
+  <url type="faq">https://hub.libreoffice.org/faq</url>
+  <url type="help">http://www.libreoffice.org/get-help/documentation/</url>
+  <url type="translate">https://hub.libreoffice.org/translate</url>
+
+  <compulsory_for_desktop>KDE</compulsory_for_desktop>
+  <compulsory_for_desktop>Plasma</compulsory_for_desktop>
+
+  <developer_name>The Document Foundation</developer_name>
+  <update_contact>libreoffice_at_lists.freedesktop.org</update_contact>
+</component>
