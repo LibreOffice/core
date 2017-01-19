@@ -9,9 +9,9 @@
 
 #define STR_WELCOME_LINE1                259
 #define STR_WELCOME_LINE2                260
-#define IMG_WELCOME                      261
-#define IMG_RECENTDOC_REMOVE             262
-#define IMG_RECENTDOC_REMOVE_HIGHLIGHTED 263
-#define IMG_DEFAULT                      264
+#define BMP_WELCOME                      261
+#define BMP_RECENTDOC_REMOVE             262
+#define BMP_RECENTDOC_REMOVE_HIGHLIGHTED 263
+#define BMP_DEFAULT                      264
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

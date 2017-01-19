@@ -36,8 +36,8 @@ RecentDocsViewItem::RecentDocsViewItem(ThumbnailView &rView, const OUString &rUR
     : ThumbnailViewItem(rView, nId),
       maURL(rURL),
       m_bRemoveIconHighlighted(false),
-      m_aRemoveRecentBitmap(SfxResId(IMG_RECENTDOC_REMOVE)),
-      m_aRemoveRecentBitmapHighlighted(SfxResId(IMG_RECENTDOC_REMOVE_HIGHLIGHTED))
+      m_aRemoveRecentBitmap(SfxResId(BMP_RECENTDOC_REMOVE)),
+      m_aRemoveRecentBitmapHighlighted(SfxResId(BMP_RECENTDOC_REMOVE_HIGHLIGHTED))
 {
     OUString aTitle(rTitle);
     INetURLObject aURLObj(rURL);

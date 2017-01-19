@@ -214,8 +214,8 @@ namespace sfx2
         m_aToolbox->Clear();
 
         // Get the closer bitmap and set it as right most button.
-        Image aImage( SfxResId( SFX_IMG_CLOSE_DOC ) );
-        m_aToolbox->InsertItem( 1, aImage );
+        BitmapEx aBitmapEx(SfxResId(SFX_BMP_CLOSE_DOC));
+        m_aToolbox->InsertItem(1, Image(aBitmapEx));
         m_aToolbox->ShowItem( 1 );
     }
 

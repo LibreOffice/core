@@ -20,9 +20,9 @@
 #include <sfx2/sfx.hrc>
 #include "sfxlocal.hrc"
 
-Image SFX_IMG_CLOSE_DOC
+Bitmap SFX_BMP_CLOSE_DOC
 {
-    ImageBitmap = Bitmap { File = "closedoc.png" ; };
+    File = "closedoc.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

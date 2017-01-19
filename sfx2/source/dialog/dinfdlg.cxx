@@ -1450,7 +1450,7 @@ CustomPropertyLine::CustomPropertyLine( vcl::Window* pParent ) :
     m_aTimeField->SetExtFormat( ExtTimeFieldFormat::Long24H );
     m_aDateField->SetExtDateFormat( ExtDateFieldFormat::SystemShortYYYY );
 
-    m_aRemoveButton->SetModeImage(Image(SfxResId(SFX_IMG_PROPERTY_REMOVE)));
+    m_aRemoveButton->SetModeImage(Image(BitmapEx(SfxResId(SFX_BMP_PROPERTY_REMOVE))));
     m_aRemoveButton->SetQuickHelpText(SfxResId(STR_SFX_REMOVE_PROPERTY).toString());
 
     m_aEditButton->SetText(SfxResId(SFX_ST_EDIT).toString());

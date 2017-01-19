@@ -108,12 +108,9 @@ String STR_PDF_EXPORT_SEND
   Text [ en-US ] = "Send" ;
 };
 
-Image IMG_INFO
+Bitmap BMP_INFO
 {
-    ImageBitmap = Bitmap
-    {
-        File = "info.png" ;
-    };
+    File = "info.png" ;
 };
 
 String STR_FONT_TABPAGE

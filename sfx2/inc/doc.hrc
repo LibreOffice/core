@@ -104,8 +104,8 @@
 #define STR_QMSG_SEL_FOLDER_DELETE          (RID_SFX_DOC_START+146)
 #define STR_QMSG_TEMPLATE_OVERWRITE         (RID_SFX_DOC_START+147)
 #define STR_QMSG_SEL_TEMPLATE_DELETE        (RID_SFX_DOC_START+148)
-#define IMG_ACTION_SORT                     (RID_SFX_DOC_START+149)
-#define IMG_ACTION_REFRESH                  (RID_SFX_DOC_START+150)
+#define BMP_ACTION_SORT                     (RID_SFX_DOC_START+149)
+#define BMP_ACTION_REFRESH                  (RID_SFX_DOC_START+150)
 
 #define STR_OPEN                            (RID_SFX_DOC_START+151)
 #define STR_EDIT_TEMPLATE                   (RID_SFX_DOC_START+152)

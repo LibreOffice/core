@@ -93,9 +93,9 @@ String STR_SFX_REMOVE_PROPERTY
     Text [ en-US ] = "Remove Property" ;
 };
 
-Image SFX_IMG_PROPERTY_REMOVE
+Bitmap SFX_BMP_PROPERTY_REMOVE
 {
-    ImageBitmap = Bitmap { File = "deleterow.bmp" ; };
+    File = "deleterow.bmp";
 };
 
 String STR_SFX_QUERY_WRONG_TYPE

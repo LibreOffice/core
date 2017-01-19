@@ -34,7 +34,7 @@ TemplateViewItem::TemplateViewItem (ThumbnailView &rView, sal_uInt16 nId)
     : ThumbnailViewItem(rView, nId),
       mnRegionId(USHRT_MAX),
       mnDocId(USHRT_MAX),
-      maDefaultBitmap(SfxResId(IMG_DEFAULT)),
+      maDefaultBitmap(SfxResId(BMP_DEFAULT)),
       mbIsDefaultTemplate(false)
 {
 }

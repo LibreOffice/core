@@ -19,22 +19,22 @@ String STR_WELCOME_LINE2
     Text [ en-US ] = "Drop a document here or pick an app from the left side to create one.";
 };
 
-Image IMG_WELCOME
+Bitmap BMP_WELCOME
 {
-    ImageBitmap = Bitmap { File = "logo.png" ; };
+    File = "logo.png";
 };
 
-Bitmap IMG_RECENTDOC_REMOVE
+Bitmap BMP_RECENTDOC_REMOVE
 {
     File = "recentdoc_remove.png";
 };
 
-Bitmap IMG_RECENTDOC_REMOVE_HIGHLIGHTED
+Bitmap BMP_RECENTDOC_REMOVE_HIGHLIGHTED
 {
     File = "recentdoc_remove_highlighted.png";
 };
 
-Bitmap IMG_DEFAULT
+Bitmap BMP_DEFAULT
 {
     File = "templatestar.png";
 };
