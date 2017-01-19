@@ -45,8 +45,10 @@ public:
     static bool checkArgument(std::vector< std::string > & rArgs, char const * arg, size_t len);
     static bool checkCommandFile(std::vector< std::string > & rArgs, char const * filename);
 
+    /// @throws IllegalArgument
     bool initOptions(std::vector< std::string > & rArgs)
         throw(IllegalArgument);
+    /// @throws IllegalArgument
     static bool badOption(char const * reason, std::string const & rArg)
         throw(IllegalArgument);
     bool setOption(char const * option, std::string const & rArg);
@@ -61,6 +63,7 @@ public:
 
     const OString&   getProgramName() const { return m_program;}
     bool                isValid(const OString& option);
+    /// @throws IllegalArgument
     const OString&   getOption(const OString& option)
         throw( IllegalArgument );
 
