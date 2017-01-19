@@ -44,29 +44,6 @@ Image::Image()
 {
 }
 
-Image::Image( const ResId& rResId )
-{
-    rResId.SetRT( RSC_IMAGE );
-
-    ResMgr* pResMgr = rResId.GetResMgr();
-    if( pResMgr && pResMgr->GetResource( rResId ) )
-    {
-        pResMgr->Increment( sizeof( RSHEADER_TYPE ) );
-
-        BitmapEx      aBmpEx;
-        RscImageFlags nObjMask = (RscImageFlags)pResMgr->ReadLong();
-
-        if( nObjMask & RscImageFlags::ImageBitmap )
-        {
-            aBmpEx = BitmapEx( ResId( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()), *pResMgr ) );
-            pResMgr->Increment( ResMgr::GetObjSize( static_cast<RSHEADER_TYPE*>(pResMgr->GetClass()) ) );
-        }
-
-        if( ! aBmpEx.IsEmpty() )
-            ImplInit( aBmpEx );
-    }
-}
-
 Image::Image(const BitmapEx& rBitmapEx)
 {
     ImplInit(rBitmapEx);

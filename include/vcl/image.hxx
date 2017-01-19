@@ -56,7 +56,6 @@ class VCL_DLLPUBLIC Image
 
 public:
                     Image();
-                    explicit Image( const ResId& rResId );
                     explicit Image( const BitmapEx& rBitmapEx );
                     explicit Image( const Bitmap& rBitmap );
                     Image( const Bitmap& rBitmap, const Color& rColor );

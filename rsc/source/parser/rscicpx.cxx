@@ -97,24 +97,6 @@ RscTop * RscTypCont::InitClassBitmap( RscTop * pSuper )
     return pClassBitmap;
 }
 
-RscTop * RscTypCont::InitClassImage( RscTop * pSuper, RscTop * pClassBitmap )
-{
-    Atom        nId;
-    RscTop *    pClassImage;
-
-    // initialize class
-    nId = pHS->getID( "Image" );
-    pClassImage = new RscClass( nId, RSC_IMAGE, pSuper );
-    pClassImage->SetCallPar( *pStdPar1, *pStdPar2, *pStdParType );
-    aNmTb.Put( nId, CLASSNAME, pClassImage );
-
-    // initialize variables
-    nId = aNmTb.Put( "ImageBitmap", VARNAME );
-    pClassImage->SetVariable( nId, pClassBitmap, nullptr, RSCVAR::NONE, (sal_uInt32)RscImageFlags::ImageBitmap );
-
-    return pClassImage;
-}
-
 RscTop * RscTypCont::InitClassMenuItem( RscTop * pSuper )
 {
     Atom        nId;

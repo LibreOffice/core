@@ -38,7 +38,6 @@
 #define RSC_BITMAP              (RSC_NOTYPE + 0x13)
 #define RSC_MENU                (RSC_NOTYPE + 0x1c)
 #define RSC_MENUITEM            (RSC_NOTYPE + 0x1d) // only used internally
-#define RSC_IMAGE               (RSC_NOTYPE + 0x23)
 
 #define RSC_STRINGARRAY         (RSC_NOTYPE + 0x79)
 

@@ -48,7 +48,6 @@ void RscTypCont::Init()
     RscTop   *  pClassString;
     RscTop   *  pClassStringArray;
     RscTop   *  pClassBitmap;
-    RscTop   *  pClassImage;
 
     Atom        nId;
 
@@ -111,10 +110,6 @@ void RscTypCont::Init()
     pClassBitmap = InitClassBitmap( pClassMgr );
     pRoot->Insert( pClassBitmap );
 
-}
-{
-    pClassImage = InitClassImage( pClassMgr, pClassBitmap );
-    pRoot->Insert( pClassImage );
 }
 {
     RscTop* pClassMenuItem = InitClassMenuItem(pClassMgr);
