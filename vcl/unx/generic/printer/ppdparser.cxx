@@ -739,19 +739,13 @@ PPDParser::PPDParser( const OUString& rFile ) :
     if (m_pResolutions == nullptr) {
         SAL_WARN( "vcl.unx.print", "no Resolution in " << m_aFile);
     }
-    if (m_pDefaultResolution == nullptr) {
-        SAL_WARN( "vcl.unx.print", "no DefaultResolution in " + m_aFile);
-    }
+    SAL_INFO_IF(!m_pDefaultResolution, "vcl.unx.print", "no DefaultResolution in " + m_aFile);
 
     m_pInputSlots = getKey( OUString( "InputSlot" ) );
     if( m_pInputSlots )
         m_pDefaultInputSlot = m_pInputSlots->getDefaultValue();
-    if (m_pInputSlots == nullptr) {
-        SAL_WARN( "vcl.unx.print", "no InputSlot in " << m_aFile);
-    }
-    if (m_pDefaultInputSlot == nullptr) {
-        SAL_WARN( "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
-    }
+    SAL_INFO_IF(!m_pInputSlots, "vcl.unx.print", "no InputSlot in " << m_aFile);
+    SAL_INFO_IF(!m_pDefaultInputSlot, "vcl.unx.print", "no DefaultInputSlot in " << m_aFile);
 
     m_pDuplexTypes = getKey( OUString( "Duplex" ) );
     if( m_pDuplexTypes )
