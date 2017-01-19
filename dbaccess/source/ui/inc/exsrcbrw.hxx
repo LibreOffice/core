@@ -43,7 +43,9 @@ namespace dbaui
     public:
         SbaExternalSourceBrowser(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
+        /// @throws css::uno::RuntimeException
         static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        /// @throws css::uno::RuntimeException
         static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
         static css::uno::Reference< css::uno::XInterface >
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);

@@ -101,6 +101,7 @@ namespace dbaccess
             @param          _rName          the name of the table
             @param          _rType          the type of the table, as supplied by the driver
             @param          _rDesc          the description of the table, as supplied by the driver
+            @throws css::sdbc::SQLException
         */
         ODBTable(connectivity::sdbcx::OCollection* _pTables
                 ,const css::uno::Reference< css::sdbc::XConnection >& _rxConn
@@ -112,6 +113,7 @@ namespace dbaccess
                 ,const css::uno::Reference< css::container::XNameAccess >& _rxColumnDefinitions)
             throw(css::sdbc::SQLException);
 
+        /// @throws css::sdbc::SQLException
         ODBTable(connectivity::sdbcx::OCollection* _pTables
                 ,const css::uno::Reference< css::sdbc::XConnection >& _rxConn)
                 throw(css::sdbc::SQLException);

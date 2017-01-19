@@ -112,13 +112,6 @@ public:
         return aSupported;  \
     }   \
 
-#define DECLARE_SERVICE_INFO_STATIC()   \
-    DECLARE_SERVICE_INFO(); \
-    static OUString SAL_CALL getImplementationName_Static(  ) throw (css::uno::RuntimeException);   \
-    static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);  \
-    static css::uno::Reference< css::uno::XInterface >    \
-        SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&)    \
-
 #define IMPLEMENT_SERVICE_INFO1(classname, implasciiname, serviceasciiname) \
     IMPLEMENT_SERVICE_INFO_IMPLNAME(classname, implasciiname)   \
     IMPLEMENT_SERVICE_INFO_SUPPORTS(classname)  \

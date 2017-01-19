@@ -79,7 +79,9 @@ namespace dbmm
 
         // helper for factories
         static Reference< XInterface > SAL_CALL Create( const Reference< XComponentContext >& _rxContext );
+        /// @throws RuntimeException
         static OUString SAL_CALL getImplementationName_static() throw(RuntimeException);
+        /// @throws RuntimeException
         static Sequence< OUString > SAL_CALL getSupportedServiceNames_static() throw(RuntimeException);
 
     protected:
