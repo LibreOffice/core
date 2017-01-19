@@ -31,6 +31,7 @@
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 #include <unordered_map>
@@ -332,7 +333,7 @@ class ExtendedAttributes :
     OUString * m_pQNames;
     OUString * m_pValues;
 
-    DocumentHandlerImpl * m_pHandler;
+    rtl::Reference<DocumentHandlerImpl> m_xHandler;
 
 public:
     inline ExtendedAttributes(
@@ -383,10 +384,8 @@ inline ExtendedAttributes::ExtendedAttributes(
     , m_pLocalNames( pLocalNames )
     , m_pQNames( pQNames )
     , m_pValues( new OUString[ nAttributes ] )
-    , m_pHandler( pHandler )
+    , m_xHandler( pHandler )
 {
-    m_pHandler->acquire();
-
     for ( sal_Int32 nPos = 0; nPos < nAttributes; ++nPos )
     {
         m_pValues[ nPos ] = xAttributeList->getValueByIndex( nPos );
@@ -395,8 +394,6 @@ inline ExtendedAttributes::ExtendedAttributes(
 
 ExtendedAttributes::~ExtendedAttributes() throw ()
 {
-    m_pHandler->release();
-
     delete [] m_pUids;
     delete [] m_pLocalNames;
     delete [] m_pQNames;
