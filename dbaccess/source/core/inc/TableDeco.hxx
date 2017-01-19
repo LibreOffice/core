@@ -110,6 +110,7 @@ namespace dbaccess
                 the connection the table belongs to. Must not be <NULL/>
             @param _rxTable
                 the table from the driver can be <NULL/>
+            @throws css::sdbc::SQLException
         */
         ODBTableDecorator(
             const css::uno::Reference< css::sdbc::XConnection >& _rxConn,

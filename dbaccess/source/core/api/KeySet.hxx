@@ -138,6 +138,8 @@ namespace dbaccess
                                        sal_Int32 _nType,
                                        sal_Int32 _nScale );
         OUStringBuffer createKeyFilter( );
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         bool doTryRefetch_throw() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
         void tryRefetch(const ORowSetRow& _rInsertRow,bool bRefetch);
         void executeUpdate(const ORowSetRow& _rInsertRow, const ORowSetRow& _rOriginalRow, const OUString& i_sSQL, const OUString& i_sTableName,const ::std::vector<sal_Int32>& _aIndexColumnPositions = ::std::vector<sal_Int32>());
@@ -195,6 +197,8 @@ namespace dbaccess
         virtual sal_Int32 SAL_CALL getRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
         virtual bool SAL_CALL absolute( sal_Int32 row ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
         virtual bool SAL_CALL previous(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         void SAL_CALL ensureRowForData(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
         virtual void SAL_CALL refreshRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
         // css::sdbcx::XRowLocate

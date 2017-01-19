@@ -202,7 +202,11 @@ private:
         const OUString& user, const OUString& password
         );
 
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& user, const OUString& password , bool _bIsolated) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
+    /// @throws css::sdbc::SQLException
+    /// @throws css::uno::RuntimeException
     css::uno::Reference< css::sdbc::XConnection > SAL_CALL connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler , bool _bIsolated) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
 protected:

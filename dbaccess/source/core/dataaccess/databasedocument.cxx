@@ -374,6 +374,7 @@ static const char sPictures[] = "Pictures";
 // document for anything, I believe this is a valid assumption ( as much as
 // I could check anyway )
 
+/// @throws RuntimeException
 void lcl_uglyHackToStoreDialogeEmbedImages( const Reference< XStorageBasedLibraryContainer >& xDlgCont, const Reference< XStorage >& xStorage, const Reference< XModel >& rxModel, const Reference<XComponentContext >& rxContext ) throw ( RuntimeException )
 {
     Sequence< OUString > sLibraries = xDlgCont->getElementNames();

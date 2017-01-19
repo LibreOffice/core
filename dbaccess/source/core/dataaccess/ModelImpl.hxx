@@ -276,6 +276,7 @@ public:
         );
 
     // XEventListener
+    /// @throws css::uno::RuntimeException
     void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException);
 
     void setModified( bool bModified );

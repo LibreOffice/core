@@ -183,6 +183,8 @@ namespace dbaccess
         const connectivity::ORowSetValue& impl_getValue(sal_Int32 columnIndex);
         // sets the current and the bookmark
         void setCurrentRow( bool _bMoved, bool _bDoNotify, const ORowSetRow& _rOldValues, ::osl::ResettableMutexGuard& _rGuard);
+        /// @throws css::sdbc::SQLException
+        /// @throws css::uno::RuntimeException
         void checkPositioningAllowed() throw(css::sdbc::SQLException, css::uno::RuntimeException);
         // checks  if the cache is null
         void checkCache();
