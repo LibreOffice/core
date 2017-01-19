@@ -57,20 +57,14 @@ Resource RID_POPUP_FILTER
     };
 };
 
-Image RID_IMG_SELECT_CURRENT
+Bitmap RID_BMP_SELECT_CURRENT
 {
-    ImageBitmap = Bitmap
-    {
-        File = "popup_select_current.png";
-    };
+    File = "popup_select_current.png";
 };
 
-Image RID_IMG_UNSELECT_CURRENT
+Bitmap RID_BMP_UNSELECT_CURRENT
 {
-    ImageBitmap = Bitmap
-    {
-        File = "popup_unselect_current.png";
-    };
+    File = "popup_unselect_current.png";
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

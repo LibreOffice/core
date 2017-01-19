@@ -20,45 +20,54 @@
 #include "sc.hrc"
 #include "helpids.h"
 
-Image IMG_CELL_BORDER
+Bitmap RID_BMP_CELL_BORDER
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorder.png";};
+    File = "sidebar/CellBorder.png";
 };
-Image IMG_LINE_STYLE1
+
+Bitmap RID_BMP_LINE_STYLE1
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_005.png";};
+    File = "sidebar/CellBorderLineStyle_005.png";
 };
-Image IMG_LINE_STYLE2
+
+Bitmap RID_BMP_LINE_STYLE2
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_250.png";};
+    File = "sidebar/CellBorderLineStyle_250.png";
 };
-Image IMG_LINE_STYLE3
+
+Bitmap RID_BMP_LINE_STYLE3
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_400.png";};
+    File = "sidebar/CellBorderLineStyle_400.png";
 };
-Image IMG_LINE_STYLE4
+
+Bitmap RID_BMP_LINE_STYLE4
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_500.png";};
+    File = "sidebar/CellBorderLineStyle_500.png";
 };
-Image IMG_LINE_STYLE5
+
+Bitmap RID_BMP_LINE_STYLE5
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_110.png";};
+    File = "sidebar/CellBorderLineStyle_110.png";
 };
-Image IMG_LINE_STYLE6
+
+Bitmap RID_BMP_LINE_STYLE6
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_260.png";};
+    File = "sidebar/CellBorderLineStyle_260.png";
 };
-Image IMG_LINE_STYLE7
+
+Bitmap RID_BMP_LINE_STYLE7
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_450.png";};
+    File = "sidebar/CellBorderLineStyle_450.png";
 };
-Image IMG_LINE_STYLE8
+
+Bitmap RID_BMP_LINE_STYLE8
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_505.png";};
+    File = "sidebar/CellBorderLineStyle_505.png";
 };
-Image IMG_LINE_STYLE9
+
+Bitmap RID_BMP_LINE_STYLE9
 {
-    ImageBitmap = Bitmap{File = "sidebar/CellBorderLineStyle_750.png";};
+    File = "sidebar/CellBorderLineStyle_750.png";
 };
 
 // cell border style popup

@@ -396,16 +396,16 @@ void ScNavigatorDlg::UpdateButtons()
     switch (nDropMode)
     {
         case SC_DROPMODE_URL:
-            nImageId = RID_IMG_DROP_URL;
+            nImageId = RID_BMP_DROP_URL;
             break;
         case SC_DROPMODE_LINK:
-            nImageId = RID_IMG_DROP_LINK;
+            nImageId = RID_BMP_DROP_LINK;
             break;
         case SC_DROPMODE_COPY:
-            nImageId = RID_IMG_DROP_COPY;
+            nImageId = RID_BMP_DROP_COPY;
             break;
     }
-    aTbxCmd->SetItemImage(nDragModeId, Image(ScResId(nImageId)));
+    aTbxCmd->SetItemImage(nDragModeId, Image(BitmapEx(ScResId(nImageId))));
 }
 
 ScNavigatorSettings::ScNavigatorSettings()

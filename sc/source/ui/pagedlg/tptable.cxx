@@ -117,7 +117,7 @@ ScTablePage::ScTablePage( vcl::Window* pParent, const SfxItemSet& rCoreAttrs ) :
 
 void ScTablePage::ShowImage()
 {
-    Image aImg = Image( ScResId( (m_pBtnLeftRight->IsChecked()) ? IMG_LEFTRIGHT : IMG_TOPDOWN ) );
+    Image aImg(BitmapEx(ScResId((m_pBtnLeftRight->IsChecked()) ? BMP_LEFTRIGHT : BMP_TOPDOWN)));
     m_pBmpPageDir->SetImage( aImg );
     m_pBmpPageDir->SetOutputSizePixel( aImg.GetSizePixel() );
 }

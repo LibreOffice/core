@@ -18,11 +18,10 @@
  */
 
 #include "sc.hrc"
-                    // -> RID_SCPAGE_AREAS
 
 // TabPage: Tabelle
 
-#define IMG_LEFTRIGHT       (SC_DIALOGS_START + 43 + 23)
-#define IMG_TOPDOWN         (SC_DIALOGS_START + 43 + 24)
+#define BMP_LEFTRIGHT       (SC_DIALOGS_START + 43 + 23)
+#define BMP_TOPDOWN         (SC_DIALOGS_START + 43 + 24)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

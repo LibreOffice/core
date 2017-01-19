@@ -1096,13 +1096,10 @@ void ScCheckListMenuWindow::packWindow()
 
     float fScaleFactor = GetDPIScaleFactor();
 
-    Image aSingleSelect(ScResId(RID_IMG_SELECT_CURRENT));
+    BitmapEx aSingleSelectBmp(ScResId(RID_BMP_SELECT_CURRENT));
     if (fScaleFactor > 1)
-    {
-        BitmapEx aBitmap = aSingleSelect.GetBitmapEx();
-        aBitmap.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
-        aSingleSelect = Image(aBitmap);
-    }
+        aSingleSelectBmp.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
+    Image aSingleSelect(aSingleSelectBmp);
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_SELECT);
     maBtnSelectSingle->SetPosSizePixel(aPos, aSize);
@@ -1111,13 +1108,10 @@ void ScCheckListMenuWindow::packWindow()
     maBtnSelectSingle->SetClickHdl( LINK(this, ScCheckListMenuWindow, ButtonHdl) );
     maBtnSelectSingle->Show();
 
-    Image aSingleUnselect(ScResId(RID_IMG_UNSELECT_CURRENT));
+    BitmapEx aSingleUnselectBmp(ScResId(RID_BMP_UNSELECT_CURRENT));
     if (fScaleFactor > 1)
-    {
-        BitmapEx aBitmap = aSingleUnselect.GetBitmapEx();
-        aBitmap.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
-        aSingleUnselect = Image(aBitmap);
-    }
+        aSingleUnselectBmp.Scale(fScaleFactor, fScaleFactor, BmpScaleFlag::Fast);
+    Image aSingleUnselect(aSingleUnselectBmp);
 
     getSectionPosSize(aPos, aSize, BTN_SINGLE_UNSELECT);
     maBtnUnselectSingle->SetPosSizePixel(aPos, aSize);
