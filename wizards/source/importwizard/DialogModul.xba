@@ -375,7 +375,7 @@ Dim sPath as String
 	ElseIf oCheckbox.State = 0 Then
 		CheckControlPath = True
 	Else
-		sPath = ConvertToUrl(Trim(oTextBox.Text)
+		sPath = ConvertToUrl(Trim(oTextBox.Text))
 		CheckControlPath = oUcb.Exists(sPath)
 	End If
 End Function
