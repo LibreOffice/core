@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_2ccecf83",
+        "filename": "vcl/unx/generic/app/sm.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 526,
+      "author": {
+        "id": 1000182
+      },
+      "writtenOn": "2017-01-19T12:08:06Z",
+      "side": 1,
+      "message": "You can leave \u0027connection closed\u0027 logging here, as now nothing would be logged if this assert triggers",
+      "revId": "7b3ad235287d0731de32c3a3b07357503a1a9411",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
