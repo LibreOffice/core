@@ -29,11 +29,12 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/awt/XControl.hpp>
 #include <osl/thread.hxx>
-
-
 #include <osl/conditn.hxx>
 #include <cppuhelper/component.hxx>
 #include <comphelper/uno3.hxx>
+#include <rtl/ref.hxx>
+
+
 using namespace comphelper;
 
 
@@ -57,8 +58,7 @@ class OComponentEventThread
     ThreadObjects                   m_aControls;        // Control for Submit
     ThreadBools                     m_aFlags;           // Flags for Submit/Reset
 
-    ::cppu::OComponentHelper*                     m_pCompImpl;    // Implementation of the Control
-    css::uno::Reference< css::lang::XComponent>   m_xComp; // css::lang::XComponent of the Control
+    rtl::Reference<::cppu::OComponentHelper>      m_xComp;    // Implementation of the Control
 
 protected:
 
