@@ -702,12 +702,11 @@ class WebWizardDialog(WizardDialog):
 
     class LayoutRenderer:
 
-        def getImageUrls(self, listItem):
-            oResIds = None
+        def getImageUrl(self, listItem):
+            oResId = None
             if listItem is not None:
-                oResIds = listItem.getImageUrls()
-
-            return oResIds
+                oResId = listItem.getImageUrl()
+            return oResId
 
         def render(self, listItem):
             return "" if (listItem is None) else listItem.cp_Name

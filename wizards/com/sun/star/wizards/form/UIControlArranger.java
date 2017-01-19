@@ -126,14 +126,10 @@ public class UIControlArranger
 
     private class LayoutRenderer implements ButtonList.IImageRenderer
     {
-        public Object[] getImageUrls(Object listitem)
+        public Object getImageUrl(Object listitem)
         {
-
             int ResId = UIConsts.RID_IMG_FORM + (2 * ((Integer) listitem).intValue());
-            return new Integer[]
-                    {
-                    Integer.valueOf(ResId), Integer.valueOf(ResId + 1)
-                    };
+            return Integer.valueOf(ResId);
         }
 
         public String render(Object listItem)

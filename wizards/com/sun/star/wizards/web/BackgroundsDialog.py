@@ -115,11 +115,9 @@ class BackgroundsDialog(ImageListDialog):
             self.cut = cut_
             self.parent = parent
 
-        def getImageUrls(self, listItem):
-            sRetUrls = []
+        def getImageUrl(self, listItem):
             if (listItem is not None):
-                sRetUrls.append(listItem)
-                return sRetUrls
+                return listItem
             return None
 
         def render(self, obj):

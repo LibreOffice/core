@@ -224,13 +224,10 @@ class ImageList(ListDataListener):
 
         focusable = True
         for index, item in enumerate(self.m_aImages):
-            oResources = self.renderer.getImageUrls(self.getObjectFor(index))
-            if oResources is not None:
-                if len(oResources) == 1:
-                    item.Model.ImageURL = oResources[0]
-                elif len(oResources) == 2:
-                    self.oUnoDialog.getPeerConfiguration().setImageUrl(
-                        item.Model, oResources[0])
+            oResource = self.renderer.getImageUrl(self.getObjectFor(index))
+            if oResource is not None:
+                self.oUnoDialog.getPeerConfiguration().setImageUrl(
+                    item.Model, oResource)
 
                 item.Model.Tabstop = bool(focusable)
                 if self.refreshOverNull:
@@ -450,10 +447,9 @@ class ImageList(ListDataListener):
     class IImageRenderer(IRenderer):
 
          # @param listItem
-         # @return two resource ids for an image referenced in the imaglist resourcefile of the
-         # wizards project; The second one of them is designed to be used for High Contrast Mode.
+         # @return resource id for an image referenced in the resourcefile of the wizards project
         @abstractmethod
-        def getImageUrls(self, listItem):
+        def getImageUrl(self, listItem):
             pass
 
     class SimpleCounterRenderer(IRenderer):

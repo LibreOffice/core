@@ -288,17 +288,10 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
             Object oObj = getObjectFor(i);
             if (oObj == null)
                 continue;
-            Object[] oResources = renderer.getImageUrls(oObj);
-            if (oResources == null)
+            Object oResource = renderer.getImageUrl(oObj);
+            if (oResource == null)
                 continue;
-            if (oResources.length == 1)
-            {
-                Helper.setUnoPropertyValue(m_aButtons[i].getModel(), PropertyNames.PROPERTY_IMAGEURL, oResources[0]);
-            }
-            else if (oResources.length == 2)
-            {
-                oUnoDialog.getPeerConfiguration().setImageUrl(m_aButtons[i].getModel(), oResources[0]);
-            }
+            oUnoDialog.getPeerConfiguration().setImageUrl(m_aButtons[i].getModel(), oResource);
             boolean bTabStop = Boolean.TRUE; // focusable ? Boolean.TRUE : Boolean.FALSE;
             Helper.setUnoPropertyValue(m_aButtons[i].getModel(), "Tabstop", bTabStop);
             if (refreshOverNull)
@@ -533,10 +526,9 @@ public class ButtonList implements XItemEventBroadcaster, XActionListener
     {
 
         /**
-         * @return two resource ids for an image referenced in the imaglist resourcefile of the
-         * wizards project; The second one of them is designed to be used for High Contrast Mode.
+         * @return a resource ids for an image referenced in the resourcefile of the wizards project
          */
-        Object[] getImageUrls(Object listItem);
+        Object getImageUrl(Object listItem);
     }
 
     private static class SimpleCounterRenderer implements IRenderer

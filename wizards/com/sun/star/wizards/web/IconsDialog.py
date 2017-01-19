@@ -92,15 +92,12 @@ class IconsDialog(ImageListDialog, ImageList.IImageRenderer, ListModel):
     def getElementAt(self, arg0):
         return self.objects[arg0]
 
-    def getImageUrls(self, listItem):
+    def getImageUrl(self, listItem):
         i = listItem
         iset = self.getIconsetNum(i)
         icon = self.getIconNum(i)
-        sRetUrls = list(range(2))
-        sRetUrls[0] = self.htmlexpDirectory + "/htmlexpo/" \
+        return self.htmlexpDirectory + "/htmlexpo/" \
             + self.getIconsetPref(iset) + self.icons[icon] + self.getIconsetPostfix(iset)
-        sRetUrls[1] = sRetUrls[0]
-        return sRetUrls
 
     def render(self, object):
         if object is None:

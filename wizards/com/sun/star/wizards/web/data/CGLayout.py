@@ -44,9 +44,9 @@ class CGLayout(ConfigGroup):
                 self.templates[fileName] = files[i]
             i += 1
 
-    def getImageUrls(self):
+    def getImageUrl(self):
         ResId = UIConsts.RID_IMG_WEB + (self.cp_Index * 2)
-        return [ResId, ResId + 1]
+        return ResId
 
     def getTemplates(self, xmsf):
         self.createTemplates(xmsf)
