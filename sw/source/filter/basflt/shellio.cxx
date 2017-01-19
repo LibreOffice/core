@@ -735,13 +735,12 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     bool bHasMark = false;
     SwPaM * pPam;
 
-    SwDoc *pDoc = nullptr;
+    rtl::Reference<SwDoc> xDoc;
 
     if ( pShell && !bWriteAll && pShell->IsTableMode() )
     {
         bWriteAll = true;
-        pDoc = new SwDoc;
-        pDoc->acquire();
+        xDoc = new SwDoc;
 
         // Copy parts of a table:
         // Create a table with the width of the original and copy the selected cells.
@@ -751,11 +750,11 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         SwSelBoxes aBoxes;
         GetTableSel( *pShell, aBoxes );
         const SwTableNode* pTableNd = static_cast<const SwTableNode*>(aBoxes[0]->GetSttNd()->StartOfSectionNode());
-        SwNodeIndex aIdx( pDoc->GetNodes().GetEndOfExtras(), 2 );
+        SwNodeIndex aIdx( xDoc->GetNodes().GetEndOfExtras(), 2 );
         SwContentNode *pNd = aIdx.GetNode().GetContentNode();
         OSL_ENSURE( pNd, "Node not found" );
         SwPosition aPos( aIdx, SwIndex( pNd ) );
-        pTableNd->GetTable().MakeCopy( pDoc, aPos, aBoxes );
+        pTableNd->GetTable().MakeCopy( xDoc.get(), aPos, aBoxes );
     }
 
     if( !bWriteAll && ( pShell || pOutPam ))
@@ -799,7 +798,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     else
     {
         // no Shell or write-everything -> create a Pam
-        SwDoc* pOutDoc = pDoc ? pDoc : &rDoc;
+        SwDoc* pOutDoc = xDoc.is() ? xDoc.get() : &rDoc;
         pPam = new SwPaM( pOutDoc->GetNodes().GetEndOfContent() );
         if( pOutDoc->IsClipBoard() )
         {
@@ -815,13 +814,13 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     }
 
     rxWriter->bWriteAll = bWriteAll;
-    SwDoc* pOutDoc = pDoc ? pDoc : &rDoc;
+    SwDoc* pOutDoc = xDoc.is() ? xDoc.get() : &rDoc;
 
     // If the default PageDesc has still the initial value,
     // (e.g. if no printer was set) then set it to DIN A4.
     // #i37248# - Modifications are only allowed at a new document.
-    // <pOutDoc> contains a new document, if <pDoc> is set - see above.
-    if ( pDoc && !pOutDoc->getIDocumentDeviceAccess().getPrinter( false ) )
+    // <pOutDoc> contains a new document, if <xDoc> is set - see above.
+    if ( xDoc.is() && !pOutDoc->getIDocumentDeviceAccess().getPrinter( false ) )
     {
         const SwPageDesc& rPgDsc = pOutDoc->GetPageDesc( 0 );
         //const SwPageDesc& rPgDsc = *pOutDoc->GetPageDescFromPool( RES_POOLPAGE_STANDARD );
@@ -885,7 +884,7 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
     {
         delete pPam;            // delete the created Pam
         // Everything was written successfully? Tell the document!
-        if ( !IsError( nError ) && !pDoc )
+        if ( !IsError( nError ) && !xDoc.is() )
         {
             rDoc.getIDocumentState().ResetModified();
             // #i38810# - reset also flag, that indicates updated links
@@ -893,10 +892,9 @@ sal_uLong SwWriter::Write( WriterRef& rxWriter, const OUString* pRealFileName )
         }
     }
 
-    if ( pDoc )
+    if ( xDoc.is() )
     {
-        if ( !pDoc->release() )
-            delete pDoc;
+        xDoc.clear();
         bWriteAll = false;
     }
 
