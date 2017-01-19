@@ -20,13 +20,14 @@
 #define INCLUDED_SW_INC_DOCFAC_HXX
 
 #include <tools/solar.h>
+#include <rtl/ref.hxx>
 
 class SwDoc;
 
 class SW_DLLPUBLIC SwDocFac
 {
 protected:
-    SwDoc* pDoc;
+    rtl::Reference<SwDoc> mxDoc;
 
 public:
     SwDocFac( SwDoc *pDoc = nullptr );
