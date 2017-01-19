@@ -116,11 +116,15 @@ public:
         throw (css::uno::RuntimeException, std::exception) override;
 
     /** Adds a state to the set.
+
+        @throws css::uno::RuntimeException
     */
     void    AddState(sal_Int16 aState)
         throw (css::uno::RuntimeException);
 
     /** Removes a state from the set if the set contains the state, otherwise nothing is done.
+
+        @throws css::uno::RuntimeException
     */
     void    RemoveState(sal_Int16 aState)
         throw (css::uno::RuntimeException);

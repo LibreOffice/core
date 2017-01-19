@@ -38,10 +38,12 @@ public:
 
     void savePackage();
 
+    /// @throws css::uno::Exception
     void addFile( css::uno::Reference< css::uno::XInterface >& xRootFolder,
                   const OUString& rSourceFile )
         throw( css::uno::Exception, std::exception );
 
+    /// @throws css::uno::Exception
     css::uno::Reference< css::uno::XInterface > addFolder( css::uno::Reference< css::uno::XInterface >& xRootFolder,
                                                            const OUString& rName )
         throw( css::uno::Exception, std::exception );

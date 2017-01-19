@@ -113,6 +113,7 @@ public:
         getRelationByType( sal_Int16 aRelationType )
             throw (css::uno::RuntimeException, std::exception) override;
 
+    /// @throws uno::RuntimeException
     void AddRelation(
         const css::accessibility::AccessibleRelation& rRelation)
             throw (css::uno::RuntimeException);

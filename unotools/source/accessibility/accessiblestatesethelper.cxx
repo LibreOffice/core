@@ -36,14 +36,19 @@ public:
     AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl);
     ~AccessibleStateSetHelperImpl();
 
+    /// @throws uno::RuntimeException
     bool IsEmpty () const
         throw (uno::RuntimeException);
+    /// @throws uno::RuntimeException
     bool Contains (sal_Int16 aState) const
         throw (uno::RuntimeException);
+    /// @throws uno::RuntimeException
     uno::Sequence<sal_Int16> GetStates() const
         throw (uno::RuntimeException);
+    /// @throws uno::RuntimeException
     void AddState(sal_Int16 aState)
         throw (uno::RuntimeException);
+    /// @throws uno::RuntimeException
     void RemoveState(sal_Int16 aState)
         throw (uno::RuntimeException);
 

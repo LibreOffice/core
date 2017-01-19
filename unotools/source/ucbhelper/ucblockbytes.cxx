@@ -219,6 +219,8 @@ class Moderator
     // returns. This would imply that these class must be refcounted!!!
 
 public:
+    /// @throws ContentCreationException
+    /// @throws RuntimeException
     Moderator(
         Reference < XContent > const & xContent,
         Reference < XInteractionHandler > const & xInteract,

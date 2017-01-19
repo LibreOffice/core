@@ -95,11 +95,22 @@ public:
 
     void            Notify( const css::uno::Sequence<OUString>& aPropertyNames) override;
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    /// @throws css::container::NoSuchElementException
+    /// @throws css::lang::WrappedTargetException
+    /// @throws css::uno::RuntimeException
     css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     static css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException);
     OUString GetEventName( GlobalEventId nID );
 };

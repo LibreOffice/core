@@ -33,15 +33,21 @@ public:
     AccessibleRelationSetHelperImpl(const AccessibleRelationSetHelperImpl& rImpl);
     ~AccessibleRelationSetHelperImpl();
 
+    /// @throws uno::RuntimeException
     sal_Int32 getRelationCount(  )
         throw (uno::RuntimeException);
+    /// @throws lang::IndexOutOfBoundsException
+    /// @throws uno::RuntimeException
     AccessibleRelation getRelation( sal_Int32 nIndex )
             throw (lang::IndexOutOfBoundsException,
                     uno::RuntimeException);
+    /// @throws uno::RuntimeException
     bool containsRelation( sal_Int16 aRelationType )
         throw (uno::RuntimeException);
+    /// @throws uno::RuntimeException
     AccessibleRelation getRelationByType( sal_Int16 aRelationType )
             throw (uno::RuntimeException);
+    /// @throws uno::RuntimeException
     void AddRelation(const AccessibleRelation& rRelation)
             throw (uno::RuntimeException);
 
