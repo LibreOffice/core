@@ -38,6 +38,12 @@ namespace com {
     }   }   }
 }
 
+enum TemplateViewMode
+{
+    eListView,
+    eThumbnailView
+};
+
 class SFX2_DLLPUBLIC SfxTemplateManagerDlg : public ModalDialog
 {
     typedef bool (*selection_cmp_fn)(const ThumbnailViewItem*,const ThumbnailViewItem*);
@@ -52,6 +58,7 @@ public:
     virtual bool EventNotify( NotifyEvent& rNEvt ) override;
 
     void setDocumentModel (const css::uno::Reference<css::frame::XModel> &rModel);
+    void setTemplateViewMode ( TemplateViewMode eMode );
 
 protected:
 
@@ -72,6 +79,8 @@ protected:
     DECL_LINK(MoveClickHdl, Button*, void);
     DECL_LINK(ExportClickHdl, Button*, void);
     DECL_LINK(ImportClickHdl, Button*, void);
+    DECL_LINK_TYPED(ListViewHdl, Button*, void);
+    DECL_LINK_TYPED(IconViewHdl, Button*, void);
     DECL_STATIC_LINK(SfxTemplateManagerDlg, LinkClickHdl, Button*, void);
 
     DECL_LINK(TVItemStateHdl, const ThumbnailViewItem*, void);
@@ -132,6 +141,8 @@ protected:
     VclPtr<PushButton> mpExportButton;
     VclPtr<PushButton> mpImportButton;
     VclPtr<PushButton> mpLinkButton;
+    VclPtr<PushButton> mpListViewButton;
+    VclPtr<PushButton> mpIconViewButton;
     VclPtr<CheckBox> mpCBXHideDlg;
     VclPtr<ToolBox> mpActionBar;
     VclPtr<TemplateSearchView> mpSearchView;
@@ -143,6 +154,8 @@ protected:
 
     css::uno::Reference< css::frame::XModel > m_xModel;
     css::uno::Reference< css::frame::XDesktop2 > mxDesktop;
+
+    TemplateViewMode mpViewMode;
 };
 
 //  class SfxTemplateCategoryDialog -------------------------------------------------------------------

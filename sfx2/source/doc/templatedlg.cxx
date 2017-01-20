@@ -167,6 +167,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     get(mpImportButton, "import_btn");
     get(mpLinkButton, "online_link");
     get(mpCBXHideDlg, "hidedialogcb");
+    get(mpListViewButton, "list_view");
+    get(mpIconViewButton, "icon_view");
 
     // Create popup menus
     mpActionMenu = VclPtr<PopupMenu>::Create();
@@ -230,6 +232,8 @@ SfxTemplateManagerDlg::SfxTemplateManagerDlg(vcl::Window *parent)
     mpExportButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, ExportClickHdl));
     mpImportButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, ImportClickHdl));
     mpLinkButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, LinkClickHdl));
+    mpListViewButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, ListViewHdl));
+    mpIconViewButton->SetClickHdl(LINK(this, SfxTemplateManagerDlg, IconViewHdl));
 
     mpSearchFilter->SetUpdateDataHdl(LINK(this, SfxTemplateManagerDlg, SearchUpdateHdl));
     mpSearchFilter->EnableUpdateData();
@@ -277,6 +281,8 @@ void SfxTemplateManagerDlg::dispose()
     mpExportButton.clear();
     mpImportButton.clear();
     mpLinkButton.clear();
+    mpListViewButton.clear();
+    mpIconViewButton.clear();
     mpCBXHideDlg.clear();
     mpSearchFilter.clear();
     mpCBApp.clear();
@@ -649,6 +655,14 @@ IMPL_LINK_NOARG(SfxTemplateManagerDlg, ImportClickHdl, Button*, void)
 IMPL_STATIC_LINK_NOARG(SfxTemplateManagerDlg, LinkClickHdl, Button*, void)
 {
     OnTemplateLink();
+}
+
+IMPL_LINK_NOARG_TYPED ( SfxTemplateManagerDlg, ListViewHdl, Button*, void )
+{
+}
+
+IMPL_LINK_NOARG_TYPED ( SfxTemplateManagerDlg, IconViewHdl, Button*, void )
+{
 }
 
 IMPL_LINK_NOARG(SfxTemplateManagerDlg, OpenRegionHdl, void*, void)
