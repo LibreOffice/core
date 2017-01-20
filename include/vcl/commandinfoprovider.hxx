@@ -89,6 +89,11 @@ public:
 
     OUString GetCommandPropertyFromModule( const OUString& rCommandName, const OUString& rModuleName );
 
+    BitmapEx GetBitmapForCommand(
+        const OUString& rsCommandName,
+        const css::uno::Reference<css::frame::XFrame>& rxFrame,
+        vcl::ImageType eImageType = vcl::ImageType::Small);
+
     Image GetImageForCommand(
         const OUString& rsCommandName,
         const css::uno::Reference<css::frame::XFrame>& rxFrame,

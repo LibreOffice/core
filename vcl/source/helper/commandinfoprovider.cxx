@@ -209,14 +209,14 @@ OUString CommandInfoProvider::GetRealCommandForCommand(const OUString& rCommandN
     return GetCommandProperty("TargetURL", rCommandName);
 }
 
-Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName,
-                                              const Reference<frame::XFrame>& rxFrame,
-                                              vcl::ImageType eImageType)
+BitmapEx CommandInfoProvider::GetBitmapForCommand(const OUString& rsCommandName,
+                                                 const Reference<frame::XFrame>& rxFrame,
+                                                 vcl::ImageType eImageType)
 {
     SetFrame(rxFrame);
 
     if (rsCommandName.isEmpty())
-        return Image();
+        return BitmapEx();
 
     sal_Int16 nImageType(ui::ImageType::COLOR_NORMAL | ui::ImageType::SIZE_DEFAULT);
 
@@ -241,10 +241,11 @@ Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName,
 
             aGraphicSeq = xDocImgMgr->getImages( nImageType, aImageCmdSeq );
             Reference<graphic::XGraphic> xGraphic = aGraphicSeq[0];
-            Image aImage(xGraphic);
+            const Graphic aGraphic(xGraphic);
+            BitmapEx aBitmap(aGraphic.GetBitmapEx());
 
-            if (!!aImage)
-                return aImage;
+            if (!!aBitmap)
+                return aBitmap;
         }
     }
     catch (Exception&)
@@ -264,13 +265,22 @@ Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName,
 
         Reference<graphic::XGraphic> xGraphic(aGraphicSeq[0]);
 
-        return Image(xGraphic);
+        const Graphic aGraphic(xGraphic);
+
+        return aGraphic.GetBitmapEx();
     }
     catch (Exception&)
     {
     }
 
-    return Image();
+    return BitmapEx();
+}
+
+Image CommandInfoProvider::GetImageForCommand(const OUString& rsCommandName,
+                                              const Reference<frame::XFrame>& rxFrame,
+                                              vcl::ImageType eImageType)
+{
+    return Image(GetBitmapForCommand(rsCommandName, rxFrame, eImageType));
 }
 
 sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
