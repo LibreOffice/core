@@ -3303,7 +3303,7 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
 
     // don't change the whitespace at the beginning of paragraphs, this is
     // annoying when taking minutes without further formatting
-    pDocShell->GetWrtShell()->GetAutoFormatFlags()->bAFormatByInpDelSpacesAtSttEnd = false;
+    SwEditShell::GetAutoFormatFlags()->bAFormatByInpDelSpacesAtSttEnd = false;
 }
 
 void SwXTextDocument::postKeyEvent(int nType, int nCharCode, int nKeyCode)
