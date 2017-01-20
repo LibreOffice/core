@@ -41,12 +41,12 @@ void CustomToolBarImportHelper::ScaleImage( uno::Reference< graphic::XGraphic >&
     Size aSize = aGraphic.GetSizePixel();
     if ( aSize.Height() && ( aSize.Height() == aSize.Width() ) )
     {
-        Image aImage( xGraphic );
+        Graphic aImage(xGraphic);
         if ( aSize.Height() != nNewSize )
         {
             BitmapEx aBitmap = aImage.GetBitmapEx();
             BitmapEx aBitmapex = BitmapEx::AutoScaleBitmap(aBitmap, nNewSize );
-            aImage = Image( aBitmapex);
+            aImage = Graphic(aBitmapex);
             xGraphic = aImage.GetXGraphic();
         }
     }
