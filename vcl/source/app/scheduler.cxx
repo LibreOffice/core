@@ -27,7 +27,6 @@
 #include <salinst.hxx>
 
 namespace {
-const sal_uInt64 MaximumTimeoutMs = 1000 * 60; // 1 minute
 
 template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
@@ -84,26 +83,6 @@ inline std::basic_ostream<charT, traits> & operator <<(
 
 } // end anonymous namespace
 
-void ImplSchedulerData::Invoke()
-{
-    DBG_TESTSOLARMUTEX();
-
-    assert(!mbInScheduler);
-    if (mbDelete || mbInScheduler )
-        return;
-
-    // prepare Scheduler Object for deletion after handling
-    mpTask->SetDeletionFlags();
-
-    // tdf#92036 Reset the period to avoid re-firing immediately.
-    mpTask->mpImpl->mpSchedulerData->mnUpdateTime = tools::Time::GetSystemTicks();
-
-    // invoke it
-    mbInScheduler = true;
-    mpTask->Invoke();
-    mbInScheduler = false;
-}
-
 void Scheduler::ImplDeInitScheduler()
 {
     ImplSVData*           pSVData = ImplGetSVData();
@@ -152,7 +131,7 @@ void Scheduler::ImplStartTimer(sal_uInt64 nMS, bool bForce)
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
     if (!rSchedCtx.mpSalTimer)
     {
-        rSchedCtx.mnTimerPeriod = MaximumTimeoutMs;
+        rSchedCtx.mnTimerPeriod = InfiniteTimeoutMs;
         rSchedCtx.mpSalTimer = pSVData->mpDefInst->CreateSalTimer();
         rSchedCtx.mpSalTimer->SetCallback(Scheduler::CallbackTaskScheduling);
     }
@@ -210,7 +189,23 @@ bool Scheduler::ProcessTaskScheduling( bool bIdle )
                   << pMostUrgent << "  invoke     " << *pMostUrgent->mpTask );
 
         pMostUrgent->mnUpdateTime = nTime;
-        pMostUrgent->Invoke();
+
+        assert(!pMostUrgent->mbInScheduler);
+        if ( pMostUrgent->mbDelete || pMostUrgent->mbInScheduler )
+            return true;
+
+        // tdf#92036 Reset the period to avoid re-firing immediately.
+        pMostUrgent->mnUpdateTime = tools::Time::GetSystemTicks();
+
+        Task *pTask = pMostUrgent->mpTask;
+
+        // prepare Scheduler Object for deletion after handling
+        pTask->SetDeletionFlags();
+
+        // invoke it
+        pMostUrgent->mbInScheduler = true;
+        pTask->Invoke();
+        pMostUrgent->mbInScheduler = false;
         return true;
     }
     else
@@ -235,7 +230,7 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
     ImplSchedulerData* pPrevSchedulerData = nullptr;
     ImplSVData*        pSVData = ImplGetSVData();
     sal_uInt64         nTime = tools::Time::GetSystemTicks();
-    sal_uInt64         nMinPeriod = MaximumTimeoutMs;
+    sal_uInt64         nMinPeriod = InfiniteTimeoutMs;
     ImplSchedulerContext &rSchedCtx = pSVData->maSchedCtx;
 
     DBG_TESTSOLARMUTEX();
@@ -256,11 +251,11 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
             SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
                 << pSchedulerData << " " << *pSchedulerData << " (to be deleted)" );
 
-        ImplSchedulerData *pNext = pSchedulerData->mpNext;
+        if ( pSchedulerData->mbInScheduler )
+            goto next_entry;
 
         // Should Task be released from scheduling?
-        if ( !pSchedulerData->mbInScheduler &&
-              pSchedulerData->mbDelete )
+        if ( pSchedulerData->mbDelete )
         {
             if ( pPrevSchedulerData )
                 pPrevSchedulerData->mpNext = pSchedulerData->mpNext;
@@ -268,32 +263,33 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
                 rSchedCtx.mpFirstSchedulerData = pSchedulerData->mpNext;
             if ( pSchedulerData->mpTask )
                 pSchedulerData->mpTask->mpImpl->mpSchedulerData = nullptr;
-            pNext = pSchedulerData->mpNext;
-            delete pSchedulerData;
+            ImplSchedulerData *pDeleteItem = pSchedulerData;
+            pSchedulerData = pSchedulerData->mpNext;
+            delete pDeleteItem;
+            continue;
+        }
+
+        if ( !pSchedulerData->mpTask->IsIdle() )
+        {
+            sal_uInt64 nOldMinPeriod = nMinPeriod;
+            nMinPeriod = pSchedulerData->mpTask->UpdateMinPeriod(
+                                                   nOldMinPeriod, nTime );
+            assert( nMinPeriod <= nOldMinPeriod );
+            if ( nMinPeriod > nOldMinPeriod )
+            {
+                nMinPeriod = nOldMinPeriod;
+                SAL_WARN("vcl.schedule",
+                     "New update min period > old period - using old");
+            }
         }
         else
         {
-            if (!pSchedulerData->mbInScheduler)
-            {
-                if ( !pSchedulerData->mpTask->IsIdle() )
-                {
-                    sal_uInt64 nOldMinPeriod = nMinPeriod;
-                    nMinPeriod = pSchedulerData->mpTask->UpdateMinPeriod(
-                                                           nOldMinPeriod, nTime );
-                    assert( nMinPeriod <= nOldMinPeriod );
-                    if ( nMinPeriod > nOldMinPeriod )
-                    {
-                        nMinPeriod = nOldMinPeriod;
-                        SAL_WARN("vcl.schedule",
-                             "New update min period > old period - using old");
-                    }
-                }
-                else
-                    bHasActiveIdles = true;
-            }
-            pPrevSchedulerData = pSchedulerData;
+            bHasActiveIdles = true;
         }
-        pSchedulerData = pNext;
+
+next_entry:
+        pPrevSchedulerData = pSchedulerData;
+        pSchedulerData = pSchedulerData->mpNext;
     }
 
     // delete clock if no more timers available,
@@ -301,7 +297,7 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
     {
         if ( pSVData->maSchedCtx.mpSalTimer )
             pSVData->maSchedCtx.mpSalTimer->Stop();
-        nMinPeriod = MaximumTimeoutMs;
+        nMinPeriod = InfiniteTimeoutMs;
         pSVData->maSchedCtx.mnTimerPeriod = nMinPeriod;
         SAL_INFO("vcl.schedule", "Unusual - no more timers available - stop timer");
     }
