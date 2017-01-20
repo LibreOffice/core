@@ -30,6 +30,7 @@
 #include <comphelper/uno3.hxx>
 #include "sbamultiplex.hxx"
 #include <svx/dataaccessdescriptor.hxx>
+#include <rtl/ref.hxx>
 #include <map>
 #include <queue>
 
@@ -53,7 +54,7 @@ namespace dbaui
                 :public FmXGridControl
                 ,public css::frame::XDispatch
     {
-        typedef std::map<css::util::URL, SbaXStatusMultiplexer*, SbaURLCompare> StatusMultiplexerArray;
+        typedef std::map<css::util::URL, rtl::Reference<SbaXStatusMultiplexer>, SbaURLCompare> StatusMultiplexerArray;
         StatusMultiplexerArray      m_aStatusMultiplexer;
 
     public:

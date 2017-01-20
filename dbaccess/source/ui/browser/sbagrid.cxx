@@ -207,8 +207,8 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > 
                 aIter != m_aStatusMultiplexer.end();
                 ++aIter)
         {
-            if ((*aIter).second && (*aIter).second->getLength())
-                xDisp->addStatusListener((*aIter).second, (*aIter).first);
+            if ((*aIter).second.is() && (*aIter).second->getLength())
+                xDisp->addStatusListener((*aIter).second.get(), (*aIter).first);
         }
 }
 
@@ -224,24 +224,23 @@ void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListen
     ::osl::MutexGuard aGuard( GetMutex() );
     if ( _rxListener.is() )
     {
-        SbaXStatusMultiplexer*& pMultiplexer = m_aStatusMultiplexer[ _rURL ];
-        if ( !pMultiplexer )
+        rtl::Reference<SbaXStatusMultiplexer>& xMultiplexer = m_aStatusMultiplexer[ _rURL ];
+        if ( !xMultiplexer.is() )
         {
-            pMultiplexer = new SbaXStatusMultiplexer( *this, GetMutex() );
-            pMultiplexer->acquire();
+            xMultiplexer = new SbaXStatusMultiplexer( *this, GetMutex() );
         }
 
-        pMultiplexer->addInterface( _rxListener );
+        xMultiplexer->addInterface( _rxListener );
         if ( getPeer().is() )
         {
-            if ( 1 == pMultiplexer->getLength() )
+            if ( 1 == xMultiplexer->getLength() )
             {   // the first external listener for this URL
                 Reference< XDispatch >  xDisp( getPeer(), UNO_QUERY );
-                xDisp->addStatusListener( pMultiplexer, _rURL );
+                xDisp->addStatusListener( xMultiplexer.get(), _rURL );
             }
             else
             {   // already have other listeners for this URL
-                _rxListener->statusChanged( pMultiplexer->getLastEvent() );
+                _rxListener->statusChanged( xMultiplexer->getLastEvent() );
             }
         }
     }
@@ -251,19 +250,18 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< css::frame:
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
-    SbaXStatusMultiplexer*& pMultiplexer = m_aStatusMultiplexer[_rURL];
-    if (!pMultiplexer)
+    rtl::Reference<SbaXStatusMultiplexer>& xMultiplexer = m_aStatusMultiplexer[_rURL];
+    if (!xMultiplexer.is())
     {
-        pMultiplexer = new SbaXStatusMultiplexer(*this,GetMutex());
-        pMultiplexer->acquire();
+        xMultiplexer = new SbaXStatusMultiplexer(*this,GetMutex());
     }
 
-    if (getPeer().is() && pMultiplexer->getLength() == 1)
+    if (getPeer().is() && xMultiplexer->getLength() == 1)
     {
         Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
-        xDisp->removeStatusListener(pMultiplexer, _rURL);
+        xDisp->removeStatusListener(xMultiplexer.get(), _rURL);
     }
-    pMultiplexer->removeInterface( _rxListener );
+    xMultiplexer->removeInterface( _rxListener );
 }
 
 void SAL_CALL SbaXGridControl::dispose() throw( RuntimeException, std::exception )
@@ -277,11 +275,10 @@ void SAL_CALL SbaXGridControl::dispose() throw( RuntimeException, std::exception
             aIter != m_aStatusMultiplexer.end();
             ++aIter)
     {
-        if ((*aIter).second)
+        if ((*aIter).second.is())
         {
             (*aIter).second->disposeAndClear(aEvt);
-            (*aIter).second->release();
-            (*aIter).second = nullptr;
+            (*aIter).second.clear();
         }
     }
     StatusMultiplexerArray().swap(m_aStatusMultiplexer);
