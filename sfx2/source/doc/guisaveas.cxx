@@ -1201,6 +1201,10 @@ OUString ModelData_Impl::GetRecommendedDir( const OUString& aSuggestedDir )
                 aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
         }
 
+        // Suggest somewhere other than the system's temp directory
+        if( aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE ).startsWith( SvtPathOptions().GetTempPath() ) )
+            aLocation = INetURLObject( SvtPathOptions().GetWorkPath() );
+
         aLocation.setFinalSlash();
         if ( !aLocation.HasError() )
             aRecommendedDir = aLocation.GetMainURL( INetURLObject::DecodeMechanism::NONE );
