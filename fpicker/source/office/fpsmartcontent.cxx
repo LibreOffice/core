@@ -49,7 +49,6 @@ namespace svt
     SmartContent::SmartContent()
         :m_pContent( nullptr )
         ,m_eState( NOT_BOUND )
-        ,m_pOwnInteraction( nullptr )
     {
     }
 
@@ -57,7 +56,6 @@ namespace svt
     SmartContent::SmartContent( const OUString& _rInitialURL )
         :m_pContent( nullptr )
         ,m_eState( NOT_BOUND )
-        ,m_pOwnInteraction( nullptr )
     {
         bindTo( _rInitialURL );
     }
@@ -85,19 +83,15 @@ namespace svt
         Reference< XInteractionHandler > xGlobalInteractionHandler(
             InteractionHandler::createWithParent(xContext, nullptr), UNO_QUERY_THROW );
 
-        m_pOwnInteraction = new ::svt::OFilePickerInteractionHandler(xGlobalInteractionHandler);
-        m_pOwnInteraction->enableInterceptions(eInterceptions);
-        m_xOwnInteraction = m_pOwnInteraction;
+        m_xOwnInteraction = new ::svt::OFilePickerInteractionHandler(xGlobalInteractionHandler);
+        m_xOwnInteraction->enableInterceptions(eInterceptions);
 
-        m_xCmdEnv = new ::ucbhelper::CommandEnvironment( m_xOwnInteraction, Reference< XProgressHandler >() );
+        m_xCmdEnv = new ::ucbhelper::CommandEnvironment( m_xOwnInteraction.get(), Reference< XProgressHandler >() );
     }
 
 
     void SmartContent::enableDefaultInteractionHandler()
     {
-        // Don't free the memory here! It will be done by the next
-        // call automatically - releasing of the uno reference ...
-        m_pOwnInteraction = nullptr;
         m_xOwnInteraction.clear();
 
         Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
@@ -109,9 +103,7 @@ namespace svt
 
     ::svt::OFilePickerInteractionHandler* SmartContent::getOwnInteractionHandler() const
     {
-        if (!m_xOwnInteraction.is())
-            return nullptr;
-        return m_pOwnInteraction;
+        return m_xOwnInteraction.get();
     }
 
 
@@ -129,11 +121,7 @@ namespace svt
 
     void SmartContent::disableInteractionHandler()
     {
-        // Don't free the memory here! It will be done by the next
-        // call automatically - releasing of the uno reference ...
-        m_pOwnInteraction = nullptr;
         m_xOwnInteraction.clear();
-
         m_xCmdEnv.clear();
     }
 

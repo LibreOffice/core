@@ -25,6 +25,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <ucbhelper/content.hxx>
+#include <rtl/ref.hxx>
 #include <memory>
 
 
@@ -53,8 +54,7 @@ namespace svt
         std::unique_ptr<::ucbhelper::Content>                  m_pContent;
         State                                                  m_eState;
         css::uno::Reference < css::ucb::XCommandEnvironment >  m_xCmdEnv;
-        css::uno::Reference < css::task::XInteractionHandler > m_xOwnInteraction;
-        ::svt::OFilePickerInteractionHandler*                  m_pOwnInteraction;
+        rtl::Reference<::svt::OFilePickerInteractionHandler>   m_xOwnInteraction;
 
     private:
         enum Type { Folder, Document };
