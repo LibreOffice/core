@@ -45,6 +45,7 @@
 #include <vcl/builderfactory.hxx>
 #include <unotools/localedatawrapper.hxx>
 #include <editeng/editview.hxx>
+#include <svtools/cliplistener.hxx>
 
 #include "cellsh.hxx"
 #include "sc.hrc"
@@ -2985,6 +2986,10 @@ IMPL_LINK_NOARG(ScCellShell, DialogClosed, Dialog&, void)
 
     ExecuteExternalSource( sFile, sFilter, sOptions, sSource, nRefresh, *(pImpl->m_pRequest) );
 }
+
+CellShell_Impl::CellShell_Impl() :
+        m_pLinkedDlg(),
+        m_pRequest( nullptr ) {}
 
 CellShell_Impl::~CellShell_Impl()
 {

@@ -87,15 +87,15 @@ ScCellShell::ScCellShell(ScViewData* pData, VclPtr<vcl::Window> frameWin) :
 
 ScCellShell::~ScCellShell()
 {
-    if ( pImpl->m_pClipEvtLstnr )
+    if ( pImpl->m_xClipEvtLstnr.is() )
     {
-        pImpl->m_pClipEvtLstnr->RemoveListener( GetViewData()->GetActiveWin() );
+        pImpl->m_xClipEvtLstnr->RemoveListener( GetViewData()->GetActiveWin() );
 
         //  The listener may just now be waiting for the SolarMutex and call the link
         //  afterwards, in spite of RemoveListener. So the link has to be reset, too.
-        pImpl->m_pClipEvtLstnr->ClearCallbackLink();
+        pImpl->m_xClipEvtLstnr->ClearCallbackLink();
 
-        pImpl->m_pClipEvtLstnr->release();
+        pImpl->m_xClipEvtLstnr.clear();
     }
 
     pImpl->m_pLinkedDlg.disposeAndClear();
@@ -556,13 +556,12 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
 // SID_PASTE_SPECIAL
 // SID_CLIPBOARD_FORMAT_ITEMS
 
-    if ( !pImpl->m_pClipEvtLstnr )
+    if ( !pImpl->m_xClipEvtLstnr.is() )
     {
         // create listener
-        pImpl->m_pClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScCellShell, ClipboardChanged ) );
-        pImpl->m_pClipEvtLstnr->acquire();
+        pImpl->m_xClipEvtLstnr = new TransferableClipboardListener( LINK( this, ScCellShell, ClipboardChanged ) );
         vcl::Window* pWin = GetViewData()->GetActiveWin();
-        pImpl->m_pClipEvtLstnr->AddListener( pWin );
+        pImpl->m_xClipEvtLstnr->AddListener( pWin );
 
         // get initial state
         TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( pWin ) );

@@ -30,6 +30,7 @@
 #include "formatsh.hxx"
 #include "address.hxx"
 #include <vcl/window.hxx>
+#include <rtl/ref.hxx>
 
 class SvxClipboardFormatItem;
 class TransferableDataHelper;
@@ -38,15 +39,12 @@ class AbstractScLinkedAreaDlg;
 
 struct CellShell_Impl
 {
-    TransferableClipboardListener*  m_pClipEvtLstnr;
+    rtl::Reference<TransferableClipboardListener>
+                                    m_xClipEvtLstnr;
     VclPtr<AbstractScLinkedAreaDlg> m_pLinkedDlg;
     SfxRequest*                     m_pRequest;
 
-    CellShell_Impl() :
-        m_pClipEvtLstnr( nullptr ),
-        m_pLinkedDlg(),
-        m_pRequest( nullptr ) {}
-
+    CellShell_Impl();
     ~CellShell_Impl();
 };
 
