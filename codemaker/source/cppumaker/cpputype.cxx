@@ -1103,10 +1103,6 @@ private:
     virtual sal_uInt32 checkInheritedMemberCount() const override
     { return BaseOffset(m_typeMgr, entity_).get(); }
 
-    static void dumpExceptionSpecification(
-        FileStream & out, std::vector< OUString > const & exceptions,
-        bool runtimeException);
-
     void dumpExceptionTypeName(
         FileStream & out, OUString const & prefix, sal_uInt32 index,
         OUString const & name);
@@ -1185,18 +1181,14 @@ void InterfaceType::dumpAttributes(FileStream & out) {
         dumpDeprecation(out, depr);
         out << "virtual ";
         dumpType(out, attr.type);
-        out << " SAL_CALL get" << attr.name << "()";
-        dumpExceptionSpecification(out, attr.getExceptions, true);
-        out << " = 0;\n";
+        out << " SAL_CALL get" << attr.name << "() = 0;\n";
         if (!attr.readOnly) {
             bool byRef = passByReference(attr.type);
             out << indent();
             dumpDeprecation(out, depr);
             out << "virtual void SAL_CALL set" << attr.name << "( ";
             dumpType(out, attr.type, byRef, byRef);
-            out << " _" << attr.name.toAsciiLowerCase() << " )";
-            dumpExceptionSpecification(out, attr.setExceptions, true);
-            out << " = 0;\n";
+            out << " _" << attr.name.toAsciiLowerCase() << " ) = 0;\n";
         }
     }
 }
@@ -1212,9 +1204,7 @@ void InterfaceType::dumpMethods(FileStream & out) {
         out << "virtual ";
         dumpType(out, method.returnType);
         out << " SAL_CALL " << method.name << "(";
-        if (method.parameters.empty()) {
-            out << ")";
-        } else {
+        if (!method.parameters.empty()) {
             out << " ";
             for (std::vector< unoidl::InterfaceTypeEntity::Method::Parameter >::
                      const_iterator j(method.parameters.begin());
@@ -1239,11 +1229,9 @@ void InterfaceType::dumpMethods(FileStream & out) {
                     out << ", ";
                 }
             }
-            out << " )";
+            out << " ";
         }
-        dumpExceptionSpecification(
-            out, method.exceptions, method.name != "acquire" && method.name != "release");
-        out << " = 0;\n";
+        out << ") = 0;\n";
     }
 }
 
@@ -1580,40 +1568,6 @@ void InterfaceType::dumpMethodsCppuDecl(
             }
         }
     }
-}
-
-void InterfaceType::dumpExceptionSpecification(
-    FileStream & out, std::vector< OUString > const & exceptions,
-    bool runtimeException)
-{
-    // Exception specifications are undesirable in production code, but make
-    // for useful assertions in debug builds (on platforms where they are
-    // enforced at runtime):
-#if !defined DBG_UTIL
-    out << " /*";
-#endif
-    out << " throw (";
-    bool bFirst = true;
-    for (const OUString& ex : exceptions)
-    {
-        if (ex != "com.sun.star.uno.RuntimeException") {
-            if (!bFirst) {
-                out << ", ";
-            }
-            out << codemaker::cpp::scopedCppName(u2b(ex));
-            bFirst = false;
-        }
-    }
-    if (runtimeException) {
-        if (!bFirst) {
-            out << ", ";
-        }
-        out << "::css::uno::RuntimeException, ::std::exception";
-    }
-    out << ")";
-#if !defined DBG_UTIL
-    out << " */";
-#endif
 }
 
 void InterfaceType::dumpExceptionTypeName(
