@@ -71,6 +71,7 @@ class XMLSignature_MSCryptImpl : public ::cppu::WeakImplHelper<
         //Helper for XServiceInfo
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
+        /// @throws css::uno::RuntimeException
         static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
 
         //Helper for registry

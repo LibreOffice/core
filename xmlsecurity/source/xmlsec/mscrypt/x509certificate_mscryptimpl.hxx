@@ -87,6 +87,7 @@ class X509Certificate_MSCryptImpl : public ::cppu::WeakImplHelper<
         //Helper methods
         void setMswcryCert( const CERT_CONTEXT* cert ) ;
         const CERT_CONTEXT* getMswcryCert() const ;
+        /// @throws css::uno::RuntimeException
         void setRawCert( css::uno::Sequence< sal_Int8 > const & rawCert ) throw ( css::uno::RuntimeException) ;
 } ;
 

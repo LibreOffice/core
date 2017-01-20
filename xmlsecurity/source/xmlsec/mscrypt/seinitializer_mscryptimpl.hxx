@@ -74,6 +74,7 @@ public:
         throw (css::uno::RuntimeException) override;
 };
 
+/// @throws css::uno::RuntimeException
 OUString SEInitializer_MSCryptImpl_getImplementationName()
     throw ( css::uno::RuntimeException );
 

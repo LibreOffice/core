@@ -134,6 +134,7 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         //Helper for XServiceInfo
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
+        /// @throws css::uno::RuntimeException
         static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
 
         //Helper for registry
@@ -151,23 +152,47 @@ class SecurityEnvironment_MSCryptImpl : public ::cppu::WeakImplHelper<
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
         static SecurityEnvironment_MSCryptImpl* getImplementation( const css::uno::Reference< css::uno::XInterface >& rObj ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         HCRYPTPROV getCryptoProvider() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         void setCryptoProvider( HCRYPTPROV aProv ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         LPCTSTR getKeyContainer() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         void setKeyContainer( LPCTSTR aKeyContainer ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         HCERTSTORE getCryptoSlot() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         void setCryptoSlot( HCERTSTORE aKeyStore ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         HCERTSTORE getCertDb() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         void setCertDb( HCERTSTORE aCertDb ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         void enableDefaultCrypt( bool enable ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         bool defaultEnabled() throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         xmlSecKeysMngrPtr createKeysManager() throw( css::uno::Exception , css::uno::RuntimeException ) ;
 
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
         static void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( css::uno::Exception , css::uno::RuntimeException ) ;
 } ;
 
