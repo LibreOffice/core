@@ -138,7 +138,9 @@ void setupMethodStubs( functor_vector_type& res )
     const BitmapEx    aBitmapExAlpha( aBitmap, aBitmapAlien );
     const BitmapEx    aBitmapExAlphaAlien( aBitmapAlien, aBitmapAlien );
 
+#ifdef NEEDS_QUALIY_PARAMTER
     const Image       aImage( aBitmapEx );
+#endif
     const Gradient    aGradient(GradientStyle::Elliptical,aBlackColor,aWhiteColor);
     const Hatch       aHatch(HatchStyle::Triple,aBlackColor,4,450);
     const Wallpaper   aWallpaper( aWhiteColor );
