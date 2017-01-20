@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_a7301809",
+        "filename": "sysui/desktop/appstream-appdata/org.libreoffice.kde.metainfo.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1001510
+      },
+      "writtenOn": "2017-01-20T19:14:56Z",
+      "side": 1,
+      "message": "In theory, you could skip \"KDE\", as that\u0027s only recognized for backwards compatibility.\n\nBut that\u0027s not really an issue.",
+      "revId": "ade401e4654ce8b9fdc10d821890f7b755686812",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
