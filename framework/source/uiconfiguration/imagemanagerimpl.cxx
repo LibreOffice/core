@@ -229,7 +229,7 @@ static bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic
     }
 
     // Check size and scale it
-    Image  aImage( rInGraphic );
+    Graphic aImage(rInGraphic);
     Size   aSize = aImage.GetSizePixel();
     bool   bMustScale( false );
 
@@ -244,7 +244,7 @@ static bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic
     {
         BitmapEx aBitmap = aImage.GetBitmapEx();
         aBitmap.Scale( aNormSize );
-        aImage = Image( aBitmap );
+        aImage = Graphic(aBitmap);
         rOutGraphic = aImage.GetXGraphic();
     }
     else
