@@ -35,11 +35,6 @@ bool Timer::ReadyForSchedule( bool /* bIdle */, sal_uInt64 nTimeNow ) const
     return (GetSchedulerData()->mnUpdateTime + mnTimeout) <= nTimeNow;
 }
 
-bool Timer::IsIdle() const
-{
-    return false;
-}
-
 sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const
 {
     sal_uInt64 nWakeupTime = GetSchedulerData()->mnUpdateTime + mnTimeout;
