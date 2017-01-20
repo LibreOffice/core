@@ -184,8 +184,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( 
         BitmapEx aBitmap;
         if ( vcl::ImageRepository::loadImage( sPathName, aBitmap, false ) )
         {
-            Image aImage( aBitmap );
-            xRet = aImage.GetXGraphic();
+            xRet = Graphic(aBitmap).GetXGraphic();
         }
     }
     return xRet;
