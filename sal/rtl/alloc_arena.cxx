@@ -428,8 +428,8 @@ rtl_arena_segment_alloc (
     assert(*ppSegment == nullptr);
     if (!RTL_MEMORY_ISP2(size))
     {
-        int msb = highbit(size);
-        if (RTL_ARENA_FREELIST_SIZE == sal::static_int_cast< size_t >(msb))
+        unsigned int msb = highbit(size);
+        if (RTL_ARENA_FREELIST_SIZE == msb)
         {
             /* highest possible freelist: fall back to first fit */
             rtl_arena_segment_type *head, *segment;
@@ -660,9 +660,7 @@ rtl_arena_destructor (void * obj)
 
     assert(arena->m_hash_table == arena->m_hash_table_0);
     assert(arena->m_hash_size  == RTL_ARENA_HASH_SIZE);
-    assert(
-        arena->m_hash_shift ==
-        sal::static_int_cast< unsigned >(highbit(arena->m_hash_size) - 1));
+    assert(arena->m_hash_shift == highbit(arena->m_hash_size) - 1);
 }
 
 /* ================================================================= */

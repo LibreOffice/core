@@ -767,7 +767,7 @@ rtl_cache_destructor (void * obj)
 
     assert(cache->m_hash_table == cache->m_hash_table_0);
     assert(cache->m_hash_size  == RTL_CACHE_HASH_SIZE);
-    assert(cache->m_hash_shift == (sal_Size)(highbit(cache->m_hash_size) - 1));
+    assert(cache->m_hash_shift == highbit(cache->m_hash_size) - 1);
 
     /* depot layer */
     (void)RTL_MEMORY_LOCK_DESTROY(&(cache->m_depot_lock));
@@ -838,7 +838,7 @@ rtl_cache_activate (
         if (flags & RTL_CACHE_FLAG_QUANTUMCACHE)
         {
             /* next power of 2 above 3 * qcache_max */
-            if(slabsize < (((sal_Size)1) << highbit(3 * source->m_qcache_max)))
+            if (slabsize < (((sal_Size)1) << highbit(3 * source->m_qcache_max)))
             {
                 slabsize = (((sal_Size)1) << highbit(3 * source->m_qcache_max));
             }

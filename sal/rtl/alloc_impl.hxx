@@ -65,10 +65,10 @@
 /** highbit(): log2() + 1
  *  (complexity O(1))
  */
-static inline int
+static inline unsigned int
 highbit(sal_Size n)
 {
-  int k = 1;
+  unsigned int k = 1;
 
   if (n == 0)
     return 0;
@@ -108,10 +108,10 @@ highbit(sal_Size n)
 /** lowbit(): find first bit set
  *  (complexity O(1))
  */
-static inline int
+static inline unsigned int
 lowbit(sal_Size n)
 {
-  int k = 1;
+  unsigned int k = 1;
 
   if (n == 0)
     return 0;
