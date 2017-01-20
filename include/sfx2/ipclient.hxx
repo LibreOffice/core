@@ -25,6 +25,7 @@
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <rtl/ref.hxx>
 
 #include <tools/gen.hxx>
 
@@ -41,7 +42,7 @@ class SFX2_DLLPUBLIC SfxInPlaceClient
 {
 friend class SfxInPlaceClient_Impl;
 
-    SfxInPlaceClient_Impl*  m_pImp;
+    rtl::Reference<SfxInPlaceClient_Impl>  m_xImp;
     SfxViewShell*           m_pViewSh;
     VclPtr<vcl::Window>     m_pEditWin;
 
