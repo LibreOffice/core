@@ -1847,8 +1847,7 @@ void Svx3DWin::GetAttr( SfxItemSet& rAttrs )
     else
         rAttrs.InvalidateItem(SDRATTR_3DSCENE_FOCAL_LENGTH);
 
-// Lighting
-    Image aImg;
+    // Lighting
     basegfx::B3DVector aVector;
     Color aColor;
     const SfxItemSet aLightItemSet(m_pCtlLightPreview->GetSvx3DLightControl().Get3DAttributes());

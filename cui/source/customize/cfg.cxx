@@ -3539,8 +3539,6 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
                         GetSaveInData()->GetImageManager()->replaceImages(
                             GetImageType(), aURLSeq, aGraphicSeq );
 
-                        Image aImage( newgraphic );
-
                         m_pContentsListBox->GetModel()->Remove( pActEntry );
                         SvTreeListEntry* pNewLBEntry =
                             InsertEntryIntoUI( pEntry, nSelectionPos );
@@ -3595,7 +3593,6 @@ IMPL_LINK( SvxToolbarConfigPage, EntrySelectHdl, MenuButton *, pButton, void )
                 GetSaveInData()->GetImageManager()->replaceImages(
                     GetImageType(), aURLSeq, aGraphicSeq );
 
-                Image aImage( backup );
                 m_pContentsListBox->GetModel()->Remove( pActEntry );
 
                 SvTreeListEntry* pNewLBEntry =
