@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_c7ed1c27",
+        "filename": "sw/source/filter/ww8/ww8par6.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 2351,
+      "author": {
+        "id": 1000804
+      },
+      "writtenOn": "2017-01-20T05:59:51Z",
+      "side": 0,
+      "message": "I think the only way to do this with a proper layout would be to wait until layout is finished, and then remove the fly and anchor the table as character. Probably a nearly impossible thing to accomplish...",
+      "range": {
+        "startLine": 2351,
+        "startChar": 26,
+        "endLine": 2351,
+        "endChar": 71
+      },
+      "revId": "2fb220093f7178f75ebd582bbcd956c1ee7e03db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
