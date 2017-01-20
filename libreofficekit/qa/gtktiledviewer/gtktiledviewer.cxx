@@ -374,18 +374,11 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         gtk_widget_queue_draw(rWindow.m_pColumnBar->m_pDrawingArea);
         gtk_widget_show(rWindow.m_pFormulabarEntry);
 
-        // Change horizontal alignment uno commands for spreadsheet
-        const std::string argsPrefix =
-            "{"
-            "\"HorizontalAlignment\":{"
-            "\"type\":\"unsigned short\", "
-            "\"value\":\"";
-        const std::string argsSuffix = "\"}}";
-
-        lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:HorizontalAlignment", argsPrefix + std::to_string(1) + argsSuffix);
-        lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:HorizontalAlignment", argsPrefix + std::to_string(2) + argsSuffix);
-        lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:HorizontalAlignment", argsPrefix + std::to_string(3) + argsSuffix);
-        lcl_registerToolItem(rWindow, rWindow.m_pJustifypara, ".uno:HorizontalAlignment", argsPrefix + std::to_string(4) + argsSuffix);
+        // Change cell alignment uno commands for spreadsheet
+        lcl_registerToolItem(rWindow, rWindow.m_pLeftpara, ".uno:AlignLeft");
+        lcl_registerToolItem(rWindow, rWindow.m_pCenterpara, ".uno:AlignHorizontalCenter");
+        lcl_registerToolItem(rWindow, rWindow.m_pRightpara, ".uno:AlignRight");
+        gtk_widget_hide(GTK_WIDGET(rWindow.m_pJustifypara));
     }
 
     return TRUE;
