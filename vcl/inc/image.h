@@ -28,16 +28,10 @@
 struct ImplImage
 {
     BitmapChecksum maBitmapChecksum;
-
-    std::unique_ptr<BitmapEx> mpBitmapEx;
+    BitmapEx maBitmapEx;
     BitmapEx maDisabledBitmapEx;
 
-    ImplImage();
-    ~ImplImage();
-
-private:
-    ImplImage(const ImplImage&) = delete;
-    void operator=(const ImplImage&) = delete;
+    ImplImage(const BitmapEx& rBitmapEx);
 };
 
 #endif // INCLUDED_VCL_INC_IMAGE_H

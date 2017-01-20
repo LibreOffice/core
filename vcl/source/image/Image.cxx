@@ -82,8 +82,7 @@ void Image::ImplInit(const BitmapEx& rBitmapEx)
 {
     if (!rBitmapEx.IsEmpty())
     {
-        mpImplData.reset(new ImplImage);
-        mpImplData->mpBitmapEx.reset(new BitmapEx(rBitmapEx));
+        mpImplData.reset(new ImplImage(rBitmapEx));
     }
 }
 
@@ -91,9 +90,9 @@ Size Image::GetSizePixel() const
 {
     Size aRet;
 
-    if (mpImplData && mpImplData->mpBitmapEx)
+    if (mpImplData)
     {
-        aRet = mpImplData->mpBitmapEx->GetSizePixel();
+        aRet = mpImplData->maBitmapEx.GetSizePixel();
     }
 
     return aRet;
@@ -103,9 +102,9 @@ BitmapEx Image::GetBitmapEx() const
 {
     BitmapEx aRet;
 
-    if (mpImplData && mpImplData->mpBitmapEx)
+    if (mpImplData)
     {
-        aRet = BitmapEx(*mpImplData->mpBitmapEx);
+        aRet = mpImplData->maBitmapEx;
     }
 
     return aRet;
@@ -127,29 +126,28 @@ bool Image::operator==(const Image& rImage) const
     else if (!rImage.mpImplData || !mpImplData)
         bRet = false;
     else
-        bRet = *rImage.mpImplData->mpBitmapEx == *mpImplData->mpBitmapEx;
+        bRet = rImage.mpImplData->maBitmapEx == mpImplData->maBitmapEx;
 
     return bRet;
 }
 
 void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle, const Size* pSize)
 {
-    if (!mpImplData || !mpImplData->mpBitmapEx ||
-        (!pOutDev->IsDeviceOutputNecessary() && pOutDev->GetConnectMetaFile() == nullptr))
+    if (!mpImplData || (!pOutDev->IsDeviceOutputNecessary() && pOutDev->GetConnectMetaFile() == nullptr))
         return;
 
     const Point aSrcPos(0, 0);
-    Size aBitmapSizePixel = mpImplData->mpBitmapEx->GetSizePixel();
+    Size aBitmapSizePixel = mpImplData->maBitmapEx.GetSizePixel();
 
     Size aOutSize = pSize ? *pSize : pOutDev->PixelToLogic(aBitmapSizePixel);
 
     if (nStyle & DrawImageFlags::Disable)
     {
-        BitmapChecksum aChecksum = mpImplData->mpBitmapEx->GetChecksum();
+        BitmapChecksum aChecksum = mpImplData->maBitmapEx.GetChecksum();
         if (mpImplData->maBitmapChecksum != aChecksum)
         {
             mpImplData->maBitmapChecksum = aChecksum;
-            mpImplData->maDisabledBitmapEx = BitmapProcessor::createDisabledImage(*mpImplData->mpBitmapEx);
+            mpImplData->maDisabledBitmapEx = BitmapProcessor::createDisabledImage(mpImplData->maBitmapEx);
         }
         pOutDev->DrawBitmapEx(rPos, aOutSize, aSrcPos, aBitmapSizePixel, mpImplData->maDisabledBitmapEx);
     }
@@ -158,7 +156,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
         if (nStyle & (DrawImageFlags::ColorTransform | DrawImageFlags::Highlight |
                       DrawImageFlags::Deactive | DrawImageFlags::SemiTransparent))
         {
-            BitmapEx aTempBitmapEx(*mpImplData->mpBitmapEx);
+            BitmapEx aTempBitmapEx(mpImplData->maBitmapEx);
 
             if (nStyle & (DrawImageFlags::Highlight | DrawImageFlags::Deactive))
             {
@@ -190,7 +188,7 @@ void Image::Draw(OutputDevice* pOutDev, const Point& rPos, DrawImageFlags nStyle
         }
         else
         {
-            pOutDev->DrawBitmapEx(rPos, aOutSize, aSrcPos, mpImplData->mpBitmapEx->GetSizePixel(), *mpImplData->mpBitmapEx);
+            pOutDev->DrawBitmapEx(rPos, aOutSize, aSrcPos, mpImplData->maBitmapEx.GetSizePixel(), mpImplData->maBitmapEx);
         }
     }
 }
