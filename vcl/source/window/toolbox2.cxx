@@ -972,7 +972,6 @@ void ToolBox::SetItemImage( sal_uInt16 nItemId, const Image& rImage )
 
 static Image ImplRotImage( const Image& rImage, long nAngle10 )
 {
-    Image       aRet;
     BitmapEx    aRotBitmapEx( rImage.GetBitmapEx() );
 
     aRotBitmapEx.Rotate( nAngle10, Color( COL_WHITE ) );
@@ -1011,7 +1010,6 @@ void ToolBox::SetItemImageAngle( sal_uInt16 nItemId, long nAngle10 )
 
 static Image ImplMirrorImage( const Image& rImage )
 {
-    Image       aRet;
     BitmapEx    aMirrBitmapEx( rImage.GetBitmapEx() );
 
     aMirrBitmapEx.Mirror( BmpMirrorFlags::Horizontal );

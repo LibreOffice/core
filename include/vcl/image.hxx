@@ -50,7 +50,7 @@ namespace vcl
 
 #define IMAGELIST_IMAGE_NOTFOUND    ((sal_uInt16)0xFFFF)
 
-class VCL_DLLPUBLIC Image
+class SAL_WARN_UNUSED VCL_DLLPUBLIC Image
 {
     friend class ::OutputDevice;
 
