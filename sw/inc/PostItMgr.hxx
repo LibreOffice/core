@@ -186,7 +186,7 @@ class SwPostItMgr: public SfxListener
 
         sw::sidebarwindows::SwSidebarWin* GetSidebarWin(const SfxBroadcaster* pBroadcaster) const;
 
-        void            InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
+        SwSidebarItem*  InsertItem( SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus);
         void            RemoveItem( SfxBroadcaster* pBroadcast );
 
     public:
