@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_e743006b",
+        "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001509
+      },
+      "writtenOn": "2017-01-20T19:01:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa48f94a_2777c8d5",
+      "range": {
+        "startLine": 6,
+        "startChar": 11,
+        "endLine": 6,
+        "endChar": 39
+      },
+      "revId": "c432f036e93cc83ba20156e5002128485fcb367f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_4774ccce",
         "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2017-01-20T18:49:34Z",
       "side": 1,
       "message": "CC0-1.0 requires you to ship a copy of CC0 with the source code. If that\u0027s an issue, I recommend using FSFAP: https://spdx.org/licenses/FSFAP.html\n\nIf you already have CC0-stuff, and include the license, ignore this remark.",
+      "revId": "c432f036e93cc83ba20156e5002128485fcb367f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_0749e48b",
+        "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001509
+      },
+      "writtenOn": "2017-01-20T19:01:33Z",
+      "side": 1,
+      "message": "We\u0027ll be using the same license as the rest.",
+      "parentUuid": "fa48f94a_4774ccce",
       "revId": "c432f036e93cc83ba20156e5002128485fcb367f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
