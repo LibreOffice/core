@@ -267,9 +267,9 @@ struct ContentEntry_Impl
 
 ContentListBox_Impl::ContentListBox_Impl(vcl::Window* pParent, WinBits nStyle)
     : SvTreeListBox(pParent, nStyle)
-    , aOpenBookImage(SfxResId(BMP_HELP_CONTENT_BOOK_OPEN))
-    , aClosedBookImage(SfxResId(BMP_HELP_CONTENT_BOOK_CLOSED))
-    , aDocumentImage(SfxResId(BMP_HELP_CONTENT_DOC))
+    , aOpenBookImage(BitmapEx(SfxResId(BMP_HELP_CONTENT_BOOK_OPEN)))
+    , aClosedBookImage(BitmapEx(SfxResId(BMP_HELP_CONTENT_BOOK_CLOSED)))
+    , aDocumentImage(BitmapEx(SfxResId(BMP_HELP_CONTENT_DOC)))
 
 {
     SetStyle( GetStyle() | WB_HIDESELECTION | WB_HSCROLL );
