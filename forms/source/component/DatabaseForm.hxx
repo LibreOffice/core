@@ -73,6 +73,7 @@
 #include <cppuhelper/implbase12.hxx>
 #include <cppuhelper/implbase4.hxx>
 #include <cppuhelper/implbase7.hxx>
+#include <rtl/ref.hxx>
 
 namespace com { namespace sun { namespace star { namespace sdbc {
     class SQLException;
@@ -173,7 +174,7 @@ class ODatabaseForm :public OFormComponents
 
     PropertyBagHelper           m_aPropertyBagHelper;
     ::dbtools::WarningsContainer    m_aWarnings;
-    OPropertyChangeMultiplexer* m_pAggregatePropertyMultiplexer;
+    rtl::Reference<OPropertyChangeMultiplexer> m_xAggregatePropertyMultiplexer;
     // Management of the Control Groups
     rtl::Reference<OGroupManager>   m_pGroupManager;
     ::dbtools::ParameterManager m_aParameterManager;

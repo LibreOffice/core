@@ -258,7 +258,6 @@ ODatabaseForm::ODatabaseForm(const Reference<XComponentContext>& _rxContext)
     ,m_aErrorListeners(m_aMutex)
     ,m_aResetListeners( *this, m_aMutex )
     ,m_aPropertyBagHelper( *this )
-    ,m_pAggregatePropertyMultiplexer(nullptr)
     ,m_aParameterManager( m_aMutex, _rxContext )
     ,m_aFilterManager()
     ,m_pLoadTimer(nullptr)
@@ -294,7 +293,6 @@ ODatabaseForm::ODatabaseForm( const ODatabaseForm& _cloneSource )
     ,m_aErrorListeners( m_aMutex )
     ,m_aResetListeners( *this, m_aMutex )
     ,m_aPropertyBagHelper( *this )
-    ,m_pAggregatePropertyMultiplexer( nullptr )
     ,m_aParameterManager( m_aMutex, _cloneSource.m_xContext )
     ,m_aFilterManager()
     ,m_pLoadTimer( nullptr )
@@ -392,10 +390,9 @@ void ODatabaseForm::impl_construct()
     // listen for the properties, important for Parameters
     if ( m_xAggregateSet.is() )
     {
-        m_pAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, false);
-        m_pAggregatePropertyMultiplexer->acquire();
-        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_COMMAND);
-        m_pAggregatePropertyMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
+        m_xAggregatePropertyMultiplexer = new OPropertyChangeMultiplexer(this, m_xAggregateSet, false);
+        m_xAggregatePropertyMultiplexer->addProperty(PROPERTY_COMMAND);
+        m_xAggregatePropertyMultiplexer->addProperty(PROPERTY_ACTIVE_CONNECTION);
     }
 
     {
@@ -429,11 +426,10 @@ ODatabaseForm::~ODatabaseForm()
 
     m_aWarnings.setExternalWarnings( nullptr );
 
-    if (m_pAggregatePropertyMultiplexer)
+    if (m_xAggregatePropertyMultiplexer.is())
     {
-        m_pAggregatePropertyMultiplexer->dispose();
-        m_pAggregatePropertyMultiplexer->release();
-        m_pAggregatePropertyMultiplexer = nullptr;
+        m_xAggregatePropertyMultiplexer->dispose();
+        m_xAggregatePropertyMultiplexer.clear();
     }
 }
 
@@ -1252,8 +1248,8 @@ bool ODatabaseForm::executeRowSet(::osl::ResettableMutexGuard& _rClearForNotifie
 
 void ODatabaseForm::disposing()
 {
-    if (m_pAggregatePropertyMultiplexer)
-        m_pAggregatePropertyMultiplexer->dispose();
+    if (m_xAggregatePropertyMultiplexer.is())
+        m_xAggregatePropertyMultiplexer->dispose();
 
     if (m_bLoaded)
         unload();
