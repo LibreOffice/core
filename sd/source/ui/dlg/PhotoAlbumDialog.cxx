@@ -140,7 +140,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                 Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl, xProvider);
 
-                Image aImg(xGraphic);
+                Graphic aImg(xGraphic);
                 // Save the original size, multiplied with 100
                 ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
@@ -214,10 +214,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
 
                 if( !sUrl1.isEmpty() )
                 {
-
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl1, xProvider);
 
-                    Image aImg(xGraphic);
+                    Graphic aImg(xGraphic);
                     // Save the original size, multiplied with 100
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
@@ -255,7 +254,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl2, xProvider);
 
-                    Image aImg(xGraphic);
+                    Graphic aImg(xGraphic);
                     // Save the original size, multiplied with 100
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
@@ -338,7 +337,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl1, xProvider);
 
-                    Image aImg(xGraphic);
+                    Graphic aImg(xGraphic);
                     // Save the original size, multiplied with 100
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
@@ -375,7 +374,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl2, xProvider);
 
-                    Image aImg(xGraphic);
+                    Graphic aImg(xGraphic);
                     // Save the original size, multiplied with 100
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
@@ -410,10 +409,9 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 }
                 if( !sUrl3.isEmpty() )
                 {
-
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl3, xProvider);
 
-                    Image aImg(xGraphic);
+                    Graphic aImg(xGraphic);
                     // Save the original size, multiplied with 100
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
@@ -450,7 +448,7 @@ IMPL_LINK_NOARG(SdPhotoAlbumDialog, CreateHdl, Button*, void)
                 {
                     Reference< graphic::XGraphic > xGraphic = createXGraphicFromUrl(sUrl4, xProvider);
 
-                    Image aImg(xGraphic);
+                    Graphic aImg(xGraphic);
                     // Save the original size, multiplied with 100
                     ::awt::Size aPicSize(aImg.GetSizePixel().Width()*100, aImg.GetSizePixel().Height()*100);
 
