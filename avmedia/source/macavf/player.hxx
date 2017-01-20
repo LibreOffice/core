@@ -47,7 +47,9 @@ public:
     virtual double SAL_CALL getDuration() throw (css::uno::RuntimeException) override;
     virtual void SAL_CALL setMediaTime( double fTime ) throw (css::uno::RuntimeException) override;
     virtual double SAL_CALL getMediaTime() throw (css::uno::RuntimeException) override;
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL setStopTime( double fTime ) throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
     virtual double SAL_CALL getStopTime() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPlaybackLoop( sal_Bool bSet ) throw (css::uno::RuntimeException) override;
     virtual sal_Bool SAL_CALL isPlaybackLoop() throw (css::uno::RuntimeException) override;
