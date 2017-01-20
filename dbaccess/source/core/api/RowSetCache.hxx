@@ -63,9 +63,8 @@ namespace dbaccess
         css::uno::Reference< css::sdbc::XResultSetMetaData >  m_xMetaData; // must be before m_aInsertRow
         css::uno::Reference< css::uno::XComponentContext>     m_aContext;
 
-        css::uno::Reference< css::sdbc::XRow>                 m_xCacheSet;
+        rtl::Reference<OCacheSet>                             m_xCacheSet; // is a bookmarkable, keyset or static resultset
 
-        OCacheSet*                      m_pCacheSet;            // is a bookmarkable, keyset or static resultset
         ORowSetMatrix*                  m_pMatrix;              // represent the table struct
         ORowSetMatrix::iterator         m_aMatrixIter;          // represent a row of the table
         ORowSetMatrix::iterator         m_aMatrixEnd;           // present the row behind the last row of the table
