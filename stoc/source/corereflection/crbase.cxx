@@ -52,13 +52,11 @@ ClassNameList g_aClassNames;
 IdlClassImpl::IdlClassImpl( IdlReflectionServiceImpl * pReflection,
                             const OUString & rName, typelib_TypeClass eTypeClass,
                             typelib_TypeDescription * pTypeDescr )
-    : _pReflection( pReflection )
+    : m_xReflection( pReflection )
     , _aName( rName )
     , _eTypeClass( (TypeClass)eTypeClass )
     , _pTypeDescr( pTypeDescr )
 {
-    if (_pReflection)
-        _pReflection->acquire();
     if (_pTypeDescr)
     {
         typelib_typedescription_acquire( _pTypeDescr );
@@ -77,8 +75,7 @@ IdlClassImpl::~IdlClassImpl()
 {
     if (_pTypeDescr)
         typelib_typedescription_release( _pTypeDescr );
-    if (_pReflection)
-        _pReflection->release();
+    m_xReflection.clear();
 
 #ifdef TEST_LIST_CLASSES
     ClassNameList::iterator iFind( std::find( g_aClassNames.begin(), g_aClassNames.end(), _aName ) );
@@ -231,12 +228,11 @@ Reference< XIdlArray > IdlClassImpl::getArray()
 IdlMemberImpl::IdlMemberImpl( IdlReflectionServiceImpl * pReflection, const OUString & rName,
                               typelib_TypeDescription * pTypeDescr,
                               typelib_TypeDescription * pDeclTypeDescr )
-    : _pReflection( pReflection )
+    : m_xReflection( pReflection )
     , _aName( rName )
     , _pTypeDescr( pTypeDescr )
     , _pDeclTypeDescr( pDeclTypeDescr )
 {
-    _pReflection->acquire();
     typelib_typedescription_acquire( _pTypeDescr );
     if (! _pTypeDescr->bComplete)
         typelib_typedescription_complete( &_pTypeDescr );
@@ -249,7 +245,6 @@ IdlMemberImpl::~IdlMemberImpl()
 {
     typelib_typedescription_release( _pDeclTypeDescr );
     typelib_typedescription_release( _pTypeDescr );
-    _pReflection->release();
 }
 
 // XIdlMember

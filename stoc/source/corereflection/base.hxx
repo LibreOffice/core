@@ -34,6 +34,7 @@
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/typeprovider.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 
 #include "lrucache.hxx"
 
@@ -143,7 +144,8 @@ public:
 class IdlClassImpl
     : public ::cppu::WeakImplHelper< css::reflection::XIdlClass >
 {
-    IdlReflectionServiceImpl *  _pReflection;
+    rtl::Reference<IdlReflectionServiceImpl>
+                                 m_xReflection;
 
     OUString                    _aName;
     css::uno::TypeClass         _eTypeClass;
@@ -154,7 +156,7 @@ public:
     typelib_TypeDescription *   getTypeDescr() const
         { return _pTypeDescr; }
     IdlReflectionServiceImpl *  getReflection() const
-        { return _pReflection; }
+        { return m_xReflection.get(); }
 
     // Ctor
     IdlClassImpl( IdlReflectionServiceImpl * pReflection,
@@ -327,7 +329,8 @@ public:
 class IdlMemberImpl
     : public ::cppu::WeakImplHelper< css::reflection::XIdlMember >
 {
-    IdlReflectionServiceImpl *  _pReflection;
+    rtl::Reference<IdlReflectionServiceImpl>
+                                m_xReflection;
     OUString                    _aName;
 
     typelib_TypeDescription *   _pTypeDescr;
@@ -338,7 +341,7 @@ protected:
 
 public:
     IdlReflectionServiceImpl *  getReflection() const
-        { return _pReflection; }
+        { return m_xReflection.get(); }
     typelib_TypeDescription *   getTypeDescr() const
         { return _pTypeDescr; }
     typelib_TypeDescription *   getDeclTypeDescr() const
