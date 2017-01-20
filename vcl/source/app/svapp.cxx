@@ -469,17 +469,9 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
              ": " << (i_bAllEvents ? "all events" : "one event") << ": " << nReleased);
 
-    bool bHasActiveIdles = false;
-    sal_uInt64 nMinTimeout = 0;
-    if (nReleased == 0) // else thread doesn't have SolarMutex so avoid race
-        nMinTimeout = Scheduler::CalculateMinimumTimeout(bHasActiveIdles);
-
-    // FIXME: should use returned value as param to DoYield
-    (void)nMinTimeout;
-
     // If we have idles, don't wait for the timeout; check for events
     // and come back as quick as possible.
-    if (bHasActiveIdles)
+    if (i_bWait && Scheduler::HasPendingTasks())
         i_bWait = false;
 
     // TODO: there's a data race here on WNT only because ImplYield may be
@@ -497,8 +489,8 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
             i_bWait && !pSVData->maAppData.mbAppQuit,
             i_bAllEvents, nReleased);
 
-    SAL_INFO("vcl.schedule", "DoYield with " << (bHasActiveIdles ? "active idles" : "no idles") <<
-             " returns: " << (eResult == SalYieldResult::EVENT ? "processed event" : "timeout"));
+    SAL_INFO("vcl.schedule", "DoYield returns: "
+             << (eResult == SalYieldResult::EVENT ? "processed event" : "timeout"));
 
     pSVData->maAppData.mnDispatchLevel--;
 
@@ -516,7 +508,7 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
 
     SAL_INFO("vcl.schedule", "Leave ImplYield");
 
-    return bHasActiveIdles || eResult == SalYieldResult::EVENT;
+    return Scheduler::HasPendingTasks() || eResult == SalYieldResult::EVENT;
 }
 
 bool Application::Reschedule( bool i_bAllEvents )

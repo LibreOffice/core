@@ -322,6 +322,8 @@ struct ImplSchedulerContext
     ImplSchedulerData*      mpFirstSchedulerData = nullptr; ///< list of all active tasks
     SalTimer*               mpSalTimer = nullptr;           ///< interface to sal event loop / system timer
     sal_uInt64              mnTimerPeriod = 0;              ///< current timer period
+    sal_uInt64              mnLastProcessTime = 0;          ///< last time a task was processed
+    bool                    mbNeedsReschedule = false;      ///< we need to reschedule
 };
 
 struct ImplSVData
