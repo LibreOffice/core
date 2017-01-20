@@ -283,8 +283,6 @@ next_entry:
 
         Task *pTask = pMostUrgent->mpTask;
 
-        ::comphelper::ProfileZone aZone( pTask->GetDebugName() );
-
         // prepare Scheduler object for deletion after handling
         pTask->SetDeletionFlags();
 
