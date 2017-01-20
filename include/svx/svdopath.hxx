@@ -69,7 +69,7 @@ public:
     double GetBrightness() { return mdBrightness; }
 
     SdrPathObj(SdrObjKind eNewKind);
-    SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness = 1.0);
+    SdrPathObj(SdrObjKind eNewKind, const basegfx::B2DPolyPolygon& rPathPoly, double dBrightness = 0.0);
     virtual ~SdrPathObj() override;
 
     virtual void TakeObjInfo(SdrObjTransformInfoRec& rInfo) const override;
