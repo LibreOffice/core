@@ -24,6 +24,7 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ref.hxx>
 
 
 //= selection helper classes
@@ -43,12 +44,12 @@ namespace comphelper
     {
         friend class OSelectionChangeMultiplexer;
 
-        OSelectionChangeMultiplexer*    m_pAdapter;
-        ::osl::Mutex&                   m_rMutex;
+        rtl::Reference<OSelectionChangeMultiplexer>  m_xAdapter;
+        ::osl::Mutex&                                m_rMutex;
 
     public:
         OSelectionChangeListener(::osl::Mutex& _rMutex)
-            : m_pAdapter(nullptr), m_rMutex(_rMutex) { }
+            : m_rMutex(_rMutex) { }
         virtual ~OSelectionChangeListener();
 
         /// @throws css::uno::RuntimeException
