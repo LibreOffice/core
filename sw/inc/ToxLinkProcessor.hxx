@@ -70,7 +70,7 @@ private:
      */
     struct ClosedLink {
         ClosedLink(const OUString& url, sal_Int32 startPosition, sal_Int32 endPosition) :
-                mINetFormat(url, OUString()), mStartTextPos(endPosition), mEndTextPos(startPosition) {
+                mINetFormat(url, OUString()), mStartTextPos(startPosition), mEndTextPos(endPosition) {
         }
         SwFormatINetFormat mINetFormat;
         sal_Int32 mStartTextPos;
