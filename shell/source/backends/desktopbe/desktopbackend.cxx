@@ -228,7 +228,7 @@ OUString xdg_user_dir_lookup (const char *type)
             }
             else
             {
-                aUserDirBuf = OUStringBuffer();
+                aUserDirBuf.truncate();
             }
             while (*p && *p != '"')
             {

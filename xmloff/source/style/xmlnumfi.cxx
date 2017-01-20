@@ -1128,7 +1128,7 @@ void SvXMLNumFmtElementContext::EndElement()
 
                 if ( rParent.ReplaceNfKeyword( NF_KEY_NNN, NF_KEY_NNNN ) )
                 {
-                    aContent = OUStringBuffer();
+                    aContent.truncate();
                 }
 
                 rParent.SetHasLongDoW( false );     // only once
