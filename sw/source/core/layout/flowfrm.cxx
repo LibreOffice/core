@@ -1800,12 +1800,9 @@ bool SwFlowFrame::MoveFwd( bool bMakePage, bool bPageBreak, bool bMoveAlways )
 {
 //!!!!MoveFootnoteCntFwd might need to be updated as well.
     SwFootnoteBossFrame *pOldBoss = m_rThis.FindFootnoteBossFrame();
-    assert(pOldBoss);
-    if (!pOldBoss)
-        return false;
     if (m_rThis.IsInFootnote())
     {
-        if (!m_rThis.IsContentFrame())
+        if (!m_rThis.IsContentFrame() || !pOldBoss)
         {
             SAL_WARN("sw.core", "Tables in footnotes are not truly supported");
             return false;
