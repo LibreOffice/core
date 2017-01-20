@@ -229,28 +229,28 @@ static void create_pixmap(struct splash* splash)
 
     if ( splash->visual->class == TrueColor )
     {
-        unsigned long red_mask   = splash->visual->red_mask;
-        unsigned long green_mask = splash->visual->green_mask;
-        unsigned long blue_mask  = splash->visual->blue_mask;
+        const unsigned long red_mask   = splash->visual->red_mask;
+        const unsigned long green_mask = splash->visual->green_mask;
+        const unsigned long blue_mask  = splash->visual->blue_mask;
 
-        unsigned long red_delta_mask   = ( 1UL << ( 8 - BITS( red_mask ) ) ) - 1;
-        unsigned long green_delta_mask = ( 1UL << ( 8 - BITS( green_mask ) ) ) - 1;
-        unsigned long blue_delta_mask  = ( 1UL << ( 8 - BITS( blue_mask ) ) ) - 1;
+        const unsigned long red_delta_mask   = ( 1UL << ( 8 - BITS( red_mask ) ) ) - 1;
+        const unsigned long green_delta_mask = ( 1UL << ( 8 - BITS( green_mask ) ) ) - 1;
+        const unsigned long blue_delta_mask  = ( 1UL << ( 8 - BITS( blue_mask ) ) ) - 1;
 
-        int red_shift   = HIGHEST_BIT( red_mask ) - 8;
-        int green_shift = HIGHEST_BIT( green_mask ) - 8;
-        int blue_shift  = HIGHEST_BIT( blue_mask ) - 8;
+        const int red_shift   = HIGHEST_BIT( red_mask ) - 8;
+        const int green_shift = HIGHEST_BIT( green_mask ) - 8;
+        const int blue_shift  = HIGHEST_BIT( blue_mask ) - 8;
 
         XImage* image = XCreateImage( splash->display, splash->visual, splash->depth, ZPixmap,
                                       0, NULL, splash->width, splash->height, 32, 0 );
 
-        int bytes_per_line = image->bytes_per_line;
-        int bpp = image->bits_per_pixel;
-        int byte_order = image->byte_order;
+        const int bytes_per_line = image->bytes_per_line;
+        const int bpp = image->bits_per_pixel;
+        const int byte_order = image->byte_order;
 #if defined OSL_LITENDIAN
-        int machine_byte_order = LSBFirst;
+        const int machine_byte_order = LSBFirst;
 #else /* OSL_BIGENDIAN */
-        int machine_byte_order = MSBFirst;
+        const int machine_byte_order = MSBFirst;
 #endif
 
         char *data = malloc( splash->height * bytes_per_line );
