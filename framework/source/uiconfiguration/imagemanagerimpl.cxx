@@ -224,7 +224,7 @@ static bool implts_checkAndScaleGraphic( uno::Reference< XGraphic >& rOutGraphic
 
     if ( !rInGraphic.is() )
     {
-        rOutGraphic = Image().GetXGraphic();
+        rOutGraphic = uno::Reference<graphic::XGraphic>();
         return false;
     }
 
@@ -882,7 +882,7 @@ throw ( css::lang::IllegalArgumentException,
             pDefaultImageList = implts_getDefaultImageList();
         }
         ImageList*                        pImageList        = implts_getUserImageList(nIndex);
-        uno::Reference< XGraphic >        xEmptyGraphic( Image().GetXGraphic() );
+        uno::Reference<XGraphic> xEmptyGraphic;
 
         for ( sal_Int32 i = 0; i < aCommandURLSequence.getLength(); i++ )
         {
@@ -1034,8 +1034,8 @@ void ImageManagerImpl::reload()
                     rGlobalImageList  = implts_getGlobalImageList();
                     pDefaultImageList = implts_getDefaultImageList();
                 }
-                uno::Reference< XGraphic >        xEmptyGraphic( Image().GetXGraphic() );
-                CommandMap::const_iterator        pIter = aOldUserCmdImageSet.begin();
+                uno::Reference<XGraphic> xEmptyGraphic;
+                CommandMap::const_iterator pIter = aOldUserCmdImageSet.begin();
                 while ( pIter != aOldUserCmdImageSet.end() )
                 {
                     if ( !pIter->second )
