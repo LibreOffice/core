@@ -155,6 +155,8 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
     return aResult;
 }
 #ifdef _WIN32
+/// @throws io::IOException
+/// @throws uno::RuntimeException
 OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStorage >& xParentStorage, const OUString& aEntryName, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
     throw( io::IOException, uno::RuntimeException )
 {

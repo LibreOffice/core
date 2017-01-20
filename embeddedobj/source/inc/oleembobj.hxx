@@ -245,6 +245,7 @@ protected:
                             bool bSaveAs )
         throw ( css::uno::Exception );
 #ifdef _WIN32
+    /// @throws css::uno::Exception
     void StoreObjectToStream( css::uno::Reference< css::io::XOutputStream > const & xOutStream )
         throw ( css::uno::Exception );
 #endif
