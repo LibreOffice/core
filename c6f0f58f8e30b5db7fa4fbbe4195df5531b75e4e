@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_a78e5825",
+        "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1001509
+      },
+      "writtenOn": "2017-01-20T12:20:10Z",
+      "side": 1,
+      "message": "Matthias, this would mean I should rename the file too then?",
+      "parentUuid": "fa48f94a_6762b0da",
+      "revId": "c6f0f58f8e30b5db7fa4fbbe4195df5531b75e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_ec9e8706",
         "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2017-01-19T17:38:08Z",
       "side": 1,
       "message": "Currently there is just one extends tag, which lists LO base (the DB part of LO), but since the KDE integration would work on any LO program, this is too narrow.\n\nhttps://www.freedesktop.org/software/appstream/docs/sect-Metadata-Addon.html\nspecifies, that \"The \u003cextends/\u003e tag may be specified multiple times.\", so you should add extends tags for all other components, e.g. calc, draw, impress and writer.",
+      "revId": "c6f0f58f8e30b5db7fa4fbbe4195df5531b75e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_47792c2f",
+        "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1001509
+      },
+      "writtenOn": "2017-01-20T12:20:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa48f94a_ec9e8706",
       "revId": "c6f0f58f8e30b5db7fa4fbbe4195df5531b75e4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_67763040",
+        "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1001509
+      },
+      "writtenOn": "2017-01-20T12:20:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa48f94a_acbb9f74",
+      "revId": "c6f0f58f8e30b5db7fa4fbbe4195df5531b75e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_4c86b3ba",
         "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
         "patchSetId": 1
@@ -82,6 +136,24 @@
       "writtenOn": "2017-01-19T17:38:08Z",
       "side": 1,
       "message": "Any reason you didn\u0027t copy all the other urls from the other files?",
+      "revId": "c6f0f58f8e30b5db7fa4fbbe4195df5531b75e4e",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_8773144d",
+        "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1001509
+      },
+      "writtenOn": "2017-01-20T12:20:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa48f94a_4c86b3ba",
       "revId": "c6f0f58f8e30b5db7fa4fbbe4195df5531b75e4e",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
