@@ -53,7 +53,7 @@ class MasterPageDescriptorOrder
 public:
     bool operator() (
         const SharedMasterPageDescriptor& rp1,
-        const SharedMasterPageDescriptor& rp2)
+        const SharedMasterPageDescriptor& rp2) const
     {
         if (rp1->meOrigin == MasterPageContainer::DEFAULT)
             return true;
