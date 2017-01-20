@@ -1104,10 +1104,9 @@ void TransferableClipboardNotifier::dispose()
 struct TransferableDataHelper_Impl
 {
     ::osl::Mutex                    maMutex;
-    TransferableClipboardNotifier*  mpClipboardListener;
+    rtl::Reference<TransferableClipboardNotifier>  mxClipboardListener;
 
     TransferableDataHelper_Impl()
-        :mpClipboardListener( nullptr )
     {
     }
 };
@@ -1152,7 +1151,7 @@ TransferableDataHelper& TransferableDataHelper::operator=( const TransferableDat
     {
         ::osl::MutexGuard aGuard(mxImpl->maMutex);
 
-        const bool bWasClipboardListening = (nullptr != mxImpl->mpClipboardListener);
+        const bool bWasClipboardListening = mxImpl->mxClipboardListener.is();
 
         if (bWasClipboardListening)
             StopClipboardListening();
@@ -1173,7 +1172,7 @@ TransferableDataHelper& TransferableDataHelper::operator=(TransferableDataHelper
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
 
-    const bool bWasClipboardListening = (nullptr != mxImpl->mpClipboardListener);
+    const bool bWasClipboardListening = mxImpl->mxClipboardListener.is();
 
     if (bWasClipboardListening)
         StopClipboardListening();
@@ -2078,21 +2077,19 @@ bool TransferableDataHelper::StartClipboardListening( )
 
     StopClipboardListening( );
 
-    mxImpl->mpClipboardListener = new TransferableClipboardNotifier(mxClipboard, *this, mxImpl->maMutex);
-    mxImpl->mpClipboardListener->acquire();
+    mxImpl->mxClipboardListener = new TransferableClipboardNotifier(mxClipboard, *this, mxImpl->maMutex);
 
-    return mxImpl->mpClipboardListener->isListening();
+    return mxImpl->mxClipboardListener->isListening();
 }
 
 void TransferableDataHelper::StopClipboardListening( )
 {
     ::osl::MutexGuard aGuard(mxImpl->maMutex);
 
-    if (mxImpl->mpClipboardListener)
+    if (mxImpl->mxClipboardListener.is())
     {
-        mxImpl->mpClipboardListener->dispose();
-        mxImpl->mpClipboardListener->release();
-        mxImpl->mpClipboardListener = nullptr;
+        mxImpl->mxClipboardListener->dispose();
+        mxImpl->mxClipboardListener.clear();
     }
 }
 
