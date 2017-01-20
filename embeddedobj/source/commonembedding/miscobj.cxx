@@ -43,8 +43,7 @@ using namespace ::com::sun::star;
 
 OCommonEmbeddedObject::OCommonEmbeddedObject( const uno::Reference< uno::XComponentContext >& rxContext,
                                                 const uno::Sequence< beans::NamedValue >& aObjProps )
-: m_pDocHolder( nullptr )
-, m_pInterfaceContainer( nullptr )
+: m_pInterfaceContainer( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_bClosed( false )
@@ -70,8 +69,7 @@ OCommonEmbeddedObject::OCommonEmbeddedObject(
         const uno::Sequence< beans::NamedValue >& aObjProps,
         const uno::Sequence< beans::PropertyValue >& aMediaDescr,
         const uno::Sequence< beans::PropertyValue >& aObjectDescr )
-: m_pDocHolder( nullptr )
-, m_pInterfaceContainer( nullptr )
+: m_pInterfaceContainer( nullptr )
 , m_bReadOnly( false )
 , m_bDisposed( false )
 , m_bClosed( false )
@@ -99,8 +97,7 @@ void OCommonEmbeddedObject::CommonInit_Impl( const uno::Sequence< beans::NamedVa
     if ( !m_xContext.is() )
         throw uno::RuntimeException();
 
-    m_pDocHolder = new DocumentHolder( m_xContext, this );
-    m_pDocHolder->acquire();
+    m_xDocHolder = new DocumentHolder( m_xContext, this );
 
     // parse configuration entries
     // TODO/LATER: in future UI names can be also provided here
@@ -256,13 +253,13 @@ void OCommonEmbeddedObject::LinkInit_Impl(
     CommonInit_Impl( aObjectProps );
 
     if ( xDispatchInterceptor.is() )
-        m_pDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
+        m_xDocHolder->SetOutplaceDispatchInterceptor( xDispatchInterceptor );
 }
 
 
 OCommonEmbeddedObject::~OCommonEmbeddedObject()
 {
-    if ( m_pInterfaceContainer || m_pDocHolder )
+    if ( m_pInterfaceContainer || m_xDocHolder.is() )
     {
         m_refCount++;
         try {
@@ -278,16 +275,15 @@ OCommonEmbeddedObject::~OCommonEmbeddedObject()
         } catch( const uno::Exception& ) {}
 
         try {
-            if ( m_pDocHolder )
+            if ( m_xDocHolder.is() )
             {
-                m_pDocHolder->CloseFrame();
+                m_xDocHolder->CloseFrame();
                 try {
-                    m_pDocHolder->CloseDocument( true, true );
+                    m_xDocHolder->CloseDocument( true, true );
                 } catch ( const uno::Exception& ) {}
-                m_pDocHolder->FreeOffice();
+                m_xDocHolder->FreeOffice();
 
-                m_pDocHolder->release();
-                m_pDocHolder = nullptr;
+                m_xDocHolder.clear();
             }
         } catch( const uno::Exception& ) {}
     }
@@ -449,7 +445,7 @@ uno::Reference< util::XCloseable > SAL_CALL OCommonEmbeddedObject::getComponent(
                                      static_cast< ::cppu::OWeakObject* >(this) );
     }
 
-    return uno::Reference< util::XCloseable >( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    return uno::Reference< util::XCloseable >( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
 }
 
 
@@ -537,29 +533,27 @@ void SAL_CALL OCommonEmbeddedObject::close( sal_Bool bDeliverOwnership )
     // the exception will be thrown otherwise in addition to exception the object must register itself
     // as termination listener and listen for document events
 
-    if ( m_pDocHolder )
+    if ( m_xDocHolder.is() )
     {
-        m_pDocHolder->CloseFrame();
+        m_xDocHolder->CloseFrame();
 
         try {
-            m_pDocHolder->CloseDocument( bDeliverOwnership, bDeliverOwnership );
+            m_xDocHolder->CloseDocument( bDeliverOwnership, bDeliverOwnership );
         }
         catch( const uno::Exception& )
         {
             if ( bDeliverOwnership )
             {
-                m_pDocHolder->release();
-                m_pDocHolder = nullptr;
+                m_xDocHolder.clear();
                 m_bClosed = true;
             }
 
             throw;
         }
 
-        m_pDocHolder->FreeOffice();
+        m_xDocHolder->FreeOffice();
 
-        m_pDocHolder->release();
-        m_pDocHolder = nullptr;
+        m_xDocHolder.clear();
     }
 
     // TODO: for now the storage will be disposed by the object, but after the document

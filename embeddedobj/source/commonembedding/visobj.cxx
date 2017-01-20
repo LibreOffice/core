@@ -60,7 +60,7 @@ void SAL_CALL OCommonEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const
         bBackToLoaded = m_bIsLink;
     }
 
-    bool bSuccess = m_pDocHolder->SetExtent( nAspect, aSize );
+    bool bSuccess = m_xDocHolder->SetExtent( nAspect, aSize );
 
     if ( bBackToLoaded )
         changeState( embed::EmbedStates::LOADED );
@@ -98,7 +98,7 @@ awt::Size SAL_CALL OCommonEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
     }
 
     awt::Size aResult;
-    bool bSuccess = m_pDocHolder->GetExtent( nAspect, &aResult );
+    bool bSuccess = m_xDocHolder->GetExtent( nAspect, &aResult );
 
     if ( bBackToLoaded )
         changeState( embed::EmbedStates::LOADED );
@@ -139,7 +139,7 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getMapUnit( sal_Int64 nAspect )
         bBackToLoaded = m_bIsLink;
     }
 
-    sal_Int32 nResult = m_pDocHolder->GetMapUnit( nAspect );
+    sal_Int32 nResult = m_xDocHolder->GetMapUnit( nAspect );
 
     if ( bBackToLoaded )
         changeState( embed::EmbedStates::LOADED );
@@ -185,19 +185,19 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
         bBackToLoaded = m_bIsLink;
     }
 
-    SAL_WARN_IF( !m_pDocHolder->GetComponent().is(), "embeddedobj.common", "Running or Active object has no component!" );
+    SAL_WARN_IF( !m_xDocHolder->GetComponent().is(), "embeddedobj.common", "Running or Active object has no component!" );
 
     // TODO: return for the aspect of the document
     embed::VisualRepresentation aVisualRepresentation;
 
-    uno::Reference< embed::XVisualObject > xVisualObject( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    uno::Reference< embed::XVisualObject > xVisualObject( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
     if( xVisualObject.is())
     {
         aVisualRepresentation = xVisualObject->getPreferredVisualRepresentation( nAspect );
     }
     else
     {
-        uno::Reference< datatransfer::XTransferable > xTransferable( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+        uno::Reference< datatransfer::XTransferable > xTransferable( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
         if (!xTransferable.is() )
             throw uno::RuntimeException();
 

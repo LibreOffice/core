@@ -83,7 +83,7 @@ sal_Int32 OCommonEmbeddedObject::ConvertVerbToState_Impl( sal_Int32 nVerb )
 
 void OCommonEmbeddedObject::Deactivate()
 {
-    uno::Reference< util::XModifiable > xModif( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+    uno::Reference< util::XModifiable > xModif( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
 
     // no need to lock for the initialization
     uno::Reference< embed::XEmbeddedClient > xClientSite = m_xClientSite;
@@ -108,7 +108,7 @@ void OCommonEmbeddedObject::Deactivate()
         }
     }
 
-    m_pDocHolder->CloseFrame();
+    m_xDocHolder->CloseFrame();
 
     xClientSite->visibilityChanged( false );
 }
@@ -166,7 +166,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
             if ( m_bIsLink )
             {
-                m_pDocHolder->SetComponent( LoadLink_Impl(), m_bReadOnly );
+                m_xDocHolder->SetComponent( LoadLink_Impl(), m_bReadOnly );
             }
             else
             {
@@ -179,7 +179,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     if ( !m_xObjectStorage.is() )
                         throw io::IOException(); //TODO: access denied
 
-                    m_pDocHolder->SetComponent( LoadDocumentFromStorage_Impl(), m_bReadOnly );
+                    m_xDocHolder->SetComponent( LoadDocumentFromStorage_Impl(), m_bReadOnly );
                 }
                 else
                 {
@@ -194,11 +194,11 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     if ( xChild.is() )
                         xChild->setParent( m_xParent );
 
-                    m_pDocHolder->SetComponent( xDocument, m_bReadOnly );
+                    m_xDocHolder->SetComponent( xDocument, m_bReadOnly );
                 }
             }
 
-            if ( !m_pDocHolder->GetComponent().is() )
+            if ( !m_xDocHolder->GetComponent().is() )
                 throw embed::UnreachableStateException(); //TODO: can't open document
 
             m_nObjectState = nNextState;
@@ -213,11 +213,11 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
     {
         if ( nNextState == embed::EmbedStates::LOADED )
         {
-            m_nClonedMapUnit = m_pDocHolder->GetMapUnit( embed::Aspects::MSOLE_CONTENT );
-            m_bHasClonedSize = m_pDocHolder->GetExtent( embed::Aspects::MSOLE_CONTENT, &m_aClonedSize );
+            m_nClonedMapUnit = m_xDocHolder->GetMapUnit( embed::Aspects::MSOLE_CONTENT );
+            m_bHasClonedSize = m_xDocHolder->GetExtent( embed::Aspects::MSOLE_CONTENT, &m_aClonedSize );
 
             // actually frame should not exist at this point
-            m_pDocHolder->CloseDocument( false, false );
+            m_xDocHolder->CloseDocument( false, false );
 
             m_nObjectState = nNextState;
         }
@@ -250,7 +250,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
                     // dispatch provider may not be provided
                     uno::Reference< frame::XDispatchProvider > xContainerDP = xInplaceClient->getInplaceDispatchProvider();
-                    bool bOk = m_pDocHolder->ShowInplace( xClientWindowPeer, aRectangleToShow, xContainerDP );
+                    bool bOk = m_xDocHolder->ShowInplace( xClientWindowPeer, aRectangleToShow, xContainerDP );
                     m_nObjectState = nNextState;
                     if ( !bOk )
                     {
@@ -267,7 +267,7 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     throw embed::WrongStateException(); //TODO: client site is not set!
 
                 // create frame and load document in the frame
-                m_pDocHolder->Show();
+                m_xDocHolder->Show();
 
                 m_xClientSite->visibilityChanged( true );
                 m_nObjectState = nNextState;
@@ -324,13 +324,13 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
                     // the container. Locking the LM will prevent flicker.
                     xContainerLM->lock();
                     xInplaceClient->activatingUI();
-                    bool bOk = m_pDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
+                    bool bOk = m_xDocHolder->ShowUI( xContainerLM, xContainerDP, aModuleName );
                     xContainerLM->unlock();
 
                     if ( bOk )
                     {
                         m_nObjectState = nNextState;
-                        m_pDocHolder->ResizeHatchWindow();
+                        m_xDocHolder->ResizeHatchWindow();
                     }
                     else
                     {
@@ -371,12 +371,12 @@ void OCommonEmbeddedObject::SwitchStateTo_Impl( sal_Int32 nNextState )
 
             bool bOk = false;
             if ( xContainerLM.is() )
-                bOk = m_pDocHolder->HideUI( xContainerLM );
+                bOk = m_xDocHolder->HideUI( xContainerLM );
 
             if ( bOk )
             {
                 m_nObjectState = nNextState;
-                m_pDocHolder->ResizeHatchWindow();
+                m_xDocHolder->ResizeHatchWindow();
                 xInplaceClient->deactivatedUI();
             }
             else
@@ -449,7 +449,7 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
             {
                 // if active object is activated again, bring its window to top
                 if ( m_nObjectState == embed::EmbedStates::ACTIVE )
-                    m_pDocHolder->Show();
+                    m_xDocHolder->Show();
 
                 return;
             }
@@ -681,7 +681,7 @@ void SAL_CALL OCommonEmbeddedObject::setParent( const css::uno::Reference< css::
     m_xParent = xParent;
     if ( m_nObjectState != -1 && m_nObjectState != embed::EmbedStates::LOADED )
     {
-        uno::Reference < container::XChild > xChild( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+        uno::Reference < container::XChild > xChild( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
         if ( xChild.is() )
             xChild->setParent( xParent );
     }

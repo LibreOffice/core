@@ -39,6 +39,7 @@
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/chart2/XDefaultSizeTransmitter.hpp>
 #include <cppuhelper/weak.hxx>
+#include <rtl/ref.hxx>
 
 namespace com { namespace sun { namespace star {
     namespace embed {
@@ -82,7 +83,7 @@ class OCommonEmbeddedObject : public css::embed::XEmbeddedObject
 protected:
     ::osl::Mutex    m_aMutex;
 
-    DocumentHolder* m_pDocHolder;
+    rtl::Reference<DocumentHolder> m_xDocHolder;
 
     ::cppu::OMultiTypeInterfaceContainerHelper* m_pInterfaceContainer;
 

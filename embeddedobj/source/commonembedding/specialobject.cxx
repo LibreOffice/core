@@ -187,7 +187,7 @@ void SAL_CALL OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
     if ( nVerbID == -7 )
     {
 
-        uno::Reference < ui::dialogs::XExecutableDialog > xDlg( m_pDocHolder->GetComponent(), uno::UNO_QUERY );
+        uno::Reference < ui::dialogs::XExecutableDialog > xDlg( m_xDocHolder->GetComponent(), uno::UNO_QUERY );
         if ( xDlg.is() )
             xDlg->execute();
         else

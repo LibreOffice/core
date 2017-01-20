@@ -55,7 +55,7 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
     // the clip rectangle changes view only in case interception is also changed
     if ( !RectanglesEqual( m_aOwnRectangle, aPosRect )
       || ( !RectanglesEqual( m_aClipRectangle, aPosRect ) && !RectanglesEqual( aOldRectToShow, aNewRectToShow ) ) )
-        m_pDocHolder->PlaceFrame( aNewRectToShow );
+        m_xDocHolder->PlaceFrame( aNewRectToShow );
 
     m_aOwnRectangle = aPosRect;
     m_aClipRectangle = aClipRect;
