@@ -72,12 +72,16 @@ protected:
 
     NavigationServices_DialogType m_nDialogType;
 
+    /// @throws css::uno::RuntimeException
     void implsetTitle( const OUString& aTitle )
         throw( css::uno::RuntimeException );
 
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void implsetDisplayDirectory( const OUString& rDirectory )
         throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
+    /// @throws css::uno::RuntimeException
     OUString const & implgetDisplayDirectory(  )
         throw( css::uno::RuntimeException );
 

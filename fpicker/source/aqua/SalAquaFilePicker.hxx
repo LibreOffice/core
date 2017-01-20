@@ -132,6 +132,7 @@ public:
     // XEventListener
 
     using cppu::WeakComponentImplHelperBase::disposing;
+    /// @throws css::uno::RuntimeException
     virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent )
         throw(css::uno::RuntimeException);
 
