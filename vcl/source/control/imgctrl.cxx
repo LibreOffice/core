@@ -77,9 +77,8 @@ void ImageControl::ImplDraw(OutputDevice& rDev, DrawFlags nDrawFlags, const Poin
     }
 
     const Image& rImage( GetModeImage() );
-    const Image* pImage = &rImage;
     const Rectangle aDrawRect( rPos, rSize );
-    if ( !*pImage )
+    if (!rImage)
     {
         OUString  sText( GetText() );
         if ( sText.isEmpty() )
@@ -95,23 +94,20 @@ void ImageControl::ImplDraw(OutputDevice& rDev, DrawFlags nDrawFlags, const Poin
         return;
     }
 
-    const Size&      rBitmapSize = pImage->GetSizePixel();
+    const Size& rBitmapSize = rImage.GetSizePixel();
 
     switch ( mnScaleMode )
     {
     case ImageScaleMode::NONE:
     {
-        rDev.DrawImage( lcl_centerWithin( aDrawRect, rBitmapSize ), *pImage, nStyle );
+        rDev.DrawImage(lcl_centerWithin( aDrawRect, rBitmapSize ), rImage, nStyle);
     }
     break;
 
     case ImageScaleMode::ISOTROPIC:
     {
         const Size aPaintSize = lcl_calcPaintSize( aDrawRect, rBitmapSize );
-        rDev.DrawImage(
-            lcl_centerWithin( aDrawRect, aPaintSize ),
-            aPaintSize,
-            *pImage, nStyle );
+        rDev.DrawImage(lcl_centerWithin(aDrawRect, aPaintSize), aPaintSize, rImage, nStyle);
     }
     break;
 
@@ -120,7 +116,7 @@ void ImageControl::ImplDraw(OutputDevice& rDev, DrawFlags nDrawFlags, const Poin
         rDev.DrawImage(
             aDrawRect.TopLeft(),
             aDrawRect.GetSize(),
-            *pImage, nStyle );
+            rImage, nStyle );
     }
     break;
 
