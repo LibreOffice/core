@@ -64,13 +64,18 @@ namespace connectivity
 
 
         protected:
+            /// @throws css::sdbc::SQLException
             class MacabCondition *analyseWhereClause(
                 const OSQLParseNode *pParseNode) const throw(css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             class MacabOrder *analyseOrderByClause(
                 const OSQLParseNode *pParseNode) const throw(css::sdbc::SQLException);
             OUString getTableName( ) const;
+            /// @throws css::sdbc::SQLException
             void setMacabFields(class MacabResultSet *pResult) const throw(css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             void selectRecords(MacabResultSet *pResult) const throw(css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             void sortRecords(MacabResultSet *pResult) const throw(css::sdbc::SQLException);
 
             // OPropertyArrayUsageHelper
@@ -90,7 +95,9 @@ namespace connectivity
                     css::uno::Any& rValue,
                     sal_Int32 nHandle) const override;
 
+            /// @throws css::sdbc::SQLException
             virtual void resetParameters() const throw(css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             virtual void getNextParameter(OUString &rParameter) const throw(css::sdbc::SQLException);
             virtual ~MacabCommonStatement() override;
 

@@ -118,10 +118,13 @@ namespace connectivity
             MacabImplModule             m_aImplModule;
 
         public:
+            /// @throws css::uno::Exception
             static css::uno::Reference< css::uno::XInterface > SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception );
 
             // XServiceInfo - static versions
+            /// @throws css::uno::RuntimeException
             static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+            /// @throws css::uno::RuntimeException
             static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
 
             css::uno::Reference< css::uno::XComponentContext > const &

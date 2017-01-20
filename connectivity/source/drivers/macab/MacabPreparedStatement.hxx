@@ -47,7 +47,9 @@ namespace connectivity
             mutable sal_Int32               m_nParameterIndex;
             OValueRow                       m_aParameterRow;
 
+            /// @throws css::sdbc::SQLException
             void checkAndResizeParameters(sal_Int32 nParams) throw(css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             void setMacabFields() const throw(css::sdbc::SQLException);
 
         protected:

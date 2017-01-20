@@ -58,6 +58,7 @@ class MacabConditionColumn : public MacabCondition
         sal_Int32 m_nFieldNumber;
 
     public:
+        /// @throws css::sdbc::SQLException
         MacabConditionColumn(
             const MacabHeader *header,
             const OUString &sColumnName) throw(css::sdbc::SQLException);
@@ -68,6 +69,7 @@ class MacabConditionColumn : public MacabCondition
 class MacabConditionNull : public MacabConditionColumn
 {
     public:
+        /// @throws css::sdbc::SQLException
         MacabConditionNull(
             const MacabHeader *header,
             const OUString &sColumnName) throw(css::sdbc::SQLException);
@@ -77,6 +79,7 @@ class MacabConditionNull : public MacabConditionColumn
 class MacabConditionNotNull : public MacabConditionColumn
 {
     public:
+        /// @throws css::sdbc::SQLException
         MacabConditionNotNull(
             const MacabHeader *header,
             const OUString &sColumnName) throw(css::sdbc::SQLException);
@@ -89,6 +92,7 @@ class MacabConditionCompare : public MacabConditionColumn
         const OUString m_sMatchString;
 
     public:
+        /// @throws css::sdbc::SQLException
         MacabConditionCompare(
             const MacabHeader *header,
             const OUString &sColumnName,
@@ -98,6 +102,7 @@ class MacabConditionCompare : public MacabConditionColumn
 class MacabConditionEqual : public MacabConditionCompare
 {
     public:
+        /// @throws css::sdbc::SQLException
         MacabConditionEqual(
             const MacabHeader *header,
             const OUString &sColumnName,
@@ -108,6 +113,7 @@ class MacabConditionEqual : public MacabConditionCompare
 class MacabConditionDifferent : public MacabConditionCompare
 {
     public:
+        /// @throws css::sdbc::SQLException
         MacabConditionDifferent(
             const MacabHeader *header,
             const OUString &sColumnName,
@@ -118,6 +124,7 @@ class MacabConditionDifferent : public MacabConditionCompare
 class MacabConditionSimilar : public MacabConditionCompare
 {
     public:
+        /// @throws css::sdbc::SQLException
         MacabConditionSimilar(
             const MacabHeader *header,
             const OUString &sColumnName,

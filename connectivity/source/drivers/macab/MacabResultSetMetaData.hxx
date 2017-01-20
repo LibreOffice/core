@@ -53,6 +53,7 @@ namespace connectivity
             inline operator css::uno::Reference< css::sdbc::XResultSetMetaData > () throw()
                 { return this; }
 
+            /// @throws css::sdbc::SQLException
             void setMacabFields(
                 const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(css::sdbc::SQLException);
             inline sal_uInt32 fieldAtColumn(sal_Int32 columnIndex) const
