@@ -1039,16 +1039,40 @@ sal_Int32 EnhancedCustomShape2d::GetLuminanceChange( sal_uInt32 nIndex ) const
 
 Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 nIndex, double dBrightness ) const
 {
-    const sal_Int32 nLuminance = GetLuminanceChange(nIndex);
-    if( !nLuminance && dBrightness == 1.0 )
-        return rFillColor;
+    if ( bOOXMLShape || ( mso_sptMin == eSpType /* ODF "non-primitive" */ ) )
+    { //do LibreOffice way, using dBrightness
+        if ( dBrightness == 0.0)
+        {
+            return rFillColor;
+        }
+        else
+        {
+            if (dBrightness >=0.0)
+            { //lighten, blending with white
+                return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetRed() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0)  ),
+                              (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetGreen() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) ),
+                              (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetBlue() * (1.0-dBrightness) + dBrightness * 255.0, 0.0, 255.0) )  );
+            }
+            else
+            { //darken (indicated by negative sign), blending with black
+                return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetRed() * (1.0+dBrightness), 0.0, 255.0)  ),
+                              (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetGreen() * (1.0+dBrightness), 0.0, 255.0) ),
+                              (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(rFillColor.GetBlue() * (1.0+dBrightness), 0.0, 255.0) )  );
+            }
+        }
+    }
+    else
+    { //do OpenOffice way, using nColorData
+        const sal_Int32 nLuminance = GetLuminanceChange(nIndex);
+        if( !nLuminance )
+            return rFillColor;
 
-    basegfx::BColor aHSVColor=
-        basegfx::tools::rgb2hsv(
-            basegfx::BColor(rFillColor.GetRed()/255.0,
-                            rFillColor.GetGreen()/255.0,
-                            rFillColor.GetBlue()/255.0));
-    if (nLuminance ) {
+        basegfx::BColor aHSVColor=
+                basegfx::tools::rgb2hsv(
+                    basegfx::BColor(rFillColor.GetRed()/255.0,
+                                    rFillColor.GetGreen()/255.0,
+                                    rFillColor.GetBlue()/255.0));
+
         if( nLuminance > 0 )
         {
             aHSVColor.setGreen(
@@ -1062,12 +1086,12 @@ Color EnhancedCustomShape2d::GetColorData( const Color& rFillColor, sal_uInt32 n
             aHSVColor.setBlue(
                 (1.0+nLuminance/100.0)*aHSVColor.getBlue());
         }
-    }
 
-    aHSVColor = basegfx::tools::hsv2rgb(aHSVColor);
-    return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(dBrightness*aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 ),
-                  (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(dBrightness*aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 ),
-                  (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(dBrightness*aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 ) );
+        aHSVColor = basegfx::tools::hsv2rgb(aHSVColor);
+        return Color( (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getRed(),0.0,1.0) * 255.0 + 0.5 ),
+                    (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getGreen(),0.0,1.0) * 255.0 + 0.5 ),
+                    (sal_uInt8)static_cast< sal_Int32 >( basegfx::clamp(aHSVColor.getBlue(),0.0,1.0) * 255.0 + 0.5 ) );
+    }
 }
 
 Rectangle EnhancedCustomShape2d::GetTextRect() const
@@ -1431,7 +1455,7 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
 {
     bool bNoFill = false;
     bool bNoStroke = false;
-    double dBrightness = 1.0;
+    double dBrightness = 0.0; //no blending
 
     basegfx::B2DPolyPolygon aNewB2DPolyPolygon;
     basegfx::B2DPolygon aNewB2DPolygon;
@@ -1468,16 +1492,16 @@ void EnhancedCustomShape2d::CreateSubPath( sal_uInt16& rSrcPt, sal_uInt16& rSegm
                     bNoStroke = true;
                 break;
                 case DARKEN :
-                    dBrightness = 0.66666666;
+                    dBrightness = -0.4; //use sign to distinguish DARKEN from LIGHTEN
                     break;
                 case DARKENLESS :
-                    dBrightness = 0.83333333;
+                    dBrightness = -0.2;
                     break;
                 case LIGHTEN :
-                    dBrightness = 1.16666666;
+                    dBrightness = 0.4;
                     break;
                 case LIGHTENLESS :
-                    dBrightness = 1.33333333;
+                    dBrightness = 0.2;
                     break;
                 case MOVETO :
                 {
@@ -2134,7 +2158,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             case drawing::FillStyle_SOLID:
             {
                 Color aFillColor;
-                if ( nColorCount || rObj.GetBrightness() != 1.0 )
+                if ( nColorCount || rObj.GetBrightness() != 0.0 )
                 {
                     aFillColor = GetColorData(
                         static_cast<const XFillColorItem&>(rCustomShapeSet.Get( XATTR_FILLCOLOR )).GetColorValue(),
@@ -2146,7 +2170,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             case drawing::FillStyle_GRADIENT:
             {
                 XGradient aXGradient(static_cast<const XFillGradientItem&>(rObj.GetMergedItem(XATTR_FILLGRADIENT)).GetGradientValue());
-                if ( nColorCount || rObj.GetBrightness() != 1.0 )
+                if ( nColorCount || rObj.GetBrightness() != 0.0 )
                 {
                     aXGradient.SetStartColor(
                         GetColorData(
@@ -2164,7 +2188,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             case drawing::FillStyle_HATCH:
             {
                 XHatch aXHatch(static_cast<const XFillHatchItem&>(rObj.GetMergedItem(XATTR_FILLHATCH)).GetHatchValue());
-                if ( nColorCount || rObj.GetBrightness() != 1.0 )
+                if ( nColorCount || rObj.GetBrightness() != 0.0 )
                 {
                     aXHatch.SetColor(
                         GetColorData(
@@ -2177,7 +2201,7 @@ void EnhancedCustomShape2d::AdaptObjColor(SdrPathObj& rObj, const SfxItemSet& rC
             }
             case drawing::FillStyle_BITMAP:
             {
-                if ( nColorCount || rObj.GetBrightness() != 1.0 )
+                if ( nColorCount || rObj.GetBrightness() != 0.0 )
                 {
                     Bitmap aBitmap(static_cast<const XFillBitmapItem&>(rObj.GetMergedItem(XATTR_FILLBITMAP)).GetGraphicObject().GetGraphic().GetBitmapEx().GetBitmap());
 

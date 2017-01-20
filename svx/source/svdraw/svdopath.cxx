@@ -1669,7 +1669,7 @@ sdr::contact::ViewContact* SdrPathObj::CreateObjectSpecificViewContact()
 SdrPathObj::SdrPathObj(SdrObjKind eNewKind)
 :   meKind(eNewKind),
     mpDAC(nullptr),
-    mdBrightness(1.0)
+    mdBrightness(0.0)
 {
     bClosedObj = IsClosed();
 }
