@@ -24,6 +24,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <cppuhelper/implbase.hxx>
 #include <com/sun/star/form/XLoadable.hpp>
+#include <rtl/ref.hxx>
 
 
 namespace bib
@@ -37,12 +38,11 @@ namespace bib
         friend class OComponentAdapterBase;
 
     private:
-        OComponentAdapterBase*  m_pAdapter;
-        ::osl::Mutex&           m_rMutex;
+        rtl::Reference<OComponentAdapterBase>  m_xAdapter;
+        ::osl::Mutex&                          m_rMutex;
     protected:
         explicit OComponentListener( ::osl::Mutex& _rMutex )
-            :m_pAdapter( nullptr )
-            ,m_rMutex( _rMutex )
+            :m_rMutex( _rMutex )
         {
         }
 

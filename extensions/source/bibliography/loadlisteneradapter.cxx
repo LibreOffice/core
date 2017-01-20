@@ -32,31 +32,16 @@ namespace bib
 
     OComponentListener::~OComponentListener()
     {
-        {
-            ::osl::MutexGuard aGuard( m_rMutex );
-            if ( m_pAdapter )
-                m_pAdapter->dispose();
-        }
+        ::osl::MutexGuard aGuard( m_rMutex );
+        if ( m_xAdapter.is() )
+            m_xAdapter->dispose();
     }
 
 
     void OComponentListener::setAdapter( OComponentAdapterBase* pAdapter )
     {
-        {
-            ::osl::MutexGuard aGuard( m_rMutex );
-            if ( m_pAdapter )
-            {
-                m_pAdapter->release();
-                m_pAdapter = nullptr;
-            }
-        }
-
-        if ( pAdapter )
-        {
-            ::osl::MutexGuard aGuard( m_rMutex );
-            m_pAdapter = pAdapter;
-            m_pAdapter->acquire();
-        }
+        ::osl::MutexGuard aGuard( m_rMutex );
+        m_xAdapter = pAdapter;
     }
 
     OComponentAdapterBase::OComponentAdapterBase( const Reference< XComponent >& _rxComp )
