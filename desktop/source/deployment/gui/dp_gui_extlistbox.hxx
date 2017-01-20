@@ -74,7 +74,6 @@ struct Entry_Impl
     OUString        m_sErrorText;
     OUString        m_sLicenseText;
     Image           m_aIcon;
-    Image           m_aIconHC;
     VclPtr<FixedHyperlink> m_pPublisher;
 
     css::uno::Reference<css::deployment::XPackage> m_xPackage;

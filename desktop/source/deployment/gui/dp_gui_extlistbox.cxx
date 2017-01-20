@@ -95,12 +95,6 @@ Entry_Impl::Entry_Impl( const uno::Reference< deployment::XPackage > &xPackage,
         if ( xGraphic.is() )
             m_aIcon = Image( xGraphic );
 
-        xGraphic = xPackage->getIcon( true );
-        if ( xGraphic.is() )
-            m_aIconHC = Image( xGraphic );
-        else
-            m_aIconHC = m_aIcon;
-
         if ( eState == AMBIGUOUS )
             m_sErrorText = DialogHelper::getResourceString( RID_STR_ERROR_UNKNOWN_STATUS );
         else if ( eState == NOT_REGISTERED )
