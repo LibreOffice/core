@@ -253,6 +253,7 @@ namespace
     {
         bool operator () ( const SwAnnotationStartPortion_ImplSharedPtr &r1,
                            const SwAnnotationStartPortion_ImplSharedPtr &r2 )
+            const
         {
             return r1->maPosition < r2->maPosition;
         }
@@ -696,7 +697,7 @@ struct RedlineCompareStruct
     }
 
     bool operator () ( const SwXRedlinePortion_ImplSharedPtr &r1,
-                       const SwXRedlinePortion_ImplSharedPtr &r2 )
+                       const SwXRedlinePortion_ImplSharedPtr &r2 ) const
     {
         return getPosition ( r1 ) < getPosition ( r2 );
     }
