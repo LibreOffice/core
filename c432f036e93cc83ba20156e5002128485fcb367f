@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_2777c8d5",
+        "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1001510
+      },
+      "writtenOn": "2017-01-20T18:49:34Z",
+      "side": 1,
+      "message": "This is wrong(tm) - I would bet a lot that `libreoffice-calc.appdata.xml` is not the component-ID of Calc\nSee https://www.freedesktop.org/software/appstream/docs/sect-Metadata-Addon.html#tag-extends",
+      "range": {
+        "startLine": 6,
+        "startChar": 11,
+        "endLine": 6,
+        "endChar": 39
+      },
+      "revId": "c432f036e93cc83ba20156e5002128485fcb367f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_4774ccce",
+        "filename": "sysui/desktop/appstream-appdata/libreoffice-kde.appdata.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1001510
+      },
+      "writtenOn": "2017-01-20T18:49:34Z",
+      "side": 1,
+      "message": "CC0-1.0 requires you to ship a copy of CC0 with the source code. If that\u0027s an issue, I recommend using FSFAP: https://spdx.org/licenses/FSFAP.html\n\nIf you already have CC0-stuff, and include the license, ignore this remark.",
+      "revId": "c432f036e93cc83ba20156e5002128485fcb367f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
