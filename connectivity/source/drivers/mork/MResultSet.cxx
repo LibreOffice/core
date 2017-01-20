@@ -78,7 +78,6 @@ OResultSet::OResultSet(OCommonStatement* pStmt, const std::shared_ptr< connectiv
     ,m_pSQLIterator( _pSQLIterator )
     ,m_pParseTree( _pSQLIterator->getParseTree() )
     ,m_aQueryHelper(pStmt->getOwnConnection()->getColumnAlias())
-    ,m_pTable(nullptr)
     ,m_CurrentRowCount(0)
     ,m_nParamIndex(0)
     ,m_bIsAlwaysFalseQuery(false)
@@ -106,11 +105,7 @@ void OResultSet::disposing()
     m_xColumns = nullptr;
     m_xParamColumns = nullptr;
     m_pKeySet       = nullptr;
-    if(m_pTable)
-    {
-        m_pTable->release();
-        m_pTable = nullptr;
-    }
+    m_xTable.clear();
 }
 
 Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
@@ -133,7 +128,7 @@ Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeExcep
 void OResultSet::methodEntry()
 {
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
-    if ( !m_pTable )
+    if ( !m_xTable.is() )
     {
         OSL_FAIL( "OResultSet::methodEntry: looks like we're disposed, but how is this possible?" );
         throw DisposedException( OUString(), *this );
@@ -244,7 +239,7 @@ Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLEx
 
     if(!m_xMetaData.is())
         m_xMetaData = new OResultSetMetaData(
-        m_pSQLIterator->getSelectColumns(), m_pSQLIterator->getTables().begin()->first ,m_pTable,determineReadOnly());
+        m_pSQLIterator->getSelectColumns(), m_pSQLIterator->getTables().begin()->first, m_xTable.get(), determineReadOnly());
     return m_xMetaData;
 }
 
@@ -1001,7 +996,7 @@ void OResultSet::fillRowData()
         return;
     }
 
-    OUString aStr(  m_pTable->getName() );
+    OUString aStr(  m_xTable->getName() );
     m_aQueryHelper.setAddressbook( aStr );
 
     sal_Int32 rv = m_aQueryHelper.executeQuery(pConnection, queryExpression);
@@ -1068,15 +1063,14 @@ void SAL_CALL OResultSet::executeQuery() throw(css::sdbc::SQLException,
 {
     ResultSetEntryGuard aGuard( *this );
 
-    OSL_ENSURE( m_pTable, "Need a Table object");
-    if(!m_pTable)
+    OSL_ENSURE( m_xTable.is(), "Need a Table object");
+    if(!m_xTable.is())
     {
         const OSQLTables& rTabs = m_pSQLIterator->getTables();
         if (rTabs.empty() || !rTabs.begin()->second.is())
             m_pStatement->getOwnConnection()->throwSQLException( STR_QUERY_TOO_COMPLEX, *this );
 
-        m_pTable = static_cast< OTable* > ((rTabs.begin()->second).get());
-
+        m_xTable = static_cast< OTable* > ((rTabs.begin()->second).get());
     }
 
     m_nRowPos = 0;
@@ -1752,9 +1746,8 @@ bool OResultSet::determineReadOnly()
 
 void OResultSet::setTable(OTable* _rTable)
 {
-    m_pTable = _rTable;
-    m_pTable->acquire();
-    m_xTableColumns = m_pTable->getColumns();
+    m_xTable = _rTable;
+    m_xTableColumns = m_xTable->getColumns();
     if(m_xTableColumns.is())
         m_aColumnNames = m_xTableColumns->getElementNames();
 }

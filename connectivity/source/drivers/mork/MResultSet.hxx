@@ -34,6 +34,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <comphelper/proparrhlp.hxx>
 #include <tools/gen.hxx>
+#include <rtl/ref.hxx>
 #include "MStatement.hxx"
 #include "MQueryHelper.hxx"
 #include <connectivity/CommonTools.hxx>
@@ -215,7 +216,7 @@ namespace connectivity
 protected:
             //MQuery                   m_aQuery;
             MQueryHelper             m_aQueryHelper;
-            OTable*                  m_pTable;
+            rtl::Reference<OTable>   m_xTable;
             sal_Int32                   m_CurrentRowCount;
             css::uno::Reference< css::container::XNameAccess >
                                      m_xTableColumns;
