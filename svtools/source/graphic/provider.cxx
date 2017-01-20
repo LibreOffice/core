@@ -201,19 +201,19 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadStandardImage( co
         OUString sImageName( rResourceURL.copy( nIndex ) );
         if ( sImageName == "info" )
         {
-            xRet = InfoBox::GetStandardImage().GetXGraphic();
+            xRet = Graphic(InfoBox::GetStandardImage().GetBitmapEx()).GetXGraphic();
         }
         else if ( sImageName == "warning" )
         {
-            xRet = WarningBox::GetStandardImage().GetXGraphic();
+            xRet = Graphic(WarningBox::GetStandardImage().GetBitmapEx()).GetXGraphic();
         }
         else if ( sImageName == "error" )
         {
-            xRet = ErrorBox::GetStandardImage().GetXGraphic();
+            xRet = Graphic(ErrorBox::GetStandardImage().GetBitmapEx()).GetXGraphic();
         }
         else if ( sImageName == "query" )
         {
-            xRet = QueryBox::GetStandardImage().GetXGraphic();
+            xRet = Graphic(QueryBox::GetStandardImage().GetBitmapEx()).GetXGraphic();
         }
     }
     return xRet;

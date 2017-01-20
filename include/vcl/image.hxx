@@ -65,7 +65,6 @@ public:
     Size            GetSizePixel() const;
 
     BitmapEx        GetBitmapEx() const;
-    css::uno::Reference< css::graphic::XGraphic > GetXGraphic() const;
 
     bool            operator!() const { return !mpImplData; }
     bool            operator==( const Image& rImage ) const;

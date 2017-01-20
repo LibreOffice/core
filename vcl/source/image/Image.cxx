@@ -110,13 +110,6 @@ BitmapEx Image::GetBitmapEx() const
     return aRet;
 }
 
-css::uno::Reference< css::graphic::XGraphic > Image::GetXGraphic() const
-{
-    const Graphic aGraphic( GetBitmapEx() );
-
-    return aGraphic.GetXGraphic();
-}
-
 bool Image::operator==(const Image& rImage) const
 {
     bool bRet = false;

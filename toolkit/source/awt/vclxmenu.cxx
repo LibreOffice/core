@@ -873,7 +873,7 @@ throw (css::uno::RuntimeException, std::exception)
     {
         Image aImage = mpMenu->GetItemImage( nItemId );
         if ( !!aImage )
-            rxGraphic = aImage.GetXGraphic();
+            rxGraphic = Graphic(aImage.GetBitmapEx()).GetXGraphic();
     }
     return rxGraphic;
 }

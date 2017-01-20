@@ -717,6 +717,14 @@ throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
     return false;
 }
 
+namespace
+{
+    css::uno::Reference< css::graphic::XGraphic > GetXGraphic(const Image &rImage)
+    {
+        return Graphic(rImage.GetBitmapEx()).GetXGraphic();
+    }
+}
+
 Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
     ::sal_Int16 nImageType,
     const Sequence< OUString >& aCommandURLSequence )
@@ -759,7 +767,7 @@ throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException )
                 aImage = rGlobalImageList->getImageFromCommandURL( nIndex, aStrArray[n] );
         }
 
-        aGraphSeq[n] = aImage.GetXGraphic();
+        aGraphSeq[n] = GetXGraphic(aImage);
     }
 
     return aGraphSeq;
@@ -909,7 +917,7 @@ throw ( css::lang::IllegalArgumentException,
                     {
                         if ( !pReplacedImages )
                             pReplacedImages = new CmdToXGraphicNameAccess();
-                        pReplacedImages->addElement( aCommandURLSequence[i], aNewImage.GetXGraphic() );
+                        pReplacedImages->addElement(aCommandURLSequence[i], GetXGraphic(aNewImage));
                     }
                 } // if ( m_bUseGlobal )
                 else
@@ -1013,14 +1021,14 @@ void ImageManagerImpl::reload()
                         if ( !pReplacedImages )
                             pReplacedImages = new CmdToXGraphicNameAccess();
                         pReplacedImages->addElement( aNewUserCmdImageSet[j],
-                                                     pImageList->GetImage( aNewUserCmdImageSet[j] ).GetXGraphic() );
+                                                     GetXGraphic(pImageList->GetImage(aNewUserCmdImageSet[j])) );
                     }
                     else
                     {
                         if ( !pInsertedImages )
                             pInsertedImages = new CmdToXGraphicNameAccess();
                         pInsertedImages->addElement( aNewUserCmdImageSet[j],
-                                                     pImageList->GetImage( aNewUserCmdImageSet[j] ).GetXGraphic() );
+                                                     GetXGraphic(pImageList->GetImage(aNewUserCmdImageSet[j])) );
                     }
                 }
 
@@ -1058,7 +1066,7 @@ void ImageManagerImpl::reload()
                                 // Image has been found in the module/global image list => replace user image
                                 if ( !pReplacedImages )
                                     pReplacedImages = new CmdToXGraphicNameAccess();
-                                pReplacedImages->addElement( pIter->first, aImage.GetXGraphic() );
+                                pReplacedImages->addElement(pIter->first, GetXGraphic(aImage));
                             }
                         } // if ( m_bUseGlobal )
                         else
