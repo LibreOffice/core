@@ -37,6 +37,7 @@ public:
     */
     class Comparator { public:
         bool operator() (const Request& rRequest1, const Request& rRequest2)
+            const
         {
             if (rRequest1.meClass == rRequest2.meClass)
             {
