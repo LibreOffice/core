@@ -1339,6 +1339,9 @@ static void doc_iniUnoCommands ()
 
     OUString sUnoCommands[] =
     {
+        OUString(".uno:AlignLeft"),
+        OUString(".uno:AlignHorizontalCenter"),
+        OUString(".uno:AlignRight"),
         OUString(".uno:BackColor"),
         OUString(".uno:BackgroundColor"),
         OUString(".uno:Bold"),
