@@ -3879,11 +3879,12 @@ StackVar ScInterpreter::Interpret()
     // so reassure exceptions are really off.
     SAL_MATH_FPEXCEPTIONS_OFF();
 
+    OpCode eOp = ocNone;
     aCode.Reset();
     while( ( pCur = aCode.Next() ) != nullptr
             && (nGlobalError == FormulaError::NONE || nErrorFunction <= nErrorFunctionCount) )
     {
-        OpCode eOp = pCur->GetOpCode();
+        eOp = pCur->GetOpCode();
         cPar = pCur->GetByte();
         if ( eOp == ocPush )
         {
@@ -4454,6 +4455,21 @@ StackVar ScInterpreter::Interpret()
 
     // End: obtain result
 
+    bool bForcedResultType;
+    switch (eOp)
+    {
+        case ocGetDateValue:
+        case ocGetTimeValue:
+            // Force final result of DATEVALUE and TIMEVALUE to number type,
+            // which so far was date or time for calculations.
+            nRetTypeExpr = nFuncFmtType = css::util::NumberFormat::NUMBER;
+            nRetIndexExpr = nFuncFmtIndex = 0;
+            bForcedResultType = true;
+        break;
+        default:
+            bForcedResultType = false;
+    }
+
     if( sp )
     {
         pCur = pStack[ sp-1 ];
@@ -4476,9 +4492,12 @@ StackVar ScInterpreter::Interpret()
                         if (pCur->GetDoubleType())
                         {
                             const double fVal = PopDouble();
-                            if (nCurFmtType != nFuncFmtType)
-                                nRetIndexExpr = 0;  // carry format index only for matching type
-                            nRetTypeExpr = nFuncFmtType = nCurFmtType;
+                            if (!bForcedResultType)
+                            {
+                                if (nCurFmtType != nFuncFmtType)
+                                    nRetIndexExpr = 0;  // carry format index only for matching type
+                                nRetTypeExpr = nFuncFmtType = nCurFmtType;
+                            }
                             PushTempToken( new FormulaDoubleToken( fVal));
                         }
                         if ( nFuncFmtType == css::util::NumberFormat::UNDEFINED )
@@ -4573,7 +4592,7 @@ StackVar ScInterpreter::Interpret()
     else
         SetError( FormulaError::NoCode);
 
-    if( nRetTypeExpr != css::util::NumberFormat::UNDEFINED )
+    if (bForcedResultType || nRetTypeExpr != css::util::NumberFormat::UNDEFINED)
     {
         nRetFmtType = nRetTypeExpr;
         nRetFmtIndex = nRetIndexExpr;

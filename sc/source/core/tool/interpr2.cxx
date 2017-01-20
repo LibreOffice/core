@@ -177,7 +177,10 @@ void ScInterpreter::ScGetDateValue()
     {
         short eType = pFormatter->GetType(nFIndex);
         if (eType == css::util::NumberFormat::DATE || eType == css::util::NumberFormat::DATETIME)
+        {
+            nFuncFmtType = css::util::NumberFormat::DATE;
             PushDouble(::rtl::math::approxFloor(fVal));
+        }
         else
             PushIllegalArgument();
     }
@@ -937,6 +940,7 @@ void ScInterpreter::ScGetTimeValue()
         short eType = pFormatter->GetType(nFIndex);
         if (eType == css::util::NumberFormat::TIME || eType == css::util::NumberFormat::DATETIME)
         {
+            nFuncFmtType = css::util::NumberFormat::TIME;
             double fDateVal = rtl::math::approxFloor(fVal);
             double fTimeVal = fVal - fDateVal;
             PushDouble(fTimeVal);
