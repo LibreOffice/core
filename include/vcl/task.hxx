@@ -58,8 +58,6 @@ protected:
     virtual void SetDeletionFlags();
     /// Is this item ready to be dispatched at nTimeNow
     virtual bool ReadyForSchedule( bool bIdle, sal_uInt64 nTimeNow ) const = 0;
-    /// Schedule only when other timers and events are processed
-    virtual bool IsIdle() const = 0;
     /**
      * Adjust nMinPeriod downwards if we want to be notified before
      * then, nTimeNow is the current time.
