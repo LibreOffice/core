@@ -93,7 +93,7 @@ public:
 #if HAVE_FEATURE_SCRIPTING
     SfxErrorHandler *m_pSbxErrorHdl;
 #endif
-    SfxStatusDispatcher*                pAppDispatch;
+    rtl::Reference<SfxStatusDispatcher> mxAppDispatch;
     SfxDocumentTemplates*               pTemplates;
 
     // global pointers

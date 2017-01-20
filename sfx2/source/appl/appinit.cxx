@@ -112,8 +112,8 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
 
     SfxApplication* pApp = SfxGetpApp();
     pApp->Broadcast( SfxHint( SfxHintId::Deinitializing ) );
-    pApp->Get_Impl()->pAppDispatch->ReleaseAll();
-    pApp->Get_Impl()->pAppDispatch->release();
+    pApp->Get_Impl()->mxAppDispatch->ReleaseAll();
+    pApp->Get_Impl()->mxAppDispatch.clear();
 
     css::uno::Reference< css::uno::XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     css::uno::Reference< css::document::XDocumentEventListener > xGlobalBroadcaster(css::frame::theGlobalEventBroadcaster::get(xContext), css::uno::UNO_QUERY_THROW);
@@ -205,8 +205,7 @@ void SfxApplication::Initialize_Impl()
     Reference < XDesktop2 > xDesktop = Desktop::create ( ::comphelper::getProcessComponentContext() );
     xDesktop->addTerminateListener( new SfxTerminateListener_Impl() );
 
-    pImpl->pAppDispatch = new SfxStatusDispatcher;
-    pImpl->pAppDispatch->acquire();
+    pImpl->mxAppDispatch = new SfxStatusDispatcher;
 
     // SV-Look
     Help::EnableContextHelp();

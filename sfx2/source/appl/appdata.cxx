@@ -40,6 +40,7 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/sidebar/Theme.hxx>
+#include <sfx2/unoctitm.hxx>
 #include "app.hrc"
 #include <sfx2/sfxresid.hxx>
 #include "objshimp.hxx"
@@ -99,7 +100,6 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
 #if HAVE_FEATURE_SCRIPTING
     , m_pSbxErrorHdl(nullptr)
 #endif
-    , pAppDispatch(nullptr)
     , pTemplates( nullptr )
     , pPool(nullptr)
     , pProgress(nullptr)
