@@ -283,7 +283,6 @@ void Ruler::ImplInit( WinBits nWinBits )
         aDefSize.Width() = nDefHeight;
     SetOutputSizePixel( aDefSize );
     SetType(WINDOW_RULER);
-    pAccContext = nullptr;
 }
 
 Ruler::Ruler( vcl::Window* pParent, WinBits nWinStyle ) :
@@ -334,11 +333,7 @@ void Ruler::dispose()
     mpSaveData = nullptr;
     delete mpDragData;
     mpDragData = nullptr;
-    if( pAccContext )
-    {
-        pAccContext->release();
-        pAccContext = nullptr;
-    }
+    mxAccContext.clear();
     Window::dispose();
 }
 
@@ -2827,10 +2822,9 @@ uno::Reference< XAccessible > Ruler::CreateAccessible()
         {
             aStr = SvtResId(STR_SVT_ACC_RULER_VERT_NAME);
         }
-        pAccContext = new SvtRulerAccessible( xAccParent, *this, aStr );
-        pAccContext->acquire();
-        this->SetAccessible(pAccContext);
-        return pAccContext;
+        mxAccContext = new SvtRulerAccessible( xAccParent, *this, aStr );
+        this->SetAccessible(mxAccContext.get());
+        return mxAccContext.get();
     }
     else
         return uno::Reference< XAccessible >();
