@@ -23,6 +23,7 @@
 #include <comphelper/propstate.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/comphelperdllapi.h>
+#include <rtl/ref.hxx>
 
 
 //= property helper classes
@@ -42,12 +43,12 @@ namespace comphelper
     {
         friend class OPropertyChangeMultiplexer;
 
-        OPropertyChangeMultiplexer* m_pAdapter;
+        rtl::Reference<OPropertyChangeMultiplexer> m_xAdapter;
         ::osl::Mutex&               m_rMutex;
 
     public:
         OPropertyChangeListener(::osl::Mutex& _rMutex)
-            : m_pAdapter(nullptr), m_rMutex(_rMutex) { }
+            : m_rMutex(_rMutex) { }
         virtual ~OPropertyChangeListener();
 
         /// @throws css::uno::RuntimeException

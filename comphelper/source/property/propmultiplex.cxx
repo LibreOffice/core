@@ -31,8 +31,8 @@ using namespace ::com::sun::star::beans;
 
 OPropertyChangeListener::~OPropertyChangeListener()
 {
-    if (m_pAdapter)
-        m_pAdapter->dispose();
+    if (m_xAdapter.is())
+        m_xAdapter->dispose();
 }
 
 
@@ -45,29 +45,18 @@ void OPropertyChangeListener::_disposing(const EventObject&)
 
 void OPropertyChangeListener::disposeAdapter()
 {
-    if ( m_pAdapter )
-        m_pAdapter->dispose();
+    if ( m_xAdapter.is() )
+        m_xAdapter->dispose();
 
     // will automatically set a new adapter
-    OSL_ENSURE( !m_pAdapter, "OPropertyChangeListener::disposeAdapter: what did dispose do?" );
+    OSL_ENSURE( !m_xAdapter.is(), "OPropertyChangeListener::disposeAdapter: what did dispose do?" );
 }
 
 
 void OPropertyChangeListener::setAdapter(OPropertyChangeMultiplexer* pAdapter)
 {
-    if (m_pAdapter)
-    {
-        ::osl::MutexGuard aGuard(m_rMutex);
-        m_pAdapter->release();
-        m_pAdapter = nullptr;
-    }
-
-    if (pAdapter)
-    {
-        ::osl::MutexGuard aGuard(m_rMutex);
-        m_pAdapter = pAdapter;
-        m_pAdapter->acquire();
-    }
+    ::osl::MutexGuard aGuard(m_rMutex);
+    m_xAdapter = pAdapter;
 }
 
 OPropertyChangeMultiplexer::OPropertyChangeMultiplexer(OPropertyChangeListener* _pListener, const  Reference< XPropertySet>& _rxSet, bool _bAutoReleaseSet)
