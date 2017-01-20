@@ -2387,9 +2387,9 @@ throw(css::uno::RuntimeException, std::exception)
                 Reference< XGraphic > xGraphic;
                 if (( Value >>= xGraphic ) && xGraphic.is() )
                 {
-                    Image aImage( xGraphic );
+                    Graphic aImage(xGraphic);
 
-                    Wallpaper aWallpaper( aImage.GetBitmapEx());
+                    Wallpaper aWallpaper(aImage.GetBitmapEx());
                     aWallpaper.SetStyle( WallpaperStyle::Scale );
                     pDialog->SetBackground( aWallpaper );
                 }
@@ -2548,9 +2548,9 @@ throw(css::uno::RuntimeException, std::exception)
                 Reference< XGraphic > xGraphic;
                 if (( Value >>= xGraphic ) && xGraphic.is() )
                 {
-                    Image aImage( xGraphic );
+                    Graphic aImage(xGraphic);
 
-                    Wallpaper aWallpaper( aImage.GetBitmapEx());
+                    Wallpaper aWallpaper(aImage.GetBitmapEx());
                     aWallpaper.SetStyle( WallpaperStyle::Scale );
                     pTabControl->SetBackground( aWallpaper );
                 }
@@ -2778,9 +2778,9 @@ throw(css::uno::RuntimeException, std::exception)
                 Reference< XGraphic > xGraphic;
                 if (( Value >>= xGraphic ) && xGraphic.is() )
                 {
-                    Image aImage( xGraphic );
+                    Graphic aImage(xGraphic);
 
-                    Wallpaper aWallpaper( aImage.GetBitmapEx());
+                    Wallpaper aWallpaper(aImage.GetBitmapEx());
                     aWallpaper.SetStyle( WallpaperStyle::Scale );
                     pTabPage->SetBackground( aWallpaper );
                 }
