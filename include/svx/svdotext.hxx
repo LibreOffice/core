@@ -32,6 +32,7 @@
 #include <svx/svxdllapi.h>
 #include <drawinglayer/primitive2d/baseprimitive2d.hxx>
 #include <svx/svdpagv.hxx>
+#include <rtl/ref.hxx>
 
 
 //   forward declarations
@@ -105,7 +106,7 @@ class ImpSdrObjTextLinkUserData : public SdrObjUserData
     OUString                    aFileName;   // Name des referenzierten Dokuments
     OUString                    aFilterName; // ggf. ein Filter
     DateTime                    aFileDate0;  // Unnoetiges neuladen vermeiden
-    std::unique_ptr<ImpSdrObjTextLink>
+    tools::SvRef<ImpSdrObjTextLink>
                                 pLink;
     rtl_TextEncoding            eCharSet;
 

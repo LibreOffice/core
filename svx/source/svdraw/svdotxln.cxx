@@ -257,7 +257,7 @@ void SdrTextObj::ImpLinkAnmeldung()
     ImpSdrObjTextLinkUserData* pData=GetLinkUserData();
     sfx2::LinkManager* pLinkManager=pModel!=nullptr ? pModel->GetLinkManager() : nullptr;
     if (pLinkManager!=nullptr && pData!=nullptr && pData->pLink==nullptr) { // don't register twice
-        pData->pLink.reset( new ImpSdrObjTextLink(this) );
+        pData->pLink = new ImpSdrObjTextLink(this);
         pLinkManager->InsertFileLink(*pData->pLink,OBJECT_CLIENT_FILE,pData->aFileName,
                                      !pData->aFilterName.isEmpty() ?
                                       &pData->aFilterName : nullptr);
