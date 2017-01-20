@@ -579,7 +579,7 @@ DECLARE_WW8EXPORT_TEST(testfdo68963, "fdo68963.doc")
     CPPUNIT_ASSERT ( !parseDump("/root/page/body/tab/row[2]/cell[1]/txt/Special", "rText").isEmpty() );
     CPPUNIT_ASSERT_EQUAL( OUString("Topic 1"), parseDump("/root/page/body/tab/row[2]/cell[1]/txt/Special", "rText") );
     // all crossreference bookmarks should have a target.  Shouldn't be any "Reference source not found" in the xml
-    CPPUNIT_ASSERT ( -1 == parseDump("/root/page/body/txt[24]/Special[2]","rText").indexOf("Reference source not found"));
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-1), parseDump("/root/page/body/txt[24]/Special[2]","rText").indexOf("Reference source not found"));
 }
 
 DECLARE_WW8EXPORT_TEST(testTdf99100, "tdf99100.doc")
@@ -703,7 +703,7 @@ DECLARE_WW8EXPORT_TEST(testTscp, "tscp.doc")
         rdf::Statement aStatement = xStatements->nextElement().get<rdf::Statement>();
         aActualStatements[aStatement.Predicate->getNamespace() + aStatement.Predicate->getLocalName()] = aStatement.Object->getStringValue();
     }
-    CPPUNIT_ASSERT(aExpectedStatements == aActualStatements);
+    CPPUNIT_ASSERT(bool(aExpectedStatements == aActualStatements));
 
     // No RDF statement on the third paragraph.
     xParagraph.set(getParagraph(3), uno::UNO_QUERY);
@@ -1174,7 +1174,7 @@ DECLARE_WW8EXPORT_TEST(testRES_MIRROR_GRAPH_BOTH, "tdf56321_flipImage_both.doc")
         SwNode* pNode = pDoc->GetNodes()[ n ];
         if (SwGrfNode *pGrfNode = pNode->GetGrfNode())
         {
-            CPPUNIT_ASSERT(pGrfNode->GetSwAttrSet().GetMirrorGrf().GetValue() == 3);
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(3), pGrfNode->GetSwAttrSet().GetMirrorGrf().GetValue());
             break;
         }
     }
