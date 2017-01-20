@@ -1459,7 +1459,7 @@ void SAL_CALL ScStyleObj::setAllPropertiesToDefault()
             throw uno::RuntimeException();
 
         SfxItemSet& rSet = pStyle->GetItemSet();
-        rSet.ClearItem();                               // set all items to default
+        rSet.ClearAllItems();       // set all items to default
 
         //! merge with SetOneProperty
 

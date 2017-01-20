@@ -1444,7 +1444,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         rDstDesc.GetMaster().DelDiffs( aAttrSet );
         rDstDesc.GetMaster().SetFormatAttr( aAttrSet );
 
-        aAttrSet.ClearItem();
+        aAttrSet.ClearAllItems();
         aAttrSet.Put( rSrcDesc.GetLeft().GetAttrSet() );
         aAttrSet.ClearItem( RES_HEADER );
         aAttrSet.ClearItem( RES_FOOTER );
@@ -1452,7 +1452,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         rDstDesc.GetLeft().DelDiffs( aAttrSet );
         rDstDesc.GetLeft().SetFormatAttr( aAttrSet );
 
-        aAttrSet.ClearItem();
+        aAttrSet.ClearAllItems();
         aAttrSet.Put( rSrcDesc.GetFirstMaster().GetAttrSet() );
         aAttrSet.ClearItem( RES_HEADER );
         aAttrSet.ClearItem( RES_FOOTER );
@@ -1460,7 +1460,7 @@ void SwDoc::CopyPageDesc( const SwPageDesc& rSrcDesc, SwPageDesc& rDstDesc,
         rDstDesc.GetFirstMaster().DelDiffs( aAttrSet );
         rDstDesc.GetFirstMaster().SetFormatAttr( aAttrSet );
 
-        aAttrSet.ClearItem();
+        aAttrSet.ClearAllItems();
         aAttrSet.Put( rSrcDesc.GetFirstLeft().GetAttrSet() );
         aAttrSet.ClearItem( RES_HEADER );
         aAttrSet.ClearItem( RES_FOOTER );

@@ -404,7 +404,7 @@ void SfxFrame::UpdateDescriptor( SfxObjectShell *pDoc )
     SfxItemSet *pSet = GetDescriptor()->GetArgs();
 
     // Delete all old Items
-    pSet->ClearItem();
+    pSet->ClearAllItems();
 
     if ( pRefererItem )
         pSet->Put( *pRefererItem );

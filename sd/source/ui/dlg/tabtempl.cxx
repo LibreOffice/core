@@ -171,7 +171,7 @@ void SdTabTemplateDlg::RefreshInputSet()
 
     if( pInputSet )
     {
-        pInputSet->ClearItem();
+        pInputSet->ClearAllItems();
         pInputSet->SetParent( GetStyleSheet().GetItemSet().GetParent() );
     }
     else

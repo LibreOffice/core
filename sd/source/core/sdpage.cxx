@@ -225,7 +225,7 @@ void SdPage::EnsureMasterPageDefaultBackground()
     if(mbMaster)
     {
         // no hard attributes on MasterPage attributes
-        getSdrPageProperties().ClearItem();
+        getSdrPageProperties().ClearAllItems();
         SfxStyleSheet* pSheetForPresObj = GetStyleSheetForMasterPageBackground();
 
         if(pSheetForPresObj)

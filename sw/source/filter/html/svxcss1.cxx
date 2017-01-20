@@ -661,7 +661,7 @@ bool SvxCSS1Parser::SelectorParsed( CSS1Selector *pSelector, bool bFirst )
         {
             StyleParsed(rpSelection.get(), *pSheetItemSet, *pSheetPropInfo);
         }
-        pSheetItemSet->ClearItem();
+        pSheetItemSet->ClearAllItems();
         pSheetPropInfo->Clear();
 
         // und die naechste Rule vorbereiten
@@ -828,7 +828,7 @@ bool SvxCSS1Parser::ParseStyleSheet( const OUString& rIn )
 
     // und etwas aufrauemen
     m_Selectors.clear();
-    pSheetItemSet->ClearItem();
+    pSheetItemSet->ClearAllItems();
     pSheetPropInfo->Clear();
 
     pItemSet = nullptr;

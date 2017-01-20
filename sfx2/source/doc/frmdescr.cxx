@@ -71,7 +71,7 @@ void SfxFrameDescriptor::SetActualURL( const OUString& rURL )
 {
     aActualURL = INetURLObject(rURL);
     if ( pImpl->pArgs )
-        pImpl->pArgs->ClearItem();
+        pImpl->pArgs->ClearAllItems();
 }
 
 void SfxFrameDescriptor::SetEditable( bool bSet )

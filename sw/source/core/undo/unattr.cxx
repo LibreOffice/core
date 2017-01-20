@@ -187,7 +187,7 @@ void SwUndoFormatAttr::UndoImpl(::sw::UndoRedoContext & rContext)
             // transfer ownership of helper object's old set
             m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);
         } else {
-            m_pOldSet->ClearItem();
+            m_pOldSet->ClearAllItems();
         }
 
         if ( RES_FLYFRMFMT == m_nFormatWhich || RES_DRAWFRMFMT == m_nFormatWhich ) {
@@ -477,7 +477,7 @@ bool SwUndoFormatAttr::RestoreFlyAnchor(::sw::UndoRedoContext & rContext)
             // transfer ownership of helper object's old set
             m_pOldSet = std::move(aTmp.GetUndo()->m_pOldSet);
         } else {
-            m_pOldSet->ClearItem();
+            m_pOldSet->ClearAllItems();
         }
     }
 

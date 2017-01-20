@@ -119,8 +119,8 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
         if( nEndNd - nSttNd >= getMaxLookup() )
         {
-            rSet.ClearItem();
-            rSet.InvalidateAllItems();
+            rSet.ClearAllItems();
+            rSet.InvalidateAllItems(); // does this make sense after ClearAllItems?
             return false;
         }
 
@@ -158,7 +158,7 @@ bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                     rSet.MergeValues( aSet );
 
                 if( aSet.Count() )
-                    aSet.ClearItem();
+                    aSet.ClearAllItems();
             }
             pSet = &aSet;
         }
@@ -214,7 +214,7 @@ bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
                 if( pSet != &rSet && aSet.Count() )
                 {
                     rSet.MergeValues( aSet );
-                    aSet.ClearItem();
+                    aSet.ClearAllItems();
                 }
 
                 pSet = &aSet;

@@ -581,6 +581,7 @@ public:
     // ItemSet access
     const SfxItemSet& GetMergedItemSet() const;
     void SetMergedItem(const SfxPoolItem& rItem);
+    /// @param nWhich  item to clear, pass 0 to clear all items
     void ClearMergedItem(const sal_uInt16 nWhich = 0);
     void SetMergedItemSet(const SfxItemSet& rSet, bool bClearAllItems = false);
     const SfxPoolItem& GetMergedItem(const sal_uInt16 nWhich) const;

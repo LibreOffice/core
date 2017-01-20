@@ -97,7 +97,7 @@ void SdUnoPageBackground::Notify( SfxBroadcaster&, const SfxHint& rHint )
 
 void SdUnoPageBackground::fillItemSet( SdDrawDocument* pDoc, SfxItemSet& rSet ) throw()
 {
-    rSet.ClearItem();
+    rSet.ClearAllItems();
 
     if( mpSet == nullptr )
     {

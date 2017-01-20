@@ -662,7 +662,7 @@ void DifColumn::Apply( ScDocument& rDoc, const SCCOL nCol, const SCTAB nTab )
 
         rDoc.ApplyPatternAreaTab( nCol, it->nStart, nCol, it->nEnd, nTab, aAttr );
 
-        rItemSet.ClearItem();
+        rItemSet.ClearAllItems();
     }
 }
 

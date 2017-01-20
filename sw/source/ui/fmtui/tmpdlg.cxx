@@ -357,7 +357,7 @@ short SwTemplateDlg::Ok()
 void SwTemplateDlg::RefreshInputSet()
 {
     SfxItemSet* pInSet = GetInputSetImpl();
-    pInSet->ClearItem();
+    pInSet->ClearAllItems();
     pInSet->SetParent( &GetStyleSheet().GetItemSet() );
 }
 

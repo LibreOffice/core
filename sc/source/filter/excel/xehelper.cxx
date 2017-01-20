@@ -448,7 +448,7 @@ XclExpStringRef lclCreateFormattedString(
             aSel.nEndPos =  *it;
             OUString aXclPortionText = aParaText.copy( aSel.nStartPos, aSel.nEndPos - aSel.nStartPos );
 
-            aItemSet.ClearItem();
+            aItemSet.ClearAllItems();
             SfxItemSet aEditSet( rEE.GetAttribs( aSel ) );
             ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
 
@@ -721,7 +721,7 @@ void XclExpHFConverter::AppendPortion( const EditTextObject* pTextObj, sal_Unico
 // --- font attributes ---
 
                 vcl::Font aFont;
-                aItemSet.ClearItem();
+                aItemSet.ClearAllItems();
                 SfxItemSet aEditSet( mrEE.GetAttribs( aSel ) );
                 ScPatternAttr::GetFromEditItemSet( aItemSet, aEditSet );
                 ScPatternAttr::GetFont( aFont, aItemSet, SC_AUTOCOL_RAW );

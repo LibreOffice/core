@@ -1695,7 +1695,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
             rDoc.CheckForUniqueItemForLineFillNameOrIndex(aSet);
         }
 
-        aCoreSet.ClearItem();
+        aCoreSet.ClearAllItems();
 
         if( pNewDsc )
         {
@@ -1710,7 +1710,7 @@ void SwDocStyleSheet::SetItemSet( const SfxItemSet& rSet,
     }
     else
     {
-        aCoreSet.ClearItem();
+        aCoreSet.ClearAllItems();
         if( pNewDsc )       // we still need to delete it
         {
             rDoc.PreDelPageDesc(pNewDsc); // #i7983#
@@ -2152,7 +2152,7 @@ void SwDocStyleSheet::Create()
         default:; //prevent warning
     }
     bPhysical = true;
-    aCoreSet.ClearItem();
+    aCoreSet.ClearAllItems();
 }
 
 SwCharFormat* SwDocStyleSheet::GetCharFormat()
@@ -3097,8 +3097,11 @@ SfxStyleSheetBase* SwStyleSheetIterator::Next()
         mxIterSheet->SetMask( nMask );
         if(mxIterSheet->pSet)
         {
-            mxIterSheet->pSet->ClearItem();
-            mxIterSheet->pSet= nullptr;
+            if (mxIterSheet->bMySet)
+                delete mxIterSheet->pSet;
+            else
+                mxIterSheet->pSet->ClearAllItems();
+            mxIterSheet->pSet = nullptr; // sure we don't leak here?
         }
         return mxIterSheet.get();
     }

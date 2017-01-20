@@ -2475,7 +2475,7 @@ SdrObject* SdrObject::ImpConvertToContourObj(SdrObject* pRet, bool bForceLineDas
                 if(bAddOriginalGeometry)
                 {
                     // Add a clone of the original geometry.
-                    aSet.ClearItem();
+                    aSet.ClearAllItems();
                     aSet.Put(pRet->GetMergedItemSet());
                     aSet.Put(XLineStyleItem(drawing::LineStyle_NONE));
                     aSet.Put(XLineWidthItem(0L));

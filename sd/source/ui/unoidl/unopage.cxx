@@ -2561,8 +2561,8 @@ void SdDrawPage::setBackground( const Any& rValue )
     }
     else
     {
-        // background fill, set at page (not sure if ClearItem is needed)
-        GetPage()->getSdrPageProperties().ClearItem();
+        // background fill, set at page (not sure if ClearAllItems is needed)
+        GetPage()->getSdrPageProperties().ClearAllItems();
         GetPage()->getSdrPageProperties().PutItemSet(aSet);
     }
 

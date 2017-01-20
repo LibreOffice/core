@@ -39,6 +39,7 @@ namespace sdr
             virtual SfxItemSet* CreateObjectSpecificItemSet(SfxItemPool& rPool) override;
 
             // Do the ItemChange, may do special handling
+            // Pass nWhich 0 and pNewItem = nullptr to clear all items
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             // react on ItemSet changes

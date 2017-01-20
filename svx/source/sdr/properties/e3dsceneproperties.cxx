@@ -57,7 +57,7 @@ namespace sdr
                 // filter for SDRATTR_3DSCENE_ items, only keep those items
                 SfxItemSet aNew(*mpItemSet->GetPool(), SDRATTR_3DSCENE_FIRST, SDRATTR_3DSCENE_LAST);
                 aNew.Put(*mpItemSet);
-                mpItemSet->ClearItem();
+                mpItemSet->ClearAllItems();
                 mpItemSet->Put(aNew);
             }
             else

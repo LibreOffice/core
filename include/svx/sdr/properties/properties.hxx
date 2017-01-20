@@ -116,12 +116,12 @@ namespace sdr
             // but not PostItemChange() and ItemSetChanged() calls.
             virtual void SetObjectItemDirect(const SfxPoolItem& rItem) = 0;
 
-            // Clear a single local item. Uses AllowItemChange(),
-            // ItemChange(), PostItemChange() and ItemSetChanged() calls.
+            // Clear a single local item or all items if nWhich = 0.
+            // Uses AllowItemChange(), ItemChange(), PostItemChange() and ItemSetChanged() calls.
             virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) = 0;
 
             // Set a single item, iterate over hierarchies if necessary. Default
-            // Implementation falls back to ClearObjectItem().
+            // Implementation falls back to SetObjectItem().
             virtual void SetMergedItem(const SfxPoolItem& rItem);
 
             // Clear a single item, iterate over hierarchies if necessary. Default

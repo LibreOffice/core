@@ -176,7 +176,7 @@ void ScStyleDlg::PageCreated( sal_uInt16 nPageId, SfxTabPage& rTabPage )
 void ScStyleDlg::RefreshInputSet()
 {
     SfxItemSet* pItemSet = GetInputSetImpl();
-    pItemSet->ClearItem();
+    pItemSet->ClearAllItems();
     pItemSet->SetParent( GetStyleSheet().GetItemSet().GetParent() );
 }
 

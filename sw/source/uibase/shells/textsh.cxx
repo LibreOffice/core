@@ -977,7 +977,7 @@ void SwTextShell::InsertSymbol( SfxRequest& rReq )
         if ( rSh.HasSelection() )
         {
             rSh.DelRight();
-            aSet.ClearItem();
+            aSet.ClearAllItems();
             rSh.GetCurAttr( aSet );
 
             SvxScriptSetItem aSetItem( SID_ATTR_CHAR_FONT, *aSet.GetPool() );

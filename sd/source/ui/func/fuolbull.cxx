@@ -169,7 +169,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
             {
                 //save the itemset value
                 SfxItemSet aStoreSet( aNewAttr );
-                aNewAttr.ClearItem();
+                aNewAttr.ClearAllItems();
                 //extend range
                 aNewAttr.MergeRange( SID_PARAM_NUM_PRESET, SID_PARAM_CUR_NUM_LEVEL );
                 aNewAttr.Put( aStoreSet );

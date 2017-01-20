@@ -812,7 +812,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable,
                 // The old one should not have a flow and it should be adjusted to above and
                 // middle.
                 // Also, the width should be 100% and it should also adjust the hight, if changed.
-                pNewSet->ClearItem();
+                pNewSet->ClearAllItems();
 
                 pNewSet->Put( SwFormatSurround( SURROUND_NONE ) );
                 pNewSet->Put( SvxOpaqueItem( RES_OPAQUE, true ) );
@@ -1129,7 +1129,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTextFormatColls *const pTextFormatCollTable
 
     // The old one should not have a flow
     // and it should be adjusted to above and middle.
-    pNewSet->ClearItem();
+    pNewSet->ClearAllItems();
 
     pNewSet->Put( SwFormatSurround( SURROUND_NONE ) );
     if (nLayerId == rDoc.getIDocumentDrawModelAccess().GetHellId())

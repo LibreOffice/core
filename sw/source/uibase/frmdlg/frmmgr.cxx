@@ -577,7 +577,7 @@ void SwFlyFrameAttrMgr::SetSize( const Size& rSize )
 
 void SwFlyFrameAttrMgr::SetAttrSet(const SfxItemSet& rSet)
 {
-    m_aSet.ClearItem();
+    m_aSet.ClearAllItems();
     m_aSet.Put( rSet );
 }
 

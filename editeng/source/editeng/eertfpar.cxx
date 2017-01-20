@@ -86,7 +86,7 @@ SvParserState EditRTFParser::CallParser()
     aCurSel = mpEditEngine->InsertParaBreak(aCurSel);
     EditPaM aStart2PaM = aCurSel.Min();
     // Useful or not?
-    aStart2PaM.GetNode()->GetContentAttribs().GetItems().ClearItem();
+    aStart2PaM.GetNode()->GetContentAttribs().GetItems().ClearAllItems();
     AddRTFDefaultValues( aStart2PaM, aStart2PaM );
     EditPaM aEnd1PaM = mpEditEngine->InsertParaBreak(aCurSel.Max());
     // aCurCel now points to the gap

@@ -74,7 +74,7 @@ namespace sdr
             // set single item direct, do not do any notifies or things like that
             virtual void SetObjectItemDirect(const SfxPoolItem& rItem) override;
 
-            // clear single item
+            // clear single item or clear all items with nWhich = 0
             virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) override;
 
             // clear single item direct, do not do any notifies or things like that.

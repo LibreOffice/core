@@ -43,13 +43,14 @@ namespace sdr
             virtual void ItemSetChanged(const SfxItemSet& rSet) override;
 
             // react on Item change
+            // pass nWhich = 0 and pNewItem = nullptr to clear all items
             virtual void ItemChange(const sal_uInt16 nWhich, const SfxPoolItem* pNewItem = nullptr) override;
 
             // Called after ItemChange() is done for all items. Allows local reactions on
             // specific item changes
             virtual void PostItemChange(const sal_uInt16 nWhich) override;
 
-            // clear single item
+            // clear single item or clear all items with nWhich = 0
             virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) override;
 
             // clear single item direct, do not do any notifies or things like that.

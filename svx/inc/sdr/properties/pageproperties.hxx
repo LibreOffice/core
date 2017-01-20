@@ -62,7 +62,7 @@ namespace sdr
             // set the installed StyleSheet
             virtual void SetStyleSheet(SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr) override;
 
-            // clear single item
+            // clear single item or clear all items with nWhich = 0 (function is a NOP)
             virtual void ClearObjectItem(const sal_uInt16 nWhich = 0) override;
         };
     } // end of namespace properties

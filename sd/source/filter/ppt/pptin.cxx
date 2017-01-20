@@ -880,16 +880,16 @@ bool ImplSdPPTImport::Import()
                         if(pSheet)
                         {
                             // if we have a StyleSheet (for Masterpages), set attributes there and use it
-                            pSheet->GetItemSet().ClearItem();
+                            pSheet->GetItemSet().ClearAllItems();
                             pSheet->GetItemSet().Put(pObj->GetMergedItemSet());
-                            pMPage->getSdrPageProperties().ClearItem();
+                            pMPage->getSdrPageProperties().ClearAllItems();
                             pMPage->getSdrPageProperties().SetStyleSheet(pSheet);
                         }
                         else
                         {
                             // without StyleSheet, set attributes directly. This
                             // should not be done at all and is an error (will be asserted by SdrPage)
-                            pMPage->getSdrPageProperties().ClearItem();
+                            pMPage->getSdrPageProperties().ClearAllItems();
                             pMPage->getSdrPageProperties().PutItemSet(pObj->GetMergedItemSet());
                         }
 

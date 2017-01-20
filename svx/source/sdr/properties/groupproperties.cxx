@@ -71,7 +71,7 @@ namespace sdr
             if(mpItemSet)
             {
                 // clear local itemset for merge
-                mpItemSet->ClearItem();
+                mpItemSet->ClearAllItems();
             }
             else
             {
@@ -259,10 +259,9 @@ namespace sdr
                 if(mpItemSet)
                 {
                     // copy/paste is still using clone operators and MoveToItemPool functionality.
-                    // Since SfxItemSet contains a pool pointer, ClearItem is not enough here.
+                    // Since SfxItemSet contains a pool pointer, ClearAllItems is not enough here.
                     // The ItemSet for merge is constructed on demand, so it's enough here to
-                    // just delete it and set to 0L.
-                    // mpItemSet->ClearItem();
+                    // just delete it and set to nullptr.
                     delete mpItemSet;
                     mpItemSet = nullptr;
                 }
