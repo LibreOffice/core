@@ -73,15 +73,31 @@ namespace connectivity
             bool                            m_bEOF;
             bool                            m_bOnFirstAfterOpen;
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getResultSetConcurrency() const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getResultSetType()        const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             static sal_Int32 getFetchDirection() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getFetchSize()            const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             static OUString getCursorName() throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setFetchDirection(sal_Int32 _par0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setFetchSize(sal_Int32 _par0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
             void updateValue(sal_Int32 columnIndex,const OLEVariant& x);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             OLEVariant getValue(sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
         protected:

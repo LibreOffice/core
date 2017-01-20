@@ -67,6 +67,8 @@ namespace connectivity
             virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException) override;
             virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException) override;
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             bool create() throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
             WpADOTable getImpl() const { return m_aTable;}

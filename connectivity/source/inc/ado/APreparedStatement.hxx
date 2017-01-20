@@ -43,6 +43,8 @@ namespace connectivity
                                     public  css::lang::XServiceInfo
 
         {
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setParameter(sal_Int32 parameterIndex, const DataTypeEnum& _eType, sal_Int32 _nSize,const OLEVariant& Val)
                                         throw(css::sdbc::SQLException, css::uno::RuntimeException);
             void replaceParameterNodeName(  OSQLParseNode* _pNode,

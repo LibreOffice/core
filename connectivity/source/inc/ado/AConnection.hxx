@@ -70,14 +70,17 @@ namespace connectivity
             bool                        m_bAutocommit;
 
         protected:
+            /// @throws css::sdbc::SQLException
             void buildTypeInfo() throw( css::sdbc::SQLException);
         public:
-
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             OConnection(ODriver*        _pDriver) throw(css::sdbc::SQLException, css::uno::RuntimeException);
             //  OConnection(const SQLHANDLE _pConnectionHandle);
             ~OConnection() override;
             void construct(const OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
 
+            /// @throws css::sdbc::SQLException
             void closeAllStatements () throw( css::sdbc::SQLException);
 
             //XUnoTunnel

@@ -53,8 +53,14 @@ namespace connectivity
             OUString getLiteral(sal_uInt32 _nProperty);
 
             // get info out of propertyst
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             OUString getStringProperty(const OUString& _aProperty) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32       getInt32Property(const OUString& _aProperty) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             bool            getBoolProperty(const OUString& _aProperty) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
             virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;

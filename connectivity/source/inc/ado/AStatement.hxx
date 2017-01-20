@@ -82,33 +82,69 @@ namespace connectivity
 
             using OStatement_BASE::rBHelper;
         private:
-
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getQueryTimeOut()         const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             static sal_Int32 getMaxFieldSize() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getMaxRows()              const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getResultSetConcurrency() const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getResultSetType()        const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             static sal_Int32 getFetchDirection() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             sal_Int32 getFetchSize()            const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             OUString getCursorName()     const throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setQueryTimeOut(sal_Int32 _par0)           throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setMaxFieldSize(sal_Int32 _par0)           throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setMaxRows(sal_Int32 _par0)                throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setResultSetConcurrency(sal_Int32 _par0)   throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setResultSetType(sal_Int32 _par0)          throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setFetchDirection(sal_Int32 _par0)         throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setFetchSize(sal_Int32 _par0)              throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setCursorName(const OUString &_par0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
 
         protected:
 
             void assignRecordSet( ADORecordset* _pRS );
 
+            /// @throws css::sdbc::SQLException
             void reset () throw( css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             void clearMyResultSet () throw( css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             void setWarning (const  css::sdbc::SQLWarning &ex) throw( css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             sal_Int32 getColumnCount () throw( css::sdbc::SQLException);
+            /// @throws css::sdbc::SQLException
             sal_Int32 getRowCount () throw( css::sdbc::SQLException);
             sal_Int32 getPrecision ( sal_Int32 sqlType);
 

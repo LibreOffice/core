@@ -36,6 +36,8 @@ namespace connectivity
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
             virtual void impl_refresh() throw(css::uno::RuntimeException) override;
             virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
+            /// @throws css::sdbc::SQLException
+            /// @throws css::uno::RuntimeException
             void setComments(const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
             virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
             virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
