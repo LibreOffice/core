@@ -25,6 +25,7 @@
 
 #include <com/sun/star/xforms/XSubmission.hpp>
 #include <comphelper/propmultiplex.hxx>
+#include <rtl/ref.hxx>
 
 namespace comphelper
 {
@@ -68,8 +69,8 @@ namespace pcr
     class SubmissionPropertyHandler : public EditPropertyHandler_Base, public ::comphelper::OPropertyChangeListener
     {
     private:
-        ::std::unique_ptr< SubmissionHelper >       m_pHelper;
-        ::comphelper::OPropertyChangeMultiplexer*   m_pPropChangeMultiplexer;
+        ::std::unique_ptr< SubmissionHelper >                    m_pHelper;
+        rtl::Reference<::comphelper::OPropertyChangeMultiplexer> m_xPropChangeMultiplexer;
 
     public:
         explicit SubmissionPropertyHandler(

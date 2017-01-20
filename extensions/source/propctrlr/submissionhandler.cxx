@@ -93,7 +93,6 @@ namespace pcr
     SubmissionPropertyHandler::SubmissionPropertyHandler( const Reference< XComponentContext >& _rxContext )
         :EditPropertyHandler_Base( _rxContext )
         ,OPropertyChangeListener( m_aMutex )
-        ,m_pPropChangeMultiplexer( nullptr )
     {
     }
 
@@ -236,11 +235,10 @@ namespace pcr
 
     void SubmissionPropertyHandler::onNewComponent()
     {
-        if ( m_pPropChangeMultiplexer )
+        if ( m_xPropChangeMultiplexer.is() )
         {
-            m_pPropChangeMultiplexer->dispose();
-            m_pPropChangeMultiplexer->release();
-            m_pPropChangeMultiplexer = nullptr;
+            m_xPropChangeMultiplexer->dispose();
+            m_xPropChangeMultiplexer.clear();
         }
 
         EditPropertyHandler_Base::onNewComponent();
@@ -254,9 +252,8 @@ namespace pcr
         {
             m_pHelper.reset( new SubmissionHelper( m_aMutex, m_xComponent, xDocument ) );
 
-            m_pPropChangeMultiplexer = new OPropertyChangeMultiplexer( this, m_xComponent );
-            m_pPropChangeMultiplexer->acquire();
-            m_pPropChangeMultiplexer->addProperty( PROPERTY_BUTTONTYPE );
+            m_xPropChangeMultiplexer = new OPropertyChangeMultiplexer( this, m_xComponent );
+            m_xPropChangeMultiplexer->addProperty( PROPERTY_BUTTONTYPE );
         }
     }
 
