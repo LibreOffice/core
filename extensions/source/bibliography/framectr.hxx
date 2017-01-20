@@ -66,8 +66,7 @@ friend class BibFrameCtrl_Impl;
     css::uno::Reference< css::frame::XFrame >                 xFrame;
     bool                        bDisposing;
     bool                        bHierarchical;
-    css::uno::Reference< css::form::XLoadable >               m_xDatMan;
-    BibDataManager*             pDatMan;
+    rtl::Reference<BibDataManager>                            m_xDatMan;
     HdlBibModul                 pBibMod;
 
     DECL_LINK( DisposeHdl, void*, void );
