@@ -115,7 +115,7 @@ DECLARE_OOXMLEXPORT_TEST(testTscp, "tscp.docx")
         rdf::Statement aStatement = xStatements->nextElement().get<rdf::Statement>();
         aActualStatements[aStatement.Predicate->getNamespace() + aStatement.Predicate->getLocalName()] = aStatement.Object->getStringValue();
     }
-    CPPUNIT_ASSERT(aExpectedStatements == aActualStatements);
+    CPPUNIT_ASSERT(bool(aExpectedStatements == aActualStatements));
 
     // No RDF statement on the third paragraph.
     xParagraph.set(getParagraph(3), uno::UNO_QUERY);

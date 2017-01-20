@@ -223,7 +223,7 @@ public:
         }
         else
         {
-            CPPUNIT_ASSERT(res == true);
+            CPPUNIT_ASSERT_EQUAL(uno::makeAny(true), res);
             if( !bMMFilenameFromColumn && !bDontLoadResult )
                 loadMailMergeDocument( 0 );
         }
@@ -337,7 +337,7 @@ int MMTest::documentStartPageNumber( int document ) const
         if( IDocumentMarkAccess::GetType( **mark ) == IDocumentMarkAccess::MarkType::UNO_BOOKMARK )
             ++pos;
     }
-    CPPUNIT_ASSERT( pos == document );
+    CPPUNIT_ASSERT_EQUAL(document, pos);
     sal_uInt16 page, dummy;
     shell->Push();
     shell->GotoMark( mark->get());

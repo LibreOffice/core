@@ -1151,13 +1151,13 @@ void SwUiWriterTest::testBookmarkUndo()
     CPPUNIT_ASSERT(ppBkmk != pMarkAccess->getAllMarksEnd());
 
     pMarkAccess->renameMark(ppBkmk->get(), "Mark_");
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
     CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
     rUndoManager.Undo();
     CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") != pMarkAccess->getAllMarksEnd());
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark_") == pMarkAccess->getAllMarksEnd()));
     rUndoManager.Redo();
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
     CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
 
     pMarkAccess->deleteMark( pMarkAccess->findMark("Mark_") );
@@ -1341,19 +1341,19 @@ void SwUiWriterTest::testTdf51741()
     pMarkAccess->renameMark(ppBkmk->get(), "Mark_");
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
     CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
     //Modification 5
     rUndoManager.Undo();
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
     CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") != pMarkAccess->getAllMarksEnd());
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark_") == pMarkAccess->getAllMarksEnd()));
     //Modification 6
     rUndoManager.Redo();
     CPPUNIT_ASSERT(pWrtShell->IsModified());
     pWrtShell->ResetModified();
-    CPPUNIT_ASSERT(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd());
+    CPPUNIT_ASSERT(bool(pMarkAccess->findMark("Mark") == pMarkAccess->getAllMarksEnd()));
     CPPUNIT_ASSERT(pMarkAccess->findMark("Mark_") != pMarkAccess->getAllMarksEnd());
     //Modification 7
     pMarkAccess->deleteMark( pMarkAccess->findMark("Mark_") );
@@ -1415,7 +1415,7 @@ void SwUiWriterTest::testDeleteTableRedlines()
     IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
     SwExtraRedlineTable& rExtras = rIDRA.GetExtraRedlineTable();
     rExtras.DeleteAllTableRedlines(pDoc, rTable, false, sal_uInt16(USHRT_MAX));
-    CPPUNIT_ASSERT(rExtras.GetSize() == 0);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt16>(0), rExtras.GetSize());
 }
 
 void SwUiWriterTest::testXFlatParagraph()
@@ -1955,8 +1955,8 @@ void SwUiWriterTest::testTdf60967()
     pCursor->Move(fnMoveForward);
     SwPosition aPosMoveAfterDel(*(pCursor->GetPoint()));
     //checking the positions to verify that the paragraph is actually deleted
-    CPPUNIT_ASSERT(aPosInTable == aPosAfterDel);
-    CPPUNIT_ASSERT(aPosInTable == aPosMoveAfterDel);
+    CPPUNIT_ASSERT_EQUAL(aPosAfterDel, aPosInTable);
+    CPPUNIT_ASSERT_EQUAL(aPosMoveAfterDel, aPosInTable);
     //Undo the changes
     rUndoManager.Undo();
     {
@@ -1969,18 +1969,18 @@ void SwUiWriterTest::testTdf60967()
         SwPosition aPosMoveAfterUndo(*(pCursor->GetPoint()));
         //checking positions to verify that paragraph node is the last one and we are paragraph node only
         CPPUNIT_ASSERT(aPosAfterTable > aPosMoveAfterUndo);
-        CPPUNIT_ASSERT(aPosMoveAfterUndo == aPosAfterUndo);
+        CPPUNIT_ASSERT_EQUAL(aPosAfterUndo, aPosMoveAfterUndo);
     }
     //Redo the changes
     rUndoManager.Redo();
     //paragraph *text node* should not be there
     SwPosition aPosAfterRedo(*(pCursor->GetPoint()));
     //position should be exactly same as it was after deletion of *text node*
-    CPPUNIT_ASSERT(aPosMoveAfterDel == aPosAfterRedo);
+    CPPUNIT_ASSERT_EQUAL(aPosAfterRedo, aPosMoveAfterDel);
     //moving the cursor forward, but it should not actually move as there is no *text node* after the table due to this same position is expected after move as it was before move
     pCursor->Move(fnMoveForward);
     SwPosition aPosAfterUndoMove(*(pCursor->GetPoint()));
-    CPPUNIT_ASSERT(aPosAfterUndoMove == aPosAfterRedo);
+    CPPUNIT_ASSERT_EQUAL(aPosAfterRedo, aPosAfterUndoMove);
 }
 
 void SwUiWriterTest::testSearchWithTransliterate()
@@ -3177,13 +3177,13 @@ void SwUiWriterTest::testTextTableCellNames()
 {
     sal_Int32 nCol, nRow2;
     SwXTextTable::GetCellPosition( "z1", nCol, nRow2);
-    CPPUNIT_ASSERT(nCol == 51);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(51), nCol);
     SwXTextTable::GetCellPosition( "AA1", nCol, nRow2);
-    CPPUNIT_ASSERT(nCol == 52);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(52), nCol);
     SwXTextTable::GetCellPosition( "AB1", nCol, nRow2);
-    CPPUNIT_ASSERT(nCol == 53);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(53), nCol);
     SwXTextTable::GetCellPosition( "BB1", nCol, nRow2);
-    CPPUNIT_ASSERT(nCol == 105);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(105), nCol);
 }
 
 void SwUiWriterTest::testShapeAnchorUndo()
@@ -3208,7 +3208,7 @@ void SwUiWriterTest::testShapeAnchorUndo()
 
     rUndoManager.Undo();
 
-    CPPUNIT_ASSERT(aOrigLogicRect == pObject->GetLogicRect());
+    CPPUNIT_ASSERT_EQUAL(pObject->GetLogicRect(), aOrigLogicRect);
 }
 
 void lcl_dispatchCommand(const uno::Reference<lang::XComponent>& xComponent, const OUString& rCommand, const uno::Sequence<beans::PropertyValue>& rPropertyValues)
@@ -3883,7 +3883,7 @@ void SwUiWriterTest::testTableStyleUndo()
     // check if attributes are preserved
     pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground);
+    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
 
     pDoc->DelTableStyle("Test Style");
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
@@ -3892,7 +3892,7 @@ void SwUiWriterTest::testTableStyleUndo()
     pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
     // check if attributes are preserved
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground);
+    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
     rUndoManager.Redo();
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount);
 
@@ -3901,7 +3901,7 @@ void SwUiWriterTest::testTableStyleUndo()
     CPPUNIT_ASSERT_EQUAL(sal_Int32(pDoc->GetTableStyles().size()), nStyleCount +1 );
     pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground);
+    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
 
     SwTableAutoFormat aNewStyle("Test Style2");
     SvxBrushItem aBackground2(Color(0x00FF00), RES_BACKGROUND);
@@ -3910,15 +3910,15 @@ void SwUiWriterTest::testTableStyleUndo()
     pDoc->ChgTableStyle("Test Style", aNewStyle);
     pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground2);
+    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground2));
     rUndoManager.Undo();
     pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground);
+    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground));
     rUndoManager.Redo();
     pStyle = pDoc->GetTableStyles().FindAutoFormat("Test Style");
     CPPUNIT_ASSERT(pStyle);
-    CPPUNIT_ASSERT(pStyle->GetBoxFormat(0).GetBackground() == aBackground2);
+    CPPUNIT_ASSERT(bool(pStyle->GetBoxFormat(0).GetBackground() == aBackground2));
 }
 
 void SwUiWriterTest::testRedlineParam()
