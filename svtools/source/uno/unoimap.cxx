@@ -32,6 +32,7 @@
 #include <cppuhelper/weakagg.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
+#include <algorithm>
 #include <list>
 #include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
@@ -513,7 +514,6 @@ class SvUnoImageMap : public WeakImplHelper< XIndexContainer, XServiceInfo, XUno
 public:
     explicit SvUnoImageMap( const SvEventDescription* pSupportedMacroItems );
     SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pSupportedMacroItems );
-    virtual ~SvUnoImageMap() override;
 
     bool fillImageMap( ImageMap& rMap ) const;
     /// @throws IllegalArgumentException
@@ -544,7 +544,7 @@ public:
 private:
     OUString maName;
 
-    std::list< SvUnoImageMapObject* > maObjectList;
+    std::list< rtl::Reference<SvUnoImageMapObject> > maObjectList;
 };
 
 UNO3_GETIMPLEMENTATION_IMPL( SvUnoImageMap );
@@ -561,19 +561,8 @@ SvUnoImageMap::SvUnoImageMap( const ImageMap& rMap, const SvEventDescription* pS
     for( std::size_t nPos = 0; nPos < nCount; nPos++ )
     {
         IMapObject* pMapObject = rMap.GetIMapObject( nPos );
-        SvUnoImageMapObject* pUnoObj = new SvUnoImageMapObject( *pMapObject, pSupportedMacroItems );
-        pUnoObj->acquire();
-        maObjectList.push_back( pUnoObj );
-    }
-}
-
-SvUnoImageMap::~SvUnoImageMap()
-{
-    std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
-    const std::list< SvUnoImageMapObject* >::iterator aEnd = maObjectList.end();
-    while( aIter != aEnd )
-    {
-        (*aIter++)->release();
+        rtl::Reference<SvUnoImageMapObject> xUnoObj = new SvUnoImageMapObject( *pMapObject, pSupportedMacroItems );
+        maObjectList.push_back( xUnoObj );
     }
 }
 
@@ -591,24 +580,20 @@ SvUnoImageMapObject* SvUnoImageMap::getObject( const Any& aElement )
 }
 
 // XIndexContainer
-void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 Index, const Any& Element )
+void SAL_CALL SvUnoImageMap::insertByIndex( sal_Int32 nIndex, const Any& Element )
     throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     SvUnoImageMapObject* pObject = getObject( Element );
     const sal_Int32 nCount = maObjectList.size();
-    if( nullptr == pObject || Index > nCount )
+    if( nullptr == pObject || nIndex > nCount )
         throw IndexOutOfBoundsException();
 
-    pObject->acquire();
-
-    if( Index == nCount )
+    if( nIndex == nCount )
         maObjectList.push_back( pObject );
     else
     {
-        std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
-        for( sal_Int32 n = 0; n < Index; n++ )
-            ++aIter;
-
+        auto aIter = maObjectList.begin();
+        std::advance(aIter, nIndex);
         maObjectList.insert( aIter, pObject );
     }
 }
@@ -621,34 +606,27 @@ void SAL_CALL SvUnoImageMap::removeByIndex( sal_Int32 nIndex ) throw(IndexOutOfB
 
     if( nCount - 1 == nIndex )
     {
-        maObjectList.back()->release();
         maObjectList.pop_back();
     }
     else
     {
-        std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
+        auto aIter = maObjectList.begin();
         std::advance(aIter, nIndex);
-
-        (*aIter)->release();
         maObjectList.erase( aIter );
     }
 }
 
 // XIndexReplace
-void SAL_CALL SvUnoImageMap::replaceByIndex( sal_Int32 Index, const Any& Element ) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL SvUnoImageMap::replaceByIndex( sal_Int32 nIndex, const Any& Element ) throw(IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     SvUnoImageMapObject* pObject = getObject( Element );
     const sal_Int32 nCount = maObjectList.size();
-    if( nullptr == pObject || Index >= nCount )
+    if( nullptr == pObject || nIndex >= nCount )
         throw IndexOutOfBoundsException();
 
-    std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
-    for( sal_Int32 n = 0; n < Index; n++ )
-        ++aIter;
-
-    (*aIter)->release();
+    auto aIter = maObjectList.begin();
+    std::advance(aIter, nIndex);
     *aIter = pObject;
-    pObject->acquire();
 }
 
 // XIndexAccess
@@ -657,17 +635,16 @@ sal_Int32 SAL_CALL SvUnoImageMap::getCount(  ) throw(RuntimeException, std::exce
     return maObjectList.size();
 }
 
-Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL SvUnoImageMap::getByIndex( sal_Int32 nIndex ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     const sal_Int32 nCount = maObjectList.size();
-    if( Index >= nCount )
+    if( nIndex >= nCount )
         throw IndexOutOfBoundsException();
 
-    std::list< SvUnoImageMapObject* >::iterator aIter = maObjectList.begin();
-    for( sal_Int32 n = 0; n < Index; n++ )
-        ++aIter;
+    auto aIter = maObjectList.begin();
+    std::advance(aIter, nIndex);
 
-    Reference< XPropertySet > xObj( *aIter );
+    Reference< XPropertySet > xObj( aIter->get() );
     return makeAny( xObj );
 }
 
@@ -708,8 +685,8 @@ bool SvUnoImageMap::fillImageMap( ImageMap& rMap ) const
 
     rMap.SetName( maName );
 
-    std::list< SvUnoImageMapObject* >::const_iterator aIter = maObjectList.begin();
-    const std::list< SvUnoImageMapObject* >::const_iterator aEnd = maObjectList.end();
+    auto aIter = maObjectList.begin();
+    auto const aEnd = maObjectList.end();
     while( aIter != aEnd )
     {
         IMapObject* pNewMapObject = (*aIter)->createIMapObject();
