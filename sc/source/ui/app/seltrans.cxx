@@ -141,9 +141,7 @@ ScSelectionTransferObj* ScSelectionTransferObj::CreateFromView( ScTabView* pView
 
 ScSelectionTransferObj::ScSelectionTransferObj( ScTabView* pSource, ScSelectionTransferMode eNewMode ) :
     pView( pSource ),
-    eMode( eNewMode ),
-    pCellData( nullptr ),
-    pDrawData( nullptr )
+    eMode( eNewMode )
 {
     //! store range for StillValid
 }
@@ -168,16 +166,8 @@ void ScSelectionTransferObj::ForgetView()
     pView = nullptr;
     eMode = SC_SELTRANS_INVALID;
 
-    if (pCellData)
-    {
-        pCellData->release();
-        pCellData = nullptr;
-    }
-    if (pDrawData)
-    {
-        pDrawData->release();
-        pDrawData = nullptr;
-    }
+    mxCellData.clear();
+    mxDrawData.clear();
 }
 
 void ScSelectionTransferObj::AddSupportedFormats()
@@ -258,7 +248,7 @@ void ScSelectionTransferObj::AddSupportedFormats()
 
 void ScSelectionTransferObj::CreateCellData()
 {
-    OSL_ENSURE( !pCellData, "CreateCellData twice" );
+    OSL_ENSURE( !mxCellData.is(), "CreateCellData twice" );
     if ( pView )
     {
         ScViewData& rViewData = pView->GetViewData();
@@ -306,19 +296,18 @@ void ScSelectionTransferObj::CreateCellData()
 
                 pTransferObj->SetDragSource( pDocSh, aNewMark );
 
-                pCellData = pTransferObj;
-                pCellData->acquire();       // keep ref count up - released in ForgetView
+                mxCellData = pTransferObj;
             }
             else
                 delete pClipDoc;
         }
     }
-    OSL_ENSURE( pCellData, "can't create CellData" );
+    OSL_ENSURE( mxCellData.is(), "can't create CellData" );
 }
 
 void ScSelectionTransferObj::CreateDrawData()
 {
-    OSL_ENSURE( !pDrawData, "CreateDrawData twice" );
+    OSL_ENSURE( !mxDrawData.is(), "CreateDrawData twice" );
     if ( pView )
     {
         //  similar to ScDrawView::BeginDrag
@@ -356,27 +345,26 @@ void ScSelectionTransferObj::CreateDrawData()
             pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive
             pTransferObj->SetDragSource( pDrawView );       // copies selection
 
-            pDrawData = pTransferObj;
-            pDrawData->acquire();       // keep ref count up - released in ForgetView
+            mxDrawData = pTransferObj;
         }
     }
-    OSL_ENSURE( pDrawData, "can't create DrawData" );
+    OSL_ENSURE( mxDrawData.is(), "can't create DrawData" );
 }
 
 ScTransferObj* ScSelectionTransferObj::GetCellData()
 {
-    if ( !pCellData && ( eMode == SC_SELTRANS_CELL || eMode == SC_SELTRANS_CELLS ) )
+    if ( !mxCellData.is() && ( eMode == SC_SELTRANS_CELL || eMode == SC_SELTRANS_CELLS ) )
         CreateCellData();
-    return pCellData;
+    return mxCellData.get();
 }
 
 ScDrawTransferObj* ScSelectionTransferObj::GetDrawData()
 {
-    if ( !pDrawData && ( eMode == SC_SELTRANS_DRAW_BITMAP || eMode == SC_SELTRANS_DRAW_GRAPHIC ||
-                         eMode == SC_SELTRANS_DRAW_BOOKMARK || eMode == SC_SELTRANS_DRAW_OLE ||
-                         eMode == SC_SELTRANS_DRAW_OTHER ) )
+    if ( !mxDrawData.is() && ( eMode == SC_SELTRANS_DRAW_BITMAP || eMode == SC_SELTRANS_DRAW_GRAPHIC ||
+                               eMode == SC_SELTRANS_DRAW_BOOKMARK || eMode == SC_SELTRANS_DRAW_OLE ||
+                               eMode == SC_SELTRANS_DRAW_OTHER ) )
         CreateDrawData();
-    return pDrawData;
+    return mxDrawData.get();
 }
 
 bool ScSelectionTransferObj::GetData(

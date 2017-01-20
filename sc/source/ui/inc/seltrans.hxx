@@ -21,6 +21,7 @@
 #define INCLUDED_SC_SOURCE_UI_INC_SELTRANS_HXX
 
 #include <svtools/transfer.hxx>
+#include <rtl/ref.hxx>
 
 class ScTabView;
 class ScTransferObj;
@@ -41,10 +42,10 @@ enum ScSelectionTransferMode
 class ScSelectionTransferObj : public TransferableHelper
 {
 private:
-    ScTabView*              pView;
-    ScSelectionTransferMode eMode;
-    ScTransferObj*          pCellData;
-    ScDrawTransferObj*      pDrawData;
+    ScTabView*                         pView;
+    ScSelectionTransferMode            eMode;
+    rtl::Reference<ScTransferObj>      mxCellData;
+    rtl::Reference<ScDrawTransferObj>  mxDrawData;
 
                 ScSelectionTransferObj( ScTabView* pSource, ScSelectionTransferMode eNewMode );
     void        CreateCellData();
