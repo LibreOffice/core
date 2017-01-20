@@ -399,7 +399,7 @@ Reference< XSpellAlternatives > SAL_CALL
     return xAlt;
 }
 
-
+/// @throws Exception
 Reference< XInterface > SAL_CALL MacSpellChecker_CreateInstance(
             const Reference< XMultiServiceFactory > & /*rSMgr*/ )
         throw(Exception)
