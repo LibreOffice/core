@@ -36,6 +36,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 class OCommonEmbeddedObject;
 class Interceptor;
@@ -53,7 +54,7 @@ private:
 
     OCommonEmbeddedObject* m_pEmbedObj;
 
-    Interceptor*        m_pInterceptor;
+    rtl::Reference<Interceptor>        m_xInterceptor;
     css::uno::Reference< css::frame::XDispatchProviderInterceptor > m_xOutplaceInterceptor;
 
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

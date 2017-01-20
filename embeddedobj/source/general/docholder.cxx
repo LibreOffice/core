@@ -149,7 +149,6 @@ static void InsertMenu_Impl( const uno::Reference< container::XIndexContainer >&
 DocumentHolder::DocumentHolder( const uno::Reference< uno::XComponentContext >& xContext,
                                 OCommonEmbeddedObject* pEmbObj )
 : m_pEmbedObj( pEmbObj ),
-  m_pInterceptor( nullptr ),
   m_xContext( xContext ),
   m_bReadOnly( false ),
   m_bWaitForClose( false ),
@@ -200,10 +199,10 @@ DocumentHolder::~DocumentHolder()
         } catch( const uno::Exception& ) {}
     }
 
-    if ( m_pInterceptor )
+    if ( m_xInterceptor.is() )
     {
-        m_pInterceptor->DisconnectDocHolder();
-        m_pInterceptor->release();
+        m_xInterceptor->DisconnectDocHolder();
+        m_xInterceptor.clear();
     }
 
     if ( !m_bDesktopTerminated )
@@ -837,17 +836,15 @@ uno::Reference< frame::XFrame > const & DocumentHolder::GetDocFrame()
         uno::Reference< frame::XDispatchProviderInterception > xInterception( m_xFrame, uno::UNO_QUERY );
         if ( xInterception.is() )
         {
-            if ( m_pInterceptor )
+            if ( m_xInterceptor.is() )
             {
-                m_pInterceptor->DisconnectDocHolder();
-                m_pInterceptor->release();
-                m_pInterceptor = nullptr;
+                m_xInterceptor->DisconnectDocHolder();
+                m_xInterceptor.clear();
             }
 
-            m_pInterceptor = new Interceptor( this );
-            m_pInterceptor->acquire();
+            m_xInterceptor = new Interceptor( this );
 
-            xInterception->registerDispatchProviderInterceptor( m_pInterceptor );
+            xInterception->registerDispatchProviderInterceptor( m_xInterceptor.get() );
 
             // register interceptor from outside
             if ( m_xOutplaceInterceptor.is() )
