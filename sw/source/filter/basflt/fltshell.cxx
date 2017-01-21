@@ -690,8 +690,8 @@ void SwFltControlStack::SetAttrInDoc(const SwPosition& rTmpPos,
             delete pTOXAttr->GetBase();
 
             // set (above saved and removed) the break item at the node following the TOX
-            if( aBkSet.Count() )
-                pNd->SetAttr( aBkSet );
+            if (pNd && aBkSet.Count())
+                pNd->SetAttr(aBkSet);
         }
         break;
     case RES_FLTR_REDLINE:
