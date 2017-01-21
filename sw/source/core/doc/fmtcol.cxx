@@ -54,11 +54,11 @@ namespace TextFormatCollFunc
         if ( !pTextFormatColl->StayAssignedToListLevelOfOutlineStyle() &&
              pTextFormatColl->IsAssignedToListLevelOfOutlineStyle() )
         {
-            if ( !pNewNumRuleItem )
+            if (!pNewNumRuleItem)
             {
-                pTextFormatColl->GetItemState( RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem) );
+                (void)pTextFormatColl->GetItemState(RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNewNumRuleItem));
             }
-            if ( pNewNumRuleItem )
+            if (pNewNumRuleItem)
             {
                 OUString sNumRuleName = pNewNumRuleItem->GetValue();
                 if ( sNumRuleName.isEmpty() ||
