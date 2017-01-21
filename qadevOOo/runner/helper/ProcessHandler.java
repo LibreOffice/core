@@ -116,7 +116,6 @@ public class ProcessHandler
     private int exitValue = -1;
     private boolean isFinished = false;
     private boolean isStarted = false;
-    private Pump stdout = null;
     private PrintStream stdIn = null;
     private Process m_aProcess = null;
     private boolean debug = false;
@@ -273,7 +272,7 @@ public class ProcessHandler
             return;
         }
         dbg("execute: pump io-streams");
-        stdout = new Pump(m_aProcess.getInputStream(), log, "out > ", bUseOutput);
+        new Pump(m_aProcess.getInputStream(), log, "out > ", bUseOutput);
         new Pump(m_aProcess.getErrorStream(), log, "err > ", bUseOutput);
         stdIn = new PrintStream(m_aProcess.getOutputStream());
 
