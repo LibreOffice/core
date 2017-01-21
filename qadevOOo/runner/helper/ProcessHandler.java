@@ -109,9 +109,7 @@ class Pump extends Thread
  */
 public class ProcessHandler
 {
-
     private String cmdLine;
-    private String[] cmdLineArray;
     private String[] envVars = null;
     private File workDir = null;
     private PrintWriter log;
@@ -254,47 +252,25 @@ public class ProcessHandler
         final Runtime runtime = Runtime.getRuntime();
         try
         {
-            if (cmdLine == null)
+            if (workDir != null)
             {
-                log.println(utils.getDateTime() + "execute: Starting command from array: ");
-                for (int i = 0; i < cmdLineArray.length; i++)
-                {
-                    log.println(cmdLineArray[i]);
-                }
+                log.println(utils.getDateTime() + "execute: Starting command: ");
+                log.println(cmdLine + " path=" + workDir.getAbsolutePath());
                 showEnvVars();
-                log.println("");
-                initializeProcessKiller();
-                m_aProcess = runtime.exec(cmdLineArray, envVars);
+                m_aProcess = runtime.exec(cmdLine, envVars, workDir);
             }
             else
             {
-                if (workDir != null)
-                {
-                    log.println(utils.getDateTime() + "execute: Starting command: ");
-                    log.println(cmdLine + " path=" + workDir.getAbsolutePath());
-                    showEnvVars();
-                    m_aProcess = runtime.exec(cmdLine, envVars, workDir);
-                }
-                else
-                {
-                    log.println(utils.getDateTime() + "execute: Starting command: ");
-                    log.println(cmdLine);
-                    showEnvVars();
-                    m_aProcess = runtime.exec(cmdLine, envVars);
-                }
+                log.println(utils.getDateTime() + "execute: Starting command: ");
+                log.println(cmdLine);
+                showEnvVars();
+                m_aProcess = runtime.exec(cmdLine, envVars);
             }
             isStarted = true;
         }
         catch (java.io.IOException e)
         {
-            if (cmdLine == null)
-            {
-                log.println(utils.getDateTime() + "execute: The command array can't be started: " + e);
-            }
-            else
-            {
-                log.println(utils.getDateTime() + "execute: The command " + cmdLine + " can't be started: " + e);
-            }
+            log.println(utils.getDateTime() + "execute: The command " + cmdLine + " can't be started: " + e);
             return;
         }
         dbg("execute: pump io-streams");
