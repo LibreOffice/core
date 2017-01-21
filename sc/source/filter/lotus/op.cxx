@@ -618,7 +618,7 @@ void OP_ApplyPatternArea123(LotusContext& rContext, SvStream& rStream)
                     rStream.ReadUInt16( nData );
                     rStream.SeekRel( nLength - 2 );
                     if( nLevel == 1 )
-                        nTabCount = nData;
+                        nTabCount = SanitizeTab(nData);
                     else if( nLevel == 2 )
                     {
                         nCol = nCol + nColCount;
