@@ -6744,46 +6744,46 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                             {
                                 ReadDffRecordHeader( rIn, aTextHd );
                                 sal_uInt16 nVal = 0;
-                                PPTFieldEntry* pEntry = nullptr;
+                                std::unique_ptr<PPTFieldEntry> xEntry;
                                 switch ( aTextHd.nRecType )
                                 {
                                     case PPT_PST_DateTimeMCAtom :
                                     {
-                                        pEntry = new PPTFieldEntry;
-                                        rIn.ReadUInt16( pEntry->nPos )
+                                        xEntry.reset(new PPTFieldEntry);
+                                        rIn.ReadUInt16(xEntry->nPos)
                                            .ReadUInt16( nVal )
                                            .ReadUInt16( nVal );
-                                        pEntry->SetDateTime( nVal & 0xff );
+                                        xEntry->SetDateTime( nVal & 0xff );
                                     }
                                     break;
 
                                     case PPT_PST_FooterMCAtom :
                                     {
-                                        pEntry = new PPTFieldEntry;
-                                        rIn.ReadUInt16( pEntry->nPos );
-                                        pEntry->pField1 = new SvxFieldItem( SvxFooterField(), EE_FEATURE_FIELD );
+                                        xEntry.reset(new PPTFieldEntry);
+                                        rIn.ReadUInt16(xEntry->nPos);
+                                        xEntry->pField1 = new SvxFieldItem( SvxFooterField(), EE_FEATURE_FIELD );
                                     }
                                     break;
 
                                     case PPT_PST_HeaderMCAtom :
                                     {
-                                        pEntry = new PPTFieldEntry;
-                                        rIn.ReadUInt16( pEntry->nPos );
-                                        pEntry->pField1 = new SvxFieldItem( SvxHeaderField(), EE_FEATURE_FIELD );
+                                        xEntry.reset(new PPTFieldEntry);
+                                        rIn.ReadUInt16(xEntry->nPos);
+                                        xEntry->pField1 = new SvxFieldItem( SvxHeaderField(), EE_FEATURE_FIELD );
                                     }
                                     break;
 
                                     case PPT_PST_GenericDateMCAtom :
                                     {
-                                        pEntry = new PPTFieldEntry;
-                                        rIn.ReadUInt16( pEntry->nPos );
-                                        pEntry->pField1 = new SvxFieldItem( SvxDateTimeField(), EE_FEATURE_FIELD );
+                                        xEntry.reset(new PPTFieldEntry);
+                                        rIn.ReadUInt16(xEntry->nPos);
+                                        xEntry->pField1 = new SvxFieldItem( SvxDateTimeField(), EE_FEATURE_FIELD );
                                         if ( rPersistEntry.pHeaderFooterEntry ) // sj: #i34111# on master pages it is possible
                                         {                                       // that there is no HeaderFooterEntry available
                                             if ( rPersistEntry.pHeaderFooterEntry->nAtom & 0x20000 )    // auto date time
-                                                pEntry->SetDateTime( rPersistEntry.pHeaderFooterEntry->nAtom & 0xff );
+                                                xEntry->SetDateTime( rPersistEntry.pHeaderFooterEntry->nAtom & 0xff );
                                             else
-                                                pEntry->pString = new OUString( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] );
+                                                xEntry->pString = new OUString( rPersistEntry.pHeaderFooterEntry->pPlaceholder[ nVal ] );
                                         }
                                     }
                                     break;
@@ -6791,10 +6791,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                     case PPT_PST_SlideNumberMCAtom :
                                     case PPT_PST_RTFDateTimeMCAtom :
                                     {
-                                        pEntry = new PPTFieldEntry;
+                                        xEntry.reset(new PPTFieldEntry);
                                         if ( aTextHd.nRecLen >= 4 )
                                         {
-                                            rIn.ReadUInt16( pEntry->nPos )
+                                            rIn.ReadUInt16(xEntry->nPos)
                                                .ReadUInt16( nVal );
 
                                             // evaluate ID
@@ -6802,7 +6802,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                             switch( aTextHd.nRecType )
                                             {
                                                 case PPT_PST_SlideNumberMCAtom:
-                                                    pEntry->pField1 = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
+                                                    xEntry->pField1 = new SvxFieldItem( SvxPageField(), EE_FEATURE_FIELD );
                                                 break;
 
                                                 case PPT_PST_RTFDateTimeMCAtom:
@@ -6835,7 +6835,7 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             else if (!n)
                                                             {
                                                                 // End of format string
-                                                                pEntry->pString = new OUString( aStr );
+                                                                xEntry->pString = new OUString( aStr );
                                                                 break;
                                                             }
                                                             else if (!inquote)
@@ -6851,10 +6851,10 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                             }
                                                         }
                                                     }
-                                                    if ( pEntry->pString == nullptr )
+                                                    if (!xEntry->pString)
                                                     {
                                                         // Handle as previously
-                                                        pEntry->pField1 = new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
+                                                        xEntry->pField1 = new SvxFieldItem( SvxDateField( Date( Date::SYSTEM ), SVXDATETYPE_FIX ), EE_FEATURE_FIELD );
                                                     }
                                                 }
                                             }
@@ -6887,16 +6887,16 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                                            .ReadUInt32( nEndPos );
                                                         if ( nEndPos )
                                                         {
-                                                            pEntry = new PPTFieldEntry;
-                                                            pEntry->nPos = (sal_uInt16)nStartPos;
-                                                            pEntry->nTextRangeEnd = (sal_uInt16)nEndPos;
+                                                            xEntry.reset(new PPTFieldEntry);
+                                                            xEntry->nPos = (sal_uInt16)nStartPos;
+                                                            xEntry->nTextRangeEnd = (sal_uInt16)nEndPos;
                                                             OUString aTarget( pHyperlink->aTarget );
                                                             if ( !pHyperlink->aConvSubString.isEmpty() )
                                                             {
                                                                 aTarget += "#";
                                                                 aTarget += pHyperlink->aConvSubString;
                                                             }
-                                                            pEntry->pField1 = new SvxFieldItem( SvxURLField( aTarget, OUString(), SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
+                                                            xEntry->pField1 = new SvxFieldItem( SvxURLField( aTarget, OUString(), SVXURLFORMAT_REPR ), EE_FEATURE_FIELD );
                                                         }
                                                     }
                                                     break;
@@ -6908,19 +6908,19 @@ PPTTextObj::PPTTextObj( SvStream& rIn, SdrPowerPointImport& rSdrPowerPointImport
                                 }
                                 if (!aTextHd.SeekToEndOfRecord(rIn))
                                     break;
-                                if ( pEntry )
+                                if (xEntry)
                                 {
                                     // sorting fields ( hi >> lo )
                                     ::std::vector< PPTFieldEntry* >::iterator it = FieldList.begin();
                                     for( ; it != FieldList.end(); ++it ) {
-                                        if ( (*it)->nPos < pEntry->nPos ) {
+                                        if ( (*it)->nPos < xEntry->nPos ) {
                                             break;
                                         }
                                     }
                                     if ( it != FieldList.end() ) {
-                                        FieldList.insert( it, pEntry );
+                                        FieldList.insert(it, xEntry.release());
                                     } else {
-                                        FieldList.push_back( pEntry );
+                                        FieldList.push_back(xEntry.release());
                                     }
                                 }
                             }
