@@ -38,11 +38,16 @@ static sal_Int32 map100thmm( sal_Int32 n100thMM )
 }
 
 
-Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int32 nDocWidthInput, sal_Int32 nDocHeightInput, sal_Int32 nJPEGcompressMode )
-:   mpClipPolyPolygon( nullptr ),
+Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int32 nDocWidth, sal_Int32 nDocHeight, sal_Int32 nJPEGcompressMode )
+:   mnDocWidth( map100thmm(nDocWidth) ),
+    mnDocHeight( map100thmm(nDocHeight) ),
+    mnDocXScale( (double)nTWIPWidthOutput / mnDocWidth ),
+    mnDocYScale( (double)nTWIPHeightOutput / mnDocHeight ),
+    mpClipPolyPolygon( nullptr ),
     mpTag( nullptr ),
     mpSprite( nullptr ),
     mnNextId( 1 ),
+    mnFrames( 0 ),
     mnGlobalTransparency(0),
     mnJPEGCompressMode(nJPEGcompressMode)
 {
@@ -53,14 +58,6 @@ Writer::Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int
 
     mpMovieStream = maMovieTempFile.GetStream( StreamMode::WRITE|StreamMode::TRUNC );
     mpFontsStream = maFontsTempFile.GetStream( StreamMode::WRITE|StreamMode::TRUNC );
-
-    mnFrames = 0;
-
-    mnDocWidth = map100thmm( nDocWidthInput );
-    mnDocHeight = map100thmm( nDocHeightInput );
-
-    mnDocXScale = (double)nTWIPWidthOutput / mnDocWidth;
-    mnDocYScale = (double)nTWIPHeightOutput / mnDocHeight;
 
     // define an invisible button with the size of a page
     Rectangle aRect( 0, 0, (long)( mnDocWidth * mnDocXScale ), (long)( mnDocHeight * mnDocYScale ) );
