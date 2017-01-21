@@ -113,7 +113,8 @@ DECLARE_OOXMLEXPORT_TEST(testFdo68787, "fdo68787.docx")
 
 DECLARE_OOXMLEXPORT_TEST(testTdf92470_footnoteRestart, "tdf92470_footnoteRestart.docx")
 {
-    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwXTextDocument* pTextDoc = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT( pTextDoc );
     SwDoc* pDoc = pTextDoc->GetDocShell()->GetDoc();
     CPPUNIT_ASSERT( pDoc );
     CPPUNIT_ASSERT_EQUAL_MESSAGE( "Footnote doesn't restart every Page", FTNNUM_PAGE, pDoc->GetFootnoteInfo().eNum );
