@@ -5385,7 +5385,7 @@ bool SvxIconSelectorDialog::ReplaceGraphicItem(
                 }
                 pTbSymbol->InsertItem( nId,aImage, aURL, ToolBoxItemBits::NONE, 0 ); //modify
 
-                xGraphic = aImage.GetXGraphic();
+                xGraphic = Graphic(aImage.GetBitmapEx()).GetXGraphic();
 
                 URLs[0] = aURL;
                 aImportGraph[ 0 ] = xGraphic;
@@ -5548,7 +5548,7 @@ bool SvxIconSelectorDialog::ImportGraphic( const OUString& aURL )
                 {
                     pTbSymbol->InsertItem( nId, aImage, aURL, ToolBoxItemBits::NONE, 0 );
 
-                    xGraphic = aImage.GetXGraphic();
+                    xGraphic = Graphic(aImage.GetBitmapEx()).GetXGraphic();
                     xGraphic->acquire();
 
                     pTbSymbol->SetItemData(
