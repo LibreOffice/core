@@ -33,3 +33,9 @@ $(eval $(call gb_Module_add_targets,sd,\
 	Package_uiconfig \
 	Package_xml \
 ))
+
+ifneq ($(OOO_JUNIT_JAR),)
+$(eval $(call gb_Module_add_subsequentcheck_targets,sd,\
+	JunitTest_sd_unoapi \
+))
+endif
