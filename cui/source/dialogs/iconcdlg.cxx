@@ -463,7 +463,8 @@ void IconChoiceDialog::DeActivatePageImpl ()
             if ( ( DeactivateRC::LeavePage & nRet ) &&
                  aTmp.Count() )
             {
-                pExampleSet->Put( aTmp );
+                if (pExampleSet)
+                    pExampleSet->Put(aTmp);
                 pOutSet->Put( aTmp );
             }
         }
