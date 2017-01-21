@@ -303,12 +303,12 @@ bool SwPaM::Find( const SearchOptions2& rSearchOpt, bool bSearchInNotes , utl::T
             }
 
             SwDocShell *const pDocShell = pNode->GetDoc()->GetDocShell();
-            SwWrtShell *const pWrtShell = (pDocShell) ? pDocShell->GetWrtShell() : nullptr;
-            SwPostItMgr *const pPostItMgr = (pWrtShell) ? pWrtShell->GetPostItMgr() : nullptr;
+            SwWrtShell *const pWrtShell = pDocShell ? pDocShell->GetWrtShell() : nullptr;
+            SwPostItMgr *const pPostItMgr = pWrtShell ? pWrtShell->GetPostItMgr() : nullptr;
 
             // If there is an active text edit, then search there.
             bool bEndedTextEdit = false;
-            SdrView* pSdrView = pWrtShell->GetDrawView();
+            SdrView* pSdrView = pWrtShell ? pWrtShell->GetDrawView() : nullptr;
             if (pSdrView)
             {
                 // If the edited object is not anchored to this node, then ignore it.
