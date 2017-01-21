@@ -38,6 +38,7 @@ class TestInteractionHandler : public cppu::WeakImplHelper<css::lang::XServiceIn
 public:
     TestInteractionHandler(const OUString& sPassword)
         : msPassword(sPassword)
+        , mbPasswordRequested(false)
     {}
 
     virtual ~TestInteractionHandler() override
