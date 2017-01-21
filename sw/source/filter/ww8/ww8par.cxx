@@ -3671,8 +3671,8 @@ bool SwWW8ImplReader::ReadChar(long nPosCp, long nCpOfs)
                 {
                     WW8_FC nPos;
                     void *pData;
-                    pTest->Get(nPos, pData);
-                    sal_uInt32 nData = SVBT32ToUInt32(*static_cast<SVBT32*>(pData));
+                    sal_uInt32 nData = pTest->Get(nPos, pData) ? SVBT32ToUInt32(*static_cast<SVBT32*>(pData))
+                                                               : 0;
                     if (nData & 0x2) // Might be how it works
                     {
                         TabCellEnd();
