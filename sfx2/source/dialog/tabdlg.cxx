@@ -1169,7 +1169,7 @@ IMPL_LINK( SfxTabDialog, DeactivatePageHdl, TabControl *, pTabCtrl, bool )
         else
             nRet = pPage->DeactivatePage( nullptr );
         if ( ( DeactivateRC::LeavePage & nRet ) == DeactivateRC::LeavePage &&
-             aTmp.Count() )
+             aTmp.Count() && m_pExampleSet)
         {
             m_pExampleSet->Put( aTmp );
             m_pOutSet->Put( aTmp );
