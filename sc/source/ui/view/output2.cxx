@@ -621,6 +621,9 @@ void ScDrawStringsVars::SetTextToWidthOrHash( ScRefCellValue& rCell, long nWidth
         return;
 
     long nMaxDigit = GetMaxDigitWidth();
+    if (!nMaxDigit)
+        return;
+
     sal_uInt16 nNumDigits = static_cast<sal_uInt16>(nWidth / nMaxDigit);
     {
         OUString sTempOut(aString);
