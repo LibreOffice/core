@@ -221,7 +221,7 @@ void OutputDevice::DrawPolyLine( const basegfx::B2DPolygon& rB2DPolygon,
         // to avoid optical gaps
         for(sal_uInt32 a(0); a < aAreaPolyPolygon.count(); a++)
         {
-            DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, 15.0 * F_PI180 /*default, not used*/, bTryAA);
+            (void)DrawPolyLineDirect( aAreaPolyPolygon.getB2DPolygon(a), 0.0, 0.0, basegfx::B2DLineJoin::NONE, css::drawing::LineCap_BUTT, 15.0 * F_PI180 /*default, not used*/, bTryAA);
         }
     }
     else
