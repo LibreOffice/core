@@ -75,9 +75,9 @@ namespace TextFormatCollFunc
     {
         SwNumRule* pNumRule( nullptr );
 
-        const SwNumRuleItem* pNumRuleItem( nullptr );
-        rTextFormatColl.GetItemState( RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNumRuleItem) );
-        if ( pNumRuleItem )
+        const SwNumRuleItem* pNumRuleItem(nullptr);
+        (void)rTextFormatColl.GetItemState(RES_PARATR_NUMRULE, false, reinterpret_cast<const SfxPoolItem**>(&pNumRuleItem));
+        if (pNumRuleItem)
         {
             const OUString sNumRuleName = pNumRuleItem->GetValue();
             if ( !sNumRuleName.isEmpty() )
