@@ -183,6 +183,9 @@ sub read_all_tables_from_msidatabase
         if ( ! -f $longonefilename ) { installer::exiter::exit_program("ERROR: Could not find idt file: $longonefilename!", "read_all_tables_from_msidatabase"); }
         my $filecontent = installer::files::read_file($longonefilename);
         my $idtcontent = analyze_idt_file($filecontent);
+        if ($onefilename eq "Directory.idt") {
+            collect_directories($filecontent);
+        }
         my $key = $onefilename;
         $key =~ s/\.idt\s*$//;
         $database{$key} = $idtcontent;
@@ -404,6 +407,31 @@ sub readdatabase
     }
 
     return $database;
+}
+
+#########################################################################
+# Reading the file "Directory.idt".
+#########################################################################
+
+sub collect_directories
+{
+    my ($filecontent) = @_;
+
+    for ( my $i = 0; $i <= $#{$filecontent}; $i++ )
+    {
+        if ( $i <= 2 ) { next; }                        # ignoring first three lines
+        if ( ${$filecontent}[$i] =~ /^\s*$/ ) { next; } # ignoring empty lines
+        # Format: Directory Directory_Parent    DefaultDir
+        if ( ${$filecontent}[$i] =~ /^\s*(.+?)\t(.*?)\t(.*?)\s*$/ )
+        {
+            $installer::globals::merge_directory_hash{$1} = 1;
+        }
+        else
+        {
+            my $linecount = $i + 1;
+            installer::exiter::exit_program("ERROR: Unknown line format in table \"$idtfilename\" (line $linecount) !", "collect_directories");
+        }
+    }
 }
 
 #################################################################################
