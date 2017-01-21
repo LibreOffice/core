@@ -1059,24 +1059,23 @@ inline bool SwFrame::IsAccessibleFrame() const
 class SwFrameDeleteGuard
 {
 private:
-    SwFrame *m_pFrame;
-    bool m_bOldDeleteAllowed;
+    SwFrame *m_pForbidFrame;
 public:
     //Flag pFrame for SwFrameDeleteGuard lifetime that we shouldn't delete
     //it in e.g. SwSectionFrame::MergeNext etc because we will need it
     //again after the SwFrameDeleteGuard dtor
     explicit SwFrameDeleteGuard(SwFrame* pFrame)
-        : m_pFrame(pFrame)
+        : m_pForbidFrame((pFrame && !pFrame->IsDeleteForbidden()) ?
+            pFrame : nullptr)
     {
-        m_bOldDeleteAllowed = m_pFrame && !m_pFrame->IsDeleteForbidden();
-        if (m_bOldDeleteAllowed)
-            m_pFrame->ForbidDelete();
+        if (m_pForbidFrame)
+            m_pForbidFrame->ForbidDelete();
     }
 
     ~SwFrameDeleteGuard()
     {
-        if (m_bOldDeleteAllowed)
-            m_pFrame->AllowDelete();
+        if (m_pForbidFrame)
+            m_pForbidFrame->AllowDelete();
     }
 };
 
