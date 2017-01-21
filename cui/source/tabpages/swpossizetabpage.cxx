@@ -1037,7 +1037,7 @@ void SvxSwPosSizeTabPage::Reset( const SfxItemSet* rSet)
     pItem = GetItem( *rSet, SID_ATTR_TRANSFORM_HEIGHT );
     sal_Int32 nHeight = std::max( pItem ? ( static_cast<const SfxUInt32Item*>(pItem)->GetValue()) : 0, (sal_uInt32)1 );
     m_pHeightMF->SetValue(m_pHeightMF->Normalize(nHeight), FUNIT_TWIP);
-    m_fWidthHeightRatio = nHeight ? double(nWidth) / double(nHeight) : 1.0;
+    m_fWidthHeightRatio = double(nWidth) / double(nHeight);
 
     if(!m_bPositioningDisabled)
     {
