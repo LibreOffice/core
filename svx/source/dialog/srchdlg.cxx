@@ -333,8 +333,18 @@ SvxSearchDialog::SvxSearchDialog( vcl::Window* pParent, SfxChildWindow* pChildWi
     get(m_pColumnsBtn, "cols");
     get(m_pAllSheetsCB, "allsheets");
 
-    m_pSimilarityBtn->set_height_request(m_pSimilarityBox->get_preferred_size().Height());
-    m_pJapOptionsBtn->set_height_request(m_pJapOptionsCB->get_preferred_size().Height());
+    //align find and replace inputs without a predefined with for the labels
+    get(m_pFindLabel, "label4"); //"Find:"
+    get(m_pReplaceLabel, "label5"); //"Replace:"
+    long nFindWidth = m_pFindLabel->get_preferred_size().Width();
+    long nReplaceWidth = m_pReplaceLabel->get_preferred_size().Width();
+    if ( nFindWidth > nReplaceWidth)
+       m_pReplaceLabel->set_width_request(nFindWidth);
+    else
+       m_pFindLabel->set_width_request(nReplaceWidth);
+
+    // m_pSimilarityBtn->set_height_request(m_pSimilarityBox->get_preferred_size().Height());
+    // m_pJapOptionsBtn->set_height_request(m_pJapOptionsCB->get_preferred_size().Height());
 
     long nTermWidth = approximate_char_width() * 32;
     m_pSearchLB->set_width_request(nTermWidth);
@@ -412,6 +422,8 @@ void SvxSearchDialog::dispose()
     m_pRowsBtn.clear();
     m_pColumnsBtn.clear();
     m_pAllSheetsCB.clear();
+    m_pFindLabel.clear();
+    m_pReplaceLabel.clear();
     SfxModelessDialog::dispose();
 }
 
