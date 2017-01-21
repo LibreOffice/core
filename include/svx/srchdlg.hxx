@@ -202,6 +202,9 @@ private:
     VclPtr<RadioButton>    m_pColumnsBtn;
     VclPtr<CheckBox>       m_pAllSheetsCB;
 
+    VclPtr<FixedText>       m_pFindLabel;
+    VclPtr<FixedText>       m_pReplaceLabel;
+
     SfxBindings&    rBindings;
     bool            bWriter;
     bool            bSearch;
