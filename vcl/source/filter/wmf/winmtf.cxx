@@ -1483,9 +1483,9 @@ void WinMtfOutput::DrawText( Point& rPosition, OUString& rText, long* pDXArry, l
         Point aActPosDelta;
         pVDev->SetMapMode( MapMode( MapUnit::Map100thMM ) );
         pVDev->SetFont( maFont );
-        if( pDXArry )
+        const sal_uInt32 nLen = pDXArry ? rText.getLength() : 0;
+        if (nLen)
         {
-            sal_uInt32 nLen = rText.getLength();
             nTextWidth = pVDev->GetTextWidth( OUString(rText[ nLen - 1 ]) );
             if( nLen > 1 )
                 nTextWidth += pDXArry[ nLen - 2 ];
