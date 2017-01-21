@@ -24,6 +24,7 @@ import java.io.PrintStream;
 import java.io.LineNumberReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import lib.TestParameters;
 import util.PropertyName;
 import util.utils;
@@ -166,7 +167,7 @@ public class ProcessHandler
         this.envVars = envVars;
         if (log == null)
         {
-            this.log = new PrintWriter(new OutputStreamWriter(System.out));
+            this.log = new PrintWriter(new OutputStreamWriter(System.out, StandardCharsets.UTF_8));
         }
         else
         {

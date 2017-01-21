@@ -22,6 +22,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.StringTokenizer;
@@ -584,7 +585,7 @@ public class APIDescGetter extends DescGetter
                             entry.endsWith(sEndsWithCSVName))
                     {
                         InputStream input = this.getClass().getResourceAsStream("/" + entry);
-                        csvFile = new BufferedReader(new InputStreamReader(input, "UTF-8"));
+                        csvFile = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
                         break;
                     }
                 }
@@ -592,7 +593,7 @@ public class APIDescGetter extends DescGetter
             else
             {
                 InputStream in = con.getInputStream();
-                java.io.BufferedReader buf = new java.io.BufferedReader(new InputStreamReader(in, "UTF-8"));
+                java.io.BufferedReader buf = new java.io.BufferedReader(new InputStreamReader(in, StandardCharsets.UTF_8));
                 while (true)
                 {
                     String entry = buf.readLine();
@@ -606,7 +607,7 @@ public class APIDescGetter extends DescGetter
                                 module +
                                 "/" +
                                 entry);
-                        csvFile = new BufferedReader(new InputStreamReader(input, "UTF-8"));
+                        csvFile = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8));
                         break;
                     }
                 }
