@@ -3834,7 +3834,8 @@ void SwUiWriterTest::testTdf84695NormalChar()
     pWrtShell->SelectObj(Point(), 0, pObject);
 
     // Now pressing 'a' should add a character.
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
 
     uno::Reference<text::XTextRange> xShape(getShape(1), uno::UNO_QUERY);
