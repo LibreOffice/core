@@ -266,7 +266,8 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
     {
         mpView->ChangeMarkedObjectsBulletsNumbering( bToggle, nSId == FN_SVX_SET_BULLET, bInMasterView ? nullptr : pNumRule );
     }
-    if ( bInMasterView )
+
+    if (bInMasterView && pNumRule)
     {
         SfxItemSet aSetAttr( mpViewShell->GetPool(), EE_ITEMS_START, EE_ITEMS_END );
         aSetAttr.Put(SvxNumBulletItem( *pNumRule, nNumItemId ));
