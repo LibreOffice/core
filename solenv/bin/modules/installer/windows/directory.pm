@@ -29,6 +29,36 @@ use installer::windows::msiglobal;
 # Collecting all directory trees in global hash
 ##############################################################
 
+my @msistandarddirectorynames = qw(
+   AdminToolsFolder
+   AppDataFolder
+   CommonAppDataFolder
+   CommonFiles64Folder
+   CommonFilesFolder
+   DesktopFolder
+   FavoritesFolder
+   FontsFolder
+   LocalAppDataFolder
+   MyPicturesFolder
+   NetHoodFolder
+   PersonalFolder
+   PrintHoodFolder
+   ProgramFiles64Folder
+   ProgramFilesFolder
+   ProgramMenuFolder
+   RecentFolder
+   SendToFolder
+   StartMenuFolder
+   StartupFolder
+   System16Folder
+   System64Folder
+   SystemFolder
+   TempFolder
+   TemplateFolder
+   WindowsFolder
+   WindowsVolume
+);
+
 sub collectdirectorytrees
 {
     my ( $directoryref ) = @_;
@@ -567,6 +597,38 @@ sub create_directory_table
     $infoline = "Created idt file: $directorytablename\n";
     push(@installer::globals::logfileinfo, $infoline);
     }
+}
+
+################################################
+# Check if the string starts with another string
+################################################
+
+sub starts_with
+{
+    my ($first, $second) = @_;
+
+    return substr($first, 0, length($second)) eq $second;
+}
+
+###############################################
+# Check if the directory prefix is a standard
+# directory name. If it is the case, then the
+# standard directory name is returned in $var.
+###############################################
+
+sub has_standard_directory_prefix
+{
+    my ($dir, $var) = @_;
+
+    for my $d (@msistandarddirectorynames) {
+        if (starts_with($dir, $d) && $dir ne $d) {
+            installer::logger::print_message("... match found: [$d]\n");
+            ${$var} = $d;
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 1;
