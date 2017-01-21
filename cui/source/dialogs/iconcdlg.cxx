@@ -703,7 +703,8 @@ void IconChoiceDialog::Ok()
 
                 if ( pPage->FillItemSet( &aTmp ) )
                 {
-                    pExampleSet->Put( aTmp );
+                    if (pExampleSet)
+                        pExampleSet->Put(aTmp);
                     pOutSet->Put( aTmp );
                 }
             }
