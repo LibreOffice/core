@@ -166,7 +166,6 @@ public class ProcessHandler
         this.cmdLine = cmdLine;
         this.workDir = workDir;
         this.log = log;
-        this.cmdLine = cmdLine;
         this.envVars = envVars;
         if (log == null)
         {
