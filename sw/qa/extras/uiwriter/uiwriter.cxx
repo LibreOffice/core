@@ -3810,7 +3810,8 @@ void SwUiWriterTest::testTdf84695()
     pWrtShell->SelectObj(Point(), 0, pObject);
 
     // Now Enter + a key should add some text.
-    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 0, KEY_RETURN);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'a', 0);
 
