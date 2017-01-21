@@ -515,16 +515,14 @@ class IcnCursor_Impl
                                 sal_uInt16 nCol,
                                 sal_uInt16 nTop,
                                 sal_uInt16 nBottom,
-                                sal_uInt16 nPref,
                                 bool bDown,
                                 bool bSimple
                             );
 
     SvxIconChoiceCtrlEntry* SearchRow(
                                 sal_uInt16 nRow,
-                                sal_uInt16 nRight,
                                 sal_uInt16 nLeft,
-                                sal_uInt16 nPref,
+                                sal_uInt16 nRight,
                                 bool bRight,
                                 bool bSimple
                             );

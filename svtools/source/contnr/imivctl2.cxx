@@ -111,7 +111,7 @@ void IcnCursor_Impl::Clear()
 }
 
 SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nTop, sal_uInt16 nBottom,
-    sal_uInt16, bool bDown, bool bSimple )
+    bool bDown, bool bSimple )
 {
     DBG_ASSERT(pCurEntry, "SearchCol: No reference entry");
     IconChoiceMap::iterator mapIt = xColumns->find( nCol );
@@ -159,11 +159,8 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
     }
 
     if( nTop > nBottom )
-    {
-        sal_uInt16 nTemp = nTop;
-        nTop = nBottom;
-        nBottom = nTemp;
-    }
+        std::swap(nTop, nBottom);
+
     long nMinDistance = LONG_MAX;
     SvxIconChoiceCtrlEntry* pResult = nullptr;
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
@@ -190,7 +187,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchCol(sal_uInt16 nCol, sal_uInt16 nT
 }
 
 SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nLeft, sal_uInt16 nRight,
-    sal_uInt16, bool bRight, bool bSimple )
+    bool bRight, bool bSimple )
 {
     DBG_ASSERT(pCurEntry,"SearchRow: No reference entry");
     IconChoiceMap::iterator mapIt = xRows->find( nRow );
@@ -238,11 +235,8 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::SearchRow(sal_uInt16 nRow, sal_uInt16 nL
 
     }
     if( nRight < nLeft )
-    {
-        sal_uInt16 nTemp = nRight;
-        nRight = nLeft;
-        nLeft = nTemp;
-    }
+        std::swap(nRight, nLeft);
+
     long nMinDistance = LONG_MAX;
     SvxIconChoiceCtrlEntry* pResult = nullptr;
     for( sal_uInt16 nCur = 0; nCur < nCount; nCur++ )
@@ -298,9 +292,9 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     // neighbor in same row?
     if( bRight )
         pResult = SearchRow(
-            nY, nX, sal::static_int_cast< sal_uInt16 >(nCols-1), nX, true, true );
+            nY, nX, sal::static_int_cast< sal_uInt16 >(nCols-1), true, true );
     else
-        pResult = SearchRow( nY, nX ,0, nX, false, true );
+        pResult = SearchRow( nY, 0, nX, false, true );
     if( pResult )
         return pResult;
 
@@ -322,7 +316,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoLeftRight( SvxIconChoiceCtrlEntry* pCt
     sal_uInt16 nRowMax = nY;
     do
     {
-        SvxIconChoiceCtrlEntry* pEntry = SearchCol((sal_uInt16)nCurCol,nRowMin,nRowMax,nY,true, false);
+        SvxIconChoiceCtrlEntry* pEntry = SearchCol((sal_uInt16)nCurCol, nRowMin, nRowMax, true, false);
         if( pEntry )
             return pEntry;
         if( nRowMin )
@@ -417,9 +411,9 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     // neighbor in same column?
     if( bDown )
         pResult = SearchCol(
-            nX, nY, sal::static_int_cast< sal_uInt16 >(nRows-1), nY, true, true );
+            nX, nY, sal::static_int_cast< sal_uInt16 >(nRows-1), true, true );
     else
-        pResult = SearchCol( nX, nY ,0, nY, false, true );
+        pResult = SearchCol( nX, 0, nY, false, true );
     if( pResult )
         return pResult;
 
@@ -441,7 +435,7 @@ SvxIconChoiceCtrlEntry* IcnCursor_Impl::GoUpDown( SvxIconChoiceCtrlEntry* pCtrlE
     sal_uInt16 nColMax = nX;
     do
     {
-        SvxIconChoiceCtrlEntry* pEntry = SearchRow((sal_uInt16)nCurRow,nColMin,nColMax,nX,true, false);
+        SvxIconChoiceCtrlEntry* pEntry = SearchRow((sal_uInt16)nCurRow, nColMin, nColMax, true, false);
         if( pEntry )
             return pEntry;
         if( nColMin )
