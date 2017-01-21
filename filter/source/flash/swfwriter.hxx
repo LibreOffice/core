@@ -247,7 +247,7 @@ public:
         An invisible shape with the size of the document is placed at depth 1
         and it clips all shapes on depth 2 and 3.
     */
-    Writer( sal_Int32 nDocWidthInput, sal_Int32 nDocHeightInput, sal_Int32 nDocWidth, sal_Int32 nDocHeight, sal_Int32 nJPEGcompressMode );
+    Writer( sal_Int32 nTWIPWidthOutput, sal_Int32 nTWIPHeightOutput, sal_Int32 nDocWidth, sal_Int32 nDocHeight, sal_Int32 nJPEGcompressMode );
     ~Writer();
 
     void storeTo( css::uno::Reference< css::io::XOutputStream > &xOutStream );
