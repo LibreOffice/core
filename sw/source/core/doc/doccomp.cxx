@@ -234,8 +234,8 @@ private:
         sal_uLong CheckDiag( sal_uLong nStt1, sal_uLong nEnd1,
                         sal_uLong nStt2, sal_uLong nEnd2, sal_uLong* pCost );
     public:
-        CompareSequence( CompareData& rData1, CompareData& rData2,
-                        const MovedData& rD1, const MovedData& rD2 );
+        CompareSequence( CompareData& rD1, CompareData& rD2,
+                        const MovedData& rMD1, const MovedData& rMD2 );
         ~CompareSequence();
     };
 
