@@ -307,14 +307,18 @@ static void create_pixmap(struct splash* splash)
         }
         else if ( bpp == 24 )
         {
-            if ( machine_byte_order == byte_order && byte_order == LSBFirst )
+            if (machine_byte_order == byte_order)
+            {
+#if defined OSL_LITENDIAN
                 COPY_IN_OUT( 3, memcpy(out, &pixel, sizeof (color_t)); out += 3; )
-            else if ( machine_byte_order == byte_order && byte_order == MSBFirst )
+#else /* OSL_BIGENDIAN */
                 COPY_IN_OUT( 3, tmp = pixel;
                              *( (uint8_t *)out     ) = *( (uint8_t *)(&tmp) + 1 );
                              *( (uint8_t *)out + 1 ) = *( (uint8_t *)(&tmp) + 2 );
                              *( (uint8_t *)out + 2 ) = *( (uint8_t *)(&tmp) + 3 );
                              out += 3; )
+#endif
+            }
             else
                 COPY_IN_OUT( 3, tmp = pixel;
                              *( (uint8_t *)out     ) = *( (uint8_t *)(&tmp) + 3 );
