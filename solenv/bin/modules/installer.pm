@@ -1540,7 +1540,105 @@ sub run {
                 if ( -d $mergeidtdir ) { installer::systemactions::remove_complete_directory($mergeidtdir, 1); }
                 installer::systemactions::create_directory($mergeidtdir);
                 installer::systemactions::copy_one_file($installdir . $installer::globals::separator . $mergedbname, $mergeidtdir . $installer::globals::separator . $mergedbname);
-                $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database($mergemodulesarrayref, $filesinproductlanguageresolvedarrayref, $mergeidtdir . $installer::globals::separator . $mergedbname, $languagestringref, $allvariableshashref, $includepatharrayref, $allupdatesequences, $allupdatelastsequences, $allupdatediskids);
+
+                installer::logger::print_message( "... Before main merge module invocation ...\n" );
+
+                # TODO(davido): Pass in a container to gather directory table variables
+                # in merge module
+                $filesinproductlanguageresolvedarrayref = installer::windows::mergemodule::merge_mergemodules_into_msi_database(
+                    $mergemodulesarrayref,
+                    $filesinproductlanguageresolvedarrayref,
+                    $mergeidtdir . $installer::globals::separator . $mergedbname,
+                    $languagestringref,
+                    $allvariableshashref,
+                    $includepatharrayref,
+                    $allupdatesequences,
+                    $allupdatelastsequences,
+                    $allupdatediskids);
+
+                installer::logger::print_message( "... After main merge module invocation ...\n" );
+
+                # Emit custom actions to establish variables that prefixed with standard directory names.
+                # See the spec: "Authoring Merge Module Directory Tables":
+                # https://msdn.microsoft.com/en-us/library/windows/desktop/aa367787%28v=vs.85%29.aspx
+                #
+                # Replicate it here, in case it disappeared from the net
+                #
+                # "When a predefined directory is included in a merge module, the merge tool automatically
+                # adds a Custom Action Type 51 to the target database. The merge module author must ensure
+                # that a CustomAction table is also included. The CustomAction table may be empty, but this
+                # table is required to exist in the target database and ensures that the modified predefined
+                # directories are written to the correct locations. For example, when a system directory is
+                # included in a merge module, the merge module author must ensure that a Custom Action table
+                # exists.
+                #
+                # Note that the matching algorithm for the generation of these type 51 custom actions only
+                # checks that the directory name begins with one of the predefined SystemFolder properties.
+                # It does not verify that the directory name exactly equals the directory property. Any
+                # directory beginning with one of these standard folder names gets a type 51 custom action,
+                # even if the rest of the name is not a GUID. Authors need to take care that this does not
+                # generate false positive matches, and unintended custom action generation, on derivative
+                # primary keys that begin with one of the SystemFolder properties."
+                #
+                # Implementation details:
+                #
+                # We use the existing facility for emitting the custom action table events including referencing
+                # them in the corresponding sequence tables. Given that the specification above doesn't mention
+                # what sequence table should be be referencing this emitted custom action, we reversed engineer
+                # this information from WiX toolkit. Merging the VC++ CRT module with WiX toolkit and investigating
+                # the resulting MSI with Orca MSI reader, reveals that these sequence tables were referencing
+                # emitted custom action:
+                #
+                # * AdminExecuteSequence
+                # * AdminUISequence
+                # * AdvtExecuteSequence
+                # * InstallExecuteSequence
+                # * InstallUISequence
+                #
+                # Replicate this behaviour here as well.
+                #
+                # Emitted custom action content (here example for MSVS 2017 merge module, x64 bit):
+                #
+                # System64Folder.3CFBED52_9B44_3A4D_953C_90E456671BA1   51      System64Folder.3CFBED52_9B44_3A4D_953C_90E456671BA1     [System64Folder]
+                # System64Folder_amd64_VC.3CFBED52_9B44_3A4D_953C_90E456671BA1  51      System64Folder_amd64_VC.3CFBED52_9B44_3A4D_953C_90E456671BA1    [System64Folder]
+                # And the resulting entries in the sequence table, here example for InstallExecuteSequence.idt:
+                #
+                # System64Folder.3CFBED52_9B44_3A4D_953C_90E456671BA1           1
+                # System64Folder_amd64_VC.3CFBED52_9B44_3A4D_953C_90E456671BA1          1
+                #
+                # Rendering in the tables is achieved by programmaticla emulating of declarative
+                # custom action in in SCP module. Consider this similar action:
+                #
+                # Name = "MigrateInstallPath";
+                # Typ = "321";
+                # Source = "shlxtmsi.dll";
+                # Target = "MigrateInstallPath";
+                # Inbinarytable = 1;
+                # Assignment1 = ("InstallExecuteSequence", "", "CostInitialize");
+                # Assignment2 = ("InstallUISequence", "", "CostInitialize");
+                #
+                # we programmatically instantiate the following data structure
+                # to emit custom action System64Folder.3CFBED52_9B44_3A4D_953C_90E456671BA1:
+                #
+                # Name = "System64Folder.3CFBED52_9B44_3A4D_953C_90E456671BA1"
+                # Typ = "51"
+                # Source = "System64Folder.3CFBED52_9B44_3A4D_953C_90E456671BA1"
+                # Target = "[System64Folder]"
+                # Inbinarytable = 1 # TODO(davido): No idea what is this for
+                # Assignment1 = ("AdminExecuteSequence", "", "CostInitialize")
+                # Assignment2 = ("InstallExecuteSequence", "", "CostInitialize")
+                # Assignment3 = ("InstallUISequence", "", "CostInitialize")
+                #
+                # We probably do not care, but thise sequence tables are not covered
+                # by existing addcustomactions() method:
+                # * AdminUISequence
+                # * AdvtExecuteSequence
+
+                # TODO(davido): Iterate over the returned container with diretory names
+                # check if they start with the standard directory names and emit the
+                # customaction array, and pass a refrence to it to the addcustomaction
+                # method
+
                 installer::systemactions::copy_one_file($mergeidtdir . $installer::globals::separator . $mergedbname, $installdir . $installer::globals::separator . $mergedbname);
 
                 installer::windows::msiglobal::rename_msi_database_in_installset($defaultlanguage, $installdir, $allvariableshashref);
