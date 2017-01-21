@@ -51,6 +51,12 @@
 #include <algorithm>
 #include <memory>
 
+// Glyph Flags
+#define GF_FONTMASK  0xF0000000
+#define GF_FONTSHIFT 28
+#define GF_DROPPED   0xFFFFFFFF
+
+
 std::ostream &operator <<(std::ostream& s, ImplLayoutArgs &rArgs)
 {
 #ifndef SAL_LOG_INFO

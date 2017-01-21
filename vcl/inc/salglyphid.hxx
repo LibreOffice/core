@@ -21,11 +21,6 @@
 
 typedef sal_uInt32 sal_GlyphId;
 
-// Glyph Flags
-#define GF_FONTMASK 0xF0000000
-#define GF_FONTSHIFT 28
-
-#define GF_DROPPED  0xFFFFFFFF
 
 #endif // INCLUDED_VCL_INC_SALGLYPHID_HXX
 
