@@ -106,13 +106,15 @@ public class _XFunctionDescriptions extends MultiMethodTest {
 
         log.println("OK.");
 
-        try {
-            log.println("Now trying to get description with wrong id ... ");
-            oObj.getById(-1);
-            bResult = false;
-            log.println("Exception expected! - FAILED");
-        } catch (com.sun.star.lang.IllegalArgumentException e) {
-            log.println("Expected exception " + e + " - OK!");
+        if (bResult) {
+            try {
+                log.println("Now trying to get description with wrong id ... ");
+                oObj.getById(-1);
+                bResult = false;
+                log.println("Exception expected! - FAILED");
+            } catch (com.sun.star.lang.IllegalArgumentException e) {
+                log.println("Expected exception " + e + " - OK!");
+            }
         }
 
         tRes.tested("getById()", bResult);

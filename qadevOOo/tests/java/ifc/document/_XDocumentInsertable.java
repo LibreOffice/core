@@ -161,20 +161,21 @@ public class _XDocumentInsertable extends MultiMethodTest {
             result = false ;
         }
 
-        try {
-            PropertyValue [] szEmptyArgs = new PropertyValue [0];
-            String docURL = "file:///c:/ThisIsAnInvaldURL";
-            log.println("Inserting document from URL '" + docURL + "'");
-            oObj.insertDocumentFromURL(docURL, szEmptyArgs);
+        if (result) {
+            try {
+                PropertyValue [] szEmptyArgs = new PropertyValue [0];
+                String docURL = "file:///c:/ThisIsAnInvaldURL";
+                log.println("Inserting document from URL '" + docURL + "'");
+                oObj.insertDocumentFromURL(docURL, szEmptyArgs);
 
-            result=false;
+                result=false;
 
-        } catch (IOException ex) {
-            log.println("expected exception was thrown -> ok");
-        } catch (com.sun.star.lang.IllegalArgumentException ex) {
-            log.println("expected exception was thrown -> ok");
+            } catch (IOException ex) {
+                log.println("expected exception was thrown -> ok");
+            } catch (com.sun.star.lang.IllegalArgumentException ex) {
+                log.println("expected exception was thrown -> ok");
+            }
         }
-
 
         tRes.tested("insertDocumentFromURL()", result);
     }
@@ -187,4 +188,3 @@ public class _XDocumentInsertable extends MultiMethodTest {
         disposeEnvironment();
     }
 }  // finish class _XDocumentInsertable
-
