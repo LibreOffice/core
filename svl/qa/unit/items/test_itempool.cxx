@@ -135,7 +135,9 @@ void PoolItemTest::testItemSet()
 
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)1, aIter.GetFirstWhich());
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)7, aIter.GetLastWhich());
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)1, aIter.FirstItem()->Which());
+    const SfxPoolItem *pFirstItem = aIter.FirstItem();
+    CPPUNIT_ASSERT(pFirstItem);
+    CPPUNIT_ASSERT_EQUAL((sal_uInt16)1, pFirstItem->Which());
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)2, aIter.NextItem()->Which());
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, aIter.NextItem()->Which());
     CPPUNIT_ASSERT_EQUAL((sal_uInt16)5, aIter.NextItem()->Which());
