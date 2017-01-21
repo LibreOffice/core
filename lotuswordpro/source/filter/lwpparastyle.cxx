@@ -346,7 +346,7 @@ void LwpParaStyle::ApplyParaBorder(XFParaStyle* pParaStyle, LwpParaBorderOverrid
         // apply 4 borders respectively
         LwpBorderStuff::BorderType pType[] = { LwpBorderStuff::LEFT, LwpBorderStuff::RIGHT,
             LwpBorderStuff::TOP, LwpBorderStuff::BOTTOM };
-        float pMarginValue[4];
+        float pMarginValue[4] = { 0.0, 0.0, 0.0, 0.0 };
 
         for (sal_uInt8 nC = 0; nC < 4; nC++)
         {
