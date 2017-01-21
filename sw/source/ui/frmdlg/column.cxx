@@ -235,31 +235,11 @@ IMPL_LINK(SwColumnDlg, ObjectListBoxHdl, ListBox&, rBox, void)
 {
     ObjectHdl(&rBox);
 }
+
 void SwColumnDlg::ObjectHdl(ListBox* pBox)
 {
-    SfxItemSet* pSet = nullptr;
-    switch(nOldSelection)
-    {
-        case LISTBOX_SELECTION  :
-            pSet = pSelectionSet;
-        break;
-        case LISTBOX_SECTION    :
-            pSet = pSectionSet;
-            bSectionChanged = true;
-        break;
-        case LISTBOX_SECTIONS   :
-            pSet = pSectionSet;
-            bSelSectionChanged = true;
-        break;
-        case LISTBOX_PAGE       :
-            pSet = pPageSet;
-            bPageChanged = true;
-        break;
-        case LISTBOX_FRAME:
-            pSet = pFrameSet;
-            bFrameChanged = true;
-        break;
-    }
+    SfxItemSet* pSet = EvalCurrentSelection();
+
     if(pBox)
     {
         pTabPage->FillItemSet(pSet);
@@ -300,29 +280,7 @@ void SwColumnDlg::ObjectHdl(ListBox* pBox)
 IMPL_LINK_NOARG(SwColumnDlg, OkHdl, Button*, void)
 {
     // evaluate current selection
-    SfxItemSet* pSet = nullptr;
-    switch(nOldSelection)
-    {
-        case LISTBOX_SELECTION  :
-            pSet = pSelectionSet;
-        break;
-        case LISTBOX_SECTION    :
-            pSet = pSectionSet;
-            bSectionChanged = true;
-        break;
-        case LISTBOX_SECTIONS   :
-            pSet = pSectionSet;
-            bSelSectionChanged = true;
-        break;
-        case LISTBOX_PAGE       :
-            pSet = pPageSet;
-            bPageChanged = true;
-        break;
-        case LISTBOX_FRAME:
-            pSet = pFrameSet;
-            bFrameChanged = true;
-        break;
-    }
+    SfxItemSet* pSet = EvalCurrentSelection();
     pTabPage->FillItemSet(pSet);
 
     if(pSelectionSet && SfxItemState::SET == pSelectionSet->GetItemState(RES_COL))
@@ -375,6 +333,36 @@ IMPL_LINK_NOARG(SwColumnDlg, OkHdl, Button*, void)
         rWrtShell.EndAction();
     }
     EndDialog(RET_OK);
+}
+
+SfxItemSet* SwColumnDlg::EvalCurrentSelection(void)
+{
+    SfxItemSet* pSet = nullptr;
+
+    switch(nOldSelection)
+    {
+        case LISTBOX_SELECTION  :
+            pSet = pSelectionSet;
+        break;
+        case LISTBOX_SECTION    :
+            pSet = pSectionSet;
+            bSectionChanged = true;
+        break;
+        case LISTBOX_SECTIONS   :
+            pSet = pSectionSet;
+            bSelSectionChanged = true;
+        break;
+        case LISTBOX_PAGE       :
+            pSet = pPageSet;
+            bPageChanged = true;
+        break;
+        case LISTBOX_FRAME:
+            pSet = pFrameSet;
+            bFrameChanged = true;
+        break;
+    }
+
+    return pSet;
 }
 
 #if OSL_DEBUG_LEVEL < 2
