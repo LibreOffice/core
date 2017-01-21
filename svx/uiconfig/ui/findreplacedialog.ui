@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Generated with glade 3.18.3 -->
+<!-- Generated with glade 3.20.0 -->
 <interface>
   <requires lib="gtk+" version="3.0"/>
   <object class="GtkDialog" id="FindReplaceDialog">
     <property name="can_focus">False</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Find &amp; Replace</property>
+    <property name="resizable">False</property>
     <property name="type_hint">dialog</property>
     <child internal-child="vbox">
       <object class="GtkBox" id="dialog-vbox3">
@@ -127,15 +128,14 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="label4">
-                            <property name="width_request">80</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="xalign">0</property>
-                            <property name="yalign">0.40000000596046448</property>
                             <property name="label" translatable="yes">_Find:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
+                            <property name="yalign">0.40000000596046448</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -150,9 +150,9 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="hexpand">True</property>
+                            <property name="wrap">True</property>
                             <property name="xalign">0</property>
                             <property name="yalign">0.55000001192092896</property>
-                            <property name="wrap">True</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -164,9 +164,9 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="wrap">True</property>
                             <property name="ellipsize">end</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
@@ -271,6 +271,18 @@
                             <property name="top_attach">3</property>
                           </packing>
                         </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -358,14 +370,13 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="label5">
-                            <property name="width_request">80</property>
                             <property name="visible">True</property>
                             <property name="can_focus">False</property>
                             <property name="halign">start</property>
                             <property name="valign">center</property>
-                            <property name="xalign">0</property>
                             <property name="label" translatable="yes">Re_place:</property>
                             <property name="use_underline">True</property>
+                            <property name="xalign">0</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
                             </attributes>
@@ -381,13 +392,19 @@
                             <property name="can_focus">False</property>
                             <property name="no_show_all">True</property>
                             <property name="hexpand">True</property>
-                            <property name="xalign">0</property>
                             <property name="wrap">True</property>
+                            <property name="xalign">0</property>
                           </object>
                           <packing>
                             <property name="left_attach">1</property>
                             <property name="top_attach">2</property>
                           </packing>
+                        </child>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <placeholder/>
                         </child>
                       </object>
                     </child>
@@ -522,7 +539,7 @@
                         <child>
                           <object class="GtkLabel" id="label7">
                             <property name="can_focus">False</property>
-                            <property name="label" translatable="no">Component Label</property>
+                            <property name="label">Component Label</property>
                             <property name="use_underline">True</property>
                             <attributes>
                               <attribute name="weight" value="bold"/>
@@ -541,7 +558,7 @@
                             <property name="spacing">12</property>
                             <child>
                               <object class="GtkButton" id="component1">
-                                <property name="label" translatable="no">component button 1</property>
+                                <property name="label">component button 1</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="no_show_all">True</property>
@@ -554,7 +571,7 @@
                             </child>
                             <child>
                               <object class="GtkButton" id="component2">
-                                <property name="label" translatable="no">component button 2</property>
+                                <property name="label">component button 2</property>
                                 <property name="can_focus">True</property>
                                 <property name="receives_default">True</property>
                                 <property name="no_show_all">True</property>
@@ -579,7 +596,7 @@
                 <child type="label">
                   <object class="GtkLabel" id="label6">
                     <property name="can_focus">False</property>
-                    <property name="label" translatable="no">Component Label</property>
+                    <property name="label">Component Label</property>
                     <property name="use_underline">True</property>
                     <attributes>
                       <attribute name="weight" value="bold"/>
@@ -779,6 +796,7 @@
                                   <object class="GtkBox" id="box3">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="vexpand">True</property>
                                     <property name="spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="similarity">
@@ -786,6 +804,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
+                                        <property name="vexpand">True</property>
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
@@ -804,6 +823,7 @@
                                         <property name="no_show_all">True</property>
                                         <property name="halign">end</property>
                                         <property name="hexpand">True</property>
+                                        <property name="vexpand">True</property>
                                         <property name="use_underline">True</property>
                                       </object>
                                       <packing>
@@ -822,6 +842,7 @@
                                   <object class="GtkBox" id="box5">
                                     <property name="visible">True</property>
                                     <property name="can_focus">False</property>
+                                    <property name="vexpand">True</property>
                                     <property name="spacing">12</property>
                                     <child>
                                       <object class="GtkCheckButton" id="soundslike">
@@ -829,6 +850,7 @@
                                         <property name="can_focus">True</property>
                                         <property name="receives_default">False</property>
                                         <property name="no_show_all">True</property>
+                                        <property name="vexpand">True</property>
                                         <property name="use_underline">True</property>
                                         <property name="xalign">0</property>
                                         <property name="draw_indicator">True</property>
@@ -846,8 +868,8 @@
                                         <property name="receives_default">True</property>
                                         <property name="no_show_all">True</property>
                                         <property name="halign">end</property>
-                                        <property name="margin_right">25</property>
                                         <property name="hexpand">True</property>
+                                        <property name="vexpand">True</property>
                                         <property name="use_underline">True</property>
                                       </object>
                                       <packing>
@@ -942,9 +964,9 @@
                                       <object class="GtkLabel" id="searchinlabel">
                                         <property name="can_focus">False</property>
                                         <property name="no_show_all">True</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Search i_n:</property>
                                         <property name="use_underline">True</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -984,9 +1006,9 @@
                                       <object class="GtkLabel" id="searchdir">
                                         <property name="can_focus">False</property>
                                         <property name="no_show_all">True</property>
-                                        <property name="xalign">0</property>
                                         <property name="label" translatable="yes">Direction:</property>
                                         <property name="use_underline">True</property>
+                                        <property name="xalign">0</property>
                                       </object>
                                       <packing>
                                         <property name="expand">False</property>
@@ -1100,6 +1122,9 @@
       <action-widget response="0">help</action-widget>
       <action-widget response="0">close</action-widget>
     </action-widgets>
+    <child>
+      <placeholder/>
+    </child>
   </object>
   <object class="GtkSizeGroup" id="sizegroup2">
     <property name="ignore_hidden">True</property>
