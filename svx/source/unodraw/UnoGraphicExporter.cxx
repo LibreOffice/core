@@ -721,9 +721,9 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 
                 // create a view
                 std::unique_ptr< SdrView > pView;
-                if( dynamic_cast<FmFormModel*>( mpDoc ) !=  nullptr  )
+                if (FmFormModel *pFormModel = dynamic_cast<FmFormModel*>(mpDoc))
                 {
-                    pView.reset(new FmFormView( dynamic_cast<FmFormModel*>( mpDoc ), aVDev ) );
+                    pView.reset(new FmFormView(pFormModel, aVDev));
                 }
                 else
                 {
