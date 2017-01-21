@@ -64,6 +64,7 @@ class SwColumnDlg : public SfxModalDialog
     DECL_LINK(ObjectListBoxHdl, ListBox&, void);
     DECL_LINK(OkHdl, Button*, void);
     void ObjectHdl(ListBox*);
+    SfxItemSet* EvalCurrentSelection(void);
 
 public:
     SwColumnDlg(vcl::Window* pParent, SwWrtShell& rSh);
