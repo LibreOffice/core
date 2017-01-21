@@ -177,8 +177,7 @@ public class ProcessHandler
 
     /**
      * Executes the command immediately returns. The process
-     * remains in running state. Control of its state should
-     * be made by <code>waitFor</code> methods.
+     * remains in running state.
      *
      * @return <code>true</code> if process was successfully
      * started.
@@ -281,100 +280,6 @@ public class ProcessHandler
         dbg("execute: flush io-streams");
 
         flushInput();
-    }
-
-
-
-    /**
-     * This method is useful when the process was executed
-     * asynchronously. Waits during specified time for process
-     * to exit and return its status.
-     *
-     * @param timeout      > 0
-     *                      Waits specified time in miliSeconds for
-     *                      process to exit and return its status.
-     *
-     *                      = 0
-     *                      Waits for the process to end regulary
-     *
-     *                      < 0
-     *                      Kills the process immediately
-     *
-     * @return <code>true</code> if process correctly exited
-     * (exit code doesn't affect to this result).
-     */
-    private boolean waitFor(long timeout)
-    {
-        return waitFor(timeout, true);
-    }
-
-    private boolean waitFor(long timeout, boolean bKillProcessAfterTimeout)
-    {
-        if (isFinished())
-        {
-            return true;
-        }
-        if (!isStarted())
-        {
-            return false;
-        }
-
-        if (timeout == 0)
-        {
-            try
-            {
-                m_aProcess.waitFor();
-            }
-            catch (InterruptedException e)
-            {
-                log.println("The process was interrupted: " + e);
-            }
-            isFinished = true;
-            try
-            {
-                exitValue = m_aProcess.exitValue();
-            }
-            catch (IllegalThreadStateException e)
-            {
-            }
-        }
-        else
-        {
-            try
-            {
-                while (!isFinished && timeout > 0)
-                {
-                    isFinished = true;
-                    Thread.sleep(1000);
-                    timeout -= 1000;
-                    try
-                    {
-                        exitValue = m_aProcess.exitValue(); // throws exception if not finished
-                    }
-                    catch (IllegalThreadStateException e)
-                    {
-                        isFinished = false;
-                    }
-                }
-                if (timeout < 0)
-                {
-                    log.println("The process has timed out!");
-                }
-            }
-            catch (InterruptedException ex)
-            {
-                log.println("The process was interrupted: " + ex);
-            }
-        }
-
-        if (bKillProcessAfterTimeout && !isFinished)
-        {
-            log.println("Going to destroy the process!!");
-            m_aProcess.destroy();
-            log.println("Process has been destroyed!");
-        }
-
-        return isFinished();
     }
 
     private void flushInput()
