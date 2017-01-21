@@ -130,7 +130,7 @@ bool StgCompObjStream::Load()
                 //all platforms and envs
                 //https://bz.apache.org/ooo/attachment.cgi?id=68668
                 //for a good edge-case example
-                m_aUserName = nStrLen ? OUString( p.get(), nStrLen, RTL_TEXTENCODING_MS_1252 ) : OUString();
+                m_aUserName = OUString(p.get(), nStrLen, RTL_TEXTENCODING_MS_1252);
                 m_nCbFormat = ReadClipboardFormat( *this );
             }
             else
