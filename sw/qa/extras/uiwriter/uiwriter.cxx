@@ -3372,6 +3372,7 @@ void SwUiWriterTest::testTdf89954()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     pWrtShell->EndPara();
     SwXTextDocument* pXTextDocument = dynamic_cast<SwXTextDocument *>(mxComponent.get());
+    CPPUNIT_ASSERT(pXTextDocument);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 't', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 'e', 0);
     pXTextDocument->postKeyEvent(LOK_KEYEVENT_KEYINPUT, 's', 0);
