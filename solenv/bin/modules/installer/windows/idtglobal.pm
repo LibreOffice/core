@@ -1834,4 +1834,29 @@ sub setbidiattributes
     push(@installer::globals::logfileinfo, $infoline);
 }
 
+###############################################
+# Emit custom action 51 for setting standard
+# directory variable. Reference to a hash is
+# returned, represented the custom action.
+# This can be passed in to addcustomaction
+# method.
+###############################################
+
+sub emit_custom_action_for_standard_directory
+{
+    my ($dir, $var) = @_;
+    my %action = ();
+
+    $action{'Name'} = $dir;
+    $action{'Typ'} = "51";
+    $action{'Source'} = $dir;
+    $action{'Target'} = "[$var]";
+    $action{'Styles'} = "NO_FILE";
+    $action{'Assignment1'} = '("AdminExecuteSequence", "", "CostInitialize")';
+    $action{'Assignment2'} = '("InstallExecuteSequence", "", "CostInitialize")';
+    $action{'Assignment3'} = '("InstallUISequence", "", "CostInitialize")';
+
+    return \%action;
+}
+
 1;

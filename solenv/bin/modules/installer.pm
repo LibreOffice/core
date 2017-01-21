@@ -519,8 +519,14 @@ sub run {
                 if ( $installer::globals::updatedatabase )
                 {
                     ($uniquefilename, $revuniquefilename, $revshortfilename, $allupdatesequences, $allupdatecomponents, $allupdatefileorder, $allupdatecomponentorder, $shortdirname, $componentid, $componentidkeypath, $alloldproperties, $allupdatelastsequences, $allupdatediskids) = installer::windows::update::create_database_hashes($refdatabase);
-                    if ( $mergemodulesarrayref > -1 ) { installer::windows::update::readmergedatabase($mergemodulesarrayref, $languagestringref, $includepatharrayref); }
                 }
+            }
+
+            # Always analyze the merge module.
+            # We need to investigate the directory table in merge module to emit
+            # custom action for directory names that start with standard prefix
+            if ( $mergemodulesarrayref > -1 ) {
+                installer::windows::update::readmergedatabase($mergemodulesarrayref, $languagestringref, $includepatharrayref);
             }
         }
 
@@ -1509,6 +1515,24 @@ sub run {
                 # Adding Windows Installer CustomActions
 
                 installer::windows::idtglobal::addcustomactions($languageidtdir, $windowscustomactionsarrayref, $filesinproductlanguageresolvedarrayref);
+
+                installer::logger::print_message( "... Analyze if custom action table must be patched with merge module directory names ...\n" );
+
+                my @customactions = ();
+                for my $e (keys %installer::globals::merge_directory_hash) {
+                    my $var;
+                    installer::logger::print_message( "... analyzing directory from merge module: $e\n");
+                    if (installer::windows::directory::has_standard_directory_prefix($e, \$var)) {
+                        installer::logger::print_message( "... emitting custom action to set the var $e to directory: $var\n");
+                        push(@customactions, installer::windows::idtglobal::emit_custom_action_for_standard_directory($e, $var));
+                    }
+                }
+
+                if (@customactions) {
+                    installer::logger::print_message( "... Patching custom action table with merge module directory names ...\n" );
+                    #print Dumper(@customactions);
+                    installer::windows::idtglobal::addcustomactions($languageidtdir, \@customactions, $filesinproductlanguageresolvedarrayref);
+                }
 
                 # Then the language specific msi database can be created
 
