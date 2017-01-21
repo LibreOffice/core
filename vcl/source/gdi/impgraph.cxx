@@ -293,14 +293,17 @@ bool ImpGraphic::operator==( const ImpGraphic& rImpGraphic ) const
     return bRet;
 }
 
-void ImpGraphic::ImplClearGraphics( bool bCreateSwapInfo )
+void ImpGraphic::ImplCreateSwapInfo()
 {
-    if( bCreateSwapInfo && !ImplIsSwapOut() )
+    if (!ImplIsSwapOut())
     {
         maSwapInfo.maPrefMapMode = ImplGetPrefMapMode();
         maSwapInfo.maPrefSize = ImplGetPrefSize();
     }
+}
 
+void ImpGraphic::ImplClearGraphics()
+{
     maEx.Clear();
     maMetaFile.Clear();
 
@@ -345,11 +348,10 @@ void ImpGraphic::ImplClear()
     mbSwapOut = false;
 
     // cleanup
-    ImplClearGraphics( false );
+    ImplClearGraphics();
     meType = GraphicType::NONE;
     mnSizeBytes = 0;
 }
-
 
 void ImpGraphic::ImplSetDefaultType()
 {
@@ -1180,7 +1182,8 @@ bool ImpGraphic::ImplSwapOut()
 
 void ImpGraphic::ImplSwapOutAsLink()
 {
-    ImplClearGraphics( true );
+    ImplCreateSwapInfo();
+    ImplClearGraphics();
     mbSwapOut = true;
 }
 
@@ -1198,7 +1201,8 @@ bool ImpGraphic::ImplSwapOut( SvStream* xOStm )
 
             if( !xOStm->GetError() )
             {
-                ImplClearGraphics( true );
+                ImplCreateSwapInfo();
+                ImplClearGraphics();
                 bRet = mbSwapOut = true;
             }
         }

@@ -69,7 +69,8 @@ private:
     bool                operator==( const ImpGraphic& rImpGraphic ) const;
     bool                operator!=( const ImpGraphic& rImpGraphic ) const { return !( *this == rImpGraphic ); }
 
-    void                ImplClearGraphics( bool bCreateSwapInfo );
+    void                ImplCreateSwapInfo();
+    void                ImplClearGraphics();
     void                ImplClear();
 
     GraphicType         ImplGetType() const { return meType;}
