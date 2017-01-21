@@ -120,7 +120,7 @@ private:
 
 public:
     OpenGLCfg();
-    ~OpenGLCfg();
+    ~OpenGLCfg() noexcept(false);
 
     bool useOpenGL() const;
     bool forceOpenGL() const;
@@ -144,7 +144,7 @@ void OpenGLCfg::reset()
     mbModified = false;
 }
 
-OpenGLCfg::~OpenGLCfg()
+OpenGLCfg::~OpenGLCfg() noexcept(false)
 {
     if (mbModified)
     {
