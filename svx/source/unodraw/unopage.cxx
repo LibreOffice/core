@@ -59,17 +59,14 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::drawing;
 
 UNO3_GETIMPLEMENTATION_IMPL( SvxDrawPage );
-SvxDrawPage::SvxDrawPage( SdrPage* pInPage ) throw()
-: mrBHelper( getMutex() )
-, mpPage( pInPage )
-, mpModel( nullptr )
-{
-    // register at broadcaster
-    if( mpPage )
-        mpModel = mpPage->GetModel();
 
-    // create (hidden) view
-    mpView = new SdrView( mpModel );
+SvxDrawPage::SvxDrawPage(SdrPage* pInPage) throw()
+    : mrBHelper(getMutex())
+    , mpPage(pInPage)
+    , mpModel(mpPage->GetModel())  // register at broadcaster
+    , mpView(new SdrView(mpModel)) // create (hidden) view
+
+{
     mpView->SetDesignMode();
 }
 
