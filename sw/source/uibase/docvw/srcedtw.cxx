@@ -249,6 +249,7 @@ SwSrcEditWindow::SwSrcEditWindow( vcl::Window* pParent, SwSrcView* pParentView )
     m_nCurTextWidth(0),
     m_nStartLine(USHRT_MAX),
     m_eSourceEncoding(osl_getThreadTextEncoding()),
+    m_bReadonly(false),
     m_bHighlighting(false),
     m_aSyntaxIdle("sw uibase SwSrcEditWindow Syntax")
 {
