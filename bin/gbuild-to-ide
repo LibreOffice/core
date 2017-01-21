@@ -22,26 +22,6 @@ import traceback
 import collections
 import subprocess
 
-class GbuildLinkTarget:
-    def __init__(self, name, location, sources, include, include_sys, defs, cxxobjects, cxxflags, linked_libs,
-                 asmobjects, cflags, gencobjects, gencxxobjects, ilibtarget, linked_static_libs, linktarget,
-                 objcflags, objcobjects, objcxxflags, objcxxobjects, yaccobjects, build_type):
-        (self.name, self.location, self.include,
-         self.include_sys, self.defs, self.cxxobjects,
-         self.cxxflags, self.linked_libs,
-         self.asmobjects, self.cflags, self.gencobjects,
-         self.gencxxobjects, self.ilibtarget, self.linked_static_libs,
-         self.linktarget, self.objcflags, self.objcobjects,
-         self.objcxxflags, self.objcxxobjects, self.yaccobjects,
-         self.build_type) = (name, location, include,
-                             include_sys, defs, cxxobjects,
-                             cxxflags, linked_libs, asmobjects,
-                             cflags, gencobjects, gencxxobjects,
-                             ilibtarget, linked_static_libs, linktarget,
-                             objcflags, objcobjects, objcxxflags,
-                             objcxxobjects, yaccobjects, build_type)
-        self.target_name = self.build_type + '_' + self.name
-        self.sources = sources
 
 
 class GbuildParser:
@@ -96,8 +76,6 @@ class GbuildParser:
                    'ASMOBJECTS': '.s',
                    'YACCOBJECTS': '.y',
                    'GENCOBJECTS': '.c',
-
-            # not in GbuildLinkTarget
                    'COBJECTS':      '.c',
                    'FLEXOBJECTS': '.l',
                    'JAVAOBJECTS': '.java',
@@ -115,41 +93,31 @@ class GbuildParser:
                     (foundincludes, foundisystem) = GbuildParser.__split_includes(jsondata['INCLUDE'])
                     match = GbuildParser._buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
                     location = os.path.dirname(jsondata['MAKEFILE'])
-                    sources = {}
-                    for i in jsonSrc:
-                        if i in jsondata and len(jsondata[i]) > 0:
-                            sources[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
-                        else:
-                            sources[i] = []
 
-                    # TODO: extend GbuildLinkTarget with new json keys
-                    # Find a better way instead on a zillion parameters
-                    newObj = GbuildLinkTarget(match,
-                                              location,
-                                              sources,
-                                              foundincludes,
-                                              foundisystem,
-                                              GbuildParser.__split_defs(jsondata['DEFS']),
-                                              sources['CXXOBJECTS'],
-                                              GbuildParser.__split_flags(jsondata['CXXFLAGS'], jsondata['CXXFLAGSAPPEND']),
-                                              jsondata['LINKED_LIBS'].strip().split(' '),
-                                              sources['ASMOBJECTS'],
-                                              GbuildParser.__split_flags(jsondata['CFLAGS'], jsondata['CFLAGSAPPEND']),
-                                              sources['GENCOBJECTS'],
-                                              sources['GENCXXOBJECTS'],
-                                              jsondata['ILIBTARGET'],
-                                              jsondata['LINKED_STATIC_LIBS'],
-                                              jsondata['LINKTARGET'],
-                                              GbuildParser.__split_flags(jsondata['OBJCFLAGS'], jsondata['OBJCFLAGSAPPEND']),
-                                              sources['OBJCOBJECTS'],
-                                              GbuildParser.__split_flags(jsondata['OBJCXXFLAGS'], jsondata['OBJCXXFLAGSAPPEND']),
-                                              sources['OBJCXXOBJECTS'],
-                                              sources['YACCOBJECTS'],
-                                              jsontype)
+                    # build Central data object (holds all json information is a easy accessible form
+                    obj = {'name'        : match,
+                           'location'    : location,
+                           'include'     : foundincludes,
+                           'include_sys' : foundisystem,
+                           'defs'        : GbuildParser.__split_defs(jsondata['DEFS']),
+                           'cxxflags'    : GbuildParser.__split_flags(jsondata['CXXFLAGS'], jsondata['CXXFLAGSAPPEND']),
+                           'linked_libs' : jsondata['LINKED_LIBS'].strip().split(' '),
+                           'cflags'      : GbuildParser.__split_flags(jsondata['CFLAGS'], jsondata['CFLAGSAPPEND']),
+                           'ilibtarget'  : jsondata['ILIBTARGET'],
+                            'linked_static_libs' :  jsondata['LINKED_STATIC_LIBS'],
+                            'linktarget' : jsondata['LINKTARGET'],
+                            'objcflags' :  GbuildParser.__split_flags(jsondata['OBJCFLAGS'], jsondata['OBJCFLAGSAPPEND']),
+                           'objcxxflags': GbuildParser.__split_flags(jsondata['OBJCXXFLAGS'], jsondata['OBJCXXFLAGSAPPEND']),
+                           'build_type' : jsontype,
+                           'target_name' : jsontype + '_' + match
+                    }
+                    for i in jsonSrc:
+                        obj[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
+
                     module = location.split('/')[-1]
                     if not module in moduleDict:
-                        moduleDict[module] = {'targets': set(),'headers':{}}
-                    moduleDict[module]['targets'] |= set([newObj])
+                        moduleDict[module] = {'targets': [],'headers':{}}
+                    moduleDict[module]['targets'].append(obj)
                     moduleDict[module]['headers'] =self.headers_of(module)
 
 
@@ -204,10 +172,10 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             for lib in self.target_path.keys():
                 if lib.startswith(module+'/'):
                     modulelibs.append(lib)
-            include = set()
+            include = []
             for lib in modulelibs:
                 for target in self.target_path[lib]:
-                    include |= set(target.include)
+                    include.extend(target[0]['include'])
             includedirfile.write('\n'.join(include))
             includedirfile.close()
 
@@ -226,8 +194,8 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             defineset = set()
             for lib in modulelibs:
                 for target in self.target_path[lib]:
-                    for i in target.defs.keys():
-                        tmp = str(i) +','+str(target.defs[i])
+                    for i in target[0]['defs'].keys():
+                        tmp = str(i) +','+str(target[0]['defs'][i])
                         if tmp not in defineset:
                             defineset.add(tmp)
             macrofile.write('\n'.join(defineset))
@@ -314,11 +282,11 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             if m == 'include':
                 continue
             for target in self.gbuildparser.modules[m]['targets']:
-                for cxx in target.cxxobjects:
+                for cxx in target['CXXOBJECTS']:
                     path = '/'.join(cxx.split('/')[:-1])
                     if path not in self.target_path:
-                        self.target_path[path] = set()
-                    self.target_path[path] |= set([target])
+                        self.target_path[path] = []
+                    self.target_path[path].append([target])
         self.create_include_path()
         self.create_macros()
         self.create_settings_file()
@@ -354,9 +322,9 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
         for m in self.gbuildparser.modules:
             for lib in self.gbuildparser.modules[m]['targets']:
                 entries = []
-                for file in lib.cxxobjects:
+                for file in lib['CXXOBJECTS']:
                     filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
-                    entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
+                    entry = {'directory': lib['location'], 'file': filePath, 'command': self.generateCommand(lib, filePath)}
                     entries.append(entry)
                 global_list.extend(entries)
         export_file = open('compile_commands.json', 'w')
@@ -364,7 +332,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
 
     def generateCommand(self, lib, file):
         command = 'clang++ -Wall'
-        for key, value in lib.defs.items():
+        for key, value in lib['defs'].items():
             command += ' -D'
             command += key
             if value is not None:
@@ -375,13 +343,13 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
         # one is not the same for all source files in the lib.
         command += ' -I' + os.path.dirname(file)
 
-        for include in lib.include:
+        for include in lib['include']:
             command += ' -I'
             command += include
-        for isystem in lib.include_sys:
+        for isystem in lib['include_sys']:
             command += ' -isystem '
             command += isystem
-        for cxxflag in lib.cxxflags:
+        for cxxflag in lib['cxxflags']:
             command += ' '
             command += cxxflag
         command += ' -c '
@@ -534,7 +502,7 @@ VersionControl=kdevgit
         includedirfile = open(os.path.join(path, '.kdev_include_paths'), 'w')
         include = set()
         for target in self.target_path[path]:
-            include |= set(target.include)
+            include |= set(target['include'])
         includedirfile.write('\n'.join(include))
         includedirfile.close()
 
@@ -545,11 +513,11 @@ VersionControl=kdevgit
         self.target_path = {}
         for m in self.gbuildparser.modules:
             for target in self.gbuildparser.modules[m]['targets']:
-                for cxx in target.cxxobjects:
+                for cxx in target['CXXOBJECTS']:
                     path = '/'.join(cxx.split('/')[:-1])
                     if path not in self.target_path:
-                        self.target_path[path] = set()
-                    self.target_path[path] |= set([target])
+                        self.target_path[path] = []
+                    self.target_path[path].append(target)
 
         for path in self.target_path:
             self.write_includepaths(path)
@@ -664,24 +632,24 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
 
 
     def generate_target(self, modulename):
-        if modulename.build_type == 'Library':
+        if modulename['build_type'] == 'Library':
             product = 'com.apple.product-type.library.dynamic'
-        elif modulename.build_type == 'Executable':
+        elif modulename['build_type'] == 'Executable':
             product = 'com.apple.product-type.executable'
-        elif modulename.build_type == 'CppunitTest':
+        elif modulename['build_type'] == 'CppunitTest':
             product = 'com.apple.product-type.cppunit'
         else:
             product = 'com.apple.product-type.something'
 
         result = {'isa': 'PBXLegacyTarget',
                   'buildConfigurationList': self.configurationListId,
-                  'buildArgumentsString': modulename.target_name,
+                  'buildArgumentsString': modulename['target_name'],
                   'buildPhases': [],
                   'dependencies': [],
                   'buildToolPath': 'make',
                   'buildWorkingDirectory': self.gbuildparser.builddir,
-                  'name': modulename.target_name,
-                  'productName': modulename.name,
+                  'name': modulename['target_name'],
+                  'productName': modulename['name'],
                   'passBuildSettingsEnvironment': 1}
         return result
 
@@ -729,7 +697,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                       'ONLY_ACTIVE_ARCH': 'YES',
                       'PRODUCT_NAME': '$(TARGET_NAME)',
                       'SDKROOT': 'macosx',
-                      'HEADER_SEARCH_PATHS': modulename.include},
+                      'HEADER_SEARCH_PATHS': modulename['include']},
                   'name': 'Debug'}
         return result
 
@@ -744,7 +712,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         self.sourceRefList = {}
         self.sourceList = {}
 
-        for i in module.cxxobjects:
+        for i in module['CXXOBJECTS']:
             ref = self.generate_id()
             self.sourceList[self.generate_id()] = ref
             self.sourceRefList[ref] = {'lastKnownFileType': 'sourcecode.cpp.cpp',
@@ -827,7 +795,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             module_directory = os.path.join(self.solution_directory, module)
             if module != 'include': #FIXME
                 for target in self.gbuildparser.modules[module]['targets']:
-                    project_path = os.path.join(module_directory, '%s.vcxproj' % target.target_name)
+                    project_path = os.path.join(module_directory, '%s.vcxproj' % target['target_name'])
                     project_guid = self.write_project(project_path, target)
                     p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
                     projects.append(p)
@@ -842,24 +810,23 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         dependency_libs = {}
         for linked_lib in linked_libs:
             for library_project in library_projects:
-                if library_project.target.name == linked_lib:
+                if library_project.target['name'] == linked_lib:
                     dependency_libs[library_project.guid] = library_project
         return dependency_libs
 
     def write_solution(self, solution_path, projects):
         print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
-        library_projects = [project for project in projects if project.target.build_type == 'Library']
+        library_projects = [project for project in projects if project.target['build_type'] == 'Library']
         with open(solution_path, 'w') as f:
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
             for project in projects:
                 target = project.target
-                print(' %s' % target.target_name, end='')
+                print(' %s' % target['target_name'], end='')
                 proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
-                         target.target_name, proj_path, project.guid))
-                libs_in_solution = self.get_dependency_libs(target.linked_libs,
-                                                            library_projects)
+                         target['target_name'], proj_path, project.guid))
+                libs_in_solution = self.get_dependency_libs(target['linked_libs'], library_projects)
                 if libs_in_solution:
                     f.write('\tProjectSection(ProjectDependencies) = postProject\n')
                     for lib_guid in libs_in_solution.keys():
@@ -910,7 +877,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         proj_keyword_node = ET.SubElement(globals_node, '{%s}Keyword' % ns)
         proj_keyword_node.text = 'MakeFileProj'
         proj_name_node = ET.SubElement(globals_node, '{%s}ProjectName' % ns)
-        proj_name_node.text = target.target_name
+        proj_name_node.text = target['target_name']
 
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
         for configuration in self.configurations:
@@ -940,9 +907,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_params = {
                 'sh': os.path.join(self.gbuildparser.binpath, 'dash.exe'),
                 'builddir': self.gbuildparser.builddir,
-                'location': target.location,
+                'location': target['location'],
                 'makecmd': self.gbuildparser.makecmd,
-                'target': target.target_name}
+                'target': target['target_name']}
             nmake_build_node = ET.SubElement(conf_node, '{%s}NMakeBuildCommandLine' % ns)
             nmake_build_node.text = cfg_targets['build'] % nmake_params
             nmake_clean_node = ET.SubElement(conf_node, '{%s}NMakeCleanCommandLine' % ns)
@@ -952,23 +919,23 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
             nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.exe')
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
-            nmake_defs_node.text = ';'.join(list(target.defs) + ['$(NMakePreprocessorDefinitions)'])
+            nmake_defs_node.text = ';'.join(list(target['defs']) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
-            include_path_node.text = ';'.join(target.include + ['$(IncludePath)'])
+            include_path_node.text = ';'.join(target['include'] + ['$(IncludePath)'])
 
         ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns)
 
         cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
-        for cxxobject in target.cxxobjects:
+        for cxxobject in target['CXXOBJECTS']:
             cxxabspath = os.path.join(self.gbuildparser.srcdir, cxxobject)
             cxxfile = cxxabspath + '.cxx'
             if os.path.isfile(cxxfile):
                 ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxfile)
             else:
-                print('Source %s in project %s does not exist' % (cxxfile, target.target_name))
+                print('Source %s in project %s does not exist' % (cxxfile, target['target_name']))
 
         includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
-        for cxxobject in target.cxxobjects:
+        for cxxobject in target['CXXOBJECTS']:
             include_abs_path = os.path.join(self.gbuildparser.srcdir, cxxobject)
             hxxfile = include_abs_path + '.hxx'
             if os.path.isfile(hxxfile):
@@ -981,7 +948,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
         self.write_pretty_xml(proj_node, project_path)
         self.write_filters(project_path + '.filters',
-                           os.path.join(self.gbuildparser.srcdir, os.path.basename(target.location)),
+                           os.path.join(self.gbuildparser.srcdir, os.path.basename(target['location'])),
                            [cxx_node.get('Include') for cxx_node in cxxobjects_node.findall('{%s}ClCompile' % ns)],
                            [include_node.get('Include') for include_node in includes_node.findall('{%s}ClInclude' % ns)])
         return project_guid
@@ -1039,9 +1006,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
         self.target_by_location = {}
         for m in self.gbuildparser.modules:
             for target in self.gbuildparser.modules[m]['targets']:
-                if target.location not in self.target_by_location:
-                    self.target_by_location[target.location] = set()
-                self.target_by_location[target.location] |= set([target])
+                if target['location'] not in self.target_by_location:
+                    self.target_by_location[target['location']] = []
+                self.target_by_location[target['location']].append(target)
 
         self._do_log = False  # set to 'True' to activate log of QtCreatorIntegrationGenerator
         if self._do_log:
@@ -1499,12 +1466,12 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             for f in self.gbuildparser.modules[m]['targets']:
                 all_libs.append(f)
         for lib in all_libs:
-            self._log("\nlibrary : %s, loc=%s" % (lib.target_name, lib.location))
-            lib_name = os.path.basename(lib.location)
-            lib_folder = os.path.relpath(lib.location, self.base_folder)
+            self._log("\nlibrary : %s, loc=%s" % (lib['target_name'], lib['location']))
+            lib_name = os.path.basename(lib['location'])
+            lib_folder = os.path.relpath(lib['location'], self.base_folder)
 
             def lopath(path):
-                return os.path.relpath(path, lib.location)
+                return os.path.relpath(path, lib['location'])
 
             defines_list = []
             sources_list = []
@@ -1515,7 +1482,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
             # in a specific "Headers" folder in QtCreator's Project panel.
             # We will list here only headers files of current lib.
             headers_list = []
-            for file_ in lib.cxxobjects:
+            for file_ in lib['CXXOBJECTS']:
                 # the file has no extension : search it
                 # self._log("\n    file : %s" % file_)
                 ext = self.get_source_extension(file_)
@@ -1528,20 +1495,20 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                     headers_list.append(lopath(file_ + ext))
 
             # List all include paths
-            for hdir in lib.include:
+            for hdir in lib['include']:
                 hf_lopath = lopath(hdir)
                 includepath_list.append(hf_lopath)
 
             # List headers files from current lib
-            for hdir in lib.include:
-                if hdir.startswith(lib.location):
+            for hdir in lib['include']:
+                if hdir.startswith(lib['location']):
                     for hf in os.listdir(hdir):
                         if hf.endswith(('.h', '.hxx', '.hpp', '.hrc')):
                             hf_lopath = lopath(os.path.join(hdir, hf))
                             headers_list.append(hf_lopath)
 
             # List defines
-            for key, value in lib.defs.items():
+            for key, value in lib['defs'].items():
                 define = key
                 if value is not None:
                     define += '=' + value
@@ -1559,7 +1526,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                     'headers': set(headers_list),
                     'includepath': set(includepath_list),
                     'defines': set(defines_list),
-                    'loc': lib.location,
+                    'loc': lib['location'],
                     'name': lib_name
                 }
 
