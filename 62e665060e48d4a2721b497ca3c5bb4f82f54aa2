@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_397c5020",
+        "filename": "sc/source/core/tool/rangenam.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 539,
+      "author": {
+        "id": 1001362
+      },
+      "writtenOn": "2017-01-22T09:21:38Z",
+      "side": 1,
+      "message": "I don\u0027t like copying IsNameValid(present just above) into IsNameValidCellRef. It was done to get an integer return value so as to identify the type of invalidity. Perhaps, there is a better way to do this? Could\u0027ve changed the original function directly, but it was being referenced at a few more places.",
+      "range": {
+        "startLine": 511,
+        "startChar": 0,
+        "endLine": 539,
+        "endChar": 1
+      },
+      "revId": "62e665060e48d4a2721b497ca3c5bb4f82f54aa2",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
