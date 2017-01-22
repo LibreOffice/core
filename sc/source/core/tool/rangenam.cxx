@@ -506,6 +506,36 @@ bool ScRangeData::IsNameValid( const OUString& rName, ScDocument* pDoc )
     return true;
 }
 
+int ScRangeData::IsNameValidCellRef( const OUString& rName, ScDocument* pDoc )
+{
+    sal_Char a('.');
+    if (rName.indexOf(a) != -1)
+        return 0;
+    sal_Int32 nPos = 0;
+    sal_Int32 nLen = rName.getLength();
+    if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, ScCharFlags::CharName ) )
+        return 0;
+    while ( nPos < nLen )
+    {
+        if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos++, ScCharFlags::Name ) )
+            return 0;
+    }
+    ScAddress aAddr;
+    ScRange aRange;
+    for (int nConv = FormulaGrammar::CONV_UNSPECIFIED; ++nConv < FormulaGrammar::CONV_LAST; )
+    {
+        ScAddress::Details details( static_cast<FormulaGrammar::AddressConvention>( nConv ) );
+        // Don't check Parse on VALID, any partial only VALID may result in
+        // #REF! during compile later!
+        if (aRange.Parse(rName, pDoc, details) != ScRefFlags::ZERO ||
+             aAddr.Parse(rName, pDoc, details) != ScRefFlags::ZERO )
+        {
+            return -1;
+        }
+    }
+    return 1;
+}
+
 SCROW ScRangeData::GetMaxRow() const
 {
     return mnMaxRow >= 0 ? mnMaxRow : MAXROW;

@@ -155,6 +155,7 @@ public:
 
     static void     MakeValidName( OUString& rName );
     SC_DLLPUBLIC static bool        IsNameValid( const OUString& rName, ScDocument* pDoc );
+    SC_DLLPUBLIC static int        IsNameValidCellRef( const OUString& rName, ScDocument* pDoc );
 
     SCROW GetMaxRow() const;
     SCCOL GetMaxCol() const;
