@@ -156,6 +156,7 @@ class SwPostItMgr: public SfxListener
         bool                            mbDeleteNote;
         FieldShadowState                mShadowState;
         OutlinerParaObject*             mpAnswer;
+        OUString                        maAnswerText;
         bool                            mbIsShowAnchor;
 
         // data structure to collect the <SwSidebarWin> instances for certain <SwFrame> instances.
@@ -265,6 +266,8 @@ class SwPostItMgr: public SfxListener
 
         void                RegisterAnswer(OutlinerParaObject* pAnswer) { mpAnswer = pAnswer;}
         OutlinerParaObject* IsAnswer() {return mpAnswer;}
+        void                RegisterAnswerText(const OUString& aAnswerText) { maAnswerText = aAnswerText; }
+        const OUString&     GetAnswerText() { return maAnswerText; }
         void CheckMetaText();
 
         sal_uInt16 Replace(SvxSearchItem* pItem);

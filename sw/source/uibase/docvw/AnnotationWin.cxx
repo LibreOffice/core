@@ -41,6 +41,7 @@
 #include <editeng/editeng.hxx>
 #include <editeng/editobj.hxx>
 
+#include <comphelper/lok.hxx>
 #include <docufld.hxx>
 #include <txtfld.hxx>
 #include <ndtxt.hxx>
@@ -240,6 +241,10 @@ VclPtr<MenuButton> SwAnnotationWin::CreateMenuButton()
 
 void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
 {
+    // If tiled annotations is off in lok case, skip adding additional reply text.
+    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+        return;
+
     //collect our old meta data
     SwSidebarWin* pWin = Mgr().GetNextPostIt(KEY_PAGEUP, this);
     const SvtSysLocale aSysLocale;

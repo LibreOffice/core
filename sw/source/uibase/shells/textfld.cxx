@@ -369,6 +369,37 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     GetView().GetPostItMgr()->Hide( pNoteItem->GetValue() );
             }
             break;
+            case FN_REPLY:
+            {
+                const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+                if (pIdItem && pIdItem->GetValue())
+                {
+                    SwFieldType* pType = rSh.GetDoc()->getIDocumentFieldsAccess().GetFieldType(RES_POSTITFLD, OUString(), false);
+                    SwIterator<SwFormatField,SwFieldType> aIter( *pType );
+                    SwFormatField* pSwFormatField = aIter.First();
+                    while( pSwFormatField )
+                    {
+                        if ( static_cast<SwPostItField*>(pSwFormatField->GetField())->GetPostItId() == pIdItem->GetValue())
+                        {
+                            sw::sidebarwindows::SwSidebarWin* pWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue());
+                            if (pWin)
+                            {
+                                const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+                                OUString sText;
+                                if ( pTextItem )
+                                    sText = pTextItem->GetValue();
+
+                                GetView().GetPostItMgr()->RegisterAnswerText(sText);
+                                pWin->ExecuteCommand(nSlot);
+                            }
+
+                            break;
+                        }
+                        pSwFormatField = aIter.Next();
+                    }
+                }
+            }
+            break;
             case FN_POSTIT:
             {
                 SwPostItField* pPostIt = dynamic_cast<SwPostItField*>(aFieldMgr.GetCurField());
@@ -389,6 +420,13 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                     OUString sText;
                     if ( pTextItem )
                         sText = pTextItem->GetValue();
+
+                    // If we have a text already registered for answer, use that
+                    if (GetView().GetPostItMgr()->IsAnswer() && !GetView().GetPostItMgr()->GetAnswerText().isEmpty())
+                    {
+                        sText = GetView().GetPostItMgr()->GetAnswerText();
+                        GetView().GetPostItMgr()->RegisterAnswerText(OUString());
+                    }
 
                     if ( rSh.HasSelection() && !rSh.IsTableMode() )
                     {
@@ -753,12 +791,13 @@ void SwTextShell::StateField( SfxItemSet &rSet )
                 rSet.DisableItem(nWhich);
             break;
 
+        case FN_REPLY:
         case FN_POSTIT :
         case FN_JAVAEDIT :
             {
                 bool bCurField = false;
                 pField = rSh.GetCurField();
-                if(nWhich == FN_POSTIT)
+                if(nWhich == FN_POSTIT || nWhich == FN_REPLY)
                     bCurField = pField && pField->GetTyp()->Which() == RES_POSTITFLD;
                 else
                     bCurField = pField && pField->GetTyp()->Which() == RES_SCRIPTFLD;
