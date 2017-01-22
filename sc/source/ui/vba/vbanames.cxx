@@ -101,7 +101,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
         NameLocal >>= sName;
     if ( !sName.isEmpty() )
     {
-        if ( !ScRangeData::IsNameValid( sName , getScDocument() ) )
+        if ( ScRangeData::IsNameValid( sName , getScDocument() )  != ScRangeData::NAME_VALID )
         {
             OUString sResult ;
             sal_Int32 nToken = 0;
@@ -112,7 +112,7 @@ ScVbaNames::Add( const css::uno::Any& Name ,
             else
                 sResult = sName.copy( nIndex );
             sName = sResult ;
-            if ( !ScRangeData::IsNameValid( sName , getScDocument() ) )
+            if ( ScRangeData::IsNameValid( sName , getScDocument() ) != ScRangeData::NAME_VALID )
                 throw uno::RuntimeException( "This Name is not valid ." );
         }
     }

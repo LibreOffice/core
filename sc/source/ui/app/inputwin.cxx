@@ -1991,7 +1991,7 @@ static ScNameInputType lcl_GetInputType( const OUString& rText )
             eRet = SC_NAME_INPUT_ROW;
         else if ( pDoc->GetTable( rText, nNameTab ) )
             eRet = SC_NAME_INPUT_SHEET;
-        else if ( ScRangeData::IsNameValid( rText, pDoc ) )     // nothing found, create new range?
+        else if ( ScRangeData::IsNameValid( rText, pDoc ) == ScRangeData::NAME_VALID )     // nothing found, create new range?
         {
             if ( rViewData.GetSimpleArea( aRange ) == SC_MARK_SIMPLE )
                 eRet = SC_NAME_INPUT_DEFINE;
