@@ -604,6 +604,17 @@ gb_GoogleTest_get_filename = $(1)$(gb_Executable_EXT)
 define gb_GoogleTest_GoogleTest_platform
 endef
 
+# JunitTest class
+
+define gb_JunitTest_JunitTest_platform
+$(call gb_JunitTest_get_target,$(1)) : DEFS := \
+	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(SRCDIR)/instsetoo_native/$(INPATH)/Apache_OpenOffice/installed/install/en-US/OpenOffice 4/program/soffice.exe}" \
+    -Dorg.openoffice.test.arg.env=PATH \
+    -Dorg.openoffice.test.arg.user=file:///$(call gb_JunitTest_get_userdir,$(1)) \
+
+endef
+
+
 # SdiTarget class
 
 gb_SdiTarget_SVIDLPRECOMMAND := PATH="$${PATH}:$(OUTDIR)/bin"

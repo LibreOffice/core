@@ -632,43 +632,9 @@ endef
 
 # JunitTest class
 
-gb_defaultlangiso := en-US
-gb_smoketest_instset := $(SRCDIR)/instsetoo_native/$(INPATH)/OpenOffice/archive/install/$(gb_defaultlangiso)/OOo_*_install-arc_$(gb_defaultlangiso).zip
-
-ifeq ($(OOO_TEST_SOFFICE),)
-
-
-# Work around Windows problems with long pathnames (see issue 50885) by
-# installing into the temp directory instead of the module output tree (in which
-# case $(target).instpath contains the path to the temp installation,
-# which is removed after smoketest); can be removed once issue 50885 is fixed;
-# on other platforms, a single installation to solver is created in
-# smoketestoo_native.
-
-# for now, no dependency on $(shell ls $(gb_smoketest_instset))
-# because that doesn't work before the instset is built
-# and there is not much of a benefit anyway (gbuild not knowing about smoketest)
-define gb_JunitTest_JunitTest_platform_longpathname_hack
-$(call gb_JunitTest_get_target,$(1)) : $(call gb_JunitTest_get_target,$(1)).instpath
-$(call gb_JunitTest_get_target,$(1)) : CLEAN_CMD = $(call gb_Helper_abbreviate_dirs,rm -rf `cat $$@.instpath` $$@.instpath)
-
-$(call gb_JunitTest_get_target,$(1)).instpath : 
-	INST_DIR=$$$$(cygpath -m `mktemp -d -t testinst.XXXXXX`) \
-	&& unzip -d "$$$${INST_DIR}"  $$(gb_smoketest_instset) \
-	&& mv "$$$${INST_DIR}"/OOo_*_install-arc_$$(gb_defaultlangiso) "$$$${INST_DIR}"/opt\
-	&& mkdir -p $$(dir $$@) \
-	&& echo "$$$${INST_DIR}" > $$@
-
-endef
-else # OOO_TEST_SOFFICE
-gb_JunitTest_JunitTest_platform_longpathname_hack =
-endif # OOO_TEST_SOFFICE
-
 define gb_JunitTest_JunitTest_platform
-$(call gb_JunitTest_JunitTest_platform_longpathname_hack,$(1))
-
 $(call gb_JunitTest_get_target,$(1)) : DEFS := \
-	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:`cat $(call gb_JunitTest_get_target,$(1)).instpath`/opt/OpenOffice.org 3/program/soffice.exe}" \
+	-Dorg.openoffice.test.arg.soffice="$$$${OOO_TEST_SOFFICE:-path:$(SRCDIR)/instsetoo_native/$(INPATH)/Apache_OpenOffice/installed/install/en-US/OpenOffice 4/program/soffice.exe}" \
     -Dorg.openoffice.test.arg.env=PATH \
     -Dorg.openoffice.test.arg.user=file:///$(call gb_JunitTest_get_userdir,$(1)) \
 
