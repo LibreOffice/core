@@ -135,15 +135,8 @@ export PNG_TARBALL := libpng-1.6.28.tar.gz
 export POPPLER_MD5SUM := 1a4c0cd873bddd8f266b85ab8d799962
 export POPPLER_TARBALL := poppler-0.50.0.tar.xz
 export POSTGRESQL_TARBALL := c0b4799ea9850eae3ead14f0a60e9418-postgresql-9.2.1.tar.bz2
-
-ifeq ($(PYTHON_VERSION_MINOR),3)
-export PYTHON_MD5SUM := 803a75927f8f241ca78633890c798021
-export PYTHON_TARBALL := Python-3.3.5.tgz
-else
 export PYTHON_MD5SUM := 6192f0e45f02575590760e68c621a488
 export PYTHON_TARBALL := Python-3.5.3.tgz
-endif
-
 export RAPTOR_TARBALL := a39f6c07ddb20d7dd2ff1f95fa21e2cd-raptor2-2.0.15.tar.gz
 export RASQAL_TARBALL := 1f5def51ca0026cd192958ef07228b52-rasqal-0.9.33.tar.gz
 export REDLAND_TARBALL := e5be03eda13ef68aabab6e42aa67715e-redland-1.0.17.tar.gz
