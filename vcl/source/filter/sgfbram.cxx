@@ -323,6 +323,8 @@ bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
 
     nFileStart=rInp.Tell();
     ReadSgfHeader( rInp, aHead );
+    if (!rIStream.good())
+        return false;
     if (aHead.ChkMagic() && (aHead.Typ==SgfBitImag0 || aHead.Typ==SgfBitImag1 ||
                              aHead.Typ==SgfBitImag2 || aHead.Typ==SgfBitImgMo))
     {
