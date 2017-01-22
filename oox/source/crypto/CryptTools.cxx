@@ -15,8 +15,6 @@
 namespace oox {
 namespace core {
 
-using namespace std;
-
 Crypto::Crypto()
 #if USE_TLS_NSS
     : mContext(nullptr)
@@ -61,7 +59,7 @@ const EVP_CIPHER* Crypto::getCipher(CryptoType type)
 #endif
 
 #if USE_TLS_NSS
-void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type, CK_ATTRIBUTE_TYPE operation)
+void Crypto::setupContext(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type, CK_ATTRIBUTE_TYPE operation)
 {
     CK_MECHANISM_TYPE mechanism = static_cast<CK_ULONG>(-1);
 
@@ -70,7 +68,7 @@ void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoT
     if(iv.empty())
         ivItem.data = nullptr;
     else
-        ivItem.data = &iv[0];
+        ivItem.data = iv.data();
     ivItem.len = iv.size();
 
     SECItem* pIvItem = nullptr;
@@ -92,37 +90,37 @@ void Crypto::setupContext(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoT
             break;
     }
 
-    PK11SlotInfo* pSlot( PK11_GetBestSlot( mechanism, nullptr ) );
+    PK11SlotInfo* pSlot(PK11_GetBestSlot(mechanism, nullptr));
 
     if (!pSlot)
         throw css::uno::RuntimeException("NSS Slot failure", css::uno::Reference<css::uno::XInterface>());
 
     SECItem keyItem;
     keyItem.type = siBuffer;
-    keyItem.data = &key[0];
+    keyItem.data = key.data();
     keyItem.len  = key.size();
 
-    mSymKey = PK11_ImportSymKey( pSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, nullptr );
-    mSecParam = PK11_ParamFromIV( mechanism, pIvItem );
-    mContext = PK11_CreateContextBySymKey( mechanism, operation, mSymKey, mSecParam );
+    mSymKey = PK11_ImportSymKey(pSlot, mechanism, PK11_OriginUnwrap, CKA_ENCRYPT, &keyItem, nullptr);
+    mSecParam = PK11_ParamFromIV(mechanism, pIvItem);
+    mContext = PK11_CreateContextBySymKey(mechanism, operation, mSymKey, mSecParam);
 }
 #endif // USE_TLS_NSS
 
 // DECRYPT
 
-Decrypt::Decrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type) :
-    Crypto()
+Decrypt::Decrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type)
+    : Crypto()
 {
 #if USE_TLS_OPENSSL
-    EVP_CIPHER_CTX_init( &mContext );
+    EVP_CIPHER_CTX_init(&mContext);
 
     const EVP_CIPHER* cipher = getCipher(type);
 
     if (iv.empty())
-        EVP_DecryptInit_ex( &mContext, cipher, NULL, &key[0], 0 );
+        EVP_DecryptInit_ex(&mContext, cipher, nullptr, key.data(), 0);
     else
-        EVP_DecryptInit_ex( &mContext, cipher, NULL, &key[0], &iv[0] );
-    EVP_CIPHER_CTX_set_padding( &mContext, 0 );
+        EVP_DecryptInit_ex(&mContext, cipher, nullptr, key.data(), iv.data());
+    EVP_CIPHER_CTX_set_padding(&mContext, 0);
 #endif
 
 #if USE_TLS_NSS
@@ -130,27 +128,27 @@ Decrypt::Decrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type)
 #endif // USE_TLS_NSS
 }
 
-sal_uInt32 Decrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, sal_uInt32 inputLength)
+sal_uInt32 Decrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input, sal_uInt32 inputLength)
 {
     int outputLength = 0;
 
     sal_uInt32 actualInputLength = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
 
 #if USE_TLS_OPENSSL
-    (void)EVP_DecryptUpdate( &mContext, &output[0], &outputLength, &input[0], actualInputLength );
+    (void)EVP_DecryptUpdate(&mContext, output.data(), &outputLength, input.data(), actualInputLength);
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
-    (void)PK11_CipherOp( mContext, &output[0], &outputLength, actualInputLength, &input[0], actualInputLength );
+    (void)PK11_CipherOp( mContext, output.data(), &outputLength, actualInputLength, input.data(), actualInputLength );
 #endif // USE_TLS_NSS
 
     return static_cast<sal_uInt32>(outputLength);
 }
 
-sal_uInt32 Decrypt::aes128ecb(vector<sal_uInt8>& output, vector<sal_uInt8>& input, vector<sal_uInt8>& key)
+sal_uInt32 Decrypt::aes128ecb(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input, std::vector<sal_uInt8>& key)
 {
     sal_uInt32 outputLength = 0;
-    vector<sal_uInt8> iv;
+    std::vector<sal_uInt8> iv;
     Decrypt crypto(key, iv, Crypto::AES_128_ECB);
     outputLength = crypto.update(output, input);
     return outputLength;
@@ -158,19 +156,19 @@ sal_uInt32 Decrypt::aes128ecb(vector<sal_uInt8>& output, vector<sal_uInt8>& inpu
 
 // ENCRYPT
 
-Encrypt::Encrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type) :
-    Crypto()
+Encrypt::Encrypt(std::vector<sal_uInt8>& key, std::vector<sal_uInt8>& iv, CryptoType type)
+    : Crypto()
 {
 #if USE_TLS_OPENSSL
-    EVP_CIPHER_CTX_init( &mContext );
+    EVP_CIPHER_CTX_init(&mContext);
 
     const EVP_CIPHER* cipher = getCipher(type);
 
     if (iv.empty())
-        EVP_EncryptInit_ex( &mContext, cipher, NULL, &key[0], 0 );
+        EVP_EncryptInit_ex(&mContext, cipher, nullptr, key.data(), 0);
     else
-        EVP_EncryptInit_ex( &mContext, cipher, NULL, &key[0], &iv[0] );
-    EVP_CIPHER_CTX_set_padding( &mContext, 0 );
+        EVP_EncryptInit_ex(&mContext, cipher, nullptr, key.data(), iv.data());
+    EVP_CIPHER_CTX_set_padding(&mContext, 0);
 #endif
 
 #if USE_TLS_NSS
@@ -178,18 +176,18 @@ Encrypt::Encrypt(vector<sal_uInt8>& key, vector<sal_uInt8>& iv, CryptoType type)
 #endif // USE_TLS_NSS
 }
 
-sal_uInt32 Encrypt::update(vector<sal_uInt8>& output, vector<sal_uInt8>& input, sal_uInt32 inputLength)
+sal_uInt32 Encrypt::update(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input, sal_uInt32 inputLength)
 {
     int outputLength = 0;
 
     sal_uInt32 actualInputLength = inputLength == 0 || inputLength > input.size() ? input.size() : inputLength;
 
 #if USE_TLS_OPENSSL
-    (void)EVP_EncryptUpdate( &mContext, &output[0], &outputLength, &input[0], actualInputLength );
+    (void)EVP_EncryptUpdate(&mContext, output.data(), &outputLength, input.data(), actualInputLength);
 #endif // USE_TLS_OPENSSL
 
 #if USE_TLS_NSS
-    (void)PK11_CipherOp( mContext, &output[0], &outputLength, actualInputLength, &input[0], actualInputLength );
+    (void)PK11_CipherOp(mContext, output.data(), &outputLength, actualInputLength, input.data(), actualInputLength);
 #endif // USE_TLS_NSS
 
     return static_cast<sal_uInt32>(outputLength);
@@ -237,29 +235,29 @@ HASH_HashType lclNSSgetHashType(Digest::DigestType eType)
 Digest::Digest(DigestType eType) :
     meType(eType)
 {
-    #if USE_TLS_OPENSSL
+#if USE_TLS_OPENSSL
     mpContext = EVP_MD_CTX_create();
     EVP_DigestInit_ex(mpContext, lclOpenSSLgetEngine(eType), NULL);
-    #endif
+#endif
 
-    #if USE_TLS_NSS
+#if USE_TLS_NSS
     NSS_NoDB_Init(nullptr);
     mpContext = HASH_Create(lclNSSgetHashType(eType));
     HASH_Begin(mpContext);
-    #endif
+#endif
 }
 
 Digest::~Digest()
 {
-    #if USE_TLS_OPENSSL
+#if USE_TLS_OPENSSL
     if(mpContext)
         EVP_MD_CTX_destroy(mpContext);
-    #endif
+#endif
 
-    #if USE_TLS_NSS
+#if USE_TLS_NSS
     if(mpContext)
         HASH_Destroy(mpContext);
-    #endif
+#endif
 }
 
 sal_uInt32 Digest::getLength()
@@ -278,33 +276,33 @@ sal_uInt32 Digest::getLength()
 
 void Digest::update(std::vector<sal_uInt8>& input)
 {
-    #if USE_TLS_OPENSSL
-    EVP_DigestUpdate(mpContext, &input[0], input.size());
-    #endif
-    #if USE_TLS_NSS
-    HASH_Update(mpContext, &input[0], input.size());
-    #endif
+#if USE_TLS_OPENSSL
+    EVP_DigestUpdate(mpContext, input.data(), input.size());
+#endif
+#if USE_TLS_NSS
+    HASH_Update(mpContext, input.data(), input.size());
+#endif
 }
 
 void Digest::finalize(std::vector<sal_uInt8>& digest)
 {
     digest.clear();
 
-    #if USE_TLS_OPENSSL
+#if USE_TLS_OPENSSL
     unsigned int digestWrittenLength;
     digest.resize(getLength(), 0);
-    EVP_DigestFinal_ex(mpContext, &digest[0], &digestWrittenLength);
-    #endif
+    EVP_DigestFinal_ex(mpContext, digest.data(), &digestWrittenLength);
+#endif
 
-    #if USE_TLS_NSS
+#if USE_TLS_NSS
     unsigned int digestWrittenLength;
     unsigned int digestLength = static_cast<unsigned int>(getLength());
     digest.resize(digestLength, 0);
-    HASH_End(mpContext, &digest[0], &digestWrittenLength, digestLength);
-    #endif
+    HASH_End(mpContext, digest.data(), &digestWrittenLength, digestLength);
+#endif
 }
 
-bool Digest::sha1(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
+bool Digest::sha1(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input)
 {
     bool aResult = false;
 
@@ -315,7 +313,7 @@ bool Digest::sha1(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
     return aResult;
 }
 
-bool Digest::sha512(vector<sal_uInt8>& output, vector<sal_uInt8>& input)
+bool Digest::sha512(std::vector<sal_uInt8>& output, std::vector<sal_uInt8>& input)
 {
     bool aResult = false;
 
