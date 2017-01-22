@@ -151,7 +151,7 @@ SwMailMergeDlg::SwMailMergeDlg(vcl::Window* pParent, SwWrtShell& rShell,
 
     get(m_pSaveMergedDocumentFT, "savemergeddoclabel");
     get(m_pSaveSingleDocRB, "singledocument");
-    get(m_pSaveIndividualRB, "idividualdocuments");
+    get(m_pSaveIndividualRB, "individualdocuments");
     get(m_pGenerateFromDataBaseCB, "generate");
 
     get(m_pColumnFT, "fieldlabel");
