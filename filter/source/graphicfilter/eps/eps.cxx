@@ -241,7 +241,6 @@ PSWriter::PSWriter()
     , mnTextMode(0)
     , mpPS(nullptr)
     , pMTF(nullptr)
-    , pAMTF(nullptr)
     , pVDev()
     , nBoundingX2(0)
     , nBoundingY2(0)
@@ -276,7 +275,6 @@ PSWriter::PSWriter()
     , dwShift(0)
     , xStatusIndicator()
 {
-    pAMTF = nullptr;
 }
 
 PSWriter::~PSWriter()
