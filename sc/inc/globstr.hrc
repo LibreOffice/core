@@ -712,7 +712,9 @@
 
 #define STR_QUERY_PIVOTTABLE_DELTAB     545
 
-#define SC_GLOBSTR_STR_COUNT            546     /**< the count of permanently resident strings */
+#define STR_ERR_NAME_INVALID_CELL_REF   546
+
+#define SC_GLOBSTR_STR_COUNT            547     /**< the count of permanently resident strings */
 
 #endif
 

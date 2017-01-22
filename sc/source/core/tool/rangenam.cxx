@@ -474,21 +474,21 @@ void ScRangeData::MakeValidName( OUString& rName )
     }
 }
 
-bool ScRangeData::IsNameValid( const OUString& rName, ScDocument* pDoc )
+ScRangeData::IsNameValidType ScRangeData::IsNameValid( const OUString& rName, ScDocument* pDoc )
 {
     /* XXX If changed, sc/source/filter/ftools/ftools.cxx
      * ScfTools::ConvertToScDefinedName needs to be changed too. */
     sal_Char a('.');
     if (rName.indexOf(a) != -1)
-        return false;
+        return NAME_INVALID_BAD_STRING;
     sal_Int32 nPos = 0;
     sal_Int32 nLen = rName.getLength();
     if ( !nLen || !ScCompiler::IsCharFlagAllConventions( rName, nPos++, ScCharFlags::CharName ) )
-        return false;
+        return NAME_INVALID_BAD_STRING;
     while ( nPos < nLen )
     {
         if ( !ScCompiler::IsCharFlagAllConventions( rName, nPos++, ScCharFlags::Name ) )
-            return false;
+            return NAME_INVALID_BAD_STRING;
     }
     ScAddress aAddr;
     ScRange aRange;
@@ -500,10 +500,10 @@ bool ScRangeData::IsNameValid( const OUString& rName, ScDocument* pDoc )
         if (aRange.Parse(rName, pDoc, details) != ScRefFlags::ZERO ||
              aAddr.Parse(rName, pDoc, details) != ScRefFlags::ZERO )
         {
-            return false;
+            return NAME_INVALID_CELL_REF;
         }
     }
-    return true;
+    return NAME_VALID;
 }
 
 SCROW ScRangeData::GetMaxRow() const

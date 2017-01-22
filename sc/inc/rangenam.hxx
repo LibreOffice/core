@@ -59,6 +59,13 @@ public:
         AbsPos     = 0x0080
     };
 
+    enum IsNameValidType
+    {
+        NAME_VALID,
+        NAME_INVALID_CELL_REF,
+        NAME_INVALID_BAD_STRING
+    };
+
 private:
     OUString        aName;
     OUString        aUpperName; // #i62977# for faster searching (aName is never modified after ctor)
@@ -154,7 +161,8 @@ public:
     void            ValidateTabRefs();
 
     static void     MakeValidName( OUString& rName );
-    SC_DLLPUBLIC static bool        IsNameValid( const OUString& rName, ScDocument* pDoc );
+
+    SC_DLLPUBLIC static IsNameValidType     IsNameValid( const OUString& rName, ScDocument* pDoc );
 
     SCROW GetMaxRow() const;
     SCCOL GetMaxCol() const;
