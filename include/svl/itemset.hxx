@@ -23,13 +23,13 @@
 
 #include <cstdarg>
 #include <svl/poolitem.hxx>
-#include <map>
+#include <unordered_map>
 
 class SfxItemPool;
 class SfxPoolItem;
 class SvStream;
 
-typedef std::map<sal_uInt16, SfxPoolItem const *> SfxItemMap;
+typedef std::unordered_map<sal_uInt16, SfxPoolItem const *> SfxItemMap;
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
