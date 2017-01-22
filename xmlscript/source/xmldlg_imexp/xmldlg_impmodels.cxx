@@ -1152,11 +1152,6 @@ Reference< xml::input::XElement > TitledBoxElement::startChildElement(
         _radios.push_back( xRet );
         return xRet;
     }
-    // event
-    else if (m_xImport->isEventElement( nUid, rLocalName ))
-    {
-        return new EventElement( nUid, rLocalName, xAttributes, this, m_xImport.get() );
-    }
     else
     {
         return BulletinBoardElement::startChildElement( nUid, rLocalName, xAttributes );
