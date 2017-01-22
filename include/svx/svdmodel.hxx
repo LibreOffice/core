@@ -168,8 +168,8 @@ protected:
     SfxItemPool*    pItemPool;
     comphelper::IEmbeddedHelper*
                     m_pEmbeddedHelper; // helper for embedded objects to get rid of the SfxObjectShell
-    SdrOutliner*    pDrawOutliner;  // an Outliner for outputting text
-    SdrOutliner*    pHitTestOutliner;// an Outliner for the HitTest
+    std::shared_ptr< SdrOutliner > pDrawOutliner;  // an Outliner for outputting text
+    std::shared_ptr< SdrOutliner > pHitTestOutliner;// an Outliner for the HitTest
     SdrOutliner*    pChainingOutliner; // an Outliner for chaining overflowing text
     sal_uIntPtr           nDefTextHgt;    // Default text height in logical units
     VclPtr<OutputDevice>  pRefOutDev;     // ReferenceDevice for the EditEngine
@@ -226,7 +226,7 @@ public:
 
     SdrOutlinerCache*   mpOutlinerCache;
     //get a vector of all the SdrOutliner belonging to the model
-    std::vector<SdrOutliner*> GetActiveOutliners() const;
+    std::vector< std::shared_ptr< SdrOutliner > > GetActiveOutliners() const;
     std::unique_ptr<SdrModelImpl>       mpImpl;
     sal_uInt16          mnCharCompressType;
     sal_uInt16          mnHandoutPageCount;
@@ -572,8 +572,8 @@ public:
 
     void ReformatAllTextObjects();
 
-    SdrOutliner* createOutliner( sal_uInt16 nOutlinerMode );
-    void disposeOutliner( SdrOutliner* pOutliner );
+    std::shared_ptr< SdrOutliner > createOutliner( sal_uInt16 nOutlinerMode );
+    void disposeOutliner( const std::shared_ptr< SdrOutliner >& pOutliner );
 
     bool IsWriter() const { return !bMyPool; }
 

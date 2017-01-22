@@ -294,7 +294,7 @@ void ScGridWindow::DrawAfterScroll()
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (pDrView)
     {
-        OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOlView = pDrView->GetTextEditOutlinerView();
         if (pOlView && pOlView->GetWindow() == this)
             pOlView->ShowCursor(false); // was removed at scrolling
     }
@@ -321,7 +321,7 @@ SdrObject* ScGridWindow::GetEditObject()
     ScDrawView* pDrView = pViewData->GetView()->GetScDrawView();
     if (pDrView)
     {
-        OutlinerView* pOlView = pDrView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOlView = pDrView->GetTextEditOutlinerView();
         if (pOlView && pOlView->GetWindow() == this)
             return pDrView->GetTextEditObject();
     }

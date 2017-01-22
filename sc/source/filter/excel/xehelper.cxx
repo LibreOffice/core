@@ -592,7 +592,8 @@ XclExpStringRef XclExpStringHelper::CreateString(
         XclStrFlags nFlags, sal_uInt16 nMaxLen )
 {
     XclExpStringRef xString;
-    if( const OutlinerParaObject* pParaObj = rTextObj.GetOutlinerParaObject() )
+    const std::shared_ptr< OutlinerParaObject > pParaObj(rTextObj.GetOutlinerParaObject());
+    if( pParaObj )
     {
         EditEngine& rEE = rRoot.GetDrawEditEngine();
         bool bOldUpdateMode = rEE.GetUpdateMode();

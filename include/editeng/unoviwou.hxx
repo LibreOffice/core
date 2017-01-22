@@ -29,14 +29,14 @@ class OutlinerView;
 class EDITENG_DLLPUBLIC SvxDrawOutlinerViewForwarder : public SvxEditViewForwarder
 {
 private:
-    OutlinerView&       mrOutlinerView;
+    std::shared_ptr< OutlinerView > mpOutlinerView;
     Point               maTextShapeTopLeft;
 
     EDITENG_DLLPRIVATE Point                GetTextOffset() const;
 
 public:
-    explicit            SvxDrawOutlinerViewForwarder( OutlinerView& rOutl );
-                        SvxDrawOutlinerViewForwarder( OutlinerView& rOutl, const Point& rShapePosTopLeft );
+    explicit            SvxDrawOutlinerViewForwarder( const std::shared_ptr< OutlinerView >& pOutl );
+                        SvxDrawOutlinerViewForwarder( const std::shared_ptr< OutlinerView >& pOutl, const Point& rShapePosTopLeft );
     virtual             ~SvxDrawOutlinerViewForwarder();
 
     virtual bool        IsValid() const override;

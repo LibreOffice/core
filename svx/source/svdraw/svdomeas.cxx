@@ -417,7 +417,7 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
     bool bBrkLine=rPol.eUsedTextVPos==SDRMEASURETEXT_BREAKEDLINE;
     if (rPol.eUsedTextVPos==SDRMEASURETEXT_VERTICALCENTERED)
     {
-        OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(SdrTextObj::GetOutlinerParaObject());
         if (pOutlinerParaObject!=nullptr && pOutlinerParaObject->GetTextObject().GetParagraphCount()==1)
         {
             bBrkLine=true; // dashed line if there's only on paragraph.
@@ -602,7 +602,7 @@ void SdrMeasureObj::UndirtyText() const
     if (bTextDirty)
     {
         SdrOutliner& rOutliner=ImpGetDrawOutliner();
-        OutlinerParaObject* pOutlinerParaObject = SdrTextObj::GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(SdrTextObj::GetOutlinerParaObject());
         if(pOutlinerParaObject==nullptr)
         {
             rOutliner.QuickInsertField(SvxFieldItem(SdrMeasureField(SDRMEASUREFIELD_ROTA90BLANCS), EE_FEATURE_FIELD), ESelection(0,0));
@@ -617,7 +617,7 @@ void SdrMeasureObj::UndirtyText() const
             rOutliner.SetParaAttribs(0, GetObjectItemSet());
 
             // cast to nonconst
-            const_cast<SdrMeasureObj*>(this)->NbcSetOutlinerParaObject( rOutliner.CreateParaObject() );
+            const_cast<SdrMeasureObj*>(this)->NbcSetOutlinerParaObject( std::shared_ptr< OutlinerParaObject >(rOutliner.CreateParaObject()) );
         }
         else
         {
@@ -1281,14 +1281,14 @@ const Size& SdrMeasureObj::GetTextSize() const
     return SdrTextObj::GetTextSize();
 }
 
-OutlinerParaObject* SdrMeasureObj::GetOutlinerParaObject() const
+std::shared_ptr< OutlinerParaObject > SdrMeasureObj::GetOutlinerParaObject() const
 {
     if(bTextDirty)
         UndirtyText();
     return SdrTextObj::GetOutlinerParaObject();
 }
 
-void SdrMeasureObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
+void SdrMeasureObj::NbcSetOutlinerParaObject(const std::shared_ptr< OutlinerParaObject >& pTextObject)
 {
     SdrTextObj::NbcSetOutlinerParaObject(pTextObject);
     if(SdrTextObj::GetOutlinerParaObject())

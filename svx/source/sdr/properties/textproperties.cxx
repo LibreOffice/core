@@ -92,7 +92,7 @@ namespace sdr
             {
                 SdrText* pText = rTextProvider.getText( nText );
 
-                OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
+                const std::shared_ptr< OutlinerParaObject > pParaObj(pText ? pText->GetOutlinerParaObject() : nullptr);
 
                 if(pParaObj)
                 {
@@ -128,7 +128,7 @@ namespace sdr
                             mpItemSet->Put(aNewSet);
                         }
 
-                        OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                        const std::shared_ptr< OutlinerParaObject > pTemp(pOutliner->CreateParaObject(0, nParaCount));
                         pOutliner->Clear();
 
                         rObj.NbcSetOutlinerParaObjectForText(pTemp,pText);
@@ -176,7 +176,7 @@ namespace sdr
                 while( nCount-- )
                 {
                     SdrText* pText = rTextProvider.getText( nCount );
-                    OutlinerParaObject* pParaObj = pText->GetOutlinerParaObject();
+                    const std::shared_ptr< OutlinerParaObject > pParaObj(pText->GetOutlinerParaObject());
                     if( pParaObj )
                     {
                         rOutliner.SetText(*pParaObj);
@@ -187,7 +187,7 @@ namespace sdr
                             ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
                             rOutliner.RemoveAttribs(aSelection, true, 0);
 
-                            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
+                            const std::shared_ptr< OutlinerParaObject > pTemp(rOutliner.CreateParaObject(0, nParaCount));
                             rOutliner.Clear();
 
                             rObj.NbcSetOutlinerParaObjectForText( pTemp, pText );
@@ -251,7 +251,7 @@ namespace sdr
                 {
                     SdrText* pText = rTextProvider.getText( nText );
 
-                    OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
+                    const std::shared_ptr< OutlinerParaObject > pParaObj(pText ? pText->GetOutlinerParaObject() : nullptr);
                     if( !pParaObj )
                         continue;
 
@@ -344,7 +344,7 @@ namespace sdr
                             }
                         }
 
-                        OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
+                        const std::shared_ptr< OutlinerParaObject > pTemp(rOutliner.CreateParaObject(0, nParaCount));
                         rOutliner.Clear();
                         rObj.NbcSetOutlinerParaObjectForText(pTemp, pText);
                     }
@@ -413,7 +413,7 @@ namespace sdr
                 {
                     SdrText* pText = rTextProvider.getText( nText );
 
-                    OutlinerParaObject* pParaObj = pText ? pText->GetOutlinerParaObject() : nullptr;
+                    const std::shared_ptr< OutlinerParaObject > pParaObj(pText ? pText->GetOutlinerParaObject() : nullptr);
                     if( !pParaObj )
                         continue;
 
@@ -527,7 +527,7 @@ namespace sdr
 
                         if(bBurnIn)
                         {
-                            OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                            const std::shared_ptr< OutlinerParaObject > pTemp(pOutliner->CreateParaObject(0, nParaCount));
                             rObj.NbcSetOutlinerParaObjectForText(pTemp,pText);
                         }
                     }
@@ -566,7 +566,7 @@ namespace sdr
                         sal_Int32 nText = rTextProvider.getTextCount();
                         while( --nText > 0 )
                         {
-                            OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
+                            const std::shared_ptr< OutlinerParaObject > pParaObj(rTextProvider.getText( nText )->GetOutlinerParaObject());
                             if( pParaObj )
                                 pParaObj->ClearPortionInfo();
                         }
@@ -589,7 +589,7 @@ namespace sdr
                         sal_Int32 nText = rTextProvider.getTextCount();
                         while( --nText > 0 )
                         {
-                            OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
+                            const std::shared_ptr< OutlinerParaObject > pParaObj(rTextProvider.getText( nText )->GetOutlinerParaObject());
                             if( pParaObj )
                                 pParaObj->ClearPortionInfo();
                         }
@@ -611,7 +611,7 @@ namespace sdr
                             sal_Int32 nText = rTextProvider.getTextCount();
                             while( --nText > 0 )
                             {
-                                OutlinerParaObject* pParaObj = rTextProvider.getText( nText )->GetOutlinerParaObject();
+                                const std::shared_ptr< OutlinerParaObject > pParaObj(rTextProvider.getText( nText )->GetOutlinerParaObject());
                                 if( pParaObj )
                                     pParaObj->ChangeStyleSheetName(eFamily, aOldName, aNewName);
                             }

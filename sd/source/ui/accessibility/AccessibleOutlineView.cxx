@@ -76,15 +76,15 @@ AccessibleOutlineView::AccessibleOutlineView (
 
         if (dynamic_cast<const ::sd::OutlineView* >( pView ) !=  nullptr)
         {
-            OutlinerView* pOutlineView = static_cast< ::sd::OutlineView*>(
+            const std::shared_ptr< OutlinerView > pOutlineView = static_cast< ::sd::OutlineView*>(
                 pView)->GetViewByWindow( pSdWindow );
-            SdrOutliner& rOutliner =
+            const std::shared_ptr< SdrOutliner > pOutliner =
                 static_cast< ::sd::OutlineView*>(pView)->GetOutliner();
 
             if( pOutlineView )
             {
                 maTextHelper.SetEditSource( ::std::unique_ptr< SvxEditSource >( new AccessibleOutlineEditSource(
-                                                                                  rOutliner, *pView, *pOutlineView, *pSdWindow ) ) );
+                                                                                  pOutliner, *pView, pOutlineView, *pSdWindow ) ) );
             }
         }
     }

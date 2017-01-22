@@ -214,11 +214,11 @@ void SdrModel::ImpCtor(SfxItemPool* pPool, ::comphelper::IEmbeddedHelper* _pEmbe
 
     // can't create DrawOutliner OnDemand, because I can't get the Pool,
     // then (only from 302 onwards!)
-    pDrawOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this);
-    ImpSetOutlinerDefaults(pDrawOutliner, true);
+    pDrawOutliner = std::shared_ptr< SdrOutliner >(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this));
+    ImpSetOutlinerDefaults(pDrawOutliner.get(), true);
 
-    pHitTestOutliner = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this);
-    ImpSetOutlinerDefaults(pHitTestOutliner, true);
+    pHitTestOutliner = std::shared_ptr< SdrOutliner >(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *this));
+    ImpSetOutlinerDefaults(pHitTestOutliner.get(), true);
 
     /* Start Text Chaining related code */
     // Initialize Chaining Outliner
@@ -283,8 +283,8 @@ SdrModel::~SdrModel()
     // Delete DrawOutliner only after deleting ItemPool, because ItemPool
     // references Items of the DrawOutliner!
     delete pChainingOutliner;
-    delete pHitTestOutliner;
-    delete pDrawOutliner;
+    pHitTestOutliner.reset();
+    pDrawOutliner.reset();
 
     // delete StyleSheetPool, derived classes should not do this since
     // the DrawingEngine may need it in its destructor
@@ -818,8 +818,8 @@ void SdrModel::ImpSetOutlinerDefaults( SdrOutliner* pOutliner, bool bInit )
 void SdrModel::SetRefDevice(OutputDevice* pDev)
 {
     pRefOutDev=pDev;
-    ImpSetOutlinerDefaults( pDrawOutliner );
-    ImpSetOutlinerDefaults( pHitTestOutliner );
+    ImpSetOutlinerDefaults( pDrawOutliner.get() );
+    ImpSetOutlinerDefaults( pHitTestOutliner.get() );
     RefDeviceChanged();
 }
 
@@ -1070,8 +1070,8 @@ void SdrModel::SetScaleUnit(MapUnit eMap, const Fraction& rFrac)
         aObjUnit=rFrac;
         pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
         ImpSetUIUnit();
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
         ImpReformatAllTextObjects();
     }
 }
@@ -1082,8 +1082,8 @@ void SdrModel::SetScaleUnit(MapUnit eMap)
         eObjUnit=eMap;
         pItemPool->SetDefaultMetric((SfxMapUnit)eObjUnit);
         ImpSetUIUnit();
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
         ImpReformatAllTextObjects();
     }
 }
@@ -1093,8 +1093,8 @@ void SdrModel::SetScaleFraction(const Fraction& rFrac)
     if (aObjUnit!=rFrac) {
         aObjUnit=rFrac;
         ImpSetUIUnit();
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
         ImpReformatAllTextObjects();
     }
 }
@@ -1890,8 +1890,8 @@ void SdrModel::SetForbiddenCharsTable( const rtl::Reference<SvxForbiddenCharacte
     if( mpForbiddenCharactersTable )
         mpForbiddenCharactersTable->acquire();
 
-    ImpSetOutlinerDefaults( pDrawOutliner );
-    ImpSetOutlinerDefaults( pHitTestOutliner );
+    ImpSetOutlinerDefaults( pDrawOutliner.get() );
+    ImpSetOutlinerDefaults( pHitTestOutliner.get() );
 }
 
 
@@ -1900,8 +1900,8 @@ void SdrModel::SetCharCompressType( sal_uInt16 nType )
     if( nType != mnCharCompressType )
     {
         mnCharCompressType = nType;
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
     }
 }
 
@@ -1910,8 +1910,8 @@ void SdrModel::SetKernAsianPunctuation( bool bEnabled )
     if( mbKernAsianPunctuation != bEnabled )
     {
         mbKernAsianPunctuation = bEnabled;
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
     }
 }
 
@@ -1920,8 +1920,8 @@ void SdrModel::SetAddExtLeading( bool bEnabled )
     if( mbAddExtLeading != bEnabled )
     {
         mbAddExtLeading = bEnabled;
-        ImpSetOutlinerDefaults( pDrawOutliner );
-        ImpSetOutlinerDefaults( pHitTestOutliner );
+        ImpSetOutlinerDefaults( pDrawOutliner.get() );
+        ImpSetOutlinerDefaults( pHitTestOutliner.get() );
     }
 }
 
@@ -1930,7 +1930,7 @@ void SdrModel::ReformatAllTextObjects()
     ImpReformatAllTextObjects();
 }
 
-SdrOutliner* SdrModel::createOutliner( sal_uInt16 nOutlinerMode )
+std::shared_ptr< SdrOutliner > SdrModel::createOutliner( sal_uInt16 nOutlinerMode )
 {
     if( nullptr == mpOutlinerCache )
         mpOutlinerCache = new SdrOutlinerCache(this);
@@ -1938,24 +1938,20 @@ SdrOutliner* SdrModel::createOutliner( sal_uInt16 nOutlinerMode )
     return mpOutlinerCache->createOutliner( nOutlinerMode );
 }
 
-std::vector<SdrOutliner*> SdrModel::GetActiveOutliners() const
+std::vector< std::shared_ptr< SdrOutliner > > SdrModel::GetActiveOutliners() const
 {
-    std::vector< SdrOutliner* > aRet(mpOutlinerCache ? mpOutlinerCache->GetActiveOutliners() : std::vector< SdrOutliner* >());
+    std::vector< std::shared_ptr< SdrOutliner > > aRet(mpOutlinerCache ? mpOutlinerCache->GetActiveOutliners() : std::vector< std::shared_ptr< SdrOutliner > >());
     aRet.push_back(pDrawOutliner);
     aRet.push_back(pHitTestOutliner);
 
     return aRet;
 }
 
-void SdrModel::disposeOutliner( SdrOutliner* pOutliner )
+void SdrModel::disposeOutliner( const std::shared_ptr< SdrOutliner >& pOutliner )
 {
     if( mpOutlinerCache )
     {
         mpOutlinerCache->disposeOutliner( pOutliner );
-    }
-    else
-    {
-        delete pOutliner;
     }
 }
 

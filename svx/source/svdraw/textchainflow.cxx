@@ -163,11 +163,11 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, true);
     // making whole text
     bool bNewTextTransferred = false;
-    OutlinerParaObject *pNewText = impGetMergedUnderflowParaObject(pOutl);
+    std::shared_ptr< OutlinerParaObject > pNewText(impGetMergedUnderflowParaObject(pOutl));
 
     // Set the other box empty; it will be replaced by the rest of the text if overflow occurs
     if (!mpTargetLink->GetPreventChainable())
-        mpNextLink->NbcSetOutlinerParaObject(pOutl->GetEmptyParaObject());
+        mpNextLink->NbcSetOutlinerParaObject(std::shared_ptr< OutlinerParaObject >(pOutl->GetEmptyParaObject()));
 
     // We store the size since NbcSetOutlinerParaObject can change it
     //Size aOldSize = pOutl->GetMaxAutoPaperSize();
@@ -185,7 +185,7 @@ void TextChainFlow::ExecuteUnderflow(SdrOutliner *pOutl)
 
     //GetTextChain()->SetNilChainingEvent(mpTargetLink, false);
     if (!bNewTextTransferred)
-        delete pNewText;
+        pNewText.reset();
 
     // Check for new overflow
     CheckForFlowEvents(pOutl);
@@ -208,7 +208,7 @@ void TextChainFlow::ExecuteOverflow(SdrOutliner *pNonOverflOutl, SdrOutliner *pO
 
 void TextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
-    OutlinerParaObject *pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
+    const std::shared_ptr< OutlinerParaObject > pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
 
     SAL_INFO("svx.chaining", "[TEXTCHAINFLOW - OF] SOURCE box set to "
              << pNewText->GetTextObject().GetParagraphCount() << " paras");
@@ -231,9 +231,9 @@ void TextChainFlow::impMoveChainedTextToNextLink(SdrOutliner *pOverflOutl)
         return;
     }
 
-    OutlinerParaObject *pNewText =
+    const std::shared_ptr< OutlinerParaObject > pNewText(
         mpOverflChText->InsertOverflowingText(pOverflOutl,
-                                              mpNextLink->GetOutlinerParaObject());
+                                              mpNextLink->GetOutlinerParaObject()));
     SAL_INFO("svx.chaining", "[TEXTCHAINFLOW - OF] DEST box set to "
              << pNewText->GetTextObject().GetParagraphCount() << " paras");
 
@@ -253,7 +253,7 @@ SdrTextObj *TextChainFlow::GetLinkTarget() const
     return mpTargetLink;
 }
 
-OutlinerParaObject *TextChainFlow::impGetMergedUnderflowParaObject(SdrOutliner *pOutliner)
+std::shared_ptr< OutlinerParaObject> TextChainFlow::impGetMergedUnderflowParaObject(SdrOutliner *pOutliner)
 {
         return mpUnderflChText->CreateMergedUnderflowParaObject(pOutliner, mpNextLink->GetOutlinerParaObject());
 }
@@ -285,8 +285,8 @@ void EditingTextChainFlow::CheckForFlowEvents(SdrOutliner *pFlowOutl)
 
 void EditingTextChainFlow::impLeaveOnlyNonOverflowingText(SdrOutliner *pNonOverflOutl)
 {
-    OutlinerParaObject *pNewText = mpOverflChText->RemoveOverflowingText(pNonOverflOutl);
-    delete pNewText;
+    std::shared_ptr< OutlinerParaObject > pNewText(mpOverflChText->RemoveOverflowingText(pNonOverflOutl));
+    pNewText.reset();
     //impSetTextForEditingOutliner(pNewText); //XXX: Don't call it since we do everything with NonOverflowingText::ToParaObject // XXX: You may need this for Underflow
 
     // XXX: I'm not sure whether we need this (after all operations such as Paste don't change this - as far as I understand)

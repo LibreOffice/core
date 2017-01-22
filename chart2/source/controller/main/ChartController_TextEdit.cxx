@@ -64,7 +64,8 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
     OSL_PRECOND( !m_pTextActionUndoGuard.get(), "ChartController::StartTextEdit: already have a TextUndoGuard!?" );
     m_pTextActionUndoGuard.reset( new UndoGuard(
         SCH_RESSTR( STR_ACTION_EDIT_TEXT ), m_xUndoManager ) );
-    SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
+    // do not delete outliner
+    const std::shared_ptr< SdrOutliner > pOutliner( m_pDrawViewWrapper->getOutliner(), []( SdrOutliner* ){} );
 
     //#i77362 change notification for changes on additional shapes are missing
     uno::Reference< beans::XPropertySet > xChartViewProps( m_xChartView, uno::UNO_QUERY );
@@ -87,7 +88,7 @@ void ChartController::StartTextEdit( const Point* pMousePixel )
         // #i12587# support for shapes in chart
         if ( pMousePixel )
         {
-            OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
             if ( pOutlinerView )
             {
                 MouseEvent aEditEvt( *pMousePixel, 1, MouseEventModifiers::SYNTHETIC, MOUSE_LEFT, 0 );
@@ -116,7 +117,7 @@ bool ChartController::EndTextEdit()
         return false;
 
     SdrOutliner* pOutliner = m_pDrawViewWrapper->getOutliner();
-    OutlinerParaObject* pParaObj = pTextObject->GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pParaObj(pTextObject->GetOutlinerParaObject());
     if( pParaObj && pOutliner )
     {
         pOutliner->SetText( *pParaObj );
@@ -180,7 +181,7 @@ void ChartController::executeDispatch_InsertSpecialCharacter()
              dynamic_cast< const SfxStringItem* >(pItem) !=  nullptr )
                 aString = dynamic_cast<const SfxStringItem*>(pItem)->GetValue();
 
-        OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
         SdrOutliner*  pOutliner = m_pDrawViewWrapper->getOutliner();
 
         if(!pOutliner || !pOutlinerView)

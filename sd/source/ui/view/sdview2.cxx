@@ -238,10 +238,10 @@ void View::UpdateSelectionClipboard( bool bForceDeselect )
 
 void View::DoCut(vcl::Window* )
 {
-    const OutlinerView* pOLV = GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
 
     if( pOLV )
-        const_cast<OutlinerView*>(pOLV)->Cut();
+        pOLV->Cut();
     else if( AreObjectsMarked() )
     {
         OUString aStr(SD_RESSTR(STR_UNDO_CUT));
@@ -255,10 +255,10 @@ void View::DoCut(vcl::Window* )
 
 void View::DoCopy (vcl::Window* pWindow)
 {
-    const OutlinerView* pOLV = GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
 
     if( pOLV )
-        const_cast<OutlinerView*>(pOLV)->Copy();
+        pOLV->Copy();
     else if( AreObjectsMarked() )
     {
         BrkAction();
@@ -272,15 +272,15 @@ void View::DoPaste (vcl::Window* pWindow)
     if( !aDataHelper.GetTransferable().is() )
         return; // empty clipboard?
 
-    const OutlinerView* pOLV = GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
 
     if( pOLV && EditEngine::HasValidData( aDataHelper.GetTransferable() ) )
     {
-        const_cast< OutlinerView* >(pOLV)->PasteSpecial();
+        pOLV->PasteSpecial();
 
         SdrObject*  pObj = GetTextEditObject();
         SdPage*     pPage = static_cast<SdPage*>( pObj ? pObj->GetPage() : nullptr );
-        ::Outliner* pOutliner = pOLV->GetOutliner();
+        const std::shared_ptr< ::Outliner > pOutliner = pOLV->GetOutliner();
 
         if( pOutliner)
         {
@@ -451,7 +451,7 @@ sal_Int8 View::AcceptDrop( const AcceptDropEvent& rEvt, DropTargetHelper& rTarge
 
     if( mbIsDropAllowed && !pPV->IsLayerLocked( aLayerName ) && pPV->IsLayerVisible( aLayerName ) )
     {
-        const OutlinerView* pOLV = GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
         bool                bIsInsideOutlinerView = false;
 
         if( pOLV )
@@ -631,7 +631,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
 
     if( !pPV->IsLayerLocked( aActiveLayer ) )
     {
-        const OutlinerView* pOLV = GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
         bool                bIsInsideOutlinerView = false;
 
         if( pOLV )

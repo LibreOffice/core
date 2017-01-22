@@ -90,15 +90,15 @@ static SdPage* GetCurrentPage( sd::ViewShell* pViewSh, EditFieldInfo* pInfo, boo
     if( dynamic_cast<const sd::OutlineViewShell* >(pViewSh) !=  nullptr )
         pSdView = static_cast<sd::OutlineView*> (static_cast<sd::OutlineViewShell*>(pViewSh)->GetView());
 
-    if (pSdView != nullptr && (pOutliner ==  &pSdView->GetOutliner()))
+    if (pSdView != nullptr && (pOutliner ==  pSdView->GetOutliner().get()))
     {
         // outline mode
         int nPgNum = 0;
-        Outliner& rOutl = pSdView->GetOutliner();
+        const std::shared_ptr< Outliner > pOutl = pSdView->GetOutliner();
         long nPos = pInfo->GetPara();
         sal_Int32 nParaPos = 0;
 
-        for( Paragraph* pPara = rOutl.GetParagraph( 0 ); pPara && nPos >= 0; pPara = rOutl.GetParagraph( ++nParaPos ), nPos-- )
+        for( Paragraph* pPara = pOutl->GetParagraph( 0 ); pPara && nPos >= 0; pPara = pOutl->GetParagraph( ++nParaPos ), nPos-- )
         {
             if( Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ) )
                 nPgNum++;
@@ -666,11 +666,11 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
             SdDrawDocument* pDocument = pDocSh->GetDoc();
             pDocument->SetDefaultTabulator( nDefTab );
 
-            ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
+            const std::shared_ptr< ::sd::Outliner > pOutl = pDocument->GetOutliner( false );
             if( pOutl )
                 pOutl->SetDefTab( nDefTab );
 
-            ::sd::Outliner* pInternalOutl = pDocument->GetInternalOutliner( false );
+            const std::shared_ptr< ::sd::Outliner > pInternalOutl = pDocument->GetInternalOutliner( false );
             if( pInternalOutl )
                 pInternalOutl->SetDefTab( nDefTab );
         }
@@ -684,7 +684,7 @@ void SdModule::ApplyItemSet( sal_uInt16 nSlot, const SfxItemSet& rSet )
             SdrOutliner& rOutl = pDocument->GetDrawOutliner();
             nCntrl = rOutl.GetControlWord() &~ EEControlBits::ULSPACESUMMATION;
             rOutl.SetControlWord( nCntrl | nSum );
-            ::sd::Outliner* pOutl = pDocument->GetOutliner( false );
+            std::shared_ptr< ::sd::Outliner > pOutl = pDocument->GetOutliner( false );
             if( pOutl )
             {
                 nCntrl = pOutl->GetControlWord() &~ EEControlBits::ULSPACESUMMATION;

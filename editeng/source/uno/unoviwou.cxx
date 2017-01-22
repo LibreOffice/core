@@ -24,13 +24,13 @@
 #include <editeng/outliner.hxx>
 #include <editeng/editeng.hxx>
 
-SvxDrawOutlinerViewForwarder::SvxDrawOutlinerViewForwarder( OutlinerView& rOutl ) :
-    mrOutlinerView ( rOutl ), maTextShapeTopLeft()
+SvxDrawOutlinerViewForwarder::SvxDrawOutlinerViewForwarder( const std::shared_ptr< OutlinerView >& pOutl ) :
+    mpOutlinerView ( pOutl ), maTextShapeTopLeft()
 {
 }
 
-SvxDrawOutlinerViewForwarder::SvxDrawOutlinerViewForwarder( OutlinerView& rOutl, const Point& rShapePosTopLeft ) :
-    mrOutlinerView ( rOutl ), maTextShapeTopLeft( rShapePosTopLeft )
+SvxDrawOutlinerViewForwarder::SvxDrawOutlinerViewForwarder( const std::shared_ptr< OutlinerView >& pOutl, const Point& rShapePosTopLeft ) :
+    mpOutlinerView ( pOutl ), maTextShapeTopLeft( rShapePosTopLeft )
 {
 }
 
@@ -41,7 +41,7 @@ SvxDrawOutlinerViewForwarder::~SvxDrawOutlinerViewForwarder()
 Point SvxDrawOutlinerViewForwarder::GetTextOffset() const
 {
     // calc text offset from shape anchor
-    Rectangle aOutputRect( mrOutlinerView.GetOutputArea() );
+    Rectangle aOutputRect( mpOutlinerView->GetOutputArea() );
 
     return aOutputRect.TopLeft() - maTextShapeTopLeft;
 }
@@ -53,17 +53,17 @@ bool SvxDrawOutlinerViewForwarder::IsValid() const
 
 Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const
 {
-    OutputDevice* pOutDev = mrOutlinerView.GetWindow();
+    OutputDevice* pOutDev = mpOutlinerView->GetWindow();
 
     if( pOutDev )
     {
-        Rectangle aVisArea = mrOutlinerView.GetVisArea();
+        Rectangle aVisArea = mpOutlinerView->GetVisArea();
 
         Point aTextOffset( GetTextOffset() );
         aVisArea.Move( aTextOffset.X(), aTextOffset.Y() );
 
         // figure out map mode from edit engine
-        Outliner* pOutliner = mrOutlinerView.GetOutliner();
+        const std::shared_ptr< Outliner > pOutliner = mpOutlinerView->GetOutliner();
 
         if( pOutliner )
         {
@@ -81,7 +81,7 @@ Rectangle SvxDrawOutlinerViewForwarder::GetVisArea() const
 
 Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    OutputDevice* pOutDev = mrOutlinerView.GetWindow();
+    OutputDevice* pOutDev = mpOutlinerView->GetWindow();
 
     if( pOutDev )
     {
@@ -103,7 +103,7 @@ Point SvxDrawOutlinerViewForwarder::LogicToPixel( const Point& rPoint, const Map
 
 Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const MapMode& rMapMode ) const
 {
-    OutputDevice* pOutDev = mrOutlinerView.GetWindow();
+    OutputDevice* pOutDev = mpOutlinerView->GetWindow();
 
     if( pOutDev )
     {
@@ -126,31 +126,31 @@ Point SvxDrawOutlinerViewForwarder::PixelToLogic( const Point& rPoint, const Map
 
 bool SvxDrawOutlinerViewForwarder::GetSelection( ESelection& rSelection ) const
 {
-    rSelection = mrOutlinerView.GetSelection();
+    rSelection = mpOutlinerView->GetSelection();
     return true;
 }
 
 bool SvxDrawOutlinerViewForwarder::SetSelection( const ESelection& rSelection )
 {
-    mrOutlinerView.SetSelection( rSelection );
+    mpOutlinerView->SetSelection( rSelection );
     return true;
 }
 
 bool SvxDrawOutlinerViewForwarder::Copy()
 {
-    mrOutlinerView.Copy();
+    mpOutlinerView->Copy();
     return true;
 }
 
 bool SvxDrawOutlinerViewForwarder::Cut()
 {
-    mrOutlinerView.Cut();
+    mpOutlinerView->Cut();
     return true;
 }
 
 bool SvxDrawOutlinerViewForwarder::Paste()
 {
-    mrOutlinerView.Paste();
+    mpOutlinerView->Paste();
     return true;
 }
 

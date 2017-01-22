@@ -125,7 +125,7 @@ public:
     SfxViewShell* GetSfxViewShell() const override;
 
     virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = nullptr, vcl::Window* pWin = nullptr, bool bIsNewObj = false,
-        SdrOutliner* pGivenOutliner = nullptr, OutlinerView* pGivenOutlinerView = nullptr,
+        const std::shared_ptr< SdrOutliner >& pGivenOutliner = nullptr, const std::shared_ptr< OutlinerView >& pGivenOutlinerView = nullptr,
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true) override;
 
     virtual SdrEndTextEditKind SdrEndTextEdit(bool bDontDeleteReally = false) override;

@@ -59,8 +59,8 @@ void TextChainCursorManager::impDetectEvent(const KeyEvent& rKEvt,
                                             ESelection *pOutSel,
                                             bool *bOutHandled)
 {
-    SdrOutliner *pOutl = mpEditView->GetTextEditOutliner();
-    OutlinerView *pOLV = mpEditView->GetTextEditOutlinerView();
+    const std::shared_ptr< SdrOutliner > pOutl = mpEditView->GetTextEditOutliner();
+    const std::shared_ptr< OutlinerView > pOLV = mpEditView->GetTextEditOutlinerView();
 
     SdrTextObj *pNextLink = mpTextObj->GetNextLinkInChain();
     SdrTextObj *pPrevLink = mpTextObj->GetPrevLinkInChain();
@@ -159,7 +159,7 @@ void TextChainCursorManager::HandleCursorEvent(
 
 {
 
-    OutlinerView* pOLV = mpEditView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = mpEditView->GetTextEditOutlinerView();
     SdrTextObj *pNextLink = mpTextObj->GetNextLinkInChain();
     SdrTextObj *pPrevLink = mpTextObj->GetPrevLinkInChain();
 
@@ -199,7 +199,7 @@ void TextChainCursorManager::impChangeEditingTextObj(SdrTextObj *pTargetTextObj,
     mpEditView->SdrEndTextEdit();
     mpEditView->SdrBeginTextEdit(pTargetTextObj);
     // OutlinerView has changed, so we update the pointer
-    OutlinerView *pOLV = mpEditView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = mpEditView->GetTextEditOutlinerView();
     pOLV->SetSelection(aNewSel);
 
     // Update reference text obj

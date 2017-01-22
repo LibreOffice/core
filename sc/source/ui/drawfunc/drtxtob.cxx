@@ -150,8 +150,8 @@ ScDrawTextObjectBar::~ScDrawTextObjectBar()
 void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 {
     ScDrawView* pView = pViewData->GetScDrawView();
-    OutlinerView* pOutView = pView->GetTextEditOutlinerView();
-    Outliner* pOutliner = pView->GetTextEditOutliner();
+    const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
+    const std::shared_ptr< Outliner > pOutliner = pView->GetTextEditOutliner();
 
     if (!pOutView || !pOutliner)
     {
@@ -381,7 +381,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     {
         SvxHyperlinkItem aHLinkItem;
         SdrView* pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
         if ( pOutView )
         {
             bool bField = false;
@@ -412,7 +412,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
     if ( rSet.GetItemState( SID_OPEN_HYPERLINK ) != SfxItemState::UNKNOWN )
     {
         SdrView* pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
         bool bEnable = false;
         if ( pOutView )
         {
@@ -452,7 +452,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
          rSet.GetItemState( SID_THESAURUS ) != SfxItemState::UNKNOWN )
     {
         SdrView * pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
 
         OUString        aStatusVal;
         LanguageType    nLang = LANGUAGE_NONE;
@@ -585,7 +585,7 @@ static void lcl_RemoveFields( OutlinerView& rOutView )
 {
     //! Outliner should have RemoveFields with a selection
 
-    Outliner* pOutliner = rOutView.GetOutliner();
+    const std::shared_ptr< Outliner > pOutliner = rOutView.GetOutliner();
     if (!pOutliner) return;
 
     ESelection aOldSel = rOutView.GetSelection();
@@ -797,7 +797,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
         {
             case SID_TEXT_STANDARD: // Harte Textattributierung loeschen
             {
-                OutlinerView* pOutView = pView->IsTextEdit() ?
+                const std::shared_ptr< OutlinerView > pOutView = pView->IsTextEdit() ?
                                 pView->GetTextEditOutlinerView() : nullptr;
                 if ( pOutView )
                     pOutView->Paint( Rectangle() );
@@ -820,7 +820,7 @@ void ScDrawTextObjectBar::ExecuteAttr( SfxRequest &rReq )
             case SID_GROW_FONT_SIZE:
             case SID_SHRINK_FONT_SIZE:
             {
-                OutlinerView* pOutView = pView->IsTextEdit() ?
+                const std::shared_ptr< OutlinerView > pOutView = pView->IsTextEdit() ?
                     pView->GetTextEditOutlinerView() : nullptr;
                 if ( pOutView )
                 {
@@ -984,7 +984,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     // #i55929# input-language-dependent script type (depends on input language if nothing selected)
     SvtScriptType nInputScript = nScript;
-    OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
     if (pOutView && !pOutView->GetSelection().HasRange())
     {
         LanguageType nInputLang = pViewData->GetActiveWin()->GetInputLanguage();
@@ -1135,7 +1135,7 @@ void ScDrawTextObjectBar::GetAttrState( SfxItemSet& rDestSet )
 
     bool bLeftToRight = true;
 
-    SdrOutliner* pOutl = pView->GetTextEditOutliner();
+    const std::shared_ptr< SdrOutliner > pOutl = pView->GetTextEditOutliner();
     if( pOutl )
     {
         if( pOutl->IsVertical() )
@@ -1191,7 +1191,7 @@ void ScDrawTextObjectBar::ExecuteTrans( SfxRequest& rReq )
     if ( nType )
     {
         ScDrawView* pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
         if ( pOutView )
         {
             //  change selected text in object

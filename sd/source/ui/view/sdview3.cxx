@@ -1397,7 +1397,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
         if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::EDITENGINE, xStm ) )
         {
-            OutlinerView* pOLV = GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
 
             xStm->Seek( 0 );
 
@@ -1434,7 +1434,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
             }
             else
             {
-                OutlinerView* pOLV = GetTextEditOutlinerView();
+                const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
 
                 if( pOLV )
                 {
@@ -1498,7 +1498,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
             if( aDataHelper.GetString( SotClipboardFormatId::STRING, aOUString ) )
             {
-                OutlinerView* pOLV = GetTextEditOutlinerView();
+                const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
 
                 if( pOLV )
                 {

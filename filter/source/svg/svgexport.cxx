@@ -640,10 +640,10 @@ bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
                     //method, so get the full list of outliners and restore
                     //the maOldFieldHdl for all that have ended up using
                     //maNewFieldHdl
-                    std::vector<SdrOutliner*> aOutliners(mpSdrModel->GetActiveOutliners());
+                    std::vector< std::shared_ptr< SdrOutliner > > aOutliners(mpSdrModel->GetActiveOutliners());
                     for (auto aIter = aOutliners.begin(); aIter != aOutliners.end(); ++aIter)
                     {
-                        SdrOutliner* pOutliner = *aIter;
+                        const std::shared_ptr< SdrOutliner > pOutliner = *aIter;
                         if (maNewFieldHdl == pOutliner->GetCalcFieldValueHdl())
                             pOutliner->SetCalcFieldValueHdl(maOldFieldHdl);
                     }

@@ -21,6 +21,7 @@
 
 #include <cstdlib>
 
+#include <editeng/editobj.hxx>
 #include <SidebarWin.hxx>
 #include <SidebarWinAcc.hxx>
 #include <PostItMgr.hxx>
@@ -226,13 +227,11 @@ void SwSidebarWin::dispose()
 
     if ( mpOutlinerView )
     {
-        delete mpOutlinerView;
-        mpOutlinerView = nullptr;
+        mpOutlinerView.reset();
     }
 
     if (mpOutliner)
     {
-        delete mpOutliner;
         mpOutliner = nullptr;
     }
 
@@ -598,13 +597,13 @@ void SwSidebarWin::InitControls()
     }
 
     SwDocShell* aShell = mrView.GetDocShell();
-    mpOutliner = new Outliner(&aShell->GetPool(),OUTLINERMODE_TEXTOBJECT);
-    aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner );
+    mpOutliner = std::make_shared< Outliner >(&aShell->GetPool(), OUTLINERMODE_TEXTOBJECT);
+    aShell->GetDoc()->SetCalcFieldValueHdl( mpOutliner.get() );
     mpOutliner->SetUpdateMode( true );
     Rescale();
 
     mpSidebarTextControl->EnableRTL( false );
-    mpOutlinerView = new OutlinerView ( mpOutliner, mpSidebarTextControl );
+    mpOutlinerView = std::make_shared< OutlinerView >( mpOutliner, mpSidebarTextControl );
     mpOutlinerView->SetBackgroundColor(COL_TRANSPARENT);
     mpOutliner->InsertView(mpOutlinerView );
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );
@@ -1318,7 +1317,8 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
             // will be created
             if (!Engine()->GetEditEngine().GetText().isEmpty())
             {
-                OutlinerParaObject* pPara = new OutlinerParaObject(*GetOutlinerView()->GetEditView().CreateTextObject());
+                std::shared_ptr< EditTextObject > pEditText(GetOutlinerView()->GetEditView().CreateTextObject());
+                OutlinerParaObject* pPara = new OutlinerParaObject(pEditText);
                 mrMgr.RegisterAnswer(pPara);
             }
             if (mrMgr.HasActiveSidebarWin())

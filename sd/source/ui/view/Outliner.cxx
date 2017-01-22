@@ -107,14 +107,14 @@ public:
     /** Return the OutlinerView that was provided by the last call to
         ProvideOutlinerView() (or NULL when there was no such call.)
     */
-    OutlinerView* GetOutlinerView() { return mpOutlineView;}
+    std::shared_ptr< OutlinerView > GetOutlinerView() { return mpOutlineView;}
 
     /** Provide in the member mpOutlineView an instance of OutlinerView that
         is either taken from the ViewShell, when it is an OutlineViewShell,
         or is created.  When an OutlinerView already exists it is initialied.
     */
     void ProvideOutlinerView (
-        Outliner& rOutliner,
+        const std::shared_ptr< Outliner >& pOutliner,
         const std::shared_ptr<ViewShell>& rpViewShell,
         vcl::Window* pWindow);
 
@@ -134,7 +134,7 @@ private:
         For all other views an instance is created.  The
         <member>mbOwnOutlineView</member> distinguishes between both cases.
     */
-    OutlinerView* mpOutlineView;
+    std::shared_ptr< OutlinerView > mpOutlineView;
 };
 
 Outliner::Outliner( SdDrawDocument* pDoc, sal_uInt16 nMode )
@@ -279,7 +279,9 @@ void Outliner::PrepareSpelling()
         maSearchStartPosition = ::sd::outliner::Iterator();
         RememberStartPosition();
 
-        mpImpl->ProvideOutlinerView(*this, pViewShell, mpWindow);
+        // do not delete outliner
+        const std::shared_ptr< Outliner > pThis(this, []( Outliner* ){});
+        mpImpl->ProvideOutlinerView(pThis, pViewShell, mpWindow);
 
         HandleChangedSelection ();
     }
@@ -325,7 +327,7 @@ void Outliner::EndSpelling()
 
         // Remove and, if previously created by us, delete the outline
         // view.
-        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
         if (pOutlinerView != nullptr)
         {
             RemoveView(pOutlinerView);
@@ -378,7 +380,7 @@ bool Outliner::SpellNextDocument()
         Initialize (true);
 
         mpWindow = pViewShell->GetActiveWindow();
-        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
         if (pOutlinerView != nullptr)
             pOutlinerView->SetWindow(mpWindow);
         ProvideNextTextObject ();
@@ -408,7 +410,7 @@ svx::SpellPortions Outliner::GetNextSpellSentence()
     bool bFoundNextSentence = false;
     while ( ! bFoundNextSentence)
     {
-        OutlinerView* pOutlinerView = GetView(0);
+        const std::shared_ptr< OutlinerView > pOutlinerView = GetView(0);
         if (pOutlinerView != nullptr)
         {
             ESelection aCurrentSelection (pOutlinerView->GetSelection());
@@ -710,7 +712,7 @@ bool Outliner::SearchAndReplaceOnce(std::vector<SearchSelection>* pSelections)
 {
     DetectChange ();
 
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
     if (!pOutlinerView)
         return true; // end of search
 
@@ -857,7 +859,7 @@ void Outliner::DetectChange()
             mpView->UnmarkAllObj (pPageView);
         mpView->SdrEndTextEdit();
         SetUpdateMode(false);
-        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
         if (pOutlinerView != nullptr)
             pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
         if (meMode == SPELL)
@@ -962,11 +964,11 @@ void Outliner::RememberStartPosition()
             {
                 // Try to retrieve current caret position only when there is an
                 // edited object.
-                ::Outliner* pOutliner =
+                const std::shared_ptr< ::Outliner > pOutliner =
                     static_cast<DrawView*>(mpView)->GetTextEditOutliner();
                 if (pOutliner!=nullptr && pOutliner->GetViewCount()>0)
                 {
-                    OutlinerView* pOutlinerView = pOutliner->GetView(0);
+                    const std::shared_ptr< OutlinerView > pOutlinerView = pOutliner->GetView(0);
                     maStartSelection = pOutlinerView->GetSelection();
                 }
             }
@@ -975,7 +977,7 @@ void Outliner::RememberStartPosition()
     else if( nullptr != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
     {
         // Remember the current cursor position.
-        OutlinerView* pView = GetView(0);
+        const std::shared_ptr< OutlinerView > pView = GetView(0);
         if (pView != nullptr)
             pView->GetSelection();
     }
@@ -1012,7 +1014,8 @@ void Outliner::RestoreStartPosition()
                 {
                     PutTextIntoOutliner();
                     EnterEditMode(false);
-                    if (OutlinerView* pOutlinerView = mpImpl->GetOutlinerView())
+                    const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
+                    if (pOutlinerView)
                         pOutlinerView->SetSelection(maStartSelection);
                 }
             }
@@ -1020,7 +1023,7 @@ void Outliner::RestoreStartPosition()
         else if( nullptr != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
         {
             // Set cursor to its old position.
-            OutlinerView* pView = GetView(0);
+            const std::shared_ptr< OutlinerView > pView = GetView(0);
             if (pView != nullptr)
                 pView->SetSelection (maStartSelection);
         }
@@ -1049,7 +1052,7 @@ void Outliner::ProvideNextTextObject()
         DBG_UNHANDLED_EXCEPTION();
     }
     SetUpdateMode(false);
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView != nullptr)
         pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
     if (meMode == SPELL)
@@ -1146,7 +1149,7 @@ void Outliner::EndOfSearch()
             if( nullptr != dynamic_cast< const OutlineViewShell *>( pViewShell.get() ))
             {
                 // Set cursor to first character of the document.
-                OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+                const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
                 if (pOutlinerView != nullptr)
                     pOutlinerView->SetSelection (GetSearchStartPosition ());
             }
@@ -1316,7 +1319,7 @@ void Outliner::PrepareSearchAndReplace()
         mpDrawDocument->GetDocSh()->SetWaitCursor( false );
         // Start search at the right end of the current object's text
         // depending on the search direction.
-        OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
         if (pOutlinerView != nullptr)
             pOutlinerView->SetSelection (GetSearchStartPosition ());
     }
@@ -1404,7 +1407,7 @@ void Outliner::SetPage (EditMode eEditMode, sal_uInt16 nPageIndex)
 
 void Outliner::EnterEditMode (bool bGrabFocus)
 {
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView && mpTextObj)
     {
         pOutlinerView->SetOutputArea( Rectangle( Point(), Size(1, 1)));
@@ -1428,8 +1431,10 @@ void Outliner::EnterEditMode (bool bGrabFocus)
 
         mpTextObj->setActiveText( mnText );
 
+        // do not delete outliner
+        const std::shared_ptr< Outliner > pThis(this, []( Outliner* ){});
         // Turn on the edit mode for the text object.
-        mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, true, this, pOutlinerView, true, true, bGrabFocus);
+        mpView->SdrBeginTextEdit(mpTextObj, pPV, mpWindow, true, pThis, pOutlinerView, true, true, bGrabFocus);
 
         SetUpdateMode(true);
         mbFoundObject = true;
@@ -1464,7 +1469,7 @@ ESelection Outliner::GetSearchStartPosition()
 
 bool Outliner::HasNoPreviousMatch()
 {
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
 
     DBG_ASSERT (pOutlinerView!=nullptr, "outline view in Outliner::HasNoPreviousMatch is NULL");
 
@@ -1477,7 +1482,7 @@ bool Outliner::HandleFailedSearch()
 {
     bool bContinueSearch = false;
 
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView != nullptr && mpSearchItem != nullptr)
     {
         // Detect whether there is/may be a prior match.  If there is then
@@ -1525,8 +1530,10 @@ void Outliner::SetViewShell (const std::shared_ptr<ViewShell>& rpViewShell)
 
             mpWindow = rpViewShell->GetActiveWindow();
 
-            mpImpl->ProvideOutlinerView(*this, rpViewShell, mpWindow);
-            OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+            // do not delete outliner
+            const std::shared_ptr< Outliner > pThis(this, []( Outliner* ){});
+            mpImpl->ProvideOutlinerView(pThis, rpViewShell, mpWindow);
+            const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
             if (pOutlinerView != nullptr)
                 pOutlinerView->SetWindow(mpWindow);
         }
@@ -1573,7 +1580,7 @@ void Outliner::StartConversion( sal_Int16 nSourceLanguage,  sal_Int16 nTargetLan
 
     BeginConversion();
 
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView != nullptr)
     {
         pOutlinerView->StartTextConversion(
@@ -1634,7 +1641,9 @@ void Outliner::BeginConversion()
         maSearchStartPosition = ::sd::outliner::Iterator();
         RememberStartPosition();
 
-        mpImpl->ProvideOutlinerView(*this, pViewShell, mpWindow);
+        // do not delete outliner
+        const std::shared_ptr< Outliner > pThis(this, []( Outliner* ){});
+        mpImpl->ProvideOutlinerView(pThis, pViewShell, mpWindow);
 
         HandleChangedSelection ();
     }
@@ -1656,7 +1665,7 @@ bool Outliner::ConvertNextDocument()
 
     Initialize ( true );
 
-    OutlinerView* pOutlinerView = mpImpl->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutlinerView = mpImpl->GetOutlinerView();
     if (pOutlinerView != nullptr)
     {
         mpWindow = pViewShell->GetActiveWindow();
@@ -1738,8 +1747,7 @@ Outliner::Implementation::~Implementation()
     if (mbOwnOutlineView && mpOutlineView!=nullptr)
     {
         mpOutlineView->SetWindow(nullptr);
-        delete mpOutlineView;
-        mpOutlineView = nullptr;
+        mpOutlineView.reset();
     }
 }
 
@@ -1749,7 +1757,7 @@ Outliner::Implementation::~Implementation()
     which can not cope with exchanging the OutlinerView.
 */
 void Outliner::Implementation::ProvideOutlinerView (
-    Outliner& rOutliner,
+    const std::shared_ptr< Outliner >& pOutliner,
     const std::shared_ptr<ViewShell>& rpViewShell,
     vcl::Window* pWindow)
 {
@@ -1768,7 +1776,7 @@ void Outliner::Implementation::ProvideOutlinerView (
                     mpOutlineView = nullptr;
                 if (mpOutlineView == nullptr)
                 {
-                    mpOutlineView = new OutlinerView(&rOutliner, pWindow);
+                    mpOutlineView = std::make_shared< OutlinerView >(pOutliner, pWindow);
                     mbOwnOutlineView = true;
                     bInsert = true;
                 }
@@ -1778,11 +1786,11 @@ void Outliner::Implementation::ProvideOutlinerView (
                 nStat &= ~EVControlBits::AUTOSCROLL;
                 mpOutlineView->SetControlWord(nStat);
                 if (bInsert)
-                    rOutliner.InsertView( mpOutlineView );
-                rOutliner.SetUpdateMode(false);
+                    pOutliner->InsertView( mpOutlineView );
+                pOutliner->SetUpdateMode(false);
                 mpOutlineView->SetOutputArea (Rectangle (Point(), Size(1, 1)));
-                rOutliner.SetPaperSize( Size(1, 1) );
-                rOutliner.SetText(OUString(), rOutliner.GetParagraph(0));
+                pOutliner->SetPaperSize( Size(1, 1) );
+                pOutliner->SetText(OUString(), pOutliner->GetParagraph(0));
 
                 meOriginalEditMode =
                     std::static_pointer_cast<DrawViewShell>(rpViewShell)->GetEditMode();
@@ -1792,8 +1800,8 @@ void Outliner::Implementation::ProvideOutlinerView (
             case ViewShell::ST_OUTLINE:
             {
                 if (mpOutlineView!=nullptr && mbOwnOutlineView)
-                    delete mpOutlineView;
-                mpOutlineView = rOutliner.GetView(0);
+                    mpOutlineView.reset();
+                mpOutlineView = pOutliner->GetView(0);
                 mbOwnOutlineView = false;
             }
             break;
@@ -1811,13 +1819,13 @@ void Outliner::Implementation::ReleaseOutlinerView()
 {
     if (mbOwnOutlineView)
     {
-        OutlinerView* pView = mpOutlineView;
+        std::shared_ptr< OutlinerView > pView = mpOutlineView;
         mpOutlineView = nullptr;
         mbOwnOutlineView = false;
         if (pView != nullptr)
         {
             pView->SetWindow(nullptr);
-            delete pView;
+            pView.reset();
         }
     }
     else

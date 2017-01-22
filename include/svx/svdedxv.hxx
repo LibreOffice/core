@@ -63,29 +63,29 @@ class SVX_DLLPUBLIC SdrObjEditView: public SdrGlueEditView
 protected:
     // TextEdit
     SdrObjectWeakRef            mxTextEditObj;         // current object in TextEdit
-    SdrPageView*                pTextEditPV;
-    SdrOutliner*                pTextEditOutliner;     // outliner for the TextEdit
-    OutlinerView*               pTextEditOutlinerView; // current view of the outliners
-    VclPtr<vcl::Window>         pTextEditWin;          // matching window to pTextEditOutlinerView
-    vcl::Cursor*                pTextEditCursorMerker; // to restore the cursor in each window
-    ImpSdrEditPara*             pEditPara;             // trash bin for everything else to stay compatible
-    SdrObject*                  pMacroObj;
-    SdrPageView*                pMacroPV;
-    VclPtr<vcl::Window>         pMacroWin;
+    SdrPageView*                mpTextEditPgView;
+    std::shared_ptr< SdrOutliner >  mpTextEditOutliner;     // outliner for the TextEdit
+    std::shared_ptr< OutlinerView > mpTextEditOutlinerView; // current view of the outliners
+    VclPtr<vcl::Window>         mpTextEditWin;          // matching window to pTextEditOutlinerView
+    vcl::Cursor*                mpTextEditCursorMerker; // to restore the cursor in each window
+    ImpSdrEditPara*             mpEditPara;             // trash bin for everything else to stay compatible
+    SdrObject*                  mpMacroObj;
+    SdrPageView*                mpMacroPV;
+    VclPtr<vcl::Window>         mpMacroWin;
 
-    Rectangle                   aTextEditArea;
-    Rectangle                   aMinTextEditArea;
-    Link<EditFieldInfo*,void>   aOldCalcFieldValueLink; // for call the old handler
-    Point                       aMacroDownPos;
+    Rectangle                   maTextEditArea;
+    Rectangle                   maMinTextEditArea;
+    Link<EditFieldInfo*,void>   maOldCalcFieldValueLink; // for call the old handler
+    Point                       maMacroDownPos;
 
-    sal_uInt16                  nMacroTol;
+    sal_uInt16                  mnMacroTol;
 
-    bool                        bTextEditDontDelete : 1;   // do not delete outliner and view of SdrEndTextEdit (f. spellchecking)
-    bool                        bTextEditOnlyOneView : 1;  // a single OutlinerView (f. spellchecking)
-    bool                        bTextEditNewObj : 1;       // current edited object was just recreated
-    bool                        bQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
-    bool                        bMacroMode : 1;            // persistent(->CrtV). Default=TRUE
-    bool                        bMacroDown : 1;
+    bool                        mbTextEditDontDelete : 1;   // do not delete outliner and view of SdrEndTextEdit (f. spellchecking)
+    bool                        mbTextEditOnlyOneView : 1;  // a single OutlinerView (f. spellchecking)
+    bool                        mbTextEditNewObj : 1;       // current edited object was just recreated
+    bool                        mbQuickTextEditMode : 1;    // persistent(->CrtV). Default=TRUE
+    bool                        mbMacroMode : 1;            // persistent(->CrtV). Default=TRUE
+    bool                        mbMacroDown : 1;
 
     rtl::Reference< sdr::SelectionController > mxSelectionController;
     rtl::Reference< sdr::SelectionController > mxLastSelectionController;
@@ -106,11 +106,11 @@ protected:
     TextChainCursorManager *ImpHandleMotionThroughBoxesKeyInput(const KeyEvent& rKEvt, vcl::Window* pWin, bool *bOutHandled);
 
 
-    OutlinerView* ImpFindOutlinerView(vcl::Window* pWin) const;
+    std::shared_ptr< OutlinerView > ImpFindOutlinerView(vcl::Window* pWin) const;
 
     // Create a new OutlinerView at the heap and initialize all required parameters.
     // pTextEditObj, pTextEditPV and pTextEditOutliner have to be initialized
-    OutlinerView* ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, OutlinerView* pGivenView, SfxViewShell* pViewShell = nullptr) const;
+    std::shared_ptr< OutlinerView > ImpMakeOutlinerView(vcl::Window* pWin, bool bNoPaint, const std::shared_ptr< OutlinerView >& pGivenView, SfxViewShell* pViewShell = nullptr) const;
     void ImpPaintOutlinerView(OutlinerView& rOutlView, const Rectangle& rRect, OutputDevice& rTargetDevice) const;
     void ImpInvalidateOutlinerView(OutlinerView& rOutlView) const;
 
@@ -166,8 +166,8 @@ public:
     // TextEdit over an outliner
 
     // QuickTextEditMode = edit the text straight after selection. Default=TRUE. Persistent.
-    void SetQuickTextEditMode(bool bOn) { bQuickTextEditMode=bOn; }
-    bool IsQuickTextEditMode() const { return bQuickTextEditMode; }
+    void SetQuickTextEditMode(bool bOn) { mbQuickTextEditMode = bOn; }
+    bool IsQuickTextEditMode() const { return mbQuickTextEditMode; }
 
     // Start the TextEditMode. If pWin==NULL, use the first window, which is logged at the View.
     // The cursor of the currently edited window is stored with SdrBeginTextEdit()
@@ -182,7 +182,7 @@ public:
     // Similarly a specific OutlinerView can be specified.
 
     virtual bool SdrBeginTextEdit(SdrObject* pObj, SdrPageView* pPV = nullptr, vcl::Window* pWin = nullptr, bool bIsNewObj = false,
-        SdrOutliner* pGivenOutliner = nullptr, OutlinerView* pGivenOutlinerView = nullptr,
+        const std::shared_ptr< SdrOutliner >& pGivenOutliner = nullptr, const std::shared_ptr< OutlinerView >& pGivenOutlinerView = nullptr,
         bool bDontDeleteOutliner = false, bool bOnlyOneView = false, bool bGrabFocus = true);
     // bDontDeleteReally is a special parameter for writer
     // If this flag is set, then a maybe empty textobject is not deleted.
@@ -215,10 +215,10 @@ public:
 
     // Now at this outliner, events can be send, attributes can be set,
     // call Cut/Copy/Paste, call Undo/Redo, and so on...
-    const SdrOutliner* GetTextEditOutliner() const { return pTextEditOutliner; }
-    SdrOutliner* GetTextEditOutliner() { return pTextEditOutliner; }
-    const OutlinerView* GetTextEditOutlinerView() const { return pTextEditOutlinerView; }
-    OutlinerView* GetTextEditOutlinerView() { return pTextEditOutlinerView; }
+    const std::shared_ptr< SdrOutliner > GetTextEditOutliner() const { return mpTextEditOutliner; }
+    std::shared_ptr< SdrOutliner > GetTextEditOutliner() { return mpTextEditOutliner; }
+    const std::shared_ptr< OutlinerView > GetTextEditOutlinerView() const { return mpTextEditOutlinerView; }
+    std::shared_ptr< OutlinerView > GetTextEditOutlinerView() { return mpTextEditOutlinerView; }
 
     virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt, vcl::Window* pWin) override;
@@ -247,13 +247,13 @@ public:
 
     // Persistent. Default TRUE. SvDraw evaluates the flag e.g. at SdrView::GetPreferredPointer().
     // Has only effect, if the document has draw-objects with macrofunctionality (SdrObject::HasMacro()==sal_True).
-    bool IsMacroMode() const { return bMacroMode; }
+    bool IsMacroMode() const { return mbMacroMode; }
     bool BegMacroObj(const Point& rPnt, short nTol, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin);
     bool BegMacroObj(const Point& rPnt, SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin) { return BegMacroObj(rPnt,-2,pObj,pPV,pWin); }
     void MovMacroObj(const Point& rPnt);
     void BrkMacroObj();
     bool EndMacroObj();
-    bool IsMacroObj() const { return pMacroObj!=nullptr; }
+    bool IsMacroObj() const { return mpMacroObj != nullptr; }
 
     /** fills the given any with a XTextCursor for the current text selection.
         Leaves the any untouched if there currently is no text selected */

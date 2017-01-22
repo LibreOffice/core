@@ -575,13 +575,13 @@ void SdExportTest::testBnc822347_EmptyBullet()
     xDocShRef = saveAndReload(xDocShRef, PPTX);
 
     SdDrawDocument* pDoc = xDocShRef->GetDoc();
-    SdrOutliner* pOutliner = pDoc->GetInternalOutliner();
+    const std::shared_ptr< SdrOutliner > pOutliner = pDoc->GetInternalOutliner();
     const SdrPage* pPage = pDoc->GetPage(1);
     SdrObject* pObject = pPage->GetObj(0);
     SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pObject);
     CPPUNIT_ASSERT(pTextObject);
 
-    OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
     const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
 
     OUString sText = aEdit.GetText(0);
@@ -606,7 +606,7 @@ void SdExportTest::testFdo90607()
     const SdrPage *pPage = GetPage( 1, xDocShRef );
     SdrTextObj *pTxtObj = dynamic_cast<SdrTextObj *>( pPage->GetObj(1) );
     CPPUNIT_ASSERT_MESSAGE( "no text object", pTxtObj != nullptr);
-    OutlinerParaObject* pOutlinerParagraphObject = pTxtObj->GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParagraphObject = pTxtObj->GetOutlinerParaObject();
     const sal_Int16 nDepth = pOutlinerParagraphObject->GetDepth(0);
     CPPUNIT_ASSERT_MESSAGE("not equal", nDepth != -1);
     xDocShRef->DoClose();

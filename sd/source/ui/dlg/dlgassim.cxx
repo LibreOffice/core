@@ -120,7 +120,7 @@ void SdPageListControl::InsertTitle( SvTreeListEntry* pParent, const OUString& r
 
 void SdPageListControl::Fill( SdDrawDocument* pDoc )
 {
-    Outliner* pOutliner = pDoc->GetInternalOutliner();
+    const std::shared_ptr< Outliner > pOutliner = pDoc->GetInternalOutliner();
 
     sal_uInt16 nPage = 0;
     const sal_uInt16 nMaxPages = pDoc->GetPageCount();
@@ -150,7 +150,7 @@ void SdPageListControl::Fill( SdDrawDocument* pDoc )
 
             if (pTO && !pTO->IsEmptyPresObj())
             {
-                OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pOPO(pTO->GetOutlinerParaObject());
                 if (pOPO)
                 {
                     pOutliner->Clear();

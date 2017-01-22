@@ -115,7 +115,7 @@ void CellUndo::setDataToCell( const Data& rData )
         mxCell->mpProperties = nullptr;
 
     if( rData.mpOutlinerParaObject )
-        mxCell->SetOutlinerParaObject( new OutlinerParaObject(*rData.mpOutlinerParaObject) );
+        mxCell->SetOutlinerParaObject( std::make_shared< OutlinerParaObject >(*rData.mpOutlinerParaObject) );
     else
         mxCell->RemoveOutlinerParaObject();
 

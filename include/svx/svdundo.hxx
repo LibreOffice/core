@@ -154,10 +154,10 @@ protected:
     bool                        bHaveToTakeRedoSet;
 
     // When assigning TextItems to a drawing object with text:
-    OutlinerParaObject*         pTextUndo;
+    std::shared_ptr< OutlinerParaObject >   pTextUndo;
     // #i8508#
     // The text rescue mechanism needs also to be implemented for redo actions.
-    OutlinerParaObject*         pTextRedo;
+    std::shared_ptr< OutlinerParaObject >   pTextRedo;
 
     // If we have a group object:
     SdrUndoGroup*               pUndoGroup;
@@ -404,8 +404,8 @@ public:
 class SVX_DLLPUBLIC SdrUndoObjSetText : public SdrUndoObj
 {
 protected:
-    OutlinerParaObject*         pOldText;
-    OutlinerParaObject*         pNewText;
+    std::shared_ptr< OutlinerParaObject >         pOldText;
+    std::shared_ptr< OutlinerParaObject >         pNewText;
     bool                        bNewTextAvailable;
     bool                        bEmptyPresObj;
     sal_Int32                   mnText;

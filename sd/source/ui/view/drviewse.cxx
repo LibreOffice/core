@@ -31,6 +31,7 @@
 #include "undo/undomanager.hxx"
 #include <vcl/waitobj.hxx>
 #include <svl/aeitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/editstat.hxx>
 #include <vcl/msgbox.hxx>
 #include <svl/urlbmk.hxx>
@@ -120,7 +121,7 @@ void ImpAddPrintableCharactersToTextEdit(SfxRequest& rReq, ::sd::View* pView)
 
         if(!aInputString.isEmpty())
         {
-            OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = pView->GetTextEditOutlinerView();
 
             if(pOLV)
             {
@@ -842,7 +843,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             if( mpDrawView->IsTextEdit() )
             {
-                OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+                const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
                 if( pOLV )
                 {
                     OUString sInput = pOLV->GetSurroundingText();
@@ -944,7 +945,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         {
             if ( mpDrawView->IsTextEdit() )
             {
-                OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+                const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
 
                 if (pOLV)
                 {
@@ -1325,7 +1326,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
             bool bOnlineSpell = !GetDoc()->GetOnlineSpell();
             GetDoc()->SetOnlineSpell(bOnlineSpell);
 
-            ::Outliner* pOL = mpDrawView->GetTextEditOutliner();
+            const std::shared_ptr< ::Outliner > pOL = mpDrawView->GetTextEditOutliner();
 
             if (pOL)
             {
@@ -1436,7 +1437,7 @@ void DrawViewShell::FuSupport(SfxRequest& rReq)
         case SID_TRANSLITERATE_HIRAGANA:
         case SID_TRANSLITERATE_KATAGANA:
         {
-            OutlinerView* pOLV = GetView()->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = GetView()->GetTextEditOutlinerView();
             if( pOLV )
             {
                 using namespace ::com::sun::star::i18n;
@@ -1508,7 +1509,7 @@ void DrawViewShell::FuSupportRotate(SfxRequest &rReq)
         if (!pView)
             return;
 
-        OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = pView->GetTextEditOutlinerView();
 
         if (!pOLV)
             return;
@@ -1520,7 +1521,7 @@ void DrawViewShell::FuSupportRotate(SfxRequest &rReq)
 void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
                                    const OUString& rTarget, const Point* pPos)
 {
-    OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
 
     if (pOLV)
     {
@@ -1535,7 +1536,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
     }
     else
     {
-        Outliner* pOutl = GetDoc()->GetInternalOutliner();
+        const std::shared_ptr< Outliner > pOutl = GetDoc()->GetInternalOutliner();
         pOutl->Init( OUTLINERMODE_TEXTOBJECT );
         sal_uInt16 nOutlMode = pOutl->GetMode();
 
@@ -1543,7 +1544,7 @@ void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
         aURLField.SetTargetFrame(rTarget);
         SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
         pOutl->QuickInsertField( aURLItem, ESelection() );
-        OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
+        std::shared_ptr< OutlinerParaObject > pOutlParaObject(pOutl->CreateParaObject());
 
         SdrRectObj* pRectObj = new SdrRectObj(OBJ_TEXT);
 

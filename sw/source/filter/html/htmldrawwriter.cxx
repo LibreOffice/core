@@ -140,8 +140,8 @@ Writer& OutHTML_DrawFrameFormatAsMarquee( Writer& rWrt,
     const SdrTextObj *pTextObj = static_cast<const SdrTextObj *>(&rSdrObject);
 
     // Gibt es ueberhaupt auszugebenden Text
-    const OutlinerParaObject *pOutlinerParaObj =
-        pTextObj->GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParaObj(
+        pTextObj->GetOutlinerParaObject());
     if( !pOutlinerParaObj )
         return rWrt;
 

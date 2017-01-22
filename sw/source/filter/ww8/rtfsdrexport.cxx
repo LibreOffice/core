@@ -535,8 +535,8 @@ sal_Int32 RtfSdrExport::StartShape()
     const SdrTextObj* pTextObj = dynamic_cast<const SdrTextObj*>(m_pSdrObject);
     if (pTextObj)
     {
-        const OutlinerParaObject* pParaObj = nullptr;
-        std::unique_ptr<const OutlinerParaObject> pOwnedParaObj;
+        std::shared_ptr< OutlinerParaObject > pParaObj = nullptr;
+        std::shared_ptr< OutlinerParaObject > pOwnedParaObj;
 
         /*
         #i13885#
@@ -545,8 +545,8 @@ sal_Int32 RtfSdrExport::StartShape()
         */
         if (pTextObj->IsTextEditActive())
         {
-            pOwnedParaObj.reset(pTextObj->GetEditOutlinerParaObject());
-            pParaObj = pOwnedParaObj.get();
+            pOwnedParaObj = pTextObj->GetEditOutlinerParaObject();
+            pParaObj = pOwnedParaObj;
         }
         else
         {

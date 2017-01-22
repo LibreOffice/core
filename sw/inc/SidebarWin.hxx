@@ -82,7 +82,7 @@ class SwSidebarWin : public vcl::Window
         inline Point GetAnchorPos() { return mAnchorRect.Pos(); }
         SwEditWin& EditWin();
 
-        inline OutlinerView* GetOutlinerView() { return mpOutlinerView;}
+        inline std::shared_ptr< OutlinerView > GetOutlinerView() { return mpOutlinerView;}
         bool HasScrollbar() const;
         bool IsScrollbarVisible() const;
         inline ScrollBar* Scrollbar() { return mpVScrollbar; }
@@ -204,7 +204,7 @@ class SwSidebarWin : public vcl::Window
 
         inline SwView& DocView() { return mrView;}
         inline SwPostItMgr& Mgr() { return mrMgr; }
-        inline Outliner* Engine() { return mpOutliner;}
+        inline std::shared_ptr< Outliner > Engine() { return mpOutliner;}
 
     private:
         SwSidebarWin*   GetTopReplyNote();
@@ -217,8 +217,8 @@ class SwSidebarWin : public vcl::Window
 
         ImplSVEvent *   mnEventId;
 
-        OutlinerView*   mpOutlinerView;
-        Outliner*       mpOutliner;
+        std::shared_ptr< OutlinerView > mpOutlinerView;
+        std::shared_ptr< Outliner >     mpOutliner;
 
         VclPtr<sw::sidebarwindows::SidebarTextControl> mpSidebarTextControl;
         VclPtr<ScrollBar>      mpVScrollbar;

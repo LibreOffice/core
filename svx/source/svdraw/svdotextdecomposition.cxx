@@ -753,7 +753,7 @@ void SdrTextObj::impDecomposeAutoFitTextPrimitive(
     // add one to rage sizes to get back to the old Rectangle and outliner measurements
     const sal_uInt32 nAnchorTextWidth(FRound(aAnchorTextRange.getWidth() + 1L));
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
-    const OutlinerParaObject* pOutlinerParaObject = rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(rSdrAutofitTextPrimitive.getSdrText()->GetOutlinerParaObject());
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
     const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());
     const Size aAnchorTextSize(Size(nAnchorTextWidth, nAnchorTextHeight));
@@ -1497,7 +1497,7 @@ void SdrTextObj::impDecomposeChainedTextPrimitive(
     const sal_uInt32 nAnchorTextHeight(FRound(aAnchorTextRange.getHeight() + 1L));
 
     // Text
-    const OutlinerParaObject* pOutlinerParaObject = rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(rSdrChainedTextPrimitive.getSdrText()->GetOutlinerParaObject());
     OSL_ENSURE(pOutlinerParaObject, "impDecomposeBlockTextPrimitive used with no OutlinerParaObject (!)");
 
     const bool bVerticalWritintg(pOutlinerParaObject->IsVertical());

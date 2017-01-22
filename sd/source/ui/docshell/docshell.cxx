@@ -421,7 +421,7 @@ void DrawDocShell::SetModified( bool bSet /* = true */ )
 IMPL_LINK_TYPED(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo&, rInfo, void)
 {
     SdrObject* pObj = nullptr;
-    SdrOutliner* pOutl = nullptr;
+    std::shared_ptr< SdrOutliner > pOutl = nullptr;
 
     if(GetViewShell())
     {
@@ -429,7 +429,7 @@ IMPL_LINK_TYPED(DrawDocShell, OnlineSpellCallback, SpellCallbackInfo&, rInfo, vo
         pObj = GetViewShell()->GetView()->GetTextEditObject();
     }
 
-    mpDoc->ImpOnlineSpellCallback(&rInfo, pObj, pOutl);
+    mpDoc->ImpOnlineSpellCallback(&rInfo, pObj, pOutl.get());
 }
 
 void DrawDocShell::ClearUndoBuffer()
@@ -451,7 +451,7 @@ void DrawDocShell::ClearUndoBuffer()
                     sd::OutlineView* pOutlView = dynamic_cast< sd::OutlineView* >( pView );
                     if( pOutlView )
                     {
-                        pOutlView->GetOutliner().GetUndoManager().Clear();
+                        pOutlView->GetOutliner()->GetUndoManager().Clear();
                     }
                 }
             }

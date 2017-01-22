@@ -502,10 +502,10 @@ public:
     virtual void EndTextEdit(SdrOutliner& rOutl) override;
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const;
 
-    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
-    void NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObject, SdrText* pText );
-    virtual OutlinerParaObject* GetOutlinerParaObject() const override;
-    virtual OutlinerParaObject* GetEditOutlinerParaObject() const;
+    virtual void NbcSetOutlinerParaObject(const std::shared_ptr< OutlinerParaObject >& pTextObject) override;
+    void NbcSetOutlinerParaObjectForText(const std::shared_ptr< OutlinerParaObject >& pTextObject, SdrText* pText );
+    virtual std::shared_ptr< OutlinerParaObject > GetOutlinerParaObject() const override;
+    virtual std::shared_ptr< OutlinerParaObject > GetEditOutlinerParaObject() const;
 
     virtual void NbcReformatText() override;
     virtual void ReformatText() override;

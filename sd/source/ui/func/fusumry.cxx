@@ -173,7 +173,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
                 }
 
                 // add text
-                OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetOutlinerParaObject());
                 // #118876#, check if the OutlinerParaObject is created successfully
                 if( pParaObj )
                 {
@@ -204,7 +204,7 @@ void FuSummaryPage::DoExecute( SfxRequest& )
         pOutl->SetDepth(pOutl->GetParagraph(nPara), 0);
     }
 
-    pTextObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
+    pTextObj->SetOutlinerParaObject( std::shared_ptr< OutlinerParaObject >(pOutl->CreateParaObject()) );
     pTextObj->SetEmptyPresObj(false);
 
     // remove hard attributes (Flag to sal_True)

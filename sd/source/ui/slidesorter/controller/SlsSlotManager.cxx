@@ -567,10 +567,10 @@ void SlotManager::GetMenuState (SfxItemSet& rSet)
                         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                         if( pTextObj )
                         {
-                            OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+                            std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetEditOutlinerParaObject());
                             if( pParaObj )
                             {
-                                delete pParaObj;
+                                pParaObj.reset();
                                 bDisable = false;
                             }
                         }

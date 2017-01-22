@@ -69,7 +69,7 @@ struct SwTextAPIEditSource_Impl
     // needed for "internal" refcounting
     SfxItemPool*                    mpPool;
     SwDoc*                          mpDoc;
-    Outliner*                       mpOutliner;
+    std::shared_ptr< Outliner >     mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
     sal_Int32                       mnRef;
 };
@@ -113,7 +113,6 @@ void SwTextAPIEditSource::Dispose()
     pImpl->mpPool=nullptr;
     pImpl->mpDoc=nullptr;
     DELETEZ(pImpl->mpTextForwarder);
-    DELETEZ(pImpl->mpOutliner);
 }
 
 SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
@@ -125,12 +124,12 @@ SvxTextForwarder* SwTextAPIEditSource::GetTextForwarder()
     {
         //init draw model first
         pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-        pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
-        pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+        pImpl->mpOutliner = std::make_shared< Outliner >( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
+        pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner.get() );
     }
 
     if( !pImpl->mpTextForwarder )
-        pImpl->mpTextForwarder = new SvxOutlinerForwarder( *pImpl->mpOutliner, false );
+        pImpl->mpTextForwarder = new SvxOutlinerForwarder( pImpl->mpOutliner, false );
 
     return pImpl->mpTextForwarder;
 }
@@ -143,8 +142,8 @@ void SwTextAPIEditSource::SetText( OutlinerParaObject& rText )
         {
             //init draw model first
             pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-            pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
-            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+            pImpl->mpOutliner = std::make_shared< Outliner >( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
+            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner.get() );
         }
 
         pImpl->mpOutliner->SetText( rText );
@@ -159,8 +158,8 @@ void SwTextAPIEditSource::SetString( const OUString& rText )
         {
             //init draw model first
             pImpl->mpDoc->getIDocumentDrawModelAccess().GetOrCreateDrawModel();
-            pImpl->mpOutliner = new Outliner( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
-            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+            pImpl->mpOutliner = std::make_shared< Outliner >( pImpl->mpPool, OUTLINERMODE_TEXTOBJECT );
+            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner.get() );
         }
         else
             pImpl->mpOutliner->Clear();

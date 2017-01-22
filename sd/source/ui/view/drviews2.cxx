@@ -799,7 +799,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if (mpDrawView->IsTextEdit())
             {
-                ::Outliner* pOutl = mpDrawView->GetTextEditOutliner();
+                const std::shared_ptr< ::Outliner > pOutl = mpDrawView->GetTextEditOutliner();
                 if (pOutl)
                 {
                     pOutl->RemoveFields(checkSvxFieldData<SvxURLField>);
@@ -1717,7 +1717,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_OPEN_HYPERLINK:
         {
-            OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOutView = mpDrawView->GetTextEditOutlinerView();
             if ( pOutView )
             {
                 const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
@@ -1780,7 +1780,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 }
                 else if (pHLItem->GetInsertMode() == HLINK_DEFAULT)
                 {
-                    OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
+                    const std::shared_ptr< OutlinerView > pOlView = mpDrawView->GetTextEditOutlinerView();
 
                     if (pOlView)
                     {
@@ -1923,7 +1923,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 break;
             }
 
-            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
 
             if( pOLV )
             {
@@ -1949,12 +1949,12 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             }
             else
             {
-                Outliner* pOutl = GetDoc()->GetInternalOutliner();
+                const std::shared_ptr< Outliner > pOutl = GetDoc()->GetInternalOutliner();
                 pOutl->Init( OUTLINERMODE_TEXTOBJECT );
                 sal_uInt16 nOutlMode = pOutl->GetMode();
                 pOutl->SetStyleSheet( 0, nullptr );
                 pOutl->QuickInsertField( *pFieldItem, ESelection() );
-                OutlinerParaObject* pOutlParaObject = pOutl->CreateParaObject();
+                const std::shared_ptr< OutlinerParaObject > pOutlParaObject(pOutl->CreateParaObject());
 
                 SdrRectObj* pRectObj = new SdrRectObj( OBJ_TEXT );
                 pRectObj->SetMergedItem(makeSdrTextAutoGrowWidthItem(true));
@@ -1988,7 +1988,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
         case SID_MODIFY_FIELD:
         {
-            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
 
             if( pOLV )
             {
@@ -2033,7 +2033,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         {
                             pOLV->SetAttribs( aSet );
 
-                            ::Outliner* pOutliner = pOLV->GetOutliner();
+                            const std::shared_ptr< ::Outliner > pOutliner = pOLV->GetOutliner();
                             if( pOutliner )
                                 pOutliner->UpdateFields();
                         }

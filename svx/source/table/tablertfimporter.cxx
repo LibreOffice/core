@@ -276,7 +276,7 @@ void SdrTableRTFParser::FillTable()
                         SdrOutliner& rOutliner=mrTableObj.ImpGetDrawOutliner();
                         rOutliner.SetUpdateMode(true);
                         rOutliner.SetText( *pTextObject );
-                        mrTableObj.NbcSetOutlinerParaObjectForText( rOutliner.CreateParaObject(), xCell.get() );
+                        mrTableObj.NbcSetOutlinerParaObjectForText( std::shared_ptr< OutlinerParaObject >(rOutliner.CreateParaObject()), xCell.get() );
                     }
                 }
             }

@@ -183,7 +183,7 @@ sal_uInt8 FuPoor::Command(const CommandEvent& rCEvt)
         // nur, wenn im Outliner was selektiert ist, darf
         // Command sal_True zurueckliefern:
 
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
 
         if ( pOutView )
             return pOutView->HasSelection() ? (pView->Command(rCEvt,pWindow) ? 1 : 0) : SC_CMD_NONE;

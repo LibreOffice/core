@@ -631,7 +631,7 @@ void HtmlExport::InitExportParameters( const Sequence< PropertyValue >& rParams 
 
 void HtmlExport::ExportSingleDocument()
 {
-    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner().get();
 
     maPageNames.resize(mnSdPageCount);
 
@@ -1091,7 +1091,7 @@ bool HtmlExport::CreateHtmlTextForPresPages()
 {
     bool bOk = true;
 
-    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner().get();
 
     for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount && bOk; nSdPage++)
     {
@@ -1193,7 +1193,7 @@ OUString HtmlExport::CreateTextForTitle( SdrOutliner* pOutliner, SdPage* pPage, 
 
     if (pTO && !pTO->IsEmptyPresObj())
     {
-        OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pOPO(pTO->GetOutlinerParaObject());
         if(pOPO && pOutliner->GetParagraphCount() != 0)
         {
             pOutliner->Clear();
@@ -1234,7 +1234,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
                 {
                     if (pObject->GetOutlinerParaObject())
                     {
-                        WriteOutlinerParagraph(aStr, pOutliner, pObject->GetOutlinerParaObject(), rBackgroundColor, false);
+                        WriteOutlinerParagraph(aStr, pOutliner, pObject->GetOutlinerParaObject().get(), rBackgroundColor, false);
                     }
                 }
             }
@@ -1253,7 +1253,7 @@ OUString HtmlExport::CreateTextForPage(SdrOutliner* pOutliner, SdPage* pPage,
                 SdrTextObj* pTextObject = static_cast<SdrTextObj*>(pObject);
                 if (pTextObject->IsEmptyPresObj())
                     continue;
-                WriteOutlinerParagraph(aStr, pOutliner, pTextObject->GetOutlinerParaObject(), rBackgroundColor, bHeadLine);
+                WriteOutlinerParagraph(aStr, pOutliner, pTextObject->GetOutlinerParaObject().get(), rBackgroundColor, bHeadLine);
             }
             break;
 
@@ -1284,7 +1284,7 @@ void HtmlExport::WriteTable(OUStringBuffer& aStr, SdrTableObj* pTableObject, Sdr
 
             if (pText == nullptr)
                 continue;
-            WriteOutlinerParagraph(aStr, pOutliner, pText->GetOutlinerParaObject(), rBackgroundColor, false);
+            WriteOutlinerParagraph(aStr, pOutliner, pText->GetOutlinerParaObject().get(), rBackgroundColor, false);
             aStr.append("    </td>\r\n");
         }
         aStr.append("  </tr>\r\n");
@@ -1306,10 +1306,10 @@ void HtmlExport::WriteObjectGroup(OUStringBuffer& aStr, SdrObjGroup* pObjectGrou
         }
         else
         {
-            OutlinerParaObject* pOutlinerParagraphObject = pCurrentObject->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pOutlinerParagraphObject(pCurrentObject->GetOutlinerParaObject());
             if (pOutlinerParagraphObject != nullptr)
             {
-                WriteOutlinerParagraph(aStr, pOutliner, pOutlinerParagraphObject, rBackgroundColor, bHeadLine);
+                WriteOutlinerParagraph(aStr, pOutliner, pOutlinerParagraphObject.get(), rBackgroundColor, bHeadLine);
             }
         }
     }
@@ -1386,7 +1386,7 @@ OUString HtmlExport::CreateTextForNotesPage( SdrOutliner* pOutliner,
 
     if (pTO && !pTO->IsEmptyPresObj())
     {
-        OutlinerParaObject* pOPO = pTO->GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pOPO(pTO->GetOutlinerParaObject());
         if (pOPO)
         {
             pOutliner->Clear();
@@ -1660,7 +1660,7 @@ bool HtmlExport::CreateHtmlForPresPages()
         // notes
         if(mbNotes && !mbFrames)
         {
-            SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+            SdrOutliner* pOutliner = mpDoc->GetInternalOutliner().get();
             SdPage* pNotesPage = maNotesPages[ nSdPage ];
             OUString aNotesStr( CreateTextForNotesPage( pOutliner, pNotesPage, true, maBackColor) );
             pOutliner->Clear();
@@ -2050,7 +2050,7 @@ bool HtmlExport::CreateNotesPages()
 {
     bool bOk = true;
 
-    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+    SdrOutliner* pOutliner = mpDoc->GetInternalOutliner().get();
     for( sal_uInt16 nSdPage = 0; bOk && nSdPage < mnSdPageCount; nSdPage++ )
     {
         SdPage* pPage = maNotesPages[nSdPage];
@@ -2104,7 +2104,7 @@ bool HtmlExport::CreateOutlinePages()
         aStr.append("</title>\r\n</head>\r\n");
         aStr.append(CreateBodyTag());
 
-        SdrOutliner* pOutliner = mpDoc->GetInternalOutliner();
+        SdrOutliner* pOutliner = mpDoc->GetInternalOutliner().get();
         for(sal_uInt16 nSdPage = 0; nSdPage < mnSdPageCount; nSdPage++)
         {
             SdPage* pPage = maPages[ nSdPage ];
@@ -2214,7 +2214,7 @@ OUString HtmlExport::getDocumentTitle()
             SdrObject* pTitleObj = pSdPage->GetPresObj(PRESOBJ_TITLE);
             if (pTitleObj && !pTitleObj->IsEmptyPresObj())
             {
-                OutlinerParaObject* pParaObject = pTitleObj->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pParaObject(pTitleObj->GetOutlinerParaObject());
                 if (pParaObject)
                 {
                     const EditTextObject& rEditTextObject =

@@ -85,7 +85,7 @@ void SidebarTextControl::dispose()
     Control::dispose();
 }
 
-OutlinerView* SidebarTextControl::GetTextView() const
+std::shared_ptr< OutlinerView > SidebarTextControl::GetTextView() const
 {
     return mrSidebarWin.GetOutlinerView();
 }
@@ -296,7 +296,7 @@ void SidebarTextControl::MouseMove( const MouseEvent& rMEvt )
 {
     if ( GetTextView() )
     {
-        OutlinerView* pOutlinerView( GetTextView() );
+        const std::shared_ptr< OutlinerView > pOutlinerView( GetTextView() );
         pOutlinerView->MouseMove( rMEvt );
         // mba: why does OutlinerView not handle the modifier setting?!
         // this forces the postit to handle *all* pointer types

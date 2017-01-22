@@ -181,7 +181,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
         return;
 
-    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
@@ -340,7 +340,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
         break;
         case SID_SELECTALL:
         {
-            Outliner * pOutliner = pOLV->GetOutliner();
+            const std::shared_ptr< Outliner > pOutliner = pOLV->GetOutliner();
             if(pOutliner)
             {
                 sal_Int32 nParaCount = pOutliner->GetParagraphCount();
@@ -626,7 +626,7 @@ void SwAnnotationShell::GetState(SfxItemSet& rSet)
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
         return;
 
-    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
 
     SfxWhichIter aIter(rSet);
@@ -893,7 +893,7 @@ void SwAnnotationShell::ExecClpbrd(SfxRequest &rReq)
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
         return;
 
-    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
@@ -965,7 +965,7 @@ void SwAnnotationShell::StateClpbrd(SfxItemSet &rSet)
     SwPostItMgr* pPostItMgr = rView.GetPostItMgr();
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
         return;
-    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
 
     TransferableDataHelper aDataHelper( TransferableDataHelper::CreateFromSystemClipboard( &rView.GetEditWin() ) );
     bool bPastePossible = ( aDataHelper.HasFormat( SotClipboardFormatId::STRING ) || aDataHelper.HasFormat( SotClipboardFormatId::RTF ) );
@@ -1047,7 +1047,7 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
         return;
 
-    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
 
@@ -1208,7 +1208,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
         return;
 
-    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     sal_uInt16 nSlot = rReq.GetSlot();
     SwWrtShell &rSh = rView.GetWrtShell();
@@ -1225,7 +1225,7 @@ void SwAnnotationShell::ExecLingu(SfxRequest &rReq)
                 pOLV->GetEditView().SelectCurrentWord();
             }
 
-            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV,rReq,rView,rSh);
+            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV.get(), rReq, rView, rSh);
             break;
         }
         case SID_THES:
@@ -1332,7 +1332,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
         return;
 
-    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
 
     SfxWhichIter aIter(rSet);
@@ -1343,7 +1343,7 @@ void SwAnnotationShell::GetLinguState(SfxItemSet &rSet)
         {
             case SID_LANGUAGE_STATUS:
             {
-                SwLangHelper::GetLanguageStatus(pOLV,rSet);
+                SwLangHelper::GetLanguageStatus(pOLV.get(), rSet);
                 break;
             }
 
@@ -1403,7 +1403,7 @@ void SwAnnotationShell::ExecTransliteration(SfxRequest &rReq)
     if (!pPostItMgr || !pPostItMgr->HasActiveSidebarWin())
         return;
 
-    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
 
     if (!pOLV)
         return;
@@ -1458,7 +1458,7 @@ void SwAnnotationShell::ExecRotateTransliteration( SfxRequest & rReq )
         if (!pPostItMgr || !pPostItMgr->HasActiveSidebarWin())
             return;
 
-        OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
 
         if (!pOLV)
             return;
@@ -1684,7 +1684,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     if ( !pPostItMgr || !pPostItMgr->HasActiveSidebarWin() )
         return;
 
-    OutlinerView* pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pPostItMgr->GetActiveSidebarWin()->GetOutlinerView();
 
     const SfxItemSet *pArgs = rReq.GetArgs();
     const SfxPoolItem* pItem = nullptr;
@@ -1765,7 +1765,7 @@ void SwAnnotationShell::InsertSymbol(SfxRequest& rReq)
     {
         // do not flicker
         pOLV->HideCursor();
-        Outliner * pOutliner = pOLV->GetOutliner();
+        const std::shared_ptr< Outliner > pOutliner = pOLV->GetOutliner();
         pOutliner->SetUpdateMode(false);
 
         SfxItemSet aOldSet( pOLV->GetAttribs() );

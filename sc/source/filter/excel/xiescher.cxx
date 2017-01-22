@@ -1446,9 +1446,9 @@ void XclImpTextObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
             if( maTextData.mxString->IsRich() )
             {
                 // rich text
-                std::unique_ptr< EditTextObject > xEditObj(
+                const std::shared_ptr< EditTextObject > pEditObj(
                     XclImpStringHelper::CreateTextObject( GetRoot(), *maTextData.mxString ) );
-                OutlinerParaObject* pOutlineObj = new OutlinerParaObject( *xEditObj );
+                const std::shared_ptr< OutlinerParaObject > pOutlineObj(std::make_shared< OutlinerParaObject >( pEditObj ));
                 pOutlineObj->SetOutlinerMode( OUTLINERMODE_TEXTOBJECT );
                 // text object takes ownership of the outliner object
                 pTextObj->NbcSetOutlinerParaObject( pOutlineObj );
@@ -1791,7 +1791,7 @@ void XclImpNoteObj::DoPreProcessSdrObj( XclImpDffConverter& rDffConv, SdrObject&
 {
     // create formatted text
     XclImpTextObj::DoPreProcessSdrObj( rDffConv, rSdrObj );
-    OutlinerParaObject* pOutlinerObj = rSdrObj.GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerObj(rSdrObj.GetOutlinerParaObject());
     if( maScPos.IsValid() && pOutlinerObj )
     {
         // create cell note with all data from drawing object

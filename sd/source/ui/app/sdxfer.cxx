@@ -213,7 +213,7 @@ void SdTransferable::CreateObjectReplacement( SdrObject* pObj )
         }
         else if( dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr )
         {
-            const OutlinerParaObject* pPara;
+            std::shared_ptr< OutlinerParaObject > pPara;
 
             if( (pPara = static_cast< SdrTextObj* >( pObj )->GetOutlinerParaObject()) != nullptr )
             {

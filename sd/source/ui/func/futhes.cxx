@@ -89,8 +89,8 @@ void FuThesaurus::DoExecute( SfxRequest& )
             }
         }
 
-        ::Outliner* pOutliner = mpView->GetTextEditOutliner();
-        const OutlinerView* pOutlView = mpView->GetTextEditOutlinerView();
+        const std::shared_ptr< ::Outliner > pOutliner = mpView->GetTextEditOutliner();
+        const std::shared_ptr< OutlinerView > pOutlView = mpView->GetTextEditOutlinerView();
 
         if ( pTextObj && pOutliner && pOutlView )
         {
@@ -107,7 +107,7 @@ void FuThesaurus::DoExecute( SfxRequest& )
                 pOutliner->SetDefaultLanguage( mpDoc->GetLanguage( EE_CHAR_LANGUAGE ) );
             }
 
-            EESpellState eState = const_cast<OutlinerView*>(pOutlView)->StartThesaurus();
+            EESpellState eState = pOutlView->StartThesaurus();
             DBG_ASSERT(eState != EE_SPELL_NOSPELLER, "No SpellChecker");
 
             if (eState == EE_SPELL_NOLANGUAGE)
@@ -118,8 +118,8 @@ void FuThesaurus::DoExecute( SfxRequest& )
     }
     else if (mpViewShell && dynamic_cast< OutlineViewShell *>( mpViewShell ) !=  nullptr)
     {
-        Outliner* pOutliner = mpDoc->GetOutliner();
-        OutlinerView* pOutlView = pOutliner->GetView(0);
+        const std::shared_ptr< Outliner > pOutliner = mpDoc->GetOutliner();
+        const std::shared_ptr< OutlinerView > pOutlView = pOutliner->GetView(0);
 
         if ( !pOutliner->GetSpeller().is() )
         {

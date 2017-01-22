@@ -48,7 +48,7 @@
 using namespace ::com::sun::star;
 
 
-OutlinerView::OutlinerView( Outliner* pOut, vcl::Window* pWin )
+OutlinerView::OutlinerView( const std::shared_ptr< Outliner >& pOut, vcl::Window* pWin )
 {
     pOwner                      = pOut;
 
@@ -411,7 +411,7 @@ void OutlinerView::SetAttribs( const SfxItemSet& rAttrs )
         pOwner->ImplCalcBulletText( nPara, false, false );
 
         if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
-            pOwner->InsertUndo( new OutlinerUndoCheckPara( pOwner, nPara ) );
+            pOwner->InsertUndo( new OutlinerUndoCheckPara( pOwner.get(), nPara ) );
     }
 
     if( !pOwner->IsInUndo() && pOwner->IsUndoEnabled() )
@@ -485,7 +485,7 @@ void OutlinerView::Indent( short nDiff )
                 pOwner->pEditEngine->QuickMarkInvalid( ESelection( nPara, 0, nPara, 0 ) );
 
                 if( bUndo )
-                    pOwner->InsertUndo( new OutlinerUndoChangeParaFlags( pOwner, nPara, pOwner->mnDepthChangeHdlPrevFlags, pPara->nFlags ) );
+                    pOwner->InsertUndo( new OutlinerUndoChangeParaFlags( pOwner.get(), nPara, pOwner->mnDepthChangeHdlPrevFlags, pPara->nFlags ) );
 
                 continue;
             }

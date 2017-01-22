@@ -150,12 +150,12 @@ void OutlineViewShell::Construct(DrawDocShell* )
     // Apply settings of FrameView
     ReadFrameViewData(mpFrameView);
 
-    ::Outliner& rOutl = pOlView->GetOutliner();
-    rOutl.SetUpdateMode(true);
+    const std::shared_ptr< ::Outliner > pOutl = pOlView->GetOutliner();
+    pOutl->SetUpdateMode(true);
 
     if (!bModified)
     {
-        rOutl.ClearModifyFlag();
+        pOutl->ClearModifyFlag();
     }
 
     pLastPage = GetActualPage();
@@ -264,7 +264,7 @@ void OutlineViewShell::ArrangeGUIElements ()
         pWindow->SetMinZoomAutoCalc(false);
 
         // change OuputArea of the OutlinerView
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
+        const std::shared_ptr< OutlinerView > pOutlinerView = pOlView->GetViewByWindow(pWindow);
 
         Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
 
@@ -275,7 +275,7 @@ void OutlineViewShell::ArrangeGUIElements ()
 
         Rectangle aText = Rectangle(Point(0,0),
             Size(pOlView->GetPaperWidth(),
-                pOlView->GetOutliner().GetTextHeight()));
+                pOlView->GetOutliner()->GetTextHeight()));
         if (aWin.GetHeight() > aText.Bottom())
             aText.Bottom() = aWin.GetHeight();
 
@@ -303,7 +303,7 @@ void OutlineViewShell::ExecCtrl(SfxRequest &rReq)
 
         case SID_OPT_LOCALE_CHANGED:
         {
-            pOlView->GetOutliner().UpdateFields();
+            pOlView->GetOutliner()->UpdateFields();
             UpdatePreview( GetActualPage() );
             rReq.Done();
             break;
@@ -334,8 +334,8 @@ void OutlineViewShell::Activate( bool bIsMDIActivate )
 
     if( bIsMDIActivate )
     {
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
-        ::Outliner* pOutl = pOutlinerView->GetOutliner();
+        const std::shared_ptr< OutlinerView > pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
+        const std::shared_ptr< ::Outliner > pOutl = pOutlinerView->GetOutliner();
         pOutl->UpdateFields();
     }
 }
@@ -358,7 +358,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
     {
         SvxHyperlinkItem aHLinkItem;
 
-        OutlinerView* pOLV = pOlView->GetViewByWindow(GetActiveWindow());
+        const std::shared_ptr< OutlinerView > pOLV = pOlView->GetViewByWindow(GetActiveWindow());
         if (pOLV)
         {
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
@@ -517,7 +517,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         {
             if( pOlView )
             {
-                OutlinerView* pOutlView = pOlView->GetViewByWindow(GetActiveWindow());
+                const std::shared_ptr< OutlinerView > pOutlView = pOlView->GetViewByWindow(GetActiveWindow());
                 if (pOutlView)
                 {
                     OutlineViewPageChangesGuard aGuard2(pOlView);
@@ -593,7 +593,7 @@ void OutlineViewShell::FuSupport(SfxRequest &rReq)
         case SID_TRANSLITERATE_HIRAGANA:
         case SID_TRANSLITERATE_KATAGANA:
         {
-            OutlinerView* pOLV = pOlView ? pOlView->GetViewByWindow( GetActiveWindow() ) : nullptr;
+            const std::shared_ptr< OutlinerView > pOLV = pOlView ? pOlView->GetViewByWindow( GetActiveWindow() ) : nullptr;
             if( pOLV )
             {
                 using namespace ::com::sun::star::i18n;
@@ -678,9 +678,9 @@ void OutlineViewShell::FuPermanent(SfxRequest &rReq)
     {
         case SID_EDIT_OUTLINER:
         {
-            ::Outliner& rOutl = pOlView->GetOutliner();
-            rOutl.GetUndoManager().Clear();
-            rOutl.UpdateFields();
+            const std::shared_ptr< ::Outliner > pOutl = pOlView->GetOutliner();
+            pOutl->GetUndoManager().Clear();
+            pOutl->UpdateFields();
 
             SetCurrentFunction( FuOutlineText::Create(this,GetActiveWindow(),pOlView,GetDoc(),rReq) );
 
@@ -752,16 +752,16 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
             rSet.DisableItem( SID_ZOOM_OUT );
     }
 
-    ::Outliner& rOutl = pOlView->GetOutliner();
+    const std::shared_ptr< ::Outliner > pOutl = pOlView->GetOutliner();
 
     // allow 'Select All'?
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_SELECTALL ) )
     {
-        sal_Int32 nParaCount = rOutl.GetParagraphCount();
+        sal_Int32 nParaCount = pOutl->GetParagraphCount();
         bool bDisable = nParaCount == 0;
         if (!bDisable && nParaCount == 1)
         {
-            OUString aTest = rOutl.GetText(rOutl.GetParagraph(0));
+            OUString aTest = pOutl->GetText(pOutl->GetParagraph(0));
             if (aTest.isEmpty())
             {
                 bDisable = true;
@@ -775,14 +775,14 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     rSet.Put( SfxBoolItem( SID_RULER, HasRuler() ) );
 
     // Enable formatting?
-    rSet.Put( SfxBoolItem( SID_OUTLINE_FORMAT, !rOutl.IsFlatMode() ) );
+    rSet.Put( SfxBoolItem( SID_OUTLINE_FORMAT, !pOutl->IsFlatMode() ) );
 
-    if( rOutl.IsFlatMode() )
+    if( pOutl->IsFlatMode() )
         rSet.DisableItem( SID_COLORVIEW );
     else
     {
         // Enable color view?
-        EEControlBits nCntrl = rOutl.GetControlWord();
+        EEControlBits nCntrl = pOutl->GetControlWord();
         bool bNoColor = false;
         if (nCntrl & EEControlBits::NOCOLORS)
             bNoColor = true;
@@ -795,7 +795,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     bool bDisableCollapse = true;
     bool bDisableExpand   = true;
     bool bUnique          = true;
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow(GetActiveWindow());
+    const std::shared_ptr< OutlinerView > pOutlinerView = pOlView->GetViewByWindow(GetActiveWindow());
 
     std::vector<Paragraph*> aSelList;
     pOutlinerView->CreateSelectionList(aSelList);
@@ -806,21 +806,21 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         Paragraph* pPara = *iter;
 
         sal_Int16 nDepth;
-        sal_Int16 nTmpDepth = rOutl.GetDepth( rOutl.GetAbsPos( pPara ) );
+        sal_Int16 nTmpDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
         bool bPage = ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE );
 
         while (iter != aSelList.begin())
         {
             pPara = *iter;
 
-            nDepth = rOutl.GetDepth( rOutl.GetAbsPos( pPara ) );
+            nDepth = pOutl->GetDepth( pOutl->GetAbsPos( pPara ) );
 
             if( nDepth != nTmpDepth || bPage != ::Outliner::HasParaFlag( pPara, ParaFlag::ISPAGE ))
                 bUnique = false;
 
-            if (rOutl.HasChildren(pPara))
+            if (pOutl->HasChildren(pPara))
             {
-                if (!rOutl.IsExpanded(pPara))
+                if (!pOutl->IsExpanded(pPara))
                     bDisableExpand = false;
                 else
                     bDisableCollapse = false;
@@ -863,16 +863,16 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     if (bDisableCollapseAll || bDisableExpandAll)
     {
         sal_Int32 nParaPos = 0;
-        Paragraph* pPara = rOutl.GetParagraph( nParaPos );
+        Paragraph* pPara = pOutl->GetParagraph( nParaPos );
         while (pPara && (bDisableCollapseAll || bDisableExpandAll))
         {
-            if (!rOutl.IsExpanded(pPara) && rOutl.HasChildren(pPara))
+            if (!pOutl->IsExpanded(pPara) && pOutl->HasChildren(pPara))
                 bDisableExpandAll = false;
 
-            if (rOutl.IsExpanded(pPara) && rOutl.HasChildren(pPara))
+            if (pOutl->IsExpanded(pPara) && pOutl->HasChildren(pPara))
                 bDisableCollapseAll = false;
 
-            pPara = rOutl.GetParagraph( ++nParaPos );
+            pPara = pOutl->GetParagraph( ++nParaPos );
         }
     }
 
@@ -910,7 +910,7 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
         rSet.DisableItem(SID_COPY);
     }
 
-    if (pOlView->GetOutliner().IsModified())
+    if (pOlView->GetOutliner()->IsModified())
     {
         GetDoc()->SetChanged();
     }
@@ -978,10 +978,10 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
                         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                         if( pTextObj )
                         {
-                            OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+                            std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetEditOutlinerParaObject());
                             if( pParaObj )
                             {
-                                delete pParaObj;
+                                pParaObj.reset();
                                 bDisable = false;
                             }
                         }
@@ -1077,7 +1077,7 @@ long OutlineViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
     double fX     = (double) nThumb / nRange;
 
     Window*       pWin          = mpContentWindow.get();
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
+    const std::shared_ptr< OutlinerView > pOutlinerView = pOlView->GetViewByWindow(pWin);
     long          nViewWidth    = pWin->PixelToLogic(
         pWin->GetSizePixel()).Width();
     long          nTextWidth    = pOlView->GetPaperWidth();
@@ -1100,10 +1100,10 @@ long OutlineViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
     double fY = (double) nThumb / nRange;
 
     Window*       pWin          = mpContentWindow.get();
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWin);
+    const std::shared_ptr< OutlinerView > pOutlinerView = pOlView->GetViewByWindow(pWin);
     long          nViewHeight   = pWin->PixelToLogic(
         pWin->GetSizePixel()).Height();
-    long          nTextHeight   = pOlView->GetOutliner().GetTextHeight();
+    long          nTextHeight   = pOlView->GetOutliner()->GetTextHeight();
     nViewHeight                += nTextHeight;
     long          nCurrentPos   = pOutlinerView->GetVisArea().Top();
     long          nTargetPos    = (long)(fY * nViewHeight);
@@ -1139,7 +1139,7 @@ void OutlineViewShell::SetZoom(long nZoom)
     if (pWindow)
     {
         // change OutputArea of OutlinerView
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
+        const std::shared_ptr< OutlinerView > pOutlinerView = pOlView->GetViewByWindow(pWindow);
         Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
         aWin = pWindow->PixelToLogic(aWin);
         pOutlinerView->SetOutputArea(aWin);
@@ -1160,7 +1160,7 @@ void OutlineViewShell::SetZoomRect(const Rectangle& rZoomRect)
     if (pWindow)
     {
         // change OutputArea of OutlinerView
-        OutlinerView* pOutlinerView = pOlView->GetViewByWindow(pWindow);
+        const std::shared_ptr< OutlinerView > pOutlinerView = pOlView->GetViewByWindow(pWindow);
         Rectangle aWin(Point(0,0), pWindow->GetOutputSizePixel());
         aWin = pWindow->PixelToLogic(aWin);
         pOutlinerView->SetOutputArea(aWin);
@@ -1224,16 +1224,16 @@ void OutlineViewShell::Execute(SfxRequest& rReq)
  */
 void OutlineViewShell::ReadFrameViewData(FrameView* pView)
 {
-    ::Outliner& rOutl = pOlView->GetOutliner();
+    const std::shared_ptr< ::Outliner > pOutl = pOlView->GetOutliner();
 
-    rOutl.SetFlatMode( pView->IsNoAttribs() );
+    pOutl->SetFlatMode( pView->IsNoAttribs() );
 
-    EEControlBits nCntrl = rOutl.GetControlWord();
+    EEControlBits nCntrl = pOutl->GetControlWord();
 
     if ( pView->IsNoColors() )
-        rOutl.SetControlWord(nCntrl | EEControlBits::NOCOLORS);
+        pOutl->SetControlWord(nCntrl | EEControlBits::NOCOLORS);
     else
-        rOutl.SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
+        pOutl->SetControlWord(nCntrl & ~EEControlBits::NOCOLORS);
 
     sal_uInt16 nPage = mpFrameView->GetSelectedPage();
     pLastPage = GetDoc()->GetSdPage( nPage, PK_STANDARD );
@@ -1245,14 +1245,14 @@ void OutlineViewShell::ReadFrameViewData(FrameView* pView)
  */
 void OutlineViewShell::WriteFrameViewData()
 {
-    ::Outliner& rOutl = pOlView->GetOutliner();
+    const std::shared_ptr< ::Outliner > pOutl = pOlView->GetOutliner();
 
-    EEControlBits nCntrl = rOutl.GetControlWord();
+    EEControlBits nCntrl = pOutl->GetControlWord();
     bool bNoColor = false;
     if (nCntrl & EEControlBits::NOCOLORS)
         bNoColor = true;
     mpFrameView->SetNoColors(bNoColor);
-    mpFrameView->SetNoAttribs( rOutl.IsFlatMode() );
+    mpFrameView->SetNoAttribs( pOutl->IsFlatMode() );
     SdPage* pActualPage = pOlView->GetActualPage();
     DBG_ASSERT(pActualPage, "No current page");
     if( pActualPage )
@@ -1306,7 +1306,7 @@ void OutlineViewShell::GetStatusBarState(SfxItemSet& rSet)
     OUString  aPageStr, aLayoutStr;
 
     ::sd::Window*   pWin        = GetActiveWindow();
-    OutlinerView*   pActiveView = pOlView->GetViewByWindow( pWin );
+    const std::shared_ptr< OutlinerView >   pActiveView = pOlView->GetViewByWindow( pWin );
 
     std::vector<Paragraph*> aSelList;
     pActiveView->CreateSelectionList(aSelList);
@@ -1369,7 +1369,7 @@ void OutlineViewShell::Command( const CommandEvent& rCEvt, ::sd::Window* pWin )
     {
         GetActiveWindow()->ReleaseMouse();
 
-        OutlinerView* pOLV = pOlView->GetViewByWindow(GetActiveWindow());
+        const std::shared_ptr< OutlinerView > pOLV = pOlView->GetViewByWindow(GetActiveWindow());
         Point aPos(rCEvt.GetMousePosPixel());
 
         if (pOLV && pOLV->IsWrongSpelledWordAtPos(aPos))
@@ -1502,7 +1502,7 @@ void OutlineViewShell::GetAttrState( SfxItemSet& rSet )
             case SID_STYLE_UPDATE_BY_EXAMPLE:
             {
                 ::sd::Window*     pActWin = GetActiveWindow();
-                OutlinerView* pOV = pOlView->GetViewByWindow(pActWin);
+                const std::shared_ptr< OutlinerView > pOV = pOlView->GetViewByWindow(pActWin);
                 ESelection aESel(pOV->GetSelection());
 
                 if (aESel.nStartPara != aESel.nEndPara ||
@@ -1586,10 +1586,10 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
     if( !pPage || !pPara )
         return false;
 
-    ::Outliner&         rOutliner = pOlView->GetOutliner();
+    const std::shared_ptr< ::Outliner > pOutliner = pOlView->GetOutliner();
     SdrTextObj*         pTO  = OutlineView::GetTitleTextObject( pPage );
 
-    OUString aTest = rOutliner.GetText(pPara);
+    OUString aTest = pOutliner->GetText(pPara);
     bool    bText = !aTest.isEmpty();
     bool    bNewObject = false;
 
@@ -1604,7 +1604,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
         }
 
         // if we have a title object and a text, set the text
-        OutlinerParaObject* pOPO = pTO ? rOutliner.CreateParaObject(rOutliner.GetAbsPos(pPara), 1) : nullptr;
+        std::shared_ptr< OutlinerParaObject > pOPO(pTO ? pOutliner->CreateParaObject(pOutliner->GetAbsPos(pPara), 1) : nullptr);
         if (pOPO)
         {
             pOPO->SetOutlinerMode( OUTLINERMODE_TITLEOBJECT );
@@ -1612,7 +1612,7 @@ bool OutlineViewShell::UpdateTitleObject( SdPage* pPage, Paragraph* pPara )
             if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
             {
                 // do nothing, same text already set
-                delete pOPO;
+                pOPO.reset();
             }
             else
             {
@@ -1666,8 +1666,8 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     if( !pPage || !pPara )
         return false;
 
-    ::Outliner&         rOutliner = pOlView->GetOutliner();
-    OutlinerParaObject* pOPO = nullptr;
+    const std::shared_ptr< ::Outliner >  pOutliner = pOlView->GetOutliner();
+    std::shared_ptr< OutlinerParaObject > pOPO = nullptr;
     SdrTextObj*         pTO  = nullptr;
 
     bool bNewObject = false;
@@ -1681,19 +1681,19 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
     }
 
     // how many paragraphs in the outline?
-    sal_Int32 nTitlePara     = rOutliner.GetAbsPos( pPara );
+    sal_Int32 nTitlePara     = pOutliner->GetAbsPos( pPara );
     sal_Int32 nPara          = nTitlePara + 1;
     sal_Int32 nParasInLayout = 0L;
-    pPara = rOutliner.GetParagraph( nPara );
+    pPara = pOutliner->GetParagraph( nPara );
     while( pPara && !::Outliner::HasParaFlag(pPara, ParaFlag::ISPAGE) )
     {
         nParasInLayout++;
-        pPara = rOutliner.GetParagraph( ++nPara );
+        pPara = pOutliner->GetParagraph( ++nPara );
     }
     if( nParasInLayout )
     {
         // create an OutlinerParaObject
-        pOPO  = rOutliner.CreateParaObject( nTitlePara + 1, nParasInLayout );
+        pOPO.reset(pOutliner->CreateParaObject( nTitlePara + 1, nParasInLayout ));
     }
 
     if( pOPO )
@@ -1716,7 +1716,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
             if( pTO->GetOutlinerParaObject() && (pOPO->GetTextObject() == pTO->GetOutlinerParaObject()->GetTextObject()) )
             {
                 // do nothing, same text already set
-                delete pOPO;
+                pOPO.reset();
             }
             else
             {
@@ -1729,7 +1729,7 @@ bool OutlineViewShell::UpdateOutlineObject( SdPage* pPage, Paragraph* pPara )
             }
         }
         else
-            delete pOPO;
+            pOPO.reset();
     }
     else if( pTO )
     {
@@ -1770,40 +1770,40 @@ sal_uLong OutlineViewShell::Read(SvStream& rInput, const OUString& rBaseURL, sal
 {
     sal_uLong bRet = 0;
 
-    ::Outliner& rOutl = pOlView->GetOutliner();
+    const std::shared_ptr< ::Outliner > pOutl = pOlView->GetOutliner();
 
     OutlineViewPageChangesGuard aGuard( pOlView );
     OutlineViewModelChangeGuard aGuard2( *pOlView );
 
-    bRet = rOutl.Read( rInput, rBaseURL, eFormat, GetDocSh()->GetHeaderAttributes() );
+    bRet = pOutl->Read( rInput, rBaseURL, eFormat, GetDocSh()->GetHeaderAttributes() );
 
     SdPage* pPage = GetDoc()->GetSdPage( GetDoc()->GetSdPageCount(PK_STANDARD) - 1, PK_STANDARD );
     SfxStyleSheet* pTitleSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_TITLE );
     SfxStyleSheet* pOutlSheet = pPage->GetStyleSheetForPresObj( PRESOBJ_OUTLINE );
 
-    sal_Int32 nParaCount = rOutl.GetParagraphCount();
+    sal_Int32 nParaCount = pOutl->GetParagraphCount();
     if ( nParaCount > 0 )
     {
         for ( sal_Int32 nPara = 0; nPara < nParaCount; nPara++ )
         {
             pOlView->UpdateParagraph( nPara );
 
-            sal_Int16 nDepth = rOutl.GetDepth( nPara );
+            sal_Int16 nDepth = pOutl->GetDepth( nPara );
 
             if( (nDepth == 0) || !nPara )
             {
-                Paragraph* pPara = rOutl.GetParagraph( nPara );
-                rOutl.SetDepth(pPara, -1);
-                rOutl.SetParaFlag(pPara, ParaFlag::ISPAGE);
+                Paragraph* pPara = pOutl->GetParagraph( nPara );
+                pOutl->SetDepth(pPara, -1);
+                pOutl->SetParaFlag(pPara, ParaFlag::ISPAGE);
 
-                rOutl.SetStyleSheet( nPara, pTitleSheet );
+                pOutl->SetStyleSheet( nPara, pTitleSheet );
 
                 if( nPara ) // first slide already exists
                     pOlView->InsertSlideForParagraph( pPara );
             }
             else
             {
-                rOutl.SetDepth( rOutl.GetParagraph( nPara ), nDepth - 1 );
+                pOutl->SetDepth( pOutl->GetParagraph( nPara ), nDepth - 1 );
                 OUString aStyleSheetName = pOutlSheet->GetName();
                 if (!aStyleSheetName.isEmpty())
                     aStyleSheetName = aStyleSheetName.copy(0, aStyleSheetName.getLength() - 1);
@@ -1812,12 +1812,12 @@ sal_uLong OutlineViewShell::Read(SvStream& rInput, const OUString& rBaseURL, sal
                 SfxStyleSheet* pStyle = static_cast<SfxStyleSheet*>( pStylePool->Find( aStyleSheetName, pOutlSheet->GetFamily() ) );
                 DBG_ASSERT( pStyle, "AutoStyleSheetName - Style not found!" );
                 if ( pStyle )
-                    rOutl.SetStyleSheet( nPara, pStyle );
+                    pOutl->SetStyleSheet( nPara, pStyle );
             }
         }
     }
 
-    rOutl.GetUndoManager().Clear();
+    pOutl->GetUndoManager().Clear();
 
     return bRet;
 }

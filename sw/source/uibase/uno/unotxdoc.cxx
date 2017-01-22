@@ -3626,7 +3626,7 @@ uno::Sequence< lang::Locale > SAL_CALL SwXTextDocument::getDocumentLanguages(
 
     if( pSdrView )
     {
-        SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
+        const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
         if(pOutliner)
         {
             EditEngine& rEditEng = (EditEngine&)pOutliner->GetEditEngine();

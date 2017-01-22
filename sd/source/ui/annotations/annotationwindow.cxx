@@ -296,9 +296,8 @@ AnnotationWindow::~AnnotationWindow()
 void AnnotationWindow::dispose()
 {
     mpMeta.disposeAndClear();
-    delete mpOutlinerView;
-    delete mpOutliner;
-    mpOutliner = nullptr;
+    mpOutlinerView.reset();
+    mpOutliner.reset();
     mpVScrollbar.disposeAndClear();
     mpTextWindow.disposeAndClear();
     FloatingWindow::dispose();
@@ -327,8 +326,8 @@ void AnnotationWindow::InitControls()
     aSettings.SetStyleSettings(aStyleSettings);
     mpMeta->SetSettings(aSettings);
 
-    mpOutliner = new ::Outliner(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT);
-    Doc()->SetCalcFieldValueHdl( mpOutliner );
+    mpOutliner = std::make_shared < ::Outliner >(GetAnnotationPool(),OUTLINERMODE_TEXTOBJECT);
+    Doc()->SetCalcFieldValueHdl( mpOutliner.get() );
     mpOutliner->SetUpdateMode( true );
     Rescale();
 
@@ -339,7 +338,7 @@ void AnnotationWindow::InitControls()
     }
 
     mpTextWindow->EnableRTL( false );
-    mpOutlinerView = new OutlinerView ( mpOutliner, mpTextWindow );
+    mpOutlinerView = std::make_shared< OutlinerView >( mpOutliner, mpTextWindow );
     mpOutliner->InsertView(mpOutlinerView );
     mpTextWindow->SetOutlinerView(mpOutlinerView);
     mpOutlinerView->SetOutputArea( PixelToLogic( Rectangle(0,0,1,1) ) );

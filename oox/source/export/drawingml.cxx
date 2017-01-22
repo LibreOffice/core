@@ -2097,7 +2097,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
     const SdrTextObj* pTxtObj = dynamic_cast<SdrTextObj*>( pSdrObject );
     if (pTxtObj && mpTextExport)
     {
-        const OutlinerParaObject* pParaObj = nullptr;
+        std::shared_ptr< OutlinerParaObject > pParaObj = nullptr;
         bool bOwnParaObj = false;
 
         /*
@@ -2118,7 +2118,7 @@ void DrawingML::WriteText( Reference< XInterface > rXIface, const OUString& pres
             // this is reached only in case some text is attached to the shape
             mpTextExport->WriteOutliner(*pParaObj);
             if (bOwnParaObj)
-                delete pParaObj;
+                pParaObj.reset();
         }
         return;
     }

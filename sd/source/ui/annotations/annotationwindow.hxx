@@ -49,7 +49,7 @@ class View;
 class AnnotationTextWindow : public Control
 {
 private:
-    OutlinerView*       mpOutlinerView;
+    std::shared_ptr< OutlinerView > mpOutlinerView;
     VclPtr<AnnotationWindow>   mpAnnotationWindow;
 
 protected:
@@ -66,7 +66,7 @@ public:
     virtual ~AnnotationTextWindow();
     virtual void dispose() override;
 
-    void SetOutlinerView( OutlinerView* pOutlinerView ) { mpOutlinerView = pOutlinerView; }
+    void SetOutlinerView( const std::shared_ptr< OutlinerView >& pOutlinerView ) { mpOutlinerView = pOutlinerView; }
 
     virtual OUString GetSurroundingText() const override;
     virtual Selection GetSurroundingTextSelection() const override;
@@ -81,8 +81,8 @@ class AnnotationWindow : public FloatingWindow
         DrawDocShell*           mpDocShell;
         SdDrawDocument*         mpDoc;
 
-        OutlinerView*           mpOutlinerView;
-        ::Outliner*             mpOutliner;
+        std::shared_ptr< OutlinerView > mpOutlinerView;
+        std::shared_ptr< ::Outliner >   mpOutliner;
         VclPtr<ScrollBar>       mpVScrollbar;
         css::uno::Reference< css::office::XAnnotation > mxAnnotation;
         bool                    mbReadonly;
@@ -112,8 +112,8 @@ class AnnotationWindow : public FloatingWindow
         void ExecuteSlot( sal_uInt16 nSID );
 
         DrawDocShell*           DocShell()      { return mpDocShell; }
-        OutlinerView*           getView()       { return mpOutlinerView; }
-        ::Outliner*             Engine()        { return mpOutliner; }
+        std::shared_ptr< OutlinerView > getView() { return mpOutlinerView; }
+        std::shared_ptr< ::Outliner >   Engine()  { return mpOutliner; }
         SdDrawDocument*         Doc()           { return mpDoc; }
 
         long            GetPostItTextHeight();

@@ -483,7 +483,9 @@ SdrHitKind SdrView::PickAnything(const Point& rLogicPos, SdrViewEvent& rVEvt) co
                 // we currently don't account for ticker text
                 if(mpActualOutDev && mpActualOutDev->GetOutDevType() == OUTDEV_WINDOW)
                 {
-                    OutlinerView aOLV(pOutliner, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(mpActualOutDev.get())));
+                    // do not delete outliner
+                    const std::shared_ptr< SdrOutliner > pOutl(pOutliner, []( SdrOutliner* ){});
+                    OutlinerView aOLV(pOutl, const_cast<vcl::Window*>(static_cast<const vcl::Window*>(mpActualOutDev.get())));
                     const EditView& aEV=aOLV.GetEditView();
                     const SvxFieldItem* pItem=aEV.GetField(aTemporaryTextRelativePosition);
                     if (pItem!=nullptr) {
@@ -824,7 +826,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
                             MouseEvent aMEvt(mpActualOutDev->LogicToPixel(aLogicPos),
                                              1,rVEvt.nMouseMode,rVEvt.nMouseCode,rVEvt.nMouseCode);
 
-                            OutlinerView* pOLV=GetTextEditOutlinerView();
+                            const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
                             if (pOLV!=nullptr) {
                                 pOLV->MouseButtonDown(aMEvt); // event for the Outliner, but without double-click
                                 pOLV->MouseButtonUp(aMEvt); // event for the Outliner, but without double-click
@@ -916,7 +918,7 @@ bool SdrView::DoMouseEvent(const SdrViewEvent& rVEvt)
             {
                 MouseEvent aMEvt(mpActualOutDev->LogicToPixel(aLogicPos),
                                  1,rVEvt.nMouseMode,rVEvt.nMouseCode,rVEvt.nMouseCode);
-                OutlinerView* pOLV=GetTextEditOutlinerView();
+                const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
                 if (pOLV!=nullptr) pOLV->MouseButtonDown(aMEvt); // event for the Outliner, but without double-click
             }
         } break;
@@ -961,13 +963,13 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     if (IsMacroObj()) {
         SdrObjMacroHitRec aHitRec;
         aHitRec.aPos=pOut->LogicToPixel(rMousePos);
-        aHitRec.aDownPos=aMacroDownPos;
-        aHitRec.nTol=nMacroTol;
-        aHitRec.pVisiLayer=&pMacroPV->GetVisibleLayers();
-        aHitRec.pPageView=pMacroPV;
-        aHitRec.pOut=pMacroWin.get();
-        aHitRec.bDown=bMacroDown;
-        return pMacroObj->GetMacroPointer(aHitRec);
+        aHitRec.aDownPos=maMacroDownPos;
+        aHitRec.nTol=mnMacroTol;
+        aHitRec.pVisiLayer=&mpMacroPV->GetVisibleLayers();
+        aHitRec.pPageView=mpMacroPV;
+        aHitRec.pOut=mpMacroWin.get();
+        aHitRec.bDown=mbMacroDown;
+        return mpMacroObj->GetMacroPointer(aHitRec);
     }
 
     // TextEdit, ObjEdit, Macro
@@ -975,17 +977,17 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
     {
         if(!pOut || IsTextEditInSelectionMode())
         {
-            if(pTextEditOutliner->IsVertical())
+            if(mpTextEditOutliner->IsVertical())
                 return Pointer(PointerStyle::TextVertical);
             else
                 return Pointer(PointerStyle::Text);
         }
         // Outliner should return something here...
         Point aPos(pOut->LogicToPixel(rMousePos));
-        Pointer aPointer(pTextEditOutlinerView->GetPointer(aPos));
+        Pointer aPointer(mpTextEditOutlinerView->GetPointer(aPos));
         if (aPointer==PointerStyle::Arrow)
         {
-            if(pTextEditOutliner->IsVertical())
+            if(mpTextEditOutliner->IsVertical())
                 aPointer = PointerStyle::TextVertical;
             else
                 aPointer = PointerStyle::Text;
@@ -1045,7 +1047,7 @@ Pointer SdrView::GetPreferredPointer(const Point& rMousePos, const OutputDevice*
             SdrTextObj* pText = dynamic_cast< SdrTextObj* >( aVEvt.pObj );
             if(pText && pText->HasText())
             {
-                OutlinerParaObject* pParaObj = pText->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pParaObj(pText->GetOutlinerParaObject());
                 if(pParaObj && pParaObj->IsVertical())
                     return Pointer(PointerStyle::TextVertical);
             }
@@ -1229,24 +1231,24 @@ OUString SdrView::GetStatusText()
             aStr = ImpGetResStr(STR_ViewMarkGluePoints);
         }
     }
-    else if (IsTextEdit() && pTextEditOutlinerView!=nullptr) {
+    else if (IsTextEdit() && mpTextEditOutlinerView!=nullptr) {
         aStr=ImpGetResStr(STR_ViewTextEdit); // "TextEdit - Row y, Column x";
-        ESelection aSel(pTextEditOutlinerView->GetSelection());
+        ESelection aSel(mpTextEditOutlinerView->GetSelection());
         long nPar=aSel.nEndPara,nLin=0,nCol=aSel.nEndPos;
         if (aSel.nEndPara>0) {
             for (sal_Int32 nParaNum=0; nParaNum<aSel.nEndPara; nParaNum++) {
-                nLin+=pTextEditOutliner->GetLineCount(nParaNum);
+                nLin+=mpTextEditOutliner->GetLineCount(nParaNum);
             }
         }
         // A little imperfection:
         // At the end of a line of any multi-line paragraph, we display the
         // position of the next line of the same paragraph, if there is one.
         sal_uInt16 nParaLine = 0;
-        sal_uIntPtr nParaLineCount = pTextEditOutliner->GetLineCount(aSel.nEndPara);
+        sal_uIntPtr nParaLineCount = mpTextEditOutliner->GetLineCount(aSel.nEndPara);
         bool bBrk = false;
         while (!bBrk)
         {
-            sal_uInt16 nLen = pTextEditOutliner->GetLineLen(aSel.nEndPara, nParaLine);
+            sal_uInt16 nLen = mpTextEditOutliner->GetLineLen(aSel.nEndPara, nParaLine);
             bool bLastLine = (nParaLine == nParaLineCount - 1);
             if (nCol>nLen || (!bLastLine && nCol == nLen))
             {
@@ -1267,7 +1269,7 @@ OUString SdrView::GetStatusText()
 
 #ifdef DBG_UTIL
         aStr +=  ", Level " ;
-        aStr += OUString::number( pTextEditOutliner->GetDepth( aSel.nEndPara ) );
+        aStr += OUString::number( mpTextEditOutliner->GetDepth( aSel.nEndPara ) );
 #endif
     }
 
@@ -1394,7 +1396,7 @@ void SdrView::DeleteMarked()
 {
     if (IsTextEdit())
     {
-        SdrObjEditView::KeyInput(KeyEvent(0,vcl::KeyCode(KeyFuncType::DELETE)),pTextEditWin);
+        SdrObjEditView::KeyInput(KeyEvent(0,vcl::KeyCode(KeyFuncType::DELETE)),mpTextEditWin);
     }
     else
     {

@@ -90,7 +90,7 @@ private:
     SdrView*                        mpView;
     VclPtr<const vcl::Window>       mpWindow;
     SdrModel*                       mpModel;
-    SdrOutliner*                    mpOutliner;
+    std::shared_ptr< SdrOutliner >  mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
     SvxDrawOutlinerViewForwarder*   mpViewForwarder;    // if non-NULL, use GetViewModeTextForwarder text forwarder
     css::uno::Reference< css::linguistic2::XLinguServiceManager2 > m_xLinguServiceManager;
@@ -281,7 +281,7 @@ void SvxTextEditSourceImpl::ChangeModel( SdrModel* pNewModel )
             if( mpModel )
                 mpModel->disposeOutliner( mpOutliner );
             else
-                delete mpOutliner;
+                mpOutliner.reset();
             mpOutliner = nullptr;
         }
 
@@ -485,7 +485,7 @@ void SvxTextEditSourceImpl::dispose()
         }
         else
         {
-            delete mpOutliner;
+            mpOutliner.reset();
         }
         mpOutliner = nullptr;
     }
@@ -569,7 +569,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
             if( pTextObj && pTextObj->IsTextFrame() && pTextObj->GetTextKind() == OBJ_OUTLINETEXT )
                 nOutlMode = OUTLINERMODE_OUTLINEOBJECT;
 
-            mpOutliner = mpModel->createOutliner( nOutlMode );
+            mpOutliner = std::shared_ptr<SdrOutliner>(mpModel->createOutliner( nOutlMode ));
 
             // #109151# Do the setup after outliner creation, would be useless otherwise
             if( HasView() )
@@ -597,8 +597,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
                 mpOutliner->SetHyphenator( xHyphenator );
         }
 
-
-        mpTextForwarder = new SvxOutlinerForwarder( *mpOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
+        mpTextForwarder = new SvxOutlinerForwarder( mpOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
         // delay listener subscription and UAA initialization until Outliner is fully setup
         bCreated = true;
 
@@ -610,7 +609,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
     {
         mpTextForwarder->flushCache();
 
-        OutlinerParaObject* pOutlinerParaObject = nullptr;
+        std::shared_ptr< OutlinerParaObject > pOutlinerParaObject = nullptr;
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( mpObject  );
         if( pTextObj && pTextObj->getActiveText() == mpText )
             pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
@@ -672,7 +671,7 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetBackgroundTextForwarder()
         mbDataValid = true;
 
         if( bOwnParaObj )
-            delete pOutlinerParaObject;
+            pOutlinerParaObject.reset();
     }
 
     if( bCreated && mpOutliner && HasView() )
@@ -693,11 +692,11 @@ SvxTextForwarder* SvxTextEditSourceImpl::GetEditModeTextForwarder()
 {
     if( !mpTextForwarder && HasView() )
     {
-        SdrOutliner* pEditOutliner = mpView->GetTextEditOutliner();
+        const std::shared_ptr< SdrOutliner > pEditOutliner = mpView->GetTextEditOutliner();
 
         if( pEditOutliner )
         {
-            mpTextForwarder = new SvxOutlinerForwarder( *pEditOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
+            mpTextForwarder = new SvxOutlinerForwarder( pEditOutliner, (mpObject->GetObjInventor() == SdrInventor) && (mpObject->GetObjIdentifier() == OBJ_OUTLINETEXT) );
             mbForwarderIsEditMode = true;
         }
     }
@@ -750,9 +749,9 @@ SvxDrawOutlinerViewForwarder* SvxTextEditSourceImpl::CreateViewForwarder()
         if( pTextObj )
         {
             Rectangle aBoundRect( pTextObj->GetCurrentBoundRect() );
-            OutlinerView& rOutlView = *mpView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOutlView = mpView->GetTextEditOutlinerView();
 
-            return new SvxDrawOutlinerViewForwarder( rOutlView, aBoundRect.TopLeft() );
+            return new SvxDrawOutlinerViewForwarder( pOutlView, aBoundRect.TopLeft() );
         }
     }
 
@@ -855,7 +854,7 @@ void SvxTextEditSourceImpl::UpdateData()
                             }
                         }
 
-                        pTextObj->NbcSetOutlinerParaObjectForText( mpOutliner->CreateParaObject(), mpText );
+                        pTextObj->NbcSetOutlinerParaObjectForText( std::shared_ptr< OutlinerParaObject >(mpOutliner->CreateParaObject()), mpText );
                     }
                     else
                     {

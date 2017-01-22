@@ -541,8 +541,8 @@ bool ScDrawView::SdrBeginTextEdit(
     SdrPageView* pPV,
     vcl::Window* pWinL,
     bool bIsNewObj,
-    SdrOutliner* pGivenOutliner,
-    OutlinerView* pGivenOutlinerView,
+    const std::shared_ptr< SdrOutliner>& pGivenOutliner,
+    const std::shared_ptr< OutlinerView>& pGivenOutlinerView,
     bool bDontDeleteOutliner,
     bool bOnlyOneView,
     bool bGrabFocus )
@@ -556,7 +556,8 @@ bool ScDrawView::SdrBeginTextEdit(
 
     if (comphelper::LibreOfficeKit::isActive())
     {
-        if (OutlinerView* pView = GetTextEditOutlinerView())
+        const std::shared_ptr< OutlinerView > pView = GetTextEditOutlinerView();
+        if (pView)
         {
             Rectangle aRectangle = pView->GetOutputArea();
             if (pWinL && pWinL->GetMapMode().GetMapUnit() == MAP_100TH_MM)

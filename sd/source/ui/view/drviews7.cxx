@@ -233,13 +233,13 @@ void DrawViewShell::GetDrawAttrState(SfxItemSet& rSet)
     if (!pPage || (pPage->GetPageKind() != PK_STANDARD) || !pPage->IsMasterPage())
         return nullptr;
 
-    OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-    ::Outliner* pOL = pOLV ? pOLV->GetOutliner() : nullptr;
+    const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
+    const std::shared_ptr< ::Outliner > pOL = pOLV ? pOLV->GetOutliner() : nullptr;
     if (!pOL)
         return nullptr;
     rSel = pOLV->GetSelection();
 
-    return pOL;
+    return pOL.get();
 }
 
 void DrawViewShell::GetMenuState( SfxItemSet &rSet )
@@ -326,10 +326,10 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
                         SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( pObj );
                         if( pTextObj )
                         {
-                            OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+                            std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetEditOutlinerParaObject());
                             if( pParaObj )
                             {
-                                delete pParaObj;
+                                pParaObj.reset();
                                 bDisable = false;
                             }
                         }
@@ -839,7 +839,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
         SfxItemState::DEFAULT == rSet.GetItemState( SID_COPY ) ||
         SfxItemState::DEFAULT == rSet.GetItemState( SID_OUTLINE_BULLET ))
     {
-        OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOlView = mpDrawView->GetTextEditOutlinerView();
 
         // special treatment of for SID_OUTLINE_BULLET if objects with different
         // kinds of NumBullets are marked
@@ -1396,7 +1396,7 @@ void DrawViewShell::GetMenuState( SfxItemSet &rSet )
     {
         if( mpDrawView->IsTextEdit() )
         {
-            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
             if (pOLV)
             {
                 const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();

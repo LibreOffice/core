@@ -1789,7 +1789,7 @@ uno::Reference< datatransfer::XTransferable > SAL_CALL SwXTextView::getTransfera
     if ( GetView()->GetShellMode() == SHELL_MODE_DRAWTEXT )
     {
         SdrView *pSdrView = rSh.GetDrawView();
-        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
         return pOLV->GetEditView().GetTransferable();
     }
     else
@@ -1813,7 +1813,7 @@ void SAL_CALL SwXTextView::insertTransferable( const uno::Reference< datatransfe
     if ( GetView()->GetShellMode() == SHELL_MODE_DRAWTEXT )
     {
         SdrView *pSdrView = rSh.GetDrawView();
-        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
         pOLV->GetEditView().InsertText( xTrans, GetView()->GetDocShell()->GetMedium()->GetBaseURL(), false );
     }
     else

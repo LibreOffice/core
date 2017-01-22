@@ -46,7 +46,7 @@ bool FuOutline::Command(const CommandEvent& rCEvt)
 {
     bool bResult = false;
 
-    OutlinerView* pOlView =
+    const std::shared_ptr< OutlinerView > pOlView =
         static_cast<OutlineView*>(mpView)->GetViewByWindow(mpWindow);
     DBG_ASSERT (pOlView, "no OutlineView found");
 

@@ -173,8 +173,8 @@ bool DrawView::SetAttributes(const SfxItemSet& rSet,
                 else if (eObjKind == OBJ_OUTLINETEXT)
                 {
                     // Presentation object outline
-                    OutlinerView* pOV   = GetTextEditOutlinerView();
-                    ::Outliner* pOutliner = pOV->GetOutliner();
+                    const std::shared_ptr< OutlinerView > pOV = GetTextEditOutlinerView();
+                    const std::shared_ptr< ::Outliner > pOutliner = pOV->GetOutliner();
 
                     pOutliner->SetUpdateMode(false);
                     mpDocSh->SetWaitCursor( true );

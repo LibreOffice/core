@@ -1757,7 +1757,8 @@ void SdrObject::dumpAsXml(xmlTextWriterPtr pWriter) const
     xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nOrdNum"), "%" SAL_PRIuUINT32, GetOrdNumDirect());
     xmlTextWriterWriteAttribute(pWriter, BAD_CAST("aOutRect"), BAD_CAST(aOutRect.toString().getStr()));
 
-    if (const OutlinerParaObject* pOutliner = GetOutlinerParaObject())
+    const std::shared_ptr< OutlinerParaObject > pOutliner(GetOutlinerParaObject());
+    if (pOutliner)
         pOutliner->dumpAsXml(pWriter);
 
     xmlTextWriterEndElement(pWriter);
@@ -1772,7 +1773,7 @@ void SdrObject::EndTextEdit(SdrOutliner& /*rOutl*/)
 {
 }
 
-void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
+void SdrObject::SetOutlinerParaObject(const std::shared_ptr< OutlinerParaObject >& pTextObject)
 {
     Rectangle aBoundRect0; if (pUserCall!=nullptr) aBoundRect0=GetLastBoundRect();
     NbcSetOutlinerParaObject(pTextObject);
@@ -1783,11 +1784,11 @@ void SdrObject::SetOutlinerParaObject(OutlinerParaObject* pTextObject)
     }
 }
 
-void SdrObject::NbcSetOutlinerParaObject(OutlinerParaObject* /*pTextObject*/)
+void SdrObject::NbcSetOutlinerParaObject(const std::shared_ptr< OutlinerParaObject >& /*pTextObject*/)
 {
 }
 
-OutlinerParaObject* SdrObject::GetOutlinerParaObject() const
+std::shared_ptr< OutlinerParaObject > SdrObject::GetOutlinerParaObject() const
 {
     return nullptr;
 }

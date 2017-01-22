@@ -1093,7 +1093,7 @@ namespace {
 
             // Get and set up the outliner.
             const Rectangle aOutRect (rPrinter.GetPageOffset(), rPrinter.GetOutputSize());
-            Outliner* pOutliner = rDocument.GetInternalOutliner();
+            const std::shared_ptr< Outliner > pOutliner = rDocument.GetInternalOutliner();
             const sal_uInt16 nSavedOutlMode (pOutliner->GetMode());
             const bool bSavedUpdateMode (pOutliner->GetUpdateMode());
             const Size aSavedPaperSize (pOutliner->GetPaperSize());
@@ -1609,7 +1609,7 @@ private:
                                   Size( nRotatedWidth, nRotatedHeight ) );
         }
 
-        Outliner* pOutliner = mrBase.GetDocument()->GetInternalOutliner();
+        const std::shared_ptr< Outliner > pOutliner = mrBase.GetDocument()->GetInternalOutliner();
         pOutliner->Init(OUTLINERMODE_OUTLINEVIEW);
         const sal_uInt16 nSavedOutlMode (pOutliner->GetMode());
         const bool bSavedUpdateMode (pOutliner->GetUpdateMode());

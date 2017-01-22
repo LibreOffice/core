@@ -60,8 +60,8 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 {
     const SfxItemSet* pArgs = rReq.GetArgs();
 
-    OutlinerView* pOutlView = mpView->GetTextEditOutlinerView();
-    ::Outliner* pOutliner = mpView->GetTextEditOutliner();
+    const std::shared_ptr< OutlinerView > pOutlView = mpView->GetTextEditOutlinerView();
+    const std::shared_ptr< ::Outliner > pOutliner = mpView->GetTextEditOutliner();
 
     if( !pArgs )
     {

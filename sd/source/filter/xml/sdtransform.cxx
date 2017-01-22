@@ -27,6 +27,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdogrp.hxx>
 #include <editeng/eeitem.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/numitem.hxx>
 
@@ -187,7 +188,7 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
 
     if(!rTextShape.IsEmptyPresObj())
     {
-        OutlinerParaObject* pOPO = rTextShape.GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pOPO(rTextShape.GetOutlinerParaObject());
         if (pOPO)
         {
             mrOutliner.SetText( *pOPO );
@@ -251,7 +252,10 @@ void SdTransformOOo2xDocument::transformTextShape( SdrTextObj& rTextShape )
             }
 
             if( bChange )
-                rTextShape.SetOutlinerParaObject(mrOutliner.CreateParaObject());
+            {
+                const std::shared_ptr< OutlinerParaObject > pTemp(mrOutliner.CreateParaObject());
+                rTextShape.SetOutlinerParaObject(pTemp);
+            }
 
             mrOutliner.Clear();
         }

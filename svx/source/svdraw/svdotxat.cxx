@@ -166,7 +166,7 @@ bool SdrTextObj::AdjustTextFrameWidthAndHeight( Rectangle& rR, bool bHgt, bool b
         rOutliner.SetPaperSize(aNewSize);
         rOutliner.SetUpdateMode(true);
         // TODO: add the optimization with bPortionInfoChecked etc. here
-        OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(GetOutlinerParaObject());
         if (pOutlinerParaObject)
         {
             rOutliner.SetText(*pOutlinerParaObject);
@@ -301,7 +301,7 @@ void SdrTextObj::ImpSetTextStyleSheetListeners()
     if (pStylePool!=nullptr)
     {
         std::vector<OUString> aStyleNames;
-        OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(GetOutlinerParaObject());
         if (pOutlinerParaObject!=nullptr)
         {
             // First, we collect all stylesheets contained in the ParaObject in
@@ -384,7 +384,7 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
     while( --nText >= 0 )
     {
         SdrText* pText = getText( nText );
-        OutlinerParaObject* pOutlinerParaObject = pText ? pText->GetOutlinerParaObject() : nullptr;
+        const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(pText ? pText->GetOutlinerParaObject() : nullptr);
 
         if(pOutlinerParaObject)
         {
@@ -409,7 +409,7 @@ void SdrTextObj::RemoveOutlinerCharacterAttribs( const std::vector<sal_uInt16>& 
             if(!pEdtOutl || (pText != getActiveText()) )
             {
                 const sal_Int32 nParaCount = pOutliner->GetParagraphCount();
-                OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                const std::shared_ptr< OutlinerParaObject > pTemp(pOutliner->CreateParaObject(0, nParaCount));
                 pOutliner->Clear();
                 NbcSetOutlinerParaObjectForText(pTemp, pText);
             }
@@ -422,7 +422,7 @@ bool SdrTextObj::HasText() const
     if( pEdtOutl )
         return HasEditText();
 
-    OutlinerParaObject* pOPO = GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOPO(GetOutlinerParaObject());
 
     bool bHasText = false;
     if( pOPO )

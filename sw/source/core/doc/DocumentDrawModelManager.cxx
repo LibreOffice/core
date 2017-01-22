@@ -357,7 +357,7 @@ bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rS
         SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>(pObject);
         if (!pTextObj)
             continue;
-        const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetOutlinerParaObject());
         if (!pParaObj)
             continue;
         rOutliner.SetText(*pParaObj);
@@ -380,7 +380,7 @@ bool DocumentDrawModelManager::Search(const SwPaM& rPaM, const SvxSearchItem& rS
         SdrView* pSdrView = pWrtShell->GetDrawView();
         if (!pSdrView)
             return false;
-        OutlinerView* pOutlinerView = pSdrView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutlinerView = pSdrView->GetTextEditOutlinerView();
         if (!rSearchItem.GetBackward())
             pOutlinerView->SetSelection(ESelection(0, 0, 0, 0));
         else

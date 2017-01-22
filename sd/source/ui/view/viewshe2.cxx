@@ -151,7 +151,7 @@ long ViewShell::VirtHScrollHdl(ScrollBar* pHScroll)
 
         // scroll all windows of the column
         ::sd::View* pView = GetView();
-        OutlinerView* pOLV = nullptr;
+        std::shared_ptr< OutlinerView > pOLV = nullptr;
 
         if (pView)
             pOLV = pView->GetTextEditOutlinerView();
@@ -212,7 +212,7 @@ long ViewShell::VirtVScrollHdl(ScrollBar* pVScroll)
         double fY = (double) pVScroll->GetThumbPos() / pVScroll->GetRange().Len();
 
         ::sd::View* pView = GetView();
-        OutlinerView* pOLV = nullptr;
+        std::shared_ptr< OutlinerView > pOLV = nullptr;
 
         if (pView)
             pOLV = pView->GetTextEditOutlinerView();

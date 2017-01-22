@@ -25,6 +25,7 @@
 #include <svx/svxids.hrc>
 #include <editeng/editeng.hxx>
 #include <editeng/editstat.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/flstitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <svl/aeitem.hxx>
@@ -227,12 +228,12 @@ void DrawDocShell::UpdateRefDevice()
         }
         mpDoc->SetRefDevice( pRefDevice.get() );
 
-        ::sd::Outliner* pOutl = mpDoc->GetOutliner( false );
+        const std::shared_ptr< ::sd::Outliner > pOutl = mpDoc->GetOutliner( false );
 
         if( pOutl )
             pOutl->SetRefDevice( pRefDevice );
 
-        ::sd::Outliner* pInternalOutl = mpDoc->GetInternalOutliner( false );
+        const std::shared_ptr< ::sd::Outliner > pInternalOutl = mpDoc->GetInternalOutliner( false );
 
         if( pInternalOutl )
             pInternalOutl->SetRefDevice( pRefDevice );
@@ -562,10 +563,10 @@ bool DrawDocShell::SaveAs( SfxMedium& rMedium )
         if( pPage && pPage->getMainSequence()->getCount() )
         {
             SdrObject* pObj = mpViewShell->GetView()->GetTextEditObject();
-            SdrOutliner* pOutl = mpViewShell->GetView()->GetTextEditOutliner();
+            const std::shared_ptr< SdrOutliner > pOutl = mpViewShell->GetView()->GetTextEditOutliner();
             if( pObj && pOutl && pOutl->IsModified() )
             {
-                OutlinerParaObject* pNewText = pOutl->CreateParaObject( 0, pOutl->GetParagraphCount() );
+                const std::shared_ptr< OutlinerParaObject > pNewText(pOutl->CreateParaObject( 0, pOutl->GetParagraphCount() ));
                 pObj->SetOutlinerParaObject( pNewText );
                 pOutl->ClearModifyFlag();
             }
@@ -662,14 +663,14 @@ bool DrawDocShell::SaveCompleted( const css::uno::Reference< css::embed::XStorag
         {
             if( dynamic_cast< OutlineViewShell *>( mpViewShell ) !=  nullptr )
                 static_cast<OutlineView*>(mpViewShell->GetView())
-                    ->GetOutliner().ClearModifyFlag();
+                    ->GetOutliner()->ClearModifyFlag();
 
-            SdrOutliner* pOutl = mpViewShell->GetView()->GetTextEditOutliner();
+            const std::shared_ptr< SdrOutliner > pOutl = mpViewShell->GetView()->GetTextEditOutliner();
             if( pOutl )
             {
                 SdrObject* pObj = mpViewShell->GetView()->GetTextEditObject();
                 if( pObj )
-                    pObj->NbcSetOutlinerParaObject( pOutl->CreateParaObject() );
+                    pObj->NbcSetOutlinerParaObject( std::shared_ptr< OutlinerParaObject >(pOutl->CreateParaObject()) );
 
                 pOutl->ClearModifyFlag();
             }

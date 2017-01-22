@@ -105,7 +105,7 @@ using namespace ::com::sun::star;
 void SwDrawTextShell::Execute( SfxRequest &rReq )
 {
     SwWrtShell &rSh = GetShell();
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemSet aNewAttr(*aEditAttr.GetPool(), aEditAttr.GetRanges());
 
@@ -128,7 +128,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 pOLV->GetEditView().SelectCurrentWord();
             }
 
-            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV,rReq,GetView(),rSh);
+            bRestoreSelection = SwLangHelper::SetLanguageStatus(pOLV.get(), rReq,GetView(), rSh);
             break;
         }
 
@@ -441,7 +441,7 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
         {
 //!! JP 16.03.2001: why??           pSdrView = rSh.GetDrawView();
 //!! JP 16.03.2001: why??           pOutliner = pSdrView->GetTextEditOutliner();
-            SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+            const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
             EEControlBits nCtrl = pOutliner->GetControlWord();
 
             bool bSet = static_cast<const SfxBoolItem&>(rReq.GetArgs()->Get(
@@ -585,7 +585,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
     if (!IsTextEdit())  // Otherwise sometimes crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
 
@@ -601,7 +601,7 @@ void SwDrawTextShell::GetState(SfxItemSet& rSet)
         {
             case SID_LANGUAGE_STATUS://20412:
             {
-                nSlotId = SwLangHelper::GetLanguageStatus(pOLV,rSet);
+                nSlotId = SwLangHelper::GetLanguageStatus(pOLV.get(), rSet);
                 break;
             }
 
@@ -771,7 +771,7 @@ ASK_ESCAPE:
             }
             else
             {
-                SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+                const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
                 if( pOutliner )
                     bFlag = pOutliner->IsVertical() ==
                             (SID_TEXTDIRECTION_TOP_TO_BOTTOM == nSlotId);
@@ -801,7 +801,7 @@ ASK_ESCAPE:
             }
             else
             {
-                SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+                const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
                 if(pOutliner && pOutliner->IsVertical())
                 {
                     rSet.DisableItem( nWhich );
@@ -867,7 +867,7 @@ void SwDrawTextShell::GetDrawTextCtrlState(SfxItemSet& rSet)
     if (!IsTextEdit())  // Otherwise crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
 
     SfxWhichIter aIter(rSet);
@@ -952,7 +952,7 @@ void SwDrawTextShell::ExecClpbrd(SfxRequest &rReq)
     if (!IsTextEdit())  // Otherwise crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
 
     ESelection aSel(pOLV->GetSelection());
     const bool bCopy = (aSel.nStartPara != aSel.nEndPara) || (aSel.nStartPos != aSel.nEndPos);
@@ -984,7 +984,7 @@ void SwDrawTextShell::StateClpbrd(SfxItemSet &rSet)
     if (!IsTextEdit())  // Otherwise crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
     ESelection aSel(pOLV->GetSelection());
     const bool bCopy = (aSel.nStartPara != aSel.nEndPara) ||
         (aSel.nStartPos != aSel.nEndPos);
@@ -1032,7 +1032,7 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
     if (!IsTextEdit())  // Otherwise crash!
         return;
 
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
     SfxWhichIter aIter(rSet);
     sal_uInt16 nWhich = aIter.FirstWhich();
 

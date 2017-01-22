@@ -232,7 +232,7 @@ bool FuConstruct::MouseButtonUp(const MouseEvent& rMEvt)
                 //  bei Uno-Controls nicht in Textmodus
                 if ( dynamic_cast<const SdrTextObj*>( pObj) != nullptr && dynamic_cast<const SdrUnoObj*>( pObj) ==  nullptr )
                 {
-                    OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                    const std::shared_ptr< OutlinerParaObject > pOPO(pObj->GetOutlinerParaObject());
                     bool bVertical = ( pOPO && pOPO->IsVertical() );
                     sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 

@@ -70,7 +70,7 @@ protected:
     virtual void impSetFlowOutlinerParams(SdrOutliner *, SdrOutliner *);
 
     // impGetMergedUnderflowingParaObject merges underflowing text with the one in the next box
-    OutlinerParaObject *impGetMergedUnderflowParaObject(SdrOutliner *pOutliner);
+    std::shared_ptr< OutlinerParaObject> impGetMergedUnderflowParaObject(SdrOutliner *pOutliner);
 
 private:
     bool mbOFisUFinduced;

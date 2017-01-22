@@ -902,7 +902,8 @@ void ScXMLTableRowCellContext::SetAnnotation(const ScAddress& rPos)
             // rescue settings from drawing object before the shape is removed
             ::std::unique_ptr< SfxItemSet > xItemSet( new SfxItemSet( pObject->GetMergedItemSet() ) );
             ::std::unique_ptr< OutlinerParaObject > xOutlinerObj;
-            if( OutlinerParaObject* pOutlinerObj = pObject->GetOutlinerParaObject() )
+            const std::shared_ptr< OutlinerParaObject > pOutlinerObj(pObject->GetOutlinerParaObject());
+            if( pOutlinerObj )
                 xOutlinerObj.reset( new OutlinerParaObject( *pOutlinerObj ) );
             Rectangle aCaptionRect;
             if( mxAnnotationData->mbUseShapePos )

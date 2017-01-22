@@ -191,7 +191,7 @@ static bool lcl_KeyEditMode( SdrObject* pObj, ScTabViewShell* pViewShell, const 
         // start text edit - like FuSelection::MouseButtonUp,
         // but with bCursorToEnd instead of mouse position
 
-        OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pOPO(pObj->GetOutlinerParaObject());
         bool bVertical = ( pOPO && pOPO->IsVertical() );
         sal_uInt16 nTextSlotId = bVertical ? SID_DRAW_TEXT_VERTICAL : SID_DRAW_TEXT;
 

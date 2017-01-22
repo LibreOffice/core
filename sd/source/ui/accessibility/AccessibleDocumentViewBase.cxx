@@ -806,7 +806,7 @@ uno::Any SAL_CALL AccessibleDocumentViewBase::getExtendedAttributes()
             SdrObject* pNotesObj = pNotesPge->GetPresObj(PRESOBJ_NOTES);
             if (pNotesObj)
             {
-                OutlinerParaObject* pPara = pNotesObj->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pPara(pNotesObj->GetOutlinerParaObject());
                 if (pPara)
                 {
                     sValue += "note:";

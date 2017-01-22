@@ -78,7 +78,7 @@ void SpellDialogChildWindow::ApplyChangedSentence (
 {
     if (mpSdOutliner != nullptr)
     {
-        OutlinerView* pOutlinerView = mpSdOutliner->GetView(0);
+        const std::shared_ptr< OutlinerView > pOutlinerView = mpSdOutliner->GetView(0);
         if (pOutlinerView != nullptr)
             mpSdOutliner->ApplyChangedSentence (
                 pOutlinerView->GetEditView(),
@@ -156,7 +156,7 @@ void SpellDialogChildWindow::ProvideOutliner()
                 // will use it instead of creating its own.
                 mbOwnOutliner = false;
                 SdDrawDocument *pDoc = pViewShell->GetDoc();
-                mpSdOutliner = pDoc->GetOutliner();
+                mpSdOutliner = pDoc->GetOutliner().get();
                 StartListening(*pDoc);
             }
 

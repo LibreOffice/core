@@ -280,7 +280,7 @@ private:
     sal_Int32 mnText;
 
     /// Paragraph object of <member>mpTextObj</member>.
-    OutlinerParaObject* mpParaObj;
+    std::shared_ptr< OutlinerParaObject > mpParaObj;
 
     /// The view mode that was active when starting to search/spell check.
     PageKind meStartViewMode;

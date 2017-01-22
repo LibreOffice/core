@@ -205,7 +205,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 //              pView->TakeTextEditObject(aMDPos, pObj, pPV) )
                 pView->PickObj(aMDPos, pView->getHitTolLog(), pObj, pPV, SdrSearchOptions::PICKTEXTEDIT) )
             {
-                SdrOutliner* pO = MakeOutliner();
+                const std::shared_ptr< SdrOutliner > pO( MakeOutliner() );
                 lcl_UpdateHyphenator( *pO, pObj );
 
                 //  vertical flag:
@@ -213,7 +213,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
 
                 sal_uInt16 nSlotID = aSfxRequest.GetSlot();
                 bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
-                OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pOPO(pObj->GetOutlinerParaObject());
                 if ( pOPO )
                     bVertical = pOPO->IsVertical();     // content wins
                 pO->SetVertical( bVertical );
@@ -224,7 +224,7 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
                     //  EditEngine-UndoManager anmelden
                     pViewShell->SetDrawTextUndo( &pO->GetUndoManager() );
 
-                    OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+                    const std::shared_ptr< OutlinerView > pOLV = pView->GetTextEditOutlinerView();
                     if ( pOLV->MouseButtonDown(rMEvt) )
                         return true; // Event an den Outliner
                 }
@@ -658,7 +658,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
 
             if ( pObj->HasTextEdit() )
             {
-                SdrOutliner* pO = MakeOutliner();
+                const std::shared_ptr< SdrOutliner > pO( MakeOutliner() );
                 lcl_UpdateHyphenator( *pO, pObj );
 
                 //  vertical flag:
@@ -666,7 +666,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
 
                 sal_uInt16 nSlotID = aSfxRequest.GetSlot();
                 bool bVertical = ( nSlotID == SID_DRAW_TEXT_VERTICAL );
-                OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pOPO(pObj->GetOutlinerParaObject());
                 if ( pOPO )
                     bVertical = pOPO->IsVertical();     // content wins
                 pO->SetVertical( bVertical );
@@ -690,7 +690,7 @@ void FuText::SetInEditMode(SdrObject* pObj, const Point* pMousePixel,
                     //  pass initial key event to outliner view
                     if ( pMousePixel || bCursorToEnd || pInitialKey )
                     {
-                        OutlinerView* pOLV = pView->GetTextEditOutlinerView();
+                        const std::shared_ptr< OutlinerView > pOLV = pView->GetTextEditOutlinerView();
                         if (pOLV)
                         {
                             if ( pMousePixel )

@@ -35,7 +35,7 @@
 #include <o3tl/cow_wrapper.hxx>
 #include <libxml/xmlwriter.h>
 
-OutlinerParaObjData::OutlinerParaObjData( EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
+OutlinerParaObjData::OutlinerParaObjData(const std::shared_ptr< EditTextObject >& pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
     mpEditTextObject(pEditTextObject),
     maParagraphDataVector(rParagraphDataVector),
     mbIsEditDoc(bIsEditDoc)
@@ -45,7 +45,7 @@ OutlinerParaObjData::OutlinerParaObjData( EditTextObject* pEditTextObject, const
 }
 
 OutlinerParaObjData::OutlinerParaObjData( const OutlinerParaObjData& r ):
-    mpEditTextObject(r.mpEditTextObject->Clone()),
+    mpEditTextObject(r.mpEditTextObject),
     maParagraphDataVector(r.maParagraphDataVector),
     mbIsEditDoc(r.mbIsEditDoc)
 {
@@ -53,7 +53,6 @@ OutlinerParaObjData::OutlinerParaObjData( const OutlinerParaObjData& r ):
 
 OutlinerParaObjData::~OutlinerParaObjData()
 {
-    delete mpEditTextObject;
 }
 
 bool OutlinerParaObjData::operator==(const OutlinerParaObjData& rCandidate) const
@@ -69,13 +68,13 @@ bool OutlinerParaObjData::isWrongListEqual(const OutlinerParaObjData& rCompare) 
 }
 
 OutlinerParaObject::OutlinerParaObject(
-    const EditTextObject& rTextObj, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
-    mpImpl(OutlinerParaObjData(rTextObj.Clone(), rParagraphDataVector, bIsEditDoc))
+    const std::shared_ptr< EditTextObject >& pTextObj, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc ) :
+    mpImpl(OutlinerParaObjData(pTextObj, rParagraphDataVector, bIsEditDoc))
 {
 }
 
-OutlinerParaObject::OutlinerParaObject( const EditTextObject& rTextObj ) :
-    mpImpl(OutlinerParaObjData(rTextObj.Clone(), ParagraphDataVector(), true))
+OutlinerParaObject::OutlinerParaObject( const std::shared_ptr< EditTextObject >& pTextObj ) :
+    mpImpl(OutlinerParaObjData(pTextObj, ParagraphDataVector(), true))
 {
 }
 

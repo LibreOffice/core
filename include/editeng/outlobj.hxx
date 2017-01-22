@@ -24,6 +24,7 @@
 #include <editeng/editengdllapi.h>
 #include <rtl/ustring.hxx>
 #include <rsc/rscsfx.hxx>
+#include <memory>
 #include <o3tl/cow_wrapper.hxx>
 
 class EditTextObject;
@@ -35,12 +36,12 @@ class EditTextObject;
 struct OutlinerParaObjData
 {
     // data members
-    EditTextObject*                 mpEditTextObject;
+    std::shared_ptr< EditTextObject >   mpEditTextObject;
     ParagraphDataVector             maParagraphDataVector;
     bool                            mbIsEditDoc;
 
     // constuctor
-    OutlinerParaObjData( EditTextObject* pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc );
+    OutlinerParaObjData( const std::shared_ptr< EditTextObject >& pEditTextObject, const ParagraphDataVector& rParagraphDataVector, bool bIsEditDoc );
 
     OutlinerParaObjData( const OutlinerParaObjData& r );
 
@@ -59,8 +60,8 @@ class EDITENG_DLLPUBLIC OutlinerParaObject
 
 public:
     // constructors/destructor
-    OutlinerParaObject( const EditTextObject&, const ParagraphDataVector&, bool bIsEditDoc = true);
-    OutlinerParaObject( const EditTextObject&);
+    OutlinerParaObject( const std::shared_ptr< EditTextObject >&, const ParagraphDataVector&, bool bIsEditDoc = true);
+    OutlinerParaObject( const std::shared_ptr< EditTextObject >&);
     OutlinerParaObject( const OutlinerParaObject&);
     ~OutlinerParaObject();
 

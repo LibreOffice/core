@@ -73,7 +73,7 @@ bool SdrTextObj::BegTextEdit(SdrOutliner& rOutl)
     }
 
 
-    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(GetOutlinerParaObject());
     if(pOutlinerParaObject!=nullptr)
     {
         rOutl.SetText(*GetOutlinerParaObject());
@@ -287,7 +287,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
 
         sal_Int32 nParaAnz = rOutl.GetParagraphCount();
         bool bNewTextTransferred = false;
-        OutlinerParaObject* pNewText = rOutl.CreateParaObject( 0, nParaAnz );
+        std::shared_ptr< OutlinerParaObject > pNewText(rOutl.CreateParaObject( 0, nParaAnz ));
 
         // need to end edit mode early since SetOutlinerParaObject already
         // uses GetCurrentBoundRect() which needs to take the text into account
@@ -308,7 +308,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         }
 
         if (!bNewTextTransferred)
-            delete pNewText;
+            pNewText.reset();
     }
 
     /* Beginning Chaining-related code */
@@ -325,7 +325,7 @@ void SdrTextObj::EndTextEdit(SdrOutliner& rOutl)
         SdrOutliner rDrawOutl = GetNextLinkInChain()->ImpGetDrawOutliner();
         // Prepare Outliner for overflow check
         ImpUpdateOutlParamsForOverflow(&rDrawOutl, GetNextLinkInChain());
-        const OutlinerParaObject *pObj = GetNextLinkInChain()->GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pObj(GetNextLinkInChain()->GetOutlinerParaObject());
         rDrawOutl.SetText(*pObj);
 
         rDrawOutl.SetUpdateMode(true);

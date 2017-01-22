@@ -98,7 +98,7 @@ TextObjectBar::TextObjectBar (
         OutlineView* pOutlinerView = dynamic_cast< OutlineView* >( mpView );
         if( pOutlinerView )
         {
-            SetUndoManager(&pOutlinerView->GetOutliner().GetUndoManager());
+            SetUndoManager(&pOutlinerView->GetOutliner()->GetUndoManager());
         }
         else
         {
@@ -185,8 +185,8 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     // input language should be preferred over
                     // current cursor position to detect script type
-                    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
-                    SdrOutliner *pOutliner = mpView->GetTextEditOutliner();
+                    std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
+                    const std::shared_ptr< SdrOutliner > pOutliner = mpView->GetTextEditOutliner();
 
                     if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
                     {
@@ -258,7 +258,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
 
                 if (!bInMasterView)
                 {
-                    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+                    std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
 
                     if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
                     {
@@ -272,7 +272,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                         ( pOLV->GetOutliner()->GetMode() == OUTLINERMODE_OUTLINEOBJECT || bOutlineViewSh ) )
                     {
                         // Outliner at outline-mode
-                        ::Outliner* pOutl = pOLV->GetOutliner();
+                        const std::shared_ptr< ::Outliner > pOutl = pOLV->GetOutliner();
 
                         std::vector<Paragraph*> aSelList;
                         pOLV->CreateSelectionList(aSelList);
@@ -367,7 +367,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
                 {
                     bool bLeftToRight = true;
 
-                    SdrOutliner* pOutl = mpView->GetTextEditOutliner();
+                    const std::shared_ptr< SdrOutliner > pOutl = mpView->GetTextEditOutliner();
                     if( pOutl )
                     {
                         if( pOutl->IsVertical() )
@@ -446,7 +446,7 @@ void TextObjectBar::GetAttrState( SfxItemSet& rSet )
     else
     {
         // paragraph spacing
-        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
         if( pOLV )
         {
             ESelection aSel = pOLV->GetSelection();

@@ -177,7 +177,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
 
     OUString aContent;
 
-    OutlinerParaObject* pParaObj = xCell->GetEditOutlinerParaObject();
+    std::shared_ptr< OutlinerParaObject > pParaObj(xCell->GetEditOutlinerParaObject());
     bool bOwnParaObj = pParaObj != nullptr;
 
     if( pParaObj == nullptr )
@@ -194,7 +194,7 @@ void SdrTableRtfExporter::WriteCell( sal_Int32 nCol, sal_Int32 nRow )
         rOutliner.Clear();
 
         if( bOwnParaObj )
-            delete pParaObj;
+            pParaObj.reset();
     }
 
     bool bResetAttr = false;

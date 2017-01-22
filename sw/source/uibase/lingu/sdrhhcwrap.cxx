@@ -73,7 +73,8 @@ SdrHHCWrapper::SdrHHCWrapper( SwView* pVw,
      Size aSize( 1, 1 );
     SetPaperSize( aSize );
 
-    pOutlView = new OutlinerView( this, &(pView->GetEditWin()) );
+    // do not delete Outliner
+    pOutlView = std::make_shared< OutlinerView >( std::shared_ptr< Outliner >(this, []( Outliner* ){}), &(pView->GetEditWin()) );
     pOutlView->GetOutliner()->SetRefDevice(pView->GetWrtShell().getIDocumentDeviceAccess().getPrinter( false ));
 
     // Hack: all SdrTextObj attributes should be transferred to EditEngine
@@ -98,7 +99,6 @@ SdrHHCWrapper::~SdrHHCWrapper()
         pOutlView->SetOutputArea( Rectangle( Point(), Size(1, 1) ) );
     }
     RemoveView( pOutlView );
-    delete pOutlView;
 }
 
 void SdrHHCWrapper::StartTextConversion()
@@ -131,7 +131,7 @@ bool SdrHHCWrapper::ConvertNextDocument()
         pTextObj = (*aIt);
         if ( pTextObj )
         {
-            OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetOutlinerParaObject());
             if ( pParaObj )
             {
                 SetPaperSize( pTextObj->GetLogicRect().GetSize() );
@@ -156,8 +156,10 @@ bool SdrHHCWrapper::ConvertNextDocument()
                     SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     SetUpdateMode(true);
                     pView->GetWrtShell().MakeVisible(pTextObj->GetLogicRect());
+                    // do not delete outliner
+                    const std::shared_ptr< SdrOutliner > pThis(this, []( SdrOutliner* ){});
 
-                    pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), false, this, pOutlView, true, true);
+                    pSdrView->SdrBeginTextEdit(pTextObj, pPV, &pView->GetEditWin(), false, pThis, pOutlView, true, true);
                 }
                 else
                     SetUpdateMode(false);

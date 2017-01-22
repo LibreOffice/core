@@ -85,7 +85,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
     const SfxItemSet* pArgs = rReq.GetArgs();
     const SfxPoolItem* pPoolItem = nullptr;
     sal_uInt16 nSlot = rReq.GetSlot();
-    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+    std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
 
     std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
 
@@ -341,7 +341,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
                     //effectively a preview of the equivalent style level, and
                     //changing the level disconnects it from the style
 
-                    ::Outliner* pOL = pOLV->GetOutliner();
+                    const std::shared_ptr< ::Outliner > pOL = pOLV->GetOutliner();
                     if (pOL)
                     {
                         const SvxNumBulletItem *pItem = nullptr;
@@ -394,7 +394,7 @@ void TextObjectBar::Execute( SfxRequest &rReq )
             const FontList* pFontList = pFonts ? pFonts->GetFontList(): nullptr;
             if( pFontList )
             {
-                FuText::ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pOLV, pFontList, mpView );
+                FuText::ChangeFontSize( nSlot == SID_GROW_FONT_SIZE, pOLV.get(), pFontList, mpView );
                 if( pOLV )
                     pOLV->SetAttribs( pOLV->GetEditView().GetEmptyItemSet() );
                 mpViewShell->GetViewFrame()->GetBindings().Invalidate( SID_ATTR_CHAR_FONTHEIGHT );

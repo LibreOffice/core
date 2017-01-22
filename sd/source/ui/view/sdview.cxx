@@ -25,6 +25,7 @@
 #include <sfx2/request.hxx>
 #include <svx/obj3d.hxx>
 #include <svx/fmview.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/svxids.hrc>
 #include <svx/svdograf.hxx>
@@ -598,8 +599,8 @@ void View::SelectAll()
 {
     if ( IsTextEdit() )
     {
-        OutlinerView* pOLV = GetTextEditOutlinerView();
-        const ::Outliner* pOutliner = GetTextEditOutliner();
+        const std::shared_ptr< OutlinerView > pOLV = GetTextEditOutlinerView();
+        const std::shared_ptr< ::Outliner > pOutliner = GetTextEditOutliner();
         pOLV->SelectRange( 0, pOutliner->GetParagraphCount() );
     }
     else
@@ -636,7 +637,7 @@ static void SetSpellOptions( const SdDrawDocument& rDoc, EEControlBits& rCntrl )
 void OutlinerMasterViewFilter::Start(SdrOutliner *pOutl)
 {
     m_pOutl = pOutl;
-    OutlinerView* pOutlView = m_pOutl->GetView(0);
+    const std::shared_ptr< OutlinerView > pOutlView = m_pOutl->GetView(0);
     m_bReadOnly = pOutlView->IsReadOnly();
     pOutlView->SetReadOnly(true);
 }
@@ -645,7 +646,7 @@ void OutlinerMasterViewFilter::End()
 {
     if (m_pOutl)
     {
-        OutlinerView* pOutlView = m_pOutl->GetView(0);
+        const std::shared_ptr< OutlinerView > pOutlView = m_pOutl->GetView(0);
         pOutlView->SetReadOnly(m_bReadOnly);
         m_pOutl = nullptr;
     }
@@ -664,24 +665,25 @@ SfxViewShell* View::GetSfxViewShell() const
 bool View::SdrBeginTextEdit(
     SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     bool bIsNewObj,
-    SdrOutliner* pOutl, OutlinerView* pGivenOutlinerView,
+    const std::shared_ptr< SdrOutliner >& pOutl, const std::shared_ptr< OutlinerView >& pGivenOutlinerView,
     bool bDontDeleteOutliner, bool bOnlyOneView, bool bGrabFocus )
 {
     SdrPage* pPage = pObj ? pObj->GetPage() : nullptr;
     bool bMasterPage = pPage && pPage->IsMasterPage();
+    std::shared_ptr< SdrOutliner > pOutliner = pOutl;
 
     GetViewShell()->GetViewShellBase().GetEventMultiplexer()->MultiplexEvent(
         sd::tools::EventMultiplexerEvent::EID_BEGIN_TEXT_EDIT, static_cast<void*>(pObj) );
 
-    if( pOutl==nullptr && pObj )
-        pOutl = SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pObj->GetModel());
+    if( pOutliner==nullptr && pObj )
+        pOutliner.reset( SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pObj->GetModel()) );
 
     // make draw&impress specific initialisations
-    if( pOutl )
+    if( pOutliner )
     {
-        pOutl->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mrDoc.GetStyleSheetPool() ));
-        pOutl->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
-        EEControlBits nCntrl = pOutl->GetControlWord();
+        pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>( mrDoc.GetStyleSheetPool() ));
+        pOutliner->SetCalcFieldValueHdl(LINK(SD_MOD(), SdModule, CalcFieldValueHdl));
+        EEControlBits nCntrl = pOutliner->GetControlWord();
         nCntrl |= EEControlBits::ALLOWBIGOBJS;
         nCntrl |= EEControlBits::MARKFIELDS;
         nCntrl |= EEControlBits::AUTOCORRECT;
@@ -692,21 +694,21 @@ bool View::SdrBeginTextEdit(
 
         SetSpellOptions( mrDoc, nCntrl );
 
-        pOutl->SetControlWord(nCntrl);
+        pOutliner->SetControlWord(nCntrl);
 
         Reference< linguistic2::XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
-            pOutl->SetSpeller( xSpellChecker );
+            pOutliner->SetSpeller( xSpellChecker );
 
         Reference< linguistic2::XHyphenator > xHyphenator( LinguMgr::GetHyphenator() );
         if( xHyphenator.is() )
-            pOutl->SetHyphenator( xHyphenator );
+            pOutliner->SetHyphenator( xHyphenator );
 
-        pOutl->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
+        pOutliner->SetDefaultLanguage( Application::GetSettings().GetLanguageTag().getLanguageType() );
     }
 
     bool bReturn = FmFormView::SdrBeginTextEdit(
-        pObj, pPV, pWin, bIsNewObj, pOutl,
+        pObj, pPV, pWin, bIsNewObj, pOutliner,
         pGivenOutlinerView, bDontDeleteOutliner,
         bOnlyOneView, bGrabFocus);
 
@@ -716,7 +718,8 @@ bool View::SdrBeginTextEdit(
 
         if (comphelper::LibreOfficeKit::isActive())
         {
-            if (OutlinerView* pView = GetTextEditOutlinerView())
+            const std::shared_ptr< OutlinerView > pView = GetTextEditOutlinerView();
+            if ( pView )
             {
                 Rectangle aRectangle = pView->GetOutputArea();
                 if (pWin && pWin->GetMapMode().GetMapUnit() == MAP_100TH_MM)
@@ -729,7 +732,7 @@ bool View::SdrBeginTextEdit(
 
     if (bReturn)
     {
-        ::Outliner* pOL = GetTextEditOutliner();
+        const std::shared_ptr< ::Outliner > pOL = GetTextEditOutliner();
 
         if( pObj && pObj->GetPage() )
         {
@@ -753,9 +756,9 @@ bool View::SdrBeginTextEdit(
         }
     }
 
-    if (bMasterPage && bReturn && pOutl)
+    if (bMasterPage && bReturn && pOutliner)
     {
-        const SdrTextObj* pTextObj = pOutl->GetTextObj();
+        const SdrTextObj* pTextObj = pOutliner->GetTextObj();
         const SdPage* pSdPage = pTextObj ? static_cast<const SdPage*>(pTextObj->GetPage()) : nullptr;
         const PresObjKind eKind = pSdPage ? pSdPage->GetPresObjKind(const_cast<SdrTextObj*>(pTextObj)) : PRESOBJ_NONE;
         switch (eKind)
@@ -763,7 +766,7 @@ bool View::SdrBeginTextEdit(
             case PRESOBJ_TITLE:
             case PRESOBJ_OUTLINE:
             case PRESOBJ_TEXT:
-                maMasterViewFilter.Start(pOutl);
+                maMasterViewFilter.Start(pOutliner.get());
                 break;
             default:
                 break;
@@ -846,9 +849,9 @@ bool View::RestoreDefaultText( SdrTextObj* pTextObj )
                 bRestored = pPage->RestoreDefaultText( pTextObj );
                 if( bRestored )
                 {
-                    SdrOutliner* pOutliner = GetTextEditOutliner();
-                    pTextObj->SetTextEditOutliner( pOutliner );
-                    OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+                    const std::shared_ptr< SdrOutliner > pOutliner(GetTextEditOutliner());
+                    pTextObj->SetTextEditOutliner( pOutliner.get() );
+                    const std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetOutlinerParaObject());
                     if (pOutliner)
                         pOutliner->SetText(*pParaObj);
                 }
@@ -1226,7 +1229,7 @@ void View::OnEndPasteOrDrop( PasteOrDropInfos* pInfo )
 {
     /* Style Sheet handling */
     SdrTextObj* pTextObj = dynamic_cast< SdrTextObj* >( GetTextEditObject() );
-    SdrOutliner* pOutliner = GetTextEditOutliner();
+    const std::shared_ptr< SdrOutliner > pOutliner = GetTextEditOutliner();
     if( pOutliner && pTextObj && pTextObj->GetPage() )
     {
         SdPage* pPage = static_cast< SdPage* >( pTextObj->GetPage() );
@@ -1330,7 +1333,7 @@ bool View::ShouldToggleOn(
         }
         else
         {
-            OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetOutlinerParaObject());
             if (!pParaObj)
                 continue;
             pOutliner->SetText(*pParaObj);
@@ -1357,8 +1360,8 @@ void View::ChangeMarkedObjectsBulletsNumbering(
 
     const bool bToggleOn = ShouldToggleOn( bToggle, bHandleBullets );
 
-    std::unique_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
-    std::unique_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner.get(), pWindow));
+    std::shared_ptr<SdrOutliner> pOutliner(SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrModel));
+    std::unique_ptr<OutlinerView> pOutlinerView(new OutlinerView(pOutliner, pWindow));
 
     const size_t nMarkCount = GetMarkedObjectCount();
     for (size_t nIndex = 0; nIndex < nMarkCount; ++nIndex)
@@ -1407,7 +1410,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                         pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
                     }
                     sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
-                    pText->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
+                    pText->SetOutlinerParaObject(std::shared_ptr< OutlinerParaObject >(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount)));
                     pOutliner->Clear();
                 }
             }
@@ -1420,7 +1423,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
         }
         else
         {
-            OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetOutlinerParaObject());
             if (!pParaObj)
                 continue;
             pOutliner->SetText(*pParaObj);
@@ -1438,7 +1441,7 @@ void View::ChangeMarkedObjectsBulletsNumbering(
                 pOutlinerView->ApplyBulletsNumbering( bHandleBullets, pNumRule, bToggle );
             }
             sal_uInt32 nParaCount = pOutliner->GetParagraphCount();
-            pTextObj->SetOutlinerParaObject(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount));
+            pTextObj->SetOutlinerParaObject(std::shared_ptr< OutlinerParaObject >(pOutliner->CreateParaObject(0, (sal_uInt16)nParaCount)));
             pOutliner->Clear();
         }
     }

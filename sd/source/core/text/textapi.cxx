@@ -85,7 +85,7 @@ struct TextAPIEditSource_Impl
 {
     // needed for "internal" refcounting
     SdDrawDocument*                 mpDoc;
-    Outliner*                       mpOutliner;
+    std::shared_ptr< Outliner >     mpOutliner;
     SvxOutlinerForwarder*           mpTextForwarder;
     sal_Int32                       mnRef;
 };
@@ -226,8 +226,7 @@ void TextAPIEditSource::Dispose()
     delete pImpl->mpTextForwarder;
     pImpl->mpTextForwarder = nullptr;
 
-    delete pImpl->mpOutliner;
-    pImpl->mpOutliner = nullptr;
+    pImpl->mpOutliner.reset();
 }
 
 SvxTextForwarder* TextAPIEditSource::GetTextForwarder()
@@ -238,12 +237,12 @@ SvxTextForwarder* TextAPIEditSource::GetTextForwarder()
     if( !pImpl->mpOutliner )
     {
         //init draw model first
-        pImpl->mpOutliner = new Outliner( pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
-        pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+        pImpl->mpOutliner = std::make_shared< Outliner >(pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
+        pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner.get() );
     }
 
     if( !pImpl->mpTextForwarder )
-        pImpl->mpTextForwarder = new SvxOutlinerForwarder( *pImpl->mpOutliner, false );
+        pImpl->mpTextForwarder = new SvxOutlinerForwarder( pImpl->mpOutliner, false );
 
     return pImpl->mpTextForwarder;
 }
@@ -255,8 +254,8 @@ void TextAPIEditSource::SetText( OutlinerParaObject& rText )
         if( !pImpl->mpOutliner )
         {
             //init draw model first
-            pImpl->mpOutliner = new Outliner( pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
-            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner );
+            pImpl->mpOutliner = std::make_shared< Outliner >( pImpl->mpDoc, OUTLINERMODE_TEXTOBJECT );
+            pImpl->mpDoc->SetCalcFieldValueHdl( pImpl->mpOutliner.get() );
         }
 
         pImpl->mpOutliner->SetText( rText );

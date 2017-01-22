@@ -243,10 +243,10 @@ public:
     void TakeTextEditArea(const sdr::table::CellPos& rPos, Size* pPaperMin, Size* pPaperMax, Rectangle* pViewInit, Rectangle* pViewMin) const;
     virtual sal_uInt16 GetOutlinerViewAnchorMode() const override;
 
-    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
+    virtual void NbcSetOutlinerParaObject(const std::shared_ptr< OutlinerParaObject >& pTextObject) override;
 
-    virtual OutlinerParaObject* GetOutlinerParaObject() const override;
-    virtual OutlinerParaObject* GetEditOutlinerParaObject() const override;
+    virtual std::shared_ptr< OutlinerParaObject > GetOutlinerParaObject() const override;
+    virtual std::shared_ptr< OutlinerParaObject > GetEditOutlinerParaObject() const override;
 
     virtual void NbcReformatText() override;
     virtual void ReformatText() override;

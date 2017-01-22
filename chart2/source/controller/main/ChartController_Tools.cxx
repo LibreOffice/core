@@ -304,7 +304,7 @@ void ChartController::executeDispatch_Paste()
                 {
                     if( m_pDrawViewWrapper )
                     {
-                        OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+                        const std::shared_ptr< OutlinerView > pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
                         if( pOutlinerView )//in case of edit mode insert into edited string
                             pOutlinerView->InsertText( aString );
                         else
@@ -488,7 +488,7 @@ void ChartController::executeDispatch_Copy()
 {
     if ( m_pDrawViewWrapper )
     {
-        OutlinerView* pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutlinerView = m_pDrawViewWrapper->GetTextEditOutlinerView();
         if ( pOutlinerView )
         {
             pOutlinerView->Copy();

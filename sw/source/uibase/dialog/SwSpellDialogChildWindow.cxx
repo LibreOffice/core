@@ -253,7 +253,7 @@ svx::SpellPortions SwSpellDialogChildWindow::GetNextWrongSentence(bool bRecheck)
                 SdrView* pSdrView = pWrtShell->GetDrawView();
                 m_pSpellState->m_SpellStartPosition = SPELL_START_DRAWTEXT;
                 m_pSpellState->m_pStartDrawing = pSdrView->GetMarkedObjectList().GetMark(0)->GetMarkedSdrObj();
-                OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+                const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
                 // start checking at the top of the drawing object
                 pOLV->SetSelection( ESelection() );
                 m_pSpellState->m_aStartDrawingSelection = ESelection();
@@ -455,7 +455,7 @@ void SwSpellDialogChildWindow::ApplyChangedSentence(const svx::SpellPortions& rC
         else if(bDrawText )
         {
             SdrView* pDrView = pWrtShell->GetDrawView();
-            SdrOutliner *pOutliner = pDrView->GetTextEditOutliner();
+            const std::shared_ptr< SdrOutliner > pOutliner = pDrView->GetTextEditOutliner();
             pOutliner->ApplyChangedSentence(pDrView->GetTextEditOutlinerView()->GetEditView(), rChanged, bRecheck);
         }
     }
@@ -507,7 +507,7 @@ void SwSpellDialogChildWindow::SetGrammarChecking(bool bOn)
         else if( bDrawText )
         {
             SdrView*     pSdrView = pWrtShell->GetDrawView();
-            SdrOutliner* pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : nullptr;
+            const std::shared_ptr< SdrOutliner > pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : nullptr;
             OSL_ENSURE(pOutliner, "No Outliner in SwSpellDialogChildWindow::SetGrammarChecking");
             if(pOutliner)
             {
@@ -552,12 +552,12 @@ void SwSpellDialogChildWindow::GetFocus()
                 case SHELL_MODE_DRAWTEXT:
                 {
                     SdrView*     pSdrView = pWrtShell->GetDrawView();
-                    SdrOutliner* pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : nullptr;
-                    if(!pOutliner || m_pSpellState->m_pOutliner != pOutliner)
+                    const std::shared_ptr< SdrOutliner > pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : nullptr;
+                    if(!pOutliner || m_pSpellState->m_pOutliner != pOutliner.get())
                         bInvalidate = true;
                     else
                     {
-                        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+                        const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
                         OSL_ENSURE(pOLV, "no OutlinerView in SwSpellDialogChildWindow::GetFocus()");
                         if(!pOLV || !m_pSpellState->m_aESelection.IsEqual(pOLV->GetSelection()))
                             bInvalidate = true;
@@ -609,9 +609,9 @@ void SwSpellDialogChildWindow::LoseFocus()
             case SHELL_MODE_DRAWTEXT:
             {
                 SdrView*     pSdrView = pWrtShell->GetDrawView();
-                SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
-                m_pSpellState->m_pOutliner = pOutliner;
-                OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+                const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
+                m_pSpellState->m_pOutliner = pOutliner.get();
+                const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
                 OSL_ENSURE(pOutliner && pOLV, "no Outliner/OutlinerView in SwSpellDialogChildWindow::LoseFocus()");
                 if(pOLV)
                 {
@@ -761,7 +761,7 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
             if(m_pSpellState->m_pStartDrawing == pTextObj)
                 m_pSpellState->m_bRestartDrawing = true;
             m_pSpellState->m_aTextObjects.erase(aStart);
-            OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetOutlinerParaObject());
             if ( pParaObj )
             {
                 bool bHasSpellError = false;
@@ -774,8 +774,9 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     aTmpOutliner.SetRefMapMode(aMapMode);
                     aTmpOutliner.SetPaperSize( pTextObj->GetLogicRect().GetSize() );
                     aTmpOutliner.SetSpeller( xSpell );
-
-                    OutlinerView* pOutlView = new OutlinerView( &aTmpOutliner, &(rView.GetEditWin()) );
+                    // do not delete temporal outliner
+                    const std::shared_ptr< Outliner > pTemp(&aTmpOutliner, []( Outliner* ){});
+                    const std::shared_ptr< OutlinerView > pOutlView = std::make_shared< OutlinerView >( pTemp, &(rView.GetEditWin()) );
                     pOutlView->GetOutliner()->SetRefDevice( rSh.getIDocumentDeviceAccess().getPrinter( false ) );
                     aTmpOutliner.InsertView( pOutlView );
                     Point aPt;
@@ -786,7 +787,6 @@ bool SwSpellDialogChildWindow::FindNextDrawTextError_Impl(SwWrtShell& rSh)
                     aTmpOutliner.ClearModifyFlag();
                     bHasSpellError = EE_SPELL_OK != aTmpOutliner.HasSpellErrors();
                     aTmpOutliner.RemoveView( pOutlView );
-                    delete pOutlView;
                 }
                 if(bHasSpellError)
                 {
@@ -812,7 +812,7 @@ bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, svx::SpellPor
 {
     bool bRet = false;
     SdrView*     pSdrView = rSh.GetDrawView();
-    SdrOutliner* pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : nullptr;
+    const std::shared_ptr< SdrOutliner > pOutliner = pSdrView ? pSdrView->GetTextEditOutliner() : nullptr;
     OSL_ENSURE(pOutliner, "No Outliner in SwSpellDialogChildWindow::SpellDrawText_Impl");
     if(pOutliner)
     {
@@ -821,7 +821,7 @@ bool SwSpellDialogChildWindow::SpellDrawText_Impl(SwWrtShell& rSh, svx::SpellPor
         // and behind the initial selection
         if(bRet && m_pSpellState->m_bRestartDrawing)
         {
-            OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
             ESelection aCurrentSelection = pOLV->GetSelection();
             if(m_pSpellState->m_aStartDrawingSelection.nEndPara < aCurrentSelection.nEndPara ||
                (m_pSpellState->m_aStartDrawingSelection.nEndPara ==  aCurrentSelection.nEndPara &&

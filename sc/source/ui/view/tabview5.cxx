@@ -516,7 +516,7 @@ void ScTabView::UpdateDrawTextOutliner()
 {
     if ( pDrawView )
     {
-        Outliner* pOL = pDrawView->GetTextEditOutliner();
+        const std::shared_ptr< Outliner > pOL = pDrawView->GetTextEditOutliner();
         if (pOL)
             aViewData.UpdateOutlinerFlags( *pOL );
     }

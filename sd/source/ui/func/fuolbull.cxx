@@ -94,7 +94,7 @@ void FuOutlineBullet::DoExecute( SfxRequest& rReq )
                 {
                     SfxItemSet aSet( *pDlg->GetOutputItemSet() );
 
-                    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+                    std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
 
                     std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
 
@@ -232,7 +232,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
         }
     }
 
-    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+    std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
     std::unique_ptr< OutlineViewModelChangeGuard > aGuard;
     {
         if( dynamic_cast< const OutlineView *>( mpView ) !=  nullptr)
@@ -244,7 +244,7 @@ void FuOutlineBullet::SetCurrentBulletsNumbering(SfxRequest& rReq)
         }
     }
 
-    SdrOutliner* pOwner = bInMasterView ? mpView->GetTextEditOutliner() : nullptr;
+    const std::shared_ptr< SdrOutliner > pOwner = bInMasterView ? mpView->GetTextEditOutliner() : nullptr;
     const bool bOutlinerUndoEnabled = pOwner && !pOwner->IsInUndo() && pOwner->IsUndoEnabled();
     SdrModel* pSdrModel = bInMasterView ? mpView->GetModel() : nullptr;
     const bool bModelUndoEnabled = pSdrModel && pSdrModel->IsUndoEnabled();

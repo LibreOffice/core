@@ -259,7 +259,7 @@ namespace sdr
 
                 // get SdrText and OPO
                 SdrText* pSdrText = aRectObj.getText(0);
-                OutlinerParaObject* pOPO = aRectObj.GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pOPO(aRectObj.GetOutlinerParaObject());
 
                 if(pSdrText && pOPO)
                 {

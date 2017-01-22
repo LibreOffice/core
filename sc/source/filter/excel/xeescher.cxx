@@ -1190,7 +1190,8 @@ XclExpNote::XclExpNote( const XclExpRoot& rRoot, const ScAddress& rScPos,
                 if( SdrCaptionObj* pCaption = pScNote->GetOrCreateCaption( maScPos ) )
                 {
                     lcl_GetFromTo( rRoot, pCaption->GetLogicRect(), maScPos.Tab(), maCommentFrom, maCommentTo );
-                    if( const OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
+                    const std::shared_ptr< OutlinerParaObject > pOPO(pCaption->GetOutlinerParaObject());
+                    if( pOPO )
                         mnObjId = rRoot.GetObjectManager().AddObj( new XclObjComment( rRoot.GetObjectManager(), pCaption->GetLogicRect(), pOPO->GetTextObject(), pCaption, mbVisible, maScPos, maCommentFrom, maCommentTo ) );
 
                     SfxItemSet aItemSet = pCaption->GetMergedItemSet();

@@ -3511,7 +3511,7 @@ void EscherPropertyContainer::CreateCustomShapeProperties( const MSO_SPT eShapeT
                         }
                         if((nTextPathFlags & 0x4000) != 0)  // Is Font work
                         {
-                            OutlinerParaObject* pOutlinerParaObject = pCustoShape->GetOutlinerParaObject();
+                            const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(pCustoShape->GetOutlinerParaObject());
                             if ( pOutlinerParaObject && pOutlinerParaObject->IsVertical() )
                                 nTextPathFlags |= 0x2000;
                         }

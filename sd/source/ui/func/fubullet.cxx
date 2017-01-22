@@ -105,15 +105,15 @@ void FuBullet::InsertFormattingMark( sal_Unicode cMark )
     // depending on ViewShell set Outliner and OutlinerView
     if( dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
     {
-        pOV = mpView->GetTextEditOutlinerView();
+        pOV = mpView->GetTextEditOutlinerView().get();
         if (pOV)
-            pOL = mpView->GetTextEditOutliner();
+            pOL = mpView->GetTextEditOutliner().get();
     }
     else if( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr)
     {
-        pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
+        pOL = static_cast<OutlineView*>(mpView)->GetOutliner().get();
         pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-            mpViewShell->GetActiveWindow());
+            mpViewShell->GetActiveWindow()).get();
     }
 
     // insert string
@@ -225,17 +225,17 @@ void FuBullet::InsertSpecialCharacter( SfxRequest& rReq )
         // determine depending on ViewShell Outliner and OutlinerView
         if(mpViewShell && dynamic_cast< const DrawViewShell *>( mpViewShell ) !=  nullptr)
         {
-            pOV = mpView->GetTextEditOutlinerView();
+            pOV = mpView->GetTextEditOutlinerView().get();
             if (pOV)
             {
-                pOL = mpView->GetTextEditOutliner();
+                pOL = mpView->GetTextEditOutliner().get();
             }
         }
         else if(mpViewShell && dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr)
         {
-            pOL = &static_cast<OutlineView*>(mpView)->GetOutliner();
+            pOL = static_cast<OutlineView*>(mpView)->GetOutliner().get();
             pOV = static_cast<OutlineView*>(mpView)->GetViewByWindow(
-                mpViewShell->GetActiveWindow());
+                mpViewShell->GetActiveWindow()).get();
         }
 
         // insert special character
@@ -301,9 +301,9 @@ void FuBullet::GetSlotState( SfxItemSet& rSet, ViewShell* pViewShell, SfxViewFra
         SfxItemState::DEFAULT == rSet.GetItemState( SID_INSERT_ZWSP ))
     {
         ::sd::View* pView = pViewShell ? pViewShell->GetView() : nullptr;
-        OutlinerView* pOLV = pView ? pView->GetTextEditOutlinerView() : nullptr;
+        const std::shared_ptr< OutlinerView > pOLV = pView ? pView->GetTextEditOutlinerView() : nullptr;
 
-        const bool bTextEdit = pOLV;
+        const bool bTextEdit = pOLV != nullptr;
 
         SvtCTLOptions aCTLOptions;
         const bool bCtlEnabled = aCTLOptions.IsCTLFontEnabled();

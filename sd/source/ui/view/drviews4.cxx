@@ -522,7 +522,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             SdrObject*  pObj = nullptr;
             sal_uInt16      nPickId = 0;
             // for field command
-            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
             const SvxFieldItem* pFldItem = nullptr;
             if( pOLV )
                 pFldItem = pOLV->GetFieldAtSelection();
@@ -603,7 +603,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
                     {
                         if( mpDrawView->GetTextEditObject() )
                         {
-                            OutlinerView* pOutlinerView = mpDrawView->GetTextEditOutlinerView();
+                            const std::shared_ptr< OutlinerView > pOutlinerView = mpDrawView->GetTextEditOutlinerView();
                             Point aPos(rCEvt.GetMousePosPixel());
 
                             if ( pOutlinerView )

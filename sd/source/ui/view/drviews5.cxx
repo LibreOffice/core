@@ -77,7 +77,7 @@ void DrawViewShell::ModelHasChanged()
         SID_3D_STATE, SfxCallMode::ASYNCHRON | SfxCallMode::RECORD, &aItem, 0L );
 
     // now initialize the TextEditOutliner which was newly created by the draw engine
-    ::Outliner* pOutliner     = mpDrawView->GetTextEditOutliner();
+    const std::shared_ptr< ::Outliner > pOutliner = mpDrawView->GetTextEditOutliner();
     if (pOutliner)
     {
         SfxStyleSheetPool* pSPool = static_cast<SfxStyleSheetPool*>( GetDocSh()->GetStyleSheetPool() );

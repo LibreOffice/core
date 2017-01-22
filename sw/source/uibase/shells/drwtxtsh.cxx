@@ -98,11 +98,11 @@ void SwDrawTextShell::Init()
 {
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
-    SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+    const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
     //#97471# mouse click _and_ key input at the same time
     if( !pOutliner )
         return ;
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
     EEControlBits nCtrl = pOutliner->GetControlWord();
     nCtrl |= EEControlBits::AUTOCORRECT;
 
@@ -165,7 +165,7 @@ void SwDrawTextShell::StateDisableItems( SfxItemSet &rSet )
 void SwDrawTextShell::SetAttrToMarked(const SfxItemSet& rAttr)
 {
     Rectangle aNullRect;
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
     Rectangle aOutRect = pOLV->GetOutputArea();
 
     if (aNullRect != aOutRect)
@@ -286,7 +286,7 @@ void SwDrawTextShell::GetFormTextState(SfxItemSet& rSet)
 void SwDrawTextShell::ExecDrawLingu(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
-    OutlinerView* pOutlinerView = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutlinerView = pSdrView->GetTextEditOutlinerView();
     if( rSh.GetDrawView()->GetMarkedObjectList().GetMarkCount() )
     {
         switch(rReq.GetSlot())
@@ -380,7 +380,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 {
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
 
     switch (rReq.GetSlot())
     {
@@ -427,7 +427,7 @@ void SwDrawTextShell::ExecDraw(SfxRequest &rReq)
 
         case SID_SELECTALL:
         {
-            SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+            const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
             if(pOutliner)
             {
                 sal_Int32 nParaCount = pOutliner->GetParagraphCount();
@@ -668,7 +668,7 @@ void SwDrawTextShell::ExecTransliteration( SfxRequest & rReq )
 
     if( nMode )
     {
-        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
 
         if (!pOLV)
             return;
@@ -684,7 +684,7 @@ void SwDrawTextShell::ExecRotateTransliteration( SfxRequest & rReq )
         if (!pSdrView)
             return;
 
-        OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
 
         if (!pOLV)
             return;
@@ -697,7 +697,7 @@ void SwDrawTextShell::ExecRotateTransliteration( SfxRequest & rReq )
 
 void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
     if(!pOLV)
         return;
     const SfxItemSet *pArgs = rReq.GetArgs();
@@ -777,7 +777,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
     {
         // do not flicker
         pOLV->HideCursor();
-        SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+        const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
         pOutliner->SetUpdateMode(false);
 
         SfxItemSet aOldSet( pOLV->GetAttribs() );
@@ -830,7 +830,7 @@ void SwDrawTextShell::InsertSymbol(SfxRequest& rReq)
 {
     SwWrtShell &rSh = GetShell();
     pSdrView = rSh.GetDrawView();
-    SdrOutliner * pOutliner = pSdrView->GetTextEditOutliner();
+    const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
     return &pOutliner->GetUndoManager();
 }
 

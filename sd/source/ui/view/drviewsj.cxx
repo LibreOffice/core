@@ -262,7 +262,7 @@ void DrawViewShell::GetMenuStateSel( SfxItemSet &rSet )
         }
         if( SfxItemState::DEFAULT == rSet.GetItemState( SID_MODIFY_FIELD ) )
         {
-            OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
 
             if( pOLV )
             {

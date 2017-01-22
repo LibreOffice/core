@@ -158,7 +158,7 @@ void AccessibleShape::Init()
             if( pSdrObject )
             {
                 SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pSdrObject  );
-                OutlinerParaObject* pOutlinerParaObject = nullptr;
+                std::shared_ptr< OutlinerParaObject > pOutlinerParaObject = nullptr;
 
                 if( pTextObj )
                     pOutlinerParaObject = pTextObj->GetEditOutlinerParaObject(); // Get the OutlinerParaObject if text edit is active
@@ -185,7 +185,7 @@ void AccessibleShape::Init()
                     mpText->SetFocus();
 
                 if( bOwnParaObj )
-                    delete pOutlinerParaObject;
+                    pOutlinerParaObject.reset();
 
                 mpText->SetEventSource(this);
             }

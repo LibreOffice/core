@@ -1073,7 +1073,8 @@ void ViewShellBase::NotifyCursor(SfxViewShell* pOtherShell) const
         rEditView.DrawSelection(pOtherShell);
 
         // Shape text lock.
-        if (OutlinerView* pOutlinerView = pDrawView->GetTextEditOutlinerView())
+        const std::shared_ptr< OutlinerView > pOutlinerView = pDrawView->GetTextEditOutlinerView();
+        if (pOutlinerView)
         {
             Rectangle aRectangle = pOutlinerView->GetOutputArea();
             vcl::Window* pWin = pThisShell->GetActiveWindow();

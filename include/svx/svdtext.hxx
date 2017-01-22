@@ -42,14 +42,14 @@ class SfxStyleSheet;
 class SVX_DLLPUBLIC SdrText : public tools::WeakBase< SdrText >
 {
 public:
-    SdrText( SdrTextObj& rObject, OutlinerParaObject* pOutlinerParaObject = nullptr );
+    SdrText( SdrTextObj& rObject, const std::shared_ptr< OutlinerParaObject >& pOutlinerParaObject = nullptr );
     virtual ~SdrText();
 
     virtual void SetModel(SdrModel* pNewModel);
     void ForceOutlinerParaObject( sal_uInt16 nOutlMode );
 
-    virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject );
-    OutlinerParaObject* GetOutlinerParaObject() const;
+    virtual void SetOutlinerParaObject( const std::shared_ptr< OutlinerParaObject >& pTextObject );
+    std::shared_ptr< OutlinerParaObject > GetOutlinerParaObject() const;
 
     void CheckPortionInfo( SdrOutliner& rOutliner );
     void ReformatText();
@@ -62,7 +62,7 @@ public:
     SdrTextObj& GetObject() const { return mrObject; }
 
     /** returns the current OutlinerParaObject and removes it from this instance */
-    OutlinerParaObject* RemoveOutlinerParaObject();
+    std::shared_ptr< OutlinerParaObject > RemoveOutlinerParaObject();
 
 protected:
     virtual const SfxItemSet& GetObjectItemSet();
@@ -70,7 +70,7 @@ protected:
     virtual SfxStyleSheet* GetStyleSheet() const;
 
 private:
-    OutlinerParaObject* mpOutlinerParaObject;
+    std::shared_ptr< OutlinerParaObject > mpOutlinerParaObject;
     SdrTextObj& mrObject;
     SdrModel* mpModel;
     bool mbPortionInfoChecked;

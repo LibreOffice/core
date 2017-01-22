@@ -62,6 +62,7 @@
 #include <svl/itemset.hxx>
 #include <svl/stritem.hxx>
 #include <svtools/sfxecode.hxx>
+#include <editeng/outlobj.hxx>
 
 #include "sderror.hxx"
 #include "sdresid.hxx"
@@ -425,10 +426,10 @@ void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
         SdrObject* pMasterOutline = pMasterPage->GetPresObj(PRESOBJ_OUTLINE);
         if (!pMasterOutline)
             continue;
-        OutlinerParaObject* pOutlParaObj = pMasterOutline->GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pOutlParaObj(pMasterOutline->GetOutlinerParaObject());
         if (!pOutlParaObj)
             continue;
-        ::sd::Outliner* pOutliner = pDoc->GetInternalOutliner();
+        const std::shared_ptr< ::sd::Outliner > pOutliner = pDoc->GetInternalOutliner();
         pOutliner->Clear();
         pOutliner->SetText(*pOutlParaObj);
         bool bInconsistent = false;
@@ -458,7 +459,7 @@ void fixupOutlinePlaceholderNumberingDepths(SdDrawDocument* pDoc)
         if (bInconsistent)
         {
             SAL_WARN("sd.filter", "Fixing inconsistent outline numbering placeholder preview");
-            pMasterOutline->SetOutlinerParaObject(pOutliner->CreateParaObject(0, nParaCount));
+            pMasterOutline->SetOutlinerParaObject(std::shared_ptr< OutlinerParaObject >(pOutliner->CreateParaObject(0, nParaCount)));
         }
         pOutliner->Clear();
     }

@@ -5690,11 +5690,11 @@ bool SwEditWin::SelectMenuPosition(SwWrtShell& rSh, const Point& rMousePos )
         // at the mouse position then do nothing
         if(rSh.GetSelectionType() & nsSelectionType::SEL_DRW_TXT)
         {
-            OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
             ESelection aSelection = pOLV->GetSelection();
             if(!aSelection.IsZero())
             {
-                SdrOutliner* pOutliner = pSdrView->GetTextEditOutliner();
+                const std::shared_ptr< SdrOutliner > pOutliner = pSdrView->GetTextEditOutliner();
                 bool bVertical = pOutliner->IsVertical();
                 const EditEngine& rEditEng = pOutliner->GetEditEngine();
                 Point aEEPos(aDocPos);

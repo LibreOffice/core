@@ -32,8 +32,8 @@ class Outliner;
 class EDITENG_DLLPUBLIC SvxOutlinerForwarder : public SvxTextForwarder
 {
 private:
-    Outliner&           rOutliner;
-    bool                bOutlinerText;
+    std::shared_ptr< Outliner > mpOutliner;
+    bool                mbOutlinerText;
 
     /** this pointer may be null or point to an item set for the attribs of
         the selection maAttribsSelection */
@@ -50,7 +50,7 @@ private:
     mutable sal_Int32   mnParaAttribsCache;
 
 public:
-                        SvxOutlinerForwarder( Outliner& rOutl, bool bOutlText = false );
+                        SvxOutlinerForwarder( const std::shared_ptr< Outliner >& pOutl, bool bOutlText = false );
     virtual             ~SvxOutlinerForwarder();
 
     virtual sal_Int32   GetParagraphCount() const override;

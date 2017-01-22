@@ -196,7 +196,7 @@ sal_Int8 SwEditWin::ExecuteDrop( const ExecuteDropEvent& rEvt )
     SwWrtShell &rSh = m_rView.GetWrtShell();
     const Point aDocPt( PixelToLogic( rEvt.maPosPixel ));
     SdrObject *pObj = nullptr;
-    OutlinerView* pOLV;
+    std::shared_ptr< OutlinerView > pOLV;
     rSh.GetObjCntType( aDocPt, pObj );
 
     if( pObj && nullptr != ( pOLV = rSh.GetDrawView()->GetTextEditOutlinerView() ))
@@ -256,7 +256,7 @@ SotExchangeDest SwEditWin::GetDropDestination( const Point& rPixPnt, SdrObject *
     //Drop to OutlinerView (TextEdit in Drawing) should decide it on its own!
     if( pObj )
     {
-        OutlinerView* pOLV = rSh.GetDrawView()->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = rSh.GetDrawView()->GetTextEditOutlinerView();
         if ( pOLV )
         {
             Rectangle aRect( pOLV->GetOutputArea() );

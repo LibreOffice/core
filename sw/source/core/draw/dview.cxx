@@ -771,7 +771,7 @@ void SwDrawView::ModelHasChanged()
     // this method rescues the current background color if a OutlinerView
     // exists and re-establishes it then. To be more safe, the OutlinerView
     // will be fetched again (maybe textedit has ended).
-    OutlinerView* pView = GetTextEditOutlinerView();
+    std::shared_ptr< OutlinerView > pView = GetTextEditOutlinerView();
     Color aBackColor;
     bool bColorWasSaved(false);
 

@@ -112,7 +112,7 @@ bool ScDrawTextObjectBar::ExecuteParaDlg( const SfxItemSet& rArgs,
 void ScDrawTextObjectBar::ExecutePasteContents( SfxRequest & /* rReq */ )
 {
     SdrView* pView = pViewData->GetScDrawView();
-    OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     std::unique_ptr<SfxAbstractPasteDialog> pDlg(pFact->CreatePasteDialog( pViewData->GetDialogParent() ));
 

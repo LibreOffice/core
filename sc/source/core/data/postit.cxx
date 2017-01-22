@@ -448,7 +448,7 @@ ScNoteCaptionCreator::ScNoteCaptionCreator( ScDocument& rDoc, const ScAddress& r
 struct ScCaptionInitData
 {
     typedef ::std::unique_ptr< SfxItemSet >           SfxItemSetPtr;
-    typedef ::std::unique_ptr< OutlinerParaObject >   OutlinerParaObjPtr;
+    typedef ::std::shared_ptr< OutlinerParaObject >   OutlinerParaObjPtr;
 
     SfxItemSetPtr       mxItemSet;          /// Caption object formatting.
     OutlinerParaObjPtr  mxOutlinerObj;      /// Text object with all text portion formatting.
@@ -529,7 +529,7 @@ void ScPostIt::AutoStamp()
 const OutlinerParaObject* ScPostIt::GetOutlinerObject() const
 {
     if( maNoteData.mpCaption )
-        return maNoteData.mpCaption->GetOutlinerParaObject();
+        return maNoteData.mpCaption->GetOutlinerParaObject().get();
     if( maNoteData.mxInitData.get() )
         return maNoteData.mxInitData->mxOutlinerObj.get();
     return nullptr;
@@ -637,7 +637,7 @@ void ScPostIt::CreateCaptionFromInitData( const ScAddress& rPos ) const
                 OSL_ENSURE( rInitData.mxOutlinerObj.get() || !rInitData.maSimpleText.isEmpty(),
                     "ScPostIt::CreateCaptionFromInitData - need either outliner para object or simple text" );
                 if( rInitData.mxOutlinerObj.get() )
-                    maNoteData.mpCaption->SetOutlinerParaObject( rInitData.mxOutlinerObj.release() );
+                    maNoteData.mpCaption->SetOutlinerParaObject( rInitData.mxOutlinerObj );
                 else
                     maNoteData.mpCaption->SetText( rInitData.maSimpleText );
 
@@ -695,8 +695,9 @@ void ScPostIt::CreateCaption( const ScAddress& rPos, const SdrCaptionObj* pCapti
         if( pCaption )
         {
             // copy edit text object (object must be inserted into page already)
-            if( OutlinerParaObject* pOPO = pCaption->GetOutlinerParaObject() )
-                maNoteData.mpCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
+            const std::shared_ptr< OutlinerParaObject > pOPO(pCaption->GetOutlinerParaObject());
+            if( pOPO )
+                maNoteData.mpCaption->SetOutlinerParaObject( std::make_shared< OutlinerParaObject >( *pOPO ) );
             // copy formatting items (after text has been copied to apply font formatting)
             maNoteData.mpCaption->SetMergedItemSetAndBroadcast( pCaption->GetMergedItemSet() );
             // move textbox position relative to new cell, copy textbox size
@@ -784,8 +785,9 @@ SdrCaptionObj* ScNoteUtil::CreateTempCaption(
     // clone the edit text object, unless user text is present, then set this text
     if( pNoteCaption && rUserText.isEmpty() )
     {
-        if( OutlinerParaObject* pOPO = pNoteCaption->GetOutlinerParaObject() )
-            pCaption->SetOutlinerParaObject( new OutlinerParaObject( *pOPO ) );
+        const std::shared_ptr< OutlinerParaObject > pOPO(pNoteCaption->GetOutlinerParaObject());
+        if( pOPO )
+            pCaption->SetOutlinerParaObject( std::make_shared< OutlinerParaObject >( *pOPO ) );
         // set formatting (must be done after setting text) and resize the box to fit the text
         pCaption->SetMergedItemSetAndBroadcast( pNoteCaption->GetMergedItemSet() );
         Rectangle aCaptRect( pCaption->GetLogicRect().TopLeft(), pNoteCaption->GetLogicRect().GetSize() );

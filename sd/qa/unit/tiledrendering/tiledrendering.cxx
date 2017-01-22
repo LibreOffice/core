@@ -1318,7 +1318,7 @@ void SdTiledRenderingTest::testTdf81754()
     SdrTextObj* pTextObject = dynamic_cast<SdrTextObj*>(pPage->GetObj(1));
     CPPUNIT_ASSERT(pTextObject);
 
-    OutlinerParaObject* pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParagraphObject = pTextObject->GetOutlinerParaObject();
     const EditTextObject& aEdit = pOutlinerParagraphObject->GetTextObject();
 
     CPPUNIT_ASSERT_EQUAL(OUString("Somethingxx"), aEdit.GetText(0));

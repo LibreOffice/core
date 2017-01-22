@@ -28,21 +28,21 @@ namespace accessibility
 {
 
     AccessibleOutlineEditSource::AccessibleOutlineEditSource(
-        SdrOutliner&    rOutliner,
+        const std::shared_ptr< SdrOutliner >& pOutliner,
         SdrView&        rView,
-        OutlinerView& rOutlView,
+        const std::shared_ptr< OutlinerView >& pOutlView,
         const vcl::Window& rViewWindow )
         : mrView( rView ),
           mrWindow( rViewWindow ),
-          mpOutliner( &rOutliner ),
-          mpOutlinerView( &rOutlView ),
-          mTextForwarder( rOutliner, false ),
-          mViewForwarder( rOutlView )
+          mpOutliner( pOutliner ),
+          mpOutlinerView( pOutlView ),
+          mTextForwarder( pOutliner, false ),
+          mViewForwarder( pOutlView )
     {
         // register as listener - need to broadcast state change messages
         // Moved to ::GetTextForwarder()
         //rOutliner.SetNotifyHdl( LINK(this, AccessibleOutlineEditSource, NotifyHdl) );
-        StartListening(rOutliner);
+        StartListening(*pOutliner);
     }
 
     AccessibleOutlineEditSource::~AccessibleOutlineEditSource()
@@ -54,7 +54,7 @@ namespace accessibility
 
     SvxEditSource* AccessibleOutlineEditSource::Clone() const
     {
-        return new AccessibleOutlineEditSource(*mpOutliner, mrView, *mpOutlinerView, mrWindow);
+        return new AccessibleOutlineEditSource(mpOutliner, mrView, mpOutlinerView, mrWindow);
     }
 
     SvxTextForwarder* AccessibleOutlineEditSource::GetTextForwarder()
@@ -173,7 +173,7 @@ namespace accessibility
     {
         bool bDispose = false;
 
-        if( &rBroadcaster == mpOutliner )
+        if( &rBroadcaster == mpOutliner.get() )
         {
             const SfxSimpleHint* pHint = dynamic_cast< const SfxSimpleHint * >( &rHint );
             if( pHint && (pHint->GetId() == SFX_HINT_DYING) )

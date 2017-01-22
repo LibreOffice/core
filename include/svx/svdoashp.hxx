@@ -251,7 +251,7 @@ public:
     virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     virtual basegfx::B2DPolyPolygon TakeContour() const override;
 
-    virtual void NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject) override;
+    virtual void NbcSetOutlinerParaObject(const std::shared_ptr< OutlinerParaObject >& pTextObject) override;
 
     virtual SdrObject* DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 

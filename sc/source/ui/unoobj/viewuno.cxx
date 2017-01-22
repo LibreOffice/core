@@ -2226,7 +2226,7 @@ css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL ScTabViewObj::g
     {
         ScViewData& rViewData = GetViewShell()->GetViewData();
         ScDrawView* pView = rViewData.GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
         if (pOutView)
             return pOutView->GetEditView().GetTransferable();
     }
@@ -2256,7 +2256,7 @@ void SAL_CALL ScTabViewObj::insertTransferable( const css::uno::Reference< css::
         {
             ScViewData& rViewData = GetViewShell()->GetViewData();
             ScDrawView* pView = rViewData.GetScDrawView();
-            OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
             if ( pOutView )
             {
                 pOutView->GetEditView().InsertText( xTrans, OUString(), false );

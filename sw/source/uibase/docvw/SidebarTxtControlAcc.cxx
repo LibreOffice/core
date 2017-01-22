@@ -66,8 +66,8 @@ class SidebarTextEditSource : public SvxEditSource,
 SidebarTextEditSource::SidebarTextEditSource( SidebarTextControl& rSidebarTextControl )
     : SvxEditSource()
     , mrSidebarTextControl( rSidebarTextControl )
-    , mTextForwarder( *(rSidebarTextControl.GetTextView()->GetOutliner()), false )
-    , mViewForwarder( *(rSidebarTextControl.GetTextView()) )
+    , mTextForwarder( rSidebarTextControl.GetTextView()->GetOutliner(), false )
+    , mViewForwarder( rSidebarTextControl.GetTextView() )
 {
     if ( mrSidebarTextControl.GetTextView() )
     {

@@ -100,7 +100,7 @@ static bool InitializeFontWorkData( const SdrObject* pCustomShape, const sal_uIn
         rFWData.bSingleLineMode = bSingleLineMode;
 
         // setting the strings
-        OutlinerParaObject* pParaObj = static_cast<const SdrObjCustomShape*>(pCustomShape)->GetOutlinerParaObject();
+        const std::shared_ptr< OutlinerParaObject > pParaObj(static_cast<const SdrObjCustomShape*>(pCustomShape)->GetOutlinerParaObject());
         if ( pParaObj )
         {
             const EditTextObject& rTextObj = pParaObj->GetTextObject();

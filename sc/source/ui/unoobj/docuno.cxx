@@ -679,7 +679,7 @@ void ScModelObj::setTextSelection(int nType, int nX, int nY)
     else if (pDrawView && pDrawView->IsTextEdit())
     {
         // forwarding to editeng - we are editing the text in shape
-        OutlinerView* pOutlinerView = pDrawView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutlinerView = pDrawView->GetTextEditOutlinerView();
         EditView& rEditView = pOutlinerView->GetEditView();
 
         Point aPoint(convertTwipToMm100(nX), convertTwipToMm100(nY));
@@ -728,7 +728,7 @@ OString ScModelObj::getTextSelection(const char* pMimeType, OString& rUsedMimeTy
     else if ( nullptr != dynamic_cast<ScDrawTextObjectBar*>( pViewData->GetViewShell()->GetViewFrame()->GetDispatcher()->GetShell(0) ))
     {
         ScDrawView* pView = pViewData->GetScDrawView();
-        OutlinerView* pOutView = pView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOutView = pView->GetTextEditOutlinerView();
         if (pOutView)
             xTransferable = pOutView->GetEditView().GetTransferable();
     }

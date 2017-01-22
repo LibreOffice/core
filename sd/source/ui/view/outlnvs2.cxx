@@ -81,7 +81,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 {
     DeactivateCurrentFunction();
 
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
+    const std::shared_ptr< OutlinerView > pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
     sal_uInt16 nSId = rReq.GetSlot();
 
     switch( nSId )
@@ -217,7 +217,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_OUTLINE_FORMAT:
         {
-            ::Outliner* pOutl = pOutlinerView->GetOutliner();
+            const std::shared_ptr< ::Outliner > pOutl = pOutlinerView->GetOutliner();
             pOutl->SetFlatMode( !pOutl->IsFlatMode() );
             Invalidate( SID_COLORVIEW );
             Cancel();
@@ -227,8 +227,8 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_SELECTALL:
         {
-            ::Outliner& rOutl = pOlView->GetOutliner();
-            sal_Int32 nParaCount = rOutl.GetParagraphCount();
+            const std::shared_ptr< ::Outliner > pOutl = pOlView->GetOutliner();
+            sal_Int32 nParaCount = pOutl->GetParagraphCount();
             if (nParaCount > 0)
             {
                 pOutlinerView->SelectRange( 0, nParaCount );
@@ -250,7 +250,7 @@ void OutlineViewShell::FuTemporary(SfxRequest &rReq)
 
         case SID_COLORVIEW:
         {
-            ::Outliner* pOutl = pOutlinerView->GetOutliner();
+            const std::shared_ptr< ::Outliner > pOutl = pOutlinerView->GetOutliner();
             EEControlBits nCntrl = pOutl->GetControlWord();
 
             if ( !(nCntrl & EEControlBits::NOCOLORS) )
@@ -364,7 +364,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
     }
     DeactivateCurrentFunction();
 
-    OutlinerView* pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
+    const std::shared_ptr< OutlinerView > pOutlinerView = pOlView->GetViewByWindow( GetActiveWindow() );
     //sal_uInt16 nSId = rReq.GetSlot();
 
     switch( nSId )
@@ -460,7 +460,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         {
             pOlView->SetSelectedPages();
             SetCurrentFunction( FuSummaryPage::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            pOlView->GetOutliner().Clear();
+            pOlView->GetOutliner()->Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();
             Cancel();
@@ -471,7 +471,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
         {
             pOlView->SetSelectedPages();
             SetCurrentFunction( FuExpandPage::Create( this, GetActiveWindow(), pOlView, GetDoc(), rReq ) );
-            pOlView->GetOutliner().Clear();
+            pOlView->GetOutliner()->Clear();
             pOlView->FillOutliner();
             pOlView->GetActualPage();
             Cancel();
@@ -616,7 +616,7 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                     {
                         pOutlinerView->SetAttribs( aSet );
 
-                        ::Outliner* pOutliner = pOutlinerView->GetOutliner();
+                        const std::shared_ptr< ::Outliner > pOutliner = pOutlinerView->GetOutliner();
                         if( pOutliner )
                             pOutliner->UpdateFields();
                     }

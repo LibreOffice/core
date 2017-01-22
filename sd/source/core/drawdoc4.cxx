@@ -743,7 +743,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
     {
         StopOnlineSpelling();
 
-        ::sd::Outliner* pOutl = GetInternalOutliner();
+        const std::shared_ptr< ::sd::Outliner > pOutl = GetInternalOutliner();
 
         Reference< XSpellChecker1 > xSpellChecker( LinguMgr::GetSpellChecker() );
         if ( xSpellChecker.is() )
@@ -878,7 +878,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
     if (pObj && pObj->GetOutlinerParaObject() /* && pObj != pView->GetTextEditObject() */)
     {
         mbHasOnlineSpellErrors = false;
-        ::sd::Outliner* pOutl = GetInternalOutliner();
+        const std::shared_ptr< ::sd::Outliner > pOutl = GetInternalOutliner();
         pOutl->SetUpdateMode(true);
         Link<EditStatus&,void> aEvtHdl = pOutl->GetStatusEventHdl();
         pOutl->SetStatusEventHdl(LINK(this, SdDrawDocument, OnlineSpellEventHdl));
@@ -911,7 +911,7 @@ void SdDrawDocument::SpellObject(SdrTextObj* pObj)
                     pModel->setLock(true);
                 }
                 // taking text from the outliner
-                pObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
+                pObj->SetOutlinerParaObject( std::shared_ptr< OutlinerParaObject >(pOutl->CreateParaObject()) );
 
                 pObj->BroadcastObjectChange();
                 if ( pModel )
@@ -976,7 +976,7 @@ void SdDrawDocument::ImpOnlineSpellCallback(SpellCallbackInfo* pInfo, SdrObject*
         if(pObj && pOutl && dynamic_cast< const SdrTextObj *>( pObj ) !=  nullptr)
         {
             bool bModified(IsChanged());
-            static_cast<SdrTextObj*>(pObj)->SetOutlinerParaObject(pOutl->CreateParaObject());
+            static_cast<SdrTextObj*>(pObj)->SetOutlinerParaObject(std::shared_ptr< OutlinerParaObject >(pOutl->CreateParaObject()));
             SetChanged(bModified);
             pObj->BroadcastObjectChange();
         }
@@ -1128,7 +1128,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
                         case OBJ_OUTLINETEXT:
                         case OBJ_TITLETEXT:
                         {
-                            OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject();
+                            const std::shared_ptr< OutlinerParaObject > pOPO(static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject());
 
                             if (pOPO)
                             {
@@ -1171,7 +1171,7 @@ void SdDrawDocument::RenameLayoutTemplate(const OUString& rOldLayoutName, const 
                         case OBJ_OUTLINETEXT:
                         case OBJ_TITLETEXT:
                         {
-                            OutlinerParaObject* pOPO = static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject();
+                            const std::shared_ptr< OutlinerParaObject > pOPO(static_cast<SdrTextObj*>(pObj)->GetOutlinerParaObject());
 
                             if (pOPO)
                             {

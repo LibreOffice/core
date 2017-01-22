@@ -312,7 +312,7 @@ SdrUndoAttrObj::SdrUndoAttrObj(SdrObject& rNewObj, bool bStyleSheet1, bool bSave
         {
             pTextUndo = pObj->GetOutlinerParaObject();
             if(pTextUndo)
-                pTextUndo = new OutlinerParaObject(*pTextUndo);
+                pTextUndo.reset(new OutlinerParaObject(*pTextUndo));
         }
     }
 }
@@ -323,8 +323,6 @@ SdrUndoAttrObj::~SdrUndoAttrObj()
     delete pRedoSet;
     delete pRepeatSet;
     delete pUndoGroup;
-    delete pTextUndo;
-    delete pTextRedo;
 }
 
 void SdrUndoAttrObj::Undo()
@@ -354,7 +352,7 @@ void SdrUndoAttrObj::Undo()
                 pTextRedo = pObj->GetOutlinerParaObject();
 
                 if(pTextRedo)
-                    pTextRedo = new OutlinerParaObject(*pTextRedo);
+                    pTextRedo.reset(new OutlinerParaObject((*pTextRedo)));
             }
         }
 
@@ -424,7 +422,7 @@ void SdrUndoAttrObj::Undo()
 
         if(pTextUndo)
         {
-            pObj->SetOutlinerParaObject(new OutlinerParaObject(*pTextUndo));
+            pObj->SetOutlinerParaObject(std::make_shared< OutlinerParaObject >(*pTextUndo));
         }
     }
 
@@ -502,7 +500,7 @@ void SdrUndoAttrObj::Redo()
         // #i8508#
         if(pTextRedo)
         {
-            pObj->SetOutlinerParaObject(new OutlinerParaObject(*pTextRedo));
+            pObj->SetOutlinerParaObject(std::make_shared< OutlinerParaObject >(*pTextRedo));
         }
     }
 
@@ -1064,15 +1062,13 @@ SdrUndoObjSetText::SdrUndoObjSetText(SdrObject& rNewObj, sal_Int32 nText)
 {
     SdrText* pText = static_cast< SdrTextObj*>( &rNewObj )->getText(mnText);
     if( pText && pText->GetOutlinerParaObject() )
-        pOldText = new OutlinerParaObject(*pText->GetOutlinerParaObject());
+        pOldText.reset(new OutlinerParaObject(*pText->GetOutlinerParaObject()));
 
     bEmptyPresObj = rNewObj.IsEmptyPresObj();
 }
 
 SdrUndoObjSetText::~SdrUndoObjSetText()
 {
-    delete pOldText;
-    delete pNewText;
 }
 
 void SdrUndoObjSetText::AfterSetText()
@@ -1081,7 +1077,7 @@ void SdrUndoObjSetText::AfterSetText()
     {
         SdrText* pText = static_cast< SdrTextObj*>( pObj )->getText(mnText);
         if( pText && pText->GetOutlinerParaObject() )
-            pNewText = new OutlinerParaObject(*pText->GetOutlinerParaObject());
+            pNewText.reset(new OutlinerParaObject(*pText->GetOutlinerParaObject()));
         bNewTextAvailable=true;
     }
 }
@@ -1110,7 +1106,7 @@ void SdrUndoObjSetText::Undo()
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
-        OutlinerParaObject* pText1 = pOldText ? new OutlinerParaObject(*pOldText) : nullptr;
+        std::shared_ptr< OutlinerParaObject > pText1(pOldText ? new OutlinerParaObject(*pOldText) : nullptr);
         pText->SetOutlinerParaObject(pText1);
         pTarget->NbcSetOutlinerParaObjectForText(pText1, pText);
     }
@@ -1145,7 +1141,7 @@ void SdrUndoObjSetText::Redo()
     if (pText)
     {
         // copy text for Undo, because the original now belongs to SetOutlinerParaObject()
-        OutlinerParaObject* pText1 = pNewText ? new OutlinerParaObject(*pNewText) : nullptr;
+        std::shared_ptr< OutlinerParaObject > pText1(pNewText ? new OutlinerParaObject(*pNewText) : nullptr);
         pTarget->NbcSetOutlinerParaObjectForText( pText1, pText );
     }
 
@@ -1204,9 +1200,9 @@ void SdrUndoObjSetText::SdrRepeat(SdrView& rView)
                 if( bUndo )
                     rView.AddUndo(new SdrUndoObjSetText(*pTextObj,0));
 
-                OutlinerParaObject* pText1=pNewText;
+                std::shared_ptr< OutlinerParaObject > pText1(pNewText);
                 if (pText1!=nullptr)
-                    pText1 = new OutlinerParaObject(*pText1);
+                    pText1.reset(new OutlinerParaObject(*pText1));
                 pTextObj->SetOutlinerParaObject(pText1);
             }
         }

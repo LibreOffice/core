@@ -910,10 +910,10 @@ bool SdXShape::IsEmptyPresObj() const throw()
         if( pTextObj == nullptr )
             return true;
 
-        OutlinerParaObject* pParaObj = pTextObj->GetEditOutlinerParaObject();
+        std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetEditOutlinerParaObject());
         if( pParaObj )
         {
-            delete pParaObj;
+            pParaObj.reset();
         }
         else
         {
@@ -959,7 +959,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
     {
         if(!bEmpty)
         {
-            OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(pObj->GetOutlinerParaObject());
             const bool bVertical = pOutlinerParaObject && pOutlinerParaObject->IsVertical();
 
             // really delete SdrOutlinerObj at pObj
@@ -994,7 +994,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
                 if( pDoc == nullptr)
                     break;
 
-                ::sd::Outliner* pOutliner = pDoc->GetInternalOutliner();
+                const std::shared_ptr< ::sd::Outliner > pOutliner = pDoc->GetInternalOutliner();
                 DBG_ASSERT( pOutliner, "no outliner?" );
                 if( pOutliner == nullptr )
                     break;
@@ -1004,7 +1004,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
                 if( pPage == nullptr )
                     break;
 
-                OutlinerParaObject* pOutlinerParaObject = pObj->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(pObj->GetOutlinerParaObject());
                 pOutliner->SetText( *pOutlinerParaObject );
                 const bool bVertical = pOutliner->IsVertical();
 
@@ -1013,7 +1013,7 @@ void SdXShape::SetEmptyPresObj(bool bEmpty)
                 pOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(pDoc->GetStyleSheetPool()) );
                 pOutliner->SetStyleSheet( 0, pPage->GetTextStyleSheetForObject( pObj ) );
                 pOutliner->Insert( pPage->GetPresObjText( pPage->GetPresObjKind(pObj) ) );
-                pObj->SetOutlinerParaObject( pOutliner->CreateParaObject() );
+                pObj->SetOutlinerParaObject( std::shared_ptr< OutlinerParaObject >(pOutliner->CreateParaObject()) );
                 pOutliner->Clear();
             }
             while(false);

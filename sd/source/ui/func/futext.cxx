@@ -161,7 +161,7 @@ void FuText::disposing()
             mxTextObj.reset( nullptr );
 
         // reset the RequestHandler of the used Outliner to the handler of the document
-        ::Outliner* pOutliner = mpView->GetTextEditOutliner();
+        const std::shared_ptr< ::Outliner > pOutliner = mpView->GetTextEditOutliner();
 
         if (pOutliner)
             pOutliner->SetStyleSheetPool(static_cast<SfxStyleSheetPool*>(mpDoc->GetStyleSheetPool()));
@@ -677,7 +677,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             //AW outliner needs to be set to vertical when there is no
             // outliner object up to now; also it needs to be set back to not
             // vertical when there was a vertical one used last time.
-            OutlinerParaObject* pOPO = GetTextObj()->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pOPO(GetTextObj()->GetOutlinerParaObject());
             SdrOutliner& rOutl = mxTextObj->GetModel()->GetDrawOutliner(GetTextObj());
             bool bVertical((pOPO && pOPO->IsVertical())
                 || nSlotId == SID_ATTR_CHAR_VERTICAL
@@ -688,7 +688,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
             // needs to be set at the object. This is done here at the OutlinerParaObject
             // directly to not mirror the layout text items involved. These items will be set
             // from ImpSetAttributesForNewTextObject and below.
-            OutlinerParaObject* pPara = GetTextObj()->GetOutlinerParaObject();
+            std::shared_ptr< OutlinerParaObject > pPara(GetTextObj()->GetOutlinerParaObject());
 
             if(!pPara)
             {
@@ -810,7 +810,7 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
                     // needs to be set. This is done here at the OutlinerParaObject
                     // directly to not mirror the layout text items involved. These items will be set
                     // below.
-                    OutlinerParaObject* pPara = GetTextObj()->GetOutlinerParaObject();
+                    std::shared_ptr< OutlinerParaObject > pPara(GetTextObj()->GetOutlinerParaObject());
 
                     if(!pPara)
                     {
@@ -976,7 +976,7 @@ void FuText::Activate()
     // for text objects in SdrMarkView::CheckSingleSdrObjectHit
     mpView->SetHitTolerancePixel( 2 * HITPIX );
 
-    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
 
     if (pOLV)
         pOLV->ShowCursor(/*bGotoCursor=*/true, /*bActivate=*/true);
@@ -989,7 +989,7 @@ void FuText::Activate()
 
 void FuText::Deactivate()
 {
-    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
 
     if (pOLV)
         pOLV->HideCursor(/*bDeactivate=*/true);
@@ -1018,7 +1018,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
 
         if (!GetTextObj()->GetOutlinerParaObject() && mpView->GetTextEditOutliner())
         {
-            ::Outliner* pOutl = mpView->GetTextEditOutliner();
+            const std::shared_ptr< ::Outliner > pOutl = mpView->GetTextEditOutliner();
             sal_Int32 nParaAnz = pOutl->GetParagraphCount();
             Paragraph* p1stPara = pOutl->GetParagraph( 0 );
 
@@ -1043,7 +1043,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                  nSdrObjKind == OBJ_OUTLINETEXT || !mxTextObj->IsEmptyPresObj() ) )
             {
                 // create new outliner (owned by SdrObjEditView)
-                SdrOutliner* pOutl = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *mpDoc);
+                const std::shared_ptr< SdrOutliner > pOutl( SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *mpDoc) );
 
                 if (bEmptyOutliner)
                     mpView->SdrEndTextEdit(true);
@@ -1051,7 +1051,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                 SdrTextObj* pTextObj = GetTextObj();
                 if( pTextObj )
                 {
-                    OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
+                    const std::shared_ptr< OutlinerParaObject > pOPO(pTextObj->GetOutlinerParaObject());
                     if( ( pOPO && pOPO->IsVertical() ) || (nSlotId == SID_ATTR_CHAR_VERTICAL) || (nSlotId == SID_TEXT_FITTOSIZE_VERTICAL) )
                         pOutl->SetVertical( true );
 
@@ -1080,7 +1080,7 @@ void FuText::SetInEditMode(const MouseEvent& rMEvt, bool bQuickDrag)
                         bFirstObjCreated = true;
                         DeleteDefaultText();
 
-                        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+                        const std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
 
                         nSdrObjKind = mxTextObj->GetObjIdentifier();
 
@@ -1150,7 +1150,7 @@ bool FuText::DeleteDefaultText()
                   ePresObjKind == PRESOBJ_TEXT) &&
                   !pPage->IsMasterPage() )
             {
-                ::Outliner* pOutliner = mpView->GetTextEditOutliner();
+                const std::shared_ptr< ::Outliner > pOutliner = mpView->GetTextEditOutliner();
                 SfxStyleSheet* pSheet = pOutliner->GetStyleSheet( 0 );
                 bool bIsUndoEnabled = pOutliner->IsUndoEnabled();
                 if( bIsUndoEnabled )
@@ -1183,7 +1183,7 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
 {
     bool bReturn = false;
 
-    OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
 
     if ((Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled()) &&
         mxTextObj.is() && pOLV && pOLV->GetFieldUnderMousePointer())
@@ -1392,7 +1392,7 @@ void FuText::ChangeFontSize( bool bGrow, OutlinerView* pOLV, const FontList* pFo
                     SdrPageView* pPV = pView->GetSdrPageView();
                     pView->SdrBeginTextEdit(pTextObj, pPV);
 
-                    pOLV = pView->GetTextEditOutlinerView();
+                    pOLV = pView->GetTextEditOutlinerView().get();
                     if( pOLV )
                     {
                         EditEngine* pEditEngine = pOLV->GetEditView().GetEditEngine();

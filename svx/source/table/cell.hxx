@@ -55,7 +55,7 @@ class SVX_DLLPUBLIC Cell :  public SdrText,
     friend class CellUndo;
 
 public:
-    SVX_DLLPRIVATE static rtl::Reference< Cell > create( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject );
+    SVX_DLLPRIVATE static rtl::Reference< Cell > create( SdrTableObj& rTableObj, const std::shared_ptr< OutlinerParaObject >& pOutlinerParaObject );
 
     // private
     SVX_DLLPRIVATE void dispose();
@@ -70,7 +70,7 @@ public:
     SVX_DLLPRIVATE const ::Rectangle& getCellRect() const { return maCellRect; }
     SVX_DLLPRIVATE ::Rectangle& getCellRect() { return maCellRect; }
 
-    OutlinerParaObject* GetEditOutlinerParaObject() const;
+    std::shared_ptr< OutlinerParaObject > GetEditOutlinerParaObject() const;
     SVX_DLLPRIVATE void SetStyleSheet( SfxStyleSheet* pStyleSheet, bool bDontRemoveHardAttr );
     SVX_DLLPRIVATE virtual SfxStyleSheet* GetStyleSheet() const override;
     SVX_DLLPRIVATE void TakeTextAnchorRect(Rectangle& rAnchorRect) const;
@@ -180,7 +180,7 @@ public:
     // XEventListener
     SVX_DLLPRIVATE virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
 
-    SVX_DLLPRIVATE virtual void SetOutlinerParaObject( OutlinerParaObject* pTextObject ) override;
+    SVX_DLLPRIVATE virtual void SetOutlinerParaObject( const std::shared_ptr< OutlinerParaObject >& pTextObject ) override;
 
     SVX_DLLPRIVATE void AddUndo();
 
@@ -200,7 +200,7 @@ protected:
     SVX_DLLPRIVATE css::uno::Any GetAnyForItem( SfxItemSet& aSet, const SfxItemPropertySimpleEntry* pMap );
 
 private:
-    SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw(css::uno::RuntimeException);
+    SVX_DLLPRIVATE Cell( SdrTableObj& rTableObj, const std::shared_ptr< OutlinerParaObject >& pOutlinerParaObject ) throw(css::uno::RuntimeException);
     SVX_DLLPRIVATE virtual ~Cell() throw();
 
     const SvxItemPropertySet* mpPropSet;

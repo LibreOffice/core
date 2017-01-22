@@ -1435,7 +1435,7 @@ void SwPostItMgr::ExecuteFormatAllDialog(SwView& rView)
     if (!pWin)
         return;
     SetActiveSidebarWin(pWin);
-    OutlinerView* pOLV = pWin->GetOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pWin->GetOutlinerView();
     SfxItemSet aEditAttr(pOLV->GetAttribs());
     SfxItemPool* pPool(SwAnnotationShell::GetAnnotationPool(rView));
     SfxItemSet aDlgAttr(*pPool, EE_ITEMS_START, EE_ITEMS_END);
@@ -1463,11 +1463,11 @@ void SwPostItMgr::FormatAll(const SfxItemSet &rNewAttr)
     {
         if (!(*i)->pPostIt)
             continue;
-        OutlinerView* pOLV = (*i)->pPostIt->GetOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = (*i)->pPostIt->GetOutlinerView();
         //save old selection
         ESelection aOrigSel(pOLV->GetSelection());
         //select all
-        Outliner *pOutliner = pOLV->GetOutliner();
+        const std::shared_ptr< Outliner > pOutliner = pOLV->GetOutliner();
         if (pOutliner)
         {
             sal_Int32 nParaCount = pOutliner->GetParagraphCount();

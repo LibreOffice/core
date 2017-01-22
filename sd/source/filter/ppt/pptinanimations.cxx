@@ -2779,7 +2779,7 @@ sal_Int32 AnimationImporter::importTargetElementContainer( const Atom* pAtom, An
 
                         SdrTextObj* pTextObj = static_cast< SdrTextObj* >( pSdrObject );
 
-                        const OutlinerParaObject* pOPO = pTextObj->GetOutlinerParaObject();
+                        const std::shared_ptr< OutlinerParaObject > pOPO(pTextObj->GetOutlinerParaObject());
                         if( pOPO == nullptr )
                             break;
 

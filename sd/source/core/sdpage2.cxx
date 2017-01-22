@@ -185,7 +185,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                     }
                     else
                     {
-                        OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                        const std::shared_ptr< OutlinerParaObject > pOPO(pObj->GetOutlinerParaObject());
 
                         if( pOPO )
                             pOPO->SetStyleSheets( i,  aFullName, SD_STYLE_FAMILY_MASTERPAGE );
@@ -217,7 +217,7 @@ void SdPage::SetPresentationLayout(const OUString& rLayoutName,
                 ++iterOldOut;
             }
 
-            OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pOPO(pObj->GetOutlinerParaObject());
             if ( bReplaceStyleSheets && pOPO )
             {
                 std::vector<StyleReplaceData>::const_iterator it = aReplList.begin();

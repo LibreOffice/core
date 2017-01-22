@@ -192,7 +192,7 @@ class EDITENG_DLLPUBLIC OutlinerView
 
 private:
 
-    Outliner*   pOwner;
+    std::shared_ptr< Outliner >   pOwner;
     EditView*   pEditView;
 
     enum class MouseTarget {
@@ -216,7 +216,7 @@ private:
     Link<LinkParamNone*,void> aEndCutPasteLink;
 
 public:
-                OutlinerView( Outliner* pOut, vcl::Window* pWindow );
+                OutlinerView( const std::shared_ptr< Outliner >& pOut, vcl::Window* pWindow );
     virtual     ~OutlinerView();
 
     EditView&   GetEditView() const { return *pEditView; }
@@ -233,7 +233,7 @@ public:
     void        ShowCursor( bool bGotoCursor = true, bool bActivate = false );
     void        HideCursor( bool bDeactivate = false );
 
-    Outliner*   GetOutliner() const { return pOwner; }
+    std::shared_ptr< Outliner >   GetOutliner() const { return pOwner; }
 
     void        SetWindow( vcl::Window* pWindow );
     vcl::Window*     GetWindow() const;
@@ -395,7 +395,7 @@ protected:
 bool EDITENG_DLLPUBLIC  GetStatusValueForThesaurusFromContext( OUString &rStatusVal, LanguageType &rLang, const EditView &rEditView );
 void EDITENG_DLLPUBLIC  ReplaceTextWithSynonym( EditView &rEditView, const OUString &rSynonmText );
 
-typedef ::std::vector< OutlinerView* > ViewList;
+typedef ::std::vector< std::shared_ptr< OutlinerView > > ViewList;
 
 class EDITENG_DLLPUBLIC DrawPortionInfo
 {
@@ -701,10 +701,10 @@ public:
 
     void            SetAddExtLeading( bool b );
 
-    size_t          InsertView( OutlinerView* pView, size_t nIndex = size_t(-1) );
-    void            RemoveView( OutlinerView* pView );
-    OutlinerView*   RemoveView( size_t nIndex );
-    OutlinerView*   GetView( size_t nIndex ) const;
+    size_t          InsertView( const std::shared_ptr< OutlinerView >& pView, size_t nIndex = size_t(-1) );
+    void            RemoveView( const std::shared_ptr< OutlinerView >& pView );
+    std::shared_ptr< OutlinerView > RemoveView( size_t nIndex );
+    std::shared_ptr< OutlinerView > GetView( size_t nIndex ) const;
     size_t          GetViewCount() const;
 
     Paragraph*      Insert( const OUString& rText, sal_Int32 nAbsPos = EE_PARA_APPEND, sal_Int16 nDepth = 0 );
@@ -772,7 +772,7 @@ public:
     void ClearOverflowingParaNum();
     bool IsPageOverflow();
 
-    OutlinerParaObject *GetEmptyParaObject() const;
+    std::shared_ptr< OutlinerParaObject > GetEmptyParaObject() const;
 
 
     void            DepthChangedHdl();

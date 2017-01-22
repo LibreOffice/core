@@ -194,9 +194,9 @@ SdrObject* EnhancedCustomShapeEngine::ImplForceGroupWithText( const SdrObjCustom
                 pCustoObj->GetObjInventor(), OBJ_TEXT, nullptr, pCustoObj->GetModel());
 
             // Copy text content
-            OutlinerParaObject* pParaObj = pCustoObj->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pParaObj(pCustoObj->GetOutlinerParaObject());
             if( pParaObj )
-                pTextObj->NbcSetOutlinerParaObject( new OutlinerParaObject(*pParaObj) );
+                pTextObj->NbcSetOutlinerParaObject( std::make_shared< OutlinerParaObject >(*pParaObj) );
 
             // copy all attributes
             SfxItemSet aTargetItemSet( pCustoObj->GetMergedItemSet() );

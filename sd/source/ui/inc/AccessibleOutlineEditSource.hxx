@@ -49,9 +49,9 @@ namespace accessibility
     public:
         /// Create an SvxEditSource interface for the given Outliner
         AccessibleOutlineEditSource(
-            SdrOutliner& rOutliner,
+            const std::shared_ptr< SdrOutliner >& pOutliner,
             SdrView& rView,
-            OutlinerView& rOutlView,
+            const std::shared_ptr< OutlinerView >& pOutlView,
             const vcl::Window& rViewWindow );
         virtual ~AccessibleOutlineEditSource();
 
@@ -80,8 +80,8 @@ namespace accessibility
 
         SdrView&                        mrView;
         const vcl::Window& mrWindow;
-        SdrOutliner*                    mpOutliner;
-        OutlinerView* mpOutlinerView;
+        std::shared_ptr< SdrOutliner >   mpOutliner;
+        std::shared_ptr< OutlinerView >  mpOutlinerView;
 
         SvxOutlinerForwarder            mTextForwarder;
         SvxDrawOutlinerViewForwarder    mViewForwarder;

@@ -80,8 +80,8 @@ public:
     virtual void AddWindowToPaintView(OutputDevice* pWin, vcl::Window* pWindow) override;
     virtual void DeleteWindowFromPaintView(OutputDevice* pWin) override;
 
-    OutlinerView*   GetViewByWindow(vcl::Window* pWin) const;
-    SdrOutliner&    GetOutliner() { return mrOutliner; }
+    std::shared_ptr< OutlinerView > GetViewByWindow(vcl::Window* pWin) const;
+    std::shared_ptr< SdrOutliner >  GetOutliner() { return mpOutliner; }
 
     Paragraph*      GetPrevTitle(const Paragraph* pPara);
     Paragraph*      GetNextTitle(const Paragraph* pPara);
@@ -170,8 +170,8 @@ private:
     void UpdateDocument();
 
     OutlineViewShell&   mrOutlineViewShell;
-    SdrOutliner&        mrOutliner;
-    OutlinerView*       mpOutlinerView[MAX_OUTLINERVIEWS];
+    std::shared_ptr< SdrOutliner > mpOutliner;
+    std::vector< std::shared_ptr< OutlinerView > > mpOutlinerView;
 
     std::vector<Paragraph*> maOldParaOrder;
     std::vector<Paragraph*> maSelectedParas;

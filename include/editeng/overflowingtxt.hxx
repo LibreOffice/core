@@ -20,6 +20,7 @@
 #ifndef INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 #define INCLUDED_EDITENG_OVERFLOWINGTXT_HXX
 
+#include <memory>
 #include <editeng/macros.hxx>
 #include <editeng/editengdllapi.h>
 #include <editeng/editdata.hxx>
@@ -50,14 +51,14 @@ class TextChainingUtils
 public:
     static css::uno::Reference< css::datatransfer::XTransferable> CreateTransferableFromText(Outliner *);
 
-    static OutlinerParaObject *JuxtaposeParaObject(
+    static std::shared_ptr< OutlinerParaObject > JuxtaposeParaObject(
             css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent,
             Outliner *,
-            OutlinerParaObject *);
-    static OutlinerParaObject *DeeplyMergeParaObject(
+            const std::shared_ptr< OutlinerParaObject >&);
+    static std::shared_ptr< OutlinerParaObject > DeeplyMergeParaObject(
             css::uno::Reference< css::datatransfer::XTransferable > xOverflowingContent,
             Outliner *,
-            OutlinerParaObject *);
+            const std::shared_ptr< OutlinerParaObject >&);
 };
 
 /*
@@ -69,8 +70,8 @@ public:
 class OverflowingText
 {
 public:
-    OutlinerParaObject *JuxtaposeParaObject(Outliner *, OutlinerParaObject *);
-    OutlinerParaObject *DeeplyMergeParaObject(Outliner *, OutlinerParaObject *);
+    std::shared_ptr< OutlinerParaObject > JuxtaposeParaObject(Outliner *, const std::shared_ptr< OutlinerParaObject >&);
+    std::shared_ptr< OutlinerParaObject > DeeplyMergeParaObject(Outliner *, const std::shared_ptr< OutlinerParaObject >&);
 
 private:
     friend class Outliner;
@@ -82,7 +83,7 @@ private:
 class NonOverflowingText
 {
 public:
-    OutlinerParaObject *RemoveOverflowingText(Outliner *) const;
+    std::shared_ptr< OutlinerParaObject > RemoveOverflowingText(Outliner *) const;
     ESelection GetOverflowPointSel() const;
     bool IsLastParaInterrupted() const;
 
@@ -107,8 +108,8 @@ public:
     OFlowChainedText(Outliner *, bool );
     ~OFlowChainedText();
 
-    OutlinerParaObject *InsertOverflowingText(Outliner *, OutlinerParaObject *);
-    OutlinerParaObject *RemoveOverflowingText(Outliner *);
+    std::shared_ptr< OutlinerParaObject > InsertOverflowingText(Outliner *, const std::shared_ptr< OutlinerParaObject >&);
+    std::shared_ptr< OutlinerParaObject > RemoveOverflowingText(Outliner *);
 
     ESelection GetOverflowPointSel() const;
 
@@ -126,7 +127,7 @@ class EDITENG_DLLPUBLIC UFlowChainedText
 {
 public:
     UFlowChainedText(Outliner *, bool);
-    OutlinerParaObject *CreateMergedUnderflowParaObject(Outliner *, OutlinerParaObject *);
+    std::shared_ptr< OutlinerParaObject > CreateMergedUnderflowParaObject(Outliner *, const std::shared_ptr< OutlinerParaObject >&);
 
 private:
     css::uno::Reference< css::datatransfer::XTransferable > mxUnderflowingTxt;

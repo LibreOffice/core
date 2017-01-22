@@ -520,7 +520,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
 {
     SwWrtShell *pSh = &GetWrtShell();
     SdrView *pSdrView = pSh->GetDrawView();
-    SdrOutliner* pOutliner = ::SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrView->GetModel());
+    const std::shared_ptr< SdrOutliner > pOutliner ( ::SdrMakeOutliner(OUTLINERMODE_TEXTOBJECT, *pSdrView->GetModel()) );
     uno::Reference< linguistic2::XSpellChecker1 >  xSpell( ::GetSpellChecker() );
     if (pOutliner)
     {
@@ -528,7 +528,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
         pOutliner->SetSpeller(xSpell);
         uno::Reference<linguistic2::XHyphenator> xHyphenator( ::GetHyphenator() );
         pOutliner->SetHyphenator( xHyphenator );
-        pSh->SetCalcFieldValueHdl(pOutliner);
+        pSh->SetCalcFieldValueHdl(pOutliner.get());
 
         EEControlBits nCntrl = pOutliner->GetControlWord();
         nCntrl |= EEControlBits::ALLOWBIGOBJS;
@@ -588,7 +588,7 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
     // after TextEditing was started. This is now done here.
     if(bRet)
     {
-        OutlinerView* pView = pSdrView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pView = pSdrView->GetTextEditOutlinerView();
 
         if(pView)
         {
@@ -746,7 +746,7 @@ bool SwView::ExecDrwTextSpellPopup(const Point& rPt)
 {
     bool bRet = false;
     SdrView *pSdrView = m_pWrtShell->GetDrawView();
-    OutlinerView* pOLV = pSdrView->GetTextEditOutlinerView();
+    const std::shared_ptr< OutlinerView > pOLV = pSdrView->GetTextEditOutlinerView();
     Point aPos( GetEditWin().LogicToPixel( rPt ) );
 
     if (pOLV->IsWrongSpelledWordAtPos( aPos ))

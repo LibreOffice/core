@@ -85,7 +85,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
     {
         SvxHyperlinkItem aHLinkItem;
 
-        OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = mpDrawView->GetTextEditOutlinerView();
 
         if (pOLV)
         {
@@ -749,8 +749,8 @@ void DrawViewShell::GetAttrState( SfxItemSet& rSet )
 OUString DrawViewShell::GetSelectionText(bool bCompleteWords)
 {
     OUString aStrSelection;
-    ::Outliner* pOl = mpDrawView->GetTextEditOutliner();
-    OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
+    const std::shared_ptr< ::Outliner > pOl = mpDrawView->GetTextEditOutliner();
+    const std::shared_ptr< OutlinerView > pOlView = mpDrawView->GetTextEditOutlinerView();
 
     if (pOl && pOlView)
     {
@@ -778,7 +778,7 @@ bool DrawViewShell::HasSelection(bool bText) const
 
     if (bText)
     {
-        OutlinerView* pOlView = mpDrawView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOlView = mpDrawView->GetTextEditOutlinerView();
 
         if (pOlView && !pOlView->GetSelected().isEmpty())
         {

@@ -290,7 +290,7 @@ EscherExHostAppData* XclEscherEx::StartShape( const Reference< XShape >& rxShape
                     const SdrTextObj* pTextObj = dynamic_cast<SdrTextObj*>( pObj  );
                     if( pTextObj && !lcl_IsFontwork( pTextObj ) && (pObj->GetObjIdentifier() != OBJ_CAPTION) )
                     {
-                        const OutlinerParaObject* pParaObj = pTextObj->GetOutlinerParaObject();
+                        const std::shared_ptr< OutlinerParaObject > pParaObj(pTextObj->GetOutlinerParaObject());
                         if( pParaObj )
                             pCurrAppData->SetClientTextbox(
                                 new XclEscherClientTextbox( GetRoot(), *pTextObj, pCurrXclObj ) );

@@ -1162,13 +1162,13 @@ void ViewShell::UpdatePreview (SdPage*, bool )
             OutlineView* pOlView = dynamic_cast< OutlineView* >( pView );
             if( pOlView )
             {
-                ::Outliner& rOutl = pOlView->GetOutliner();
-                return &rOutl.GetUndoManager();
+                const std::shared_ptr< ::Outliner > pOutl = pOlView->GetOutliner();
+                return &pOutl->GetUndoManager();
             }
         }
         else if( pView->IsTextEdit() )
         {
-            SdrOutliner* pOL = pView->GetTextEditOutliner();
+            const std::shared_ptr< SdrOutliner > pOL = pView->GetTextEditOutliner();
             if( pOL )
                 return &pOL->GetUndoManager();
         }

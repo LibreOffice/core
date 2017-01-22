@@ -2998,7 +2998,7 @@ void ScGridWindow::Command( const CommandEvent& rCEvt )
             SdrView* pSdrView = pViewData->GetView()->GetSdrView();
             if ( pSdrView )
             {
-                OutlinerView* pOlView = pSdrView->GetTextEditOutlinerView();
+                const std::shared_ptr< OutlinerView > pOlView = pSdrView->GetTextEditOutlinerView();
                 if ( pOlView && pOlView->GetWindow() == this )
                 {
                     pOlView->Command( rCEvt );
@@ -3306,13 +3306,13 @@ void ScGridWindow::SelectForContextMenu( const Point& rPosPixel, SCsCOL nCellX, 
     Point aLogicPos = PixelToLogic( rPosPixel );        // after cell edit mode is ended
     if ( pDrawView && pDrawView->GetTextEditObject() && pDrawView->GetTextEditOutlinerView() )
     {
-        OutlinerView* pOlView = pDrawView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOlView = pDrawView->GetTextEditOutlinerView();
         Rectangle aOutputArea = pOlView->GetOutputArea();
         if ( aOutputArea.IsInside( aLogicPos ) )
         {
             //  handle selection within the OutlinerView
 
-            Outliner* pOutliner = pOlView->GetOutliner();
+            const std::shared_ptr< Outliner > pOutliner = pOlView->GetOutliner();
             const EditEngine& rEditEngine = pOutliner->GetEditEngine();
             Rectangle aVisArea = pOlView->GetVisArea();
 

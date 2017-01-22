@@ -384,7 +384,7 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
     if (nCount <= 0)
         return nullptr;
 
-    EditTextObject* pText = pEditEngine->CreateTextObject( nStartPara, nCount );
+    const std::shared_ptr< EditTextObject > pText(pEditEngine->CreateTextObject( nStartPara, nCount ));
     const bool bIsEditDoc(OUTLINERMODE_TEXTOBJECT == ImplGetOutlinerMode());
     ParagraphDataVector aParagraphDataVector(nCount);
     const sal_Int32 nLastPara(nStartPara + nCount - 1);
@@ -394,18 +394,16 @@ OutlinerParaObject* Outliner::CreateParaObject( sal_Int32 nStartPara, sal_Int32 
         aParagraphDataVector[nPara-nStartPara] = *GetParagraph(nPara);
     }
 
-    OutlinerParaObject* pPObj = new OutlinerParaObject(*pText, aParagraphDataVector, bIsEditDoc);
+    OutlinerParaObject* pPObj = new OutlinerParaObject(pText, aParagraphDataVector, bIsEditDoc);
     pPObj->SetOutlinerMode(GetMode());
-    delete pText;
 
     return pPObj;
 }
 
 void Outliner::SetToEmptyText()
 {
-    OutlinerParaObject *pEmptyTxt =  GetEmptyParaObject();
+    const std::shared_ptr< OutlinerParaObject > pEmptyTxt(GetEmptyParaObject());
     SetText(*pEmptyTxt);
-    delete pEmptyTxt;
 }
 
 void Outliner::SetText( const OUString& rText, Paragraph* pPara )
@@ -1076,7 +1074,7 @@ void Outliner::InvalidateBullet(sal_Int32 nPara)
     long nLineHeight = (long)pEditEngine->GetLineHeight(nPara );
     for ( size_t i = 0, n = aViewList.size(); i < n; ++i )
     {
-        OutlinerView* pView = aViewList[ i ];
+        const std::shared_ptr< OutlinerView > pView = aViewList[ i ];
         Point aPos( pView->pEditView->GetWindowPosTopLeft(nPara ) );
         Rectangle aRect( pView->GetOutputArea() );
         aRect.Right() = aPos.X();
@@ -1290,7 +1288,7 @@ Outliner::~Outliner()
     delete pEditEngine;
 }
 
-size_t Outliner::InsertView( OutlinerView* pView, size_t nIndex )
+size_t Outliner::InsertView( const std::shared_ptr< OutlinerView >& pView, size_t nIndex )
 {
     size_t ActualIndex;
 
@@ -1309,7 +1307,7 @@ size_t Outliner::InsertView( OutlinerView* pView, size_t nIndex )
     return ActualIndex;
 }
 
-void Outliner::RemoveView( OutlinerView* pView )
+void Outliner::RemoveView( const std::shared_ptr< OutlinerView >& pView )
 {
 
     for ( ViewList::iterator it = aViewList.begin(); it != aViewList.end(); ++it )
@@ -1324,7 +1322,7 @@ void Outliner::RemoveView( OutlinerView* pView )
     }
 }
 
-OutlinerView* Outliner::RemoveView( size_t nIndex )
+std::shared_ptr< OutlinerView > Outliner::RemoveView( size_t nIndex )
 {
 
     EditView* pEditView = pEditEngine->GetView( nIndex );
@@ -1342,7 +1340,7 @@ OutlinerView* Outliner::RemoveView( size_t nIndex )
 }
 
 
-OutlinerView* Outliner::GetView( size_t nIndex ) const
+std::shared_ptr< OutlinerView > Outliner::GetView( size_t nIndex ) const
 {
     return ( nIndex >= aViewList.size() ) ? nullptr : aViewList[ nIndex ];
 }
@@ -2145,13 +2143,12 @@ NonOverflowingText *Outliner::GetNonOverflowingText() const
     }
 }
 
-OutlinerParaObject *Outliner::GetEmptyParaObject() const
+std::shared_ptr< OutlinerParaObject > Outliner::GetEmptyParaObject() const
 {
-    EditTextObject *pEmptyText = pEditEngine->GetEmptyTextObject();
-    OutlinerParaObject* pPObj = new OutlinerParaObject( *pEmptyText );
+    std::shared_ptr< EditTextObject > pEmptyText(pEditEngine->GetEmptyTextObject());
+    std::shared_ptr< OutlinerParaObject > pPObj(std::make_shared< OutlinerParaObject >( pEmptyText ));
     pPObj->SetOutlinerMode(GetMode());
 
-    delete pEmptyText;
     return pPObj;
 }
 

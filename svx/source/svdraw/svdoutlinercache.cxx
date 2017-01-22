@@ -30,9 +30,9 @@ SdrOutlinerCache::SdrOutlinerCache( SdrModel* pModel )
 {
 }
 
-SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
+std::shared_ptr< SdrOutliner > SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
 {
-    SdrOutliner* pOutliner = nullptr;
+    std::shared_ptr< SdrOutliner > pOutliner = nullptr;
 
     if( (OUTLINERMODE_OUTLINEOBJECT == nOutlinerMode) && !maModeOutline.empty() )
     {
@@ -46,7 +46,7 @@ SdrOutliner* SdrOutlinerCache::createOutliner( sal_uInt16 nOutlinerMode )
     }
     else
     {
-        pOutliner = SdrMakeOutliner(nOutlinerMode, *mpModel);
+        pOutliner = std::shared_ptr< SdrOutliner >(SdrMakeOutliner(nOutlinerMode, *mpModel));
         Outliner& aDrawOutliner = mpModel->GetDrawOutliner();
         pOutliner->SetCalcFieldValueHdl( aDrawOutliner.GetCalcFieldValueHdl() );
         maActiveOutliners.insert(pOutliner);
@@ -59,20 +59,20 @@ SdrOutlinerCache::~SdrOutlinerCache()
 {
     for( auto candA : maModeOutline )
     {
-        delete candA;
+        candA.reset();
     }
 
     maModeOutline.clear();
 
     for( auto candB : maModeText )
     {
-        delete candB;
+        candB.reset();
     }
 
     maModeText.clear();
 }
 
-void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
+void SdrOutlinerCache::disposeOutliner( const std::shared_ptr< SdrOutliner >& pOutliner )
 {
     if( pOutliner )
     {
@@ -99,14 +99,13 @@ void SdrOutlinerCache::disposeOutliner( SdrOutliner* pOutliner )
         else
         {
             maActiveOutliners.erase(pOutliner);
-            delete pOutliner;
         }
     }
 }
 
-std::vector< SdrOutliner* > SdrOutlinerCache::GetActiveOutliners() const
+std::vector< std::shared_ptr< SdrOutliner > > SdrOutlinerCache::GetActiveOutliners() const
 {
-    return std::vector< SdrOutliner* >(maActiveOutliners.begin(), maActiveOutliners.end());
+    return std::vector< std::shared_ptr< SdrOutliner > >(maActiveOutliners.begin(), maActiveOutliners.end());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

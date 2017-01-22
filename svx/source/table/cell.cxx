@@ -236,7 +236,7 @@ namespace sdr
 
             if( mxCell.is() )
             {
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+                std::shared_ptr< OutlinerParaObject > pParaObj(mxCell->GetEditOutlinerParaObject());
 
                 bool bOwnParaObj = pParaObj != nullptr;
 
@@ -289,14 +289,14 @@ namespace sdr
                             mpItemSet->Put(aNewSet);
                         }
 
-                        OutlinerParaObject* pTemp = pOutliner->CreateParaObject(0, nParaCount);
+                        const std::shared_ptr< OutlinerParaObject > pTemp(pOutliner->CreateParaObject(0, nParaCount));
                         pOutliner->Clear();
 
                         mxCell->SetOutlinerParaObject(pTemp);
                     }
 
                     if( bOwnParaObj )
-                        delete pParaObj;
+                        pParaObj.reset();
                 }
             }
 
@@ -318,7 +318,7 @@ namespace sdr
                     rObj.SetVerticalWriting(bVertical);
 
                 // Set a cell vertical property
-                OutlinerParaObject* pParaObj = mxCell->GetEditOutlinerParaObject();
+                std::shared_ptr< OutlinerParaObject > pParaObj(mxCell->GetEditOutlinerParaObject());
                 if( pParaObj == nullptr )
                     pParaObj = mxCell->GetOutlinerParaObject();
                 if(pParaObj)
@@ -345,7 +345,7 @@ namespace sdr { namespace table {
 // Cell
 
 
-rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject )
+rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj, const std::shared_ptr< OutlinerParaObject >& pOutlinerParaObject )
 {
     rtl::Reference< Cell > xCell( new Cell( rTableObj, pOutlinerParaObject ) );
     if( xCell->mxTable.is() )
@@ -357,7 +357,7 @@ rtl::Reference< Cell > Cell::create( SdrTableObj& rTableObj, OutlinerParaObject*
 }
 
 
-Cell::Cell( SdrTableObj& rTableObj, OutlinerParaObject* pOutlinerParaObject ) throw(css::uno::RuntimeException)
+Cell::Cell( SdrTableObj& rTableObj, const std::shared_ptr< OutlinerParaObject >& pOutlinerParaObject ) throw(css::uno::RuntimeException)
 : SdrText( rTableObj, pOutlinerParaObject )
 , SvxUnoTextBase( ImplGetSvxUnoOutlinerTextCursorSvxPropertySet() )
 , mpPropSet( ImplGetSvxCellPropertySet() )
@@ -467,9 +467,9 @@ void Cell::mergeContent( const CellRef& xSourceCell )
             rOutliner.SetText(*xSourceCell->GetOutlinerParaObject());
         }
 
-        SetOutlinerParaObject( rOutliner.CreateParaObject() );
+        SetOutlinerParaObject( std::shared_ptr< OutlinerParaObject >(rOutliner.CreateParaObject()) );
         rOutliner.Clear();
-        xSourceCell->SetOutlinerParaObject(rOutliner.CreateParaObject());
+        xSourceCell->SetOutlinerParaObject(std::shared_ptr< OutlinerParaObject>(rOutliner.CreateParaObject()));
         rOutliner.Clear();
         SetStyleSheet( GetStyleSheet(), true );
     }
@@ -501,7 +501,7 @@ void Cell::replaceContentAndFormating( const CellRef& xSourceCell )
     if( xSourceCell.is() && mpProperties )
     {
         mpProperties->SetMergedItemSet( xSourceCell->GetObjectItemSet() );
-        SetOutlinerParaObject( new OutlinerParaObject(*xSourceCell->GetOutlinerParaObject()) );
+        SetOutlinerParaObject( std::make_shared< OutlinerParaObject >(*xSourceCell->GetOutlinerParaObject()) );
 
         SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
         SdrTableObj& rSourceTableObj = dynamic_cast< SdrTableObj& >( xSourceCell->GetObject() );
@@ -559,11 +559,11 @@ bool Cell::IsTextEditActive()
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if(rTableObj.getActiveCell().get() == this )
     {
-        OutlinerParaObject* pParaObj = rTableObj.GetEditOutlinerParaObject();
+        std::shared_ptr< OutlinerParaObject > pParaObj(rTableObj.GetEditOutlinerParaObject());
         if( pParaObj != nullptr )
         {
             isActive = true;
-            delete pParaObj;
+            pParaObj.reset();
         }
     }
     return isActive;
@@ -572,7 +572,7 @@ bool Cell::IsTextEditActive()
 
 bool Cell::hasText() const
 {
-    OutlinerParaObject* pParaObj = GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pParaObj(GetOutlinerParaObject());
     if( pParaObj )
     {
         const EditTextObject& rTextObj = pParaObj->GetTextObject();
@@ -591,7 +591,7 @@ bool Cell::hasText() const
 }
 
 
-OutlinerParaObject* Cell::GetEditOutlinerParaObject() const
+std::shared_ptr< OutlinerParaObject > Cell::GetEditOutlinerParaObject() const
 {
     SdrTableObj& rTableObj = dynamic_cast< SdrTableObj& >( GetObject() );
     if( rTableObj.getActiveCell().get() == this )
@@ -754,7 +754,7 @@ SdrTextHorzAdjust Cell::GetTextHorizontalAdjust() const
 }
 
 
-void Cell::SetOutlinerParaObject( OutlinerParaObject* pTextObject )
+void Cell::SetOutlinerParaObject( const std::shared_ptr< OutlinerParaObject >& pTextObject )
 {
     SdrText::SetOutlinerParaObject( pTextObject );
     maSelection.nStartPara = EE_PARA_MAX_COUNT;
@@ -1532,7 +1532,7 @@ void SAL_CALL Cell::setAllPropertiesToDefault()
 
     SdrOutliner& rOutliner = GetObject().ImpGetDrawOutliner();
 
-    OutlinerParaObject* pParaObj = GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pParaObj(GetOutlinerParaObject());
     if( pParaObj )
     {
         rOutliner.SetText(*pParaObj);
@@ -1543,7 +1543,7 @@ void SAL_CALL Cell::setAllPropertiesToDefault()
             ESelection aSelection( 0, 0, EE_PARA_ALL, EE_TEXTPOS_ALL);
             rOutliner.RemoveAttribs(aSelection, true, 0);
 
-            OutlinerParaObject* pTemp = rOutliner.CreateParaObject(0, nParaCount);
+            const std::shared_ptr< OutlinerParaObject > pTemp(rOutliner.CreateParaObject(0, nParaCount));
             rOutliner.Clear();
 
             SetOutlinerParaObject(pTemp);

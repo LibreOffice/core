@@ -982,7 +982,7 @@ OUString Window::GetSurroundingText() const
         return OUString();
     else if ( mpViewShell->GetView()->IsTextEdit() )
     {
-        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
         return pOLV->GetEditView().GetSurroundingText();
     }
     return OUString();
@@ -996,7 +996,7 @@ Selection Window::GetSurroundingTextSelection() const
     }
     else if ( mpViewShell->GetView()->IsTextEdit() )
     {
-        OutlinerView *pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = mpViewShell->GetView()->GetTextEditOutlinerView();
         return pOLV->GetEditView().GetSurroundingTextSelection();
     }
     else

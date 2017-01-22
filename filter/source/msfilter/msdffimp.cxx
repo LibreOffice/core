@@ -3633,7 +3633,7 @@ void SvxMSDffManager::ReadObjText( const OUString& rText, SdrObject* pObj )
             rOutliner.QuickSetAttribs( aParagraphAttribs, aSelection );
             nParaIndex++;
         }
-        OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
+        const std::shared_ptr< OutlinerParaObject > pNewText(rOutliner.CreateParaObject());
         rOutliner.Clear();
         rOutliner.SetUpdateMode( bOldUpdateMode );
         pText->SetOutlinerParaObject( pNewText );
@@ -4377,7 +4377,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                     // so we have to calculate the a text direction from string:
                     if ( bIsFontwork )
                     {
-                        OutlinerParaObject* pParaObj = static_cast<SdrObjCustomShape*>(pRet)->GetOutlinerParaObject();
+                        const std::shared_ptr< OutlinerParaObject > pParaObj(static_cast<SdrObjCustomShape*>(pRet)->GetOutlinerParaObject());
                         if ( pParaObj )
                         {
                             SdrOutliner& rOutliner = static_cast<SdrObjCustomShape*>(pRet)->ImpGetDrawOutliner();
@@ -4407,7 +4407,7 @@ SdrObject* SvxMSDffManager::ImportShape( const DffRecordHeader& rHd, SvStream& r
                                 }
                                 if  ( bCreateNewParaObject )
                                 {
-                                    OutlinerParaObject* pNewText = rOutliner.CreateParaObject();
+                                    const std::shared_ptr< OutlinerParaObject > pNewText(rOutliner.CreateParaObject());
                                     rOutliner.Init( OUTLINERMODE_TEXTOBJECT );
                                     static_cast<SdrObjCustomShape*>(pRet)->NbcSetOutlinerParaObject( pNewText );
                                 }

@@ -23,6 +23,7 @@
 #include <editeng/langitem.hxx>
 #include <svx/langbox.hxx>
 #include <svx/svdotext.hxx>
+#include <editeng/outlobj.hxx>
 #include <editeng/editeng.hxx>
 #include <sfx2/viewfrm.hxx>
 
@@ -623,13 +624,13 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
         SdrTextObj* pObj = static_cast<SdrTextObj*>(pPage->GetPresObj( PRESOBJ_DATETIME ));
         if( pObj )
         {
-            Outliner* pOutl = mpDoc->GetInternalOutliner();
+            const std::shared_ptr< Outliner > pOutl = mpDoc->GetInternalOutliner();
             pOutl->Init( OUTLINERMODE_TEXTOBJECT );
             sal_uInt16 nOutlMode = pOutl->GetMode();
 
             EditEngine* pEdit = const_cast< EditEngine* >(&pOutl->GetEditEngine());
 
-            OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pOPO(pObj->GetOutlinerParaObject());
             if( pOPO )
                 pOutl->SetText( *pOPO );
 
@@ -675,7 +676,7 @@ void HeaderFooterTabPage::GetOrSetDateTimeLanguage( LanguageType &rLanguage, boo
                     ESelection aSel( aFieldInfo.aPosition.nPara, aFieldInfo.aPosition.nIndex, aFieldInfo.aPosition.nPara, aFieldInfo.aPosition.nIndex+1 );
                     pEdit->QuickSetAttribs( aSet, aSel );
 
-                    pObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
+                    pObj->SetOutlinerParaObject( std::shared_ptr< OutlinerParaObject >(pOutl->CreateParaObject()) );
                     pOutl->UpdateFields();
                 }
                 else

@@ -2240,7 +2240,7 @@ void SdrObjCustomShape::SetVerticalWriting( bool bVertical )
 {
     ForceOutlinerParaObject();
 
-    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+    std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(GetOutlinerParaObject());
 
     DBG_ASSERT( pOutlinerParaObject, "SdrTextObj::SetVerticalWriting() without OutlinerParaObject!" );
 
@@ -2364,7 +2364,7 @@ bool SdrObjCustomShape::AdjustTextFrameWidthAndHeight(Rectangle& rR, bool bHgt, 
                     rOutliner.SetPaperSize(aSiz);
                     rOutliner.SetUpdateMode(true);
                     // TODO: add the optimization with bPortionInfoChecked again.
-                    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+                    const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(GetOutlinerParaObject());
                     if( pOutlinerParaObject != nullptr )
                     {
                         rOutliner.SetText(*pOutlinerParaObject);
@@ -2711,9 +2711,9 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     rOutliner.SetPaperSize( aNullSize );
 
     // put text into the Outliner - if necessary the use the text from the EditOutliner
-    OutlinerParaObject* pPara= GetOutlinerParaObject();
+    std::shared_ptr< OutlinerParaObject > pPara(GetOutlinerParaObject());
     if (pEdtOutl && !bNoEditText)
-        pPara=pEdtOutl->CreateParaObject();
+        pPara = std::shared_ptr< OutlinerParaObject >(pEdtOutl->CreateParaObject());
 
     if (pPara)
     {
@@ -2737,7 +2737,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
         rOutliner.SetTextObj( nullptr );
     }
     if (pEdtOutl && !bNoEditText && pPara)
-        delete pPara;
+        pPara.reset();
 
     rOutliner.SetUpdateMode(true);
     rOutliner.SetControlWord(nStat0);
@@ -2802,7 +2802,7 @@ void SdrObjCustomShape::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRe
     rTextRect=Rectangle(aTextPos,aTextSiz);
 }
 
-void SdrObjCustomShape::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
+void SdrObjCustomShape::NbcSetOutlinerParaObject(const std::shared_ptr< OutlinerParaObject >& pTextObject)
 {
     SdrTextObj::NbcSetOutlinerParaObject( pTextObject );
     SetBoundRectDirty();

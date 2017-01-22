@@ -185,7 +185,7 @@ bool FuFormatPaintBrush::MouseButtonUp(const MouseEvent& rMEvt)
                 bNoParagraphFormats = true;
         }
 
-        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
         if( pOLV )
             pOLV->MouseButtonUp(rMEvt);
 

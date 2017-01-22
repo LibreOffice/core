@@ -245,7 +245,7 @@ void SdrTextObj::NbcSetText(const OUString& rStr)
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
     rOutliner.SetUpdateMode(true);
     rOutliner.SetText(rStr,rOutliner.GetParagraph( 0 ));
-    OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
+    const std::shared_ptr< OutlinerParaObject > pNewText( rOutliner.CreateParaObject() );
     Size aSiz(rOutliner.CalcTextSize());
     rOutliner.Clear();
     NbcSetOutlinerParaObject(pNewText);
@@ -267,7 +267,7 @@ void SdrTextObj::NbcSetText(SvStream& rInput, const OUString& rBaseURL, sal_uInt
     SdrOutliner& rOutliner=ImpGetDrawOutliner();
     rOutliner.SetStyleSheet( 0, GetStyleSheet());
     rOutliner.Read(rInput,rBaseURL,eFormat);
-    OutlinerParaObject* pNewText=rOutliner.CreateParaObject();
+    const std::shared_ptr< OutlinerParaObject > pNewText(rOutliner.CreateParaObject());
     rOutliner.SetUpdateMode(true);
     Size aSiz(rOutliner.CalcTextSize());
     rOutliner.Clear();
@@ -789,8 +789,8 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
 
     // put text into the outliner, if available from the edit outliner
     SdrText* pText = getActiveText();
-    OutlinerParaObject* pOutlinerParaObject = pText ? pText->GetOutlinerParaObject() : nullptr;
-    OutlinerParaObject* pPara = (pEdtOutl && !bNoEditText) ? pEdtOutl->CreateParaObject() : pOutlinerParaObject;
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(pText ? pText->GetOutlinerParaObject() : nullptr);
+    std::shared_ptr< OutlinerParaObject > pPara((pEdtOutl && !bNoEditText) ? std::shared_ptr< OutlinerParaObject >(pEdtOutl->CreateParaObject()) : pOutlinerParaObject);
 
     if (pPara)
     {
@@ -818,7 +818,7 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
     }
 
     if (pEdtOutl && !bNoEditText && pPara)
-        delete pPara;
+        pPara.reset();
 
     rOutliner.SetUpdateMode(true);
     rOutliner.SetControlWord(nStat0);
@@ -883,13 +883,13 @@ void SdrTextObj::TakeTextRect( SdrOutliner& rOutliner, Rectangle& rTextRect, boo
         rTextRect=aAnkRect;
 }
 
-OutlinerParaObject* SdrTextObj::GetEditOutlinerParaObject() const
+std::shared_ptr< OutlinerParaObject > SdrTextObj::GetEditOutlinerParaObject() const
 {
-    OutlinerParaObject* pPara=nullptr;
+    std::shared_ptr< OutlinerParaObject > pPara = nullptr;
     if( HasTextImpl( pEdtOutl ) )
     {
         sal_Int32 nParaCount = pEdtOutl->GetParagraphCount();
-        pPara = pEdtOutl->CreateParaObject(0, nParaCount);
+        pPara.reset(pEdtOutl->CreateParaObject(0, nParaCount));
     }
     return pPara;
 }
@@ -1032,7 +1032,7 @@ OUString SdrTextObj::TakeObjNameSingul() const
         }
     }
 
-    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(GetOutlinerParaObject());
     if(pOutlinerParaObject && eTextKind != OBJ_OUTLINETEXT)
     {
         // shouldn't currently cause any problems at OUTLINETEXT
@@ -1114,7 +1114,7 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
     bNoMirror = rObj.bNoMirror;
     bDisableAutoWidthOnDragging = rObj.bDisableAutoWidthOnDragging;
 
-    OutlinerParaObject* pNewOutlinerParaObject = nullptr;
+    std::shared_ptr< OutlinerParaObject > pNewOutlinerParaObject = nullptr;
 
     SdrText* pText = getActiveText();
 
@@ -1123,11 +1123,11 @@ SdrTextObj& SdrTextObj::operator=(const SdrTextObj& rObj)
         const Outliner* pEO=rObj.pEdtOutl;
         if (pEO!=nullptr)
         {
-            pNewOutlinerParaObject = pEO->CreateParaObject();
+            pNewOutlinerParaObject.reset(pEO->CreateParaObject());
         }
         else
         {
-            pNewOutlinerParaObject = new OutlinerParaObject(*rObj.getActiveText()->GetOutlinerParaObject());
+            pNewOutlinerParaObject.reset(new OutlinerParaObject(*rObj.getActiveText()->GetOutlinerParaObject()));
         }
     }
 
@@ -1211,7 +1211,7 @@ void SdrTextObj::ImpCheckMasterCachable()
 {
     bNotMasterCachable=false;
 
-    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(GetOutlinerParaObject());
 
     if(!bNotVisibleAsMaster && pOutlinerParaObject && pOutlinerParaObject->IsEditDoc() )
     {
@@ -1396,7 +1396,7 @@ void SdrTextObj::UpdateOutlinerFormatting( SdrOutliner& rOutl, Rectangle& rPaint
 }
 
 
-OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
+std::shared_ptr< OutlinerParaObject > SdrTextObj::GetOutlinerParaObject() const
 {
     SdrText* pText = getActiveText();
     if( pText )
@@ -1405,12 +1405,12 @@ OutlinerParaObject* SdrTextObj::GetOutlinerParaObject() const
         return nullptr;
 }
 
-void SdrTextObj::NbcSetOutlinerParaObject(OutlinerParaObject* pTextObject)
+void SdrTextObj::NbcSetOutlinerParaObject(const std::shared_ptr< OutlinerParaObject >& pTextObject)
 {
     NbcSetOutlinerParaObjectForText( pTextObject, getActiveText() );
 }
 
-void SdrTextObj::NbcSetOutlinerParaObjectForText( OutlinerParaObject* pTextObject, SdrText* pText )
+void SdrTextObj::NbcSetOutlinerParaObjectForText( const std::shared_ptr< OutlinerParaObject >& pTextObject, SdrText* pText )
 {
     if( pText )
         pText->SetOutlinerParaObject( pTextObject );
@@ -1556,7 +1556,7 @@ bool SdrTextObj::IsVerticalWriting() const
         return pEdtOutl->IsVertical();
     }
 
-    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+    const std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(GetOutlinerParaObject());
     if(pOutlinerParaObject)
     {
         return pOutlinerParaObject->IsVertical();
@@ -1567,7 +1567,7 @@ bool SdrTextObj::IsVerticalWriting() const
 
 void SdrTextObj::SetVerticalWriting(bool bVertical)
 {
-    OutlinerParaObject* pOutlinerParaObject = GetOutlinerParaObject();
+    std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(GetOutlinerParaObject());
     if( !pOutlinerParaObject && bVertical )
     {
         // we only need to force a outliner para object if the default of

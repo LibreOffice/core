@@ -315,7 +315,7 @@ SdDrawDocument::SdDrawDocument(DocumentType eType, SfxObjectShell* pDrDocSh)
     SfxItemSet aSet2( pHitTestOutliner->GetEmptyItemSet() );
     pHitTestOutliner->SetStyleSheetPool( static_cast<SfxStyleSheetPool*>(GetStyleSheetPool()) );
 
-    SetCalcFieldValueHdl( pHitTestOutliner );
+    SetCalcFieldValueHdl( pHitTestOutliner.get() );
 
     try
     {
@@ -426,11 +426,10 @@ SdDrawDocument::~SdDrawDocument()
         mpCustomShowList = nullptr;
     }
 
-    delete mpOutliner;
-    mpOutliner = nullptr;
+    mpOutliner.reset();
 
-    delete mpInternalOutliner;
-    mpInternalOutliner = nullptr;
+    mpInternalOutliner.reset();
+
 
     delete mpLocale;
     mpLocale = nullptr;
@@ -768,7 +767,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
         {
             if (pObj->GetObjInventor() == SdrInventor)
             {
-                OutlinerParaObject* pOPO = pObj->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pOPO(pObj->GetOutlinerParaObject());
                 sal_uInt16 nId = pObj->GetObjIdentifier();
 
                 if (nId == OBJ_TITLETEXT)
@@ -808,7 +807,7 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
                     if (!aString.isEmpty())
                     {
-                        sd::Outliner* pInternalOutl = GetInternalOutliner();
+                        sd::Outliner* pInternalOutl = GetInternalOutliner().get();
                         pPage->SetObjText( static_cast<SdrTextObj*>(pObj), pInternalOutl, ePresObjKind, aString );
                         pObj->NbcSetStyleSheet( pPage->GetStyleSheetForPresObj( ePresObjKind ), true );
                         pInternalOutl->Clear();
@@ -821,11 +820,11 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
 // Local outliner that is used for outline mode. In this outliner, OutlinerViews
 // may be inserted.
-::sd::Outliner* SdDrawDocument::GetOutliner(bool bCreateOutliner)
+std::shared_ptr< ::sd::Outliner > SdDrawDocument::GetOutliner(bool bCreateOutliner)
 {
     if (!mpOutliner && bCreateOutliner)
     {
-        mpOutliner = new ::sd::Outliner( this, OUTLINERMODE_TEXTOBJECT );
+        mpOutliner = std::make_shared< ::sd::Outliner >( this, OUTLINERMODE_TEXTOBJECT );
 
         if (mpDocSh)
             mpOutliner->SetRefDevice( SD_MOD()->GetRefDevice( *mpDocSh ) );
@@ -839,11 +838,11 @@ void SdDrawDocument::NewOrLoadCompleted( SdPage* pPage, SdStyleSheetPool* pSPool
 
 // Internal outliner that is used to create text objects. We don't insert any
 // OutlinerViews into this outliner!
-::sd::Outliner* SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
+std::shared_ptr< ::sd::Outliner > SdDrawDocument::GetInternalOutliner(bool bCreateOutliner)
 {
     if ( !mpInternalOutliner && bCreateOutliner )
     {
-        mpInternalOutliner = new ::sd::Outliner( this, OUTLINERMODE_TEXTOBJECT );
+        mpInternalOutliner = std::make_shared< ::sd::Outliner >( this, OUTLINERMODE_TEXTOBJECT );
 
         // This outliner is only used to create special text objects. As no
         // information about portions is saved in this outliner, the update mode

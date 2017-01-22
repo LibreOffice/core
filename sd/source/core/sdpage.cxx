@@ -455,7 +455,7 @@ SdrObject* SdPage::CreatePresObj(PresObjKind eObjKind, bool bVertical, const Rec
         OUString aString = GetPresObjText(eObjKind);
         if( (!aString.isEmpty() || bForceText) && dynamic_cast< const SdrTextObj *>( pSdrObj ) !=  nullptr )
         {
-            SdrOutliner* pOutliner = static_cast<SdDrawDocument*>( GetModel() )->GetInternalOutliner();
+            SdrOutliner* pOutliner = static_cast<SdDrawDocument*>( GetModel() )->GetInternalOutliner().get();
 
             sal_uInt16 nOutlMode = pOutliner->GetMode();
             pOutliner->Init( OUTLINERMODE_TEXTOBJECT );
@@ -2084,15 +2084,15 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
         pNewObj = rPage.CreatePresObj(PRESOBJ_OUTLINE, bVertical, rRect);
 
         // Set text of the subtitle into PRESOBJ_OUTLINE
-        OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
+        std::shared_ptr< OutlinerParaObject > pOutlParaObj(pSourceObj->GetOutlinerParaObject());
 
         if(pOutlParaObj)
         {
             // assign text
-            ::sd::Outliner* pOutl = pModel->GetInternalOutliner();
+            const std::shared_ptr< ::sd::Outliner > pOutl = pModel->GetInternalOutliner();
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
-            pOutlParaObj = pOutl->CreateParaObject();
+            pOutlParaObj.reset(pOutl->CreateParaObject());
             pNewObj->SetOutlinerParaObject( pOutlParaObj );
             pOutl->Clear();
             pNewObj->SetEmptyPresObj(false);
@@ -2142,15 +2142,15 @@ SdrObject* convertPresentationObjectImpl(SdPage& rPage, SdrObject* pSourceObj, P
         pNewObj = rPage.CreatePresObj(PRESOBJ_TEXT, bVertical, rRect);
 
         // Set text of the outline object into PRESOBJ_TITLE
-        OutlinerParaObject* pOutlParaObj = pSourceObj->GetOutlinerParaObject();
+        std::shared_ptr< OutlinerParaObject > pOutlParaObj(pSourceObj->GetOutlinerParaObject());
 
         if(pOutlParaObj)
         {
             // assign text
-            ::sd::Outliner* pOutl = pModel->GetInternalOutliner();
+            const std::shared_ptr< ::sd::Outliner > pOutl = pModel->GetInternalOutliner();
             pOutl->Clear();
             pOutl->SetText( *pOutlParaObj );
-            pOutlParaObj = pOutl->CreateParaObject();
+            pOutlParaObj.reset(pOutl->CreateParaObject());
             pNewObj->SetOutlinerParaObject( pOutlParaObj );
             pOutl->Clear();
             pNewObj->SetEmptyPresObj(false);
@@ -2489,7 +2489,7 @@ void SdPage::SetObjText(SdrTextObj* pObj, SdrOutliner* pOutliner, PresObjKind eO
         if( !aString.isEmpty() )
             pOutl->SetText( aString, pOutl->GetParagraph( 0 ) );
 
-        pObj->SetOutlinerParaObject( pOutl->CreateParaObject() );
+        pObj->SetOutlinerParaObject( std::shared_ptr< OutlinerParaObject >(pOutl->CreateParaObject()) );
 
         if (!pOutliner)
         {
@@ -2888,7 +2888,7 @@ bool SdPage::RestoreDefaultText( SdrObject* pObj )
             if (!aString.isEmpty())
             {
                 bool bVertical = false;
-                OutlinerParaObject* pOldPara = pTextObj->GetOutlinerParaObject();
+                const std::shared_ptr< OutlinerParaObject > pOldPara(pTextObj->GetOutlinerParaObject());
                 if( pOldPara )
                     bVertical = pOldPara->IsVertical();  // is old para object vertical?
 

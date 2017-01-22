@@ -146,8 +146,8 @@ private:
 public:
     SAL_DLLPRIVATE bool getDocReadOnly() const { return bReadOnly; }
 private:
-    ::sd::Outliner*     mpOutliner;          ///< local outliner for outline mode
-    ::sd::Outliner*     mpInternalOutliner;  ///< internal outliner for creation of text objects
+    std::shared_ptr< ::sd::Outliner >   mpOutliner;          ///< local outliner for outline mode
+    std::shared_ptr< ::sd::Outliner >   mpInternalOutliner;  ///< internal outliner for creation of text objects
     Timer*              mpWorkStartupTimer;
     Idle*               mpOnlineSpellingIdle;
     sd::ShapeList*      mpOnlineSpellingList;
@@ -220,8 +220,8 @@ public:
 
     SAL_DLLPRIVATE SfxItemPool&        GetPool() { return( *pItemPool ); }
 
-    SAL_DLLPRIVATE ::sd::Outliner* GetOutliner(bool bCreateOutliner=true);
-    ::sd::Outliner* GetInternalOutliner(bool bCreateOutliner=true);
+    SAL_DLLPRIVATE std::shared_ptr< ::sd::Outliner > GetOutliner(bool bCreateOutliner=true);
+    std::shared_ptr< ::sd::Outliner > GetInternalOutliner(bool bCreateOutliner=true);
 
     SAL_DLLPRIVATE ::sd::DrawDocShell*     GetDocSh() const { return mpDocSh; }
 

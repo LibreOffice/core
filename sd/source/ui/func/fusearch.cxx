@@ -82,7 +82,7 @@ void FuSearch::DoExecute( SfxRequest& )
     else if ( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr )
     {
         bOwnOutliner = false;
-        pSdOutliner = mpDoc->GetOutliner();
+        pSdOutliner = mpDoc->GetOutliner().get();
     }
 
     if (pSdOutliner)
@@ -124,7 +124,7 @@ void FuSearch::SearchAndReplace( const SvxSearchItem* pSearchItem )
             delete pSdOutliner;
 
             bOwnOutliner = false;
-            pSdOutliner = mpDoc->GetOutliner();
+            pSdOutliner = mpDoc->GetOutliner().get();
             pSdOutliner->PrepareSpelling();
         }
 

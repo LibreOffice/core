@@ -111,7 +111,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                 mpView->BegUndo(SD_RESSTR(STR_UNDO_EXPAND_PAGE));
 
             // set current structuring-object into outliner
-            OutlinerParaObject* pParaObj = pActualOutline->GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pParaObj(pActualOutline->GetOutlinerParaObject());
             pOutl->SetText(*pParaObj);
 
             // remove hard paragraph- and character attributes
@@ -184,7 +184,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     if (!pTextObj)
                         continue;
 
-                    OutlinerParaObject* pOutlinerParaObject = pOutl->CreateParaObject( nParaPos, 1);
+                    std::shared_ptr< OutlinerParaObject > pOutlinerParaObject(pOutl->CreateParaObject( nParaPos, 1));
                     pOutlinerParaObject->SetOutlinerMode(OUTLINERMODE_TITLEOBJECT);
 
                     if( pOutlinerParaObject->GetDepth(0) != -1 )
@@ -193,11 +193,11 @@ void FuExpandPage::DoExecute( SfxRequest& )
 
                         pTempOutl->SetText( *pOutlinerParaObject );
 
-                        delete pOutlinerParaObject;
+                        pOutlinerParaObject.reset();
 
                         pTempOutl->SetDepth( pTempOutl->GetParagraph( 0 ), -1 );
 
-                        pOutlinerParaObject = pTempOutl->CreateParaObject();
+                        pOutlinerParaObject.reset(pTempOutl->CreateParaObject());
                         delete pTempOutl;
                     }
 
@@ -215,7 +215,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                     if (pOutlineObj)
                     {
                         // create structuring text objects
-                        OutlinerParaObject* pOPO = pOutl->CreateParaObject(++nParaPos, nChildCount);
+                        std::shared_ptr< OutlinerParaObject > pOPO(pOutl->CreateParaObject(++nParaPos, nChildCount));
 
                         SdrOutliner* pTempOutl = SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *mpDoc);
                         pTempOutl->SetText( *pOPO );
@@ -229,8 +229,7 @@ void FuExpandPage::DoExecute( SfxRequest& )
                                 pTempOutl->GetDepth( nPara ) - 1);
                         }
 
-                        delete pOPO;
-                        pOPO = pTempOutl->CreateParaObject();
+                        pOPO.reset(pTempOutl->CreateParaObject());
                         delete pTempOutl;
 
                         pOutlineObj->SetOutlinerParaObject( pOPO );

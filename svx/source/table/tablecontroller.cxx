@@ -313,7 +313,8 @@ bool SvxTableController::onMouseButtonDown(const MouseEvent& rMEvt, vcl::Window*
     if (comphelper::LibreOfficeKit::isActive() && rMEvt.GetClicks() == 2 && rMEvt.IsLeft() && eHit == SDRTABLEHIT_CELLTEXTAREA)
     {
         bool bEmptyOutliner = false;
-        if (Outliner* pOutliner = mpView->GetTextEditOutliner())
+        const std::shared_ptr< Outliner > pOutliner = mpView->GetTextEditOutliner();
+        if (pOutliner)
         {
             if (pOutliner->GetParagraphCount() == 1)
             {
@@ -1584,7 +1585,7 @@ sal_uInt16 SvxTableController::getKeyboardAction( const KeyEvent& rKEvt, vcl::Wi
         }
 
         bool bTextMove = false;
-        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+        const std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
         if( pOLV )
         {
             RemoveSelection();
@@ -1867,7 +1868,7 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, co
 
         if(!pTableObj->GetOutlinerParaObject() && mpView->GetTextEditOutliner())
         {
-            ::Outliner* pOutl = mpView->GetTextEditOutliner();
+            const std::shared_ptr< ::Outliner > pOutl = mpView->GetTextEditOutliner();
             sal_Int32 nParaAnz = pOutl->GetParagraphCount();
             Paragraph* p1stPara = pOutl->GetParagraph( 0 );
 
@@ -1892,7 +1893,7 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, co
             pTableObj->setActiveCell( aPos );
 
             // create new outliner, owner will be the SdrObjEditView
-            SdrOutliner* pOutl = mpModel ? SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *mpModel) : nullptr;
+            const std::shared_ptr< SdrOutliner > pOutl( mpModel ? SdrMakeOutliner(OUTLINERMODE_OUTLINEOBJECT, *mpModel) : nullptr );
             if (pOutl && pTableObj->IsVerticalWriting())
                 pOutl->SetVertical( true );
 
@@ -1900,7 +1901,7 @@ void SvxTableController::EditCell( const CellPos& rPos, vcl::Window* pWindow, co
             {
                 maCursorLastPos = maCursorFirstPos = rPos;
 
-                OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+                const std::shared_ptr< OutlinerView > pOLV = mpView->GetTextEditOutlinerView();
 
                 bool bNoSel = true;
 
@@ -2571,7 +2572,7 @@ bool SvxTableController::GetAttributes(SfxItemSet& rTargetSet, bool bOnlyHardAtt
             if( mxTableObj->GetOutlinerParaObject() )
                 rTargetSet.Put( SvxScriptTypeItem( mxTableObj->GetOutlinerParaObject()->GetTextObject().GetScriptType() ) );
 
-            OutlinerView* pTextEditOutlinerView = mpView->GetTextEditOutlinerView();
+            const std::shared_ptr< OutlinerView > pTextEditOutlinerView = mpView->GetTextEditOutlinerView();
             if(pTextEditOutlinerView)
             {
                 // FALSE= InvalidItems nicht al Default, sondern als "Loecher" betrachten

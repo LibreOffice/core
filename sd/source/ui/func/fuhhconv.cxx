@@ -70,7 +70,7 @@ FuHangulHanjaConversion::FuHangulHanjaConversion (
     else if ( dynamic_cast< const OutlineViewShell *>( mpViewShell ) !=  nullptr )
     {
         bOwnOutliner = false;
-        pSdOutliner = mpDoc->GetOutliner();
+        pSdOutliner = mpDoc->GetOutliner().get();
     }
 
     if (pSdOutliner)
@@ -121,7 +121,7 @@ void FuHangulHanjaConversion::StartConversion( sal_Int16 nSourceLanguage, sal_In
             delete pSdOutliner;
 
             bOwnOutliner = false;
-            pSdOutliner = mpDoc->GetOutliner();
+            pSdOutliner = mpDoc->GetOutliner().get();
             pSdOutliner->BeginConversion();
         }
 

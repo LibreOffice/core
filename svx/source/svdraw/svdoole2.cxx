@@ -1304,11 +1304,11 @@ SdrObject* SdrOle2Obj::createSdrGrafObjReplacement(bool bAddText, bool /* bUseHC
         if(bAddText)
         {
             // #i118485# copy text (Caution! Model needed, as guaranteed in aw080)
-            OutlinerParaObject* pOPO = GetOutlinerParaObject();
+            const std::shared_ptr< OutlinerParaObject > pOPO(GetOutlinerParaObject());
 
             if(pOPO && GetModel())
             {
-                pClone->NbcSetOutlinerParaObject(new OutlinerParaObject(*pOPO));
+                pClone->NbcSetOutlinerParaObject(std::make_shared< OutlinerParaObject >(*pOPO));
             }
         }
 
