@@ -416,7 +416,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl, Button*, void)
 
     if ( !aNewName.isEmpty() && !aNewArea.isEmpty() )
     {
-        if ( ScRangeData::IsNameValid( aNewName, pDoc ) && aNewName != STR_DB_LOCAL_NONAME )
+        if ( ScRangeData::IsNameValid( aNewName, pDoc ) == ScRangeData::NAME_VALID && aNewName != STR_DB_LOCAL_NONAME )
         {
             //  weil jetzt editiert werden kann, muss erst geparst werden
             ScRange aTmpRange;

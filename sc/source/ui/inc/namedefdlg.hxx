@@ -50,6 +50,7 @@ private:
     OUString maStrInfoDefault;
     const OUString maGlobalNameStr;
     const OUString maErrInvalidNameStr;
+    const OUString maErrInvalidNameCellRefStr;
     const OUString maErrNameInUse;
 
     //hack to call this dialog from Manage Names

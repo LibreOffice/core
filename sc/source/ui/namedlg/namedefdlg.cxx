@@ -36,6 +36,7 @@ ScNameDefDlg::ScNameDefDlg( SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* p
 
     maGlobalNameStr  ( ScGlobal::GetRscString(STR_GLOBAL_SCOPE) ),
     maErrInvalidNameStr( ScGlobal::GetRscString(STR_ERR_NAME_INVALID)),
+    maErrInvalidNameCellRefStr( ScGlobal::GetRscString(STR_ERR_NAME_INVALID_CELL_REF)),
     maErrNameInUse   ( ScGlobal::GetRscString(STR_ERR_NAME_EXISTS)),
     maRangeMap( aRangeMap )
 {
@@ -150,6 +151,7 @@ bool ScNameDefDlg::IsNameValid()
         pRangeName = maRangeMap.find(aScope)->second;
     }
 
+    ScRangeData::IsNameValidType eType;
     m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
     if ( aName.isEmpty() )
     {
@@ -157,10 +159,17 @@ bool ScNameDefDlg::IsNameValid()
         m_pFtInfo->SetText(maStrInfoDefault);
         return false;
     }
-    else if (!ScRangeData::IsNameValid( aName, mpDoc ))
+    else if ((eType = ScRangeData::IsNameValid( aName, mpDoc )) != ScRangeData::NAME_VALID)
     {
         m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
-        m_pFtInfo->SetText(maErrInvalidNameStr);
+        if (eType == ScRangeData::NAME_INVALID_BAD_STRING)
+        {
+            m_pFtInfo->SetText(maErrInvalidNameStr);
+        }
+        else if (eType == ScRangeData::NAME_INVALID_CELL_REF)
+        {
+            m_pFtInfo->SetText(maErrInvalidNameCellRefStr);
+        }
         m_pBtnAdd->Disable();
         return false;
     }

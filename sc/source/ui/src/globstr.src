@@ -2113,6 +2113,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "The selected sheet(s) contain source data of related pivot tables that will be lost. Are you sure you want to delete the selected sheet(s)?";
     };
+    String STR_ERR_NAME_INVALID_CELL_REF
+    {
+        Text [ en-US ] = "Invalid name. Reference to a cell, or a range of cells not allowed.";
+    };
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
