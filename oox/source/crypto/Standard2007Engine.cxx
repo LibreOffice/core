@@ -20,8 +20,6 @@
 namespace oox {
 namespace core {
 
-using namespace std;
-
 /* =========================================================================== */
 /*  Kudos to Caolan McNamara who provided the core decryption implementations. */
 /* =========================================================================== */
@@ -31,23 +29,16 @@ namespace
 void lclRandomGenerateValues(sal_uInt8* aArray, sal_uInt32 aSize)
 {
     TimeValue aTime;
-    osl_getSystemTime( &aTime );
-    rtlRandomPool aRandomPool = rtl_random_createPool ();
-    rtl_random_addBytes ( aRandomPool, &aTime, 8 );
-    rtl_random_getBytes ( aRandomPool, aArray, aSize );
-    rtl_random_destroyPool ( aRandomPool );
+    osl_getSystemTime(&aTime);
+    rtlRandomPool aRandomPool = rtl_random_createPool();
+    rtl_random_addBytes(aRandomPool, &aTime, 8);
+    rtl_random_getBytes(aRandomPool, aArray, aSize);
+    rtl_random_destroyPool(aRandomPool);
 }
 
 static const OUString lclCspName = "Microsoft Enhanced RSA and AES Cryptographic Provider";
 
-} // namespace
-
-Standard2007Engine::Standard2007Engine() :
-    CryptoEngine()
-{}
-
-Standard2007Engine::~Standard2007Engine()
-{}
+} // end anonymous namespace
 
 bool Standard2007Engine::generateVerifier()
 {
@@ -55,23 +46,23 @@ bool Standard2007Engine::generateVerifier()
     if (mKey.size() != 16)
         return false;
 
-    vector<sal_uInt8> verifier(msfilter::ENCRYPTED_VERIFIER_LENGTH);
-    vector<sal_uInt8> encryptedVerifier(msfilter::ENCRYPTED_VERIFIER_LENGTH);
+    std::vector<sal_uInt8> verifier(msfilter::ENCRYPTED_VERIFIER_LENGTH);
+    std::vector<sal_uInt8> encryptedVerifier(msfilter::ENCRYPTED_VERIFIER_LENGTH);
 
-    lclRandomGenerateValues(&verifier[0], verifier.size());
+    lclRandomGenerateValues(verifier.data(), verifier.size());
 
-    vector<sal_uInt8> iv;
+    std::vector<sal_uInt8> iv;
     Encrypt aEncryptorVerifier(mKey, iv, Crypto::AES_128_ECB);
     if (aEncryptorVerifier.update(encryptedVerifier, verifier) != msfilter::ENCRYPTED_VERIFIER_LENGTH)
         return false;
     std::copy(encryptedVerifier.begin(), encryptedVerifier.end(), mInfo.verifier.encryptedVerifier);
 
-    vector<sal_uInt8> hash(msfilter::SHA1_HASH_LENGTH, 0);
+    std::vector<sal_uInt8> hash(msfilter::SHA1_HASH_LENGTH, 0);
     mInfo.verifier.encryptedVerifierHashSize = msfilter::SHA1_HASH_LENGTH;
     Digest::sha1(hash, verifier);
     hash.resize(msfilter::SHA256_HASH_LENGTH, 0);
 
-    vector<sal_uInt8> encryptedHash(msfilter::SHA256_HASH_LENGTH, 0);
+    std::vector<sal_uInt8> encryptedHash(msfilter::SHA256_HASH_LENGTH, 0);
 
     Encrypt aEncryptorHash(mKey, iv, Crypto::AES_128_ECB);
     aEncryptorHash.update(encryptedHash, hash, hash.size());
@@ -87,7 +78,7 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
     const sal_uInt8* saltArray = mInfo.verifier.salt;
 
     // Prepare initial data -> salt + password (in 16-bit chars)
-    vector<sal_uInt8> initialData(saltSize + passwordByteLength);
+    std::vector<sal_uInt8> initialData(saltSize + passwordByteLength);
     std::copy(saltArray, saltArray + saltSize, initialData.begin());
 
     const sal_uInt8* passwordByteArray = reinterpret_cast<const sal_uInt8*>(rPassword.getStr());
@@ -98,17 +89,17 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
         initialData.begin() + saltSize);
 
     // use "hash" vector for result of sha1 hashing
-    vector<sal_uInt8> hash(msfilter::SHA1_HASH_LENGTH, 0);
+    std::vector<sal_uInt8> hash(msfilter::SHA1_HASH_LENGTH, 0);
 
     // calculate SHA1 hash of initialData
     Digest::sha1(hash, initialData);
 
     // data = iterator (4bytes) + hash
-    vector<sal_uInt8> data(msfilter::SHA1_HASH_LENGTH + 4, 0);
+    std::vector<sal_uInt8> data(msfilter::SHA1_HASH_LENGTH + 4, 0);
 
     for (sal_Int32 i = 0; i < 50000; ++i)
     {
-        ByteOrderConverter::writeLittleEndian( &data[0], i );
+        ByteOrderConverter::writeLittleEndian(data.data(), i);
         std::copy(hash.begin(), hash.end(), data.begin() + 4);
         Digest::sha1(hash, data);
     }
@@ -118,8 +109,8 @@ bool Standard2007Engine::calculateEncryptionKey(const OUString& rPassword)
     Digest::sha1(hash, data);
 
     // derive key
-    vector<sal_uInt8> buffer(64, 0x36);
-    for( size_t i = 0; i < hash.size(); ++i )
+    std::vector<sal_uInt8> buffer(64, 0x36);
+    for (size_t i = 0; i < hash.size(); ++i)
         buffer[i] ^= hash[i];
 
     Digest::sha1(hash, buffer);
@@ -135,48 +126,47 @@ bool Standard2007Engine::generateEncryptionKey(const OUString& password)
 
     calculateEncryptionKey(password);
 
-    vector<sal_uInt8> encryptedVerifier(msfilter::ENCRYPTED_VERIFIER_LENGTH);
+    std::vector<sal_uInt8> encryptedVerifier(msfilter::ENCRYPTED_VERIFIER_LENGTH);
     std::copy(
         mInfo.verifier.encryptedVerifier,
         mInfo.verifier.encryptedVerifier + msfilter::ENCRYPTED_VERIFIER_LENGTH,
         encryptedVerifier.begin());
 
-    vector<sal_uInt8> encryptedHash(msfilter::SHA256_HASH_LENGTH);
+    std::vector<sal_uInt8> encryptedHash(msfilter::SHA256_HASH_LENGTH);
     std::copy(
         mInfo.verifier.encryptedVerifierHash,
         mInfo.verifier.encryptedVerifierHash + msfilter::SHA256_HASH_LENGTH,
         encryptedHash.begin());
 
-    vector<sal_uInt8> verifier(encryptedVerifier.size(), 0);
+    std::vector<sal_uInt8> verifier(encryptedVerifier.size(), 0);
     Decrypt::aes128ecb(verifier, encryptedVerifier, mKey);
 
-    vector<sal_uInt8> verifierHash(encryptedHash.size(), 0);
+    std::vector<sal_uInt8> verifierHash(encryptedHash.size(), 0);
     Decrypt::aes128ecb(verifierHash, encryptedHash, mKey);
 
-    vector<sal_uInt8> hash(msfilter::SHA1_HASH_LENGTH, 0);
+    std::vector<sal_uInt8> hash(msfilter::SHA1_HASH_LENGTH, 0);
     Digest::sha1(hash, verifier);
 
-    return std::equal( hash.begin(), hash.end(), verifierHash.begin() );
+    return std::equal(hash.begin(), hash.end(), verifierHash.begin());
 }
 
-bool Standard2007Engine::decrypt(
-                            BinaryXInputStream& aInputStream,
-                            BinaryXOutputStream& aOutputStream)
+bool Standard2007Engine::decrypt(BinaryXInputStream& aInputStream,
+                                 BinaryXOutputStream& aOutputStream)
 {
-    aInputStream.skip(4);    // Document unencrypted size - 4 bytes
-    aInputStream.skip(4);    // Reserved 4 Bytes
+    aInputStream.skip(4); // Document unencrypted size - 4 bytes
+    aInputStream.skip(4); // Reserved 4 Bytes
 
-    vector<sal_uInt8> iv;
+    std::vector<sal_uInt8> iv;
     Decrypt aDecryptor(mKey, iv, Crypto::AES_128_ECB);
-    vector<sal_uInt8> inputBuffer (4096);
-    vector<sal_uInt8> outputBuffer(4096);
+    std::vector<sal_uInt8> inputBuffer (4096);
+    std::vector<sal_uInt8> outputBuffer(4096);
     sal_uInt32 inputLength;
     sal_uInt32 outputLength;
 
-    while( (inputLength = aInputStream.readMemory( &inputBuffer[0], inputBuffer.size() )) > 0 )
+    while ((inputLength = aInputStream.readMemory(inputBuffer.data(), inputBuffer.size())) > 0)
     {
         outputLength = aDecryptor.update(outputBuffer, inputBuffer, inputLength);
-        aOutputStream.writeMemory( &outputBuffer[0], outputLength );
+        aOutputStream.writeMemory(outputBuffer.data(), outputLength);
     }
     return true;
 }
@@ -207,9 +197,9 @@ void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
 
     sal_uInt32 encryptionHeaderSize = static_cast<sal_uInt32>(sizeof(msfilter::EncryptionStandardHeader));
 
-    rStream.WriteUInt32( mInfo.header.flags );
+    rStream.WriteUInt32(mInfo.header.flags);
     sal_uInt32 headerSize = encryptionHeaderSize + cspNameSize;
-    rStream.WriteUInt32( headerSize );
+    rStream.WriteUInt32(headerSize);
 
     rStream.writeMemory(&mInfo.header, encryptionHeaderSize);
     rStream.writeUnicodeArray(lclCspName);
@@ -219,24 +209,23 @@ void Standard2007Engine::writeEncryptionInfo(const OUString& password, BinaryXOu
     rStream.writeMemory(&mInfo.verifier, encryptionVerifierSize);
 }
 
-void Standard2007Engine::encrypt(
-                            BinaryXInputStream& aInputStream,
-                            BinaryXOutputStream& aOutputStream)
+void Standard2007Engine::encrypt(BinaryXInputStream& aInputStream,
+                                 BinaryXOutputStream& aOutputStream)
 {
-    vector<sal_uInt8> inputBuffer(1024);
-    vector<sal_uInt8> outputBuffer(1024);
+    std::vector<sal_uInt8> inputBuffer(1024);
+    std::vector<sal_uInt8> outputBuffer(1024);
 
     sal_uInt32 inputLength;
     sal_uInt32 outputLength;
 
-    vector<sal_uInt8> iv;
+    std::vector<sal_uInt8> iv;
     Encrypt aEncryptor(mKey, iv, Crypto::AES_128_ECB);
 
-    while( (inputLength = aInputStream.readMemory( &inputBuffer[0], inputBuffer.size() )) > 0 )
+    while ((inputLength = aInputStream.readMemory(inputBuffer.data(), inputBuffer.size())) > 0)
     {
         inputLength = inputLength % 16 == 0 ? inputLength : ((inputLength / 16) * 16) + 16;
         outputLength = aEncryptor.update(outputBuffer, inputBuffer, inputLength);
-        aOutputStream.writeMemory( &outputBuffer[0], outputLength );
+        aOutputStream.writeMemory(outputBuffer.data(), outputLength);
     }
 }
 
