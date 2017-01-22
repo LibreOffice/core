@@ -290,6 +290,14 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
             rOut.WriteBytes(pBuf.get(), nWdtOut);
         }
     } else if (nColors==256) {
+
+        //we're going to loop Ysize * XSize on GetByte, max compression for GetByte is a run of 63
+        //if we're less than that (and add a generous amount of wriggle room) then its not going
+        //to fly
+        const sal_uInt64 nMinBytesPossiblyNeeded = rHead.Xsize * rHead.Ysize / 128;
+        if (rInp.remainingSize() < nMinBytesPossiblyNeeded)
+            return false;
+
         cRGB[3]=0;                      // fourth palette entry for BMP
         for (sal_uInt16 i=0;i<256;i++) {           // copy palette
             rInp.ReadBytes(cRGB, 3);
@@ -325,6 +333,7 @@ bool SgfBMapFilter(SvStream& rInp, SvStream& rOut)
     ReadSgfHeader( rInp, aHead );
     if (!rInp.good())
         return false;
+
     if (aHead.ChkMagic() && (aHead.Typ==SgfBitImag0 || aHead.Typ==SgfBitImag1 ||
                              aHead.Typ==SgfBitImag2 || aHead.Typ==SgfBitImgMo))
     {
