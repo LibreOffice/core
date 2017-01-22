@@ -1404,11 +1404,11 @@ void EditTextObjectImpl::CreateData( SvStream& rIStream )
                     aNewFontItem.SetFamilyName( GetFontToSubsFontName( hConv ) );
 
                     // Replace the existing attribute with a new one.
-                    XEditAttribute* pNewAttr = CreateAttrib(aNewFontItem, rAttr.GetStart(), rAttr.GetEnd());
-
+                    pC->maCharAttribs[nAttr] =
+                            std::unique_ptr<XEditAttribute>(CreateAttrib(aNewFontItem, rAttr.GetStart(), rAttr.GetEnd()));
                     pPool->Remove(*rAttr.GetItem());
-                    pC->maCharAttribs[nAttr] = std::unique_ptr<XEditAttribute>(pNewAttr);
 
+                    XEditAttribute* pNewAttr = pC->maCharAttribs[nAttr].get();
                     for ( sal_uInt16 nChar = pNewAttr->GetStart(); nChar < pNewAttr->GetEnd(); nChar++ )
                     {
                         sal_Unicode cOld = pC->GetText()[ nChar ];
