@@ -37,20 +37,15 @@ using namespace css::uno;
 using namespace css::xml::sax;
 using namespace css::xml;
 
-using namespace std;
-
-using ::comphelper::SequenceAsHashMap;
-using ::sax::Converter;
-
 namespace {
 
-vector<sal_uInt8> convertToVector(Sequence<sal_Int8>& input)
+std::vector<sal_uInt8> convertToVector(Sequence<sal_Int8>& input)
 {
-    const sal_uInt8* inputArray = reinterpret_cast<const sal_uInt8*>( input.getConstArray() );
-    return vector<sal_uInt8>(inputArray, inputArray + input.getLength());
+    const sal_uInt8* inputArray = reinterpret_cast<const sal_uInt8*>(input.getConstArray());
+    return std::vector<sal_uInt8>(inputArray, inputArray + input.getLength());
 }
 
-class AgileTokenHandler : public cppu::WeakImplHelper< XFastTokenHandler >
+class AgileTokenHandler : public cppu::WeakImplHelper<XFastTokenHandler>
 {
 public:
     virtual sal_Int32 SAL_CALL getTokenFromUTF8( const Sequence< sal_Int8 >& /*nIdentifier*/ ) override
@@ -64,7 +59,7 @@ public:
     }
 };
 
-class AgileDocumentHandler : public ::cppu::WeakImplHelper< XFastDocumentHandler >
+class AgileDocumentHandler : public ::cppu::WeakImplHelper<XFastDocumentHandler>
 {
     AgileEncryptionInfo& mInfo;
 
@@ -82,81 +77,78 @@ public:
     void SAL_CALL startFastElement( sal_Int32 /*Element*/, const Reference< XFastAttributeList >& /*Attribs*/ ) override
     {}
 
-    void SAL_CALL startUnknownElement( const OUString& /*aNamespace*/, const OUString& aName, const Reference< XFastAttributeList >& aAttributeList ) override
+    void SAL_CALL startUnknownElement( const OUString& /*aNamespace*/, const OUString& rName, const Reference< XFastAttributeList >& aAttributeList ) override
     {
-        if(aName == "keyData")
+        if (rName == "keyData")
         {
-            Sequence<Attribute> aAttributes(aAttributeList->getUnknownAttributes());
-
-            for (int i=0; i<aAttributes.getLength(); i++)
+            for (const Attribute& rAttribute : aAttributeList->getUnknownAttributes())
             {
-                if (aAttributes[i].Name == "saltValue")
+                if (rAttribute.Name == "saltValue")
                 {
                     Sequence<sal_Int8> keyDataSalt;
-                    Converter::decodeBase64(keyDataSalt, aAttributes[i].Value);
+                    ::sax::Converter::decodeBase64(keyDataSalt, rAttribute.Value);
                     mInfo.keyDataSalt = convertToVector(keyDataSalt);
                 }
             }
         }
-        else if(aName == "encryptedKey")
+        else if (rName == "encryptedKey")
         {
-            Sequence<Attribute> aAttributes(aAttributeList->getUnknownAttributes());
-            for (int i=0; i<aAttributes.getLength(); i++)
+            for (const Attribute& rAttribute : aAttributeList->getUnknownAttributes())
             {
-                if (aAttributes[i].Name == "spinCount")
+                if (rAttribute.Name == "spinCount")
                 {
-                    Converter::convertNumber(mInfo.spinCount, aAttributes[i].Value);
+                    ::sax::Converter::convertNumber(mInfo.spinCount, rAttribute.Value);
                 }
-                else if (aAttributes[i].Name == "saltSize")
+                else if (rAttribute.Name == "saltSize")
                 {
-                    Converter::convertNumber(mInfo.saltSize, aAttributes[i].Value);
+                    ::sax::Converter::convertNumber(mInfo.saltSize, rAttribute.Value);
                 }
-                else if (aAttributes[i].Name == "blockSize")
+                else if (rAttribute.Name == "blockSize")
                 {
-                    Converter::convertNumber(mInfo.blockSize, aAttributes[i].Value);
+                    ::sax::Converter::convertNumber(mInfo.blockSize, rAttribute.Value);
                 }
-                else if (aAttributes[i].Name == "keyBits")
+                else if (rAttribute.Name == "keyBits")
                 {
-                    Converter::convertNumber(mInfo.keyBits, aAttributes[i].Value);
+                    ::sax::Converter::convertNumber(mInfo.keyBits, rAttribute.Value);
                 }
-                else if (aAttributes[i].Name == "hashSize")
+                else if (rAttribute.Name == "hashSize")
                 {
-                    Converter::convertNumber(mInfo.hashSize, aAttributes[i].Value);
+                    ::sax::Converter::convertNumber(mInfo.hashSize, rAttribute.Value);
                 }
-                else if (aAttributes[i].Name == "cipherAlgorithm")
+                else if (rAttribute.Name == "cipherAlgorithm")
                 {
-                    mInfo.cipherAlgorithm = aAttributes[i].Value;
+                    mInfo.cipherAlgorithm = rAttribute.Value;
                 }
-                else if (aAttributes[i].Name == "cipherChaining")
+                else if (rAttribute.Name == "cipherChaining")
                 {
-                    mInfo.cipherChaining = aAttributes[i].Value;
+                    mInfo.cipherChaining = rAttribute.Value;
                 }
-                else if (aAttributes[i].Name == "hashAlgorithm")
+                else if (rAttribute.Name == "hashAlgorithm")
                 {
-                    mInfo.hashAlgorithm = aAttributes[i].Value;
+                    mInfo.hashAlgorithm = rAttribute.Value;
                 }
-                else if (aAttributes[i].Name == "saltValue")
+                else if (rAttribute.Name == "saltValue")
                 {
                     Sequence<sal_Int8> saltValue;
-                    Converter::decodeBase64(saltValue, aAttributes[i].Value);
+                    ::sax::Converter::decodeBase64(saltValue, rAttribute.Value);
                     mInfo.saltValue = convertToVector(saltValue);
                 }
-                else if (aAttributes[i].Name == "encryptedVerifierHashInput")
+                else if (rAttribute.Name == "encryptedVerifierHashInput")
                 {
                     Sequence<sal_Int8> encryptedVerifierHashInput;
-                    Converter::decodeBase64(encryptedVerifierHashInput, aAttributes[i].Value);
+                    ::sax::Converter::decodeBase64(encryptedVerifierHashInput, rAttribute.Value);
                     mInfo.encryptedVerifierHashInput = convertToVector(encryptedVerifierHashInput);
                 }
-                else if (aAttributes[i].Name == "encryptedVerifierHashValue")
+                else if (rAttribute.Name == "encryptedVerifierHashValue")
                 {
                     Sequence<sal_Int8> encryptedVerifierHashValue;
-                    Converter::decodeBase64(encryptedVerifierHashValue, aAttributes[i].Value);
+                    ::sax::Converter::decodeBase64(encryptedVerifierHashValue, rAttribute.Value);
                     mInfo.encryptedVerifierHashValue = convertToVector(encryptedVerifierHashValue);
                 }
-                else if (aAttributes[i].Name == "encryptedKeyValue")
+                else if (rAttribute.Name == "encryptedKeyValue")
                 {
                     Sequence<sal_Int8> encryptedKeyValue;
-                    Converter::decodeBase64(encryptedKeyValue, aAttributes[i].Value);
+                    ::sax::Converter::decodeBase64(encryptedKeyValue, rAttribute.Value);
                     mInfo.encryptedKeyValue = convertToVector(encryptedKeyValue);
                 }
             }
@@ -206,15 +198,14 @@ bool DocumentDecryption::readAgileEncryptionInfo(Reference< XInputStream >& xInp
     Reference<XFastDocumentHandler> xFastDocumentHandler( new AgileDocumentHandler(info) );
     Reference<XFastTokenHandler>    xFastTokenHandler   ( new AgileTokenHandler );
 
-    Reference<XFastParser> xParser(
-        css::xml::sax::FastParser::create(mxContext));
+    Reference<XFastParser> xParser(css::xml::sax::FastParser::create(mxContext));
 
-    xParser->setFastDocumentHandler( xFastDocumentHandler );
-    xParser->setTokenHandler( xFastTokenHandler );
+    xParser->setFastDocumentHandler(xFastDocumentHandler);
+    xParser->setTokenHandler(xFastTokenHandler);
 
     InputSource aInputSource;
     aInputSource.aInputStream = xInputStream;
-    xParser->parseStream( aInputSource );
+    xParser->parseStream(aInputSource);
 
     // CHECK info data
     if (2 > info.blockSize || info.blockSize > 4096)
@@ -256,14 +247,14 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
     msfilter::StandardEncryptionInfo& info = engine->getInfo();
 
     info.header.flags = rStream.readuInt32();
-    if( getFlag( info.header.flags, msfilter::ENCRYPTINFO_EXTERNAL ) )
+    if (getFlag(info.header.flags, msfilter::ENCRYPTINFO_EXTERNAL))
         return false;
 
     sal_uInt32 nHeaderSize = rStream.readuInt32();
 
     sal_uInt32 actualHeaderSize = sizeof(info.header);
 
-    if( (nHeaderSize < actualHeaderSize) )
+    if (nHeaderSize < actualHeaderSize)
         return false;
 
     info.header.flags = rStream.readuInt32();
@@ -275,7 +266,7 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
     info.header.reserved1 = rStream.readuInt32();
     info.header.reserved2 = rStream.readuInt32();
 
-    rStream.skip( nHeaderSize - actualHeaderSize );
+    rStream.skip(nHeaderSize - actualHeaderSize);
 
     info.verifier.saltSize = rStream.readuInt32();
     rStream.readArray(info.verifier.salt, SAL_N_ELEMENTS(info.verifier.salt));
@@ -283,25 +274,25 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
     info.verifier.encryptedVerifierHashSize = rStream.readuInt32();
     rStream.readArray(info.verifier.encryptedVerifierHash, SAL_N_ELEMENTS(info.verifier.encryptedVerifierHash));
 
-    if( info.verifier.saltSize != 16 )
+    if (info.verifier.saltSize != 16)
         return false;
 
     // check flags and algorithm IDs, required are AES128 and SHA-1
-    if( !getFlag( info.header.flags, msfilter::ENCRYPTINFO_CRYPTOAPI ) )
+    if (!getFlag(info.header.flags, msfilter::ENCRYPTINFO_CRYPTOAPI))
         return false;
 
-    if( !getFlag( info.header.flags, msfilter::ENCRYPTINFO_AES ) )
+    if (!getFlag(info.header.flags, msfilter::ENCRYPTINFO_AES))
         return false;
 
     // algorithm ID 0 defaults to AES128 too, if ENCRYPTINFO_AES flag is set
-    if( info.header.algId != 0 && info.header.algId != msfilter::ENCRYPT_ALGO_AES128 )
+    if (info.header.algId != 0 && info.header.algId != msfilter::ENCRYPT_ALGO_AES128)
         return false;
 
     // hash algorithm ID 0 defaults to SHA-1 too
-    if( info.header.algIdHash != 0 && info.header.algIdHash != msfilter::ENCRYPT_HASH_SHA1 )
+    if (info.header.algIdHash != 0 && info.header.algIdHash != msfilter::ENCRYPT_HASH_SHA1)
         return false;
 
-    if( info.verifier.encryptedVerifierHashSize != 20 )
+    if (info.verifier.encryptedVerifierHashSize != 20)
         return false;
 
     return !rStream.isEof();
@@ -309,14 +300,14 @@ bool DocumentDecryption::readStandard2007EncryptionInfo(BinaryInputStream& rStre
 
 bool DocumentDecryption::readEncryptionInfo()
 {
-    if( !mrOleStorage.isStorage() )
+    if (!mrOleStorage.isStorage())
         return false;
 
-    Reference< XInputStream > xEncryptionInfo( mrOleStorage.openInputStream( "EncryptionInfo" ), UNO_SET_THROW );
+    Reference<XInputStream> xEncryptionInfo(mrOleStorage.openInputStream("EncryptionInfo"), UNO_SET_THROW);
 
     bool bResult = false;
 
-    BinaryXInputStream aBinaryInputStream( xEncryptionInfo, true );
+    BinaryXInputStream aBinaryInputStream(xEncryptionInfo, true);
 
     sal_uInt32 aVersion = aBinaryInputStream.readuInt32();
 
@@ -341,7 +332,7 @@ bool DocumentDecryption::readEncryptionInfo()
 
 Sequence<NamedValue> DocumentDecryption::createEncryptionData(const OUString& rPassword)
 {
-    SequenceAsHashMap aEncryptionData;
+    comphelper::SequenceAsHashMap aEncryptionData;
 
     if (mCryptoType == AGILE)
     {
@@ -360,16 +351,16 @@ bool DocumentDecryption::decrypt(const Reference<XStream>& xDocumentStream)
 {
     bool aResult = false;
 
-    if( !mrOleStorage.isStorage() )
+    if (!mrOleStorage.isStorage())
         return false;
 
     // open the required input streams in the encrypted package
-    Reference< XInputStream > xEncryptedPackage( mrOleStorage.openInputStream( "EncryptedPackage" ), UNO_SET_THROW );
+    Reference<XInputStream> xEncryptedPackage(mrOleStorage.openInputStream("EncryptedPackage"), UNO_SET_THROW);
 
     // create temporary file for unencrypted package
-    Reference< XOutputStream > xDecryptedPackage( xDocumentStream->getOutputStream(), UNO_SET_THROW );
-    BinaryXOutputStream aDecryptedPackage( xDecryptedPackage, true );
-    BinaryXInputStream aEncryptedPackage( xEncryptedPackage, true );
+    Reference<XOutputStream> xDecryptedPackage(xDocumentStream->getOutputStream(), UNO_SET_THROW);
+    BinaryXOutputStream aDecryptedPackage(xDecryptedPackage, true);
+    BinaryXInputStream aEncryptedPackage(xEncryptedPackage, true);
 
     aResult = mEngine->decrypt(aEncryptedPackage, aDecryptedPackage);
 
