@@ -218,16 +218,15 @@ std::vector<std::shared_ptr<osl::File> > binaryGenerated( const char * clFileNam
     assert(pDevID == gpuEnv.mpDevID);
 
     OString fileName = createFileName(gpuEnv.mpDevID, clFileName);
-    osl::File* pNewFile = new osl::File(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
+    auto pNewFile = std::make_shared<osl::File>(rtl::OStringToOUString(fileName, RTL_TEXTENCODING_UTF8));
     if(pNewFile->open(osl_File_OpenFlag_Read) == osl::FileBase::E_None)
     {
-        aGeneratedFiles.push_back(std::shared_ptr<osl::File>(pNewFile));
+        aGeneratedFiles.push_back(pNewFile);
         SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: success");
     }
     else
     {
         SAL_INFO("opencl.file", "Opening binary file '" << fileName << "' for reading: FAIL");
-        delete pNewFile;
     }
 
     return aGeneratedFiles;
