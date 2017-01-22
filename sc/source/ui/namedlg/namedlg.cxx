@@ -278,7 +278,7 @@ bool ScNameDlg::IsNameValid()
 
     ScRangeName* pRangeName = GetRangeName( aScope );
 
-    if (!ScRangeData::IsNameValid( aName, mpDoc ))
+    if (ScRangeData::IsNameValid( aName, mpDoc ) != ScRangeData::NAME_VALID)
     {
         m_pFtInfo->SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         m_pFtInfo->SetText(maErrInvalidNameStr);
