@@ -234,7 +234,7 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
 }
 
 bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
-    rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd, bool bEncodedFilter)
+    rtl_TextEncoding *pCharSet, bool *pSwap, LineEnd *pLineEnd)
 {
     bool bSwap = false;
     rtl_TextEncoding eCharSet = RTL_TEXTENCODING_DONTKNOW;
@@ -369,7 +369,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
     if (pLineEnd)
         *pLineEnd = eLineEnd;
 
-    return bEncodedFilter || (!bIsBareUnicode && eSysLE == eLineEnd);
+    return !bIsBareUnicode && eSysLE == eLineEnd;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
