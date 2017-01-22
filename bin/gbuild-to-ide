@@ -89,39 +89,27 @@ class GbuildParser:
             for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', jsontype)):
                 with open(os.path.join(self.workdir, 'GbuildToJson', jsontype, jsonfilename), 'r') as f:
                     jsondata = json.load(f)
-
-                    (foundincludes, foundisystem) = GbuildParser.__split_includes(jsondata['INCLUDE'])
                     match = GbuildParser._buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
-                    location = os.path.dirname(jsondata['MAKEFILE'])
-
-                    # build Central data object (holds all json information is a easy accessible form
-                    obj = {'name'        : match,
-                           'location'    : location,
-                           'include'     : foundincludes,
-                           'include_sys' : foundisystem,
-                           'defs'        : GbuildParser.__split_defs(jsondata['DEFS']),
-                           'cxxflags'    : GbuildParser.__split_flags(jsondata['CXXFLAGS'], jsondata['CXXFLAGSAPPEND']),
-                           'linked_libs' : jsondata['LINKED_LIBS'].strip().split(' '),
-                           'cflags'      : GbuildParser.__split_flags(jsondata['CFLAGS'], jsondata['CFLAGSAPPEND']),
-                           'ilibtarget'  : jsondata['ILIBTARGET'],
-                            'linked_static_libs' :  jsondata['LINKED_STATIC_LIBS'],
-                            'linktarget' : jsondata['LINKTARGET'],
-                            'objcflags' :  GbuildParser.__split_flags(jsondata['OBJCFLAGS'], jsondata['OBJCFLAGSAPPEND']),
-                           'objcxxflags': GbuildParser.__split_flags(jsondata['OBJCXXFLAGS'], jsondata['OBJCXXFLAGSAPPEND']),
-                           'build_type' : jsontype,
-                           'target_name' : jsontype + '_' + match
-                    }
+                    jsondata['location'] = os.path.dirname(jsondata['MAKEFILE'])
+                    module = jsondata['location'].split('/')[-1]
+                    (jsondata['include'], jsondata['include_sys']) = GbuildParser.__split_includes(jsondata['INCLUDE'])
+                    jsondata['name'] = match
+                    jsondata['build_type'] = jsontype
+                    jsondata['target_name'] = module + '_' + jsontype + '_' + match
+                    jsondata['DEFS'] = GbuildParser.__split_defs(jsondata['DEFS'])
+                    jsondata['LINKED_LIBS'] = jsondata['LINKED_LIBS'].strip().split(' ')
+                    for i in ['CXXFLAGS', 'CFLAGS', 'OBJCFLAGS', 'OBJCXXFLAGS']:
+                        jsondata[i] = GbuildParser.__split_flags(jsondata[i], jsondata[i+'APPEND'])
                     for i in jsonSrc:
-                        obj[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
+                        jsondata[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
 
-                    module = location.split('/')[-1]
+                    module = jsondata['location'].split('/')[-1]
                     if not module in moduleDict:
                         moduleDict[module] = {'targets': [],'headers':{}}
-                    moduleDict[module]['targets'].append(obj)
+                    moduleDict[module]['targets'].append(jsondata)
                     moduleDict[module]['headers'] =self.headers_of(module)
 
-
-        moduleDict['include']={ 'targets': set(), 'headers':self.headers_of('include')}
+        moduleDict['include']={ 'targets': [], 'headers':self.headers_of('include')}
 
         for module in sorted(moduleDict):
             self.modules[module] = moduleDict[module]
@@ -194,8 +182,8 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             defineset = set()
             for lib in modulelibs:
                 for target in self.target_path[lib]:
-                    for i in target[0]['defs'].keys():
-                        tmp = str(i) +','+str(target[0]['defs'][i])
+                    for i in target[0]['DEFS'].keys():
+                        tmp = str(i) +','+str(target[0]['DEFS'][i])
                         if tmp not in defineset:
                             defineset.add(tmp)
             macrofile.write('\n'.join(defineset))
@@ -332,7 +320,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
 
     def generateCommand(self, lib, file):
         command = 'clang++ -Wall'
-        for key, value in lib['defs'].items():
+        for key, value in lib['DEFS'].items():
             command += ' -D'
             command += key
             if value is not None:
@@ -349,7 +337,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
         for isystem in lib['include_sys']:
             command += ' -isystem '
             command += isystem
-        for cxxflag in lib['cxxflags']:
+        for cxxflag in lib['CXXFLAGS']:
             command += ' '
             command += cxxflag
         command += ' -c '
@@ -826,7 +814,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
                          target['target_name'], proj_path, project.guid))
-                libs_in_solution = self.get_dependency_libs(target['linked_libs'], library_projects)
+                libs_in_solution = self.get_dependency_libs(target['LINKED_LIBS'], library_projects)
                 if libs_in_solution:
                     f.write('\tProjectSection(ProjectDependencies) = postProject\n')
                     for lib_guid in libs_in_solution.keys():
@@ -919,7 +907,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
             nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.exe')
             nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
-            nmake_defs_node.text = ';'.join(list(target['defs']) + ['$(NMakePreprocessorDefinitions)'])
+            nmake_defs_node.text = ';'.join(list(target['DEFS']) + ['$(NMakePreprocessorDefinitions)'])
             include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
             include_path_node.text = ';'.join(target['include'] + ['$(IncludePath)'])
 
@@ -1508,7 +1496,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
                             headers_list.append(hf_lopath)
 
             # List defines
-            for key, value in lib['defs'].items():
+            for key, value in lib['DEFS'].items():
                 define = key
                 if value is not None:
                     define += '=' + value
