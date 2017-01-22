@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_39953040",
+        "filename": "qadevOOo/runner/base/java_fat.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-22T04:37:35Z",
+      "side": 1,
+      "message": "I forget what our baseline java version is, but this is only available in Java7 (1.7)",
+      "revId": "7a761f80a1e59ac51f522d4d994ce22188636f23",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
