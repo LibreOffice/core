@@ -919,6 +919,11 @@ interface BaseText
         ExecMethod = ExecField ;
         StateMethod = StateField;
     ]
+    FN_REPLY
+    [
+        ExecMethod = ExecField;
+        StateMethod = StateField;
+    ]
     FN_DELETE_COMMENT
     [
         ExecMethod = ExecField ;

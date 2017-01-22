@@ -19,6 +19,7 @@
 #ifndef INCLUDED_SVX_POSTATTR_HXX
 #define INCLUDED_SVX_POSTATTR_HXX
 
+#include <svl/intitem.hxx>
 #include <svl/stritem.hxx>
 #include <svx/svxdllapi.h>
 
@@ -108,6 +109,31 @@ public:
     inline SvxPostItTextItem& operator=( const SvxPostItTextItem& rText )
     {
         SetValue( rText.GetValue() );
+        return *this;
+    }
+};
+
+// class SvxPostItIdItem -----------------------------------------------
+
+
+/*
+The internal id of a note
+*/
+
+class SVX_DLLPUBLIC SvxPostItIdItem: public SfxUInt32Item
+{
+public:
+    static SfxPoolItem* CreateDefault();
+
+    SvxPostItIdItem( sal_uInt16 nWhich  );
+
+    SvxPostItIdItem( sal_uInt32 rId, sal_uInt16 nWhich  );
+
+    virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
+
+    inline SvxPostItIdItem& operator=( const SvxPostItIdItem& rId )
+    {
+        SetValue( rId.GetValue() );
         return *this;
     }
 };

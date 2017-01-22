@@ -56,6 +56,7 @@
 #include <editeng/contouritem.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/frmdiritem.hxx>
+#include <svx/postattr.hxx>
 #include <svx/svdoutl.hxx>
 #include <svl/whiter.hxx>
 #include <svl/cjkoptions.hxx>

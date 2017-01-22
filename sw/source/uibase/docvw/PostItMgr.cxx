@@ -1627,6 +1627,16 @@ sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const SwPostItFie
     return nullptr;
 }
 
+sw::annotation::SwAnnotationWin* SwPostItMgr::GetAnnotationWin(const sal_uInt32 nPostItId) const
+{
+    for(const_iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
+    {
+        if ( static_cast<const SwPostItField*>((*i)->GetFormatField().GetField())->GetPostItId() == nPostItId )
+            return dynamic_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt.get());
+    }
+    return nullptr;
+}
+
 SwSidebarWin* SwPostItMgr::GetNextPostIt( sal_uInt16 aDirection,
                                           SwSidebarWin* aPostIt )
 {
