@@ -3272,8 +3272,6 @@ map_vs_year_to_version()
     unset vsversion
 
     case $1 in
-    2013)
-        vsversion=12.0;;
     2015)
         vsversion=14.0;;
     *)
@@ -3368,7 +3366,7 @@ find_ucrt()
 
 find_msvc()
 {
-    # Find Visual C++ 2013/2015
+    # Find Visual C++ 2015
     # Args: $1 (optional) : The VS version year
     # Return values: $vctest, $vcyear, $vcnum, $vcnumwithdot
 
@@ -3391,10 +3389,6 @@ find_msvc()
     if test -n "$vctest"; then
         vcnumwithdot=$ver
         case "$vcnumwithdot" in
-        12.0)
-            vcyear=2013
-            vcnum=120
-            ;;
         14.0)
             vcyear=2015
             vcnum=140
@@ -3420,7 +3414,7 @@ if test "$_os" = "WINNT"; then
             if test -n "$with_visual_studio"; then
                 AC_MSG_ERROR([No Visual Studio $with_visual_studio installation found])
             else
-                AC_MSG_ERROR([No Visual Studio 2013/2015 installation found])
+                AC_MSG_ERROR([No Visual Studio 2015 installation found])
             fi
         fi
 
@@ -3488,10 +3482,6 @@ if test "$_os" = "WINNT"; then
 
         # Find the version of devenv.exe
         DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/devenv.exe"
-        if test ! -e "$DEVENV" -a "$vcnum" = "120"; then
-            # for Visual Studio 2013 Express, fall back
-            DEVENV="$VC_PRODUCT_DIR/../Common7/IDE/WDExpress.exe"
-        fi
         if test ! -e "$DEVENV"; then
             AC_MSG_ERROR([No devenv.exe found, Visual Studio installation broken?])
         fi
@@ -5358,7 +5348,7 @@ find_msms()
     my_msm_file=Microsoft_VC${VCVER}_CRT_x86.msm
     AC_MSG_CHECKING([for $my_msm_file])
     msmdir=
-    for ver in 12.0 14.0; do
+    for ver in 14.0; do
         reg_get_value_32 HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/VisualStudio/$ver/Setup/VS/MSMDir
         if test -n "$regvalue"; then
             if test -e "$regvalue/$my_msm_file"; then
@@ -8414,19 +8404,8 @@ int main(int argc, char **argv) {
 internal)
     SYSTEM_PYTHON=
     PYTHON_VERSION_MAJOR=3
-    # On windows we are supporting two different python versions: 3.3 and 3.5.
-    # We msut do it as long as we support MSVC 2013. Python 3.3 can be removed
-    # when MSVC 2013 support was dropped.
-    if test "$COM" = "MSC" -a "$VCVER" = "120"; then
-        PYTHON_VERSION_MINOR=3
-        PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.5
-    else
-        PYTHON_VERSION_MINOR=5
-        PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.5
-    fi
-    if ! grep -q -i python.*${PYTHON_VERSION} ${SRC_ROOT}/download.lst; then
-        AC_MSG_ERROR([PYTHON_VERSION ${PYTHON_VERSION} but no matching file in download.lst])
-    fi
+    PYTHON_VERSION_MINOR=5
+    PYTHON_VERSION=${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}.5
     AC_DEFINE_UNQUOTED([PYTHON_VERSION_STRING], [L"${PYTHON_VERSION}"])
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     # Embedded Python dies without Home set
@@ -13055,7 +13034,7 @@ place yourself in a working directory of you choice.
 
  git clone git://git.savannah.gnu.org/make.git
 
- [go to Start menu, click "All Programs", click "Visual Studio 2013", click "Visual Studio Tools", double-click "VS2013 x86 Native Tools Command Prompt" or "VS2013 x64 Native Tools Command Prompt"]
+ [go to Start menu, click "All Programs", click "Visual Studio 2015", click "Visual Studio Tools", double-click "VS2015 x86 Native Tools Command Prompt" or "VS2015 x64 Native Tools Command Prompt"]
  set PATH=%PATH%;C:\Cygwin\bin
  [or Cygwin64, if that is what you have]
  cd path-to-make-repo-you-cloned-above
