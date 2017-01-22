@@ -318,14 +318,16 @@ bool StgFAT::FreePages( sal_Int32 nStart, bool bAll )
 // and accessing the data on a physical basis. It uses the built-in
 // FAT class for the page allocations.
 
-StgStrm::StgStrm( StgIo& r ) : m_rIo( r )
+StgStrm::StgStrm( StgIo& r )
+    : m_rIo(r),
+      m_pEntry(nullptr),
+      m_nStart(STG_EOF),
+      m_nSize(0),
+      m_nPos(0),
+      m_nPage(STG_EOF),
+      m_nOffset(0),
+      m_nPageSize(m_rIo.GetPhysPageSize())
 {
-    m_pFat    = nullptr;
-    m_nStart  = m_nPage = STG_EOF;
-    m_nOffset = 0;
-    m_pEntry  = nullptr;
-    m_nPos = m_nSize = 0;
-    m_nPageSize = m_rIo.GetPhysPageSize();
 }
 
 StgStrm::~StgStrm()
