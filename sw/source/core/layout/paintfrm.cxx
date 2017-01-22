@@ -972,36 +972,24 @@ void SwLineRects::LockLines( bool bLock )
 
 static void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect & rLRect )
 {
-    double nHalfLWidth = rLRect.Height(  );
-    if ( nHalfLWidth > 1 )
-    {
-        nHalfLWidth = nHalfLWidth / 2;
-    }
-    else
-    {
-        nHalfLWidth = 1;
-    }
+    long startX = rLRect.Left(  ), endX;
+    long startY = rLRect.Top(  ),  endY;
 
-    long startX = rLRect.Left(  );
-    long startY = rLRect.Top(  ) + static_cast<long>(nHalfLWidth);
-    long endX = rLRect.Left(  ) + rLRect.Width(  );
-    long endY = rLRect.Top(  ) + static_cast<long>(nHalfLWidth);
+    // Discriminate vertically stretched rect from horizontally stretched
+    // and restrict minimum nHalfLWidth to 1
+    long nHalfLWidth = std::max( static_cast<long>(std::min( rLRect.Width(  ), rLRect.Height(  ) ) / 2), 1L );
 
     if ( rLRect.Height(  ) > rLRect.Width(  ) )
     {
-        nHalfLWidth = rLRect.Width(  );
-        if ( nHalfLWidth > 1 )
-        {
-            nHalfLWidth = nHalfLWidth / 2;
-        }
-        else
-        {
-            nHalfLWidth = 1;
-        }
-        startX = rLRect.Left(  ) + static_cast<long>(nHalfLWidth);
-        startY = rLRect.Top(  );
-        endX = rLRect.Left(  ) + static_cast<long>(nHalfLWidth);
-        endY = rLRect.Top(  ) + rLRect.Height(  );
+        startX += nHalfLWidth;
+        endX = startX;
+        endY = startY + rLRect.Height(  );
+    }
+    else
+    {
+        startY += nHalfLWidth;
+        endY = startY;
+        endX = startX + rLRect.Width(  );
     }
 
     svtools::DrawLine( *pOut, Point( startX, startY ), Point( endX, endY ),
