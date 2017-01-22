@@ -694,7 +694,7 @@
                                               </packing>
                                             </child>
                                             <child>
-                                              <object class="GtkRadioButton" id="idividualdocuments">
+                                              <object class="GtkRadioButton" id="individualdocuments">
                                                 <property name="label" translatable="yes">Sa_ve as individual documents</property>
                                                 <property name="use_action_appearance">False</property>
                                                 <property name="visible">True</property>
