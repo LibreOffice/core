@@ -607,13 +607,13 @@ const Bitmap CreateDesignPreview( const Reference< XIndexAccess >& xTableStyle, 
     CellInfoMatrix aMatrix;
     FillCellInfoMatrix( aCellInfoVector, rSettings, aMatrix );
 
-// bbbbbbbbbbbb w = 12 pixel
-// bccccccccccb h = 7 pixel
-// bccccccccccb b = border color
-// bcttttttttcb c = cell color
-// bccccccccccb t = text color
-// bccccccccccb
-// bbbbbbbbbbbb
+    // bbbbbbbbbbbb w = 12 pixel
+    // bccccccccccb h = 7 pixel
+    // bccccccccccb b = border color
+    // bcttttttttcb c = cell color
+    // bccccccccccb t = text color
+    // bccccccccccb
+    // bbbbbbbbbbbb
 
     Bitmap aPreviewBmp( Size( nBitmapWidth, nBitmapHeight), 24, nullptr );
     Bitmap::ScopedWriteAccess pAccess(aPreviewBmp);
