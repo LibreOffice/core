@@ -140,7 +140,6 @@ rtl_cache_hash_rescale (
                 rtl_cache_bufctl_type  * next = curr->m_next;
                 rtl_cache_bufctl_type ** head;
 
-                // coverity[negative_shift]
                 head = &(cache->m_hash_table[RTL_CACHE_HASH_INDEX(cache, curr->m_addr)]);
                 curr->m_next = (*head);
                 (*head) = curr;
@@ -212,8 +211,9 @@ rtl_cache_hash_remove (
             if (!(cache->m_features & RTL_CACHE_FEATURE_RESCALE))
             {
                 sal_Size ave = nbuf >> cache->m_hash_shift;
-                // coverity[negative_shift]
-                sal_Size new_size = cache->m_hash_size << (highbit(ave) - 1);
+                const auto bit = highbit(ave);
+                assert(bit > 0);
+                sal_Size new_size = cache->m_hash_size << (bit - 1);
 
                 cache->m_features |= RTL_CACHE_FEATURE_RESCALE;
                 RTL_MEMORY_LOCK_RELEASE(&(cache->m_slab_lock));

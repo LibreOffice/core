@@ -217,8 +217,9 @@ rtl_arena_freelist_insert (
 )
 {
     rtl_arena_segment_type * head;
-
-    head = &(arena->m_freelist_head[highbit(segment->m_size) - 1]);
+    const auto bit = highbit(segment->m_size);
+    assert(bit > 0);
+    head = &(arena->m_freelist_head[bit - 1]);
     QUEUE_INSERT_TAIL_NAMED(head, segment, f);
 
     arena->m_freelist_bitmap |= head->m_size;
