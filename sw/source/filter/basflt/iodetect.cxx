@@ -370,7 +370,7 @@ bool SwIoSystem::IsDetectableText(const sal_Char* pBuf, sal_uLong &rLen,
     if (pLineEnd)
         *pLineEnd = eLineEnd;
 
-    return bEncodedFilter || (!bIsBareUnicode && eSysLE == eLineEnd);
+    return bEncodedFilter || !bIsBareUnicode;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
