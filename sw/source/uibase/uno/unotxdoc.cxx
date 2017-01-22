@@ -3243,7 +3243,7 @@ OUString SwXTextDocument::getPostIts()
         boost::property_tree::ptree aAnnotation;
         SwPostItField* pField = annotationWin->GetPostItField();
         sal_uInt32 nPostItId = annotationWin->GetAnnotationId();
-        bool bReply = annotationWin->IsFollow();
+        sal_uInt32 nParentId = annotationWin->CalcParent();
         Point aAnchorPoint = annotationWin->GetAnchorPos();
         std::string aAnchorPos = std::to_string(pt.X()) + ", " + std::to_string(pt.Y());
         OUString aAuthor = pField->GetPar1();
@@ -3259,7 +3259,7 @@ OUString SwXTextDocument::getPostIts()
         OString sRects = comphelper::string::join("; ", aRects);
 
         aAnnotation.put("id", nPostItId);
-        aAnnotation.put("reply", bReply);
+        aAnnotation.put("parent", nParentId);
         aAnnotation.put("author", aAuthor.toUtf8().getStr());
         aAnnotation.put("text", aText.toUtf8().getStr());
         aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));

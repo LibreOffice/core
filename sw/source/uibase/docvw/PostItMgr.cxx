@@ -151,7 +151,7 @@ namespace {
             sw::annotation::SwAnnotationWin* annotationWin = static_cast<sw::annotation::SwAnnotationWin*>(pItem->pPostIt.get());
             SwPostItField* pField = annotationWin->GetPostItField();
             sal_uInt32 id = annotationWin->GetAnnotationId();
-            bool bReply = annotationWin->IsFollow();
+            sal_uInt32 nParentId = annotationWin->CalcParent();
             Point aAnchorPoint = annotationWin->GetAnchorPos();
             std::string aAnchorPos = std::to_string(pt.X()) + ", " + std::to_string(aAnchorPoint.Y());
             OUString aAuthor = pField->GetPar1();
@@ -167,7 +167,7 @@ namespace {
             OString sRects = comphelper::string::join("; ", aRects);
 
             aAnnotation.put("id", id);
-            aAnnotation.put("reply", bReply);
+            aAnnotation.put("parent", nParentId);
             aAnnotation.put("author", aAuthor.toUtf8().getStr());
             aAnnotation.put("text", aText.toUtf8().getStr());
             aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
@@ -751,7 +751,7 @@ void SwPostItMgr::LayoutPostIts()
                             pItem->pPostIt = pPostIt;
                             if (mpAnswer)
                             {
-                                if (pPostIt->CalcFollow()) //do we really have another note in front of this one
+                                if (static_cast<bool>(pPostIt->CalcParent())) //do we really have another note in front of this one
                                     static_cast<sw::annotation::SwAnnotationWin*>(pPostIt.get())->InitAnswer(mpAnswer);
                                 delete mpAnswer;
                                 mpAnswer = nullptr;
@@ -762,7 +762,7 @@ void SwPostItMgr::LayoutPostIts()
                             pItem->mLayoutStatus,
                             GetColorAnchor(pItem->maLayoutInfo.mRedlineAuthor));
                         pPostIt->SetSidebarPosition(pPage->eSidebarPosition);
-                        pPostIt->SetFollow(pPostIt->CalcFollow());
+                        pPostIt->SetFollow(static_cast<bool>(pPostIt->CalcParent()));
                         aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
                                           ? pPostIt->GetMinimumSizeWithoutMeta()
                                           : pPostIt->GetPostItTextHeight() )
