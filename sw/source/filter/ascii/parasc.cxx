@@ -269,11 +269,13 @@ sal_uLong SwASCIIParser::ReadChars()
         sal_uLong nLen, nOrig;
         nOrig = nLen = rInput.ReadBytes(pArr, ASC_BUFFLEN);
         rtl_TextEncoding eCharSet;
-        bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode);
+        LineEnd eLineEnd;
+        bool bRet = SwIoSystem::IsDetectableText(pArr, nLen, &eCharSet, &bSwapUnicode, &eLineEnd);
         OSL_ENSURE(bRet, "Autodetect of text import without nag dialog must have failed");
         if (bRet && eCharSet != RTL_TEXTENCODING_DONTKNOW)
         {
             aEmpty.SetCharSet(eCharSet);
+            aEmpty.SetParaFlags(eLineEnd);
             rInput.SeekRel(-(long(nLen)));
         }
         else
