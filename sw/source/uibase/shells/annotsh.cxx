@@ -1106,12 +1106,12 @@ void SwAnnotationShell::NoteExec(SfxRequest &rReq)
     sal_uInt16 nSlot = rReq.GetSlot();
     switch (nSlot)
     {
-    case FN_REPLY:
-    case FN_POSTIT:
-    case FN_DELETE_COMMENT:
-        if ( pPostItMgr->HasActiveSidebarWin() )
-            pPostItMgr->GetActiveSidebarWin()->ExecuteCommand(nSlot);
-        break;
+        case FN_REPLY:
+        case FN_POSTIT:
+        case FN_DELETE_COMMENT:
+            if ( pPostItMgr->HasActiveSidebarWin() )
+                pPostItMgr->GetActiveSidebarWin()->ExecuteCommand(nSlot);
+            break;
 
         case FN_DELETE_ALL_NOTES:
             pPostItMgr->Delete();

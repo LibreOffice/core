@@ -1319,8 +1319,8 @@ void SwSidebarWin::ExecuteCommand(sal_uInt16 nSlot)
         }
         case FN_DELETE_COMMENT:
 
-                //Delete(); // do not kill the parent of our open popup menu
-                mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), nullptr, true );
+            //Delete(); // do not kill the parent of our open popup menu
+            mnEventId = Application::PostUserEvent( LINK( this, SwSidebarWin, DeleteHdl), nullptr, true );
             break;
         case FN_FORMAT_ALL_NOTES:
         case FN_DELETE_ALL_NOTES:
