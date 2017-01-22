@@ -578,7 +578,7 @@ void SdrHdl::CreateB2dIAObject()
                     if (xManager.is())
                     {
                         basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
-                        sdr::overlay::OverlayObject* pNewOverlayObject = nullptr;
+                        std::unique_ptr<sdr::overlay::OverlayObject> pNewOverlayObject;
                         if (getenv ("SVX_DRAW_HANDLES") && (eKindOfMarker == BitmapMarkerKind::Rect_7x7 || eKindOfMarker == BitmapMarkerKind::Rect_9x9 || eKindOfMarker == BitmapMarkerKind::Rect_11x11))
                         {
                             double fSize = 7.0;
@@ -618,13 +618,13 @@ void SdrHdl::CreateB2dIAObject()
                                 default:
                                     break;
                             }
-                            pNewOverlayObject = new sdr::overlay::OverlayHandle(aPosition, aB2DSize, aHandleStrokeColor, aHandleFillColor);
+                            pNewOverlayObject.reset(new sdr::overlay::OverlayHandle(aPosition, aB2DSize, aHandleStrokeColor, aHandleFillColor));
                         }
                         else
                         {
-                            pNewOverlayObject = CreateOverlayObject(
+                            pNewOverlayObject.reset(CreateOverlayObject(
                                                     aPosition, eColIndex, eKindOfMarker,
-                                                    rOutDev, aMoveOutsideOffset);
+                                                    rOutDev, aMoveOutsideOffset));
                         }
                         // OVERLAYMANAGER
                         if (pNewOverlayObject)
@@ -2396,7 +2396,7 @@ void SdrCropHdl::CreateB2dIAObject()
                 {
                     basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
 
-                    sdr::overlay::OverlayObject* pOverlayObject = nullptr;
+                    std::unique_ptr<sdr::overlay::OverlayObject> pOverlayObject;
 
                     // animate focused handles
                     if(IsFocusHdl() && (pHdlList->GetFocusHdl() == this))
@@ -2408,7 +2408,7 @@ void SdrCropHdl::CreateB2dIAObject()
 
                         const sal_uInt64 nBlinkTime = rStyleSettings.GetCursorBlinkTime();
 
-                        pOverlayObject = new sdr::overlay::OverlayAnimatedBitmapEx(
+                        pOverlayObject.reset(new sdr::overlay::OverlayAnimatedBitmapEx(
                             aPosition,
                             aBmpEx1,
                             aBmpEx2,
@@ -2418,19 +2418,19 @@ void SdrCropHdl::CreateB2dIAObject()
                             (sal_uInt16)(aBmpEx2.GetSizePixel().Width() - 1) >> 1,
                             (sal_uInt16)(aBmpEx2.GetSizePixel().Height() - 1) >> 1,
                             mfShearX,
-                            mfRotation);
+                            mfRotation));
                     }
                     else
                     {
                         // create centered handle as default
-                        pOverlayObject = new sdr::overlay::OverlayBitmapEx(
+                        pOverlayObject.reset(new sdr::overlay::OverlayBitmapEx(
                             aPosition,
                             aBmpEx1,
                             (sal_uInt16)(aBmpEx1.GetSizePixel().Width() - 1) >> 1,
                             (sal_uInt16)(aBmpEx1.GetSizePixel().Height() - 1) >> 1,
                             0.0,
                             mfShearX,
-                            mfRotation);
+                            mfRotation));
                     }
 
                     // OVERLAYMANAGER
