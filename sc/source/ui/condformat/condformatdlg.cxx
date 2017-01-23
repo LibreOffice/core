@@ -187,10 +187,12 @@ void ScCondFormatList::RecalcAll()
 {
     sal_Int32 nTotalHeight = 0;
     sal_Int32 nIndex = 1;
-    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    for (const auto& item : maEntries)
     {
-        nTotalHeight += (*itr)->GetSizePixel().Height();
-        (*itr)->SetIndex( nIndex );
+        if (!item)
+            continue;
+        nTotalHeight += item->GetSizePixel().Height();
+        item->SetIndex(nIndex);
         ++nIndex;
     }
 
@@ -212,17 +214,19 @@ void ScCondFormatList::RecalcAll()
     }
 
     Point aPoint(0,-1*mpScrollBar->GetThumbPos());
-    for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
+    for (const auto& item : maEntries)
     {
-        (*itr)->SetPosPixel(aPoint);
-        Size aSize = (*itr)->GetSizePixel();
+        if (!item)
+            continue;
+        item->SetPosPixel(aPoint);
+        Size aSize = item->GetSizePixel();
         if(mbHasScrollBar)
             aSize.Width() = aCtrlSize.Width() - nSrcBarSize;
         else
             aSize.Width() = aCtrlSize.Width();
-        (*itr)->SetSizePixel(aSize);
+        item->SetSizePixel(aSize);
 
-        aPoint.Y() += (*itr)->GetSizePixel().Height();
+        aPoint.Y() += item->GetSizePixel().Height();
     }
 }
 
