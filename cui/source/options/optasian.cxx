@@ -48,15 +48,9 @@ const sal_Char cCharacterCompressionType[] = "CharacterCompressionType";
 
 struct SvxForbiddenChars_Impl
 {
-    ~SvxForbiddenChars_Impl();
-
     bool                                  bRemoved;
     std::unique_ptr<ForbiddenCharacters>  pCharacters;
 };
-
-SvxForbiddenChars_Impl::~SvxForbiddenChars_Impl()
-{
-}
 
 typedef ::std::map< LanguageType, SvxForbiddenChars_Impl* > SvxForbiddenCharacterMap_Impl;
 

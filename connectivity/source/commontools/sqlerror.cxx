@@ -52,7 +52,6 @@ namespace connectivity
     {
     public:
         explicit SQLError_Impl( const Reference<XComponentContext> & _rxContext );
-        ~SQLError_Impl();
 
         // versions of the public SQLError methods which are just delegated to this impl-class
         static const OUString& getMessagePrefix();
@@ -91,11 +90,6 @@ namespace connectivity
         :m_aContext( _rxContext )
         ,m_pResources( )
         ,m_bAttemptedInit( false )
-    {
-    }
-
-
-    SQLError_Impl::~SQLError_Impl()
     {
     }
 

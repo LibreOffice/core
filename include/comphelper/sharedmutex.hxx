@@ -36,9 +36,6 @@ namespace comphelper
         SharedMutex();
         SharedMutex( const SharedMutex& );
         SharedMutex& operator=( const SharedMutex& );
-        ~SharedMutex()
-        {
-        }
 
         inline operator ::osl::Mutex& () { return *m_pMutexImpl; }
 

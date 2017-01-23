@@ -118,8 +118,6 @@ public:
         const OUString& installDir,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xCmdEnv);
 
-    ~ExtensionDescription();
-
     const css::uno::Reference<css::xml::dom::XNode>& getRootElement() const
     {
         return m_xRoot;
@@ -241,11 +239,6 @@ ExtensionDescription::ExtensionDescription(
             e.Message, Reference< css::uno::XInterface >(), a);
     }
 }
-
-ExtensionDescription::~ExtensionDescription()
-{
-}
-
 
 FileDoesNotExistFilter::FileDoesNotExistFilter(
     const Reference< css::ucb::XCommandEnvironment >& xCmdEnv):

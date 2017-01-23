@@ -35,16 +35,11 @@ class AutoOGuardArray
 
 public:
     explicit AutoOGuardArray( sal_Int32 nNumElements );
-    ~AutoOGuardArray();
 
     std::unique_ptr< osl::Guard< comphelper::SolarMutex > > &  operator[] ( sal_Int32 i ) { return maGuardArray[i]; }
 };
 
 AutoOGuardArray::AutoOGuardArray( sal_Int32 nNumElements ) : maGuardArray(nNumElements)
-{
-}
-
-AutoOGuardArray::~AutoOGuardArray()
 {
 }
 

@@ -121,10 +121,6 @@ namespace comphelper
             _rComponent.checkDisposed( ComponentBase::GuardAccess() );
         }
 
-        ~ComponentMethodGuard()
-        {
-        }
-
         inline void clear()
         {
             m_aMutexGuard.clear();
