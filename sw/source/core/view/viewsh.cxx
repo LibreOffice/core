@@ -1908,7 +1908,7 @@ void SwViewShell::PaintTile(VirtualDevice &rDevice, int contextWidth, int contex
     // draw - works in logic coordinates
     Paint(rDevice, aOutRect);
 
-    if (SwPostItMgr* pPostItMgr = GetPostItMgr())
+    if (SwPostItMgr* pPostItMgr = GetPostItMgr() && GetViewOptions()->IsPostIts())
         pPostItMgr->PaintTile(rDevice, aOutRect);
 
     // SwViewShell's output device tear down
