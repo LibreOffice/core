@@ -59,6 +59,7 @@
 
 #include <swmodule.hxx>
 #include <annotation.hrc>
+#include <utlui.hrc>
 #include "cmdid.h"
 
 #include <sfx2/request.hxx>
@@ -1351,6 +1352,22 @@ public:
     }
 };
 
+class IsPostitFieldWithPostitId : public FilterFunctor
+{
+    sal_uInt32 m_nPostItId;
+public:
+    explicit IsPostitFieldWithPostitId(sal_uInt32 nPostItId)
+        : m_nPostItId(nPostItId)
+        {}
+
+    bool operator()(const SwFormatField* pField) const override
+    {
+        if (pField->GetField()->GetTyp()->Which() != RES_POSTITFLD)
+            return false;
+        return static_cast<const SwPostItField*>(pField->GetField())->GetPostItId() == m_nPostItId;
+    }
+};
+
 
 //Manages the passed in vector by automatically removing entries if they are deleted
 //and automatically adding entries if they appear in the document and match the
@@ -1469,6 +1486,31 @@ void SwPostItMgr::Delete(const OUString& rAuthor)
         if (mpWrtShell->GotoField(*pField))
             mpWrtShell->DelRight();
     }
+    mpWrtShell->EndUndo();
+    PrepareView();
+    mpWrtShell->EndAllAction();
+    mbLayout = true;
+    CalcRects();
+    LayoutPostIts();
+}
+
+void SwPostItMgr::Delete(sal_uInt32 nPostItId)
+{
+    mpWrtShell->StartAllAction();
+    if (HasActiveSidebarWin() &&
+        static_cast<sw::annotation::SwAnnotationWin*>(mpActivePostIt.get())->GetPostItField()->GetPostItId() == nPostItId)
+    {
+        SetActiveSidebarWin(nullptr);
+    }
+    SwRewriter aRewriter;
+    aRewriter.AddRule(UndoArg1, SW_RESSTR(STR_CONTENT_TYPE_SINGLE_POSTIT));
+    mpWrtShell->StartUndo( UNDO_DELETE, &aRewriter );
+
+    IsPostitFieldWithPostitId aFilter(nPostItId);
+    FieldDocWatchingStack aStack(mvPostItFields, *mpView->GetDocShell(), aFilter);
+    const SwFormatField* pField = aStack.pop();
+    if (mpWrtShell->GotoField(*pField))
+        mpWrtShell->DelRight();
     mpWrtShell->EndUndo();
     PrepareView();
     mpWrtShell->EndAllAction();

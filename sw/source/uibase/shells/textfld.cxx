@@ -330,11 +330,18 @@ void SwTextShell::ExecField(SfxRequest &rReq)
             }
             break;
             case FN_DELETE_COMMENT:
-                if ( GetView().GetPostItMgr() &&
-                     GetView().GetPostItMgr()->HasActiveSidebarWin() )
+            {
+                const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+                if (pIdItem && pIdItem->GetValue() && GetView().GetPostItMgr())
+                {
+                    GetView().GetPostItMgr()->Delete(pIdItem->GetValue());
+                }
+                else if ( GetView().GetPostItMgr() &&
+                          GetView().GetPostItMgr()->HasActiveSidebarWin() )
                 {
                     GetView().GetPostItMgr()->DeleteActiveSidebarWin();
                 }
+            }
             break;
             case FN_DELETE_ALL_NOTES:
                 if ( GetView().GetPostItMgr() )

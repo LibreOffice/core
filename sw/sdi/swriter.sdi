@@ -7080,7 +7080,7 @@ SfxVoidItem ReplyComment FN_REPLY
 ]
 
 SfxVoidItem DeleteComment FN_DELETE_COMMENT
-()
+(SvxPostItIdItem Id SID_ATTR_POSTIT_ID)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,
