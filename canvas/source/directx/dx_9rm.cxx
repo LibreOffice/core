@@ -583,6 +583,14 @@ namespace dxcanvas
             // TODO(P2): get rid of those fine-grained locking
             ::osl::MutexGuard aGuard( maMutex );
 
+            // TODO(F2): since we would like to share precious hardware
+            // resources, the direct3d9 object should be global. each new
+            // request for a canvas should only create a new swapchain.
+            mpDirect3D9 = COMReference<IDirect3D9>(
+                Direct3DCreate9(D3D_SDK_VERSION));
+            if(!mpDirect3D9.is())
+                return false;
+
             maVertexCache.reserve( 1024 );
 
             mpWindow.disposeAndClear();
@@ -619,17 +627,12 @@ namespace dxcanvas
             // let the child window cover the same size as the parent window.
             mpWindow->setPosSizePixel(0,0,maSize.getX(),maSize.getY());
 
-            // TODO(F2): since we would like to share precious hardware
-            // resources, the direct3d9 object should be global. each new
-            // request for a canvas should only create a new swapchain.
-            mpDirect3D9 = COMReference<IDirect3D9>(
-                Direct3DCreate9(D3D_SDK_VERSION));
-            if(!mpDirect3D9.is())
-                return false;
-
             // create a device from the direct3d9 object.
             if(!(createDevice()))
+            {
+                mpWindow.disposeAndClear();
                 return false;
+            }
 
             mpWindow->Show();
 
