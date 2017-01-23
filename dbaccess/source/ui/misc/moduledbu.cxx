@@ -40,7 +40,6 @@ class OModuleImpl
 public:
     /// ctor
     OModuleImpl();
-    ~OModuleImpl();
 
     /// get the manager for the resources of the module
     ResMgr* getResManager();
@@ -50,10 +49,6 @@ OModuleImpl::OModuleImpl()
     :m_pResources(nullptr)
 {
 
-}
-
-OModuleImpl::~OModuleImpl()
-{
 }
 
 ResMgr* OModuleImpl::getResManager()

@@ -258,7 +258,6 @@ namespace internal
 
     public:
         explicit PropertyForwarder( OPropertySetAggregationHelper& _rAggregationHelper );
-        ~PropertyForwarder();
 
         /** declares that the forwarder should be responsible for the given property
 
@@ -283,11 +282,6 @@ namespace internal
     PropertyForwarder::PropertyForwarder( OPropertySetAggregationHelper& _rAggregationHelper )
         :m_rAggregationHelper( _rAggregationHelper )
         ,m_nCurrentlyForwarding( -1 )
-    {
-    }
-
-
-    PropertyForwarder::~PropertyForwarder()
     {
     }
 

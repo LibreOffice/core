@@ -35,7 +35,6 @@ class PropertyMapImpl final
 {
 public:
     PropertyMapImpl() throw();
-    ~PropertyMapImpl() throw();
 
     void add(PropertyMapEntry const * pMap) throw();
     void remove( const OUString& aName ) throw();
@@ -55,10 +54,6 @@ private:
 }
 
 PropertyMapImpl::PropertyMapImpl() throw()
-{
-}
-
-PropertyMapImpl::~PropertyMapImpl() throw()
 {
 }
 

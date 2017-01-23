@@ -155,7 +155,6 @@ class RegisteredDb: public BackendDb
 public:
     RegisteredDb( css::uno::Reference<css::uno::XComponentContext> const &  xContext,
                   OUString const & url);
-    virtual ~RegisteredDb() override {};
 
 
     void addEntry(OUString const & url);

@@ -62,7 +62,6 @@ class ButtonBox
         {
             mnCurrentButton = NO_BUTTON_SELECTED;
         };
-        ~ButtonBox() {};
         void AddButton(VclPtr<PushButton> pButton)
         {
             maButtonList.push_back(pButton);

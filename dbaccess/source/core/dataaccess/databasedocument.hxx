@@ -716,10 +716,6 @@ public:
     {
     }
 
-    ~DocumentGuard()
-    {
-    }
-
     void clear()
     {
         ModelMethodGuard::clear();

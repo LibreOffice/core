@@ -603,10 +603,6 @@ public:
         m_SolarGuard.reset(); // SolarMutex first
         m_OslGuard.reset();
     }
-
-    ~ModelMethodGuard()
-    {
-    }
 };
 
 }   // namespace dbaccess

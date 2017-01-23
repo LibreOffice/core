@@ -544,7 +544,6 @@ namespace dbmm
     public:
         explicit ScriptsStorage( MigrationLog& _rLogger );
         ScriptsStorage( const Reference< XModel >& _rxDocument, MigrationLog& _rLogger );
-        ~ScriptsStorage();
 
         /** determines whether the instance is valid, i.e. refers to a valid root storage
             for reading/storing scripts
@@ -604,10 +603,6 @@ namespace dbmm
         ,m_xScriptsStorage()
     {
         bind( _rxDocument );
-    }
-
-    ScriptsStorage::~ScriptsStorage()
-    {
     }
 
     bool ScriptsStorage::commit()
@@ -784,7 +779,6 @@ namespace dbmm
             IMigrationProgress& _rProgress,
             MigrationLog& _rLogger
         );
-        ~MigrationEngine_Impl();
 
         inline  size_t      getFormCount() const    { return m_nFormCount; }
         inline  size_t      getReportCount()const   { return m_nReportCount; }
@@ -915,10 +909,6 @@ namespace dbmm
         ,m_nReportCount( 0 )
     {
         OSL_VERIFY( impl_collectSubDocuments_nothrow() );
-    }
-
-    MigrationEngine_Impl::~MigrationEngine_Impl()
-    {
     }
 
     bool MigrationEngine_Impl::migrateAll()
