@@ -859,19 +859,17 @@ namespace svxform
             }
         };
 
-        TerminateListener* mpListener;
-        css::uno::Reference<css::frame::XTerminateListener> mxLifeCycle;
+        rtl::Reference<TerminateListener> mxListener;
     public:
         QuitGuard()
-            : mpListener(new TerminateListener)
-            , mxLifeCycle(mpListener)
+            : mxListener(new TerminateListener)
         {
-            mpListener->start();
+            mxListener->start();
         }
 
         ~QuitGuard()
         {
-            mpListener->stop();
+            mxListener->stop();
         }
     };
 
