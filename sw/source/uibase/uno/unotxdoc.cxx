@@ -119,6 +119,7 @@
 #include <drawdoc.hxx>
 #include <SwStyleNameMapper.hxx>
 #include <osl/file.hxx>
+#include <comphelper/lok.hxx>
 #include <comphelper/storagehelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/saveopt.hxx>
@@ -3292,7 +3293,14 @@ void SwXTextDocument::initializeForTiledRendering(const css::uno::Sequence<css::
             pDocShell->SetView(pView);
         }
     }
+
+    aViewOption.SetPostIts(comphelper::LibreOfficeKit::isTiledAnnotations());
     pViewShell->ApplyViewOptions(aViewOption);
+
+    // position the pages again after setting view options. Eg: if postit
+    // rendering is false, then there would be no sidebar, so width of the
+    // document needs to be adjusted
+    pViewShell->GetLayout()->CheckViewLayout( pViewShell->GetViewOptions(), nullptr );
 
     // Disable map mode, so that it's possible to send mouse event coordinates
     // directly in twips.

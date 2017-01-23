@@ -69,6 +69,11 @@ typedef enum
      * LOK_CALLBACK_INVALIDATE_TILES payload.
      */
     LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK = (1ULL << 2),
+
+    /**
+     * Turn off tile rendering for annotations
+     */
+    LOK_FEATURE_NO_TILED_ANNOTATIONS = (1ULL << 3)
 }
 LibreOfficeKitOptionalFeatures;
 

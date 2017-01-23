@@ -2786,6 +2786,8 @@ static void lo_setOptionalFeatures(LibreOfficeKit* pThis, uint64_t const feature
     pLib->mOptionalFeatures = features;
     if (features & LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK)
         comphelper::LibreOfficeKit::setPartInInvalidation(true);
+    if (features & LOK_FEATURE_NO_TILED_ANNOTATIONS)
+        comphelper::LibreOfficeKit::setTiledAnnotations(false);
 }
 
 static void lo_setDocumentPassword(LibreOfficeKit* pThis,

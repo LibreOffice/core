@@ -52,6 +52,10 @@ COMPHELPER_DLLPUBLIC void setPartInInvalidation(bool bPartInInvalidation);
 COMPHELPER_DLLPUBLIC bool isTiledPainting();
 /// Set if we are doing tiled painting.
 COMPHELPER_DLLPUBLIC void setTiledPainting(bool bTiledPainting);
+/// Set if we want no annotations rendering
+COMPHELPER_DLLPUBLIC void setTiledAnnotations(bool bTiledAnnotations);
+/// Check if annotations rendering is turned off
+COMPHELPER_DLLPUBLIC bool isTiledAnnotations();
 
 // Status indicator handling. Even if in theory there could be several status indicators active at
 // the same time, in practice there is only one at a time, so we don't handle any identification of
