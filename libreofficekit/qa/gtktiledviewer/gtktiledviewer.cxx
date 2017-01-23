@@ -1470,6 +1470,8 @@ static void openDocumentCallback (GObject* source_object, GAsyncResult* res, gpo
 
     gtk_widget_show_all(rWindow.m_pStatusBar);
     gtk_widget_hide(rWindow.m_pProgressBar);
+
+    gtk_toggle_tool_button_set_active(GTK_TOGGLE_TOOL_BUTTON(rWindow.m_pEnableEditing), TRUE);
 }
 
 /**
