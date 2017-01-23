@@ -92,7 +92,7 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
     if( IsSelected() )
     {
         rStateSet.AddState( AccessibleStateType::SELECTED );
-        assert(bIsSelected && "bSelected out of sync");
+        assert(m_bIsSelected && "bSelected out of sync");
         ::rtl::Reference < SwAccessibleContext > xThis( this );
         GetMap()->SetCursorContext( xThis );
     }
@@ -101,14 +101,14 @@ void SwAccessibleCell::GetStates( ::utl::AccessibleStateSetHelper& rStateSet )
 SwAccessibleCell::SwAccessibleCell( SwAccessibleMap *pInitMap,
                                     const SwCellFrame *pCellFrame )
     : SwAccessibleContext( pInitMap, AccessibleRole::TABLE_CELL, pCellFrame )
-    , aSelectionHelper( *this )
-    , bIsSelected( false )
+    , m_aSelectionHelper( *this )
+    , m_bIsSelected( false )
 {
     SolarMutexGuard aGuard;
     OUString sBoxName( pCellFrame->GetTabBox()->GetName() );
     SetName( sBoxName );
 
-    bIsSelected = IsSelected();
+    m_bIsSelected = IsSelected();
 
     css::uno::Reference<css::accessibility::XAccessible> xTableReference(
         getAccessibleParent());
@@ -127,8 +127,8 @@ bool SwAccessibleCell::InvalidateMyCursorPos()
     bool bOld;
     {
         osl::MutexGuard aGuard( m_Mutex );
-        bOld = bIsSelected;
-        bIsSelected = bNew;
+        bOld = m_bIsSelected;
+        m_bIsSelected = bNew;
     }
     if( bNew )
     {
@@ -227,7 +227,7 @@ void SwAccessibleCell::InvalidateCursorPos_()
 bool SwAccessibleCell::HasCursor()
 {
     osl::MutexGuard aGuard( m_Mutex );
-    return bIsSelected;
+    return m_bIsSelected;
 }
 
 SwAccessibleCell::~SwAccessibleCell()
@@ -453,14 +453,14 @@ void SwAccessibleCell::selectAccessibleChild(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    aSelectionHelper.selectAccessibleChild(nChildIndex);
+    m_aSelectionHelper.selectAccessibleChild(nChildIndex);
 }
 
 sal_Bool SwAccessibleCell::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    return aSelectionHelper.isAccessibleChildSelected(nChildIndex);
+    return m_aSelectionHelper.isAccessibleChildSelected(nChildIndex);
 }
 
 void SwAccessibleCell::clearAccessibleSelection(  )
@@ -471,27 +471,27 @@ void SwAccessibleCell::clearAccessibleSelection(  )
 void SwAccessibleCell::selectAllAccessibleChildren(  )
     throw ( uno::RuntimeException, std::exception )
 {
-    aSelectionHelper.selectAllAccessibleChildren();
+    m_aSelectionHelper.selectAllAccessibleChildren();
 }
 
 sal_Int32 SwAccessibleCell::getSelectedAccessibleChildCount(  )
     throw ( uno::RuntimeException, std::exception )
 {
-    return aSelectionHelper.getSelectedAccessibleChildCount();
+    return m_aSelectionHelper.getSelectedAccessibleChildCount();
 }
 
 uno::Reference<XAccessible> SwAccessibleCell::getSelectedAccessibleChild(
     sal_Int32 nSelectedChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
-    return aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
+    return m_aSelectionHelper.getSelectedAccessibleChild(nSelectedChildIndex);
 }
 
 void SwAccessibleCell::deselectAccessibleChild(
     sal_Int32 nSelectedChildIndex )
     throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
-    aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
+    m_aSelectionHelper.deselectAccessibleChild(nSelectedChildIndex);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
