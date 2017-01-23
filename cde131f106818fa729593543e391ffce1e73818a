@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_efb5967e",
+        "filename": "sc/inc/globstr.hrc",
+        "patchSetId": 4
+      },
+      "lineNbr": 715,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-23T23:37:42Z",
+      "side": 1,
+      "message": "Just a nitpick: why not align to the same column with the other values?",
+      "range": {
+        "startLine": 715,
+        "startChar": 39,
+        "endLine": 715,
+        "endChar": 44
+      },
+      "revId": "cde131f106818fa729593543e391ffce1e73818a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_cfc0d2e3",
+        "filename": "sc/source/ui/namedlg/namedefdlg.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 174,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-23T23:37:42Z",
+      "side": 1,
+      "message": "It\u0027s unnecessary to duplicate the block just for the different error type and message and even call IsNameValid() twice. Instead, call it once and act on the different return values.",
+      "revId": "cde131f106818fa729593543e391ffce1e73818a",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
