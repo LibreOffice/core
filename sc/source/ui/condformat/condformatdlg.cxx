@@ -39,6 +39,7 @@
 ScCondFormatList::ScCondFormatList(vcl::Window* pParent, WinBits nStyle)
     : Control(pParent, nStyle | WB_DIALOGCONTROL)
     , mbHasScrollBar(false)
+    , mbFrozen(false)
     , mpScrollBar(VclPtr<ScrollBar>::Create(this, WB_VERT ))
     , mpDoc(nullptr)
     , mpDialogParent(nullptr)
@@ -56,6 +57,7 @@ ScCondFormatList::~ScCondFormatList()
 
 void ScCondFormatList::dispose()
 {
+    Freeze();
     mpDialogParent.clear();
     mpScrollBar.disposeAndClear();
     for (auto it = maEntries.begin(); it != maEntries.end(); ++it)
@@ -72,6 +74,8 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
     mpDoc = pDoc;
     maPos = rPos;
     maRanges = rRanges;
+
+    Freeze();
 
     if(pFormat)
     {
@@ -137,6 +141,7 @@ void ScCondFormatList::init(ScDocument* pDoc, ScCondFormatDlg* pDialogParent,
                 break;
         }
     }
+    Thaw();
     RecalcAll();
     if (!maEntries.empty())
         (*maEntries.begin())->SetActive();
@@ -185,6 +190,9 @@ ScConditionalFormat* ScCondFormatList::GetConditionalFormat() const
 
 void ScCondFormatList::RecalcAll()
 {
+    if (mbFrozen)
+        return;
+
     sal_Int32 nTotalHeight = 0;
     sal_Int32 nIndex = 1;
     for (const auto& item : maEntries)
@@ -257,6 +265,7 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
             if((*itr)->GetType() == condformat::entry::COLORSCALE2)
                 return;
 
+            Freeze();
             itr->disposeAndClear();
             *itr = VclPtr<ScColorScale2FrmtEntry>::Create( this, mpDoc, maPos );
             break;
@@ -264,6 +273,7 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
             if((*itr)->GetType() == condformat::entry::COLORSCALE3)
                 return;
 
+            Freeze();
             itr->disposeAndClear();
             *itr = VclPtr<ScColorScale3FrmtEntry>::Create( this, mpDoc, maPos );
             break;
@@ -271,6 +281,7 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
             if((*itr)->GetType() == condformat::entry::DATABAR)
                 return;
 
+            Freeze();
             itr->disposeAndClear();
             *itr = VclPtr<ScDataBarFrmtEntry>::Create( this, mpDoc, maPos );
             break;
@@ -278,6 +289,7 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
             if((*itr)->GetType() == condformat::entry::ICONSET)
                 return;
 
+            Freeze();
             itr->disposeAndClear();
             *itr = VclPtr<ScIconSetFrmtEntry>::Create( this, mpDoc, maPos );
             break;
@@ -286,6 +298,7 @@ IMPL_LINK(ScCondFormatList, ColFormatTypeHdl, ListBox&, rBox, void)
     }
     mpDialogParent->InvalidateRefData();
     (*itr)->SetActive();
+    Thaw();
     RecalcAll();
 }
 
@@ -326,6 +339,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
                 case condformat::entry::ICONSET:
                     return;
             }
+            Freeze();
             itr->disposeAndClear();
             *itr = VclPtr<ScColorScale3FrmtEntry>::Create(this, mpDoc, maPos);
             mpDialogParent->InvalidateRefData();
@@ -335,6 +349,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
             if((*itr)->GetType() == condformat::entry::CONDITION)
                 return;
 
+            Freeze();
             itr->disposeAndClear();
             *itr = VclPtr<ScConditionFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
             mpDialogParent->InvalidateRefData();
@@ -344,6 +359,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
             if((*itr)->GetType() == condformat::entry::FORMULA)
                 return;
 
+            Freeze();
             itr->disposeAndClear();
             *itr = VclPtr<ScFormulaFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
             mpDialogParent->InvalidateRefData();
@@ -353,6 +369,7 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
             if((*itr)->GetType() == condformat::entry::DATE)
                 return;
 
+            Freeze();
             itr->disposeAndClear();
             *itr = VclPtr<ScDateFrmtEntry>::Create( this, mpDoc );
             mpDialogParent->InvalidateRefData();
@@ -360,11 +377,13 @@ IMPL_LINK(ScCondFormatList, AfterTypeListHdl, void*, p, void)
             break;
 
     }
+    Thaw();
     RecalcAll();
 }
 
 IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl, Button*, void )
 {
+    Freeze();
     VclPtr<ScCondFrmtEntry> pNewEntry = VclPtr<ScConditionFrmtEntry>::Create(this, mpDoc, mpDialogParent, maPos);
     maEntries.push_back( pNewEntry );
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
@@ -373,11 +392,13 @@ IMPL_LINK_NOARG( ScCondFormatList, AddBtnHdl, Button*, void )
     }
     mpDialogParent->InvalidateRefData();
     pNewEntry->SetActive();
+    Thaw();
     RecalcAll();
 }
 
 IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl, Button*, void )
 {
+    Freeze();
     for(EntryContainer::iterator itr = maEntries.begin(); itr != maEntries.end(); ++itr)
     {
         auto widget = *itr;
@@ -389,6 +410,7 @@ IMPL_LINK_NOARG( ScCondFormatList, RemoveBtnHdl, Button*, void )
         }
     }
     mpDialogParent->InvalidateRefData();
+    Thaw();
     RecalcAll();
 }
 
@@ -397,6 +419,7 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry&, rEntry, void )
     if(rEntry.IsSelected())
         return;
 
+    Freeze();
     //A child has focus, but we will hide that, so regrab to whatever new thing gets
     //shown instead of leaving it stuck in the inaccessible hidden element
     bool bReGrabFocus = HasChildPathFocus();
@@ -406,6 +429,7 @@ IMPL_LINK( ScCondFormatList, EntrySelectHdl, ScCondFrmtEntry&, rEntry, void )
     }
     mpDialogParent->InvalidateRefData();
     rEntry.SetActive();
+    Thaw();
     RecalcAll();
     if (bReGrabFocus)
         GrabFocus();

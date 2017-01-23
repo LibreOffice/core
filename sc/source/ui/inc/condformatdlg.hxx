@@ -47,6 +47,7 @@ private:
     EntryContainer maEntries;
 
     bool mbHasScrollBar;
+    bool mbFrozen;
     VclPtr<ScrollBar> mpScrollBar;
 
     ScDocument* mpDoc;
@@ -70,6 +71,8 @@ public:
     virtual void Resize() override;
 
     ScConditionalFormat* GetConditionalFormat() const;
+    void Freeze() { mbFrozen = true; }
+    void Thaw() { mbFrozen = false; }
     void RecalcAll();
 
     DECL_LINK( AddBtnHdl, Button*, void );
