@@ -107,9 +107,6 @@ class SmRect
             bHasAlignInfo;
 
 protected:
-            void BuildRect (const OutputDevice &rDev, const SmFormat *pFormat,
-                            const OUString &rText, sal_uInt16 nBorderWidth);
-
     inline  void CopyMBL(const SmRect& rRect);
             void CopyAlignInfo(const SmRect& rRect);
 
@@ -118,7 +115,7 @@ protected:
 public:
             SmRect();
             SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
-                   const OUString &rText, long nBorderWidth);
+                   const OUString &rText, sal_uInt16 nBorderWidth);
             SmRect(long nWidth, long nHeight);
 
 
