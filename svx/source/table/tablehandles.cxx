@@ -176,7 +176,7 @@ void TableEdgeHdl::CreateB2dIAObject()
                                 // create overlay object for visible parts
                                 sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aVisible, true);
                                 xManager->add(*pOverlayObject);
-                                maOverlayGroup.append(*pOverlayObject);
+                                maOverlayGroup.append(pOverlayObject);
                             }
 
                             if(aInvisible.count())
@@ -186,7 +186,7 @@ void TableEdgeHdl::CreateB2dIAObject()
                                 // (see OverlayTableEdge implementation)
                                 sdr::overlay::OverlayObject* pOverlayObject = new OverlayTableEdge(aInvisible, false);
                                 xManager->add(*pOverlayObject);
-                                maOverlayGroup.append(*pOverlayObject);
+                                maOverlayGroup.append(pOverlayObject);
                             }
                         }
                     }
@@ -293,7 +293,7 @@ void TableBorderHdl::CreateB2dIAObject()
                                                            aHilightColor, fTransparence,
                                                            fWidth, 0.0, 0.0, bAnimate);
                     xManager->add(*pOverlayObject);
-                    maOverlayGroup.append(*pOverlayObject);
+                    maOverlayGroup.append(pOverlayObject);
                 }
             }
         }

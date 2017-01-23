@@ -104,7 +104,7 @@ void SdrDropMarkerOverlay::ImplCreateOverlays(
                 rLinePolyPolygon);
 
             xTargetOverlay->add(*pNew);
-            maObjects.append(*pNew);
+            maObjects.append(pNew);
         }
     }
 }

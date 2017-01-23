@@ -77,7 +77,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
             sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                 aB2DPolyPolygon);
             xTargetOverlay->add(*pNew);
-            maObjects.append(*pNew);
+            maObjects.append(pNew);
 
             // glue points
             for(sal_uInt16 i(0); i < 4; i++)
@@ -101,7 +101,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
                 pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                     aTempPolyPoly);
                 xTargetOverlay->add(*pNew);
-                maObjects.append(*pNew);
+                maObjects.append(pNew);
             }
         }
     }
@@ -153,7 +153,7 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
                 sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
 
                 xOverlayManager->add(*pNew);
-                maObjects.append(*pNew);
+                maObjects.append(pNew);
             }
 
             if(rPolyPoly.count())
@@ -161,7 +161,7 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
                 sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                     rPolyPoly);
                 xOverlayManager->add(*pNew);
-                maObjects.append(*pNew);
+                maObjects.append(pNew);
             }
         }
     }

@@ -206,7 +206,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
                     sdr::overlay::OverlayPrimitive2DSequenceObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aContent);
 
                     xTargetOverlay->add(*pNew);
-                    maObjects.append(*pNew);
+                    maObjects.append(pNew);
                 }
             }
             else
@@ -220,7 +220,7 @@ void Impl3DMirrorConstructOverlay::SetMirrorAxis(Point aMirrorAxisA, Point aMirr
                     sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
                         aPolyPolygon);
                     xTargetOverlay->add(*pNew);
-                    maObjects.append(*pNew);
+                    maObjects.append(pNew);
                 }
             }
         }

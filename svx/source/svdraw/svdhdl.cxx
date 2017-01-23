@@ -630,7 +630,7 @@ void SdrHdl::CreateB2dIAObject()
                         if (pNewOverlayObject)
                         {
                             xManager->add(*pNewOverlayObject);
-                            maOverlayGroup.append(*pNewOverlayObject);
+                            maOverlayGroup.append(pNewOverlayObject);
                         }
                     }
                 }
@@ -1142,7 +1142,7 @@ void SdrHdlColor::CreateB2dIAObject()
 
                             // OVERLAYMANAGER
                             xManager->add(*pNewOverlayObject);
-                            maOverlayGroup.append(*pNewOverlayObject);
+                            maOverlayGroup.append(pNewOverlayObject);
                         }
                     }
                 }
@@ -1307,7 +1307,7 @@ void SdrHdlGradient::CreateB2dIAObject()
 
                             pNewOverlayObject->setBaseColor(IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
                             xManager->add(*pNewOverlayObject);
-                            maOverlayGroup.append(*pNewOverlayObject);
+                            maOverlayGroup.append(pNewOverlayObject);
 
                             // arrowhead
                             Point aLeft(aMidPoint.X() + (sal_Int32)(aPerpend.getX() * fHalfArrowWidth),
@@ -1329,7 +1329,7 @@ void SdrHdlGradient::CreateB2dIAObject()
                             DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
                             xManager->add(*pNewOverlayObject);
-                            maOverlayGroup.append(*pNewOverlayObject);
+                            maOverlayGroup.append(pNewOverlayObject);
                         }
                     }
                 }
@@ -1457,7 +1457,7 @@ void SdrHdlLine::CreateB2dIAObject()
                             pNewOverlayObject->setBaseColor(Color(COL_LIGHTRED));
 
                             xManager->add(*pNewOverlayObject);
-                            maOverlayGroup.append(*pNewOverlayObject);
+                            maOverlayGroup.append(pNewOverlayObject);
                         }
                     }
                 }
@@ -1517,7 +1517,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
                                 pNewOverlayObject->setBaseColor(Color(COL_LIGHTBLUE));
 
                                 xManager->add(*pNewOverlayObject);
-                                maOverlayGroup.append(*pNewOverlayObject);
+                                maOverlayGroup.append(pNewOverlayObject);
                             }
                         }
                     }
@@ -1563,7 +1563,7 @@ void E3dVolumeMarker::CreateB2dIAObject()
                             pNewOverlayObject->setBaseColor(Color(COL_BLACK));
 
                             xManager->add(*pNewOverlayObject);
-                            maOverlayGroup.append(*pNewOverlayObject);
+                            maOverlayGroup.append(pNewOverlayObject);
                         }
                     }
                 }
@@ -1629,7 +1629,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
                                 if (pNewOverlayObject)
                                 {
                                     xManager->add(*pNewOverlayObject);
-                                    maOverlayGroup.append(*pNewOverlayObject);
+                                    maOverlayGroup.append(pNewOverlayObject);
                                 }
                             }
                         }
@@ -1750,7 +1750,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
                             if (pNewOverlayObject)
                             {
                                 xManager->add(*pNewOverlayObject);
-                                maOverlayGroup.append(*pNewOverlayObject);
+                                maOverlayGroup.append(pNewOverlayObject);
                             }
                         }
                     }
@@ -1821,7 +1821,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
                             // OVERLAYMANAGER
                             pNewOverlayObject->setHittable(false);
                             xManager->add(*pNewOverlayObject);
-                            maOverlayGroup.append(*pNewOverlayObject);
+                            maOverlayGroup.append(pNewOverlayObject);
                         }
                     }
                 }
@@ -2437,7 +2437,7 @@ void SdrCropHdl::CreateB2dIAObject()
                     if(pOverlayObject)
                     {
                         xManager->add(*pOverlayObject);
-                        maOverlayGroup.append(*pOverlayObject);
+                        maOverlayGroup.append(pOverlayObject);
                     }
                 }
             }
@@ -2651,7 +2651,7 @@ void SdrCropViewHdl::CreateB2dIAObject()
                 pNew->setHittable(false);
 
                 xManager->add(*pNew);
-                maOverlayGroup.append(*pNew);
+                maOverlayGroup.append(pNew);
             }
         }
     }

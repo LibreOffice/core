@@ -788,7 +788,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
         {
             sdr::overlay::OverlayObject* pNewOverlayObject = new sdr::overlay::OverlayPrimitive2DSequenceObject(aResult);
             rOverlayManager.add(*pNewOverlayObject);
-            addToOverlayObjectList(*pNewOverlayObject);
+            addToOverlayObjectList(pNewOverlayObject);
         }
 
         if(!aResultTransparent.empty())
@@ -798,7 +798,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
 
             sdr::overlay::OverlayObject* pNewOverlayObject = new sdr::overlay::OverlayPrimitive2DSequenceObject(aResultTransparent);
             rOverlayManager.add(*pNewOverlayObject);
-            addToOverlayObjectList(*pNewOverlayObject);
+            addToOverlayObjectList(pNewOverlayObject);
         }
     }
 
@@ -814,7 +814,7 @@ void SdrDragMethod::CreateOverlayGeometry(sdr::overlay::OverlayManager& rOverlay
             aTopLeft, aBottomRight, true, false);
 
         rOverlayManager.add(*pNew);
-        addToOverlayObjectList(*pNew);
+        addToOverlayObjectList(pNew);
     }
 }
 

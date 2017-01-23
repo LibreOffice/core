@@ -289,7 +289,7 @@ void SdPathHdl::CreateB2dIAObject()
                             sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
 
                             xManager->add(*pNew);
-                            maOverlayGroup.append(*pNew);
+                            maOverlayGroup.append(pNew);
                         }
                     }
                 }

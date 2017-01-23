@@ -5848,7 +5848,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
         ::basegfx::B2DRange aRange(aLogic.Left(), aLogic.Top(), aLogic.Right(), aLogic.Bottom());
         ScOverlayDashedBorder* pDashedBorder = new ScOverlayDashedBorder(aRange, aHighlight);
         xOverlayManager->add(*pDashedBorder);
-        mpOOSelectionBorder->append(*pDashedBorder);
+        mpOOSelectionBorder->append(pDashedBorder);
     }
 
     if ( aOldMode != aDrawMode )
@@ -6066,7 +6066,7 @@ void ScGridWindow::UpdateCursorOverlay()
 
                 xOverlayManager->add(*pOverlay);
                 mpOOCursors.reset(new sdr::overlay::OverlayObjectList);
-                mpOOCursors->append(*pOverlay);
+                mpOOCursors->append(pOverlay);
 
                 // notify the LibreOfficeKit too
                 updateLibreOfficeKitSelection(pViewData, aPixelRects);
@@ -6142,7 +6142,7 @@ void ScGridWindow::UpdateSelectionOverlay()
 
             xOverlayManager->add(*pOverlay);
             mpOOSelection.reset(new sdr::overlay::OverlayObjectList);
-            mpOOSelection->append(*pOverlay);
+            mpOOSelection->append(pOverlay);
 
             // notify the LibreOfficeKit too
             updateLibreOfficeKitSelection(pViewData, aPixelRects);
@@ -6239,7 +6239,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
 
             xOverlayManager->add(*pOverlay);
             mpOOAutoFill.reset(new sdr::overlay::OverlayObjectList);
-            mpOOAutoFill->append(*pOverlay);
+            mpOOAutoFill->append(pOverlay);
         }
 
         if ( aOldMode != aDrawMode )
@@ -6366,7 +6366,7 @@ void ScGridWindow::UpdateDragRectOverlay()
 
             xOverlayManager->add(*pOverlay);
             mpOODragRect.reset(new sdr::overlay::OverlayObjectList);
-            mpOODragRect->append(*pOverlay);
+            mpOODragRect->append(pOverlay);
         }
     }
 
@@ -6412,7 +6412,7 @@ void ScGridWindow::UpdateHeaderOverlay()
 
             xOverlayManager->add(*pOverlay);
             mpOOHeader.reset(new sdr::overlay::OverlayObjectList);
-            mpOOHeader->append(*pOverlay);
+            mpOOHeader->append(pOverlay);
         }
     }
 
@@ -6479,7 +6479,7 @@ void ScGridWindow::UpdateShrinkOverlay()
 
             xOverlayManager->add(*pOverlay);
             mpOOShrink.reset(new sdr::overlay::OverlayObjectList);
-            mpOOShrink->append(*pOverlay);
+            mpOOShrink->append(pOverlay);
         }
     }
 

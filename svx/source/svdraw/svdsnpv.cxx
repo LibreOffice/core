@@ -62,7 +62,7 @@ ImplPageOriginOverlay::ImplPageOriginOverlay(const SdrPaintView& rView, const ba
             sdr::overlay::OverlayCrosshairStriped* aNew = new sdr::overlay::OverlayCrosshairStriped(
                 maPosition);
             xTargetOverlay->add(*aNew);
-            maObjects.append(*aNew);
+            maObjects.append(aNew);
         }
     }
 }
@@ -140,7 +140,7 @@ ImplHelpLineOverlay::ImplHelpLineOverlay(
             sdr::overlay::OverlayHelplineStriped* aNew = new sdr::overlay::OverlayHelplineStriped(
                 maPosition, meHelpLineKind);
             xTargetOverlay->add(*aNew);
-            maObjects.append(*aNew);
+            maObjects.append(aNew);
         }
     }
 }

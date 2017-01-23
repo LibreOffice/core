@@ -215,7 +215,7 @@ void DragMethod_RotateDiagram::CreateOverlayGeometry(sdr::overlay::OverlayManage
         sdr::overlay::OverlayPolyPolygonStripedAndFilled* pNew = new sdr::overlay::OverlayPolyPolygonStripedAndFilled(
             aPolyPolygon);
         rOverlayManager.add(*pNew);
-        addToOverlayObjectList(*pNew);
+        addToOverlayObjectList(pNew);
     }
 }
 } //namespace chart
