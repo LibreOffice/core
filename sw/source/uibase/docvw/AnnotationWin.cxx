@@ -300,6 +300,12 @@ void SwAnnotationWin::InitAnswer(OutlinerParaObject* pText)
     Engine()->GetUndoManager().Clear();
 }
 
+void SwAnnotationWin::SetText(const OUString& aText)
+{
+    GetOutlinerView()->InsertText(aText, true);
+    UpdateData();
+}
+
 SvxLanguageItem SwAnnotationWin::GetLanguage()
 {
     // set initial language for outliner

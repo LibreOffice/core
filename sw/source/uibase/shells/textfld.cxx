@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <AnnotationWin.hxx>
 #include <comphelper/lok.hxx>
 #include <chrdlgmodes.hxx>
 #include <hintids.hxx>
@@ -472,6 +473,22 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                         }
                         pSwFormatField = aIter.Next();
                     }
+                }
+            }
+            break;
+            case SID_EDIT_POSTIT:
+            {
+                const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+                if (pIdItem && pIdItem->GetValue())
+                {
+                    const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+                    OUString sText;
+                    if ( pTextItem )
+                        sText = pTextItem->GetValue();
+
+                    sw::annotation::SwAnnotationWin* pAnnotationWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue());
+                    if (pAnnotationWin)
+                        pAnnotationWin->SetText(sText);
                 }
             }
             break;

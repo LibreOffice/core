@@ -239,6 +239,7 @@ class SwPostItMgr: public SfxListener
         Color GetArrowColor(sal_uInt16 aDirection,unsigned long aPage) const;
 
         sw::annotation::SwAnnotationWin* GetAnnotationWin(const SwPostItField* pField) const;
+        sw::annotation::SwAnnotationWin* GetAnnotationWin(const sal_uInt32 nPostItId) const;
 
         sw::sidebarwindows::SwSidebarWin* GetNextPostIt( sal_uInt16 aDirection,
                                                          sw::sidebarwindows::SwSidebarWin* aPostIt);
