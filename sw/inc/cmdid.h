@@ -297,8 +297,9 @@
 #define FN_FORMAT_GRAFIC_DLG        (FN_FORMAT + 58)  /* graphic */
 #define FN_FORMAT_TABLE_DLG         (FN_FORMAT + 60)  /* table */
 
-#define FN_UPDATE_STYLE_BY_EXAMPLE  (FN_FORMAT + 63)  /* update style */
-#define FN_FORMAT_FOOTNOTE_DLG      (FN_FORMAT + 68)  /* footnote dialog */
+#define FN_UPDATE_STYLE_BY_EXAMPLE            (FN_FORMAT + 63)  /* update style */
+#define FN_FORMAT_FOOTNOTE_DLG                (FN_FORMAT + 68)  /* footnote dialog */
+#define FN_FORMAT_CURRENT_FOOTNOTE_DLG        (FN_FORMAT + 64)  /* Contextual footnote dialog */
 
 #define FN_FRAME_NOWRAP             (FN_FORMAT + 72)
 #define FN_FRAME_WRAP               (FN_FORMAT + 73)
