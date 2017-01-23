@@ -937,7 +937,7 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
     if (pAddr->m_sockaddr.sa_family == FAMILY_TO_NATIVE(osl_Socket_FamilyInet))
     {
         const struct sockaddr_in *sin= reinterpret_cast<sockaddr_in *>(&pAddr->m_sockaddr);
-        struct hostent *he;
+        struct hostent *he = static_cast<hostent*>(malloc(sizeof(struct hostent)));
 
         if (sin->sin_addr.s_addr == htonl(INADDR_ANY))
             return nullptr;
@@ -945,10 +945,30 @@ oslHostAddr SAL_CALL osl_createHostAddrByAddr (const oslSocketAddr pAddr)
         char const * addr = reinterpret_cast<char const *>(&sin->sin_addr);
             // at least some Androids apparently have a gethostbyaddr with char*
             // instead of void* argument
-        he= gethostbyaddr(addr,
+
+        struct hostent *result_ = static_cast<hostent*>(malloc(sizeof(struct hostent))); /* will be the same as result */
+        char *buffer = NULL;
+        int buflen = 0;
+        int *h_errnop = NULL;
+        int e;
+        e = gethostbyaddr_r(addr,
                           sizeof (sin->sin_addr),
-                          sin->sin_family);
-        return hostentToHostAddr (he);
+                          sin->sin_family,
+                          he,
+                          // arguments below this point were added just to make the function work, after converting from 'gethostbyaddr' (which wasn't thread safe).
+                          buffer,
+                          buflen,
+                          &result_,
+                          h_errnop
+                          );
+
+        free (result_);
+        if (e) {
+            return nullptr;
+        }
+        else {
+            return hostentToHostAddr (he);
+        }
     }
 
     return nullptr;
