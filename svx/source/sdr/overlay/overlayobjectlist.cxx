@@ -24,8 +24,6 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <tools/gen.hxx>
 
-#include <algorithm>
-
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
 #include <comphelper/lok.hxx>
 
@@ -43,20 +41,13 @@ namespace sdr
 
         void OverlayObjectList::clear()
         {
-            OverlayObjectVector::iterator aStart(maVector.begin());
-
-            for(; aStart != maVector.end(); ++aStart)
+            for(OverlayObject* pCandidate : maVector)
             {
-                sdr::overlay::OverlayObject* pCandidate = *aStart;
-
                 if(pCandidate->getOverlayManager())
-                {
                     pCandidate->getOverlayManager()->remove(*pCandidate);
-                }
 
                 delete pCandidate;
             }
-
             maVector.clear();
         }
 
@@ -70,8 +61,7 @@ namespace sdr
         {
             if(!maVector.empty())
             {
-                OverlayObjectVector::const_iterator aStart(maVector.begin());
-                sdr::overlay::OverlayObject* pFirst = *aStart;
+                OverlayObject* pFirst = maVector.front();
                 OverlayManager* pManager = pFirst->getOverlayManager();
 
                 if(pManager)
@@ -99,10 +89,8 @@ namespace sdr
                         fLogicTolerance,
                         false);
 
-                    for(; aStart != maVector.end(); ++aStart)
+                    for(OverlayObject* pCandidate : maVector)
                     {
-                        sdr::overlay::OverlayObject* pCandidate = *aStart;
-
                         if(pCandidate->isHittable())
                         {
                             const drawinglayer::primitive2d::Primitive2DContainer& rSequence = pCandidate->getOverlayObjectPrimitive2DSequence();
@@ -129,8 +117,7 @@ namespace sdr
             sal_uInt32 nDiscreteTolerance = DEFAULT_VALUE_FOR_HITTEST_PIXEL;
             if(!maVector.empty())
             {
-                OverlayObjectVector::const_iterator aStart(maVector.begin());
-                sdr::overlay::OverlayObject* pCandidate = *aStart;
+                OverlayObject* pCandidate = maVector.front();
                 OverlayManager* pManager = pCandidate->getOverlayManager();
 
                 if(pManager)
@@ -150,15 +137,9 @@ namespace sdr
         {
             basegfx::B2DRange aRetval;
 
-            if(!maVector.empty())
+            for(OverlayObject* pCandidate : maVector)
             {
-                OverlayObjectVector::const_iterator aStart(maVector.begin());
-
-                for(; aStart != maVector.end(); ++aStart)
-                {
-                    sdr::overlay::OverlayObject* pCandidate = *aStart;
-                    aRetval.expand(pCandidate->getBaseRange());
-                }
+                aRetval.expand(pCandidate->getBaseRange());
             }
 
             return aRetval;
