@@ -108,6 +108,11 @@ void ParaLRSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
 
     DBG_ASSERT( pWindow, "Control not found!" );
 
+    if(SfxItemState::DISABLED == eState)
+        pWindow->Disable();
+    else
+        pWindow->Enable();
+
     if(!m_xMultiplexer.is())
     {
         m_xMultiplexer = css::ui::ContextChangeEventMultiplexer::get(
