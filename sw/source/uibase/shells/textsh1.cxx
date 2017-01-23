@@ -498,6 +498,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
         }
         break;
         case FN_FORMAT_FOOTNOTE_DLG:
+        case FN_FORMAT_CURRENT_FOOTNOTE_DLG:
         {
             GetView().ExecFormatFootnote();
             break;
@@ -1376,6 +1377,11 @@ void SwTextShell::GetState( SfxItemSet &rSet )
     {
         switch ( nWhich )
         {
+        case FN_FORMAT_CURRENT_FOOTNOTE_DLG:
+            if( !rSh.IsCursorInFootnote() )
+                rSet.DisableItem( nWhich );
+        break;
+
         case SID_LANGUAGE_STATUS:
             {
                 // the value of used script types

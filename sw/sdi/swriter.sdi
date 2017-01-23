@@ -1321,6 +1321,24 @@ SfxVoidItem FootnoteDialog FN_FORMAT_FOOTNOTE_DLG
     GroupId = GID_FORMAT;
 ]
 
+SfxVoidItem CurrentFootnoteDialog FN_FORMAT_CURRENT_FOOTNOTE_DLG
+()
+[
+    AutoUpdate = FALSE,
+    FastCall = FALSE,
+    ReadOnlyDoc = FALSE,
+    Toggle = FALSE,
+    Container = FALSE,
+    RecordAbsolute = FALSE,
+    RecordPerSet;
+    Asynchron;
+
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
+    GroupId = GID_FORMAT;
+]
+
 SfxVoidItem EditFootnote FN_EDIT_FOOTNOTE
 ()
 [

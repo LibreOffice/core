@@ -565,6 +565,8 @@ public:
     // Check of SPoint or Mark of current cursor are placed within a table.
     inline const SwTableNode* IsCursorInTable() const;
 
+    bool IsCursorInFootnote() const;
+
     inline Point& GetCursorDocPos() const;
     inline bool IsCursorPtAtEnd() const;
 
