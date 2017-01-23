@@ -88,7 +88,7 @@ public:
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     explicit SfxEventAsyncer_Impl(const SfxEventHint& rHint);
-    DECL_LINK( IdleHdl, Idle*, void );
+    DECL_LINK( IdleHdl, Timer*, void );
 };
 
 
@@ -108,14 +108,14 @@ SfxEventAsyncer_Impl::SfxEventAsyncer_Impl( const SfxEventHint& rHint )
     if( rHint.GetObjShell() )
         StartListening( *rHint.GetObjShell() );
     pIdle.reset( new Idle("SfxEventASyncer") );
-    pIdle->SetIdleHdl( LINK(this, SfxEventAsyncer_Impl, IdleHdl) );
+    pIdle->SetInvokeHandler( LINK(this, SfxEventAsyncer_Impl, IdleHdl) );
     pIdle->SetPriority( TaskPriority::HIGHEST );
     pIdle->SetDebugName( "sfx::SfxEventAsyncer_Impl pIdle" );
     pIdle->Start();
 }
 
 
-IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Idle*, pAsyncIdle, void)
+IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Timer*, pAsyncIdle, void)
 {
     SfxObjectShellRef xRef( aHint.GetObjShell() );
     pAsyncIdle->Stop();

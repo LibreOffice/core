@@ -140,7 +140,7 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper
 private:
                     DECL_LINK(ClickHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
                     DECL_LINK(HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, bool);
-                    DECL_LINK(WaitTimeOutHdl, Idle *, void);
+                    DECL_LINK(WaitTimeOutHdl, Timer *, void);
                     DECL_LINK(TimeOutHdl, Timer *, void);
                     DECL_LINK(UserEventHdl, void *, void);
                     DECL_LINK(WindowEventHdl, VclWindowEvent&, void);
@@ -207,10 +207,10 @@ UpdateCheckUI::UpdateCheckUI(const uno::Reference<uno::XComponentContext>& xCont
     maBubbleImage = GetBubbleImage( maBubbleImageURL );
 
     maWaitIdle.SetPriority( TaskPriority::LOWEST );
-    maWaitIdle.SetIdleHdl( LINK( this, UpdateCheckUI, WaitTimeOutHdl ) );
+    maWaitIdle.SetInvokeHandler( LINK( this, UpdateCheckUI, WaitTimeOutHdl ) );
 
     maTimeoutTimer.SetTimeout( 10000 );
-    maTimeoutTimer.SetTimeoutHdl( LINK( this, UpdateCheckUI, TimeOutHdl ) );
+    maTimeoutTimer.SetInvokeHandler( LINK( this, UpdateCheckUI, TimeOutHdl ) );
 
     uno::Reference< document::XDocumentEventBroadcaster > xBroadcaster( frame::theGlobalEventBroadcaster::get(m_xContext) );
     xBroadcaster->addDocumentEventListener( this );
@@ -601,7 +601,7 @@ IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg&, rDat
 }
 
 
-IMPL_LINK_NOARG(UpdateCheckUI, WaitTimeOutHdl, Idle *, void)
+IMPL_LINK_NOARG(UpdateCheckUI, WaitTimeOutHdl, Timer *, void)
 {
     SolarMutexGuard aGuard;
 

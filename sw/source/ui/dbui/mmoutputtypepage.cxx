@@ -387,7 +387,7 @@ IMPL_STATIC_LINK( SwSendMailDialog, StartSendMails, void*, pDialog, void )
     static_cast<SwSendMailDialog*>(pDialog)->SendMails();
 }
 
-IMPL_LINK( SwSendMailDialog, RemoveThis, Idle*, pTimer, void )
+IMPL_LINK( SwSendMailDialog, RemoveThis, Timer*, pTimer, void )
 {
     if( m_pImpl->xMailDispatcher.is() )
     {
@@ -537,7 +537,7 @@ void  SwSendMailDialog::StateChanged( StateChangedType nStateChange )
     ModelessDialog::StateChanged( nStateChange );
     if(StateChangedType::Visible == nStateChange && !IsVisible())
     {
-        m_pImpl->aRemoveIdle.SetIdleHdl( LINK( this, SwSendMailDialog,
+        m_pImpl->aRemoveIdle.SetInvokeHandler( LINK( this, SwSendMailDialog,
                                                     RemoveThis ) );
         m_pImpl->aRemoveIdle.Start();
     }

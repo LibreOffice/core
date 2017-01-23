@@ -527,7 +527,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, bool bSidebar, vcl::Window* pPar
     aContentBox->Hide();
     aScenarioBox->Hide();
 
-    aContentIdle.SetIdleHdl( LINK( this, ScNavigatorDlg, TimeHdl ) );
+    aContentIdle.SetInvokeHandler( LINK( this, ScNavigatorDlg, TimeHdl ) );
     aContentIdle.SetPriority( TaskPriority::LOWEST );
 
     if (bInSidebar)
@@ -649,7 +649,7 @@ void ScNavigatorDlg::Notify( SfxBroadcaster&, const SfxHint& rHint )
     }
 }
 
-IMPL_LINK( ScNavigatorDlg, TimeHdl, Idle*, pIdle, void )
+IMPL_LINK( ScNavigatorDlg, TimeHdl, Timer*, pIdle, void )
 {
     if ( pIdle != &aContentIdle )
         return;

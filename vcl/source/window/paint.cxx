@@ -631,7 +631,7 @@ void Window::ImplCallOverlapPaint()
     }
 }
 
-IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Idle *, void)
+IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Timer *, void)
 {
     // save paint events until layout is done
     if (IsSystemWindow() && static_cast<const SystemWindow*>(this)->hasPendingLayout())
@@ -652,7 +652,7 @@ IMPL_LINK_NOARG(Window, ImplHandlePaintHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl, Timer *, void)
 {
     if( mpWindowImpl->mbReallyVisible )
     {

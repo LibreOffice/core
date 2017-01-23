@@ -91,7 +91,7 @@ TextEngine::TextEngine()
     mpViews = new TextViews;
 
     mpIdleFormatter = new IdleFormatter;
-    mpIdleFormatter->SetIdleHdl( LINK( this, TextEngine, IdleFormatHdl ) );
+    mpIdleFormatter->SetInvokeHandler( LINK( this, TextEngine, IdleFormatHdl ) );
     mpIdleFormatter->SetDebugName( "vcl::TextEngine mpIdleFormatter" );
 
     mpRefDev = VclPtr<VirtualDevice>::Create();
@@ -1498,7 +1498,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
     maInvalidRect = Rectangle();
 }
 
-IMPL_LINK_NOARG(TextEngine, IdleFormatHdl, Idle *, void)
+IMPL_LINK_NOARG(TextEngine, IdleFormatHdl, Timer *, void)
 {
     FormatAndUpdate( mpIdleFormatter->GetView() );
 }

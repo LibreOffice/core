@@ -90,7 +90,7 @@ SwChartLockController_Helper::SwChartLockController_Helper( SwDoc *pDocument ) :
     , bIsLocked( false )
 {
     aUnlockTimer.SetTimeout( 1500 );
-    aUnlockTimer.SetTimeoutHdl( LINK( this, SwChartLockController_Helper, DoUnlockAllCharts ));
+    aUnlockTimer.SetInvokeHandler( LINK( this, SwChartLockController_Helper, DoUnlockAllCharts ));
     aUnlockTimer.SetDebugName( "sw::SwChartLockController_Helper aUnlockTimer" );
 }
 

@@ -214,7 +214,7 @@ private:
 
     ScNavigatorControllerItem** ppBoundItems;
 
-    DECL_LINK(TimeHdl, Idle*, void);
+    DECL_LINK(TimeHdl, Timer*, void);
     DECL_LINK(DocumentSelectHdl, ListBox&, void);
     DECL_LINK(ToolBoxSelectHdl, ToolBox*, void);
     DECL_LINK(ToolBoxDropdownClickHdl, ToolBox*, void);

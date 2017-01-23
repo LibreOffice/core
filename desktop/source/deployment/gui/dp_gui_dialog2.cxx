@@ -522,7 +522,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
 #endif
 
     m_aIdle.SetPriority(TaskPriority::LOWEST);
-    m_aIdle.SetIdleHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
+    m_aIdle.SetInvokeHandler( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
 
 
@@ -948,7 +948,7 @@ IMPL_LINK_NOARG(ExtMgrDialog, HandleUpdateBtn, Button*, void)
 #endif
 }
 
-IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Idle *, void)
+IMPL_LINK_NOARG(ExtMgrDialog, TimeOutHdl, Timer *, void)
 {
     if ( m_bStopProgress )
     {
@@ -1066,7 +1066,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     m_pCloseBtn->GrabFocus();
 
     m_aIdle.SetPriority( TaskPriority::LOWEST );
-    m_aIdle.SetIdleHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
+    m_aIdle.SetInvokeHandler( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 
 UpdateRequiredDialog::~UpdateRequiredDialog()
@@ -1258,7 +1258,7 @@ IMPL_LINK_NOARG(UpdateRequiredDialog, HandleCloseBtn, Button*, void)
 }
 
 
-IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl, Idle *, void)
+IMPL_LINK_NOARG(UpdateRequiredDialog, TimeOutHdl, Timer *, void)
 {
     if ( m_bStopProgress )
     {

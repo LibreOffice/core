@@ -271,7 +271,7 @@ SvxFontWorkDialog::SvxFontWorkDialog(SfxBindings *pBindinx,
     m_pShadowColorLB->SetSelectHdl( LINK(this, SvxFontWorkDialog, ColorSelectHdl_Impl) );
 
     aInputIdle.SetPriority(TaskPriority::LOWEST);
-    aInputIdle.SetIdleHdl(LINK(this, SvxFontWorkDialog, InputTimoutHdl_Impl));
+    aInputIdle.SetInvokeHandler(LINK(this, SvxFontWorkDialog, InputTimoutHdl_Impl));
 }
 
 SvxFontWorkDialog::~SvxFontWorkDialog()
@@ -738,7 +738,7 @@ IMPL_LINK_NOARG(SvxFontWorkDialog, ModifyInputHdl_Impl, Edit&, void)
     aInputIdle.Start();
 }
 
-IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl, Idle *, void)
+IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl, Timer *, void)
 {
     // Possibly set the Metric system again. This should be done with a
     // listen, this is however not possible at the moment due to compatibility

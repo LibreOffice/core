@@ -58,7 +58,7 @@ std::shared_ptr<CacheConfiguration> CacheConfiguration::Instance()
             rInstancePtr.reset(new CacheConfiguration());
             mpWeakInstance = rInstancePtr;
             // Prepare to release this instance in the near future.
-            maReleaseTimer.SetTimeoutHdl(
+            maReleaseTimer.SetInvokeHandler(
                 LINK(rInstancePtr.get(),CacheConfiguration,TimerCallback));
             maReleaseTimer.SetTimeout(5000 /* 5s */);
             maReleaseTimer.Start();

@@ -185,7 +185,7 @@ private:
     SAL_DLLPRIVATE void                SpellObject(SdrTextObj* pObj);
 
                         DECL_DLLPRIVATE_LINK(WorkStartupHdl, Timer *, void);
-                        DECL_DLLPRIVATE_LINK(OnlineSpellingHdl, Idle *, void);
+                        DECL_DLLPRIVATE_LINK(OnlineSpellingHdl, Timer *, void);
                         DECL_DLLPRIVATE_LINK(OnlineSpellEventHdl, EditStatus&, void);
 
     std::vector< OUString > maAnnotationAuthors;

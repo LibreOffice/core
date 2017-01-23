@@ -151,7 +151,7 @@ SwGlobalTree::SwGlobalTree(vcl::Window* pParent, SwNavigationPI* pDialog)
                     DragDropMode::ENABLE_TOP );
 
     aUpdateTimer.SetTimeout(GLOBAL_UPDATE_TIMEOUT);
-    aUpdateTimer.SetTimeoutHdl(LINK(this, SwGlobalTree, Timeout));
+    aUpdateTimer.SetInvokeHandler(LINK(this, SwGlobalTree, Timeout));
     aUpdateTimer.Start();
     for(sal_uInt16 i = 0; i < GLOBAL_CONTEXT_COUNT; i++)
     {

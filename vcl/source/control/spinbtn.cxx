@@ -37,7 +37,7 @@ void SpinButton::ImplInit( vcl::Window* pParent, WinBits nStyle )
     mnValueStep = 1;
 
     maRepeatTimer.SetTimeout(GetSettings().GetMouseSettings().GetButtonStartRepeat());
-    maRepeatTimer.SetTimeoutHdl(LINK(this, SpinButton, ImplTimeout));
+    maRepeatTimer.SetInvokeHandler(LINK(this, SpinButton, ImplTimeout));
 
     mbRepeat = 0 != (nStyle & WB_REPEAT);
 

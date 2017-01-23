@@ -100,7 +100,7 @@ private:
     void updateScreenText();
     void updateRenderFPS();
     void updateDataUpdateFPS();
-    DECL_LINK(UpdateTimerHdl, Idle*, void);
+    DECL_LINK(UpdateTimerHdl, Timer*, void);
     static int calcTimeInterval(TimeValue &startTime, TimeValue &endTime);
     float addScreenTextShape(OUString &nStr, const glm::vec2& rLeftOrRightTop, float nTextHeight, bool bLeftTopFlag,
                                   const glm::vec4& rColor,

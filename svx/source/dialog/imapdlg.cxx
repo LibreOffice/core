@@ -205,7 +205,7 @@ SvxIMapDlg::SvxIMapDlg(SfxBindings *_pBindings, SfxChildWindow *pCW, vcl::Window
     pOwnData->bExecState = false;
 
     pOwnData->aIdle.SetPriority( TaskPriority::LOW );
-    pOwnData->aIdle.SetIdleHdl( LINK( this, SvxIMapDlg, UpdateHdl ) );
+    pOwnData->aIdle.SetInvokeHandler( LINK( this, SvxIMapDlg, UpdateHdl ) );
 
     m_pTbxIMapDlg1->EnableItem( mnActiveId, false );
     m_pTbxIMapDlg1->EnableItem( mnMacroId, false );
@@ -720,7 +720,7 @@ IMPL_LINK_NOARG(SvxIMapDlg, URLLoseFocusHdl, Control&, void)
     pIMapWnd->ReplaceActualIMapInfo( aNewInfo );
 }
 
-IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl, Idle *, void)
+IMPL_LINK_NOARG(SvxIMapDlg, UpdateHdl, Timer *, void)
 {
     pOwnData->aIdle.Stop();
 

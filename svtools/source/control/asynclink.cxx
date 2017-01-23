@@ -60,7 +60,7 @@ AsynchronLink::~AsynchronLink()
     delete _pMutex;
 }
 
-IMPL_LINK_NOARG( AsynchronLink, HandleCall_Idle, Idle*, void )
+IMPL_LINK_NOARG( AsynchronLink, HandleCall_Idle, Timer*, void )
 {
     if( _pMutex ) _pMutex->acquire();
     _nEventId = nullptr;

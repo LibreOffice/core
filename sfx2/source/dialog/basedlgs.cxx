@@ -270,7 +270,7 @@ void SfxModelessDialog::Move()
     Implements a timer event that is triggered by a move or resize of the window
     This will save config information to Views.xcu with a small delay
 */
-IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG(SfxModelessDialog, TimerHdl, Timer *, void)
 {
     pImpl->aMoveIdle.Stop();
     if ( pImpl->bConstructed && pImpl->pMgr )
@@ -302,7 +302,7 @@ void SfxModelessDialog::Init(SfxBindings *pBindinx, SfxChildWindow *pCW)
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
     pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
-    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxModelessDialog,TimerHdl));
+    pImpl->aMoveIdle.SetInvokeHandler(LINK(this,SfxModelessDialog,TimerHdl));
 }
 
 /*  [Description]
@@ -440,7 +440,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
     pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
-    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
+    pImpl->aMoveIdle.SetInvokeHandler(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
 SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
@@ -457,7 +457,7 @@ SfxFloatingWindow::SfxFloatingWindow( SfxBindings *pBindinx,
     if ( pBindinx )
         pImpl->StartListening( *pBindinx );
     pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
-    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxFloatingWindow,TimerHdl));
+    pImpl->aMoveIdle.SetInvokeHandler(LINK(this,SfxFloatingWindow,TimerHdl));
 }
 
 bool SfxFloatingWindow::Close()
@@ -525,7 +525,7 @@ void SfxFloatingWindow::Move()
     Implements a timer event that is triggered by a move or resize of the window
     This will save config information to Views.xcu with a small delay
 */
-IMPL_LINK_NOARG(SfxFloatingWindow, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG(SfxFloatingWindow, TimerHdl, Timer *, void)
 {
     pImpl->aMoveIdle.Stop();
     if ( pImpl->bConstructed && pImpl->pMgr )

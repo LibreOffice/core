@@ -451,7 +451,7 @@ void SfxDispatcher::Construct_Impl()
     xImp->xPoster = new SfxHintPoster(aGenLink);
 
     xImp->aIdle.SetPriority(TaskPriority::MEDIUM);
-    xImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
+    xImp->aIdle.SetInvokeHandler( LINK(this, SfxDispatcher, EventHdl_Impl ) );
     xImp->aIdle.SetDebugName( "sfx::SfxDispatcher_Impl aIdle" );
 }
 
@@ -575,7 +575,7 @@ void SfxDispatcher::Pop(SfxShell& rShell, SfxDispatcherPopFlags nMode)
     {
         // No immediate update is requested
         xImp->aIdle.SetPriority(TaskPriority::MEDIUM);
-        xImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
+        xImp->aIdle.SetInvokeHandler( LINK(this, SfxDispatcher, EventHdl_Impl ) );
         xImp->aIdle.Start();
     }
     else
@@ -600,7 +600,7 @@ void SfxDispatcher::Pop(SfxShell& rShell, SfxDispatcherPopFlags nMode)
     It flushes the Stack, if it is dirty, thus it actually executes the
     pending Push and Pop commands.
 */
-IMPL_LINK_NOARG( SfxDispatcher, EventHdl_Impl, Idle *, void )
+IMPL_LINK_NOARG( SfxDispatcher, EventHdl_Impl, Timer *, void )
 {
     Flush();
     Update_Impl();
@@ -771,7 +771,7 @@ void SfxDispatcher::DoActivate_Impl(bool bMDI)
     {
         // No immediate update is requested
         xImp->aIdle.SetPriority(TaskPriority::MEDIUM);
-        xImp->aIdle.SetIdleHdl( LINK(this, SfxDispatcher, EventHdl_Impl ) );
+        xImp->aIdle.SetInvokeHandler( LINK(this, SfxDispatcher, EventHdl_Impl ) );
         xImp->aIdle.Start();
     }
 }

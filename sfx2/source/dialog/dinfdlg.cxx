@@ -1507,9 +1507,9 @@ CustomPropertiesWindow::CustomPropertiesWindow(vcl::Window* pParent,
     m_aTimeField->SetPosSizePixel(aPos, aSize);
 
     m_aEditLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
-    m_aEditLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
+    m_aEditLoseFocusIdle.SetInvokeHandler( LINK( this, CustomPropertiesWindow, EditTimeoutHdl ) );
     m_aBoxLoseFocusIdle.SetPriority( TaskPriority::LOWEST );
-    m_aBoxLoseFocusIdle.SetIdleHdl( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
+    m_aBoxLoseFocusIdle.SetInvokeHandler( LINK( this, CustomPropertiesWindow, BoxTimeoutHdl ) );
 
     m_aNameBox->add_mnemonic_label(m_pHeaderAccName);
     m_aNameBox->SetAccessibleName(m_pHeaderAccName->GetText());
@@ -1640,12 +1640,12 @@ IMPL_LINK( CustomPropertiesWindow, BoxLoseFocusHdl, Control&, rControl, void )
     m_aBoxLoseFocusIdle.Start();
 }
 
-IMPL_LINK_NOARG(CustomPropertiesWindow, EditTimeoutHdl, Idle *, void)
+IMPL_LINK_NOARG(CustomPropertiesWindow, EditTimeoutHdl, Timer *, void)
 {
     ValidateLine( m_pCurrentLine, false );
 }
 
-IMPL_LINK_NOARG(CustomPropertiesWindow, BoxTimeoutHdl, Idle *, void)
+IMPL_LINK_NOARG(CustomPropertiesWindow, BoxTimeoutHdl, Timer *, void)
 {
     ValidateLine( m_pCurrentLine, true );
 }

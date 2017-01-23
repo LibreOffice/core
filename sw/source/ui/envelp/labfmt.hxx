@@ -88,7 +88,7 @@ class SwLabFormatPage : public SfxTabPage
     SwLabItem    aItem;
 
     DECL_LINK( ModifyHdl, Edit&, void );
-    DECL_LINK( PreviewHdl, Idle *, void );
+    DECL_LINK( PreviewHdl, Timer *, void );
     DECL_LINK( LoseFocusHdl, Control&, void );
     DECL_LINK( SaveHdl, Button*, void );
 

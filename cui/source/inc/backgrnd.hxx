@@ -131,7 +131,7 @@ private:
     bool                FillItemSetWithWallpaperItem( SfxItemSet& rCoreSet, sal_uInt16 nSlot);
     void                ResetFromWallpaperItem( const SfxItemSet& rSet );
 
-    DECL_LINK( LoadIdleHdl_Impl, Idle*, void );
+    DECL_LINK( LoadIdleHdl_Impl, Timer*, void );
     DECL_LINK(SelectHdl_Impl, ListBox&, void );
     DECL_LINK(BrowseHdl_Impl, Button*, void);
     DECL_LINK( RadioClickHdl_Impl, Button*, void );

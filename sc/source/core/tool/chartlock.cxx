@@ -146,7 +146,7 @@ ScTemporaryChartLock::ScTemporaryChartLock( ScDocument* pDocP ) :
     mpDoc( pDocP )
 {
     maTimer.SetTimeout( SC_CHARTLOCKTIMEOUT );
-    maTimer.SetTimeoutHdl( LINK( this, ScTemporaryChartLock, TimeoutHdl ) );
+    maTimer.SetInvokeHandler( LINK( this, ScTemporaryChartLock, TimeoutHdl ) );
 }
 
 ScTemporaryChartLock::~ScTemporaryChartLock()

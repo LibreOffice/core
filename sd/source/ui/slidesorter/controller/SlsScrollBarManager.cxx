@@ -60,7 +60,7 @@ ScrollBarManager::ScrollBarManager (SlideSorter& rSlideSorter)
     mpScrollBarFiller->Hide();
 
     maAutoScrollTimer.SetTimeout(25);
-    maAutoScrollTimer.SetTimeoutHdl (
+    maAutoScrollTimer.SetInvokeHandler (
         LINK(this, ScrollBarManager, AutoScrollTimeoutHandler));
 }
 

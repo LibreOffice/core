@@ -91,7 +91,7 @@ friend class SfxStateCache;
 friend class SfxPopupMenuManager;
 friend class SfxHelp;
 
-    DECL_DLLPRIVATE_LINK( EventHdl_Impl, Idle *, void );
+    DECL_DLLPRIVATE_LINK( EventHdl_Impl, Timer *, void );
     DECL_DLLPRIVATE_LINK( PostMsgHandler, SfxRequest *, void );
 
     SAL_DLLPRIVATE void Call_Impl( SfxShell& rShell, const SfxSlot &rSlot, SfxRequest &rReq, bool bRecord );

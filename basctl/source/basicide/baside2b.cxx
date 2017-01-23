@@ -961,7 +961,7 @@ void EditorWindow::CreateEditEngine()
     ImplSetFont();
 
     aSyntaxIdle.SetPriority( TaskPriority::LOWER );
-    aSyntaxIdle.SetIdleHdl( LINK( this, EditorWindow, SyntaxTimerHdl ) );
+    aSyntaxIdle.SetInvokeHandler( LINK( this, EditorWindow, SyntaxTimerHdl ) );
 
     bool bWasDoSyntaxHighlight = bDoSyntaxHighlight;
     bDoSyntaxHighlight = false; // too slow for large texts...
@@ -1253,7 +1253,7 @@ void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
     }
 }
 
-IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl, Idle *, void)
+IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl, Timer *, void)
 {
     DBG_ASSERT( pEditView, "Noch keine View, aber Syntax-Highlight ?!" );
 

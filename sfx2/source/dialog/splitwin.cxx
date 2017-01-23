@@ -105,7 +105,7 @@ public:
                             , bEndAutoHide( false )
                             , nState( 1 )
                         {
-                            aTimer.SetTimeoutHdl(
+                            aTimer.SetInvokeHandler(
                                 LINK(pOwner, SfxSplitWindow, TimerHdl ) );
                             aTimer.SetTimeout( 200 );
                             SetAlign( pOwner->GetAlign() );

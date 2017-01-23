@@ -1255,7 +1255,7 @@ void AutoRecovery::initListeners()
     // establish callback for our internal used timer.
     // Note: Its only active, if the timer will be started ...
     SolarMutexGuard g;
-    m_aTimer.SetTimeoutHdl(LINK(this, AutoRecovery, implts_timerExpired));
+    m_aTimer.SetInvokeHandler(LINK(this, AutoRecovery, implts_timerExpired));
 }
 
 AutoRecovery::~AutoRecovery()

@@ -407,7 +407,7 @@ namespace
     }
 }
 
-IMPL_LINK_NOARG(ImplSVAppData, VclEventTestingHdl, Idle *, void)
+IMPL_LINK_NOARG(ImplSVAppData, VclEventTestingHdl, Timer *, void)
 {
     if (Application::AnyInput())
     {
@@ -458,7 +458,7 @@ void Application::Execute()
     {
         pSVData->maAppData.mnEventTestLimit = 50;
         pSVData->maAppData.mpEventTestingIdle = new Idle("eventtesting");
-        pSVData->maAppData.mpEventTestingIdle->SetIdleHdl(LINK(&(pSVData->maAppData), ImplSVAppData, VclEventTestingHdl));
+        pSVData->maAppData.mpEventTestingIdle->SetInvokeHandler(LINK(&(pSVData->maAppData), ImplSVAppData, VclEventTestingHdl));
         pSVData->maAppData.mpEventTestingIdle->SetPriority(TaskPriority::MEDIUM);
         pSVData->maAppData.mpEventTestInput = new SvFileStream("eventtesting", StreamMode::READ);
         pSVData->maAppData.mpEventTestingIdle->Start();

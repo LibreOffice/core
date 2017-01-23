@@ -75,7 +75,7 @@ ImplWheelWindow::ImplWheelWindow( vcl::Window* pParent ) :
 
     // init timer
     mpTimer = new Timer("WheelWindowTimer");
-    mpTimer->SetTimeoutHdl( LINK( this, ImplWheelWindow, ImplScrollHdl ) );
+    mpTimer->SetInvokeHandler( LINK( this, ImplWheelWindow, ImplScrollHdl ) );
     mpTimer->SetTimeout( mnTimeout );
     mpTimer->SetDebugName( "vcl::ImplWheelWindow mpTimer" );
     mpTimer->Start();

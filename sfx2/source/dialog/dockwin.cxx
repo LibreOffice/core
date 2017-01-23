@@ -434,7 +434,7 @@ SfxDockingWindow_Impl::SfxDockingWindow_Impl(SfxDockingWindow* pBase)
     ,bDockingPrevented(false)
 {
     aMoveIdle.SetPriority(TaskPriority::RESIZE);
-    aMoveIdle.SetIdleHdl(LINK(pBase,SfxDockingWindow,TimerHdl));
+    aMoveIdle.SetInvokeHandler(LINK(pBase,SfxDockingWindow,TimerHdl));
     aMoveIdle.SetDebugName( "sfx::SfxDockingWindow_Impl aMoveIdle" );
 }
 
@@ -1722,7 +1722,7 @@ void SfxDockingWindow::Move()
         pImpl->aMoveIdle.Start();
 }
 
-IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl, Timer *, void)
 {
     pImpl->aMoveIdle.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )

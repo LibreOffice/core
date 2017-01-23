@@ -151,7 +151,7 @@ private:
 
     DECL_LINK( SelectHandle, SvTreeListBox*, void );
     DECL_LINK( DeselectHandle, SvTreeListBox*, void );
-    DECL_LINK( UpdateSelectionHdl, Idle*, void );
+    DECL_LINK( UpdateSelectionHdl, Timer*, void );
     DECL_LINK( KeepMineHandle, Button*, void );
     DECL_LINK( KeepOtherHandle, Button*, void );
     DECL_LINK( KeepAllMineHandle, Button*, void );

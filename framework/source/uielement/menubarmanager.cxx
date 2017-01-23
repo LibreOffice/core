@@ -945,7 +945,7 @@ IMPL_LINK( MenuBarManager, Deactivate, Menu *, pMenu, bool )
             // Start timer to handle settings asynchronous
             // Changing the menu inside this handler leads to
             // a crash under X!
-            m_aAsyncSettingsTimer.SetTimeoutHdl(LINK(this, MenuBarManager, AsyncSettingsHdl));
+            m_aAsyncSettingsTimer.SetInvokeHandler(LINK(this, MenuBarManager, AsyncSettingsHdl));
             m_aAsyncSettingsTimer.SetTimeout(10);
             m_aAsyncSettingsTimer.Start();
         }

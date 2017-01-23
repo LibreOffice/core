@@ -28,7 +28,7 @@ private:
     Idle m_aPanelLayoutIdle;
     bool m_bInClose;
 
-    DECL_DLLPRIVATE_LINK(ImplHandlePanelLayoutTimerHdl, Idle*, void);
+    DECL_DLLPRIVATE_LINK(ImplHandlePanelLayoutTimerHdl, Timer*, void);
 
 public:
     PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,

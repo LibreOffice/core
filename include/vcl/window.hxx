@@ -531,11 +531,11 @@ private:
 
 public:
 
-    DECL_DLLPRIVATE_LINK( ImplHandlePaintHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK( ImplHandlePaintHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK( ImplGenerateMouseMoveHdl, void*, void );
     DECL_DLLPRIVATE_LINK( ImplTrackTimerHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK( ImplAsyncFocusHdl, void*, void );
-    DECL_DLLPRIVATE_LINK( ImplHandleResizeTimerHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK( ImplHandleResizeTimerHdl, Timer*, void );
 
 
     SAL_DLLPRIVATE static void          ImplInitAppFontData( vcl::Window* pWindow );

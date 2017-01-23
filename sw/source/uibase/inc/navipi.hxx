@@ -113,7 +113,7 @@ class SwNavigationPI : public PanelLayout,
     DECL_LINK( EditGetFocus, Control&, void );
     DECL_LINK( DoneLink, SfxPoolItem *, void );
     DECL_LINK( MenuSelectHdl, Menu *, bool );
-    DECL_LINK( ChangePageHdl, Idle*, void );
+    DECL_LINK( ChangePageHdl, Timer*, void );
     DECL_LINK( PageEditModifyHdl, SpinField&, void );
     DECL_LINK( PopupModeEndHdl, FloatingWindow*, void );
     DECL_LINK( ClosePopupWindow, SfxPopupWindow *, void );

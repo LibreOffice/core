@@ -91,7 +91,7 @@ void ScRefreshTimer::SetRefreshControl( ScRefreshTimerControl * const * pp )
 
 void ScRefreshTimer::SetRefreshHandler( const Link<Timer *, void>& rLink )
 {
-    SetTimeoutHdl( rLink );
+    SetInvokeHandler( rLink );
 }
 
 sal_uLong ScRefreshTimer::GetRefreshDelay() const

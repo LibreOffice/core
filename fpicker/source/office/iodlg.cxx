@@ -690,7 +690,7 @@ void SvtFileDialog::Init_Impl
 
     // set timer for the filterbox travel
     pImpl->_aFilterTimer.SetTimeout( TRAVELFILTER_TIMEOUT );
-    pImpl->_aFilterTimer.SetTimeoutHdl( LINK( this, SvtFileDialog, FilterSelectTimerHdl_Impl ) );
+    pImpl->_aFilterTimer.SetInvokeHandler( LINK( this, SvtFileDialog, FilterSelectTimerHdl_Impl ) );
 
     if ( PickerFlags::SaveAs & nStyle )
     {

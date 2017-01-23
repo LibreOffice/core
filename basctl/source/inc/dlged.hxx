@@ -102,7 +102,7 @@ public:
     };
 
 private:
-    DECL_LINK(MarkTimeout, Idle *, void);
+    DECL_LINK(MarkTimeout, Timer *, void);
 
     static void Print( Printer* pPrinter, const OUString& rTitle );
 

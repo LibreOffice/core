@@ -657,7 +657,7 @@ void FileDialogHelper_Impl::updateVersions()
     }
 }
 
-IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl, Idle *, void)
+IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl, Timer *, void)
 {
     if ( !mbHasPreview )
         return;
@@ -987,7 +987,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
 
                 // aPreviewTimer
                 maPreviewIdle.SetPriority( TaskPriority::LOWEST );
-                maPreviewIdle.SetIdleHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 
             case FILEOPEN_PLAY:
@@ -1008,7 +1008,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 mbHasPreview = true;
                 // aPreviewTimer
                 maPreviewIdle.SetPriority( TaskPriority::LOWEST );
-                maPreviewIdle.SetIdleHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 
             case FILESAVE_AUTOEXTENSION:
@@ -1022,7 +1022,7 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
                 mbHasPreview = true;
                 // aPreviewTimer
                 maPreviewIdle.SetPriority( TaskPriority::LOWEST );
-                maPreviewIdle.SetIdleHdl( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
+                maPreviewIdle.SetInvokeHandler( LINK( this, FileDialogHelper_Impl, TimeOutHdl_Impl ) );
                 break;
 
             default:
@@ -1137,7 +1137,7 @@ FileDialogHelper_Impl::~FileDialogHelper_Impl()
     if ( mbDeleteMatcher )
         delete mpMatcher;
 
-    maPreviewIdle.SetIdleHdl( Link<Idle *, void>() );
+    maPreviewIdle.ClearInvokeHandler();
 
     ::comphelper::disposeComponent( mxFileDlg );
 }

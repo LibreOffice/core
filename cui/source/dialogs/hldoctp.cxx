@@ -72,7 +72,7 @@ SvxHyperlinkDocTp::SvxHyperlinkDocTp ( vcl::Window *pParent, IconChoiceDialog* p
 
     m_pCbbPath->SetLoseFocusHdl( LINK ( this, SvxHyperlinkDocTp, LostFocusPathHdl_Impl ) );
 
-    maTimer.SetTimeoutHdl ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
+    maTimer.SetInvokeHandler ( LINK ( this, SvxHyperlinkDocTp, TimeoutHdl_Impl ) );
 }
 
 SvxHyperlinkDocTp::~SvxHyperlinkDocTp()

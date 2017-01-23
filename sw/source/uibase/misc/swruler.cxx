@@ -76,7 +76,7 @@ SwCommentRuler::SwCommentRuler( SwViewShell* pViewSh, vcl::Window* pParent, SwEd
 {
     // Set fading timeout: 5 x 40ms = 200ms
     maFadeTimer.SetTimeout(40);
-    maFadeTimer.SetTimeoutHdl( LINK( this, SwCommentRuler, FadeHandler ) );
+    maFadeTimer.SetInvokeHandler( LINK( this, SwCommentRuler, FadeHandler ) );
     maFadeTimer.SetDebugName( "sw::SwCommentRuler maFadeTimer" );
 }
 

@@ -522,7 +522,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( vcl::Window* pParentWin,
         mpHeaderBar->Show();
 
     maResetQuickSearch.SetTimeout( QUICK_SEARCH_TIMEOUT );
-    maResetQuickSearch.SetTimeoutHdl( LINK( this, ViewTabListBox_Impl, ResetQuickSearch_Impl ) );
+    maResetQuickSearch.SetInvokeHandler( LINK( this, ViewTabListBox_Impl, ResetQuickSearch_Impl ) );
 
     Reference< XComponentContext > xContext = ::comphelper::getProcessComponentContext();
     Reference< XInteractionHandler > xInteractionHandler(

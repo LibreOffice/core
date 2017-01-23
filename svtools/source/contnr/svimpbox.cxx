@@ -90,7 +90,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
 
     bAsyncBeginDrag     = false;
     aAsyncBeginDragIdle.SetPriority( TaskPriority::HIGHEST );
-    aAsyncBeginDragIdle.SetIdleHdl( LINK(this,SvImpLBox,BeginDragHdl));
+    aAsyncBeginDragIdle.SetInvokeHandler( LINK(this,SvImpLBox,BeginDragHdl));
     // button animation in listbox
     pActiveButton = nullptr;
     pActiveEntry = nullptr;
@@ -100,7 +100,7 @@ SvImpLBox::SvImpLBox( SvTreeListBox* pLBView, SvTreeList* pLBTree, WinBits nWinS
     nCurTabPos = FIRST_ENTRY_TAB;
 
     aEditIdle.SetPriority( TaskPriority::LOWEST );
-    aEditIdle.SetIdleHdl( LINK(this,SvImpLBox,EditTimerCall) );
+    aEditIdle.SetInvokeHandler( LINK(this,SvImpLBox,EditTimerCall) );
 
     nMostRight = -1;
     pMostRightEntry = nullptr;
@@ -2888,7 +2888,7 @@ void SvImpLBox::BeginDrag()
     }
 }
 
-IMPL_LINK_NOARG(SvImpLBox, BeginDragHdl, Idle *, void)
+IMPL_LINK_NOARG(SvImpLBox, BeginDragHdl, Timer *, void)
 {
     pView->StartDrag( 0, aAsyncBeginDragPos );
 }
@@ -3085,7 +3085,7 @@ void SvImpLBox::SetCurEntry( SvTreeListEntry* pEntry )
         pView->Select( pEntry );
 }
 
-IMPL_LINK_NOARG(SvImpLBox, EditTimerCall, Idle *, void)
+IMPL_LINK_NOARG(SvImpLBox, EditTimerCall, Timer *, void)
 {
     if( pView->IsInplaceEditingEnabled() )
     {

@@ -47,7 +47,7 @@ private:
     IControlReferenceHandler* pAnyRefDlg; // parent dialog
     VclPtr<vcl::Window>       pLabelWidget;
 
-    DECL_LINK( UpdateHdl, Idle*, void );
+    DECL_LINK( UpdateHdl, Timer*, void );
 
 protected:
     virtual void KeyInput( const KeyEvent& rKEvt ) override;

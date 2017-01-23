@@ -126,7 +126,7 @@ class SVX_DLLPUBLIC SvxIMapDlg : public SfxModelessDialog // SfxFloatingWindow
     DECL_LINK( URLModifyHdl, Edit&, void );
     DECL_LINK( URLModifyComboBoxHdl, ComboBox&, void );
     DECL_LINK( URLLoseFocusHdl, Control&, void );
-    DECL_LINK( UpdateHdl, Idle *, void );
+    DECL_LINK( UpdateHdl, Timer *, void );
     DECL_LINK( StateHdl, GraphCtrl*, void );
     DECL_LINK( MiscHdl, LinkParamNone*, void );
 

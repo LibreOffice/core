@@ -83,7 +83,7 @@ private:
     std::unique_ptr<ConfigurationController::Lock> mpUpdateLock;
     Idle maPrinterPollingIdle;
 
-    DECL_LINK(TimeoutHandler, Idle*, void);
+    DECL_LINK(TimeoutHandler, Timer*, void);
 
     /** Return <TRUE/> when the printer is printing.  Return <FALSE/> when
         the printer is not printing, or there is no printer, or something

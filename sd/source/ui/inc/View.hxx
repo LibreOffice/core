@@ -250,8 +250,8 @@ protected:
     sal_uInt16              mnLockRedrawSmph;
     bool                    mbIsDropAllowed;
 
-                            DECL_LINK( DropErrorHdl, Idle*, void );
-                            DECL_LINK( DropInsertFileHdl, Idle*, void );
+                            DECL_LINK( DropErrorHdl, Timer*, void );
+                            DECL_LINK( DropInsertFileHdl, Timer*, void );
                             DECL_LINK( ExecuteNavigatorDrop, void*, void );
 
     void ImplClearDrawDropMarker();

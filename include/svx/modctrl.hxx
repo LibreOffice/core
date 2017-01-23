@@ -43,7 +43,7 @@ public:
     SvxModifyControl( sal_uInt16 nSlotId, sal_uInt16 nId, StatusBar& rStb );
 
 private: // Links
-    DECL_LINK( OnTimer, Idle *, void );
+    DECL_LINK( OnTimer, Timer *, void );
 
 private: // Functions
     void _repaint();

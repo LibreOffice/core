@@ -273,12 +273,12 @@ HelpTextWindow::HelpTextWindow( vcl::Window* pParent, const OUString& rText, sal
         pSVData->maHelpData.mbKeyboardHelp = true;
 
 
-    maShowTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
+    maShowTimer.SetInvokeHandler( LINK( this, HelpTextWindow, TimerHdl ) );
     maShowTimer.SetDebugName( "vcl::HelpTextWindow maShowTimer" );
 
     const HelpSettings& rHelpSettings = pParent->GetSettings().GetHelpSettings();
     maHideTimer.SetTimeout( rHelpSettings.GetTipTimeout() );
-    maHideTimer.SetTimeoutHdl( LINK( this, HelpTextWindow, TimerHdl ) );
+    maHideTimer.SetInvokeHandler( LINK( this, HelpTextWindow, TimerHdl ) );
     maHideTimer.SetDebugName( "vcl::HelpTextWindow maHideTimer" );
 }
 

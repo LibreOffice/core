@@ -408,7 +408,7 @@ RefEdit::RefEdit( vcl::Window* _pParent, vcl::Window* pShrinkModeLabel, WinBits 
     , pAnyRefDlg( nullptr )
     , pLabelWidget(pShrinkModeLabel)
 {
-    aIdle.SetIdleHdl( LINK( this, RefEdit, UpdateHdl ) );
+    aIdle.SetInvokeHandler( LINK( this, RefEdit, UpdateHdl ) );
     aIdle.SetPriority( TaskPriority::LOW );
 }
 
@@ -425,7 +425,7 @@ RefEdit::~RefEdit()
 
 void RefEdit::dispose()
 {
-    aIdle.SetIdleHdl( Link<Idle *, void>() );
+    aIdle.ClearInvokeHandler();
     aIdle.Stop();
     pLabelWidget.clear();
     Edit::dispose();
@@ -477,12 +477,12 @@ void RefEdit::SetReferences( IControlReferenceHandler* pDlg, vcl::Window* pLabel
 
     if( pDlg )
     {
-        aIdle.SetIdleHdl( LINK( this, RefEdit, UpdateHdl ) );
+        aIdle.SetInvokeHandler( LINK( this, RefEdit, UpdateHdl ) );
         aIdle.SetPriority( TaskPriority::LOW );
     }
     else
     {
-        aIdle.SetIdleHdl( Link<Idle *, void>() );
+        aIdle.ClearInvokeHandler();
         aIdle.Stop();
     }
 }
@@ -516,7 +516,7 @@ void RefEdit::LoseFocus()
         pAnyRefDlg->HideReference();
 }
 
-IMPL_LINK_NOARG(RefEdit, UpdateHdl, Idle *, void)
+IMPL_LINK_NOARG(RefEdit, UpdateHdl, Timer *, void)
 {
     if( pAnyRefDlg )
         pAnyRefDlg->ShowReference( GetText() );

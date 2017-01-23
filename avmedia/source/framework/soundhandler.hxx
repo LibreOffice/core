@@ -110,7 +110,7 @@ class SoundHandler  :   // interfaces
 
     //  private methods
     private:
-        DECL_LINK( implts_PlayerNotify, Idle*, void );
+        DECL_LINK( implts_PlayerNotify, Timer*, void );
 
     //  variables
     //  (should be private everyway!)

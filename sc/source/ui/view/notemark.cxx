@@ -59,7 +59,7 @@ ScNoteMarker::ScNoteMarker( vcl::Window* pWin, vcl::Window* pRight, vcl::Window*
     Rectangle aVisPixel( Point( 0, 0 ), aSizePixel );
     aVisRect = pWindow->PixelToLogic( aVisPixel, aMapMode );
 
-    aTimer.SetTimeoutHdl( LINK( this, ScNoteMarker, TimeHdl ) );
+    aTimer.SetInvokeHandler( LINK( this, ScNoteMarker, TimeHdl ) );
     aTimer.SetTimeout( bForce ? SC_NOTEMARK_SHORT : SC_NOTEMARK_TIME );
     aTimer.Start();
 }

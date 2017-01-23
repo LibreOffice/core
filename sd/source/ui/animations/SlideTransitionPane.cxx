@@ -496,7 +496,7 @@ void SlideTransitionPane::Initialize(SdDrawDocument* pDoc)
     addListener();
 
     maLateInitTimer.SetTimeout(200);
-    maLateInitTimer.SetTimeoutHdl(LINK(this, SlideTransitionPane, LateInitCallback));
+    maLateInitTimer.SetInvokeHandler(LINK(this, SlideTransitionPane, LateInitCallback));
     maLateInitTimer.Start();
 
     UpdateLook();

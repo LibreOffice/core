@@ -115,7 +115,7 @@ MediaControl::MediaControl( vcl::Window* pParent, MediaControlStyle eControlStyl
     }
 
     maIdle.SetPriority( TaskPriority::LOW );
-    maIdle.SetIdleHdl( LINK( this, MediaControl, implTimeoutHdl ) );
+    maIdle.SetInvokeHandler( LINK( this, MediaControl, implTimeoutHdl ) );
     maIdle.Start();
 }
 
@@ -343,7 +343,7 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox&, p, void )
 }
 
 
-IMPL_LINK_NOARG(MediaControl, implTimeoutHdl, Idle *, void)
+IMPL_LINK_NOARG(MediaControl, implTimeoutHdl, Timer *, void)
 {
     update();
 }

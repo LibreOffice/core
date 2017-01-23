@@ -117,7 +117,7 @@ public:
         , mbAnimate(mnTest % mnNumberOfTests == mnNumberOfTests - 1)
         , mpVDev(VclPtr<VirtualDevice>::Create())
     {
-        maUpdateTimer.SetTimeoutHdl(LINK(this, VisualBackendTestWindow, updateHdl));
+        maUpdateTimer.SetInvokeHandler(LINK(this, VisualBackendTestWindow, updateHdl));
         maUpdateTimer.SetPriority(TaskPriority::REPAINT);
         if (mbAnimate)
         {

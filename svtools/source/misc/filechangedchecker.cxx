@@ -22,7 +22,7 @@ FileChangedChecker::FileChangedChecker(const OUString& rFilename,
     getCurrentModTime(mLastModTime);
 
     // associate the callback function for the Idle
-    mIdle.SetIdleHdl(LINK(this, FileChangedChecker, TimerHandler));
+    mIdle.SetInvokeHandler(LINK(this, FileChangedChecker, TimerHandler));
 
     //start the timer
     resetTimer();
@@ -76,7 +76,7 @@ bool FileChangedChecker::hasFileChanged()
         return false;
 }
 
-IMPL_LINK_NOARG(FileChangedChecker, TimerHandler, Idle *, void)
+IMPL_LINK_NOARG(FileChangedChecker, TimerHandler, Timer *, void)
 {
     // If the file has changed, then update the graphic in the doc
     SAL_INFO("svtools", "Timeout Called");

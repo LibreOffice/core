@@ -145,7 +145,7 @@ class SfxNewFileDialog_Impl
     SfxObjectShellLock xDocShell;
     VclPtr<SfxNewFileDialog> pAntiImpl;
 
-    DECL_LINK( Update, Idle *, void );
+    DECL_LINK( Update, Timer *, void );
 
     DECL_LINK(RegionSelect, ListBox&, void);
     DECL_LINK(TemplateSelect, ListBox&, void);
@@ -169,7 +169,7 @@ public:
     void             SetTemplateFlags(SfxTemplateFlags nSet);
 };
 
-IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update, Idle*, void)
+IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update, Timer*, void)
 {
     if (xDocShell.Is())
     {
@@ -409,7 +409,7 @@ SfxNewFileDialog_Impl::SfxNewFileDialog_Impl(
     }
 
     aPrevIdle.SetPriority( TaskPriority::LOWEST );
-    aPrevIdle.SetIdleHdl( LINK( this, SfxNewFileDialog_Impl, Update));
+    aPrevIdle.SetInvokeHandler( LINK( this, SfxNewFileDialog_Impl, Update));
 
     m_pRegionLb->SelectEntryPos(0);
     RegionSelect(*m_pRegionLb);

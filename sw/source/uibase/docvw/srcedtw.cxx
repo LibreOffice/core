@@ -537,7 +537,7 @@ void SwSrcEditWindow::CreateTextEngine()
     m_pTextEngine->SetFont( aFont );
 
     m_aSyntaxIdle.SetPriority( TaskPriority::LOWER );
-    m_aSyntaxIdle.SetIdleHdl( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
+    m_aSyntaxIdle.SetInvokeHandler( LINK( this, SwSrcEditWindow, SyntaxTimerHdl ) );
 
     m_pTextEngine->EnableUndo( true );
     m_pTextEngine->SetUpdateMode( true );
@@ -593,7 +593,7 @@ IMPL_LINK(SwSrcEditWindow, ScrollHdl, ScrollBar*, pScroll, void)
     GetSrcView()->GetViewFrame()->GetBindings().Invalidate( SID_TABLE_CELL );
 }
 
-IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Idle *, pIdle, void )
+IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer*, pIdle, void )
 {
     tools::Time aSyntaxCheckStart( tools::Time::SYSTEM );
     SAL_WARN_IF(m_pTextView == nullptr, "sw", "No View yet, but syntax highlighting?!");

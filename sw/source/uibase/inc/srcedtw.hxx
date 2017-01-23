@@ -92,7 +92,7 @@ private:
     using OutputDevice::SetFont;
     void            SetFont();
 
-    DECL_LINK( SyntaxTimerHdl, Idle *, void );
+    DECL_LINK( SyntaxTimerHdl, Timer *, void );
 
     using Window::Invalidate;
 

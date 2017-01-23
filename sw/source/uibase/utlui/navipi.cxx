@@ -723,7 +723,7 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     else
         m_aContentTree->GrabFocus();
     UsePage();
-    m_aPageChgIdle.SetIdleHdl(LINK(this, SwNavigationPI, ChangePageHdl));
+    m_aPageChgIdle.SetInvokeHandler(LINK(this, SwNavigationPI, ChangePageHdl));
     m_aPageChgIdle.SetPriority(TaskPriority::LOWEST);
 
     m_aContentTree->SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_CONTENT));
@@ -1153,7 +1153,7 @@ bool SwNavigationPI::IsGlobalDoc() const
     return bRet;
 }
 
-IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Idle *, void)
+IMPL_LINK_NOARG(SwNavigationPI, ChangePageHdl, Timer *, void)
 {
     if (!IsDisposed())
     {

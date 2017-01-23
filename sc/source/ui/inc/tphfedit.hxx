@@ -108,7 +108,7 @@ private:
     sal_uInt16      nSelected;
     OString         aSelectedIdent;
 
-                    DECL_DLLPRIVATE_LINK( TimerHdl, Idle*, void );
+                    DECL_DLLPRIVATE_LINK( TimerHdl, Timer*, void );
 
 protected:
 

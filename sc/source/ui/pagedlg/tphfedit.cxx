@@ -367,7 +367,7 @@ void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
 {
     if(!aIdle.IsActive())
     {
-        aIdle.SetIdleHdl(LINK( this, ScExtIButton, TimerHdl));
+        aIdle.SetInvokeHandler(LINK( this, ScExtIButton, TimerHdl));
         aIdle.Start();
     }
 
@@ -377,14 +377,14 @@ void ScExtIButton::MouseButtonDown( const MouseEvent& rMEvt )
 void ScExtIButton::MouseButtonUp( const MouseEvent& rMEvt)
 {
     aIdle.Stop();
-    aIdle.SetIdleHdl(Link<Idle *, void>());
+    aIdle.ClearInvokeHandler();
     ImageButton::MouseButtonUp(rMEvt );
 }
 
 void ScExtIButton::Click()
 {
     aIdle.Stop();
-    aIdle.SetIdleHdl(Link<Idle *, void>());
+    aIdle.ClearInvokeHandler();
     ImageButton::Click();
 }
 
@@ -423,7 +423,7 @@ bool ScExtIButton::PreNotify( NotifyEvent& rNEvt )
     return ImageButton::PreNotify(rNEvt );
 }
 
-IMPL_LINK_NOARG(ScExtIButton, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG(ScExtIButton, TimerHdl, Timer *, void)
 {
     StartPopup();
 }

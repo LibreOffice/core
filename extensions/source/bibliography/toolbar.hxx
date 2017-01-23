@@ -134,7 +134,7 @@ class BibToolBar:   public ToolBox
 
         BibDataManager*         pDatMan;
         DECL_LINK( SelHdl, ListBox&, void );
-        DECL_LINK( SendSelHdl, Idle*, void );
+        DECL_LINK( SendSelHdl, Timer*, void );
         DECL_LINK( MenuHdl, ToolBox*, void );
         DECL_LINK( OptionsChanged_Impl, LinkParamNone*, void );
         DECL_LINK( SettingsChanged_Impl, VclSimpleEvent&, void );

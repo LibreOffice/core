@@ -770,7 +770,7 @@ void SdDrawDocument::StartOnlineSpelling(bool bForceSpelling)
 
         mpOnlineSpellingList->seekShape(0);
         mpOnlineSpellingIdle = new Idle("OnlineSpelling");
-        mpOnlineSpellingIdle->SetIdleHdl( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
+        mpOnlineSpellingIdle->SetInvokeHandler( LINK(this, SdDrawDocument, OnlineSpellingHdl) );
         mpOnlineSpellingIdle->SetPriority(TaskPriority::LOWEST);
         mpOnlineSpellingIdle->Start();
     }
@@ -819,7 +819,7 @@ void SdDrawDocument::FillOnlineSpellingList(SdPage* pPage)
 }
 
 // OnlineSpelling in the background
-IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl, Idle *, void)
+IMPL_LINK_NOARG(SdDrawDocument, OnlineSpellingHdl, Timer *, void)
 {
     if (mpOnlineSpellingList!=nullptr
         && ( !mbOnlineSpell || mpOnlineSpellingList->hasMore()))

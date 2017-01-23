@@ -537,7 +537,7 @@ namespace svx
         ,m_rBindings( _pFrame->GetBindings() )
         ,m_bNeedClipboardInvalidation( true )
     {
-        m_aClipboardInvalidation.SetTimeoutHdl( LINK( this, FmTextControlShell, OnInvalidateClipboard ) );
+        m_aClipboardInvalidation.SetInvokeHandler( LINK( this, FmTextControlShell, OnInvalidateClipboard ) );
         m_aClipboardInvalidation.SetTimeout( 200 );
     }
 

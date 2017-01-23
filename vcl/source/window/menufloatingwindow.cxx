@@ -49,15 +49,15 @@ MenuFloatingWindow::MenuFloatingWindow( Menu* pMen, vcl::Window* pParent, WinBit
 
     SetPopupModeEndHdl( LINK( this, MenuFloatingWindow, PopupEnd ) );
 
-    aHighlightChangedTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, HighlightChanged ) );
+    aHighlightChangedTimer.SetInvokeHandler( LINK( this, MenuFloatingWindow, HighlightChanged ) );
     aHighlightChangedTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
     aHighlightChangedTimer.SetDebugName( "vcl::MenuFloatingWindow aHighlightChangedTimer" );
 
     aSubmenuCloseTimer.SetTimeout( GetSettings().GetMouseSettings().GetMenuDelay() );
-    aSubmenuCloseTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, SubmenuClose ) );
+    aSubmenuCloseTimer.SetInvokeHandler( LINK( this, MenuFloatingWindow, SubmenuClose ) );
     aSubmenuCloseTimer.SetDebugName( "vcl::MenuFloatingWindow aSubmenuCloseTimer" );
 
-    aScrollTimer.SetTimeoutHdl( LINK( this, MenuFloatingWindow, AutoScroll ) );
+    aScrollTimer.SetInvokeHandler( LINK( this, MenuFloatingWindow, AutoScroll ) );
     aScrollTimer.SetDebugName( "vcl::MenuFloatingWindow aScrollTimer" );
 
     AddEventListener( LINK( this, MenuFloatingWindow, ShowHideListener ) );

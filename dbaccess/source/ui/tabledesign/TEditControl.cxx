@@ -78,7 +78,7 @@ OTableEditorCtrl::ClipboardInvalidator::ClipboardInvalidator(OTableEditorCtrl* _
 {
 
     m_aInvalidateTimer.SetTimeout(500);
-    m_aInvalidateTimer.SetTimeoutHdl(LINK(this, OTableEditorCtrl::ClipboardInvalidator, OnInvalidate));
+    m_aInvalidateTimer.SetInvokeHandler(LINK(this, OTableEditorCtrl::ClipboardInvalidator, OnInvalidate));
     m_aInvalidateTimer.Start();
 }
 

@@ -69,7 +69,7 @@ private:
                         DECL_LINK( implVolumeHdl, Slider*, void );
                         DECL_LINK( implSelectHdl, ToolBox*, void );
                         DECL_LINK( implZoomSelectHdl, ListBox&, void );
-                        DECL_LINK(implTimeoutHdl, Idle *, void);
+                        DECL_LINK(implTimeoutHdl, Timer *, void);
 
     Idle                maIdle;
     MediaItem           maItem;

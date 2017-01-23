@@ -179,7 +179,7 @@ SfxBindings::SfxBindings()
     // all caches are valid (no pending invalidate-job)
     // create the list of caches
     pImpl->pCaches = new SfxStateCacheArr_Impl;
-    pImpl->aAutoTimer.SetTimeoutHdl( LINK(this, SfxBindings, NextJob) );
+    pImpl->aAutoTimer.SetInvokeHandler( LINK(this, SfxBindings, NextJob) );
     pImpl->aAutoTimer.SetDebugName( "sfx::SfxBindings aAutoTimer" );
 }
 

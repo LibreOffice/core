@@ -131,7 +131,7 @@ void ScInsertTableDlg::Init_Impl( bool bFromFile )
         m_pBtnFromFile->Check();
         SetFromTo_Impl();
 
-        aBrowseTimer.SetTimeoutHdl( LINK( this, ScInsertTableDlg, BrowseTimeoutHdl ) );
+        aBrowseTimer.SetInvokeHandler( LINK( this, ScInsertTableDlg, BrowseTimeoutHdl ) );
         aBrowseTimer.SetTimeout( 200 );
     }
 }

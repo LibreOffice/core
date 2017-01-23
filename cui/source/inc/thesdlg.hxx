@@ -45,7 +45,7 @@ public:
     virtual ~LookUpComboBox() override;
     virtual void dispose() override;
 
-    DECL_LINK( ModifyTimer_Hdl, Idle *, void );
+    DECL_LINK( ModifyTimer_Hdl, Timer *, void );
 
     void init(SvxThesaurusDialog *pDialog);
 

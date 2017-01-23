@@ -104,10 +104,10 @@ private:
     DECL_LINK( SelectHandle, SvTreeListBox*, void );
     DECL_LINK( RefInfoHandle, const OUString*, void );
 
-    DECL_LINK( UpdateSelectionHdl, Idle*, void );
+    DECL_LINK( UpdateSelectionHdl, Timer*, void );
     DECL_LINK( ChgTrackModHdl, ScChangeTrack&, void );
     DECL_LINK( CommandHdl, SvSimpleTable*, void );
-    DECL_LINK( ReOpenTimerHdl, Idle*, void );
+    DECL_LINK( ReOpenTimerHdl, Timer*, void );
     DECL_LINK( ColCompareHdl, const SvSortData*, sal_Int32 );
 
 protected:

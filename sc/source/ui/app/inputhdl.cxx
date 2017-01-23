@@ -648,7 +648,7 @@ ScInputHandler::ScInputHandler()
 
     pDelayTimer = new Timer( "ScInputHandlerDelay timer" );
     pDelayTimer->SetTimeout( 500 ); // 500 ms delay
-    pDelayTimer->SetTimeoutHdl( LINK( this, ScInputHandler, DelayTimer ) );
+    pDelayTimer->SetInvokeHandler( LINK( this, ScInputHandler, DelayTimer ) );
 }
 
 ScInputHandler::~ScInputHandler()

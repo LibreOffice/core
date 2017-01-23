@@ -75,7 +75,7 @@ DocumentStatisticsManager::DocumentStatisticsManager( SwDoc& i_rSwdoc ) : m_rDoc
 {
     maStatsUpdateTimer.SetTimeout( 1 );
     maStatsUpdateTimer.SetPriority( TaskPriority::LOWEST );
-    maStatsUpdateTimer.SetTimeoutHdl( LINK( this, DocumentStatisticsManager, DoIdleStatsUpdate ) );
+    maStatsUpdateTimer.SetInvokeHandler( LINK( this, DocumentStatisticsManager, DoIdleStatsUpdate ) );
     maStatsUpdateTimer.SetDebugName( "sw::DocumentStatisticsManager maStatsUpdateTimer" );
 }
 
@@ -233,9 +233,8 @@ bool DocumentStatisticsManager::IncrementalDocStatCalculate(long nChars, bool bF
     return nChars < 0;
 }
 
-IMPL_LINK( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, pTimer, void )
+IMPL_LINK_NOARG( DocumentStatisticsManager, DoIdleStatsUpdate, Timer *, void )
 {
-    (void)pTimer;
     if (IncrementalDocStatCalculate(32000))
         maStatsUpdateTimer.Start();
 

@@ -203,7 +203,7 @@ private:
     sal_Int16               mnLeftAlignCount;
     bool                    mbEmptyViewMargin;
 
-    DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK( ImplHandleWizardLayoutTimerHdl, Timer*, void );
 
 protected:
     long                LogicalCoordinateToPixel(int iCoordinate);

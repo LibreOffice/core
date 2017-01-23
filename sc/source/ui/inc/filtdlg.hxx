@@ -220,7 +220,7 @@ private:
     DECL_LINK( EndDlgHdl,  Button*, void );
 
     // Hack: RefInput control
-    DECL_LINK( TimeOutHdl, Idle*, void );
+    DECL_LINK( TimeOutHdl, Timer*, void );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_INC_FILTDLG_HXX

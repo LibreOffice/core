@@ -402,7 +402,7 @@ ScChartHiddenRangeListener::~ScChartHiddenRangeListener()
 
 void ScChartListenerCollection::Init()
 {
-    aIdle.SetIdleHdl( LINK( this, ScChartListenerCollection, TimerHdl ) );
+    aIdle.SetInvokeHandler( LINK( this, ScChartListenerCollection, TimerHdl ) );
     aIdle.SetPriority( TaskPriority::REPAINT );
     aIdle.SetDebugName( "sc::ScChartListenerCollection aIdle" );
 }
@@ -597,7 +597,7 @@ void ScChartListenerCollection::StartTimer()
     aIdle.Start();
 }
 
-IMPL_LINK_NOARG(ScChartListenerCollection, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG(ScChartListenerCollection, TimerHdl, Timer *, void)
 {
     if ( Application::AnyInput( VclInputFlags::KEYBOARD ) )
     {

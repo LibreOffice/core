@@ -119,7 +119,7 @@ SvxGrfCropPage::SvxGrfCropPage ( vcl::Window *pParent, const SfxItemSet &rSet )
 
     m_pOrigSizePB->SetClickHdl( LINK(this, SvxGrfCropPage, OrigSizeHdl) );
 
-    aTimer.SetTimeoutHdl(LINK(this, SvxGrfCropPage, Timeout));
+    aTimer.SetInvokeHandler(LINK(this, SvxGrfCropPage, Timeout));
     aTimer.SetTimeout( 1500 );
 }
 

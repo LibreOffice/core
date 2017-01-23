@@ -120,7 +120,7 @@ private:
     Idle                aIdle;
     OUString            aDocName;               // document on which the dialog was opened
 
-    DECL_LINK( UpdateFocusHdl, Idle*, void );
+    DECL_LINK( UpdateFocusHdl, Timer*, void );
 
 protected:
     void                disposeRefHandler();

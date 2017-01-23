@@ -418,7 +418,7 @@ DemoWindow::DemoWindow() :
     maRightBottomChild.SetPosSizePixel( Point(320,240), Size(320,240) );
     Show();
 
-    maUpdateTimer.SetTimeoutHdl(LINK(this, DemoWindow, updateHdl));
+    maUpdateTimer.SetInvokeHandler(LINK(this, DemoWindow, updateHdl));
     maUpdateTimer.SetTimeout( (sal_uLong)30 );
     maUpdateTimer.Start();
 }

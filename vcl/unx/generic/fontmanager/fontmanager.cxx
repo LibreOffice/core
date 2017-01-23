@@ -136,7 +136,7 @@ PrintFontManager::PrintFontManager()
     , m_nNextDirAtom( 1 )
 {
 #if ENABLE_DBUS
-    m_aFontInstallerTimer.SetTimeoutHdl(LINK(this, PrintFontManager, autoInstallFontLangSupport));
+    m_aFontInstallerTimer.SetInvokeHandler(LINK(this, PrintFontManager, autoInstallFontLangSupport));
     m_aFontInstallerTimer.SetTimeout(5000);
 #endif
 }

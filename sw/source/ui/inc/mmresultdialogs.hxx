@@ -199,7 +199,7 @@ class SwSendMailDialog : public ModelessDialog //SfxModalDialog
     DECL_LINK( CloseHdl_Impl, Button* , void);
     DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, void*, void );
     DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, void*, void );
-    DECL_LINK( RemoveThis, Idle*, void );
+    DECL_LINK( RemoveThis, Timer*, void );
 
     void        IterateMails();
     void        SendMails();

@@ -76,7 +76,7 @@ namespace rptui
         bool                                m_bDeleted;
 
 
-        DECL_LINK(MarkTimeout, Idle *, void);
+        DECL_LINK(MarkTimeout, Timer *, void);
         DECL_LINK( SplitHdl, SplitWindow*, void );
 
         void ImplInitSettings();

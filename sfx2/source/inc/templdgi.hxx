@@ -213,7 +213,7 @@ protected:
     DECL_LINK( ApplyHdl, LinkParamNone*, void );
     DECL_LINK( TreeListApplyHdl, SvTreeListBox*, bool );
     DECL_LINK( DropHdl, StyleTreeListBox_Impl&, bool );
-    DECL_LINK( TimeOut, Idle*, void );
+    DECL_LINK( TimeOut, Timer*, void );
     DECL_LINK( PreviewHdl, Button*, void);
 
     virtual void EnableItem(sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true)

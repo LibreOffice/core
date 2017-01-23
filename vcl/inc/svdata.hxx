@@ -151,7 +151,7 @@ struct ImplSVAppData
     DECL_STATIC_LINK(ImplSVAppData, ImplEndAllDialogsMsg, void*, void);
     DECL_STATIC_LINK(ImplSVAppData, ImplEndAllPopupsMsg, void*, void);
     DECL_STATIC_LINK(ImplSVAppData, ImplVclEventTestingHdl, void*, void);
-    DECL_LINK(VclEventTestingHdl, Idle*, void);
+    DECL_LINK(VclEventTestingHdl, Timer*, void);
 };
 
 struct ImplSVGDIData

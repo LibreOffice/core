@@ -3255,7 +3255,7 @@ class IdleTask
     public:
     bool GetFlag();
     IdleTask();
-    DECL_LINK( FlipFlag, Idle *, void );
+    DECL_LINK( FlipFlag, Timer *, void );
     ~IdleTask() {}
     private:
     bool flag;
@@ -3268,7 +3268,7 @@ IdleTask::IdleTask() : flag( false )
     //setting the Priority of Idle task to LOW, LOWEST
     maIdle.SetPriority( TaskPriority::LOWEST );
     //set idle for callback
-    maIdle.SetIdleHdl( LINK( this, IdleTask, FlipFlag) );
+    maIdle.SetInvokeHandler( LINK( this, IdleTask, FlipFlag) );
     //starting the idle
     maIdle.Start();
 }
@@ -3281,7 +3281,7 @@ bool IdleTask::GetFlag()
 }
 
 //Callback function of IdleTask Class
-IMPL_LINK(IdleTask, FlipFlag, Idle*, , void)
+IMPL_LINK(IdleTask, FlipFlag, Timer*, , void)
 {
     //setting the flag to make sure that low priority idle task has been dispatched
     this->flag = true;

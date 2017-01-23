@@ -179,7 +179,7 @@ friend void     PageNumNotify(  SwViewShell* pVwSh,
     DECL_LINK( KeyInputTimerHandler, Timer *, void );
 
     // timer for ApplyTemplates via mouse (in disguise Drag&Drop)
-    DECL_LINK( TemplateTimerHdl, Idle *, void );
+    DECL_LINK( TemplateTimerHdl, Timer *, void );
 
     void            MoveCursor( SwWrtShell &rSh, const Point& rDocPos,
                                 const bool bOnlyText, bool bLockView );

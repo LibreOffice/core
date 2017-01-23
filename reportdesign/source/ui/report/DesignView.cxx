@@ -117,7 +117,7 @@ ODesignView::ODesignView(   vcl::Window* pParent,
     m_aSplitWin->Show();
 
     m_aMarkIdle.SetPriority( TaskPriority::LOW );
-    m_aMarkIdle.SetIdleHdl( LINK( this, ODesignView, MarkTimeout ) );
+    m_aMarkIdle.SetInvokeHandler( LINK( this, ODesignView, MarkTimeout ) );
 }
 
 
@@ -265,7 +265,7 @@ void ODesignView::resizeDocumentView(Rectangle& _rPlayground)
 
 }
 
-IMPL_LINK_NOARG(ODesignView, MarkTimeout, Idle *, void)
+IMPL_LINK_NOARG(ODesignView, MarkTimeout, Timer *, void)
 {
     if ( m_pPropWin && m_pPropWin->IsVisible() )
     {

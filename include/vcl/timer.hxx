@@ -57,23 +57,12 @@ public:
     void            Invoke( Timer *arg );
     void            SetInvokeHandler( const Link<Timer *, void>& rLink ) { maInvokeHandler = rLink; }
     bool            HasInvokeHandler() const { return maInvokeHandler.IsSet(); };
-
-    /**
-     * Convenience function for more readable code
-     *
-     * TODO: actually use SetInvokeHandler and drop it
-     */
-    inline void     SetTimeoutHdl( const Link<Timer *, void>& rLink );
+    void            ClearInvokeHandler() { SetInvokeHandler( Link<Timer *, void>() ); }
 
     void            SetTimeout( sal_uInt64 nTimeoutMs );
     sal_uInt64      GetTimeout() const { return mnTimeout; }
     virtual void    Start() override;
 };
-
-inline void Timer::SetTimeoutHdl( const Link<Timer *, void>& rLink )
-{
-    SetInvokeHandler( rLink );
-}
 
 /// An auto-timer is a multi-shot timer re-emitting itself at
 /// interval until destroyed.

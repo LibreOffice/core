@@ -528,7 +528,7 @@ Desktop::Desktop()
     , m_aBootstrapStatus(BS_OK)
 {
     m_firstRunTimer.SetTimeout(3000); // 3 sec.
-    m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
+    m_firstRunTimer.SetInvokeHandler(LINK(this, Desktop, AsyncInitFirstRun));
     m_firstRunTimer.SetDebugName( "desktop::Desktop m_firstRunTimer" );
 }
 
@@ -2583,7 +2583,7 @@ void Desktop::CloseSplashScreen()
 }
 
 
-IMPL_STATIC_LINK(Desktop, AsyncInitFirstRun, Timer *, /*unused*/, void)
+IMPL_STATIC_LINK_NOARG(Desktop, AsyncInitFirstRun, Timer *, void)
 {
     // does initializations which are necessary for the first run of the office
     try

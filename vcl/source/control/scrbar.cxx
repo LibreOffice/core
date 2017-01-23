@@ -93,7 +93,7 @@ void ScrollBar::ImplInit( vcl::Window* pParent, WinBits nStyle )
     if( !mpData )  // TODO: remove when maTrackRect is no longer in mpData
     {
         mpData = new ImplScrollBarData;
-        mpData->maTimer.SetTimeoutHdl( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
+        mpData->maTimer.SetInvokeHandler( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
         mpData->maTimer.SetDebugName( "vcl::ScrollBar mpData->maTimer" );
         mpData->mbHide = false;
     }
@@ -1156,7 +1156,7 @@ void ScrollBar::GetFocus()
     if( !mpData )
     {
         mpData = new ImplScrollBarData;
-        mpData->maTimer.SetTimeoutHdl( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
+        mpData->maTimer.SetInvokeHandler( LINK( this, ScrollBar, ImplAutoTimerHdl ) );
         mpData->mbHide = false;
     }
     ImplInvert(); // react immediately

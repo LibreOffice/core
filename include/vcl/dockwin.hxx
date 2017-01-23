@@ -242,7 +242,7 @@ private:
 
     SAL_DLLPRIVATE void    ImplInitDockingWindowData();
     SAL_DLLPRIVATE void setPosSizeOnContainee(Size aSize, Window &rBox);
-    DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK( ImplHandleLayoutTimerHdl, Timer*, void );
 
                            DockingWindow (const DockingWindow &) = delete;
                            DockingWindow & operator= (const DockingWindow &) = delete;

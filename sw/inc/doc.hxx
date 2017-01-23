@@ -423,7 +423,7 @@ private:
 
     // CharTimer calls this method.
     void DoUpdateAllCharts();
-    DECL_LINK( DoUpdateModifiedOLE, Idle *, void );
+    DECL_LINK( DoUpdateModifiedOLE, Timer *, void );
 
 public:
     SwFormat *MakeCharFormat_(const OUString &, SwFormat *, bool, bool );

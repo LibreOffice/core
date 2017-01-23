@@ -161,7 +161,7 @@ SwHeaderFooterWin::SwHeaderFooterWin( SwEditWin* pEditWin, const SwFrame *pFrame
     SetPopupMenu(m_pPopupMenu);
 
     m_aFadeTimer.SetTimeout(50);
-    m_aFadeTimer.SetTimeoutHdl(LINK(this, SwHeaderFooterWin, FadeHandler));
+    m_aFadeTimer.SetInvokeHandler(LINK(this, SwHeaderFooterWin, FadeHandler));
 }
 
 SwHeaderFooterWin::~SwHeaderFooterWin( )

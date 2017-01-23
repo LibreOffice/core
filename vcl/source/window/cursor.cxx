@@ -184,7 +184,7 @@ void vcl::Cursor::ImplDoShow( bool bDrawDirect, bool bRestore )
             {
                 mpData = new ImplCursorData;
                 mpData->mbCurVisible = false;
-                mpData->maTimer.SetTimeoutHdl( LINK( this, Cursor, ImplTimerHdl ) );
+                mpData->maTimer.SetInvokeHandler( LINK( this, Cursor, ImplTimerHdl ) );
                 mpData->maTimer.SetDebugName( "vcl ImplCursorData maTimer" );
             }
 

@@ -148,9 +148,9 @@ private:
 
     std::vector< short > aContextBmpWidthVector;
 
-    DECL_LINK(EditTimerCall, Idle *, void);
+    DECL_LINK(EditTimerCall, Timer *, void);
 
-    DECL_LINK( BeginDragHdl, Idle*, void );
+    DECL_LINK( BeginDragHdl, Timer*, void );
 
     void                InvalidateEntriesFrom( long nY ) const;
     bool                IsLineVisible( long nY ) const;

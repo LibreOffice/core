@@ -58,7 +58,7 @@ void WizardDialog::ImplInitData()
     mnLeftAlignCount = 0;
 
     maWizardLayoutIdle.SetPriority(TaskPriority::RESIZE);
-    maWizardLayoutIdle.SetIdleHdl( LINK( this, WizardDialog, ImplHandleWizardLayoutTimerHdl ) );
+    maWizardLayoutIdle.SetInvokeHandler( LINK( this, WizardDialog, ImplHandleWizardLayoutTimerHdl ) );
 }
 
 
@@ -114,7 +114,7 @@ void WizardDialog::queue_resize(StateChangedType /*eReason*/)
     maWizardLayoutIdle.Start();
 }
 
-IMPL_LINK_NOARG( WizardDialog, ImplHandleWizardLayoutTimerHdl, Idle*, void )
+IMPL_LINK_NOARG( WizardDialog, ImplHandleWizardLayoutTimerHdl, Timer*, void )
 {
     ImplPosCtrls();
     ImplPosTabPage();

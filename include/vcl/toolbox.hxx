@@ -210,7 +210,7 @@ private:
     SAL_DLLPRIVATE void            ImplDrawFloatwinBorder(vcl::RenderContext& rRenderContext, ImplToolItem* pItem );
 
     DECL_DLLPRIVATE_LINK(    ImplCallExecuteCustomMenu, void*, void );
-    DECL_DLLPRIVATE_LINK(    ImplUpdateHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK(    ImplUpdateHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK(    ImplCustomMenuListener, VclMenuEvent&, void );
     DECL_DLLPRIVATE_LINK(    ImplDropdownLongClickHdl, Timer*, void );
 

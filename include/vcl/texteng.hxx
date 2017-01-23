@@ -167,7 +167,7 @@ protected:
     void                ImpCharsRemoved( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32 nChars );
     void                ImpCharsInserted( sal_uInt32 nPara, sal_Int32 nPos, sal_Int32 nChars );
 
-    DECL_LINK(    IdleFormatHdl, Idle *, void );
+    DECL_LINK(    IdleFormatHdl, Timer *, void );
     void                CheckIdleFormatter();
     void                IdleFormatAndUpdate( TextView* pCurView, sal_uInt16 nMaxTimerRestarts = 5 );
 

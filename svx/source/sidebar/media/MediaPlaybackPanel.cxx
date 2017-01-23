@@ -82,7 +82,7 @@ void MediaPlaybackPanel::Initialize()
     mpTimeSlider->SetSlideHdl(LINK(this, MediaPlaybackPanel, SeekHdl));
 
     maIdle.SetPriority( TaskPriority::HIGHEST );
-    maIdle.SetIdleHdl( LINK( this, MediaPlaybackPanel, TimeoutHdl ) );
+    maIdle.SetInvokeHandler( LINK( this, MediaPlaybackPanel, TimeoutHdl ) );
     maIdle.Start();
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);
 }
@@ -140,7 +140,7 @@ IMPL_LINK_NOARG( MediaPlaybackPanel, SeekHdl, Slider*, void)
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);
 }
 
-IMPL_LINK_NOARG( MediaPlaybackPanel, TimeoutHdl, Idle*, void)
+IMPL_LINK_NOARG( MediaPlaybackPanel, TimeoutHdl, Timer*, void)
 {
     mpBindings->Invalidate(SID_AVMEDIA_TOOLBOX);
 }

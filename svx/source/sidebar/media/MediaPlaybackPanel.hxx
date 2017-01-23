@@ -73,7 +73,7 @@ private:
     DECL_LINK(PlayToolBoxSelectHdl, ToolBox*, void);
     DECL_LINK(VolumeSlideHdl, Slider*, void);
     DECL_LINK(SeekHdl, Slider*, void);
-    DECL_LINK(TimeoutHdl, Idle*, void);
+    DECL_LINK(TimeoutHdl, Timer*, void);
 };
 
 

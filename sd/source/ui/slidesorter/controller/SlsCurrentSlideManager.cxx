@@ -46,7 +46,7 @@ CurrentSlideManager::CurrentSlideManager (SlideSorter& rSlideSorter)
       maSwitchPageDelayTimer()
 {
     maSwitchPageDelayTimer.SetTimeout(100);
-    maSwitchPageDelayTimer.SetTimeoutHdl(LINK(this,CurrentSlideManager,SwitchPageCallback));
+    maSwitchPageDelayTimer.SetInvokeHandler(LINK(this,CurrentSlideManager,SwitchPageCallback));
 }
 
 CurrentSlideManager::~CurrentSlideManager()

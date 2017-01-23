@@ -269,7 +269,7 @@ void FmSearchDialog::Init(const OUString& strVisibleFields, const OUString& sIni
     LINK(this, FmSearchDialog, OnSearchTextModified).Call(*m_pcmbSearchText);
 
     // initial
-    m_aDelayedPaint.SetTimeoutHdl(LINK(this, FmSearchDialog, OnDelayedPaint));
+    m_aDelayedPaint.SetInvokeHandler(LINK(this, FmSearchDialog, OnDelayedPaint));
     m_aDelayedPaint.SetTimeout(500);
     EnableSearchUI(true);
 

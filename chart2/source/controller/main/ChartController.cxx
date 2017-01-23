@@ -122,7 +122,7 @@ ChartController::ChartController(uno::Reference<uno::XComponentContext> const & 
             [this]() { return this->GetContextName(); },
                 this, vcl::EnumContext::Context::Cell))
 {
-    m_aDoubleClickTimer.SetTimeoutHdl( LINK( this, ChartController, DoubleClickWaitingHdl ) );
+    m_aDoubleClickTimer.SetInvokeHandler( LINK( this, ChartController, DoubleClickWaitingHdl ) );
 }
 
 ChartController::~ChartController()

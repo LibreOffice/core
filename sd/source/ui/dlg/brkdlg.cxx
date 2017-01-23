@@ -48,7 +48,7 @@ BreakDlg::BreakDlg(
     , mpProgress( nullptr )
 {
     m_aUpdateIdle.SetPriority( TaskPriority::REPAINT );
-    m_aUpdateIdle.SetIdleHdl( LINK( this, BreakDlg, InitialUpdate ) );
+    m_aUpdateIdle.SetInvokeHandler( LINK( this, BreakDlg, InitialUpdate ) );
     m_aUpdateIdle.SetDebugName( "sd::BreakDlg m_aUpdateIdle" );
 
     get(m_pFiObjInfo, "metafiles");
@@ -171,7 +171,7 @@ short BreakDlg::Execute()
 /**
  * link-method which starts the working function
  */
-IMPL_LINK_NOARG(BreakDlg, InitialUpdate, Idle *, void)
+IMPL_LINK_NOARG(BreakDlg, InitialUpdate, Timer *, void)
 {
     pDrView->DoImportMarkedMtf(pProgrInfo);
     EndDialog(RET_OK);

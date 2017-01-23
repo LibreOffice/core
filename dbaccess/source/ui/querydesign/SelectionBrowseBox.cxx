@@ -146,7 +146,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( vcl::Window* pParent )
     m_bVisibleRow[BROW_FUNCTION_ROW] = false;   // first hide
 
     m_timerInvalidate.SetTimeout(200);
-    m_timerInvalidate.SetTimeoutHdl(LINK(this, OSelectionBrowseBox, OnInvalidateTimer));
+    m_timerInvalidate.SetInvokeHandler(LINK(this, OSelectionBrowseBox, OnInvalidateTimer));
     m_timerInvalidate.Start();
 }
 

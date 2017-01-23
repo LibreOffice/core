@@ -1047,7 +1047,7 @@ SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     SetOutputSizePixel(aBrowse->GetSizePixel());
     SetText("Joe's ItemBrowser");
     aBrowse->Show();
-    aIdle.SetIdleHdl(LINK(this,SdrItemBrowser,IdleHdl));
+    aIdle.SetInvokeHandler(LINK(this,SdrItemBrowser,IdleHdl));
     GetBrowserControl()->SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
     GetBrowserControl()->SetSetDirtyHdl(LINK(this,SdrItemBrowser,SetDirtyHdl));
     SetDirty();
@@ -1127,7 +1127,7 @@ void SdrItemBrowser::Undirty()
     }
 }
 
-IMPL_LINK_NOARG(SdrItemBrowser, IdleHdl, Idle *, void)
+IMPL_LINK_NOARG(SdrItemBrowser, IdleHdl, Timer *, void)
 {
     Undirty();
 }
