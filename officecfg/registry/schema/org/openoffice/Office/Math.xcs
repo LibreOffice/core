@@ -412,7 +412,7 @@
             </info>
           </maxInclusive>
         </constraints>
-        <value>0</value>
+        <value>2</value>
       </prop>
       <prop oor:name="ScaleNormalBracket" oor:type="xs:boolean" oor:nillable="false">
         <!-- OldPath: Math/StandardFormat -->
