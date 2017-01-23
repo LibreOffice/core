@@ -24,6 +24,7 @@
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 
 #include <memory>
 
@@ -104,8 +105,7 @@ private:
 
     bool isShapeControllerCommandAvailable( const OUString& rCommand );
 
-    ChartController* m_pChartController;
-    css::uno::Reference< css::frame::XController > m_xController;
+    rtl::Reference<ChartController> m_xChartController;
     css::uno::Reference< css::view::XSelectionSupplier > m_xSelectionSupplier;
     css::uno::Reference< css::frame::XDispatch > m_xDispatch;
 
