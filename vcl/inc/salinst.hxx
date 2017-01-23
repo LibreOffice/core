@@ -127,6 +127,7 @@ public:
     virtual void            AcquireYieldMutex( sal_uLong nCount ) = 0;
     // return true, if yield mutex is owned by this thread, else false
     virtual bool            CheckYieldMutex() = 0;
+    virtual bool            IsMainThread() const = 0;
 
     /**
      * Wait for the next event (if bWait) and dispatch it,

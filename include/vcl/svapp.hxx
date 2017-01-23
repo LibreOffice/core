@@ -462,18 +462,25 @@ public:
     */
     static void                 Quit();
 
-    /** Attempt to reschedule in processing of current event(s)
+    /** Attempt to process current pending event(s)
+
+     It doesn't sleep if no events are available for processing.
 
      @param bAllEvents  If set to true, then try to process all the
         events. If set to false, then only process the current
         event. Defaults to false.
 
+     @returns true if any event was processed.
+
      @see Execute, Quit, Yield, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
      */
-    static void                 Reschedule( bool bAllEvents = false );
+    static bool                 Reschedule( bool bAllEvents = false );
 
-    /** Allow processing of the next event.
+    /** Process the next event.
+
+     It sleeps if no event is available for processing and just returns
+     if an event was processed.
 
      @see Execute, Quit, Reschedule, EndYield, GetSolarMutex,
           GetMainThreadIdentifier, ReleaseSolarMutex, AcquireSolarMutex,
