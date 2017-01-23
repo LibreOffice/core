@@ -49,11 +49,6 @@ Image::Image(const BitmapEx& rBitmapEx)
     ImplInit(rBitmapEx);
 }
 
-Image::Image(const Bitmap& rBitmap)
-{
-    ImplInit(rBitmap);
-}
-
 Image::Image(const Bitmap& rBitmap, const Color& rColor)
 {
     const BitmapEx aBitmapEx(rBitmap, rColor);
