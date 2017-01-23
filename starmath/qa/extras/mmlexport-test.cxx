@@ -132,13 +132,13 @@ void MathMLExportTest::testTdf101022()
     }                                                                   \
     while (false)
 
-    CHECK_MATHVARIANT(false, false); // default mode 0
+    CHECK_MATHVARIANT(false, true); // default mode 2
 
     mxDocShell->SetGreekCharStyle(1); // mode 1
     CHECK_MATHVARIANT(true, true);
 
-    mxDocShell->SetGreekCharStyle(2); // mode 2
-    CHECK_MATHVARIANT(false, true);
+    mxDocShell->SetGreekCharStyle(0); // mode 0
+    CHECK_MATHVARIANT(false, false);
 
 #undef CHECK_MATHVARIANT
 }
