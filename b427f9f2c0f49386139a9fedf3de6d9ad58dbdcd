@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_dc997221",
+        "filename": "sw/source/core/edit/edattr.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-23T11:18:45Z",
+      "side": 1,
+      "message": "judging by the assert in InvalidateAllItems, yes",
+      "revId": "b427f9f2c0f49386139a9fedf3de6d9ad58dbdcd",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
