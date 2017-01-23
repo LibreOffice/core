@@ -1,0 +1,30 @@
+#ifndef INCLUDED_COM_SUN_STAR_TEXT_WRAPTEXTMODE_HDL
+#define INCLUDED_COM_SUN_STAR_TEXT_WRAPTEXTMODE_HDL
+
+#include "sal/config.h"
+
+#include "cppu/macros.hxx"
+
+namespace com { namespace sun { namespace star { namespace uno { class Type; } } } }
+
+namespace com { namespace sun { namespace star { namespace text {
+
+enum SAL_DLLPUBLIC_RTTI WrapTextMode
+{
+    WrapTextMode_NONE = 0,
+    WrapTextMode_THROUGHT = 1,
+    WrapTextMode_PARALLEL = 2,
+    WrapTextMode_DYNAMIC = 3,
+    WrapTextMode_LEFT = 4,
+    WrapTextMode_RIGHT = 5,   
+    WrapTextMode_TIGHT = 6,
+    WrapTextMode_MAKE_FIXED_SIZE = SAL_MAX_ENUM
+};
+
+
+inline ::css::uno::Type const & cppu_detail_getUnoType(SAL_UNUSED_PARAMETER ::css::text::WrapTextMode const *);
+} } } }
+
+SAL_DEPRECATED("use cppu::UnoType") inline ::css::uno::Type const & SAL_CALL getCppuType(const ::css::text::WrapTextMode *);
+
+#endif
