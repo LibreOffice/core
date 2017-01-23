@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_1ca4da55",
+        "filename": "sc/inc/rangenam.hxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-23T11:27:46Z",
+      "side": 1,
+      "message": "Please use a descriptive enum instead of int as return type.\n\nAlso, keeping the function name aligned with the other would just be nice to the eye ;-)",
+      "revId": "c4e020caa0865ef1a3b3e885fd4954625d3f0edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_7c9326fb",
+        "filename": "sc/source/core/tool/rangenam.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 509,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-23T11:27:46Z",
+      "side": 1,
+      "message": "So, as this essentially duplicates code to only introduce a more differentiated return value, the better approach would be to change the IsNameValid() function instead, and adapt all places where it is used, which are just about 5 or so.",
+      "revId": "c4e020caa0865ef1a3b3e885fd4954625d3f0edf",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
