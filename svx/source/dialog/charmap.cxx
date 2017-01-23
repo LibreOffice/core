@@ -57,7 +57,6 @@ sal_uInt32& SvxShowCharSet::getSelectedChar()
 
 SvxShowCharSet::SvxShowCharSet(vcl::Window* pParent)
     : Control(pParent, WB_TABSTOP | WB_BORDER)
-    , m_pAccessible(nullptr)
     , maFontSize(0, 0)
     , aVscrollSB( VclPtr<ScrollBar>::Create(this, WB_VERT) )
     , mbRecalculateFont(true)
@@ -624,14 +623,14 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
     if( nSelectedIndex >= 0 )
     {
         getSelectedChar() = mxFontCharMap->GetCharFromIndex( nSelectedIndex );
-        if( m_pAccessible )
+        if( m_xAccessible.is() )
         {
             svx::SvxShowCharSetItem* pItem = ImplGetItem(nSelectedIndex);
             // Don't fire the focus event.
             if ( bFocus )
-                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), makeAny(pItem->GetAccessible()) ); // this call assures that m_pItem is set
+                m_xAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED, Any(), makeAny(pItem->GetAccessible()) ); // this call assures that m_pItem is set
             else
-                m_pAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(), makeAny(pItem->GetAccessible()) ); // this call assures that m_pItem is set
+                m_xAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(), makeAny(pItem->GetAccessible()) ); // this call assures that m_pItem is set
 
             assert(pItem->m_pItem && "No accessible created!");
             Any aOldAny, aNewAny;
@@ -680,14 +679,14 @@ IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl, ScrollBar*, void)
     }
     else if( nSelectedIndex > LastInView() )
     {
-        if( m_pAccessible )
+        if( m_xAccessible.is() )
         {
             css::uno::Any aOldAny, aNewAny;
             int nLast = LastInView();
             for ( ; nLast != nSelectedIndex; ++nLast)
             {
                 aOldAny <<= ImplGetItem(nLast)->GetAccessible();
-                m_pAccessible ->fireEvent( AccessibleEventId::CHILD, aOldAny, aNewAny );
+                m_xAccessible ->fireEvent( AccessibleEventId::CHILD, aOldAny, aNewAny );
             }
         }
         SelectIndex( (LastInView() - COLUMN_COUNT + 1) + (nSelectedIndex % COLUMN_COUNT) );
@@ -704,7 +703,7 @@ SvxShowCharSet::~SvxShowCharSet()
 
 void SvxShowCharSet::dispose()
 {
-    if ( m_pAccessible )
+    if ( m_xAccessible.is() )
         ReleaseAccessible();
     aVscrollSB.disposeAndClear();
     Control::dispose();
@@ -713,16 +712,14 @@ void SvxShowCharSet::dispose()
 void SvxShowCharSet::ReleaseAccessible()
 {
     m_aItems.clear();
-    m_pAccessible = nullptr;
-    m_xAccessible = nullptr;
+    m_xAccessible.clear();
 }
 
 css::uno::Reference< XAccessible > SvxShowCharSet::CreateAccessible()
 {
-    OSL_ENSURE(!m_pAccessible,"Accessible already created!");
-    m_pAccessible = new svx::SvxShowCharSetVirtualAcc(this);
-    m_xAccessible = m_pAccessible;
-    return m_xAccessible;
+    OSL_ENSURE(!m_xAccessible.is(),"Accessible already created!");
+    m_xAccessible = new svx::SvxShowCharSetVirtualAcc(this);
+    return m_xAccessible.get();
 }
 
 svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
@@ -730,9 +727,9 @@ svx::SvxShowCharSetItem* SvxShowCharSet::ImplGetItem( int _nPos )
     ItemsMap::iterator aFind = m_aItems.find(_nPos);
     if ( aFind == m_aItems.end() )
     {
-        OSL_ENSURE(m_pAccessible,"Who wants to create a child of my table without a parent?");
+        OSL_ENSURE(m_xAccessible.is(), "Who wants to create a child of my table without a parent?");
         std::shared_ptr<svx::SvxShowCharSetItem> xItem(new svx::SvxShowCharSetItem(*this,
-            m_pAccessible->getTable(), sal::static_int_cast< sal_uInt16 >(_nPos)));
+            m_xAccessible->getTable(), sal::static_int_cast< sal_uInt16 >(_nPos)));
         aFind = m_aItems.insert(ItemsMap::value_type(_nPos, xItem)).first;
         OUStringBuffer buf;
         buf.appendUtf32( mxFontCharMap->GetCharFromIndex( _nPos ) );

@@ -25,6 +25,7 @@
 #include <vcl/vclptr.hxx>
 #include <map>
 #include <memory>
+#include <rtl/ref.hxx>
 #include <svx/svxdllapi.h>
 
 #define COLUMN_COUNT    16
@@ -97,8 +98,7 @@ private:
     Link<SvxShowCharSet*,void>     aSelectHdl;
     Link<SvxShowCharSet*,void>     aHighHdl;
     Link<SvxShowCharSet*,void>     aPreSelectHdl;
-    svx::SvxShowCharSetVirtualAcc* m_pAccessible;
-    css::uno::Reference<css::accessibility::XAccessible> m_xAccessible;
+    rtl::Reference<svx::SvxShowCharSetVirtualAcc> m_xAccessible;
     long            nX;
     long            nY;
     long            m_nXGap;
