@@ -107,13 +107,12 @@ void SmRect::CopyAlignInfo(const SmRect &rRect)
 }
 
 
-void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
-                       const OUString &rText, sal_uInt16 nBorder)
+SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
+               const OUString &rText, sal_uInt16 nBorder)
+    // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
+    : aTopLeft(0, 0)
+    , aSize(rDev.GetTextWidth(rText), rDev.GetTextHeight())
 {
-    OSL_ENSURE(aTopLeft == Point(0, 0), "Sm: Ooops...");
-
-    aSize = Size(rDev.GetTextWidth(rText), rDev.GetTextHeight());
-
     const FontMetric  aFM (rDev.GetFontMetric());
     bool              bIsMath  = aFM.GetFamilyName().equalsIgnoreAsciiCase( FONTNAME_MATH );
     bool              bAllowSmaller = bIsMath && !SmIsMathAlpha(rText);
@@ -192,18 +191,6 @@ void SmRect::BuildRect(const OutputDevice &rDev, const SmFormat *pFormat,
 
     OSL_ENSURE(rText.isEmpty() || !IsEmpty(),
                "Sm: empty rectangle created");
-}
-
-
-
-SmRect::SmRect(const OutputDevice &rDev, const SmFormat *pFormat,
-               const OUString &rText, long nEBorderWidth)
-{
-    OSL_ENSURE( nEBorderWidth >= 0, "BorderWidth is negative" );
-    if (nEBorderWidth < 0)
-        nEBorderWidth = 0;
-    // get rectangle fitting for drawing 'rText' on OutputDevice 'rDev'
-    BuildRect(rDev, pFormat, rText, sal::static_int_cast<sal_uInt16>(nEBorderWidth));
 }
 
 
