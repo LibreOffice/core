@@ -1,4 +1,4 @@
-#! /usr/local/bin/python3
+#! /usr/bin/env python3
 # -*- Mode: python; tab-width: 4; indent-tabs-mode: t -*-
 #
 # This file is part of the LibreOffice project.
