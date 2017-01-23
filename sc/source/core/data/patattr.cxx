@@ -126,10 +126,10 @@ inline bool EqualPatternSets( const SfxItemSet& rSet1, const SfxItemSet& rSet2 )
     if ( rSet1.Count() != rSet2.Count() )
         return false;
 
-    SfxItemMap const & rItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
-    SfxItemMap const & rItems2 = rSet2.GetItems_Impl();
+    SfxItemArray pItems1 = rSet1.GetItems_Impl();   // inline method of SfxItemSet
+    SfxItemArray pItems2 = rSet2.GetItems_Impl();
 
-    return rItems1 == rItems2;
+    return ( 0 == memcmp( pItems1, pItems2, (ATTR_PATTERN_END - ATTR_PATTERN_START + 1) * sizeof(pItems1[0]) ) );
 }
 
 bool ScPatternAttr::operator==( const SfxPoolItem& rCmp ) const

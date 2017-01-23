@@ -8,8 +8,6 @@
  */
 
 #include <svl/itempool.hxx>
-#include <svl/itemset.hxx>
-#include <svl/itemiter.hxx>
 #include <poolio.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -23,11 +21,13 @@ class PoolItemTest : public CppUnit::TestFixture
              PoolItemTest() {}
 
     void testPool();
-    void testItemSet();
 
+    // Adds code needed to register the test suite
     CPPUNIT_TEST_SUITE(PoolItemTest);
+
     CPPUNIT_TEST(testPool);
-    CPPUNIT_TEST(testItemSet);
+
+    // End of test suite definition
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -99,53 +99,6 @@ void PoolItemTest::testPool()
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), pImpl->maPoolItems[3]->maFree.size());
 }
 
-void PoolItemTest::testItemSet()
-{
-    SfxItemInfo aItems[] =
-        { { 1, false },
-          { 2, false },
-          { 3, false },
-          { 4, false },
-          { 5, false },
-          { 6, false },
-          { 7, false }
-        };
-
-    SfxItemPool *pPool = new SfxItemPool("testpool", 1, 7, aItems);
-    std::vector<SfxPoolItem*> aDefaults {
-        new SfxVoidItem(1),
-        new SfxVoidItem(2),
-        new SfxVoidItem(3),
-        new SfxVoidItem(4),
-        new SfxVoidItem(5),
-        new SfxVoidItem(6),
-        new SfxVoidItem(7)
-    };
-    pPool->SetDefaults(&aDefaults);
-
-    SfxItemSet aItemSet(*pPool, 1, 3, 5, 7, 0);
-    aItemSet.Put(SfxVoidItem(1));
-    aItemSet.Put(SfxVoidItem(2));
-    aItemSet.Put(SfxVoidItem(3));
-    aItemSet.Put(SfxVoidItem(5));
-    aItemSet.Put(SfxVoidItem(6));
-    aItemSet.Put(SfxVoidItem(7));
-
-    SfxItemIter aIter(aItemSet);
-
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)1, aIter.GetFirstWhich());
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)7, aIter.GetLastWhich());
-    const SfxPoolItem *pFirstItem = aIter.FirstItem();
-    CPPUNIT_ASSERT(pFirstItem);
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)1, pFirstItem->Which());
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)2, aIter.NextItem()->Which());
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)3, aIter.NextItem()->Which());
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)5, aIter.NextItem()->Which());
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)6, aIter.NextItem()->Which());
-    CPPUNIT_ASSERT_EQUAL((sal_uInt16)7, aIter.NextItem()->Which());
-    CPPUNIT_ASSERT_EQUAL(static_cast<const SfxPoolItem*>(nullptr), aIter.NextItem());
-    CPPUNIT_ASSERT_EQUAL(true, aIter.IsAtEnd());
-}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PoolItemTest);
 

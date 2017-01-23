@@ -25,50 +25,44 @@
 SfxItemIter::SfxItemIter( const SfxItemSet& rItemSet )
     : m_rSet( rItemSet )
 {
-    // store the set of keys because client code likes modifying the map
-    // while iterating over it
-    m_keys.resize(rItemSet.m_aItems.size());
-    size_t idx = 0;
-    for (auto const & rPair : rItemSet.m_aItems) {
-        m_keys[idx++] = rPair.first;
+    if (!m_rSet.m_nCount)
+    {
+        m_nStart = 1;
+        m_nEnd = 0;
     }
-    m_iter = m_keys.begin();
+    else
+    {
+        SfxItemArray ppFnd = m_rSet.m_pItems;
+
+        // Find the first Item that is set
+        for (m_nStart = 0; !*(ppFnd + m_nStart ); ++m_nStart)
+            ; // empty loop
+        if (1 < m_rSet.Count())
+            for (m_nEnd = m_rSet.TotalCount(); !*(ppFnd + --m_nEnd); )
+                ; // empty loop
+        else
+            m_nEnd = m_nStart;
+    }
+
+    m_nCurrent = m_nStart;
 }
 
 SfxItemIter::~SfxItemIter()
 {
 }
 
-SfxPoolItem const * SfxItemIter::FirstItem()
+const SfxPoolItem* SfxItemIter::NextItem()
 {
-    m_iter = m_keys.begin();
-    return GetCurItem();
-}
+    SfxItemArray ppFnd = m_rSet.m_pItems;
 
-SfxPoolItem const * SfxItemIter::GetCurItem()
-{
-    if (m_keys.empty())
-        return nullptr;
-    auto it = m_rSet.m_aItems.find(*m_iter);
-    if (it == m_rSet.m_aItems.end())
-        return nullptr;
-    return it->second;
+    if (m_nCurrent < m_nEnd)
+    {
+        do {
+            m_nCurrent++;
+        } while (m_nCurrent < m_nEnd && !*(ppFnd + m_nCurrent ));
+        return *(ppFnd+m_nCurrent);
+    }
+    return nullptr;
 }
-
-SfxPoolItem const * SfxItemIter::NextItem()
-{
-    if (m_iter == m_keys.end())
-        return nullptr;
-    ++m_iter;
-    if (m_iter == m_keys.end())
-        return nullptr;
-    return GetCurItem();
-}
-
-bool SfxItemIter::IsAtEnd() const
-{
-    return m_iter == m_keys.end() || std::next(m_iter) == m_keys.end();
-}
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

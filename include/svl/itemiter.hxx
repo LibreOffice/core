@@ -21,7 +21,6 @@
 
 #include <svl/svldllapi.h>
 #include <svl/itemset.hxx>
-#include <vector>
 
 class SfxPoolItem;
 class SfxItemSet;
@@ -29,23 +28,32 @@ class SfxItemPool;
 
 class SVL_DLLPUBLIC SfxItemIter
 {
-    const SfxItemSet&            m_rSet;
-    std::vector<sal_uInt16>      m_keys;
-    std::vector<sal_uInt16>::const_iterator m_iter;
+    const SfxItemSet&   m_rSet;
+    sal_uInt16 m_nStart;
+    sal_uInt16 m_nEnd;
+    sal_uInt16 m_nCurrent;
 
 public:
     SfxItemIter( const SfxItemSet& rSet );
     ~SfxItemIter();
 
     /// get item, or null if no items
-    SfxPoolItem const * FirstItem();
-    SfxPoolItem const * GetCurItem();
-    SfxPoolItem const * NextItem();
+    const SfxPoolItem* FirstItem()
+    {
+        m_nCurrent = m_nStart;
+        return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
+    }
+    const SfxPoolItem* GetCurItem()
+    {
+        return m_rSet.m_nCount ? *(m_rSet.m_pItems + m_nCurrent) : nullptr;
+    }
+    const SfxPoolItem* NextItem();
 
-    bool       IsAtEnd()       const;
-    sal_uInt16 GetCurWhich()   const { return *m_iter; }
-    sal_uInt16 GetFirstWhich() const { return *m_keys.begin(); }
-    sal_uInt16 GetLastWhich()  const { return *m_keys.rbegin(); }
+    bool       IsAtEnd()     const { return m_nCurrent == m_nEnd; }
+
+    sal_uInt16 GetCurPos()   const { return m_nCurrent; }
+    sal_uInt16 GetFirstPos() const { return m_nStart; }
+    sal_uInt16 GetLastPos()  const { return m_nEnd; }
 };
 
 #endif

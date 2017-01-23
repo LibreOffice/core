@@ -235,8 +235,8 @@ SwAttrCheckArr::SwAttrCheckArr( const SfxItemSet& rSet, bool bFwd,
 
     // determine area of Fnd/Stack array (Min/Max)
     SfxItemIter aIter( aCmpSet );
-    nArrStart = aIter.GetFirstWhich();
-    nArrLen = aIter.GetLastWhich() - nArrStart + 1;
+    nArrStart = aCmpSet.GetWhichByPos( aIter.GetFirstPos() );
+    nArrLen = aCmpSet.GetWhichByPos( aIter.GetLastPos() ) - nArrStart+1;
 
     char* pFndChar  = new char[ nArrLen * sizeof(SwSrchChrAttr) ];
     char* pStackChar = new char[ nArrLen * sizeof(SwSrchChrAttr) ];
@@ -287,7 +287,7 @@ void SwAttrCheckArr::SetNewSet( const SwTextNode& rTextNd, const SwPaM& rPam )
     {
         if( IsInvalidItem( pItem ) )
         {
-            nWhich = aIter.GetCurWhich();
+            nWhich = aCmpSet.GetWhichByPos( aIter.GetCurPos() );
             if( RES_TXTATR_END <= nWhich )
                 break; // end of text attributes
 
@@ -861,7 +861,7 @@ static bool lcl_Search( const SwContentNode& rCNd, const SfxItemSet& rCmpSet, bo
     {
         if( IsInvalidItem( pItem ))
         {
-            nWhich = aIter.GetCurWhich();
+            nWhich = rCmpSet.GetWhichByPos( aIter.GetCurPos() );
             if( SfxItemState::SET != rNdSet.GetItemState( nWhich, !bNoColls, &pNdItem )
                 || CmpAttr( *pNdItem, rNdSet.GetPool()->GetDefaultItem( nWhich ) ))
                 return false;

@@ -23,13 +23,12 @@
 
 #include <cstdarg>
 #include <svl/poolitem.hxx>
-#include <map>
 
 class SfxItemPool;
 class SfxPoolItem;
 class SvStream;
 
-typedef std::map<sal_uInt16, SfxPoolItem const *> SfxItemMap;
+typedef SfxPoolItem const** SfxItemArray;
 
 class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 {
@@ -37,8 +36,9 @@ class SAL_WARN_UNUSED SVL_DLLPUBLIC SfxItemSet
 
     SfxItemPool*      m_pPool;         ///< pool that stores the items
     const SfxItemSet* m_pParent;       ///< derivation
-    SfxItemMap        m_aItems;        ///< array of items
+    SfxItemArray      m_pItems;        ///< array of items
     sal_uInt16*       m_pWhichRanges;  ///< array of Which Ranges
+    sal_uInt16        m_nCount;        ///< number of items
 
 friend class SfxItemPoolCache;
 friend class SfxAllItemSet;
@@ -50,7 +50,7 @@ private:
     SVL_DLLPRIVATE void                     InitRanges_Impl(sal_uInt16 nWh1, sal_uInt16 nWh2);
 
 public:
-    SfxItemMap const &          GetItems_Impl() const { return m_aItems; }
+    SfxItemArray                GetItems_Impl() const { return m_pItems; }
 
 private:
     const SfxItemSet&           operator=(const SfxItemSet &) = delete;
@@ -73,7 +73,7 @@ public:
     virtual SfxItemSet *        Clone(bool bItems = true, SfxItemPool *pToPool = nullptr) const;
 
     // Get number of items
-    sal_uInt16                  Count() const { return m_aItems.size(); }
+    sal_uInt16                  Count() const { return m_nCount; }
     sal_uInt16                  TotalCount() const;
 
     const SfxPoolItem&          Get( sal_uInt16 nWhich, bool bSrchInParent = true ) const;
