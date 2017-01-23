@@ -19,13 +19,58 @@
 
 #include <svdata.hxx>
 #include <tools/time.hxx>
-#include <vcl/scheduler.hxx>
+#include <vcl/idle.hxx>
 #include <saltimer.hxx>
 #include <salinst.hxx>
 #include <comphelper/profilezone.hxx>
 
 namespace {
 const sal_uInt64 MaximumTimeoutMs = 1000 * 60; // 1 minute
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Task& task )
+{
+    stream << "a: " << task.IsActive() << " p: " << (int) task.GetPriority();
+    const sal_Char *name = task.GetDebugName();
+    if( nullptr == name )
+        return stream << " (nullptr)";
+    else
+        return stream << " " << name;
+}
+
+/**
+ * clang won't compile this in the Timer.hxx header, even with a class Idle
+ * forward definition, due to the incomplete Idle type in the template.
+ * Currently the code is just used in the Scheduler, so we keep it local.
+ *
+ * @see http://clang.llvm.org/compatibility.html#undep_incomplete
+ */
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Timer& timer )
+{
+    bool bIsIdle = (dynamic_cast<const Idle*>( &timer ) != nullptr);
+    stream << (bIsIdle ? "Idle " : "Timer")
+           << " a: " << timer.IsActive() << " p: " << (int) timer.GetPriority();
+    const sal_Char *name = timer.GetDebugName();
+    if ( nullptr == name )
+        stream << " (nullptr)";
+    else
+        stream << " " << name;
+    if ( !bIsIdle )
+        stream << " " << timer.GetTimeout() << "ms";
+    stream << " (" << &timer << ")";
+    return stream;
+}
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const Idle& idle )
+{
+    return stream << static_cast<const Timer*>( &idle );
+}
+
 }
 
 void ImplSchedulerData::Invoke()
@@ -140,6 +185,7 @@ bool Scheduler::ProcessTaskScheduling( bool bIdle )
              !pSchedulerData->mpTask->ReadyForSchedule( bIdle, nTime ) ||
              !pSchedulerData->mpTask->IsActive())
             continue;
+
         if (!pMostUrgent)
             pMostUrgent = pSchedulerData;
         else
@@ -156,7 +202,8 @@ bool Scheduler::ProcessTaskScheduling( bool bIdle )
     {
         ::comphelper::ProfileZone aZone( pMostUrgent->GetDebugName() );
 
-        SAL_INFO("vcl.schedule", "Invoke task " << pMostUrgent->GetDebugName());
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+                  << pMostUrgent << "  invoke     " << *pMostUrgent->mpTask );
 
         pMostUrgent->mnUpdateTime = nTime;
         pMostUrgent->Invoke();
@@ -192,6 +239,18 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
     pSchedulerData = pSVData->mpFirstSchedulerData;
     while ( pSchedulerData )
     {
+        const Timer *timer = dynamic_cast<Timer*>( pSchedulerData->mpTask );
+        if ( timer )
+            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+                << pSchedulerData << " " << *pSchedulerData << " " << *timer );
+        else if ( pSchedulerData->mpTask )
+            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+                << pSchedulerData << " " << *pSchedulerData
+                << " " << *pSchedulerData->mpTask );
+        else
+            SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks() << " "
+                << pSchedulerData << " " << *pSchedulerData << " (to be deleted)" );
+
         ImplSchedulerData *pNext = pSchedulerData->mpNext;
 
         // Should Task be released from scheduling?
@@ -216,10 +275,6 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
                     sal_uInt64 nOldMinPeriod = nMinPeriod;
                     nMinPeriod = pSchedulerData->mpTask->UpdateMinPeriod(
                                                            nOldMinPeriod, nTime );
-                    SAL_INFO("vcl.schedule", "Have active timer '" <<
-                             pSchedulerData->GetDebugName() <<
-                             "' update min period from " << nOldMinPeriod <<
-                             " to " << nMinPeriod);
                     assert( nMinPeriod <= nOldMinPeriod );
                     if ( nMinPeriod > nOldMinPeriod )
                     {
@@ -229,11 +284,7 @@ sal_uInt64 Scheduler::CalculateMinimumTimeout( bool &bHasActiveIdles )
                     }
                 }
                 else
-                {
-                    SAL_INFO("vcl.schedule", "Have active idle '" <<
-                             pSchedulerData->GetDebugName() << "'");
                     bHasActiveIdles = true;
-                }
             }
             pPrevSchedulerData = pSchedulerData;
         }
@@ -309,15 +360,22 @@ void Task::Start()
             pPrev->mpNext = mpSchedulerData;
         else
             pSVData->mpFirstSchedulerData = mpSchedulerData;
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+                  << " " << mpSchedulerData << "  added      " << *this );
     }
+    else
+        SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
+                  << " " << mpSchedulerData << "  restarted  " << *this );
+
     mpSchedulerData->mbDelete      = false;
     mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
 }
 
 void Task::Stop()
 {
+    SAL_INFO_IF( mbActive, "vcl.schedule", tools::Time::GetSystemTicks()
+                  << " " << mpSchedulerData << "  stopped    " << *this );
     mbActive = false;
-
     if ( mpSchedulerData )
         mpSchedulerData->mbDelete = true;
 }
