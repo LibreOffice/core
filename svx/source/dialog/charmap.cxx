@@ -632,15 +632,15 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
             else
                 m_xAccessible->fireEvent( AccessibleEventId::ACTIVE_DESCENDANT_CHANGED_NOFOCUS, Any(), makeAny(pItem->GetAccessible()) ); // this call assures that m_pItem is set
 
-            assert(pItem->m_pItem && "No accessible created!");
+            assert(pItem->m_xItem.is() && "No accessible created!");
             Any aOldAny, aNewAny;
             aNewAny <<= AccessibleStateType::FOCUSED;
             // Don't fire the focus event.
             if ( bFocus )
-                pItem->m_pItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
+                pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
 
             aNewAny <<= AccessibleStateType::SELECTED;
-            pItem->m_pItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
+            pItem->m_xItem->fireEvent( AccessibleEventId::STATE_CHANGED, aOldAny, aNewAny );
         }
     }
     aHighHdl.Call( this );

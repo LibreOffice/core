@@ -225,7 +225,6 @@ void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
 SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos ) :
     mrParent( rParent )
     ,mnId( _nPos )
-    ,m_pItem(nullptr)
     ,m_pParent(_pParent)
 {
 }
@@ -233,24 +232,22 @@ SvxShowCharSetItem::SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAc
 
 SvxShowCharSetItem::~SvxShowCharSetItem()
 {
-    if ( m_xAcc.is() )
+    if ( m_xItem.is() )
     {
-        m_pItem->ParentDestroyed();
-        m_pItem = nullptr;
-        m_xAcc  = nullptr;
+        m_xItem->ParentDestroyed();
+        m_xItem.clear();
     }
 }
 
 
-uno::Reference< css::accessibility::XAccessible > const & SvxShowCharSetItem::GetAccessible()
+uno::Reference< css::accessibility::XAccessible > SvxShowCharSetItem::GetAccessible()
 {
-    if( !m_xAcc.is() )
+    if( !m_xItem.is() )
     {
-        m_pItem = new SvxShowCharSetItemAcc( this );
-        m_xAcc = m_pItem;
+        m_xItem = new SvxShowCharSetItemAcc( this );
     }
 
-    return m_xAcc;
+    return m_xItem.get();
 }
 
 

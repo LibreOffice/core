@@ -101,14 +101,13 @@ namespace svx
         sal_uInt16                  mnId;
         OUString                    maText;
         Rectangle                   maRect;
-        SvxShowCharSetItemAcc*      m_pItem;
+        rtl::Reference<SvxShowCharSetItemAcc>  m_xItem;
         SvxShowCharSetAcc*          m_pParent;
-        css::uno::Reference< css::accessibility::XAccessible > m_xAcc;
 
-        SvxShowCharSetItem( SvxShowCharSet& rParent,SvxShowCharSetAcc*  _pParent,sal_uInt16 _nPos );
+        SvxShowCharSetItem( SvxShowCharSet& rParent, SvxShowCharSetAcc* _pParent, sal_uInt16 _nPos );
         ~SvxShowCharSetItem();
 
-        css::uno::Reference< css::accessibility::XAccessible > const &    GetAccessible();
+        css::uno::Reference< css::accessibility::XAccessible > GetAccessible();
     };
 
 
