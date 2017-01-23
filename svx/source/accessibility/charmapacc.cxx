@@ -42,7 +42,6 @@ namespace svx
 
 SvxShowCharSetVirtualAcc::SvxShowCharSetVirtualAcc( SvxShowCharSet* pParent ) : OAccessibleComponentHelper(new VCLExternalSolarLock())
 ,mpParent( pParent )
-,m_pTable(nullptr)
 {
     osl_atomic_increment(&m_refCount);
     {
@@ -67,8 +66,8 @@ void SAL_CALL SvxShowCharSetVirtualAcc::fireEvent(
                     const css::uno::Any& _rNewValue
                 )
 {
-    if ( m_pTable )
-        m_pTable->fireEvent(_nEventId,_rOldValue,_rNewValue);
+    if ( m_xTable.is() )
+        m_xTable->fireEvent(_nEventId,_rOldValue,_rNewValue);
 }
 
 sal_Int32 SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
@@ -89,9 +88,9 @@ uno::Reference< css::accessibility::XAccessible > SAL_CALL SvxShowCharSetVirtual
 
     if( sal_uInt16(-1) != nItemId )
     {
-        if ( !m_pTable )
-            m_pTable = new SvxShowCharSetAcc(this);
-        xRet = m_pTable;
+        if ( !m_xTable.is() )
+            m_xTable = new SvxShowCharSetAcc(this);
+        xRet = m_xTable.get();
     }
     else if ( mpParent->getScrollBar().IsVisible() )
     {
@@ -121,15 +120,14 @@ Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleChild( 
         return mpParent->getScrollBar().GetAccessible();
     else if ( i == 1 )
     {
-        if ( !m_xAcc.is() )
+        if ( !m_xTable.is() )
         {
-            m_pTable = new SvxShowCharSetAcc(this);
-            m_xAcc = m_pTable;
+            m_xTable = new SvxShowCharSetAcc(this);
         }
     }
     else
         throw IndexOutOfBoundsException();
-    return m_xAcc;
+    return m_xTable.get();
 }
 
 Reference< XAccessible > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibleParent(  ) throw (RuntimeException, std::exception)
@@ -216,9 +214,9 @@ Reference< XAccessibleStateSet > SAL_CALL SvxShowCharSetVirtualAcc::getAccessibl
 void SAL_CALL SvxShowCharSetVirtualAcc::disposing()
 {
     OAccessibleContextHelper::disposing();
-    if ( m_pTable )
-        m_pTable->dispose();
-    m_pTable = nullptr;
+    if ( m_xTable.is() )
+        m_xTable->dispose();
+    m_xTable.clear();
 }
 
 

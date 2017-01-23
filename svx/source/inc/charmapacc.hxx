@@ -41,9 +41,8 @@ namespace svx
     class SvxShowCharSetVirtualAcc : public ::comphelper::OAccessibleComponentHelper,
                                      public OAccessibleHelper_Base_2
     {
-        VclPtr<SvxShowCharSet>     mpParent; // the vcl control
-        SvxShowCharSetAcc*  m_pTable; // the table, which holds the characters shown by the vcl control
-        css::uno::Reference< css::accessibility::XAccessible > m_xAcc; // the ref to the table
+        VclPtr<SvxShowCharSet>             mpParent; // the vcl control
+        rtl::Reference<SvxShowCharSetAcc>  m_xTable; // the table, which holds the characters shown by the vcl control
     protected:
         virtual ~SvxShowCharSetVirtualAcc() override;
 
@@ -84,8 +83,8 @@ namespace svx
                 );
 
         // simple access methods
-        inline SvxShowCharSetAcc*   getTable() const { return m_pTable; }
-        inline SvxShowCharSet* getCharSetControl() const { return mpParent; }
+        inline SvxShowCharSetAcc*   getTable() const { return m_xTable.get(); }
+        inline SvxShowCharSet*      getCharSetControl() const { return mpParent; }
     };
 
 
