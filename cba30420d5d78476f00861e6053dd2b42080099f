@@ -16,6 +16,24 @@
       "revId": "cba30420d5d78476f00861e6053dd2b42080099f",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_7cfc063f",
+        "filename": "sdext/source/minimizer/optimizerdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2017-01-23T11:13:40Z",
+      "side": 1,
+      "message": "Yes, that was my first thought too.\nBut I hesitates to use INetURLObject because Library_PresentationMinimizer does not depend on tools (tl) so far.\nWhat do you think?",
+      "parentUuid": "fa48f94a_fc59d68f",
+      "revId": "cba30420d5d78476f00861e6053dd2b42080099f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
