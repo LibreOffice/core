@@ -33,7 +33,7 @@ bool AquaSalTimer::bDispatchTimer = false;
 void ImplSalStartTimer( sal_uLong nMS )
 {
     SalData* pSalData = GetSalData();
-    if( pSalData->mpFirstInstance->isNSAppThread() )
+    if( !pSalData->mpFirstInstance->IsMainThread() )
     {
         AquaSalTimer::bDispatchTimer = true;
         NSTimeInterval aTI = double(nMS)/1000.0;

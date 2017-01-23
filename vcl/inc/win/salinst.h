@@ -62,6 +62,7 @@ public:
     virtual sal_uIntPtr         ReleaseYieldMutex() override;
     virtual void                AcquireYieldMutex( sal_uIntPtr nCount ) override;
     virtual bool                CheckYieldMutex() override;
+    virtual bool                IsMainThread() const override;
 
     virtual SalYieldResult      DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;

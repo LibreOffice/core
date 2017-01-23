@@ -210,6 +210,8 @@ public:
 
     virtual SalYieldResult      DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;
+    // impossible to handle correctly, as "main thread" depends on the dispatch mutex
+    virtual bool                IsMainThread() const override { return false; }
 
     virtual GenPspGraphics     *CreatePrintGraphics() override;
 
