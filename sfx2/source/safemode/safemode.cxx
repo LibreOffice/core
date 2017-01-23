@@ -74,7 +74,6 @@ OUString SafeMode::getFilePath(const OUString& sFilename)
     rtl::Bootstrap::expandMacros(url);
 
     OUString aProfilePath;
-    FileBase::getSystemPathFromFileURL(url, aProfilePath);
     FileBase::getAbsoluteFileURL(url, sFilename, aProfilePath);
     return aProfilePath;
 }
