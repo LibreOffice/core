@@ -188,10 +188,7 @@ void ImplSalYieldMutexAcquireWithWait()
     if ( !pInst )
         return;
 
-    DWORD nThreadId = GetCurrentThreadId();
-    SalData* pSalData = GetSalData();
-
-    if ( pSalData->mnAppThreadId == nThreadId )
+    if ( pInst->IsMainThread() )
     {
         // tdf#96887 If this is the main thread, then we must wait for two things:
         // - the mpSalYieldMutex being freed
@@ -594,13 +591,18 @@ ImplSalYield( bool bWait, bool bHandleAllCurrentEvents )
                      SalYieldResult::TIMEOUT;
 }
 
+bool WinSalInstance::IsMainThread() const
+{
+    const SalData* pSalData = GetSalData();
+    return pSalData->mnAppThreadId == GetCurrentThreadId();
+}
+
 SalYieldResult WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong const nReleased)
 {
     SalYieldResult eDidWork = SalYieldResult::TIMEOUT;
     // NOTE: if nReleased != 0 this will be called without SolarMutex
     //       so don't do anything dangerous before releasing it here
     SalYieldMutex*  pYieldMutex = mpSalYieldMutex;
-    SalData*        pSalData = GetSalData();
     DWORD           nCurThreadId = GetCurrentThreadId();
     sal_uLong const nCount = (nReleased != 0)
                                 ? nReleased
@@ -611,7 +613,7 @@ SalYieldResult WinSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents,
         pYieldMutex->release();
         n--;
     }
-    if ( pSalData->mnAppThreadId != nCurThreadId )
+    if ( !IsMainThread() )
     {
         // #97739# A SendMessage call blocks until the called thread (here: the main thread)
         // returns. During a yield however, messages are processed in the main thread that might

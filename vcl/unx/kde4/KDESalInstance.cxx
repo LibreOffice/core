@@ -25,6 +25,8 @@
 #include "KDEXLib.hxx"
 #include "KDESalDisplay.hxx"
 
+#include <QtGui/QApplication>
+#include <QtCore/QThread>
 #include <QX11Info>
 
 using namespace com::sun::star;
@@ -56,6 +58,11 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
 SalX11Display* KDESalInstance::CreateDisplay() const
 {
     return new SalKDEDisplay( QX11Info::display() );
+}
+
+bool KDESalInstance::IsMainThread() const
+{
+    return qApp->thread() == QThread::currentThread();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
