@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
+
 #if defined _MSC_VER
 #pragma warning(disable : 4668)
 #endif
@@ -28,7 +32,6 @@ namespace inprocserv
 
 OleWrapperAdviseSink::OleWrapperAdviseSink()
 : m_nRefCount( 0 )
-, m_pFormatEtc( nullptr )
 , m_nAspect( DVASPECT_CONTENT )
 , m_nRegID( 0 )
 , m_bObjectAdvise( TRUE )
@@ -42,7 +45,6 @@ OleWrapperAdviseSink::OleWrapperAdviseSink()
 OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener )
 : m_nRefCount( 0 )
 , m_pListener( pListener )
-, m_pFormatEtc( nullptr )
 , m_nAspect( DVASPECT_CONTENT )
 , m_nRegID( 0 )
 , m_bObjectAdvise( TRUE )
@@ -56,7 +58,6 @@ OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pList
 OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener, FORMATETC* pFormatEtc, DWORD nDataRegFlag )
 : m_nRefCount( 0 )
 , m_pListener( pListener )
-, m_pFormatEtc( nullptr )
 , m_nAspect( DVASPECT_CONTENT )
 , m_nRegID( 0 )
 , m_bObjectAdvise( FALSE )
@@ -67,7 +68,7 @@ OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pList
 {
     if ( pFormatEtc )
     {
-        m_pFormatEtc = new FORMATETC;
+        m_pFormatEtc = o3tl::make_unique<FORMATETC>();
         m_pFormatEtc->cfFormat = pFormatEtc->cfFormat;
         m_pFormatEtc->ptd = nullptr;
         m_pFormatEtc->dwAspect = pFormatEtc->dwAspect;
@@ -79,7 +80,6 @@ OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pList
 OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pListener, DWORD nAspect, DWORD nViewRegFlag )
 : m_nRefCount( 0 )
 , m_pListener( pListener )
-, m_pFormatEtc( nullptr )
 , m_nAspect( nAspect )
 , m_nRegID( 0 )
 , m_bObjectAdvise( TRUE )
@@ -91,9 +91,7 @@ OleWrapperAdviseSink::OleWrapperAdviseSink( const ComSmart< IAdviseSink >& pList
 }
 
 OleWrapperAdviseSink::~OleWrapperAdviseSink()
-{
-    delete m_pFormatEtc;
-}
+{}
 
 STDMETHODIMP OleWrapperAdviseSink::QueryInterface( REFIID riid , void** ppv )
 {

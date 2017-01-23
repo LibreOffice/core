@@ -20,6 +20,10 @@
 #ifndef INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_ADVISESINK_HXX
 #define INCLUDED_EMBEDSERV_SOURCE_INPROCSERV_ADVISESINK_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <windows.h>
 #include "smartpointer.hxx"
 
@@ -33,7 +37,7 @@ protected:
     ComSmart< IAdviseSink > m_pListener;
     DWORD m_nListenerID;
 
-    FORMATETC* m_pFormatEtc;
+    std::unique_ptr<FORMATETC> m_pFormatEtc;
     DWORD m_nAspect;
 
     DWORD m_nRegID;
@@ -66,7 +70,7 @@ public:
     DWORD GetDataAdviseFlag() { return m_nDataRegFlag; }
     DWORD GetViewAdviseFlag() { return m_nViewRegFlag; }
 
-    FORMATETC* GetFormatEtc() { return m_pFormatEtc; }
+    FORMATETC* GetFormatEtc() { return m_pFormatEtc.get(); }
     DWORD GetAspect() { return m_nAspect; }
     ComSmart< IAdviseSink >& GetOrigAdvise() { return m_pListener; }
     void DisconnectOrigAdvise() { m_pListener = nullptr; }
