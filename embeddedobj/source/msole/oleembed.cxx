@@ -759,11 +759,11 @@ namespace
                 } while (nRead == 1 && aData[0] != 0);  // Actual string representing the file path
                 uno::Sequence< sal_Int8 > aLenData(4);
                 xIn->readBytes(aLenData, 4); //len of attachment
-                sal_uInt32 nLen = static_cast<sal_uInt32>
-                                              ((sal_uInt32)aLenData[0]
-                                            + ((sal_uInt32)aLenData[1] <<  8)
-                                            + ((sal_uInt32)aLenData[2] << 16)
-                                            + ((sal_uInt32)aLenData[3] << 24));
+                sal_uInt32 nLen = static_cast<sal_uInt32>(
+                                              (aLenData[0] & 0xFF) |
+                                              ((aLenData[1] & 0xFF) <<  8) |
+                                              ((aLenData[2] & 0xFF) << 16) |
+                                              ((aLenData[3] & 0xFF) << 24));
 
                 bCopied = lcl_CopyStream(xIn, xStream->getOutputStream(), nLen);
             }
