@@ -290,6 +290,8 @@ void TiledRowColumnBar::docAdjustmentChanged(GtkAdjustment* /*pAdjustment*/, gpo
     docConfigureEvent(pDocView, nullptr, nullptr);
 }
 
+static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const std::string& rName);
+
 gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigure* /*pEvent*/, gpointer /*pData*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
