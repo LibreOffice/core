@@ -225,7 +225,7 @@ void AnnotationHdl::CreateB2dIAObject()
                             }
 
                             xManager->add(*pOverlayObject);
-                            maOverlayGroup.append(*pOverlayObject);
+                            maOverlayGroup.append(pOverlayObject);
                         }
                     }
                 }

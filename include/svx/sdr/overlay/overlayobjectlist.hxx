@@ -39,13 +39,15 @@ namespace sdr
 
         public:
             OverlayObjectList() {}
+            OverlayObjectList(const OverlayObjectList&) = delete;
+            OverlayObjectList& operator=(const OverlayObjectList&) = delete;
             ~OverlayObjectList();
 
             // clear list, this includes deletion of all contained objects
             void clear();
 
-            // append objects
-            void append(OverlayObject& rOverlayObject) { maVector.push_back(&rOverlayObject); }
+            // append objects (takes ownership)
+            void append(OverlayObject* pOverlayObject);
 
             // access to objects
             sal_uInt32 count() const { return maVector.size(); }

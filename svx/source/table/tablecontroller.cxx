@@ -2118,7 +2118,7 @@ void SvxTableController::updateSelectionOverlay()
 
                         xOverlayManager->add(*pOverlay);
                         mpSelectionOverlay = new sdr::overlay::OverlayObjectList;
-                        mpSelectionOverlay->append(*pOverlay);
+                        mpSelectionOverlay->append(pOverlay);
                     }
                 }
             }

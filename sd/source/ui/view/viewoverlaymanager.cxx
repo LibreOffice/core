@@ -240,7 +240,7 @@ void ImageButtonHdl::CreateB2dIAObject()
 
                         pOverlayObject = new sdr::overlay::OverlayBitmapEx( aPosition, aBitmapEx, 0, 0 );
                         xManager->add(*pOverlayObject);
-                        maOverlayGroup.append(*pOverlayObject);
+                        maOverlayGroup.append(pOverlayObject);
                     }
                 }
             }

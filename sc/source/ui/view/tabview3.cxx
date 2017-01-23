@@ -733,7 +733,7 @@ void ScTabView::TestHintWindow()
                 ScOverlayHint* pOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
 
                 mxInputHintOO.reset(new sdr::overlay::OverlayObjectList);
-                mxInputHintOO->append(*pOverlay);
+                mxInputHintOO->append(pOverlay);
 
                 Size aHintWndSize = pOverlay->GetSizePixel();
                 long nCellSizeX = 0;
@@ -767,7 +767,7 @@ void ScTabView::TestHintWindow()
                         ScOverlayHint* pOtherOverlay = new ScOverlayHint(aTitle, aMessage, aCommentColor, pFrameWin->GetFont());
                         Point aFooPos(pWindow->PixelToLogic(aOtherPos, pWindow->GetDrawMapMode()));
                         pOtherOverlay->SetPos(aFooPos, pWindow->GetDrawMapMode());
-                        mxInputHintOO->append(*pOtherOverlay);
+                        mxInputHintOO->append(pOtherOverlay);
                         xOverlayManager->add(*pOtherOverlay);
                     }
                 }

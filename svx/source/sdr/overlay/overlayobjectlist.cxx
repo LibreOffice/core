@@ -60,13 +60,18 @@ namespace sdr
             maVector.clear();
         }
 
+        void OverlayObjectList::append(OverlayObject* pOverlayObject)
+        {
+            assert(pOverlayObject && "tried to add invalid OverlayObject to OverlayObjectList");
+            maVector.push_back(pOverlayObject);
+        }
+
         bool OverlayObjectList::isHitLogic(const basegfx::B2DPoint& rLogicPosition, double fLogicTolerance) const
         {
             if(!maVector.empty())
             {
                 OverlayObjectVector::const_iterator aStart(maVector.begin());
                 sdr::overlay::OverlayObject* pFirst = *aStart;
-                OSL_ENSURE(pFirst, "Corrupt OverlayObjectList (!)");
                 OverlayManager* pManager = pFirst->getOverlayManager();
 
                 if(pManager)
@@ -97,7 +102,6 @@ namespace sdr
                     for(; aStart != maVector.end(); ++aStart)
                     {
                         sdr::overlay::OverlayObject* pCandidate = *aStart;
-                        OSL_ENSURE(pCandidate, "Corrupt OverlayObjectList (!)");
 
                         if(pCandidate->isHittable())
                         {
