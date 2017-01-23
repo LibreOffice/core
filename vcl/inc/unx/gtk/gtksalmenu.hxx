@@ -63,7 +63,7 @@ private:
     void                        ImplUpdate(bool bRecurse, bool bRemoveDisabledEntries);
     void                        ActivateAllSubmenus(Menu* pMenuBar);
 
-    DECL_LINK_TYPED(MenuBarHierarchyChangeHandler, Idle*, void);
+    DECL_LINK_TYPED(MenuBarHierarchyChangeHandler, Timer*, void);
 
 public:
     GtkSalMenu( bool bMenuBar );

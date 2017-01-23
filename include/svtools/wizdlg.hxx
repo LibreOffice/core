@@ -202,9 +202,8 @@ private:
     Link<WizardDialog*,void>  maActivateHdl;
     sal_Int16               mnLeftAlignCount;
     bool                    mbEmptyViewMargin;
-
-    DECL_DLLPRIVATE_LINK_TYPED( ImplHandleWizardLayoutTimerHdl, Idle*, void );
     bool hasWizardPendingLayout() const;
+    DECL_DLLPRIVATE_LINK_TYPED( ImplHandleWizardLayoutTimerHdl, Timer*, void );
 
 protected:
     long                LogicalCoordinateToPixel(int iCoordinate);

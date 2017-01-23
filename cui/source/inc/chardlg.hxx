@@ -132,7 +132,7 @@ private:
     void                Reset_Impl( const SfxItemSet& rSet, LanguageGroup eLangGrp );
     bool                FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp );
 
-    DECL_LINK_TYPED( UpdateHdl_Impl, Idle *, void );
+    DECL_LINK_TYPED( UpdateHdl_Impl, Timer *, void );
     DECL_LINK_TYPED( FontModifyEditHdl_Impl, Edit&, void );
     DECL_LINK_TYPED( FontModifyListBoxHdl_Impl, ListBox&, void );
     DECL_LINK_TYPED( FontModifyComboBoxHdl_Impl, ComboBox&, void );

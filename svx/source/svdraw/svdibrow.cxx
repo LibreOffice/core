@@ -1076,7 +1076,7 @@ SdrItemBrowser::SdrItemBrowser(SdrView& rView):
     pView(&rView),
     bDirty(false)
 {
-    aIdle.SetIdleHdl(LINK(this,SdrItemBrowser,IdleHdl));
+    aIdle.SetInvokeHandler(LINK(this,SdrItemBrowser,IdleHdl));
     GetBrowserControl()->SetEntryChangedHdl(LINK(this,SdrItemBrowser,ChangedHdl));
     GetBrowserControl()->SetSetDirtyHdl(LINK(this,SdrItemBrowser,SetDirtyHdl));
     SetDirty();
@@ -1135,7 +1135,7 @@ void SdrItemBrowser::Undirty()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdrItemBrowser, IdleHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SdrItemBrowser, IdleHdl, Timer *, void)
 {
     Undirty();
 }

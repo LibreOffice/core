@@ -293,7 +293,7 @@ namespace
         }
 
         m_aDeleteTimer.SetTimeout( 3000 );  // 3 seconds
-        m_aDeleteTimer.SetTimeoutHdl( LINK( this, DelayedFileDeletion, OnTryDeleteFile ) );
+        m_aDeleteTimer.SetInvokeHandler( LINK( this, DelayedFileDeletion, OnTryDeleteFile ) );
         m_nPendingDeleteAttempts = 3;   // try 3 times at most
         m_aDeleteTimer.Start( );
     }

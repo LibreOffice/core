@@ -228,7 +228,7 @@ PrinterSetupDialog::PrinterSetupDialog(vcl::Window* pParent)
     mpTempPrinter   = nullptr;
 
     maStatusTimer.SetTimeout( IMPL_PRINTDLG_STATUS_UPDATE );
-    maStatusTimer.SetTimeoutHdl( LINK( this, PrinterSetupDialog, ImplStatusHdl ) );
+    maStatusTimer.SetInvokeHandler( LINK( this, PrinterSetupDialog, ImplStatusHdl ) );
     m_pBtnProperties->SetClickHdl( LINK( this, PrinterSetupDialog, ImplPropertiesHdl ) );
     m_pLbName->SetSelectHdl( LINK( this, PrinterSetupDialog, ImplChangePrinterHdl ) );
 }

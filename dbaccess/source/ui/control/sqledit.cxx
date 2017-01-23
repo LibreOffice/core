@@ -76,10 +76,10 @@ OSqlEdit::OSqlEdit( OQueryTextView* pParent,  WinBits nWinStyle ) :
     SetModifyHdl( LINK(this, OSqlEdit, ModifyHdl) );
 
     m_timerUndoActionCreation.SetTimeout(1000);
-    m_timerUndoActionCreation.SetTimeoutHdl(LINK(this, OSqlEdit, OnUndoActionTimer));
+    m_timerUndoActionCreation.SetInvokeHandler(LINK(this, OSqlEdit, OnUndoActionTimer));
 
     m_timerInvalidate.SetTimeout(200);
-    m_timerInvalidate.SetTimeoutHdl(LINK(this, OSqlEdit, OnInvalidateTimer));
+    m_timerInvalidate.SetInvokeHandler(LINK(this, OSqlEdit, OnInvalidateTimer));
     m_timerInvalidate.Start();
 
     ImplSetFont();

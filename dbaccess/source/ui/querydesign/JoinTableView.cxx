@@ -174,7 +174,7 @@ OJoinTableView::OJoinTableView( vcl::Window* pParent, OJoinDesignView* pView )
 
     InitColors();
 
-    m_aDragScrollIdle.SetIdleHdl(LINK(this, OJoinTableView, OnDragScrollTimer));
+    m_aDragScrollIdle.SetInvokeHandler(LINK(this, OJoinTableView, OnDragScrollTimer));
 }
 
 OJoinTableView::~OJoinTableView()
@@ -1072,7 +1072,7 @@ void OJoinTableView::ScrollWhileDragging()
     ShowTracking( m_aDragRect, ShowTrackFlags::Small | ShowTrackFlags::TrackWindow );
 }
 
-IMPL_LINK_NOARG_TYPED(OJoinTableView, OnDragScrollTimer, Idle *, void)
+IMPL_LINK_NOARG_TYPED(OJoinTableView, OnDragScrollTimer, Timer *, void)
 {
     ScrollWhileDragging();
 }

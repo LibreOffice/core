@@ -1392,11 +1392,11 @@ void ToolBox::ImplInitToolBoxData()
 
     mpIdle = new Idle("vcl::ToolBox maIdle update");
     mpIdle->SetPriority( TaskPriority::RESIZE );
-    mpIdle->SetIdleHdl( LINK( this, ToolBox, ImplUpdateHdl ) );
+    mpIdle->SetInvokeHandler( LINK( this, ToolBox, ImplUpdateHdl ) );
 
     // set timeout and handler for dropdown items
     mpData->maDropdownTimer.SetTimeout( 250 );
-    mpData->maDropdownTimer.SetTimeoutHdl( LINK( this, ToolBox, ImplDropdownLongClickHdl ) );
+    mpData->maDropdownTimer.SetInvokeHandler( LINK( this, ToolBox, ImplDropdownLongClickHdl ) );
     mpData->maDropdownTimer.SetDebugName( "vcl::ToolBox mpData->maDropdownTimer" );
 }
 
@@ -2743,7 +2743,7 @@ IMPL_LINK_NOARG_TYPED(ToolBox, ImplDropdownLongClickHdl, Timer *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ToolBox, ImplUpdateHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ToolBox, ImplUpdateHdl, Timer *, void)
 {
 
     if( mbFormat && mpData )

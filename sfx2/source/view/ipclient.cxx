@@ -616,7 +616,7 @@ SfxInPlaceClient::SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window *pDraw
     m_pImp->m_xClient = static_cast< embed::XEmbeddedClient* >( m_pImp );
     pViewShell->NewIPClient_Impl(this);
     m_pImp->m_aTimer.SetTimeout( SFX_CLIENTACTIVATE_TIMEOUT );
-    m_pImp->m_aTimer.SetTimeoutHdl( LINK( m_pImp, SfxInPlaceClient_Impl, TimerHdl ) );
+    m_pImp->m_aTimer.SetInvokeHandler( LINK( m_pImp, SfxInPlaceClient_Impl, TimerHdl ) );
 }
 
 

@@ -1432,7 +1432,7 @@ void SfxCommonTemplateDialog_Impl::Update_Impl()
      EnableNew( bCanNew );
 }
 
-IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, TimeOut, Idle *, void )
+IMPL_LINK_NOARG_TYPED( SfxCommonTemplateDialog_Impl, TimeOut, Timer *, void )
 {
     if(!bDontUpdate)
     {
@@ -1542,7 +1542,7 @@ void SfxCommonTemplateDialog_Impl::Notify(SfxBroadcaster& /*rBC*/, const SfxHint
         {
             pIdle=new Idle("SfxCommonTemplate");
             pIdle->SetPriority(TaskPriority::LOWEST);
-            pIdle->SetIdleHdl(LINK(this,SfxCommonTemplateDialog_Impl,TimeOut));
+            pIdle->SetInvokeHandler(LINK(this,SfxCommonTemplateDialog_Impl,TimeOut));
         }
         pIdle->Start();
 

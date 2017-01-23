@@ -64,7 +64,7 @@ SvxLineBox::SvxLineBox( vcl::Window* pParent, const Reference< XFrame >& rFrame,
     Show();
 
     aDelayTimer.SetTimeout( DELAY_TIMEOUT );
-    aDelayTimer.SetTimeoutHdl( LINK( this, SvxLineBox, DelayHdl_Impl ) );
+    aDelayTimer.SetInvokeHandler( LINK( this, SvxLineBox, DelayHdl_Impl ) );
     aDelayTimer.Start();
 }
 

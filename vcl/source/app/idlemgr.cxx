@@ -36,7 +36,7 @@ ImplIdleMgr::ImplIdleMgr():
     mpIdleList  = new ImplIdleList();
 
     maTimer.SetTimeout( IMPL_IDLETIMEOUT );
-    maTimer.SetTimeoutHdl( LINK( this, ImplIdleMgr, TimeoutHdl ) );
+    maTimer.SetInvokeHandler( LINK( this, ImplIdleMgr, TimeoutHdl ) );
 }
 
 ImplIdleMgr::~ImplIdleMgr()

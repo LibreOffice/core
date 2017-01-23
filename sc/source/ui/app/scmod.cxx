@@ -177,11 +177,11 @@ ScModule::ScModule( SfxObjectFactory* pFact ) :
                                         GetResMgr() );
 
     aSpellIdle.SetPriority(TaskPriority::LOWER);
-    aSpellIdle.SetIdleHdl( LINK( this, ScModule, SpellTimerHdl ) );
+    aSpellIdle.SetInvokeHandler( LINK( this, ScModule, SpellTimerHdl ) );
     aSpellIdle.SetDebugName( "sc::ScModule aSpellIdle" );
 
     aIdleTimer.SetTimeout(SC_IDLE_MIN);
-    aIdleTimer.SetTimeoutHdl( LINK( this, ScModule, IdleHandler ) );
+    aIdleTimer.SetInvokeHandler( LINK( this, ScModule, IdleHandler ) );
     aIdleTimer.SetDebugName( "sc::ScModule aIdleTimer" );
     aIdleTimer.Start();
 
@@ -1903,7 +1903,7 @@ IMPL_LINK_NOARG_TYPED(ScModule, IdleHandler, Timer *, void)
     aIdleTimer.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(ScModule, SpellTimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ScModule, SpellTimerHdl, Timer *, void)
 {
     if ( Application::AnyInput( VclInputFlags::KEYBOARD ) )
     {

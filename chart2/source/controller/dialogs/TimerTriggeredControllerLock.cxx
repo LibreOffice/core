@@ -32,7 +32,7 @@ TimerTriggeredControllerLock::TimerTriggeredControllerLock( const uno::Reference
     , m_aTimer()
 {
     m_aTimer.SetTimeout( 4*EDIT_UPDATEDATA_TIMEOUT );
-    m_aTimer.SetTimeoutHdl( LINK( this, TimerTriggeredControllerLock, TimerTimeout ) );
+    m_aTimer.SetInvokeHandler( LINK( this, TimerTriggeredControllerLock, TimerTimeout ) );
 }
 TimerTriggeredControllerLock::~TimerTriggeredControllerLock()
 {

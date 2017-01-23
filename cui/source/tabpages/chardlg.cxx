@@ -428,7 +428,7 @@ void SvxCharNamePage::Initialize()
     m_pCTLFontSizeLB->SetModifyHdl( aLink );
     m_pCTLFontLanguageLB->SetSelectHdl( LINK( this, SvxCharNamePage, FontModifyListBoxHdl_Impl ) );
 
-    m_pImpl->m_aUpdateIdle.SetIdleHdl( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
+    m_pImpl->m_aUpdateIdle.SetInvokeHandler( LINK( this, SvxCharNamePage, UpdateHdl_Impl ) );
 }
 
 
@@ -1164,7 +1164,7 @@ bool SvxCharNamePage::FillItemSet_Impl( SfxItemSet& rSet, LanguageGroup eLangGrp
 }
 
 
-IMPL_LINK_NOARG_TYPED(SvxCharNamePage, UpdateHdl_Impl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvxCharNamePage, UpdateHdl_Impl, Timer *, void)
 {
     UpdatePreview_Impl();
 }

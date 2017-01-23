@@ -258,9 +258,9 @@ private:
 
     ScNavigatorControllerItem** ppBoundItems;
 
-    DECL_LINK_TYPED( TimeHdl, Idle*, void );
-
     void    DoResize();
+
+    DECL_LINK_TYPED(TimeHdl, Timer*, void);
 
     void    SetCurrentCell( SCCOL nCol, SCROW Row );
     void    SetCurrentCellStr( const OUString& rName );

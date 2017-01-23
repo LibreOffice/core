@@ -357,7 +357,7 @@ void SvxNumberFormatTabPage::Init_Impl()
     UpdateThousandEngineeringCheckBox();
 
     m_pEdComment->SetLoseFocusHdl( LINK( this, SvxNumberFormatTabPage, LostFocusHdl_Impl) );
-    aResetWinTimer.SetTimeoutHdl(LINK( this, SvxNumberFormatTabPage, TimeHdl_Impl));
+    aResetWinTimer.SetInvokeHandler(LINK( this, SvxNumberFormatTabPage, TimeHdl_Impl));
     aResetWinTimer.SetTimeout( 10);
 
     // initialize language ListBox

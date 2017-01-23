@@ -247,7 +247,7 @@ NavigatorTree::NavigatorTree( vcl::Window* pParent,OReportController& _rControll
     SetSelectionMode(MULTIPLE_SELECTION);
     Clear();
 
-    m_aDropActionTimer.SetTimeoutHdl(LINK(this, NavigatorTree, OnDropActionTimer));
+    m_aDropActionTimer.SetInvokeHandler(LINK(this, NavigatorTree, OnDropActionTimer));
     SetSelectHdl(LINK(this, NavigatorTree, OnEntrySelDesel));
     SetDeselectHdl(LINK(this, NavigatorTree, OnEntrySelDesel));
 }

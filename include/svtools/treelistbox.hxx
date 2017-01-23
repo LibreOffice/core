@@ -812,7 +812,7 @@ class SvInplaceEdit2
     bool          bAlreadyInCallBack;
 
     void        CallCallBackHdl_Impl();
-    DECL_LINK_TYPED( Timeout_Impl, Idle *, void );
+    DECL_LINK_TYPED( Timeout_Impl, Timer *, void );
     DECL_LINK_TYPED( ReturnHdl_Impl, Accelerator&, void );
     DECL_LINK_TYPED( EscapeHdl_Impl, Accelerator&, void );
 

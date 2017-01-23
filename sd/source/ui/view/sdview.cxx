@@ -139,9 +139,9 @@ View::View(SdDrawDocument& rDrawDoc, OutputDevice* pOutDev,
     SetMeasureLayer(SD_RESSTR(STR_LAYER_MEASURELINES));
 
     // Timer for delayed drop (has to be for MAC)
-    maDropErrorIdle.SetIdleHdl( LINK(this, View, DropErrorHdl) );
+    maDropErrorIdle.SetInvokeHandler( LINK(this, View, DropErrorHdl) );
     maDropErrorIdle.SetPriority(TaskPriority::MEDIUM);
-    maDropInsertFileIdle.SetIdleHdl( LINK(this, View, DropInsertFileHdl) );
+    maDropInsertFileIdle.SetInvokeHandler( LINK(this, View, DropInsertFileHdl) );
     maDropInsertFileIdle.SetPriority(TaskPriority::MEDIUM);
 }
 

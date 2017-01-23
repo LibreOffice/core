@@ -553,7 +553,7 @@ SbaXDataBrowserController::SbaXDataBrowserController(const Reference< css::uno::
     }
     osl_atomic_decrement(&m_refCount);
 
-    m_aInvalidateClipboard.SetTimeoutHdl(LINK(this, SbaXDataBrowserController, OnInvalidateClipboard));
+    m_aInvalidateClipboard.SetInvokeHandler(LINK(this, SbaXDataBrowserController, OnInvalidateClipboard));
     m_aInvalidateClipboard.SetTimeout(300);
 }
 

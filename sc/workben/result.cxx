@@ -29,7 +29,7 @@ ScAddInResult::ScAddInResult(const String& rStr) :
     nTickCount( 0 )
 {
     aTimer.SetTimeout( 1000 );
-    aTimer.SetTimeoutHdl( LINK( this, ScAddInResult, TimeoutHdl ) );
+    aTimer.SetInvokeHandler( LINK( this, ScAddInResult, TimeoutHdl ) );
     aTimer.Start();
 }
 

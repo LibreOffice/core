@@ -1383,7 +1383,7 @@ namespace svxform
         m_pInstanceBtn->SetActivateHdl( aLink2 );
         m_pTabCtrl->SetActivatePageHdl( LINK( this, DataNavigatorWindow, ActivatePageHdl ) );
         m_aUpdateTimer.SetTimeout( 2000 );
-        m_aUpdateTimer.SetTimeoutHdl( LINK( this, DataNavigatorWindow, UpdateHdl ) );
+        m_aUpdateTimer.SetInvokeHandler( LINK( this, DataNavigatorWindow, UpdateHdl ) );
 
         // init tabcontrol
         m_pTabCtrl->Show();
@@ -2774,7 +2774,7 @@ namespace svxform
         m_pEditNamespacesBtn->SetClickHdl( LINK( this, AddConditionDialog, EditHdl ) );
         m_pOKBtn->SetClickHdl( LINK( this, AddConditionDialog, OKHdl ) );
         m_aResultIdle.SetPriority( TaskPriority::LOWEST );
-        m_aResultIdle.SetIdleHdl( LINK( this, AddConditionDialog, ResultHdl ) );
+        m_aResultIdle.SetInvokeHandler( LINK( this, AddConditionDialog, ResultHdl ) );
 
         if ( !m_sPropertyName.isEmpty() )
         {
@@ -2867,7 +2867,7 @@ namespace svxform
     }
 
 
-    IMPL_LINK_NOARG_TYPED(AddConditionDialog, ResultHdl, Idle *, void)
+    IMPL_LINK_NOARG_TYPED(AddConditionDialog, ResultHdl, Timer *, void)
     {
         OUString sCondition = comphelper::string::strip(m_pConditionED->GetText(), ' ');
         OUString sResult;

@@ -30,7 +30,7 @@ class SfxItemDisruptor_Impl
     Idle m_Idle;
 
 private:
-    DECL_LINK_TYPED( Delete, Idle*, void );
+    DECL_LINK_TYPED( Delete, Timer*, void );
 
 public:
     explicit SfxItemDisruptor_Impl(SfxPoolItem *pItemToDesrupt);
@@ -44,7 +44,7 @@ SfxItemDisruptor_Impl::SfxItemDisruptor_Impl(SfxPoolItem *const pItemToDisrupt)
     : pItem(pItemToDisrupt)
     , m_Idle("SfxItemDisruptor_Impl")
 {
-    m_Idle.SetIdleHdl(LINK(this, SfxItemDisruptor_Impl, Delete));
+    m_Idle.SetInvokeHandler(LINK(this, SfxItemDisruptor_Impl, Delete));
     m_Idle.SetPriority(TaskPriority::DEFAULT_IDLE);
 
     DBG_ASSERT( 0 == pItem->GetRefCount(), "disrupting pooled item" );
@@ -66,7 +66,7 @@ SfxItemDisruptor_Impl::~SfxItemDisruptor_Impl()
     delete pItem;
 }
 
-IMPL_LINK_NOARG_TYPED(SfxItemDisruptor_Impl, Delete, Idle*, void)
+IMPL_LINK_NOARG_TYPED(SfxItemDisruptor_Impl, Delete, Timer*, void)
 {
     delete this;
 }

@@ -1790,7 +1790,7 @@ namespace frm
         doSetDelegator();
 
         m_aChangeIdle.SetPriority(TaskPriority::LOWEST);
-        m_aChangeIdle.SetIdleHdl(LINK(this,OListBoxControl,OnTimeout));
+        m_aChangeIdle.SetInvokeHandler(LINK(this,OListBoxControl,OnTimeout));
     }
 
 
@@ -1975,7 +1975,7 @@ namespace frm
     }
 
 
-    IMPL_LINK_NOARG_TYPED(OListBoxControl, OnTimeout, Idle*, void)
+    IMPL_LINK_NOARG_TYPED(OListBoxControl, OnTimeout, Timer*, void)
     {
         m_aChangeListeners.notifyEach( &XChangeListener::changed, EventObject( *this ) );
     }

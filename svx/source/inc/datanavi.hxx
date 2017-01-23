@@ -479,7 +479,7 @@ namespace svxform
         XPropertySet_ref        m_xBinding;
 
         DECL_LINK_TYPED(ModifyHdl, Edit&, void);
-        DECL_LINK_TYPED(ResultHdl, Idle *, void);
+        DECL_LINK_TYPED(ResultHdl, Timer *, void);
         DECL_LINK_TYPED(EditHdl, Button*, void);
         DECL_LINK_TYPED(OKHdl, Button*, void);
 

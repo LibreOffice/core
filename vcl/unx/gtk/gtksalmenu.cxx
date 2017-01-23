@@ -437,11 +437,11 @@ GtkSalMenu::GtkSalMenu( bool bMenuBar ) :
     //next idle slot, in the normal case of a new menubar SetFrame is called
     //directly long before this idle would get called.
     maUpdateMenuBarIdle.SetPriority(TaskPriority::HIGHEST);
-    maUpdateMenuBarIdle.SetIdleHdl(LINK(this, GtkSalMenu, MenuBarHierarchyChangeHandler));
+    maUpdateMenuBarIdle.SetInvokeHandler(LINK(this, GtkSalMenu, MenuBarHierarchyChangeHandler));
     maUpdateMenuBarIdle.SetDebugName("Native Gtk Menu Update Idle");
 }
 
-IMPL_LINK_NOARG_TYPED(GtkSalMenu, MenuBarHierarchyChangeHandler, Idle *, void)
+IMPL_LINK_NOARG_TYPED(GtkSalMenu, MenuBarHierarchyChangeHandler, Timer *, void)
 {
     SAL_WARN_IF(!mpFrame, "vcl.gtk", "MenuBar layout changed, but no frame for some reason!");
     if (!mpFrame)

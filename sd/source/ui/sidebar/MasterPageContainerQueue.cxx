@@ -109,8 +109,8 @@ void MasterPageContainerQueue::LateInit()
 {
     // Set up the timer for the delayed creation of preview bitmaps.
     maDelayedPreviewCreationTimer.SetTimeout (snDelayedCreationTimeout);
-    Link<Timer *, void> aLink (LINK(this,MasterPageContainerQueue,DelayedPreviewCreation));
-    maDelayedPreviewCreationTimer.SetTimeoutHdl(aLink);
+    maDelayedPreviewCreationTimer.SetInvokeHandler(
+        LINK(this,MasterPageContainerQueue,DelayedPreviewCreation) );
 }
 
 bool MasterPageContainerQueue::RequestPreview (const SharedMasterPageDescriptor& rpDescriptor)

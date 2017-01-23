@@ -209,7 +209,7 @@ BrowserDataWin::BrowserDataWin( BrowseBox* pParent )
     ,m_nDragRowDividerLimit( 0 )
     ,m_nDragRowDividerOffset( 0 )
 {
-    aMouseTimer.SetTimeoutHdl( LINK( this, BrowserDataWin, RepeatedMouseMove ) );
+    aMouseTimer.SetInvokeHandler( LINK( this, BrowserDataWin, RepeatedMouseMove ) );
     aMouseTimer.SetTimeout( 100 );
 }
 

@@ -493,7 +493,7 @@ void FmXAutoControl::ImplSetPeerProperty( const OUString& rPropName, const Any& 
 }
 
 
-IMPL_LINK_NOARG_TYPED( FormController, OnActivateTabOrder, Idle*, void )
+IMPL_LINK_NOARG_TYPED( FormController, OnActivateTabOrder, Timer*, void )
 {
     activateTabOrder();
 }
@@ -573,10 +573,10 @@ FormController::FormController(const Reference< css::uno::XComponentContext > & 
     osl_atomic_decrement(&m_refCount);
 
     m_aTabActivationIdle.SetPriority( TaskPriority::LOWEST );
-    m_aTabActivationIdle.SetIdleHdl( LINK( this, FormController, OnActivateTabOrder ) );
+    m_aTabActivationIdle.SetInvokeHandler( LINK( this, FormController, OnActivateTabOrder ) );
 
     m_aFeatureInvalidationTimer.SetTimeout( 200 );
-    m_aFeatureInvalidationTimer.SetTimeoutHdl( LINK( this, FormController, OnInvalidateFeatures ) );
+    m_aFeatureInvalidationTimer.SetInvokeHandler( LINK( this, FormController, OnInvalidateFeatures ) );
 }
 
 

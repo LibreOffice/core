@@ -43,7 +43,7 @@ SwChildWinWrapper::SwChildWinWrapper(vcl::Window *pParentWindow, sal_uInt16 nId)
 {
     // avoid flickering of buttons:
     m_aUpdateTimer.SetTimeout(200);
-    m_aUpdateTimer.SetTimeoutHdl(LINK(this, SwChildWinWrapper, UpdateHdl));
+    m_aUpdateTimer.SetInvokeHandler(LINK(this, SwChildWinWrapper, UpdateHdl));
 }
 
 IMPL_LINK_NOARG_TYPED(SwChildWinWrapper, UpdateHdl, Timer *, void)

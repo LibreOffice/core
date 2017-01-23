@@ -428,7 +428,6 @@ friend class SfxDockingWindow;
                         { eDockAlignment = eAlign; }
 };
 
-
 /*  [Description]
 
     This virtual method of the class FloatingWindow keeps track of changes in
@@ -842,7 +841,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImpl->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
     pImpl->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
     pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
-    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
+    pImpl->aMoveIdle.SetInvokeHandler(LINK(this,SfxDockingWindow,TimerHdl));
     pImpl->aMoveIdle.SetDebugName( "sfx::SfxDockingWindow_Impl aMoveIdle" );
 }
 
@@ -870,7 +869,7 @@ SfxDockingWindow::SfxDockingWindow( SfxBindings *pBindinx, SfxChildWindow *pCW,
     pImpl->SetDockAlignment(SfxChildAlignment::NOALIGNMENT);
     pImpl->SetLastAlignment(SfxChildAlignment::NOALIGNMENT);
     pImpl->aMoveIdle.SetPriority(TaskPriority::RESIZE);
-    pImpl->aMoveIdle.SetIdleHdl(LINK(this,SfxDockingWindow,TimerHdl));
+    pImpl->aMoveIdle.SetInvokeHandler(LINK(this,SfxDockingWindow,TimerHdl));
     pImpl->aMoveIdle.SetDebugName( "sfx::SfxDockingWindow_Impl aMoveIdle" );
 }
 
@@ -1749,7 +1748,7 @@ void SfxDockingWindow::Move()
         pImpl->aMoveIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxDockingWindow, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SfxDockingWindow, TimerHdl, Timer *, void)
 {
     pImpl->aMoveIdle.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )

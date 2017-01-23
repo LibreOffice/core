@@ -63,8 +63,8 @@ ScAutoStyleList::ScAutoStyleList(ScDocShell* pShell)
     , aInitIdle("ScAutoStyleList InitIdle")
     , nTimerStart(0)
 {
-    aTimer.SetTimeoutHdl( LINK( this, ScAutoStyleList, TimerHdl ) );
-    aInitIdle.SetIdleHdl( LINK( this, ScAutoStyleList, InitHdl ) );
+    aTimer.SetInvokeHandler( LINK( this, ScAutoStyleList, TimerHdl ) );
+    aInitIdle.SetInvokeHandler( LINK( this, ScAutoStyleList, InitHdl ) );
     aInitIdle.SetPriority( TaskPriority::HIGHEST );
 }
 
@@ -81,7 +81,7 @@ void ScAutoStyleList::AddInitial( const ScRange& rRange, const OUString& rStyle1
     aInitIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(ScAutoStyleList, InitHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ScAutoStyleList, InitHdl, Timer *, void)
 {
     std::vector<ScAutoStyleInitData>::iterator iter;
     for (iter = aInitials.begin(); iter != aInitials.end(); ++iter)

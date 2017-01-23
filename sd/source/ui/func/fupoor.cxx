@@ -84,13 +84,13 @@ FuPoor::FuPoor (
 {
     ReceiveRequest(rReq);
 
-    aScrollTimer.SetTimeoutHdl( LINK(this, FuPoor, ScrollHdl) );
+    aScrollTimer.SetInvokeHandler( LINK(this, FuPoor, ScrollHdl) );
     aScrollTimer.SetTimeout(SELENG_AUTOREPEAT_INTERVAL);
 
-    aDragTimer.SetTimeoutHdl( LINK(this, FuPoor, DragHdl) );
+    aDragTimer.SetInvokeHandler( LINK(this, FuPoor, DragHdl) );
     aDragTimer.SetTimeout(SELENG_DRAGDROP_TIMEOUT);
 
-    aDelayToScrollTimer.SetTimeoutHdl( LINK(this, FuPoor, DelayHdl) );
+    aDelayToScrollTimer.SetInvokeHandler( LINK(this, FuPoor, DelayHdl) );
     aDelayToScrollTimer.SetTimeout(2000);
 }
 

@@ -824,7 +824,7 @@ GraphicCache::GraphicCache( sal_uLong nDisplayCacheSize, sal_uLong nMaxObjDispla
     mnMaxObjDisplaySize     ( nMaxObjDisplayCacheSize ),
     mnUsedDisplaySize       ( 0UL )
 {
-    maReleaseTimer.SetTimeoutHdl( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
+    maReleaseTimer.SetInvokeHandler( LINK( this, GraphicCache, ReleaseTimeoutHdl ) );
     maReleaseTimer.SetTimeout( 10000 );
     maReleaseTimer.Start();
 }

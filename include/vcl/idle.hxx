@@ -45,20 +45,7 @@ public:
     Idle( const sal_Char *pDebugName = nullptr );
 
     virtual void  Start() override;
-
-    /**
-     * Convenience function for more readable code
-     *
-     * TODO: actually rename it and it's instances to SetInvokeHandler
-     */
-    inline void   SetIdleHdl( const Link<Idle *, void>& rLink );
 };
-
-inline void Idle::SetIdleHdl( const Link<Idle*, void> &rLink )
-{
-    SetInvokeHandler( Link<Timer*, void>( rLink.GetInstance(),
-        reinterpret_cast< Link<Timer*, void>::Stub* >( rLink.GetFunction()) ) );
-}
 
 #endif // INCLUDED_VCL_IDLE_HXX
 

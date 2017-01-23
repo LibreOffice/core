@@ -2431,7 +2431,7 @@ void Edit::EnableUpdateData( sal_uLong nTimeout )
         if ( !mpUpdateDataTimer )
         {
             mpUpdateDataTimer = new Timer("UpdateDataTimer");
-            mpUpdateDataTimer->SetTimeoutHdl( LINK( this, Edit, ImplUpdateDataHdl ) );
+            mpUpdateDataTimer->SetInvokeHandler( LINK( this, Edit, ImplUpdateDataHdl ) );
             mpUpdateDataTimer->SetDebugName( "vcl::Edit mpUpdateDataTimer" );
         }
 

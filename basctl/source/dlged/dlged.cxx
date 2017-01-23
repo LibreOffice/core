@@ -221,7 +221,7 @@ DlgEditor::DlgEditor (
     m_ClipboardDataFlavorsResource[1].DataType =             cppu::UnoType<Sequence< sal_Int8 >>::get();
 
     aMarkIdle.SetPriority(TaskPriority::LOW);
-    aMarkIdle.SetIdleHdl( LINK( this, DlgEditor, MarkTimeout ) );
+    aMarkIdle.SetInvokeHandler( LINK( this, DlgEditor, MarkTimeout ) );
 
     rWindow.SetMapMode( MapMode( MAP_100TH_MM ) );
     pDlgEdPage->SetSize( rWindow.PixelToLogic( Size(DLGED_PAGE_WIDTH_MIN, DLGED_PAGE_HEIGHT_MIN) ) );
@@ -577,7 +577,7 @@ void DlgEditor::Paint(vcl::RenderContext& rRenderContext, const Rectangle& rRect
 }
 
 
-IMPL_LINK_NOARG_TYPED(DlgEditor, MarkTimeout, Idle *, void)
+IMPL_LINK_NOARG_TYPED(DlgEditor, MarkTimeout, Timer *, void)
 {
     rLayout.UpdatePropertyBrowser();
 }

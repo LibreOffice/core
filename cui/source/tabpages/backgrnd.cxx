@@ -624,8 +624,6 @@ void SvxBackgroundTabPage::ResetFromWallpaperItem( const SfxItemSet& rSet )
     In this case the condition of the preview button is saved.
 */
 void SvxBackgroundTabPage::FillUserData()
-
-
 {
     SetUserData( m_pBtnPreview->IsChecked() ? OUString('1') : OUString('0') );
 }
@@ -953,7 +951,7 @@ void SvxBackgroundTabPage::ShowSelector()
         // delayed loading via timer (because of UI-Update)
         pPageImpl->pLoadIdle = new Idle("DelayedLoad");
         pPageImpl->pLoadIdle->SetPriority( TaskPriority::LOWEST );
-        pPageImpl->pLoadIdle->SetIdleHdl(
+        pPageImpl->pLoadIdle->SetInvokeHandler(
             LINK( this, SvxBackgroundTabPage, LoadIdleHdl_Impl ) );
 
         bAllowShowSelector = false;
@@ -1254,7 +1252,8 @@ IMPL_LINK_NOARG_TYPED(SvxBackgroundTabPage, BrowseHdl_Impl, Button*, void)
     Graphic is only loaded, if it's
     different to the current graphic.
 */
-IMPL_LINK_TYPED( SvxBackgroundTabPage, LoadIdleHdl_Impl, Idle* , pIdle, void )
+
+IMPL_LINK_TYPED( SvxBackgroundTabPage, LoadIdleHdl_Impl, Timer*, pIdle, void )
 {
     if ( pIdle == pPageImpl->pLoadIdle )
     {

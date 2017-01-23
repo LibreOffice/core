@@ -5108,19 +5108,19 @@ SwEditWin::SwEditWin(vcl::Window *pParent, SwView &rMyView):
     SetMapMode(MapMode(MAP_TWIP));
 
     SetPointer( PointerStyle::Text );
-    m_aTimer.SetTimeoutHdl(LINK(this, SwEditWin, TimerHandler));
+    m_aTimer.SetInvokeHandler(LINK(this, SwEditWin, TimerHandler));
 
     m_bTableInsDelMode = false;
     m_aKeyInputTimer.SetTimeout( 3000 );
-    m_aKeyInputTimer.SetTimeoutHdl(LINK(this, SwEditWin, KeyInputTimerHandler));
+    m_aKeyInputTimer.SetInvokeHandler(LINK(this, SwEditWin, KeyInputTimerHandler));
 
     m_aKeyInputFlushTimer.SetTimeout( 200 );
-    m_aKeyInputFlushTimer.SetTimeoutHdl(LINK(this, SwEditWin, KeyInputFlushHandler));
+    m_aKeyInputFlushTimer.SetInvokeHandler(LINK(this, SwEditWin, KeyInputFlushHandler));
 
     // TemplatePointer for colors should be resetted without
     // selection after single click
     m_aTemplateIdle.SetPriority(TaskPriority::LOWEST);
-    m_aTemplateIdle.SetIdleHdl(LINK(this, SwEditWin, TemplateTimerHdl));
+    m_aTemplateIdle.SetInvokeHandler(LINK(this, SwEditWin, TemplateTimerHdl));
 
     // temporary solution!!! Should set the font of the current
     // insert position at every cursor movement!
@@ -5929,7 +5929,7 @@ void SwEditWin::StopQuickHelp()
         m_pQuickHlpData->Stop( m_rView.GetWrtShell() );
 }
 
-IMPL_LINK_NOARG_TYPED(SwEditWin, TemplateTimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SwEditWin, TemplateTimerHdl, Timer *, void)
 {
     SetApplyTemplate(SwApplyTemplate());
 }

@@ -40,7 +40,7 @@ ToolTip::ToolTip (SlideSorter& rSlideSorter)
     sd::Window *window = rSlideSorter.GetContentWindow();
     const HelpSettings& rHelpSettings = window->GetSettings().GetHelpSettings();
     maShowTimer.SetTimeout(rHelpSettings.GetTipDelay());
-    maShowTimer.SetTimeoutHdl(LINK(this, ToolTip, DelayTrigger));
+    maShowTimer.SetInvokeHandler(LINK(this, ToolTip, DelayTrigger));
     maHiddenTimer.SetTimeout(rHelpSettings.GetTipDelay());
 }
 

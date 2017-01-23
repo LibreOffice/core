@@ -340,7 +340,7 @@ SwDoc::SwDoc()
                     getIDocumentStylePoolAccess().GetTextCollFromPool( RES_POOLCOLL_STANDARD ));
 
     maOLEModifiedIdle.SetPriority( TaskPriority::LOWEST );
-    maOLEModifiedIdle.SetIdleHdl( LINK( this, SwDoc, DoUpdateModifiedOLE ));
+    maOLEModifiedIdle.SetInvokeHandler( LINK( this, SwDoc, DoUpdateModifiedOLE ));
     maOLEModifiedIdle.SetDebugName( "sw::SwDoc maOLEModifiedIdle" );
 
 #if HAVE_FEATURE_DBCONNECTIVITY

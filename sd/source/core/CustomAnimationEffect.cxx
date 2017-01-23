@@ -3025,7 +3025,7 @@ void MainSequence::init()
 {
     mnSequenceType = EffectNodeType::MAIN_SEQUENCE;
 
-    maTimer.SetTimeoutHdl( LINK(this, MainSequence, onTimerHdl) );
+    maTimer.SetInvokeHandler( LINK(this, MainSequence, onTimerHdl) );
     maTimer.SetTimeout(500);
 
     mxChangesListener.set( new AnimationChangeListener( this ) );

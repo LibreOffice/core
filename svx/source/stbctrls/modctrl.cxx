@@ -77,7 +77,7 @@ SvxModifyControl::SvxModifyControl( sal_uInt16 _nSlotId, sal_uInt16 _nId, Status
         }
     }
 //#endif
-    mxImpl->maIdle.SetIdleHdl( LINK(this, SvxModifyControl, OnTimer) );
+    mxImpl->maIdle.SetInvokeHandler( LINK(this, SvxModifyControl, OnTimer) );
 }
 
 
@@ -106,7 +106,7 @@ void SvxModifyControl::StateChanged( sal_uInt16, SfxItemState eState,
 }
 
 
-IMPL_LINK_TYPED( SvxModifyControl, OnTimer, Idle *, pTimer, void )
+IMPL_LINK_TYPED( SvxModifyControl, OnTimer, Timer *, pTimer, void )
 {
     if (pTimer == nullptr)
         return;

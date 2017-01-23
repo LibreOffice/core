@@ -42,10 +42,10 @@ FuPoor::FuPoor(ScTabViewShell* pViewSh, vcl::Window* pWin, ScDrawView* pViewP,
     // remember MouseButton state
     mnCode(0)
 {
-    aScrollTimer.SetTimeoutHdl( LINK(this, FuPoor, ScrollHdl) );
+    aScrollTimer.SetInvokeHandler( LINK(this, FuPoor, ScrollHdl) );
     aScrollTimer.SetTimeout(SELENG_AUTOREPEAT_INTERVAL);
 
-    aDragTimer.SetTimeoutHdl( LINK(this, FuPoor, DragTimerHdl) );
+    aDragTimer.SetInvokeHandler( LINK(this, FuPoor, DragTimerHdl) );
     aDragTimer.SetTimeout(SELENG_DRAGDROP_TIMEOUT);
 }
 

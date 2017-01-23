@@ -71,7 +71,7 @@ GraphCtrl::GraphCtrl( vcl::Window* pParent, WinBits nStyle ) :
 {
     pUserCall = new GraphCtrlUserCall( *this );
     aUpdateIdle.SetPriority( TaskPriority::LOWEST );
-    aUpdateIdle.SetIdleHdl( LINK( this, GraphCtrl, UpdateHdl ) );
+    aUpdateIdle.SetInvokeHandler( LINK( this, GraphCtrl, UpdateHdl ) );
     aUpdateIdle.Start();
     EnableRTL( false );
 }
@@ -764,7 +764,7 @@ void GraphCtrl::SetObjKind( const SdrObjKind _eObjKind )
     QueueIdleUpdate();
 }
 
-IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Idle *, , void )
+IMPL_LINK_TYPED( GraphCtrl, UpdateHdl, Timer *, , void )
 {
     mbInIdleUpdate = true;
     aUpdateLink.Call( this );

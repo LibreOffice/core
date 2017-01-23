@@ -147,7 +147,7 @@ SoundHandler::SoundHandler()
     ,   m_bError        ( false    )
     ,   m_aUpdateIdle   ( "avmedia SoundHandler Update" )
 {
-    m_aUpdateIdle.SetIdleHdl(LINK(this, SoundHandler, implts_PlayerNotify));
+    m_aUpdateIdle.SetInvokeHandler(LINK(this, SoundHandler, implts_PlayerNotify));
 }
 
 /*-************************************************************************************************************
@@ -299,7 +299,7 @@ OUString SAL_CALL SoundHandler::detect( css::uno::Sequence< css::beans::Property
     @return     0 every time... it doesn't matter for us.
     @threadsafe yes
 *//*-*************************************************************************************************************/
-IMPL_LINK_NOARG_TYPED(SoundHandler, implts_PlayerNotify, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SoundHandler, implts_PlayerNotify, Timer *, void)
 {
     // SAFE {
     ::osl::ClearableMutexGuard aLock( m_aLock );

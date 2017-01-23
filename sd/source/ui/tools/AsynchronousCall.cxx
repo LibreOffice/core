@@ -27,8 +27,7 @@ AsynchronousCall::AsynchronousCall()
     : maTimer(),
       mpFunction()
 {
-    Link<Timer *, void> aCallback (LINK(this,AsynchronousCall,TimerCallback));
-    maTimer.SetTimeoutHdl(aCallback);
+    maTimer.SetInvokeHandler( LINK(this,AsynchronousCall,TimerCallback) );
 }
 
 AsynchronousCall::~AsynchronousCall()

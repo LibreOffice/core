@@ -354,7 +354,7 @@ SwLabFormatPage::SwLabFormatPage(vcl::Window* pParent, const SfxItemSet& rSet)
     m_pSavePB->SetClickHdl( LINK (this, SwLabFormatPage, SaveHdl));
     // Set timer
     aPreviewIdle.SetPriority(TaskPriority::LOWEST);
-    aPreviewIdle.SetIdleHdl(LINK(this, SwLabFormatPage, PreviewHdl));
+    aPreviewIdle.SetInvokeHandler(LINK(this, SwLabFormatPage, PreviewHdl));
 }
 
 SwLabFormatPage::~SwLabFormatPage()
@@ -390,7 +390,7 @@ IMPL_LINK_NOARG_TYPED(SwLabFormatPage, ModifyHdl, Edit&, void)
 }
 
 // Invalidate preview
-IMPL_LINK_NOARG_TYPED(SwLabFormatPage, PreviewHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SwLabFormatPage, PreviewHdl, Timer *, void)
 {
     aPreviewIdle.Stop();
     ChangeMinMax();

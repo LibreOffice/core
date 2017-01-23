@@ -111,13 +111,10 @@ OLEObjCache::OLEObjCache()
     else
         nSize = 100;
     pTimer = new AutoTimer( "svx OLEObjCache pTimer UnloadCheck" );
-    Link<Timer *, void> aLink = LINK(this, OLEObjCache, UnloadCheckHdl);
-
-    pTimer->SetTimeoutHdl(aLink);
+    pTimer->SetInvokeHandler( LINK(this, OLEObjCache, UnloadCheckHdl) );
     pTimer->SetTimeout(20000);
+    pTimer->Invoke();
     pTimer->Start();
-
-    aLink.Call(pTimer);
 }
 
 OLEObjCache::~OLEObjCache()

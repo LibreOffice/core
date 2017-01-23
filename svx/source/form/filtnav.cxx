@@ -1115,7 +1115,7 @@ FmFilterNavigator::FmFilterNavigator( vcl::Window* pParent )
 
     SetDragDropMode(DragDropMode::ALL);
 
-    m_aDropActionTimer.SetTimeoutHdl(LINK(this, FmFilterNavigator, OnDropActionTimer));
+    m_aDropActionTimer.SetInvokeHandler(LINK(this, FmFilterNavigator, OnDropActionTimer));
 }
 
 

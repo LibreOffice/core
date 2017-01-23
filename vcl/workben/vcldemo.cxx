@@ -1595,7 +1595,7 @@ bool DemoRenderer::MouseButtonDown(const MouseEvent& rMEvt)
         mpButtonWin->SetPosSizePixel(Point(0,0), mpButton->GetOptimalSize());
         mpButtonWin->Show();
         mnBounceX = 1; mnBounceX = 1;
-        maBounce.SetTimeoutHdl(LINK(this,DemoRenderer,BounceTimerCb));
+        maBounce.SetInvokeHandler(LINK(this,DemoRenderer,BounceTimerCb));
         maBounce.SetTimeout(55);
         maBounce.Start();
     }

@@ -544,12 +544,11 @@ private:
 #endif
 
 public:
-
-    DECL_DLLPRIVATE_LINK_TYPED( ImplHandlePaintHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplHandlePaintHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplGenerateMouseMoveHdl, void*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplTrackTimerHdl, Timer*, void );
     DECL_DLLPRIVATE_LINK_TYPED( ImplAsyncFocusHdl, void*, void );
-    DECL_DLLPRIVATE_LINK_TYPED( ImplHandleResizeTimerHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( ImplHandleResizeTimerHdl, Timer*, void );
 
 
     SAL_DLLPRIVATE static void          ImplInitAppFontData( vcl::Window* pWindow );

@@ -462,7 +462,7 @@ short ActualizeProgress::Execute()
     short nRet;
 
     pIdle = new Idle("ActualizeProgressTimeout");
-    pIdle->SetIdleHdl( LINK( this, ActualizeProgress, TimeoutHdl ) );
+    pIdle->SetInvokeHandler( LINK( this, ActualizeProgress, TimeoutHdl ) );
     pIdle->SetPriority( TaskPriority::LOWEST );
     pIdle->Start();
 
@@ -479,7 +479,7 @@ IMPL_LINK_NOARG_TYPED(ActualizeProgress, ClickCancelBtn, Button*, void)
 }
 
 
-IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Idle*, _pTimer, void)
+IMPL_LINK_TYPED( ActualizeProgress, TimeoutHdl, Timer*, _pTimer, void)
 {
     if ( _pTimer )
     {
@@ -755,7 +755,7 @@ void TPGalleryThemeProperties::SetXChgData( ExchangeData* _pData )
 {
     pData = _pData;
 
-    aPreviewTimer.SetTimeoutHdl( LINK( this, TPGalleryThemeProperties, PreviewTimerHdl ) );
+    aPreviewTimer.SetInvokeHandler( LINK( this, TPGalleryThemeProperties, PreviewTimerHdl ) );
     aPreviewTimer.SetTimeout( 500 );
     m_pBtnSearch->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickSearchHdl));
     m_pBtnTake->SetClickHdl(LINK(this, TPGalleryThemeProperties, ClickTakeHdl));

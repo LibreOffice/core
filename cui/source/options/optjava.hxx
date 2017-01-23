@@ -90,7 +90,7 @@ private:
     DECL_LINK_TYPED(        AddHdl_Impl, Button*, void);
     DECL_LINK_TYPED(        ParameterHdl_Impl, Button*, void);
     DECL_LINK_TYPED(        ClassPathHdl_Impl, Button*, void);
-    DECL_LINK_TYPED(        ResetHdl_Impl, Idle *, void);
+    DECL_LINK_TYPED(        ResetHdl_Impl, Timer *, void);
 
     DECL_LINK_TYPED(        StartFolderPickerHdl, void *, void );
     DECL_LINK_TYPED(        DialogClosedHdl, css::ui::dialogs::DialogClosedEvent*, void );

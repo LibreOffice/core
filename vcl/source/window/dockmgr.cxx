@@ -51,8 +51,8 @@ private:
     ImplSVEvent *   mnLastUserEvent;
 
     DECL_LINK_TYPED(DockingHdl, void *, void);
-    DECL_LINK_TYPED(DockTimerHdl, Idle *, void);
-    DECL_LINK_TYPED(EndDockTimerHdl, Idle *, void);
+    DECL_LINK_TYPED(DockTimerHdl, Timer *, void);
+    DECL_LINK_TYPED(EndDockTimerHdl, Timer *, void);
 public:
     ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
                       ImplDockingWindowWrapper* pDockingWin );
@@ -90,11 +90,11 @@ ImplDockFloatWin2::ImplDockFloatWin2( vcl::Window* pParent, WinBits nWinBits,
 
     SetBackground( GetSettings().GetStyleSettings().GetFaceColor() );
 
-    maDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
+    maDockIdle.SetInvokeHandler( LINK( this, ImplDockFloatWin2, DockTimerHdl ) );
     maDockIdle.SetPriority( TaskPriority::MEDIUM );
     maDockIdle.SetDebugName( "vcl::ImplDockFloatWin2 maDockIdle" );
 
-    maEndDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
+    maEndDockIdle.SetInvokeHandler( LINK( this, ImplDockFloatWin2, EndDockTimerHdl ) );
     maEndDockIdle.SetPriority( TaskPriority::MEDIUM );
     maEndDockIdle.SetDebugName( "vcl::ImplDockFloatWin2 maEndDockIdle" );
 }
@@ -111,7 +111,7 @@ void ImplDockFloatWin2::dispose()
     FloatingWindow::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockTimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockTimerHdl, Timer *, void)
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
@@ -137,7 +137,7 @@ IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, DockTimerHdl, Idle *, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, EndDockTimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ImplDockFloatWin2, EndDockTimerHdl, Timer *, void)
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "enddocktimer called but not floating" );
 

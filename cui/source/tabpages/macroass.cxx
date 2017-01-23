@@ -141,7 +141,7 @@ SfxMacroTabPage_::SfxMacroTabPage_(vcl::Window* pParent, const SfxItemSet& rAttr
 {
     mpImpl = new SfxMacroTabPage_Impl;
 
-    mpImpl->maFillGroupIdle.SetIdleHdl( LINK( this, SfxMacroTabPage, TimeOut_Impl ) );
+    mpImpl->maFillGroupIdle.SetInvokeHandler( LINK( this, SfxMacroTabPage, TimeOut_Impl ) );
     mpImpl->maFillGroupIdle.SetPriority( TaskPriority::HIGHEST );
     mpImpl->maFillGroupIdle.SetDebugName( "SfxMacroTabPage maFillGroupIdle" );
 }
@@ -351,7 +351,7 @@ bool SfxMacroTabPage_::AssignDeleteHdl(Control* pBtn)
     return false;
 }
 
-IMPL_LINK_TYPED( SfxMacroTabPage_, TimeOut_Impl, Idle*,, void )
+IMPL_LINK_TYPED( SfxMacroTabPage_, TimeOut_Impl, Timer*,, void )
 {
     // FillMacroList() can take a long time -> show wait cursor and disable input
     SfxTabDialog* pTabDlg = GetTabDialog();

@@ -104,7 +104,7 @@ public:
 
         m_xBase = xBase;
         m_aTimerInfo = VbaTimerInfo( aFunction, ::std::pair< double, double >( nFrom, nTo ) );
-        m_aTimer.SetTimeoutHdl( LINK( this, VbaTimer, MacroCallHdl ) );
+        m_aTimer.SetInvokeHandler( LINK( this, VbaTimer, MacroCallHdl ) );
         m_aTimer.SetTimeout( GetTimerMiliseconds( GetNow(), nFrom ) );
         m_aTimer.Start();
     }

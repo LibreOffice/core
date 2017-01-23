@@ -712,7 +712,7 @@ ExtMgrDialog::ExtMgrDialog(vcl::Window *pParent, TheExtensionManager *pManager, 
 #endif
 
     m_aIdle.SetPriority(TaskPriority::LOWEST);
-    m_aIdle.SetIdleHdl( LINK( this, ExtMgrDialog, TimeOutHdl ) );
+    m_aIdle.SetInvokeHandler( LINK( this, ExtMgrDialog, TimeOutHdl ) );
 }
 
 
@@ -1067,14 +1067,12 @@ IMPL_LINK_NOARG_TYPED(ExtMgrDialog, HandleUpdateBtn, Button*, void)
 #endif
 }
 
-
 IMPL_LINK_TYPED( ExtMgrDialog, HandleHyperlink, FixedHyperlink&, rHyperlink, void )
 {
     openWebBrowser( rHyperlink.GetURL(), GetText() );
 }
 
-
-IMPL_LINK_NOARG_TYPED(ExtMgrDialog, TimeOutHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ExtMgrDialog, TimeOutHdl, Timer *, void)
 {
     if ( m_bStopProgress )
     {
@@ -1196,7 +1194,7 @@ UpdateRequiredDialog::UpdateRequiredDialog(vcl::Window *pParent, TheExtensionMan
     m_pCloseBtn->GrabFocus();
 
     m_aIdle.SetPriority( TaskPriority::LOWEST );
-    m_aIdle.SetIdleHdl( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
+    m_aIdle.SetInvokeHandler( LINK( this, UpdateRequiredDialog, TimeOutHdl ) );
 }
 
 UpdateRequiredDialog::~UpdateRequiredDialog()
@@ -1401,7 +1399,7 @@ IMPL_LINK_TYPED( UpdateRequiredDialog, HandleHyperlink, FixedHyperlink&, rHyperl
 }
 
 
-IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, TimeOutHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(UpdateRequiredDialog, TimeOutHdl, Timer *, void)
 {
     if ( m_bStopProgress )
     {

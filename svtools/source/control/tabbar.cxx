@@ -397,7 +397,7 @@ private:
     bool            mbPostEvt;
 
                     DECL_LINK_TYPED( ImplEndEditHdl, void*, void );
-                    DECL_LINK_TYPED( ImplEndTimerHdl, Idle*, void );
+                    DECL_LINK_TYPED( ImplEndTimerHdl, Timer*, void );
 
 public:
                     TabBarEdit( TabBar* pParent, WinBits nWinStyle = 0 );
@@ -416,7 +416,7 @@ TabBarEdit::TabBarEdit( TabBar* pParent, WinBits nWinStyle ) :
 {
     mbPostEvt = false;
     maLoseFocusIdle.SetPriority( TaskPriority::REPAINT );
-    maLoseFocusIdle.SetIdleHdl( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
+    maLoseFocusIdle.SetInvokeHandler( LINK( this, TabBarEdit, ImplEndTimerHdl ) );
     maLoseFocusIdle.SetDebugName( "svtools::TabBarEdit maLoseFocusIdle" );
 }
 
@@ -477,7 +477,7 @@ IMPL_LINK_TYPED( TabBarEdit, ImplEndEditHdl, void*, pCancel, void )
         GetParent()->EndEditMode( pCancel != nullptr );
 }
 
-IMPL_LINK_NOARG_TYPED(TabBarEdit, ImplEndTimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(TabBarEdit, ImplEndTimerHdl, Timer *, void)
 {
     if ( HasFocus() )
         return;

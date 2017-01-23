@@ -84,7 +84,7 @@ SvxConfigFunctionListBox::SvxConfigFunctionListBox(vcl::Window* pParent, WinBits
 
     // Timer for the BallonHelp
     aTimer.SetTimeout( 200 );
-    aTimer.SetTimeoutHdl(
+    aTimer.SetInvokeHandler(
         LINK( this, SvxConfigFunctionListBox, TimerHdl ) );
 }
 

@@ -138,7 +138,7 @@ private:
     void                ClearIndex();
 
     DECL_LINK_TYPED(OpenHdl, Button*, void);
-    DECL_LINK_TYPED(IdleHdl, Idle*, void);
+    DECL_LINK_TYPED(IdleHdl, Timer*, void);
     DECL_LINK_TYPED(TimeoutHdl, Timer*, void);
 
 public:
@@ -314,8 +314,8 @@ private:
 
     DECL_LINK_TYPED(ActivatePageHdl, TabControl*, void );
     DECL_LINK_TYPED(SelectHdl, ListBox&, void);
-    DECL_LINK_TYPED(InitHdl, Idle *, void);
-    DECL_LINK_TYPED(SelectFactoryHdl, Idle *, void);
+    DECL_LINK_TYPED(InitHdl, Timer *, void);
+    DECL_LINK_TYPED(SelectFactoryHdl, Timer *, void);
     DECL_LINK_TYPED(KeywordHdl, IndexTabPage_Impl&, void);
     DECL_LINK_TYPED(ContentTabPageDoubleClickHdl, SvTreeListBox*, bool);
     DECL_LINK_TYPED(TabPageDoubleClickHdl, ListBox&, void);
@@ -453,7 +453,7 @@ private:
                             getCursor() const;
     bool                    isHandledKey( const vcl::KeyCode& _rKeyCode );
 
-    DECL_LINK_TYPED(        SelectHdl, Idle *, void);
+    DECL_LINK_TYPED(        SelectHdl, Timer *, void);
     DECL_LINK_TYPED(        NotifyHdl, LinkParamNone*, void );
     DECL_LINK_TYPED(        FindHdl, sfx2::SearchDialog&, void );
     DECL_LINK_TYPED(        CloseHdl, sfx2::SearchDialog*, void );

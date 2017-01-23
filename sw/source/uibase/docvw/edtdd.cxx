@@ -51,7 +51,7 @@ bool g_bExecuteDrag = false;
 
 void SwEditWin::StartDDTimer()
 {
-    m_aTimer.SetTimeoutHdl(LINK(this, SwEditWin, DDHandler));
+    m_aTimer.SetInvokeHandler(LINK(this, SwEditWin, DDHandler));
     m_aTimer.SetTimeout(480);
     m_aTimer.Start();
     g_bDDTimerStarted = true;
@@ -63,7 +63,7 @@ void SwEditWin::StopDDTimer(SwWrtShell *pSh, const Point &rPt)
     g_bDDTimerStarted = false;
     if(!pSh->IsSelFrameMode())
         pSh->CallSetCursor(&rPt, false);
-    m_aTimer.SetTimeoutHdl(LINK(this,SwEditWin, TimerHandler));
+    m_aTimer.SetInvokeHandler(LINK(this,SwEditWin, TimerHandler));
 }
 
 void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
@@ -147,7 +147,7 @@ void SwEditWin::StartExecuteDrag()
 void SwEditWin::DragFinished()
 {
     DropCleanup();
-    m_aTimer.SetTimeoutHdl( LINK(this,SwEditWin, TimerHandler) );
+    m_aTimer.SetInvokeHandler( LINK(this,SwEditWin, TimerHandler) );
     m_bIsInDrag = false;
 }
 

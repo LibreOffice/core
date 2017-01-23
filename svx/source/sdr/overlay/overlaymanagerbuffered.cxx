@@ -205,7 +205,7 @@ namespace sdr
             mpBufferDevice->EnableMapMode(bMapModeWasEnabledSource);
         }
 
-        IMPL_LINK_NOARG_TYPED(OverlayManagerBuffered, ImpBufferTimerHandler, Idle*, void)
+        IMPL_LINK_NOARG_TYPED(OverlayManagerBuffered, ImpBufferTimerHandler, Timer*, void)
         {
             //Resolves: fdo#46728 ensure this exists until end of scope
             rtl::Reference<OverlayManager> xRef(this);
@@ -384,7 +384,7 @@ namespace sdr
         {
             // Init timer
             maBufferIdle.SetPriority( TaskPriority::POST_PAINT );
-            maBufferIdle.SetIdleHdl(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
+            maBufferIdle.SetInvokeHandler(LINK(this, OverlayManagerBuffered, ImpBufferTimerHandler));
             maBufferIdle.SetDebugName( "sdr::overlay::OverlayManagerBuffered maBufferIdle" );
         }
 

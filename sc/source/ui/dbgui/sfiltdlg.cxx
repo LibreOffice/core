@@ -89,7 +89,7 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, vc
     pIdle = new Idle;
     // FIXME: this is an abomination
     pIdle->SetPriority( TaskPriority::LOWEST );
-    pIdle->SetIdleHdl( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
+    pIdle->SetInvokeHandler( LINK( this, ScSpecialFilterDlg, TimeOutHdl ) );
     pIdle->Start();
 
     pLbCopyArea->SetAccessibleName(pBtnCopyResult->GetText());
@@ -399,7 +399,7 @@ IMPL_LINK_TYPED( ScSpecialFilterDlg, EndDlgHdl, Button*, pBtn, void )
     }
 }
 
-IMPL_LINK_TYPED( ScSpecialFilterDlg, TimeOutHdl, Idle*, _pIdle, void )
+IMPL_LINK_TYPED( ScSpecialFilterDlg, TimeOutHdl, Timer*, _pIdle, void )
 {
     // every 50ms check whether RefInputMode is still true
 

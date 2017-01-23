@@ -70,7 +70,7 @@ void DBTreeListBox::init()
     SetSpaceBetweenEntries(nSize);
 
     m_aTimer.SetTimeout(900);
-    m_aTimer.SetTimeoutHdl(LINK(this, DBTreeListBox, OnTimeOut));
+    m_aTimer.SetInvokeHandler(LINK(this, DBTreeListBox, OnTimeOut));
 
     m_aScrollHelper.setUpScrollMethod( LINK(this, DBTreeListBox, ScrollUpHdl) );
     m_aScrollHelper.setDownScrollMethod( LINK(this, DBTreeListBox, ScrollDownHdl) );

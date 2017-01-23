@@ -65,9 +65,9 @@ ShowWindow::ShowWindow( const ::rtl::Reference< SlideshowImpl >& xController, vc
     // set HelpId
     SetHelpId( HID_SD_WIN_PRESENTATION );
 
-    maPauseTimer.SetTimeoutHdl( LINK( this, ShowWindow, PauseTimeoutHdl ) );
+    maPauseTimer.SetInvokeHandler( LINK( this, ShowWindow, PauseTimeoutHdl ) );
     maPauseTimer.SetTimeout( 1000 );
-    maMouseTimer.SetTimeoutHdl( LINK( this, ShowWindow, MouseTimeoutHdl ) );
+    maMouseTimer.SetInvokeHandler( LINK( this, ShowWindow, MouseTimeoutHdl ) );
     maMouseTimer.SetTimeout( HIDE_MOUSE_TIMEOUT );
 
     maShowBackground = Wallpaper( Color( COL_BLACK ) );

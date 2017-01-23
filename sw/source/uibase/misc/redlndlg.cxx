@@ -219,11 +219,11 @@ SwRedlineAcceptDlg::SwRedlineAcceptDlg(vcl::Window *pParent, VclBuilderContainer
 
     // avoid flickering of buttons:
     m_aDeselectTimer.SetTimeout(100);
-    m_aDeselectTimer.SetTimeoutHdl(LINK(this, SwRedlineAcceptDlg, SelectTimerHdl));
+    m_aDeselectTimer.SetInvokeHandler(LINK(this, SwRedlineAcceptDlg, SelectTimerHdl));
 
     // avoid multiple selection of the same texts:
     m_aSelectTimer.SetTimeout(100);
-    m_aSelectTimer.SetTimeoutHdl(LINK(this, SwRedlineAcceptDlg, GotoHdl));
+    m_aSelectTimer.SetInvokeHandler(LINK(this, SwRedlineAcceptDlg, GotoHdl));
 }
 
 SwRedlineAcceptDlg::~SwRedlineAcceptDlg()

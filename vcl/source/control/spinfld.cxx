@@ -328,7 +328,7 @@ void SpinField::ImplInit(vcl::Window* pParent, WinBits nWinStyle)
 
         SetSubEdit(mpEdit);
 
-        maRepeatTimer.SetTimeoutHdl(LINK( this, SpinField, ImplTimeout));
+        maRepeatTimer.SetInvokeHandler(LINK( this, SpinField, ImplTimeout));
         maRepeatTimer.SetTimeout(GetSettings().GetMouseSettings().GetButtonStartRepeat());
         if (nWinStyle & WB_REPEAT)
             mbRepeat = true;

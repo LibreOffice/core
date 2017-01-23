@@ -58,7 +58,7 @@ QueueProcessor::QueueProcessor (
     if (aTimeBetweenReqeusts.has<sal_Int32>())
         aTimeBetweenReqeusts >>= mnTimeBetweenRequestsWhenNotIdle;
 
-    maTimer.SetTimeoutHdl (LINK(this,QueueProcessor,ProcessRequestHdl));
+    maTimer.SetInvokeHandler (LINK(this,QueueProcessor,ProcessRequestHdl));
     maTimer.SetTimeout (10);
 }
 

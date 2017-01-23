@@ -62,7 +62,7 @@ protected:
 SwGrammarContact::SwGrammarContact() : mpProxyList(nullptr), mbFinished( false )
 {
     aTimer.SetTimeout( 2000 );  // Repaint of grammar check after 'setChecked'
-    aTimer.SetTimeoutHdl( LINK(this, SwGrammarContact, TimerRepaint) );
+    aTimer.SetInvokeHandler( LINK(this, SwGrammarContact, TimerRepaint) );
     aTimer.SetDebugName( "sw::SwGrammarContact TimerRepaint" );
 }
 

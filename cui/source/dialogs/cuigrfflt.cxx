@@ -149,7 +149,7 @@ GraphicFilterDialog::GraphicFilterDialog(vcl::Window* pParent,
 {
     bIsBitmap = rGraphic.GetType() == GRAPHIC_BITMAP;
 
-    maTimer.SetTimeoutHdl( LINK( this, GraphicFilterDialog, ImplPreviewTimeoutHdl ) );
+    maTimer.SetInvokeHandler( LINK( this, GraphicFilterDialog, ImplPreviewTimeoutHdl ) );
     maTimer.SetTimeout( 5 );
 
     get(mpPreview, "preview");

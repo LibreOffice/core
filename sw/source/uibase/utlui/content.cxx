@@ -820,7 +820,7 @@ SwContentTree::SwContentTree(vcl::Window* pParent, const ResId& rResId)
         m_aContextStrings[i] = SW_RESSTR(i+STR_CONTEXT_FIRST);
     }
     m_nActiveBlock = m_pConfig->GetActiveBlock();
-    m_aUpdTimer.SetTimeoutHdl(LINK(this, SwContentTree, TimerUpdate));
+    m_aUpdTimer.SetInvokeHandler(LINK(this, SwContentTree, TimerUpdate));
     m_aUpdTimer.SetTimeout(1000);
     Clear();
     EnableContextMenuHandling();

@@ -2011,7 +2011,7 @@ private:
                                         SCCOLROW nEndCol, SCCOLROW* pTranslate,
                                         ScProgress* pProgress, sal_uLong nProAdd );
 
-    DECL_LINK_TYPED(TrackTimeHdl, Idle *, void);
+    DECL_LINK_TYPED(TrackTimeHdl, Timer *, void);
 
     static ScRecursionHelper*   CreateRecursionHelperInstance();
 

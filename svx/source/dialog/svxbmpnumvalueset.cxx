@@ -476,7 +476,7 @@ void SvxBmpNumValueSet::init()
     SetStyle( GetStyle() | WB_VSCROLL );
     SetLineCount( 3 );
     aFormatIdle.SetPriority(TaskPriority::LOWEST);
-    aFormatIdle.SetIdleHdl(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
+    aFormatIdle.SetInvokeHandler(LINK(this, SvxBmpNumValueSet, FormatHdl_Impl));
 }
 
 
@@ -522,7 +522,7 @@ void SvxBmpNumValueSet::UserDraw(const UserDrawEvent& rUDEvt)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvxBmpNumValueSet, FormatHdl_Impl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvxBmpNumValueSet, FormatHdl_Impl, Timer *, void)
 {
     // only when a graphics was not there, it needs to be formatted
     if (bGrfNotFound)

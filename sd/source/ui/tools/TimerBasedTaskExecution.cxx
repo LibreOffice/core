@@ -88,8 +88,7 @@ TimerBasedTaskExecution::TimerBasedTaskExecution (
       mpSelf(),
       mnMaxTimePerStep(nMaxTimePerStep)
 {
-    Link<Timer *, void> aLink(LINK(this,TimerBasedTaskExecution,TimerCallback));
-    maTimer.SetTimeoutHdl(aLink);
+    maTimer.SetInvokeHandler( LINK(this,TimerBasedTaskExecution,TimerCallback) );
     maTimer.SetTimeout(nMillisecondsBetweenSteps);
     maTimer.Start();
 }

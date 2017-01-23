@@ -226,14 +226,14 @@ public:
 
     DECL_LINK_TYPED( SelectFileHdl, ListBox&, void );
     DECL_LINK_TYPED( SelectRegionHdl, ListBox&, void );
-    DECL_LINK_TYPED( UpdatePreviewHdl, Idle *, void );
-    DECL_LINK_TYPED( UpdatePageListHdl, Idle *, void );
+    DECL_LINK_TYPED( UpdatePreviewHdl, Timer *, void );
+    DECL_LINK_TYPED( UpdatePageListHdl, Timer *, void );
     DECL_LINK_TYPED( StartTypeHdl, Button *, void );
     DECL_LINK_TYPED( SelectTemplateHdl, ListBox&, void);
     DECL_LINK_TYPED( NextPageHdl, Button*, void );
     DECL_LINK_TYPED( LastPageHdl, Button*, void );
     DECL_LINK_TYPED( PreviewFlagHdl, Button*, void );
-    DECL_LINK_TYPED( EffectPreviewIdleHdl, Idle *, void );
+    DECL_LINK_TYPED( EffectPreviewIdleHdl, Timer *, void );
     DECL_LINK_TYPED( EffectPreviewClickHdl, SdDocPreviewWin&, void );
     DECL_LINK_TYPED( SelectLayoutHdl, ListBox&, void );
     DECL_LINK_TYPED( PageSelectHdl, SvTreeListBox*, void );
@@ -596,14 +596,14 @@ AssistentDlgImpl::AssistentDlgImpl( vcl::Window* pWindow, const Link<ListBox&,vo
     maAssistentFunc.GotoPage(1);
     mpLastPageButton->Disable();
 
-    maPrevIdle.SetPriority( SchedulerPriority::LOWER );
-    maPrevIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, UpdatePreviewHdl));
+    maPrevIdle.SetPriority( TaskPriority::LOWER );
+    maPrevIdle.SetInvokeHandler( LINK( this, AssistentDlgImpl, UpdatePreviewHdl));
 
-    maEffectPrevIdle.SetPriority( SchedulerPriority::MEDIUM );
-    maEffectPrevIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, EffectPreviewIdleHdl ));
+    maEffectPrevIdle.SetPriority( TaskPriority::MEDIUM );
+    maEffectPrevIdle.SetInvokeHandler( LINK( this, AssistentDlgImpl, EffectPreviewIdleHdl ));
 
-    maUpdatePageListIdle.SetPriority( SchedulerPriority::MEDIUM );
-    maUpdatePageListIdle.SetIdleHdl( LINK( this, AssistentDlgImpl, UpdatePageListHdl));
+    maUpdatePageListIdle.SetPriority( TaskPriority::MEDIUM );
+    maUpdatePageListIdle.SetInvokeHandler( LINK( this, AssistentDlgImpl, UpdatePageListHdl));
 
     SetStartType( ST_EMPTY );
 
@@ -1132,7 +1132,7 @@ IMPL_LINK_NOARG_TYPED( AssistentDlgImpl, OpenButtonHdl, Button*, void )
     mpPage1OpenLB->GetDoubleClickHdl().Call(*mpPage1OpenLB);
 }
 
-IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, EffectPreviewIdleHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, EffectPreviewIdleHdl, Timer *, void)
 {
     if(mbPreview && xDocShell.Is() )
     {
@@ -1195,12 +1195,12 @@ IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, PageSelectHdl, SvTreeListBox*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, UpdatePageListHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, UpdatePageListHdl, Timer *, void)
 {
     UpdatePageList();
 }
 
-IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, UpdatePreviewHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(AssistentDlgImpl, UpdatePreviewHdl, Timer *, void)
 {
     UpdatePreview( true );
 }

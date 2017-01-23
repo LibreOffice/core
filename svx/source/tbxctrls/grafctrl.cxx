@@ -74,7 +74,7 @@ private:
     OUString            maCommand;
     Reference< XFrame > mxFrame;
 
-                    DECL_LINK_TYPED(ImplModifyHdl, Idle *, void);
+                    DECL_LINK_TYPED(ImplModifyHdl, Timer *, void);
 
 protected:
 
@@ -122,7 +122,7 @@ ImplGrafMetricField::ImplGrafMetricField( vcl::Window* pParent, const OUString& 
     }
 
     maIdle.SetPriority( TaskPriority::LOW );
-    maIdle.SetIdleHdl( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
+    maIdle.SetInvokeHandler( LINK( this, ImplGrafMetricField, ImplModifyHdl ) );
 }
 
 void ImplGrafMetricField::Modify()
@@ -130,7 +130,7 @@ void ImplGrafMetricField::Modify()
     maIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(ImplGrafMetricField, ImplModifyHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ImplGrafMetricField, ImplModifyHdl, Timer *, void)
 {
     const sal_Int64 nVal = GetValue();
 

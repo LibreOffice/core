@@ -352,11 +352,11 @@ FormulaDlg_Impl::FormulaDlg_Impl(Dialog* pParent
 
 FormulaDlg_Impl::~FormulaDlg_Impl()
 {
-    if(aIdle.IsActive())
+    if (aIdle.IsActive())
     {
-        aIdle.SetIdleHdl(Link<Idle *, void>());
+        aIdle.ClearInvokeHandler();
         aIdle.Stop();
-    }// if(aIdle.IsActive())
+    }
     bIsShutDown=true;// Set it in order to PreNotify not to save GetFocus.
 
     m_pTabCtrl->RemovePage(TP_FUNCTION);
@@ -1803,7 +1803,7 @@ void FormulaDlg::Update()
 {
     m_pImpl->Update();
     m_pImpl->aIdle.SetPriority(TaskPriority::LOWER);
-    m_pImpl->aIdle.SetIdleHdl(LINK( this, FormulaDlg, UpdateFocusHdl));
+    m_pImpl->aIdle.SetInvokeHandler(LINK( this, FormulaDlg, UpdateFocusHdl));
     m_pImpl->aIdle.Start();
 }
 
@@ -1877,7 +1877,7 @@ void FormulaDlg::SetEdSelection()
     m_pImpl->SetEdSelection();
 }
 
-IMPL_LINK_NOARG_TYPED(FormulaDlg, UpdateFocusHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(FormulaDlg, UpdateFocusHdl, Timer *, void)
 {
     FormEditData* pData = m_pImpl->m_pHelper->getFormEditData();
     if (!pData)

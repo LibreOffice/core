@@ -643,7 +643,7 @@ void SdDrawDocument::CreateFirstPages( SdDrawDocument* pRefDocument /* = 0 */ )
             pPage->SetAutoLayout( AUTOLAYOUT_TITLE, true, true );
 
         mpWorkStartupTimer = new Timer("DrawWorkStartupTimer");
-        mpWorkStartupTimer->SetTimeoutHdl( LINK(this, SdDrawDocument, WorkStartupHdl) );
+        mpWorkStartupTimer->SetInvokeHandler( LINK(this, SdDrawDocument, WorkStartupHdl) );
         mpWorkStartupTimer->SetTimeout(2000);
         mpWorkStartupTimer->Start();
 

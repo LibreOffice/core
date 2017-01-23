@@ -29,7 +29,7 @@ private:
     bool m_bInClose;
     bool hasPanelPendingLayout() const;
 
-    DECL_DLLPRIVATE_LINK_TYPED( ImplHandlePanelLayoutTimerHdl, Idle*, void );
+    DECL_DLLPRIVATE_LINK_TYPED(ImplHandlePanelLayoutTimerHdl, Timer*, void);
 
 public:
     PanelLayout(vcl::Window* pParent, const OString& rID, const OUString& rUIXMLDescription,

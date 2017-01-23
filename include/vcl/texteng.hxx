@@ -172,7 +172,7 @@ protected:
     void                ImpTextHeightChanged();
     void                ImpTextFormatted();
 
-    DECL_LINK_TYPED(    IdleFormatHdl, Idle *, void );
+    DECL_LINK_TYPED(    IdleFormatHdl, Timer *, void );
     void                CheckIdleFormatter();
     void                IdleFormatAndUpdate( TextView* pCurView = nullptr, sal_uInt16 nMaxTimerRestarts = 5 );
 

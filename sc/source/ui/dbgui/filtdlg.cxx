@@ -108,7 +108,7 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
     // Hack: RefInput control
     pTimer = new Timer("ScFilterTimer");
     pTimer->SetTimeout( 50 ); // Wait 50ms
-    pTimer->SetTimeoutHdl( LINK( this, ScFilterDlg, TimeOutHdl ) );
+    pTimer->SetInvokeHandler( LINK( this, ScFilterDlg, TimeOutHdl ) );
 
     OUStringBuffer aBuf;
 
@@ -155,7 +155,6 @@ ScFilterDlg::ScFilterDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window* pPar
 
     pLbCopyArea->SetAccessibleName(ScResId(STR_COPY_AREA_TO));
     pEdCopyArea->SetAccessibleName(ScResId(STR_COPY_AREA_TO));
-
 }
 
 ScFilterDlg::~ScFilterDlg()

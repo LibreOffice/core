@@ -48,7 +48,7 @@ Throbber::Throbber( vcl::Window* i_parentWindow, WinBits i_style )
     ,meImageSet( IMAGES_AUTO )
 {
     maWaitTimer.SetTimeout( mnStepTime );
-    maWaitTimer.SetTimeoutHdl( LINK( this, Throbber, TimeOutHdl ) );
+    maWaitTimer.SetInvokeHandler( LINK( this, Throbber, TimeOutHdl ) );
 
     SetScaleMode( ImageScaleMode::NONE );
     initImages();

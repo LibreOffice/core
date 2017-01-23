@@ -53,7 +53,7 @@ ScMenuFloatingWindow::SubMenuItemData::SubMenuItemData(ScMenuFloatingWindow* pPa
     mnMenuPos(MENU_NOT_SELECTED),
     mpParent(pParent)
 {
-    maTimer.SetTimeoutHdl( LINK(this, ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl) );
+    maTimer.SetInvokeHandler( LINK(this, ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl) );
     maTimer.SetTimeout(mpParent->GetSettings().GetMouseSettings().GetMenuDelay());
 }
 

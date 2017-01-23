@@ -391,7 +391,7 @@ SdrMediaObj* View::InsertMediaObj( const OUString& rMediaURL, const OUString& rM
 /**
  * Timer handler for InsertFile at Drop()
  */
-IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Timer *, void)
 {
     DBG_ASSERT( mpViewSh, "sd::View::DropInsertFileHdl(), I need a view shell to work!" );
     if( !mpViewSh )
@@ -582,7 +582,7 @@ IMPL_LINK_NOARG_TYPED(View, DropInsertFileHdl, Idle *, void)
 /**
  * Timer handler for Errorhandling at Drop()
  */
-IMPL_LINK_NOARG_TYPED(View, DropErrorHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(View, DropErrorHdl, Timer *, void)
 {
     ScopedVclPtrInstance<InfoBox>( mpViewSh ? mpViewSh->GetActiveWindow() : nullptr, SD_RESSTR(STR_ACTION_NOTPOSSIBLE) )->Execute();
 }

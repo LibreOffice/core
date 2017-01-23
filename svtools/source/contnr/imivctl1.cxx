@@ -64,7 +64,7 @@ class IcnViewEdit_Impl : public MultiLineEdit
     bool            bGrabFocus;
 
     void            CallCallBackHdl_Impl();
-                    DECL_LINK_TYPED(Timeout_Impl, Idle *, void);
+                    DECL_LINK_TYPED(Timeout_Impl, Timer *, void);
                     DECL_LINK_TYPED( ReturnHdl_Impl, Accelerator&, void );
                     DECL_LINK_TYPED( EscapeHdl_Impl, Accelerator&, void );
 
@@ -140,23 +140,23 @@ SvxIconChoiceCtrl_Impl::SvxIconChoiceCtrl_Impl(
     nVerSBarWidth = aVerSBar->GetSizePixel().Width();
 
     aEditIdle.SetPriority( TaskPriority::LOWEST );
-    aEditIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
+    aEditIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,EditTimeoutHdl));
     aEditIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aEditIdle" );
 
     aAutoArrangeIdle.SetPriority( TaskPriority::LOW );
-    aAutoArrangeIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
+    aAutoArrangeIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,AutoArrangeHdl));
     aAutoArrangeIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aAutoArrangeIdle" );
 
     aCallSelectHdlIdle.SetPriority( TaskPriority::LOWEST );
-    aCallSelectHdlIdle.SetIdleHdl( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
+    aCallSelectHdlIdle.SetInvokeHandler( LINK(this,SvxIconChoiceCtrl_Impl,CallSelectHdlHdl));
     aCallSelectHdlIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aCallSelectHdlIdle" );
 
     aDocRectChangedIdle.SetPriority( TaskPriority::MEDIUM );
-    aDocRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
+    aDocRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,DocRectChangedHdl));
     aDocRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aDocRectChangedIdle" );
 
     aVisRectChangedIdle.SetPriority( TaskPriority::MEDIUM );
-    aVisRectChangedIdle.SetIdleHdl(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
+    aVisRectChangedIdle.SetInvokeHandler(LINK(this,SvxIconChoiceCtrl_Impl,VisRectChangedHdl));
     aVisRectChangedIdle.SetDebugName( "svtools::SvxIconChoiceCtrl_Impl aVisRectChangedIdle" );
 
     Clear( true );
@@ -2678,18 +2678,18 @@ void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
     aSelectedRectList.clear();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, Timer *, void)
 {
     aAutoArrangeIdle.Stop();
     Arrange( IsAutoArrange() );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, Timer *, void)
 {
     aVisRectChangedIdle.Stop();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, Timer *, void)
 {
     aDocRectChangedIdle.Stop();
 }
@@ -2702,7 +2702,7 @@ bool SvxIconChoiceCtrl_Impl::IsTextHit( SvxIconChoiceCtrlEntry* pEntry, const Po
     return false;
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Timer *, void)
 {
     SvxIconChoiceCtrlEntry* pEntry = GetCurEntry();
     if( bEntryEditingEnabled && pEntry &&
@@ -3064,7 +3064,7 @@ IcnViewEdit_Impl::IcnViewEdit_Impl( SvtIconChoiceCtrl* pParent, const Point& rPo
     bGrabFocus( false )
 {
     maLoseFocusIdle.SetPriority(TaskPriority::REPAINT);
-    maLoseFocusIdle.SetIdleHdl(LINK(this,IcnViewEdit_Impl,Timeout_Impl));
+    maLoseFocusIdle.SetInvokeHandler(LINK(this,IcnViewEdit_Impl,Timeout_Impl));
     maLoseFocusIdle.SetDebugName( "svx::IcnViewEdit_Impl maLoseFocusIdle" );
 
     // FIXME: Outside of Paint Hierarchy
@@ -3117,7 +3117,7 @@ void IcnViewEdit_Impl::CallCallBackHdl_Impl()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(IcnViewEdit_Impl, Timeout_Impl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(IcnViewEdit_Impl, Timeout_Impl, Timer *, void)
 {
     CallCallBackHdl_Impl();
 }
@@ -3535,7 +3535,7 @@ void SvxIconChoiceCtrl_Impl::CallSelectHandler( SvxIconChoiceCtrlEntry* )
         aCallSelectHdlIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl, Timer *, void)
 {
     pHdlEntry = nullptr;
     pView->ClickIcon();

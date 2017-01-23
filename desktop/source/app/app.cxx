@@ -524,7 +524,7 @@ Desktop::Desktop()
     , m_aBootstrapStatus(BS_OK)
 {
     m_firstRunTimer.SetTimeout(3000); // 3 sec.
-    m_firstRunTimer.SetTimeoutHdl(LINK(this, Desktop, AsyncInitFirstRun));
+    m_firstRunTimer.SetInvokeHandler(LINK(this, Desktop, AsyncInitFirstRun));
     m_firstRunTimer.SetDebugName( "desktop::Desktop m_firstRunTimer" );
 }
 

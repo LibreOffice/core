@@ -68,7 +68,7 @@ private:
     ImplSVEvent *   mnLastUserEvent;
 
     DECL_LINK_TYPED(DockingHdl, void *, void);
-    DECL_LINK_TYPED(DockTimerHdl, Idle *, void);
+    DECL_LINK_TYPED(DockTimerHdl, Timer *, void);
 public:
     ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
@@ -106,7 +106,7 @@ ImplDockFloatWin::ImplDockFloatWin( vcl::Window* pParent, WinBits nWinBits,
 
     SetBackground();
 
-    maDockIdle.SetIdleHdl( LINK( this, ImplDockFloatWin, DockTimerHdl ) );
+    maDockIdle.SetInvokeHandler( LINK( this, ImplDockFloatWin, DockTimerHdl ) );
     maDockIdle.SetPriority( TaskPriority::MEDIUM );
     maDockIdle.SetDebugName( "vcl::ImplDockFloatWin maDockIdle" );
 }
@@ -127,7 +127,7 @@ void ImplDockFloatWin::dispose()
     FloatingWindow::dispose();
 }
 
-IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockTimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ImplDockFloatWin, DockTimerHdl, Timer *, void)
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
@@ -338,7 +338,7 @@ void DockingWindow::ImplInitDockingWindowData()
 
     //To-Do, reuse maResizeTimer
     maLayoutIdle.SetPriority(TaskPriority::RESIZE);
-    maLayoutIdle.SetIdleHdl( LINK( this, DockingWindow, ImplHandleLayoutTimerHdl ) );
+    maLayoutIdle.SetInvokeHandler( LINK( this, DockingWindow, ImplHandleLayoutTimerHdl ) );
     maLayoutIdle.SetDebugName( "vcl::DockingWindow maLayoutIdle" );
 }
 
@@ -1145,7 +1145,7 @@ void DockingWindow::queue_resize(StateChangedType eReason)
     vcl::Window::queue_resize(eReason);
 }
 
-IMPL_LINK_NOARG_TYPED(DockingWindow, ImplHandleLayoutTimerHdl, Idle*, void)
+IMPL_LINK_NOARG_TYPED(DockingWindow, ImplHandleLayoutTimerHdl, Timer*, void)
 {
     if (!isLayoutEnabled())
     {

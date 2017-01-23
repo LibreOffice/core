@@ -148,7 +148,7 @@ class SAL_WARN_UNUSED SVX_DLLPUBLIC SvxFontWorkDialog : public SfxDockingWindow
     DECL_LINK_TYPED( SelectShadowHdl_Impl, ToolBox *, void );
 
     DECL_LINK_TYPED( ModifyInputHdl_Impl, Edit&, void );
-    DECL_LINK_TYPED( InputTimoutHdl_Impl, Idle *, void );
+    DECL_LINK_TYPED( InputTimoutHdl_Impl, Timer *, void );
 
     DECL_LINK_TYPED( ColorSelectHdl_Impl, ListBox&, void );
 

@@ -199,13 +199,13 @@ void SvInplaceEdit2::LoseFocus()
     {
         bCanceled = false;
         aIdle.SetPriority(TaskPriority::REPAINT);
-        aIdle.SetIdleHdl(LINK(this,SvInplaceEdit2,Timeout_Impl));
+        aIdle.SetInvokeHandler(LINK(this,SvInplaceEdit2,Timeout_Impl));
         aIdle.SetDebugName( "svtools::SvInplaceEdit2 aIdle" );
         aIdle.Start();
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SvInplaceEdit2, Timeout_Impl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvInplaceEdit2, Timeout_Impl, Timer *, void)
 {
     CallCallBackHdl_Impl();
 }

@@ -563,7 +563,7 @@ namespace svxform
         bool isListeningForChanges() const {return m_bDBConnection && !m_bFiltering && !isLocked();}
         css::uno::Reference< css::awt::XControl> isInList(const css::uno::Reference< css::awt::XWindowPeer>& xPeer) const;
 
-        DECL_LINK_TYPED( OnActivateTabOrder, Idle*, void );
+        DECL_LINK_TYPED( OnActivateTabOrder, Timer*, void );
         DECL_LINK_TYPED( OnInvalidateFeatures, Timer*, void );
         DECL_LINK_TYPED( OnLoad, void*, void );
         DECL_LINK_TYPED( OnToggleAutoFields, void*, void );

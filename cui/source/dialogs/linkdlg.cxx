@@ -123,7 +123,7 @@ SvBaseLinksDlg::SvBaseLinksDlg( vcl::Window * pParent, LinkManager* pMgr, bool b
     m_pTbLinks->Resize();  // OS: hack for correct selection
 
     // UpdateTimer for DDE-/Grf-links, which are waited for
-    aUpdateIdle.SetIdleHdl( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
+    aUpdateIdle.SetInvokeHandler( LINK( this, SvBaseLinksDlg, UpdateWaitingHdl ) );
     aUpdateIdle.SetPriority( TaskPriority::LOWEST );
 
     m_pPbOpenSource->Hide();
@@ -501,7 +501,7 @@ IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, UpdateWaitingHdl, Idle*, void )
+IMPL_LINK_NOARG_TYPED( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, void )
 {
     m_pTbLinks->SetUpdateMode(false);
     for( sal_uLong nPos = m_pTbLinks->GetEntryCount(); nPos; )

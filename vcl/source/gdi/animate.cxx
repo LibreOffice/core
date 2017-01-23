@@ -70,7 +70,7 @@ Animation::Animation() :
     mbLoopTerminated    ( false ),
     mbIsWaiting         ( false )
 {
-    maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
+    maTimer.SetInvokeHandler( LINK( this, Animation, ImplTimeoutHdl ) );
 }
 
 Animation::Animation( const Animation& rAnimation ) :
@@ -87,7 +87,7 @@ Animation::Animation( const Animation& rAnimation ) :
     for(const AnimationBitmap* i : rAnimation.maList)
         maList.push_back( new AnimationBitmap( *i ) );
 
-    maTimer.SetTimeoutHdl( LINK( this, Animation, ImplTimeoutHdl ) );
+    maTimer.SetInvokeHandler( LINK( this, Animation, ImplTimeoutHdl ) );
     mnLoops = mbLoopTerminated ? 0 : mnLoopCount;
 }
 

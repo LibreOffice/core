@@ -99,7 +99,7 @@ public:
     void                SetMinOutputSizePixel( const Size& rSize );
     const Size&         GetMinOutputSizePixel() const;
     virtual bool        Notify( NotifyEvent& rNEvt ) override;
-    DECL_LINK_TYPED(TimerHdl, Idle *, void);
+    DECL_LINK_TYPED(TimerHdl, Timer *, void);
 
     SAL_DLLPRIVATE void Initialize_Impl();
     SAL_DLLPRIVATE SplitWindowItemFlags GetWinBits_Impl() const;

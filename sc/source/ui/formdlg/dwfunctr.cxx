@@ -70,8 +70,8 @@ ScFunctionWin::ScFunctionWin( SfxBindings* pBindingsP, vcl::Window* pParent, con
     InitLRUList();
     SetStyle(GetStyle()|WB_CLIPCHILDREN);
 
-    aIdle.SetPriority(SchedulerPriority::LOWER);
-    aIdle.SetIdleHdl(LINK( this, ScFunctionWin, TimerHdl));
+    aIdle.SetPriority(TaskPriority::LOWER);
+    aIdle.SetInvokeHandler(LINK( this, ScFunctionWin, TimerHdl));
 
     aFiFuncDesc->SetUpdateMode(true);
     pAllFuncList=aFuncList;
@@ -675,7 +675,7 @@ IMPL_LINK_TYPED( ScFunctionWin, SetSplitHdl, ScPrivatSplit&, rCtrl, void )
     }
 }
 
-IMPL_LINK_NOARG_TYPED(ScFunctionWin, TimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ScFunctionWin, TimerHdl, Timer *, void)
 {
     OUString aString("ww");
     Size aTxtSize( aFiFuncDesc->GetTextWidth(aString), aFiFuncDesc->GetTextHeight() );

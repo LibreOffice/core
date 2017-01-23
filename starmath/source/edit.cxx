@@ -99,12 +99,12 @@ SmEditWindow::SmEditWindow( SmCmdBoxWindow &rMyCmdBoxWin ) :
     // compare DataChanged
     SetBackground( GetSettings().GetStyleSettings().GetWindowColor() );
 
-    aModifyIdle.SetIdleHdl(LINK(this, SmEditWindow, ModifyTimerHdl));
+    aModifyIdle.SetInvokeHandler(LINK(this, SmEditWindow, ModifyTimerHdl));
     aModifyIdle.SetPriority(TaskPriority::LOWEST);
 
     if (!IsInlineEditEnabled())
     {
-        aCursorMoveIdle.SetIdleHdl(LINK(this, SmEditWindow, CursorMoveTimerHdl));
+        aCursorMoveIdle.SetInvokeHandler(LINK(this, SmEditWindow, CursorMoveTimerHdl));
         aCursorMoveIdle.SetPriority(TaskPriority::LOWEST);
     }
 
@@ -249,13 +249,13 @@ void SmEditWindow::DataChanged( const DataChangedEvent& )
     Resize();
 }
 
-IMPL_LINK_NOARG_TYPED( SmEditWindow, ModifyTimerHdl, Idle *, void )
+IMPL_LINK_NOARG_TYPED( SmEditWindow, ModifyTimerHdl, Timer *, void )
 {
     UpdateStatus();
     aModifyIdle.Stop();
 }
 
-IMPL_LINK_NOARG_TYPED(SmEditWindow, CursorMoveTimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SmEditWindow, CursorMoveTimerHdl, Timer *, void)
     // every once in a while check cursor position (selection) of edit
     // window and if it has changed (try to) set the formula-cursor
     // according to that.

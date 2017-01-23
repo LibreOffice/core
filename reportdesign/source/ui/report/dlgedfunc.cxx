@@ -121,7 +121,7 @@ DlgEdFunc::DlgEdFunc( OReportSection* _pParent )
     , m_bUiActive(false)
     , m_bShowPropertyBrowser(false)
 {
-    aScrollTimer.SetTimeoutHdl( LINK( this, DlgEdFunc, ScrollTimeout ) );
+    aScrollTimer.SetInvokeHandler( LINK( this, DlgEdFunc, ScrollTimeout ) );
     m_rView.SetActualWin( m_pParent);
     aScrollTimer.SetTimeout( SELENG_AUTOREPEAT_INTERVAL );
 }

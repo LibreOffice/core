@@ -415,7 +415,7 @@ void SvxSearchDialog::Construct_Impl()
     // temporary to avoid incompatibility
     pImpl.reset( new SearchDlg_Impl() );
     pImpl->aSelectionTimer.SetTimeout( 500 );
-    pImpl->aSelectionTimer.SetTimeoutHdl(
+    pImpl->aSelectionTimer.SetInvokeHandler(
         LINK( this, SvxSearchDialog, TimeoutHdl_Impl ) );
     EnableControls_Impl( SearchOptionFlags::NONE );
 

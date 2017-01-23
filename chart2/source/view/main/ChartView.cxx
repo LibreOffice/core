@@ -3293,7 +3293,7 @@ void ChartView::createShapes2D( const awt::Size& rPageSize )
     if(maTimeBased.bTimeBased && maTimeBased.eMode != MANUAL && !maTimeBased.maTimer.IsActive())
     {
         maTimeBased.maTimer.SetTimeout(15);
-        maTimeBased.maTimer.SetTimeoutHdl(LINK(this, ChartView, UpdateTimeBased));
+        maTimeBased.maTimer.SetInvokeHandler(LINK(this, ChartView, UpdateTimeBased));
         maTimeBased.maTimer.Start();
     }
 }

@@ -78,7 +78,7 @@ private:
                         DECL_LINK_TYPED( implVolumeHdl, Slider*, void );
                         DECL_LINK_TYPED( implSelectHdl, ToolBox*, void );
                         DECL_LINK_TYPED( implZoomSelectHdl, ListBox&, void );
-                        DECL_LINK_TYPED(implTimeoutHdl, Idle *, void);
+                        DECL_LINK_TYPED(implTimeoutHdl, Timer *, void);
 
     ImageList           maImageList;
     Idle                maIdle;

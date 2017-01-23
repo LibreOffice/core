@@ -71,7 +71,7 @@ void ScTabView::Init()
     mbInlineWithScrollbar = officecfg::Office::Calc::Layout::Other::TabbarInlineWithScrollbar::get();
 
     aScrollTimer.SetTimeout(10);
-    aScrollTimer.SetTimeoutHdl( LINK( this, ScTabView, TimerHdl ) );
+    aScrollTimer.SetInvokeHandler( LINK( this, ScTabView, TimerHdl ) );
 
     for (i=0; i<4; i++)
         pGridWin[i] = nullptr;

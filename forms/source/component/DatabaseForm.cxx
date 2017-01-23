@@ -2563,7 +2563,7 @@ void ODatabaseForm::impl_createLoadTimer()
     OSL_PRECOND( m_pLoadTimer == nullptr, "ODatabaseForm::impl_createLoadTimer: timer already exists!" );
     m_pLoadTimer = new Timer("DatabaseFormLoadTimer");
     m_pLoadTimer->SetTimeout(100);
-    m_pLoadTimer->SetTimeoutHdl(LINK(this,ODatabaseForm,OnTimeout));
+    m_pLoadTimer->SetInvokeHandler(LINK(this,ODatabaseForm,OnTimeout));
 }
 
 

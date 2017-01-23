@@ -214,7 +214,8 @@ protected:
     DECL_LINK_TYPED( ApplyHdl, LinkParamNone*, void );
     DECL_LINK_TYPED( TreeListApplyHdl, SvTreeListBox*, bool );
     DECL_LINK_TYPED( DropHdl, StyleTreeListBox_Impl&, bool );
-    DECL_LINK_TYPED( TimeOut, Idle*, void );
+    DECL_LINK_TYPED( TimeOut, Timer*, void );
+    DECL_LINK_TYPED( PreviewHdl, Button*, void);
 
     virtual void EnableItem(sal_uInt16 /*nMesId*/, bool /*bCheck*/ = true)
     {}

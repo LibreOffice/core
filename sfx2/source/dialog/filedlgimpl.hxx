@@ -145,7 +145,7 @@ namespace sfx2
                                                       std::vector<OUString>&                   rpURLList,
                                                       const std::shared_ptr<const SfxFilter>&  pFilter  );
 
-        DECL_LINK_TYPED( TimeOutHdl_Impl, Idle *, void);
+        DECL_LINK_TYPED( TimeOutHdl_Impl, Timer *, void);
         DECL_LINK_TYPED( InitControls, void*, void );
 
     public:

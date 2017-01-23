@@ -110,13 +110,13 @@ ScAcceptChgDlg::ScAcceptChgDlg(SfxBindings* pB, SfxChildWindow* pCW, vcl::Window
     nAcceptCount=0;
     nRejectCount=0;
     aReOpenIdle.SetPriority(TaskPriority::MEDIUM);
-    aReOpenIdle.SetIdleHdl(LINK( this, ScAcceptChgDlg, ReOpenTimerHdl ));
+    aReOpenIdle.SetInvokeHandler(LINK( this, ScAcceptChgDlg, ReOpenTimerHdl ));
 
     pTPFilter=m_pAcceptChgCtr->GetFilterPage();
     pTPView=m_pAcceptChgCtr->GetViewPage();
     pTheView=pTPView->GetTableControl();
     aSelectionIdle.SetPriority(TaskPriority::LOW);
-    aSelectionIdle.SetIdleHdl(LINK( this, ScAcceptChgDlg, UpdateSelectionHdl ));
+    aSelectionIdle.SetInvokeHandler(LINK( this, ScAcceptChgDlg, UpdateSelectionHdl ));
     aSelectionIdle.SetDebugName( "ScAcceptChgDlg  aSelectionIdle" );
 
     pTPFilter->SetReadyHdl(LINK( this, ScAcceptChgDlg, FilterHandle ));
@@ -1615,14 +1615,14 @@ IMPL_LINK_TYPED( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack&, rChgTrack, void
 
     aMsgQueue.clear();
 }
-IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, ReOpenTimerHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, ReOpenTimerHdl, Timer *, void)
 {
     ScSimpleRefDlgWrapper::SetAutoReOpen(true);
     m_pAcceptChgCtr->ShowFilterPage();
     RefHandle(nullptr);
 }
 
-IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, UpdateSelectionHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ScAcceptChgDlg, UpdateSelectionHdl, Timer *, void)
 {
     ScTabView* pTabView = pViewData->GetView();
 

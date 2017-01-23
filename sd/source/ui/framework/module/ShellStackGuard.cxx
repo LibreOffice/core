@@ -71,7 +71,7 @@ ShellStackGuard::ShellStackGuard (Reference<frame::XController>& rxController)
             Any());
 
         // Prepare the printer polling.
-        maPrinterPollingIdle.SetIdleHdl(LINK(this,ShellStackGuard,TimeoutHandler));
+        maPrinterPollingIdle.SetInvokeHandler(LINK(this,ShellStackGuard,TimeoutHandler));
         maPrinterPollingIdle.SetPriority(TaskPriority::LOWER);
     }
 }
@@ -118,7 +118,7 @@ void SAL_CALL ShellStackGuard::disposing (
         }
 }
 
-IMPL_LINK_TYPED(ShellStackGuard, TimeoutHandler, Idle*, pIdle, void)
+IMPL_LINK_TYPED(ShellStackGuard, TimeoutHandler, Timer*, pIdle, void)
 {
 #ifdef DEBUG
     OSL_ASSERT(pIdle==&maPrinterPollingIdle);

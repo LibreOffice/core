@@ -648,7 +648,7 @@ ScInputHandler::ScInputHandler()
 
     pDelayTimer = new Timer( "ScInputHandlerDelay timer" );
     pDelayTimer->SetTimeout( 500 ); // 500 ms delay
-    pDelayTimer->SetTimeoutHdl( LINK( this, ScInputHandler, DelayTimer ) );
+    pDelayTimer->SetInvokeHandler( LINK( this, ScInputHandler, DelayTimer ) );
 }
 
 ScInputHandler::~ScInputHandler()
@@ -3760,7 +3760,7 @@ void ScInputHandler::ResetDelayTimer()
     }
 }
 
-IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
+IMPL_LINK_NOARG_TYPED( ScInputHandler, DelayTimer, Timer*, void )
 {
     if ( nullptr == pLastState || SC_MOD()->IsFormulaMode() || SC_MOD()->IsRefDialogOpen())
     {
@@ -3779,7 +3779,7 @@ IMPL_LINK_NOARG( ScInputHandler, DelayTimer, Timer*, void )
             bInOwnChange = true; // disable ModifyHdl (reset below)
 
             pActiveViewSh = nullptr;
-            mpEditEngine->SetText( EMPTY_OUSTRING );
+            pEngine->SetText( EMPTY_OUSTRING );
             if ( pInputWin )
             {
                 pInputWin->SetPosString( EMPTY_OUSTRING );

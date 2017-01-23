@@ -246,7 +246,7 @@ ScDocument::ScDocument( ScDocumentMode eMode, SfxObjectShell* pDocShell ) :
     // languages for a visible document are set by docshell later (from options)
     SetLanguage( ScGlobal::eLnge, ScGlobal::eLnge, ScGlobal::eLnge );
 
-    aTrackIdle.SetIdleHdl( LINK( this, ScDocument, TrackTimeHdl ) );
+    aTrackIdle.SetInvokeHandler( LINK( this, ScDocument, TrackTimeHdl ) );
     aTrackIdle.SetPriority( TaskPriority::LOW );
 }
 
@@ -319,7 +319,7 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
     pChangeTrack = pTrack;
 }
 
-IMPL_LINK_NOARG_TYPED(ScDocument, TrackTimeHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ScDocument, TrackTimeHdl, Timer *, void)
 {
     if ( ScDdeLink::IsInUpdate() )      // do not nest
     {

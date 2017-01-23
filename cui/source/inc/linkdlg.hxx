@@ -71,7 +71,7 @@ class SvBaseLinksDlg : public ModalDialog
     DECL_LINK_TYPED( UpdateNowClickHdl, Button *, void);
     DECL_LINK_TYPED( ChangeSourceClickHdl, Button *, void );
     DECL_LINK_TYPED( BreakLinkClickHdl, Button *, void );
-    DECL_LINK_TYPED( UpdateWaitingHdl, Idle *, void );
+    DECL_LINK_TYPED( UpdateWaitingHdl, Timer *, void );
     DECL_LINK_TYPED( EndEditHdl, sfx2::SvBaseLink&, void );
     sfx2::SvBaseLink* GetSelEntry( sal_uLong* pPos );
     OUString ImplGetStateStr( const sfx2::SvBaseLink& );

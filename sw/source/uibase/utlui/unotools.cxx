@@ -83,7 +83,7 @@ SwOneExampleFrame::SwOneExampleFrame( vcl::Window& rWin,
         aInitializedLink = *pInitializedLink;
 
     // the controller is asynchronously set
-    aLoadedIdle.SetIdleHdl(LINK(this, SwOneExampleFrame, TimeoutHdl));
+    aLoadedIdle.SetInvokeHandler(LINK(this, SwOneExampleFrame, TimeoutHdl));
     aLoadedIdle.SetPriority(TaskPriority::HIGH);
 
     CreateControl();
@@ -196,7 +196,7 @@ static void disableScrollBars(uno::Reference< beans::XPropertySet > xViewProps,
     }
 }
 
-IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Idle*, pTimer, void )
+IMPL_LINK_TYPED( SwOneExampleFrame, TimeoutHdl, Timer*, pTimer, void )
 {
     if(!_xControl.is())
         return;

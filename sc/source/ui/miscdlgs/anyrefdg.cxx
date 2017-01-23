@@ -766,7 +766,7 @@ ScRefHandler::ScRefHandler( vcl::Window &rWindow, SfxBindings* pB, bool bBindRef
 {
     m_aHelper.SetWindow(m_rWindow.get());
     aIdle.SetPriority(TaskPriority::LOWER);
-    aIdle.SetIdleHdl(LINK( this, ScRefHandler, UpdateFocusHdl));
+    aIdle.SetInvokeHandler(LINK( this, ScRefHandler, UpdateFocusHdl));
 
     if( bBindRef ) EnterRefMode();
 }
@@ -938,7 +938,7 @@ void ScRefHandler::ToggleCollapsed( formula::RefEdit* pEdit, formula::RefButton*
     m_aHelper.ToggleCollapsed( pEdit, pButton );
 }
 
-IMPL_LINK_NOARG_TYPED(ScRefHandler, UpdateFocusHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ScRefHandler, UpdateFocusHdl, Timer *, void)
 {
     if (pActiveWin)
     {

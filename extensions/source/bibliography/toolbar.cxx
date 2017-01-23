@@ -205,7 +205,7 @@ BibToolBar::BibToolBar(vcl::Window* pParent, Link<void*,void> aLink)
     SvtMiscOptions().AddListenerLink( LINK( this, BibToolBar, OptionsChanged_Impl ) );
     Application::AddEventListener( LINK( this, BibToolBar, SettingsChanged_Impl ) );
 
-    aIdle.SetIdleHdl(LINK( this, BibToolBar, SendSelHdl));
+    aIdle.SetInvokeHandler(LINK( this, BibToolBar, SendSelHdl));
     aIdle.SetPriority(TaskPriority::LOWEST);
 
     SetDropdownClickHdl( LINK( this, BibToolBar, MenuHdl));
@@ -475,7 +475,7 @@ IMPL_LINK_NOARG_TYPED( BibToolBar, SelHdl, ListBox&, void )
     aIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED( BibToolBar, SendSelHdl, Idle*, void )
+IMPL_LINK_NOARG_TYPED( BibToolBar, SendSelHdl, Timer*, void )
 {
     Sequence<PropertyValue> aPropVal(1);
     PropertyValue* pPropertyVal = const_cast<PropertyValue*>(aPropVal.getConstArray());

@@ -57,11 +57,10 @@ private:
 
     void                        CheckSelectionState();
 
-                                DECL_LINK_TYPED( PlayMusicHdl, void *, void );
-
     Idle                        maUpdateIdle;
 
-                                DECL_LINK_TYPED( IsMusicStoppedHdl, Idle *, void );
+    DECL_LINK_TYPED( PlayMusicHdl, void *, void );
+    DECL_LINK_TYPED( IsMusicStoppedHdl, Timer *, void );
 
 public:
                        explicit SdFileDialog_Imp( const short nDialogType );
@@ -160,7 +159,7 @@ IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, PlayMusicHdl, void*, void)
     }
 }
 
-IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, IsMusicStoppedHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SdFileDialog_Imp, IsMusicStoppedHdl, Timer *, void)
 {
     SolarMutexGuard aGuard;
 
@@ -219,7 +218,7 @@ SdFileDialog_Imp::SdFileDialog_Imp( const short     nDialogType    ) :
     mbUsableSelection( false ),
     mbLabelPlaying(false)
 {
-    maUpdateIdle.SetIdleHdl(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
+    maUpdateIdle.SetInvokeHandler(LINK(this, SdFileDialog_Imp, IsMusicStoppedHdl));
     maUpdateIdle.SetDebugName( "SdFileDialog_Imp maUpdateIdle" );
 
     css::uno::Reference < css::ui::dialogs::XFilePicker2 > xFileDlg = GetFilePicker();

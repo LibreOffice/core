@@ -310,7 +310,7 @@ IMPL_LINK_NOARG_TYPED(ImpEditEngine, OnlineSpellHdl, Timer *, void)
         aOnlineSpellTimer.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(ImpEditEngine, IdleFormatHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ImpEditEngine, IdleFormatHdl, Timer *, void)
 {
     aIdleFormatter.ResetRestarts();
 

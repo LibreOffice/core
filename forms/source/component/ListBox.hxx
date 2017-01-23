@@ -329,7 +329,7 @@ protected:
     virtual void processEvent( const ::comphelper::AnyEvent& _rEvent ) override;
 
 private:
-    DECL_LINK_TYPED( OnTimeout, Idle*, void );
+    DECL_LINK_TYPED( OnTimeout, Timer*, void );
 };
 
 

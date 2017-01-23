@@ -218,7 +218,7 @@ SwHTMLTableLayout::SwHTMLTableLayout( const SwTable * pTable,
     , m_bMustNotResize( false )
     , m_bMustNotRecalc( false )
 {
-    m_aResizeTimer.SetTimeoutHdl( LINK( this, SwHTMLTableLayout,
+    m_aResizeTimer.SetInvokeHandler( LINK( this, SwHTMLTableLayout,
                                              DelayedResize_Impl ) );
 }
 

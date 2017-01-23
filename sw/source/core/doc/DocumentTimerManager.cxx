@@ -43,7 +43,7 @@ DocumentTimerManager::DocumentTimerManager( SwDoc& i_rSwdoc ) : m_rDoc( i_rSwdoc
                                                                 maIdle("DocumentTimerManagerIdleTimer")
 {
     maIdle.SetPriority( TaskPriority::LOWEST );
-    maIdle.SetIdleHdl( LINK( this, DocumentTimerManager, DoIdleJobs) );
+    maIdle.SetInvokeHandler( LINK( this, DocumentTimerManager, DoIdleJobs) );
     maIdle.SetDebugName( "sw::DocumentTimerManager maIdle" );
 }
 
@@ -80,7 +80,7 @@ void DocumentTimerManager::StartBackgroundJobs()
         maIdle.Start();
 }
 
-IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Idle*, pIdle, void )
+IMPL_LINK_TYPED( DocumentTimerManager, DoIdleJobs, Timer*, pIdle, void )
 {
 #ifdef TIMELOG
     static ::rtl::Logfile* pModLogFile = 0;

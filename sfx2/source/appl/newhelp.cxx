@@ -551,10 +551,9 @@ IndexTabPage_Impl::IndexTabPage_Impl(vcl::Window* pParent, SfxHelpIndexWindow_Im
     get(m_pOpenBtn, "display");
 
     m_pOpenBtn->SetClickHdl( LINK( this, IndexTabPage_Impl, OpenHdl ) );
-    Link<Timer *, void> aTimeoutLink = LINK( this, IndexTabPage_Impl, TimeoutHdl );
-    aFactoryIdle.SetIdleHdl( LINK(this, IndexTabPage_Impl, IdleHdl ));
+    aFactoryIdle.SetInvokeHandler( LINK(this, IndexTabPage_Impl, IdleHdl ));
     aFactoryIdle.SetPriority(TaskPriority::LOWER);
-    aKeywordTimer.SetTimeoutHdl( aTimeoutLink );
+    aKeywordTimer.SetInvokeHandler( LINK( this, IndexTabPage_Impl, TimeoutHdl ) );
 }
 
 IndexTabPage_Impl::~IndexTabPage_Impl()
@@ -725,7 +724,7 @@ IMPL_LINK_NOARG_TYPED(IndexTabPage_Impl, OpenHdl, Button*, void)
     m_pIndexCB->GetDoubleClickHdl().Call(*m_pIndexCB);
 }
 
-IMPL_LINK_TYPED( IndexTabPage_Impl, IdleHdl, Idle*, pIdle, void )
+IMPL_LINK_TYPED( IndexTabPage_Impl, IdleHdl, Timer*, pIdle, void )
 {
     if ( &aFactoryIdle == pIdle )
         InitializeIndex();
@@ -1433,7 +1432,7 @@ SfxHelpIndexWindow_Impl::SfxHelpIndexWindow_Impl(SfxHelpWindow_Impl* _pParent)
     m_pActiveLB->SetSelectHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectHdl ) );
     nMinWidth = ( m_pActiveLB->GetSizePixel().Width() / 2 );
 
-    aIdle.SetIdleHdl( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
+    aIdle.SetInvokeHandler( LINK( this, SfxHelpIndexWindow_Impl, InitHdl ) );
     aIdle.SetPriority( TaskPriority::LOWER );
     aIdle.Start();
 
@@ -1557,17 +1556,17 @@ IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, SelectHdl, ListBox&, void)
     aIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, InitHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, InitHdl, Timer *, void)
 {
     bIsInitDone = true;
     Initialize();
 
     // now use the timer for selection
-    aIdle.SetIdleHdl( LINK( this, SfxHelpIndexWindow_Impl, SelectFactoryHdl ) );
+    aIdle.SetInvokeHandler( LINK( this, SfxHelpIndexWindow_Impl, SelectFactoryHdl ) );
     aIdle.SetPriority( TaskPriority::LOWEST );
 }
 
-IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SfxHelpIndexWindow_Impl, SelectFactoryHdl, Timer *, void)
 {
     OUString* pFactory = static_cast<OUString*>(m_pActiveLB->GetSelectEntryData());
     if ( pFactory )
@@ -1902,7 +1901,7 @@ SfxHelpTextWindow_Impl::SfxHelpTextWindow_Impl( SfxHelpWindow_Impl* pParent ) :
     InitOnStartupBox();
     aOnStartupCB->SetClickHdl( LINK( this, SfxHelpTextWindow_Impl, CheckHdl ) );
 
-    aSelectIdle.SetIdleHdl( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
+    aSelectIdle.SetInvokeHandler( LINK( this, SfxHelpTextWindow_Impl, SelectHdl ) );
     aSelectIdle.SetPriority( TaskPriority::LOWEST );
 
     char* pEnv = getenv( "help_debug" );
@@ -2155,7 +2154,7 @@ bool SfxHelpTextWindow_Impl::isHandledKey( const vcl::KeyCode& _rKeyCode )
 }
 
 
-IMPL_LINK_NOARG_TYPED(SfxHelpTextWindow_Impl, SelectHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SfxHelpTextWindow_Impl, SelectHdl, Timer *, void)
 {
     try
     {

@@ -150,9 +150,9 @@ namespace svxform
 
         StartListening( *m_pNavModel );
 
-        m_aDropActionTimer.SetTimeoutHdl(LINK(this, NavigatorTree, OnDropActionTimer));
+        m_aDropActionTimer.SetInvokeHandler(LINK(this, NavigatorTree, OnDropActionTimer));
 
-        m_aSynchronizeTimer.SetTimeoutHdl(LINK(this, NavigatorTree, OnSynchronizeTimer));
+        m_aSynchronizeTimer.SetInvokeHandler(LINK(this, NavigatorTree, OnSynchronizeTimer));
         SetSelectHdl(LINK(this, NavigatorTree, OnEntrySelDesel));
         SetDeselectHdl(LINK(this, NavigatorTree, OnEntrySelDesel));
     }

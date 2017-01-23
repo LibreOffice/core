@@ -47,7 +47,7 @@ void ThreadManager::Init()
     mpThreadListener.reset( new ThreadListener( *this ) );
 
     maStartNewThreadIdle.SetPriority( TaskPriority::LOWEST );
-    maStartNewThreadIdle.SetIdleHdl( LINK( this, ThreadManager, TryToStartNewThread ) );
+    maStartNewThreadIdle.SetInvokeHandler( LINK( this, ThreadManager, TryToStartNewThread ) );
 }
 
 ThreadManager::~ThreadManager()
@@ -202,7 +202,7 @@ bool ThreadManager::StartThread( const tThreadData& rThreadData )
     return bThreadStarted;
 }
 
-IMPL_LINK_NOARG_TYPED(ThreadManager, TryToStartNewThread, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ThreadManager, TryToStartNewThread, Timer *, void)
 {
     osl::MutexGuard aGuard(maMutex);
 

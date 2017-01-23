@@ -72,7 +72,7 @@ class BibBookContainer: public BibSplitWindow
         HdlBibModul             pBibMod;
         Idle                    aIdle;
 
-        DECL_LINK_TYPED( SplitHdl, Idle*, void );
+        DECL_LINK_TYPED( SplitHdl, Timer*, void );
 
     protected:
 

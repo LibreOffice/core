@@ -42,7 +42,7 @@ SwBlink::SwBlink()
     bVisible = true;
     // Prepare the timer
     aTimer.SetTimeout( BLINK_ON_TIME );
-    aTimer.SetTimeoutHdl( LINK(this, SwBlink, Blinker) );
+    aTimer.SetInvokeHandler( LINK(this, SwBlink, Blinker) );
 }
 
 SwBlink::~SwBlink( )

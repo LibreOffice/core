@@ -159,7 +159,7 @@ private:
     GalleryProgress     aStatusProgress;
 
                         DECL_LINK_TYPED( ClickCancelBtn, Button*, void );
-                        DECL_LINK_TYPED( TimeoutHdl, Idle*, void );
+                        DECL_LINK_TYPED( TimeoutHdl, Timer*, void );
                         DECL_LINK_TYPED( ActualizeHdl, const INetURLObject&, void );
 
 public:

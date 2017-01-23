@@ -43,7 +43,7 @@ SelectionEngine::SelectionEngine( vcl::Window* pWindow, FunctionSet* pFuncSet,
     nFlags = SelectionEngineFlags::EXPANDONMOVE;
     nLockedMods = 0;
 
-    aWTimer.SetTimeoutHdl( LINK( this, SelectionEngine, ImpWatchDog ) );
+    aWTimer.SetInvokeHandler( LINK( this, SelectionEngine, ImpWatchDog ) );
     aWTimer.SetTimeout( nUpdateInterval );
     aWTimer.SetDebugName( "vcl::SelectionEngine aWTimer" );
 }

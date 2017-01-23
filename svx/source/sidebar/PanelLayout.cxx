@@ -26,7 +26,7 @@ PanelLayout::PanelLayout(vcl::Window* pParent, const OString& rID, const OUStrin
     SetStyle(GetStyle() | WB_DIALOGCONTROL);
     m_pUIBuilder = new VclBuilder(this, getUIRootDir(), rUIXMLDescription, rID, rFrame);
     m_aPanelLayoutIdle.SetPriority(TaskPriority::RESIZE);
-    m_aPanelLayoutIdle.SetIdleHdl( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
+    m_aPanelLayoutIdle.SetInvokeHandler( LINK( this, PanelLayout, ImplHandlePanelLayoutTimerHdl ) );
     m_aPanelLayoutIdle.SetDebugName( "svx::PanelLayout  m_aPanelLayoutIdle" );
 }
 
@@ -73,7 +73,7 @@ void PanelLayout::queue_resize(StateChangedType /*eReason*/)
     m_aPanelLayoutIdle.Start();
 }
 
-IMPL_LINK_NOARG_TYPED( PanelLayout, ImplHandlePanelLayoutTimerHdl, Idle*, void )
+IMPL_LINK_NOARG_TYPED( PanelLayout, ImplHandlePanelLayoutTimerHdl, Timer*, void )
 {
     vcl::Window *pChild = GetWindow(GetWindowType::FirstChild);
     assert(pChild);

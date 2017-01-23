@@ -1682,7 +1682,7 @@ ScExternalRefManager::ScExternalRefManager(ScDocument* pDoc) :
     mbUserInteractionEnabled(true),
     mbDocTimerEnabled(true)
 {
-    maSrcDocTimer.SetTimeoutHdl( LINK(this, ScExternalRefManager, TimeOutHdl) );
+    maSrcDocTimer.SetInvokeHandler( LINK(this, ScExternalRefManager, TimeOutHdl) );
     maSrcDocTimer.SetTimeout(SRCDOC_SCAN_INTERVAL);
     maSrcDocTimer.SetDebugName( "sc::ScExternalRefManager maSrcDocTimer" );
 }

@@ -53,7 +53,7 @@ namespace sdr
             bool                                    mbRefreshWithPreRendering : 1;
 
             // link for timer
-            DECL_LINK_TYPED(ImpBufferTimerHandler, Idle*, void);
+            DECL_LINK_TYPED(ImpBufferTimerHandler, Timer*, void);
 
             // Internal methods for buffering
             void ImpPrepareBufferDevice();

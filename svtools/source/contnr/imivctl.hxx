@@ -219,12 +219,12 @@ class SvxIconChoiceCtrl_Impl
 
                         DECL_LINK_TYPED( ScrollUpDownHdl, ScrollBar*, void );
                         DECL_LINK_TYPED( ScrollLeftRightHdl, ScrollBar*, void );
-                        DECL_LINK_TYPED( EditTimeoutHdl, Idle *, void);
+                        DECL_LINK_TYPED( EditTimeoutHdl, Timer *, void);
                         DECL_LINK_TYPED( UserEventHdl, void*, void );
-                        DECL_LINK_TYPED( AutoArrangeHdl, Idle*, void );
-                        DECL_LINK_TYPED( DocRectChangedHdl, Idle*, void );
-                        DECL_LINK_TYPED( VisRectChangedHdl, Idle*, void );
-                        DECL_LINK_TYPED( CallSelectHdlHdl, Idle*, void );
+                        DECL_LINK_TYPED( AutoArrangeHdl, Timer*, void );
+                        DECL_LINK_TYPED( DocRectChangedHdl, Timer*, void );
+                        DECL_LINK_TYPED( VisRectChangedHdl, Timer*, void );
+                        DECL_LINK_TYPED( CallSelectHdlHdl, Timer*, void );
 
     void                AdjustScrollBars();
     void                PositionScrollBars( long nRealWidth, long nRealHeight );

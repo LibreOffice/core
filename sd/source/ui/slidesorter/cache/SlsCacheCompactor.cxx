@@ -128,7 +128,7 @@ CacheCompactor::CacheCompactor(
       mbIsCompactionRunning(false)
 {
     maCompactionTimer.SetTimeout(100);
-    maCompactionTimer.SetTimeoutHdl(LINK(this,CacheCompactor,CompactionCallback));
+    maCompactionTimer.SetInvokeHandler(LINK(this,CacheCompactor,CompactionCallback));
 
 }
 

@@ -208,7 +208,7 @@ CustomAnimationPane::CustomAnimationPane( Window* pParent, ViewShellBase& rBase,
     // Wait a short time before the presets list is created.  This gives the
     // system time to paint the control.
     maLateInitTimer.SetTimeout(100);
-    maLateInitTimer.SetTimeoutHdl(LINK(this, CustomAnimationPane, lateInitCallback));
+    maLateInitTimer.SetInvokeHandler(LINK(this, CustomAnimationPane, lateInitCallback));
     maLateInitTimer.Start();
     UpdateLook();
 }

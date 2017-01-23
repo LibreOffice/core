@@ -108,7 +108,7 @@ namespace dbaui
 
         Construct();
 
-        m_aResetVisitFlag.SetTimeoutHdl(LINK(this, OParameterDialog, OnVisitedTimeout));
+        m_aResetVisitFlag.SetInvokeHandler(LINK(this, OParameterDialog, OnVisitedTimeout));
     }
 
     OParameterDialog::~OParameterDialog()

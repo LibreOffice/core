@@ -26,6 +26,7 @@
 #include <osl/mutex.hxx>
 
 class Idle;
+class Timer;
 struct ImplSVEvent;
 
 namespace svtools {
@@ -40,7 +41,7 @@ class SVT_DLLPUBLIC AsynchronLink
     void*            _pArg;
     ::osl::Mutex*    _pMutex;
 
-    DECL_DLLPRIVATE_LINK_TYPED( HandleCall_Idle, Idle*, void );
+    DECL_DLLPRIVATE_LINK_TYPED( HandleCall_Idle, Timer*, void );
     DECL_DLLPRIVATE_LINK_TYPED( HandleCall_PostUserEvent, void*, void );
     SVT_DLLPRIVATE void Call_Impl( void* pArg );
 

@@ -344,7 +344,7 @@ ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
 {
     // Start a timer that will unlock the ToolBarManager update lock when
     // that is not done explicitly by calling Release().
-    maTimer.SetTimeoutHdl(LINK(this,ToolBarManagerLock,TimeoutCallback));
+    maTimer.SetInvokeHandler(LINK(this,ToolBarManagerLock,TimeoutCallback));
     maTimer.SetTimeout(100);
     maTimer.Start();
 }

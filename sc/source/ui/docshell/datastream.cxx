@@ -330,7 +330,7 @@ DataStream::DataStream(ScDocShell *pShell, const OUString& rURL, const ScRange& 
     mbIsUpdate(false)
 {
     maImportTimer.SetTimeout(0);
-    maImportTimer.SetTimeoutHdl( LINK(this, DataStream, ImportTimerHdl) );
+    maImportTimer.SetInvokeHandler( LINK(this, DataStream, ImportTimerHdl) );
 
     Decode(rURL, rRange, nLimit, eMove, nSettings);
 }

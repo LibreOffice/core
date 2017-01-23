@@ -287,10 +287,10 @@ SvxSuperContourDlg::SvxSuperContourDlg(SfxBindings *_pBindings, SfxChildWindow *
     Resize();
 
     aUpdateIdle.SetPriority( TaskPriority::LOW );
-    aUpdateIdle.SetIdleHdl( LINK( this, SvxSuperContourDlg, UpdateHdl ) );
+    aUpdateIdle.SetInvokeHandler( LINK( this, SvxSuperContourDlg, UpdateHdl ) );
 
     aCreateIdle.SetPriority( TaskPriority::RESIZE );
-    aCreateIdle.SetIdleHdl( LINK( this, SvxSuperContourDlg, CreateHdl ) );
+    aCreateIdle.SetInvokeHandler( LINK( this, SvxSuperContourDlg, CreateHdl ) );
 }
 
 SvxSuperContourDlg::~SvxSuperContourDlg()
@@ -569,7 +569,7 @@ IMPL_LINK_TYPED( SvxSuperContourDlg, GraphSizeHdl, GraphCtrl*, pWnd, void )
     m_pStbStatus->SetItemText( 3, aStr );
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, UpdateHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, UpdateHdl, Timer *, void)
 {
     aUpdateIdle.Stop();
 
@@ -594,7 +594,7 @@ IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, UpdateHdl, Idle *, void)
     m_pContourWnd->QueueIdleUpdate();
 }
 
-IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, CreateHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SvxSuperContourDlg, CreateHdl, Timer *, void)
 {
     aCreateIdle.Stop();
 

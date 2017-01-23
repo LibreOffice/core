@@ -422,7 +422,7 @@ ScConflictsDlg::ScConflictsDlg( vcl::Window* pParent, ScViewData* pViewData, ScD
     m_pLbConflicts->SetHighlightRange();
 
     maSelectionIdle.SetPriority( TaskPriority::LOW );
-    maSelectionIdle.SetIdleHdl( LINK( this, ScConflictsDlg, UpdateSelectionHdl ) );
+    maSelectionIdle.SetInvokeHandler( LINK( this, ScConflictsDlg, UpdateSelectionHdl ) );
     maSelectionIdle.SetDebugName( "ScConflictsDlg maSelectionIdle" );
 
     m_pLbConflicts->SetSelectHdl( LINK( this, ScConflictsDlg, SelectHandle ) );
@@ -564,7 +564,7 @@ IMPL_LINK_NOARG_TYPED(ScConflictsDlg, DeselectHandle, SvTreeListBox*, void)
     mbInDeselectHdl = false;
 }
 
-IMPL_LINK_NOARG_TYPED(ScConflictsDlg, UpdateSelectionHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(ScConflictsDlg, UpdateSelectionHdl, Timer *, void)
 {
     if ( !mpViewData || !mpOwnDoc )
     {

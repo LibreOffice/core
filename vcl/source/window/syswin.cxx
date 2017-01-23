@@ -86,7 +86,7 @@ void SystemWindow::Init()
 
     //To-Do, reuse maResizeTimer
     maLayoutIdle.SetPriority(TaskPriority::RESIZE);
-    maLayoutIdle.SetIdleHdl( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
+    maLayoutIdle.SetInvokeHandler( LINK( this, SystemWindow, ImplHandleLayoutTimerHdl ) );
     maLayoutIdle.SetDebugName( "vcl::SystemWindow maLayoutIdle" );
 }
 
@@ -1051,7 +1051,7 @@ void SystemWindow::setPosSizeOnContainee(Size aSize, Window &rBox)
     VclContainer::setLayoutAllocation(rBox, aPos, aSize);
 }
 
-IMPL_LINK_NOARG_TYPED( SystemWindow, ImplHandleLayoutTimerHdl, Idle*, void )
+IMPL_LINK_NOARG_TYPED( SystemWindow, ImplHandleLayoutTimerHdl, Timer*, void )
 {
     if (!isLayoutEnabled())
     {

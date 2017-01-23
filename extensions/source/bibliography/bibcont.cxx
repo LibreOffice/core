@@ -125,7 +125,7 @@ BibBookContainer::BibBookContainer(vcl::Window* pParent, WinBits nStyle):
     aIdle("extensions BibBookContainer Split Idle")
 {
     pBibMod = OpenBibModul();
-    aIdle.SetIdleHdl(LINK( this, BibBookContainer, SplitHdl));
+    aIdle.SetInvokeHandler(LINK( this, BibBookContainer, SplitHdl));
     aIdle.SetPriority(TaskPriority::LOWEST);
 }
 
@@ -165,7 +165,7 @@ void BibBookContainer::Split()
 {
     aIdle.Start();
 }
-IMPL_LINK_NOARG_TYPED( BibBookContainer, SplitHdl, Idle*, void)
+IMPL_LINK_NOARG_TYPED( BibBookContainer, SplitHdl, Timer*, void)
 {
     long nSize= GetItemSize( TOP_WINDOW);
     BibConfig* pConfig = BibModul::GetConfig();

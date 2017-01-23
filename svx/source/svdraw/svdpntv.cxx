@@ -185,7 +185,7 @@ void SdrPaintView::ImpClearVars()
     mbSomeObjChgdFlag=false;
     mnGraphicManagerDrawMode = GraphicManagerDrawFlags::STANDARD;
     maComeBackIdle.SetPriority(TaskPriority::REPAINT);
-    maComeBackIdle.SetIdleHdl(LINK(this,SdrPaintView,ImpComeBackHdl));
+    maComeBackIdle.SetInvokeHandler(LINK(this,SdrPaintView,ImpComeBackHdl));
     maComeBackIdle.SetDebugName( "svx::SdrPaintView aComeBackIdle" );
 
     if (mpModel)
@@ -286,7 +286,7 @@ void SdrPaintView::ConfigurationChanged( ::utl::ConfigurationBroadcaster* , sal_
     InvalidateAllWin();
 }
 
-IMPL_LINK_NOARG_TYPED(SdrPaintView, ImpComeBackHdl, Idle *, void)
+IMPL_LINK_NOARG_TYPED(SdrPaintView, ImpComeBackHdl, Timer *, void)
 {
     if (mbSomeObjChgdFlag) {
         mbSomeObjChgdFlag=false;

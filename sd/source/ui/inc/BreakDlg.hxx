@@ -73,7 +73,7 @@ private:
 
     DECL_LINK_TYPED( CancelButtonHdl, Button*, void );
     DECL_LINK_TYPED( UpDate, void*, bool );
-    DECL_LINK_TYPED( InitialUpdate, Idle*, void );
+    DECL_LINK_TYPED( InitialUpdate, Timer*, void );
 };
 
 } // end of namespace sd

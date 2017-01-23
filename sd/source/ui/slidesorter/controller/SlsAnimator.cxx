@@ -68,7 +68,7 @@ Animator::Animator (SlideSorter& rSlideSorter)
       mnNextAnimationId(0)
 {
     maIdle.SetPriority(TaskPriority::REPAINT);
-    maIdle.SetIdleHdl(LINK(this,Animator,TimeoutHandler));
+    maIdle.SetInvokeHandler(LINK(this,Animator,TimeoutHandler));
 }
 
 Animator::~Animator()
@@ -212,7 +212,7 @@ void Animator::RequestNextFrame ()
     }
 }
 
-IMPL_LINK_NOARG_TYPED(Animator, TimeoutHandler, Idle *, void)
+IMPL_LINK_NOARG_TYPED(Animator, TimeoutHandler, Timer *, void)
 {
     if (mbIsDisposed)
         return;

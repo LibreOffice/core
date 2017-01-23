@@ -242,7 +242,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
             {
                 if( !m_aScrollTimer.IsActive() )
                 {
-                    m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollUpHdl) );
+                    m_aScrollTimer.SetInvokeHandler( LINK(this, OTableWindowListBox, ScrollUpHdl) );
                     ScrollUpHdl( nullptr );
                 }
             }
@@ -252,7 +252,7 @@ sal_Int8 OTableWindowListBox::AcceptDrop( const AcceptDropEvent& _rEvt )
             {
                 if( !m_aScrollTimer.IsActive() )
                 {
-                    m_aScrollTimer.SetTimeoutHdl( LINK(this, OTableWindowListBox, ScrollDownHdl) );
+                    m_aScrollTimer.SetInvokeHandler( LINK(this, OTableWindowListBox, ScrollDownHdl) );
                     ScrollDownHdl( nullptr );
                 }
             }

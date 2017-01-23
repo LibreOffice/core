@@ -454,7 +454,7 @@ LngSvcMgr::LngSvcMgr()
     UpdateAll();
 
     aUpdateIdle.SetPriority(TaskPriority::LOWEST);
-    aUpdateIdle.SetIdleHdl(LINK(this, LngSvcMgr, updateAndBroadcast));
+    aUpdateIdle.SetInvokeHandler(LINK(this, LngSvcMgr, updateAndBroadcast));
 
     // request to be notified if an extension has been added/removed
     uno::Reference<uno::XComponentContext> xContext(comphelper::getProcessComponentContext());
@@ -497,7 +497,7 @@ void LngSvcMgr::modified(const lang::EventObject&)
 //needs to be run in the main thread because
 //utl::ConfigChangeListener_Impl::changesOccurred grabs the SolarMutex and we
 //get notified that an extension was added from an extension manager thread
-IMPL_LINK_NOARG_TYPED(LngSvcMgr, updateAndBroadcast, Idle *, void)
+IMPL_LINK_NOARG_TYPED(LngSvcMgr, updateAndBroadcast, Timer *, void)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
