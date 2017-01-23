@@ -95,7 +95,6 @@ ChartModel::ChartModel(uno::Reference<uno::XComponentContext > const & xContext)
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
     , mbTimeBased(false)
-    , mpChartView(nullptr)
     , m_pUndoManager( nullptr )
     , m_aControllers( m_aModelMutex )
     , m_nControllerLockCount(0)
@@ -136,7 +135,6 @@ ChartModel::ChartModel( const ChartModel & rOther )
     , m_nInLoad(0)
     , m_bUpdateNotificationsPending(false)
     , mbTimeBased(rOther.mbTimeBased)
-    , mpChartView(nullptr)
     , m_aResource( rOther.m_aResource )
     , m_aMediaDescriptor( rOther.m_aMediaDescriptor )
     , m_aControllers( m_aModelMutex )
@@ -203,6 +201,11 @@ void SAL_CALL ChartModel::initialize( const Sequence< Any >& /*rArguments*/ )
     //support argument "EmbeddedObject"?
     //support argument "EmbeddedScriptSupport"?
     //support argument "DocumentRecoverySupport"?
+}
+
+css::uno::Reference< css::uno::XInterface > ChartModel::getChartView() const
+{
+    return static_cast< ::cppu::OWeakObject* >( mxChartView.get() );
 }
 
 // private methods
@@ -1220,12 +1223,11 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
             case SERVICE_TRANSP_GRADIENT_TABLE:
             case SERVICE_MARKER_TABLE:
                 {
-                    if(!mpChartView)
+                    if(!mxChartView.is())
                     {
-                        mpChartView = new ChartView( m_xContext, *this);
-                        xChartView = static_cast< ::cppu::OWeakObject* >( mpChartView );
+                        mxChartView = new ChartView( m_xContext, *this);
                     }
-                    return mpChartView->createInstance( rServiceSpecifier );
+                    return mxChartView->createInstance( rServiceSpecifier );
                 }
                 break;
             case SERVICE_NAMESPACE_MAP:
@@ -1234,13 +1236,12 @@ Reference< uno::XInterface > SAL_CALL ChartModel::createInstance( const OUString
     }
     else if(rServiceSpecifier == CHART_VIEW_SERVICE_NAME)
     {
-        if(!mpChartView)
+        if(!mxChartView.is())
         {
-            mpChartView = new ChartView( m_xContext, *this);
-            xChartView = static_cast< ::cppu::OWeakObject* >( mpChartView );
+            mxChartView = new ChartView( m_xContext, *this);
         }
 
-        return static_cast< ::cppu::OWeakObject* >( mpChartView );
+        return static_cast< ::cppu::OWeakObject* >( mxChartView.get() );
     }
     else
     {
@@ -1424,17 +1425,13 @@ void ChartModel::setWindow( const sal_uInt64 nWindowPtr )
 void ChartModel::update()
     throw (uno::RuntimeException, std::exception)
 {
-    if(!mpChartView)
+    if(!mxChartView.is())
     {
-        mpChartView = new ChartView( m_xContext, *this);
-        xChartView = static_cast< ::cppu::OWeakObject* >( mpChartView );
+        mxChartView = new ChartView( m_xContext, *this);
     }
-    if(mpChartView)
-    {
-        mpChartView->setViewDirty();
-        mpChartView->update();
-        mpChartView->updateOpenGLWindow();
-    }
+    mxChartView->setViewDirty();
+    mxChartView->update();
+    mxChartView->updateOpenGLWindow();
 }
 
 }  // namespace chart
