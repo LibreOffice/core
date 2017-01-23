@@ -80,19 +80,18 @@ AccessibleBase::AccessibleBase(
         m_bMayHaveChildren( bMayHaveChildren ),
         m_bChildrenInitialized( false ),
         m_nEventNotifierId(0),
-        m_pStateSetHelper( new ::utl::AccessibleStateSetHelper() ),
-        m_aStateSet( m_pStateSetHelper ),
+        m_xStateSetHelper( new ::utl::AccessibleStateSetHelper() ),
         m_aAccInfo( rAccInfo ),
         m_bAlwaysTransparent( bAlwaysTransparent ),
         m_bStateSetInitialized( false )
 {
     // initialize some states
-    OSL_ASSERT( m_pStateSetHelper );
-    m_pStateSetHelper->AddState( AccessibleStateType::ENABLED );
-    m_pStateSetHelper->AddState( AccessibleStateType::SHOWING );
-    m_pStateSetHelper->AddState( AccessibleStateType::VISIBLE );
-    m_pStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
-    m_pStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
+    OSL_ASSERT( m_xStateSetHelper.is() );
+    m_xStateSetHelper->AddState( AccessibleStateType::ENABLED );
+    m_xStateSetHelper->AddState( AccessibleStateType::SHOWING );
+    m_xStateSetHelper->AddState( AccessibleStateType::VISIBLE );
+    m_xStateSetHelper->AddState( AccessibleStateType::SELECTABLE );
+    m_xStateSetHelper->AddState( AccessibleStateType::FOCUSABLE );
 }
 
 AccessibleBase::~AccessibleBase()
@@ -192,16 +191,16 @@ void AccessibleBase::AddState( sal_Int16 aState )
     throw (RuntimeException)
 {
     CheckDisposeState();
-    OSL_ASSERT( m_pStateSetHelper );
-    m_pStateSetHelper->AddState( aState );
+    OSL_ASSERT( m_xStateSetHelper.is() );
+    m_xStateSetHelper->AddState( aState );
 }
 
 void AccessibleBase::RemoveState( sal_Int16 aState )
     throw (RuntimeException)
 {
     CheckDisposeState();
-    OSL_ASSERT( m_pStateSetHelper );
-    m_pStateSetHelper->RemoveState( aState );
+    OSL_ASSERT( m_xStateSetHelper.is() );
+    m_xStateSetHelper->RemoveState( aState );
 }
 
 bool AccessibleBase::UpdateChildren()
@@ -453,16 +452,11 @@ void SAL_CALL AccessibleBase::disposing()
     // reset pointers
     m_aAccInfo.m_pParent = nullptr;
 
-    // invalidate implementation for helper, but keep UNO reference to still
-    // allow a tool to query the DEFUNC state.
-    // Note: The object will be deleted when the last reference is released
-    m_pStateSetHelper = nullptr;
-
     // attach new empty state set helper to member reference
     ::utl::AccessibleStateSetHelper * pHelper = new ::utl::AccessibleStateSetHelper();
     pHelper->AddState( AccessibleStateType::DEFUNC );
     // release old helper and attach new one
-    m_aStateSet.set( pHelper );
+    m_xStateSetHelper = pHelper;
 
     m_bIsDisposed = true;
 
@@ -607,7 +601,7 @@ Reference< XAccessibleStateSet > SAL_CALL AccessibleBase::getAccessibleStateSet(
         m_bStateSetInitialized = true;
     }
 
-    return m_aStateSet;
+    return m_xStateSetHelper.get();
 }
 
 lang::Locale SAL_CALL AccessibleBase::getLocale()

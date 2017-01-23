@@ -35,6 +35,7 @@
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <unotools/accessiblestatesethelper.hxx>
+#include <rtl/ref.hxx>
 
 #include <map>
 #include <memory>
@@ -339,17 +340,7 @@ private:
 
         Note: This member must come before m_aStateSet!
      */
-    ::utl::AccessibleStateSetHelper *     m_pStateSetHelper;
-    /** this is returned in getAccessibleStateSet().
-
-        The implementation is an ::utl::AccessibleStateSetHelper.  To access
-        implementation methods use m_pStateSetHelper.
-
-        Note: Keeping this reference ensures, that the helper object is only
-              destroyed after this object has been disposed().
-     */
-    css::uno::Reference< css::accessibility::XAccessibleStateSet >
-        m_aStateSet;
+    rtl::Reference<::utl::AccessibleStateSetHelper>     m_xStateSetHelper;
 
     AccessibleElementInfo  m_aAccInfo;
     const bool             m_bAlwaysTransparent;
