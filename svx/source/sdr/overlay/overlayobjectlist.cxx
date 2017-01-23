@@ -29,6 +29,9 @@
 #include <drawinglayer/processor2d/hittestprocessor2d.hxx>
 #include <comphelper/lok.hxx>
 
+#define DEFAULT_VALUE_FOR_HITTEST_PIXEL         (2)
+#define DEFAULT_VALUE_FOR_HITTEST_TWIP          (30)
+
 namespace sdr
 {
     namespace overlay

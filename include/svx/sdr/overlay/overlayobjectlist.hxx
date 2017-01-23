@@ -25,10 +25,6 @@
 #include <svx/svxdllapi.h>
 
 
-#define DEFAULT_VALUE_FOR_HITTEST_PIXEL         (2L)
-#define DEFAULT_VALUE_FOR_HITTEST_TWIP          (30L)
-
-
 class Point;
 
 namespace sdr
