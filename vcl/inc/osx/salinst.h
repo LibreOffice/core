@@ -142,7 +142,8 @@ public:
     void PostUserEvent( AquaSalFrame* pFrame, SalEvent nType, void* pData );
     void delayedSettingsChanged( bool bInvalidate );
 
-    bool isNSAppThread() const;
+    // Is this the NSAppThread?
+    virtual bool IsMainThread() const override;
 
     void startedPrintJob() { mnActivePrintJobs++; }
     void endedPrintJob() { mnActivePrintJobs--; }
