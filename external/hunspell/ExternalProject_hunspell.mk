@@ -27,6 +27,8 @@ endif
 
 $(call gb_ExternalProject_get_state_target,hunspell,build):
 	$(call gb_ExternalProject_run,build,\
+		$(if $(filter IOS MACOSX,$(OS)),ACLOCAL="aclocal -I $(SRCDIR)/m4/mac") \
+		autoreconf -i && \
 		LIBS="$(gb_STDLIBS) $(LIBS)" \
 		./configure --disable-shared --disable-nls --with-pic \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\
