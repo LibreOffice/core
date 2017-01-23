@@ -27,6 +27,7 @@ endif
 
 $(call gb_ExternalProject_get_state_target,hunspell,build):
 	$(call gb_ExternalProject_run,build,\
+		autoreconf -vfi && \
 		LIBS="$(gb_STDLIBS) $(LIBS)" \
 		./configure --disable-shared --disable-nls --with-pic \
 			$(if $(CROSS_COMPILING),--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM))\

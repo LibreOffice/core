@@ -19,8 +19,4 @@ endif
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,hunspell,0))
 
-$(eval $(call gb_UnpackedTarball_add_patches,hunspell, \
-    external/hunspell/clangcl-werror.patch \
-))
-
 # vim: set noet sw=4 ts=4:
