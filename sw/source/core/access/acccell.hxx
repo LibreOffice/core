@@ -34,8 +34,8 @@ class SwAccessibleCell : public SwAccessibleContext,
                   public  css::accessibility::XAccessibleExtendedAttributes
 {
     // Implementation for XAccessibleSelection interface
-    SwAccessibleSelectionHelper aSelectionHelper;
-    bool    bIsSelected;    // protected by base class mutex
+    SwAccessibleSelectionHelper m_aSelectionHelper;
+    bool    m_bIsSelected;    // protected by base class mutex
 
     bool    IsSelected();
 
