@@ -173,7 +173,6 @@ struct ImpSdXMLExpTransObj2DBase
     sal_uInt16                  mnType;
     explicit ImpSdXMLExpTransObj2DBase(sal_uInt16 nType)
     :   mnType(nType) {}
-    virtual ~ImpSdXMLExpTransObj2DBase() {}
 };
 
 // possible object types for 2D
@@ -544,7 +543,6 @@ struct ImpSdXMLExpTransObj3DBase
     sal_uInt16                  mnType;
     explicit ImpSdXMLExpTransObj3DBase(sal_uInt16 nType)
     :   mnType(nType) {}
-    virtual ~ImpSdXMLExpTransObj3DBase() {}
 };
 
 // possible object types for 3D

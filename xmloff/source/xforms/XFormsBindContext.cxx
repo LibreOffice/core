@@ -76,10 +76,6 @@ XFormsBindContext::XFormsBindContext(
     mxModel->getBindings()->insert( makeAny( mxBinding ) );
 }
 
-XFormsBindContext::~XFormsBindContext()
-{
-}
-
 void XFormsBindContext::HandleAttribute( sal_uInt16 nToken,
                                          const OUString& rValue )
 {

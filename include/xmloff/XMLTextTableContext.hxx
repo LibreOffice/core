@@ -30,14 +30,10 @@ namespace com { namespace sun { namespace star {
 
 class XMLOFF_DLLPUBLIC XMLTextTableContext : public SvXMLImportContext
 {
-
 public:
-
-
     XMLTextTableContext( SvXMLImport& rImport,
             sal_uInt16 nPrfx,
             const OUString& rLName );
-    virtual ~XMLTextTableContext() override;
 };
 
 #endif

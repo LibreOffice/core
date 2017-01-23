@@ -49,10 +49,6 @@ XMLIgnoreTransformerContext::XMLIgnoreTransformerContext(
 {
 }
 
-XMLIgnoreTransformerContext::~XMLIgnoreTransformerContext()
-{
-}
-
 rtl::Reference<XMLTransformerContext> XMLIgnoreTransformerContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,

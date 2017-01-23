@@ -64,12 +64,6 @@ public:
     XMLTransformerContext( XMLTransformerBase& rTransformer,
                         const OUString& rQName );
 
-    // A contexts destructor does anything that is required if an element
-    // ends. By default, nothing is done.
-    // Note that virtual methods cannot be used inside destructors. Use
-    // EndElement instead if this is required.
-    virtual ~XMLTransformerContext() override;
-
     // Create a children element context. By default, the import's
     // CreateContext method is called to create a new default context.
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,

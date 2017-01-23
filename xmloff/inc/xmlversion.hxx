@@ -42,7 +42,6 @@ public:
         const css::uno::Sequence < css::util::RevisionTag >& rVersions,
         const OUString &rFileName,
         css::uno::Reference< css::xml::sax::XDocumentHandler > &rHandler );
-    virtual     ~XMLVersionListExport() override {}
 
     sal_uInt32  exportDoc( enum ::xmloff::token::XMLTokenEnum eClass = ::xmloff::token::XML_TOKEN_INVALID ) override;
     void        ExportAutoStyles_() override {}

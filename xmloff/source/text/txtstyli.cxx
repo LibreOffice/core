@@ -149,9 +149,6 @@ XMLTextStyleContext::XMLTextStyleContext( SvXMLImport& rImport,
 {
 }
 
-XMLTextStyleContext::~XMLTextStyleContext()
-{}
-
 SvXMLImportContext *XMLTextStyleContext::CreateChildContext(
         sal_uInt16 nPrefix,
         const OUString& rLocalName,

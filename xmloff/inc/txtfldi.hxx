@@ -132,8 +132,6 @@ public:
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
 
-    virtual ~XMLTextFieldImportContext() override;
-
     /// process character data: will be collected in member sContentBuffer
     virtual void Characters( const OUString& sContent ) override;
 

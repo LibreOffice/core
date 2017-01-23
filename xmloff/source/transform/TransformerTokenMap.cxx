@@ -17,9 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-
 #include "TransformerTokenMap.hxx"
-
 
 using namespace ::xmloff::token;
 
@@ -35,10 +33,6 @@ XMLTransformerTokenMap::XMLTransformerTokenMap( XMLTokenEnum *pInit )
             ++pInit;
         }
     }
-}
-
-XMLTransformerTokenMap::~XMLTransformerTokenMap()
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

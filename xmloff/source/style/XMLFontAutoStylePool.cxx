@@ -131,7 +131,10 @@ struct XMLFontAutoStylePoolEntryCmp_Impl {
 class XMLFontAutoStylePool_Impl : public o3tl::sorted_vector<XMLFontAutoStylePoolEntry_Impl*, XMLFontAutoStylePoolEntryCmp_Impl>
 {
 public:
-    ~XMLFontAutoStylePool_Impl() { DeleteAndDestroyAll(); }
+    ~XMLFontAutoStylePool_Impl()
+    {
+        DeleteAndDestroyAll();
+    }
 };
 
 XMLFontAutoStylePool::XMLFontAutoStylePool( SvXMLExport& rExp, bool _tryToEmbedFonts ) :

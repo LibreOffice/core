@@ -32,12 +32,6 @@ public:
     XMLDocumentTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    // A contexts destructor does anything that is required if an element
-    // ends. By default, nothing is done.
-    // Note that virtual methods cannot be used inside destructors. Use
-    // EndElement instead if this is required.
-    virtual ~XMLDocumentTransformerContext() override;
-
     // StartElement is called after a context has been constructed and
     // before a elements context is parsed. It may be used for actions that
     // require virtual methods. The default is to do nothing.

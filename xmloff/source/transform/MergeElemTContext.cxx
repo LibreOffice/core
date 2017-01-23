@@ -117,10 +117,6 @@ XMLMergeElemTransformerContext::XMLMergeElemTransformerContext(
 {
 }
 
-XMLMergeElemTransformerContext::~XMLMergeElemTransformerContext()
-{
-}
-
 void XMLMergeElemTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {

@@ -44,8 +44,6 @@ public:
                              const OUString& rLName,
                              const css::uno::Reference<css::xforms::XDataTypeRepository>& rRepository );
 
-    virtual ~SchemaSimpleTypeContext() override;
-
     // implement TokenContext methods:
 
 protected:

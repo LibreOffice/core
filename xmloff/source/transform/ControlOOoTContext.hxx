@@ -32,8 +32,6 @@ public:
     XMLControlOOoTransformerContext( XMLTransformerBase& rTransformer,
                            const OUString& rQName );
 
-    virtual ~XMLControlOOoTransformerContext() override;
-
     virtual rtl::Reference<XMLTransformerContext> CreateChildContext( sal_uInt16 nPrefix,
                                    const OUString& rLocalName,
                                    const OUString& rQName,

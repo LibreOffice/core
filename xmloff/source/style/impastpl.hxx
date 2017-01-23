@@ -122,7 +122,6 @@ struct XMLAutoStyleFamily
             const OUString& rStrPrefix, bool bAsFamily );
 
     explicit XMLAutoStyleFamily( sal_Int32 nFamily );
-    ~XMLAutoStyleFamily();
 
     XMLAutoStyleFamily(const XMLAutoStyleFamily&) = delete;
     XMLAutoStyleFamily& operator=(const XMLAutoStyleFamily&) = delete;

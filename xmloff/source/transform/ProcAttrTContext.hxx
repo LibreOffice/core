@@ -44,8 +44,6 @@ public:
                               ::xmloff::token::XMLTokenEnum eToken,
                               sal_uInt16 nActionMap );
 
-    virtual ~XMLProcAttrTransformerContext() override;
-
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
     virtual void EndElement() override;
 };

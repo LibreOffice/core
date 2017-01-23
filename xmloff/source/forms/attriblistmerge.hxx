@@ -44,8 +44,6 @@ namespace xmloff
         typedef std::vector< css::uno::Reference< css::xml::sax::XAttributeList > > AttributeListArray;
         AttributeListArray  m_aLists;
 
-        virtual ~OAttribListMerger() override { }
-
     public:
         OAttribListMerger() { }
 

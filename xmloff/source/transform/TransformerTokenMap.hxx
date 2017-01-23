@@ -30,7 +30,6 @@ class XMLTransformerTokenMap :
 {
 public:
     explicit XMLTransformerTokenMap( ::xmloff::token::XMLTokenEnum *pInit );
-    ~XMLTransformerTokenMap();
 };
 
 #endif // INCLUDED_XMLOFF_SOURCE_TRANSFORM_TRANSFORMERTOKENMAP_HXX

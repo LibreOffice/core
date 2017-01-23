@@ -135,8 +135,6 @@ SchXMLFlatDocContext_Impl::SchXMLFlatDocContext_Impl(
 {
 }
 
-SchXMLFlatDocContext_Impl::~SchXMLFlatDocContext_Impl() { }
-
 SvXMLImportContext *SchXMLFlatDocContext_Impl::CreateChildContext(
     sal_uInt16 i_nPrefix, const OUString& i_rLocalName,
     const uno::Reference<xml::sax::XAttributeList>& i_xAttrList)

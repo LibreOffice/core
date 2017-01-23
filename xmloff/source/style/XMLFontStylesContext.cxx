@@ -377,8 +377,6 @@ XMLFontStylesContext::XMLFontStylesContext( SvXMLImport& rImport,
 {
 }
 
-XMLFontStylesContext::~XMLFontStylesContext() {}
-
 bool XMLFontStylesContext::FillProperties( const OUString& rName,
                          ::std::vector< XMLPropertyState > &rProps,
                          sal_Int32 nFamilyNameIdx,

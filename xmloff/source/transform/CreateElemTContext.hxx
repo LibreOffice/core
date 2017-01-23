@@ -32,8 +32,6 @@ public:
                            const OUString& rQName,
                               sal_uInt16 nActionMap );
 
-    virtual ~XMLCreateElemTransformerContext() override;
-
     virtual void StartElement( const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList ) override;
 };
 

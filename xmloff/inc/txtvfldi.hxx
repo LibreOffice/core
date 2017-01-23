@@ -64,8 +64,6 @@ public:
         bool bValue,                        /// process value (Prep.Field)
         bool bFormula);                     /// process formula (Prep.F.)
 
-    ~XMLValueImportHelper();
-
     /// process attribute values
     void ProcessAttribute( sal_uInt16 nAttrToken,
                                    const OUString& sAttrValue );
@@ -442,13 +440,11 @@ class XMLTableFormulaImportContext : public XMLTextFieldImportContext
 
 public:
 
-
     XMLTableFormulaImportContext(
         SvXMLImport& rImport,                   /// XML Import
         XMLTextImportHelper& rHlp,              /// text import helper
         sal_uInt16 nPrfx,                       /// namespace prefix
         const OUString& rLocalName);     /// element name w/o prefix
-    virtual ~XMLTableFormulaImportContext() override;
 
 protected:
 

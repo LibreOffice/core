@@ -42,7 +42,6 @@ public:
                    sal_uInt16 nPrfx,
                    const OUString& rLName,
                    const css::uno::Reference<css::xforms::XDataTypeRepository>& rRepository );
-    virtual ~SchemaContext() override;
 
     // implement TokenContext methods:
 

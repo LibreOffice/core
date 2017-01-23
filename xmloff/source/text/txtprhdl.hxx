@@ -30,11 +30,9 @@ class XMLTextPropertyHandlerFactory : public XMLPropertyHandlerFactory
 public:
 
     XMLTextPropertyHandlerFactory();
-    virtual ~XMLTextPropertyHandlerFactory() override;
 
     virtual const XMLPropertyHandler* GetPropertyHandler( sal_Int32 nType ) const override ;
 };
-
 
 #endif
 

@@ -147,9 +147,6 @@ void XMLTextFieldImportContext::StartElement(
     }
 }
 
-XMLTextFieldImportContext::~XMLTextFieldImportContext() {
-}
-
 OUString const & XMLTextFieldImportContext::GetContent()
 {
     if (sContent.isEmpty())

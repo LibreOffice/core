@@ -31,12 +31,10 @@
 using com::sun::star::uno::Reference;
 using com::sun::star::xml::sax::XAttributeList;
 
-
 struct SvXMLTokenMapEntry aEmptyMap[1] =
 {
     XML_TOKEN_MAP_END
 };
-
 
 TokenContext::TokenContext( SvXMLImport& rImport,
                             sal_uInt16 nPrefix,
@@ -46,10 +44,6 @@ TokenContext::TokenContext( SvXMLImport& rImport,
     : SvXMLImportContext( rImport, nPrefix, rLocalName ),
       mpAttributes( pAttributes ),
       mpChildren( pChildren )
-{
-}
-
-TokenContext::~TokenContext()
 {
 }
 

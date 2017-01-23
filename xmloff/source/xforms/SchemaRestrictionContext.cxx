@@ -93,10 +93,6 @@ SchemaRestrictionContext::SchemaRestrictionContext(
     SAL_WARN_IF( !mxRepository.is(), "xmloff", "need repository" );
 }
 
-SchemaRestrictionContext::~SchemaRestrictionContext()
-{
-}
-
 void SchemaRestrictionContext::CreateDataType()
 {
     // only do something if we don't have a data type already

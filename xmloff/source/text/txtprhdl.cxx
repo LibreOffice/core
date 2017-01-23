@@ -1336,10 +1336,6 @@ XMLTextPropertyHandlerFactory::XMLTextPropertyHandlerFactory() :
 {
 }
 
-XMLTextPropertyHandlerFactory::~XMLTextPropertyHandlerFactory()
-{
-}
-
 const XMLPropertyHandler *XMLTextPropertyHandlerFactory::GetPropertyHandler(
         sal_Int32 nType ) const
 {

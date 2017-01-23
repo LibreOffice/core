@@ -602,10 +602,6 @@ XMLTableFormulaImportContext::XMLTableFormulaImportContext(
 {
 }
 
-XMLTableFormulaImportContext::~XMLTableFormulaImportContext()
-{
-}
-
 void XMLTableFormulaImportContext::ProcessAttribute(
     sal_uInt16 nAttrToken,
     const OUString& sAttrValue )
@@ -1117,10 +1113,6 @@ XMLValueImportHelper::XMLValueImportHelper(
         bSetValue(bValue),
         bSetStyle(bStyle),
         bSetFormula(bFormula)
-{
-}
-
-XMLValueImportHelper::~XMLValueImportHelper()
 {
 }
 

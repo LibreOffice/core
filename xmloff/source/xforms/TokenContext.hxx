@@ -47,8 +47,6 @@ public:
                   const SvXMLTokenMapEntry* pAttributes,
                   const SvXMLTokenMapEntry* pChildren );
 
-    virtual ~TokenContext() override;
-
     // implement SvXMLImportContext methods:
 
     /** call HandleAttribute for each attribute in the token map;

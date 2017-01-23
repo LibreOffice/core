@@ -56,8 +56,6 @@ XMLAutoStyleFamily::XMLAutoStyleFamily(
 XMLAutoStyleFamily::XMLAutoStyleFamily( sal_Int32 nFamily ) :
     mnFamily(nFamily), mnCount(0), mnName(0), mbAsFamily(false) {}
 
-XMLAutoStyleFamily::~XMLAutoStyleFamily() {}
-
 void XMLAutoStyleFamily::ClearEntries()
 {
     m_ParentSet.clear();

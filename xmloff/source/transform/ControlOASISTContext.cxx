@@ -42,10 +42,6 @@ XMLControlOASISTransformerContext::XMLControlOASISTransformerContext(
 {
 }
 
-XMLControlOASISTransformerContext::~XMLControlOASISTransformerContext()
-{
-}
-
 void XMLControlOASISTransformerContext::StartElement(
     const Reference< XAttributeList >& rAttrList )
 {

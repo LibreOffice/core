@@ -94,8 +94,6 @@ public:
             const OUString& i_rLocalName,
             const css::uno::Reference< css::xml::sax::XAttributeList > & i_xAttrList );
 
-    virtual ~XMLNumberedParaContext() override;
-
     virtual void EndElement() override;
 
     virtual SvXMLImportContext *CreateChildContext( sal_uInt16 i_nPrefix,

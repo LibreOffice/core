@@ -78,10 +78,6 @@ XFormsSubmissionContext::XFormsSubmissionContext(
     xModel->getSubmissions()->insert( makeAny( mxSubmission ) );
 }
 
-XFormsSubmissionContext::~XFormsSubmissionContext()
-{
-}
-
 Any toBool( const OUString& rValue )
 {
     Any aValue;

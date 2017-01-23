@@ -2263,10 +2263,6 @@ XMLNumberedParaContext::XMLNumberedParaContext(
     i_rImport.GetTextImport()->GetTextListHelper().PushListContext( this );
 }
 
-XMLNumberedParaContext::~XMLNumberedParaContext()
-{
-}
-
 void XMLNumberedParaContext::EndElement()
 {
     if (!m_ListId.isEmpty()) {

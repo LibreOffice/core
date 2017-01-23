@@ -76,7 +76,6 @@ public:
         sStyleName( rStyleName )
     {
     }
-    virtual ~XMLStyleHint_Impl() override {}
 
     const OUString& GetStyleName() const { return sStyleName; }
 };
@@ -93,8 +92,6 @@ public:
         sRefName( rRefName )
     {
     }
-
-    virtual ~XMLReferenceHint_Impl() override {}
 
     const OUString& GetRefName() const { return sRefName; }
 };
@@ -160,8 +157,6 @@ public:
     {
     }
 
-    virtual ~XMLIndexMarkHint_Impl() override {}
-
     const css::uno::Reference<css::beans::XPropertySet> & GetMark() const
         { return xIndexMarkPropSet; }
     const OUString& GetID() const { return sID; }
@@ -178,10 +173,6 @@ public:
                            const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_TEXT_FRAME, rPos, rPos ),
         xContext( pContext )
-    {
-    }
-
-    virtual ~XMLTextFrameHint_Impl() override
     {
     }
 
@@ -235,10 +226,6 @@ public:
                       const css::uno::Reference < css::text::XTextRange > & rPos ) :
         XMLHint_Impl( XML_HINT_DRAW, rPos, rPos ),
         xContext( pContext )
-    {
-    }
-
-    virtual ~XMLDrawHint_Impl() override
     {
     }
 

@@ -41,7 +41,6 @@ public:
     XFormsModelContext( SvXMLImport& rImport,
                         sal_uInt16 nPrfx,
                         const OUString& rLName );
-    virtual ~XFormsModelContext() override;
 
     const css::uno::Reference<css::xforms::XModel2>& getModel() { return mxModel;}
 

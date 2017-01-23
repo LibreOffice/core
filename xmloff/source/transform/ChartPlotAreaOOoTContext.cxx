@@ -111,15 +111,11 @@ void XMLAxisOOoContext::StartElement(
     XMLPersElemContentTContext::StartElement( xAttrList );
 }
 
-
 XMLChartPlotAreaOOoTContext::XMLChartPlotAreaOOoTContext(
     XMLTransformerBase & rTransformer, const OUString & rQName ) :
         XMLProcAttrTransformerContext( rTransformer, rQName, OOO_SHAPE_ACTIONS )
 {
 }
-
-XMLChartPlotAreaOOoTContext::~XMLChartPlotAreaOOoTContext()
-{}
 
 rtl::Reference<XMLTransformerContext> XMLChartPlotAreaOOoTContext::CreateChildContext(
     sal_uInt16 nPrefix,

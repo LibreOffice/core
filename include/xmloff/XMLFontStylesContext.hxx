@@ -59,8 +59,6 @@ public:
             const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList,
             rtl_TextEncoding eDfltEnc );
 
-    ~XMLFontStylesContext() override;
-
     const SvXMLTokenMap& GetFontStyleAttrTokenMap() const
     {
         return *pFontStyleAttrTokenMap;
