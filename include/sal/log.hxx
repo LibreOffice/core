@@ -10,15 +10,15 @@
 #ifndef INCLUDED_SAL_LOG_HXX
 #define INCLUDED_SAL_LOG_HXX
 
-#include "sal/config.h"
+#include <sal/config.h>
 
 #include <cstdlib>
 #include <sstream>
 #include <string>
 
-#include "sal/detail/log.h"
-#include "sal/saldllapi.h"
-#include "sal/types.h"
+#include <sal/detail/log.h>
+#include <sal/saldllapi.h>
+#include <sal/types.h>
 
 // Avoid the use of other sal code in this header as much as possible, so that
 // this code can be called from other sal code without causing endless
@@ -29,6 +29,10 @@
 extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log(
     enum sal_detail_LogLevel level, char const * area, char const * where,
     char const * message);
+
+extern "C" SAL_DLLPUBLIC void SAL_CALL sal_detail_log_backtrace(
+    enum sal_detail_LogLevel level, char const * area, char const * where,
+    char const * message, int maxNoStackFramesToDisplay);
 
 namespace sal { namespace detail {
 
@@ -157,9 +161,13 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 
     @since LibreOffice 3.5
 */
+#ifdef _LIBCPP_VERSION
 #define SAL_STREAM(stream) \
-    (dynamic_cast< ::std::ostringstream & >(::std::ostringstream() << stream). \
-     str())
+    (::std::ostringstream() << stream).str()
+#else
+#define SAL_STREAM(stream) \
+    (dynamic_cast< ::std::ostringstream & >(::std::ostringstream() << stream).str())
+#endif
 
 /**
     @page sal_log Basic logging functionality.
@@ -224,15 +232,31 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     with
 
     @verbatim
-      <switch> ::= <sense><level>("."<area>)?
+      <switch> ::= <sense><item>
       <sense> ::= "+"|"-"
+      <item> ::= <flag>|<level>("."<area>)?
+      <flag> ::= "TIMESTAMP"|"RELATIVETIMER"
       <level> ::= "INFO"|"WARN"
     @endverbatim
 
-    If the environment variable is unset, "+WARN" is used instead (which results
-    in all warnings being output but no infos).  If the given value does not
-    match the regular expression, "+INFO+WARN" is used instead (which in turn
-    results in everything being output).
+    If the environment variable is unset, the setting "+WARN" is
+    assumed instead (which results in all warnings being output but no
+    infos).  If the given value does not match the regular expression,
+    "+INFO+WARN" is used instead (which in turn results in everything
+    being output).
+
+    The "+TIMESTAMP" flag causes each output line (as selected by the level
+    switch(es)) to be prefixed by a timestamp like 2016-08-18:14:04:43.
+
+    The "+RELATIVETIMER" flag causes each output line (as selected by
+    the level switch(es)) to be prefixed by a relative timestamp in
+    seconds since the first output line like 1.312.
+
+    If both +TIMESTAMP and +RELATIVETIMER are specified, they are
+    output in that order.
+
+    Specifying a flag with a negative sense has no effect. Specifying
+    the same flag multiple times has no extra effect.
 
     A given macro call's level (INFO or WARN) and area is matched against the
     given switches as follows:  Only those switches for which the level matches
@@ -242,17 +266,20 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
     that has a sense of "+".  (That is, if both +INFO.foo and -INFO.foo are
     present, +INFO.foo wins.)
 
+    If no WARN selection is specified, but an INFO selection is, the
+    INFO selection is used for WARN messages, too.
+
     For example, if SAL_LOG is "+INFO-INFO.foo+INFO.foo.bar", then calls like
     SAL_INFO("foo.bar", ...), SAL_INFO("foo.bar.baz", ...), or
     SAL_INFO("other", ...) generate output, while calls like
     SAL_INFO("foo", ...) or SAL_INFO("foo.barzzz", ...) do not.
 
-    The generated log output consists of the given level ("info" or "warn"), the
-    given area, the process ID, the thread ID, the source file, and the source
-    line number, each followed by a colon, followed by a space, the given
-    message, and a newline.  The precise format of the log output is subject to
-    change.  The log output is printed to stderr without further text encoding
-    conversion.
+    The generated log output consists of the optinal timestamp, the given level
+    ("info" or "warn"), the given area, the process ID, the thread ID, the
+    source file, and the source line number, each followed by a colon, followed
+    by a space, the given message, and a newline.  The precise format of the log
+    output is subject to change.  The log output is printed to stderr without
+    further text encoding conversion.
 
     @see @ref sal_log_areas
 
@@ -310,7 +337,33 @@ inline char const * unwrapStream(SAL_UNUSED_PARAMETER StreamIgnore const &) {
 */
 #define SAL_DEBUG(stream) \
     SAL_DETAIL_LOG_STREAM( \
-        SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG, 0, 0, stream)
+        SAL_LOG_TRUE, ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, stream)
+
+/**
+  Produce temporary debugging output from stream along with a
+  stack trace of the calling location.  This macro is meant to
+  be used only while working on code and should never exist
+  in production code.
+
+  See @ref sal_log "basic logging functionality" for details.
+*/
+#define SAL_DEBUG_BACKTRACE(stream, maxNoStackFramesToDisplay) \
+    do { \
+        if (sizeof ::sal::detail::getResult(::sal::detail::StreamStart() << stream) == 1) \
+        { \
+            ::sal_detail_log_backtrace( \
+                ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, \
+                ::sal::detail::unwrapStream( \
+                    ::sal::detail::StreamStart() << stream)); \
+        } else { \
+            ::std::ostringstream sal_detail_stream; \
+            sal_detail_stream << stream; \
+            ::sal::detail::log( \
+                ::SAL_DETAIL_LOG_LEVEL_DEBUG, NULL, NULL, sal_detail_stream); \
+        } \
+    } while (false)
+
+
 
 #endif
 

@@ -32,6 +32,7 @@
 #include <android/log.h>
 #elif defined WNT
 #include <process.h>
+#include <time.h>
 #define OSL_DETAIL_GETPID _getpid()
 #else
 #include <unistd.h>
@@ -43,7 +44,7 @@
 // sal/osl/unx/salinit.cxx::sal_detail_initialize updates this:
 bool sal_use_syslog;
 #else
-enum { sal_use_syslog = false };
+bool const sal_use_syslog = false;
 #endif
 
 // Avoid the use of other sal code in this file as much as possible, so that
@@ -103,7 +104,86 @@ char const * getEnvironmentVariable() {
     return env;
 }
 
+void maybeOutputTimestamp(std::ostringstream &s) {
+    char const * env = getEnvironmentVariable();
+    if (env == nullptr)
+        return;
+    bool outputTimestamp = false;
+    bool outputRelativeTimer = false;
+    for (char const * p = env;;) {
+        switch (*p++) {
+        case '\0':
+            if (outputTimestamp) {
+                char ts[100];
+                TimeValue systemTime;
+                osl_getSystemTime(&systemTime);
+                TimeValue localTime;
+                osl_getLocalTimeFromSystemTime(&systemTime, &localTime);
+                oslDateTime dateTime;
+                osl_getDateTimeFromTimeValue(&localTime, &dateTime);
+                struct tm tm;
+                tm.tm_sec = dateTime.Seconds;
+                tm.tm_min = dateTime.Minutes;
+                tm.tm_hour = dateTime.Hours;
+                tm.tm_mday = dateTime.Day;
+                tm.tm_mon = dateTime.Month - 1;
+                tm.tm_year = dateTime.Year - 1900;
+                strftime(ts, sizeof(ts), "%Y-%m-%d:%H:%M:%S", &tm);
+                char milliSecs[10];
+                sprintf(milliSecs, "%03d", static_cast<int>(dateTime.NanoSeconds/1000000));
+                s << ts << '.' << milliSecs << ':';
+            }
+            if (outputRelativeTimer) {
+                static bool beenHere = false;
+                static TimeValue first;
+                if (!beenHere) {
+                    osl_getSystemTime(&first);
+                    beenHere = true;
+                }
+                TimeValue now;
+                osl_getSystemTime(&now);
+                int seconds = now.Seconds - first.Seconds;
+                int milliSeconds;
+                if (now.Nanosec < first.Nanosec) {
+                    seconds--;
+                    milliSeconds = 1000-(first.Nanosec-now.Nanosec)/1000000;
+                }
+                else
+                    milliSeconds = (now.Nanosec-first.Nanosec)/1000000;
+                char relativeTimestamp[100];
+                sprintf(relativeTimestamp, "%d.%03d", seconds, milliSeconds);
+                s << relativeTimestamp << ':';
+            }
+            return;
+        case '+':
+            {
+                char const * p1 = p;
+                while (*p1 != '.' && *p1 != '+' && *p1 != '-' && *p1 != '\0') {
+                    ++p1;
+                }
+                if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")))
+                    outputTimestamp = true;
+                else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
+                    outputRelativeTimer = true;
+                char const * p2 = p1;
+                while (*p2 != '+' && *p2 != '-' && *p2 != '\0') {
+                    ++p2;
+                }
+                p = p2;
+            }
+            break;
+        default:
+            ; // nothing
+        }
+    }
+    return;
+}
+
 #endif
+
+bool isDebug(sal_detail_LogLevel level) {
+    return level == SAL_DETAIL_LOG_LEVEL_DEBUG;
+}
 
 bool report(sal_detail_LogLevel level, char const * area) {
     if (level == SAL_DETAIL_LOG_LEVEL_DEBUG)
@@ -120,10 +200,13 @@ bool report(sal_detail_LogLevel level, char const * area) {
         // no matching switches at all, the result will be negative (and
         // initializing with 1 is safe as the length of a valid switch, even
         // without the "+"/"-" prefix, will always be > 1)
+    bool seenWarn = false;
     for (char const * p = env;;) {
         Sense sense;
         switch (*p++) {
         case '\0':
+            if (level == SAL_DETAIL_LOG_LEVEL_WARN && !seenWarn)
+                return report(SAL_DETAIL_LOG_LEVEL_INFO, area);
             return senseLen[POSITIVE] >= senseLen[NEGATIVE];
                 // if a specific item is both postiive and negative
                 // (senseLen[POSITIVE] == senseLen[NEGATIVE]), default to
@@ -147,6 +230,12 @@ bool report(sal_detail_LogLevel level, char const * area) {
         } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("WARN")))
         {
             match = level == SAL_DETAIL_LOG_LEVEL_WARN;
+            seenWarn = true;
+        } else if (equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("TIMESTAMP")) ||
+                   equalStrings(p, p1 - p, RTL_CONSTASCII_STRINGPARAM("RELATIVETIMER")))
+        {
+            // handled later
+            match = false;
         } else {
             return true;
                 // upon an illegal SAL_LOG value, everything is considered
@@ -181,8 +270,9 @@ void log(
     std::ostringstream s;
 #if !defined ANDROID
     // On Android, the area will be used as the "tag," and log info already
-    // contains the PID
+    // contains timestamp and PID.
     if (!sal_use_syslog) {
+        maybeOutputTimestamp(s);
         s << toString(level) << ':';
     }
     if (level != SAL_DETAIL_LOG_LEVEL_DEBUG) {
@@ -243,6 +333,23 @@ void log(
 
 }
 
+void osl::detail::logFormat(
+    sal_detail_LogLevel level, char const * area, char const * where,
+    char const * format, std::va_list arguments)
+{
+    char buf[1024];
+    int const len = sizeof buf - RTL_CONSTASCII_LENGTH("...");
+    int n = vsnprintf(buf, len, format, arguments);
+    if (n < 0) {
+        std::strcpy(buf, "???");
+    } else if (n >= len) {
+        std::strcpy(buf + len - 1, "...");
+    }
+    log(level, area, where, buf);
+}
+
+
+
 void sal_detail_log(
     sal_detail_LogLevel level, char const * area, char const * where,
     char const * message)
@@ -259,24 +366,17 @@ void sal_detail_logFormat(
     if (report(level, area)) {
         std::va_list args;
         va_start(args, format);
-        osl::detail::logFormat(level, area, where, format, args);
+        char buf[1024];
+        int const len = sizeof buf - RTL_CONSTASCII_LENGTH("...");
+        int n = vsnprintf(buf, len, format, args);
+        if (n < 0) {
+            std::strcpy(buf, "???");
+        } else if (n >= len) {
+            std::strcpy(buf + len - 1, "...");
+        }
+        log(level, area, where, buf);
         va_end(args);
     }
-}
-
-void osl::detail::logFormat(
-    sal_detail_LogLevel level, char const * area, char const * where,
-    char const * format, std::va_list arguments)
-{
-    char buf[1024];
-    int const len = sizeof buf - RTL_CONSTASCII_LENGTH("...");
-    int n = vsnprintf(buf, len, format, arguments);
-    if (n < 0) {
-        std::strcpy(buf, "???");
-    } else if (n >= len) {
-        std::strcpy(buf + len - 1, "...");
-    }
-    log(level, area, where, buf);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
