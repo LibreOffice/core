@@ -229,9 +229,7 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
     mbAutoSelect( true ),
     mbClicked( false ),
     mbHCMode( false ),
-    mpAccess( nullptr ),
-    maChildVec( 8, static_cast< a11y::AccFrameSelector* >( nullptr ) ),
-    mxChildVec( 8 )
+    maChildVec( 8 )
 {
     maAllBorders.resize( FRAMEBORDERTYPE_COUNT, nullptr );
     maAllBorders[ GetIndexFromFrameBorderType( FrameBorderType::Left   ) ] = &maLeft;
@@ -265,10 +263,10 @@ FrameSelectorImpl::FrameSelectorImpl( FrameSelector& rFrameSel ) :
 FrameSelectorImpl::~FrameSelectorImpl()
 
 {
-    if( mpAccess )
-        mpAccess->Invalidate();
+    if( mxAccess.is() )
+        mxAccess->Invalidate();
     for( auto aIt = maChildVec.begin(), aEnd = maChildVec.end(); aIt != aEnd; ++aIt )
-        if( *aIt )
+        if( aIt->is() )
             (*aIt)->Invalidate();
 }
 
@@ -731,7 +729,7 @@ void FrameSelectorImpl::SetBorderState( FrameBorder& rBorder, FrameBorderState e
     Reference< XAccessible > xRet;
     size_t nVecIdx = static_cast< size_t >( rBorder.GetType() );
     if( GetBorder(rBorder.GetType()).IsEnabled() && (1 <= nVecIdx) && (nVecIdx <= maChildVec.size()) )
-        xRet = mxChildVec[ --nVecIdx ];
+        xRet = maChildVec[ --nVecIdx ].get();
     a11y::AccFrameSelector* pFrameSelector = static_cast<a11y::AccFrameSelector*>(xRet.get());
 
     if( eState == FrameBorderState::Show )
@@ -1007,9 +1005,9 @@ void FrameSelector::SetColorToSelection( const Color& rColor )
 Reference< XAccessible > FrameSelector::CreateAccessible()
 {
     if( !mxImpl->mxAccess.is() )
-        mxImpl->mxAccess = mxImpl->mpAccess =
+        mxImpl->mxAccess = mxImpl->mxAccess =
             new a11y::AccFrameSelector( *this, FrameBorderType::NONE );
-    return mxImpl->mxAccess;
+    return mxImpl->mxAccess.get();
 }
 
 Reference< XAccessible > FrameSelector::GetChildAccessible( FrameBorderType eBorder )
@@ -1019,10 +1017,9 @@ Reference< XAccessible > FrameSelector::GetChildAccessible( FrameBorderType eBor
     if( IsBorderEnabled( eBorder ) && (1 <= nVecIdx) && (nVecIdx <= mxImpl->maChildVec.size()) )
     {
         --nVecIdx;
-        if( !mxImpl->maChildVec[ nVecIdx ] )
-            mxImpl->mxChildVec[ nVecIdx ] = mxImpl->maChildVec[ nVecIdx ] =
-                new a11y::AccFrameSelector( *this, eBorder );
-        xRet = mxImpl->mxChildVec[ nVecIdx ];
+        if( !mxImpl->maChildVec[ nVecIdx ].is() )
+            mxImpl->maChildVec[ nVecIdx ] = new a11y::AccFrameSelector( *this, eBorder );
+        xRet = mxImpl->maChildVec[ nVecIdx ].get();
     }
     return xRet;
 }
@@ -1211,7 +1208,7 @@ void FrameSelector::GetFocus()
 
     mxImpl->DoInvalidate( false );
     if( mxImpl->mxAccess.is() )
-        mxImpl->mpAccess->NotifyFocusListeners( true );
+        mxImpl->mxAccess->NotifyFocusListeners( true );
     if (IsAnyBorderSelected())
     {
         FrameBorderType borderType = FrameBorderType::NONE;
@@ -1242,7 +1239,7 @@ void FrameSelector::LoseFocus()
 {
     mxImpl->DoInvalidate( false );
     if( mxImpl->mxAccess.is() )
-        mxImpl->mpAccess->NotifyFocusListeners( false );
+        mxImpl->mxAccess->NotifyFocusListeners( false );
     Control::LoseFocus();
 }
 

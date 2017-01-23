@@ -138,14 +138,9 @@ struct FrameSelectorImpl
     bool                mbClicked;      /// true = The control has been clicked at least one time.
     bool                mbHCMode;       /// true = High contrast mode.
 
-    a11y::AccFrameSelector* mpAccess;   /// Pointer to accessibility object of the control.
-    css::uno::Reference<css::accessibility::XAccessible>
-                        mxAccess;       /// Reference to accessibility object of the control.
-    std::vector<a11y::AccFrameSelector*>
+    rtl::Reference<a11y::AccFrameSelector> mxAccess;   /// Pointer to accessibility object of the control.
+    std::vector<rtl::Reference<a11y::AccFrameSelector>>
                         maChildVec;     /// Pointers to accessibility objects for frame borders.
-    std::vector<css::uno::Reference<css::accessibility::XAccessible> >
-                        mxChildVec;     /// References to accessibility objects for frame borders.
-
     explicit            FrameSelectorImpl( FrameSelector& rFrameSel );
                         ~FrameSelectorImpl();
 
