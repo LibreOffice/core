@@ -21,10 +21,9 @@
 #define INCLUDED_VCL_INC_SALTIMER_HXX
 
 #include <sal/config.h>
-
 #include <vcl/dllapi.h>
-
 #include <salwtype.hxx>
+#include <iostream>
 
 /*
  * note: there will be only a single instance of SalTimer
@@ -71,6 +70,15 @@ struct ImplSchedulerData
 
     const char *GetDebugName() const;
 };
+
+template< typename charT, typename traits >
+inline std::basic_ostream<charT, traits> & operator <<(
+    std::basic_ostream<charT, traits> & stream, const ImplSchedulerData& data )
+{
+    stream << " i: " << data.mbInScheduler
+           << " d: " << data.mbDelete;
+    return stream;
+}
 
 #endif // INCLUDED_VCL_INC_SALTIMER_HXX
 
