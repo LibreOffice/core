@@ -218,6 +218,7 @@ class SwPostItMgr: public SfxListener
 
         void SetLayout() { mbLayout = true; };
         void Delete(const OUString& aAuthor);
+        void Delete(sal_uInt32 nPostItId);
         void Delete();
 
         void ExecuteFormatAllDialog(SwView& rView);
