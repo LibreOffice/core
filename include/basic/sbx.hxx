@@ -55,7 +55,6 @@ struct SbxParamInfo
     sal_uInt32     nUserData;      // IDs etc.
     SbxParamInfo( const OUString& s, SbxDataType t, SbxFlagBits n )
         : aName( s ), eType( t ), nFlags( n ), nUserData( 0 ) {}
-    ~SbxParamInfo() {}
 };
 
 typedef std::vector<std::unique_ptr<SbxParamInfo>> SbxParams;

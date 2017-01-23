@@ -28,8 +28,6 @@ public:
     CppuOptions()
         : Options() {}
 
-    virtual ~CppuOptions() override {}
-
     bool initOptions(int ac, char* av[], bool bCmdFile=false)
             throw( IllegalArgument ) override;
 
