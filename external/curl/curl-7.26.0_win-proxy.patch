@@ -26,15 +26,15 @@
    return FALSE;
  }
  
-+#ifdef WIN32
-+static char* wstrToCstr(LPWSTR wStr)
++#ifdef _WIN32
++static char *wstrToCstr(LPWSTR wStr)
 +{
 +  int bufSize;
-+  char* out = NULL;
++  char *out = NULL;
 +  if(wStr != NULL) {
 +    bufSize = WideCharToMultiByte(
 +      CP_ACP,  0, wStr, -1, NULL, 0, NULL, NULL);
-+    out = (char*)malloc(bufSize * sizeof(char));
++    out = (char *)malloc(bufSize * sizeof(char));
 +    WideCharToMultiByte(CP_ACP, 0, wStr, -1, out, bufSize, NULL, NULL);
 +  }
 +  return out;
@@ -57,15 +57,15 @@
     * checked if the lowercase versions don't exist.
     */
 -  char *no_proxy=NULL;
-+#ifdef WIN32
++#ifdef _WIN32
 +  WINHTTP_CURRENT_USER_IE_PROXY_CONFIG *ieProxyConfig;
-+  ieProxyConfig = (WINHTTP_CURRENT_USER_IE_PROXY_CONFIG*)
++  ieProxyConfig = (WINHTTP_CURRENT_USER_IE_PROXY_CONFIG *)
 +    malloc(sizeof(WINHTTP_CURRENT_USER_IE_PROXY_CONFIG));
 +  if(WinHttpGetIEProxyConfigForCurrentUser(ieProxyConfig)) {
 +    if(!ieProxyConfig->fAutoDetect) {
 +      char *ieProxy;
 +      char *ieNoProxy;
-+      char* pos;
++      char *pos;
 +
 +      ieProxy = wstrToCstr(ieProxyConfig->lpszProxy);
 +      ieNoProxy = wstrToCstr(ieProxyConfig->lpszProxyBypass);
@@ -82,7 +82,7 @@
 +
 +      if(!check_noproxy(conn->host.name, no_proxy)) {
 +        /* Look for the http proxy setting */
-+        char* tok;
++        char *tok;
 +        char *saveptr;
 +
 +        if(NULL != ieProxy) {
