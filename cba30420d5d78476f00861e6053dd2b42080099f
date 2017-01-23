@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_fc59d68f",
+        "filename": "sdext/source/minimizer/optimizerdialog.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 518,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-23T09:33:46Z",
+      "side": 1,
+      "message": "this \"manual\" computation of a filename from a (file) URL looks like a good use of INetURLObject.setExtension and then INetURLObject.getName with eMechanism\u003dDecodeMechanism::WithCharset (and the eCharset\u003dRTL_TEXTENCODING_UTF8 default)",
+      "revId": "cba30420d5d78476f00861e6053dd2b42080099f",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
