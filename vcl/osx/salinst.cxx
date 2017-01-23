@@ -445,7 +445,7 @@ bool AquaSalInstance::CheckYieldMutex()
     return bRet;
 }
 
-bool AquaSalInstance::isNSAppThread() const
+bool AquaSalInstance::IsMainThread() const
 {
     return osl::Thread::getCurrentIdentifier() == maMainThread;
 }
@@ -607,7 +607,7 @@ SalYieldResult AquaSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents
     // handle cocoa event queue
     // cocoa events may be only handled in the thread the NSApp was created
     bool bHadEvent = false;
-    if( isNSAppThread() && mnActivePrintJobs == 0 )
+    if( IsMainThread() && mnActivePrintJobs == 0 )
     {
         // we need to be woken up by a cocoa-event
         // if a user event should be posted by the event handling below
@@ -742,7 +742,7 @@ bool AquaSalInstance::AnyInput( VclInputFlags nType )
         }
     }
 
-    if (![NSThread isMainThread])
+    if (!IsMainThread())
         return false;
 
     unsigned/*NSUInteger*/ nEventMask = 0;
@@ -1019,7 +1019,7 @@ OUString AquaSalInstance::getOSVersion()
 YieldMutexReleaser::YieldMutexReleaser() : mnCount( 0 )
 {
     SalData* pSalData = GetSalData();
-    if( ! pSalData->mpFirstInstance->isNSAppThread() )
+    if( ! pSalData->mpFirstInstance->IsMainThread() )
     {
         SalData::ensureThreadAutoreleasePool();
         mnCount = pSalData->mpFirstInstance->ReleaseYieldMutex();
