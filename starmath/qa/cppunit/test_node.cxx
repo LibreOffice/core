@@ -105,10 +105,10 @@ void NodeTest::testTdf52225()
     } while (false)
 
     SmFormat aFormat = mxDocShell->GetFormat();
-    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), aFormat.GetGreekCharStyle()); // default format
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), aFormat.GetGreekCharStyle()); // default format
     CHECK_GREEK_SYMBOL("%ALPHA", 0x0391, false);
     CHECK_GREEK_SYMBOL("%iALPHA", 0x0391, true);
-    CHECK_GREEK_SYMBOL("%alpha", 0x03b1, false);
+    CHECK_GREEK_SYMBOL("%alpha", 0x03b1, true);
     CHECK_GREEK_SYMBOL("%ialpha", 0x03b1, true);
 
     // mode 1
