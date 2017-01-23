@@ -220,7 +220,7 @@ class OFilterExchangeHelper : public OLocalExchangeHelper
 public:
     OFilterExchangeHelper(vcl::Window* _pDragSource) : OLocalExchangeHelper(_pDragSource) { }
 
-    OFilterItemExchange* operator->() const { return static_cast<OFilterItemExchange*>(m_pTransferable); }
+    OFilterItemExchange* operator->() const { return static_cast<OFilterItemExchange*>(m_xTransferable.get()); }
 
 protected:
     virtual OLocalExchange* createExchange() const override;
