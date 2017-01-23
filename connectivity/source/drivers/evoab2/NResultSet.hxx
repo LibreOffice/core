@@ -20,6 +20,8 @@
 #ifndef INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSET_HXX
 #define INCLUDED_CONNECTIVITY_SOURCE_DRIVERS_EVOAB2_NRESULTSET_HXX
 
+#include <memory>
+
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSetMetaDataSupplier.hpp>
@@ -80,7 +82,7 @@ namespace connectivity
                                 ,public ::comphelper::OPropertyArrayUsageHelper<OEvoabResultSet>
         {
         private:
-            OEvoabVersionHelper *m_pVersionHelper;
+            std::unique_ptr<OEvoabVersionHelper> m_pVersionHelper;
 
         protected:
 

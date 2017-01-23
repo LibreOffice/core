@@ -42,6 +42,7 @@
 #include <connectivity/dbexception.hxx>
 #include <connectivity/sqlerror.hxx>
 #include <cppuhelper/typeprovider.hxx>
+#include <o3tl/make_unique.hxx>
 #include <rtl/string.hxx>
 #include <tools/diagnose_ex.h>
 #include <unotools/syslocale.hxx>
@@ -628,11 +629,11 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
     ,m_nLength(0)
 {
     if (eds_check_version( 3, 7, 6 ) == nullptr)
-        m_pVersionHelper  = new OEvoabVersion38Helper;
+        m_pVersionHelper  = o3tl::make_unique<OEvoabVersion38Helper>();
     else if (eds_check_version( 3, 6, 0 ) == nullptr)
-        m_pVersionHelper  = new OEvoabVersion36Helper;
+        m_pVersionHelper  = o3tl::make_unique<OEvoabVersion36Helper>();
     else
-        m_pVersionHelper  = new OEvoabVersion35Helper;
+        m_pVersionHelper  = o3tl::make_unique<OEvoabVersion35Helper>();
 
     #define REGISTER_PROP( id, member ) \
         registerProperty( \
@@ -650,9 +651,7 @@ OEvoabResultSet::OEvoabResultSet( OCommonStatement* pStmt, OEvoabConnection *pCo
 }
 
 OEvoabResultSet::~OEvoabResultSet()
-{
-    delete m_pVersionHelper;
-}
+{}
 
 void OEvoabResultSet::construct( const QueryData& _rData )
 {
@@ -716,8 +715,7 @@ void OEvoabResultSet::disposing()
     ::comphelper::OPropertyContainer::disposing();
 
     ::osl::MutexGuard aGuard(m_aMutex);
-    delete m_pVersionHelper;
-    m_pVersionHelper = nullptr;
+    m_pVersionHelper.reset();
     m_pStatement = nullptr;
     m_xMetaData.clear();
 }
