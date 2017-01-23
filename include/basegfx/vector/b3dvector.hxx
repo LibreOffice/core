@@ -80,9 +80,6 @@ namespace basegfx
         :   B3DTuple(rTuple)
         {}
 
-        ~B3DVector()
-        {}
-
         /** *=operator to allow usage from B3DVector, too
         */
         B3DVector& operator*=( const B3DVector& rPnt )

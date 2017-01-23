@@ -102,7 +102,6 @@ public:
         : m_aDocument(rDocument)
     {
     }
-    ~LibUserData() {};
 
     const ScriptDocument& GetDocument() const { return m_aDocument; }
 };
