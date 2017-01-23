@@ -24,6 +24,10 @@
 
 #include "KDEXLib.hxx"
 
+#include <QtGui/QApplication>
+#include <QtCore/QThread>
+
+
 using namespace com::sun::star;
 
 KDESalInstance::KDESalInstance(SalYieldMutex* pMutex)
@@ -53,6 +57,11 @@ uno::Reference< ui::dialogs::XFilePicker2 > KDESalInstance::createFilePicker(
 int KDESalInstance::getFrameWidth()
 {
     return static_cast<KDEXLib*>( mpXLib )->getFrameWidth();
+}
+
+bool KDESalInstance::IsMainThread() const
+{
+    return qApp->thread() == QThread::currentThread();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

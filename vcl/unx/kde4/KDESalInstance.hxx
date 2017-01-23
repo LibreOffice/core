@@ -31,12 +31,15 @@ class KDESalInstance : public X11SalInstance
         virtual ~KDESalInstance() {}
         virtual SalFrame* CreateFrame( SalFrame* pParent, SalFrameStyleFlags nStyle ) override;
 
-        virtual bool hasNativeFileSelection() const override { return true; }
+    virtual bool hasNativeFileSelection() const override { return true; }
 
         virtual css::uno::Reference< css::ui::dialogs::XFilePicker2 >
             createFilePicker( const css::uno::Reference<
                                   css::uno::XComponentContext >& ) override;
         int getFrameWidth();
+
+    virtual bool IsMainThread() const override;
+
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

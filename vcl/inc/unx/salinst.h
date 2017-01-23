@@ -73,6 +73,7 @@ public:
 
     virtual SalYieldResult      DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong nReleased) override;
     virtual bool                AnyInput( VclInputFlags nType ) override;
+    virtual bool                IsMainThread() const override { return true; }
 
     virtual void*               GetConnectionIdentifier( ConnectionIdentifierType& rReturnedType, int& rReturnedBytes ) override;
     void                        SetLib( SalXLib *pXLib ) { mpXLib = pXLib; }
