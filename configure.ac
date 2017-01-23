@@ -9543,7 +9543,7 @@ if test "$with_system_hunspell" = "yes"; then
         HUNSPELL_LIBS=-lhunspell
     fi
     AC_LANG_POP([C++])
-    libo_MINGW_CHECK_DLL([libhunspell-1.5])
+    libo_MINGW_CHECK_DLL([libhunspell-1.6])
     HUNSPELL_CFLAGS=$(printf '%s' "$HUNSPELL_CFLAGS" | sed -e "s/-I/${ISYSTEM?}/g")
     FilterLibs "${HUNSPELL_LIBS}"
     HUNSPELL_LIBS="${filteredlibs}"
@@ -9554,7 +9554,7 @@ else
     if test "$COM" = "MSC"; then
         HUNSPELL_LIBS="${WORKDIR}/LinkTarget/StaticLibrary/hunspell.lib"
     else
-        HUNSPELL_LIBS="-L${WORKDIR}/UnpackedTarball/hunspell/src/hunspell/.libs -lhunspell-1.5"
+        HUNSPELL_LIBS="-L${WORKDIR}/UnpackedTarball/hunspell/src/hunspell/.libs -lhunspell-1.6"
     fi
     BUILD_TYPE="$BUILD_TYPE HUNSPELL"
 fi
