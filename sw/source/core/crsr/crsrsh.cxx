@@ -1074,6 +1074,12 @@ bool SwCursorShell::IsEndOfTable() const
     return (lastNode == m_pCurrentCursor->GetPoint()->nNode);
 }
 
+bool SwCursorShell::IsCursorInFootnote() const
+{
+    SwStartNodeType aStartNodeType = m_pCurrentCursor->GetNode().StartOfSectionNode()->GetStartNodeType();
+    return aStartNodeType == SwStartNodeType::SwFootnoteStartNode;
+}
+
 bool SwCursorShell::IsInFrontOfLabel() const
 {
     return m_pCurrentCursor->IsInFrontOfLabel();

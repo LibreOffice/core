@@ -1162,6 +1162,11 @@
           <value xml:lang="en-US">~Footnotes and Endnotes...</value>
         </prop>
       </node>
+      <node oor:name=".uno:CurrentFootnoteDialog" oor:op="replace">
+        <prop oor:name="Label" oor:type="xs:string">
+          <value xml:lang="en-US">~Footnotes and Endnotes...</value>
+        </prop>
+      </node>
       <node oor:name=".uno:ResetAttributes" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
           <value xml:lang="en-US">Clear</value>

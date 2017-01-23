@@ -768,6 +768,11 @@ interface BaseText
     [
         ExecMethod = Execute ;
     ]
+    FN_FORMAT_CURRENT_FOOTNOTE_DLG // status()
+    [
+        ExecMethod = Execute ;
+        StateMethod = GetState ;
+    ]
     FN_FOOTNOTE_TO_ANCHOR // status(final|play)
     [
         ExecMethod = ExecMoveMisc ;
