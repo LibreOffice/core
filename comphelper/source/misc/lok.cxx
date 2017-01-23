@@ -21,6 +21,8 @@ static bool g_bPartInInvalidation(false);
 
 static bool g_bTiledPainting(false);
 
+static bool g_bTiledAnnotations(true);
+
 void setActive(bool bActive)
 {
     g_bActive = bActive;
@@ -49,6 +51,16 @@ void setTiledPainting(bool bTiledPainting)
 bool isTiledPainting()
 {
     return g_bTiledPainting;
+}
+
+void setTiledAnnotations(bool bTiledAnnotations)
+{
+    g_bTiledAnnotations = bTiledAnnotations;
+}
+
+bool isTiledAnnotations()
+{
+    return g_bTiledAnnotations;
 }
 
 static bool g_bLocalRendering(false);
