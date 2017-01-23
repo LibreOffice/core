@@ -71,6 +71,9 @@ public:
             bool bDefaultStyle = false );
     ~XMLTextStyleContext() override;
 
+    XMLTextStyleContext(const XMLTextStyleContext &) = delete;
+    XMLTextStyleContext operator=(const XMLTextStyleContext &) = delete;
+
     virtual SvXMLImportContext *CreateChildContext(
             sal_uInt16 nPrefix,
             const OUString& rLocalName,
