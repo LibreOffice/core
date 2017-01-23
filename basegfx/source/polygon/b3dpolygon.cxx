@@ -87,10 +87,6 @@ public:
     {
     }
 
-    ~CoordinateDataArray3D()
-    {
-    }
-
     ::basegfx::B3DVector getNormal() const
     {
         ::basegfx::B3DVector aRetval;
@@ -285,10 +281,6 @@ public:
         }
     }
 
-    ~BColorArray()
-    {
-    }
-
     bool operator==(const BColorArray& rCandidate) const
     {
         return (maVector == rCandidate.maVector);
@@ -440,10 +432,6 @@ public:
 
             maVector.push_back(*aStart);
         }
-    }
-
-    ~NormalsArray3D()
-    {
     }
 
     bool operator==(const NormalsArray3D& rCandidate) const
@@ -607,10 +595,6 @@ public:
 
             maVector.push_back(*aStart);
         }
-    }
-
-    ~TextureCoordinate2D()
-    {
     }
 
     bool operator==(const TextureCoordinate2D& rCandidate) const
