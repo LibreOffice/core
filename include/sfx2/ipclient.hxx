@@ -59,8 +59,11 @@ public:
                         SfxInPlaceClient( SfxViewShell* pViewShell, vcl::Window* pDraw, sal_Int64 nAspect );
     virtual             ~SfxInPlaceClient();
 
+    SfxInPlaceClient(const SfxInPlaceClient &) = delete;
+    SfxInPlaceClient& operator=(const SfxInPlaceClient &) = delete;
+
     SfxViewShell*       GetViewShell() const { return m_pViewSh; }
-    vcl::Window*             GetEditWin() const { return m_pEditWin; }
+    vcl::Window*        GetEditWin() const { return m_pEditWin; }
     const css::uno::Reference < css::embed::XEmbeddedObject >& GetObject() const;
     void                SetObject( const css::uno::Reference < css::embed::XEmbeddedObject >& rObject );
     void                SetObjectState( sal_Int32 );
