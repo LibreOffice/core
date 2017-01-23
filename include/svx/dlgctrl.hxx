@@ -25,6 +25,7 @@
 #include <svx/rectenum.hxx>
 #include <vcl/graph.hxx>
 #include <svx/xtable.hxx>
+#include <rtl/ref.hxx>
 #include <o3tl/typed_flags_set.hxx>
 
 class XOBitmap;
@@ -159,6 +160,8 @@ protected:
     bool        bPaintable;
     //Add member identifying position
     Point       aFocusPosition;
+    rtl::Reference<SvxPixelCtlAccessible>  m_xAccess;
+
     Rectangle   implCalFocusRect( const Point& aPosition );
     void    ChangePixel( sal_uInt16 nPixel );
 
@@ -185,8 +188,6 @@ public:
 
     void    SetPaintable( bool bTmp ) { bPaintable = bTmp; }
     void    Reset();
-    SvxPixelCtlAccessible*  m_pAccess;
-    css::uno::Reference< css::accessibility::XAccessible >        m_xAccess;
     virtual css::uno::Reference< css::accessibility::XAccessible > CreateAccessible() override;
     long GetSquares() const { return nSquares ; }
     long GetWidth() const { return aRectSize.getWidth() ; }

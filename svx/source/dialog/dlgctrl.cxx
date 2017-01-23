@@ -743,9 +743,9 @@ css::uno::Reference< css::accessibility::XAccessible > SvxPixelCtl::CreateAccess
 {
     if(!m_xAccess.is())
     {
-        m_xAccess = m_pAccess =  new SvxPixelCtlAccessible(*this);
+        m_xAccess = new SvxPixelCtlAccessible(*this);
     }
-    return m_xAccess;
+    return m_xAccess.get();
 }
 
 //Logic Pixel
@@ -813,7 +813,6 @@ SvxPixelCtl::SvxPixelCtl(vcl::Window* pParent, sal_uInt16 nNumber)
     nSquares = nLines * nLines;
     pPixel = new sal_uInt16[ nSquares ];
     memset(pPixel, 0, nSquares * sizeof(sal_uInt16));
-    m_pAccess=nullptr;
 }
 
 void SvxPixelCtl::Resize()
@@ -865,9 +864,9 @@ void SvxPixelCtl::MouseButtonDown( const MouseEvent& rMEvt )
 
     long nIndex = ShowPosition(rMEvt.GetPosPixel());
 
-    if(m_pAccess)
+    if(m_xAccess.is())
     {
-        m_pAccess->NotifyChild(nIndex,true, true);
+        m_xAccess->NotifyChild(nIndex,true, true);
     }
 }
 
@@ -1015,11 +1014,11 @@ void SvxPixelCtl::KeyInput( const KeyEvent& rKEvt )
             case KEY_DOWN:
                 if (bFocusPosChanged)
                 {
-                    m_pAccess->NotifyChild(nIndex,false,false);
+                    m_xAccess->NotifyChild(nIndex,false,false);
                 }
                 break;
             case KEY_SPACE:
-                m_pAccess->NotifyChild(nIndex,false,true);
+                m_xAccess->NotifyChild(nIndex,false,true);
                 break;
             default:
                 break;
@@ -1037,9 +1036,9 @@ void SvxPixelCtl::GetFocus()
 {
     Invalidate(implCalFocusRect(aFocusPosition));
 
-    if(m_pAccess)
+    if(m_xAccess.is())
     {
-        m_pAccess->NotifyChild(GetFocusPosIndex(),true,false);
+        m_xAccess->NotifyChild(GetFocusPosIndex(),true,false);
     }
 
     Control::GetFocus();
@@ -1049,9 +1048,9 @@ void SvxPixelCtl::GetFocus()
 void SvxPixelCtl::LoseFocus()
 {
     HideFocus();
-    if (m_pAccess)
+    if (m_xAccess.is())
     {
-        m_pAccess->LoseFocus();
+        m_xAccess->LoseFocus();
     }
     Control::LoseFocus();
 }
