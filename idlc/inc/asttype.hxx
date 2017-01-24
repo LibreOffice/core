@@ -28,8 +28,6 @@ public:
         : AstDeclaration(type, name, pScope)
         {}
 
-    virtual ~AstType() override {}
-
     virtual bool isUnsigned() const { return false; }
 };
 

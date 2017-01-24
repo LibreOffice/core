@@ -34,7 +34,6 @@ public:
         : AstDeclaration(type, name, pScope)
         , AstScope(type)
     {}
-    virtual ~AstModule() override {}
 
     virtual bool dump(RegistryKey& rKey) override;
 };

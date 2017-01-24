@@ -62,8 +62,6 @@ struct ImageListItemDescriptor
 {
     ImageListItemDescriptor() : nMaskMode( ImageMaskMode_Color ) {}
 
-    ~ImageListItemDescriptor() {}
-
     OUString                    aURL;               // an URL to a bitmap with several images inside
     Color                       aMaskColor;         // a color used as transparent
     OUString                    aMaskURL;           // an URL to an optional bitmap used as a mask

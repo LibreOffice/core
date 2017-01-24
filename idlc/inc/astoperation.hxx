@@ -35,7 +35,6 @@ public:
         , AstScope(NT_operation)
         , m_pReturnType(pReturnType)
         {}
-    virtual ~AstOperation() override {}
 
     bool isVariadic() const;
 

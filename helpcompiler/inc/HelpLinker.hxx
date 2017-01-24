@@ -60,9 +60,6 @@ public:
         , m_bUseLangRoot(true)
         , m_bCreateIndex(true)
     {}
-    ~HelpLinker()
-    {
-    }
 
 private:
     Stringtable additionalFiles;
