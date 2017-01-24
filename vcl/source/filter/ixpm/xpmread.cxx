@@ -527,31 +527,26 @@ sal_uLong XPMReader::ImplGetULONG( sal_uLong nPara )
 
 bool XPMReader::ImplCompare( sal_uInt8 const * pSource, sal_uInt8 const * pDest, sal_uLong nSize, sal_uLong nMode )
 {
-    bool bRet = true;
-
     if ( nMode == XPMCASENONSENSITIVE )
     {
         for ( sal_uLong i = 0; i < nSize; i++ )
         {
             if ( ( pSource[i]&~0x20 ) != ( pDest[i]&~0x20 ) )
             {
-                bRet = false;
-                break;
+                return false;
             }
         }
+        return true;
     }
-    else
+
+    for ( sal_uLong i = 0; i < nSize; i++ )
     {
-        for ( sal_uLong i = 0; i < nSize; i++ )
+        if ( pSource[i] != pDest[i] )
         {
-            if ( pSource[i] != pDest[i] )
-            {
-                bRet = false;
-                break;
-            }
+            return false;
         }
     }
-    return bRet;
+    return true;
 }
 
 // ImplGetPara tries to retrieve nNumb (0...x) parameters from mpStringBuf.
