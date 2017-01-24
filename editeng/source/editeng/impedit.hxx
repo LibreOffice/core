@@ -513,7 +513,6 @@ private:
     bool            bIsInUndo:1;
     bool            bUpdate:1;
     bool            bUndoEnabled:1;
-    bool            bOwnerOfRefDev:1;
     bool            bDowning:1;
     bool            bUseAutoColor:1;
     bool            bForceAutoColor:1;
