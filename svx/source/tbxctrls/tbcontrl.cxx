@@ -1311,7 +1311,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
         }
     }
 
-    OUString aWindowTitle = vcl::CommandInfoProvider::Instance().GetLabelForCommand( rCommand, rFrame );
+    OUString aWindowTitle = vcl::CommandInfoProvider::GetLabelForCommand( rCommand, rFrame );
     SetText( aWindowTitle );
     mpColorSet->SetAccessibleName( aWindowTitle );
 

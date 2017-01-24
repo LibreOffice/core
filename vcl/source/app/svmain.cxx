@@ -528,7 +528,6 @@ void DeInitVCL()
 
     if (pSVData->mpCommandInfoProvider)
     {
-        pSVData->mpCommandInfoProvider->dispose();
         pSVData->mpCommandInfoProvider = nullptr;
     }
 
