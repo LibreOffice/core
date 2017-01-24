@@ -687,16 +687,15 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
                     }
                 }
 
-                std::unique_ptr< SdrView > pLocalView;
-                if( dynamic_cast<FmFormModel*>( mpDoc )  )
+                std::unique_ptr<SdrView> xLocalView;
+                if (FmFormModel* pFormModel = dynamic_cast<FmFormModel*>(mpDoc))
                 {
-                    pLocalView.reset( new FmFormView( dynamic_cast<FmFormModel*>( mpDoc ), aVDev )  );
+                    xLocalView.reset(new FmFormView(pFormModel, aVDev) );
                 }
                 else
                 {
-                    pLocalView.reset( new SdrView( mpDoc, aVDev ) );
+                    xLocalView.reset(new SdrView(mpDoc, aVDev));
                 }
-
 
                 ScopedVclPtr<VirtualDevice> pVDev(CreatePageVDev( pPage, nWidthPix, nHeightPix ));
 
