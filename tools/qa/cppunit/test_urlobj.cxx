@@ -357,6 +357,16 @@ namespace tools_urlobj
                 !INetURLObject("vnd.sun.star.pkg://example.org").isAnyKnownWebDAVScheme());
         }
 
+        void testSetExtension() {
+            INetURLObject obj("file:///foo/bar.baz/");
+            bool ok = obj.setExtension(
+                "other", INetURLObject::LAST_SEGMENT, false);
+            CPPUNIT_ASSERT(ok);
+            CPPUNIT_ASSERT_EQUAL(
+                OUString("file:///foo/bar.baz/.other"),
+                obj.GetMainURL(INetURLObject::DecodeMechanism::NONE));
+        }
+
         // Change the following lines only, if you add, remove or rename
         // member functions of the current class,
         // because these macros are need by auto register mechanism.
@@ -373,6 +383,7 @@ namespace tools_urlobj
         CPPUNIT_TEST( urlobjTest_data );
         CPPUNIT_TEST( urlobjTest_isSchemeEqualTo );
         CPPUNIT_TEST( urlobjTest_isAnyKnownWebDAVScheme );
+        CPPUNIT_TEST( testSetExtension );
         CPPUNIT_TEST_SUITE_END(  );
     };                          // class createPool
 
