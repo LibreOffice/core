@@ -76,7 +76,6 @@ private:
 
 public:
     PageEntry();
-    ~PageEntry();
 
     OUString getTempURL() { return maTempFile.getFileURL(); }
 
@@ -95,10 +94,6 @@ public:
 
 PageEntry::PageEntry()
 : maTempFile( PlaceWareTempFile::createTempFileURL() )
-{
-}
-
-PageEntry::~PageEntry()
 {
 }
 

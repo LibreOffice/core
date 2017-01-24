@@ -41,9 +41,6 @@ public:
         , pMtf( nullptr )
         , nAdvFlags( 0x2 )  // in Dokument gefunden
     {}
-    ~Impl_OlePres()
-    {
-    }
     void    SetMtf( const GDIMetaFile & rMtf )
             {
                 pMtf.reset( new GDIMetaFile( rMtf ) );

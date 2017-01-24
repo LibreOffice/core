@@ -109,7 +109,6 @@ namespace accessibility
 
         // receive pointer to our frontend class and view window
         AccessibleStaticTextBase_Impl();
-        ~AccessibleStaticTextBase_Impl();
 
         void SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource );
 
@@ -188,10 +187,6 @@ namespace accessibility
 
         // TODO: this is still somewhat of a hack, all the more since
         // now the maTextParagraph has an empty parent reference set
-    }
-
-    AccessibleStaticTextBase_Impl::~AccessibleStaticTextBase_Impl()
-    {
     }
 
     void AccessibleStaticTextBase_Impl::SetEditSource( ::std::unique_ptr< SvxEditSource > && pEditSource )

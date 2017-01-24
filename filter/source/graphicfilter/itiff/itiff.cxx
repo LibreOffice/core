@@ -170,10 +170,6 @@ public:
         pMap[ 0 ] = pMap[ 1 ] = pMap[ 2 ] = pMap[ 3 ] = nullptr;
     }
 
-    ~TIFFReader()
-    {
-    }
-
     sal_uLong GetRowsPerStrip() const
     {
         //Rows Per Strip:
