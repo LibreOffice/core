@@ -369,16 +369,12 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosXHdl, Edit&, void )
     if ( mpMtrPosX->IsValueModified())
     {
         long lX = GetCoreValue( *mpMtrPosX, mePoolUnit );
-        long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
         lX += maAnchorPos.X();
         lX = Fraction( lX ) * aUIScale;
-        lY += maAnchorPos.Y();
-        lY = Fraction( lY ) * aUIScale;
 
         SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
-        SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
 
         GetBindings()->GetDispatcher()->ExecuteList(
             SID_ATTR_TRANSFORM, SfxCallMode::RECORD, { &aPosXItem });
@@ -390,16 +386,12 @@ IMPL_LINK_NOARG( PosSizePropertyPanel, ChangePosYHdl, Edit&, void )
 {
     if ( mpMtrPosY->IsValueModified() )
     {
-        long lX = GetCoreValue( *mpMtrPosX, mePoolUnit );
         long lY = GetCoreValue( *mpMtrPosY, mePoolUnit );
 
         Fraction aUIScale = mpView->GetModel()->GetUIScale();
-        lX += maAnchorPos.X();
-        lX = Fraction( lX ) * aUIScale;
         lY += maAnchorPos.Y();
         lY = Fraction( lY ) * aUIScale;
 
-        SfxInt32Item aPosXItem( SID_ATTR_TRANSFORM_POS_X,(sal_uInt32) lX);
         SfxInt32Item aPosYItem( SID_ATTR_TRANSFORM_POS_Y,(sal_uInt32) lY);
 
         GetBindings()->GetDispatcher()->ExecuteList(

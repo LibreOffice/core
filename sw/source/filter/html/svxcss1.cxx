@@ -937,7 +937,6 @@ void SvxCSS1Parser::MergeStyles( const SfxItemSet& rSrcSet,
     {
         SvxLRSpaceItem aLRSpace( static_cast<const SvxLRSpaceItem&>(rTargetSet.Get(aItemIds.nLRSpace)) );
         SvxULSpaceItem aULSpace( static_cast<const SvxULSpaceItem&>(rTargetSet.Get(aItemIds.nULSpace)) );
-        SvxBoxItem aBox( static_cast<const SvxBoxItem&>(rTargetSet.Get(aItemIds.nBox)) );
 
         rTargetSet.Put( rSrcSet );
 

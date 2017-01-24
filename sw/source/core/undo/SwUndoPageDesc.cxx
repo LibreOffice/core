@@ -148,17 +148,20 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
             SwFrameFormat* pFormat = new SwFrameFormat( *rNewHead.GetHeaderFormat() );
             // The Ctor of this object will remove the duplicate!
             SwFormatHeader aFormatHeader(pFormat);
+            (void)aFormatHeader;
             if (!rNewDesc.IsHeaderShared())
             {
                 pFormat = new SwFrameFormat( *rNewDesc.GetLeft().GetHeader().GetHeaderFormat() );
                 // The Ctor of this object will remove the duplicate!
                 SwFormatHeader aLeftHeader(pFormat);
+                (void)aLeftHeader;
             }
             if (!rNewDesc.IsFirstShared())
             {
                 pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetHeader().GetHeaderFormat() );
                 // The Ctor of this object will remove the duplicate!
                 SwFormatHeader aFirstHeader(pFormat);
+                (void)aFirstHeader;
             }
         }
         // Same procedure for footers...
@@ -167,17 +170,20 @@ SwUndoPageDesc::SwUndoPageDesc(const SwPageDesc & _aOld,
             SwFrameFormat* pFormat = new SwFrameFormat( *rNewFoot.GetFooterFormat() );
             // The Ctor of this object will remove the duplicate!
             SwFormatFooter aFormatFooter(pFormat);
+            (void)aFormatFooter;
             if (!rNewDesc.IsFooterShared())
             {
                 pFormat = new SwFrameFormat( *rNewDesc.GetLeft().GetFooter().GetFooterFormat() );
                 // The Ctor of this object will remove the duplicate!
                 SwFormatFooter aLeftFooter(pFormat);
+                (void)aLeftFooter;
             }
             if (!rNewDesc.IsFirstShared())
             {
                 pFormat = new SwFrameFormat( *rNewDesc.GetFirstMaster().GetFooter().GetFooterFormat() );
                 // The Ctor of this object will remove the duplicate!
                 SwFormatFooter aFirstFooter(pFormat);
+                (void)aFirstFooter;
             }
         }
 

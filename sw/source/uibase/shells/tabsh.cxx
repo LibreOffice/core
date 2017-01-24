@@ -224,7 +224,6 @@ static SwTableRep*  lcl_TableParamToItemSet( SfxItemSet& rSet, SwWrtShell &rSh )
 
     SwTabCols aTabCols;
     rSh.GetTabCols( aTabCols );
-    SvxColumnItem aColItem;
 
     // Pointer will be deleted after the dialogue execution.
     SwTableRep* pRep = new SwTableRep( aTabCols );

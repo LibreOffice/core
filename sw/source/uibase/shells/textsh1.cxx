@@ -466,9 +466,6 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 rWrtSh.Left( CRSR_SKIP_CHARS, true, 1, false );
                 SfxItemSet aSet( rWrtSh.GetAttrPool(), RES_CHRATR_FONT, RES_CHRATR_FONT );
                 rWrtSh.GetCurAttr( aSet );
-                const SvxFontItem &rFont = static_cast<const SvxFontItem &>( aSet.Get( RES_CHRATR_FONT ));
-                SvxFontItem aFont( rFont.GetFamily(), pFont->GetValue(),
-                                    rFont.GetStyleName(), rFont.GetPitch(), RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT );
                 rWrtSh.SetAttrSet( aSet, SetAttrMode::DONTEXPAND );
                 rWrtSh.ResetSelect(nullptr, false);
                 rWrtSh.EndSelect();

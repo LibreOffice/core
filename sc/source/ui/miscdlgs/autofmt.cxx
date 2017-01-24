@@ -254,7 +254,6 @@ void ScAutoFmtPreview::DrawString(vcl::RenderContext& rRenderContext, size_t nCo
         Point aPos = cellRect.TopLeft();
         sal_uInt16 nRightX = 0;
         bool bJustify = pCurData->GetIncludeJustify();
-        SvxHorJustifyItem aHorJustifyItem( SVX_HOR_JUSTIFY_STANDARD, ATTR_HOR_JUSTIFY );
         SvxCellHorJustify eJustification;
 
         SvtScriptedTextHelper aScriptedText(rRenderContext);

@@ -841,7 +841,6 @@ IMPL_LINK(SwMMResultPrintDialog, PrintHdl_Impl, Button*, pButton, void)
 
     SfxObjectShell* pObjSh = pTargetView->GetViewFrame()->GetObjectShell();
     SfxGetpApp()->NotifyEvent(SfxEventHint(SfxEventHintId::SwMailMerge, SwDocShell::GetEventName(STR_SW_EVENT_MAIL_MERGE), pObjSh));
-    SfxBoolItem aMergeSilent(SID_SILENT, false);
 
     uno::Sequence < beans::PropertyValue > aProps( 2 );
     aProps[0]. Name = "MonitorVisible";
@@ -1045,7 +1044,6 @@ IMPL_LINK(SwMMResultEmailDialog, SendDocumentsHdl_Impl, Button*, pButton, void)
         else
             return; // back to the dialog
     }
-    SfxStringItem aFilterName( SID_FILTER_NAME, pSfxFlt->GetFilterName() );
     OUString sEMailColumn = m_pMailToLB->GetSelectEntry();
     OSL_ENSURE( !sEMailColumn.isEmpty(), "No email column selected");
     Reference< sdbcx::XColumnsSupplier > xColsSupp( xConfigItem->GetResultSet(), UNO_QUERY);

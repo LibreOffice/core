@@ -629,8 +629,6 @@ bool SwDoc::SetFrameFormatToFly( SwFrameFormat& rFormat, SwFrameFormat& rNewForm
     bool bChgAnchor = false, bFrameSz = false;
 
     const SwFormatFrameSize aFrameSz( rFormat.GetFrameSize() );
-    const SwFormatVertOrient aVert( rFormat.GetVertOrient() );
-    const SwFormatHoriOrient aHori( rFormat.GetHoriOrient() );
 
     SwUndoSetFlyFormat* pUndo = nullptr;
     bool const bUndo = GetIDocumentUndoRedo().DoesUndo();

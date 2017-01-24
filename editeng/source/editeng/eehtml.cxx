@@ -598,10 +598,10 @@ void EditHTMLParser::ImpSetStyleSheet( sal_uInt16 nHLevel )
         aItems.Put( aWeightItem );
 
         SvxWeightItem aWeightItemCJK( WEIGHT_BOLD, EE_CHAR_WEIGHT_CJK );
-        aItems.Put( aWeightItem );
+        aItems.Put( aWeightItemCJK );
 
         SvxWeightItem aWeightItemCTL( WEIGHT_BOLD, EE_CHAR_WEIGHT_CTL );
-        aItems.Put( aWeightItem );
+        aItems.Put( aWeightItemCTL );
     }
 
     // Font hight and margins, when LogicToLogic is possible:

@@ -1260,7 +1260,6 @@ ScVbaApplication::setDisplayFormulaBar( sal_Bool _displayformulabar )
     ScTabViewShell* pViewShell = excel::getCurrentBestViewShell( mxContext );
     if ( pViewShell && ( _displayformulabar !=  getDisplayFormulaBar() ) )
     {
-        SfxBoolItem sfxFormBar( FID_TOGGLEINPUTLINE, _displayformulabar);
         SfxAllItemSet reqList(  SfxGetpApp()->GetPool() );
         SfxRequest aReq( FID_TOGGLEINPUTLINE, SfxCallMode::SLOT, reqList );
         pViewShell->Execute( aReq );

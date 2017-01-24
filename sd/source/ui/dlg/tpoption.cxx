@@ -158,9 +158,6 @@ bool SdTpOptionsContents::FillItemSet( SfxItemSet* rAttrs )
 
 void SdTpOptionsContents::Reset( const SfxItemSet* rAttrs )
 {
-    SdOptionsContentsItem aOptsItem( static_cast<const SdOptionsContentsItem&>( rAttrs->
-                        Get( ATTR_OPTIONS_CONTENTS ) ) );
-
     SdOptionsLayoutItem aLayoutItem( static_cast<const SdOptionsLayoutItem&>( rAttrs->
                         Get( ATTR_OPTIONS_LAYOUT ) ) );
 

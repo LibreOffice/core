@@ -49,7 +49,7 @@ void UnusedVariableCheck::run()
     TraverseDecl( compiler.getASTContext().getTranslationUnitDecl());
     }
 
-bool BaseCheckNotDialogSubclass(
+bool BaseCheckNotSomethingInterestingSubclass(
     const CXXRecordDecl *BaseDefinition
 #if CLANG_VERSION < 30800
     , void *
@@ -59,13 +59,18 @@ bool BaseCheckNotDialogSubclass(
     if (BaseDefinition && BaseDefinition->getQualifiedNameAsString().compare("Dialog") == 0) {
         return false;
     }
+    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString().compare("SfxPoolItem") == 0) {
+        return false;
+    }
     return true;
 }
 
-bool isDerivedFromDialog(const CXXRecordDecl *decl) {
+bool isDerivedFromSomethingInteresting(const CXXRecordDecl *decl) {
     if (!decl)
         return false;
     if (decl->getQualifiedNameAsString() == "Dialog")
+        return true;
+    if (decl->getQualifiedNameAsString() == "SfxPoolItem")
         return true;
     if (!decl->hasDefinition()) {
         return false;
@@ -73,7 +78,7 @@ bool isDerivedFromDialog(const CXXRecordDecl *decl) {
     if (// not sure what hasAnyDependentBases() does,
         // but it avoids classes we don't want, e.g. WeakAggComponentImplHelper1
         !decl->hasAnyDependentBases() &&
-        !compat::forallBases(*decl, BaseCheckNotDialogSubclass, nullptr, true)) {
+        !compat::forallBases(*decl, BaseCheckNotSomethingInterestingSubclass, nullptr, true)) {
         return true;
     }
     return false;
@@ -114,8 +119,7 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
                 || n == "std::list" || n == "std::__debug::list"
                 || n == "std::vector" || n == "std::__debug::vector" )
                 warn_unused = true;
-            // check if this field is derived from Dialog
-            if (!warn_unused && isDerivedFromDialog(type))
+            if (!warn_unused && isDerivedFromSomethingInteresting(type))
                   warn_unused = true;
             }
         if( warn_unused )
