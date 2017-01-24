@@ -1889,7 +1889,6 @@ SwChartDataSequence::SwChartDataSequence(
     m_aRowLabelText( SW_RES( STR_CHART2_ROW_LABEL_TEXT ) ),
     m_aColLabelText( SW_RES( STR_CHART2_COL_LABEL_TEXT ) ),
     m_xDataProvider( &rProvider ),
-    m_pDataProvider( &rProvider ),
     m_pTableCursor( pTableCursor ),
     m_pPropSet( aSwMapProvider.GetPropertySet( PROPERTY_MAP_CHART2_DATA_SEQUENCE ) )
 {
@@ -1902,8 +1901,8 @@ SwChartDataSequence::SwChartDataSequence(
         if (pTable)
         {
             uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
-            m_pDataProvider->AddDataSequence( *pTable, xRef );
-            m_pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
+            m_xDataProvider->AddDataSequence( *pTable, xRef );
+            m_xDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
         else {
             OSL_FAIL( "table missing" );
@@ -1936,8 +1935,7 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
     m_aRole( rObj.m_aRole ),
     m_aRowLabelText( SW_RES(STR_CHART2_ROW_LABEL_TEXT) ),
     m_aColLabelText( SW_RES(STR_CHART2_COL_LABEL_TEXT) ),
-    m_xDataProvider( rObj.m_pDataProvider ),
-    m_pDataProvider( rObj.m_pDataProvider ),
+    m_xDataProvider( rObj.m_xDataProvider ),
     m_pTableCursor( rObj.m_pTableCursor ),
     m_pPropSet( rObj.m_pPropSet )
 {
@@ -1950,8 +1948,8 @@ SwChartDataSequence::SwChartDataSequence( const SwChartDataSequence &rObj ) :
         if (pTable)
         {
             uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
-            m_pDataProvider->AddDataSequence( *pTable, xRef );
-            m_pDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
+            m_xDataProvider->AddDataSequence( *pTable, xRef );
+            m_xDataProvider->addEventListener( dynamic_cast< lang::XEventListener * >(this) );
         }
         else {
             OSL_FAIL( "table missing" );
@@ -2358,9 +2356,8 @@ void SAL_CALL SwChartDataSequence::disposing( const lang::EventObject& rSource )
 {
     if (m_bDisposed)
         throw lang::DisposedException();
-    if (rSource.Source == m_xDataProvider)
+    if (rSource.Source == static_cast<cppu::OWeakObject*>(m_xDataProvider.get()))
     {
-        m_pDataProvider = nullptr;
         m_xDataProvider.clear();
     }
 }
@@ -2378,13 +2375,13 @@ void SAL_CALL SwChartDataSequence::dispose(  )
     if (bMustDispose)
     {
         m_bDisposed = true;
-        if (m_pDataProvider)
+        if (m_xDataProvider.is())
         {
             const SwTable* pTable = SwTable::FindTable( GetFrameFormat() );
             if (pTable)
             {
                 uno::Reference< chart2::data::XDataSequence > xRef( dynamic_cast< chart2::data::XDataSequence * >(this), uno::UNO_QUERY );
-                m_pDataProvider->RemoveDataSequence( *pTable, xRef );
+                m_xDataProvider->RemoveDataSequence( *pTable, xRef );
             }
             else {
                 OSL_FAIL( "table missing" );

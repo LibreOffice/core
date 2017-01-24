@@ -46,6 +46,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weakref.hxx>
 
+#include <rtl/ref.hxx>
 #include <tools/link.hxx>
 #include <vcl/timer.hxx>
 
@@ -250,15 +251,12 @@ class SwChartDataSequence :
 {
     ::comphelper::OInterfaceContainerHelper2          m_aEvtListeners;
     ::comphelper::OInterfaceContainerHelper2          m_aModifyListeners;
-    css::chart2::data::DataSequenceRole        m_aRole;
+    css::chart2::data::DataSequenceRole               m_aRole;
 
     OUString  m_aRowLabelText;
     OUString  m_aColLabelText;
 
-    // holds a reference to the data-provider to guarantee its lifetime last as
-    // long as the pointer may be used.
-    css::uno::Reference< css::chart2::data::XDataProvider >    m_xDataProvider;
-    SwChartDataProvider *                   m_pDataProvider;
+    rtl::Reference<SwChartDataProvider>                m_xDataProvider;
 
     sw::UnoCursorPointer m_pTableCursor;   // cursor spanned over cells to use
 
