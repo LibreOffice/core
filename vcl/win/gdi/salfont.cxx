@@ -22,6 +22,7 @@
 
 #include <algorithm>
 #include <map>
+#include <memory>
 #include <set>
 #include <string.h>
 #include <svsys.h>
@@ -74,19 +75,17 @@ class RawFontData
 {
 public:
     explicit    RawFontData( HDC, DWORD nTableTag=0 );
-                ~RawFontData() { delete[] mpRawBytes; }
-    const unsigned char*    get() const { return mpRawBytes; }
-    const unsigned char*    steal() { unsigned char* p = mpRawBytes; mpRawBytes = nullptr; return p; }
+    const unsigned char*    get() const { return mpRawBytes.get(); }
+    const unsigned char*    steal() { return mpRawBytes.release(); }
     int               size() const { return mnByteCount; }
 
 private:
-    unsigned char*  mpRawBytes;
+    std::unique_ptr<unsigned char[]> mpRawBytes;
     unsigned        mnByteCount;
 };
 
 RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
-:   mpRawBytes( nullptr )
-,   mnByteCount( 0 )
+:   mnByteCount( 0 )
 {
     // get required size in bytes
     mnByteCount = ::GetFontData( hDC, nTableTag, 0, nullptr, 0 );
@@ -96,7 +95,7 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
         return;
 
     // allocate the array
-    mpRawBytes = new unsigned char[ mnByteCount ];
+    mpRawBytes.reset(new unsigned char[ mnByteCount ]);
 
     // get raw data in chunks small enough for GetFontData()
     unsigned nRawDataOfs = 0;
@@ -111,7 +110,7 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
         if( nFDGet > nMaxChunkSize )
             nFDGet = nMaxChunkSize;
         const DWORD nFDGot = ::GetFontData( hDC, nTableTag, nRawDataOfs,
-            mpRawBytes + nRawDataOfs, nFDGet );
+            mpRawBytes.get() + nRawDataOfs, nFDGet );
         if( !nFDGot )
             break;
         else if( nFDGot != GDI_ERROR )
@@ -128,8 +127,7 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
     // cleanup if the raw data is incomplete
     if( nRawDataOfs != mnByteCount )
     {
-        delete[] mpRawBytes;
-        mpRawBytes = nullptr;
+        mpRawBytes.reset();
     }
 }
 
