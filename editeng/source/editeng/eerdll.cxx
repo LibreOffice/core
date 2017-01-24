@@ -70,6 +70,7 @@
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/justifyitem.hxx>
 #include <rtl/instance.hxx>
+#include <tools/mapunit.hxx>
 
 using namespace ::com::sun::star;
 
@@ -83,9 +84,11 @@ EditDLL& EditDLL::Get()
     return theEditDLL::get();
 }
 
-GlobalEditData::GlobalEditData()
+GlobalEditData::GlobalEditData() :
+    ppDefItems(nullptr),
+    mpVirDev(VclPtr<VirtualDevice>::Create())
 {
-    ppDefItems = nullptr;
+    mpVirDev->SetMapMode(MapUnit::MapTwip);
 }
 
 GlobalEditData::~GlobalEditData()
@@ -191,6 +194,11 @@ uno::Reference< linguistic2::XLanguageGuessing > GlobalEditData::GetLanguageGues
         xLanguageGuesser = linguistic2::LanguageGuessing::create( comphelper::getProcessComponentContext() );
     }
     return xLanguageGuesser;
+}
+
+VclPtr<VirtualDevice> GlobalEditData::GetStdVirtualDevice()
+{
+    return mpVirDev;
 }
 
 EditResId::EditResId(sal_uInt16 nId)
