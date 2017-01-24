@@ -24,7 +24,24 @@
 #include <rtfreferenceproperties.hxx>
 #include <rtfskipdestination.hxx>
 
+#include "officecfg/Setup.hxx"
+#include "officecfg/Office/Linguistic.hxx"
+#include "unotools/wincodepage.hxx"
+
 using namespace com::sun::star;
+
+namespace
+{
+
+OUString getLODefaultLanguage()
+{
+    OUString result(::officecfg::Office::Linguistic::General::DefaultLocale::get());
+    if (result.isEmpty())
+        result = ::officecfg::Setup::L10N::ooSetupSystemLocale::get();
+    return result;
+}
+
+}
 
 namespace writerfilter
 {
@@ -375,14 +392,22 @@ RTFError RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
     break;
     case RTF_ANSICPG:
     {
-        m_aDefaultState.nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
-        m_aStates.top().nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
+        rtl_TextEncoding nEncoding = (nParam == 0) ?
+            utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr()) :
+            rtl_getTextEncodingFromWindowsCodePage(nParam);
+        m_aDefaultState.nCurrentEncoding = nEncoding;
+        m_aStates.top().nCurrentEncoding = nEncoding;
     }
     break;
     case RTF_CPG:
-        m_nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nParam);
+    {
+        rtl_TextEncoding nEncoding = (nParam == 0) ?
+            utl_getWinTextEncodingFromLangStr(getLODefaultLanguage().toUtf8().getStr()) :
+            rtl_getTextEncodingFromWindowsCodePage(nParam);
+        m_nCurrentEncoding = rtl_getTextEncodingFromWindowsCodePage(nEncoding);
         m_aStates.top().nCurrentEncoding = m_nCurrentEncoding;
-        break;
+    }
+    break;
     case RTF_CF:
     {
         RTFSprms aAttributes;
