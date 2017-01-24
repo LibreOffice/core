@@ -158,7 +158,7 @@ void SmGraphicWindow::MouseButtonDown(const MouseEvent& rMEvt)
     SAL_WARN_IF( rMEvt.GetClicks() == 0, "starmath", "0 clicks" );
     if ( rMEvt.IsLeft() )
     {
-        // get click position relativ to formula
+        // get click position relative to formula
         Point  aPos (PixelToLogic(rMEvt.GetPosPixel())
                      - GetFormulaDrawPos());
 

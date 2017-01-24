@@ -371,7 +371,7 @@ public:
 
     /** creates a new key or opens a key if the specified key already exists.
 
-        The specified keyname is relativ to this key.
+        The specified keyname is relative to this key.
         @param  keyName specifies the name of the key which will be opened or created.
         @param  rNewKey references a RegistryKey which will be filled with the new or open key.
         @return RegError::NO_ERROR if succeeds else an error code.
@@ -381,7 +381,7 @@ public:
 
     /** opens the specified key.
 
-        The specified keyname is relativ to this key.
+        The specified keyname is relative to this key.
         @param  keyName specifies the name of the key which will be opened.
         @param  rOpenKey references a RegistryKey which will be filled with the open key.
         @return RegError::NO_ERROR if succeeds else an error code.
@@ -391,7 +391,7 @@ public:
 
     /** opens all subkeys of the specified key.
 
-        The specified keyname is relativ to this key.
+        The specified keyname is relative to this key.
         @param  keyName specifies the name of the key which subkeys will be opened.
         @param  rSubKeys reference a RegistryKeyArray which will be filled with the open subkeys.
         @return RegError::NO_ERROR if succeeds else an error code.
@@ -401,7 +401,7 @@ public:
 
     /** returns an array with the names of all subkeys of the specified key.
 
-        The specified keyname is relativ to this key.
+        The specified keyname is relative to this key.
         @param  keyName specifies the name of the key which subkey names will be returned.
         @param  rSubKeyNames reference a RegistryKeyNames array which will be filled with the subkey names.
         @return RegError::NO_ERROR if succeeds else an error code.

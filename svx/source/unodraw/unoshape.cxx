@@ -1122,7 +1122,7 @@ awt::Point SAL_CALL SvxShape::getPosition() throw(uno::RuntimeException, std::ex
         Rectangle aRect( svx_getLogicRectHack(mpObj.get()) );
         Point aPt( aRect.Left(), aRect.Top() );
 
-        // Position is relativ to anchor, so recalc to absolute position
+        // Position is relative to anchor, so recalc to absolute position
         if( mpModel->IsWriter() )
             aPt -= mpObj->GetAnchorPos();
 
@@ -1150,7 +1150,7 @@ void SAL_CALL SvxShape::setPosition( const awt::Point& Position ) throw(uno::Run
             Point aLocalPos( Position.X, Position.Y );
             ForceMetricToItemPoolMetric(aLocalPos);
 
-            // Position is absolute, so recalc to position relativ to anchor
+            // Position is absolute, so recalc to position relative to anchor
             if( mpModel->IsWriter() )
                 aLocalPos += mpObj->GetAnchorPos();
 

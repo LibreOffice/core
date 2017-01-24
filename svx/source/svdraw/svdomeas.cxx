@@ -390,11 +390,11 @@ void SdrMeasureObj::ImpCalcGeometrics(const ImpMeasureRec& rRec, ImpMeasurePoly&
 
     nArrow1Wdt = static_cast<const XLineStartWidthItem&>(rSet.Get(XATTR_LINESTARTWIDTH)).GetValue();
     if(nArrow1Wdt < 0)
-        nArrow1Wdt = -nLineWdt * nArrow1Wdt / 100; // <0 = relativ
+        nArrow1Wdt = -nLineWdt * nArrow1Wdt / 100; // <0 = relative
 
     nArrow2Wdt = static_cast<const XLineEndWidthItem&>(rSet.Get(XATTR_LINEENDWIDTH)).GetValue();
     if(nArrow2Wdt < 0)
-        nArrow2Wdt = -nLineWdt * nArrow2Wdt / 100; // <0 = relativ
+        nArrow2Wdt = -nLineWdt * nArrow2Wdt / 100; // <0 = relative
 
     basegfx::B2DPolyPolygon aPol1(static_cast<const XLineStartItem&>(rSet.Get(XATTR_LINESTART)).GetLineStartValue());
     basegfx::B2DPolyPolygon aPol2(static_cast<const XLineEndItem&>(rSet.Get(XATTR_LINEEND)).GetLineEndValue());

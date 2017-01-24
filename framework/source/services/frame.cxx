@@ -3134,7 +3134,7 @@ void Frame::implts_resizeComponentWindow()
         {
             css::uno::Reference< css::awt::XDevice > xDevice( getContainerWindow(), css::uno::UNO_QUERY );
 
-            // Convert relativ size to output size.
+            // Convert relative size to output size.
             css::awt::Rectangle  aRectangle  = getContainerWindow()->getPosSize();
             css::awt::DeviceInfo aInfo = xDevice->getInfo();
             css::awt::Size aSize( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset,

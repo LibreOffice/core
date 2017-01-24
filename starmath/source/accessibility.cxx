@@ -70,7 +70,7 @@ static awt::Rectangle lcl_GetBounds( vcl::Window *pWin )
 {
     // !! see VCLXAccessibleComponent::implGetBounds()
 
-    //! the coordinates returned are relativ to the parent window !
+    //! the coordinates returned are relative to the parent window !
     //! Thus the top-left point may be different from (0, 0) !
 
     awt::Rectangle aBounds;
@@ -172,7 +172,7 @@ uno::Reference< XAccessibleContext > SAL_CALL SmGraphicAccessible::getAccessible
 sal_Bool SAL_CALL SmGraphicAccessible::containsPoint( const awt::Point& aPoint )
     throw (RuntimeException, std::exception)
 {
-    //! the arguments coordinates are relativ to the current window !
+    //! the arguments coordinates are relative to the current window !
     //! Thus the top-left point is (0, 0)
 
     SolarMutexGuard aGuard;
@@ -1645,7 +1645,7 @@ uno::Reference< XAccessibleContext > SAL_CALL SmEditAccessible::getAccessibleCon
 sal_Bool SAL_CALL SmEditAccessible::containsPoint( const awt::Point& aPoint )
     throw (RuntimeException, std::exception)
 {
-    //! the arguments coordinates are relativ to the current window !
+    //! the arguments coordinates are relative to the current window !
     //! Thus the top left-point is (0, 0)
 
     SolarMutexGuard aGuard;

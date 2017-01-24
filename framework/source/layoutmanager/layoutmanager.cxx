@@ -2525,7 +2525,7 @@ void LayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangle& /*rB
     aReadLock.clear();
 
     uno::Reference< awt::XDevice > xDevice( xContainerWindow, uno::UNO_QUERY );
-    // Convert relativ size to output size.
+    // Convert relative size to output size.
     awt::Rectangle  aRectangle           = xContainerWindow->getPosSize();
     awt::DeviceInfo aInfo                = xDevice->getInfo();
     awt::Size       aContainerClientSize = awt::Size( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset,
@@ -2682,7 +2682,7 @@ throw( uno::RuntimeException, std::exception )
         {
             uno::Reference< awt::XDevice > xDevice( m_xFrame->getContainerWindow(), uno::UNO_QUERY );
 
-            // Convert relativ size to output size.
+            // Convert relative size to output size.
             awt::Rectangle  aRectangle = m_xFrame->getContainerWindow()->getPosSize();
             awt::DeviceInfo aInfo      = xDevice->getInfo();
             awt::Size       aSize(  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,

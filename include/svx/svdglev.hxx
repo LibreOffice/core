@@ -51,7 +51,7 @@ public:
     SDR_TRISTATE IsMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc) const;
     void SetMarkedGluePointsEscDir(SdrEscapeDirection nThisEsc, bool bOn);
 
-    // check/set, if the GluePoints are relativ to the
+    // check/set, if the GluePoints are relative to the
     // object size (Percent=sal_True) or not (Percent=sal_False)
     SDR_TRISTATE IsMarkedGluePointsPercent() const;
     void SetMarkedGluePointsPercent(bool bOn);

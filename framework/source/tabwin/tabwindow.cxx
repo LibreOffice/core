@@ -112,7 +112,7 @@ void TabWindow::implts_LayoutWindows() const
     aLock.clear();
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
 
-    // Convert relativ size to output size.
+    // Convert relative size to output size.
     if ( xWindow.is() && xDevice.is() )
     {
         css::awt::Rectangle  aRectangle  = xWindow->getPosSize();
