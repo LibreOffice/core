@@ -30,8 +30,6 @@ class SvxHyperlinkItem;
 
 class SW_DLLPUBLIC SwTextShell: public SwBaseShell
 {
-    RotateTransliteration m_aRotateCase;
-
     void InsertSymbol( SfxRequest& );
     void InsertHyperlink( const SvxHyperlinkItem& rHlnkItem );
     bool InsertMediaDlg( SfxRequest& );

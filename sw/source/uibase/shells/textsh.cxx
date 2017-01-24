@@ -826,7 +826,7 @@ void SwTextShell::ExecTransliteration( SfxRequest & rReq )
 void SwTextShell::ExecRotateTransliteration( SfxRequest & rReq )
 {
     if( rReq.GetSlot() == SID_TRANSLITERATE_ROTATE_CASE )
-        GetShell().TransliterateText( m_aRotateCase.getNextMode() );
+        GetShell().TransliterateTextRotateCase();
 }
 
 SwTextShell::SwTextShell(SwView &_rView) :

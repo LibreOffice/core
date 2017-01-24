@@ -190,6 +190,9 @@ public:
     /// Change text to Upper/Lower/Hiragana/Katagana/...
     void TransliterateText( sal_uInt32 nType );
 
+    /// Rotate text between Upper/Lower/Title case.
+    void TransliterateTextRotateCase();
+
     /// Count words in current selection.
     void CountWords( SwDocStat& rStat ) const;
 

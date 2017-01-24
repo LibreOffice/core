@@ -22,6 +22,8 @@
 #include <unotools/charclass.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <breakit.hxx>
+#include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 #include <unotools/transliterationwrapper.hxx>
 #include <swwait.hxx>
 #include <fmtsrnd.hxx>
@@ -1000,6 +1002,77 @@ void SwEditShell::CountWords( SwDocStat& rStat ) const
         if( rPaM.HasMark() )
             SwDoc::CountWords( rPaM, rStat );
 
+    }
+}
+
+void SwEditShell::TransliterateTextRotateCase()
+{
+    SwCursor* const pCursor = GetCursor_();
+    const SwTextNode* pTNd = pCursor->Start()->nNode.GetNode().GetTextNode();
+    if( pTNd && !pTNd->GetText().isEmpty() )
+    {
+        SwCursorSaveState aSaveState( *pCursor );
+
+        OUString sFirstWord = pTNd->GetText();
+        sal_Int32 nLen = sFirstWord.getLength();
+        sal_Int32 nStart = pCursor->Start()->nContent.GetIndex();
+        sal_Int32 nEnd = nStart;
+        if( pCursor->Start()->nNode != pCursor->End()->nNode )
+            nEnd += nLen;
+        else if( pCursor->HasMark() )
+            nEnd = pCursor->End()->nContent.GetIndex();
+        const sal_Int32 nLang = pTNd->GetLang(nStart);
+
+        // Cannot be at the very end of the content - otherwise word not found.
+        if( nStart == nLen )
+        {
+            nStart--;
+            Left( 1, CRSR_SKIP_CHARS ); //move cursor hack for final TransliterateText call
+        }
+        // with selection, ensure that start position does not touch previous word (i.e. whitespace was also selected)
+        else if( pCursor->HasMark() && nStart < nEnd - 1 )
+            nStart++;
+
+        i18n::Boundary aBndry;
+        if( g_pBreakIt->GetBreakIter().is() )
+            aBndry = g_pBreakIt->GetBreakIter()->getWordBoundary(
+                        sFirstWord, nStart,
+                        g_pBreakIt->GetLocale( nLang ),
+                        i18n::WordType::ANYWORD_IGNOREWHITESPACES,
+                        true );
+
+        // Cursor without selection MUST be inside of the word - otherwise  word is not found in final TransliterateText call.
+        if( !pCursor->HasMark() && aBndry.startPos >= nStart && aBndry.endPos > aBndry.startPos +1 )
+            Right( aBndry.startPos + 1 - nStart, CRSR_SKIP_CHARS ); //move cursor hack
+        else if( !pCursor->HasMark() && aBndry.endPos == nStart && aBndry.endPos > aBndry.startPos )
+            Left( 1, CRSR_SKIP_CHARS ); //move cursor hack
+
+        nStart = aBndry.startPos;
+        if( !pCursor->HasMark() || aBndry.endPos < nEnd )
+            nEnd = aBndry.endPos;
+
+        // identify the current situation: Uppercase, Lowercase, or Titlecase
+        nLen = nEnd - nStart;
+        sFirstWord = sFirstWord.copy(nStart, nLen);
+        utl::TransliterationWrapper aLowerTrans( ::comphelper::getProcessComponentContext(), i18n::TransliterationModules_UPPERCASE_LOWERCASE );
+        utl::TransliterationWrapper aUpperTrans( ::comphelper::getProcessComponentContext(), i18n::TransliterationModules_LOWERCASE_UPPERCASE );
+        utl::TransliterationWrapper aTitleTrans( ::comphelper::getProcessComponentContext(), i18n::TransliterationModulesExtra::TITLE_CASE );
+        uno::Sequence <sal_Int32> aOffsets;
+        const OUString sUpperCase = aUpperTrans.transliterate( sFirstWord, nLang, 0, nLen, &aOffsets);
+        const OUString sLowerCase = aLowerTrans.transliterate( sFirstWord, nLang, 0, nLen, &aOffsets);
+        const OUString sTitleCase = aTitleTrans.transliterate( sFirstWord, nLang, 0, nLen, &aOffsets);
+
+        if( sUpperCase != sLowerCase )
+        {
+            if( sFirstWord == sUpperCase)
+                TransliterateText( i18n::TransliterationModules_UPPERCASE_LOWERCASE );
+            else if( sFirstWord == sTitleCase )
+                TransliterateText( i18n::TransliterationModules_LOWERCASE_UPPERCASE );
+            else
+                TransliterateText( i18n::TransliterationModulesExtra::TITLE_CASE );
+        }
+
+        GetCursor_()->RestoreSavePos();  //restore cursor;
     }
 }
 
