@@ -975,8 +975,8 @@ vcl::Window* ViewShellBase::GetViewWindow()
 
 OUString ViewShellBase::RetrieveLabelFromCommand( const OUString& aCmdURL ) const
 {
-    Reference< XFrame > xFrame( GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface(), UNO_QUERY );
-    return vcl::CommandInfoProvider::Instance().GetLabelForCommand( aCmdURL, xFrame );
+    OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(GetMainViewShell()->GetViewFrame()->GetFrame().GetFrameInterface()));
+    return vcl::CommandInfoProvider::GetLabelForCommand( aCmdURL, aModuleName );
 }
 
 int ViewShellBase::getPart() const

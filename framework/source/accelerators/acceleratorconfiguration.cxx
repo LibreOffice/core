@@ -994,21 +994,6 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::disposing(const css::lang::Event
 {
 }
 
-void SAL_CALL XCUBasedAcceleratorConfiguration::dispose()
-{
-    // nop
-}
-
-void SAL_CALL XCUBasedAcceleratorConfiguration::addEventListener( const css::uno::Reference< css::lang::XEventListener >& /*xListener*/ )
-{
-    // nop
-}
-
-void SAL_CALL XCUBasedAcceleratorConfiguration::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& /*xListener*/ )
-{
-    // nop
-}
-
 void XCUBasedAcceleratorConfiguration::impl_ts_load( bool bPreferred, const css::uno::Reference< css::container::XNameAccess >& xCfg )
 {
     AcceleratorCache aReadCache = AcceleratorCache();

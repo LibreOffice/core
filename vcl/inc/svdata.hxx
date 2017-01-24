@@ -67,7 +67,6 @@ class Application;
 class OutputDevice;
 namespace vcl
 {
-    class CommandInfoProvider;
     class Window;
 }
 class SystemWindow;
@@ -330,7 +329,6 @@ struct ImplSVData
     VclPtr<vcl::Window>     mpIntroWindow;                  // the splash screen
     DockingManager*         mpDockingManager = nullptr;
     BlendFrameCache*        mpBlendFrameCache = nullptr;
-    vcl::CommandInfoProvider* mpCommandInfoProvider = nullptr;
 
     oslThreadIdentifier     mnMainThreadId = 0;
     rtl::Reference< vcl::DisplayConnectionDispatch > mxDisplayConnection;

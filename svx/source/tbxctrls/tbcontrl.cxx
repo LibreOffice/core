@@ -1312,9 +1312,7 @@ SvxColorWindow::SvxColorWindow(const OUString&            rCommand,
         }
     }
 
-    OUString aWindowTitle = vcl::CommandInfoProvider::Instance().GetLabelForCommand( rCommand, rFrame );
-    SetText( aWindowTitle );
-    mpColorSet->SetAccessibleName( aWindowTitle );
+    mpColorSet->SetAccessibleName( GetText() );
 
     mpPaletteListBox->SetStyle( mpPaletteListBox->GetStyle() | WB_BORDER | WB_AUTOSIZE );
     mpPaletteListBox->SetSelectHdl( LINK( this, SvxColorWindow, SelectPaletteHdl ) );
@@ -2831,6 +2829,8 @@ VclPtr<SfxPopupWindow> SvxColorToolBoxControl::CreatePopupWindow()
                             &GetToolBox(),
                             m_aColorSelectFunction);
 
+    OUString aWindowTitle = vcl::CommandInfoProvider::GetLabelForCommand( m_aCommandURL, m_sModuleName );
+    pColorWin->SetText( aWindowTitle );
     pColorWin->StartPopupMode(&GetToolBox(), FloatWinPopupFlags::GrabFocus);
     pColorWin->StartSelection();
     SetPopupWindow(pColorWin);

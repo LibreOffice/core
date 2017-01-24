@@ -83,9 +83,6 @@ public:
         return {"com.sun.star.ui.ModuleAcceleratorConfiguration"};
     }
 
-    // XComponent
-    virtual  void SAL_CALL dispose() override;
-
     /// This has to be called after when the instance is acquire()'d.
     void SAL_CALL fillCache();
 
@@ -148,22 +145,6 @@ void ModuleAcceleratorConfiguration::fillCache()
         { throw; }
     catch(const css::uno::Exception&)
         {}
-}
-
-// XComponent.dispose(),  #i120029#, to release the cyclic reference
-
-void SAL_CALL ModuleAcceleratorConfiguration::dispose()
-{
-    try
-    {
-        css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
-        if ( xBroadcaster.is() )
-            xBroadcaster->removeChangesListener(static_cast< css::util::XChangesListener* >(this));
-    }
-    catch(const css::uno::RuntimeException&)
-    { throw; }
-    catch(const css::uno::Exception&)
-    {}
 }
 
 }

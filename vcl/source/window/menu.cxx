@@ -510,9 +510,10 @@ void Menu::InsertItem(const OUString& rCommand, const css::uno::Reference<css::f
 
     if (rFrame.is())
     {
-        OUString aLabel(CommandInfoProvider::Instance().GetPopupLabelForCommand(rCommand, rFrame));
-        OUString aTooltip(CommandInfoProvider::Instance().GetTooltipForCommand(rCommand, rFrame));
-        Image aImage(CommandInfoProvider::Instance().GetImageForCommand(rCommand, rFrame));
+        OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(rFrame));
+        OUString aLabel(CommandInfoProvider::GetPopupLabelForCommand(rCommand, aModuleName));
+        OUString aTooltip(CommandInfoProvider::GetTooltipForCommand(rCommand, rFrame));
+        Image aImage(CommandInfoProvider::GetImageForCommand(rCommand, rFrame));
 
         InsertItem(nItemId, aLabel, aImage);
         SetHelpText(nItemId, aTooltip);

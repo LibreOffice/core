@@ -524,12 +524,6 @@ void DeInitVCL()
         pSVData->mpBlendFrameCache = nullptr;
     }
 
-    if (pSVData->mpCommandInfoProvider)
-    {
-        pSVData->mpCommandInfoProvider->dispose();
-        pSVData->mpCommandInfoProvider = nullptr;
-    }
-
     ImplDeletePrnQueueList();
     delete pSVData->maGDIData.mpScreenFontList;
     pSVData->maGDIData.mpScreenFontList = nullptr;

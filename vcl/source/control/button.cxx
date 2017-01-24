@@ -115,6 +115,7 @@ void Button::SetCommandHandler(const OUString& aCommand)
     SetClickHdl( LINK( this, Button, dispatchCommandHandler) );
 
     mpButtonData->mpStatusListener = new VclStatusListener<Button>(this, aCommand);
+    mpButtonData->mpStatusListener->startListening();
 }
 
 void Button::Click()

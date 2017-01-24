@@ -69,9 +69,6 @@ public:
         return {"com.sun.star.ui.GlobalAcceleratorConfiguration"};
     }
 
-    // XComponent
-    virtual  void SAL_CALL dispose() override;
-
     /// This has to be called after when the instance is acquire()'d.
     void fillCache();
 
@@ -114,21 +111,21 @@ void GlobalAcceleratorConfiguration::fillCache()
         {}
 }
 
-// XComponent.dispose(),  #i120029#, to release the cyclic reference
-
-void SAL_CALL GlobalAcceleratorConfiguration::dispose()
+struct Instance
 {
-    try
+    explicit Instance(css::uno::Reference<css::uno::XComponentContext> const & context)
+        : instance(new GlobalAcceleratorConfiguration(context))
     {
-        css::uno::Reference< css::util::XChangesNotifier > xBroadcaster(m_xCfg, css::uno::UNO_QUERY_THROW);
-        if ( xBroadcaster.is() )
-            xBroadcaster->removeChangesListener(static_cast< css::util::XChangesListener* >(this));
+        instance->fillCache();
     }
-    catch(const css::uno::RuntimeException&)
-    { throw; }
-    catch(const css::uno::Exception&)
-    {}
-}
+
+    rtl::Reference<GlobalAcceleratorConfiguration> instance;
+};
+
+struct Singleton:
+    public rtl::StaticWithArg<
+        Instance, css::uno::Reference<css::uno::XComponentContext>, Singleton>
+{};
 
 }
 
@@ -137,12 +134,7 @@ com_sun_star_comp_framework_GlobalAcceleratorConfiguration_get_implementation(
     css::uno::XComponentContext *context,
     css::uno::Sequence<css::uno::Any> const &)
 {
-    GlobalAcceleratorConfiguration *inst = new GlobalAcceleratorConfiguration(context);
-    css::uno::XInterface *acquired_inst = cppu::acquire(inst);
-
-    inst->fillCache();
-
-    return acquired_inst;
+    return cppu::acquire(static_cast<cppu::OWeakObject*>(Singleton::get(context).instance.get()));
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

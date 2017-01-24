@@ -259,13 +259,6 @@ OUString getDefaultModule_Impl()
     return sDefaultModule;
 }
 
-Reference< XFrame > getCurrentFrame()
-{
-    Reference < XComponentContext > xContext = ::comphelper::getProcessComponentContext();
-    Reference < XDesktop2 > xDesktop = Desktop::create(xContext);
-    return xDesktop->getCurrentFrame();
-}
-
 OUString getCurrentModuleIdentifier_Impl()
 {
     OUString sIdentifier;
@@ -446,7 +439,7 @@ SfxHelpWindow_Impl* impl_createHelp(Reference< XFrame2 >& rHelpTask   ,
 OUString SfxHelp::GetHelpText( const OUString& aCommandURL, const vcl::Window* pWindow )
 {
     OUString sModuleName = GetHelpModuleName_Impl();
-    OUString sRealCommand = vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( aCommandURL, getCurrentFrame() );
+    OUString sRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( aCommandURL, getCurrentModuleIdentifier_Impl() );
     OUString sHelpText = SfxHelp_Impl::GetHelpText( sRealCommand.isEmpty() ? aCommandURL : sRealCommand, sModuleName );
 
     OString aNewHelpId;
@@ -564,7 +557,7 @@ bool SfxHelp::Start_Impl(const OUString& rURL, const vcl::Window* pWindow, const
 
             if ( nProtocol == INetProtocol::Uno )
                 // Command can be just an alias to another command.
-                aRealCommand = vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( rURL, getCurrentFrame() );
+                aRealCommand = vcl::CommandInfoProvider::GetRealCommandForCommand( rURL, getCurrentModuleIdentifier_Impl() );
 
             // no URL, just a HelpID (maybe empty in case of keyword search)
             aHelpURL = CreateHelpURL_Impl( aRealCommand.isEmpty() ? rURL : aRealCommand, aHelpModuleName );
