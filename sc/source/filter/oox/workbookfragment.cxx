@@ -244,7 +244,7 @@ public:
         SAL_INFO( "sc.filter",  "got solar\n" );
 
         std::unique_ptr<oox::core::FastParser> xParser(
-                mrWorkbookHandler.getOoxFilter().createParser() );
+                oox::core::XmlFilterBase::createParser() );
 
         SAL_INFO( "sc.filter",  "start import\n" );
         mrWorkbookHandler.importOoxFragment( mxHandler, *xParser );
@@ -504,7 +504,7 @@ void WorkbookFragment::finalizeImport()
     OUString aRevHeadersPath = getFragmentPathFromFirstType(CREATE_OFFICEDOC_RELATION_TYPE("revisionHeaders"));
     if (!aRevHeadersPath.isEmpty())
     {
-        std::unique_ptr<oox::core::FastParser> xParser(getOoxFilter().createParser());
+        std::unique_ptr<oox::core::FastParser> xParser(oox::core::XmlFilterBase::createParser());
         rtl::Reference<oox::core::FragmentHandler> xFragment(new RevisionHeadersFragment(*this, aRevHeadersPath));
         importOoxFragment(xFragment, *xParser);
     }

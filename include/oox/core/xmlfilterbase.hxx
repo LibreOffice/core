@@ -230,7 +230,7 @@ public:
 
     void importDocumentProperties();
 
-    FastParser* createParser() const;
+    static FastParser* createParser();
 
     bool isMSO2007Document() const;
 

@@ -63,13 +63,11 @@ InputStreamCloseGuard::~InputStreamCloseGuard()
 
 } // namespace
 
-FastParser::FastParser( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
-    mrNamespaceMap( StaticNamespaceMap::get() ),
-    mpParser(nullptr)
+FastParser::FastParser() throw( RuntimeException ) :
+    mrNamespaceMap( StaticNamespaceMap::get() )
 {
     // create a fast parser instance
-    mxParser = css::xml::sax::FastParser::create(rxContext);
-    mpParser = dynamic_cast<sax_fastparser::FastSaxParser*>(mxParser.get());
+    mxParser = new sax_fastparser::FastSaxParser;
 
     // create the fast tokenhandler
     mxTokenHandler.set( new FastTokenHandler );

@@ -26,6 +26,7 @@
 #include <com/sun/star/uno/RuntimeException.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <rtl/ustring.hxx>
+#include <rtl/ref.hxx>
 #include <sal/types.h>
 
 namespace com { namespace sun { namespace star {
@@ -57,9 +58,11 @@ class FastParser
 {
 public:
     /// @throws css::uno::RuntimeException
-    explicit            FastParser(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext )
+    explicit            FastParser()
                             throw( css::uno::RuntimeException );
+
+                        FastParser(const FastParser&) = delete;
+                        FastParser& operator=(const FastParser&) = delete;
 
     virtual             ~FastParser();
 
@@ -110,13 +113,9 @@ public:
                getTokenHandler() const { return mxTokenHandler; }
 
 private:
-    css::uno::Reference< css::xml::sax::XFastParser >
-                        mxParser;
-    css::uno::Reference< css::xml::sax::XFastTokenHandler >
-                        mxTokenHandler;
-    const NamespaceMap& mrNamespaceMap;
-
-    sax_fastparser::FastSaxParser* mpParser;
+    css::uno::Reference<css::xml::sax::XFastTokenHandler>   mxTokenHandler;
+    const NamespaceMap&                                     mrNamespaceMap;
+    rtl::Reference<sax_fastparser::FastSaxParser>           mxParser;
 };
 
 

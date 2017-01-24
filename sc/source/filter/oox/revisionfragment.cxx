@@ -265,7 +265,7 @@ void RevisionHeadersFragment::finalizeImport()
         const RevisionMetadata& rData = it->second;
         pCT->SetUser(rData.maUserName);
         pCT->SetFixDateTimeLocal(rData.maDateTime);
-        std::unique_ptr<oox::core::FastParser> xParser(getOoxFilter().createParser());
+        std::unique_ptr<oox::core::FastParser> xParser(oox::core::XmlFilterBase::createParser());
         rtl::Reference<oox::core::FragmentHandler> xFragment(new RevisionLogFragment(*this, aPath, *pCT));
         importOoxFragment(xFragment, *xParser);
     }

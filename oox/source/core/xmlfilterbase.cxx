@@ -188,7 +188,6 @@ struct XmlFilterBaseImpl
 
 XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
     mxContext(rxContext),
-    maFastParser( rxContext ),
     maBinSuffix( ".bin" ),
     mrNamespaceMap(StaticNamespaceMap::get())
 {
@@ -268,9 +267,9 @@ void XmlFilterBase::importDocumentProperties()
     checkDocumentProperties(xDocProps);
 }
 
-FastParser* XmlFilterBase::createParser() const
+FastParser* XmlFilterBase::createParser()
 {
-    FastParser* pParser = new FastParser(getComponentContext());
+    FastParser* pParser = new FastParser;
     registerNamespaces(*pParser);
     return pParser;
 }
@@ -305,7 +304,7 @@ OUString XmlFilterBase::getFragmentPathFromFirstTypeFromOfficeDoc( const OUStrin
 
 bool XmlFilterBase::importFragment( const rtl::Reference<FragmentHandler>& rxHandler )
 {
-    FastParser aParser(mxImpl->mxContext);
+    FastParser aParser;
     registerNamespaces(aParser);
     return importFragment(rxHandler, aParser);
 }

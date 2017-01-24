@@ -159,7 +159,7 @@ void SAL_CALL DocumentPropertiesImport::importProperties(
         if( aCoreStreams.getLength() > 1 )
             throw IOException( "Unexpected core properties stream!" );
 
-        ::oox::core::FastParser aParser( mxContext );
+        ::oox::core::FastParser aParser;
         aParser.registerNamespace( NMSP_packageMetaCorePr );
         aParser.registerNamespace( NMSP_dc );
         aParser.registerNamespace( NMSP_dcTerms );

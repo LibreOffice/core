@@ -403,7 +403,7 @@ OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq
         if( aZipStorage.isStorage() )
         {
             // create the fast parser, register the XML namespaces, set document handler
-            FastParser aParser( mxContext );
+            FastParser aParser;
             aParser.registerNamespace( NMSP_packageRel );
             aParser.registerNamespace( NMSP_officeRel );
             aParser.registerNamespace( NMSP_packageContentTypes );
