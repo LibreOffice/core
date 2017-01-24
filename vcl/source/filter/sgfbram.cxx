@@ -294,7 +294,8 @@ bool SgfFilterBMap(SvStream& rInp, SvStream& rOut, SgfHeader& rHead, SgfEntry&)
         //we're going to loop Ysize * XSize on GetByte, max compression for GetByte is a run of 63
         //if we're less than that (and add a generous amount of wriggle room) then its not going
         //to fly
-        const sal_uInt64 nMinBytesPossiblyNeeded = rHead.Xsize * rHead.Ysize / 128;
+        sal_uInt64 nMinBytesPossiblyNeeded = rHead.Xsize;
+        nMinBytesPossiblyNeeded *= rHead.Ysize / 128;
         if (rInp.remainingSize() < nMinBytesPossiblyNeeded)
             return false;
 
