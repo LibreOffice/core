@@ -33,7 +33,7 @@ class SwTextGuess
     sal_Int32 nCutPos;         // this character doesn't fit
     sal_Int32 nBreakStart;     // start index of word containing line break
     sal_Int32 nBreakPos;       // start index of break position
-    sal_Int32 nFieldDiff;      // absolut positions can be wrong if we
+    sal_Int32 nFieldDiff;      // absolute positions can be wrong if we
                                // a field in the text has been expanded
     sal_uInt16 nBreakWidth;    // width of the broken portion
 public:

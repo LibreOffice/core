@@ -1196,7 +1196,7 @@ FUNC_TYPE LotusToSc::IndexToTypeWK123( sal_uInt8 nIndex )
         FT_Snum,            //    5 Short number
         FT_ConstString,     //    6 ASCII string
         FT_Nrref,           //    7 Named range reference
-        FT_Absnref,         //    8 Absolut named range
+        FT_Absnref,         //    8 Absolute named range
         FT_Erref,           //    9 Err range reference
         FT_Ecref,           //   10 Err cell reference
         FT_Econstant,       //   11 Err constant
@@ -1460,7 +1460,7 @@ DefTokenId LotusToSc::IndexToTokenWK123( sal_uInt8 nIndex )
         ocPush,             //    5 Numbers
         ocPush,             //    6 ASCII string
         ocPush,             //    7 Named range reference
-        ocPush,             //    8 Absolut named range
+        ocPush,             //    8 Absolute named range
         ocPush,             //    9 Err range reference
         ocPush,             //   10 Err cell reference
         ocPush,             //   11 Err constant
@@ -1725,7 +1725,7 @@ const sal_Char* GetAddInName( const sal_uInt8 n )
         nullptr,                       //    5 2-Byte integer
         nullptr,                       //    6 ASCII string
         nullptr,                       //    7 Named range reference
-        nullptr,                       //    8 Absolut named range
+        nullptr,                       //    8 Absolute named range
         nullptr,                       //    9 Err range reference
         nullptr,                       //   10 Err cell reference
         nullptr,                       //   11 Err constant

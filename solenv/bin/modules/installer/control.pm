@@ -127,7 +127,7 @@ sub check_system_path
         else
         {
             installer::logger::print_message( "\tFound: $$fileref\n" );
-            # Saving the absolut path for msitran.exe. This is required for the determination of the checksum.
+            # Saving the absolute path for msitran.exe. This is required for the determination of the checksum.
             if ( $onefile eq "msitran.exe" ) { $installer::globals::msitranpath = $$fileref; }
         }
     }

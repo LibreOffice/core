@@ -39,7 +39,7 @@ high performance access to file system issues on any operating system.<p>
 
 There are a few main goals:<p>
 
-1.The path specifications always has to be absolut. Any usage of relative path
+1.The path specifications always has to be absolute. Any usage of relative path
 specifications is forbidden. Exceptions are <code>osl_getSystemPathFromFileURL</code>,
 <code>osl_getFileURLFromSystemPath</code> and <code>osl_getAbsoluteFileURL</code>. Most operating systems
 provide a "Current Directory" per process. This is the reason why relative path

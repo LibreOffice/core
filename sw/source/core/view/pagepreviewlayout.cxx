@@ -788,7 +788,7 @@ Point SwPagePreviewLayout::GetPreviewStartPosForNewScale(
 
 /** determines, if page with given page number is visible in preview
 
-    @note _nPageNum is absolut!
+    @note _nPageNum is absolute
 */
 bool SwPagePreviewLayout::IsPageVisible( const sal_uInt16 _nPageNum ) const
 {
@@ -1275,7 +1275,7 @@ void SwPagePreviewLayout::PaintSelectMarkAtPage(vcl::RenderContext& rRenderConte
     Perform paint for current selected page in order to unmark it.
     Set new selected page and perform paint to mark this page.
 
-    @note _nSelectedPage, mnSelectedPage are absolut
+    @note _nSelectedPage, mnSelectedPage are absolute
 */
 void SwPagePreviewLayout::MarkNewSelectedPage( const sal_uInt16 _nSelectedPage )
 {
