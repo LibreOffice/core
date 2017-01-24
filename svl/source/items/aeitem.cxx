@@ -114,7 +114,7 @@ SfxPoolItem* SfxAllEnumItem::Create( SvStream & rStream, sal_uInt16 ) const
 }
 
 /**
- * In contrast to @see SfxEnumItemInterface::GetPosByValue(sal_uInt16) const
+ * In contrast to @see GetPosByValue(sal_uInt16) const
  * this internal method returns the position the value would be for non-present values.
  */
 sal_uInt16 SfxAllEnumItem::GetPosByValue_( sal_uInt16 nVal ) const
@@ -130,17 +130,16 @@ sal_uInt16 SfxAllEnumItem::GetPosByValue_( sal_uInt16 nVal ) const
     return nPos;
 }
 
-/**
- * In contrast to @see SfxEnumItemInterface::GetPosByValue(sal_uInt16) const
- * this method always returns nValue, as long as not at least one value has
- * been inserted using the SfxAllEnumItem::InsertValue() methods
- */
 sal_uInt16 SfxAllEnumItem::GetPosByValue( sal_uInt16 nValue ) const
 {
     if ( !pValues || pValues->empty() )
         return nValue;
 
-    return SfxEnumItem::GetPosByValue( nValue );
+    sal_uInt16 nCount = GetValueCount();
+    for (sal_uInt16 i = 0; i < nCount; ++i)
+        if (GetValueByPos(i) == nValue)
+            return i;
+    return USHRT_MAX;
 }
 
 void SfxAllEnumItem::InsertValue( sal_uInt16 nValue, const OUString &rValue )

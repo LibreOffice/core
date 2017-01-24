@@ -80,16 +80,6 @@ sal_uInt16 SfxEnumItemInterface::GetValueByPos(sal_uInt16 nPos) const
     return nPos;
 }
 
-// virtual
-sal_uInt16 SfxEnumItemInterface::GetPosByValue(sal_uInt16 nValue) const
-{
-    sal_uInt16 nCount = GetValueCount();
-    for (sal_uInt16 i = 0; i < nCount; ++i)
-        if (GetValueByPos(i) == nValue)
-            return i;
-    return USHRT_MAX;
-}
-
 bool SfxEnumItemInterface::IsEnabled(sal_uInt16) const
 {
     return true;

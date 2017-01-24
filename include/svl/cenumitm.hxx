@@ -49,18 +49,6 @@ public:
 
     virtual sal_uInt16 GetValueByPos(sal_uInt16 nPos) const;
 
-    /// Return the position of some value within this enumeration.
-    ///
-    /// @descr  This method is implemented using GetValueCount() and
-    /// GetValueByPos().  Derived classes may replace this with a more
-    /// efficient implementation.
-    ///
-    /// @param nValue  Some value.
-    ///
-    /// @return  The position of nValue within this enumeration, or USHRT_MAX
-    /// if not included.
-    virtual sal_uInt16 GetPosByValue(sal_uInt16 nValue) const;
-
     virtual bool IsEnabled(sal_uInt16 nValue) const;
 
     virtual sal_uInt16 GetEnumValue() const = 0;

@@ -31,11 +31,11 @@ class SVL_DLLPUBLIC SfxAllEnumItem: public SfxEnumItem
     SfxAllEnumValueArr*      pValues;
     std::vector<sal_uInt16>* pDisabledValues;
 
-protected:
-    sal_uInt16                  GetPosByValue_( sal_uInt16 nValue ) const;
+    sal_uInt16              GetPosByValue( sal_uInt16 nValue ) const;
+    sal_uInt16              GetPosByValue_( sal_uInt16 nValue ) const;
 
 public:
-    static SfxPoolItem* CreateDefault();
+    static SfxPoolItem*     CreateDefault();
 
                             SfxAllEnumItem();
     explicit                SfxAllEnumItem( sal_uInt16 nWhich);
@@ -48,14 +48,12 @@ public:
     void                    InsertValue( sal_uInt16 nValue, const OUString &rText );
     void                    RemoveValue( sal_uInt16 nValue );
 
-    sal_uInt16              GetPosByValue( sal_uInt16 nValue ) const override;
-
     virtual sal_uInt16      GetValueCount() const override;
     virtual sal_uInt16      GetValueByPos( sal_uInt16 nPos ) const override;
-    virtual OUString   GetValueTextByPos( sal_uInt16 nPos ) const override;
+    virtual OUString        GetValueTextByPos( sal_uInt16 nPos ) const override;
     virtual SfxPoolItem*    Clone( SfxItemPool *pPool = nullptr ) const override;
     virtual SfxPoolItem*    Create(SvStream &, sal_uInt16 nVersion) const override;
-    virtual bool        IsEnabled( sal_uInt16 ) const override;
+    virtual bool            IsEnabled( sal_uInt16 ) const override;
     void                    DisableValue( sal_uInt16 );
 };
 
