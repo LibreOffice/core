@@ -426,6 +426,8 @@ callbackTypeToString (int nType)
         return "LOK_CALLBACK_REDLINE_TABLE_SIZE_CHANGED";
     case LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED:
         return "LOK_CALLBACK_REDLINE_TABLE_ENTRY_MODIFIED";
+    case LOK_CALLBACK_COMMENT:
+        return "LOK_CALLBACK_COMMENT";
     }
     g_assert(false);
     return nullptr;
@@ -1395,6 +1397,8 @@ callback (gpointer pData)
     {
         break;
     }
+    case LOK_CALLBACK_COMMENT:
+        break;
     default:
         g_assert(false);
         break;

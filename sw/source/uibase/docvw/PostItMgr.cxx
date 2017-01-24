@@ -17,11 +17,13 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <boost/property_tree/json_parser.hpp>
+
 #include "PostItMgr.hxx"
 #include <postithelper.hxx>
 
-#include <SidebarWin.hxx>
 #include <AnnotationWin.hxx>
+#include <SidebarWin.hxx>
 #include <frmsidebarwincontainer.hxx>
 #include <accmap.hxx>
 
@@ -53,6 +55,7 @@
 #include <docary.hxx>
 #include <SwRewriter.hxx>
 #include <tools/color.hxx>
+#include <unotools/datetime.hxx>
 
 #include <swmodule.hxx>
 #include <annotation.hrc>
@@ -75,6 +78,8 @@
 #include <i18nlangtag/mslangid.hxx>
 #include <i18nlangtag/lang.h>
 #include <comphelper/lok.hxx>
+#include <comphelper/string.hxx>
+#include <LibreOfficeKit/LibreOfficeKitEnums.h>
 
 #include "annotsh.hxx"
 #include "swabstdlg.hxx"
@@ -94,37 +99,89 @@
 
 using namespace sw::sidebarwindows;
 
-bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
-{
-    // sort by anchor position
-    SwPosition aPosAnchorA = a->GetAnchorPosition();
-    SwPosition aPosAnchorB = b->GetAnchorPosition();
+namespace {
 
-    bool aAnchorAInFooter = false;
-    bool aAnchorBInFooter = false;
+    enum class CommentNotificationType { Add, Remove, Modify };
 
-    // is the anchor placed in Footnote or the Footer?
-    if( aPosAnchorA.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorA.nNode.GetNode().FindFooterStartNode() )
-        aAnchorAInFooter = true;
-    if( aPosAnchorB.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorB.nNode.GetNode().FindFooterStartNode() )
-        aAnchorBInFooter = true;
+    bool comp_pos(const SwSidebarItem* a, const SwSidebarItem* b)
+    {
+        // sort by anchor position
+        SwPosition aPosAnchorA = a->GetAnchorPosition();
+        SwPosition aPosAnchorB = b->GetAnchorPosition();
 
-    // fdo#34800
-    // if AnchorA is in footnote, and AnchorB isn't
-    // we do not want to change over the position
-    if( aAnchorAInFooter && !aAnchorBInFooter )
-        return false;
-    // if aAnchorA is not placed in a footnote, and aAnchorB is
-    // force a change over
-    else if( !aAnchorAInFooter && aAnchorBInFooter )
-        return true;
-    // If neither or both are in the footer, compare the positions.
-    // Since footnotes are in Inserts section of nodes array and footers
-    // in Autotext section, all footnotes precede any footers so no need
-    // to check that.
-    else
-        return aPosAnchorA < aPosAnchorB;
-}
+        bool aAnchorAInFooter = false;
+        bool aAnchorBInFooter = false;
+
+        // is the anchor placed in Footnote or the Footer?
+        if( aPosAnchorA.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorA.nNode.GetNode().FindFooterStartNode() )
+            aAnchorAInFooter = true;
+        if( aPosAnchorB.nNode.GetNode().FindFootnoteStartNode() || aPosAnchorB.nNode.GetNode().FindFooterStartNode() )
+            aAnchorBInFooter = true;
+
+        // fdo#34800
+        // if AnchorA is in footnote, and AnchorB isn't
+        // we do not want to change over the position
+        if( aAnchorAInFooter && !aAnchorBInFooter )
+            return false;
+        // if aAnchorA is not placed in a footnote, and aAnchorB is
+        // force a change over
+        else if( !aAnchorAInFooter && aAnchorBInFooter )
+            return true;
+        // If neither or both are in the footer, compare the positions.
+        // Since footnotes are in Inserts section of nodes array and footers
+        // in Autotext section, all footnotes precede any footers so no need
+        // to check that.
+        else
+            return aPosAnchorA < aPosAnchorB;
+    }
+
+    /// Emits LOK notification about one addition/removal/change of a comment
+    void lcl_CommentNotification(const SwView* pView, const CommentNotificationType nType, const SwSidebarItem* pItem, const sal_uInt32 nPostItId)
+    {
+        if (!comphelper::LibreOfficeKit::isActive())
+            return;
+
+        boost::property_tree::ptree aAnnotation;
+        aAnnotation.put("action", (nType == CommentNotificationType::Add ? "Add" :
+                                   (nType == CommentNotificationType::Remove ? "Remove" :
+                                    (nType == CommentNotificationType::Modify ? "Modify" : "???"))));
+        aAnnotation.put("id", nPostItId);
+        if (nType != CommentNotificationType::Remove && pItem != nullptr)
+        {
+            sw::annotation::SwAnnotationWin* pWin = static_cast<sw::annotation::SwAnnotationWin*>((pItem)->pPostIt.get());
+
+            const SwPostItField* pField = pWin->GetPostItField();
+            const std::string aAnchorPos = std::to_string(pWin->GetAnchorPos().X()) + ", " + std::to_string(pWin->GetAnchorPos().Y());
+            std::vector<OString> aRects;
+            for (const basegfx::B2DRange& aRange : pWin->GetAnnotationTextRanges())
+            {
+                const SwRect rect(aRange.getMinX(), aRange.getMinY(), aRange.getWidth(), aRange.getHeight());
+                aRects.push_back(rect.SVRect().toString());
+            }
+            const OString sRects = comphelper::string::join("; ", aRects);
+
+            aAnnotation.put("id", pField->GetPostItId());
+            aAnnotation.put("reply", pWin->IsFollow());
+            aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
+            aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
+            aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
+            aAnnotation.put("anchorPos", aAnchorPos.c_str());
+            aAnnotation.put("textRange", sRects.getStr());
+        }
+
+        boost::property_tree::ptree aTree;
+        aTree.add_child("comment", aAnnotation);
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree);
+        std::string aPayload = aStream.str();
+
+        if (pView)
+        {
+            pView->libreOfficeKitViewCallback(LOK_CALLBACK_COMMENT, aPayload.c_str());
+        }
+    }
+
+} // anonymous namespace
 
 SwPostItMgr::SwPostItMgr(SwView* pView)
     : mpView(pView)
@@ -216,21 +273,27 @@ void SwPostItMgr::CheckForRemovedPostIts()
     }
 }
 
-void SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus)
+SwSidebarItem* SwPostItMgr::InsertItem(SfxBroadcaster* pItem, bool bCheckExistance, bool bFocus)
 {
+    SwSidebarItem* pAnnotationItem = nullptr;
     if (bCheckExistance)
     {
         for(std::list<SwSidebarItem*>::iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
         {
             if ( (*i)->GetBroadCaster() == pItem )
-                return;
+                return pAnnotationItem;
         }
     }
     mbLayout = bFocus;
+
     if (dynamic_cast< const SwFormatField *>( pItem ) !=  nullptr)
-        mvPostItFields.push_back(new SwAnnotationItem(static_cast<SwFormatField&>(*pItem), bFocus) );
+    {
+        pAnnotationItem = new SwAnnotationItem(static_cast<SwFormatField&>(*pItem), bFocus);
+        mvPostItFields.push_back(pAnnotationItem);
+    }
     OSL_ENSURE(dynamic_cast< const SwFormatField *>( pItem ) !=  nullptr,"Mgr::InsertItem: seems like new stuff was added");
     StartListening(*pItem);
+    return pAnnotationItem;
 }
 
 void SwPostItMgr::RemoveItem( SfxBroadcaster* pBroadcast )
@@ -284,9 +347,22 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 if ( pField->IsFieldInDoc() )
                 {
                     bool bEmpty = !HasNotes();
-                    InsertItem( pField, true, false );
+                    SwSidebarItem* pItem = InsertItem( pField, true, false );
+
                     if (bEmpty && !mvPostItFields.empty())
                         PrepareView(true);
+
+                    // If LOK has disabled tiled annotations, emit annotation callbacks
+                    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+                    {
+                        CalcRects();
+                        Show();
+
+                        if (pItem && pItem->pPostIt)
+                        {
+                            lcl_CommentNotification(mpView, CommentNotificationType::Add, pItem, 0);
+                        }
+                    }
                 }
                 else
                 {
@@ -304,6 +380,13 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         break;
                     }
                     RemoveItem(pField);
+
+                    // If LOK has disabled tiled annotations, emit annotation callbacks
+                    if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+                    {
+                        SwPostItField* pPostItField = static_cast<SwPostItField*>(pField->GetField());
+                        lcl_CommentNotification(mpView, CommentNotificationType::Remove, nullptr, pPostItField->GetPostItId());
+                    }
                 }
                 break;
             }
@@ -315,7 +398,7 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
             }
             case SwFormatFieldHintWhich::CHANGED:
             {
-                        SwFormatField* pFormatField = dynamic_cast<SwFormatField*>(&rBC);
+                SwFormatField* pFormatField = dynamic_cast<SwFormatField*>(&rBC);
                 for(std::list<SwSidebarItem*>::iterator i = mvPostItFields.begin(); i != mvPostItFields.end() ; ++i)
                 {
                     if ( pFormatField == (*i)->GetBroadCaster() )
@@ -324,6 +407,12 @@ void SwPostItMgr::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                         {
                             (*i)->pPostIt->SetPostItText();
                             mbLayout = true;
+                        }
+
+                        // If LOK has disabled tiled annotations, emit annotation callbacks
+                        if (comphelper::LibreOfficeKit::isActive() && !comphelper::LibreOfficeKit::isTiledAnnotations())
+                        {
+                            lcl_CommentNotification(mpView, CommentNotificationType::Modify, *i, 0);
                         }
                         break;
                     }
@@ -459,7 +548,6 @@ bool SwPostItMgr::CalcRects()
                 bRepair = true;
                 continue;
             }
-
             const SwRect aOldAnchorRect( pItem->maLayoutInfo.mPosition );
             const SwPostItHelper::SwLayoutStatus eOldLayoutStatus = pItem->mLayoutStatus;
             const sal_uLong nOldStartNodeIdx( pItem->maLayoutInfo.mnStartNodeIdx );
