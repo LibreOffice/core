@@ -137,6 +137,8 @@ public:
 
     FloatingWindow*     GetFloatingWindow() const;
 
+    static FloatingWindow* GetFloatingWindow(vcl::Window *pParent);
+
     static void         RegisterChildWindowContext(SfxModule*, sal_uInt16, SfxChildWinContextFactory*);
 };
 
