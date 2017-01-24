@@ -1369,7 +1369,7 @@ namespace pcr
         if ( ( aProperty.Attributes & PropertyAttribute::MAYBEVOID ) != 0 )
         {
             // insert the string "Default" string, if necessary
-            if ( bNeedDefaultStringIfVoidAllowed || ( nControlType == PropertyControlType::ColorListBox ) )
+            if (bNeedDefaultStringIfVoidAllowed)
             {
                 Reference< XStringListControl > xStringList( aDescriptor.Control, UNO_QUERY_THROW );
                 xStringList->prependListEntry( m_sDefaultValueString );
