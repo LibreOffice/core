@@ -47,7 +47,7 @@ public:
         if (ignoreLocation(decl)) {
             return true;
         }
-        auto proto = dyn_cast<FunctionProtoType>(decl->getType());
+        auto proto = decl->getType()->getAs<FunctionProtoType>();
         if (proto == nullptr || proto->getExceptionSpecType() != EST_Dynamic) {
             return true;
         }
