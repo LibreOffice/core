@@ -1114,7 +1114,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     bool bDoNotCaptureDrawObjsOnPage( false );
     bool bClipAsCharacterAnchoredWriterFlyFrames( false );
     bool bUnixForceZeroExtLeading = false;
-    bool bUseOldPrinterMetrics = false;
     bool bSmallCapsPercentage66 = false;
     bool bTabOverflow = false;
     bool bUnbreakableNumberings = false;
@@ -1201,8 +1200,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bClipAsCharacterAnchoredWriterFlyFrames = true;
                 else if ( pValues->Name == "UnxForceZeroExtLeading" )
                     bUnixForceZeroExtLeading = true;
-                else if ( pValues->Name == "UseOldPrinterMetrics" )
-                    bUseOldPrinterMetrics = true;
                 else if ( pValues->Name == "SmallCapsPercentage66" )
                     bSmallCapsPercentage66 = true;
                 else if ( pValues->Name == "TabOverflow" )
@@ -1347,11 +1344,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if ( !bUnixForceZeroExtLeading )
     {
         xProps->setPropertyValue( "UnxForceZeroExtLeading", makeAny( true ) );
-    }
-
-    if ( !bUseOldPrinterMetrics )
-    {
-        xProps->setPropertyValue( "UseOldPrinterMetrics", makeAny( true ) );
     }
 
     // Old LO versions had 66 as the value for small caps percentage, later changed to 80.
