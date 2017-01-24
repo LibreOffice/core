@@ -36,7 +36,7 @@ ScFormulaListener::ScFormulaListener(ScDocument* pDoc):
 
 void ScFormulaListener::startListening(ScTokenArray* pArr, const ScRange& rRange)
 {
-    if (!pArr)
+    if (!pArr || mpDoc->IsClipOrUndo())
         return;
 
     pArr->Reset();
@@ -123,6 +123,9 @@ private:
 
 void ScFormulaListener::stopListening()
 {
+    if (mpDoc->IsClipOrUndo())
+        return;
+
     std::for_each(maCells.begin(), maCells.end(), StopListeningCell(mpDoc, this));
 }
 
