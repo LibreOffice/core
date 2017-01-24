@@ -299,6 +299,7 @@ enum
     PROP_CAN_ZOOM_OUT,
     PROP_DOC_PASSWORD,
     PROP_DOC_PASSWORD_TO_MODIFY,
+    PROP_TILED_ANNOTATIONS,
 
     PROP_LAST
 };
@@ -2465,6 +2466,7 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
     LOKDocViewPrivate& priv = getPrivate(pDocView);
     gboolean bDocPasswordEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD;
     gboolean bDocPasswordToModifyEnabled = priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
+    gboolean bTiledAnnotationsEnabled = !(priv->m_nLOKFeatures & LOK_FEATURE_NO_TILED_ANNOTATIONS);
 
     switch (propId)
     {
@@ -2507,6 +2509,13 @@ static void lok_doc_view_set_property (GObject* object, guint propId, const GVal
         if ( g_value_get_boolean (value) != bDocPasswordToModifyEnabled)
         {
             priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY;
+            priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
+        }
+        break;
+    case PROP_TILED_ANNOTATIONS:
+        if ( g_value_get_boolean (value) != bTiledAnnotationsEnabled)
+        {
+            priv->m_nLOKFeatures = priv->m_nLOKFeatures ^ LOK_FEATURE_NO_TILED_ANNOTATIONS;
             priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
         }
         break;
@@ -2566,6 +2575,9 @@ static void lok_doc_view_get_property (GObject* object, guint propId, GValue *va
         break;
     case PROP_DOC_PASSWORD_TO_MODIFY:
         g_value_set_boolean (value, priv->m_nLOKFeatures & LOK_FEATURE_DOCUMENT_PASSWORD_TO_MODIFY);
+        break;
+    case PROP_TILED_ANNOTATIONS:
+        g_value_set_boolean (value, !(priv->m_nLOKFeatures & LOK_FEATURE_NO_TILED_ANNOTATIONS));
         break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, propId, pspec);
@@ -2632,7 +2644,6 @@ static gboolean lok_doc_view_initable_init (GInitable *initable, GCancellable* /
         return FALSE;
     }
     priv->m_nLOKFeatures |= LOK_FEATURE_PART_IN_INVALIDATION_CALLBACK;
-    priv->m_nLOKFeatures |= LOK_FEATURE_NO_TILED_ANNOTATIONS;
     priv->m_pOffice->pClass->setOptionalFeatures(priv->m_pOffice, priv->m_nLOKFeatures);
 
     return TRUE;
@@ -2860,6 +2871,20 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                              "Edit document password capability",
                              "Whether the client supports providing passwords to edit documents",
                              FALSE,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE
+                                                      | G_PARAM_STATIC_STRINGS));
+
+    /**
+     * LOKDocView:tiled-annotations-rendering:
+     *
+     * Set it to false if client does not want LO to render comments in tiles and
+     * instead interested in using comments API to access comments
+     */
+    properties[PROP_TILED_ANNOTATIONS] =
+        g_param_spec_boolean("tiled-annotations",
+                             "Render comments in tiles",
+                             "Whether the client wants in tile comment rendering",
+                             TRUE,
                              static_cast<GParamFlags>(G_PARAM_READWRITE
                                                       | G_PARAM_STATIC_STRINGS));
 
