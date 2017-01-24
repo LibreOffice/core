@@ -101,11 +101,11 @@ public:
      *
      *  This method must be used in combination with openConfig().
      *  The cached configuration access must be provided here ... and
-     *  all operations are made relativ to this access point.
+     *  all operations are made relative to this access point.
      *
      *  @param  xCFG
      *          the configuration root, where sRelPath should be interpreted.
-     *          as relativ path
+     *          as relative path
      *
      *  @param  sRelPath
      *          path relative to xCFG parameter.
@@ -130,11 +130,11 @@ public:
      *
      *  This method must be used in combination with openConfig().
      *  The cached configuration access must be provided here ... and
-     *  all operations are made relativ to this access point.
+     *  all operations are made relative to this access point.
      *
      *  @param  xCFG
      *          the configuration root, where sRelPath should be interpreted.
-     *          as relativ path
+     *          as relative path
      *
      *  @param  sRelPath
      *          path relative to xCFG parameter.
@@ -161,14 +161,14 @@ public:
      *
      *  This method must be used in combination with openConfig().
      *  The cached configuration access must be provided here ... and
-     *  all operations are made relativ to this access point.
+     *  all operations are made relative to this access point.
      *
      *  Further this method must be used only with configuration set's.
      *  Atomic keys can't be "created" ... they "exists every time".
      *
      *  @param  xCFG
      *          the configuration root, where sRelPathToSet should be interpreted
-     *          as relativ path.
+     *          as relative path.
      *
      *  @param  sRelPathToSet
      *          path relative to xCFG parameter.

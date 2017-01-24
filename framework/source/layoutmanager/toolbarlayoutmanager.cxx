@@ -150,7 +150,7 @@ void ToolbarLayoutManager::implts_setDockingAreaWindowSizes( const awt::Rectangl
 
     uno::Reference< awt::XDevice > xDevice( xContainerWindow, uno::UNO_QUERY );
 
-    // Convert relativ size to output size.
+    // Convert relative size to output size.
     awt::Rectangle  aRectangle           = xContainerWindow->getPosSize();
     awt::DeviceInfo aInfo                = xDevice->getInfo();
     awt::Size       aContainerClientSize = awt::Size( aRectangle.Width - aInfo.LeftInset - aInfo.RightInset  ,

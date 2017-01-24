@@ -638,7 +638,7 @@ void ProgressMonitor::impl_recalcLayout ()
     nWidth_Topic_Top        =   std::max( aTopicSize_Top.Width, aTopicSize_Bottom.Width );
     nHeight_Topic_Top       =   aTopicSize_Top.Height;
 
-    // Right column before progressbar has relativ position to left column ...
+    // Right column before progressbar has relative position to left column ...
     // ... and a size as rest of dialog size!
     nX_Text_Top             =   nX_Topic_Top+nWidth_Topic_Top+PROGRESSMONITOR_FREEBORDER;
     nY_Text_Top             =   nY_Topic_Top;
@@ -652,7 +652,7 @@ void ProgressMonitor::impl_recalcLayout ()
         nWidth_Text_Top     =   impl_getWidth()-nWidth_Topic_Top-(3*PROGRESSMONITOR_FREEBORDER);
     nHeight_Text_Top        =   nHeight_Topic_Top;
 
-    // Position of progressbar is relativ to columns before.
+    // Position of progressbar is relative to columns before.
     // Progressbar.Width  = Dialog.Width !!!
     // Progressbar.Height = Button.Height
     nX_ProgressBar          =   nX_Topic_Top;

@@ -270,7 +270,7 @@ public:
 
         @param rPoint
         Point to query text position of. Is interpreted in logical
-        coordinates, relativ to the upper left corner of the text, and
+        coordinates, relative to the upper left corner of the text, and
         in the map mode given by GetMapMode()
 
         @param rPara[0 .. n-1]
