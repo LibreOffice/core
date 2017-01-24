@@ -32,11 +32,14 @@ private:
     /** Dispatcher. Need to keep a reference to it as long as this StatusListener exists. */
     css::uno::Reference<css::frame::XDispatch> mxDispatch;
     css::util::URL maCommandURL;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
 
 public:
     void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override;
+
+    const css::uno::Reference<css::frame::XFrame>& getFrame() { return mxFrame; }
 
     void dispose();
 };
@@ -51,6 +54,8 @@ VclStatusListener<T>::VclStatusListener(T* widget, const rtl::OUString& aCommand
     css::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getActiveFrame());
     if (!xFrame.is())
         xFrame = css::uno::Reference<css::frame::XFrame>(xDesktop, css::uno::UNO_QUERY);
+
+    mxFrame = xFrame;
 
     css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(xFrame, css::uno::UNO_QUERY);
     if (!xDispatchProvider.is())
@@ -86,6 +91,7 @@ void VclStatusListener<T>::dispose()
         mxDispatch->removeStatusListener(this, maCommandURL);
         mxDispatch.clear();
     }
+    mxFrame.clear();
     mWidget.clear();
 }
 

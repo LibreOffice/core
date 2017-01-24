@@ -275,7 +275,7 @@ IMPL_LINK_NOARG(SidebarToolBox, ChangedIconSizeHandler, LinkParamNone*, void)
         {
             OUString aCommandURL = GetItemCommand(it.first);
             css::uno::Reference<frame::XFrame> xFrame = SfxViewFrame::Current()->GetFrame().GetFrameInterface();
-            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, xFrame, eImageType);
+            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, xFrame, eImageType);
             SetItemImage(it.first, aImage);
         }
     }

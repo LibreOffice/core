@@ -180,7 +180,7 @@ void SmartTagMenuController::FillMenu()
     {
         const OUString aCommand = ".uno:AutoCorrectDlg?OpenSmartTag:bool=true";
         pVCLMenu->InsertSeparator();
-        pVCLMenu->InsertItem( nMenuId, vcl::CommandInfoProvider::Instance().GetPopupLabelForCommand( aCommand, m_xFrame ) );
+        pVCLMenu->InsertItem( nMenuId, vcl::CommandInfoProvider::GetPopupLabelForCommand( aCommand, m_xFrame ) );
         pVCLMenu->SetItemCommand( nMenuId, aCommand );
     }
 }
