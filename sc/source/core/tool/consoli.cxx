@@ -680,7 +680,7 @@ void ScConsData::OutputToDocument( ScDocument* pDestDoc, SCCOL nCol, SCROW nRow,
                                 }
                             }
 
-                            // insert sum (relativ, not 3d)
+                            // insert sum (relative, not 3d)
 
                             ScAddress aDest( sal::static_int_cast<SCCOL>(nCol+nArrX),
                                              sal::static_int_cast<SCROW>(nRow+nArrY+nNeeded), nTab );

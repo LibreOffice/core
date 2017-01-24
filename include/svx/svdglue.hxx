@@ -67,7 +67,7 @@ namespace o3tl
 class SVX_DLLPUBLIC SdrGluePoint {
     // Reference Point is SdrObject::GetSnapRect().Center()
     // bNoPercent=false: position is -5000..5000 (1/100)% or 0..10000 (depending on align)
-    // bNoPercent=true : position is in log unit, relativ to the reference point
+    // bNoPercent=true : position is in log unit, relative to the reference point
     Point    aPos;
     SdrEscapeDirection nEscDir;
     sal_uInt16   nId;

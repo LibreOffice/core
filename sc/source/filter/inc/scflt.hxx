@@ -482,7 +482,7 @@ struct Sc10GraphHeader
     sal_Int32       y;
     sal_Int32       w;              // w,h width and height in pixels
     sal_Int32       h;
-    sal_uInt8       IsRelPos;       // position relativ to cell, or absolute in the table
+    sal_uInt8       IsRelPos;       // position relative to cell, or absolute in the table
     sal_uInt8       DoPrint;        // print Grafic?
     sal_uInt16      FrameType;      // Frame type around Grafic (none, simple, double, simple thick, double thick)
     sal_uInt8       IsTransparent;  // show background?

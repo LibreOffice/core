@@ -228,7 +228,7 @@ int ImplSalWICompareAscii( const wchar_t* pStr1, const char* pStr2 );
 
 // wParam == 0; lParam == pData
 #define SAL_MSG_USEREVENT           (WM_USER+130)
-// wParam == 0; lParam == MousePosition relativ to upper left of screen
+// wParam == 0; lParam == MousePosition relative to upper left of screen
 #define SAL_MSG_MOUSELEAVE          (WM_USER+131)
 // NULL-Message, should not be processed
 #define SAL_MSG_DUMMY               (WM_USER+132)

@@ -73,7 +73,7 @@ sal_Bool SAL_CALL DockingAreaDefaultAcceptor::requestDockingAreaSpace( const css
         if ( xContainerWindow.is() && xComponentWindow.is() )
         {
             css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
-            // Convert relativ size to output size.
+            // Convert relative size to output size.
             css::awt::Rectangle  aRectangle  = xContainerWindow->getPosSize();
             css::awt::DeviceInfo aInfo       = xDevice->getInfo();
             css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,
@@ -107,7 +107,7 @@ void SAL_CALL DockingAreaDefaultAcceptor::setDockingAreaSpace( const css::awt::R
         if ( xContainerWindow.is() && xComponentWindow.is() )
         {
             css::uno::Reference< css::awt::XDevice > xDevice( xContainerWindow, css::uno::UNO_QUERY );
-            // Convert relativ size to output size.
+            // Convert relative size to output size.
             css::awt::Rectangle  aRectangle  = xContainerWindow->getPosSize();
             css::awt::DeviceInfo aInfo       = xDevice->getInfo();
             css::awt::Size       aSize       (  aRectangle.Width  - aInfo.LeftInset - aInfo.RightInset  ,

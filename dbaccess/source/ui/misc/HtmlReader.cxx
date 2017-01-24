@@ -390,7 +390,7 @@ sal_Int16 OHTMLReader::GetWidthPixel( const HTMLOption& rOption )
     else
     {
         if ( rOptVal.indexOf('*') != -1 )
-        {   // relativ to what?!?
+        {   // relative to what?!?
 //TODO: collect ColArray of all relevant values and then MakeCol
             return 0;
         }
