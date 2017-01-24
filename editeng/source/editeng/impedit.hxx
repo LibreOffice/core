@@ -421,6 +421,7 @@ private:
 
     VclPtr< VirtualDevice> pVirtDev;
     VclPtr< OutputDevice > pRefDev;
+    VclPtr<VirtualDevice> mpOwnDev;
 
     svtools::ColorConfig*   pColorConfig;
     mutable SvtCTLOptions*  pCTLOptions;
@@ -506,7 +507,6 @@ private:
     bool            bIsInUndo:1;
     bool            bUpdate:1;
     bool            bUndoEnabled:1;
-    bool            bOwnerOfRefDev:1;
     bool            bDowning:1;
     bool            bUseAutoColor:1;
     bool            bForceAutoColor:1;
