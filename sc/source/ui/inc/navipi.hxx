@@ -194,7 +194,6 @@ private:
     OUString        aStrHidden;
     OUString        aStrActiveWin;
 
-    bool            bInSidebar;
     sal_uInt16      nZoomId;
     sal_uInt16      nChangeRootId;
     sal_uInt16      nDragModeId;
@@ -257,7 +256,7 @@ private:
     static void ReleaseFocus();
 
 public:
-    ScNavigatorDlg(SfxBindings* pB, bool bSidebar, vcl::Window* pParent);
+    ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent);
     virtual ~ScNavigatorDlg() override;
     virtual void dispose() override;
 

@@ -85,8 +85,6 @@ class SwNavigationPI : public PanelLayout,
     VclPtr<SfxPopupWindow>      m_pPopupWindow;
     VclPtr<SfxPopupWindow>      m_pFloatingWindow;
 
-    SfxChildWindowContext* m_pContextWin;
-
     SwNavigationConfig  *m_pConfig;
     SfxBindings         &m_rBindings;
 
@@ -134,7 +132,7 @@ protected:
 
 public:
 
-    SwNavigationPI(SfxBindings*, SfxChildWindowContext*, vcl::Window*);
+    SwNavigationPI(SfxBindings*, vcl::Window*);
     virtual ~SwNavigationPI() override;
     virtual void    dispose() override;
 

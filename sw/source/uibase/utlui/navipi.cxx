@@ -244,7 +244,7 @@ IMPL_LINK( SwNavigationPI, ToolBoxSelectHdl, ToolBox *, pBox, void )
     }
     else if (sCommand == "listbox")
     {
-        if (m_pContextWin && m_pContextWin->GetFloatingWindow())
+        if (SfxChildWindowContext::GetFloatingWindow(GetParent()))
         {
             if (IsZoomedIn())
             {
@@ -583,7 +583,6 @@ void SwNavigationPI::ZoomIn()
 }
 
 SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
-                               SfxChildWindowContext* pCw,
                                vcl::Window* pParent)
     : PanelLayout(pParent, "NavigatorPanel", "modules/swriter/ui/navigatorpanel.ui", nullptr)
     , SfxControllerItem(SID_DOCFULLNAME, *_pBindings)
@@ -594,7 +593,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     , m_pCreateView(nullptr)
     , m_pPopupWindow(nullptr)
     , m_pFloatingWindow(nullptr)
-    , m_pContextWin(pCw)
     , m_pConfig(SW_MOD()->GetNavigationConfig())
     , m_rBindings(*_pBindings)
     , m_nAutoMarkIdx(1)
@@ -730,12 +728,12 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aGlobalTree->SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));
     m_aDocListBox->SetAccessibleName(m_aStatusArr[3]);
 
-    if (m_pContextWin == nullptr)
+    if (!SfxChildWindowContext::GetFloatingWindow(GetParent()))
     {
-        // When the context window is missing then the navigator is
-        // displayed in the sidebar.  While the navigator could change
-        // its size, the sidebar can not, and the navigator would just
-        // waste space.  Therefore hide this button.
+        // if the parent isn't a float, then then the navigator is displayed in
+        // the sidebar or is otherwise docked. While the navigator could change
+        // its size, the sidebar can not, and the navigator would just waste
+        // space. Therefore hide this button.
         m_aContentToolBox->RemoveItem(m_aContentToolBox->GetItemPos(m_aContentToolBox->GetItemId("listbox")));
     }
 
@@ -1194,7 +1192,7 @@ SwNavigationChild::SwNavigationChild( vcl::Window* pParent,
                         SfxChildWinInfo* )
     : SfxChildWindowContext( nId )
 {
-    VclPtr<SwNavigationPI> pNavi = VclPtr<SwNavigationPI>::Create( _pBindings, this, pParent );
+    VclPtr<SwNavigationPI> pNavi = VclPtr<SwNavigationPI>::Create(_pBindings, pParent);
     _pBindings->Invalidate(SID_NAVIGATOR);
 
     SwNavigationConfig* pNaviConfig = SW_MOD()->GetNavigationConfig();
