@@ -38,6 +38,7 @@
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <vcl/svapp.hxx>
+#include <vcl/commandinfoprovider.hxx>
 #include "svtools/treelistentry.hxx"
 
 #include <memory>
@@ -410,6 +411,98 @@ IMPL_LINK_NOARG( DBTreeListBox, ScrollDownHdl, LinkParamNone*, void )
 
 namespace
 {
+    void lcl_enableEntries( PopupMenu* _pPopup, IController& _rController )
+    {
+        if ( !_pPopup )
+            return;
+
+        sal_uInt16 nCount = _pPopup->GetItemCount();
+        for (sal_uInt16 i=0; i < nCount; ++i)
+        {
+            if ( _pPopup->GetItemType(i) != MenuItemType::SEPARATOR )
+            {
+                sal_uInt16 nId = _pPopup->GetItemId(i);
+                PopupMenu* pSubPopUp = _pPopup->GetPopupMenu(nId);
+                if ( pSubPopUp )
+                {
+                    lcl_enableEntries( pSubPopUp, _rController );
+                    _pPopup->EnableItem(nId,pSubPopUp->HasValidEntries());
+                }
+                else
+                {
+                    OUString sCommandURL( _pPopup->GetItemCommand( nId ) );
+                    bool bEnabled =  sCommandURL.isEmpty()
+                                  ? _rController.isCommandEnabled( nId )
+                                  : _rController.isCommandEnabled( sCommandURL );
+                    _pPopup->EnableItem( nId, bEnabled );
+                }
+            }
+        }
+
+        _pPopup->RemoveDisabledEntries();
+    }
+}
+
+namespace
+{
+    void lcl_adjustMenuItemIDs( Menu& _rMenu, IController& _rCommandController )
+    {
+        sal_uInt16 nCount = _rMenu.GetItemCount();
+        for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
+        {
+            // do not adjust separators
+            if ( _rMenu.GetItemType( pos ) == MenuItemType::SEPARATOR )
+                continue;
+
+            sal_uInt16 nId = _rMenu.GetItemId(pos);
+            OUString aCommand = _rMenu.GetItemCommand( nId );
+            PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
+            if ( pPopup )
+            {
+                lcl_adjustMenuItemIDs( *pPopup, _rCommandController );
+                continue;
+            }
+
+            const sal_uInt16 nCommandId = _rCommandController.registerCommandURL( aCommand );
+            _rMenu.InsertItem( nCommandId, _rMenu.GetItemText( nId ), _rMenu.GetItemImage( nId ),
+                _rMenu.GetItemBits( nId ), OString(), pos );
+
+            // more things to preserve:
+            // - the help command
+            OUString sHelpURL = _rMenu.GetHelpCommand( nId );
+            if ( !sHelpURL.isEmpty() )
+                _rMenu.SetHelpCommand(  nCommandId, sHelpURL  );
+
+            // remove the "old" item
+            _rMenu.RemoveItem( pos+1 );
+        }
+    }
+    void lcl_insertMenuItemImages( Menu& _rMenu, IController& _rCommandController )
+    {
+        uno::Reference< frame::XController > xController = _rCommandController.getXController();
+        uno::Reference< frame::XFrame> xFrame;
+        if ( xController.is() )
+            xFrame = xController->getFrame();
+        sal_uInt16 nCount = _rMenu.GetItemCount();
+        for ( sal_uInt16 pos = 0; pos < nCount; ++pos )
+        {
+            // do not adjust separators
+            if ( _rMenu.GetItemType( pos ) == MenuItemType::SEPARATOR )
+                continue;
+
+            sal_uInt16 nId = _rMenu.GetItemId(pos);
+            OUString aCommand = _rMenu.GetItemCommand( nId );
+            PopupMenu* pPopup = _rMenu.GetPopupMenu( nId );
+            if ( pPopup )
+            {
+                lcl_insertMenuItemImages( *pPopup, _rCommandController );
+                continue;
+            }
+
+            if ( xFrame.is() )
+                _rMenu.SetItemImage(nId, vcl::CommandInfoProvider::GetImageForCommand(aCommand, xFrame));
+        }
+    }
     // SelectionSupplier
     typedef ::cppu::WeakImplHelper<   XSelectionSupplier
                                   >   SelectionSupplier_Base;
