@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_32af05e5",
+        "filename": "sdext/source/minimizer/optimizerdialog.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 519,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-24T09:13:06Z",
+      "side": 1,
+      "message": "(1) when aLocation is empty, constructing a aURLObj from it is fine, and aURLObj.setExtension will return false, so no need to handle that case specially\n\n(2) better to use bIgnoreFinalSlash\u003dfalse in the calls to setExtension and getName; if aLocation is a URL with a path ending in a slash (so implicitly denoting a directory), better skip setting aFileOpenDialog.setDefaultName;  however, setExtension would still return true in that case (cf. \u003chttps://cgit.freedesktop.org/libreoffice/core/commit/?id\u003d635d4b0eb8ccdec84d78c9b1d2aa113f6250e1f2\u003e \"Clarify some INetURLObject::setExtension behavior\"), so it needs to be preceeded by a check for !aURLObj.hasFinalSlash() (for which (1) holds, too)",
+      "revId": "236a292581b345be4b413c2d23486fe15c263e33",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
