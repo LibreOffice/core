@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_12b921ea",
+        "filename": "external/curl/curl-7.26.0_win-proxy.patch",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-24T15:05:59Z",
+      "side": 0,
+      "message": "what is the reason for dropping this patch? it appears that the upstream code does not contain this feature in this place, are you aware of it being implemented elsewhere?\n\ndo you consider it unnecessary?",
+      "revId": "9f0b05a64733fcaac39127db5e5f2fa3ad80a1b9",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
