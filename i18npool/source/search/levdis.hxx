@@ -122,7 +122,6 @@ public:
     {
         NewMem(s);
     }
-    ~WLevDisDistanceMem()           {}
     int* GetPtr() const             { return p.get(); }
     int* NewMem( size_t s )
     {

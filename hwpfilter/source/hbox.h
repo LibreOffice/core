@@ -394,7 +394,6 @@ struct Columns
           nTotal = INIT_SIZE;
           data.reset(new int[nTotal]);
      }
-     ~Columns() {}
 
      void AddColumnsSize(){
           if (nTotal + ADD_AMOUNT < nTotal) // overflow
@@ -454,7 +453,6 @@ struct Rows
           nTotal = INIT_SIZE;
           data.reset( new int[nTotal] );
      }
-     ~Rows() {}
 
      void AddRowsSize(){
           if (nTotal + ADD_AMOUNT < nTotal) // overflow

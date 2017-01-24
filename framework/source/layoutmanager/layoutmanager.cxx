@@ -3132,9 +3132,6 @@ namespace detail
             rManager.describeProperties(aProperties);
             m_pInfoHelper.reset( new ::cppu::OPropertyArrayHelper(aProperties, true) );
         }
-        ~InfoHelperBuilder()
-        {
-        }
         InfoHelperBuilder(const InfoHelperBuilder&) = delete;
         InfoHelperBuilder& operator=(const InfoHelperBuilder&) = delete;
 
