@@ -288,7 +288,11 @@ gboolean CommentsSidebar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigu
     TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
     LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
 
-    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_TEXT)
+    // whether tield rendering is turned on
+    gboolean bTiledAnnotations;
+    g_object_get(G_OBJECT(pDocView), "tiled-annotations", &bTiledAnnotations, nullptr);
+
+    if (!bTiledAnnotations && pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_TEXT)
     {
         if (!rWindow.m_pCommentsSidebar)
         {
@@ -933,19 +937,20 @@ static void toggleFindbar(GtkWidget* pButton, gpointer /*pItem*/)
 }
 
 static void
-setLOKFeatures (GtkWidget* pDocView)
+setLOKFeatures (GtkWidget* pDocView, gboolean bTiledAnnotations)
 {
     g_object_set(G_OBJECT(pDocView),
                  "doc-password", TRUE,
                  "doc-password-to-modify", TRUE,
+                 "tiled-annotations", bTiledAnnotations,
                  nullptr);
 }
 
 /// Common initialization, regardless if it's just a new view or a full init.
-static TiledWindow& setupWidgetAndCreateWindow(GtkWidget* pDocView)
+static TiledWindow& setupWidgetAndCreateWindow(GtkWidget* pDocView, gboolean bTiledAnnotations)
 {
     setupDocView(pDocView);
-    setLOKFeatures(pDocView);
+    setLOKFeatures(pDocView, bTiledAnnotations);
     TiledWindow aWindow;
     aWindow.m_pDocView = pDocView;
     GtkWidget* pWindow = createWindow(aWindow);
@@ -974,8 +979,9 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
     std::string aArguments = aStream.str();
 
     GtkWidget* pDocView = lok_doc_view_new_from_widget(LOK_DOC_VIEW(rWindow.m_pDocView), aArguments.c_str());
-
-    TiledWindow& rNewWindow = setupWidgetAndCreateWindow(pDocView);
+    gboolean bTiledAnnotations;
+    g_object_get(G_OBJECT(rWindow.m_pDocView), "tiled-annotations", &bTiledAnnotations, nullptr);
+    TiledWindow& rNewWindow = setupWidgetAndCreateWindow(pDocView, bTiledAnnotations);
     // Hide the unused progress bar.
     gtk_widget_show_all(rNewWindow.m_pStatusBar);
     gtk_widget_hide(rNewWindow.m_pProgressBar);
@@ -988,17 +994,20 @@ static void createView(GtkWidget* pButton, gpointer /*pItem*/)
 static void createModelAndView(const char* pLOPath, const char* pDocPath, const std::vector<std::string>& rArguments)
 {
     std::string aUserProfile;
+    gboolean bTiledAnnotations = FALSE;
     for (size_t i = 0; i < rArguments.size(); ++i)
     {
         const std::string& rArgument = rArguments[i];
         if (rArgument == "--user-profile" && i + 1 < rArguments.size())
             aUserProfile = std::string("vnd.sun.star.pathname:")
                 + rArguments[i + 1].c_str();
+        else if (rArgument == "--enable-tiled-annotations")
+            bTiledAnnotations = TRUE;
     }
     const gchar* pUserProfile = aUserProfile.empty() ? nullptr : aUserProfile.c_str();
     GtkWidget* pDocView = lok_doc_view_new_from_user_profile(pLOPath, pUserProfile, nullptr, nullptr);
 
-    TiledWindow& rWindow = setupWidgetAndCreateWindow(pDocView);
+    TiledWindow& rWindow = setupWidgetAndCreateWindow(pDocView, bTiledAnnotations);
 
     boost::property_tree::ptree aTree;
     for (size_t i = 0; i < rArguments.size(); ++i)
