@@ -95,7 +95,6 @@ ImpEditEngine::ImpEditEngine( EditEngine* pEE, SfxItemPool* pItemPool ) :
     bIsInUndo(false),
     bUpdate(true),
     bUndoEnabled(true),
-    bOwnerOfRefDev(false),
     bDowning(false),
     bUseAutoColor(true),
     bForceAutoColor(false),
@@ -184,26 +183,15 @@ ImpEditEngine::~ImpEditEngine()
     delete mpIMEInfos;
     delete pColorConfig;
     delete pCTLOptions;
-    if ( bOwnerOfRefDev )
-        pRefDev.disposeAndClear();
     delete pSpellInfo;
 }
 
 void ImpEditEngine::SetRefDevice( OutputDevice* pRef )
 {
-    if ( bOwnerOfRefDev )
-        pRefDev.disposeAndClear();
-
-    if ( !pRef )
-    {
-        pRefDev = VclPtr<VirtualDevice>::Create();
-        pRefDev->SetMapMode( MapUnit::MapTwip );
-        bOwnerOfRefDev = true;
-    } else
-    {
+    if (pRef)
         pRefDev = pRef;
-        bOwnerOfRefDev = false;
-    }
+    else
+        pRefDev = EditDLL::Get().GetGlobalData()->GetStdVirtualDevice();
 
     nOnePixelInRef = (sal_uInt16)pRefDev->PixelToLogic( Size( 1, 0 ) ).Width();
 
@@ -219,13 +207,10 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
     if ( GetRefDevice()->GetMapMode() == rMapMode )
         return;
 
-    if ( !bOwnerOfRefDev )
-    {
-        pRefDev = VclPtr<VirtualDevice>::Create();
-        pRefDev->SetMapMode( MapUnit::MapTwip );
-        SetRefDevice( pRefDev );
-        bOwnerOfRefDev = true;
-    }
+    pRefDev = VclPtr<VirtualDevice>::Create();
+    pRefDev->SetMapMode( MapUnit::MapTwip );
+    SetRefDevice( pRefDev );
+
     pRefDev->SetMapMode( rMapMode );
     nOnePixelInRef = (sal_uInt16)pRefDev->PixelToLogic( Size( 1, 0 ) ).Width();
     if ( IsFormatted() )
