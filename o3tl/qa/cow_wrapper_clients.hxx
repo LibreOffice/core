@@ -22,6 +22,7 @@
 
 #include "o3tl/cow_wrapper.hxx"
 #include "cppunit/extensions/HelperMacros.h"
+#include <assert.h>
 
 /* Definition of Cow_Wrapper_Clients classes */
 
@@ -153,15 +154,12 @@ struct BogusRefCountPolicy
     static sal_uInt32 s_nEndOfScope;
     typedef sal_uInt32 ref_count_t;
     static void incrementCount( ref_count_t& rCount ) {
-        if(s_bShouldIncrement)
-        {
-            ++rCount;
-            s_bShouldIncrement = false;
-        }
-        else
-            CPPUNIT_FAIL("Ref-counting policy incremented when it should not have.");
+        assert(s_bShouldIncrement && "Ref-counting policy incremented when it should not have.");
+        ++rCount;
+        s_bShouldIncrement = false;
     }
     static bool decrementCount( ref_count_t& rCount ) {
+        assert((s_nEndOfScope || s_bShouldDecrement) && "Ref-counting policy decremented when it should not have.");
         if(s_nEndOfScope)
         {
             --rCount;
@@ -172,8 +170,6 @@ struct BogusRefCountPolicy
             --rCount;
             s_bShouldDecrement = false;
         }
-        else
-            CPPUNIT_FAIL("Ref-counting policy decremented when it should not have.");
         return rCount != 0;
     }
 };
