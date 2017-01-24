@@ -66,6 +66,10 @@ class GbuildParser:
     def __split_flags(flagsline, flagslineappend):
         return [cxxflag.strip() for cxxflag in GbuildParser._warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
 
+
+
+
+
     def parse(self):
         # Relation between json object and file extension
         jsonSrc = {
@@ -91,6 +95,7 @@ class GbuildParser:
                     jsondata = json.load(f)
                     match = GbuildParser._buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
                     jsondata['location'] = os.path.dirname(jsondata['MAKEFILE'])
+
                     module = jsondata['location'].split('/')[-1]
                     (jsondata['include'], jsondata['include_sys']) = GbuildParser.__split_includes(jsondata['INCLUDE'])
                     jsondata['name'] = match
@@ -103,7 +108,6 @@ class GbuildParser:
                     for i in jsonSrc:
                         jsondata[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
 
-                    module = jsondata['location'].split('/')[-1]
                     if not module in moduleDict:
                         moduleDict[module] = {'targets': [],'headers':{}}
                     moduleDict[module]['targets'].append(jsondata)
@@ -114,6 +118,8 @@ class GbuildParser:
         for module in sorted(moduleDict):
             self.modules[module] = moduleDict[module]
         return self
+
+
 
     def find_all_headers(self):
 
@@ -144,6 +150,473 @@ class IdeIntegrationGenerator:
 
     def emit(self):
         pass
+
+class testide(IdeIntegrationGenerator):
+
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+        self.toolset = self.retrieve_toolset()
+        self.solution_directory = './windows'
+        self.configurations = {
+            'Build': {
+                'build': self.module_make_command('%(target)s'),
+                'clean': self.module_make_command('%(target)s.clean'),
+                'rebuild': self.module_make_command('%(target)s.clean %(target)s')
+            },
+            'Unit Tests': {
+                'build': self.module_make_command('unitcheck'),
+                'clean': self.module_make_command('clean'),
+                'rebuild': self.module_make_command('clean unitcheck'),
+            },
+            'Integration tests': {
+                'build': self.module_make_command('unitcheck slowcheck screenshot subsequentcheck'),
+                'clean': self.module_make_command('clean'),
+                'rebuild': self.module_make_command('clean unitcheck slowcheck screenshot subsequentcheck')
+            }
+        }
+
+    def retrieve_toolset(self):
+        return {'vs2013': 'v120', 'vs2015': 'v140'}.get(self.ide, None)
+
+    def module_make_command(self, targets):
+        return '%(sh)s -c "PATH=\\"/bin:$PATH\\";BUILDDIR=\\"%(builddir)s\\" %(makecmd)s -rsC %(location)s ' + targets + '"'
+
+    class Project:
+
+        def __init__(self, guid, target, project_path):
+            self.guid = guid
+            self.target = target
+            self.path = project_path
+
+    def emit(self):
+        all_projects = []
+        for module in self.gbuildparser.modules:
+            projects = []
+            module_directory = os.path.join(self.solution_directory, module)
+            if module != 'include':  # FIXME
+                for target in self.gbuildparser.modules[module]['targets']:
+                    project_path = os.path.join(module_directory, '%s.vcxproj' % target['target_name'])
+                    project_guid = self.write_project(project_path, target)
+                    p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
+                    projects.append(p)
+                self.write_solution(os.path.join(module_directory, '%s.sln' % module), projects)
+                all_projects += projects
+
+        self.write_solution(os.path.join(self.solution_directory, 'LibreOffice.sln'), all_projects)
+
+    nmake_project_guid = '8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942'
+
+    def get_dependency_libs(self, linked_libs, library_projects):
+        dependency_libs = {}
+        for linked_lib in linked_libs:
+            for library_project in library_projects:
+                if library_project.target['name'] == linked_lib:
+                    dependency_libs[library_project.guid] = library_project
+        return dependency_libs
+
+    def write_solution(self, solution_path, projects):
+        print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
+        library_projects = [project for project in projects if project.target['build_type'] == 'Library']
+        with open(solution_path, 'w') as f:
+            f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
+            for project in projects:
+                target = project.target
+                print(' %s' % target['target_name'], end='')
+                proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
+                f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
+                        (VisualStudioIntegrationGenerator.nmake_project_guid,
+                         target['target_name'], proj_path, project.guid))
+                libs_in_solution = self.get_dependency_libs(target['LINKED_LIBS'], library_projects)
+                if libs_in_solution:
+                    f.write('\tProjectSection(ProjectDependencies) = postProject\n')
+                    for lib_guid in libs_in_solution.keys():
+                        f.write('\t\t{%(guid)s} = {%(guid)s}\n' % {'guid': lib_guid})
+                    f.write('\tEndProjectSection\n')
+                f.write('EndProject\n')
+            f.write('Global\n')
+            platform = 'Win32'
+            f.write('\tGlobalSection(SolutionConfigurationPlatforms) = preSolution\n')
+            for cfg in self.configurations:
+                f.write('\t\t%(cfg)s|%(platform)s = %(cfg)s|%(platform)s\n' % {'cfg': cfg, 'platform': platform})
+            f.write('\tEndGlobalSection\n')
+            f.write('\tGlobalSection(ProjectConfigurationPlatforms) = postSolution\n')
+            # Specifies project configurations for solution configuration
+            for project in projects:
+                for cfg in self.configurations:
+                    params = {'guid': project.guid, 'sol_cfg': cfg, 'proj_cfg': cfg, 'platform': platform}
+                    f.write(
+                        '\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.ActiveCfg = %(proj_cfg)s|%(platform)s\n' % params)
+                    # Build.0 is basically 'Build checkbox' in configuration manager
+                    f.write(
+                        '\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.Build.0 = %(proj_cfg)s|%(platform)s\n' % params)
+            f.write('\tEndGlobalSection\n')
+            f.write('EndGlobal\n')
+        print('')
+
+    def write_project(self, project_path, target):
+        # See info at http://blogs.msdn.com/b/visualstudio/archive/2010/05/14/a-guide-to-vcxproj-and-props-file-structure.aspx
+        folder = os.path.dirname(project_path)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        project_guid = str(uuid.uuid4()).upper()
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        ET.register_namespace('', ns)
+        proj_node = ET.Element('{%s}Project' % ns, DefaultTargets='Build', ToolsVersion='4.0')
+        proj_confs_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns, Label='ProjectConfigurations')
+        platform = 'Win32'
+        for configuration in self.configurations:
+            proj_conf_node = ET.SubElement(proj_confs_node,
+                                           '{%s}ProjectConfiguration' % ns,
+                                           Include='%s|%s' % (configuration, platform))
+            conf_node = ET.SubElement(proj_conf_node, '{%s}Configuration' % ns)
+            conf_node.text = configuration
+            platform_node = ET.SubElement(proj_conf_node, '{%s}Platform' % ns)
+            platform_node.text = platform
+
+        globals_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='Globals')
+        proj_guid_node = ET.SubElement(globals_node, '{%s}ProjectGuid' % ns)
+        proj_guid_node.text = '{%s}' % project_guid
+        proj_keyword_node = ET.SubElement(globals_node, '{%s}Keyword' % ns)
+        proj_keyword_node.text = 'MakeFileProj'
+        proj_name_node = ET.SubElement(globals_node, '{%s}ProjectName' % ns)
+        proj_name_node.text = target['target_name']
+
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
+        for configuration in self.configurations:
+            conf_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label="Configuration",
+                                      Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (
+                                      configuration, platform))
+            # Type of project used by the MSBuild to determine build process, see Microsoft.Makefile.targets
+            conf_type_node = ET.SubElement(conf_node, '{%s}ConfigurationType' % ns)
+            conf_type_node.text = 'Makefile'
+            # VS2012: I need to have this otherwise the names of projects will contain text Visual Studio 2010 in the Solution Explorer
+            platform_toolset_node = ET.SubElement(conf_node, '{%s}PlatformToolset' % ns)
+            platform_toolset_node.text = self.toolset
+
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.props')
+        ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionSettings')
+        for configuration in self.configurations:
+            prop_sheets_node = ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='Configuration',
+                                             Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (
+                                             configuration, platform))
+            ET.SubElement(prop_sheets_node, '{%s}Import' % ns,
+                          Project='$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props',
+                          Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')",
+                          Label='LocalAppDataPlatform')
+
+        ET.SubElement(proj_node, '{%s}PropertyGroup' % ns, Label='UserMacros')
+        for cfg_name, cfg_targets in self.configurations.items():
+            conf_node = ET.SubElement(proj_node, '{%s}PropertyGroup' % ns,
+                                      Condition="'$(Configuration)|$(Platform)'=='%s|%s'" % (cfg_name, platform))
+            nmake_params = {
+                'sh': os.path.join(self.gbuildparser.binpath, 'dash.exe'),
+                'builddir': self.gbuildparser.builddir,
+                'location': target['location'],
+                'makecmd': self.gbuildparser.makecmd,
+                'target': target['target_name']}
+            nmake_build_node = ET.SubElement(conf_node, '{%s}NMakeBuildCommandLine' % ns)
+            nmake_build_node.text = cfg_targets['build'] % nmake_params
+            nmake_clean_node = ET.SubElement(conf_node, '{%s}NMakeCleanCommandLine' % ns)
+            nmake_clean_node.text = cfg_targets['clean'] % nmake_params
+            nmake_rebuild_node = ET.SubElement(conf_node, '{%s}NMakeReBuildCommandLine' % ns)
+            nmake_rebuild_node.text = cfg_targets['rebuild'] % nmake_params
+            nmake_output_node = ET.SubElement(conf_node, '{%s}NMakeOutput' % ns)
+            nmake_output_node.text = os.path.join(self.gbuildparser.instdir, 'program', 'soffice.exe')
+            nmake_defs_node = ET.SubElement(conf_node, '{%s}NMakePreprocessorDefinitions' % ns)
+            nmake_defs_node.text = ';'.join(list(target['DEFS']) + ['$(NMakePreprocessorDefinitions)'])
+            include_path_node = ET.SubElement(conf_node, '{%s}IncludePath' % ns)
+            include_path_node.text = ';'.join(target['include'] + ['$(IncludePath)'])
+
+        ET.SubElement(proj_node, '{%s}ItemDefinitionGroup' % ns)
+
+        cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        for cxxobject in target['CXXOBJECTS']:
+            cxxabspath = os.path.join(self.gbuildparser.srcdir, cxxobject)
+            cxxfile = cxxabspath + '.cxx'
+            if os.path.isfile(cxxfile):
+                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxfile)
+            else:
+                print('Source %s in project %s does not exist' % (cxxfile, target['target_name']))
+
+        includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        for cxxobject in target['CXXOBJECTS']:
+            include_abs_path = os.path.join(self.gbuildparser.srcdir, cxxobject)
+            hxxfile = include_abs_path + '.hxx'
+            if os.path.isfile(hxxfile):
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hxxfile)
+            # Few files have corresponding .h files
+            hfile = include_abs_path + '.h'
+            if os.path.isfile(hfile):
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hfile)
+        ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
+        ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
+        self.write_pretty_xml(proj_node, project_path)
+        self.write_filters(project_path + '.filters',
+                           os.path.join(self.gbuildparser.srcdir, os.path.basename(target['location'])),
+                           [cxx_node.get('Include') for cxx_node in cxxobjects_node.findall('{%s}ClCompile' % ns)],
+                           [include_node.get('Include') for include_node in
+                            includes_node.findall('{%s}ClInclude' % ns)])
+        return project_guid
+
+    def get_filter(self, module_dir, proj_file):
+        return '\\'.join(os.path.relpath(proj_file, module_dir).split('/')[:-1])
+
+    def get_subfilters(self, proj_filter):
+        parts = proj_filter.split('\\')
+        subfilters = set([proj_filter])
+        for i in range(1, len(parts)):
+            subfilters.add('\\'.join(parts[:i]))
+        return subfilters
+
+    def write_pretty_xml(self, node, file_path):
+        xml_str = ET.tostring(node, encoding='unicode')
+        pretty_str = minidom.parseString(xml_str).toprettyxml(encoding='utf-8')
+        with open(file_path, 'w') as f:
+            f.write(pretty_str.decode())
+
+    def add_nodes(self, files_node, module_dir, tag, project_files):
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        filters = set()
+        for project_file in project_files:
+            file_node = ET.SubElement(files_node, tag, Include=project_file)
+            if os.path.commonprefix([module_dir, project_file]) == module_dir:
+                project_filter = self.get_filter(module_dir, project_file)
+                filter_node = ET.SubElement(file_node, '{%s}Filter' % ns)
+                filter_node.text = project_filter
+                filters |= self.get_subfilters(project_filter)
+        return filters
+
+    def write_filters(self, filters_path, module_dir, compile_files, include_files):
+        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
+        ET.register_namespace('', ns)
+        proj_node = ET.Element('{%s}Project' % ns, ToolsVersion='4.0')
+        filters = set()
+        compiles_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        filters |= self.add_nodes(compiles_node, module_dir, '{%s}ClCompile' % ns, compile_files)
+        include_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        filters |= self.add_nodes(include_node, module_dir, '{%s}ClInclude' % ns, include_files)
+
+        filters_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
+        for proj_filter in filters:
+            filter_node = ET.SubElement(filters_node, '{%s}Filter' % ns, Include=proj_filter)
+            filter_id_node = ET.SubElement(filter_node, '{%s}UniqueIdentifier' % ns)
+            filter_id_node.text = '{%s}' % str(uuid.uuid4())
+        self.write_pretty_xml(proj_node, filters_path)
+
+
+class XcodeIntegrationGenerator(IdeIntegrationGenerator):
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+
+    def emit(self):
+        rootId = 'X0000001'
+        mainGroupId = 'X0000002'
+        self.rootObj = {'attributes': {'LastUpgradeCheck': '0820',
+                                       'ORGANIZATIONNAME': 'LibreOffice',
+                                       'TargetAttributes': {}},
+                        'compatibilityVersion': 'Xcode 3.2',
+                        'developmentRegion': 'English',
+                        'isa': 'PBXProject',
+                        'hasScannedForEncodings': 0,
+                        'knownRegions': ['en'],
+                        'mainGroup': mainGroupId,
+                        'projectDirPath': self.gbuildparser.srcdir,
+                        'projectRoot': '',
+                        'buildConfigurationList': '',
+                        'targets': []}
+        mainGroup = {'isa': 'PBXGroup', 'children': [], 'sourceTree': '<group>'}
+        pbxproj = {'archiveVersion': 1,
+                   'classes': {},
+                   'objectVersion': 46,
+                   'objects': {rootId: self.rootObj,
+                               mainGroupId: mainGroup},
+                   'rootObject': rootId}
+        for module in self.gbuildparser.modules:
+            if module == 'include':
+                continue
+            sourceId, self.sourceObj = self.define_pbxgroup('Sources')
+            includeId, self.includeObj = self.define_pbxgroup('Headers')
+            moduleId, self.moduleObj = self.define_pbxgroup(module)
+
+            self.moduleObj['children'] = [sourceId, includeId]
+            pbxproj['objects'].update({sourceId: self.sourceObj,
+                                       includeId: self.includeObj,
+                                       moduleId: self.moduleObj})
+            mainGroup['children'].append(moduleId)
+
+            for target in self.gbuildparser.modules[module]['targets']:
+                pbxproj['objects'].update(self.generate_project(target))
+
+        xcodeprojdir = './osx/libreoffice.xcodeproj'
+        try:
+            os.mkdir(xcodeprojdir)
+        except:
+            pass
+        with open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w') as f:
+            f.write('// !$*UTF8*$!\n')
+            self.write_object(pbxproj, f, 0)
+
+    def define_pbxgroup(self, name):
+        return self.generate_id(), {'isa': 'PBXGroup', 'children': [], 'name': name, 'sourceTree': '<group>'}
+
+    counter = 16777216
+
+    def generate_id(self):
+        XcodeIntegrationGenerator.counter += 1
+        return str('X%07x' % XcodeIntegrationGenerator.counter)
+
+    def indent(self, file, level):
+        if level != 0:
+            for i in range(0, level):
+                file.write('\t')
+
+    def write_object(self, object, file, indent):
+        if isinstance(object, int):
+            file.write('%d' % object)
+        elif isinstance(object, str):
+            if object == '':
+                file.write('""')
+            elif not re.search('[^A-Za-z0-9_]', object):
+                file.write('%s' % object)
+            else:
+                file.write('"%s"' % object)
+        elif isinstance(object, dict):
+            file.write('{')
+            file.write('\n')
+            for key in sorted(object.keys()):
+                self.indent(file, indent + 1)
+                file.write('%s = ' % key)
+                self.write_object(object[key], file, indent + 1)
+                file.write(';\n')
+            self.indent(file, indent)
+            file.write('}')
+        elif isinstance(object, list):
+            file.write('(')
+            for key in object:
+                self.write_object(key, file, 1)
+                file.write(',')
+            file.write(')')
+
+    def generate_target(self, modulename):
+        if modulename['build_type'] == 'Library':
+            product = 'com.apple.product-type.library.dynamic'
+        elif modulename['build_type'] == 'Executable':
+            product = 'com.apple.product-type.executable'
+        elif modulename['build_type'] == 'CppunitTest':
+            product = 'com.apple.product-type.cppunit'
+        else:
+            product = 'com.apple.product-type.something'
+
+        result = {'isa': 'PBXLegacyTarget',
+                  'buildConfigurationList': self.configurationListId,
+                  'buildArgumentsString': modulename['target_name'],
+                  'buildPhases': [],
+                  'dependencies': [],
+                  'buildToolPath': 'make',
+                  'buildWorkingDirectory': self.gbuildparser.builddir,
+                  'name': modulename['target_name'],
+                  'productName': modulename['name'],
+                  'passBuildSettingsEnvironment': 1}
+        return result
+
+    def generate_configuration_debug(self, modulename):
+        result = {'isa': 'XCBuildConfiguration',
+                  'buildSettings': {
+                      'ALWAYS_SEARCH_USER_PATHS': 'NO',
+                      'CLANG_ANALYZER_NONNULL': 'YES',
+                      'CLANG_CXX_LANGUAGE_STANDARD': 'gnu++0x',
+                      'CLANG_CXX_LIBRARY': 'libc++',
+                      'CLANG_ENABLE_MODULES': 'YES',
+                      'CLANG_ENABLE_OBJC_ARC': 'YES',
+                      'CLANG_WARN_BOOL_CONVERSION': 'YES',
+                      'CLANG_WARN_CONSTANT_CONVERSION': 'YES',
+                      'CLANG_WARN_DIRECT_OBJC_ISA_USAGE': 'YES_ERROR',
+                      'CLANG_WARN_DOCUMENTATION_COMMENTS': 'YES',
+                      'CLANG_WARN_EMPTY_BODY': 'YES',
+                      'CLANG_WARN_ENUM_CONVERSION': 'YES',
+                      'CLANG_WARN_INFINITE_RECURSION': 'YES',
+                      'CLANG_WARN_INT_CONVERSION': 'YES',
+                      'CLANG_WARN_OBJC_ROOT_CLASS': 'YES_ERROR',
+                      'CLANG_WARN_SUSPICIOUS_MOVE': 'YES',
+                      'CLANG_WARN_UNREACHABLE_CODE': 'YES',
+                      'CLANG_WARN__DUPLICATE_METHOD_MATCH': 'YES',
+                      'CODE_SIGN_IDENTITY': '-',
+                      'COPY_PHASE_STRIP': 'NO',
+                      'DEBUG_INFORMATION_FORMAT': 'dwarf',
+                      'ENABLE_STRICT_OBJC_MSGSEND': 'YES',
+                      'ENABLE_TESTABILITY': 'YES',
+                      'GCC_C_LANGUAGE_STANDARD': 'gnu99',
+                      'GCC_DYNAMIC_NO_PIC': 'NO',
+                      'GCC_NO_COMMON_BLOCKS': 'YES',
+                      'GCC_OPTIMIZATION_LEVEL': 0,
+                      'GCC_PREPROCESSOR_DEFINITIONS': [
+                          'DEBUG=1',
+                          '$(inherited)'],
+                      'GCC_WARN_64_TO_32_BIT_CONVERSION': 'YES',
+                      'GCC_WARN_ABOUT_RETURN_TYPE': 'YES_ERROR',
+                      'GCC_WARN_UNDECLARED_SELECTOR': 'YES',
+                      'GCC_WARN_UNINITIALIZED_AUTOS': 'YES_AGGRESSIVE',
+                      'GCC_WARN_UNUSED_FUNCTION': 'YES',
+                      'GCC_WARN_UNUSED_VARIABLE': 'YES',
+                      'MACOSX_DEPLOYMENT_TARGET': '10.12',
+                      'MTL_ENABLE_DEBUG_INFO': 'YES',
+                      'ONLY_ACTIVE_ARCH': 'YES',
+                      'PRODUCT_NAME': '$(TARGET_NAME)',
+                      'SDKROOT': 'macosx',
+                      'HEADER_SEARCH_PATHS': modulename['include']},
+                  'name': 'Debug'}
+        return result
+
+    def generate_configuration_list(self, modulename):
+        result = {'isa': 'XCConfigurationList',
+                  'buildConfigurations': [self.configurationDebugId],
+                  'defaultConfigurationIsVisible': 0,
+                  'defaultConfigurationName': 'Debug'}
+        return result
+
+    def build_source_list(self, module):
+        self.sourceRefList = {}
+        self.sourceList = {}
+
+        for i in module['CXXOBJECTS']:
+            ref = self.generate_id()
+            self.sourceList[self.generate_id()] = ref
+            self.sourceRefList[ref] = {'lastKnownFileType': 'sourcecode.cpp.cpp',
+                                       'path': i + '.cxx',
+                                       'sourceTree': '<group>'}
+
+    def generate_project(self, target):
+        self.targetId = self.generate_id()
+        self.configurationListId = self.generate_id()
+        self.configurationDebugId = self.generate_id()
+
+        self.productReferenceId = self.generate_id()
+        self.productGroupId = self.generate_id()
+        self.build_source_list(target)
+        self.sourceObj['children'].extend(list(self.sourceRefList.keys()))
+
+        self.rootObj['attributes']['TargetAttributes'].update({
+            self.targetId: {'CreatedOnToolsVersion': '8.2',
+                            'ProvisioningStyle': 'Automatic'}})
+        self.rootObj['buildConfigurationList'] = self.configurationListId
+        self.rootObj['targets'].append(self.targetId)
+        objects = {self.targetId: self.generate_target(target),
+                   self.configurationListId: self.generate_configuration_list(target),
+                   self.configurationDebugId: self.generate_configuration_debug(target)
+                   }
+        for i in self.sourceList.keys():
+            ref = self.sourceList[i]
+            path = self.sourceRefList[ref]['path']
+            name = '/'.join(path.split('/')[2:])
+            objects[ref] = {'isa': 'PBXFileReference',
+                            'lastKnownFileType': self.sourceRefList[ref]['lastKnownFileType'],
+                            'path': path,
+                            'name': name,
+                            'fileEncoding': 4,
+                            'sourceTree': '<group>'}
+        return objects
+
+# ---- LO supported ide -------
 
 class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 
@@ -523,220 +996,7 @@ VersionControl=kdevgit
                         shutil.rmtree(os.path.join(location, f))
 
 
-class XcodeIntegrationGenerator(IdeIntegrationGenerator):
-    def __init__(self, gbuildparser, ide):
-        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
-
-    def emit(self):
-        rootId = 'X0000001'
-        mainGroupId = 'X0000002'
-        self.rootObj = {'attributes': {'LastUpgradeCheck': '0820',
-                                       'ORGANIZATIONNAME': 'LibreOffice',
-                                       'TargetAttributes': {}},
-                        'compatibilityVersion': 'Xcode 3.2',
-                        'developmentRegion': 'English',
-                        'isa': 'PBXProject',
-                        'hasScannedForEncodings': 0,
-                        'knownRegions': ['en'],
-                        'mainGroup': mainGroupId,
-                        'projectDirPath': self.gbuildparser.srcdir,
-                        'projectRoot': '',
-                        'buildConfigurationList': '',
-                        'targets': []}
-        mainGroup = {'isa': 'PBXGroup', 'children': [], 'sourceTree': '<group>'}
-        pbxproj = {'archiveVersion': 1,
-                   'classes': {},
-                   'objectVersion': 46,
-                   'objects': {rootId : self.rootObj,
-                               mainGroupId : mainGroup},
-                   'rootObject': rootId}
-        for module in self.gbuildparser.modules:
-            if module == 'include':
-                continue
-            sourceId, self.sourceObj = self.define_pbxgroup('Sources')
-            includeId, self.includeObj = self.define_pbxgroup('Headers')
-            moduleId, self.moduleObj = self.define_pbxgroup(module)
-
-            self.moduleObj['children'] = [sourceId, includeId]
-            pbxproj['objects'].update( {sourceId: self.sourceObj,
-                                        includeId: self.includeObj,
-                                        moduleId: self.moduleObj})
-            mainGroup['children'].append(moduleId)
-
-            for target in self.gbuildparser.modules[module]['targets']:
-                pbxproj['objects'].update(self.generate_project(target))
-
-        xcodeprojdir = './osx/libreoffice.xcodeproj'
-        try:
-            os.mkdir(xcodeprojdir)
-        except:
-            pass
-        with open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w') as f:
-            f.write('// !$*UTF8*$!\n')
-            self.write_object(pbxproj, f, 0)
-
-
-    def define_pbxgroup(self, name):
-        return self.generate_id(), {'isa': 'PBXGroup','children': [],'name': name,'sourceTree': '<group>'}
-
-    counter = 16777216
-
-    def generate_id(self):
-        XcodeIntegrationGenerator.counter += 1
-        return str('X%07x' % XcodeIntegrationGenerator.counter)
-
-    def indent(self, file, level):
-        if level != 0:
-            for i in range(0, level):
-                file.write('\t')
-
-    def write_object(self, object, file, indent):
-        if isinstance(object, int):
-            file.write('%d' % object)
-        elif isinstance(object, str):
-          if object == '':
-              file.write('""')
-          elif not re.search('[^A-Za-z0-9_]', object):
-            file.write('%s' % object)
-          else:
-            file.write('"%s"' % object)
-        elif isinstance(object, dict):
-            file.write('{')
-            file.write('\n')
-            for key in sorted(object.keys()):
-                self.indent(file, indent + 1)
-                file.write('%s = ' % key)
-                self.write_object(object[key], file, indent + 1)
-                file.write(';\n')
-            self.indent(file, indent)
-            file.write('}')
-        elif isinstance(object, list):
-            file.write('(')
-            for key in object:
-                self.write_object(key, file, 1)
-                file.write(',')
-            file.write(')')
-
-
-    def generate_target(self, modulename):
-        if modulename['build_type'] == 'Library':
-            product = 'com.apple.product-type.library.dynamic'
-        elif modulename['build_type'] == 'Executable':
-            product = 'com.apple.product-type.executable'
-        elif modulename['build_type'] == 'CppunitTest':
-            product = 'com.apple.product-type.cppunit'
-        else:
-            product = 'com.apple.product-type.something'
-
-        result = {'isa': 'PBXLegacyTarget',
-                  'buildConfigurationList': self.configurationListId,
-                  'buildArgumentsString': modulename['target_name'],
-                  'buildPhases': [],
-                  'dependencies': [],
-                  'buildToolPath': 'make',
-                  'buildWorkingDirectory': self.gbuildparser.builddir,
-                  'name': modulename['target_name'],
-                  'productName': modulename['name'],
-                  'passBuildSettingsEnvironment': 1}
-        return result
-
-    def generate_configuration_debug(self, modulename):
-        result = {'isa': 'XCBuildConfiguration',
-                  'buildSettings': {
-                      'ALWAYS_SEARCH_USER_PATHS': 'NO',
-                      'CLANG_ANALYZER_NONNULL': 'YES',
-                      'CLANG_CXX_LANGUAGE_STANDARD': 'gnu++0x',
-                      'CLANG_CXX_LIBRARY': 'libc++',
-                      'CLANG_ENABLE_MODULES': 'YES',
-                      'CLANG_ENABLE_OBJC_ARC': 'YES',
-                      'CLANG_WARN_BOOL_CONVERSION': 'YES',
-                      'CLANG_WARN_CONSTANT_CONVERSION': 'YES',
-                      'CLANG_WARN_DIRECT_OBJC_ISA_USAGE': 'YES_ERROR',
-                      'CLANG_WARN_DOCUMENTATION_COMMENTS': 'YES',
-                      'CLANG_WARN_EMPTY_BODY': 'YES',
-                      'CLANG_WARN_ENUM_CONVERSION': 'YES',
-                      'CLANG_WARN_INFINITE_RECURSION': 'YES',
-                      'CLANG_WARN_INT_CONVERSION': 'YES',
-                      'CLANG_WARN_OBJC_ROOT_CLASS': 'YES_ERROR',
-                      'CLANG_WARN_SUSPICIOUS_MOVE': 'YES',
-                      'CLANG_WARN_UNREACHABLE_CODE': 'YES',
-                      'CLANG_WARN__DUPLICATE_METHOD_MATCH': 'YES',
-                      'CODE_SIGN_IDENTITY': '-',
-                      'COPY_PHASE_STRIP': 'NO',
-                      'DEBUG_INFORMATION_FORMAT': 'dwarf',
-                      'ENABLE_STRICT_OBJC_MSGSEND': 'YES',
-                      'ENABLE_TESTABILITY': 'YES',
-                      'GCC_C_LANGUAGE_STANDARD': 'gnu99',
-                      'GCC_DYNAMIC_NO_PIC': 'NO',
-                      'GCC_NO_COMMON_BLOCKS': 'YES',
-                      'GCC_OPTIMIZATION_LEVEL': 0,
-                      'GCC_PREPROCESSOR_DEFINITIONS': [
-                            'DEBUG=1',
-                            '$(inherited)'],
-                      'GCC_WARN_64_TO_32_BIT_CONVERSION': 'YES',
-                      'GCC_WARN_ABOUT_RETURN_TYPE': 'YES_ERROR',
-                      'GCC_WARN_UNDECLARED_SELECTOR': 'YES',
-                      'GCC_WARN_UNINITIALIZED_AUTOS': 'YES_AGGRESSIVE',
-                      'GCC_WARN_UNUSED_FUNCTION': 'YES',
-                      'GCC_WARN_UNUSED_VARIABLE': 'YES',
-                      'MACOSX_DEPLOYMENT_TARGET': '10.12',
-                      'MTL_ENABLE_DEBUG_INFO': 'YES',
-                      'ONLY_ACTIVE_ARCH': 'YES',
-                      'PRODUCT_NAME': '$(TARGET_NAME)',
-                      'SDKROOT': 'macosx',
-                      'HEADER_SEARCH_PATHS': modulename['include']},
-                  'name': 'Debug'}
-        return result
-
-    def generate_configuration_list(self, modulename):
-        result = {'isa': 'XCConfigurationList',
-                  'buildConfigurations': [self.configurationDebugId],
-                  'defaultConfigurationIsVisible': 0,
-                  'defaultConfigurationName': 'Debug'}
-        return result
-
-    def build_source_list(self, module):
-        self.sourceRefList = {}
-        self.sourceList = {}
-
-        for i in module['CXXOBJECTS']:
-            ref = self.generate_id()
-            self.sourceList[self.generate_id()] = ref
-            self.sourceRefList[ref] = {'lastKnownFileType': 'sourcecode.cpp.cpp',
-                                       'path': i + '.cxx',
-                                       'sourceTree': '<group>'}
-
-    def generate_project(self, target):
-        self.targetId = self.generate_id()
-        self.configurationListId = self.generate_id()
-        self.configurationDebugId = self.generate_id()
-
-        self.productReferenceId = self.generate_id()
-        self.productGroupId = self.generate_id()
-        self.build_source_list(target)
-        self.sourceObj['children'].extend(list(self.sourceRefList.keys()))
-
-        self.rootObj['attributes']['TargetAttributes'].update({
-        self.targetId: {'CreatedOnToolsVersion': '8.2',
-                        'ProvisioningStyle': 'Automatic'}})
-        self.rootObj['buildConfigurationList'] = self.configurationListId
-        self.rootObj['targets'].append(self.targetId)
-        objects = {self.targetId: self.generate_target(target),
-                   self.configurationListId: self.generate_configuration_list(target),
-                   self.configurationDebugId: self.generate_configuration_debug(target)
-                   }
-        for i in self.sourceList.keys():
-            ref = self.sourceList[i]
-            path = self.sourceRefList[ref]['path']
-            name = '/'.join(path.split('/')[2:])
-            objects[ref] = {'isa': 'PBXFileReference',
-                            'lastKnownFileType': self.sourceRefList[ref]['lastKnownFileType'],
-                            'path': path,
-                            'name': name,
-                            'fileEncoding': 4,
-                            'sourceTree': '<group>'}
-        return objects
 
 
 class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
@@ -918,7 +1178,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             cxxabspath = os.path.join(self.gbuildparser.srcdir, cxxobject)
             cxxfile = cxxabspath + '.cxx'
             if os.path.isfile(cxxfile):
-                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxfile)
+                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include='../../' + cxxobject + '.cxx')
             else:
                 print('Source %s in project %s does not exist' % (cxxfile, target['target_name']))
 
@@ -927,11 +1187,11 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             include_abs_path = os.path.join(self.gbuildparser.srcdir, cxxobject)
             hxxfile = include_abs_path + '.hxx'
             if os.path.isfile(hxxfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hxxfile)
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include='../../' + cxxobject + '.hxx')
             # Few files have corresponding .h files
             hfile = include_abs_path + '.h'
             if os.path.isfile(hfile):
-                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hfile)
+                ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include='../../' + cxxobject + '.h')
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
         self.write_pretty_xml(proj_node, project_path)
@@ -1708,8 +1968,8 @@ if __name__ == '__main__':
     # FIXME: Hack
     if args.makecmd == 'make':
         args.makecmd = '/usr/bin/make'
-    if args.debug=='allheaders':
-        #headers=GbuildParser(args.makecmd).find_all_headers()
+    if args.debug=='test':
+
         pass
     paths = {}
     generators = {
