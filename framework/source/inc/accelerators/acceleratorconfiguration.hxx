@@ -201,7 +201,6 @@ class XMLBasedAcceleratorConfiguration : public    ::cppu::WeakImplHelper<
 
 class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
                                                      css::util::XChangesListener,
-                                                     css::lang::XComponent,
                                                      css::form::XReset,                    // TODO use XPresetHandler instead if available
                                                      css::ui::XAcceleratorConfiguration >  // => css::ui::XUIConfigurationPersistence
                                                                                            //    css::ui::XUIConfigurationStorage
@@ -286,11 +285,6 @@ class XCUBasedAcceleratorConfiguration : public  ::cppu::WeakImplHelper<
 
         // css.lang.XEventListener
         virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
-
-        // XComponent
-        virtual  void SAL_CALL dispose() override;
-        virtual  void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
-        virtual  void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // helper for derived classes
 

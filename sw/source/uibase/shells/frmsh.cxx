@@ -806,19 +806,20 @@ void SwFrameShell::GetState(SfxItemSet& rSet)
                                     }
                                 }
                             }
+                            OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(GetFrame()->GetFrame().GetFrameInterface()));
                             switch (nWhich)
                             {
                                 case SID_OBJECT_ALIGN_UP :
                                 case FN_FRAME_ALIGN_VERT_TOP:
-                                    sNewLabel = vcl::CommandInfoProvider::Instance().GetLabelForCommand(".uno:AlignTop", GetFrame()->GetFrame().GetFrameInterface());
+                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(".uno:AlignTop", aModuleName);
                                     break;
                                 case SID_OBJECT_ALIGN_MIDDLE:
                                 case FN_FRAME_ALIGN_VERT_CENTER:
-                                    sNewLabel = vcl::CommandInfoProvider::Instance().GetLabelForCommand(".uno:AlignVerticalCenter", GetFrame()->GetFrame().GetFrameInterface());
+                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(".uno:AlignVerticalCenter", aModuleName);
                                     break;
                                 case SID_OBJECT_ALIGN_DOWN:
                                 case FN_FRAME_ALIGN_VERT_BOTTOM:
-                                    sNewLabel = vcl::CommandInfoProvider::Instance().GetLabelForCommand(".uno:AlignBottom", GetFrame()->GetFrame().GetFrameInterface());
+                                    sNewLabel = vcl::CommandInfoProvider::GetLabelForCommand(".uno:AlignBottom", aModuleName);
                                     break;
                             }
                         }

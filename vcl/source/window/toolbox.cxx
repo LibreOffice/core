@@ -1401,6 +1401,7 @@ void ToolBox::ImplInitToolBoxData()
     mnActivateCount   = 0;
     mnImagesRotationAngle = 0;
     mpStatusListener  = new VclStatusListener<ToolBox>(this, ".uno:ImageOrientation");
+    mpStatusListener->startListening();
 
     mpIdle = new Idle("vcl::ToolBox maIdle update");
     mpIdle->SetPriority( TaskPriority::RESIZE );
@@ -4538,11 +4539,12 @@ void ToolBox::statusChanged( const css::frame::FeatureStateEvent& Event )
         mnImagesRotationAngle = aItem.GetRotation();
 
         // update image orientation
+        OUString aModuleName(vcl::CommandInfoProvider::GetModuleIdentifier(mpStatusListener->getFrame()));
         for (std::vector<ImplToolItem>::const_iterator it = mpData->m_aItems.begin(); it != mpData->m_aItems.end(); ++it)
         {
-            if (vcl::CommandInfoProvider::Instance().IsMirrored(it->maCommandStr))
+            if (vcl::CommandInfoProvider::IsMirrored(it->maCommandStr, aModuleName))
                 SetItemImageMirrorMode(it->mnId, mbImagesMirrored);
-            if (vcl::CommandInfoProvider::Instance().IsRotated(it->maCommandStr))
+            if (vcl::CommandInfoProvider::IsRotated(it->maCommandStr, aModuleName))
                 SetItemImageAngle(it->mnId, mnImagesRotationAngle);
         }
     }
