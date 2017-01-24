@@ -39,128 +39,49 @@ using namespace css;
 using namespace css::uno;
 
 
-namespace
-{
-    typedef ::cppu::WeakComponentImplHelper <
-        css::frame::XFrameActionListener
-        > FrameListenerInterfaceBase;
-    class FrameListener
-        : public ::cppu::BaseMutex,
-          public FrameListenerInterfaceBase
-    {
-    public:
-        FrameListener (vcl::CommandInfoProvider& rInfoProvider, const Reference<frame::XFrame>& rxFrame)
-            : FrameListenerInterfaceBase(m_aMutex),
-              mrInfoProvider(rInfoProvider),
-              mxFrame(rxFrame)
-        {
-            if (mxFrame.is())
-                mxFrame->addFrameActionListener(this);
-        }
-
-        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override
-        {
-            // The same frame can be reused for a different component, e.g.
-            // starting component from the start center, so need to re-init the cached data.
-            if (aEvent.Action == css::frame::FrameAction_COMPONENT_DETACHING)
-                mrInfoProvider.SetFrame(nullptr);
-        }
-        virtual void SAL_CALL disposing() override
-        {
-            if (mxFrame.is())
-                mxFrame->removeFrameActionListener(this);
-        }
-        virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override
-        {
-            (void)rEvent;
-            mrInfoProvider.SetFrame(nullptr);
-            mxFrame = nullptr;
-        }
-
-    private:
-        vcl::CommandInfoProvider& mrInfoProvider;
-        Reference<frame::XFrame> mxFrame;
-    };
-}
-
 namespace vcl {
 
-CommandInfoProvider& CommandInfoProvider::Instance()
-{
-    static CommandInfoProvider aProvider;
-    return aProvider;
-}
-
-CommandInfoProvider::CommandInfoProvider()
-    : mxContext(comphelper::getProcessComponentContext()),
-      mxCachedDataFrame(),
-      mxCachedDocumentAcceleratorConfiguration(),
-      mxCachedModuleAcceleratorConfiguration(),
-      mxCachedGlobalAcceleratorConfiguration(),
-      msCachedModuleIdentifier(),
-      mxFrameListener()
-{
-    ImplGetSVData()->mpCommandInfoProvider = this;
-}
-
-void CommandInfoProvider::dispose()
-{
-    if (mxFrameListener.is())
-    {
-        mxFrameListener->dispose();
-        mxFrameListener.clear();
-    }
-    mxCachedGlobalAcceleratorConfiguration.clear();
-    mxCachedModuleAcceleratorConfiguration.clear();
-    mxCachedDocumentAcceleratorConfiguration.clear();
-    mxCachedDataFrame.clear();
-    mxContext.clear();
-}
+CommandInfoProvider::CommandInfoProvider() { }
 
 CommandInfoProvider::~CommandInfoProvider()
 {
-    dispose();
 }
 
 OUString CommandInfoProvider::GetLabelForCommand (
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
 
-    return GetCommandProperty("Name", rsCommandName);
+    return GetCommandProperty("Name", rsCommandName, rxFrame);
 }
 
 OUString CommandInfoProvider::GetMenuLabelForCommand (
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
 
     // Here we want to use "Label", not "Name". "Name" is a stripped-down version of "Label" without accelerators
     // and ellipsis. In the menu, we want to have those accelerators and ellipsis.
-    return GetCommandProperty("Label", rsCommandName);
+    return GetCommandProperty("Label", rsCommandName, rxFrame);
 }
 
 OUString CommandInfoProvider::GetPopupLabelForCommand (
     const OUString& rsCommandName,
     const css::uno::Reference<css::frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
 
-    OUString sPopupLabel(GetCommandProperty("PopupLabel", rsCommandName));
+    OUString sPopupLabel(GetCommandProperty("PopupLabel", rsCommandName, rxFrame));
     if (!sPopupLabel.isEmpty())
         return sPopupLabel;
-    return GetCommandProperty("Label", rsCommandName);
+    return GetCommandProperty("Label", rsCommandName, rxFrame);
 }
 
 OUString CommandInfoProvider::GetTooltipForCommand (
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
 
-    OUString sLabel (GetCommandProperty("TooltipLabel", rsCommandName));
+    OUString sLabel (GetCommandProperty("TooltipLabel", rsCommandName, rxFrame));
     if (sLabel.isEmpty()) {
         sLabel = GetPopupLabelForCommand(rsCommandName, rxFrame);
         // Remove '...' at the end and mnemonics (we don't want those in tooltips)
@@ -180,15 +101,14 @@ OUString CommandInfoProvider::GetTooltipForCommand (
 OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName,
                                                   const Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
 
     OUString sShortcut;
 
-    sShortcut = RetrieveShortcutsFromConfiguration(GetDocumentAcceleratorConfiguration(), rsCommandName);
+    sShortcut = RetrieveShortcutsFromConfiguration(GetDocumentAcceleratorConfiguration(rxFrame), rsCommandName);
     if (sShortcut.getLength() > 0)
         return sShortcut;
 
-    sShortcut = RetrieveShortcutsFromConfiguration(GetModuleAcceleratorConfiguration(), rsCommandName);
+    sShortcut = RetrieveShortcutsFromConfiguration(GetModuleAcceleratorConfiguration(rxFrame), rsCommandName);
     if (sShortcut.getLength() > 0)
         return sShortcut;
 
@@ -202,16 +122,14 @@ OUString CommandInfoProvider::GetCommandShortcut (const OUString& rsCommandName,
 OUString CommandInfoProvider::GetRealCommandForCommand(const OUString& rCommandName,
                                                        const css::uno::Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
 
-    return GetCommandProperty("TargetURL", rCommandName);
+    return GetCommandProperty("TargetURL", rCommandName, rxFrame);
 }
 
 BitmapEx CommandInfoProvider::GetBitmapForCommand(const OUString& rsCommandName,
                                                  const Reference<frame::XFrame>& rxFrame,
                                                  vcl::ImageType eImageType)
 {
-    SetFrame(rxFrame);
 
     if (rsCommandName.isEmpty())
         return BitmapEx();
@@ -251,8 +169,8 @@ BitmapEx CommandInfoProvider::GetBitmapForCommand(const OUString& rsCommandName,
     }
 
     try {
-        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(mxContext));
-        Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(GetModuleIdentifier()));
+        Reference<ui::XModuleUIConfigurationManagerSupplier> xModuleCfgMgrSupplier(ui::theModuleUIConfigurationManagerSupplier::get(comphelper::getProcessComponentContext()));
+        Reference<ui::XUIConfigurationManager> xUICfgMgr(xModuleCfgMgrSupplier->getUIConfigurationManager(GetModuleIdentifier(rxFrame)));
 
         Sequence< Reference<graphic::XGraphic> > aGraphicSeq;
         Reference<ui::XImageManager> xModuleImageManager(xUICfgMgr->getImageManager(), UNO_QUERY);
@@ -285,10 +203,9 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
     const OUString& rsCommandName,
     const Reference<frame::XFrame>& rxFrame)
 {
-    SetFrame(rxFrame);
 
     sal_Int32 nValue = 0;
-    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName));
+    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rxFrame));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
     {
         if (aProperties[nIndex].Name == "Properties")
@@ -300,14 +217,14 @@ sal_Int32 CommandInfoProvider::GetPropertiesForCommand (
     return nValue;
 }
 
-bool CommandInfoProvider::IsRotated(const OUString& rsCommandName)
+bool CommandInfoProvider::IsRotated(const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
 {
-    return ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName);
+    return ResourceHasKey("private:resource/image/commandrotateimagelist", rsCommandName, rxFrame);
 }
 
-bool CommandInfoProvider::IsMirrored(const OUString& rsCommandName)
+bool CommandInfoProvider::IsMirrored(const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
 {
-    return ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName);
+    return ResourceHasKey("private:resource/image/commandmirrorimagelist", rsCommandName, rxFrame);
 }
 
 bool CommandInfoProvider::IsExperimental(const OUString& rsCommandName,
@@ -318,7 +235,7 @@ bool CommandInfoProvider::IsExperimental(const OUString& rsCommandName,
     {
         if( rModuleName.getLength() > 0)
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
@@ -339,100 +256,60 @@ bool CommandInfoProvider::IsExperimental(const OUString& rsCommandName,
     return false;
 }
 
-void CommandInfoProvider::SetFrame (const Reference<frame::XFrame>& rxFrame)
+Reference<ui::XAcceleratorConfiguration> const CommandInfoProvider::GetDocumentAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
 {
-    if (rxFrame != mxCachedDataFrame)
+    Reference<frame::XController> xController = rxFrame->getController();
+    if (xController.is())
     {
-        // Detach from the old frame.
-        if (mxFrameListener.is())
+        Reference<frame::XModel> xModel (xController->getModel());
+        if (xModel.is())
         {
-            mxFrameListener->dispose();
-            mxFrameListener = nullptr;
-        }
-
-        // Release objects that are tied to the old frame.
-        mxCachedDocumentAcceleratorConfiguration = nullptr;
-        mxCachedModuleAcceleratorConfiguration = nullptr;
-        msCachedModuleIdentifier.clear();
-        mxCachedDataFrame = rxFrame;
-
-        // Connect to the new frame.
-        if (rxFrame.is())
-            mxFrameListener = new FrameListener(*this, rxFrame);
-    }
-}
-
-Reference<ui::XAcceleratorConfiguration> const & CommandInfoProvider::GetDocumentAcceleratorConfiguration()
-{
-    if ( ! mxCachedDocumentAcceleratorConfiguration.is())
-    {
-        // Get the accelerator configuration for the document.
-        if (mxCachedDataFrame.is())
-        {
-            Reference<frame::XController> xController = mxCachedDataFrame->getController();
-            if (xController.is())
+            Reference<ui::XUIConfigurationManagerSupplier> xSupplier (xModel, UNO_QUERY);
+            if (xSupplier.is())
             {
-                Reference<frame::XModel> xModel (xController->getModel());
-                if (xModel.is())
+                Reference<ui::XUIConfigurationManager> xConfigurationManager(
+                    xSupplier->getUIConfigurationManager(),
+                    UNO_QUERY);
+                if (xConfigurationManager.is())
                 {
-                    Reference<ui::XUIConfigurationManagerSupplier> xSupplier (xModel, UNO_QUERY);
-                    if (xSupplier.is())
-                    {
-                        Reference<ui::XUIConfigurationManager> xConfigurationManager(
-                            xSupplier->getUIConfigurationManager(),
-                            UNO_QUERY);
-                        if (xConfigurationManager.is())
-                        {
-                            mxCachedDocumentAcceleratorConfiguration = xConfigurationManager->getShortCutManager();
-                        }
-                    }
+                    return xConfigurationManager->getShortCutManager();
                 }
             }
         }
     }
-    return mxCachedDocumentAcceleratorConfiguration;
+    return nullptr;
 }
 
-Reference<ui::XAcceleratorConfiguration> const & CommandInfoProvider::GetModuleAcceleratorConfiguration()
+Reference<ui::XAcceleratorConfiguration> const CommandInfoProvider::GetModuleAcceleratorConfiguration(const Reference<frame::XFrame>& rxFrame)
 {
-    if ( ! mxCachedModuleAcceleratorConfiguration.is())
+    css::uno::Reference<css::ui::XAcceleratorConfiguration> curModuleAcceleratorConfiguration;
+    try
     {
-        try
+        Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier  = ui::theModuleUIConfigurationManagerSupplier::get(comphelper::getProcessComponentContext());
+        Reference<ui::XUIConfigurationManager> xManager (
+            xSupplier->getUIConfigurationManager(GetModuleIdentifier(rxFrame)));
+        if (xManager.is())
         {
-            Reference<ui::XModuleUIConfigurationManagerSupplier> xSupplier  = ui::theModuleUIConfigurationManagerSupplier::get(mxContext);
-            Reference<ui::XUIConfigurationManager> xManager (
-                xSupplier->getUIConfigurationManager(GetModuleIdentifier()));
-            if (xManager.is())
-            {
-                mxCachedModuleAcceleratorConfiguration = xManager->getShortCutManager();
-            }
-        }
-        catch (Exception&)
-        {
+            curModuleAcceleratorConfiguration = xManager->getShortCutManager();
         }
     }
-    return mxCachedModuleAcceleratorConfiguration;
+    catch (Exception&)
+    {
+    }
+    return curModuleAcceleratorConfiguration;
 }
 
-Reference<ui::XAcceleratorConfiguration> const & CommandInfoProvider::GetGlobalAcceleratorConfiguration()
+Reference<ui::XAcceleratorConfiguration> const CommandInfoProvider::GetGlobalAcceleratorConfiguration()
 {
     // Get the global accelerator configuration.
-    if ( ! mxCachedGlobalAcceleratorConfiguration.is())
-    {
-        mxCachedGlobalAcceleratorConfiguration = ui::GlobalAcceleratorConfiguration::create(mxContext);
-    }
+    return ui::GlobalAcceleratorConfiguration::create(comphelper::getProcessComponentContext());
 
-    return mxCachedGlobalAcceleratorConfiguration;
 }
 
-OUString const & CommandInfoProvider::GetModuleIdentifier()
+OUString const CommandInfoProvider::GetModuleIdentifier(const Reference<frame::XFrame>& rxFrame)
 {
-    if (msCachedModuleIdentifier.getLength() == 0)
-    {
-        Reference<frame::XModuleManager2> xModuleManager = frame::ModuleManager::create(mxContext);
-        msCachedModuleIdentifier = xModuleManager->identify(mxCachedDataFrame);
-    }
-    return msCachedModuleIdentifier;
+    Reference<frame::XModuleManager2> xModuleManager = frame::ModuleManager::create(comphelper::getProcessComponentContext());
+    return xModuleManager->identify(rxFrame);
 }
 
 OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
@@ -462,15 +339,15 @@ OUString CommandInfoProvider::RetrieveShortcutsFromConfiguration(
     return OUString();
 }
 
-bool CommandInfoProvider::ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName)
+bool CommandInfoProvider::ResourceHasKey(const OUString& rsResourceName, const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
 {
     Sequence< OUString > aSequence;
     try
     {
-        const OUString sModuleIdentifier (GetModuleIdentifier());
+        const OUString sModuleIdentifier (GetModuleIdentifier(rxFrame));
         if (!sModuleIdentifier.isEmpty())
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels) {
                 xUICommandLabels->getByName(rsResourceName) >>= aSequence;
@@ -488,16 +365,16 @@ bool CommandInfoProvider::ResourceHasKey(const OUString& rsResourceName, const O
     return false;
 }
 
-Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties(const OUString& rsCommandName)
+Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties(const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
 {
     Sequence<beans::PropertyValue> aProperties;
 
     try
     {
-        const OUString sModuleIdentifier (GetModuleIdentifier());
+        const OUString sModuleIdentifier (GetModuleIdentifier(rxFrame));
         if (sModuleIdentifier.getLength() > 0)
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName(sModuleIdentifier) >>= xUICommandLabels)
                 xUICommandLabels->getByName(rsCommandName) >>= aProperties;
@@ -510,9 +387,9 @@ Sequence<beans::PropertyValue> CommandInfoProvider::GetCommandProperties(const O
     return aProperties;
 }
 
-OUString CommandInfoProvider::GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName)
+OUString CommandInfoProvider::GetCommandProperty(const OUString& rsProperty, const OUString& rsCommandName, const Reference<frame::XFrame>& rxFrame)
 {
-    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName));
+    const Sequence<beans::PropertyValue> aProperties (GetCommandProperties(rsCommandName, rxFrame));
     for (sal_Int32 nIndex=0; nIndex<aProperties.getLength(); ++nIndex)
     {
         if (aProperties[nIndex].Name == rsProperty)
@@ -536,7 +413,7 @@ OUString CommandInfoProvider::GetCommandPropertyFromModule( const OUString& rCom
     {
         if( rModuleName.getLength() > 0)
         {
-            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(mxContext);
+            Reference<container::XNameAccess> xNameAccess  = frame::theUICommandDescription::get(comphelper::getProcessComponentContext());
             Reference<container::XNameAccess> xUICommandLabels;
             if (xNameAccess->getByName( rModuleName ) >>= xUICommandLabels )
                 xUICommandLabels->getByName(rCommandName) >>= aProperties;
