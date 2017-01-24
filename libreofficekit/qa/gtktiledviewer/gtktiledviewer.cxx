@@ -40,6 +40,24 @@ static int help()
     return 1;
 }
 
+/// Represents the comment sidebar widget (only for text documents as of now)
+class CommentsSidebar
+{
+public:
+    /// Main Vertical Box containing comments box and additional controls (eg. buttons)
+    GtkWidget* m_pMainVBox;
+    /// Button to issue a .uno:ViewAnnotations command
+    GtkWidget* m_pViewAnnotationsButton;
+    /// top level container for all comments in the sidebar
+    GtkWidget* m_pCommentsVBox;
+
+    /// Click even handler for m_pViewAnnotationsButton
+    static void unoViewAnnotations(GtkWidget* pWidget, gpointer userdata);
+    /// Configure event handler for window
+    static gboolean docConfigureEvent(GtkWidget* pWidget, GdkEventConfigure* pEvent, gpointer pData);
+};
+
+
 /// Represents the row or column header widget for spreadsheets.
 class TiledRowColumnBar
 {
@@ -128,6 +146,7 @@ public:
     std::map<GtkToolItem*, bool> m_aToolItemSensitivities;
     bool m_bToolItemBroadcast;
     GtkWidget* m_pVBox;
+    GtkWidget* m_pMainHBox;
     GtkComboBoxText* m_pPartSelector;
     GtkWidget* m_pPartModeComboBox;
     /// Should the part selector avoid calling lok::Document::setPart()?
@@ -139,6 +158,7 @@ public:
     std::shared_ptr<TiledRowColumnBar> m_pRowBar;
     std::shared_ptr<TiledRowColumnBar> m_pColumnBar;
     std::shared_ptr<TiledCornerButton> m_pCornerButton;
+    std::shared_ptr<CommentsSidebar> m_pCommentsSidebar;
     /// Rendering arguments, which are the same for all views.
     boost::property_tree::ptree m_aRenderingArguments;
 
@@ -216,6 +236,75 @@ static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const
     rWindow.m_aToolItemCommandArgs[pItem] = rArgs;
     rWindow.m_aCommandNameToolItems[rName] = pItem;
     rWindow.m_aToolItemSensitivities[pItem] = true;
+}
+
+void CommentsSidebar::unoViewAnnotations(GtkWidget* pWidget, gpointer /*userdata*/)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
+
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(rWindow.m_pDocView));
+    char* pValues = pDocument->pClass->getCommandValues(pDocument, ".uno:ViewAnnotations");
+    g_info("lok::Document::getCommandValues(%s) : %s", ".uno:ViewAnnotations", pValues);
+    std::stringstream aStream(pValues);
+    free(pValues);
+
+    gtk_widget_destroy(rWindow.m_pCommentsSidebar->m_pCommentsVBox);
+
+    rWindow.m_pCommentsSidebar->m_pCommentsVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+    gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pCommentsVBox);
+
+    boost::property_tree::ptree aTree;
+    boost::property_tree::read_json(aStream, aTree);
+    try
+    {
+        for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
+        {
+            GtkWidget* pCommentVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
+            gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pCommentsVBox), pCommentVBox);
+
+            GtkWidget* pCommentText = gtk_label_new(rValue.second.get<std::string>("text").c_str());
+            GtkWidget* pCommentAuthor = gtk_label_new(rValue.second.get<std::string>("author").c_str());
+            GtkWidget* pCommentDate = gtk_label_new(rValue.second.get<std::string>("dateTime").c_str());
+            GtkWidget* pCommentSeparator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+
+            gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentText);
+            gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentAuthor);
+            gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentDate);
+            gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentSeparator);
+
+            gtk_label_set_line_wrap(GTK_LABEL(pCommentText), TRUE);
+            gtk_label_set_max_width_chars(GTK_LABEL(pCommentText), 35);
+        }
+        gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pCommentsVBox);
+    }
+    catch(boost::property_tree::ptree_bad_path& rException)
+    {
+        std::cerr << "CommentsSidebar::unoViewAnnotations: failed to get comments" << rException.what() << std::endl;
+    }
+}
+
+gboolean CommentsSidebar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigure* /*pEvent*/, gpointer /*userdata*/)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pDocView);
+    LibreOfficeKitDocument* pDocument = lok_doc_view_get_document(LOK_DOC_VIEW(pDocView));
+
+    if (pDocument && pDocument->pClass->getDocumentType(pDocument) == LOK_DOCTYPE_TEXT)
+    {
+        if (!rWindow.m_pCommentsSidebar)
+        {
+            rWindow.m_pCommentsSidebar.reset(new CommentsSidebar());
+            rWindow.m_pCommentsSidebar->m_pMainVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+            gtk_container_add(GTK_CONTAINER(rWindow.m_pMainHBox), rWindow.m_pCommentsSidebar->m_pMainVBox);
+
+            rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton = gtk_button_new_with_label(".uno:ViewAnnotations");
+            gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton);
+            g_signal_connect(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, "clicked", G_CALLBACK(CommentsSidebar::unoViewAnnotations), nullptr);
+
+            gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pMainVBox);
+        }
+    }
+
+    return TRUE;
 }
 
 TiledRowColumnBar::TiledRowColumnBar(TiledBarType eType)
@@ -381,7 +470,7 @@ gboolean TiledRowColumnBar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfi
         gtk_widget_hide(GTK_WIDGET(rWindow.m_pJustifypara));
     }
 
-    return TRUE;
+    return FALSE;
 }
 
 TiledCornerButton::TiledCornerButton()
@@ -1788,9 +1877,12 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
 
     gtk_box_pack_end(GTK_BOX(rWindow.m_pVBox), rWindow.m_pFindbar, FALSE, FALSE, 0);
 
+    rWindow.m_pMainHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    gtk_container_add(GTK_CONTAINER(rWindow.m_pVBox), rWindow.m_pMainHBox);
+
     // Grid for the row/column bar + doc view.
     GtkWidget* pGrid = gtk_grid_new();
-    gtk_container_add(GTK_CONTAINER(rWindow.m_pVBox), pGrid);
+    gtk_container_add(GTK_CONTAINER(rWindow.m_pMainHBox), pGrid);
     rWindow.m_pCornerButton.reset(new TiledCornerButton());
     // "A1" cell of the grid.
     gtk_grid_attach(GTK_GRID(pGrid), rWindow.m_pCornerButton->m_pDrawingArea, 0, 0, 1, 1);
@@ -1847,7 +1939,9 @@ static GtkWidget* createWindow(TiledWindow& rWindow)
     gtk_widget_hide(rWindow.m_pZoomLabel);
 
     g_aWindows[pWindow] = rWindow;
+
     g_signal_connect(rWindow.m_pDocView, "configure-event", G_CALLBACK(TiledRowColumnBar::docConfigureEvent), 0);
+    g_signal_connect(rWindow.m_pDocView, "configure-event", G_CALLBACK(CommentsSidebar::docConfigureEvent), 0);
     return pWindow;
 }
 
