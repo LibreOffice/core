@@ -29,13 +29,13 @@
 #include "oox/ppt/pptshapecontext.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
-#include "oox/drawingml/lineproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "drawingml/customshapegeometry.hxx"
 #include "drawingml/shapepropertiescontext.hxx"
 #include "drawingml/textbodycontext.hxx"
 #include "oox/drawingml/connectorshapecontext.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include "drawingml/fillproperties.hxx"
 #include "extdrawingfragmenthandler.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

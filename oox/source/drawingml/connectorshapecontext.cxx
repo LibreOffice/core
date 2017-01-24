@@ -23,7 +23,7 @@
 
 #include "oox/drawingml/connectorshapecontext.hxx"
 #include "oox/drawingml/graphicshapecontext.hxx"
-#include "oox/drawingml/lineproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include <oox/helper/attributelist.hxx>
 #include <oox/token/namespaces.hxx>

@@ -25,8 +25,8 @@
 #include <basegfx/numeric/ftools.hxx>
 
 #include "oox/helper/attributelist.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/lineproperties.hxx"
+#include "drawingml/fillproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 #include "drawingml/textbody.hxx"
 #include "drawingml/textparagraph.hxx"
 #include "drawingml/textrun.hxx"

@@ -24,8 +24,9 @@
 
 #include <com/sun/star/io/XInputStream.hpp>
 
-#include <oox/drawingml/fillproperties.hxx>
 #include <oox/helper/helper.hxx>
+
+#include "drawingml/fillproperties.hxx"
 
 namespace oox {
     class GraphicHelper;

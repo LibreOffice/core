@@ -26,8 +26,8 @@
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
 #include "oox/core/xmlfilterbase.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/lineproperties.hxx"
+#include "drawingml/fillproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "drawingml/textbody.hxx"
 #include "drawingml/textparagraph.hxx"

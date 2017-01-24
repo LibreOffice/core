@@ -35,7 +35,7 @@
 #include "drawingml/chart/axismodel.hxx"
 #include "drawingml/chart/titleconverter.hxx"
 #include "drawingml/chart/typegroupconverter.hxx"
-#include "oox/drawingml/lineproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>

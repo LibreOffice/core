@@ -23,10 +23,11 @@
 #include <oox/helper/propertymap.hxx>
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/drawingml/lineproperties.hxx>
-#include <oox/drawingml/fillproperties.hxx>
 #include <drawingml/textliststyle.hxx>
 #include <com/sun/star/table/XCell.hpp>
+
+#include "drawingml/fillproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 
 #include <vector>
 #include <map>

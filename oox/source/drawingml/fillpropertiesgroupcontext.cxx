@@ -22,7 +22,7 @@
 #include "oox/helper/graphichelper.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include "drawingml/fillproperties.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <sfx2/docfile.hxx>

@@ -26,7 +26,7 @@
 
 #include "drawingml/colorchoicecontext.hxx"
 #include "drawingml/textcharacterpropertiescontext.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include "drawingml/fillproperties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "textspacingcontext.hxx"
 #include "texttabstoplistcontext.hxx"

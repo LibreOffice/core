@@ -30,7 +30,7 @@
 #include "drawingml/textparagraph.hxx"
 #include "drawingml/textrun.hxx"
 #include "drawingml/diagram/diagram.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include "drawingml/fillproperties.hxx"
 #include "oox/ppt/pptshapegroupcontext.hxx"
 #include "oox/ppt/pptshape.hxx"
 

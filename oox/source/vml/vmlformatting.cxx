@@ -27,8 +27,8 @@
 #include <osl/diagnose.h>
 #include "oox/drawingml/color.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/fillproperties.hxx"
-#include "oox/drawingml/lineproperties.hxx"
+#include "drawingml/fillproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/graphichelper.hxx"

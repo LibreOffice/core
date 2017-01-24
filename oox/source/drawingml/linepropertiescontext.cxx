@@ -20,7 +20,7 @@
 #include "drawingml/linepropertiescontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/lineproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 #include "oox/helper/attributelist.hxx"
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>

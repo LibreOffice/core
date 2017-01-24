@@ -20,10 +20,10 @@
 #include "oox/drawingml/shape.hxx"
 #include "drawingml/customshapeproperties.hxx"
 #include "oox/drawingml/theme.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include "drawingml/fillproperties.hxx"
 #include "drawingml/graphicproperties.hxx"
 #include <drawingml/scene3dcontext.hxx>
-#include "oox/drawingml/lineproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 #include "effectproperties.hxx"
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "drawingml/textbody.hxx"

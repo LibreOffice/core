@@ -40,7 +40,7 @@
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
-#include <oox/drawingml/lineproperties.hxx>
+#include "drawingml/lineproperties.hxx"
 
 namespace oox {
 namespace drawingml {

@@ -23,7 +23,7 @@
 #include "oox/export/drawingml.hxx"
 #include "oox/export/utils.hxx"
 #include <oox/drawingml/color.hxx>
-#include <oox/drawingml/fillproperties.hxx>
+#include <drawingml/fillproperties.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>

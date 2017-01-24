@@ -28,7 +28,7 @@
 #include <drawingml/shapepropertiescontext.hxx>
 #include "drawingml/shapestylecontext.hxx"
 #include "drawingml/fillpropertiesgroupcontext.hxx"
-#include "oox/drawingml/lineproperties.hxx"
+#include "drawingml/lineproperties.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
 #include "drawingml/customshapegeometry.hxx"
 #include "drawingml/textbodycontext.hxx"

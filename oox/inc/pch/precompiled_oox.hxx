@@ -162,7 +162,9 @@
 #include <drawingml/colorchoicecontext.hxx>
 #include <drawingml/customshapegeometry.hxx>
 #include <drawingml/customshapeproperties.hxx>
+#include <drawingml/fillproperties.hxx>
 #include <drawingml/fillpropertiesgroupcontext.hxx>
+#include <drawingml/lineproperties.hxx>
 #include <drawingml/shapepropertiescontext.hxx>
 #include <drawingml/shapestylecontext.hxx>
 #include <drawingml/table/tablestylepart.hxx>
@@ -210,9 +212,7 @@
 #include <oox/drawingml/clrscheme.hxx>
 #include <oox/drawingml/color.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
-#include <oox/drawingml/fillproperties.hxx>
 #include <oox/drawingml/graphicshapecontext.hxx>
-#include <oox/drawingml/lineproperties.hxx>
 #include <oox/drawingml/shape.hxx>
 #include <oox/drawingml/shapegroupcontext.hxx>
 #include <oox/drawingml/shapepropertymap.hxx>

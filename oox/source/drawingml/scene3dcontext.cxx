@@ -24,7 +24,7 @@
 #include <comphelper/anytostring.hxx>
 #include "drawingml/colorchoicecontext.hxx"
 #include "oox/drawingml/drawingmltypes.hxx"
-#include "oox/drawingml/fillproperties.hxx"
+#include "drawingml/fillproperties.hxx"
 #include "oox/core/xmlfilterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include <oox/token/namespaces.hxx>
