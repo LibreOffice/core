@@ -224,7 +224,6 @@ private:
 public:
     bool            WritePS( const Graphic& rGraphic, SvStream& rTargetStream, FilterConfigItem* );
     PSWriter();
-    ~PSWriter();
 };
 
 //========================== methods from PSWriter ==========================
@@ -274,10 +273,6 @@ PSWriter::PSWriter()
     , nOffset(0)
     , dwShift(0)
     , xStatusIndicator()
-{
-}
-
-PSWriter::~PSWriter()
 {
 }
 

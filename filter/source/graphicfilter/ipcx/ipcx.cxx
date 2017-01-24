@@ -53,7 +53,6 @@ private:
 
 public:
     explicit PCXReader(SvStream &rStream);
-    ~PCXReader();
     bool                ReadPCX(Graphic & rGraphic );
                         // Reads a PCX file from the stream and fills the GDIMetaFile
 };
@@ -75,10 +74,6 @@ PCXReader::PCXReader(SvStream &rStream)
     , nDestBitsPerPixel(0)
     , pPalette(new sal_uInt8[ 768 ])
     , bStatus(false)
-{
-}
-
-PCXReader::~PCXReader()
 {
 }
 

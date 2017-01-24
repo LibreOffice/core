@@ -58,7 +58,6 @@ private:
 
 public:
     explicit RASReader(SvStream &rRAS);
-    ~RASReader();
     bool                ReadRAS(Graphic & rGraphic);
 };
 
@@ -81,11 +80,6 @@ RASReader::RASReader(SvStream &rRAS)
     , mbPalette(false)
 {
 }
-
-RASReader::~RASReader()
-{
-}
-
 
 bool RASReader::ReadRAS(Graphic & rGraphic)
 {
