@@ -107,7 +107,7 @@ bool SwTextFrameBreak::IsInside( SwTextMargin &rLine ) const
 
     SwSwapIfSwapped swap(m_pFrame);
     SwRectFnSet aRectFnSet(m_pFrame);
-    // nOrigin is an absolut value, rLine referes to the swapped situation.
+    // nOrigin is an absolute value, rLine referes to the swapped situation.
 
     SwTwips nTmpY;
     if ( m_pFrame->IsVertical() )
