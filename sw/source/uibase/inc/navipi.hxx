@@ -119,8 +119,6 @@ class SwNavigationPI : public PanelLayout,
 
     void SetPopupWindow( SfxPopupWindow* );
 
-    using Window::StateChanged;
-
 protected:
 
     // release ObjectShellLock early enough for app end
@@ -141,6 +139,8 @@ public:
 
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,
                                             const SfxPoolItem* pState ) override;
+
+    virtual void    StateChanged(StateChangedType nStateChange) override;
 
     static OUString CreateDropFileName( TransferableDataHelper& rData );
     static OUString CleanEntry(const OUString& rEntry);

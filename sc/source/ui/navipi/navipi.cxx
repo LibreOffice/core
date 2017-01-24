@@ -529,13 +529,6 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     aContentIdle.SetInvokeHandler( LINK( this, ScNavigatorDlg, TimeHdl ) );
     aContentIdle.SetPriority( TaskPriority::LOWEST );
 
-    if (!SfxChildWindowContext::GetFloatingWindow(GetParent()))
-    {
-        // When the navigator is displayed in the sidebar, or is otherwise
-        // docked, it has the whole deck to fill. Therefore hide the button that
-        // hides all controls below the top two rows of buttons.
-        aTbxCmd->RemoveItem(aTbxCmd->GetItemPos(nZoomId));
-    }
     aLbEntries->SetNavigatorDlgFlag(true);
 
     // if scenario was active, switch on
@@ -547,6 +540,18 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     SetListMode(eNavMode);
 
     aExpandedSize = GetOptimalSize();
+}
+
+void ScNavigatorDlg::StateChanged(StateChangedType nStateChange)
+{
+    PanelLayout::StateChanged(nStateChange);
+    if (nStateChange == StateChangedType::InitShow)
+    {
+        // When the navigator is displayed in the sidebar, or is otherwise
+        // docked, it has the whole deck to fill. Therefore hide the button that
+        // hides all controls below the top two rows of buttons.
+        aTbxCmd->ShowItem(aTbxCmd->GetItemId(nZoomId), SfxChildWindowContext::GetFloatingWindow(GetParent()));
+    }
 }
 
 ScNavigatorDlg::~ScNavigatorDlg()

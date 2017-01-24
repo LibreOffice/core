@@ -261,6 +261,8 @@ public:
     virtual void dispose() override;
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
+
+    virtual void StateChanged(StateChangedType nStateChange) override;
 };
 
 class ScNavigatorDialogWrapper: public SfxChildWindowContext

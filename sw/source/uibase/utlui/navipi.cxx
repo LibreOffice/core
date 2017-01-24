@@ -728,15 +728,6 @@ SwNavigationPI::SwNavigationPI(SfxBindings* _pBindings,
     m_aGlobalTree->SetAccessibleName(SW_RESSTR(STR_ACCESS_TL_GLOBAL));
     m_aDocListBox->SetAccessibleName(m_aStatusArr[3]);
 
-    if (!SfxChildWindowContext::GetFloatingWindow(GetParent()))
-    {
-        // if the parent isn't a float, then then the navigator is displayed in
-        // the sidebar or is otherwise docked. While the navigator could change
-        // its size, the sidebar can not, and the navigator would just waste
-        // space. Therefore hide this button.
-        m_aContentToolBox->RemoveItem(m_aContentToolBox->GetItemPos(m_aContentToolBox->GetItemId("listbox")));
-    }
-
     m_aExpandedSize = GetOptimalSize();
 }
 
@@ -846,6 +837,19 @@ void SwNavigationPI::StateChanged( sal_uInt16 nSID, SfxItemState /*eState*/,
             m_aContentTree->SetActiveShell(nullptr);
         }
         UpdateListBox();
+    }
+}
+
+void SwNavigationPI::StateChanged(StateChangedType nStateChange)
+{
+    PanelLayout::StateChanged(nStateChange);
+    if (nStateChange == StateChangedType::InitShow)
+    {
+        // if the parent isn't a float, then then the navigator is displayed in
+        // the sidebar or is otherwise docked. While the navigator could change
+        // its size, the sidebar can not, and the navigator would just waste
+        // space. Therefore hide this button.
+        m_aContentToolBox->ShowItem(m_aContentToolBox->GetItemId("listbox"), SfxChildWindowContext::GetFloatingWindow(GetParent()));
     }
 }
 
