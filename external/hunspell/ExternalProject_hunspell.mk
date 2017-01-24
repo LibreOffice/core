@@ -35,7 +35,7 @@ $(call gb_ExternalProject_get_state_target,hunspell,build):
 			$(if $(filter AIX,$(OS)),CFLAGS="-D_LINUX_SOURCE_COMPAT") \
 			$(if $(filter-out WNTGCC,$(OS)$(COM)),,LDFLAGS="-Wl,--enable-runtime-pseudo-reloc-v2") \
 			CXXFLAGS="$(hunspell_CXXFLAGS)" \
-		&& $(MAKE) \
+		&& cd src/hunspell && $(MAKE) \
 	)
 
 # vim: set noet sw=4 ts=4:
