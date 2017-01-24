@@ -28,7 +28,6 @@ public:
         : AstDeclaration(NT_observes, name, pScope)
         , m_pRealInterface(pRealInterface)
         {}
-    virtual ~AstObserves() override {}
 
     AstInterface* getRealInterface()
         { return m_pRealInterface; }

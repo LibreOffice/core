@@ -78,7 +78,6 @@ protected:
 public:
 
     NameContainer() {}
-    virtual ~NameContainer() override {}
 
 
     // methods for XElementAccess

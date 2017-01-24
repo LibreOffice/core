@@ -41,7 +41,6 @@ public:
         , m_flags(flags)
         , m_pType(pType)
         {}
-    virtual ~AstAttribute() override {}
 
     void setExceptions(
         OUString const * getDoc, DeclList const * getExc,
