@@ -83,7 +83,7 @@ void MacrosMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPo
 
     // insert basic
     OUString aCommand(".uno:MacroDialog");
-    OUString aDisplayName = vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand(aCommand, m_xFrame);
+    OUString aDisplayName = vcl::CommandInfoProvider::GetMenuLabelForCommand(aCommand, m_xFrame);
     pPopupMenu->InsertItem( 2, aDisplayName );
     pPopupMenu->SetItemCommand( 2, aCommand );
 

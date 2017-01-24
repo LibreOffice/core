@@ -147,7 +147,7 @@ void ToolbarsMenuController::addCommand(
 
     OUString aLabel;
     if ( rLabel.isEmpty() )
-        aLabel = vcl::CommandInfoProvider::Instance().GetMenuLabelForCommand( rCommandURL, m_xFrame );
+        aLabel = vcl::CommandInfoProvider::GetMenuLabelForCommand( rCommandURL, m_xFrame );
     else
         aLabel = rLabel;
 
@@ -167,7 +167,7 @@ void ToolbarsMenuController::addCommand(
     const StyleSettings& rSettings = Application::GetSettings().GetStyleSettings();
 
     if ( rSettings.GetUseImagesInMenus() )
-        aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(rCommandURL, m_xFrame);
+        aImage = vcl::CommandInfoProvider::GetImageForCommand(rCommandURL, m_xFrame);
 
     VCLXPopupMenu* pPopupMenu = static_cast<VCLXPopupMenu *>(VCLXPopupMenu::GetImplementation( rPopupMenu ));
     if ( pPopupMenu )
