@@ -1438,7 +1438,50 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
         LOKDocView* pLOKDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
         GtkToolItem* pItem = GTK_TOOL_ITEM(pWidget);
         const std::string& rString = rWindow.m_aToolItemCommandNames[pItem];
-        const std::string& rArguments = rWindow.m_aToolItemCommandArgs[pItem];
+        std::string& rArguments = rWindow.m_aToolItemCommandArgs[pItem];
+
+        if (rString == ".uno:InsertAnnotation")
+        {
+            LOKDocView* pDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
+
+            GtkWidget* pAnnotationDialog = gtk_dialog_new_with_buttons ("Insert Comment",
+                                                                        GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
+                                                                        GTK_DIALOG_MODAL,
+                                                                        "Insert",
+                                                                        GTK_RESPONSE_OK,
+                                                                        nullptr);
+
+            GtkWidget* pDialogMessageArea = gtk_dialog_get_content_area (GTK_DIALOG (pAnnotationDialog));
+            GtkWidget* pHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+            gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pHBox, TRUE, TRUE, 2);
+
+            GtkWidget* pCommentLabel = gtk_label_new("Comment text");
+            gtk_box_pack_start(GTK_BOX(pHBox), pCommentLabel, TRUE, TRUE, 2);
+
+            GtkWidget* pCommentText = gtk_entry_new();
+            gtk_box_pack_start(GTK_BOX(pHBox), pCommentText, TRUE, TRUE, 2);
+
+            gtk_widget_show_all(pAnnotationDialog);
+
+            gint res = gtk_dialog_run(GTK_DIALOG(pAnnotationDialog));
+            switch(res)
+            {
+            case GTK_RESPONSE_OK:
+                const gchar* sText = gtk_entry_get_text(GTK_ENTRY(pCommentText));
+                boost::property_tree::ptree aTree;
+                aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
+                aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), sText);
+
+                std::stringstream aStream;
+                boost::property_tree::write_json(aStream, aTree);
+                rArguments = aStream.str();
+
+                break;
+            }
+
+            gtk_widget_destroy(pAnnotationDialog);
+        }
+
         g_info("toggleToolItem: lok_doc_view_post_command('%s %s')", rString.c_str(), rArguments.c_str());
 
         // notify about the finished Save
