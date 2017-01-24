@@ -85,7 +85,6 @@ class LwpPropList : public LwpDLVListHead
 {
 public:
     LwpPropList(){}
-    ~LwpPropList(){}
     using LwpDLVListHead::Read;
     LwpPropListElement* GetFirst();
     OUString GetNamedProperty(const OUString& name);

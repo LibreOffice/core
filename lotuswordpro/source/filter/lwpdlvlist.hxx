@@ -150,7 +150,6 @@ class LwpDLVListHead
 {
 public:
     LwpDLVListHead(){}
-    ~LwpDLVListHead(){}
     void Read(LwpObjectStream* pObjStrm);
     LwpObjectID& GetFirst() { return m_objHead; }
 protected:

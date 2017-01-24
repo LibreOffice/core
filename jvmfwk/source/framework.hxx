@@ -110,7 +110,6 @@ public:
         errorCode(err), message(msg)
         {
         }
-    virtual ~FrameworkException() throw () override {}
     javaFrameworkError errorCode;
     OString message;
 };

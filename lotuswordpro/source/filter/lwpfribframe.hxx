@@ -70,7 +70,6 @@ class LwpFribFrame : public LwpFrib
 {
 public:
     explicit LwpFribFrame( LwpPara* pPara) : LwpFrib(pPara){}
-    virtual ~LwpFribFrame() override {}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     rtl::Reference<LwpObject> GetLayout();
     void RegisterStyle(LwpFoundry* pFoundry) override;
@@ -84,7 +83,6 @@ class LwpFribRubyFrame : public LwpFrib
 {
 public:
     explicit LwpFribRubyFrame(LwpPara* pPara) : LwpFrib(pPara){}
-    virtual ~LwpFribRubyFrame() override {}
     void Read(LwpObjectStream* pObjStrm, sal_uInt16 len) override;
     LwpRubyLayout* GetLayout();
     void RegisterStyle(LwpFoundry* pFoundry) override;

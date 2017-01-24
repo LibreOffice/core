@@ -94,7 +94,6 @@ class LwpForkedNotifyList
 {
 public:
     LwpForkedNotifyList(){}
-    ~LwpForkedNotifyList() {}
     void Read(LwpObjectStream* pObjStrm)
     {
         m_PersistentList.Read(pObjStrm);

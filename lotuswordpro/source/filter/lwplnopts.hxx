@@ -72,7 +72,6 @@ class LwpLineNumberOptions
 {
 public:
     explicit LwpLineNumberOptions(LwpObjectStream* pStrm);
-    ~LwpLineNumberOptions(){}
 protected:
     sal_uInt16 m_nType;
     sal_uInt16 m_nFlags;

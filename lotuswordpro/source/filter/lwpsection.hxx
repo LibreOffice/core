@@ -71,7 +71,6 @@ class LwpOrderedObject : public LwpDLNFVList
 {
 public:
     LwpOrderedObject(LwpObjectHeader &objHdr, LwpSvStream* pStrm);
-    virtual ~LwpOrderedObject() override {}
     void Read() override;
     LwpObjectID& GetPosition(){ return m_Para;}
     LwpObjectID& GetListList(){ return m_ListList;}
