@@ -32,12 +32,22 @@ private:
     /** Dispatcher. Need to keep a reference to it as long as this StatusListener exists. */
     css::uno::Reference<css::frame::XDispatch> mxDispatch;
     css::util::URL maCommandURL;
+    css::uno::Reference<css::frame::XFrame> mxFrame;
 
 public:
     void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override;
 
+    const css::uno::Reference<css::frame::XFrame>& getFrame() { return mxFrame; }
+
+    void addFrameActionListener(const css::uno::Reference<css::frame::XFrameActionListener>& xListener) {
+        mxFrame->addFrameActionListener(xListener);
+    }
+
+    void removeFrameActionListener(const css::uno::Reference<css::frame::XFrameActionListener>& xListener) {
+        mxFrame->removeFrameActionListener(xListener);
+    }
     void dispose();
 };
 
@@ -49,8 +59,10 @@ VclStatusListener<T>::VclStatusListener(T* widget, const rtl::OUString& aCommand
     css::uno::Reference<css::frame::XDesktop2> xDesktop = css::frame::Desktop::create(xContext);
 
     css::uno::Reference<css::frame::XFrame> xFrame(xDesktop->getActiveFrame());
-    if (!xFrame.is())
+    if (!xFrame.is()) {
         xFrame = css::uno::Reference<css::frame::XFrame>(xDesktop, css::uno::UNO_QUERY);
+        mxFrame = xFrame;
+    }
 
     css::uno::Reference<css::frame::XDispatchProvider> xDispatchProvider(xFrame, css::uno::UNO_QUERY);
     if (!xDispatchProvider.is())
@@ -85,6 +97,9 @@ void VclStatusListener<T>::dispose()
     if (mxDispatch.is()) {
         mxDispatch->removeStatusListener(this, maCommandURL);
         mxDispatch.clear();
+    }
+    if(mxFrame.is()) {
+        mxFrame.clear();
     }
     mWidget.clear();
 }

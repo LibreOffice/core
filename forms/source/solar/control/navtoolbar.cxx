@@ -287,7 +287,7 @@ namespace frm
                     OUString sCommandURL( lcl_getCommandURL( pSupportedFeatures->nId ) );
                     m_pToolbar->SetItemCommand( pSupportedFeatures->nId, sCommandURL );
                     m_pToolbar->SetQuickHelpText( pSupportedFeatures->nId,
-                            vcl::CommandInfoProvider::Instance().GetCommandPropertyFromModule(sCommandURL, m_sModuleId) );
+                            vcl::CommandInfoProvider::GetCommandPropertyFromModule(sCommandURL, m_sModuleId) );
                 }
 
                 if ( pSupportedFeatures->bItemWindow )

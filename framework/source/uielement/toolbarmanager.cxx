@@ -314,7 +314,7 @@ void ToolBarManager::RefreshImages()
         else
         {
             OUString aCommandURL = m_pToolBar->GetItemCommand( it.first );
-            Image aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, m_xFrame, eImageType);
+            Image aImage = vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, m_xFrame, eImageType);
             // Try also to query for add-on images before giving up and use an
             // empty image.
             bool bBigImages = eImageType != vcl::ImageType::Size16;
@@ -679,7 +679,7 @@ void ToolBarManager::CreateControllers()
 
         OUString aCommandURL( m_pToolBar->GetItemCommand( nId ) );
         // Command can be just an alias to another command.
-        OUString aRealCommandURL( vcl::CommandInfoProvider::Instance().GetRealCommandForCommand( aCommandURL, m_xFrame ) );
+        OUString aRealCommandURL( vcl::CommandInfoProvider::GetRealCommandForCommand( aCommandURL, m_xFrame ) );
         if ( !aRealCommandURL.isEmpty() )
             aCommandURL = aRealCommandURL;
 
@@ -758,7 +758,7 @@ void ToolBarManager::CreateControllers()
                             new GenericToolbarController( m_xContext, m_xFrame, m_pToolBar, nId, aCommandURL ));
 
                         // Accessibility support: Set toggle button role for specific commands
-                        sal_Int32 nProps = vcl::CommandInfoProvider::Instance().GetPropertiesForCommand(aCommandURL, m_xFrame);
+                        sal_Int32 nProps = vcl::CommandInfoProvider::GetPropertiesForCommand(aCommandURL, m_xFrame);
                         if ( nProps & UICOMMANDDESCRIPTION_PROPERTIES_TOGGLEBUTTON )
                             m_pToolBar->SetItemBits( nId, m_pToolBar->GetItemBits( nId ) | ToolBoxItemBits::CHECKABLE );
                     }
@@ -1046,7 +1046,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                         aProp[i].Value >>= nStyle;
                 }
 
-                if (vcl::CommandInfoProvider::Instance().IsExperimental(aCommandURL, m_aModuleIdentifier) &&
+                if (vcl::CommandInfoProvider::IsExperimental(aCommandURL, m_aModuleIdentifier) &&
                     !SvtMiscOptions().IsExperimentalMode())
                 {
                     continue;
@@ -1054,7 +1054,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
 
                 if (( nType == css::ui::ItemType::DEFAULT ) && !aCommandURL.isEmpty() )
                 {
-                    OUString aString(vcl::CommandInfoProvider::Instance().GetLabelForCommand(aCommandURL, m_xFrame));
+                    OUString aString(vcl::CommandInfoProvider::GetLabelForCommand(aCommandURL, m_xFrame));
 
                     ToolBoxItemBits nItemBits = ConvertStyleToToolboxItemBits( nStyle );
                     if ( aMenuDesc.is() )
@@ -1067,7 +1067,7 @@ void ToolBarManager::FillToolbar( const Reference< XIndexAccess >& rItemContaine
                     if ( !aTooltip.isEmpty() )
                         m_pToolBar->SetQuickHelpText( nId, aTooltip );
                     else
-                        m_pToolBar->SetQuickHelpText( nId, vcl::CommandInfoProvider::Instance().GetTooltipForCommand(aCommandURL, m_xFrame) );
+                        m_pToolBar->SetQuickHelpText( nId, vcl::CommandInfoProvider::GetTooltipForCommand(aCommandURL, m_xFrame) );
 
                     if ( !aLabel.isEmpty() )
                     {
@@ -1484,7 +1484,7 @@ bool ToolBarManager::MenuItemAllowed( sal_uInt16 ) const
                 pVisibleItemsPopupMenu->InsertItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->GetItemText( nId ), MenuItemBits::CHECKABLE );
                 pVisibleItemsPopupMenu->CheckItem( STARTID_CUSTOMIZE_POPUPMENU+nPos, m_pToolBar->IsItemVisible( nId ) );
                 pVisibleItemsPopupMenu->SetItemCommand( STARTID_CUSTOMIZE_POPUPMENU+nPos, aCommandURL );
-                Image aImage(vcl::CommandInfoProvider::Instance().GetImageForCommand(aCommandURL, m_xFrame));
+                Image aImage(vcl::CommandInfoProvider::GetImageForCommand(aCommandURL, m_xFrame));
                 commandToImage[aCommandURL] = aImage;
                 pVisibleItemsPopupMenu->SetItemImage( STARTID_CUSTOMIZE_POPUPMENU+nPos, aImage );
             }
