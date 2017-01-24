@@ -28,22 +28,18 @@
 #include "rangenam.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
-    namespace lang { class XMultiServiceFactory; }
     namespace sheet { class XDatabaseRange; }
     namespace sheet { class XSpreadsheet; }
     namespace sheet { class XSpreadsheetDocument; }
     namespace sheet { struct FormulaToken; }
     namespace style { class XStyle; }
-    namespace table { class XCell; }
     namespace table { class XCellRange; }
 } } }
 
 namespace oox {
     class AttributeList;
     class SegmentProgressBar;
-    class ISegmentProgressBar;
 }
 
 namespace oox { namespace core {
@@ -54,7 +50,6 @@ namespace oox { namespace core {
 } }
 
 class ScDocument;
-class ScDocShell;
 class ScDocumentImport;
 class ScEditEngineDefaulter;
 class ScDBData;
@@ -73,7 +68,6 @@ struct IgnoreCaseCompare
 class AddressConverter;
 class ConnectionsBuffer;
 class DefinedNamesBuffer;
-class ExcelChartConverter;
 class ExternalLinkBuffer;
 class FormulaParser;
 class PageSettingsConverter;

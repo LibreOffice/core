@@ -37,12 +37,8 @@
 #include "attarray.hxx"
 #include <list>
 
-class ScMarkData;
-namespace com { namespace sun { namespace star {
-    namespace awt { struct FontDescrtiptor; }
-} } }
-
-namespace oox { class PropertySet; }
+namespace oox { class PropertySet;
+                class PropertyMap; }
 
 namespace oox {
 namespace xls {

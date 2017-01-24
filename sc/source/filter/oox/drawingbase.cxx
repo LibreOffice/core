@@ -32,7 +32,6 @@
 namespace oox {
 namespace xls {
 
-using namespace ::com::sun::star::table;
 using namespace ::oox::drawingml;
 
 namespace {

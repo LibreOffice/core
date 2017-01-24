@@ -27,6 +27,7 @@
 #include <com/sun/star/sheet/XSheetAnnotationShapeSupplier.hpp>
 #include <com/sun/star/sheet/XSheetAnnotations.hpp>
 #include <com/sun/star/sheet/XSheetAnnotationsSupplier.hpp>
+#include <com/sun/star/text/XText.hpp>
 #include <osl/diagnose.h>
 #include <oox/helper/attributelist.hxx>
 #include <oox/vml/vmlshape.hxx>
@@ -34,10 +35,6 @@
 #include "drawingfragment.hxx"
 #include <svx/sdtaitm.hxx>
 #include "unitconverter.hxx"
-
-#include <com/sun/star/text/XText.hpp>
-
-using ::com::sun::star::text::XText;
 
 namespace oox {
 namespace xls {

@@ -21,12 +21,8 @@
 
 #include <algorithm>
 #include <com/sun/star/sheet/XArrayFormulaTokens.hpp>
-#include <com/sun/star/sheet/XCellRangeData.hpp>
-#include <com/sun/star/sheet/XMultipleOperation.hpp>
-#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XMergeable.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <rtl/ustrbuf.hxx>
@@ -58,7 +54,6 @@ namespace xls {
 
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::text;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
 

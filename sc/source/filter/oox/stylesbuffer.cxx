@@ -30,14 +30,11 @@
 #include <com/sun/star/awt/XDevice.hpp>
 #include <com/sun/star/awt/XFont2.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/style/XStyle.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
-#include <com/sun/star/text/XText.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/CellJustifyMethod.hpp>
-#include <com/sun/star/table/TableBorder.hpp>
 #include <editeng/justifyitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/fontitem.hxx>
@@ -85,7 +82,6 @@
 namespace oox {
 namespace xls {
 
-using namespace com::sun::star;
 using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::style;
@@ -1549,42 +1545,42 @@ bool Border::convertBorderLine( BorderLine2& rBorderLine, const BorderLineModel&
     {
         case XML_dashDot:
             lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
-            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT;
+            rBorderLine.LineStyle = BorderLineStyle::DASH_DOT;
         break;
         case XML_dashDotDot:
             lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
-            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT_DOT;
+            rBorderLine.LineStyle = BorderLineStyle::DASH_DOT_DOT;
         break;
         case XML_dashed:
             lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
-            rBorderLine.LineStyle = table::BorderLineStyle::FINE_DASHED;
+            rBorderLine.LineStyle = BorderLineStyle::FINE_DASHED;
         break;
         case XML_dotted:
             lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );
-            rBorderLine.LineStyle = table::BorderLineStyle::DOTTED;
+            rBorderLine.LineStyle = BorderLineStyle::DOTTED;
         break;
         case XML_double:
             lclSetBorderLineWidth( rBorderLine, 10, 15, 10 );
-            rBorderLine.LineStyle = table::BorderLineStyle::DOUBLE_THIN;
+            rBorderLine.LineStyle = BorderLineStyle::DOUBLE_THIN;
         break;
         case XML_hair:              lclSetBorderLineWidth( rBorderLine, API_LINE_HAIR );    break;
         case XML_medium:            lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );  break;
         case XML_mediumDashDot:
             lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
-            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT;
+            rBorderLine.LineStyle = BorderLineStyle::DASH_DOT;
             break;
         case XML_mediumDashDotDot:
             lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
-            rBorderLine.LineStyle = table::BorderLineStyle::DASH_DOT_DOT;
+            rBorderLine.LineStyle = BorderLineStyle::DASH_DOT_DOT;
             break;
         case XML_mediumDashed:
             lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
-            rBorderLine.LineStyle = table::BorderLineStyle::DASHED;
+            rBorderLine.LineStyle = BorderLineStyle::DASHED;
         break;
         case XML_none:              lclSetBorderLineWidth( rBorderLine, API_LINE_NONE );    break;
         case XML_slantDashDot:
             lclSetBorderLineWidth( rBorderLine, API_LINE_MEDIUM );
-            rBorderLine.LineStyle = table::BorderLineStyle::FINE_DASHED;
+            rBorderLine.LineStyle = BorderLineStyle::FINE_DASHED;
             break;
         case XML_thick:             lclSetBorderLineWidth( rBorderLine, API_LINE_THICK );   break;
         case XML_thin:              lclSetBorderLineWidth( rBorderLine, API_LINE_THIN );    break;

@@ -19,10 +19,6 @@
 
 #include "sheetdatacontext.hxx"
 
-#include <com/sun/star/table/CellContentType.hpp>
-#include <com/sun/star/table/XCell.hpp>
-#include <com/sun/star/table/XCellRange.hpp>
-#include <com/sun/star/text/XText.hpp>
 #include <oox/helper/attributelist.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/token/namespaces.hxx>
@@ -34,11 +30,6 @@
 
 namespace oox {
 namespace xls {
-
-using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::table;
-using namespace ::com::sun::star::text;
-using namespace ::com::sun::star::uno;
 
 using ::oox::core::ContextHandlerRef;
 

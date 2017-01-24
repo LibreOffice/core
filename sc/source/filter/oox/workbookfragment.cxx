@@ -80,7 +80,6 @@ namespace xls {
 using namespace ::com::sun::star::io;
 using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::sheet;
 using namespace ::oox::core;
 
 using ::oox::drawingml::ThemeFragmentHandler;

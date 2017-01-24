@@ -19,9 +19,7 @@
 
 #include "numberformatsbuffer.hxx"
 
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
@@ -46,7 +44,6 @@
 namespace oox {
 namespace xls {
 
-using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;

@@ -28,8 +28,6 @@ namespace com { namespace sun { namespace star {
     namespace util { class XNumberFormats; }
 } } }
 
-namespace oox { class PropertyMap; }
-
 namespace oox {
 namespace xls {
 
