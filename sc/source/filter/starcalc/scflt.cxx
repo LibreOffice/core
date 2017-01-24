@@ -1542,7 +1542,9 @@ void Sc10Import::LoadTables()
         {
             rStream.ReadUInt16( DataEnd );
             rStream.ReadUInt16( DataValue );
-            pDoc->SetRowHeightRange(static_cast<SCROW> (DataStart), static_cast<SCROW> (DataEnd), static_cast<SCTAB> (TabNo), DataValue);
+            pDoc->SetRowHeightRange(SanitizeRow(static_cast<SCROW>(DataStart)),
+                                    SanitizeRow(static_cast<SCROW>(DataEnd)),
+                                    static_cast<SCTAB> (TabNo), DataValue);
             DataStart = DataEnd + 1;
         }
         pPrgrsBar->Progress();
