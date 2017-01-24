@@ -91,7 +91,7 @@ void NewMenuController::setMenuImages( PopupMenu* pPopupMenu, bool bSetImages )
                 INetURLObject aURLObj( aImageId.isEmpty() ? aCmd : aImageId );
                 Image aImage = SvFileInformationManager::GetImageNoDefault( aURLObj );
                 if ( !aImage )
-                    aImage = vcl::CommandInfoProvider::Instance().GetImageForCommand(aCmd, xFrame);
+                    aImage = vcl::CommandInfoProvider::GetImageForCommand(aCmd, xFrame);
 
                 if ( !!aImage )
                     pPopupMenu->SetItemImage( nItemId, aImage );
