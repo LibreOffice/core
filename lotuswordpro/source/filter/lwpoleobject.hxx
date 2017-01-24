@@ -116,7 +116,6 @@ class LwpOleObject : public LwpGraphicOleObject
 {
 public:
     LwpOleObject(LwpObjectHeader& objHdr, LwpSvStream* pStrm);
-    virtual ~LwpOleObject() override {}
     virtual void Read() override;
     virtual void Parse(IXFStream* pOutputStream) override;
     virtual void XFConvert(XFContentContainer * pCont) override;

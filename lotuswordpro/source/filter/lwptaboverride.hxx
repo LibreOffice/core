@@ -70,10 +70,6 @@ public:
     {
     }
 
-    virtual ~LwpTabOverride() override
-    {
-    }
-
     virtual LwpTabOverride* clone() const override;
 
     virtual void Read(LwpObjectStream *pStrm) override

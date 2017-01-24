@@ -72,8 +72,6 @@ public:
         , m_bLongFmt(false)
     {}
 
-    virtual ~XFDateTimePart() override {}
-public:
     void    SetPartType(enumXFDatePart ePart);
 
     void    SetLongFmt(bool bLongFmt);
@@ -91,8 +89,6 @@ class XFTimePart : public XFDateTimePart
 public:
     XFTimePart();
 
-    virtual ~XFTimePart() override {}
-public:
     void    SetDecimalPos(sal_Int32 pos);
 
     virtual void    ToXml(IXFStream *pStrm) override;

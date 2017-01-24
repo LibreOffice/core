@@ -72,7 +72,6 @@ public:
         , m_eAlign(enumXFRubyLeft)
     {
     }
-    virtual ~XFRubyStyle() override {}
     virtual void ToXml(IXFStream *strm) override;
     void SetPosition(enumXFRubyPosition ePosition);
     void SetAlignment(enumXFRubyPosition eAlignment);

@@ -129,7 +129,6 @@ private:
 
 public:
     IntArray2D( int nDim1, int nDim2 );
-    ~IntArray2D();
 
     sal_Int32 & Value( int i, int k  );
 };
@@ -139,10 +138,6 @@ IntArray2D::IntArray2D( int nDim1, int nDim2 )
     n1 = nDim1;
     n2 = nDim2;
     pData.reset( new sal_Int32[n1 * n2] );
-}
-
-IntArray2D::~IntArray2D()
-{
 }
 
 sal_Int32 & IntArray2D::Value( int i, int k  )

@@ -64,7 +64,6 @@ class LwpFileHeader
 {
 public:
     LwpFileHeader();
-    ~LwpFileHeader(){}
 private: //data member
     sal_uInt16 m_nAppRevision;
     sal_uInt16 m_nAppReleaseNo;

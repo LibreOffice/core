@@ -84,7 +84,6 @@ public:
         , m_nXHeight(0)
     {
     }
-    ~LwpPanoseNumber(){}
 public:
     void Read(LwpObjectStream *pStrm);
 private:
