@@ -25,6 +25,7 @@
 #include <rtl/ref.hxx>
 
 class SfxPoolItem;
+class VirtualDevice;
 
 class GlobalEditData
 {
@@ -33,6 +34,7 @@ private:
     SfxPoolItem**   ppDefItems;
 
     rtl::Reference<SvxForbiddenCharactersTable> xForbiddenCharsTable;
+    VclPtr<VirtualDevice> mpVirDev;
 
 public:
                     GlobalEditData();
@@ -43,6 +45,8 @@ public:
     rtl::Reference<SvxForbiddenCharactersTable> GetForbiddenCharsTable();
     void            SetForbiddenCharsTable( rtl::Reference<SvxForbiddenCharactersTable> xForbiddenChars ) { xForbiddenCharsTable = xForbiddenChars; }
     css::uno::Reference< css::linguistic2::XLanguageGuessing > GetLanguageGuesser();
+
+    VclPtr<VirtualDevice> GetStdVirtualDevice();
 };
 
 #endif // INCLUDED_EDITENG_SOURCE_EDITENG_EERDLL2_HXX
