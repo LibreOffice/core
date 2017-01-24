@@ -539,14 +539,7 @@ bool XPMReader::ImplCompare( sal_uInt8 const * pSource, sal_uInt8 const * pDest,
         return true;
     }
 
-    for ( sal_uLong i = 0; i < nSize; i++ )
-    {
-        if ( pSource[i] != pDest[i] )
-        {
-            return false;
-        }
-    }
-    return true;
+    return memcmp(pSource, pDest, nSize) == 0;
 }
 
 // ImplGetPara tries to retrieve nNumb (0...x) parameters from mpStringBuf.
