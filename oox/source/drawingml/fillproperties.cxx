@@ -843,10 +843,10 @@ OUString ArtisticEffectProperties::getEffectString( sal_Int32 nToken )
         case OOX_TOKEN( a14, artisticPlasticWrap ):         return OUString( "artisticPlasticWrap" );
         case OOX_TOKEN( a14, artisticTexturizer ):          return OUString( "artisticTexturizer" );
         case OOX_TOKEN( a14, artisticWatercolorSponge ):    return OUString( "artisticWatercolorSponge" );
-        case OOX_TOKEN( a14, artisticBrightnessContrast ):  return OUString( "artisticBrightnessContrast" );
-        case OOX_TOKEN( a14, artisticColorTemperature ):    return OUString( "artisticColorTemperature" );
-        case OOX_TOKEN( a14, artisticSaturation ):          return OUString( "artisticSaturation" );
-        case OOX_TOKEN( a14, artisticSharpenSoften ):       return OUString( "artisticSharpenSoften" );
+        case OOX_TOKEN( a14, brightnessContrast ):          return OUString( "brightnessContrast" );
+        case OOX_TOKEN( a14, colorTemperature ):            return OUString( "colorTemperature" );
+        case OOX_TOKEN( a14, saturation ):                  return OUString( "saturation" );
+        case OOX_TOKEN( a14, sharpenSoften ):               return OUString( "sharpenSoften" );
 
         // attributes
         case XML_visible:           return OUString( "visible" );
@@ -869,7 +869,7 @@ OUString ArtisticEffectProperties::getEffectString( sal_Int32 nToken )
         case XML_sat:               return OUString( "sat" );
         case XML_amount:            return OUString( "amount" );
     }
-    SAL_WARN( "oox.drawingml", "ArtisticEffectProperties::getEffectString - unexpected token" );
+    SAL_WARN( "oox.drawingml", "ArtisticEffectProperties::getEffectString: unexpected token " << nToken );
     return OUString();
 }
 
@@ -920,14 +920,14 @@ sal_Int32 ArtisticEffectProperties::getEffectToken( const OUString& sName )
         return XML_artisticTexturizer;
     else if( sName == "artisticWatercolorSponge" )
         return XML_artisticWatercolorSponge;
-    else if( sName == "artisticBrightnessContrast" )
-        return XML_artisticBrightnessContrast;
-    else if( sName == "artisticColorTemperature" )
-        return XML_artisticColorTemperature;
-    else if( sName == "artisticSaturation" )
-        return XML_artisticSaturation;
-    else if( sName == "artisticSharpenSoften" )
-        return XML_artisticSharpenSoften;
+    else if( sName == "brightnessContrast" )
+        return XML_brightnessContrast;
+    else if( sName == "colorTemperature" )
+        return XML_colorTemperature;
+    else if( sName == "saturation" )
+        return XML_saturation;
+    else if( sName == "sharpenSoften" )
+        return XML_sharpenSoften;
 
     // attributes
     else if( sName == "visible" )

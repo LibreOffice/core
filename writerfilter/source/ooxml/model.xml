@@ -5641,16 +5641,16 @@
           <element name="artisticWatercolorSponge">
             <ref name="CT_PictureEffectWatercolorSponge"/>
           </element>
-          <element name="artisticBrightnessContrast">
+          <element name="brightnessContrast">
             <ref name="CT_PictureEffectBrightnessContrast"/>
           </element>
-          <element name="artisticColorTemperature">
+          <element name="colorTemperature">
             <ref name="CT_PictureEffectColorTemperature"/>
           </element>
-          <element name="artisticSaturation">
+          <element name="saturation">
             <ref name="CT_PictureEffectSaturation"/>
           </element>
-          <element name="artisticSharpenSoften">
+          <element name="sharpenSoften">
             <ref name="CT_PictureEffectSharpenSoften"/>
           </element>
         </choice>
