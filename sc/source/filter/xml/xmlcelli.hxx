@@ -48,7 +48,7 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
     struct Field
     {
-        std::unique_ptr<SvxFieldData> mpData;
+        tools::SvRef<SvxFieldData> mpData;
         ESelection maSelection;
 
         Field(const Field&) = delete;
