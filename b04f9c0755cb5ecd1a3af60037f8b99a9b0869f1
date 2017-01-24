@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_ef6cb60a",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2220,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-24T00:21:05Z",
+      "side": 1,
+      "message": "Nitpick: I\u0027d rather prefer if all these extra spaces were not introduced. Here and throughout all the patch. It\u0027s distracting when reviewing the diff in gerrit. Specifically not at the end of multiple parentheses where it\u0027s even odd when reading the code in an editor. Well, at least to me..",
+      "range": {
+        "startLine": 2220,
+        "startChar": 42,
+        "endLine": 2220,
+        "endChar": 50
+      },
+      "revId": "b04f9c0755cb5ecd1a3af60037f8b99a9b0869f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_0f72dae5",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2235,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-24T00:21:05Z",
+      "side": 1,
+      "message": "This gets hairy. ResolveStaticReference() is called in formula context. If called with a higher column number than currently available but permittable, the reference range will silently be changed, which may lead to wrong calculations because empty cells will not be treated as numeric 0.0 anymore.\n\nI think this will need some special handling.\n\nSame for the other ResolveStaticReference() function above. Actually already using IsColValid() may be wrong.",
+      "revId": "b04f9c0755cb5ecd1a3af60037f8b99a9b0869f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_2f779ed5",
+        "filename": "sc/source/core/data/table1.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 2253,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-24T00:21:05Z",
+      "side": 1,
+      "message": "Also here, for addressable but not present columns NaN values should be returned in the array instead of an empty array.",
+      "revId": "b04f9c0755cb5ecd1a3af60037f8b99a9b0869f1",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
