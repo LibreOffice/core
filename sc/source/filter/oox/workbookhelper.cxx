@@ -83,7 +83,6 @@
 namespace oox {
 namespace xls {
 
-using namespace ::com::sun::star::awt;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::document;
 using namespace ::com::sun::star::lang;

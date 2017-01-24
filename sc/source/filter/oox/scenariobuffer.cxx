@@ -20,7 +20,6 @@
 #include "scenariobuffer.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/sheet/XScenario.hpp>
 #include <com/sun/star/sheet/XScenarios.hpp>
 #include <com/sun/star/sheet/XScenariosSupplier.hpp>

@@ -24,10 +24,8 @@
 #include <oox/token/tokens.hxx>
 #include <svl/sharedstringpool.hxx>
 
-using namespace com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::container;
 
 #include <memory>
 
@@ -170,7 +168,7 @@ void applySharedFormulas(
 
 void applyCellFormulas(
     ScDocumentImport& rDoc, CachedTokenArray& rCache, SvNumberFormatter& rFormatter,
-    const uno::Sequence<sheet::ExternalLinkInfo>& rExternalLinks,
+    const Sequence<ExternalLinkInfo>& rExternalLinks,
     const std::vector<FormulaBuffer::TokenAddressItem>& rCells )
 {
     for (const FormulaBuffer::TokenAddressItem& rItem : rCells)
@@ -289,7 +287,7 @@ void applyCellFormulaValues(
 
 void processSheetFormulaCells(
     ScDocumentImport& rDoc, FormulaBuffer::SheetItem& rItem, SvNumberFormatter& rFormatter,
-    const uno::Sequence<sheet::ExternalLinkInfo>& rExternalLinks, bool bGeneratorKnownGood )
+    const Sequence<ExternalLinkInfo>& rExternalLinks, bool bGeneratorKnownGood )
 {
     if (rItem.mpSharedFormulaEntries && rItem.mpSharedFormulaIDs)
         applySharedFormulas(rDoc, rFormatter, *rItem.mpSharedFormulaEntries, *rItem.mpSharedFormulaIDs);

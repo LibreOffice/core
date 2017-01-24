@@ -19,7 +19,6 @@
 
 #include "worksheetsettings.hxx"
 
-#include <com/sun/star/util/XProtectable.hpp>
 #include <oox/core/filterbase.hxx>
 #include <oox/helper/binaryinputstream.hxx>
 #include <oox/helper/attributelist.hxx>
@@ -34,9 +33,7 @@
 namespace oox {
 namespace xls {
 
-using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::util;
 
 namespace {
 

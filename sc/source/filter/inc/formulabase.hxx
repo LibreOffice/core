@@ -30,7 +30,7 @@
 #include "addressconverter.hxx"
 
 namespace com { namespace sun { namespace star {
-    namespace sheet { class XFormulaOpCodeMapper; }
+    namespace lang { class XMultiServiceFactory; }
     namespace sheet { class XFormulaParser; }
 } } }
 

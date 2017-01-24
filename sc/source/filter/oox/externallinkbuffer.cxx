@@ -20,16 +20,10 @@
 #include "externallinkbuffer.hxx"
 
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/sheet/ComplexReference.hpp>
 #include <com/sun/star/sheet/DDELinkInfo.hpp>
 #include <com/sun/star/sheet/ExternalLinkType.hpp>
-#include <com/sun/star/sheet/ExternalReference.hpp>
-#include <com/sun/star/sheet/ReferenceFlags.hpp>
-#include <com/sun/star/sheet/SingleReference.hpp>
 #include <com/sun/star/sheet/XDDELinks.hpp>
-#include <com/sun/star/sheet/XDDELink.hpp>
 #include <com/sun/star/sheet/XDDELinkResults.hpp>
-#include <com/sun/star/sheet/XExternalDocLink.hpp>
 #include <com/sun/star/sheet/XExternalDocLinks.hpp>
 #include <osl/diagnose.h>
 #include <rtl/strbuf.hxx>
@@ -47,7 +41,6 @@ namespace oox {
 namespace xls {
 
 using namespace ::com::sun::star::sheet;
-using namespace ::com::sun::star::table;
 using namespace ::com::sun::star::uno;
 
 using ::oox::core::Relation;

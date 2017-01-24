@@ -26,9 +26,6 @@
 #include "workbookhelper.hxx"
 #include "documentimport.hxx"
 
-namespace com { namespace sun { namespace star {
-    namespace i18n { class XCharacterClassification; }
-} } }
 
 namespace oox {
 namespace xls {

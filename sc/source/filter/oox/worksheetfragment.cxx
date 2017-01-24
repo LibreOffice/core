@@ -47,7 +47,6 @@
 namespace oox {
 namespace xls {
 
-using namespace ::com::sun::star::uno;
 using namespace ::oox::core;
 
 namespace {

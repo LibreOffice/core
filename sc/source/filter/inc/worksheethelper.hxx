@@ -35,7 +35,6 @@ namespace com { namespace sun { namespace star {
     namespace drawing { class XDrawPage; }
     namespace sheet { class XSpreadsheet; }
     namespace table { class XCell; }
-    namespace table { class XCell2; }
     namespace table { class XCellRange; }
 } } }
 
