@@ -40,15 +40,23 @@ class GbuildParser:
                      'CppunitTest': re.compile('CppunitTest_(.*)\.mk')}
     _allheaders=[]
     @staticmethod
-    def __split_includes(includes):
+    def __split_includes(json_srcdir,includes):
         foundisystem = GbuildParser._isystempattern.findall(includes)
-        foundincludes = [includeswitch.strip() for includeswitch in GbuildParser._includepattern.findall(includes) if
-                len(includeswitch) > 2]
+        foundincludes=[]
+        for includeswitch in GbuildParser._includepattern.findall(includes):
+            if len(includeswitch) > 2:
+                if includeswitch.strip()[:len(json_srcdir)] == json_srcdir:
+                    foundincludes.append(includeswitch.strip()[len(json_srcdir)+1:])
+                else:
+                    foundincludes.append(includeswitch.strip())
+
+        #foundincludes = [includeswitch.strip()[len(json_srcdir)+1:] for includeswitch in GbuildParser._includepattern.findall(includes) if
+        #        len(includeswitch) > 2]
         return (foundincludes, foundisystem)
 
     @staticmethod
-    def __split_objs(objsline):
-        return [obj for obj in objsline.strip().split(' ') if len(obj) > 0 and obj != 'CXXOBJECTS' and obj != '+=']
+    def __split_objs(module,objsline):
+        return [obj[len(module)+1:] for obj in objsline.strip().split(' ') if len(obj) > 0 and obj != 'CXXOBJECTS' and obj != '+=']
 
     @staticmethod
     def __split_defs(defsline):
@@ -95,9 +103,12 @@ class GbuildParser:
                     jsondata = json.load(f)
                     match = GbuildParser._buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
                     jsondata['location'] = os.path.dirname(jsondata['MAKEFILE'])
-
                     module = jsondata['location'].split('/')[-1]
-                    (jsondata['include'], jsondata['include_sys']) = GbuildParser.__split_includes(jsondata['INCLUDE'])
+                    json_srcdir=jsondata['location'][:-(len(module)+1)]
+                    jsondata['MAKEFILE']=jsondata['MAKEFILE'][len(jsondata['location'])+1:]
+                    jsondata['ILIBTARGET']='../' + jsondata['ILIBTARGET'][len(json_srcdir)+1:]
+
+                    (jsondata['include'], jsondata['include_sys']) = GbuildParser.__split_includes(json_srcdir, jsondata['INCLUDE'])
                     jsondata['name'] = match
                     jsondata['build_type'] = jsontype
                     jsondata['target_name'] = module + '_' + jsontype + '_' + match
@@ -106,7 +117,7 @@ class GbuildParser:
                     for i in ['CXXFLAGS', 'CFLAGS', 'OBJCFLAGS', 'OBJCXXFLAGS']:
                         jsondata[i] = GbuildParser.__split_flags(jsondata[i], jsondata[i+'APPEND'])
                     for i in jsonSrc:
-                        jsondata[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
+                        jsondata[i] = sorted(GbuildParser.__split_objs(module, jsondata[i]))
 
                     if not module in moduleDict:
                         moduleDict[module] = {'targets': [],'headers':{}}
