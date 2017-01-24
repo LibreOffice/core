@@ -565,6 +565,7 @@ void SvxBorderTabPage::Reset( const SfxItemSet* rSet )
 
         // set the current style and color (caches style in control even if nothing is selected)
         SelStyleHdl_Impl(*m_pLbLineStyle);
+        SelColHdl_Impl(*m_pLbLineColor);
     }
 
     bool bEnable = m_pWndShadows->GetSelectItemId() > 1 ;
@@ -875,6 +876,7 @@ IMPL_LINK_NOARG(SvxBorderTabPage, SelPreHdl_Impl, ValueSet*, void)
 
         // set current style to all previously selected lines
         SelStyleHdl_Impl(*m_pLbLineStyle);
+        SelColHdl_Impl(*m_pLbLineColor);
     }
 
     // Presets ValueSet does not show a selection (used as push buttons).
