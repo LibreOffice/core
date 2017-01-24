@@ -74,6 +74,14 @@ DECLARE_WW8EXPORT_TEST(testTdf104805, "tdf104805.doc")
     }
 }
 
+DECLARE_WW8EXPORT_TEST(testTdf104334, "tdf104334.doc")
+{
+    // This failed with a container::NoSuchElementException: STYLEREF was
+    // mapped to SwChapterField, and the field result was "This is a Heading 1"
+    // instead of just "1".
+    CPPUNIT_ASSERT_EQUAL(OUString("1"), getRun(getParagraph(2), 3)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
