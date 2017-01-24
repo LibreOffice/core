@@ -1024,7 +1024,6 @@ $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
     qadevOOo/tests/java/mod/_sch/AccGrid \
     qadevOOo/tests/java/mod/_sch/AccLegend \
     qadevOOo/tests/java/mod/_sch/AccLegendEntry \
-    qadevOOo/tests/java/mod/_sch/AccStatisticsObject \
     qadevOOo/tests/java/mod/_sch/AccTitle \
     qadevOOo/tests/java/mod/_sch/AccWall \
     qadevOOo/tests/java/mod/_sch/ChartArea \

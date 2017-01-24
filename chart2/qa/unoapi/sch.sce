@@ -25,7 +25,6 @@
 #i79073 -o sch.AccGrid
 #i79073 -o sch.AccLegend
 #i79073 -o sch.AccLegendEntry
-#i79073 -o sch.AccStatisticsObject
 #i79073 -o sch.AccTitle
 #i79073 -o sch.AccWall
 #i79073 -o sch.AccessibleDocumentView
