@@ -120,7 +120,9 @@ namespace DOM
         {
             nNamespaceToken = aIter->mnToken;
             sal_Int32 nNameToken = getToken( rContext, pName );
-            if( nNameToken != FastToken::DONTKNOW )
+            if( nNameToken == FastToken::DONTKNOW )
+                nNamespaceToken = FastToken::DONTKNOW;
+            else
                 nNamespaceToken |= nNameToken;
         }
 
