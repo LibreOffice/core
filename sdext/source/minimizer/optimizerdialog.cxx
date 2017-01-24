@@ -29,6 +29,7 @@
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <sal/macros.h>
 #include <osl/time.h>
+#include <tools/urlobj.hxx>
 
 
 using namespace ::com::sun::star::io;
@@ -514,20 +515,13 @@ void ActionListener::actionPerformed( const ActionEvent& rEvent )
                     OUString aLocation( xStorable->getLocation() );
                     if ( !aLocation.isEmpty() )
                     {
-                        sal_Int32 nIndex = aLocation.lastIndexOf( '/', aLocation.getLength() - 1 );
-                        if ( nIndex >= 0 )
-                        {
-                            if ( nIndex < aLocation.getLength() - 1 )
-                                aLocation = aLocation.copy( nIndex + 1 );
-
-                            // remove extension
-                            nIndex = aLocation.lastIndexOf( '.', aLocation.getLength() - 1 );
-                            if ( nIndex >= 0 )
-                                aLocation = aLocation.copy( 0, nIndex );
-
-                            // adding .mini
-                            aLocation = aLocation.concat( ".mini" );
-                            aFileOpenDialog.setDefaultName( aLocation );
+                        INetURLObject aURLObj( aLocation );
+                        if ( aURLObj.setExtension( "mini" ) ) {
+                            // tdf#105382 uri-decode file name
+                            auto aName( aURLObj.getName( INetURLObject::LAST_SEGMENT,
+                                                         true,
+                                                         INetURLObject::DecodeMechanism::WithCharset ) );
+                            aFileOpenDialog.setDefaultName( aName );
                         }
                     }
                 }
