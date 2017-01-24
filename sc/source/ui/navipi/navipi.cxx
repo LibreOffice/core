@@ -423,7 +423,7 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(vcl::Window* pParent,
                                                    SfxChildWinInfo* /* pInfo */)
     : SfxChildWindowContext(nId)
 {
-    pNavigator = VclPtr<ScNavigatorDlg>::Create(pBind, false, pParent);
+    pNavigator = VclPtr<ScNavigatorDlg>::Create(pBind, pParent);
     if (SfxNavigator* pNav = dynamic_cast<SfxNavigator*>(pParent))
         pNav->SetMinOutputSizePixel(pNavigator->GetOptimalSize());
     SetWindow(pNavigator);
@@ -434,13 +434,12 @@ ScNavigatorDialogWrapper::ScNavigatorDialogWrapper(vcl::Window* pParent,
 #define REGISTER_SLOT(i,id) \
     ppBoundItems[i]=new ScNavigatorControllerItem(id,*this,rBindings);
 
-ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, bool bSidebar, vcl::Window* pParent)
+ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, vcl::Window* pParent)
     : PanelLayout(pParent, "NavigatorPanel", "modules/scalc/ui/navigatorpanel.ui", nullptr)
     , rBindings(*pB)
     , aStrDragMode(ScResId(SCSTR_DRAGMODE))
     , aStrDisplay(ScResId(SCSTR_DISPLAY))
     , aStrActiveWin(ScResId(SCSTR_ACTIVEWIN))
-    , bInSidebar(bSidebar)
     , pMarkArea(nullptr)
     , pViewData(nullptr )
     , eListMode(NAV_LMODE_NONE)
@@ -531,11 +530,11 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings* pB, bool bSidebar, vcl::Window* pPar
     aContentIdle.SetIdleHdl( LINK( this, ScNavigatorDlg, TimeHdl ) );
     aContentIdle.SetPriority( SchedulerPriority::LOWEST );
 
-    if (bInSidebar)
+    if (!SfxChildWindowContext::GetFloatingWindow(GetParent()))
     {
-        // When the navigator is displayed in the sidebar it has the whole deck
-        // to fill. Therefore hide the button that hides all controls below
-        // the top two rows of buttons.
+        // When the navigator is displayed in the sidebar, or is otherwise
+        // docked, it has the whole deck to fill. Therefore hide the button that
+        // hides all controls below the top two rows of buttons.
         aTbxCmd->RemoveItem(aTbxCmd->GetItemPos(nZoomId));
     }
     aLbEntries->SetNavigatorDlgFlag(true);
@@ -841,7 +840,8 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
 {
     if (eMode != eListMode)
     {
-        bool bForceParentResize = (eMode == NAV_LMODE_NONE || eListMode == NAV_LMODE_NONE);
+        bool bForceParentResize = SfxChildWindowContext::GetFloatingWindow(GetParent()) &&
+                                  (eMode == NAV_LMODE_NONE || eListMode == NAV_LMODE_NONE);
         SfxNavigator* pNav = bForceParentResize ? dynamic_cast<SfxNavigator*>(GetParent()) : nullptr;
         if (pNav && eMode == NAV_LMODE_NONE) //save last normal size on minimizing
             aExpandedSize = GetSizePixel();
