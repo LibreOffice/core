@@ -914,6 +914,14 @@ long SwWW8ImplReader::Read_Field(WW8PLCFManResult* pRes)
         if (nRet == -2 && !aReadParam.GetResult().isEmpty())
             // Single numeric argument: this can be handled by SwChapterField.
             bHasHandler = rtl::isAsciiDigit(aReadParam.GetResult()[0]);
+
+        if (bHasHandler)
+        {
+            nRet = aReadParam.SkipToNextToken();
+            // Handle using SwChapterField only in case there is no \[a-z]
+            // switch after the field argument.
+            bHasHandler = nRet < 0 || nRet == '*';
+        }
     }
 
     // keine Routine vorhanden
