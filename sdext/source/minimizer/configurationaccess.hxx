@@ -68,7 +68,6 @@ struct OptimizerSettings
         mbSaveAs( true ),
         mbOpenNewDocument( true ),
         mnEstimatedFileSize( 0 ){};
-        ~OptimizerSettings(){};
 
         void LoadSettingsFromConfiguration( const css::uno::Reference< css::container::XNameAccess >& rSettings );
         void SaveSettingsToConfiguration( const css::uno::Reference< css::container::XNameReplace >& rSettings );

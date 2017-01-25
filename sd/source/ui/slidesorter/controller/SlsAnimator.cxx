@@ -36,7 +36,6 @@ public:
         const double nGlobalTime,
         const Animator::AnimationId nAnimationId,
         const Animator::FinishFunctor& rFinishFunctor);
-    ~Animation();
     /** Run next animation step.  If animation has reached its end it is
         expired.
     */
@@ -244,10 +243,6 @@ Animator::Animation::Animation (
       mbIsExpired(false)
 {
     Run(nGlobalTime);
-}
-
-Animator::Animation::~Animation()
-{
 }
 
 bool Animator::Animation::Run (const double nGlobalTime)

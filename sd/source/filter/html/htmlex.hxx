@@ -67,7 +67,6 @@ private:
 
 public:
                     explicit HtmlErrorContext();
-                    virtual ~HtmlErrorContext() override {};
 
     virtual bool    GetString( sal_uLong nErrId, OUString& rCtxStr ) override;
 

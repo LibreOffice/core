@@ -42,7 +42,6 @@ public:
         const TimeValue& rDueTime,
         const sal_Int64 nRepeatIntervall,
         const sal_Int32 nTaskId);
-    ~TimerTask() {}
 
     PresenterTimer::Task maTask;
     TimeValue maDueTime;
