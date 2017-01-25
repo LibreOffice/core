@@ -133,8 +133,7 @@ OUString SdLayer::convertToExternalName( const OUString& rName )
 }
 
 SdLayer::SdLayer( SdLayerManager* pLayerManager_, SdrLayer* pSdrLayer_ ) throw()
-: pLayerManager(pLayerManager_)
-, mxLayerManager(pLayerManager_)
+: mxLayerManager(pLayerManager_)
 , pLayer(pSdrLayer_)
 , pPropSet(ImplGetSdLayerPropertySet())
 {
@@ -181,7 +180,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
 {
     SolarMutexGuard aGuard;
 
-    if(pLayer == nullptr || pLayerManager == nullptr)
+    if(pLayer == nullptr || mxLayerManager == nullptr)
         throw lang::DisposedException();
 
     const SfxItemPropertySimpleEntry* pEntry = pPropSet->getPropertyMapEntry(aPropertyName);
@@ -210,7 +209,7 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
             throw lang::IllegalArgumentException();
 
         pLayer->SetName(SdLayer::convertToInternalName( aName ) );
-        pLayerManager->UpdateLayerView();
+        mxLayerManager->UpdateLayerView();
         break;
     }
 
@@ -238,8 +237,8 @@ void SAL_CALL SdLayer::setPropertyValue( const OUString& aPropertyName, const un
         throw beans::UnknownPropertyException( aPropertyName, static_cast<cppu::OWeakObject*>(this));
     }
 
-    if( pLayerManager->GetDocShell() )
-        pLayerManager->GetDocShell()->SetModified();
+    if( mxLayerManager->GetDocShell() )
+        mxLayerManager->GetDocShell()->SetModified();
 }
 
 uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
@@ -247,7 +246,7 @@ uno::Any SAL_CALL SdLayer::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
-    if(pLayer == nullptr || pLayerManager == nullptr)
+    if(pLayer == nullptr || mxLayerManager == nullptr)
         throw lang::DisposedException();
 
     const SfxItemPropertySimpleEntry* pEntry = pPropSet->getPropertyMapEntry(PropertyName);
@@ -291,10 +290,10 @@ void SAL_CALL SdLayer::removeVetoableChangeListener( const OUString& , const uno
 
 bool SdLayer::get( LayerAttribute what ) throw()
 {
-    if(pLayer&&pLayerManager)
+    if(pLayer && mxLayerManager.is())
     {
         // Try 1. is an arbitrary page open?
-        ::sd::View *pView = pLayerManager->GetView();
+        ::sd::View *pView = mxLayerManager->GetView();
         SdrPageView* pSdrPageView = nullptr;
         if(pView)
             pSdrPageView = pView->GetSdrPageView();
@@ -311,9 +310,9 @@ bool SdLayer::get( LayerAttribute what ) throw()
         }
 
         // Try 2. get info from FrameView
-        if(pLayerManager->GetDocShell())
+        if(mxLayerManager->GetDocShell())
         {
-            ::sd::FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
+            ::sd::FrameView *pFrameView = mxLayerManager->GetDocShell()->GetFrameView();
             if(pFrameView)
                 switch(what)
                 {
@@ -328,10 +327,10 @@ bool SdLayer::get( LayerAttribute what ) throw()
 
 void SdLayer::set( LayerAttribute what, bool flag ) throw()
 {
-    if(pLayer&&pLayerManager)
+    if(pLayer && mxLayerManager.is())
     {
         // Try 1. is an arbitrary page open?
-        ::sd::View *pView = pLayerManager->GetView();
+        ::sd::View *pView = mxLayerManager->GetView();
         SdrPageView* pSdrPageView = nullptr;
         if(pView)
             pSdrPageView = pView->GetSdrPageView();
@@ -351,9 +350,9 @@ void SdLayer::set( LayerAttribute what, bool flag ) throw()
         }
 
         // Try 2. get info from FrameView
-        if(pLayerManager->GetDocShell())
+        if(mxLayerManager->GetDocShell())
         {
-            ::sd::FrameView *pFrameView = pLayerManager->GetDocShell()->GetFrameView();
+            ::sd::FrameView *pFrameView = mxLayerManager->GetDocShell()->GetFrameView();
 
             if(pFrameView)
             {
@@ -392,10 +391,10 @@ uno::Reference<uno::XInterface> SAL_CALL SdLayer::getParent()
 {
     SolarMutexGuard aGuard;
 
-    if( pLayerManager == nullptr )
+    if( !mxLayerManager.is() )
         throw lang::DisposedException();
 
-    return uno::Reference<uno::XInterface> (mxLayerManager, uno::UNO_QUERY);
+    return uno::Reference<uno::XInterface> (static_cast<cppu::OWeakObject*>(mxLayerManager.get()), uno::UNO_QUERY);
 }
 
 void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& )
@@ -408,8 +407,7 @@ void SAL_CALL SdLayer::setParent (const uno::Reference<uno::XInterface >& )
 // XComponent
 void SAL_CALL SdLayer::dispose(  ) throw (uno::RuntimeException, std::exception)
 {
-    pLayerManager = nullptr;
-    mxLayerManager = nullptr;
+    mxLayerManager.clear();
     pLayer = nullptr;
 }
 

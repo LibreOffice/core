@@ -25,6 +25,7 @@
 
 #include <cppuhelper/implbase.hxx>
 #include <comphelper/servicehelper.hxx>
+#include <rtl/ref.hxx>
 
 #include <unomodel.hxx>
 
@@ -91,11 +92,9 @@ public:
     virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
 
 private:
-    SdLayerManager*     pLayerManager;
-    css::uno::Reference< css::drawing::XLayerManager > mxLayerManager;
-
-    SdrLayer*           pLayer;
-    const SvxItemPropertySet*   pPropSet;
+    rtl::Reference<SdLayerManager>     mxLayerManager;
+    SdrLayer*                          pLayer;
+    const SvxItemPropertySet*          pPropSet;
 
     bool get( LayerAttribute what ) throw();
     void set( LayerAttribute what, bool flag ) throw();
