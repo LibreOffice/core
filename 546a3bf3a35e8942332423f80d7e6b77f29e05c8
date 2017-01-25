@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_6d10ce4f",
+        "filename": "include/com/sun/star/uno/Reference.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-25T09:58:08Z",
+      "side": 1,
+      "message": "oh, and please drop the silly SAL_CALL from those inline functions",
+      "revId": "546a3bf3a35e8942332423f80d7e6b77f29e05c8",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
