@@ -62,6 +62,7 @@
 #include "postit.hxx"
 
 #include "fapihelper.hxx"
+#include "namebuff.hxx"
 #include "xltools.hxx"
 #include "xltable.hxx"
 #include "xlview.hxx"
@@ -129,9 +130,6 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
     pExcRoot->pShrfmlaBuff = new SharedFormulaBuffer( pExcRoot );     //&aShrfrmlaBuff;
     pExcRoot->pExtNameBuff = new ExtNameBuff ( *this );
 
-    pExtNameBuff = new NameBuffer( pExcRoot );          //prevent empty rootdata
-    pExtNameBuff->SetBase( 1 );
-
     pOutlineListBuffer = new XclImpOutlineListBuffer( );
 
     // ab Biff8
@@ -156,8 +154,6 @@ ImportExcel::ImportExcel( XclImpRootData& rImpData, SvStream& rStrm ):
 ImportExcel::~ImportExcel()
 {
     GetDoc().SetSrcCharSet( GetTextEncoding() );
-
-    delete pExtNameBuff;
 
     delete pOutlineListBuffer;
 

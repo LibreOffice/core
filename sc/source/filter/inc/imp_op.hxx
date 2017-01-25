@@ -25,7 +25,6 @@
 #include "xistream.hxx"
 #include "xistyle.hxx"
 #include "flttypes.hxx"
-#include "namebuff.hxx"
 #include "root.hxx"
 #include "otlnbuff.hxx"
 #include "colrowst.hxx"
@@ -100,7 +99,6 @@ protected:
     ScfUInt32Vec            maSheetOffsets;
     ScRange                 maScOleSize;        /// Visible range if embedded.
 
-    NameBuffer*             pExtNameBuff;       // ... external names (Ind.-Basis=1)
     ExcelToSc*              pFormConv;          // formula-converter
 
     XclImpOutlineBuffer*    pColOutlineBuff;

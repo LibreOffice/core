@@ -34,7 +34,6 @@
 #include "formulacell.hxx"
 #include "dociter.hxx"
 #include "document.hxx"
-#include "rangenam.hxx"
 #include "dbdata.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
@@ -137,7 +136,6 @@ ExcTable::ExcTable( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mnScTab( SCTAB_GLOBAL ),
     nExcTab( EXC_NOTAB ),
-    pTabNames( new NameBuffer( nullptr, 16 ) ),
     mxNoteList( new XclExpNoteList )
 {
 }
@@ -146,7 +144,6 @@ ExcTable::ExcTable( const XclExpRoot& rRoot, SCTAB nScTab ) :
     XclExpRoot( rRoot ),
     mnScTab( nScTab ),
     nExcTab( rRoot.GetTabInfo().GetXclTab( nScTab ) ),
-    pTabNames( new NameBuffer( nullptr, 16 ) ),
     mxNoteList( new XclExpNoteList )
 {
 }
@@ -174,9 +171,6 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
     else
         Add( new ExcBofW8 );
 
-    SCTAB   nC;
-    OUString aTmpString;
-    SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
     sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
 
@@ -228,15 +222,6 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
     }
 
     Add( new XclExpUInt16Record( EXC_ID_FNGROUPCOUNT, 14 ) );
-
-    // first setup table names and contents
-
-    for( nC = 0 ; nC < nScTabCount ; nC++ )
-        if( rTabInfo.IsExportTab( nC ) )
-        {
-            rDoc.GetName( nC, aTmpString );
-            *pTabNames << aTmpString;
-        }
 
     if ( GetBiff() <= EXC_BIFF5 )
     {
@@ -290,6 +275,8 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
     aRecList.AppendRecord( CreateRecord( EXC_ID_XFLIST ) );
     aRecList.AppendRecord( CreateRecord( EXC_ID_PALETTE ) );
 
+    SCTAB   nC;
+    SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     if( GetBiff() <= EXC_BIFF5 )
     {
         // Bundlesheet
@@ -326,6 +313,7 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
                 rBoundsheetList.AppendRecord( xBoundsheet );
             }
 
+        OUString aTmpString;
         for( SCTAB nAdd = 0; nC < static_cast<SCTAB>(nCodenames) ; nC++, nAdd++ )
         {
             aTmpString = lcl_GetVbaTabName( nAdd );
@@ -362,23 +350,11 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     ScDocument& rDoc = GetDoc();
     XclExpTabInfo& rTabInfo = GetTabInfo();
 
-    SCTAB   nC;
-    OUString aTmpString;
-    SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
     sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
 
     rR.pTabId = new XclExpChTrTabId( std::max( nExcTabCount, nCodenames ) );
     Add( rR.pTabId );
-
-    // first setup table names and contents
-
-    for( nC = 0 ; nC < nScTabCount ; nC++ )
-        if( rTabInfo.IsExportTab( nC ) )
-        {
-            rDoc.GetName( nC, aTmpString );
-            *pTabNames << aTmpString;
-        }
 
     Add( new XclExpXmlStartSingleElementRecord( XML_workbookPr ) );
     Add( new XclExpBoolRecord(0x0040, false, XML_backupFile ) );    // BACKUP
@@ -418,6 +394,8 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     lcl_AddBookviews( aRecList, *this );
 
     // Bundlesheet
+    SCTAB nC;
+    SCTAB nScTabCount = rTabInfo.GetScTabCount();
     aRecList.AppendNewRecord( new XclExpXmlStartElementRecord( XML_sheets ) );
     for( nC = 0 ; nC < nScTabCount ; nC++ )
         if( rTabInfo.IsExportTab( nC ) )
@@ -428,6 +406,7 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
         }
     aRecList.AppendNewRecord( new XclExpXmlEndElementRecord( XML_sheets ) );
 
+    OUString aTmpString;
     for( SCTAB nAdd = 0; nC < static_cast<SCTAB>(nCodenames) ; nC++, nAdd++ )
     {
         aTmpString = lcl_GetVbaTabName( nAdd );
