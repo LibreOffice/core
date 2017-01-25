@@ -58,6 +58,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include "comphelper/configuration.hxx"
 
 #include <bordertest.hxx>
 
@@ -1614,6 +1615,32 @@ DECLARE_RTFIMPORT_TEST(testCp1000018, "cp1000018.rtf")
     OUString aExpected("Footnote first line.\n");
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
+
+class testTdf105511 : public Test {
+protected:
+    virtual OUString getTestName() override { return OUString("testTdf105511"); }
+public:
+    CPPUNIT_TEST_SUITE(testTdf105511);
+    CPPUNIT_TEST(Import);
+    CPPUNIT_TEST_SUITE_END();
+
+    void Import() {
+        struct DefaultLocale : public comphelper::ConfigurationProperty<DefaultLocale, rtl::OUString> {
+            static OUString path() { return OUString("/org.openoffice.Office.Linguistic/General/DefaultLocale"); }
+            ~DefaultLocale() = delete;
+        };
+        auto batch = comphelper::ConfigurationChanges::create();
+        DefaultLocale::set("ru-RU", batch);
+        batch->commit();
+        executeImportTest("tdf105511.rtf", nullptr);
+    }
+    virtual void verify() override
+    {
+        OUString aExpected("\xd0\x98\xd0\xbc\xd1\x8f", 6, RTL_TEXTENCODING_UTF8);
+        getParagraph(1, aExpected);
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(testTdf105511);
 
 #endif
 DECLARE_RTFIMPORT_TEST(testFdo94835, "fdo94835.rtf")
