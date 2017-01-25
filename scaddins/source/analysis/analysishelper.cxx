@@ -946,15 +946,19 @@ bool ParseDouble( const sal_Unicode*& rp, double& rRet )
     rp = p;
 
     fInt += fFrac;
-    sal_Int32   nLog10 = sal_Int32( log10( fInt ) );
 
-    if( bNegExp )
-        nExp = -nExp;
+    if (fInt != 0.0) // exact check; log10(0.0) may entail a pole error
+    {
+        sal_Int32   nLog10 = sal_Int32( log10( fInt ) );
 
-    if( nLog10 + nExp > nMaxExp )
-        return false;
+        if( bNegExp )
+            nExp = -nExp;
 
-    fInt = ::rtl::math::pow10Exp( fInt, nExp );
+        if( nLog10 + nExp > nMaxExp )
+            return false;
+
+        fInt = ::rtl::math::pow10Exp( fInt, nExp );
+    }
 
     if( bNegNum )
         fInt = -fInt;
