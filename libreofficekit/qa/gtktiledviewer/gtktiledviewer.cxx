@@ -240,6 +240,45 @@ static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const
     rWindow.m_aToolItemSensitivities[pItem] = true;
 }
 
+static void userPromptDialog(GtkWidget* pDocView, const std::string& aTitle, std::map<std::string, std::string>& aEntries)
+{
+    GtkWidget* pDialog = gtk_dialog_new_with_buttons (aTitle.c_str(),
+                                                      GTK_WINDOW (gtk_widget_get_toplevel(pDocView)),
+                                                      GTK_DIALOG_MODAL,
+                                                      "Ok",
+                                                      GTK_RESPONSE_OK,
+                                                      nullptr);
+
+    GtkWidget* pDialogMessageArea = gtk_dialog_get_content_area (GTK_DIALOG (pDialog));
+    GtkWidget* pEntryArea = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+    gtk_container_add(GTK_CONTAINER(pDialogMessageArea), pEntryArea);
+    for (const auto& entry : aEntries)
+    {
+        GtkWidget* pEntry = gtk_entry_new();
+        gtk_entry_set_placeholder_text(GTK_ENTRY(pEntry), entry.first.c_str());
+
+        gtk_container_add(GTK_CONTAINER(pEntryArea), pEntry);
+    }
+
+    gtk_widget_show_all(pDialog);
+
+    gint res = gtk_dialog_run(GTK_DIALOG(pDialog));
+    switch(res)
+    {
+    case GTK_RESPONSE_OK:
+        GList* pList = gtk_container_get_children(GTK_CONTAINER(pEntryArea));
+
+        for (GList* l = pList; l != nullptr; l = l->next)
+        {
+            const gchar* pKey = gtk_entry_get_placeholder_text(GTK_ENTRY(l->data));
+            aEntries[std::string(pKey)] = std::string(gtk_entry_get_text(GTK_ENTRY(l->data)));
+        }
+        break;
+    }
+
+    gtk_widget_destroy(pDialog);
+}
+
 GtkWidget* CommentsSidebar::createCommentBox(const boost::property_tree::ptree& aComment)
 {
     GtkWidget* pCommentVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
@@ -1487,44 +1526,17 @@ static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 
         if (rString == ".uno:InsertAnnotation")
         {
-            LOKDocView* pDocView = LOK_DOC_VIEW(rWindow.m_pDocView);
+            std::map<std::string, std::string> aEntries;
+            aEntries["Text"] = "";
+            userPromptDialog(rWindow.m_pDocView, "Insert Comment", aEntries);
 
-            GtkWidget* pAnnotationDialog = gtk_dialog_new_with_buttons ("Insert Comment",
-                                                                        GTK_WINDOW (gtk_widget_get_toplevel(GTK_WIDGET(pDocView))),
-                                                                        GTK_DIALOG_MODAL,
-                                                                        "Insert",
-                                                                        GTK_RESPONSE_OK,
-                                                                        nullptr);
+            boost::property_tree::ptree aTree;
+            aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
+            aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
 
-            GtkWidget* pDialogMessageArea = gtk_dialog_get_content_area (GTK_DIALOG (pAnnotationDialog));
-            GtkWidget* pHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-            gtk_box_pack_start(GTK_BOX(pDialogMessageArea), pHBox, TRUE, TRUE, 2);
-
-            GtkWidget* pCommentLabel = gtk_label_new("Comment text");
-            gtk_box_pack_start(GTK_BOX(pHBox), pCommentLabel, TRUE, TRUE, 2);
-
-            GtkWidget* pCommentText = gtk_entry_new();
-            gtk_box_pack_start(GTK_BOX(pHBox), pCommentText, TRUE, TRUE, 2);
-
-            gtk_widget_show_all(pAnnotationDialog);
-
-            gint res = gtk_dialog_run(GTK_DIALOG(pAnnotationDialog));
-            switch(res)
-            {
-            case GTK_RESPONSE_OK:
-                const gchar* sText = gtk_entry_get_text(GTK_ENTRY(pCommentText));
-                boost::property_tree::ptree aTree;
-                aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
-                aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), sText);
-
-                std::stringstream aStream;
-                boost::property_tree::write_json(aStream, aTree);
-                rArguments = aStream.str();
-
-                break;
-            }
-
-            gtk_widget_destroy(pAnnotationDialog);
+            std::stringstream aStream;
+            boost::property_tree::write_json(aStream, aTree);
+            rArguments = aStream.str();
         }
 
         g_info("toggleToolItem: lok_doc_view_post_command('%s %s')", rString.c_str(), rArguments.c_str());
