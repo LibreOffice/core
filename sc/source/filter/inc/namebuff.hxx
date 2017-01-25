@@ -87,12 +87,11 @@ private:
                             Entry( const OUString& rName, const OUString& rScName, const ScComplexRefData& rCRD )
                                 : aStrHashEntry( rName )
                                 , aScComplexRefDataRel( rCRD )
-                                , aScAbsName( rScName )
+                                , aScAbsName( rScName + "_ABS" )
                                 , nAbsInd(0)
                                 , nRelInd(0)
                                 , bSingleRef(false)
                             {
-                                aScAbsName = "_ABS";
                             }
     };
 
