@@ -642,6 +642,8 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
             bRet = pFilter->Export();
             if( !bRet )
                 mpDoc->SetSwapGraphicsMode( nOldSwapMode );
+
+            delete pFilter;
         }
     }
 
