@@ -50,6 +50,8 @@ public:
     GtkWidget* m_pViewAnnotationsButton;
     /// top level container for all comments in the sidebar
     GtkWidget* m_pCommentsVBox;
+    /// scrolled window for main comments box
+    GtkWidget* m_pScrolledWindow;
 
     /// Prepare and return a comment object (GtkBox)
     static GtkWidget* createCommentBox(const boost::property_tree::ptree& aComment);
@@ -279,6 +281,47 @@ static void userPromptDialog(GtkWidget* pDocView, const std::string& aTitle, std
     gtk_widget_destroy(pDialog);
 }
 
+static void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
+    std::map<std::string, std::string> aEntries;
+    aEntries["Text"] = "";
+
+    userPromptDialog(rWindow.m_pDocView, "Reply comment", aEntries);
+
+    int *commentId = static_cast<int*>(g_object_get_data(G_OBJECT(userdata), "id"));
+
+    boost::property_tree::ptree aTree;
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::to_string(*commentId));
+
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aArguments = aStream.str();
+
+    lok_doc_view_post_command(LOK_DOC_VIEW(rWindow.m_pDocView), ".uno:ReplyComment", aArguments.c_str(), false);
+}
+
+static void deleteCommentButtonClicked(GtkWidget* pWidget, gpointer userdata)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
+
+    int *commentid = static_cast<int*>(g_object_get_data(G_OBJECT(userdata), "id"));
+
+    boost::property_tree::ptree aTree;
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::to_string(*commentid));
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aArguments = aStream.str();
+
+    lok_doc_view_post_command(LOK_DOC_VIEW(rWindow.m_pDocView), ".uno:DeleteComment", aArguments.c_str(), false);
+}
+
 GtkWidget* CommentsSidebar::createCommentBox(const boost::property_tree::ptree& aComment)
 {
     GtkWidget* pCommentVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
@@ -292,8 +335,13 @@ GtkWidget* CommentsSidebar::createCommentBox(const boost::property_tree::ptree& 
     GtkWidget* pControlsHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
     GtkWidget* pGotoButton = gtk_button_new_with_label("Goto");
     GtkWidget* pReplyButton = gtk_button_new_with_label("Reply");
+    GtkWidget* pDeleteButton = gtk_button_new_with_label("Delete");
+    g_signal_connect(G_OBJECT(pReplyButton), "clicked", G_CALLBACK(replyButtonClicked), pCommentVBox);
+    g_signal_connect(G_OBJECT(pDeleteButton), "clicked", G_CALLBACK(deleteCommentButtonClicked), pCommentVBox);
+
     gtk_container_add(GTK_CONTAINER(pControlsHBox), pGotoButton);
     gtk_container_add(GTK_CONTAINER(pControlsHBox), pReplyButton);
+    gtk_container_add(GTK_CONTAINER(pControlsHBox), pDeleteButton);
     GtkWidget* pCommentSeparator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
 
     gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentText);
@@ -318,11 +366,15 @@ void CommentsSidebar::unoViewAnnotations(GtkWidget* pWidget, gpointer /*userdata
     std::stringstream aStream(pValues);
     free(pValues);
 
-    gtk_widget_destroy(rWindow.m_pCommentsSidebar->m_pCommentsVBox);
+    gtk_widget_destroy(rWindow.m_pCommentsSidebar->m_pScrolledWindow);
 
+    rWindow.m_pCommentsSidebar->m_pScrolledWindow = gtk_scrolled_window_new(nullptr, nullptr);
+    gtk_widget_set_vexpand(rWindow.m_pCommentsSidebar->m_pScrolledWindow, TRUE);
     rWindow.m_pCommentsSidebar->m_pCommentsVBox = gtk_grid_new();
     g_object_set(rWindow.m_pCommentsSidebar->m_pCommentsVBox, "orientation", GTK_ORIENTATION_VERTICAL, nullptr);
-    gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pCommentsVBox);
+
+    gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pScrolledWindow), rWindow.m_pCommentsSidebar->m_pCommentsVBox);
+    gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pScrolledWindow);
 
     boost::property_tree::ptree aTree;
     boost::property_tree::read_json(aStream, aTree);
@@ -333,7 +385,7 @@ void CommentsSidebar::unoViewAnnotations(GtkWidget* pWidget, gpointer /*userdata
             GtkWidget* pCommentBox = CommentsSidebar::createCommentBox(rValue.second);
             gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pCommentsVBox), pCommentBox);
         }
-        gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pCommentsVBox);
+        gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pScrolledWindow);
     }
     catch(boost::property_tree::ptree_bad_path& rException)
     {
@@ -1496,21 +1548,37 @@ static void commentCallback(LOKDocView* pLOKDocView, gchar* pComment, gpointer /
     boost::property_tree::ptree aRoot;
     boost::property_tree::read_json(aStream, aRoot);
     boost::property_tree::ptree aComment = aRoot.get_child("comment");
+    gint nPos = 0;
+    GtkWidget* pCommentsGrid = rWindow.m_pCommentsSidebar->m_pCommentsVBox;
+    GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pCommentsGrid));
+    for (GList* l = pChildren; l != nullptr; l = l->next, nPos++)
+    {
+        int *id = static_cast<int*>(g_object_get_data(G_OBJECT(l->data), "id"));
 
-    gtk_container_foreach(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pCommentsVBox), [](GtkWidget* pWidget, gpointer userdata) {
-            boost::property_tree::ptree *pTree = static_cast<boost::property_tree::ptree*>(userdata);
-
-            int *id = static_cast<int*>(g_object_get_data(G_OBJECT(pWidget), "id"));
-            GtkWidget* pCommentsGrid = gtk_widget_get_parent(pWidget);
-            if (*id == pTree->get<int>("parent"))
+        if (aComment.get<std::string>("action") == "Add")
+        {
+            if (*id == aComment.get<int>("parent"))
             {
-                GtkWidget* pCommentBox = CommentsSidebar::createCommentBox(*pTree);
-                gtk_grid_insert_next_to(GTK_GRID(pCommentsGrid), pWidget, GTK_POS_BOTTOM);
-                gtk_grid_attach_next_to(GTK_GRID(pCommentsGrid), pCommentBox, pWidget, GTK_POS_BOTTOM, 1, 1);
+                GtkWidget* pCommentBox = CommentsSidebar::createCommentBox(aComment);
+                gtk_grid_insert_next_to(GTK_GRID(pCommentsGrid), GTK_WIDGET(l->data), GTK_POS_BOTTOM);
+                gtk_grid_attach_next_to(GTK_GRID(pCommentsGrid), pCommentBox, GTK_WIDGET(l->data), GTK_POS_BOTTOM, 1, 1);
                 gtk_widget_show_all(pCommentBox);
+                return;
             }
+        }
+        else if (aComment.get<std::string>("action") == "Remove" && *id == aComment.get<int>("id"))
+        {
+            gtk_widget_destroy(GTK_WIDGET(l->data));
+            return;
+        }
+    }
 
-        } , &aComment);
+    if (aComment.get<std::string>("action") == "Add")
+    {
+        GtkWidget* pCommentBox = CommentsSidebar::createCommentBox(aComment);
+        gtk_container_add(GTK_CONTAINER(pCommentsGrid), pCommentBox);
+        gtk_widget_show_all(pCommentBox);
+    }
 }
 
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
