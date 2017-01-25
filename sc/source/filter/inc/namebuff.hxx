@@ -43,33 +43,13 @@ private:
     static sal_uInt32   MakeHashCode( const OUString& );
 public:
     inline          StringHashEntry( const OUString& );
-    inline void     operator =( const sal_Char* );
-    inline void     operator =( const OUString& );
-    inline void     operator =( const StringHashEntry& );
     inline bool     operator ==( const StringHashEntry& ) const;
 };
 
-inline StringHashEntry::StringHashEntry( const OUString& r ) : aString( r )
+inline StringHashEntry::StringHashEntry( const OUString& r )
+    : aString( r )
+    , nHash( MakeHashCode(r) )
 {
-    nHash = MakeHashCode( r );
-}
-
-inline void StringHashEntry::operator =( const sal_Char* p )
-{
-    aString = OUString(p, strlen(p), RTL_TEXTENCODING_ASCII_US);
-    nHash = MakeHashCode( aString );
-}
-
-inline void StringHashEntry::operator =( const OUString& r )
-{
-    aString = r;
-    nHash = MakeHashCode( r );
-}
-
-inline void StringHashEntry::operator =( const StringHashEntry& r )
-{
-    nHash = r.nHash;
-    aString = r.aString;
 }
 
 inline bool StringHashEntry::operator ==( const StringHashEntry& r ) const
