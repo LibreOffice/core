@@ -110,6 +110,10 @@ bool SelectionController::hasSelectedCells() const
     return false;
 }
 
+void SelectionController::getSelectedCells(table::CellPos& /*rFirstPos*/, table::CellPos& /*rLastPos*/)
+{
+}
+
 bool SelectionController::setCursorLogicPosition(const Point& /*rPosition*/, bool /*bPoint*/)
 {
     return false;
