@@ -90,6 +90,8 @@ public:
 
     bool Is()         const { return pObj != nullptr; }
 
+    explicit operator bool() const { return Is(); }
+
     T * get()         const { return pObj; }
 
     T * operator ->() const { assert(pObj != nullptr); return pObj; }
