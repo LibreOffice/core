@@ -4886,7 +4886,7 @@ void SwWW8ImplReader::ReadGlobalTemplateSettings( const OUString& sCreatedFrom, 
         tools::SvRef<SotStorageStream> xTableStream =
                 rRoot->OpenSotStream(aWwFib.m_fWhichTableStm ? SL::a1Table : SL::a0Table, StreamMode::STD_READ);
 
-        if (xTableStream.Is() && SVSTREAM_OK == xTableStream->GetError())
+        if (xTableStream.is() && SVSTREAM_OK == xTableStream->GetError())
         {
             xTableStream->SetEndian(SvStreamEndian::LITTLE);
             WW8Customizations aGblCustomisations( xTableStream.get(), aWwFib );
@@ -5432,7 +5432,7 @@ sal_uLong SwWW8ImplReader::SetSubStreams(tools::SvRef<SotStorageStream> &rTableS
 
             rDataStream = m_pStg->OpenSotStream(SL::aData, StreamMode::STD_READ);
 
-            if (rDataStream.Is() && SVSTREAM_OK == rDataStream->GetError())
+            if (rDataStream.is() && SVSTREAM_OK == rDataStream->GetError())
             {
                 m_pDataStream = rDataStream.get();
                 m_pDataStream->SetEndian(SvStreamEndian::LITTLE);
@@ -6229,7 +6229,7 @@ sal_uLong WW8Reader::OpenMainStream( tools::SvRef<SotStorageStream>& rRef, sal_u
     OSL_ENSURE( pStg.get(), "Where is my Storage?" );
     rRef = pStg->OpenSotStream( "WordDocument", StreamMode::READ | StreamMode::SHARE_DENYALL);
 
-    if( rRef.Is() )
+    if( rRef.is() )
     {
         if( SVSTREAM_OK == rRef->GetError() )
         {
@@ -6273,7 +6273,7 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, co
         else if ( sFltName=="CWW7" )
             nVersion = 7;
 
-        if( pStg.Is() )
+        if( pStg.is() )
         {
             nRet = OpenMainStream( refStrm, nOldBuffSize );
             pIn = refStrm.get();
@@ -6307,10 +6307,10 @@ sal_uLong WW8Reader::Read(SwDoc &rDoc, const OUString& rBaseURL, SwPaM &rPaM, co
             nRet = ERR_WW8_NO_WW8_FILE_ERR;
         }
 
-        if( refStrm.Is() )
+        if( refStrm.is() )
         {
             refStrm->SetBufferSize( nOldBuffSize );
-            refStrm.Clear();
+            refStrm.clear();
         }
         else
         {

@@ -248,7 +248,7 @@ void ScDocShell::UnlockPaint_Impl(bool bDoc)
             pPaintLockData = nullptr;                      // nicht weitersammeln
 
             ScRangeListRef xRangeList = pPaint->GetRangeList();
-            if ( xRangeList.Is() )
+            if ( xRangeList.is() )
             {
                 PaintPartFlags nParts = pPaint->GetParts();
                 for ( size_t i = 0, nCount = xRangeList->size(); i < nCount; i++ )

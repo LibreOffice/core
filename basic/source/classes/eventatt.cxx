@@ -247,7 +247,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         }
         SbxVariable* pMethVar = nullptr;
         // Be still tolerant and make default search if no search basic exists
-        if( bSearchLib && xLibSearchBasic.Is() )
+        if( bSearchLib && xLibSearchBasic.is() )
         {
             sal_Int16 nCount = xLibSearchBasic->GetObjects()->Count();
             for( sal_Int16 nObj = -1; nObj < nCount ; nObj++ )
@@ -279,7 +279,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
         }
 
         // Default: Be tolerant and search everywhere
-        if( (!pMethVar || nullptr == dynamic_cast<const SbMethod*>( pMethVar)) && maBasicRef.Is() )
+        if( (!pMethVar || nullptr == dynamic_cast<const SbMethod*>( pMethVar)) && maBasicRef.is() )
         {
             pMethVar = maBasicRef->FindQualified( aMacro, SbxClassType::DontCare );
         }
@@ -305,7 +305,7 @@ void BasicScriptListener_Impl::firing_impl( const ScriptEvent& aScriptEvent, Any
 
         // Call method
         SbxVariableRef xValue = pRet ? new SbxVariable : nullptr;
-        if( xArray.Is() )
+        if( xArray.is() )
         {
             pMeth->SetParameters( xArray.get() );
         }
@@ -427,7 +427,7 @@ void RTL_Impl_CreateUnoDialog( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
     // Get dialog
     SbxBaseRef pObj = rPar.Get( 1 )->GetObject();
-    if( !(pObj.Is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj.get() )) )
+    if( !(pObj.is() && nullptr != dynamic_cast<const SbUnoObject*>( pObj.get() )) )
     {
         StarBASIC::Error( ERRCODE_BASIC_BAD_ARGUMENT );
         return;

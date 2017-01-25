@@ -119,9 +119,9 @@ IMPL_LINK(SfxEventAsyncer_Impl, IdleHdl, Timer*, pAsyncIdle, void)
 {
     SfxObjectShellRef xRef( aHint.GetObjShell() );
     pAsyncIdle->Stop();
-    SAL_INFO_IF(!xRef.Is(), "sfx.appl", "SfxEvent: " << aHint.GetEventName());
+    SAL_INFO_IF(!xRef.is(), "sfx.appl", "SfxEvent: " << aHint.GetEventName());
     SfxGetpApp()->Broadcast( aHint );
-    if ( xRef.Is() )
+    if ( xRef.is() )
         xRef->Broadcast( aHint );
     delete this;
 }

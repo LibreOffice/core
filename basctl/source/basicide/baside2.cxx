@@ -200,7 +200,7 @@ SbModuleRef const & ModulWindow::XModule()
     // for m_xModule it may not yet be available, here we keep trying to access
     // the module until such time as it exists
 
-    if ( !m_xModule.Is() )
+    if ( !m_xModule.is() )
     {
         BasicManager* pBasMgr = GetDocument().getBasicManager();
         if ( pBasMgr )
@@ -258,7 +258,7 @@ void ModulWindow::Resize()
 
 void ModulWindow::CheckCompileBasic()
 {
-    if ( XModule().Is() )
+    if ( XModule().is() )
     {
         // never compile while running!
         bool const bRunning = StarBASIC::IsRunning();
@@ -311,14 +311,14 @@ void ModulWindow::BasicExecute()
 
     CheckCompileBasic();
 
-    if ( XModule().Is() && m_xModule->IsCompiled() && !m_aStatus.bError )
+    if ( XModule().is() && m_xModule->IsCompiled() && !m_aStatus.bError )
     {
         if ( GetBreakPoints().size() )
             m_aStatus.nBasicFlags = m_aStatus.nBasicFlags | BasicDebugFlags::Break;
 
         if ( !m_aStatus.bIsRunning )
         {
-            DBG_ASSERT( m_xModule.Is(), "Kein Modul!" );
+            DBG_ASSERT( m_xModule.is(), "Kein Modul!" );
             AddStatus( BASWIN_RUNNINGBASIC );
             sal_uInt16 nStart, nEnd;
             TextSelection aSel = GetEditView()->GetSelection();
@@ -364,7 +364,7 @@ void ModulWindow::CompileBasic()
 {
     CheckCompileBasic();
 
-    XModule().Is() && m_xModule->IsCompiled();
+    XModule().is() && m_xModule->IsCompiled();
 }
 
 void ModulWindow::BasicRun()
@@ -488,9 +488,9 @@ void ModulWindow::ImportDialog()
 
 void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
 {
-    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().is(), "Kein Modul!" );
 
-    if ( XModule().Is() )
+    if ( XModule().is() )
     {
         CheckCompileBasic();
         if ( m_aStatus.bError )
@@ -525,9 +525,9 @@ void ModulWindow::ToggleBreakPoint( sal_uLong nLine )
 
 void ModulWindow::UpdateBreakPoint( const BreakPoint& rBrk )
 {
-    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().is(), "Kein Modul!" );
 
-    if ( XModule().Is() )
+    if ( XModule().is() )
     {
         CheckCompileBasic();
 
@@ -696,9 +696,9 @@ void ModulWindow::BasicAddWatch()
 
 void ModulWindow::EditMacro( const OUString& rMacroName )
 {
-    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().is(), "Kein Modul!" );
 
-    if ( XModule().Is() )
+    if ( XModule().is() )
     {
         CheckCompileBasic();
 
@@ -757,11 +757,11 @@ bool ModulWindow::AllowUndo()
 
 void ModulWindow::UpdateData()
 {
-    DBG_ASSERT( XModule().Is(), "Kein Modul!" );
+    DBG_ASSERT( XModule().is(), "Kein Modul!" );
     // UpdateData is called when the source has changed from outside
     // => interrupts undesired!
 
-    if ( XModule().Is() )
+    if ( XModule().is() )
     {
         SetModule( m_xModule->GetSource32() );
 
@@ -1155,7 +1155,7 @@ bool ModulWindow::IsModified()
 OUString ModulWindow::GetSbModuleName()
 {
     OUString aModuleName;
-    if ( XModule().Is() )
+    if ( XModule().is() )
         aModuleName = m_xModule->GetName();
     return aModuleName;
 }
@@ -1268,7 +1268,7 @@ SearchOptionFlags ModulWindow::GetSearchOptions()
 
 void ModulWindow::BasicStarted()
 {
-    if ( XModule().Is() )
+    if ( XModule().is() )
     {
         m_aStatus.bIsRunning = true;
         BreakPointList& rList = GetBreakPoints();
@@ -1299,7 +1299,7 @@ EntryDescriptor ModulWindow::CreateEntryDescriptor()
     LibraryLocation eLocation = aDocument.getLibraryLocation( aLibName );
     OUString aModName( GetName() );
     OUString aLibSubName;
-    if( m_xBasic.Is() && aDocument.isInVBAMode() && XModule().Is() )
+    if( m_xBasic.is() && aDocument.isInVBAMode() && XModule().is() )
     {
         switch( m_xModule->GetModuleType() )
         {
@@ -1395,7 +1395,7 @@ void ModulWindow::UpdateModule ()
     OUString const aModule = getTextEngineText(*GetEditEngine());
 
     // update module in basic
-    assert(m_xModule.Is());
+    assert(m_xModule.is());
 
     // update module in module window
     SetModule(aModule);

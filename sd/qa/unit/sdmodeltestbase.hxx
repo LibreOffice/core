@@ -136,9 +136,9 @@ protected:
 
         ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false);
         SfxMedium* pSrcMed = new SfxMedium(rURL, StreamMode::STD_READ, pFilt, pParams);
-        if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.Is() )
+        if ( !xDocShRef->DoLoad(pSrcMed) || !xDocShRef.is() )
         {
-            if (xDocShRef.Is())
+            if (xDocShRef.is())
                 xDocShRef->DoClose();
             CPPUNIT_ASSERT_MESSAGE( OUStringToOString( "failed to load " + rURL, RTL_TEXTENCODING_UTF8 ).getStr(), false );
         }
@@ -226,7 +226,7 @@ protected:
     */
     void compareWithShapesDump( ::sd::DrawDocShellRef xDocShRef, const OUString &rShapesDumpFileNameBase, bool bCreate )
     {
-        CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.Is() );
+        CPPUNIT_ASSERT_MESSAGE( "failed to load", xDocShRef.is() );
         CPPUNIT_ASSERT_MESSAGE( "not in destruction", !xDocShRef->IsInDestruction() );
 
         uno::Reference<frame::XModel> xTempModel(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY_THROW);

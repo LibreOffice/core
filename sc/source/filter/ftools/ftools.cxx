@@ -164,7 +164,7 @@ OUString ScfTools::ConvertToScDefinedName(const OUString& rName )
 tools::SvRef<SotStorage> ScfTools::OpenStorageRead( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrgName )
 {
     tools::SvRef<SotStorage> xSubStrg;
-    if( xStrg.Is() && xStrg->IsContained( rStrgName ) )
+    if( xStrg.is() && xStrg->IsContained( rStrgName ) )
         xSubStrg = xStrg->OpenSotStorage( rStrgName, StreamMode::STD_READ );
     return xSubStrg;
 }
@@ -172,7 +172,7 @@ tools::SvRef<SotStorage> ScfTools::OpenStorageRead( tools::SvRef<SotStorage> con
 tools::SvRef<SotStorage> ScfTools::OpenStorageWrite( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrgName )
 {
     tools::SvRef<SotStorage> xSubStrg;
-    if( xStrg.Is() )
+    if( xStrg.is() )
         xSubStrg = xStrg->OpenSotStorage( rStrgName, StreamMode::STD_WRITE );
     return xSubStrg;
 }
@@ -180,16 +180,16 @@ tools::SvRef<SotStorage> ScfTools::OpenStorageWrite( tools::SvRef<SotStorage> co
 tools::SvRef<SotStorageStream> ScfTools::OpenStorageStreamRead( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrmName )
 {
     tools::SvRef<SotStorageStream> xStrm;
-    if( xStrg.Is() && xStrg->IsContained( rStrmName ) && xStrg->IsStream( rStrmName ) )
+    if( xStrg.is() && xStrg->IsContained( rStrmName ) && xStrg->IsStream( rStrmName ) )
         xStrm = xStrg->OpenSotStream( rStrmName, StreamMode::STD_READ );
     return xStrm;
 }
 
 tools::SvRef<SotStorageStream> ScfTools::OpenStorageStreamWrite( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrmName )
 {
-    OSL_ENSURE( !xStrg.Is() || !xStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
+    OSL_ENSURE( !xStrg.is() || !xStrg->IsContained( rStrmName ), "ScfTools::OpenStorageStreamWrite - stream exists already" );
     tools::SvRef<SotStorageStream> xStrm;
-    if( xStrg.Is() )
+    if( xStrg.is() )
         xStrm = xStrg->OpenSotStream( rStrmName, StreamMode::STD_WRITE | StreamMode::TRUNC );
     return xStrm;
 }

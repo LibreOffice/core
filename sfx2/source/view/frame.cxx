@@ -281,7 +281,7 @@ void SfxFrame::CancelTransfers()
 
         //  Check if StarOne-Loader should be canceled
         SfxFrameWeakRef wFrame( this );
-        if (wFrame.Is())
+        if (wFrame.is())
             pImpl->bInCancelTransfers = false;
     }
 }

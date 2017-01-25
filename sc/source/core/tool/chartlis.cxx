@@ -655,8 +655,8 @@ void ScChartListenerCollection::SetDiffDirty(
                 {
                     const ScRangeListRef& rList1 = pCL->GetRangeList();
                     const ScRangeListRef& rList2 = pCLCmp->GetRangeList();
-                    bool b1 = rList1.Is();
-                    bool b2 = rList2.Is();
+                    bool b1 = rList1.is();
+                    bool b2 = rList2.is();
                     if ( b1 != b2 || (b1 && b2 && (*rList1 != *rList2)) )
                         pDoc->SetChartRangeList( pCL->GetName(), rList1 );
                 }
@@ -678,7 +678,7 @@ void ScChartListenerCollection::SetRangeDirty( const ScRange& rRange )
     {
         ScChartListener *const pCL = it.second.get();
         const ScRangeListRef& rList = pCL->GetRangeList();
-        if ( rList.Is() && rList->Intersects( rRange ) )
+        if ( rList.is() && rList->Intersects( rRange ) )
         {
             bDirty = true;
             pCL->SetDirty( true );

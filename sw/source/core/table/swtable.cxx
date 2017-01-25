@@ -240,7 +240,7 @@ void DelBoxNode( SwTableSortBoxes& rSortCntBoxes )
 
 SwTable::~SwTable()
 {
-    if( m_xRefObj.Is() )
+    if( m_xRefObj.is() )
     {
         SwDoc* pDoc = GetFrameFormat()->GetDoc();
         if( !pDoc->IsInDtor() )         // then remove from the list
@@ -1937,7 +1937,7 @@ SwTableNode* SwTable::GetTableNode() const
 
 void SwTable::SetRefObject( SwServerObject* pObj )
 {
-    if( m_xRefObj.Is() )
+    if( m_xRefObj.is() )
         m_xRefObj->Closed();
 
     m_xRefObj = pObj;

@@ -131,7 +131,7 @@ bool SfxLockBytesItem::PutValue( const css::uno::Any& rVal, sal_uInt8 )
 // virtual
 bool SfxLockBytesItem::QueryValue( css::uno::Any& rVal, sal_uInt8 ) const
 {
-    if ( _xVal.Is() )
+    if ( _xVal.is() )
     {
         sal_uInt32 nLen;
         SvLockBytesStat aStat;

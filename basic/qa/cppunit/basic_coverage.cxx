@@ -77,7 +77,7 @@ void Coverage::run_test(const OUString& sFileURL)
     if( !testMacro.HasError() )
     {
         SbxVariableRef pResult = testMacro.Run();
-        if( pResult.Is() && pResult->GetInteger() == 1 )
+        if( pResult.is() && pResult->GetInteger() == 1 )
         {
             bResult = true;
         }

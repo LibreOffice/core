@@ -202,7 +202,7 @@ std::shared_ptr<const SfxFilter> SwIoSystem::GetFileFilter(const OUString& rFile
             {
             }
 
-            if( xStg.Is() && ( xStg->GetError() == SVSTREAM_OK ) )
+            if( xStg.is() && ( xStg->GetError() == SVSTREAM_OK ) )
             {
                 while ( pFilter )
                 {

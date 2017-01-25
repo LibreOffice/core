@@ -53,7 +53,7 @@ void ScAddressTest::setUp()
 
 void ScAddressTest::tearDown()
 {
-    m_xDocShRef.Clear();
+    m_xDocShRef.clear();
     BootstrapFixture::tearDown();
 }
 
@@ -94,7 +94,7 @@ void ScRangeTest::setUp()
 
 void ScRangeTest::tearDown()
 {
-    m_xDocShRef.Clear();
+    m_xDocShRef.clear();
     BootstrapFixture::tearDown();
 }
 

@@ -174,7 +174,7 @@ tools::SvRef<SotStorageStream> SdModule::GetOptionStream( const OUString& rOptio
     {
         DocumentType    eType = pDocSh->GetDoc()->GetDocumentType();
 
-        if( !xOptionStorage.Is() )
+        if( !xOptionStorage.is() )
         {
             INetURLObject aURL( SvtPathOptions().GetUserConfigPath() );
 

@@ -570,14 +570,14 @@ struct UCBStorageElement_Impl
     void                        SetContentType( const OUString& );
     OUString                    GetOriginalContentType();
     bool                        IsLoaded()
-                                { return m_xStream.Is() || m_xStorage.Is(); }
+                                { return m_xStream.is() || m_xStorage.is(); }
 };
 
 ::ucbhelper::Content* UCBStorageElement_Impl::GetContent()
 {
-    if ( m_xStream.Is() )
+    if ( m_xStream.is() )
         return m_xStream->m_pContent;
-    else if ( m_xStorage.Is() )
+    else if ( m_xStorage.is() )
         return m_xStorage->GetContent();
     else
         return nullptr;
@@ -585,9 +585,9 @@ struct UCBStorageElement_Impl
 
 OUString UCBStorageElement_Impl::GetContentType()
 {
-    if ( m_xStream.Is() )
+    if ( m_xStream.is() )
         return m_xStream->m_aContentType;
-    else if ( m_xStorage.Is() )
+    else if ( m_xStorage.is() )
         return m_xStorage->m_aContentType;
     else
     {
@@ -598,10 +598,10 @@ OUString UCBStorageElement_Impl::GetContentType()
 
 void UCBStorageElement_Impl::SetContentType( const OUString& rType )
 {
-    if ( m_xStream.Is() ) {
+    if ( m_xStream.is() ) {
         m_xStream->m_aContentType = m_xStream->m_aOriginalContentType = rType;
     }
-    else if ( m_xStorage.Is() ) {
+    else if ( m_xStorage.is() ) {
         m_xStorage->m_aContentType = m_xStorage->m_aOriginalContentType = rType;
     }
     else {
@@ -611,9 +611,9 @@ void UCBStorageElement_Impl::SetContentType( const OUString& rType )
 
 OUString UCBStorageElement_Impl::GetOriginalContentType()
 {
-    if ( m_xStream.Is() )
+    if ( m_xStream.is() )
         return m_xStream->m_aOriginalContentType;
-    else if ( m_xStorage.Is() )
+    else if ( m_xStorage.is() )
         return m_xStorage->m_aOriginalContentType;
     else
         return OUString();
@@ -624,9 +624,9 @@ bool UCBStorageElement_Impl::IsModified()
     bool bModified = m_bIsRemoved || m_bIsInserted || m_aName != m_aOriginalName;
     if ( bModified )
     {
-        if ( m_xStream.Is() )
+        if ( m_xStream.is() )
             bModified = m_xStream->m_aContentType != m_xStream->m_aOriginalContentType;
-        else if ( m_xStorage.Is() )
+        else if ( m_xStorage.is() )
             bModified = m_xStorage->m_aContentType != m_xStorage->m_aOriginalContentType;
     }
 
@@ -1774,7 +1774,7 @@ void UCBStorage_Impl::ReadContent()
                 {
                     if ( m_bIsLinked )
                         OpenStorage( pElement, m_nMode, m_bDirect );
-                    if ( pElement->m_xStorage.Is() )
+                    if ( pElement->m_xStorage.is() )
                         pElement->m_xStorage->Init();
                 }
                 else if ( bIsOfficeDocument )
@@ -1857,8 +1857,8 @@ sal_Int32 UCBStorage_Impl::GetObjectCount()
     sal_Int32 nCount = m_aChildrenList.size();
     for (UCBStorageElement_Impl* pElement : m_aChildrenList)
     {
-        DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.Is(), "Storage should be open!" );
-        if ( pElement->m_bIsFolder && pElement->m_xStorage.Is() )
+        DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.is(), "Storage should be open!" );
+        if ( pElement->m_bIsFolder && pElement->m_xStorage.is() )
             nCount += pElement->m_xStorage->GetObjectCount();
     }
 
@@ -1913,8 +1913,8 @@ void UCBStorage_Impl::SetProps( const Sequence < Sequence < PropertyValue > >& r
 
     for (UCBStorageElement_Impl* pElement : m_aChildrenList)
     {
-        DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.Is(), "Storage should be open!" );
-        if ( pElement->m_bIsFolder && pElement->m_xStorage.Is() )
+        DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.is(), "Storage should be open!" );
+        if ( pElement->m_bIsFolder && pElement->m_xStorage.is() )
             pElement->m_xStorage->SetProps( rSequence, aPath );
         else
         {
@@ -1964,8 +1964,8 @@ void UCBStorage_Impl::GetProps( sal_Int32& nProps, Sequence < Sequence < Propert
     // now the properties of my elements
     for (UCBStorageElement_Impl* pElement : m_aChildrenList)
     {
-        DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.Is(), "Storage should be open!" );
-        if ( pElement->m_bIsFolder && pElement->m_xStorage.Is() )
+        DBG_ASSERT( !pElement->m_bIsFolder || pElement->m_xStorage.is(), "Storage should be open!" );
+        if ( pElement->m_bIsFolder && pElement->m_xStorage.is() )
             // storages add there properties by themselves ( see above )
             pElement->m_xStorage->GetProps( nProps, rSequence, aPath );
         else
@@ -2087,7 +2087,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                     if ( !pElement->m_bIsInserted )
                     {
                         // first remove all open stream handles
-                        if (pContent && (!pElement->m_xStream.Is() || pElement->m_xStream->Clear()))
+                        if (pContent && (!pElement->m_xStream.is() || pElement->m_xStream->Clear()))
                         {
                             pContent->executeCommand( "delete", makeAny( true ) );
                             nRet = COMMIT_RESULT_SUCCESS;
@@ -2100,7 +2100,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                 else
                 {
                     sal_Int16 nLocalRet = COMMIT_RESULT_NOTHING_TO_DO;
-                    if ( pElement->m_xStorage.Is() )
+                    if ( pElement->m_xStorage.is() )
                     {
                         // element is a storage
                         // do a commit in the following cases:
@@ -2113,7 +2113,7 @@ sal_Int16 UCBStorage_Impl::Commit()
                             pContent = pElement->GetContent();
                         }
                     }
-                    else if ( pElement->m_xStream.Is() )
+                    else if ( pElement->m_xStream.is() )
                     {
                         // element is a stream
                         nLocalRet = pElement->m_xStream->Commit();
@@ -2333,12 +2333,12 @@ bool UCBStorage_Impl::Revert()
         }
         else
         {
-            if ( pElement->m_xStream.Is() )
+            if ( pElement->m_xStream.is() )
             {
                 pElement->m_xStream->m_bCommited = false;
                 pElement->m_xStream->Revert();
             }
-            else if ( pElement->m_xStorage.Is() )
+            else if ( pElement->m_xStorage.is() )
             {
                 pElement->m_xStorage->m_bCommited = false;
                 pElement->m_xStorage->Revert();
@@ -2431,7 +2431,7 @@ void UCBStorage::FillInfoList( SvStorageInfoList* pList ) const
         {
             // problem: what about the size of a substorage ?!
             sal_uLong nSize = pElement->m_nSize;
-            if ( pElement->m_xStream.Is() )
+            if ( pElement->m_xStream.is() )
                 nSize = pElement->m_xStream->GetSize();
             SvStorageInfo aInfo( pElement->m_aName, nSize, pElement->m_bIsStorage );
             pList->push_back( aInfo );
@@ -2453,7 +2453,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
         bool bDeleteStream = false;
 
         // if stream is already open, it is allowed to copy it, so be aware of this
-        if ( rElement.m_xStream.Is() )
+        if ( rElement.m_xStream.is() )
             pStream = rElement.m_xStream->m_pAntiImpl;
         if ( !pStream )
         {
@@ -2479,7 +2479,7 @@ bool UCBStorage::CopyStorageElement_Impl( UCBStorageElement_Impl& rElement, Base
 
         // if stream is already open, it is allowed to copy it, so be aware of this
         bool bDeleteStorage = false;
-        if ( rElement.m_xStorage.Is() )
+        if ( rElement.m_xStorage.is() )
             pStorage = rElement.m_xStorage->m_pAntiImpl;
         if ( !pStorage )
         {
@@ -2632,7 +2632,7 @@ BaseStorageStream* UCBStorage::OpenStream( const OUString& rEleName, StreamMode 
     if ( !pElement->m_bIsFolder )
     {
         // check if stream is already created
-        if ( pElement->m_xStream.Is() )
+        if ( pElement->m_xStream.is() )
         {
             // stream has already been created; if it has no external reference, it may be opened another time
             if ( pElement->m_xStream->m_pAntiImpl )
@@ -2732,7 +2732,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         // Such a storage will be created on a UCBStorageStream; it will write into the stream
         // if it is opened in direct mode or when it is committed. In this case the stream will be
         // modified and then it MUST be treated as committed.
-        if ( !pElement->m_xStream.Is() )
+        if ( !pElement->m_xStream.is() )
         {
             BaseStorageStream* pStr = OpenStream( rEleName, nMode, bDirect );
             UCBStorageStream* pStream =  dynamic_cast<UCBStorageStream*>( pStr );
@@ -2757,7 +2757,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
         pElement->m_bIsStorage = true;
         return pElement->m_xStream->CreateStorage();  // can only be created in transacted mode
     }
-    else if ( pElement->m_xStorage.Is() )
+    else if ( pElement->m_xStorage.is() )
     {
         // storage has already been opened; if it has no external reference, it may be opened another time
         if ( pElement->m_xStorage->m_pAntiImpl )
@@ -2783,7 +2783,7 @@ BaseStorage* UCBStorage::OpenStorage_Impl( const OUString& rEleName, StreamMode 
             }
         }
     }
-    else if ( !pElement->m_xStream.Is() )
+    else if ( !pElement->m_xStream.is() )
     {
         // storage is opened the first time
         bool bIsWritable = bool(pImp->m_nMode & StreamMode::WRITE);

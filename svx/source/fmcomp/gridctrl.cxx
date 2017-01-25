@@ -76,7 +76,7 @@ using namespace ::com::sun::star::datatransfer;
 using namespace ::com::sun::star::container;
 using namespace com::sun::star::accessibility;
 
-#define ROWSTATUS(row) (!row.Is() ? "NULL" : row->GetStatus() == GridRowStatus::Clean ? "CLEAN" : row->GetStatus() == GridRowStatus::Modified ? "MODIFIED" : row->GetStatus() == GridRowStatus::Deleted ? "DELETED" : "INVALID")
+#define ROWSTATUS(row) (!row.is() ? "NULL" : row->GetStatus() == GridRowStatus::Clean ? "CLEAN" : row->GetStatus() == GridRowStatus::Modified ? "MODIFIED" : row->GetStatus() == GridRowStatus::Deleted ? "DELETED" : "INVALID")
 
 #define DEFAULT_BROWSE_MODE             \
               BrowserMode::COLUMNSELECTION   \
@@ -1286,7 +1286,7 @@ void DbGridControl::EnableNavigationBar(bool bEnable)
 
 DbGridControlOptions DbGridControl::SetOptions(DbGridControlOptions nOpt)
 {
-    DBG_ASSERT(!m_xCurrentRow.Is() || !m_xCurrentRow->IsModified(),
+    DBG_ASSERT(!m_xCurrentRow.is() || !m_xCurrentRow->IsModified(),
         "DbGridControl::SetOptions : please do not call when editing a record (things are much easier this way ;) !");
 
     // for the next setDataSource (which is triggered by a refresh, for instance)
@@ -1917,7 +1917,7 @@ void DbGridControl::RowInserted(long nRow, long nNumRows, bool bDoPaint)
             // if we have an insert row we have to reduce to count by 1
             // as the total count reflects only the existing rows in database
             m_nTotalCount = GetRowCount() + nNumRows;
-            if (m_xEmptyRow.Is())
+            if (m_xEmptyRow.is())
                 --m_nTotalCount;
         }
         else if (m_nTotalCount >= 0)
@@ -1936,7 +1936,7 @@ void DbGridControl::RowRemoved(long nRow, long nNumRows, bool bDoPaint)
         {
             m_nTotalCount = GetRowCount() - nNumRows;
             // if we have an insert row reduce by 1
-            if (m_xEmptyRow.Is())
+            if (m_xEmptyRow.is())
                 --m_nTotalCount;
         }
         else if (m_nTotalCount >= 0)
@@ -2112,7 +2112,7 @@ bool DbGridControl::SetCurrent(long nNewRow)
                     if ( !m_pSeekCursor->isBeforeFirst() && !m_pSeekCursor->isAfterLast() )
                     {
                         Any aBookmark = m_pSeekCursor->getBookmark();
-                        if (!m_xCurrentRow.Is() || m_xCurrentRow->IsNew() || !CompareBookmark(aBookmark, m_pDataCursor->getBookmark()))
+                        if (!m_xCurrentRow.is() || m_xCurrentRow->IsNew() || !CompareBookmark(aBookmark, m_pDataCursor->getBookmark()))
                         {
                             // adjust the cursor to the new desired row
                             if (!m_pDataCursor->moveToBookmark(aBookmark))
@@ -2219,7 +2219,7 @@ void DbGridControl::AdjustDataSource(bool bFull)
     // but this is only possible for rows which are not inserted, in that case the comparison result
     // may not be correct
     else
-        if  (   m_xCurrentRow.Is()
+        if  (   m_xCurrentRow.is()
             &&  !m_xCurrentRow->IsNew()
             &&  !m_pDataCursor->isBeforeFirst()
             &&  !m_pDataCursor->isAfterLast()
@@ -2247,7 +2247,7 @@ void DbGridControl::AdjustDataSource(bool bFull)
         m_xPaintRow = m_xSeekRow;
 
     // not up-to-date row, thus, adjust completely
-    if (!m_xCurrentRow.Is())
+    if (!m_xCurrentRow.is())
         AdjustRows();
 
     sal_Int32 nNewPos = AlignSeekCursor();
@@ -2260,7 +2260,7 @@ void DbGridControl::AdjustDataSource(bool bFull)
         if (m_bSynchDisplay)
             DbGridControl_Base::GoToRow(nNewPos);
 
-        if (!m_xCurrentRow.Is())
+        if (!m_xCurrentRow.is())
             // Happens e.g. when deleting the n last datasets (n>1) while the cursor was positioned
             // on the last one. In this case, AdjustRows deletes two rows from BrowseBox, by what
             // CurrentRow is corrected to point two rows down, so that GoToRow will point into
@@ -2276,7 +2276,7 @@ void DbGridControl::AdjustDataSource(bool bFull)
 
     // if the data cursor was moved from outside, this section is voided
     SetNoSelection();
-    m_aBar->InvalidateAll(m_nCurrentPos, m_xCurrentRow.Is());
+    m_aBar->InvalidateAll(m_nCurrentPos, m_xCurrentRow.is());
 }
 
 sal_Int32 DbGridControl::AlignSeekCursor()
@@ -2746,7 +2746,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt)
         if (xSource.is())
             bIsNew = ::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ISNEW));
 
-        if (bIsNew && m_xCurrentRow.Is())
+        if (bIsNew && m_xCurrentRow.is())
         {
             DBG_ASSERT(::comphelper::getBOOL(xSource->getPropertyValue(FM_PROP_ROWCOUNTFINAL)), "DbGridControl::DataSourcePropertyChanged : somebody moved the form to a new record before the row count was final !");
             sal_Int32 nRecordCount = 0;
@@ -2774,7 +2774,7 @@ void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt)
                 }
             }
         }
-        if (m_xCurrentRow.Is())
+        if (m_xCurrentRow.is())
         {
             m_xCurrentRow->SetStatus(::comphelper::getBOOL(evt.NewValue) ? GridRowStatus::Modified : GridRowStatus::Clean);
             m_xCurrentRow->SetNew( bIsNew );
@@ -3114,7 +3114,7 @@ bool DbGridControl::IsModified() const
 
 bool DbGridControl::IsCurrentAppending() const
 {
-    return m_xCurrentRow.Is() && m_xCurrentRow->IsNew();
+    return m_xCurrentRow.is() && m_xCurrentRow->IsNew();
 }
 
 bool DbGridControl::IsInsertionRow(long nRow) const
@@ -3137,8 +3137,8 @@ bool DbGridControl::SaveModified()
     size_t Location = GetModelColumnPos( GetCurColumnId() );
     DbGridColumn* pColumn = ( Location < m_aColumns.size() ) ? m_aColumns[ Location ] : nullptr;
     bool bOK = pColumn && pColumn->Commit();
-    DBG_ASSERT( Controller().Is(), "DbGridControl::SaveModified: was modified, by have no controller?!" );
-    if ( !Controller().Is() )
+    DBG_ASSERT( Controller().is(), "DbGridControl::SaveModified: was modified, by have no controller?!" );
+    if ( !Controller().is() )
         // this might happen if the callbacks implicitly triggered by Commit
         // fiddled with the form or the control ...
         // (Note that this here is a workaround, at most. We need a general concept how
@@ -3178,7 +3178,7 @@ bool DbGridControl::SaveRow()
     if (!IsValid(m_xCurrentRow) || !IsModified())
         return true;
     // value of the controller was not saved, yet
-    else if (Controller().Is() && Controller()->IsModified())
+    else if (Controller().is() && Controller()->IsModified())
     {
         if (!SaveModified())
             return false;

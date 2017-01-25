@@ -6752,7 +6752,7 @@ bool SvxMSDffManager::ConvertToOle2( SvStream& rStm, sal_uInt32 nReadLen,
 
         if( !rStm.IsEof() && nReadLen > nBytesRead && nDataLen )
         {
-            if( xOle10Stm.Is() )
+            if( xOle10Stm.is() )
             {
                 std::unique_ptr<sal_uInt8[]> pData(new sal_uInt8[ nDataLen ]);
                 if( !pData )
@@ -6952,7 +6952,7 @@ css::uno::Reference < css::embed::XEmbeddedObject >  SvxMSDffManager::CheckForCo
             tools::SvRef<SotStorage> xStorage = new SotStorage( false, *xMemStream );
             rSrcStg.CopyTo( xStorage.get() );
             xStorage->Commit();
-            xStorage.Clear();
+            xStorage.clear();
             OUString aType = SfxFilter::GetTypeFromStorage( rSrcStg );
             if ( aType.getLength() )
                 pFilter = aMatch.GetFilter4EA( aType );
@@ -7073,7 +7073,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 {
     sal_Int64 nAspect = nRecommendedAspect;
     SdrOle2Obj* pRet = nullptr;
-    if( rSrcStorage.Is() && xDestStorage.is() && rStorageName.getLength() )
+    if( rSrcStorage.is() && xDestStorage.is() && rStorageName.getLength() )
     {
         comphelper::EmbeddedObjectContainer aCnt( xDestStorage );
         // does the 01Ole-Stream exist at all?
@@ -7086,18 +7086,18 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 
         {
             tools::SvRef<SotStorage> xObjStg = rSrcStorage->OpenSotStorage( rStorageName );
-            if( xObjStg.Is()  )
+            if( xObjStg.is()  )
             {
                 {
                     sal_uInt8 aTestA[10];   // exist the \1CompObj-Stream ?
                     tools::SvRef<SotStorageStream> xSrcTst = xObjStg->OpenSotStream( "\1CompObj" );
-                    bValidStorage = xSrcTst.Is() && sizeof( aTestA ) ==
+                    bValidStorage = xSrcTst.is() && sizeof( aTestA ) ==
                                     xSrcTst->ReadBytes(aTestA, sizeof(aTestA));
                     if( !bValidStorage )
                     {
                         // or the \1Ole-Stream ?
                         xSrcTst = xObjStg->OpenSotStream( "\1Ole" );
-                        bValidStorage = xSrcTst.Is() && sizeof(aTestA) ==
+                        bValidStorage = xSrcTst.is() && sizeof(aTestA) ==
                                     xSrcTst->ReadBytes(aTestA, sizeof(aTestA));
                     }
                 }
@@ -7113,7 +7113,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
 
                         tools::SvRef<SotStorageStream> xObjInfoSrc = xObjStg->OpenSotStream(
                             "\3ObjInfo", StreamMode::STD_READ );
-                        if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
+                        if ( xObjInfoSrc.is() && !xObjInfoSrc->GetError() )
                         {
                             sal_uInt8 nByte = 0;
                             xObjInfoSrc->ReadUChar( nByte );
@@ -7146,7 +7146,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
             // object is not an own object
             tools::SvRef<SotStorage> xObjStor = SotStorage::OpenOLEStorage( xDestStorage, aDstStgName, StreamMode::READWRITE );
 
-            if ( xObjStor.Is() )
+            if ( xObjStor.is() )
             {
                 tools::SvRef<SotStorage> xSrcStor = rSrcStorage->OpenSotStorage( rStorageName, StreamMode::READ );
                 xSrcStor->CopyTo( xObjStor.get() );
@@ -7159,7 +7159,7 @@ SdrOle2Obj* SvxMSDffManager::CreateSdrOLEFromStorage(
                     rError = xObjStor->GetError();
                     bValidStorage = false;
                 }
-                else if( !xObjStor.Is() )
+                else if( !xObjStor.is() )
                     bValidStorage = false;
             }
         }

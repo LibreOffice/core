@@ -120,7 +120,7 @@ static SvStream* lcl_CreateStream( const OUString& rFileName, StreamMode eOpenMo
             comphelper::getProcessComponentContext() );
         xLockBytes = UcbLockBytes::CreateLockBytes( aContent.get(), Sequence < PropertyValue >(),
                                                     eOpenMode, xInteractionHandler );
-        if ( xLockBytes.Is() )
+        if ( xLockBytes.is() )
         {
             pStream = new SvStream( xLockBytes.get() );
             pStream->SetBufferSize( 4096 );
@@ -169,7 +169,7 @@ SvStream* UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStre
 {
     SvStream* pStream = nullptr;
     UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream );
-    if ( xLockBytes.Is() )
+    if ( xLockBytes.is() )
     {
         pStream = new SvStream( xLockBytes.get() );
         pStream->SetBufferSize( 4096 );
@@ -185,7 +185,7 @@ SvStream* UcbStreamHelper::CreateStream( const Reference < XStream >& xStream )
     if ( xStream->getOutputStream().is() )
     {
         UcbLockBytesRef xLockBytes = UcbLockBytes::CreateLockBytes( xStream );
-        if ( xLockBytes.Is() )
+        if ( xLockBytes.is() )
         {
             pStream = new SvStream( xLockBytes.get() );
             pStream->SetBufferSize( 4096 );
@@ -202,7 +202,7 @@ SvStream* UcbStreamHelper::CreateStream( const Reference < XInputStream >& xStre
 {
     SvStream* pStream = nullptr;
     UcbLockBytesRef xLockBytes = UcbLockBytes::CreateInputLockBytes( xStream );
-    if ( xLockBytes.Is() )
+    if ( xLockBytes.is() )
     {
         if ( !bCloseStream )
             xLockBytes->setDontClose_Impl();
@@ -221,7 +221,7 @@ SvStream* UcbStreamHelper::CreateStream( const Reference < XStream >& xStream, b
     if ( xStream->getOutputStream().is() )
     {
         UcbLockBytesRef xLockBytes = UcbLockBytes::CreateLockBytes( xStream );
-        if ( xLockBytes.Is() )
+        if ( xLockBytes.is() )
         {
             if ( !bCloseStream )
                 xLockBytes->setDontClose_Impl();
