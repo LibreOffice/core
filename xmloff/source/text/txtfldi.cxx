@@ -680,6 +680,16 @@ void XMLAuthorFieldImportContext::StartElement(
     XMLTextFieldImportContext::StartElement(xAttrList);
 }
 
+void XMLAuthorFieldImportContext::ProcessAttribute(sal_uInt16 nAttrToken, const OUString& sAttrValue)
+{
+    if(nAttrToken == XML_TOK_TEXTFIELD_FIXED)
+    {
+        bool bTmp(false);
+        if (::sax::Converter::convertBool(bTmp, sAttrValue))
+            bFixed = bTmp;
+    }
+}
+
 void XMLAuthorFieldImportContext::PrepareField(
     const Reference<XPropertySet> & rPropSet)
 {
