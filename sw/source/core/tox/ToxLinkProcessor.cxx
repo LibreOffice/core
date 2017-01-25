@@ -21,19 +21,18 @@ namespace sw {
 void
 ToxLinkProcessor::StartNewLink(sal_Int32 startPosition, const OUString& characterStyle)
 {
-    m_StartedLinks.push_back(o3tl::make_unique<StartedLink>(
-                startPosition, characterStyle));
+    SAL_INFO_IF(m_pStartedLink, "sw.core", "ToxLinkProcessor: LS without LE");
+    m_pStartedLink = o3tl::make_unique<StartedLink>(
+                startPosition, characterStyle);
 }
 
 void
 ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url)
 {
-    StartedLink const startedLink( (m_StartedLinks.empty())
-        ? StartedLink(0, SW_RES(STR_POOLCHR_TOXJUMP))
-        : *m_StartedLinks.back() );
-    if (!m_StartedLinks.empty())
+    if (m_pStartedLink == nullptr)
     {
-        m_StartedLinks.pop_back();
+        SAL_INFO("sw.core", "ToxLinkProcessor: LE without LS");
+        return;
     }
 
     if (url.isEmpty()) {
@@ -41,14 +40,15 @@ ToxLinkProcessor::CloseLink(sal_Int32 endPosition, const OUString& url)
     }
 
     std::unique_ptr<ClosedLink> pClosedLink(
-            new ClosedLink(url, startedLink.mStartPosition, endPosition));
+            new ClosedLink(url, m_pStartedLink->mStartPosition, endPosition));
 
-    const OUString& characterStyle = startedLink.mCharacterStyle;
+    const OUString& characterStyle = m_pStartedLink->mCharacterStyle;
     sal_uInt16 poolId = ObtainPoolId(characterStyle);
     pClosedLink->mINetFormat.SetVisitedFormatAndId(characterStyle, poolId);
     pClosedLink->mINetFormat.SetINetFormatAndId(characterStyle, poolId);
 
     m_ClosedLinks.push_back(std::move(pClosedLink));
+    m_pStartedLink.reset();
 }
 
 sal_uInt16
