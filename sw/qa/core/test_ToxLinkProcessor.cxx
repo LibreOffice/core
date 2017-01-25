@@ -30,17 +30,15 @@ using namespace sw;
 class ToxLinkProcessorTest : public test::BootstrapFixture
 {
     void NoExceptionIsThrownIfTooManyLinksAreClosed();
-    void AddingAndClosingTwoLinksResultsInTwoClosedLinks();
+    void AddingAndClosingTwoOverlappingLinksResultsInOneClosedLink();
     void LinkIsCreatedCorrectly();
     void LinkSequenceIsPreserved();
-    void StandardOpenLinkIsAddedWhenMoreLinksThanAvaiableAreClosed();
 
     CPPUNIT_TEST_SUITE(ToxLinkProcessorTest);
     CPPUNIT_TEST(NoExceptionIsThrownIfTooManyLinksAreClosed);
-    CPPUNIT_TEST(AddingAndClosingTwoLinksResultsInTwoClosedLinks);
+    CPPUNIT_TEST(AddingAndClosingTwoOverlappingLinksResultsInOneClosedLink);
     CPPUNIT_TEST(LinkIsCreatedCorrectly);
     CPPUNIT_TEST(LinkSequenceIsPreserved);
-    CPPUNIT_TEST(StandardOpenLinkIsAddedWhenMoreLinksThanAvaiableAreClosed);
     CPPUNIT_TEST_SUITE_END();
 public:
     void setUp() override {
@@ -71,30 +69,28 @@ ToxLinkProcessorTest::NoExceptionIsThrownIfTooManyLinksAreClosed()
     sut.CloseLink(1, URL_1);
     // fdo#85872 actually it turns out the UI does something like this
     // so an exception must not be thrown!
-    sut.CloseLink(1, URL_1);
+    // should not succeed either (for backward compatibility)
+    sut.CloseLink(2, URL_1);
+    CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
+    CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.at(0)->mEndTextPos));
+    CPPUNIT_ASSERT_MESSAGE("no links are open", sut.m_pStartedLink == nullptr);
 }
 
 void
-ToxLinkProcessorTest::StandardOpenLinkIsAddedWhenMoreLinksThanAvaiableAreClosed()
-{
-    ToxLinkProcessor sut;
-    sut.StartNewLink(0, STYLE_NAME_1);
-    sut.CloseLink(1, URL_1);
-    sut.CloseLink(1, URL_1);
-    CPPUNIT_ASSERT_EQUAL(2u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
-    CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.at(1)->mEndTextPos));
-}
-
-void
-ToxLinkProcessorTest::AddingAndClosingTwoLinksResultsInTwoClosedLinks()
+ToxLinkProcessorTest::AddingAndClosingTwoOverlappingLinksResultsInOneClosedLink()
 {
     ToxLinkProcessor sut;
     sut.StartNewLink(0, STYLE_NAME_1);
     sut.StartNewLink(0, STYLE_NAME_2);
     sut.CloseLink(1, URL_1);
+    // this should not cause an error, and should not succeed either
+    // (for backward compatibility)
     sut.CloseLink(1, URL_2);
-    CPPUNIT_ASSERT_EQUAL(2u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
-    CPPUNIT_ASSERT_MESSAGE("no links are open", sut.m_StartedLinks.empty());
+    CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
+    CPPUNIT_ASSERT_MESSAGE("no links are open", sut.m_pStartedLink == nullptr);
+    // backward compatibility: the last start is closed by the first end
+    CPPUNIT_ASSERT_EQUAL(STYLE_NAME_2, sut.m_ClosedLinks[0]->mINetFormat.GetINetFormat());
+    CPPUNIT_ASSERT_EQUAL(URL_1, sut.m_ClosedLinks[0]->mINetFormat.GetValue());
 }
 
 class ToxLinkProcessorWithOverriddenObtainPoolId : public ToxLinkProcessor {
@@ -131,10 +127,10 @@ ToxLinkProcessorTest::LinkSequenceIsPreserved()
     // obtainpoolid needs to be overridden to check what we are
     ToxLinkProcessorWithOverriddenObtainPoolId sut;
 
-    sut.StartNewLink(0, STYLE_NAME_1);
     sut.StartNewLink(0, STYLE_NAME_2);
     sut.CloseLink(1, URL_2);
-    sut.CloseLink(1, URL_1);
+    sut.StartNewLink(1, STYLE_NAME_1);
+    sut.CloseLink(2, URL_1);
 
     // check first closed element
     CPPUNIT_ASSERT_EQUAL_MESSAGE("Style is stored correctly in link",
