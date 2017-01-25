@@ -205,7 +205,6 @@ gb_GLOBALDEFS += -DTIMELOG \
 endif
 
 ifeq ($(gb_DEBUGLEVEL),0)
-gb_GLOBALDEFS += -DOPTIMIZE \
 
 ifeq ($(strip $(ASSERT_ALWAYS_ABORT)),FALSE)
 gb_GLOBALDEFS += -DNDEBUG \
