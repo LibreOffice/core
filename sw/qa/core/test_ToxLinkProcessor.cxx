@@ -82,7 +82,7 @@ ToxLinkProcessorTest::StandardOpenLinkIsAddedWhenMoreLinksThanAvaiableAreClosed(
     sut.CloseLink(1, URL_1);
     sut.CloseLink(1, URL_1);
     CPPUNIT_ASSERT_EQUAL(2u, static_cast<unsigned>(sut.m_ClosedLinks.size()));
-    CPPUNIT_ASSERT_EQUAL(0u, static_cast<unsigned>(sut.m_ClosedLinks.at(1)->mEndTextPos));
+    CPPUNIT_ASSERT_EQUAL(1u, static_cast<unsigned>(sut.m_ClosedLinks.at(1)->mEndTextPos));
 }
 
 void
