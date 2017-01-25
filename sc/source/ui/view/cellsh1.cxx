@@ -2004,6 +2004,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                         {
                             // found a matching range, edit this conditional format
                             bCondFormatDlg = true;
+                            nIndex = pCondFormat->GetKey();
                             break;
                         }
                     }
