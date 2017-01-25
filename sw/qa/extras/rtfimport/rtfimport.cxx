@@ -58,6 +58,7 @@
 #include <unotools/ucbstreamhelper.hxx>
 #include <unotools/streamwrap.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include "comphelper/configuration.hxx"
 
 #include <bordertest.hxx>
 
@@ -2727,6 +2728,32 @@ DECLARE_RTFIMPORT_TEST(testTdf104744, "tdf104744.rtf")
     // import.
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1270), getProperty<sal_Int32>(getParagraph(1), "ParaLeftMargin"));
 }
+
+class testTdf105511 : public Test {
+protected:
+    virtual OUString getTestName() override { return "testTdf105511"; }
+public:
+    CPPUNIT_TEST_SUITE(testTdf105511);
+    CPPUNIT_TEST(Import);
+    CPPUNIT_TEST_SUITE_END();
+
+    void Import() {
+        struct DefaultLocale : public comphelper::ConfigurationProperty<DefaultLocale, rtl::OUString> {
+            static OUString path() { return "/org.openoffice.Office.Linguistic/General/DefaultLocale"; }
+        private:
+            DefaultLocale(); // not defined
+            ~DefaultLocale(); // not defined
+        };
+        DefaultLocale::set("ru-RU", comphelper::ConfigurationChanges::create());
+        executeImportTest("tdf105511.rtf", nullptr);
+    }
+    virtual void verify() override
+    {
+        OUString aExpected("\xd0\x98\xd0\xbc\xd1\x8f", 6, RTL_TEXTENCODING_UTF8);
+        getParagraph(1, aExpected);
+    }
+};
+CPPUNIT_TEST_SUITE_REGISTRATION(testTdf105511);
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 
