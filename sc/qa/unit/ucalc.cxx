@@ -144,7 +144,7 @@ void Test::setUp()
 void Test::tearDown()
 {
     m_pImpl->m_xDocShell->DoClose();
-    m_pImpl->m_xDocShell.Clear();
+    m_pImpl->m_xDocShell.clear();
     BootstrapFixture::tearDown();
 }
 

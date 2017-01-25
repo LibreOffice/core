@@ -197,9 +197,9 @@ ScTransferObj::~ScTransferObj()
 
     delete pDoc;        // ScTransferObj is owner of clipboard document
 
-    aDocShellRef.Clear();   // before releasing the mutex
+    aDocShellRef.clear();   // before releasing the mutex
 
-    aDrawPersistRef.Clear();                    // after the model
+    aDrawPersistRef.clear();                    // after the model
 
 }
 
@@ -612,7 +612,7 @@ ScMarkData ScTransferObj::GetSourceMarkData()
 
 void ScTransferObj::InitDocShell(bool bLimitToPageSize)
 {
-    if ( !aDocShellRef.Is() )
+    if ( !aDocShellRef.is() )
     {
         ScDocShell* pDocSh = new ScDocShell;
         aDocShellRef = pDocSh;      // ref must be there before InitNew
@@ -759,7 +759,7 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
 {
     // update ScGlobal::xDrawClipDocShellRef
 
-    ScGlobal::xDrawClipDocShellRef.Clear();
+    ScGlobal::xDrawClipDocShellRef.clear();
     if (bAnyOle)
     {
         ScGlobal::xDrawClipDocShellRef = new ScDocShell(SfxModelFlags::EMBEDDED_OBJECT | SfxModelFlags::DISABLE_EMBEDDED_SCRIPTS); // there must be a ref
@@ -768,7 +768,7 @@ SfxObjectShell* ScTransferObj::SetDrawClipDoc( bool bAnyOle )
     }
     else
     {
-        ScGlobal::xDrawClipDocShellRef.Clear();
+        ScGlobal::xDrawClipDocShellRef.clear();
         return nullptr;
     }
 }

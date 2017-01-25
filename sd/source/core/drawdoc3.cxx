@@ -249,7 +249,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(SfxMedium* pMedium)
         CloseBookmarkDoc();
         pBookmarkDoc = nullptr;
     }
-    else if (mxBookmarkDocShRef.Is())
+    else if (mxBookmarkDocShRef.is())
     {
         pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
     }
@@ -267,7 +267,7 @@ SdDrawDocument* SdDrawDocument::OpenBookmarkDoc(const OUString& rBookmarkFile)
         std::unique_ptr<SfxMedium> xMedium(new SfxMedium(rBookmarkFile, StreamMode::READ));
         pBookmarkDoc = OpenBookmarkDoc(xMedium.release());
     }
-    else if (mxBookmarkDocShRef.Is())
+    else if (mxBookmarkDocShRef.is())
     {
         pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
     }
@@ -301,7 +301,7 @@ void SdDrawDocument::InsertBookmark(
         {
             pBookmarkDoc = pBookmarkDocSh->GetDoc();
         }
-        else if ( mxBookmarkDocShRef.Is() )
+        else if ( mxBookmarkDocShRef.is() )
         {
             pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
         }
@@ -396,7 +396,7 @@ bool SdDrawDocument::InsertBookmarkAsPage(
             aBookmarkName = pBookmarkDocSh->GetMedium()->GetName();
         }
     }
-    else if ( mxBookmarkDocShRef.Is() )
+    else if ( mxBookmarkDocShRef.is() )
     {
         pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
         aBookmarkName = maBookmarkFile;
@@ -990,7 +990,7 @@ bool SdDrawDocument::InsertBookmarkAsObject(
     {
         pBookmarkDoc = pBookmarkDocSh->GetDoc();
     }
-    else if ( mxBookmarkDocShRef.Is() )
+    else if ( mxBookmarkDocShRef.is() )
     {
         pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
     }
@@ -1143,12 +1143,12 @@ bool SdDrawDocument::InsertBookmarkAsObject(
 // Stops the bookmark insertion
 void SdDrawDocument::CloseBookmarkDoc()
 {
-    if (mxBookmarkDocShRef.Is())
+    if (mxBookmarkDocShRef.is())
     {
         mxBookmarkDocShRef->DoClose();
     }
 
-    mxBookmarkDocShRef.Clear();
+    mxBookmarkDocShRef.clear();
     maBookmarkFile.clear();
 }
 
@@ -1164,12 +1164,12 @@ void SdDrawDocument::SetAllocDocSh(bool bAlloc)
 {
     mbAllocDocSh = bAlloc;
 
-    if(mxAllocedDocShRef.Is())
+    if(mxAllocedDocShRef.is())
     {
         mxAllocedDocShRef->DoClose();
     }
 
-    mxAllocedDocShRef.Clear();
+    mxAllocedDocShRef.clear();
 }
 
 // Return list of CustomShows (create it, too, if necessary)

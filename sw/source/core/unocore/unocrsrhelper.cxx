@@ -1045,7 +1045,7 @@ void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     SfxObjectShellRef aRef( pDocSh );
 
     pMed->Download();   // if necessary: start the download
-    if( aRef.Is() && 1 < aRef->GetRefCount() )  // Ref still valid?
+    if( aRef.is() && 1 < aRef->GetRefCount() )  // Ref still valid?
     {
         SwReader* pRdr;
         SfxItemSet* pSet =  pMed->GetItemSet();

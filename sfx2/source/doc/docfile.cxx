@@ -3159,7 +3159,7 @@ SfxItemSet* SfxMedium::GetItemSet() const
 
 SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
 {
-    if( !pImpl->xAttributes.Is() )
+    if( !pImpl->xAttributes.is() )
     {
         pImpl->xAttributes = SvKeyValueIteratorRef( new SvKeyValueIterator );
 

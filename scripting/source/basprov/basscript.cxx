@@ -162,7 +162,7 @@ namespace basprov
 
         Any aReturn;
 
-        if ( m_xMethod.Is() )
+        if ( m_xMethod.is() )
         {
             // check if compiled
             SbModule* pModule = static_cast< SbModule* >( m_xMethod->GetParent() );
@@ -212,7 +212,7 @@ namespace basprov
                         xSbxVar->SetFlag( SbxFlagBits::Fixed );
                  }
             }
-            if ( xSbxParams.Is() )
+            if ( xSbxParams.is() )
                 m_xMethod->SetParameters( xSbxParams.get() );
 
             // call method
@@ -242,7 +242,7 @@ namespace basprov
             }
 
             // get output parameters
-            if ( xSbxParams.Is() )
+            if ( xSbxParams.is() )
             {
                 SbxInfo* pInfo_ = m_xMethod->GetInfo();
                 if ( pInfo_ )

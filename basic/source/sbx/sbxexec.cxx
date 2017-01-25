@@ -90,7 +90,7 @@ static SbxVariableRef QualifiedName
     {
         // Read in the element
         refVar = Element( pObj, pGbl, &p, t );
-        while( refVar.Is() && (*p == '.' || *p == '!') )
+        while( refVar.is() && (*p == '.' || *p == '!') )
         {
             // It follows still an objectelement. The current element
             // had to be a SBX-Object or had to deliver such an object!
@@ -98,7 +98,7 @@ static SbxVariableRef QualifiedName
             if( !pObj )
                 // Then it had to deliver an object
                 pObj = dynamic_cast<SbxObject*>( refVar->GetObject() );
-            refVar.Clear();
+            refVar.clear();
             if( !pObj )
                 break;
             p++;
@@ -129,7 +129,7 @@ static SbxVariableRef Operand
         sal_uInt16 nLen;
         if( !refVar->Scan( OUString( p ), &nLen ) )
         {
-            refVar.Clear();
+            refVar.clear();
         }
         else
         {
@@ -176,11 +176,11 @@ static SbxVariableRef MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
     const sal_Unicode* p = *ppBuf;
     SbxVariableRef refVar( Operand( pObj, pGbl, &p, false ) );
     p = SkipWhitespace( p );
-    while( refVar.Is() && ( *p == '*' || *p == '/' ) )
+    while( refVar.is() && ( *p == '*' || *p == '/' ) )
     {
         sal_Unicode cOp = *p++;
         SbxVariableRef refVar2( Operand( pObj, pGbl, &p, false ) );
-        if( refVar2.Is() )
+        if( refVar2.is() )
         {
             // temporary variable!
             SbxVariable* pVar = refVar.get();
@@ -193,7 +193,7 @@ static SbxVariableRef MulDiv( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
         }
         else
         {
-            refVar.Clear();
+            refVar.clear();
             break;
         }
     }
@@ -206,11 +206,11 @@ static SbxVariableRef PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Uni
     const sal_Unicode* p = *ppBuf;
     SbxVariableRef refVar( MulDiv( pObj, pGbl, &p ) );
     p = SkipWhitespace( p );
-    while( refVar.Is() && ( *p == '+' || *p == '-' ) )
+    while( refVar.is() && ( *p == '+' || *p == '-' ) )
     {
         sal_Unicode cOp = *p++;
         SbxVariableRef refVar2( MulDiv( pObj, pGbl, &p ) );
-        if( refVar2.Is() )
+        if( refVar2.is() )
         {
             // temporaere Variable!
             SbxVariable* pVar = refVar.get();
@@ -223,7 +223,7 @@ static SbxVariableRef PlusMinus( SbxObject* pObj, SbxObject* pGbl, const sal_Uni
         }
         else
         {
-            refVar.Clear();
+            refVar.clear();
             break;
         }
     }
@@ -236,7 +236,7 @@ static SbxVariableRef Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
     const sal_Unicode* p = *ppBuf;
     SbxVariableRef refVar( Operand( pObj, pGbl, &p, true ) );
     p = SkipWhitespace( p );
-    if( refVar.Is() )
+    if( refVar.is() )
     {
         if( *p == '=' )
         {
@@ -244,13 +244,13 @@ static SbxVariableRef Assign( SbxObject* pObj, SbxObject* pGbl, const sal_Unicod
             if( refVar->GetClass() != SbxClassType::Property )
             {
                 SbxBase::SetError( ERRCODE_SBX_BAD_ACTION );
-                refVar.Clear();
+                refVar.clear();
             }
             else
             {
                 p++;
                 SbxVariableRef refVar2( PlusMinus( pObj, pGbl, &p ) );
-                if( refVar2.Is() )
+                if( refVar2.is() )
                 {
                     SbxVariable* pVar = refVar.get();
                     SbxVariable* pVar2 = refVar2.get();
@@ -287,7 +287,7 @@ static SbxVariableRef Element
         }
         refVar = pObj->Find( aSym, t );
         pObj->SetFlags( nOld );
-        if( refVar.Is() )
+        if( refVar.is() )
         {
             refVar->SetParameters( nullptr );
             // Follow still parameter?
@@ -303,10 +303,10 @@ static SbxVariableRef Element
                 while( *p && *p != ')' && *p != ']' )
                 {
                     SbxVariableRef refArg = PlusMinus( pGbl, pGbl, &p );
-                    if( !refArg.Is() )
+                    if( !refArg.is() )
                     {
                         // Error during the parsing
-                        refVar.Clear(); break;
+                        refVar.clear(); break;
                     }
                     else
                     {
@@ -321,7 +321,7 @@ static SbxVariableRef Element
                 }
                 if( *p == ')' )
                     p++;
-                if( refVar.Is() )
+                if( refVar.is() )
                     refVar->SetParameters( refPar.get() );
             }
         }
@@ -350,7 +350,7 @@ SbxVariable* SbxObject::Execute( const OUString& rTxt )
             SetError( ERRCODE_SBX_SYNTAX ); break;
         }
         pVar = Assign( this, this, &p );
-        if( !pVar.Is() )
+        if( !pVar.is() )
         {
             break;
         }

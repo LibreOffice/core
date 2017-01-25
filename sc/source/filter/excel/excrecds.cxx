@@ -519,7 +519,7 @@ void XclExpSheetProtection::SaveXml( XclExpXmlStream& rStrm )
                         XML_hashValue, (*it).maHashValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maHashValue).getStr(),
                         XML_saltValue, (*it).maSaltValue.isEmpty() ? nullptr : XclXmlUtils::ToOString( (*it).maSaltValue).getStr(),
                         XML_spinCount, (*it).mnSpinCount ? OString::number( (*it).mnSpinCount).getStr() : nullptr,
-                        XML_sqref, (*it).maRangeList.Is() ? XclXmlUtils::ToOString( *(*it).maRangeList).getStr() : nullptr,
+                        XML_sqref, (*it).maRangeList.is() ? XclXmlUtils::ToOString( *(*it).maRangeList).getStr() : nullptr,
                         FSEND);
             }
             rWorksheet->endElement( XML_protectedRanges);

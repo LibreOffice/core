@@ -1701,7 +1701,7 @@ WatchItem* WatchItem::GetRootItem()
     WatchItem* pItem = mpArrayParentItem;
     while( pItem )
     {
-        if( pItem->mpArray.Is() )
+        if( pItem->mpArray.is() )
             break;
         pItem = pItem->mpArrayParentItem;
     }
@@ -2261,7 +2261,7 @@ bool WatchTreeListBox::EditingEntry( SvTreeListEntry* pEntry, Selection& )
         if (IsSbxVariable(pSbx) || bArrayElement)
         {
             // Accept no objects and only end nodes of arrays for editing
-            if( !pItem->mpObject.Is() && ( !pItem->mpArray.Is() || pItem->nDimLevel == pItem->nDimCount ) )
+            if( !pItem->mpObject.is() && ( !pItem->mpArray.is() || pItem->nDimLevel == pItem->nDimCount ) )
             {
                 aEditingRes = SvHeaderTabListBox::GetEntryText( pEntry, ITEM_ID_VALUE-1 );
                 aEditingRes = comphelper::string::strip(aEditingRes, ' ');
@@ -2483,7 +2483,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 {
                     if (SbxObject* pObj = dynamic_cast<SbxObject*>(pVar->GetObject()))
                     {
-                        if ( pItem->mpObject.Is() && !pItem->maMemberList.empty() )
+                        if ( pItem->mpObject.is() && !pItem->maMemberList.empty() )
                         {
                             bool bObjChanged = false; // Check if member list has changed
                             SbxArray* pProps = pObj->GetProperties();
@@ -2511,7 +2511,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                     else
                     {
                         aWatchStr = "Null";
-                        if( pItem->mpObject.Is() )
+                        if( pItem->mpObject.is() )
                         {
                             bCollapse = true;
                             pItem->clearWatchItem();
@@ -2522,7 +2522,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
                 }
                 else
                 {
-                    if( pItem->mpObject.Is() )
+                    if( pItem->mpObject.is() )
                     {
                         bCollapse = true;
                         pItem->clearWatchItem();
@@ -2564,7 +2564,7 @@ void WatchTreeListBox::UpdateWatches( bool bBasicStopped )
         }
         else if( bBasicStopped )
         {
-            if( pItem->mpObject.Is() || pItem->mpArray.Is() )
+            if( pItem->mpObject.is() || pItem->mpArray.is() )
             {
                 implCollapseModifiedObjectEntry( pEntry, this );
                 pItem->mpObject = nullptr;

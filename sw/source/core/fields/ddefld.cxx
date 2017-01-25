@@ -283,7 +283,7 @@ void SwDDEFieldType::SetDoc( SwDoc* pNewDoc )
     if( pNewDoc == pDoc )
         return;
 
-    if( pDoc && refLink.Is() )
+    if( pDoc && refLink.is() )
     {
         OSL_ENSURE( !nRefCnt, "How do we get the references?" );
         pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );

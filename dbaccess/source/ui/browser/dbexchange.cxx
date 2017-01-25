@@ -139,7 +139,7 @@ namespace dbaui
         if (nUserObjectId == SotClipboardFormatId::RTF || nUserObjectId == SotClipboardFormatId::HTML )
         {
             ODatabaseImportExport* pExport = static_cast<ODatabaseImportExport*>(pUserObject);
-            if ( pExport && rxOStm.Is() )
+            if ( pExport && rxOStm.is() )
             {
                 pExport->setStream(rxOStm.get());
                 return pExport->Write();

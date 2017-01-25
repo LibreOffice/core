@@ -1601,8 +1601,8 @@ bool XclExpChangeTrack::WriteUserNamesStream()
 {
     bool bRet = false;
     tools::SvRef<SotStorageStream> xSvStrm = OpenStream( EXC_STREAM_USERNAMES );
-    OSL_ENSURE( xSvStrm.Is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
-    if( xSvStrm.Is() )
+    OSL_ENSURE( xSvStrm.is(), "XclExpChangeTrack::WriteUserNamesStream - no stream" );
+    if( xSvStrm.is() )
     {
         XclExpStream aXclStrm( *xSvStrm, GetRoot() );
         XclExpChTr0x0191().Save( aXclStrm );
@@ -1623,8 +1623,8 @@ void XclExpChangeTrack::Write()
     if( WriteUserNamesStream() )
     {
         tools::SvRef<SotStorageStream> xSvStrm = OpenStream( EXC_STREAM_REVLOG );
-        OSL_ENSURE( xSvStrm.Is(), "XclExpChangeTrack::Write - no stream" );
-        if( xSvStrm.Is() )
+        OSL_ENSURE( xSvStrm.is(), "XclExpChangeTrack::Write - no stream" );
+        if( xSvStrm.is() )
         {
             XclExpStream aXclStrm( *xSvStrm, GetRoot(), EXC_MAXRECSIZE_BIFF8 + 8 );
 

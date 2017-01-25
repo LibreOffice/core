@@ -535,7 +535,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
 
     WriterRef xWriter;
     SwReaderWriter::GetWriter( pFlt->GetUserData(), rMedium.GetBaseURL( true ), xWriter );
-    if( !xWriter.Is() )
+    if( !xWriter.is() )
     {   // Filter not available
         ScopedVclPtrInstance<InfoBox>(nullptr, SW_RESSTR(STR_DLLNOTFOUND))->Execute();
         return false;

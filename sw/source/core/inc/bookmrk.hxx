@@ -142,7 +142,7 @@ namespace sw {
             const SwServerObject* GetRefObject() const { return m_aRefObj.get(); }
             SwServerObject* GetRefObject() { return m_aRefObj.get(); }
 
-            bool IsServer() const { return m_aRefObj.Is(); }
+            bool IsServer() const { return m_aRefObj.is(); }
 
             void SetRefObject( SwServerObject* pObj );
 

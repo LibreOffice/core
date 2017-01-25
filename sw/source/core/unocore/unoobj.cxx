@@ -174,7 +174,7 @@ void SwUnoCursorHelper::GetTextFromPam(SwPaM & rPam, OUString & rBuffer)
     WriterRef xWrt;
     // TODO/MBA: looks like a BaseURL doesn't make sense here
     SwReaderWriter::GetWriter( FILTER_TEXT_DLG, OUString(), xWrt );
-    if( xWrt.Is() )
+    if( xWrt.is() )
     {
         SwWriter aWriter( aStream, rPam );
         xWrt->bASCII_NoLastLineEnd = true;

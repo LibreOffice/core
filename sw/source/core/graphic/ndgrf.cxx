@@ -148,7 +148,7 @@ bool SwGrfNode::ReRead(
             "GraphicNode without a name, Graphic or GraphicObject" );
 
     // with name
-    if( refLink.Is() )
+    if( refLink.is() )
     {
         OSL_ENSURE( !bInSwapIn, "ReRead: I am still in SwapIn" );
 
@@ -179,7 +179,7 @@ bool SwGrfNode::ReRead(
         else // no name anymore, so remove link
         {
             GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
-            refLink.Clear();
+            refLink.clear();
         }
 
         if( pGraphic )
@@ -202,7 +202,7 @@ bool SwGrfNode::ReRead(
             Graphic aGrf; aGrf.SetDefaultType();
             maGrfObj.SetGraphic( aGrf, rGrfName );
 
-            if( refLink.Is() )
+            if( refLink.is() )
             {
                 if( getLayoutFrame( GetDoc()->getIDocumentLayoutAccess().GetCurrentLayout() ) )
                 {
@@ -296,7 +296,7 @@ SwGrfNode::~SwGrfNode()
     mpThreadConsumer.reset();
 
     SwDoc* pDoc = GetDoc();
-    if( refLink.Is() )
+    if( refLink.is() )
     {
         OSL_ENSURE( !bInSwapIn, "DTOR: I am still in SwapIn" );
         pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
@@ -608,7 +608,7 @@ bool SwGrfNode::SwapOut()
         maGrfObj.GetType() != GraphicType::NONE &&
         !maGrfObj.IsSwappedOut() && !bInSwapIn )
     {
-        if( refLink.Is() )
+        if( refLink.is() )
         {
             // written graphics and links are removed here
             return maGrfObj.SwapOut( GRFMGR_AUTOSWAPSTREAM_LINK );
@@ -625,7 +625,7 @@ bool SwGrfNode::SwapOut()
 bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
 {
     bool bRet = false;
-    if( refLink.Is() && refLink->GetLinkManager() )
+    if( refLink.is() && refLink->GetLinkManager() )
     {
         sal_uInt16 nType = refLink->GetObjType();
         if( OBJECT_CLIENT_GRF == nType )
@@ -656,7 +656,7 @@ bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
  */
 bool SwGrfNode::SavePersistentData()
 {
-    if( refLink.Is() )
+    if( refLink.is() )
     {
         OSL_ENSURE( !bInSwapIn, "SavePersistentData: I am still in SwapIn" );
         GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
@@ -684,7 +684,7 @@ bool SwGrfNode::SavePersistentData()
 
 bool SwGrfNode::RestorePersistentData()
 {
-    if( refLink.Is() )
+    if( refLink.is() )
     {
         IDocumentLinksAdministration& rIDLA = getIDocumentLinksAdministration();
         refLink->SetVisible( rIDLA.IsVisibleLinks() );
@@ -729,7 +729,7 @@ void SwGrfNode::InsertLink( const OUString& rGrfName, const OUString& rFltName )
 
 void SwGrfNode::ReleaseLink()
 {
-    if( refLink.Is() )
+    if( refLink.is() )
     {
         const OUString aFileName(maGrfObj.GetLink());
         const Graphic aLocalGraphic(maGrfObj.GetGraphic());
@@ -743,7 +743,7 @@ void SwGrfNode::ReleaseLink()
         }
 
         getIDocumentLinksAdministration().GetLinkManager().Remove( refLink.get() );
-        refLink.Clear();
+        refLink.clear();
         maGrfObj.SetLink();
 
         // #i15508# added extra processing after getting rid of the link. Use whatever is
@@ -962,7 +962,7 @@ IMPL_LINK( SwGrfNode, SwapGraphic, const GraphicObject*, pGrfObj, SvStream* )
     // a DataChanged call lead to a paint of the graphic.
     if( pGrfObj->IsInSwapOut() && (IsSelected() || bInSwapIn) )
         pRet = GRFMGR_AUTOSWAPSTREAM_NONE;
-    else if( refLink.Is() )
+    else if( refLink.is() )
     {
         if( pGrfObj->IsInSwapIn() )
         {

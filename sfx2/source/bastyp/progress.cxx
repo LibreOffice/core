@@ -188,7 +188,7 @@ void SfxProgress::Stop()
 {
     if( pImpl->pActiveProgress )
     {
-        if ( pImpl->xObjSh.Is() && pImpl->xObjSh->GetProgress() == this )
+        if ( pImpl->xObjSh.is() && pImpl->xObjSh->GetProgress() == this )
             pImpl->xObjSh->SetProgress_Impl(nullptr);
         return;
     }
@@ -200,7 +200,7 @@ void SfxProgress::Stop()
         "sfx.bastyp", "SfxProgress: destroyed at " << Get10ThSec() << "ds");
 
     Suspend();
-    if ( pImpl->xObjSh.Is() )
+    if ( pImpl->xObjSh.is() )
         pImpl->xObjSh->SetProgress_Impl(nullptr);
     else
         SfxGetpApp()->SetProgress_Impl(nullptr);
@@ -319,7 +319,7 @@ void SfxProgress::Resume()
 
         if ( pImpl->bWaitMode )
         {
-            if ( pImpl->xObjSh.Is() )
+            if ( pImpl->xObjSh.is() )
             {
                 for ( SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh.get() );
                         pFrame;
@@ -328,7 +328,7 @@ void SfxProgress::Resume()
             }
         }
 
-        if ( pImpl->xObjSh.Is() )
+        if ( pImpl->xObjSh.is() )
         {
             SfxViewFrame *pFrame = SfxViewFrame::GetFirst(pImpl->xObjSh.get());
             if ( pFrame )
@@ -363,7 +363,7 @@ void SfxProgress::Suspend()
             pImpl->xStatusInd->reset();
         }
 
-        if ( pImpl->xObjSh.Is() )
+        if ( pImpl->xObjSh.is() )
         {
             for ( SfxViewFrame *pFrame =
                     SfxViewFrame::GetFirst(pImpl->xObjSh.get());
@@ -371,7 +371,7 @@ void SfxProgress::Suspend()
                     pFrame = SfxViewFrame::GetNext( *pFrame, pImpl->xObjSh.get() ) )
                 pFrame->GetWindow().LeaveWait();
         }
-        if ( pImpl->xObjSh.Is() )
+        if ( pImpl->xObjSh.is() )
         {
             SfxViewFrame *pFrame = SfxViewFrame::GetFirst( pImpl->xObjSh.get() );
             if ( pFrame )

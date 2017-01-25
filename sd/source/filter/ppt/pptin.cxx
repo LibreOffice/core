@@ -2763,7 +2763,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportPPT(const OUString &rURL
         return false;
 
     tools::SvRef<SotStorageStream> xDocStream(xStorage->OpenSotStream( "PowerPoint Document", StreamMode::STD_READ));
-    if ( !xDocStream.Is() )
+    if ( !xDocStream.is() )
         return false;
 
     SdDLL::Init();

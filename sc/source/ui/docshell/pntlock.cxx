@@ -33,7 +33,7 @@ ScPaintLockData::~ScPaintLockData()
 
 void ScPaintLockData::AddRange( const ScRange& rRange, PaintPartFlags nP )
 {
-    if (!xRangeList.Is())
+    if (!xRangeList.is())
         xRangeList = new ScRangeList;
 
     xRangeList->Join( rRange );

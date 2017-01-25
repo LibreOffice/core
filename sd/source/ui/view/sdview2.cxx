@@ -676,7 +676,7 @@ sal_Int8 View::ExecuteDrop( const ExecuteDropEvent& rEvt,
                         {
                             ::tools::SvRef<SotStorageStream> xStm;
 
-                            if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::XFA, xStm ) && xStm.Is() )
+                            if( aDataHelper.GetSotStorageStream( SotClipboardFormatId::XFA, xStm ) && xStm.is() )
                             {
                                 XFillExchangeData aFillData( XFillAttrSetItem( &mrDoc.GetPool() ) );
 

@@ -122,7 +122,7 @@ SwXMLTextBlocks::~SwXMLTextBlocks()
     if ( bInfoChanged )
         WriteInfo();
     ResetBlockMode ();
-    if(xDocShellRef.Is())
+    if(xDocShellRef.is())
         xDocShellRef->DoClose();
     xDocShellRef = nullptr;
     if( pDoc && !pDoc->release() )

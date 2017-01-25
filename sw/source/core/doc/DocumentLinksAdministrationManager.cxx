@@ -416,7 +416,7 @@ bool DocumentLinksAdministrationManager::EmbedAllLinks()
             xLink->Closed();
 
             // if one forgot to remove itself
-            if( xLink.Is() )
+            if( xLink.is() )
                 rLnkMgr.Remove( xLink.get() );
 
             bRet = true;

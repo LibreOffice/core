@@ -711,7 +711,7 @@ void XclImpPivotCache::ReadPivotCacheStream( XclImpStream& rStrm )
     // open pivot cache storage stream
     tools::SvRef<SotStorage> xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
     tools::SvRef<SotStorageStream> xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( mnStrmId ) );
-    if( !xSvStrm.Is() )
+    if( !xSvStrm.is() )
         return;
 
     // create Excel record stream object

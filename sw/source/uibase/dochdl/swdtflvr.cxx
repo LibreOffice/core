@@ -236,10 +236,10 @@ SwTransferable::~SwTransferable()
     SolarMutexGuard aSolarGuard;
 
     // the DDELink still needs the WrtShell!
-    if( m_xDdeLink.Is() )
+    if( m_xDdeLink.is() )
     {
         static_cast<SwTrnsfrDdeLink*>( m_xDdeLink.get() )->Disconnect( true );
-        m_xDdeLink.Clear();
+        m_xDdeLink.clear();
     }
 
     m_pWrtShell = nullptr;
@@ -515,7 +515,7 @@ bool SwTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         switch( nFormat )
         {
         case SotClipboardFormatId::LINK:
-            if( m_xDdeLink.Is() )
+            if( m_xDdeLink.is() )
                 bOK = SetObject( m_xDdeLink.get(), SWTRANSFER_OBJECTTYPE_DDE, rFlavor );
             break;
 
@@ -727,7 +727,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
 
     case SWTRANSFER_OBJECTTYPE_STRING:
         GetASCWriter( aEmptyOUStr, OUString(), xWrt );
-        if( xWrt.Is() )
+        if( xWrt.is() )
         {
             SwAsciiOptions aAOpt;
             aAOpt.SetCharSet( RTL_TEXTENCODING_UTF8 );
@@ -740,7 +740,7 @@ bool SwTransferable::WriteObject( tools::SvRef<SotStorageStream>& xStream,
     default: break;
     }
 
-    if( xWrt.Is() )
+    if( xWrt.is() )
     {
         SwDoc* pDoc = static_cast<SwDoc*>(pObject);
         xWrt->bWriteClipboardDoc = true;
@@ -1705,7 +1705,7 @@ bool SwTransferable::PasteFileContent( TransferableDataHelper& rData,
         nResId = STR_CLPBRD_FORMAT_ERROR;
 
     // Exist a SvMemoryStream? (data in the OUString and xStrm is empty)
-    if( pStream && !xStrm.Is() )
+    if( pStream && !xStrm.is() )
         delete pStream;
 
     if( bMsg && nResId )
@@ -3677,7 +3677,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
     {
         // then we create our "server" and connect to it
         refObj = pDocShell->DdeCreateLinkSource( sName );
-        if( refObj.Is() )
+        if( refObj.is() )
         {
             refObj->AddConnectAdvise( this );
             refObj->AddDataAdvise( this,
@@ -3691,7 +3691,7 @@ SwTrnsfrDdeLink::SwTrnsfrDdeLink( SwTransferable& rTrans, SwWrtShell& rSh )
 
 SwTrnsfrDdeLink::~SwTrnsfrDdeLink()
 {
-    if( refObj.Is() )
+    if( refObj.is() )
         Disconnect( true );
 }
 
@@ -3710,7 +3710,7 @@ SwTrnsfrDdeLink::~SwTrnsfrDdeLink()
 
 bool SwTrnsfrDdeLink::WriteData( SvStream& rStrm )
 {
-    if( !refObj.Is() || !FindDocShell() )
+    if( !refObj.is() || !FindDocShell() )
         return false;
 
     rtl_TextEncoding eEncoding = DDE_TXT_ENCODING;
@@ -3782,7 +3782,7 @@ void SwTrnsfrDdeLink::Disconnect( bool bRemoveDataAdvise )
     bInDisconnect = true;
 
     // destroy the unused bookmark again (without Undo!)?
-    if( bDelBookmrk && refObj.Is() && FindDocShell() )
+    if( bDelBookmrk && refObj.is() && FindDocShell() )
     {
         SwDoc* pDoc = pDocShell->GetDoc();
         ::sw::UndoGuard const undoGuard(pDoc->GetIDocumentUndoRedo());
@@ -3804,7 +3804,7 @@ void SwTrnsfrDdeLink::Disconnect( bool bRemoveDataAdvise )
         bDelBookmrk = false;
     }
 
-    if( refObj.Is() )
+    if( refObj.is() )
     {
         refObj->SetUpdateTimeout( nOldTimeOut );
         refObj->RemoveConnectAdvise( this );
@@ -3814,7 +3814,7 @@ void SwTrnsfrDdeLink::Disconnect( bool bRemoveDataAdvise )
             // (ADVISEMODE_ONLYONCE!!!!)
             // but always in normal Disconnect!
             refObj->RemoveAllDataAdvise( this );
-        refObj.Clear();
+        refObj.clear();
     }
     bInDisconnect = bOldDisconnect;
 }
@@ -3839,11 +3839,11 @@ bool SwTrnsfrDdeLink::FindDocShell()
 
 void SwTrnsfrDdeLink::Closed()
 {
-    if( !bInDisconnect && refObj.Is() )
+    if( !bInDisconnect && refObj.is() )
     {
         refObj->RemoveAllDataAdvise( this );
         refObj->RemoveConnectAdvise( this );
-        refObj.Clear();
+        refObj.clear();
     }
 }
 

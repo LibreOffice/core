@@ -65,10 +65,10 @@ SvFileObject::SvFileObject()
 
 SvFileObject::~SvFileObject()
 {
-    if (xMed.Is())
+    if (xMed.is())
     {
         xMed->SetDoneLink( Link<void*,void>() );
-        xMed.Clear();
+        xMed.clear();
     }
     if (nPostUserEventId)
         Application::RemoveUserEvent(nPostUserEventId);
@@ -110,7 +110,7 @@ bool SvFileObject::GetData( css::uno::Any & rData,
                 if( bGetSynchron )
                 {
                     // call a LoadFile every second time to test the loading
-                    if( !xMed.Is() )
+                    if( !xMed.is() )
                         LoadFile_Impl();
 
                     if( !bInCallDownload )
@@ -124,8 +124,8 @@ bool SvFileObject::GetData( css::uno::Any & rData,
                     }
                 }
 
-                if( !bWaitForData && ( xMed.Is() ||  // was loaded as URL
-                      ( bSynchron && LoadFile_Impl() && xMed.Is() ) ) )
+                if( !bWaitForData && ( xMed.is() ||  // was loaded as URL
+                      ( bSynchron && LoadFile_Impl() && xMed.is() ) ) )
                 {
                     // If it was loaded from the Internet, do not retry
                     if( !bGetSynchron )
@@ -133,9 +133,9 @@ bool SvFileObject::GetData( css::uno::Any & rData,
                     bLoadError = !GetGraphic_Impl( aGrf, xMed->GetInStream() );
                 }
                 else if( !LoadFile_Impl() ||
-                        !GetGraphic_Impl( aGrf, xMed.Is() ? xMed->GetInStream() : nullptr ))
+                        !GetGraphic_Impl( aGrf, xMed.is() ? xMed->GetInStream() : nullptr ))
                 {
-                    if( !xMed.Is() )
+                    if( !xMed.is() )
                         break;
                     aGrf.SetDefaultType();
                 }
@@ -181,9 +181,9 @@ bool SvFileObject::GetData( css::uno::Any & rData,
                 bNativFormat = bOldNativFormat;
 
                 // Everything ready?
-                if( xMed.Is() && !bSynchron && bClearMedium )
+                if( xMed.is() && !bSynchron && bClearMedium )
                 {
-                    xMed.Clear();
+                    xMed.clear();
                     bClearMedium = false;
                 }
             }
@@ -208,7 +208,7 @@ bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
     if( OBJECT_CLIENT_GRF == pLink->GetObjType() )
     {
         SfxObjectShellRef pShell = pLink->GetLinkManager()->GetPersist();
-        if( pShell.Is() )
+        if( pShell.is() )
         {
             if( pShell->IsAbortingImport() )
                 return false;
@@ -248,7 +248,7 @@ bool SvFileObject::Connect( sfx2::SvBaseLink* pLink )
 bool SvFileObject::LoadFile_Impl()
 {
     // We are still at Loading!!
-    if( bWaitForData || !bLoadAgain || xMed.Is() )
+    if( bWaitForData || !bLoadAgain || xMed.is() )
         return false;
 
     // at the moment on the current DocShell
@@ -269,7 +269,7 @@ bool SvFileObject::LoadFile_Impl()
         xMed->Download( LINK( this, SvFileObject, LoadGrfReady_Impl ) );
         bInCallDownload = false;
 
-        bClearMedium = !xMed.Is();
+        bClearMedium = !xMed.is();
         if( bClearMedium )
             xMed = xTmpMed;  // If already finished in Download
         return bDataReady;
@@ -304,7 +304,7 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
         rGrf.SetLink( GfxLink() );
 
     if( !pStream )
-        nRes = xMed.Is() ? GRFILTER_OPENERROR
+        nRes = xMed.is() ? GRFILTER_OPENERROR
                          : rGF.ImportGraphic( rGrf, INetURLObject(sFileNm),
                             nFilter );
     else
@@ -320,7 +320,7 @@ bool SvFileObject::GetGraphic_Impl( Graphic& rGrf, SvStream* pStream )
 
     if( nRes )
     {
-        if( xMed.Is() && !pStream )
+        if( xMed.is() && !pStream )
             SAL_WARN( "sfx.appl", "Graphic error [" << nRes << "] - [" << xMed->GetPhysicalName() << "] URL[" << sFileNm << "]" );
         else
             SAL_WARN( "sfx.appl", "Graphic error [" << nRes << "] - [" << sFileNm << "]" );
@@ -475,13 +475,13 @@ IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl, void*, void )
     if( bDataReady )
     {
         bLoadAgain = true;
-        if( xMed.Is() )
+        if( xMed.is() )
         {
             xMed->SetDoneLink( Link<void*,void>() );
             mxDelMed = xMed;
             nPostUserEventId = Application::PostUserEvent(
                         LINK( this, SvFileObject, DelMedium_Impl ));
-            xMed.Clear();
+            xMed.clear();
         }
     }
 }
@@ -489,7 +489,7 @@ IMPL_LINK_NOARG( SvFileObject, LoadGrfReady_Impl, void*, void )
 IMPL_LINK_NOARG( SvFileObject, DelMedium_Impl, void*, void )
 {
     nPostUserEventId = nullptr;
-    mxDelMed.Clear();
+    mxDelMed.clear();
 }
 
 IMPL_LINK( SvFileObject, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg, void )
@@ -537,7 +537,7 @@ bool SvFileObject::IsDataComplete() const
     {
         SvFileObject* pThis = const_cast<SvFileObject*>(this);
         if( bDataReady ||
-            ( bSynchron && pThis->LoadFile_Impl() && xMed.Is() ) )
+            ( bSynchron && pThis->LoadFile_Impl() && xMed.is() ) )
             bRet = true;
         else
         {

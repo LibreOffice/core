@@ -58,7 +58,7 @@ bool SwServerObject::GetData( uno::Any & rData,
     default: break;
     }
 
-    if( xWrt.Is() )
+    if( xWrt.is() )
     {
         SwPaM* pPam = nullptr;
         switch( eType )

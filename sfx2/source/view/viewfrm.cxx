@@ -189,7 +189,7 @@ void SfxEditDocumentDialog::dispose()
 /// Is this read-only object shell opened via .uno:SignPDF?
 static bool IsSignPDF(SfxObjectShellRef xObjSh)
 {
-    if (!xObjSh.Is())
+    if (!xObjSh.is())
         return false;
 
     SfxMedium* pMedium = xObjSh->GetMedium();
@@ -1000,7 +1000,7 @@ void SfxViewFrame::PopShellAndSubShells_Impl( SfxViewShell& i_rViewShell )
 */
 void SfxViewFrame::ReleaseObjectShell_Impl()
 {
-    DBG_ASSERT( m_xObjSh.Is(), "no SfxObjectShell to release!" );
+    DBG_ASSERT( m_xObjSh.is(), "no SfxObjectShell to release!" );
 
     GetFrame().ReleasingComponent_Impl();
     if ( GetWindow().HasChildPathFocus( true ) )
@@ -1022,7 +1022,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
         OSL_FAIL("No Shell");
 #endif
 
-    if ( m_xObjSh.Is() )
+    if ( m_xObjSh.is() )
     {
         m_pDispatcher->Pop( *m_xObjSh );
         SfxModule* pModule = m_xObjSh->GetModule();
@@ -1037,7 +1037,7 @@ void SfxViewFrame::ReleaseObjectShell_Impl()
         if ( 1 == m_xObjSh->GetOwnerLockCount() && m_pImpl->bObjLocked && m_xObjSh->GetCreateMode() == SfxObjectCreateMode::EMBEDDED )
             m_xObjSh->DoClose();
         SfxObjectShellRef xDyingObjSh = m_xObjSh;
-        m_xObjSh.Clear();
+        m_xObjSh.clear();
         if( ( GetFrameType() & SFXFRAME_HASTITLE ) && m_pImpl->nDocViewNo )
             xDyingObjSh->GetNoSet_Impl().ReleaseIndex(m_pImpl->nDocViewNo-1);
         if ( m_pImpl->bObjLocked )
@@ -1172,7 +1172,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             case SfxEventHintId::OpenDoc:
             case SfxEventHintId::CreateDoc:
             {
-                if ( !m_xObjSh.Is() )
+                if ( !m_xObjSh.is() )
                     break;
 
                 SfxBindings& rBind = GetBindings();
@@ -1276,7 +1276,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
             {
                 UpdateTitle();
 
-                if ( !m_xObjSh.Is() )
+                if ( !m_xObjSh.is() )
                     break;
 
                 // Switch r/o?
@@ -1326,7 +1326,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
                 break;
             case SfxHintId::Dying:
                 // when the Object is being deleted, destroy the view too
-                if ( m_xObjSh.Is() )
+                if ( m_xObjSh.is() )
                     ReleaseObjectShell_Impl();
                 else
                     GetFrame().DoClose();
@@ -1338,7 +1338,7 @@ void SfxViewFrame::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint )
 
 IMPL_LINK_NOARG(SfxViewFrame, SwitchReadOnlyHandler, Button*, void)
 {
-    if (m_xObjSh.Is() && IsSignPDF(m_xObjSh))
+    if (m_xObjSh.is() && IsSignPDF(m_xObjSh))
     {
         ScopedVclPtrInstance<SfxEditDocumentDialog> pDialog(nullptr);
         if (pDialog->Execute() != RET_OK)
@@ -1374,7 +1374,7 @@ void SfxViewFrame::Construct_Impl( SfxObjectShell *pObjSh )
         GetBindings().SetDispatcher( m_pDispatcher );
 
     m_xObjSh = pObjSh;
-    if ( m_xObjSh.Is() && m_xObjSh->IsPreview() )
+    if ( m_xObjSh.is() && m_xObjSh->IsPreview() )
         GetDispatcher()->SetQuietMode_Impl( true );
 
     if ( pObjSh )
@@ -1462,8 +1462,8 @@ SfxViewFrame::~SfxViewFrame()
 void SfxViewFrame::KillDispatcher_Impl()
 {
 
-    SfxModule* pModule = m_xObjSh.Is() ? m_xObjSh->GetModule() : nullptr;
-    if ( m_xObjSh.Is() )
+    SfxModule* pModule = m_xObjSh.is() ? m_xObjSh->GetModule() : nullptr;
+    if ( m_xObjSh.is() )
         ReleaseObjectShell_Impl();
     if ( m_pDispatcher )
     {
@@ -1633,7 +1633,7 @@ void SfxViewFrame::Show()
 {
     // First lock the objectShell so that UpdateTitle() is valid:
     // IsVisible() == true (:#)
-    if ( m_xObjSh.Is() )
+    if ( m_xObjSh.is() )
     {
         m_xObjSh->GetMedium()->GetItemSet()->ClearItem( SID_HIDDEN );
         if ( !m_pImpl->bObjLocked )
@@ -2310,7 +2310,7 @@ bool SfxViewFrame::DoClose()
 
 OUString SfxViewFrame::GetActualPresentationURL_Impl() const
 {
-    if ( m_xObjSh.Is() )
+    if ( m_xObjSh.is() )
         return m_xObjSh->GetMedium()->GetName();
     return OUString();
 }
@@ -2318,7 +2318,7 @@ OUString SfxViewFrame::GetActualPresentationURL_Impl() const
 void SfxViewFrame::SetModalMode( bool bModal )
 {
     m_pImpl->bModal = bModal;
-    if ( m_xObjSh.Is() )
+    if ( m_xObjSh.is() )
     {
         for ( SfxViewFrame* pFrame = SfxViewFrame::GetFirst( m_xObjSh.get() );
               !bModal && pFrame; pFrame = SfxViewFrame::GetNext( *pFrame, m_xObjSh.get() ) )

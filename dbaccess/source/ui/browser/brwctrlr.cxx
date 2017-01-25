@@ -1462,7 +1462,7 @@ FeatureState SbaXDataBrowserController::GetState(sal_uInt16 nId) const
             case ID_BROWSER_CUT:
             {
                 CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
-                if (xCurrentController.Is() && nullptr != dynamic_cast< const EditCellController* >(xCurrentController.get()))
+                if (xCurrentController.is() && nullptr != dynamic_cast< const EditCellController* >(xCurrentController.get()))
                 {
                     Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
                     bool bHasLen = (rEdit.GetSelection().Len() != 0);
@@ -1941,7 +1941,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
         case ID_BROWSER_PASTE:
         {
             CellControllerRef xCurrentController = getBrowserView()->getVclControl()->Controller();
-            if (!xCurrentController.Is())
+            if (!xCurrentController.is())
                 // should be intercepted by GetState. Normally.
                 // Unfortunately ID_BROWSER_PASTE is a 'fast call' slot, which means it may be executed without checking if it is
                 // enabled. This would be really deadly herein if the current cell has no controller ...

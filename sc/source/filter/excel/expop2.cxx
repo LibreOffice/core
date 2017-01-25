@@ -77,7 +77,7 @@ FltError ExportBiff5::Write()
     OSL_ENSURE( pDocShell, "ExportBiff5::Write - no document shell" );
 
     tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
-    OSL_ENSURE( xRootStrg.Is(), "ExportBiff5::Write - no root storage" );
+    OSL_ENSURE( xRootStrg.is(), "ExportBiff5::Write - no root storage" );
 
     VBAExportMode eVbaExportMode = VBAExportMode::NONE;
     if( GetBiff() == EXC_BIFF8 )
@@ -92,7 +92,7 @@ FltError ExportBiff5::Write()
         }
     }
 
-    if ( pDocShell && xRootStrg.Is() && eVbaExportMode == VBAExportMode::FULL_EXPORT)
+    if ( pDocShell && xRootStrg.is() && eVbaExportMode == VBAExportMode::FULL_EXPORT)
     {
         VbaExport aExport(pDocShell->GetModel());
         if (aExport.containsVBAProject())
@@ -101,7 +101,7 @@ FltError ExportBiff5::Write()
             aExport.exportVBA( xVBARoot.get() );
         }
     }
-    else if( pDocShell && xRootStrg.Is() && eVbaExportMode == VBAExportMode::REEXPORT_STREAM )
+    else if( pDocShell && xRootStrg.is() && eVbaExportMode == VBAExportMode::REEXPORT_STREAM )
     {
         SvxImportMSVBasic aBasicImport( *pDocShell, *xRootStrg );
         const ErrCode nErr = aBasicImport.SaveOrDelMSVBAStorage( true, EXC_STORAGE_VBA_PROJECT );
@@ -112,7 +112,7 @@ FltError ExportBiff5::Write()
     pExcDoc->ReadDoc();         // ScDoc -> ExcDoc
     pExcDoc->Write( aOut );     // wechstreamen
 
-    if( pDocShell && xRootStrg.Is() )
+    if( pDocShell && xRootStrg.is() )
     {
         using namespace ::com::sun::star;
         uno::Reference<document::XDocumentPropertiesSupplier> xDPS(

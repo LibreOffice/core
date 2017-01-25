@@ -413,9 +413,9 @@ std::unique_ptr<XclExpOcxControlObj> XclEscherEx::CreateOCXCtrlObj( Reference< X
     if( xCtrlModel.is() )
     {
         // output stream
-        if( !mxCtlsStrm.Is() )
+        if( !mxCtlsStrm.is() )
             mxCtlsStrm = OpenStream( EXC_STREAM_CTLS );
-        if( mxCtlsStrm.Is() )
+        if( mxCtlsStrm.is() )
         {
             OUString aClassName;
             sal_uInt32 nStrmStart = static_cast< sal_uInt32 >( mxCtlsStrm->Tell() );

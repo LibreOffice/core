@@ -246,7 +246,7 @@ IMPL_LINK( SvBaseLink, EndEditHdl, const OUString&, _rNewName, void )
 void SvBaseLink::SetObjType( sal_uInt16 nObjTypeP )
 {
     DBG_ASSERT( nObjType != OBJECT_CLIENT_DDE, "type already set" );
-    DBG_ASSERT( !xObj.Is(), "object exist" );
+    DBG_ASSERT( !xObj.is(), "object exist" );
 
     nObjType = nObjTypeP;
 }
@@ -303,7 +303,7 @@ void SvBaseLink::SetUpdateMode( SfxLinkUpdateMode nMode )
 void SvBaseLink::clearStreamToLoadFrom()
 {
     m_xInputStreamToLoadFrom.clear();
-    if( xObj.Is() )
+    if( xObj.is() )
     {
         xObj->clearStreamToLoadFrom();
     }
@@ -318,7 +318,7 @@ bool SvBaseLink::Update()
 
         GetRealObject_();
         ReleaseRef();
-        if( xObj.Is() )
+        if( xObj.is() )
         {
             xObj->setStreamToLoadFrom(m_xInputStreamToLoadFrom,m_bIsReadOnly);
             OUString sMimeType( SotExchange::GetFormatMimeType(
@@ -331,11 +331,11 @@ bool SvBaseLink::Update()
                 bool bSuccess = eRes == SUCCESS;
                 //for manual Updates there is no need to hold the ServerObject
                 if( OBJECT_CLIENT_DDE == nObjType &&
-                    SfxLinkUpdateMode::ONCALL == GetUpdateMode() && xObj.Is() )
+                    SfxLinkUpdateMode::ONCALL == GetUpdateMode() && xObj.is() )
                     xObj->RemoveAllDataAdvise( this );
                 return bSuccess;
             }
-            if( xObj.Is() )
+            if( xObj.is() )
             {
                 // should be asynchronous?
                 if( xObj->IsPending() )
@@ -365,7 +365,7 @@ void SvBaseLink::GetRealObject_( bool bConnect)
     if( !pImpl->m_pLinkMgr )
         return;
 
-    DBG_ASSERT( !xObj.Is(), "object already exist" );
+    DBG_ASSERT( !xObj.is(), "object already exist" );
 
     if( OBJECT_CLIENT_DDE == nObjType )
     {
@@ -389,7 +389,7 @@ void SvBaseLink::GetRealObject_( bool bConnect)
     else if( (OBJECT_CLIENT_SO & nObjType) )
         xObj = sfx2::LinkManager::CreateObj( this );
 
-    if( bConnect && ( !xObj.Is() || !xObj->Connect( this ) ) )
+    if( bConnect && ( !xObj.is() || !xObj->Connect( this ) ) )
         Disconnect();
 }
 
@@ -427,11 +427,11 @@ void SvBaseLink::SetLinkManager( LinkManager* _pMgr )
 
 void SvBaseLink::Disconnect()
 {
-    if( xObj.Is() )
+    if( xObj.is() )
     {
         xObj->RemoveAllDataAdvise( this );
         xObj->RemoveConnectAdvise( this );
-        xObj.Clear();
+        xObj.clear();
     }
 }
 
@@ -451,9 +451,9 @@ void SvBaseLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndE
 {
     pImpl->m_pParentWin = pParent;
     pImpl->m_aEndEditLink = rEndEditHdl;
-    pImpl->m_bIsConnect = xObj.Is();
+    pImpl->m_bIsConnect = xObj.is();
     if( !pImpl->m_bIsConnect )
-        GetRealObject_( xObj.Is() );
+        GetRealObject_( xObj.is() );
 
     bool bAsync = false;
     Link<const OUString&, void> aLink = LINK( this, SvBaseLink, EndEditHdl );
@@ -463,7 +463,7 @@ void SvBaseLink::Edit( vcl::Window* pParent, const Link<SvBaseLink&,void>& rEndE
         if( pImpl->m_pLinkMgr )
         {
             SvLinkSourceRef ref = sfx2::LinkManager::CreateObj( this );
-            if( ref.Is() )
+            if( ref.is() )
             {
                 ref->Edit( pParent, this, aLink );
                 bAsync = true;
@@ -527,7 +527,7 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
 
 void SvBaseLink::Closed()
 {
-    if( xObj.Is() )
+    if( xObj.is() )
         xObj->RemoveAllDataAdvise( this );
 }
 

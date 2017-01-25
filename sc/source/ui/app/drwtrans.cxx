@@ -236,10 +236,10 @@ ScDrawTransferObj::~ScDrawTransferObj()
     }
 
     aOleData = TransferableDataHelper();        // clear before releasing the mutex
-    aDocShellRef.Clear();
+    aDocShellRef.clear();
 
     delete pModel;
-    aDrawPersistRef.Clear();                    // after the model
+    aDrawPersistRef.clear();                    // after the model
 
     delete pBookmark;
     delete pDragSourceView;
@@ -715,7 +715,7 @@ void ScDrawTransferObj::CreateOLEData()
 
 void ScDrawTransferObj::InitDocShell()
 {
-    if ( !aDocShellRef.Is() )
+    if ( !aDocShellRef.is() )
     {
         ScDocShell* pDocSh = new ScDocShell;
         aDocShellRef = pDocSh;      // ref must be there before InitNew

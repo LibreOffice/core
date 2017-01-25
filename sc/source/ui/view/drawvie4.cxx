@@ -356,7 +356,7 @@ void ScDrawView::DoCopy()
 
     // update ScGlobal::xDrawClipDocShellRef
     ScDrawLayer::SetGlobalDrawPersist( ScTransferObj::SetDrawClipDoc(!aRanges.empty()) );
-    if (ScGlobal::xDrawClipDocShellRef.Is())
+    if (ScGlobal::xDrawClipDocShellRef.is())
     {
         // Copy data referenced by the chart objects to the draw clip
         // document. We need to do this before GetMarkedObjModel() below.
@@ -382,7 +382,7 @@ void ScDrawView::DoCopy()
     ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
     uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-    if ( ScGlobal::xDrawClipDocShellRef.Is() )
+    if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
         pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef.get() );    // keep persist for ole objects alive
     }
@@ -418,7 +418,7 @@ uno::Reference<datatransfer::XTransferable> ScDrawView::CopyToTransferable()
     ScDrawTransferObj* pTransferObj = new ScDrawTransferObj( pModel, pDocSh, aObjDesc );
     uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-    if ( ScGlobal::xDrawClipDocShellRef.Is() )
+    if ( ScGlobal::xDrawClipDocShellRef.is() )
     {
         pTransferObj->SetDrawPersist( ScGlobal::xDrawClipDocShellRef.get() );    // keep persist for ole objects alive
     }

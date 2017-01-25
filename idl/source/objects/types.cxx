@@ -39,7 +39,7 @@ SvMetaAttribute::SvMetaAttribute( SvMetaType * pType )
 
 SvMetaType * SvMetaAttribute::GetType() const
 {
-    if( aType.Is() || !GetRef() ) return aType.get();
+    if( aType.is() || !GetRef() ) return aType.get();
     return static_cast<SvMetaAttribute *>(GetRef())->GetType();
 }
 

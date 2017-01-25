@@ -45,11 +45,11 @@ XclImpChangeTrack::XclImpChangeTrack( const XclImpRoot& rRoot, const XclImpStrea
     // "Revision Log" and "User Names" streams when Change Tracking is active but the Revision log
     // remains if Change Tracking is turned off.
     tools::SvRef<SotStorageStream> xUserStrm = OpenStream( EXC_STREAM_USERNAMES );
-    if( !xUserStrm.Is() )
+    if( !xUserStrm.is() )
         return;
 
     xInStrm = OpenStream( EXC_STREAM_REVLOG );
-    if( xInStrm.Is() )
+    if( xInStrm.is() )
     {
         xInStrm->Seek( STREAM_SEEK_TO_END );
         sal_uInt64 const nStreamLen = xInStrm->Tell();

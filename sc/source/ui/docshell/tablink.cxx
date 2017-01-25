@@ -534,7 +534,7 @@ ScDocumentLoader::ScDocumentLoader( const OUString& rFileName,
 
 ScDocumentLoader::~ScDocumentLoader()
 {
-    if ( aRef.Is() )
+    if ( aRef.is() )
         aRef->DoClose();
     else if ( pMedium )
         delete pMedium;
@@ -542,14 +542,14 @@ ScDocumentLoader::~ScDocumentLoader()
 
 void ScDocumentLoader::ReleaseDocRef()
 {
-    if ( aRef.Is() )
+    if ( aRef.is() )
     {
         //  release reference without calling DoClose - caller must
         //  have another reference to the doc and call DoClose later
 
         pDocShell = nullptr;
         pMedium = nullptr;
-        aRef.Clear();
+        aRef.clear();
     }
 }
 

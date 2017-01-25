@@ -72,7 +72,7 @@ LinkManager::~LinkManager()
 {
     for(tools::SvRef<SvBaseLink> & rTmp : aLinkTbl)
     {
-        if( rTmp.Is() )
+        if( rTmp.is() )
         {
             rTmp->Disconnect();
             rTmp->SetLinkManager( nullptr );
@@ -110,12 +110,12 @@ void LinkManager::Remove( SvBaseLink *pLink )
         {
             rTmp->Disconnect();
             rTmp->SetLinkManager( nullptr );
-            rTmp.Clear();
+            rTmp.clear();
             bFound = true;
         }
 
         // Remove empty ones if they exist
-        if( !rTmp.Is() )
+        if( !rTmp.is() )
         {
             aLinkTbl.erase( aLinkTbl.begin() + n );
             if( bFound )
@@ -136,7 +136,7 @@ void LinkManager::Remove( size_t nPos, size_t nCnt )
         for( size_t n = nPos; n < nPos + nCnt; ++n)
         {
             tools::SvRef<SvBaseLink>& rTmp = aLinkTbl[ n ];
-            if( rTmp.Is() )
+            if( rTmp.is() )
             {
                 rTmp->Disconnect();
                 rTmp->SetLinkManager( nullptr );
@@ -151,7 +151,7 @@ bool LinkManager::Insert( SvBaseLink* pLink )
     for( size_t n = 0; n < aLinkTbl.size(); ++n )
     {
         tools::SvRef<SvBaseLink>& rTmp = aLinkTbl[ n ];
-        if( !rTmp.Is() )
+        if( !rTmp.is() )
         {
             aLinkTbl.erase( aLinkTbl.begin() + n-- );
         }
@@ -279,7 +279,7 @@ void LinkManager::UpdateAllLinks(
     for( size_t n = 0; n < aLinkTbl.size(); ++n )
     {
         tools::SvRef<SvBaseLink>& rLink = aLinkTbl[ n ];
-        if( !rLink.Is() )
+        if( !rLink.is() )
         {
             Remove( n-- );
             continue;

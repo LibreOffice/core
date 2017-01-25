@@ -3395,7 +3395,7 @@ void ScXMLExport::ExportShape(const uno::Reference < drawing::XShape >& xShape, 
                             if (pListener)
                             {
                                 const ScRangeListRef& rRangeList = pListener->GetRangeList();
-                                if ( rRangeList.Is() )
+                                if ( rRangeList.is() )
                                 {
                                     ScRangeStringConverter::GetStringFromRangeList( sRanges, rRangeList.get(), pDoc, FormulaGrammar::CONV_OOO );
                                     if ( !sRanges.isEmpty() )

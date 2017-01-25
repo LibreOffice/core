@@ -244,7 +244,7 @@ bool OTableGrantControl::SaveModified()
         bErg = false;
         ::dbaui::showError(::dbtools::SQLExceptionInfo(e),GetParent(),m_xContext);
     }
-    if(bErg && Controller().Is())
+    if(bErg && Controller().is())
         Controller()->ClearModified();
     if(!bErg)
         UpdateTables();

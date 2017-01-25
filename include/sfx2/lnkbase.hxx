@@ -103,7 +103,7 @@ protected:
 
     SvLinkSource*   GetRealObject()
                     {
-                        if( !xObj.Is() )
+                        if( !xObj.is() )
                             GetRealObject_();
                         return xObj.get();
                     }

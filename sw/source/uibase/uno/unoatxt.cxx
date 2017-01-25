@@ -713,7 +713,7 @@ SwXAutoTextEntry::~SwXAutoTextEntry()
 
 void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
 {
-    if ( xDocSh.Is() )
+    if ( xDocSh.is() )
     {
         if ( xDocSh->GetDoc()->getIDocumentState().IsModified () )
             xDocSh->Save();
@@ -724,7 +724,7 @@ void SwXAutoTextEntry::implFlushDocument( bool _bCloseDoc )
             EndListening( *xDocSh );
 
             xDocSh->DoClose();
-            xDocSh.Clear();
+            xDocSh.clear();
         }
     }
 }
@@ -740,7 +740,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
                 implFlushDocument();
                 mxBodyText.clear();
                 EndListening( *xDocSh );
-                xDocSh.Clear();
+                xDocSh.clear();
             }
         }
         else
@@ -752,7 +752,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
                 // stop listening at the docu
                 EndListening( *xDocSh );
                 // and release our reference
-                xDocSh.Clear();
+                xDocSh.clear();
             }
         }
     }
@@ -763,7 +763,7 @@ void SwXAutoTextEntry::GetBodyText ()
     SolarMutexGuard aGuard;
 
     xDocSh = pGlossaries->EditGroupDoc ( sGroupName, sEntryName, false );
-    OSL_ENSURE( xDocSh.Is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
+    OSL_ENSURE( xDocSh.is(), "SwXAutoTextEntry::GetBodyText: unexpected: no doc returned by EditGroupDoc!" );
 
     // start listening at the document
     StartListening( *xDocSh );

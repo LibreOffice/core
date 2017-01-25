@@ -24,7 +24,7 @@ namespace utl
 
 sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
 {
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     if (nBytesToRead < 0)
@@ -61,7 +61,7 @@ sal_Int64 SAL_CALL OInputStreamHelper::getPosition(  )
 
 sal_Int64 SAL_CALL OInputStreamHelper::getLength(  )
 {
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         return 0;
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -80,7 +80,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::readSomeBytes(css::uno::Sequence< sal_Int
 void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     if (nBytesToSkip < 0)
@@ -92,7 +92,7 @@ void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
 sal_Int32 SAL_CALL OInputStreamHelper::available()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     return m_nAvailable;
@@ -101,7 +101,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::available()
 void SAL_CALL OInputStreamHelper::closeInput()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     m_xLockBytes = nullptr;

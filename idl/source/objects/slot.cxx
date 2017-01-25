@@ -105,12 +105,12 @@ OString SvMetaSlot::GetMangleName() const
 /** reference disbandment **/
 SvMetaType * SvMetaSlot::GetSlotType() const
 {
-    if( aSlotType.Is() || !GetRef() ) return aSlotType.get();
+    if( aSlotType.is() || !GetRef() ) return aSlotType.get();
     return static_cast<SvMetaSlot *>(GetRef())->GetSlotType();
 }
 SvMetaAttribute * SvMetaSlot::GetMethod() const
 {
-    if( aMethod.Is() || !GetRef() ) return aMethod.get();
+    if( aMethod.is() || !GetRef() ) return aMethod.get();
     return static_cast<SvMetaSlot *>(GetRef())->GetMethod();
 }
 const OString& SvMetaSlot::GetGroupId() const
@@ -272,7 +272,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
 
     if( !bOk )
     {
-        if( !aSlotType.Is() )
+        if( !aSlotType.is() )
         {
             sal_uInt32 nTokPos = rInStm.Tell();
             SvToken& rTok = rInStm.GetToken_Next();
@@ -281,7 +281,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                 if( rInStm.ReadIf( '=' ) )
                 {
                     aSlotType = rBase.ReadKnownType( rInStm );
-                    if( !aSlotType.Is() )
+                    if( !aSlotType.is() )
                         throw SvParseException( rInStm, "SlotType with unknown item type" );
                     if( !aSlotType->IsItem() )
                         throw SvParseException( rInStm, "the SlotType is not a item" );
@@ -291,7 +291,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
             rInStm.Seek( nTokPos );
 
         }
-        if( !aMethod.Is() )
+        if( !aMethod.is() )
         {
             SvToken& rTok = rInStm.GetToken();
             if( rTok.IsIdentifier() )
@@ -308,7 +308,7 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
                     }
                     rInStm.Seek( nTokPos );
                 }
-                aMethod.Clear();
+                aMethod.clear();
             }
         }
     }

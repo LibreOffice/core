@@ -164,7 +164,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
                 }
 
                 xDocShRef->DoClose();
-                xDocShRef.Clear();
+                xDocShRef.clear();
             }
             else
             {
@@ -298,7 +298,7 @@ bool ScViewFunc::PasteDataFormat( SotClipboardFormatId nFormatId,
 
             OUString aStr;
             tools::SvRef<SotStorageStream> xStream;
-            if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.Is() )
+            if ( aDataHelper.GetSotStorageStream( nFormatId, xStream ) && xStream.is() )
             {
                 if (nFormatId == SotClipboardFormatId::HTML)
                 {

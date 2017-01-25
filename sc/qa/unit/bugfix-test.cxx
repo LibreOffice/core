@@ -61,7 +61,7 @@ void ScFiltersTest::testTdf64229()
 
     xDocSh->DoHardRecalc(true);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo64229b.*", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo64229b.*", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     OUString aCSVFileName;
 
@@ -79,7 +79,7 @@ void ScFiltersTest::testTdf36933()
 
     xDocSh->DoHardRecalc(true);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo36933test.*", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo36933test.*", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     OUString aCSVFileName;
 
@@ -97,7 +97,7 @@ void ScFiltersTest::testTdf43700()
 
     xDocSh->DoHardRecalc(true);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo43700test.*", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo43700test.*", xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     OUString aCSVFileName;
 
@@ -115,7 +115,7 @@ void ScFiltersTest::testTdf43534()
 
     xDocSh->DoHardRecalc(true);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo43534test.*", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load fdo43534test.*", xDocSh.is());
     // ScDocument& rDoc = xDocSh->GetDocument();
     OUString aCSVFileName;
 

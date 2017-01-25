@@ -3158,7 +3158,7 @@ void SwMSConvertControls::ExportControl(WW8Export &rWW8Wrt, const SdrUnoObj& rFo
     sStorageName.append('_').append( static_cast<sal_Int64>( nObjId ));
     tools::SvRef<SotStorage> xOleStg = xObjPool->OpenSotStorage(sStorageName.makeStringAndClear());
 
-    if (!xOleStg.Is())
+    if (!xOleStg.is())
         return;
 
     OUString sUName;

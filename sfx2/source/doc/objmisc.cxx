@@ -1527,7 +1527,7 @@ void SfxHeaderAttributes_Impl::Append( const SvKeyValue& rKV )
 
 SvKeyValueIterator* SfxObjectShell::GetHeaderAttributes()
 {
-    if( !pImpl->xHeaderAttributes.Is() )
+    if( !pImpl->xHeaderAttributes.is() )
     {
         DBG_ASSERT( pMedium, "No Medium" );
         pImpl->xHeaderAttributes = new SfxHeaderAttributes_Impl( this );

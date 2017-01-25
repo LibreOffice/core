@@ -1248,7 +1248,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
     if ( IsDropFormatSupported( SotClipboardFormatId::STRING ) ) do
     {   // odd construction, but spares us a lot of (explicit ;) goto's
 
-        if (!GetEmptyRow().Is())
+        if (!GetEmptyRow().is())
             // without an empty row we're not in update mode
             break;
 
@@ -1270,12 +1270,12 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
             // not dropped within a cell (a cell isn't as wide as the column - the are small spaces)
             break;
 
-        if ((IsModified() || (GetCurrentRow().Is() && GetCurrentRow()->IsModified())) && (GetCurrentPos() != nRow))
+        if ((IsModified() || (GetCurrentRow().is() && GetCurrentRow()->IsModified())) && (GetCurrentPos() != nRow))
             // there is a current and modified row or cell and he text is to be dropped into another one
             break;
 
         CellControllerRef xCurrentController = Controller();
-        if (xCurrentController.Is() && xCurrentController->IsModified() && ((nRow != GetCurRow()) || (nCol != GetCurColumnId())))
+        if (xCurrentController.is() && xCurrentController->IsModified() && ((nRow != GetCurRow()) || (nCol != GetCurColumnId())))
             // the current controller is modified and the user wants to drop in another cell -> no chance
             // (when leaving the modified cell a error may occur - this is deadly while dragging)
             break;
@@ -1323,7 +1323,7 @@ sal_Int8 SbaGridControl::AcceptDrop( const BrowserAcceptDropEvent& rEvt )
 
     } while (false);
 
-    if(nAction != DND_ACTION_COPY && GetEmptyRow().Is())
+    if(nAction != DND_ACTION_COPY && GetEmptyRow().is())
     {
         const DataFlavorExVector& _rFlavors = GetDataFlavors();
         if(::std::any_of(_rFlavors.begin(),_rFlavors.end(),SbaGridControlPrec()))
@@ -1366,7 +1366,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
             ActivateCell();
 
         CellControllerRef xCurrentController = Controller();
-        if (!xCurrentController.Is() || nullptr == dynamic_cast< const EditCellController* >(xCurrentController.get()))
+        if (!xCurrentController.is() || nullptr == dynamic_cast< const EditCellController* >(xCurrentController.get()))
             return DND_ACTION_NONE;
         Edit& rEdit = static_cast<Edit&>(xCurrentController->GetWindow());
 
@@ -1384,7 +1384,7 @@ sal_Int8 SbaGridControl::ExecuteDrop( const BrowserExecuteDropEvent& rEvt )
         return DND_ACTION_COPY;
     }
 
-    if(GetEmptyRow().Is())
+    if(GetEmptyRow().is())
     {
         const DataFlavorExVector& _rFlavors = GetDataFlavors();
         if( ::std::any_of(_rFlavors.begin(),_rFlavors.end(), SbaGridControlPrec()) )

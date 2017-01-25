@@ -705,7 +705,7 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
         // SfxObjectShellRef is used here ( instead of ...Lock ) since the model is closed below if necessary
         // SfxObjectShellLock would be even dangerous here, since the lifetime control should be done outside in case of success
         const SfxObjectShellRef xDoc = impl_findObjectShell( xModel );
-        ENSURE_OR_THROW( xDoc.Is(), "no SfxObjectShell for the given model" );
+        ENSURE_OR_THROW( xDoc.is(), "no SfxObjectShell for the given model" );
 
         // ensure the ID of the to-be-created view is in the descriptor, if possible
         const sal_Int16 nViewId = impl_determineEffectiveViewId_nothrow( *xDoc, aDescriptor );

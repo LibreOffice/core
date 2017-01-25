@@ -641,7 +641,7 @@ sal_uInt16 SwWW8ImplReader::End_Field()
                                         "OLELinks", embed::ElementModes::WRITE );
                                 tools::SvRef<SotStorage> xObjDst = SotStorage::OpenOLEStorage( xOleStg, sOleId );
 
-                                if ( xObjDst.Is() )
+                                if ( xObjDst.is() )
                                 {
                                     xSrc1->CopyTo( xObjDst.get() );
 

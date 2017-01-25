@@ -144,7 +144,7 @@ bool SdPPTFilter::Export()
             ExportPPTPointer PPTExport = ExportPPT;
 #endif
 
-            if( PPTExport && xStorRef.Is() )
+            if( PPTExport && xStorRef.is() )
             {
                 sal_uInt32          nCnvrtFlags = 0;
                 const SvtFilterOptions& rFilterOptions = SvtFilterOptions::Get();

@@ -125,14 +125,14 @@ SdTransferable::~SdTransferable()
 
     delete mpOLEDataHelper;
 
-    if( maDocShellRef.Is() )
+    if( maDocShellRef.is() )
     {
         SfxObjectShell* pObj = maDocShellRef.get();
         ::sd::DrawDocShell* pDocSh = static_cast< ::sd::DrawDocShell*>(pObj);
         pDocSh->DoClose();
     }
 
-    maDocShellRef.Clear();
+    maDocShellRef.clear();
 
     if( mbOwnDocument )
         delete mpSdDrawDocumentIntern;
@@ -287,10 +287,10 @@ void SdTransferable::CreateData()
         if( mpSourceDoc )
             mpSourceDoc->CreatingDataObj(nullptr);
 
-        if( !maDocShellRef.Is() && mpSdDrawDocumentIntern->GetDocSh() )
+        if( !maDocShellRef.is() && mpSdDrawDocumentIntern->GetDocSh() )
             maDocShellRef = mpSdDrawDocumentIntern->GetDocSh();
 
-        if( !maDocShellRef.Is() )
+        if( !maDocShellRef.is() )
         {
             OSL_FAIL( "SdTransferable::CreateData(), failed to create a model with persist, clipboard operation will fail for OLE objects!" );
             mbOwnDocument = true;
@@ -499,7 +499,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
         {
             SfxObjectShellRef aOldRef( maDocShellRef );
 
-            maDocShellRef.Clear();
+            maDocShellRef.clear();
 
             if( mpSdViewIntern )
             {
@@ -510,7 +510,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
 
                 bOK = SetObject( pDoc, SDTRANSFER_OBJECTTYPE_DRAWMODEL, rFlavor );
 
-                if( maDocShellRef.Is() )
+                if( maDocShellRef.is() )
                 {
                     maDocShellRef->DoClose();
                 }
@@ -569,7 +569,7 @@ bool SdTransferable::GetData( const DataFlavor& rFlavor, const OUString& rDestDo
                 SdrSwapGraphicsMode nOldSwapMode = mpSdDrawDocumentIntern->GetSwapGraphicsMode();
                 mpSdDrawDocumentIntern->SetSwapGraphicsMode( SdrSwapGraphicsMode::PURGE );
 
-                if( !maDocShellRef.Is() )
+                if( !maDocShellRef.is() )
                 {
                     maDocShellRef = new ::sd::DrawDocShell(
                         mpSdDrawDocumentIntern,

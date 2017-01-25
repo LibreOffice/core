@@ -549,7 +549,7 @@ ScDocShellRef ScBootstrapFixture::load( bool bReadWrite,
     {
         xDocShRef->DoClose();
         // load failed.
-        xDocShRef.Clear();
+        xDocShRef.clear();
     }
 
     return xDocShRef;
@@ -649,7 +649,7 @@ ScDocShellRef ScBootstrapFixture::saveAndReload( ScDocShell* pShell, sal_Int32 n
     OUString aFilterType(aFileFormats[nFormat].pTypeName, strlen(aFileFormats[nFormat].pTypeName), RTL_TEXTENCODING_UTF8);
     ScDocShellRef xDocSh = saveAndReload(pShell, aFilterName, OUString(), aFilterType, aFileFormats[nFormat].nFormatType);
 
-    CPPUNIT_ASSERT(xDocSh.Is());
+    CPPUNIT_ASSERT(xDocSh.is());
     return xDocSh;
 }
 
@@ -691,12 +691,12 @@ void ScBootstrapFixture::miscRowHeightsTest( TestParam* aTestValues, unsigned in
         int nImportType =  aTestValues[ index ].nImportType;
         int nExportType =  aTestValues[ index ].nExportType;
         ScDocShellRef xShell = loadDoc( sFileName, nImportType );
-        CPPUNIT_ASSERT(xShell.Is());
+        CPPUNIT_ASSERT(xShell.is());
 
         if ( nExportType != -1 )
             xShell = saveAndReload(&(*xShell), nExportType );
 
-        CPPUNIT_ASSERT(xShell.Is());
+        CPPUNIT_ASSERT(xShell.is());
 
         ScDocument& rDoc = xShell->GetDocument();
 

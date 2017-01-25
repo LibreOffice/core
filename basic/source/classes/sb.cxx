@@ -114,7 +114,7 @@ DocBasicItem::~DocBasicItem()
     try
     {
         stopListening();
-        mxClassModules.Clear(); // release with SolarMutex locked
+        mxClassModules.clear(); // release with SolarMutex locked
     }
     catch (...)
     {
@@ -232,7 +232,7 @@ StarBASIC* lclGetDocBasicForModule( SbModule* pModule )
 
 SbxObject* StarBASIC::getVBAGlobals( )
 {
-    if ( !pVBAGlobals.Is() )
+    if ( !pVBAGlobals.is() )
     {
         Any aThisDoc;
         if ( GetUNOConstant("ThisComponent", aThisDoc) )
@@ -996,7 +996,7 @@ StarBASIC::~StarBASIC()
     }
 
     // #100326 Set Parent NULL in registered listeners
-    if( xUnoListeners.Is() )
+    if( xUnoListeners.is() )
     {
         sal_uInt16 uCount = xUnoListeners->Count();
         for( sal_uInt16 i = 0 ; i < uCount ; i++ )
@@ -1809,7 +1809,7 @@ void StarBASIC::SetGlobalBreakHdl( const Link<StarBASIC*,BasicDebugFlags>& rLink
 
 SbxArrayRef const & StarBASIC::getUnoListeners()
 {
-    if( !xUnoListeners.Is() )
+    if( !xUnoListeners.is() )
     {
         xUnoListeners = new SbxArray();
     }
@@ -2036,7 +2036,7 @@ void BasicCollection::Initialize()
     p->SetFlag( SbxFlagBits::DontStore );
     p = Make( pRemoveStr, SbxClassType::Method, SbxEMPTY );
     p->SetFlag( SbxFlagBits::DontStore );
-    if ( !xAddInfo.Is() )
+    if ( !xAddInfo.is() )
     {
         xAddInfo = new SbxInfo;
         xAddInfo->AddParam(  "Item", SbxVARIANT );
@@ -2044,7 +2044,7 @@ void BasicCollection::Initialize()
         xAddInfo->AddParam(  "Before", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
         xAddInfo->AddParam(  "After", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional );
     }
-    if ( !xItemInfo.Is() )
+    if ( !xItemInfo.is() )
     {
         xItemInfo = new SbxInfo;
         xItemInfo->AddParam(  "Index", SbxVARIANT, SbxFlagBits::Read | SbxFlagBits::Optional);

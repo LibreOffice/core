@@ -538,11 +538,11 @@ bool ScOpenCLTest::initTestEnv(const OUString& fileName, sal_Int32 nFormat,
         return false;
 
     xDocSh = loadDoc(fileName, nFormat, bReadWrite);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocSh.is());
     enableOpenCL();
 
     xDocShRes = loadDoc(fileName, nFormat, bReadWrite);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load document.", xDocShRes.is());
 
     return true;
 }
@@ -4747,15 +4747,15 @@ void ScOpenCLTest::setUp()
 void ScOpenCLTest::tearDown()
 {
     //close test env
-    if(xDocSh.Is())
+    if(xDocSh.is())
     {
         xDocSh->DoClose();
-        xDocSh.Clear();
+        xDocSh.clear();
     }
-    if(xDocShRes.Is())
+    if(xDocShRes.is())
     {
         xDocShRes->DoClose();
-        xDocShRes.Clear();
+        xDocShRes.clear();
     }
 
     uno::Reference< lang::XComponent >

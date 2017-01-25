@@ -441,7 +441,7 @@ Reference< css::sdb::XColumn >  DbGridColumn::GetCurrentFieldValue() const
 {
     Reference< css::sdb::XColumn >  xField;
     const DbGridRowRef xRow = m_rParent.GetCurrentRow();
-    if (xRow.Is() && xRow->HasField(m_nFieldPos))
+    if (xRow.is() && xRow->HasField(m_nFieldPos))
     {
         xField = xRow->GetField(m_nFieldPos).getColumn();
     }

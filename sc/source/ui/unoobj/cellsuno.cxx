@@ -3034,7 +3034,7 @@ ScMemChart* ScCellRangesBase::CreateMemChart_Impl() const
                 xChartRanges->Append( ScRange( nStartX, nStartY, nTab, nEndX, nEndY, nTab ) );
             }
         }
-        if (!xChartRanges.Is())         //  sonst Ranges direkt uebernehmen
+        if (!xChartRanges.is())         //  sonst Ranges direkt uebernehmen
             xChartRanges = new ScRangeList(aRanges);
         ScChartArray aArr( &pDocShell->GetDocument(), xChartRanges, OUString() );
 
@@ -3113,7 +3113,7 @@ void SAL_CALL ScCellRangesBase::setData( const uno::Sequence< uno::Sequence<doub
     long nRowCount = aData.getLength();
     long nColCount = nRowCount ? aData[0].getLength() : 0;
     ScRangeListRef xChartRanges = GetLimitedChartRanges_Impl( nColCount, nRowCount );
-    if ( pDocShell && xChartRanges.Is() )
+    if ( pDocShell && xChartRanges.is() )
     {
         ScDocument& rDoc = pDocShell->GetDocument();
         ScChartArray aArr( &rDoc, xChartRanges, OUString() );
@@ -3184,7 +3184,7 @@ void SAL_CALL ScCellRangesBase::setRowDescriptions(
     {
         long nRowCount = aRowDescriptions.getLength();
         ScRangeListRef xChartRanges = GetLimitedChartRanges_Impl( 1, nRowCount );
-        if ( pDocShell && xChartRanges.Is() )
+        if ( pDocShell && xChartRanges.is() )
         {
             ScDocument& rDoc = pDocShell->GetDocument();
             ScChartArray aArr( &rDoc, xChartRanges, OUString() );
@@ -3253,7 +3253,7 @@ void SAL_CALL ScCellRangesBase::setColumnDescriptions(
     {
         long nColCount = aColumnDescriptions.getLength();
         ScRangeListRef xChartRanges = GetLimitedChartRanges_Impl( nColCount, 1 );
-        if ( pDocShell && xChartRanges.Is() )
+        if ( pDocShell && xChartRanges.is() )
         {
             ScDocument& rDoc = pDocShell->GetDocument();
             ScChartArray aArr( &rDoc, xChartRanges, OUString() );
@@ -9293,7 +9293,7 @@ public:
 
     void                Join( const ScRange& rNewRange );
     const ScRangeList&  GetRanges();
-    void                Clear() { aReturnRanges.Clear(); }  // aJoinedRanges and aCompletedRanges are cleared in GetRanges
+    void                Clear() { aReturnRanges.clear(); }  // aJoinedRanges and aCompletedRanges are cleared in GetRanges
 };
 
 void ScUniqueFormatsEntry::Join( const ScRange& rNewRange )

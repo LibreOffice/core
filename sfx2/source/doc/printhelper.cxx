@@ -121,7 +121,7 @@ Sequence< css::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrintOptions
 
 Sequence< css::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter()
 {
-    if( m_pData->m_pObjectShell.Is() )
+    if( m_pData->m_pObjectShell.is() )
     {
         Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell->GetModel(), UNO_QUERY );
         if ( xPrintable.is() )
@@ -132,14 +132,14 @@ Sequence< css::beans::PropertyValue > SAL_CALL SfxPrintJob_Impl::getPrinter()
 
 Reference< css::view::XPrintable > SAL_CALL SfxPrintJob_Impl::getPrintable()
 {
-    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell.Is() ? m_pData->m_pObjectShell->GetModel() : nullptr, UNO_QUERY );
+    Reference < view::XPrintable > xPrintable( m_pData->m_pObjectShell.is() ? m_pData->m_pObjectShell->GetModel() : nullptr, UNO_QUERY );
     return xPrintable;
 }
 
 void SAL_CALL SfxPrintJob_Impl::cancelJob()
 {
     // FIXME: how to cancel PrintJob via API?!
-    if( m_pData->m_pObjectShell.Is() )
+    if( m_pData->m_pObjectShell.is() )
         m_pData->m_pObjectShell->Broadcast( SfxPrintingHint( SFX_PRINTABLESTATE_CANCELJOB ) );
 }
 
@@ -259,7 +259,7 @@ uno::Sequence< beans::PropertyValue > SAL_CALL SfxPrintHelper::getPrinter()
 
     // search for any view of this document that is currently printing
     const Printer *pPrinter = nullptr;
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get(), false ) : nullptr;
+    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.is() ? SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get(), false ) : nullptr;
     SfxViewFrame* pFirst = pViewFrm;
     while ( pViewFrm && !pPrinter )
     {
@@ -318,7 +318,7 @@ void SfxPrintHelper::impl_setPrinter(const uno::Sequence< beans::PropertyValue >
 
 {
     // Get old Printer
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
+    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get(), false ) : nullptr;
     if ( !pViewFrm )
         return;
@@ -591,7 +591,7 @@ void SAL_CALL SfxPrintHelper::print(const uno::Sequence< beans::PropertyValue >&
     SolarMutexGuard aGuard;
 
     // get view for sfx printing capabilities
-    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.Is() ?
+    SfxViewFrame *pViewFrm = m_pData->m_pObjectShell.is() ?
                                 SfxViewFrame::GetFirst( m_pData->m_pObjectShell.get(), false ) : nullptr;
     if ( !pViewFrm )
         return;

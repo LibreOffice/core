@@ -890,7 +890,7 @@ void XclObjOle::WriteSubRecs( XclExpStream& rStrm )
     sprintf( aBuf, "%08X", static_cast< unsigned int >( nPictureId ) );
     aStorageName += OUString::createFromAscii(aBuf);
     tools::SvRef<SotStorage>    xOleStg = pRootStorage->OpenSotStorage( aStorageName );
-    if( xOleStg.Is() )
+    if( xOleStg.is() )
     {
         uno::Reference < embed::XEmbeddedObject > xObj( static_cast<const SdrOle2Obj&>(rOleObj).GetObjRef() );
         if ( xObj.is() )
@@ -1605,7 +1605,7 @@ void XclExpSheetEnhancedProtection::WriteBody( XclExpStream& rStrm )
     rStrm.WriteZeroBytesToRecord(5);        // reserved1 (1 bytes) and reserved2 (4 bytes)
 
     XclRangeList aRefs;
-    if (maEnhancedProtection.maRangeList.Is())
+    if (maEnhancedProtection.maRangeList.is())
         mrRoot.GetAddressConverter().ConvertRangeList( aRefs, *maEnhancedProtection.maRangeList, false);
     sal_uInt16 nCref = ulimit_cast<sal_uInt16>(aRefs.size());
     rStrm << nCref;                         // cref

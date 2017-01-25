@@ -207,7 +207,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
     if ( m_xAggInv.is() &&  m_xAggInv->hasMethod( aFunctionName ) )
             return m_xAggInv->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
     SbMethodRef pMethod = getMethod( aFunctionName );
-    if ( !pMethod.Is() )
+    if ( !pMethod.is() )
         throw RuntimeException();
     // check number of parameters
     sal_Int32 nParamsCount = aParams.getLength();
@@ -246,7 +246,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
                 xSbxVar->SetFlag( SbxFlagBits::Fixed );
         }
     }
-    if ( xSbxParams.Is() )
+    if ( xSbxParams.is() )
         pMethod->SetParameters( xSbxParams.get() );
 
     // call method
@@ -255,7 +255,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
     pMethod->Call( xReturn.get() );
     Any aReturn;
     // get output parameters
-    if ( xSbxParams.Is() )
+    if ( xSbxParams.is() )
     {
         SbxInfo* pInfo_ = pMethod->GetInfo();
         if ( pInfo_ )
@@ -302,7 +302,7 @@ DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue )
             return m_xAggInv->setValue( aPropertyName, aValue );
 
     SbPropertyRef pProperty = getProperty( aPropertyName );
-    if ( !pProperty.Is() )
+    if ( !pProperty.is() )
        throw UnknownPropertyException();
     unoToSbxValue( pProperty.get(), aValue );
 }
@@ -314,7 +314,7 @@ DocObjectWrapper::getValue( const OUString& aPropertyName )
             return m_xAggInv->getValue( aPropertyName );
 
     SbPropertyRef pProperty = getProperty( aPropertyName );
-    if ( !pProperty.Is() )
+    if ( !pProperty.is() )
        throw UnknownPropertyException();
 
     SbxVariable* pProp = pProperty.get();
@@ -330,7 +330,7 @@ DocObjectWrapper::hasMethod( const OUString& aName )
 {
     if ( m_xAggInv.is() && m_xAggInv->hasMethod( aName ) )
         return true;
-    return getMethod( aName ).Is();
+    return getMethod( aName ).is();
 }
 
 sal_Bool SAL_CALL
@@ -339,7 +339,7 @@ DocObjectWrapper::hasProperty( const OUString& aName )
     bool bRes = false;
     if ( m_xAggInv.is() && m_xAggInv->hasProperty( aName ) )
         bRes = true;
-    else bRes = getProperty( aName ).Is();
+    else bRes = getProperty( aName ).is();
     return bRes;
 }
 
@@ -668,7 +668,7 @@ SbxVariable* SbModule::Find( const OUString& rName, SbxClassType t )
             // Put enum types as objects into module,
             // allows MyEnum.First notation
             SbxArrayRef xArray = pImage->GetEnums();
-            if( xArray.Is() )
+            if( xArray.is() )
             {
                 SbxVariable* pEnumVar = xArray->Find( rName, SbxClassType::DontCare );
                 SbxObject* pEnumObject = dynamic_cast<SbxObject*>( pEnumVar  );
@@ -1286,7 +1286,7 @@ void SbModule::RemoveVars()
     // SbUserform because it could trigger say an initialise event
     // which would cause basic to be re-run in the middle of the init ( and remember RemoveVars is called from compile and we don't want code to run as part of the compile )
     SbxVariableRef p = SbModule::Find( rModuleVariableName, SbxClassType::Property );
-    if( p.Is() )
+    if( p.is() )
         Remove( p.get() );
     }
 }
@@ -2122,7 +2122,7 @@ void SbMethod::Broadcast( SfxHintId nHintId )
         pCst = nullptr;
         SbMethod* pThisCopy = new SbMethod( *this );
         SbMethodRef xHolder = pThisCopy;
-        if( mpPar.Is() )
+        if( mpPar.is() )
         {
             // Enregister this as element 0, but don't reset the parent!
             if( GetType() != SbxVOID ) {
@@ -2563,7 +2563,7 @@ void SbUserFormModule::Load()
 {
     SAL_INFO("basic", "** load() ");
     // forces a load
-    if ( !pDocObject.Is() )
+    if ( !pDocObject.is() )
         InitObject();
 }
 
@@ -2689,7 +2689,7 @@ void SbUserFormModule::InitObject()
 SbxVariable*
 SbUserFormModule::Find( const OUString& rName, SbxClassType t )
 {
-    if ( !pDocObject.Is() && !GetSbData()->bRunInit && GetSbData()->pInst )
+    if ( !pDocObject.is() && !GetSbData()->bRunInit && GetSbData()->pInst )
         InitObject();
     return SbObjModule::Find( rName, t );
 }

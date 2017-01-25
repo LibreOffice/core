@@ -3369,7 +3369,7 @@ void WW8Export::ExportDocument_Impl()
     xDataStrm->SetBufferSize( 0 );
     if( 0 == pDataStrm->Seek( STREAM_SEEK_TO_END ))
     {
-        xDataStrm.Clear();
+        xDataStrm.clear();
         pDataStrm = nullptr;
         GetWriter().GetStorage().Remove(SL::aData);
     }

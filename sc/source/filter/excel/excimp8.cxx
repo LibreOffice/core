@@ -365,7 +365,7 @@ void ImportExcel8::ReadBasic()
     SfxObjectShell* pShell = GetDocShell();
     tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
     const SvtFilterOptions& rFilterOpt = SvtFilterOptions::Get();
-    if( pShell && xRootStrg.Is() ) try
+    if( pShell && xRootStrg.is() ) try
     {
         // #FIXME need to get rid of this, we can also do this from within oox
         // via the "ooo.vba.VBAGlobals" service
@@ -375,7 +375,7 @@ void ImportExcel8::ReadBasic()
         {
             // see if we have the XCB stream
             tools::SvRef<SotStorageStream> xXCB = xRootStrg->OpenSotStream( "XCB", StreamMode::STD_READ );
-            if ( xXCB.Is()|| SVSTREAM_OK == xXCB->GetError() )
+            if ( xXCB.is()|| SVSTREAM_OK == xXCB->GetError() )
             {
                 ScCTBWrapper wrapper;
                 if ( wrapper.Read( *xXCB ) )
@@ -450,7 +450,7 @@ void ImportExcel8::PostDocLoad()
     {
         // BIFF5+ without storage is possible
         tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
-        if( xRootStrg.Is() ) try
+        if( xRootStrg.is() ) try
         {
             uno::Reference< document::XDocumentPropertiesSupplier > xDPS( pShell->GetModel(), uno::UNO_QUERY_THROW );
             uno::Reference< document::XDocumentProperties > xDocProps( xDPS->getDocumentProperties(), uno::UNO_SET_THROW );

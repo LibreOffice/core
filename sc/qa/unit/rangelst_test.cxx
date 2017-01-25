@@ -100,7 +100,7 @@ void Test::setUp()
 
 void Test::tearDown()
 {
-    m_xDocShRef.Clear();
+    m_xDocShRef.clear();
     BootstrapFixture::tearDown();
 }
 

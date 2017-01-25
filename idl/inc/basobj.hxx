@@ -115,7 +115,7 @@ public:
 
     const OString &     GetName() const override
                         {
-                            return ( !aRef.Is()
+                            return ( !aRef.is()
                                     || !SvMetaObject::GetName().isEmpty() )
                                 ? SvMetaObject::GetName()
                                 : aRef->GetName();

@@ -443,7 +443,7 @@ bool ORptFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
         tools::SvRef<SfxMedium> pMedium = new SfxMedium(
                 sFileName, ( StreamMode::READ | StreamMode::NOCREATE ) );
 
-        if( pMedium.Is() )
+        if( pMedium.is() )
         {
             try
             {

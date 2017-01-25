@@ -845,7 +845,7 @@ OUString MacroChooser::GetInfo( SbxVariable* pVar )
 {
     OUString aComment;
     SbxInfoRef xInfo = pVar->GetInfo();
-    if ( xInfo.Is() )
+    if ( xInfo.is() )
         aComment = xInfo->GetComment();
     return aComment;
 }

@@ -1251,7 +1251,7 @@ Sequence< sal_Bool > SAL_CALL FmXGridPeer::queryFieldDataType( const Type& xType
 
         pCol = aColumns[ nModelPos ];
         const DbGridRowRef xRow = pGrid->GetSeekRow();
-        xFieldContent = (xRow.Is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< css::sdb::XColumn > ();
+        xFieldContent = (xRow.is() && xRow->HasField(pCol->GetFieldPos())) ? xRow->GetField(pCol->GetFieldPos()).getColumn() : Reference< css::sdb::XColumn > ();
         if (!xFieldContent.is())
             // can't supply anything without a field content
             // FS - 07.12.99 - 54391
@@ -1291,7 +1291,7 @@ Sequence< Any > SAL_CALL FmXGridPeer::queryFieldData( sal_Int32 nRow, const Type
     // don't use GetCurrentRow as this isn't affected by the above SeekRow
     // FS - 30.09.99 - 68644
     DbGridRowRef xPaintRow = pGrid->GetPaintRow();
-    ENSURE_OR_THROW( xPaintRow.Is(), "invalid paint row" );
+    ENSURE_OR_THROW( xPaintRow.is(), "invalid paint row" );
 
     // I need the columns of the control for GetFieldText
     DbGridColumns aColumns = pGrid->GetColumns();

@@ -74,7 +74,7 @@ sd::DrawDocShellRef SdMiscTest::Load(const OUString& rURL, sal_Int32 nFormat)
 
     // 1. Open the document
     sd::DrawDocShellRef xDocSh = loadURL(rURL, nFormat);
-    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load file.", xDocSh.is());
 
     uno::Reference< frame::XModel2 > xModel2(xDocSh->GetModel(), uno::UNO_QUERY);
     CPPUNIT_ASSERT(xModel2.is());

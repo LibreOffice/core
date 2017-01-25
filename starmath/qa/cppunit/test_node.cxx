@@ -55,7 +55,7 @@ void NodeTest::setUp()
 
 void NodeTest::tearDown()
 {
-    if (mxDocShell.Is())
+    if (mxDocShell.is())
         mxDocShell->DoClose();
     BootstrapFixture::tearDown();
 }

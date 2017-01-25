@@ -210,7 +210,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
 
     tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
 
-    if( xObjStg.Is()  )
+    if( xObjStg.is()  )
     {
         uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
         if( xObj.is() )
@@ -229,7 +229,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
             OUString sStorageName('_');
             sStorageName += OUString::number( nPictureId );
             tools::SvRef<SotStorage> xOleStg = xObjStg->OpenSotStorage( sStorageName );
-            if( xOleStg.Is() )
+            if( xOleStg.is() )
             {
                 /*
                 If this object storage has been written already don't
@@ -247,7 +247,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                         {
                             const sal_uInt8 pObjInfoData[] = { 0x40, 0x00, 0x03, 0x00 };
                             tools::SvRef<SotStorageStream> rObjInfoStream = xOleStg->OpenSotStream( aObjInfo );
-                            if ( rObjInfoStream.Is() && !rObjInfoStream->GetError() )
+                            if ( rObjInfoStream.is() && !rObjInfoStream->GetError() )
                             {
                                 rObjInfoStream->WriteBytes(pObjInfoData, sizeof(pObjInfoData));
                                 xOleStg->Commit();
@@ -324,10 +324,10 @@ void WW8Export::OutputLinkedOLE( const OUString& rOleId )
 
     tools::SvRef<SotStorage> xObjStg = GetWriter().GetStorage().OpenSotStorage(SL::aObjectPool);
 
-    if( xObjStg.Is() && xObjSrc.Is() )
+    if( xObjStg.is() && xObjSrc.is() )
     {
         tools::SvRef<SotStorage> xOleDst = xObjStg->OpenSotStorage( rOleId );
-        if ( xOleDst.Is() )
+        if ( xOleDst.is() )
             xObjSrc->CopyTo( xOleDst.get() );
 
         if ( !xOleDst->GetError( ) )

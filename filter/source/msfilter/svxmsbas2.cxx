@@ -35,7 +35,7 @@ ErrCode SvxImportMSVBasic::SaveOrDelMSVBAStorage( bool bSaveInto,
     OUString aDstStgName( GetMSBasicStorageName() );
     tools::SvRef<SotStorage> xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, aDstStgName,
                                 StreamMode::READWRITE | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL ) );
-    if( xVBAStg.Is() && !xVBAStg->GetError() )
+    if( xVBAStg.is() && !xVBAStg->GetError() )
     {
         xVBAStg = nullptr;
         if( bSaveInto )
@@ -67,7 +67,7 @@ ErrCode SvxImportMSVBasic::GetSaveWarningOfMSVBAStorage( SfxObjectShell &rDocSh)
     uno::Reference < embed::XStorage > xSrcRoot( rDocSh.GetStorage() );
     tools::SvRef<SotStorage> xVBAStg( SotStorage::OpenOLEStorage( xSrcRoot, GetMSBasicStorageName(),
                     StreamMode::READ | StreamMode::NOCREATE | StreamMode::SHARE_DENYALL ));
-    return ( xVBAStg.Is() && !xVBAStg->GetError() )
+    return ( xVBAStg.is() && !xVBAStg->GetError() )
                     ? ERRCODE_SVX_VBASIC_STORAGE_EXIST
                     : ERRCODE_NONE;
 }

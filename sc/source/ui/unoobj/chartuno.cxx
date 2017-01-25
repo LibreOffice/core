@@ -601,7 +601,7 @@ void ScChartObj::getFastPropertyValue( uno::Any& rValue, sal_Int32 nHandle ) con
                 break;
 
             const ScRangeListRef& rRangeList = pListener->GetRangeList();
-            if (!rRangeList.Is())
+            if (!rRangeList.is())
                 break;
 
             size_t nCount = rRangeList->size();
@@ -685,7 +685,7 @@ uno::Sequence<table::CellRangeAddress> SAL_CALL ScChartObj::getRanges()
     ScRangeListRef xRanges = new ScRangeList;
     bool bColHeaders, bRowHeaders;
     GetData_Impl( xRanges, bColHeaders, bRowHeaders );
-    if ( xRanges.Is() )
+    if ( xRanges.is() )
     {
         size_t nCount = xRanges->size();
 
@@ -732,7 +732,7 @@ void SAL_CALL ScChartObj::setRanges( const uno::Sequence<table::CellRangeAddress
     }
     ScRangeListRef xNewRanges( pList );
 
-    if ( !xOldRanges.Is() || *xOldRanges != *xNewRanges )
+    if ( !xOldRanges.is() || *xOldRanges != *xNewRanges )
         Update_Impl( xNewRanges, bColHeaders, bRowHeaders );
 }
 

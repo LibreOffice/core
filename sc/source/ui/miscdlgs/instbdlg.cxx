@@ -346,7 +346,7 @@ IMPL_LINK( ScInsertTableDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg
             else
             {
                 pDocShTables->DoClose();
-                aDocShTablesRef.Clear();
+                aDocShTablesRef.clear();
                 pDocShTables = nullptr;
 
                 FillTables_Impl( nullptr );

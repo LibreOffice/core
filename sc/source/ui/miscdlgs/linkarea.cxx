@@ -126,7 +126,7 @@ void ScLinkedAreaDlg::LoadDocument( const OUString& rFile, const OUString& rFilt
         //  unload old document
         pSourceShell->DoClose();
         pSourceShell = nullptr;
-        aSourceRef.Clear();
+        aSourceRef.clear();
     }
 
     if ( !rFile.isEmpty() )
@@ -239,7 +239,7 @@ IMPL_LINK( ScLinkedAreaDlg, DialogClosedHdl, sfx2::FileDialogHelper*, _pFileDlg,
         {
             pSourceShell->DoClose();
             pSourceShell = nullptr;
-            aSourceRef.Clear();
+            aSourceRef.clear();
 
             m_pCbUrl->SetText( EMPTY_OUSTRING );
         }

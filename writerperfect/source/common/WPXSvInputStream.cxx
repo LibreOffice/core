@@ -196,7 +196,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const rtl::OUString &rP
     if (maNameMap.end() == aIt)
         return tools::SvRef<SotStorageStream>();
 
-    if (!maStreams[aIt->second].stream.ref.Is())
+    if (!maStreams[aIt->second].stream.ref.is())
         maStreams[aIt->second].stream.ref = createStream(aPath);
 
     return maStreams[aIt->second].stream.ref;
@@ -204,7 +204,7 @@ tools::SvRef<SotStorageStream> OLEStorageImpl::getStream(const rtl::OUString &rP
 
 tools::SvRef<SotStorageStream> const &OLEStorageImpl::getStream(const std::size_t nId)
 {
-    if (!maStreams[nId].stream.ref.Is())
+    if (!maStreams[nId].stream.ref.is())
         maStreams[nId].stream.ref = createStream(rtl::OStringToOUString(maStreams[nId].name, RTL_TEXTENCODING_UTF8));
 
     return maStreams[nId].stream.ref;
@@ -728,7 +728,7 @@ void WPXSvInputStreamImpl::invalidateReadBuffer()
 
 librevenge::RVNGInputStream *WPXSvInputStreamImpl::createWPXStream(const tools::SvRef<SotStorageStream> &rxStorage)
 {
-    if (rxStorage.Is())
+    if (rxStorage.is())
     {
         Reference < XInputStream > xContents(new utl::OSeekableInputStreamWrapper(rxStorage.get()));
         return new WPXSvInputStream(xContents);

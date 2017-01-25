@@ -428,7 +428,7 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
     if( bOk )
         return;
 
-    if( !rSlot.aSlotType.Is() )
+    if( !rSlot.aSlotType.is() )
     {
         sal_uInt32 nTokPos = rInStm.Tell();
         SvToken& rTok = rInStm.GetToken_Next();
@@ -437,7 +437,7 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
             if( rInStm.ReadIf( '=' ) )
             {
                 rSlot.aSlotType = rBase.ReadKnownType( rInStm );
-                if( !rSlot.aSlotType.Is() )
+                if( !rSlot.aSlotType.is() )
                     throw SvParseException( rInStm, "SlotType with unknown item type" );
                 if( !rSlot.aSlotType->IsItem() )
                     throw SvParseException( rInStm, "the SlotType is not a item" );
@@ -447,7 +447,7 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
         rInStm.Seek( nTokPos );
 
     }
-    if( !rSlot.aMethod.Is() )
+    if( !rSlot.aMethod.is() )
     {
         SvToken& rTok = rInStm.GetToken();
         if( rTok.IsIdentifier() )
@@ -464,7 +464,7 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
                 }
                 rInStm.Seek( nTokPos );
             }
-            rSlot.aMethod.Clear();
+            rSlot.aMethod.clear();
         }
     }
 }

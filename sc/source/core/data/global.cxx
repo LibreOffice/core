@@ -621,7 +621,7 @@ void ScGlobal::Clear()
     ScDocumentPool::DeleteVersionMaps();
 
     DELETEZ(pEmptyOUString);
-    xDrawClipDocShellRef.Clear();
+    xDrawClipDocShellRef.clear();
 }
 
 rtl_TextEncoding ScGlobal::GetCharsetValue( const OUString& rCharSet )

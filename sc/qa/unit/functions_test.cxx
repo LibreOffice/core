@@ -34,7 +34,7 @@ bool FunctionsTest::load(const OUString& rFilter, const OUString& rURL,
 {
     ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData,
         OUString(), nFilterFlags, nClipboardID, nFilterVersion );
-    CPPUNIT_ASSERT(xDocShRef.Is());
+    CPPUNIT_ASSERT(xDocShRef.is());
 
     xDocShRef->DoHardRecalc(true);
 

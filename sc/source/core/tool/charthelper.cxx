@@ -321,7 +321,7 @@ void ScChartHelper::AddRangesIfProtectedChart( ScRangeListVector& rRangesVector,
                         if (pListener)
                         {
                             const ScRangeListRef& rRangeList = pListener->GetRangeList();
-                            if ( rRangeList.Is() )
+                            if ( rRangeList.is() )
                             {
                                 rRangesVector.push_back( *rRangeList );
                             }
