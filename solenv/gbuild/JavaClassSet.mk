@@ -22,7 +22,7 @@
 
 
 gb_JavaClassSet_REPOSITORYNAMES := $(gb_Helper_REPOSITORYNAMES)
-gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER)
+gb_JavaClassSet_JAVACCOMMAND := $(JAVACOMPILER) $(JAVAFLAGS)
 
 define gb_JavaClassSet__command
 $(call gb_Helper_abbreviate_dirs_native,\
