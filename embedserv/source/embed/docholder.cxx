@@ -20,8 +20,6 @@
 #pragma warning(disable : 4917 4555)
 #endif
 
-
-#include "xwin.hxx"
 #include "docholder.hxx"
 #include "embeddoc.hxx"
 #include "intercept.hxx"
