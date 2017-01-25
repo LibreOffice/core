@@ -280,25 +280,21 @@ ReadState XPMReader::ReadXPM( Graphic& rGraphic )
 
 // ImplGetColor returns various colour values,
 // returns TRUE if various colours could be assigned
-
 bool XPMReader::ImplGetColor( sal_uLong nNumb )
 {
     sal_uInt8*  pString = mpStringBuf;
-    sal_uInt8*  pPtr =  ( mpColMap + nNumb * ( 4 + mnCpp ) );
-    bool    bStatus = ImplGetString();
+    if (!ImplGetString())
+        return false;
 
-    if ( bStatus )
-    {
-        for ( sal_uLong i = 0; i < mnCpp; i++ )
-            *pPtr++ = *pString++;
-        bStatus = ImplGetColSub ( pPtr );
-    }
+    sal_uInt8* pPtr =  ( mpColMap + nNumb * ( 4 + mnCpp ) );
+    for (sal_uLong i = 0; i < mnCpp; ++i)
+        *pPtr++ = *pString++;
+    bool bStatus = ImplGetColSub(pPtr);
     return bStatus;
 }
 
 // ImpGetScanLine reads the string mpBufSize and writes the pixel in the
 // Bitmap. Parameter nY is the horizontal position.
-
 bool XPMReader::ImplGetScanLine( sal_uLong nY )
 {
     bool    bStatus = ImplGetString();
