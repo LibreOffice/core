@@ -667,7 +667,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
     OUString aStorName( rStorage.GetName() );
     // #i13114 removed, DBG_ASSERT( aStorName.Len(), "No Storage Name!" );
 
-    if ( !xManagerStream.Is() || xManagerStream->GetError() || ( xManagerStream->Seek( STREAM_SEEK_TO_END ) == 0 ) )
+    if ( !xManagerStream.is() || xManagerStream->GetError() || ( xManagerStream->Seek( STREAM_SEEK_TO_END ) == 0 ) )
     {
         ImpMgrNotLoaded( aStorName );
         return;
@@ -749,7 +749,7 @@ void BasicManager::LoadBasicManager( SotStorage& rStorage, const OUString& rBase
 
     xManagerStream->Seek( nEndPos );
     xManagerStream->SetBufferSize( 0 );
-    xManagerStream.Clear();
+    xManagerStream.clear();
 }
 
 void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
@@ -759,7 +759,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     OUString aStorName( rStorage.GetName() );
     DBG_ASSERT( aStorName.getLength(), "No Storage Name!" );
 
-    if ( !xManagerStream.Is() || xManagerStream->GetError() || ( xManagerStream->Seek( STREAM_SEEK_TO_END ) == 0 ) )
+    if ( !xManagerStream.is() || xManagerStream->GetError() || ( xManagerStream->Seek( STREAM_SEEK_TO_END ) == 0 ) )
     {
         ImpMgrNotLoaded( aStorName );
         return;
@@ -783,7 +783,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
     xManagerStream->Seek( nBasicEndOff+1 ); // +1: 0x00 as separator
     OUString aLibs = xManagerStream->ReadUniOrByteString(xManagerStream->GetStreamCharSet());
     xManagerStream->SetBufferSize( 0 );
-    xManagerStream.Clear(); // Close stream
+    xManagerStream.clear(); // Close stream
 
     if ( !aLibs.isEmpty() )
     {
@@ -818,7 +818,7 @@ void BasicManager::LoadOldBasicManager( SotStorage& rStorage )
                     xStorageRef = new SotStorage( false, aLibRelStorage.
                     GetMainURL( INetURLObject::DecodeMechanism::NONE ), eStorageReadMode );
             }
-            if ( xStorageRef.Is() )
+            if ( xStorageRef.is() )
             {
                 AddLib( *xStorageRef, aLibName, false );
             }
@@ -899,13 +899,13 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
         }
     }
 
-    if ( !xStorage.Is() )
+    if ( !xStorage.is() )
     {
         xStorage = new SotStorage( false, aStorageName, eStorageReadMode );
     }
     tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage( szBasicStorage, eStorageReadMode, false );
 
-    if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
+    if ( !xBasicStorage.is() || xBasicStorage->GetError() )
     {
         StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_MGROPEN, xStorage->GetName(), ERRCODE_BUTTON_OK );
         aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::OPENLIBSTORAGE));
@@ -914,7 +914,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
     {
         // In the Basic-Storage every lib is in a Stream...
         tools::SvRef<SotStorageStream> xBasicStream = xBasicStorage->OpenSotStream( pLibInfo->GetLibName(), eStreamReadMode );
-        if ( !xBasicStream.Is() || xBasicStream->GetError() )
+        if ( !xBasicStream.is() || xBasicStream->GetError() )
         {
             StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_LIBLOAD , pLibInfo->GetLibName(), ERRCODE_BUTTON_OK );
             aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::OPENLIBSTREAM));
@@ -924,7 +924,7 @@ bool BasicManager::ImpLoadLibrary( BasicLibInfo* pLibInfo, SotStorage* pCurStora
             bool bLoaded = false;
             if ( xBasicStream->Seek( STREAM_SEEK_TO_END ) != 0 )
             {
-                if ( !pLibInfo->GetLib().Is() )
+                if ( !pLibInfo->GetLib().is() )
                 {
                     pLibInfo->SetLib( new StarBASIC( GetStdLib(), mbDocMgr ) );
                 }
@@ -992,12 +992,12 @@ bool BasicManager::ImplLoadBasic( SvStream& rStrm, StarBASICRef& rOldBasic ) con
     bool bProtected = ImplEncryptStream( rStrm );
     SbxBaseRef xNew = SbxBase::Load( rStrm );
     bool bLoaded = false;
-    if( xNew.Is() )
+    if( xNew.is() )
     {
         if( auto pNew = dynamic_cast<StarBASIC*>( xNew.get() ) )
         {
             // Use the Parent of the old BASICs
-            if( rOldBasic.Is() )
+            if( rOldBasic.is() )
             {
                 pNew->SetParent( rOldBasic->GetParent() );
                 if( pNew->GetParent() )
@@ -1152,12 +1152,12 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
             SAL_WARN("basic", "BasicManager::RemoveLib: Caught exception: " << e.Message);
         }
 
-        if (xStorage.Is() && xStorage->IsStorage(szBasicStorage))
+        if (xStorage.is() && xStorage->IsStorage(szBasicStorage))
         {
             tools::SvRef<SotStorage> xBasicStorage = xStorage->OpenSotStorage
                             ( szBasicStorage, StreamMode::STD_READWRITE, false );
 
-            if ( !xBasicStorage.Is() || xBasicStorage->GetError() )
+            if ( !xBasicStorage.is() || xBasicStorage->GetError() )
             {
                 StringErrorInfo* pErrInf = new StringErrorInfo( ERRCODE_BASMGR_REMOVELIB, OUString(), ERRCODE_BUTTON_OK );
                 aErrors.push_back(BasicError(*pErrInf, BasicErrorReason::OPENLIBSTORAGE));
@@ -1173,7 +1173,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
                 xBasicStorage->FillInfoList( &aInfoList );
                 if ( aInfoList.empty() )
                 {
-                    xBasicStorage.Clear();
+                    xBasicStorage.clear();
                     xStorage->Remove( szBasicStorage );
                     xStorage->Commit();
                     // If no further Streams or SubStorages available,
@@ -1183,7 +1183,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
                     if ( aInfoList.empty() )
                     {
                         //OUString aName_( xStorage->GetName() );
-                        xStorage.Clear();
+                        xStorage.clear();
                         //*** TODO: Replace if still necessary
                         //SfxContentHelper::Kill( aName );
                         //*** TODO-End
@@ -1192,7 +1192,7 @@ bool BasicManager::RemoveLib( sal_uInt16 nLib, bool bDelBasicFromStorage )
             }
         }
     }
-    if ((*itLibInfo)->GetLib().Is())
+    if ((*itLibInfo)->GetLib().is())
     {
         GetStdLib()->Remove( (*itLibInfo)->GetLib().get() );
     }
@@ -1390,7 +1390,7 @@ bool BasicManager::IsBasicModified() const
 {
     for (auto const& rpLib : mpImpl->aLibs)
     {
-        if (rpLib->GetLib().Is() && rpLib->GetLib()->IsModified())
+        if (rpLib->GetLib().is() && rpLib->GetLib()->IsModified())
         {
             return true;
         }

@@ -185,7 +185,7 @@ void SbxVariable::Broadcast( SfxHintId nHintId )
         pCst = nullptr;
         SbxFlagBits nSaveFlags = GetFlags();
         SetFlag( SbxFlagBits::ReadWrite );
-        if( mpPar.Is() )
+        if( mpPar.is() )
         {
             // Register this as element 0, but don't change over the parent!
             mpPar->GetRef( 0 ) = this;
@@ -199,10 +199,10 @@ void SbxVariable::Broadcast( SfxHintId nHintId )
 
 SbxInfo* SbxVariable::GetInfo()
 {
-    if( !pInfo.Is() )
+    if( !pInfo.is() )
     {
         Broadcast( SfxHintId::BasicInfoWanted );
-        if( pInfo.Is() )
+        if( pInfo.is() )
         {
             SetModified( true );
         }
@@ -239,7 +239,7 @@ const OUString& SbxVariable::GetName( SbxNameType t ) const
     // Request parameter-information (not for objects)
     const_cast<SbxVariable*>(this)->GetInfo();
     // Append nothing, if it is a simple property (no empty brackets)
-    if (!pInfo.Is() || (pInfo->m_Params.empty() && GetClass() == SbxClassType::Property))
+    if (!pInfo.is() || (pInfo->m_Params.empty() && GetClass() == SbxClassType::Property))
     {
         return maName;
     }
@@ -619,7 +619,7 @@ bool SbxVariable::StoreData( SvStream& rStrm ) const
     write_uInt16_lenPrefixed_uInt8s_FromOUString(rStrm, maName,
                                                       RTL_TEXTENCODING_ASCII_US);
     rStrm.WriteUInt32( nUserData );
-    if( pInfo.Is() )
+    if( pInfo.is() )
     {
         rStrm.WriteUChar( 2 );     // Version 2: with UserData!
         pInfo->StoreData( rStrm );
@@ -656,7 +656,7 @@ SbxAlias& SbxAlias::operator=( const SbxAlias& r )
 
 SbxAlias::~SbxAlias()
 {
-    if( xAlias.Is() )
+    if( xAlias.is() )
     {
         EndListening( xAlias->GetBroadcaster() );
     }
@@ -664,7 +664,7 @@ SbxAlias::~SbxAlias()
 
 void SbxAlias::Broadcast( SfxHintId nHt )
 {
-    if( xAlias.Is() )
+    if( xAlias.is() )
     {
         xAlias->SetParameters( GetParameters() );
         if( nHt == SfxHintId::BasicDataWanted )
@@ -688,7 +688,7 @@ void SbxAlias::Notify( SfxBroadcaster&, const SfxHint& rHint )
     const SbxHint* p = dynamic_cast<const SbxHint*>(&rHint);
     if( p && p->GetId() == SfxHintId::BasicDying )
     {
-        xAlias.Clear();
+        xAlias.clear();
         // delete the alias?
         if( pParent )
         {

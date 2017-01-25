@@ -1085,7 +1085,7 @@ void FmGridControl::propertyChange(const css::beans::PropertyChangeEvent& evt)
     const DbGridRowRef& xRow = GetCurrentRow();
     // waehrend Positionierung wird kein abgleich  der Properties vorgenommen
     Reference<XPropertySet> xSet(evt.Source,UNO_QUERY);
-    if (xRow.Is() && (::cppu::any2bool(xSet->getPropertyValue(FM_PROP_ISNEW))|| CompareBookmark(getDataSource()->getBookmark(), xRow->GetBookmark())))
+    if (xRow.is() && (::cppu::any2bool(xSet->getPropertyValue(FM_PROP_ISNEW))|| CompareBookmark(getDataSource()->getBookmark(), xRow->GetBookmark())))
     {
         if (evt.PropertyName == FM_PROP_ISMODIFIED)
         {
@@ -1149,7 +1149,7 @@ void FmGridControl::DeleteSelectedRows()
     if ( IsCurrentAppending() )
         return;
     // is the insert row selected
-    if (GetEmptyRow().Is() && IsRowSelected(GetRowCount() - 1))
+    if (GetEmptyRow().is() && IsRowSelected(GetRowCount() - 1))
         nSelectedRows -= 1;
 
     // nothing to do
@@ -1216,10 +1216,10 @@ void FmGridControl::DeleteSelectedRows()
         Any aBookmark;
         bool bNewPos = false;
         // if the current row isn't selected we take the row as row after deletion
-        OSL_ENSURE( GetCurrentRow().Is(), "FmGridControl::DeleteSelectedRows: no current row here?" );
+        OSL_ENSURE( GetCurrentRow().is(), "FmGridControl::DeleteSelectedRows: no current row here?" );
             // crash reports suggest it can happen we don't have a current row - how?
             // #154303# / 2008-04-23 / frank.schoenheit@sun.com
-        if ( !IsRowSelected( GetCurrentPos() ) && !IsCurrentAppending() && GetCurrentRow().Is() )
+        if ( !IsRowSelected( GetCurrentPos() ) && !IsCurrentAppending() && GetCurrentRow().is() )
         {
             aBookmark = GetCurrentRow()->GetBookmark();
             bNewPos   = true;
@@ -1314,7 +1314,7 @@ void FmGridControl::DeleteSelectedRows()
                             --nRecordCount;
 
                         // there are no rows left and we have an insert row
-                        if (!nRecordCount && GetEmptyRow().Is())
+                        if (!nRecordCount && GetEmptyRow().is())
                         {
                             Reference< XResultSetUpdate >  xUpdateCursor(Reference< XInterface >(*m_pDataCursor), UNO_QUERY);
                             xUpdateCursor->moveToInsertRow();
@@ -1423,7 +1423,7 @@ bool FmGridControl::commit()
     // wird
     if (!IsUpdating())
     {
-        if (Controller().Is() && Controller()->IsModified())
+        if (Controller().is() && Controller()->IsModified())
         {
             if (!SaveModified())
                 return false;
@@ -1435,7 +1435,7 @@ bool FmGridControl::commit()
 void FmGridControl::inserted(const css::lang::EventObject& /*rEvent*/)
 {
     const DbGridRowRef& xRow = GetCurrentRow();
-    if (!xRow.Is())
+    if (!xRow.is())
         return;
 
     // Zeile ist eingefuegt worden, dann den status und mode zuruecksetzen

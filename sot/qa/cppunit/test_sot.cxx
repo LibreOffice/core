@@ -108,7 +108,7 @@ namespace
     {
         SvFileStream aStream(rURL, StreamMode::READ);
         tools::SvRef<SotStorage> xObjStor = new SotStorage(aStream);
-        if (!xObjStor.Is() || xObjStor->GetError())
+        if (!xObjStor.is() || xObjStor->GetError())
             return false;
 
         CPPUNIT_ASSERT_MESSAGE("sot storage is not valid", xObjStor->Validate());
@@ -127,10 +127,10 @@ namespace
         SvFileStream aStream(aURL, StreamMode::READ);
         tools::SvRef<SotStorage> xObjStor = new SotStorage(aStream);
         CPPUNIT_ASSERT_MESSAGE("sot storage failed to open",
-                               xObjStor.Is() && !xObjStor->GetError());
+                               xObjStor.is() && !xObjStor->GetError());
         tools::SvRef<SotStorageStream> xStream = xObjStor->OpenSotStream("Book");
         CPPUNIT_ASSERT_MESSAGE("stream failed to open",
-                               xStream.Is() && !xObjStor->GetError());
+                               xStream.is() && !xObjStor->GetError());
         CPPUNIT_ASSERT_MESSAGE("error in opened stream", !xStream->GetError());
         sal_uLong nPos = xStream->GetSize();
         CPPUNIT_ASSERT_EQUAL_MESSAGE("odd stream length", static_cast<sal_uLong>(13312), nPos);

@@ -3393,7 +3393,7 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicOb
     {
         if( rPicObj.IsOcxControl() )
         {
-            if( mxCtlsStrm.Is() ) try
+            if( mxCtlsStrm.is() ) try
             {
                 /*  set controls form, needed in virtual function InsertControl()
                     called from ReadOCXExcelKludgeStream() */
@@ -3425,7 +3425,7 @@ SdrObjectPtr XclImpDffConverter::CreateSdrObject( const XclImpPictureObj& rPicOb
             SfxObjectShell* pDocShell = GetDocShell();
             tools::SvRef<SotStorage> xSrcStrg = GetRootStorage();
             OUString aStrgName = rPicObj.GetOleStorageName();
-            if( pDocShell && xSrcStrg.Is() && (!aStrgName.isEmpty()) )
+            if( pDocShell && xSrcStrg.is() && (!aStrgName.isEmpty()) )
             {
                 // first try to resolve graphic from DFF storage
                 Graphic aGraphic;

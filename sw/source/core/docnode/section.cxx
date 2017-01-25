@@ -246,7 +246,7 @@ SwSection::~SwSection()
             pDoc->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink.get() );
         }
 
-        if (m_RefObj.Is())
+        if (m_RefObj.is())
         {
             pDoc->getIDocumentLinksAdministration().GetLinkManager().RemoveServer( m_RefObj.get() );
         }
@@ -261,7 +261,7 @@ SwSection::~SwSection()
             pDoc->DelSectionFormat( pFormat );
         }
     }
-    if (m_RefObj.Is())
+    if (m_RefObj.is())
     {
         m_RefObj->Closed();
     }
@@ -544,7 +544,7 @@ void SwSection::SetCondHidden(bool const bFlag)
 // Set/remove the linked FileName
 OUString SwSection::GetLinkFileName() const
 {
-    if (m_RefLink.Is())
+    if (m_RefLink.is())
     {
         OUString sTmp;
         switch (m_Data.GetType())
@@ -582,7 +582,7 @@ OUString SwSection::GetLinkFileName() const
 
 void SwSection::SetLinkFileName(const OUString& rNew)
 {
-    if (m_RefLink.Is())
+    if (m_RefLink.is())
     {
         m_RefLink->SetLinkSourceName( rNew );
     }
@@ -1309,7 +1309,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                     {
                         tools::SvRef<SwServerObject> refObj( static_cast<SwServerObject*>(
                                         pDoc->getIDocumentLinksAdministration().CreateLinkSource( sRange )));
-                        if( refObj.Is() )
+                        if( refObj.is() )
                         {
                             bRecursion = refObj->IsLinkInServer( this ) ||
                                         ChkNoDataFlag();
@@ -1385,7 +1385,7 @@ static void lcl_UpdateLinksInSect( SwBaseLink& rUpdLnk, SwSectionNode& rSectNd )
                 // Update all Links in this Section
                 lcl_UpdateLinksInSect( *this, *pSectNd );
             }
-            if( xDocSh.Is() )
+            if( xDocSh.is() )
             {
                 if( 2 == nRet )
                     xDocSh->DoClose();
@@ -1503,7 +1503,7 @@ void SwSection::CreateLink( LinkCreateType eCreateType )
 
     SfxLinkUpdateMode nUpdateType = SfxLinkUpdateMode::ALWAYS;
 
-    if (!m_RefLink.Is())
+    if (!m_RefLink.is())
     {
         // create BaseLink
         m_RefLink = new SwIntrnlSectRefLink( *pFormat, nUpdateType );
@@ -1569,7 +1569,7 @@ void SwSection::BreakLink()
     }
 
     // Release link, if it exists
-    if (m_RefLink.Is())
+    if (m_RefLink.is())
     {
         SwSectionFormat *const pFormat( GetFormat() );
         OSL_ENSURE(pFormat, "SwSection::BreakLink: no format?");
@@ -1577,7 +1577,7 @@ void SwSection::BreakLink()
         {
             pFormat->GetDoc()->getIDocumentLinksAdministration().GetLinkManager().Remove( m_RefLink.get() );
         }
-        m_RefLink.Clear();
+        m_RefLink.clear();
     }
     // change type
     SetType( CONTENT_SECTION );

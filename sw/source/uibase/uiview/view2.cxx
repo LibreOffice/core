@@ -2185,7 +2185,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
         }
 
         pMedium->Download();    // start download if needed
-        if( aRef.Is() && 1 < aRef->GetRefCount() )  // still a valid ref?
+        if( aRef.is() && 1 < aRef->GetRefCount() )  // still a valid ref?
         {
             SwReader* pRdr;
             Reader *pRead = pDocSh->StartConvertFrom( *pMedium, &pRdr, m_pWrtShell );
@@ -2275,7 +2275,7 @@ long SwView::InsertMedium( sal_uInt16 nSlotId, SfxMedium* pMedium, sal_Int16 nVe
                 vcl::Window* pWin = &GetEditWin();
                 ScopedVclPtrInstance<MessageDialog>(pWin, SW_RES(STR_NO_MERGE_ENTRY), VclMessageType::Info)->Execute();
             }
-            if( nRet==2 && xDocSh.Is() )
+            if( nRet==2 && xDocSh.is() )
                 xDocSh->DoClose();
         }
     }

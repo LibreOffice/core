@@ -1002,10 +1002,10 @@ SdDrawDocument* SdPageObjsTLB::GetBookmarkDoc(SfxMedium* pMed)
  */
 void SdPageObjsTLB::CloseBookmarkDoc()
 {
-    if (mxBookmarkDocShRef.Is())
+    if (mxBookmarkDocShRef.is())
     {
         mxBookmarkDocShRef->DoClose();
-        mxBookmarkDocShRef.Clear();
+        mxBookmarkDocShRef.clear();
 
         // Medium is owned by document, so it's destroyed already
         mpOwnMedium = nullptr;

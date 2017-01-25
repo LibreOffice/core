@@ -804,7 +804,7 @@ void XclExpPivotCache::WriteCacheStream()
 {
     tools::SvRef<SotStorage> xSvStrg = OpenStorage( EXC_STORAGE_PTCACHE );
     tools::SvRef<SotStorageStream> xSvStrm = OpenStream( xSvStrg, ScfTools::GetHexStr( maPCInfo.mnStrmId ) );
-    if( xSvStrm.Is() )
+    if( xSvStrm.is() )
     {
         XclExpStream aStrm( *xSvStrm, GetRoot() );
         // SXDB

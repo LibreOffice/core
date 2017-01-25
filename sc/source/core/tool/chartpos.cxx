@@ -67,7 +67,7 @@ ScChartPositioner::ScChartPositioner( ScDocument* pDoc, const ScRangeListRef& rR
         bRowHeaders( false ),
         bDummyUpperLeft( false )
 {
-    if ( aRangeListRef.Is() )
+    if ( aRangeListRef.is() )
         CheckColRowHeaders();
 }
 

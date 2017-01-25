@@ -860,7 +860,7 @@ Type getUnoTypeForSbxValue( const SbxValue* pVal )
     if( eBaseType == SbxOBJECT )
     {
         SbxBaseRef xObj = pVal->GetObject();
-        if( !xObj.Is() )
+        if( !xObj.is() )
         {
             aRetType = cppu::UnoType<XInterface>::get();
             return aRetType;
@@ -983,7 +983,7 @@ Any sbxToUnoValueImpl( const SbxValue* pVar, bool bBlockConversionToSmallestType
     if( eBaseType == SbxOBJECT )
     {
         SbxBaseRef xObj = pVar->GetObject();
-        if( xObj.Is() )
+        if( xObj.is() )
         {
             if( auto obj = dynamic_cast<SbUnoAnyObject*>( xObj.get() ) )
                 return obj->getValue();
@@ -2522,7 +2522,7 @@ SbUnoMethod::~SbUnoMethod()
 
 SbxInfo* SbUnoMethod::GetInfo()
 {
-    if( !pInfo.Is() && m_xUnoMethod.is() )
+    if( !pInfo.is() && m_xUnoMethod.is() )
     {
         SbiInstance* pInst = GetSbData()->pInst;
         if( pInst && pInst->IsCompatibility() )
@@ -2931,7 +2931,7 @@ void RTL_Impl_CreateUnoStruct( StarBASIC* pBasic, SbxArray& rPar, bool bWrite )
 
     // try to create Struct with the same name
     SbUnoObjectRef xUnoObj = Impl_CreateUnoStruct( aClassName );
-    if( !xUnoObj.Is() )
+    if( !xUnoObj.is() )
     {
         return;
     }
@@ -3843,7 +3843,7 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
 {
     SolarMutexGuard guard;
 
-    if( xSbxObj.Is() )
+    if( xSbxObj.is() )
     {
         OUString aMethodName = aPrefixName;
         aMethodName = aMethodName + Event.MethodName;
@@ -3908,7 +3908,7 @@ void BasicAllListener_Impl ::disposing(const EventObject& )
 {
     SolarMutexGuard guard;
 
-    xSbxObj.Clear();
+    xSbxObj.clear();
 }
 
 
@@ -4255,7 +4255,7 @@ ModuleInvocationProxy::ModuleInvocationProxy( const OUString& aPrefix, SbxObject
     , m_xScopeObj( xScopeObj )
     , m_aListeners( m_aMutex )
 {
-    m_bProxyIsClassModuleObject = xScopeObj.Is() && nullptr != dynamic_cast<const SbClassModuleObject*>( xScopeObj.get() );
+    m_bProxyIsClassModuleObject = xScopeObj.is() && nullptr != dynamic_cast<const SbClassModuleObject*>( xScopeObj.get() );
 }
 
 Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospection()
@@ -4347,7 +4347,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
 
     Any aRet;
     SbxObjectRef xScopeObj = m_xScopeObj;
-    if( !xScopeObj.Is() )
+    if( !xScopeObj.is() )
     {
         return aRet;
     }
@@ -4393,7 +4393,7 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
 
     // Call method
     SbxVariableRef xValue = new SbxVariable;
-    if( xArray.Is() )
+    if( xArray.is() )
         pMeth->SetParameters( xArray.get() );
     pMeth->Call( xValue.get() );
     aRet = sbxToUnoValue( xValue.get() );
@@ -4638,7 +4638,7 @@ bool handleToStringForCOMObjects( SbxObject* pObj, SbxValue* pVal )
         if( pUnoObj->isNativeCOMObject() )
         {
             SbxVariableRef pMeth = pObj->Find( "toString", SbxClassType::Method );
-            if ( pMeth.Is() )
+            if ( pMeth.is() )
             {
                 SbxValues aRes;
                 pMeth->Get( aRes );

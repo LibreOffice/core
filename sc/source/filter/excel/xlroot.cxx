@@ -239,7 +239,7 @@ uno::Sequence< beans::NamedValue > XclRoot::RequestEncryptionData( ::comphelper:
 bool XclRoot::HasVbaStorage() const
 {
     tools::SvRef<SotStorage> xRootStrg = GetRootStorage();
-    return xRootStrg.Is() && xRootStrg->IsContained( EXC_STORAGE_VBA_PROJECT );
+    return xRootStrg.is() && xRootStrg->IsContained( EXC_STORAGE_VBA_PROJECT );
 }
 
 tools::SvRef<SotStorage> XclRoot::OpenStorage( tools::SvRef<SotStorage> const & xStrg, const OUString& rStrgName ) const

@@ -945,7 +945,7 @@ namespace svt
         if (nEditRow >= 0 && nEditCol > HandleColumnId)
         {
             aController = GetController(nRow, nCol);
-            if (aController.Is())
+            if (aController.is())
             {
                 Rectangle aRect( GetCellRect(nEditRow, nEditCol, false));
                 ResizeController(aController, aRect);
@@ -990,7 +990,7 @@ namespace svt
             }
 
             aOldController = aController;
-            aController.Clear();
+            aController.clear();
 
             // reset the modify handler
             aOldController->SetModifyHdl(Link<LinkParamNone*,void>());

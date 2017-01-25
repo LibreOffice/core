@@ -146,7 +146,7 @@ void ScSpellDialogChildWindow::Reset()
     mxUndoDoc.reset();
     mxRedoDoc.reset();
     mxOldSel.reset();
-    mxOldRangeList.Clear();
+    mxOldRangeList.clear();
     mpViewShell = nullptr;
     mpViewData = nullptr;
     mpDocShell = nullptr;

@@ -74,7 +74,7 @@ void VBATest::testMiscVBAFunctions()
         MacroSnippet myMacro;
         myMacro.LoadSourceFromFile( sMacroURL );
         SbxVariableRef pReturn = myMacro.Run();
-        if ( pReturn.Is() )
+        if ( pReturn.is() )
         {
             fprintf(stderr, "macro result for %s\n", macroSource[ i ] );
             fprintf(stderr, "macro returned:\n%s\n", OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -152,7 +152,7 @@ void VBATest::testMiscOLEStuff()
         MacroSnippet myMacro;
         myMacro.LoadSourceFromFile( sMacroURL );
         SbxVariableRef pReturn = myMacro.Run( aArgs );
-        if ( pReturn.Is() )
+        if ( pReturn.is() )
         {
             fprintf(stderr, "macro result for %s\n", macroSource[ i ] );
             fprintf(stderr, "macro returned:\n%s\n", OUStringToOString( pReturn->GetOUString(), RTL_TEXTENCODING_UTF8 ).getStr() );

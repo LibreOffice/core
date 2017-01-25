@@ -61,7 +61,7 @@ void Test::setUp()
 
 void Test::tearDown()
 {
-    xDocShRef.Clear();
+    xDocShRef.clear();
     BootstrapFixture::tearDown();
 }
 

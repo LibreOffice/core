@@ -462,7 +462,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
         SbiCloseRecord( r, nPos );
     }
     // User defined types
-    if ( rTypes.Is() )
+    if ( rTypes.is() )
     {
         sal_uInt16 nTypes = rTypes->Count();
         if (nTypes > 0 )
@@ -620,7 +620,7 @@ void SbiImage::AddCode( char* p, sal_uInt32 s )
 // Add user type
 void SbiImage::AddType(SbxObject* pObject)
 {
-    if( !rTypes.Is() )
+    if( !rTypes.is() )
     {
         rTypes = new SbxArray;
     }
@@ -630,7 +630,7 @@ void SbiImage::AddType(SbxObject* pObject)
 
 void SbiImage::AddEnum(SbxObject* pObject) // Register enum type
 {
-    if( !rEnums.Is() )
+    if( !rEnums.is() )
     {
         rEnums = new SbxArray;
     }
@@ -674,7 +674,7 @@ OUString SbiImage::GetString( short nId ) const
 
 const SbxObject* SbiImage::FindType (const OUString& aTypeName) const
 {
-    return rTypes.Is() ? static_cast<SbxObject*>(rTypes->Find(aTypeName,SbxClassType::Object)) : nullptr;
+    return rTypes.is() ? static_cast<SbxObject*>(rTypes->Find(aTypeName,SbxClassType::Object)) : nullptr;
 }
 
 sal_uInt16 SbiImage::CalcLegacyOffset( sal_Int32 nOffset )

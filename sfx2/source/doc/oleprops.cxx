@@ -1099,7 +1099,7 @@ ErrCode SfxOlePropertySet::LoadPropertySet( SotStorage* pStrg, const OUString& r
     if( pStrg )
     {
         tools::SvRef<SotStorageStream> xStrm = pStrg->OpenSotStream( rStrmName, StreamMode::STD_READ );
-        if( xStrm.Is() && (xStrm->GetError() == SVSTREAM_OK) )
+        if( xStrm.is() && (xStrm->GetError() == SVSTREAM_OK) )
         {
             xStrm->SetBufferSize( STREAM_BUFFER_SIZE );
             Load( *xStrm );
@@ -1117,7 +1117,7 @@ ErrCode SfxOlePropertySet::SavePropertySet( SotStorage* pStrg, const OUString& r
     if( pStrg )
     {
         tools::SvRef<SotStorageStream> xStrm = pStrg->OpenSotStream( rStrmName, StreamMode::TRUNC | StreamMode::STD_WRITE );
-        if( xStrm.Is() )
+        if( xStrm.is() )
             Save( *xStrm );
         else
             SetError( ERRCODE_IO_ACCESSDENIED );

@@ -115,7 +115,7 @@ void EditBrowseBoxImpl::clearActiveCell()
 
 void EditBrowseBox::GrabTableFocus()
 {
-    if ( aController.Is() )
+    if ( aController.is() )
         aController->GetWindow().GrabFocus();
 }
 

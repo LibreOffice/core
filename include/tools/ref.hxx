@@ -56,7 +56,7 @@ public:
         if (pObj != nullptr) pObj->ReleaseRef();
     }
 
-    void Clear()
+    void clear()
     {
         if (pObj != nullptr) {
             T * pRefObj = pObj;
@@ -88,9 +88,9 @@ public:
         return *this;
     }
 
-    bool Is()         const { return pObj != nullptr; }
+    bool is()         const { return pObj != nullptr; }
 
-    explicit operator bool() const { return Is(); }
+    explicit operator bool() const { return is(); }
 
     T * get()         const { return pObj; }
 
@@ -219,12 +219,13 @@ public:
                          {  if( pObj ) _xHdl = pObj->GetHdl(); }
     inline SvCompatWeakRef& operator = ( T * pObj )
                          {  _xHdl = pObj ? pObj->GetHdl() : nullptr; return *this; }
-    inline bool          Is() const
-                         { return _xHdl.Is() && _xHdl->GetObj(); }
+    inline bool          is() const
+                         { return _xHdl.is() && _xHdl->GetObj(); }
+    explicit operator bool() const { return is(); }
     inline T*            operator -> () const
-                         { return _xHdl.Is() ? _xHdl->GetObj() : nullptr; }
+                         { return _xHdl.is() ? _xHdl->GetObj() : nullptr; }
     inline operator T* () const
-                         { return _xHdl.Is() ? _xHdl->GetObj() : nullptr; }
+                         { return _xHdl.is() ? _xHdl->GetObj() : nullptr; }
 };
 
 #endif

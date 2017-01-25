@@ -110,7 +110,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     bool bLoaded = xDocShRef->DoLoad(pSrcMed);
     if (!bExport)
     {
-        if (xDocShRef.Is())
+        if (xDocShRef.is())
             xDocShRef->DoClose();
         return bLoaded;
     }
@@ -124,7 +124,7 @@ bool SwFiltersTest::filter(const OUString &rFilter, const OUString &rURL,
     SfxMedium aDstMed(aTempFile.GetURL(), StreamMode::STD_WRITE);
     aDstMed.SetFilter(pExportFilter);
     bool bSaved = xDocShRef->DoSaveAs(aDstMed);
-    if (xDocShRef.Is())
+    if (xDocShRef.is())
         xDocShRef->DoClose();
     return bSaved;
 }

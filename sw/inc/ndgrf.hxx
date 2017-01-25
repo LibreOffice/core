@@ -178,7 +178,7 @@ public:
     virtual bool RestorePersistentData() override;
 
     /// Query link-data.
-    bool IsGrfLink() const                  { return refLink.Is(); }
+    bool IsGrfLink() const                  { return refLink.is(); }
     bool IsLinkedFile() const;
     bool IsLinkedDDE() const;
     const tools::SvRef<sfx2::SvBaseLink>& GetLink() const    { return refLink; }
@@ -215,12 +215,12 @@ inline const SwGrfNode   *SwNode::GetGrfNode() const
 
 inline bool SwGrfNode::IsLinkedFile() const
 {
-    return refLink.Is() && OBJECT_CLIENT_GRF == refLink->GetObjType();
+    return refLink.is() && OBJECT_CLIENT_GRF == refLink->GetObjType();
 }
 
 inline bool SwGrfNode::IsLinkedDDE() const
 {
-    return refLink.Is() && OBJECT_CLIENT_DDE == refLink->GetObjType();
+    return refLink.is() && OBJECT_CLIENT_DDE == refLink->GetObjType();
 }
 
 #endif

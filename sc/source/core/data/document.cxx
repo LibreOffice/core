@@ -1132,7 +1132,7 @@ void ScDocument::LimitChartArea( SCTAB nTab, SCCOL& rStartCol, SCROW& rStartRow,
 void ScDocument::LimitChartIfAll( ScRangeListRef& rRangeList )
 {
     ScRangeListRef aNew = new ScRangeList;
-    if (rRangeList.Is())
+    if (rRangeList.is())
     {
         for ( size_t i = 0, nCount = rRangeList->size(); i < nCount; i++ )
         {

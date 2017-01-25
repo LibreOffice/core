@@ -427,13 +427,13 @@ void GalleryTransferable::InitData( bool bLazy )
                         mpGraphicObject = new GraphicObject( aGraphic );
                 }
 
-                if( !mxModelStream.Is() )
+                if( !mxModelStream.is() )
                 {
                     mxModelStream = new SotStorageStream( "" );
                     mxModelStream->SetBufferSize( 16348 );
 
                     if( !mpTheme->GetModelStream( mnObjectPos, mxModelStream ) )
-                        mxModelStream.Clear();
+                        mxModelStream.clear();
                     else
                         mxModelStream->Seek( 0 );
                 }
@@ -514,7 +514,7 @@ bool GalleryTransferable::GetData( const datatransfer::DataFlavor& rFlavor, cons
 
     if( ( SotClipboardFormatId::DRAWING == nFormat ) && ( SgaObjKind::SvDraw == meObjectKind ) )
     {
-        bRet = ( mxModelStream.Is() && SetObject( mxModelStream.get(), SotClipboardFormatId::NONE, rFlavor ) );
+        bRet = ( mxModelStream.is() && SetObject( mxModelStream.get(), SotClipboardFormatId::NONE, rFlavor ) );
     }
     else if( ( SotClipboardFormatId::SVIM == nFormat ) && mpImageMap )
     {
@@ -569,7 +569,7 @@ void GalleryTransferable::DragFinished( sal_Int8 nDropAction )
 
 void GalleryTransferable::ObjectReleased()
 {
-    mxModelStream.Clear();
+    mxModelStream.clear();
     delete mpGraphicObject;
     mpGraphicObject = nullptr;
     delete mpImageMap;
