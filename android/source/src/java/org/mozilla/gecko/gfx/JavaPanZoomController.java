@@ -28,7 +28,7 @@ import java.util.TimerTask;
  * Many ideas are from Joe Hewitt's Scrollability:
  *   https://github.com/joehewitt/scrollability/
  */
-public class JavaPanZoomController
+class JavaPanZoomController
         extends GestureDetector.SimpleOnGestureListener
         implements PanZoomController, SimpleScaleGestureDetector.SimpleScaleGestureListener
 {
@@ -77,6 +77,7 @@ public class JavaPanZoomController
     private final Axis mY;
     private final TouchEventHandler mTouchEventHandler;
     private Thread mMainThread;
+    private LibreOfficeMainActivity mContext;
 
     /* The timer that handles flings or bounces. */
     private Timer mAnimationTimer;
@@ -91,7 +92,8 @@ public class JavaPanZoomController
     /* Whether or not to wait for a double-tap before dispatching a single-tap */
     private boolean mWaitForDoubleTap;
 
-    public JavaPanZoomController(PanZoomTarget target, View view) {
+    JavaPanZoomController(LibreOfficeMainActivity context, PanZoomTarget target, View view) {
+        mContext = context;
         PAN_THRESHOLD = 1/16f * LOKitShell.getDpi(view.getContext());
         MAX_SCROLL = 0.075f * LOKitShell.getDpi(view.getContext());
         mTarget = target;
@@ -100,7 +102,7 @@ public class JavaPanZoomController
         mY = new AxisY(mSubscroller);
         mTouchEventHandler = new TouchEventHandler(view.getContext(), view, this);
 
-        mMainThread = LibreOfficeMainActivity.mAppContext.getMainLooper().getThread();
+        mMainThread = mContext.getMainLooper().getThread();
         checkMainThread();
 
         setState(PanZoomState.NOTHING);
@@ -111,7 +113,7 @@ public class JavaPanZoomController
         mTouchEventHandler.destroy();
     }
 
-    private static final float easeOut(float t) {
+    private static float easeOut(float t) {
         // ease-out approx.
         // -(t-1)^2+1
         t = t-1;
@@ -202,7 +204,7 @@ public class JavaPanZoomController
     }
 
     /** This function must be called on the UI thread. */
-    public void startingNewEventBlock(MotionEvent event, boolean waitingForTouchListeners) {
+    void startingNewEventBlock(MotionEvent event, boolean waitingForTouchListeners) {
         checkMainThread();
         mSubscroller.cancel();
         if (waitingForTouchListeners && (event.getAction() & MotionEvent.ACTION_MASK) == MotionEvent.ACTION_DOWN) {
@@ -214,7 +216,7 @@ public class JavaPanZoomController
     }
 
     /** This function must be called on the UI thread. */
-    public void preventedTouchFinished() {
+    void preventedTouchFinished() {
         checkMainThread();
         if (mState == PanZoomState.WAITING_LISTENERS) {
             // if we enter here, we just finished a block of events whose default actions
@@ -276,7 +278,7 @@ public class JavaPanZoomController
     private boolean handleTouchMove(MotionEvent event) {
         if (mState == PanZoomState.PANNING_LOCKED || mState == PanZoomState.PANNING) {
             if (getVelocity() > 18.0f) {
-                LibreOfficeMainActivity.mAppContext.hideSoftKeyboard();
+                mContext.hideSoftKeyboard();
             }
         }
 
@@ -555,7 +557,7 @@ public class JavaPanZoomController
         return getVelocity() < STOPPED_THRESHOLD;
     }
 
-    PointF resetDisplacement() {
+    private PointF resetDisplacement() {
         return new PointF(mX.resetDisplacement(), mY.resetDisplacement());
     }
 
@@ -593,7 +595,7 @@ public class JavaPanZoomController
         protected abstract void animateFrame();
 
         /* This should always run on the UI thread */
-        protected final void terminate() {
+        final void terminate() {
             mAnimationTerminated = true;
         }
     }
@@ -986,7 +988,7 @@ public class JavaPanZoomController
      * While we usually use device pixels, zoomToRect must be specified in CSS
      * pixels.
      */
-    public boolean animatedZoomTo(RectF zoomToRect) {
+    boolean animatedZoomTo(RectF zoomToRect) {
         final float startZoom = getMetrics().zoomFactor;
 
         RectF viewport = getMetrics().getViewport();
@@ -1030,7 +1032,7 @@ public class JavaPanZoomController
      * Move the viewport to the top-left point to and zoom to the desired
      * zoom factor. Input zoom factor can be null, in this case leave the zoom unchanged.
      */
-    public boolean animatedMove(PointF topLeft, Float zoom) {
+    boolean animatedMove(PointF topLeft, Float zoom) {
         RectF moveToRect = getMetrics().getCssViewport();
         moveToRect.offsetTo(topLeft.x, topLeft.y);
 
