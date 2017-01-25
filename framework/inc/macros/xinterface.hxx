@@ -82,34 +82,6 @@ ________________________________________________________________________________
         return aReturn;                                                                                                                                     \
     }
 
-
-//  private
-//  implementation of XInterface::queryInterface() with more than 12 other interfaces!
-#define PRIVATE_DEFINE_XINTERFACE_LARGE( CLASS, BASECLASS, INTERFACES_FIRST, INTERFACES_SECOND )                                                            \
-    PRIVATE_DEFINE_XINTERFACE_ACQUIRE_RELEASE( CLASS, BASECLASS )                                                                                           \
-    css::uno::Any SAL_CALL CLASS::queryInterface( const css::uno::Type& aType ) throw( css::uno::RuntimeException, std::exception )  \
-    {                                                                                                                                                       \
-        /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface. */                                                              \
-        /* Ask for my own supported interfaces ...                                          */                                                              \
-        css::uno::Any aReturn  ( ::cppu::queryInterface INTERFACES_FIRST                                                                       \
-                                            );                                                                                                              \
-        /* If searched interface not supported by first group ... */                                                                                        \
-        if ( !aReturn.hasValue() )                                                                                                                          \
-        {                                                                                                                                                   \
-            /* ... search in second group. (cppuhelper support 12 items only!) */                                                                           \
-            aReturn = ::cppu::queryInterface INTERFACES_SECOND;                                                                                            \
-            /* If searched interface not supported by this class ... */                                                                                     \
-            if ( !aReturn.hasValue() )                                                                                                                      \
-            {                                                                                                                                               \
-                /* ... ask baseclass for interfaces! */                                                                                                     \
-                aReturn = BASECLASS::queryInterface( aType );                                                                                               \
-            }                                                                                                                                               \
-        }                                                                                                                                                   \
-        /* Return result of this search. */                                                                                                                 \
-        return aReturn;                                                                                                                                     \
-    }
-
-
 //  private
 //  help macros to replace INTERFACES in queryInterface() [see before]
 
@@ -195,38 +167,6 @@ ________________________________________________________________________________
                                                                             )                                       \
                                     )                                                                               \
                                 )
-
-//  implementation of XInterface with 22 additional interfaces for queryInterface()
-#define DEFINE_XINTERFACE_22( CLASS, BASECLASS, INTERFACE1, INTERFACE2, INTERFACE3, INTERFACE4, INTERFACE5, INTERFACE6, INTERFACE7, INTERFACE8, INTERFACE9, INTERFACE10, INTERFACE11, INTERFACE12, INTERFACE13, INTERFACE14, INTERFACE15, INTERFACE16, INTERFACE17, INTERFACE18, INTERFACE19, INTERFACE20, INTERFACE21, INTERFACE22 ) \
-    PRIVATE_DEFINE_XINTERFACE_LARGE (   CLASS,                                                                      \
-                                        BASECLASS,                                                                  \
-                                        ( aType, PRIVATE_DEFINE_INTERFACE_11    (   INTERFACE1  ,                   \
-                                                                                    INTERFACE2  ,                   \
-                                                                                    INTERFACE3  ,                   \
-                                                                                    INTERFACE4  ,                   \
-                                                                                    INTERFACE5  ,                   \
-                                                                                    INTERFACE6  ,                   \
-                                                                                    INTERFACE7  ,                   \
-                                                                                    INTERFACE8  ,                   \
-                                                                                    INTERFACE9  ,                   \
-                                                                                    INTERFACE10 ,                   \
-                                                                                    INTERFACE11                     \
-                                                                                )                                   \
-                                        ),                                                                          \
-                                        ( aType, PRIVATE_DEFINE_INTERFACE_11    (   INTERFACE12 ,                   \
-                                                                                    INTERFACE13 ,                   \
-                                                                                    INTERFACE14 ,                   \
-                                                                                    INTERFACE15 ,                   \
-                                                                                    INTERFACE16 ,                   \
-                                                                                    INTERFACE17 ,                   \
-                                                                                    INTERFACE18 ,                   \
-                                                                                    INTERFACE19 ,                   \
-                                                                                    INTERFACE20 ,                   \
-                                                                                    INTERFACE22 ,                   \
-                                                                                    INTERFACE21                     \
-                                                                                )                                   \
-                                        )                                                                           \
-                                    )
 
 }       //  namespace framework
 
