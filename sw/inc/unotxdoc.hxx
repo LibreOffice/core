@@ -61,6 +61,7 @@
 #include <com/sun/star/text/XFlatParagraphIteratorProvider.hpp>
 #include <com/sun/star/document/XDocumentLanguages.hpp>
 #include <com/sun/star/util/XCloneable.hpp>
+#include <rtl/ref.hxx>
 #include <svl/itemprop.hxx>
 #include <svx/fmdmod.hxx>
 #include <editeng/UnoForbiddenCharsTable.hxx>
@@ -174,8 +175,7 @@ private:
 
     //temporary frame to enable PDF export if no valid view is available
     SfxViewFrame*                                   m_pHiddenViewFrame;
-    css::uno::Reference< css::uno::XInterface>      xPropertyHelper;
-    SwXDocumentPropertyHelper*                      pPropertyHelper;
+    rtl::Reference<SwXDocumentPropertyHelper>       mxPropertyHelper;
 
     SwPrintUIOptions *                              m_pPrintUIOptions;
     SwRenderData *                                  m_pRenderData;

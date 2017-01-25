@@ -422,7 +422,6 @@ SwXTextDocument::SwXTextDocument(SwDocShell* pShell)
     mxLinkTargetSupplier(),
     mxXRedlines(),
     m_pHiddenViewFrame(nullptr),
-    pPropertyHelper(nullptr),
     m_pPrintUIOptions( nullptr ),
     m_pRenderData( nullptr ),
     // #i117783#
@@ -452,12 +451,11 @@ SwXTextDocument::~SwXTextDocument()
 
 SwXDocumentPropertyHelper * SwXTextDocument::GetPropertyHelper ()
 {
-    if(!xPropertyHelper.is())
+    if(!mxPropertyHelper.is())
     {
-        pPropertyHelper = new SwXDocumentPropertyHelper(*pDocShell->GetDoc());
-        xPropertyHelper = static_cast<cppu::OWeakObject*>(pPropertyHelper);
+        mxPropertyHelper = new SwXDocumentPropertyHelper(*pDocShell->GetDoc());
     }
-    return pPropertyHelper;
+    return mxPropertyHelper.get();
 }
 
 void SwXTextDocument::GetNumberFormatter()
@@ -1600,11 +1598,10 @@ void    SwXTextDocument::InitNewDoc()
         static_cast<SwXRedlines*>(pMarks)->Invalidate();
         mxXRedlines.clear();
     }
-    if(xPropertyHelper.is())
+    if(mxPropertyHelper.is())
     {
-        pPropertyHelper->Invalidate();
-        xPropertyHelper = nullptr;
-        pPropertyHelper = nullptr;
+        mxPropertyHelper->Invalidate();
+        mxPropertyHelper.clear();
     }
 }
 
@@ -2064,7 +2061,7 @@ Any SwXTextDocument::getPropertyValue(const OUString& rPropertyName)
         case WID_DOC_FORBIDDEN_CHARS:
         {
             GetPropertyHelper();
-            Reference<XForbiddenCharacters> xRet(xPropertyHelper, UNO_QUERY);
+            Reference<XForbiddenCharacters> xRet(static_cast<cppu::OWeakObject*>(mxPropertyHelper.get()), UNO_QUERY);
             aAny <<= xRet;
         }
         break;
