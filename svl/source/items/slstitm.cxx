@@ -34,13 +34,8 @@ public:
     std::vector<OUString>  aList;
 
     SfxImpStringList() {}
-    ~SfxImpStringList();
 };
 
-
-SfxImpStringList::~SfxImpStringList()
-{
-}
 
 SfxStringListItem::SfxStringListItem()
 {

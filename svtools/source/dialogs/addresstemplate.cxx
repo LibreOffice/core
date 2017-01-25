@@ -472,10 +472,6 @@ void AssignmentPersistentData::ImplCommit()
             memset(pFields, 0, sizeof(pFields));
         }
 
-        ~AddressBookSourceDialogData()
-        {
-        }
-
         // Copy assignment is forbidden and not implemented.
         AddressBookSourceDialogData (const AddressBookSourceDialogData &) = delete;
         AddressBookSourceDialogData & operator= (const AddressBookSourceDialogData &) = delete;

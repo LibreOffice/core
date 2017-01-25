@@ -81,7 +81,6 @@ protected:
             , nTokenId(0)
         {
         }
-        ~TokenStackType() { }
     };
 
     // methods for Token stack

@@ -267,10 +267,6 @@ struct EmbeddedObjectRef_Impl
         if (r.pGraphic && !r.bNeedUpdate)
             pGraphic.reset( new Graphic(*r.pGraphic) );
     }
-
-    ~EmbeddedObjectRef_Impl()
-    {
-    }
 };
 
 const uno::Reference <embed::XEmbeddedObject>& EmbeddedObjectRef::operator->() const

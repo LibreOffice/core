@@ -33,9 +33,8 @@ private:
 public:
                              SfxSizeItem( sal_uInt16 nWhich, const Size& rVal );
                              SfxSizeItem( const SfxSizeItem& );
-                             virtual ~SfxSizeItem() override {}
 
-    virtual bool GetPresentation( SfxItemPresentation ePres,
+    virtual bool             GetPresentation( SfxItemPresentation ePres,
                                   MapUnit eCoreMetric,
                                   MapUnit ePresMetric,
                                   OUString &rText,

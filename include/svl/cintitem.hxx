@@ -37,8 +37,6 @@ public:
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
     {}
 
-    virtual ~CntByteItem() override {}
-
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -85,8 +83,6 @@ public:
     CntUInt16Item(const CntUInt16Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
     {}
-
-    virtual ~CntUInt16Item() override {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
@@ -135,8 +131,6 @@ public:
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
     {}
 
-    virtual ~CntInt32Item() override {}
-
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 
     virtual bool GetPresentation(SfxItemPresentation,
@@ -183,8 +177,6 @@ public:
     CntUInt32Item(const CntUInt32Item & rItem):
         SfxPoolItem(rItem), m_nValue(rItem.m_nValue)
     {}
-
-    virtual ~CntUInt32Item() override {}
 
     virtual bool operator ==(const SfxPoolItem & rItem) const override;
 

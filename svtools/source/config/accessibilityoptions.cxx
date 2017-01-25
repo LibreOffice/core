@@ -52,7 +52,6 @@ private:
 
 public:
     SvtAccessibilityOptions_Impl();
-    ~SvtAccessibilityOptions_Impl();
 
     void        SetVCLSettings();
     bool        GetIsForPagePreviews() const;
@@ -99,11 +98,6 @@ SvtAccessibilityOptions_Impl::SvtAccessibilityOptions_Impl()
         SAL_WARN("svtools.config", "Caught unexpected: " << ex.Message);
     }
 }
-
-SvtAccessibilityOptions_Impl::~SvtAccessibilityOptions_Impl()
-{
-}
-
 
 bool SvtAccessibilityOptions_Impl::GetIsForPagePreviews() const
 {
