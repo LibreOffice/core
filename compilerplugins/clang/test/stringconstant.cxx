@@ -31,9 +31,10 @@ int main() {
     sb.append(s1);
     sb.append(s2); // expected-error {{in call of 'rtl::OStringBuffer::append' with non-array string constant argument, turn the non-array string constant into an array [loplugin:stringconstant]}}
     sb.append("foo", std::strlen("foo")); // expected-error {{rewrite call of 'rtl::OStringBuffer::append' with string constant and matching length arguments as call of 'rtl::OStringBuffer::append' [loplugin:stringconstant]}}
+#if 0
     sb.append(s1, std::strlen(s1)); // expected-error {{rewrite call of 'rtl::OStringBuffer::append' with string constant and matching length arguments as call of 'rtl::OStringBuffer::append' [loplugin:stringconstant]}}
     sb.append(s2, std::strlen(s2)); // expected-error {{rewrite call of 'rtl::OStringBuffer::append' with string constant and matching length arguments as call of 'rtl::OStringBuffer::append', and turn the non-array string constant into an array [loplugin:stringconstant]}}
-
+#endif
     sb.insert(0, OString()); // expected-error {{in call of 'rtl::OStringBuffer::insert', replace empty 'OString' constructor with empty string literal [loplugin:stringconstant]}}
     sb.insert(0, OString("foo")); // expected-error {{in call of 'rtl::OStringBuffer::insert', elide explicit 'OString' constructor [loplugin:stringconstant]}}
     sb.insert(0, OString(s1)); // expected-error {{in call of 'rtl::OStringBuffer::insert', elide explicit 'OString' constructor [loplugin:stringconstant]}}
@@ -45,8 +46,10 @@ int main() {
     sb.insert(0, s1);
     sb.insert(0, s2); // expected-error {{in call of 'rtl::OStringBuffer::insert' with non-array string constant argument, turn the non-array string constant into an array [loplugin:stringconstant]}}
     sb.insert(0, "foo", std::strlen("foo")); // expected-error {{rewrite call of 'rtl::OStringBuffer::insert' with string constant and matching length arguments as call of 'rtl::OStringBuffer::insert' [loplugin:stringconstant]}}
+#if 0
     sb.insert(0, s1, std::strlen(s1)); // expected-error {{rewrite call of 'rtl::OStringBuffer::insert' with string constant and matching length arguments as call of 'rtl::OStringBuffer::insert' [loplugin:stringconstant]}}
     sb.insert(0, s2, std::strlen(s2)); // expected-error {{rewrite call of 'rtl::OStringBuffer::insert' with string constant and matching length arguments as call of 'rtl::OStringBuffer::insert', and turn the non-array string constant into an array [loplugin:stringconstant]}}
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
