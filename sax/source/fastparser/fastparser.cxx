@@ -128,7 +128,6 @@ struct ParserData
     css::lang::Locale                                          maLocale;
 
     ParserData();
-    ~ParserData();
 };
 
 struct NamespaceDefine
@@ -190,7 +189,6 @@ struct Entity : public ParserData
 
     explicit Entity( const ParserData& rData );
     Entity( const Entity& rEntity );
-    ~Entity();
     void startElement( Event *pEvent );
     void characters( const OUString& sChars );
     void endElement();
@@ -394,9 +392,6 @@ ParserData::ParserData()
     : mpTokenHandler( nullptr )
 {}
 
-ParserData::~ParserData()
-{}
-
 Entity::Entity(const ParserData& rData)
     : ParserData(rData)
     , mnProducedEventsSize(0)
@@ -419,10 +414,6 @@ Entity::Entity(const Entity& e)
     , maContextStack(e.maContextStack)
     , maNamespaceCount(e.maNamespaceCount)
     , maNamespaceDefines(e.maNamespaceDefines)
-{
-}
-
-Entity::~Entity()
 {
 }
 

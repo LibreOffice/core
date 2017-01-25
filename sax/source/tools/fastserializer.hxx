@@ -177,7 +177,6 @@ private:
 #endif
 
         explicit ForMerge(sal_Int32 const nTag) : m_Tag(nTag) {}
-        virtual ~ForMerge() override {}
 
         virtual void setCurrentElement( ::sal_Int32 /*nToken*/ ) {}
         virtual Int8Sequence& getData();

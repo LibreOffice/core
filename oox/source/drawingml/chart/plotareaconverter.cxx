@@ -57,7 +57,6 @@ struct AxesSetModel
     AxisMap             maAxes;             /// All axes mapped by API axis type.
 
     inline explicit     AxesSetModel() {}
-    inline              ~AxesSetModel() {}
 };
 
 /** Axes set converter. This is a helper class for the plot area converter. */

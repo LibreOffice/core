@@ -183,7 +183,6 @@ struct XmlFilterBaseImpl
 
     /// @throws RuntimeException
     explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
-    ~XmlFilterBaseImpl();
 };
 
 XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
@@ -193,10 +192,6 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
 {
     // register XML namespaces
     registerNamespaces(maFastParser);
-}
-
-XmlFilterBaseImpl::~XmlFilterBaseImpl()
-{
 }
 
 XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :

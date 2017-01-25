@@ -169,7 +169,6 @@ public:
     {
         clearDispensation();
     }
-    ~Statistics(){}
 
     void addValue(sal_uInt8 _nIndex, sal_Int32 _nValue)
     {
