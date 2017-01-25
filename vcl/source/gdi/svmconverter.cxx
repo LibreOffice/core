@@ -923,7 +923,7 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             nDXAryLen = std::max(nAryLen, nStrLen);
                             pDXAry.reset(new long[nDXAryLen]);
 
-                            if (nDXAryLen <= nLen)
+                            if (nDXAryLen < nLen)
                             {
                                 //MetaTextArrayAction ctor expects pDXAry to be >= nLen if set, so if this can't
                                 //be achieved, don't read it, it's utterly broken.
