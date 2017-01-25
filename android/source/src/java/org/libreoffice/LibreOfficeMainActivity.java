@@ -54,7 +54,10 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
     private static final String ENABLE_EXPERIMENTAL_PREFS_KEY = "ENABLE_EXPERIMENTAL";
     private static final String ASSETS_EXTRACTED_PREFS_KEY = "ASSETS_EXTRACTED";
 
+    //TODO WIP: removing this static Context (in the following commits)
     public static LibreOfficeMainActivity mAppContext;
+    //TODO "public static" is a temporary workaround
+    public static LOKitThread loKitThread;
 
     private GeckoLayerClient mLayerClient;
 
@@ -161,7 +164,8 @@ public class LibreOfficeMainActivity extends AppCompatActivity {
             mDrawerList.setOnItemClickListener(new DocumentPartClickListener());
         }
 
-        LibreOfficeApplication.getLoKitThread().clearQueue();
+        loKitThread = new LOKitThread(this);
+        loKitThread.start();
 
         mLayerClient = new GeckoLayerClient(this);
         mLayerClient.setZoomConstraints(new ZoomConstraints(true));

@@ -1,6 +1,5 @@
 package org.libreoffice;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.PointF;
 import android.graphics.RectF;
@@ -21,7 +20,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Thread that communicates with LibreOffice through LibreOfficeKit JNI interface. The thread
  * consumes events from other threads (mainly the UI thread) and acts accordingly.
  */
-public class LOKitThread extends Thread {
+class LOKitThread extends Thread {
     private static final String LOGTAG = LOKitThread.class.getSimpleName();
 
     private LinkedBlockingQueue<LOEvent> mEventQueue = new LinkedBlockingQueue<LOEvent>();
@@ -30,8 +29,10 @@ public class LOKitThread extends Thread {
     private InvalidationHandler mInvalidationHandler;
     private ImmutableViewportMetrics mViewportMetrics;
     private GeckoLayerClient mLayerClient;
+    private LibreOfficeMainActivity mContext;
 
-    public LOKitThread() {
+    LOKitThread(LibreOfficeMainActivity context) {
+        mContext = context;
         mInvalidationHandler = null;
         TileProviderFactory.initialize();
     }
@@ -160,21 +161,13 @@ public class LOKitThread extends Thread {
 
     private void resumeDocument(String filename, int partIndex){
 
-        LibreOfficeMainActivity mainActivity = LibreOfficeMainActivity.mAppContext;
+        mLayerClient = mContext.getLayerClient();
 
-
-        mLayerClient = mainActivity.getLayerClient();
-
-        mInvalidationHandler = new InvalidationHandler(mainActivity);
-        mTileProvider = TileProviderFactory.create(mainActivity, mInvalidationHandler, filename);
+        mInvalidationHandler = new InvalidationHandler(mContext);
+        mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, filename);
 
         if (mTileProvider.isReady()) {
-            LOKitShell.showProgressSpinner(mainActivity);
-            mTileProvider.changePart(partIndex);
-            mViewportMetrics = mLayerClient.getViewportMetrics();
-            mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
-            refresh();
-            LOKitShell.hideProgressSpinner(mainActivity);
+            changePart(partIndex);
         } else {
             closeDocument();
         }
@@ -186,12 +179,12 @@ public class LOKitThread extends Thread {
      * Change part of the document.
      */
     private void changePart(int partIndex) {
-        LOKitShell.showProgressSpinner(LibreOfficeMainActivity.mAppContext);
+        LOKitShell.showProgressSpinner(mContext);
         mTileProvider.changePart(partIndex);
         mViewportMetrics = mLayerClient.getViewportMetrics();
         mLayerClient.setViewportMetrics(mViewportMetrics.scaleTo(0.9f, new PointF()));
         refresh();
-        LOKitShell.hideProgressSpinner(LibreOfficeMainActivity.mAppContext);
+        LOKitShell.hideProgressSpinner(mContext);
     }
 
     /**
@@ -199,18 +192,16 @@ public class LOKitThread extends Thread {
      * @param filename - filename where the document is located
      */
     private void loadDocument(String filename) {
-        //TODO remove static reference to context (causes memory leaks)
-        LibreOfficeMainActivity mMainActivity = LibreOfficeMainActivity.mAppContext;
 
-        mLayerClient = mMainActivity.getLayerClient();
+        mLayerClient = mContext.getLayerClient();
 
-        mInvalidationHandler = new InvalidationHandler(mMainActivity);
-        mTileProvider = TileProviderFactory.create(mMainActivity, mInvalidationHandler, filename);
+        mInvalidationHandler = new InvalidationHandler(mContext);
+        mTileProvider = TileProviderFactory.create(mContext, mInvalidationHandler, filename);
 
         if (mTileProvider.isReady()) {
-            LOKitShell.showProgressSpinner(mMainActivity);
+            LOKitShell.showProgressSpinner(mContext);
             refresh();
-            LOKitShell.hideProgressSpinner(mMainActivity);
+            LOKitShell.hideProgressSpinner(mContext);
         } else {
             closeDocument();
         }
@@ -219,7 +210,7 @@ public class LOKitThread extends Thread {
     /**
      * Close the currently loaded document.
      */
-    public void closeDocument() {
+    private void closeDocument() {
         if (mTileProvider != null) {
             mTileProvider.close();
             mTileProvider = null;
