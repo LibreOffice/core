@@ -423,6 +423,7 @@ bool XPMReader::ImplGetColSub( sal_uInt8* pDest )
                         *pDest++ = pRGBTable[ i ].red;
                         *pDest++ = pRGBTable[ i ].green;
                         *pDest++ = pRGBTable[ i ].blue;
+                        break;
                     }
                 }
                 i++;
