@@ -89,24 +89,25 @@ class SwMailMergeConfigItem;
 
 class SwView_Impl
 {
-    css::uno::Reference< css::lang::XEventListener >  xScanEvtLstnr;
-    css::uno::Reference< css::lang::XEventListener >  xClipEvtLstnr;
     css::uno::Reference< css::frame::XDispatchProviderInterceptor >   xDisProvInterceptor;
     css::uno::Reference< css::view::XSelectionSupplier >              mxXTextView;       // UNO object
-    css::uno::WeakReference< css::lang::XUnoTunnel > xTransferable;
+    css::uno::WeakReference< css::lang::XUnoTunnel >                  xTransferable;
 
     // temporary document for printing text of selection / multi selection
     // in PDF export.
-    SfxObjectShellLock           xTmpSelDocSh;
+    SfxObjectShellLock          xTmpSelDocSh;
 
-    SwView* pView;
-    SwScannerEventListener*     pScanEvtLstnr;
-    SwClipboardChangeListener*  pClipEvtLstnr;
+    SwView*                     pView;
+    rtl::Reference<SwScannerEventListener>
+                                mxScanEvtLstnr;
+    rtl::Reference<SwClipboardChangeListener>
+                                mxClipEvtLstnr;
     ShellModes                  eShellMode;
 
 #if HAVE_FEATURE_DBCONNECTIVITY
-    std::shared_ptr<SwMailMergeConfigItem> xConfigItem;
-    sal_uInt16              nMailMergeRestartPage;
+    std::shared_ptr<SwMailMergeConfigItem>
+                                xConfigItem;
+    sal_uInt16                  nMailMergeRestartPage;
 #endif
 
     sfx2::DocumentInserter*     m_pDocInserter;

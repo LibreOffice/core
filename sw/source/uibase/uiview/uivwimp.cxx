@@ -55,8 +55,6 @@ using namespace ::com::sun::star::datatransfer::clipboard;
 SwView_Impl::SwView_Impl(SwView* pShell)
     : mxXTextView()
     , pView(pShell)
-    , pScanEvtLstnr(nullptr)
-    , pClipEvtLstnr(nullptr)
     , eShellMode(SHELL_MODE_TEXT)
 #if HAVE_FEATURE_DBCONNECTIVITY
     , nMailMergeRestartPage(0)
@@ -85,12 +83,12 @@ SwView_Impl::~SwView_Impl()
     view::XSelectionSupplier* pTextView = mxXTextView.get();
     static_cast<SwXTextView*>(pTextView)->Invalidate();
     mxXTextView.clear();
-    if( xScanEvtLstnr.is() )
-           pScanEvtLstnr->ViewDestroyed();
-    if( xClipEvtLstnr.is() )
+    if( mxScanEvtLstnr.is() )
+           mxScanEvtLstnr->ViewDestroyed();
+    if( mxClipEvtLstnr.is() )
     {
-        pClipEvtLstnr->AddRemoveListener( false );
-        pClipEvtLstnr->ViewDestroyed();
+        mxClipEvtLstnr->AddRemoveListener( false );
+        mxClipEvtLstnr->ViewDestroyed();
     }
 #if HAVE_FEATURE_DBCONNECTIVITY
     xConfigItem.reset();
@@ -195,17 +193,17 @@ void SwView_Impl::ExecuteScan( SfxRequest& rReq )
 
 SwScannerEventListener& SwView_Impl::GetScannerEventListener()
 {
-    if(!xScanEvtLstnr.is())
-        xScanEvtLstnr = pScanEvtLstnr = new SwScannerEventListener(*pView);
-    return *pScanEvtLstnr;
+    if(!mxScanEvtLstnr.is())
+        mxScanEvtLstnr = new SwScannerEventListener(*pView);
+    return *mxScanEvtLstnr;
 }
 
 void SwView_Impl::AddClipboardListener()
 {
-    if(!xClipEvtLstnr.is())
+    if(!mxClipEvtLstnr.is())
     {
-        xClipEvtLstnr = pClipEvtLstnr = new SwClipboardChangeListener( *pView );
-        pClipEvtLstnr->AddRemoveListener( true );
+        mxClipEvtLstnr = new SwClipboardChangeListener( *pView );
+        mxClipEvtLstnr->AddRemoveListener( true );
     }
 }
 
