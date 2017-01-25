@@ -137,7 +137,6 @@ struct SearchDlg_Impl
         aCommand2URL.Protocol = "vnd.sun.search:";
         aCommand2URL.Path = "SearchViaComponent2";
     }
-    ~SearchDlg_Impl() {}
 };
 
 void ListToStrArr_Impl( sal_uInt16 nId, std::vector<OUString>& rStrLst, ComboBox& rCBox )

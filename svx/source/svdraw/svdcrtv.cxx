@@ -53,7 +53,10 @@ class ImplConnectMarkerOverlay
 
 public:
     ImplConnectMarkerOverlay(const SdrCreateView& rView, SdrObject& rObject);
-    ~ImplConnectMarkerOverlay();
+
+    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
+    // That destructor calls clear() at the list which removes all objects from the
+    // OverlayManager and deletes them.
 
     const SdrObject& GetTargetObject() const { return mrObject; }
 };
@@ -106,14 +109,6 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
         }
     }
 }
-
-ImplConnectMarkerOverlay::~ImplConnectMarkerOverlay()
-{
-    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
-    // That destructor calls clear() at the list which removes all objects from the
-    // OverlayManager and deletes them.
-}
-
 
 class ImpSdrCreateViewExtraData
 {

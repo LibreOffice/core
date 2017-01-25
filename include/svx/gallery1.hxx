@@ -53,7 +53,6 @@ public:
                                                const OUString& rName,
                                                bool bReadOnly, bool bNewFile,
                                                sal_uInt32 nId, bool bThemeNameFromResource );
-                            ~GalleryThemeEntry() {};
 
     const OUString&         GetThemeName() const { return aName; }
 

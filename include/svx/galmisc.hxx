@@ -111,8 +111,6 @@ public:
                                 SdrObjUserData( SdrInventor::SgaImap, ID_IMAPINFO ),
                                 aImageMap( rImageMap ) {};
 
-    virtual                 ~SgaIMapInfo() override {};
-
     virtual SdrObjUserData* Clone( SdrObject* ) const override
                             {
                                 SgaIMapInfo* pInfo = new SgaIMapInfo;

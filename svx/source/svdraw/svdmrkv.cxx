@@ -73,7 +73,10 @@ class ImplMarkingOverlay
 
 public:
     ImplMarkingOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos, bool bUnmarking);
-    ~ImplMarkingOverlay();
+
+    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
+    // That destructor calls clear() at the list which removes all objects from the
+    // OverlayManager and deletes them.
 
     void SetSecondPosition(const basegfx::B2DPoint& rNewPosition);
     bool IsUnmarking() const { return mbUnmarking; }
@@ -96,13 +99,6 @@ ImplMarkingOverlay::ImplMarkingOverlay(const SdrPaintView& rView, const basegfx:
             maObjects.append(pNew);
         }
     }
-}
-
-ImplMarkingOverlay::~ImplMarkingOverlay()
-{
-    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
-    // That destructor calls clear() at the list which removes all objects from the
-    // OverlayManager and deletes them.
 }
 
 void ImplMarkingOverlay::SetSecondPosition(const basegfx::B2DPoint& rNewPosition)

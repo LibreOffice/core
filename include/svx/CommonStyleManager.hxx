@@ -26,9 +26,6 @@ public:
         : StyleManager(rShell)
     {}
 
-    virtual ~CommonStyleManager() override
-    {}
-
     virtual sfx2::StylePreviewRenderer* CreateStylePreviewRenderer(
                                             OutputDevice& rOutputDev, SfxStyleSheetBase* pStyle,
                                             long nMaxHeight) override;
