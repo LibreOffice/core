@@ -51,6 +51,8 @@ public:
     /// top level container for all comments in the sidebar
     GtkWidget* m_pCommentsVBox;
 
+    /// Prepare and return a comment object (GtkBox)
+    static GtkWidget* createCommentBox(const boost::property_tree::ptree& aComment);
     /// Click even handler for m_pViewAnnotationsButton
     static void unoViewAnnotations(GtkWidget* pWidget, gpointer userdata);
     /// Configure event handler for window
@@ -238,6 +240,35 @@ static void lcl_registerToolItem(TiledWindow& rWindow, GtkToolItem* pItem, const
     rWindow.m_aToolItemSensitivities[pItem] = true;
 }
 
+GtkWidget* CommentsSidebar::createCommentBox(const boost::property_tree::ptree& aComment)
+{
+    GtkWidget* pCommentVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
+    int *id = g_new(int, 1);
+    *id =  aComment.get<int>("id");
+    g_object_set_data_full(G_OBJECT(pCommentVBox), "id", id, g_free);
+
+    GtkWidget* pCommentText = gtk_label_new(aComment.get<std::string>("text").c_str());
+    GtkWidget* pCommentAuthor = gtk_label_new(aComment.get<std::string>("author").c_str());
+    GtkWidget* pCommentDate = gtk_label_new(aComment.get<std::string>("dateTime").c_str());
+    GtkWidget* pControlsHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
+    GtkWidget* pGotoButton = gtk_button_new_with_label("Goto");
+    GtkWidget* pReplyButton = gtk_button_new_with_label("Reply");
+    gtk_container_add(GTK_CONTAINER(pControlsHBox), pGotoButton);
+    gtk_container_add(GTK_CONTAINER(pControlsHBox), pReplyButton);
+    GtkWidget* pCommentSeparator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
+
+    gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentText);
+    gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentAuthor);
+    gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentDate);
+    gtk_container_add(GTK_CONTAINER(pCommentVBox), pControlsHBox);
+    gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentSeparator);
+
+    gtk_label_set_line_wrap(GTK_LABEL(pCommentText), TRUE);
+    gtk_label_set_max_width_chars(GTK_LABEL(pCommentText), 35);
+
+    return pCommentVBox;
+}
+
 void CommentsSidebar::unoViewAnnotations(GtkWidget* pWidget, gpointer /*userdata*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
@@ -250,7 +281,8 @@ void CommentsSidebar::unoViewAnnotations(GtkWidget* pWidget, gpointer /*userdata
 
     gtk_widget_destroy(rWindow.m_pCommentsSidebar->m_pCommentsVBox);
 
-    rWindow.m_pCommentsSidebar->m_pCommentsVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 2);
+    rWindow.m_pCommentsSidebar->m_pCommentsVBox = gtk_grid_new();
+    g_object_set(rWindow.m_pCommentsSidebar->m_pCommentsVBox, "orientation", GTK_ORIENTATION_VERTICAL, nullptr);
     gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pCommentsVBox);
 
     boost::property_tree::ptree aTree;
@@ -259,21 +291,8 @@ void CommentsSidebar::unoViewAnnotations(GtkWidget* pWidget, gpointer /*userdata
     {
         for (boost::property_tree::ptree::value_type& rValue : aTree.get_child("comments"))
         {
-            GtkWidget* pCommentVBox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 1);
-            gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pCommentsVBox), pCommentVBox);
-
-            GtkWidget* pCommentText = gtk_label_new(rValue.second.get<std::string>("text").c_str());
-            GtkWidget* pCommentAuthor = gtk_label_new(rValue.second.get<std::string>("author").c_str());
-            GtkWidget* pCommentDate = gtk_label_new(rValue.second.get<std::string>("dateTime").c_str());
-            GtkWidget* pCommentSeparator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
-
-            gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentText);
-            gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentAuthor);
-            gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentDate);
-            gtk_container_add(GTK_CONTAINER(pCommentVBox), pCommentSeparator);
-
-            gtk_label_set_line_wrap(GTK_LABEL(pCommentText), TRUE);
-            gtk_label_set_max_width_chars(GTK_LABEL(pCommentText), 35);
+            GtkWidget* pCommentBox = CommentsSidebar::createCommentBox(rValue.second);
+            gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pCommentsVBox), pCommentBox);
         }
         gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pCommentsVBox);
     }
@@ -305,6 +324,8 @@ gboolean CommentsSidebar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigu
             g_signal_connect(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, "clicked", G_CALLBACK(CommentsSidebar::unoViewAnnotations), nullptr);
 
             gtk_widget_show_all(rWindow.m_pCommentsSidebar->m_pMainVBox);
+
+            gtk_button_clicked(GTK_BUTTON(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton));
         }
     }
 
@@ -1429,6 +1450,30 @@ static void passwordRequired(LOKDocView* pLOKDocView, gchar* pUrl, gboolean bMod
     gtk_widget_destroy(pPasswordDialog);
 }
 
+static void commentCallback(LOKDocView* pLOKDocView, gchar* pComment, gpointer /*  pData */)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(GTK_WIDGET(pLOKDocView));
+    std::stringstream aStream(pComment);
+    boost::property_tree::ptree aRoot;
+    boost::property_tree::read_json(aStream, aRoot);
+    boost::property_tree::ptree aComment = aRoot.get_child("comment");
+
+    gtk_container_foreach(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pCommentsVBox), [](GtkWidget* pWidget, gpointer userdata) {
+            boost::property_tree::ptree *pTree = static_cast<boost::property_tree::ptree*>(userdata);
+
+            int *id = static_cast<int*>(g_object_get_data(G_OBJECT(pWidget), "id"));
+            GtkWidget* pCommentsGrid = gtk_widget_get_parent(pWidget);
+            if (*id == pTree->get<int>("parent"))
+            {
+                GtkWidget* pCommentBox = CommentsSidebar::createCommentBox(*pTree);
+                gtk_grid_insert_next_to(GTK_GRID(pCommentsGrid), pWidget, GTK_POS_BOTTOM);
+                gtk_grid_attach_next_to(GTK_GRID(pCommentsGrid), pCommentBox, pWidget, GTK_POS_BOTTOM, 1, 1);
+                gtk_widget_show_all(pCommentBox);
+            }
+
+        } , &aComment);
+}
+
 static void toggleToolItem(GtkWidget* pWidget, gpointer /*pData*/)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
@@ -2014,6 +2059,7 @@ static void setupDocView(GtkWidget* pDocView)
     g_signal_connect(pDocView, "cursor-changed", G_CALLBACK(cursorChanged), nullptr);
     g_signal_connect(pDocView, "formula-changed", G_CALLBACK(formulaChanged), nullptr);
     g_signal_connect(pDocView, "password-required", G_CALLBACK(passwordRequired), nullptr);
+    g_signal_connect(pDocView, "comment", G_CALLBACK(commentCallback), nullptr);
 }
 
 int main( int argc, char* argv[] )

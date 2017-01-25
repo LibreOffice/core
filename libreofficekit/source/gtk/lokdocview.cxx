@@ -276,6 +276,7 @@ enum
     FORMULA_CHANGED,
     TEXT_SELECTION,
     PASSWORD_REQUIRED,
+    COMMENT,
 
     LAST_SIGNAL
 };
@@ -1399,6 +1400,7 @@ callback (gpointer pData)
         break;
     }
     case LOK_CALLBACK_COMMENT:
+        g_signal_emit(pCallback->m_pDocView, doc_view_signals[COMMENT], 0, pCallback->m_aPayload.c_str());
         break;
     default:
         g_assert(false);
@@ -3105,6 +3107,40 @@ static void lok_doc_view_class_init (LOKDocViewClass* pClass)
                      G_TYPE_NONE, 2,
                      G_TYPE_STRING,
                      G_TYPE_BOOLEAN);
+
+    /**
+     * LOKDocView::comment:
+     * @pDocView: the #LOKDocView on which the signal is emitted
+     * @pComment: the JSON string containing comment notification
+     * The has following structure containing the information telling whether
+     * the comment has been added, deleted or modified.
+     * The example:
+     * {
+     *     "comment": {
+     *         "action": "Add",
+     *         "id": "11",
+     *         "parent": "4",
+     *         "author": "Unknown Author",
+     *         "text": "This is a comment",
+     *         "dateTime": "2016-08-18T13:13:00",
+     *         "anchorPos": "4529, 3906",
+     *         "textRange": "1418, 3906, 3111, 919"
+     *     }
+     * }
+     * 'action' can be 'Add', 'Remove' or 'Modify' depending on whether
+     *  comment has been added, removed or modified.
+     * 'parent' is a non-zero comment id if this comment is a reply comment,
+     *  otherwise its a root comment.
+     */
+    doc_view_signals[COMMENT] =
+        g_signal_new("comment",
+                     G_TYPE_FROM_CLASS(pGObjectClass),
+                     G_SIGNAL_RUN_FIRST,
+                     0,
+                     nullptr, nullptr,
+                     g_cclosure_marshal_generic,
+                     G_TYPE_NONE, 1,
+                     G_TYPE_STRING);
 }
 
 SAL_DLLPUBLIC_EXPORT GtkWidget*
