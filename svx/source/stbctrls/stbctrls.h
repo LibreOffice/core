@@ -37,7 +37,7 @@
 #define PSZ_FUNC_MAX                4
 #define PSZ_FUNC_MIN                5
 #define PSZ_FUNC_SUM                9
-#define PSZ_FUNC_SELECTION_COUNT    12
+#define PSZ_FUNC_SELECTION_COUNT    13
 #define PSZ_FUNC_NONE               16
 
 #define XMLSEC_CALL         1
