@@ -137,7 +137,6 @@ ExcTable::ExcTable( const XclExpRoot& rRoot ) :
     XclExpRoot( rRoot ),
     mnScTab( SCTAB_GLOBAL ),
     nExcTab( EXC_NOTAB ),
-    pTabNames( new NameBuffer( nullptr, 16 ) ),
     mxNoteList( new XclExpNoteList )
 {
 }
@@ -146,7 +145,6 @@ ExcTable::ExcTable( const XclExpRoot& rRoot, SCTAB nScTab ) :
     XclExpRoot( rRoot ),
     mnScTab( nScTab ),
     nExcTab( rRoot.GetTabInfo().GetXclTab( nScTab ) ),
-    pTabNames( new NameBuffer( nullptr, 16 ) ),
     mxNoteList( new XclExpNoteList )
 {
 }
@@ -174,9 +172,6 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
     else
         Add( new ExcBofW8 );
 
-    SCTAB   nC;
-    OUString aTmpString;
-    SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
     sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
 
@@ -230,14 +225,6 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
     Add( new XclExpUInt16Record( EXC_ID_FNGROUPCOUNT, 14 ) );
 
     // first setup table names and contents
-
-    for( nC = 0 ; nC < nScTabCount ; nC++ )
-        if( rTabInfo.IsExportTab( nC ) )
-        {
-            rDoc.GetName( nC, aTmpString );
-            *pTabNames << aTmpString;
-        }
-
     if ( GetBiff() <= EXC_BIFF5 )
     {
         // global link table: EXTERNCOUNT, EXTERNSHEET, NAME
@@ -290,6 +277,8 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
     aRecList.AppendRecord( CreateRecord( EXC_ID_XFLIST ) );
     aRecList.AppendRecord( CreateRecord( EXC_ID_PALETTE ) );
 
+    SCTAB   nC;
+    SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     if( GetBiff() <= EXC_BIFF5 )
     {
         // Bundlesheet
@@ -328,7 +317,7 @@ void ExcTable::FillAsHeaderBinary( ExcBoundsheetList& rBoundsheetList )
 
         for( SCTAB nAdd = 0; nC < static_cast<SCTAB>(nCodenames) ; nC++, nAdd++ )
         {
-            aTmpString = lcl_GetVbaTabName( nAdd );
+            OUString aTmpString = lcl_GetVbaTabName( nAdd );
             ExcBoundsheetList::RecordRefType xBoundsheet( new ExcBundlesheet8( aTmpString ) );
             aRecList.AppendRecord( xBoundsheet );
             rBoundsheetList.AppendRecord( xBoundsheet );
@@ -362,9 +351,6 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     ScDocument& rDoc = GetDoc();
     XclExpTabInfo& rTabInfo = GetTabInfo();
 
-    SCTAB   nC;
-    OUString aTmpString;
-    SCTAB  nScTabCount     = rTabInfo.GetScTabCount();
     sal_uInt16  nExcTabCount    = rTabInfo.GetXclTabCount();
     sal_uInt16  nCodenames      = static_cast< sal_uInt16 >( GetExtDocOptions().GetCodeNameCount() );
 
@@ -372,14 +358,6 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     Add( rR.pTabId );
 
     // first setup table names and contents
-
-    for( nC = 0 ; nC < nScTabCount ; nC++ )
-        if( rTabInfo.IsExportTab( nC ) )
-        {
-            rDoc.GetName( nC, aTmpString );
-            *pTabNames << aTmpString;
-        }
-
     Add( new XclExpXmlStartSingleElementRecord( XML_workbookPr ) );
     Add( new XclExpBoolRecord(0x0040, false, XML_backupFile ) );    // BACKUP
     Add( new XclExpBoolRecord(0x008D, false, XML_showObjects ) );   // HIDEOBJ
@@ -418,6 +396,8 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
     lcl_AddBookviews( aRecList, *this );
 
     // Bundlesheet
+    SCTAB nC;
+    SCTAB nScTabCount = rTabInfo.GetScTabCount();
     aRecList.AppendNewRecord( new XclExpXmlStartElementRecord( XML_sheets ) );
     for( nC = 0 ; nC < nScTabCount ; nC++ )
         if( rTabInfo.IsExportTab( nC ) )
@@ -430,7 +410,7 @@ void ExcTable::FillAsHeaderXml( ExcBoundsheetList& rBoundsheetList )
 
     for( SCTAB nAdd = 0; nC < static_cast<SCTAB>(nCodenames) ; nC++, nAdd++ )
     {
-        aTmpString = lcl_GetVbaTabName( nAdd );
+        OUString aTmpString = lcl_GetVbaTabName( nAdd );
         ExcBoundsheetList::RecordRefType xBoundsheet( new ExcBundlesheet8( aTmpString ) );
         aRecList.AppendRecord( xBoundsheet );
         rBoundsheetList.AppendRecord( xBoundsheet );

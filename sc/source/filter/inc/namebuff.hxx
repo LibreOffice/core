@@ -33,12 +33,10 @@
 #include <unordered_map>
 
 class ScTokenArray;
-class NameBuffer;
 
 class StringHashEntry
 {
 private:
-    friend class NameBuffer;
     OUString          aString;
     sal_uInt32        nHash;
 
@@ -77,38 +75,6 @@ inline void StringHashEntry::operator =( const StringHashEntry& r )
 inline bool StringHashEntry::operator ==( const StringHashEntry& r ) const
 {
     return ( nHash == r.nHash && aString ==  r.aString );
-}
-
-class NameBuffer : public ExcRoot
-{
-private:
-    sal_uInt16                  nBase;      // Index-Base
-    std::vector<StringHashEntry*> maHashes;
-
-public:
-
-    inline                  NameBuffer( RootData* );
-    inline                  NameBuffer( RootData*, sal_uInt16 nNewBase );
-
-    virtual                 ~NameBuffer();
-    inline void             SetBase( sal_uInt16 nNewBase );
-    void                    operator <<( const OUString& rNewString );
-};
-
-inline NameBuffer::NameBuffer( RootData* p ) : ExcRoot( p )
-{
-    nBase = 0;
-}
-
-inline NameBuffer::NameBuffer( RootData* p, sal_uInt16 nNewBase ) : ExcRoot( p )
-{
-    nBase = nNewBase;
-}
-
-
-inline void NameBuffer::SetBase( sal_uInt16 nNewBase )
-{
-    nBase = nNewBase;
 }
 
 /**
