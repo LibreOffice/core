@@ -16,6 +16,11 @@ class ImplSchedulerDataPrinter(object):
 
        This can be used to dump the current state of the scheduler via:
           p *ImplGetSVData()->mpFirstSchedulerData
+
+       This doesn't include currently invoked tasks AKA the stack.
+
+       To dump the scheduler stack of invoked tasks use:
+          p *ImplGetSVData()->mpSchedulerStack
     '''
 
     def __init__(self, typename, value):
