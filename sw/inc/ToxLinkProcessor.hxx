@@ -82,7 +82,7 @@ private:
 
     std::vector<std::unique_ptr<ClosedLink>> m_ClosedLinks;
 
-    std::vector<std::unique_ptr<StartedLink>> m_StartedLinks;
+    std::unique_ptr<StartedLink> m_pStartedLink;
 
     friend class ::ToxLinkProcessorTest;
 };
