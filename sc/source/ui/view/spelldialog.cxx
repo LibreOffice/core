@@ -146,7 +146,7 @@ void ScSpellDialogChildWindow::Reset()
     mxUndoDoc.reset();
     mxRedoDoc.reset();
     mxOldSel.reset();
-    mxOldRangeList.reset();
+    mxOldRangeList.Clear();
     mpViewShell = nullptr;
     mpViewData = nullptr;
     mpDocShell = nullptr;
@@ -180,7 +180,7 @@ void ScSpellDialogChildWindow::Init()
 
     ScMarkData& rMarkData = mpViewData->GetMarkData();
 
-    mxOldRangeList.reset(new ScRangeList);
+    mxOldRangeList = new ScRangeList;
     rMarkData.FillRangeListWithMarks(mxOldRangeList.get(), true);
 
     rMarkData.MarkToMulti();
