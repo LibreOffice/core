@@ -97,7 +97,8 @@ public:
     /// @see sdr::SelectionController::setCursorLogicPosition().
     SVX_DLLPRIVATE virtual bool setCursorLogicPosition(const Point& rPosition, bool bPoint) override;
 
-    void getSelectedCells( CellPos& rFirstPos, CellPos& rLastPos );
+    /// @see sdr::SelectionController::getSelectedCells().
+    void getSelectedCells( CellPos& rFirstPos, CellPos& rLastPos ) override;
     void setSelectedCells( const CellPos& rFirstPos, const CellPos& rLastPos );
     void clearSelection();
     void selectAll();

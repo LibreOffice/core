@@ -37,6 +37,8 @@ class Point;
 namespace sdr
 {
 
+namespace table { struct CellPos; }
+
 class SVX_DLLPUBLIC SelectionController: public cppu::OWeakObject
 {
 public:
@@ -74,6 +76,8 @@ public:
     virtual bool hasSelectedCells() const;
     /// Allows adjusting the point or mark of the selection to a document coordinate.
     virtual bool setCursorLogicPosition(const Point& rPosition, bool bPoint);
+    /// Get the position of the first and the last selected cell.
+    virtual void getSelectedCells(table::CellPos& rFirstPos, table::CellPos& rLastPos);
 };
 
 }
