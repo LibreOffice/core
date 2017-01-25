@@ -62,8 +62,6 @@ public:
                                 SdrObjUserData  ( SdrInventor::IMap, SVD_IMAP_USERDATA ),
                                 mpObj           ( rIMapUserData.mpObj ) {}
 
-                            virtual ~IMapUserData() override { }
-
     virtual SdrObjUserData* Clone( SdrObject * ) const override { return new IMapUserData( *this ); }
 
     const IMapObjectPtr&    GetObject() const { return mpObj; }

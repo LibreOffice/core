@@ -125,9 +125,6 @@ public:
         : rWin(rGraphWin)
     {}
 
-    virtual ~GraphCtrlUserCall() override
-    {}
-
     virtual void Changed(const SdrObject& rObj, SdrUserCallType eType, const Rectangle& rOldBoundRect) override;
 };
 
@@ -152,9 +149,6 @@ public:
     GraphCtrlView(SdrModel* pModel, GraphCtrl* pWindow)
         : SdrView(pModel, pWindow)
         , rGraphCtrl(*pWindow)
-    {}
-
-    virtual ~GraphCtrlView() override
     {}
 };
 

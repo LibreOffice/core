@@ -59,7 +59,6 @@ class ImpRemap3DDepth
 public:
     ImpRemap3DDepth(sal_uInt32 nOrdNum, double fMinimalDepth);
     explicit ImpRemap3DDepth(sal_uInt32 nOrdNum);
-    ~ImpRemap3DDepth();
 
     // for ::std::sort
     bool operator<(const ImpRemap3DDepth& rComp) const;
@@ -79,10 +78,6 @@ ImpRemap3DDepth::ImpRemap3DDepth(sal_uInt32 nOrdNum)
 :   mnOrdNum(nOrdNum),
     mfMinimalDepth(0.0),
     mbIsScene(true)
-{
-}
-
-ImpRemap3DDepth::~ImpRemap3DDepth()
 {
 }
 
@@ -111,7 +106,6 @@ class Imp3DDepthRemapper
 
 public:
     explicit Imp3DDepthRemapper(E3dScene& rScene);
-    ~Imp3DDepthRemapper();
 
     sal_uInt32 RemapOrdNum(sal_uInt32 nOrdNum) const;
 };
@@ -147,10 +141,6 @@ Imp3DDepthRemapper::Imp3DDepthRemapper(E3dScene& rScene)
     // now, we need to sort the maVector by its members minimal depth. The
     // smaller, the nearer to the viewer.
     ::std::sort(maVector.begin(), maVector.end());
-}
-
-Imp3DDepthRemapper::~Imp3DDepthRemapper()
-{
 }
 
 sal_uInt32 Imp3DDepthRemapper::RemapOrdNum(sal_uInt32 nOrdNum) const

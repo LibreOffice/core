@@ -44,7 +44,10 @@ class ImplPageOriginOverlay
 
 public:
     ImplPageOriginOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos);
-    ~ImplPageOriginOverlay();
+
+    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
+    // That destructor calls clear() at the list which removes all objects from the
+    // OverlayManager and deletes them.
 
     void SetPosition(const basegfx::B2DPoint& rNewPosition);
 };
@@ -65,13 +68,6 @@ ImplPageOriginOverlay::ImplPageOriginOverlay(const SdrPaintView& rView, const ba
             maObjects.append(aNew);
         }
     }
-}
-
-ImplPageOriginOverlay::~ImplPageOriginOverlay()
-{
-    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
-    // That destructor calls clear() at the list which removes all objects from the
-    // OverlayManager and deletes them.
 }
 
 void ImplPageOriginOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
@@ -112,7 +108,10 @@ class ImplHelpLineOverlay
 public:
     ImplHelpLineOverlay(const SdrPaintView& rView, const basegfx::B2DPoint& rStartPos,
         SdrPageView* pPageView, sal_uInt16 nHelpLineNumber, SdrHelpLineKind eKind);
-    ~ImplHelpLineOverlay();
+
+    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
+    // That destructor calls clear() at the list which removes all objects from the
+    // OverlayManager and deletes them.
 
     void SetPosition(const basegfx::B2DPoint& rNewPosition);
 
@@ -143,13 +142,6 @@ ImplHelpLineOverlay::ImplHelpLineOverlay(
             maObjects.append(aNew);
         }
     }
-}
-
-ImplHelpLineOverlay::~ImplHelpLineOverlay()
-{
-    // The OverlayObjects are cleared using the destructor of OverlayObjectList.
-    // That destructor calls clear() at the list which removes all objects from the
-    // OverlayManager and deletes them.
 }
 
 void ImplHelpLineOverlay::SetPosition(const basegfx::B2DPoint& rNewPosition)
