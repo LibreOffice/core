@@ -2737,6 +2737,7 @@ void SwTokenWindow::setAllocation(const Size &rAllocation)
         aSize.Height() = aControlSize.Height();
         pControl->SetSizePixel(aSize);
     }
+    AdjustPositions();
 }
 
 SwTokenWindow::~SwTokenWindow()
