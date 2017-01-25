@@ -93,6 +93,15 @@ public:
     inline bool SAL_CALL is() const
         { return (NULL != _pInterface); }
 
+#if defined LIBO_INTERNAL_ONLY
+    /** Checks if reference is null.
+
+        @return true if reference acquires an interface, i.e. true if it is not null
+    */
+    inline explicit operator bool() const
+        { return is(); }
+#endif
+
     /** Equality operator: compares two interfaces
         Checks if both references are null or refer to the same object.
 
