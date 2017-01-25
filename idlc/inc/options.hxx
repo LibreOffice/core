@@ -53,11 +53,6 @@ public:
         throw(IllegalArgument);
     bool setOption(char const * option, std::string const & rArg);
 
-#if 0  /* @@@ */
-    sal_Bool initOptions(int ac, char* av[], sal_Bool bCmdFile=sal_False)
-        throw( IllegalArgument );
-#endif /* @@@ */
-
     OString prepareHelp();
     OString prepareVersion();
 
