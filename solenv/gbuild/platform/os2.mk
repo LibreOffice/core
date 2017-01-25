@@ -287,7 +287,11 @@ endef
 
 gb_LinkTarget_CFLAGS := $(gb_CFLAGS) $(gb_CFLAGS_WERROR)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS) $(gb_CXXFLAGS_WERROR)
-gb_DEBUG_CFLAGS := -g
+ifeq ($(ENABLE_SYMBOLS),SMALL)
+gb_DEBUG_CFLAGS := -g1
+else
+gb_DEBUG_CFLAGS := -g3
+endif
 
 gb_LinkTarget_INCLUDE :=\
 	$(filter-out %/stl, $(subst -I. , ,$(SOLARINC))) \

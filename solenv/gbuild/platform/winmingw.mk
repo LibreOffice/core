@@ -163,7 +163,11 @@ ifeq ($(MINGW_GCCLIB_EH),YES)
 gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
+ifeq ($(ENABLE_SYMBOLS),SMALL)
+gb_DEBUG_CFLAGS := -ggdb1 -finline-limit=0 -fno-inline -fno-default-inline
+else
 gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
+endif
 
 ifeq ($(gb_DEBUGLEVEL),2)
 gb_COMPILEROPTFLAGS := -O0

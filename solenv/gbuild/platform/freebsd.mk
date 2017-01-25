@@ -234,9 +234,15 @@ ifeq ($(gb_DEBUGLEVEL),0)
 gb_LinkTarget_LDFLAGS += -Wl,-O1
 endif
 
-ifeq ($(gb_DEBUGLEVEL),2)
 ifeq ($(COM),CLANG)
+ifeq ($(ENABLE_SYMBOLS),SMALL)
+gb_DEBUG_CFLAGS := -ggdb1 -fno-inline
+else
 gb_DEBUG_CFLAGS := -ggdb3 -fno-inline
+endif
+else
+ifeq ($(ENABLE_SYMBOLS),SMALL)
+gb_DEBUG_CFLAGS := -ggdb1 -finline-limit=0 -fno-inline -fno-default-inline
 else
 gb_DEBUG_CFLAGS := -ggdb3 -finline-limit=0 -fno-inline -fno-default-inline
 endif
