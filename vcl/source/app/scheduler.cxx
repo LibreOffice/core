@@ -234,6 +234,22 @@ static inline void AppendSchedulerData( ImplSchedulerContext &rSchedCtx,
     pSchedulerData->mpNext = nullptr;
 }
 
+static inline ImplSchedulerData* DropSchedulerData(
+    ImplSchedulerContext &rSchedCtx, ImplSchedulerData * const pPrevSchedulerData,
+                                     ImplSchedulerData * const pSchedulerData )
+{
+    assert( !pPrevSchedulerData || (pPrevSchedulerData->mpNext == pSchedulerData) );
+
+    ImplSchedulerData * const pSchedulerDataNext = pSchedulerData->mpNext;
+    if ( pPrevSchedulerData )
+        pPrevSchedulerData->mpNext = pSchedulerDataNext;
+    else
+        rSchedCtx.mpFirstSchedulerData = pSchedulerDataNext;
+    if ( !pSchedulerDataNext )
+        rSchedCtx.mpLastSchedulerData = pPrevSchedulerData;
+    return pSchedulerDataNext;
+}
+
 bool Scheduler::ProcessTaskScheduling()
 {
     ImplSVData *pSVData = ImplGetSVData();
@@ -246,6 +262,7 @@ bool Scheduler::ProcessTaskScheduling()
     ImplSchedulerData* pSchedulerData = nullptr;
     ImplSchedulerData* pPrevSchedulerData = nullptr;
     ImplSchedulerData *pMostUrgent = nullptr;
+    ImplSchedulerData *pPrevMostUrgent = nullptr;
     sal_uInt64         nMinPeriod = InfiniteTimeoutMs;
 
     DBG_TESTSOLARMUTEX();
@@ -268,13 +285,8 @@ bool Scheduler::ProcessTaskScheduling()
         // Should the Task be released from scheduling or stacked?
         if ( pSchedulerData->mbDelete || !pSchedulerData->mpTask || pSchedulerData->mbInScheduler )
         {
-            ImplSchedulerData * const pSchedulerDataNext = pSchedulerData->mpNext;
-            if ( pPrevSchedulerData )
-                pPrevSchedulerData->mpNext = pSchedulerDataNext;
-            else
-                rSchedCtx.mpFirstSchedulerData = pSchedulerDataNext;
-            if ( !pSchedulerDataNext )
-                rSchedCtx.mpLastSchedulerData = pPrevSchedulerData;
+            ImplSchedulerData * const pSchedulerDataNext =
+                DropSchedulerData( rSchedCtx, pPrevSchedulerData, pSchedulerData );
             if ( pSchedulerData->mbInScheduler )
             {
                 pSchedulerData->mpNext = rSchedCtx.mpSchedulerStack;
@@ -300,6 +312,7 @@ bool Scheduler::ProcessTaskScheduling()
         {
             if ( pMostUrgent )
                 UpdateMinPeriod( pMostUrgent, nTime, nMinPeriod );
+            pPrevMostUrgent = pPrevSchedulerData;
             pMostUrgent = pSchedulerData;
         }
         else
@@ -344,11 +357,21 @@ next_entry:
             UpdateSystemTimer( rSchedCtx, ImmediateTimeoutMs, true,
                                tools::Time::GetSystemTicks() );
         }
-        else if ( pMostUrgent->mpTask && !pMostUrgent->mbDelete )
+        else
         {
-            pMostUrgent->mnUpdateTime = tools::Time::GetSystemTicks();
-            UpdateMinPeriod( pMostUrgent, nTime, nMinPeriod );
-            UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );
+            // Since we can restart tasks, round-robin all non-last tasks
+            if ( pMostUrgent->mpNext )
+            {
+                DropSchedulerData( rSchedCtx, pPrevMostUrgent, pMostUrgent );
+                AppendSchedulerData( rSchedCtx, pMostUrgent );
+            }
+
+            if ( pMostUrgent->mpTask && !pMostUrgent->mbDelete )
+            {
+                pMostUrgent->mnUpdateTime = nTime;
+                UpdateMinPeriod( pMostUrgent, nTime, nMinPeriod );
+                UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );
+            }
         }
     }
 
