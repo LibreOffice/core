@@ -603,47 +603,45 @@ bool DrawDocShell::ConvertTo( SfxMedium& rMedium )
     {
         std::shared_ptr<const SfxFilter> pMediumFilter = rMedium.GetFilter();
         const OUString aTypeName( pMediumFilter->GetTypeName() );
-        SdFilter*           pFilter = nullptr;
+        std::unique_ptr<SdFilter> xFilter;
 
         if( aTypeName.indexOf( "graphic_HTML" ) >= 0 )
         {
-            pFilter = new SdHTMLFilter( rMedium, *this );
+            xFilter = std::make_unique<SdHTMLFilter>(rMedium, *this);
         }
         else if( aTypeName.indexOf( "MS_PowerPoint_97" ) >= 0 )
         {
-            pFilter = new SdPPTFilter( rMedium, *this );
-            static_cast<SdPPTFilter*>(pFilter)->PreSaveBasic();
+            xFilter = std::make_unique<SdPPTFilter>(rMedium, *this);
+            static_cast<SdPPTFilter*>(xFilter.get())->PreSaveBasic();
         }
         else if ( aTypeName.indexOf( "CGM_Computer_Graphics_Metafile" ) >= 0 )
         {
-            pFilter = new SdCGMFilter( rMedium, *this );
+            xFilter = std::make_unique<SdCGMFilter>(rMedium, *this);
         }
         else if( aTypeName.indexOf( "draw8" ) >= 0 ||
                  aTypeName.indexOf( "impress8" ) >= 0 )
         {
-            pFilter = new SdXMLFilter( rMedium, *this );
+            xFilter = std::make_unique<SdXMLFilter>(rMedium, *this);
         }
         else if( aTypeName.indexOf( "StarOffice_XML_Impress" ) >= 0 ||
                  aTypeName.indexOf( "StarOffice_XML_Draw" ) >= 0 )
         {
-            pFilter = new SdXMLFilter( rMedium, *this, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60 );
+            xFilter = std::make_unique<SdXMLFilter>(rMedium, *this, SDXMLMODE_Normal, SOFFICE_FILEFORMAT_60);
         }
         else
         {
-            pFilter = new SdGRFFilter( rMedium, *this );
+            xFilter = std::make_unique<SdGRFFilter>(rMedium, *this);
         }
 
-        if( pFilter )
+        if (xFilter)
         {
             const SdrSwapGraphicsMode nOldSwapMode = mpDoc->GetSwapGraphicsMode();
 
             mpDoc->SetSwapGraphicsMode( SdrSwapGraphicsMode::TEMP );
 
-            bRet = pFilter->Export();
+            bRet = xFilter->Export();
             if( !bRet )
                 mpDoc->SetSwapGraphicsMode( nOldSwapMode );
-
-            delete pFilter;
         }
     }
 
