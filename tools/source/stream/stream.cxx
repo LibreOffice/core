@@ -256,7 +256,7 @@ std::size_t SvStream::GetData( void* pData, std::size_t nSize )
 {
     if( !GetError() )
     {
-        DBG_ASSERT( m_xLockBytes.Is(), "pure virtual function" );
+        DBG_ASSERT( m_xLockBytes.is(), "pure virtual function" );
         std::size_t nRet(0);
         m_nError = m_xLockBytes->ReadAt(m_nActPos, pData, nSize, &nRet);
         m_nActPos += nRet;
@@ -269,7 +269,7 @@ std::size_t SvStream::PutData( const void* pData, std::size_t nSize )
 {
     if( !GetError() )
     {
-        DBG_ASSERT( m_xLockBytes.Is(), "pure virtual function" );
+        DBG_ASSERT( m_xLockBytes.is(), "pure virtual function" );
         std::size_t nRet(0);
         m_nError = m_xLockBytes->WriteAt(m_nActPos, pData, nSize, &nRet);
         m_nActPos += nRet;
@@ -284,7 +284,7 @@ sal_uInt64 SvStream::SeekPos(sal_uInt64 const nPos)
     assert(nPos != SAL_MAX_UINT32);
     if( !GetError() && nPos == STREAM_SEEK_TO_END )
     {
-        DBG_ASSERT( m_xLockBytes.Is(), "pure virtual function" );
+        DBG_ASSERT( m_xLockBytes.is(), "pure virtual function" );
         SvLockBytesStat aStat;
         m_xLockBytes->Stat( &aStat, SVSTATFLAG_DEFAULT );
         m_nActPos = aStat.nSize;
@@ -298,14 +298,14 @@ void SvStream::FlushData()
 {
     if( !GetError() )
     {
-        DBG_ASSERT( m_xLockBytes.Is(), "pure virtual function" );
+        DBG_ASSERT( m_xLockBytes.is(), "pure virtual function" );
         m_nError = m_xLockBytes->Flush();
     }
 }
 
 void SvStream::SetSize(sal_uInt64 const nSize)
 {
-    DBG_ASSERT( m_xLockBytes.Is(), "pure virtual function" );
+    DBG_ASSERT( m_xLockBytes.is(), "pure virtual function" );
     m_nError = m_xLockBytes->SetSize( nSize );
 }
 
@@ -361,7 +361,7 @@ SvStream::SvStream( SvLockBytes* pLockBytesP ) : SvStream()
 
 SvStream::~SvStream()
 {
-    if (m_xLockBytes.Is())
+    if (m_xLockBytes.is())
         Flush();
 
     delete[] m_pRWBuf;

@@ -25,7 +25,7 @@ namespace utl
 sal_Int32 SAL_CALL OInputStreamHelper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
     throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     if (nBytesToRead < 0)
@@ -62,7 +62,7 @@ sal_Int64 SAL_CALL OInputStreamHelper::getPosition(  ) throw(css::io::IOExceptio
 
 sal_Int64 SAL_CALL OInputStreamHelper::getLength(  ) throw(css::io::IOException, css::uno::RuntimeException, std::exception)
 {
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         return 0;
 
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -83,7 +83,7 @@ void SAL_CALL OInputStreamHelper::skipBytes(sal_Int32 nBytesToSkip)
     throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     if (nBytesToSkip < 0)
@@ -96,7 +96,7 @@ sal_Int32 SAL_CALL OInputStreamHelper::available()
     throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     return m_nAvailable;
@@ -106,7 +106,7 @@ void SAL_CALL OInputStreamHelper::closeInput()
     throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
-    if (!m_xLockBytes.Is())
+    if (!m_xLockBytes.is())
         throw css::io::NotConnectedException(OUString(), static_cast<css::uno::XWeak*>(this));
 
     m_xLockBytes = nullptr;

@@ -569,12 +569,12 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
             }
             else
             {
-                if ( aSvDrawStorageRef.Is() )
+                if ( aSvDrawStorageRef.is() )
                 {
                     const OUString        aStmName( GetSvDrawStreamNameFromURL( pEntry->aURL ) );
                     tools::SvRef<SotStorageStream>  pIStm = aSvDrawStorageRef->OpenSotStream( aStmName, StreamMode::READ );
 
-                    if( pIStm.Is() && !pIStm->GetError() )
+                    if( pIStm.is() && !pIStm->GetError() )
                     {
                         pIStm->SetBufferSize( 16384 );
 
@@ -670,7 +670,7 @@ void GalleryTheme::Actualize( const Link<const INetURLObject&, void>& rActualize
 
         if( nStorErr == ERRCODE_NONE )
         {
-            aSvDrawStorageRef.Clear();
+            aSvDrawStorageRef.clear();
             CopyFile( aTmpURL, GetSdvURL() );
             ImplCreateSvDrawStorage();
         }
@@ -931,12 +931,12 @@ bool GalleryTheme::GetModel( sal_uIntPtr nPos, SdrModel& rModel, bool )
         const INetURLObject aURL( ImplGetURL( pObject ) );
         tools::SvRef<SotStorage>        xStor( GetSvDrawStorage() );
 
-        if( xStor.Is() )
+        if( xStor.is() )
         {
             const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
             tools::SvRef<SotStorageStream>  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
 
-            if( xIStm.Is() && !xIStm->GetError() )
+            if( xIStm.is() && !xIStm->GetError() )
             {
                 xIStm->SetBufferSize( STREAMBUF_SIZE );
                 bRet = GallerySvDrawImport( *xIStm, rModel );
@@ -954,12 +954,12 @@ bool GalleryTheme::InsertModel( const FmFormModel& rModel, sal_uIntPtr nInsertPo
     tools::SvRef<SotStorage>    xStor( GetSvDrawStorage() );
     bool            bRet = false;
 
-    if( xStor.Is() )
+    if( xStor.is() )
     {
         const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
         tools::SvRef<SotStorageStream>  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
 
-        if( xOStm.Is() && !xOStm->GetError() )
+        if( xOStm.is() && !xOStm->GetError() )
         {
             SvMemoryStream  aMemStm( 65535, 65535 );
             FmFormModel*    pFormModel = const_cast<FmFormModel*>(&rModel);
@@ -1003,12 +1003,12 @@ bool GalleryTheme::GetModelStream( sal_uIntPtr nPos, tools::SvRef<SotStorageStre
         const INetURLObject aURL( ImplGetURL( pObject ) );
         tools::SvRef<SotStorage>        xStor( GetSvDrawStorage() );
 
-        if( xStor.Is() )
+        if( xStor.is() )
         {
             const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
             tools::SvRef<SotStorageStream>  xIStm( xStor->OpenSotStream( aStmName, StreamMode::READ ) );
 
-            if( xIStm.Is() && !xIStm->GetError() )
+            if( xIStm.is() && !xIStm->GetError() )
             {
                 sal_uInt32 nVersion = 0;
 
@@ -1050,12 +1050,12 @@ bool GalleryTheme::InsertModelStream( const tools::SvRef<SotStorageStream>& rxMo
     tools::SvRef<SotStorage>    xStor( GetSvDrawStorage() );
     bool            bRet = false;
 
-    if( xStor.Is() )
+    if( xStor.is() )
     {
         const OUString        aStmName( GetSvDrawStreamNameFromURL( aURL ) );
         tools::SvRef<SotStorageStream>  xOStm( xStor->OpenSotStream( aStmName, StreamMode::WRITE | StreamMode::TRUNC ) );
 
-        if( xOStm.Is() && !xOStm->GetError() )
+        if( xOStm.is() && !xOStm->GetError() )
         {
             GalleryCodec    aCodec( *xOStm );
             SvMemoryStream  aMemStm( 65535, 65535 );

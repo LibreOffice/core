@@ -272,7 +272,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
 
                 ScTransferObj* pTransferObj = new ScTransferObj( pClipDoc, aObjDesc );
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
-                if ( ScGlobal::xDrawClipDocShellRef.Is() )
+                if ( ScGlobal::xDrawClipDocShellRef.is() )
                 {
                     SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );
                     pTransferObj->SetDrawPersist( aPersistRef );// keep persist for ole objects alive
@@ -381,7 +381,7 @@ bool ScViewFunc::CopyToClip( ScDocument* pClipDoc, const ScRangeList& rRanges, b
                 ScTransferObj* pTransferObj = new ScTransferObj( pDocClip.release(), aObjDesc );
                 uno::Reference<datatransfer::XTransferable> xTransferable( pTransferObj );
 
-                if ( ScGlobal::xDrawClipDocShellRef.Is() )
+                if ( ScGlobal::xDrawClipDocShellRef.is() )
                 {
                     SfxObjectShellRef aPersistRef( ScGlobal::xDrawClipDocShellRef.get() );
                     pTransferObj->SetDrawPersist( aPersistRef );    // keep persist for ole objects alive

@@ -78,7 +78,7 @@ SbxVariableRef MacroSnippet::Run( const css::uno::Sequence< css::uno::Any >& rAr
     SbxVariableRef pReturn = nullptr;
     if ( !Compile() )
         return pReturn;
-    SbMethod* pMeth = mpMod.Is() ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxClassType::Method )) : nullptr;
+    SbMethod* pMeth = mpMod.is() ? static_cast<SbMethod*>(mpMod->Find( "doUnitTest",  SbxClassType::Method )) : nullptr;
     if ( pMeth )
     {
         if ( rArgs.getLength() )

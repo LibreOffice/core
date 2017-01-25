@@ -183,8 +183,6 @@ FreetypeFontInfo::FreetypeFontInfo( const FontAttributes& rDevFontAttributes,
 
 FreetypeFontInfo::~FreetypeFontInfo()
 {
-    if( mxFontCharMap.Is() )
-        mxFontCharMap.Clear();
 }
 
 FT_FaceRec_* FreetypeFontInfo::GetFaceFT()
@@ -672,7 +670,7 @@ const FontCharMapRef FreetypeFont::GetFontCharMap() const
 const FontCharMapRef& FreetypeFontInfo::GetFontCharMap()
 {
     // check if the charmap is already cached
-    if( mxFontCharMap.Is() )
+    if( mxFontCharMap.is() )
         return mxFontCharMap;
 
     // get the charmap and cache it

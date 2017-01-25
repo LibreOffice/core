@@ -549,7 +549,7 @@ PropRead::PropRead( SotStorage& rStorage, const OUString& rName ) :
     if ( rStorage.IsStream( rName ) )
     {
         mpSvStream = rStorage.OpenSotStream( rName, StreamMode::STD_READ );
-        if ( mpSvStream.Is() )
+        if ( mpSvStream.is() )
         {
             mpSvStream->SetEndian( SvStreamEndian::LITTLE );
             memset( mApplicationCLSID, 0, 16 );

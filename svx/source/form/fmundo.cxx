@@ -126,7 +126,7 @@ private:
             Reference< XPropertySet > const xListenerProps( xScriptListener, UNO_QUERY_THROW );
             // SfxObjectShellRef is good here since the model controls the lifetime of the shell
             SfxObjectShellRef const xObjectShell = m_rModel.GetObjectShell();
-            ENSURE_OR_THROW( xObjectShell.Is(), "no object shell!" );
+            ENSURE_OR_THROW( xObjectShell.is(), "no object shell!" );
             xListenerProps->setPropertyValue("Model", makeAny( xObjectShell->GetModel() ) );
 
             m_vbaListener = xScriptListener;

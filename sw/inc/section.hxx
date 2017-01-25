@@ -215,14 +215,14 @@ public:
     void SetRefObject( SwServerObject* pObj );
     const SwServerObject* GetObject() const {  return m_RefObj.get(); }
           SwServerObject* GetObject()       {  return m_RefObj.get(); }
-    bool IsServer() const                   {  return m_RefObj.Is(); }
+    bool IsServer() const                   {  return m_RefObj.is(); }
 
     // Methods for linked ranges.
     SfxLinkUpdateMode GetUpdateType() const    { return m_RefLink->GetUpdateMode(); }
     void SetUpdateType(SfxLinkUpdateMode nType )
         { m_RefLink->SetUpdateMode(nType); }
 
-    bool IsConnected() const        { return m_RefLink.Is(); }
+    bool IsConnected() const        { return m_RefLink.is(); }
     void UpdateNow()                { m_RefLink->Update(); }
     void Disconnect()               { m_RefLink->Disconnect(); }
 

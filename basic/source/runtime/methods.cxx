@@ -185,7 +185,7 @@ RTLFUNC(CreateObject)
 
     OUString aClass( rPar.Get( 1 )->GetOUString() );
     SbxObjectRef p = SbxBase::CreateObject( aClass );
-    if( !p.Is() )
+    if( !p.is() )
         StarBASIC::Error( ERRCODE_BASIC_CANNOT_LOAD );
     else
     {

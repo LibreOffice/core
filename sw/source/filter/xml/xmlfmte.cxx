@@ -145,7 +145,7 @@ void SwXMLExport::ExportFormat( const SwFormat& rFormat, enum XMLTokenEnum eFami
             ePropToken = XML_TABLE_CELL_PROPERTIES;
         }
 
-        if( xItemMap.Is() )
+        if( xItemMap.is() )
         {
             m_pTableItemMapper->setMapEntries( xItemMap );
             m_pTableItemMapper->exportXML( *this,

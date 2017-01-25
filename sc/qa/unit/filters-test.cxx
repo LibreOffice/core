@@ -118,7 +118,7 @@ bool ScFiltersTest::load(const OUString &rFilter, const OUString &rURL,
 {
     ScDocShellRef xDocShRef = ScBootstrapFixture::load(rURL, rFilter, rUserData,
         OUString(), nFilterFlags, nClipboardID, nFilterVersion );
-    bool bLoaded = xDocShRef.Is();
+    bool bLoaded = xDocShRef.is();
     //reference counting of ScDocShellRef is very confused.
     if (bLoaded)
         xDocShRef->DoClose();
@@ -187,7 +187,7 @@ void ScFiltersTest::testRangeNameODS()
 {
     ScDocShellRef xDocSh = loadDoc("named-ranges-global.", FORMAT_ODS);
 
-    CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.*", xDocSh.Is());
+    CPPUNIT_ASSERT_MESSAGE("Failed to load named-ranges-global.*", xDocSh.is());
 
     xDocSh->DoHardRecalc(true);
 
@@ -320,7 +320,7 @@ void ScFiltersTest::testContentXLSB()
 void ScFiltersTest::testContentXLS_XML()
 {
     ScDocShellRef xDocSh = loadDoc("universal-content.", FORMAT_XLS_XML);
-    CPPUNIT_ASSERT(xDocSh.Is());
+    CPPUNIT_ASSERT(xDocSh.is());
 
     ScDocument& rDoc = xDocSh->GetDocument();
     testContentImpl(rDoc, FORMAT_XLS_XML);
@@ -330,7 +330,7 @@ void ScFiltersTest::testContentXLS_XML()
 void ScFiltersTest::testSharedFormulaXLS()
 {
     ScDocShellRef xDocSh = loadDoc("shared-formula/basic.", FORMAT_XLS);
-    CPPUNIT_ASSERT(xDocSh.Is());
+    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     xDocSh->DoHardRecalc(true);
     // Check the results of formula cells in the shared formula range.
@@ -354,7 +354,7 @@ void ScFiltersTest::testSharedFormulaXLS()
     // to handle these wrong ranges that Excel stores.
 
     xDocSh = loadDoc("shared-formula/gap.", FORMAT_XLS);
-    CPPUNIT_ASSERT(xDocSh.Is());
+    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc2 = xDocSh->GetDocument();
     rDoc2.CalcAll();
 
@@ -556,7 +556,7 @@ void testEnhancedProtectionImpl( ScDocument& rDoc )
 void ScFiltersTest::testEnhancedProtectionXLS()
 {
     ScDocShellRef xDocSh = loadDoc("enhanced-protection.", FORMAT_XLS);
-    CPPUNIT_ASSERT(xDocSh.Is());
+    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     testEnhancedProtectionImpl( rDoc);
@@ -567,7 +567,7 @@ void ScFiltersTest::testEnhancedProtectionXLS()
 void ScFiltersTest::testEnhancedProtectionXLSX()
 {
     ScDocShellRef xDocSh = loadDoc("enhanced-protection.", FORMAT_XLSX);
-    CPPUNIT_ASSERT(xDocSh.Is());
+    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     testEnhancedProtectionImpl( rDoc);
@@ -578,7 +578,7 @@ void ScFiltersTest::testEnhancedProtectionXLSX()
 void ScFiltersTest::testSortWithSharedFormulasODS()
 {
     ScDocShellRef xDocSh = loadDoc("shared-formula/sort-crash.", FORMAT_ODS, true);
-    CPPUNIT_ASSERT(xDocSh.Is());
+    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
 
     // E2:E10 should be shared.
@@ -630,7 +630,7 @@ void ScFiltersTest::testSortWithSharedFormulasODS()
 void ScFiltersTest::testSortWithSheetExternalReferencesODS()
 {
     ScDocShellRef xDocSh = loadDoc("sort-with-sheet-external-references.", FORMAT_ODS, true);
-    CPPUNIT_ASSERT(xDocSh.Is());
+    CPPUNIT_ASSERT(xDocSh.is());
     ScDocument& rDoc = xDocSh->GetDocument();
     sc::AutoCalcSwitch aACSwitch(rDoc, true); // turn auto calc on.
     rDoc.CalcAll();

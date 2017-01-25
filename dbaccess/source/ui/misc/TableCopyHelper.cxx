@@ -280,7 +280,7 @@ bool OTableCopyHelper::copyTagTable(const TransferableDataHelper& _aDroppedData
         _rAsyncDrop.bHtml           = bHtml;
         _rAsyncDrop.bError          = !copyTagTable(_rAsyncDrop,true,_xConnection);
 
-        bRet = ( !_rAsyncDrop.bError && bOk && _rAsyncDrop.aHtmlRtfStorage.Is() );
+        bRet = ( !_rAsyncDrop.bError && bOk && _rAsyncDrop.aHtmlRtfStorage.is() );
         if ( bRet )
         {
             // now we need to copy the stream
@@ -302,7 +302,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
                                 ,const OUString& i_rDestDataSource
                                 ,const SharedConnection& _xConnection)
 {
-    if ( _rDesc.aHtmlRtfStorage.Is() )
+    if ( _rDesc.aHtmlRtfStorage.is() )
     {
         copyTagTable(_rDesc,false,_xConnection);
         _rDesc.aHtmlRtfStorage = nullptr;

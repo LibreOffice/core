@@ -292,7 +292,7 @@ void ScDocShell::Execute( SfxRequest& rReq )
                         bValid = true;
                     }
                     else
-                        aRangeListRef.Clear();
+                        aRangeListRef.clear();
                 }
 
                 ScTabViewShell* pViewSh = ScTabViewShell::GetActiveViewShell();

@@ -472,7 +472,7 @@ SvMemoryStream * SotStorage::CreateMemoryStream()
     }
     else
     {
-        aStg.Clear(); // Storage vorher freigeben
+        aStg.clear(); // Storage vorher freigeben
         delete pStm;
         pStm = nullptr;
     }

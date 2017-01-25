@@ -421,7 +421,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
     {
         sal_uLong nPos;
         tools::SvRef<SvBaseLink> xLink = GetSelEntry( &nPos );
-        if( !xLink.Is() )
+        if( !xLink.is() )
             return;
 
         ScopedVclPtrInstance< QueryBox > aBox( this, WB_YES_NO | WB_DEF_YES, aStrCloselinkmsg );
@@ -437,7 +437,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, BreakLinkClickHdl, Button*, void )
             xLink->Closed();
 
             // if somebody has forgotten to deregister himself
-            if( xLink.Is() )
+            if( xLink.is() )
                 pLinkMgr->Remove( xLink.get() );
 
             if( bNewLnkMgr )
@@ -508,7 +508,7 @@ IMPL_LINK_NOARG( SvBaseLinksDlg, UpdateWaitingHdl, Timer*, void )
     {
         SvTreeListEntry* pBox = m_pTbLinks->GetEntry( --nPos );
         tools::SvRef<SvBaseLink> xLink( static_cast<SvBaseLink*>(pBox->GetUserData()) );
-        if( xLink.Is() )
+        if( xLink.is() )
         {
             OUString sCur( ImplGetStateStr( *xLink ) ),
                     sOld( SvTabListBox::GetEntryText( pBox, 3 ) );
@@ -595,7 +595,7 @@ void SvBaseLinksDlg::SetManager( LinkManager* pNewMgr )
         for( size_t n = 0; n < rLnks.size(); ++n )
         {
             tools::SvRef<SvBaseLink>& rLinkRef = rLnks[ n ];
-            if( !rLinkRef.Is() )
+            if( !rLinkRef.is() )
             {
                 rLnks.erase( rLnks.begin() + n );
                 --n;

@@ -2460,7 +2460,7 @@ ScDocument* ScExternalRefManager::getSrcDocument(sal_uInt16 nFileId)
     catch (const css::uno::Exception&)
     {
     }
-    if (!aSrcDoc.maShell.Is())
+    if (!aSrcDoc.maShell.is())
     {
         // source document could not be loaded.
         return nullptr;
@@ -2559,7 +2559,7 @@ SfxObjectShellRef ScExternalRefManager::loadSrcDocument(sal_uInt16 nFileId, OUSt
     if (!pNewShell->DoLoad(pMedium.release()))
     {
         aRef->DoClose();
-        aRef.Clear();
+        aRef.clear();
         return aRef;
     }
 
@@ -2913,7 +2913,7 @@ bool ScExternalRefManager::refreshSrcDocument(sal_uInt16 nFileId)
     }
     catch ( const css::uno::Exception& ) {}
 
-    if (!xDocShell.Is())
+    if (!xDocShell.is())
         // Failed to load the document.  Bail out.
         return false;
 

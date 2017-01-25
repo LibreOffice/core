@@ -1000,7 +1000,7 @@ namespace svxform
 
         // SfxObjectShellRef is good here since the model controls the lifetime of the object
         SfxObjectShellRef xObjectShell = m_rFormModel.GetObjectShell();
-        if( !xObjectShell.Is() )
+        if( !xObjectShell.is() )
             return;
 
         // the script to execute

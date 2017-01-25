@@ -697,7 +697,7 @@ void SlotManager::GetClipboardState ( SfxItemSet& rSet)
         || rSet.GetItemState(SID_PASTE_SPECIAL)  == SfxItemState::DEFAULT)
     {
         // no own clipboard data?
-        if ( !pTransferClip || !pTransferClip->GetDocShell().Is() )
+        if ( !pTransferClip || !pTransferClip->GetDocShell().is() )
         {
             rSet.DisableItem(SID_PASTE);
             rSet.DisableItem(SID_PASTE_SPECIAL);
