@@ -581,8 +581,7 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_OUTLINELEVEL_YIELDS_NUMBERING:
         {
-            bool bTmp = *o3tl::doAccess<bool>(rValue);
-            mpDoc->getIDocumentSettingAccess().set(DocumentSettingId::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE, bTmp);
+            // ignore - this is a dead property
         }
         break;
         case HANDLE_ALLOW_PRINTJOB_CANCEL:
@@ -1064,7 +1063,7 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
         break;
         case HANDLE_OUTLINELEVEL_YIELDS_NUMBERING:
         {
-            rValue <<= mpDoc->getIDocumentSettingAccess().get(DocumentSettingId::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE);
+            rValue <<= false;
         }
         break;
         case HANDLE_ALLOW_PRINTJOB_CANCEL:

@@ -133,7 +133,6 @@ class DocumentSettingManager :
     bool mbTableRowKeep                             : 1;
     bool mbIgnoreTabsAndBlanksForLineCalculation    : 1;   // #i3952#
     bool mbDoNotCaptureDrawObjsOnPage               : 1;   // #i62875#
-    bool mbOutlineLevelYieldsOutlineRule            : 1;
     bool mbClipAsCharacterAnchoredWriterFlyFrames   : 1;
     bool mbUnixForceZeroExtLeading                  : 1;   // #i60945#
     bool mbTabRelativeToIndent                      : 1;   // #i24363# tab stops relative to indent

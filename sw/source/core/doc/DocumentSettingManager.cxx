@@ -67,7 +67,6 @@ sw::DocumentSettingManager::DocumentSettingManager(SwDoc &rDoc)
     mbTableRowKeep(false),
     mbIgnoreTabsAndBlanksForLineCalculation(false),
     mbDoNotCaptureDrawObjsOnPage(false),
-    mbOutlineLevelYieldsOutlineRule(false),
     mbClipAsCharacterAnchoredWriterFlyFrames(false),
     mbUnixForceZeroExtLeading(false),
     mbTabRelativeToIndent(true),
@@ -159,7 +158,6 @@ bool sw::DocumentSettingManager::get(/*[in]*/ DocumentSettingId id) const
         case DocumentSettingId::CONSIDER_WRAP_ON_OBJECT_POSITION: return mbConsiderWrapOnObjPos;
         case DocumentSettingId::DO_NOT_JUSTIFY_LINES_WITH_MANUAL_BREAK: return mbDoNotJustifyLinesWithManualBreak;
         case DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING: return mbIgnoreFirstLineIndentInNumbering;
-        case DocumentSettingId::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE: return mbOutlineLevelYieldsOutlineRule;
         case DocumentSettingId::TABLE_ROW_KEEP: return mbTableRowKeep;
         case DocumentSettingId::IGNORE_TABS_AND_BLANKS_FOR_LINE_CALCULATION: return mbIgnoreTabsAndBlanksForLineCalculation;
         case DocumentSettingId::DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE: return mbDoNotCaptureDrawObjsOnPage;
@@ -274,10 +272,6 @@ void sw::DocumentSettingManager::set(/*[in]*/ DocumentSettingId id, /*[in]*/ boo
             break;
         case DocumentSettingId::IGNORE_FIRST_LINE_INDENT_IN_NUMBERING:
             mbIgnoreFirstLineIndentInNumbering = value;
-            break;
-
-        case DocumentSettingId::OUTLINE_LEVEL_YIELDS_OUTLINE_RULE:
-            mbOutlineLevelYieldsOutlineRule = value;
             break;
 
         case DocumentSettingId::TABLE_ROW_KEEP:
@@ -554,7 +548,6 @@ void sw::DocumentSettingManager::ReplaceCompatibilityOptions(const DocumentSetti
     mbIgnoreFirstLineIndentInNumbering = rSource.mbIgnoreFirstLineIndentInNumbering;
     mbDoNotJustifyLinesWithManualBreak = rSource.mbDoNotJustifyLinesWithManualBreak;
     mbDoNotResetParaAttrsForNumFont = rSource.mbDoNotResetParaAttrsForNumFont;
-    mbOutlineLevelYieldsOutlineRule = rSource.mbOutlineLevelYieldsOutlineRule;
     mbTableRowKeep = rSource.mbTableRowKeep;
     mbIgnoreTabsAndBlanksForLineCalculation = rSource.mbIgnoreTabsAndBlanksForLineCalculation;
     mbDoNotCaptureDrawObjsOnPage = rSource.mbDoNotCaptureDrawObjsOnPage;

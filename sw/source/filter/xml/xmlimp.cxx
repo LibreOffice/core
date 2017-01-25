@@ -1100,7 +1100,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     // below, and set them if not found
     bool bPrinterIndependentLayout = false;
     bool bUseOldNumbering = false;
-    bool bOutlineLevelYieldsOutlineRule = false;
     bool bAddExternalLeading = false;
     bool bAddParaSpacingToTableCells = false;
     bool bUseFormerLineSpacing = false;
@@ -1182,8 +1181,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
                     bUseFormerTextWrapping = true;
                 else if ( pValues->Name == "UseOldNumbering" )
                     bUseOldNumbering = true;
-                else if ( pValues->Name == "OutlineLevelYieldsNumbering" )
-                    bOutlineLevelYieldsOutlineRule = true;
                 else if ( pValues->Name == "ConsiderTextWrapOnObjPos" )
                     bConsiderWrapOnObjPos = true;
                 else if ( pValues->Name == "IgnoreFirstLineIndentInNumbering" )
@@ -1268,11 +1265,6 @@ void SwXMLImport::SetConfigurationSettings(const Sequence < PropertyValue > & aC
     if( !bUseOldNumbering )
     {
         xProps->setPropertyValue( "UseOldNumbering", makeAny(true) );
-    }
-
-    if( !bOutlineLevelYieldsOutlineRule )
-    {
-        xProps->setPropertyValue( "OutlineLevelYieldsNumbering", makeAny(true) );
     }
 
     if( !bAddParaSpacingToTableCells )
