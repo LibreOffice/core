@@ -3943,14 +3943,12 @@ void GtkSalGraphics::updateSettings( AllSettings& rSettings )
     Color aDarkShadowColor = getColor( pStyle->fg[GTK_STATE_INSENSITIVE] );
     aStyleSet.SetDarkShadowColor( aDarkShadowColor );
 
-    int nRedDiff = aBackFieldColor.GetRed() - aDarkShadowColor.GetRed();
-    int nGreenDiff = aBackFieldColor.GetGreen() - aDarkShadowColor.GetGreen();
-    int nBlueDiff = aBackFieldColor.GetBlue() - aDarkShadowColor.GetBlue();
-
-    Color aShadowColor(aBackFieldColor.GetRed() + nRedDiff / 2,
-                       aBackFieldColor.GetGreen() + nGreenDiff / 2,
-                       aBackFieldColor.GetBlue() + nBlueDiff / 2);
-    aStyleSet.SetShadowColor( aShadowColor );
+    ::Color aShadowColor(aBackColor);
+    if (aDarkShadowColor.GetLuminance() > aBackColor.GetLuminance())
+        aShadowColor.IncreaseLuminance(64);
+    else
+        aShadowColor.DecreaseLuminance(64);
+    aStyleSet.SetShadowColor(aShadowColor);
 
     // highlighting colors
     Color aHighlightColor = getColor( pStyle->base[GTK_STATE_SELECTED] );
