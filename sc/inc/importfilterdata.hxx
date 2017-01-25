@@ -25,7 +25,6 @@ struct ImportPostProcessData
     ImportPostProcessData() = default;
     ImportPostProcessData(const ImportPostProcessData&) = delete;
     const ImportPostProcessData& operator=(const ImportPostProcessData&) = delete;
-    ~ImportPostProcessData() = default;
     /**
      * Data stream data needs to be post-processed because it requires
      * ScDocShell instance which is not available in the filter code.

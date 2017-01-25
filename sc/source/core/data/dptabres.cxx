@@ -145,7 +145,6 @@ public:
                 nMeasure(nM),
                 bAscending(bAsc)
             {}
-            ~ScDPRowMembersOrder() {}
 
     bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
 };
@@ -162,7 +161,6 @@ public:
                 nMeasure(nM),
                 bAscending(bAsc)
             {}
-            ~ScDPColMembersOrder() {}
 
     bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
 };
@@ -2689,7 +2687,6 @@ private:
     long                 nGroupBase;
 public:
             ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, long nDimension );
-            ~ScDPGroupCompare() {}
 
     bool    IsIncluded( const ScDPMember& rMember )     { return bIncludeAll || TestIncluded( rMember ); }
     bool    TestIncluded( const ScDPMember& rMember );

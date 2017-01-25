@@ -126,7 +126,6 @@ struct ScHTMLTableStackEntry
                             nColOffset( nCO ), nColOffsetStart( nCOS ),
                             bFirstRow( bFR )
                             {}
-                        ~ScHTMLTableStackEntry() {}
 };
 
 struct ScHTMLAdjustStackEntry

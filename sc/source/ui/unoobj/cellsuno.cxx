@@ -9486,7 +9486,6 @@ class ScUniqueFormatsEntry
 
 public:
                         ScUniqueFormatsEntry() : eState( STATE_EMPTY ) {}
-                        ~ScUniqueFormatsEntry() {}
 
     void                Join( const ScRange& rNewRange );
     const ScRangeList&  GetRanges();

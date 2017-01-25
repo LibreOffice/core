@@ -180,9 +180,6 @@ private:
             maAddress( rAddress)
         {
         }
-        ~QueryCriteriaAndResult()
-        {
-        }
     };
 
     typedef std::unordered_map< QueryKey, QueryCriteriaAndResult, QueryKey::Hash > QueryMap;

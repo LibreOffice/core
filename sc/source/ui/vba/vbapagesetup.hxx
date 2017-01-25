@@ -40,7 +40,6 @@ public:
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     const css::uno::Reference< css::sheet::XSpreadsheet>& xSheet,
                     const css::uno::Reference< css::frame::XModel >& xModel) throw (css::uno::RuntimeException);
-    virtual ~ScVbaPageSetup() override {}
 
     // Attribute
     virtual OUString SAL_CALL getPrintArea() throw (css::uno::RuntimeException, std::exception) override;
