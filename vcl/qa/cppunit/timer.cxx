@@ -70,6 +70,7 @@ public:
     void testTriggerIdleFromIdle();
     void testInvokedReStart();
     void testPriority();
+    void testRoundRobin();
 
     CPPUNIT_TEST_SUITE(TimerTest);
     CPPUNIT_TEST(testIdle);
@@ -88,6 +89,7 @@ public:
     CPPUNIT_TEST(testTriggerIdleFromIdle);
     CPPUNIT_TEST(testInvokedReStart);
     CPPUNIT_TEST(testPriority);
+    CPPUNIT_TEST(testRoundRobin);
 
     CPPUNIT_TEST_SUITE_END();
 };
@@ -485,6 +487,46 @@ void TimerTest::testPriority()
         while ( Application::Reschedule() );
         CPPUNIT_ASSERT_MESSAGE( "Not all idles processed", 2 == nProcessed );
     }
+}
+
+
+class TestAutoIdleRR : public AutoIdle
+{
+    unsigned int &mrCount;
+
+    DECL_LINK( IdleRRHdl, Timer *, void );
+
+public:
+    TestAutoIdleRR( unsigned int &rCount,
+                    const sal_Char *pDebugName )
+        : AutoIdle( pDebugName )
+        , mrCount( rCount )
+    {
+        CPPUNIT_ASSERT( mrCount == 0 );
+        SetInvokeHandler( LINK( this, TestAutoIdleRR, IdleRRHdl ) );
+        Start();
+    }
+};
+
+IMPL_LINK_NOARG(TestAutoIdleRR, IdleRRHdl, Timer *, void)
+{
+    ++mrCount;
+    if ( mrCount == 3 )
+        Stop();
+}
+
+void TimerTest::testRoundRobin()
+{
+    unsigned int nCount1 = 0, nCount2 = 0;
+    TestAutoIdleRR aIdle1( nCount1, "TestAutoIdleRR aIdle1" ),
+                   aIdle2( nCount2, "TestAutoIdleRR aIdle2" );
+    while ( Application::Reschedule() )
+    {
+        CPPUNIT_ASSERT( nCount1 == nCount2 || nCount1 - 1 == nCount2 );
+        CPPUNIT_ASSERT( nCount1 <= 3 );
+        CPPUNIT_ASSERT( nCount2 <= 3 );
+    }
+    CPPUNIT_ASSERT( 3 == nCount1 && 3 == nCount2 );
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TimerTest);
