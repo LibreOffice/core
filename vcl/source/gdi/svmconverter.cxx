@@ -909,6 +909,15 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                         sal_Int32 nDXAryLen = 0;
                         if (nAryLen > 0)
                         {
+                            const size_t nMinRecordSize = sizeof(sal_Int32);
+                            const size_t nMaxRecords = rIStm.remainingSize() / nMinRecordSize;
+                            if (static_cast<sal_uInt32>(nAryLen) > nMaxRecords)
+                            {
+                                SAL_WARN("vcl.gdi", "Parsing error: " << nMaxRecords <<
+                                         " max possible entries, but " << nAryLen << " claimed, truncating");
+                                nAryLen = nMaxRecords;
+                            }
+
                             sal_Int32 nStrLen( aStr.getLength() );
 
                             nDXAryLen = std::max(nAryLen, nStrLen);
