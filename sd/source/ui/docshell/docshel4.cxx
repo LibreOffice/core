@@ -17,6 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include "DrawDocShell.hxx"
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
 #include <tools/urlobj.hxx>
