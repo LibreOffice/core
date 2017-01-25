@@ -239,7 +239,6 @@ void EMFWriter::WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSiz
     ImplPlusRecord( EmfPlusSetPixelOffsetMode, 0x0 );
     ImplPlusRecord( EmfPlusSetAntiAliasMode, 0x09 );      // TODO: Check actual values for AntiAlias
     ImplPlusRecord( EmfPlusSetCompositingQuality, 0x0100 ); // Default Quality
-    ImplPlusRecord( EmfPlusSetPageTransform, 1 );
     ImplPlusRecord( EmfPlusSetInterpolationMode, 0x00 );  // Default
     ImplPlusRecord( EmfPlusGetDC, 0x00 );
     ImplEndCommentRecord();
