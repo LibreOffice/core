@@ -23,6 +23,7 @@
 
 #include <memory>
 
+#include <rtl/ref.hxx>
 #include <sfx2/dockwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svtools/scrwin.hxx>
@@ -72,8 +73,7 @@ protected:
     bool IsInlineEditEnabled() const;
 
 private:
-    css::uno::Reference<css::accessibility::XAccessible> xAccessible;
-    SmGraphicAccessible* pAccessible;
+    rtl::Reference<SmGraphicAccessible> mxAccessible;
 
     SmViewShell* pViewShell;
     sal_uInt16 nZoom;
@@ -131,7 +131,7 @@ public:
     using Window::GetAccessible;
     SmGraphicAccessible* GetAccessible_Impl()
     {
-        return pAccessible;
+        return mxAccessible.get();
     }
 };
 

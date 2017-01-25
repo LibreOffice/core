@@ -95,7 +95,6 @@ using namespace css::uno;
 
 SmGraphicWindow::SmGraphicWindow(SmViewShell* pShell)
     : ScrollableWindow(&pShell->GetViewFrame()->GetWindow())
-    , pAccessible(nullptr)
     , pViewShell(pShell)
     , nZoom(100)
 {
@@ -122,10 +121,8 @@ SmGraphicWindow::~SmGraphicWindow()
 
 void SmGraphicWindow::dispose()
 {
-    if (pAccessible)
-        pAccessible->ClearWin();    // make Accessible defunctional
-    // Note: memory for pAccessible will be freed when the reference
-    // xAccessible is released.
+    if (mxAccessible.is())
+        mxAccessible->ClearWin();    // make Accessible defunctional
     CaretBlinkStop();
     ScrollableWindow::dispose();
 }
@@ -235,12 +232,12 @@ void SmGraphicWindow::GetFocus()
 void SmGraphicWindow::LoseFocus()
 {
     ScrollableWindow::LoseFocus();
-    if (xAccessible.is())
+    if (mxAccessible.is())
     {
         uno::Any aOldValue, aNewValue;
         aOldValue <<= AccessibleStateType::FOCUSED;
         // aNewValue remains empty
-        pAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
+        mxAccessible->LaunchEvent( AccessibleEventId::STATE_CHANGED,
                 aOldValue, aNewValue );
     }
     if (!IsInlineEditEnabled())
@@ -614,12 +611,11 @@ void SmGraphicWindow::ZoomToFitInWindow()
 
 uno::Reference< XAccessible > SmGraphicWindow::CreateAccessible()
 {
-    if (!pAccessible)
+    if (!mxAccessible.is())
     {
-        pAccessible = new SmGraphicAccessible( this );
-        xAccessible = pAccessible;
+        mxAccessible = new SmGraphicAccessible( this );
     }
-    return xAccessible;
+    return mxAccessible.get();
 }
 
 /**************************************************************************/
