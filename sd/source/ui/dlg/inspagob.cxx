@@ -83,7 +83,7 @@ void SdInsertPagesObjsDlg::Reset()
     {
         Color aColor( COL_WHITE );
         Bitmap aBmpText( SdResId( BMP_DOC_TEXT ) );
-        Image aImgText( aBmpText, aColor );
+        Image aImgText(BitmapEx(aBmpText, aColor));
         m_pLbTree->InsertEntry( rName, aImgText, aImgText );
     }
 

@@ -3399,7 +3399,7 @@ void SvxRuler::Command( const CommandEvent& rCommandEvent )
                 DrawTab(*pDev, aFillColor, aPt, nStyle);
                 aMenu->InsertItem(i + 1,
                                  ResId(RID_SVXSTR_RULER_START + i, DIALOG_MGR()).toString(),
-                                 Image(pDev->GetBitmap(Point(), aSz), Color(COL_WHITE)));
+                                 Image(BitmapEx(pDev->GetBitmap(Point(), aSz), Color(COL_WHITE))));
                 aMenu->CheckItem(i + 1, i == mpTabs[mxRulerImpl->nIdx + TAB_GAP].nStyle);
                 pDev->SetOutputSize(aSz); // delete device
             }

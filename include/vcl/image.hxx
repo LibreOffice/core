@@ -57,7 +57,6 @@ class SAL_WARN_UNUSED VCL_DLLPUBLIC Image
 public:
                     Image();
                     explicit Image( const BitmapEx& rBitmapEx );
-                    Image( const Bitmap& rBitmap, const Color& rColor );
                     explicit Image( const css::uno::Reference< css::graphic::XGraphic >& rxGraphic );
                     explicit Image( const OUString &rPNGFileUrl );
 

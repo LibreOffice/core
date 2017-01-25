@@ -4868,7 +4868,7 @@ Image SvxToolbarEntriesListBox::GetSizedImage(
     rVDev.DrawLine( Point( aNewSize.Width()-3, 0 ), Point( aNewSize.Width()-3, aNewSize.Height()-1 ));
 
     // Create new image that uses the fillcolor as transparent
-    return Image( rVDev.GetBitmap( Point(), aNewSize ), aFillColor );
+    return Image(BitmapEx(rVDev.GetBitmap(Point(), aNewSize), aFillColor));
 }
 
 void SvxToolbarEntriesListBox::DataChanged( const DataChangedEvent& rDCEvt )
