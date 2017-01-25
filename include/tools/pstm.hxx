@@ -50,7 +50,7 @@ class TOOLS_DLLPUBLIC SvRttiBase : public SvRefBase
 public:
 };
 
-#define SV_DECL_PERSIST1( Class, Super1, CLASS_ID )                 \
+#define SV_DECL_PERSIST1( Class, CLASS_ID )                 \
     static  sal_Int32  StaticClassId() { return CLASS_ID; }         \
     static  void *  CreateInstance( SvPersistBase ** ppBase );      \
     friend SvPersistStream& operator >> ( SvPersistStream & rStm,   \

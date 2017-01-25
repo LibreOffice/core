@@ -47,7 +47,7 @@ public:
 
     static SvxFieldData* Create(const css::uno::Reference<css::text::XTextContent>& xContent);
 
-    SV_DECL_PERSIST1( SvxFieldData, SvPersistBase, css::text::textfield::Type::UNSPECIFIED)
+    SV_DECL_PERSIST1( SvxFieldData, css::text::textfield::Type::UNSPECIFIED)
 
                             SvxFieldData();
     virtual                 ~SvxFieldData() override;
@@ -111,7 +111,7 @@ class EDITENG_DLLPUBLIC SvxDateField : public SvxFieldData
     SvxDateFormat           eFormat;
 
 public:
-    SV_DECL_PERSIST1( SvxDateField, SvxFieldData, css::text::textfield::Type::DATE )
+    SV_DECL_PERSIST1( SvxDateField, css::text::textfield::Type::DATE )
 
                             SvxDateField();
     explicit                SvxDateField( const Date& rDate,
@@ -129,8 +129,8 @@ public:
 
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.
-    OUString           GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
-    static OUString    GetFormatted( Date& rDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    OUString                GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
+    static OUString         GetFormatted( Date& rDate, SvxDateFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
@@ -148,23 +148,23 @@ class EDITENG_DLLPUBLIC SvxURLField : public SvxFieldData
 {
 private:
     SvxURLFormat            eFormat;
-    OUString           aURL;               // URL-Address
-    OUString           aRepresentation;    // What is shown
-    OUString           aTargetFrame;       // In what Frame
+    OUString                aURL;               // URL-Address
+    OUString                aRepresentation;    // What is shown
+    OUString                aTargetFrame;       // In what Frame
 
 public:
-    SV_DECL_PERSIST1( SvxURLField, SvxFieldData, css::text::textfield::Type::URL )
+    SV_DECL_PERSIST1( SvxURLField, css::text::textfield::Type::URL )
 
                             SvxURLField();
                             SvxURLField( const OUString& rURL, const OUString& rRepres, SvxURLFormat eFmt = SVXURLFORMAT_URL );
 
-    const OUString&    GetURL() const { return aURL; }
+    const OUString&         GetURL() const { return aURL; }
     void                    SetURL( const OUString& rURL ) { aURL = rURL; }
 
-    const OUString&    GetRepresentation() const { return aRepresentation; }
+    const OUString&         GetRepresentation() const { return aRepresentation; }
     void                    SetRepresentation( const OUString& rRep ) { aRepresentation= rRep; }
 
-    const OUString&    GetTargetFrame() const { return aTargetFrame; }
+    const OUString&         GetTargetFrame() const { return aTargetFrame; }
     void                    SetTargetFrame( const OUString& rFrm ) { aTargetFrame = rFrm; }
 
     SvxURLFormat            GetFormat() const { return eFormat; }
@@ -179,7 +179,7 @@ public:
 class EDITENG_DLLPUBLIC SvxPageField final: public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxPageField, SvxFieldData, css::text::textfield::Type::PAGE )
+    SV_DECL_PERSIST1( SvxPageField, css::text::textfield::Type::PAGE )
     SvxPageField();
 
     virtual SvxFieldData*   Clone() const override;
@@ -191,7 +191,7 @@ public:
 class EDITENG_DLLPUBLIC SvxPageTitleField final: public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxPageTitleField, SvxFieldData, css::text::textfield::Type::PAGE_NAME )
+    SV_DECL_PERSIST1( SvxPageTitleField, css::text::textfield::Type::PAGE_NAME )
     SvxPageTitleField();
 
     virtual SvxFieldData*   Clone() const override;
@@ -203,7 +203,7 @@ public:
 class EDITENG_DLLPUBLIC SvxPagesField final: public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxPagesField, SvxFieldData, css::text::textfield::Type::PAGES )
+    SV_DECL_PERSIST1( SvxPagesField, css::text::textfield::Type::PAGES )
     SvxPagesField();
 
     virtual SvxFieldData*   Clone() const override;
@@ -213,7 +213,7 @@ public:
 class EDITENG_DLLPUBLIC SvxTimeField final: public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxTimeField, SvxFieldData, css::text::textfield::Type::TIME )
+    SV_DECL_PERSIST1( SvxTimeField, css::text::textfield::Type::TIME )
     SvxTimeField();
 
     virtual SvxFieldData*   Clone() const override;
@@ -225,7 +225,7 @@ public:
 class EDITENG_DLLPUBLIC SvxFileField final: public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxFileField, SvxFieldData, css::text::textfield::Type::DOCINFO_TITLE )
+    SV_DECL_PERSIST1( SvxFileField, css::text::textfield::Type::DOCINFO_TITLE )
     SvxFileField();
 
     virtual SvxFieldData*   Clone() const override;
@@ -236,7 +236,7 @@ class EDITENG_DLLPUBLIC SvxTableField final: public SvxFieldData
 {
     int mnTab;
 public:
-    SV_DECL_PERSIST1( SvxTableField, SvxFieldData, css::text::textfield::Type::TABLE )
+    SV_DECL_PERSIST1( SvxTableField, css::text::textfield::Type::TABLE )
     SvxTableField();
     explicit SvxTableField(int nTab);
 
@@ -271,14 +271,14 @@ private:
     SvxTimeFormat           eFormat;
 
 public:
-    SV_DECL_PERSIST1( SvxExtTimeField, SvxFieldData, css::text::textfield::Type::EXTENDED_TIME )
+    SV_DECL_PERSIST1( SvxExtTimeField, css::text::textfield::Type::EXTENDED_TIME )
                             SvxExtTimeField();
     explicit                SvxExtTimeField( const tools::Time& rTime,
                                 SvxTimeType eType,
                                 SvxTimeFormat eFormat = SVXTIMEFORMAT_STANDARD );
 
     sal_Int64               GetFixTime() const { return m_nFixTime; }
-    void SetFixTime( const tools::Time& rTime ) { m_nFixTime = rTime.GetTime(); }
+    void                    SetFixTime( const tools::Time& rTime ) { m_nFixTime = rTime.GetTime(); }
 
     SvxTimeType             GetType() const { return eType; }
     void                    SetType( SvxTimeType eTp ) { eType = eTp; }
@@ -288,8 +288,8 @@ public:
 
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.
-    OUString           GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
-    static OUString    GetFormatted( tools::Time& rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
+    OUString                GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
+    static OUString         GetFormatted( tools::Time& rTime, SvxTimeFormat eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
 
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
@@ -314,7 +314,7 @@ private:
     SvxFileFormat           eFormat;
 
 public:
-    SV_DECL_PERSIST1( SvxExtFileField, SvxFieldData, css::text::textfield::Type::EXTENDED_FILE )
+    SV_DECL_PERSIST1( SvxExtFileField, css::text::textfield::Type::EXTENDED_FILE )
                             SvxExtFileField();
     explicit                SvxExtFileField( const OUString& rString,
                                 SvxFileType eType = SVXFILETYPE_VAR,
@@ -329,7 +329,7 @@ public:
     SvxFileFormat           GetFormat() const { return eFormat; }
     void                    SetFormat( SvxFileFormat eFmt ) { eFormat = eFmt; }
 
-    OUString           GetFormatted() const;
+    OUString                GetFormatted() const;
 
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
@@ -353,7 +353,7 @@ private:
     SvxAuthorFormat eFormat;
 
 public:
-    SV_DECL_PERSIST1( SvxAuthorField, SvxFieldData, css::text::textfield::Type::AUTHOR )
+    SV_DECL_PERSIST1( SvxAuthorField, css::text::textfield::Type::AUTHOR )
                             SvxAuthorField();
                             SvxAuthorField(
                                 const OUString& rFirstName,
@@ -379,7 +379,7 @@ public:
 class EDITENG_DLLPUBLIC SvxHeaderField final: public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxHeaderField, SvxFieldData, css::text::textfield::Type::PRESENTATION_HEADER )
+    SV_DECL_PERSIST1( SvxHeaderField, css::text::textfield::Type::PRESENTATION_HEADER )
     SvxHeaderField();
 
     virtual SvxFieldData*   Clone() const override;
@@ -391,7 +391,7 @@ public:
 class EDITENG_DLLPUBLIC SvxFooterField final: public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxFooterField, SvxFieldData, css::text::textfield::Type::PRESENTATION_FOOTER )
+    SV_DECL_PERSIST1( SvxFooterField, css::text::textfield::Type::PRESENTATION_FOOTER )
     SvxFooterField();
     virtual SvxFieldData*   Clone() const override;
     virtual bool            operator==( const SvxFieldData& ) const override;
@@ -402,7 +402,7 @@ public:
 class EDITENG_DLLPUBLIC SvxDateTimeField final: public SvxFieldData
 {
 public:
-    SV_DECL_PERSIST1( SvxDateTimeField, SvxFieldData, css::text::textfield::Type::PRESENTATION_DATE_TIME )
+    SV_DECL_PERSIST1( SvxDateTimeField, css::text::textfield::Type::PRESENTATION_DATE_TIME )
     SvxDateTimeField();
 
     static OUString    GetFormatted( Date& rDate, tools::Time& rTime, int eFormat, SvNumberFormatter& rFormatter, LanguageType eLanguage );
