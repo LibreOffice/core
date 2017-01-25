@@ -34,7 +34,6 @@ class ContextBase : public ::oox::core::ContextHandler2
 public:
     explicit            ContextBase( ::oox::core::ContextHandler2Helper& rParent, ModelType& rModel ) :
                             ::oox::core::ContextHandler2( rParent ), mrModel( rModel ) {}
-    virtual             ~ContextBase() override {}
 
 protected:
     ModelType&          mrModel;
@@ -46,7 +45,6 @@ class FragmentBase : public ::oox::core::FragmentHandler2
 public:
     explicit            FragmentBase( ::oox::core::XmlFilterBase& rFilter, const OUString& rFragmentPath, ModelType& rModel ) :
                             ::oox::core::FragmentHandler2( rFilter, rFragmentPath, false ), mrModel( rModel ) {}
-    virtual             ~FragmentBase() override {}
 
 protected:
     ModelType&          mrModel;

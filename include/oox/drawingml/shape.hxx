@@ -92,7 +92,6 @@ struct LinkedTxbxAttr
     sal_Int32 id;
     sal_Int32 seq;
     LinkedTxbxAttr(): id(0),seq(0){};
-    ~LinkedTxbxAttr(){};
 };
 
 class OOX_DLLPUBLIC Shape

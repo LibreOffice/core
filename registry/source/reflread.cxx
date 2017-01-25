@@ -267,8 +267,6 @@ public:
     {
     }
 
-    ~ConstantPool();
-
     sal_uInt32 parseIndex(); // throws std::bad_alloc
 
     CPInfoTag       readTag(sal_uInt16 index);
@@ -287,10 +285,6 @@ public:
     const sal_Unicode*  readStringConstant(sal_uInt16 index);
         // throws std::bad_alloc
 };
-
-ConstantPool::~ConstantPool()
-{
-}
 
 sal_uInt32 ConstantPool::parseIndex()
 {
@@ -891,8 +885,6 @@ public:
         }
     }
 
-    ~MethodList();
-
     sal_uInt32 parseIndex(); // throws std::bad_alloc
 
     const sal_Char* getMethodName(sal_uInt16 index);
@@ -909,10 +901,6 @@ public:
 private:
     sal_uInt16 calcMethodParamIndex( const sal_uInt16 index );
 };
-
-MethodList::~MethodList()
-{
-}
 
 sal_uInt16 MethodList::calcMethodParamIndex( const sal_uInt16 index )
 {

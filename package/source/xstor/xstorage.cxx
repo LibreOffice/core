@@ -92,8 +92,6 @@ struct StorInternalData_Impl
     , m_bReadOnlyWrap( bReadOnlyWrap )
     , m_pSubElDispListener()
     {}
-
-    ~StorInternalData_Impl();
 };
 
 // static
@@ -156,10 +154,6 @@ uno::Reference< io::XInputStream > GetSeekableTempCopy( const uno::Reference< io
     xTempOut->closeOutput();
 
     return xTempIn;
-}
-
-StorInternalData_Impl::~StorInternalData_Impl()
-{
 }
 
 SotElement_Impl::SotElement_Impl( const OUString& rName, bool bStor, bool bNew )
