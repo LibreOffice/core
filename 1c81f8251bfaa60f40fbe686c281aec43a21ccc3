@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_8d76d23c",
+        "filename": "sc/source/filter/excel/excdoc.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1001194
+      },
+      "writtenOn": "2017-01-25T14:00:55Z",
+      "side": 0,
+      "message": "not sure if comments still apply",
+      "range": {
+        "startLine": 232,
+        "startChar": 4,
+        "endLine": 232,
+        "endChar": 43
+      },
+      "revId": "1c81f8251bfaa60f40fbe686c281aec43a21ccc3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
