@@ -50,7 +50,6 @@ namespace slideshow
         class State final
         {
         public:
-            ~State() {}
 
             /// Abstract, numerically encoded state ID
             typedef ::std::size_t StateId;

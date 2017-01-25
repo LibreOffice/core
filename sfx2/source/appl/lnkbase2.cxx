@@ -56,9 +56,6 @@ struct BaseLink_Impl
         , m_pFileDlg( nullptr )
         , m_bIsConnect( false )
         {}
-
-    ~BaseLink_Impl()
-        {}
 };
 
 // only for internal management

@@ -411,7 +411,6 @@ private:
 
 public:
             SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSetupDialog* pParent );
-            ~SfxDialogExecutor_Impl() {}
 
     Link<Button*, void> GetLink() const { return LINK(const_cast<SfxDialogExecutor_Impl*>(this), SfxDialogExecutor_Impl, Execute); }
     const SfxItemSet*   GetOptions() const { return _pOptions.get(); }

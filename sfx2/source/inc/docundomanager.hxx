@@ -82,9 +82,6 @@ public:
     {
         i_rSubComponent.MethodEntryCheck();
     }
-    ~SfxModelGuard()
-    {
-    }
 
     void clear()
     {

@@ -31,7 +31,6 @@ class SfxUnoDecks : public cppu::WeakImplHelper<css::ui::XDecks>
 public:
 
     SfxUnoDecks(const css::uno::Reference<css::frame::XFrame>&);
-    virtual ~SfxUnoDecks() override {};
 
 // XNameAccess
 
