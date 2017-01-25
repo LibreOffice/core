@@ -195,6 +195,14 @@ public:
         return (m_pBody != NULL);
     }
 
+#if defined LIBO_INTERNAL_ONLY
+    /** Returns True if the handle does point to a valid body.
+     */
+    inline explicit operator bool() const
+    {
+        return is();
+    }
+#endif
 
     /** Returns True if this points to pBody.
      */
