@@ -149,9 +149,6 @@ public:
                                     , bValid(false)
                                     , bInitialized(false)
                                     {}
-                                ~OnDemandCalendarWrapper()
-                                    {
-                                    }
 
             void                init(
                                     const css::uno::Reference< css::uno::XComponentContext >& rxContext,
@@ -207,9 +204,6 @@ public:
                                     , bValid(false)
                                     , bInitialized(false)
                                     {}
-                                ~OnDemandTransliterationWrapper()
-                                    {
-                                    }
 
             bool                isInitialized() const   { return bInitialized; }
 
@@ -265,9 +259,6 @@ public:
                                     : pPtr(nullptr)
                                     , bInitialized(false)
                                     {}
-                                ~OnDemandNativeNumberWrapper()
-                                    {
-                                    }
 
             void                init(
                                     const css::uno::Reference< css::uno::XComponentContext >& rxContext

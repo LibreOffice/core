@@ -150,7 +150,6 @@ class INetURLHistory_Impl
 
 public:
     INetURLHistory_Impl();
-    ~INetURLHistory_Impl();
     INetURLHistory_Impl(const INetURLHistory_Impl&) = delete;
     INetURLHistory_Impl& operator=(const INetURLHistory_Impl&) = delete;
 
@@ -163,10 +162,6 @@ public:
 INetURLHistory_Impl::INetURLHistory_Impl()
 {
     initialize();
-}
-
-INetURLHistory_Impl::~INetURLHistory_Impl()
-{
 }
 
 void INetURLHistory_Impl::initialize()

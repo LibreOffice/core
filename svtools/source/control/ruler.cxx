@@ -88,7 +88,6 @@ private:
 
 public:
     ImplRulerData();
-    ~ImplRulerData();
 
     ImplRulerData& operator=( const ImplRulerData& rData );
 };
@@ -110,9 +109,6 @@ ImplRulerData::ImplRulerData() :
     bTextRTL          (false)
 {
 }
-
-ImplRulerData::~ImplRulerData()
-{}
 
 ImplRulerData& ImplRulerData::operator=( const ImplRulerData& rData )
 {

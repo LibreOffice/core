@@ -249,10 +249,6 @@ struct SfxUndoManager_Data
         pActUndoArray = pUndoArray.get();
     }
 
-    ~SfxUndoManager_Data()
-    {
-    }
-
     // Copy assignment is forbidden and not implemented.
     SfxUndoManager_Data (const SfxUndoManager_Data &) = delete;
     SfxUndoManager_Data & operator= (const SfxUndoManager_Data &) = delete;

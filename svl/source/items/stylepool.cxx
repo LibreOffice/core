@@ -362,10 +362,6 @@ public:
                     "<StylePoolImpl::StylePoolImpl(..)> - <SfxItemSet::Clone( sal_False )> does not work as excepted - <mpIgnorableItems> is not empty." );
     }
 
-    ~StylePoolImpl()
-    {
-    }
-
     std::shared_ptr<SfxItemSet> insertItemSet( const SfxItemSet& rSet );
 
     // #i86923#

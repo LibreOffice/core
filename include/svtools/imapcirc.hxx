@@ -49,7 +49,6 @@ public:
                                           const OUString& rName,
                                           bool bActive = true,
                                           bool bPixelCoords = true );
-    virtual             ~IMapCircleObject() override {}
 
     virtual sal_uInt16  GetType() const override;
     virtual bool        IsHit( const Point& rPoint ) const override;
