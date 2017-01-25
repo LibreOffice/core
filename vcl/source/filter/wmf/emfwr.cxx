@@ -102,8 +102,7 @@ enum class EmfPlusRecordType
     SetAntiAliasMode           = 0x401E,
     SetInterpolationMode       = 0x4021,
     SetPixelOffsetMode         = 0x4022,
-    SetCompositingQuality      = 0x4024,
-    SetPageTransform           = 0x4030,
+    SetCompositingQuality      = 0x4024
 };
 
 void EMFWriter::ImplBeginCommentRecord( sal_Int32 nCommentType )
@@ -190,7 +189,6 @@ void EMFWriter::WriteEMFPlusHeader( const Size &rMtfSizePix, const Size &rMtfSiz
     ImplPlusRecord( EmfPlusRecordType::SetPixelOffsetMode, 0x0 );
     ImplPlusRecord( EmfPlusRecordType::SetAntiAliasMode, 0x09 );      // TODO: Check actual values for AntiAlias
     ImplPlusRecord( EmfPlusRecordType::SetCompositingQuality, 0x0100 ); // Default Quality
-    ImplPlusRecord( EmfPlusRecordType::SetPageTransform, 1 );
     ImplPlusRecord( EmfPlusRecordType::SetInterpolationMode, 0x00 );  // Default
     ImplPlusRecord( EmfPlusRecordType::GetDC, 0x00 );
     ImplEndCommentRecord();
