@@ -91,7 +91,6 @@ struct PropEntry
 
     PropEntry( sal_uInt32 nId, const sal_uInt8* pBuf, sal_uInt32 nBufSize );
     PropEntry( const PropEntry& rProp );
-    ~PropEntry() {}
 
     PropEntry& operator=(const PropEntry& rPropEntry);
 };

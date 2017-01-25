@@ -107,7 +107,6 @@ public:
     Renderer (
         const Reference<XComponentContext>& rxContext,
         const std::shared_ptr<PresenterTheme>& rpTheme);
-    ~Renderer();
 
     void SetCanvas (const Reference<rendering::XCanvas>& rxCanvas);
     void PaintBorder (
@@ -407,10 +406,6 @@ PresenterPaneBorderPainter::Renderer::Renderer (
                 rxContext),
             UNO_QUERY_THROW);
     }
-}
-
-PresenterPaneBorderPainter::Renderer::~Renderer()
-{
 }
 
 void PresenterPaneBorderPainter::Renderer::SetCanvas (const Reference<rendering::XCanvas>& rxCanvas)

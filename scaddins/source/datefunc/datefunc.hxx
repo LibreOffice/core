@@ -199,7 +199,6 @@ private:
 
 public:
                                 ScaDateAddIn();
-    virtual                     ~ScaDateAddIn() override =default;
 
     static OUString      getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
