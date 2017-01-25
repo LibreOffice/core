@@ -33,7 +33,7 @@ public:
     void CnfStyle(css::uno::Sequence<css::beans::PropertyValue>& rAttributeList);
 
     void SetSerializer(const sax_fastparser::FSHelperPtr& pSerializer);
-    DocxTableStyleExport(SwDoc* pDoc, sax_fastparser::FSHelperPtr pSerializer);
+    DocxTableStyleExport(SwDoc* pDoc, const sax_fastparser::FSHelperPtr& pSerializer);
     ~DocxTableStyleExport();
 };
 

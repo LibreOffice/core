@@ -14,14 +14,14 @@ namespace writerfilter
 namespace rtftok
 {
 
-RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes, RTFSprms aSprms)
-    : m_aAttributes(aAttributes),
-      m_aSprms(aSprms)
+RTFReferenceProperties::RTFReferenceProperties(const RTFSprms& rAttributes, const RTFSprms& rSprms)
+    : m_aAttributes(rAttributes),
+      m_aSprms(rSprms)
 {
 }
 
-RTFReferenceProperties::RTFReferenceProperties(RTFSprms aAttributes)
-    : m_aAttributes(aAttributes)
+RTFReferenceProperties::RTFReferenceProperties(const RTFSprms& rAttributes)
+    : m_aAttributes(rAttributes)
 {
 }
 

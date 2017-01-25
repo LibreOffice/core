@@ -21,8 +21,8 @@ class RTFReferenceProperties
     : public writerfilter::Reference<Properties>
 {
 public:
-    RTFReferenceProperties(RTFSprms rAttributes, RTFSprms rSprms);
-    explicit RTFReferenceProperties(RTFSprms rAttributes);
+    RTFReferenceProperties(const RTFSprms& rAttributes, const RTFSprms& rSprms);
+    explicit RTFReferenceProperties(const RTFSprms& rAttributes);
     virtual ~RTFReferenceProperties();
     virtual void resolve(Properties& rHandler) override;
     RTFSprms& getAttributes()

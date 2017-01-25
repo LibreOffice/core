@@ -100,22 +100,22 @@ public:
     std::vector<SfxClassificationCategory> m_aCategories;
 
     OUString m_aPolicyAuthorityName;
-    bool m_bInPolicyAuthorityName;
+    bool m_bInPolicyAuthorityName = false;
     OUString m_aPolicyName;
-    bool m_bInPolicyName;
+    bool m_bInPolicyName = false;
     OUString m_aProgramID;
-    bool m_bInProgramID;
+    bool m_bInProgramID = false;
     OUString m_aScale;
-    bool m_bInScale;
+    bool m_bInScale = false;
     OUString m_aConfidentalityValue;
-    bool m_bInConfidentalityValue;
+    bool m_bInConfidentalityValue = false;
     OUString m_aIdentifier;
-    bool m_bInIdentifier;
+    bool m_bInIdentifier = false;
     OUString m_aValue;
-    bool m_bInValue;
+    bool m_bInValue = false;
 
     /// Pointer to a value in m_aCategories, the currently parsed category.
-    SfxClassificationCategory* m_pCategory;
+    SfxClassificationCategory* m_pCategory = nullptr;
 
     SfxClassificationParser();
 
@@ -138,17 +138,7 @@ public:
     throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
 };
 
-SfxClassificationParser::SfxClassificationParser()
-    : m_bInPolicyAuthorityName(false)
-    , m_bInPolicyName(false)
-    , m_bInProgramID(false)
-    , m_bInScale(false)
-    , m_bInConfidentalityValue(false)
-    , m_bInIdentifier(false)
-    , m_bInValue(false)
-    , m_pCategory(nullptr)
-{
-}
+SfxClassificationParser::SfxClassificationParser() = default;
 
 void SAL_CALL SfxClassificationParser::startDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
