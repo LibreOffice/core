@@ -54,9 +54,6 @@ struct Entry
     explicit Entry (std::shared_ptr<PageData> const & rxPage, sal_uInt32 nOffset)
         : m_xPage(rxPage), m_nOffset(nOffset), m_pNext(nullptr)
     {}
-
-    // Destruction
-    ~Entry() {}
 };
 };
 

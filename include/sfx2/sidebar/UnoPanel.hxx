@@ -32,7 +32,6 @@ class SfxUnoPanel : public cppu::WeakImplHelper<css::ui::XPanel>
 public:
 
     SfxUnoPanel(const css::uno::Reference<css::frame::XFrame>& , const OUString&, const OUString&);
-    virtual ~SfxUnoPanel() override {};
 
     virtual OUString SAL_CALL getId()
                                 throw(css::uno::RuntimeException, std::exception) override;

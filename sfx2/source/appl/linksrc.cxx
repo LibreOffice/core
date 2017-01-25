@@ -81,13 +81,7 @@ struct SvLinkSource_Entry_Impl
     explicit SvLinkSource_Entry_Impl( SvBaseLink* pLink )
         : xSink( pLink ), nAdviseModes( 0 ), bIsDataSink( false )
     {}
-
-    ~SvLinkSource_Entry_Impl();
 };
-
-SvLinkSource_Entry_Impl::~SvLinkSource_Entry_Impl()
-{
-}
 
 class SvLinkSource_Array_Impl
 {
@@ -195,12 +189,7 @@ struct SvLinkSource_Impl
         , m_bIsReadOnly(false)
     {
     }
-    ~SvLinkSource_Impl();
 };
-
-SvLinkSource_Impl::~SvLinkSource_Impl()
-{
-}
 
 SvLinkSource::SvLinkSource()
      : pImpl( new SvLinkSource_Impl )

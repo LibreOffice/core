@@ -47,8 +47,6 @@ namespace slideshow
         class Animation : public virtual SharedPtrAble
         {
         public:
-            virtual ~Animation() override {}
-
             /** Notify that the animation going active soon.
 
                 Implementers should preload any buffers, and create

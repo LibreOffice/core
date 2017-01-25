@@ -124,9 +124,6 @@ struct TabDlg_Impl
     {
         aData.reserve( nCnt );
     }
-    ~TabDlg_Impl()
-    {
-    }
 };
 
 
