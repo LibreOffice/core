@@ -3482,7 +3482,7 @@ void ScInterpreter::ScBahtText()
                 lclAppendBlock( aBlock, nBlock );
             // add leading "million", if there will come more blocks
             if( fBaht > 0.0 )
-                aBlock.insert( 0, OString(UTF8_TH_1E6 ) );
+                aBlock.insert( 0, UTF8_TH_1E6 );
 
             aText.insert(0, aBlock.makeStringAndClear());
         }
@@ -3502,7 +3502,7 @@ void ScInterpreter::ScBahtText()
 
         // add the minus sign
         if( bMinus )
-            aText.insert( 0, OString( UTF8_TH_MINUS ) );
+            aText.insert( 0, UTF8_TH_MINUS );
 
         PushString( OStringToOUString(aText.makeStringAndClear(), RTL_TEXTENCODING_UTF8) );
     }

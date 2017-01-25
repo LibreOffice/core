@@ -75,6 +75,24 @@ bool hasOverloads(FunctionDecl const * decl, unsigned arguments) {
     return false;
 }
 
+CXXConstructExpr const * lookForCXXConstructExpr(Expr const * expr) {
+    if (auto e = dyn_cast<MaterializeTemporaryExpr>(expr)) {
+        expr = e->GetTemporaryExpr();
+    }
+    if (auto e = dyn_cast<CXXFunctionalCastExpr>(expr)) {
+        expr = e->getSubExpr();
+    }
+    if (auto e = dyn_cast<CXXBindTemporaryExpr>(expr)) {
+        expr = e->getSubExpr();
+    }
+    return dyn_cast<CXXConstructExpr>(expr);
+}
+
+char const * adviseNonArray(bool nonArray) {
+    return nonArray
+        ? ", and turn the non-array string constant into an array" : "";
+}
+
 class StringConstant:
     public RecursiveASTVisitor<StringConstant>, public loplugin::RewritePlugin
 {
@@ -113,7 +131,7 @@ private:
 
     void reportChange(
         Expr const * expr, ChangeKind kind, std::string const & original,
-        std::string const & replacement, PassThrough pass,
+        std::string const & replacement, PassThrough pass, bool nonArray,
         char const * rewriteFrom, char const * rewriteTo);
 
     void checkEmpty(
@@ -133,6 +151,9 @@ private:
     void handleOUStringCtor(
         CallExpr const * expr, unsigned arg, FunctionDecl const * callee,
         bool explicitFunctionalCastNotation);
+
+    void handleFunArgOstring(
+        CallExpr const * expr, unsigned arg, FunctionDecl const * callee);
 
     std::stack<Expr const *> calls_;
 };
@@ -490,7 +511,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         if (non) {
             report(
                 DiagnosticsEngine::Warning,
-                ("call of %0 with string constant argument containging"
+                ("call of '%0' with string constant argument containging"
                  " non-ASCII characters"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
@@ -498,16 +519,16 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         if (emb) {
             report(
                 DiagnosticsEngine::Warning,
-                ("call of %0 with string constant argument containging embedded"
-                 " NULs"),
+                ("call of '%0' with string constant argument containging"
+                 " embedded NULs"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
         }
         if (n == 0) {
             report(
                 DiagnosticsEngine::Warning,
-                ("rewrite call of %0  with empty string constant argument as"
-                 " call of rtl::OUString::isEmpty"),
+                ("rewrite call of '%0' with empty string constant argument as"
+                 " call of 'rtl::OUString::isEmpty'"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
             return true;
@@ -531,7 +552,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (non) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("call of %0 with string constant argument containging"
+                    ("call of '%0' with string constant argument containging"
                      " non-ASCII characters"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
@@ -540,7 +561,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (emb) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("call of %0 with string constant argument containging"
+                    ("call of '%0' with string constant argument containging"
                      " embedded NULs"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
@@ -549,8 +570,8 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (n == 0) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("rewrite call of %0 with empty string constant argument as"
-                     " call of rtl::OUString::isEmpty"),
+                    ("rewrite call of '%0' with empty string constant argument"
+                     " as call of 'rtl::OUString::isEmpty'"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
                     << expr->getSourceRange();
@@ -576,7 +597,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (non) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("call of %0 with string constant argument containging"
+                    ("call of '%0' with string constant argument containging"
                      " non-ASCII characters"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
@@ -585,7 +606,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (emb) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("call of %0 with string constant argument containging"
+                    ("call of '%0' with string constant argument containging"
                      " embedded NULs"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
@@ -594,8 +615,8 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (n == 0) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("rewrite call of %0 with empty string constant argument as"
-                     " call of !rtl::OUString::isEmpty"),
+                    ("rewrite call of '%0' with empty string constant argument"
+                     " as call of '!rtl::OUString::isEmpty'"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
                     << expr->getSourceRange();
@@ -620,7 +641,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         if (non) {
             report(
                 DiagnosticsEngine::Warning,
-                ("call of %0 with string constant argument containging"
+                ("call of '%0' with string constant argument containging"
                  " non-ASCII characters"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
@@ -628,16 +649,16 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         if (emb) {
             report(
                 DiagnosticsEngine::Warning,
-                ("call of %0 with string constant argument containging embedded"
-                 " NULs"),
+                ("call of '%0' with string constant argument containging"
+                 " embedded NULs"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
         }
         if (n == 0) {
             report(
                 DiagnosticsEngine::Warning,
-                ("rewrite call of %0 with empty string constant argument as"
-                 " call of rtl::OUString::clear"),
+                ("rewrite call of '%0' with empty string constant argument as"
+                 " call of 'rtl::OUString::clear'"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
             return true;
@@ -669,47 +690,8 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
     {
         switch (fdecl->getNumParams()) {
         case 1:
-            {
-                // char const * const s = "foo"; b.append(s) ->
-                // char const s[] = "foo"; b.append(s):
-                unsigned n;
-                bool nonArray;
-                bool non;
-                bool emb;
-                bool trm;
-                if (!isStringConstant(
-                        expr->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray,
-                        &non, &emb, &trm))
-                {
-                    return true;
-                }
-                if (non || emb) {
-                    return true;
-                }
-                if (!trm) {
-                    report(
-                        DiagnosticsEngine::Warning,
-                        ("call of %0 with string constant argument lacking a"
-                         " terminating NUL"),
-                        getMemberLocation(expr))
-                        << fdecl->getQualifiedNameAsString()
-                        << expr->getSourceRange();
-                    return true;
-                }
-                std::string repl;
-                checkEmpty(expr, fdecl, TreatEmpty::Error, n, &repl);
-                if (nonArray) {
-                    report(
-                        DiagnosticsEngine::Warning,
-                        ("in call of %0 with non-array string constant"
-                         " argument, change that argument into an array"),
-                        getMemberLocation(expr))
-                        << fdecl->getQualifiedNameAsString()
-                        << expr->getSourceRange();
-                    return true;
-                }
-                return true;
-            }
+            handleFunArgOstring(expr, 0, fdecl);
+            break;
         case 2:
             {
                 // b.append("foo", 3) -> b.append("foo"):
@@ -725,11 +707,32 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
                 handleCharLen(
                     expr, 0, 1, fdecl, "rtl::OStringBuffer::append",
                     TreatEmpty::Error);
-                return true;
+            }
+            break;
+        default:
+            break;
+        }
+        return true;
+    }
+    if (dc.Function("insert").Class("OStringBuffer").Namespace("rtl")
+        .GlobalNamespace())
+    {
+        switch (fdecl->getNumParams()) {
+        case 2:
+            handleFunArgOstring(expr, 1, fdecl);
+            break;
+        case 3:
+            {
+                // b.insert(i, "foo", 3) -> b.insert(i, "foo"):
+                handleCharLen(
+                    expr, 1, 2, fdecl, "rtl::OStringBuffer::insert",
+                    TreatEmpty::Error);
+                break;
             }
         default:
-            return true;
+            break;
         }
+        return true;
     }
     return true;
 }
@@ -903,9 +906,9 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                             {
                                 report(
                                     DiagnosticsEngine::Warning,
-                                    ("rewrite call of %0 with construction of"
+                                    ("rewrite call of '%0' with construction of"
                                      " %1 with empty string constant argument"
-                                     " as call of rtl::OUString::isEmpty"),
+                                     " as call of 'rtl::OUString::isEmpty'"),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
                                     << classdecl << call->getSourceRange();
@@ -916,9 +919,9 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                             {
                                 report(
                                     DiagnosticsEngine::Warning,
-                                    ("rewrite call of %0 with construction of"
+                                    ("rewrite call of '%0' with construction of"
                                      " %1 with empty string constant argument"
-                                     " as call of !rtl::OUString::isEmpty"),
+                                     " as call of '!rtl::OUString::isEmpty'"),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
                                     << classdecl << call->getSourceRange();
@@ -931,8 +934,9 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                             {
                                 report(
                                     DiagnosticsEngine::Warning,
-                                    ("call of %0 with suspicous construction of"
-                                     " %1 with empty string constant argument"),
+                                    ("call of '%0' with suspicous construction"
+                                     " of %1 with empty string constant"
+                                     " argument"),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
                                     << classdecl << call->getSourceRange();
@@ -943,9 +947,9 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                             {
                                 report(
                                     DiagnosticsEngine::Warning,
-                                    ("rewrite call of %0 with construction of"
+                                    ("rewrite call of '%0' with construction of"
                                      " %1 with empty string constant argument"
-                                     " as call of rtl::OUString::clear"),
+                                     " as call of 'rtl::OUString::clear'"),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
                                     << classdecl << call->getSourceRange();
@@ -958,13 +962,12 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                             {
                                 report(
                                     DiagnosticsEngine::Warning,
-                                    (("rewrite call of %0 with construction of"
-                                      " %1 with ")
-                                     + describeChangeKind(kind)
-                                     + " as operator =="),
+                                    ("rewrite call of '%0' with construction of"
+                                     " %1 with %2 as 'operator =='"),
                                     getMemberLocation(call))
                                     << fdecl->getQualifiedNameAsString()
-                                    << classdecl << call->getSourceRange();
+                                    << classdecl << describeChangeKind(kind)
+                                    << call->getSourceRange();
                                 return true;
                             }
                             if ((dc.Operator(OO_Plus).Namespace("rtl")
@@ -1013,22 +1016,20 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                                 if (kind == ChangeKind::SingleChar) {
                                     report(
                                         DiagnosticsEngine::Warning,
-                                        ("rewrite construction of %0 with "
-                                         + describeChangeKind(kind)
-                                         + (" in call of %1 as construction of"
-                                            " OUStringLiteral1")),
+                                        ("rewrite construction of %0 with %1 in"
+                                         " call of '%2' as construction of"
+                                         " 'OUStringLiteral1'"),
                                         getMemberLocation(expr))
-                                        << classdecl
+                                        << classdecl << describeChangeKind(kind)
                                         << fdecl->getQualifiedNameAsString()
                                         << expr->getSourceRange();
                                 } else {
                                     report(
                                         DiagnosticsEngine::Warning,
-                                        ("elide construction of %0 with "
-                                         + describeChangeKind(kind)
-                                         + " in call of %1"),
+                                        ("elide construction of %0 with %1 in"
+                                         " call of '%2'"),
                                         getMemberLocation(expr))
-                                        << classdecl
+                                        << classdecl << describeChangeKind(kind)
                                         << fdecl->getQualifiedNameAsString()
                                         << expr->getSourceRange();
                                 }
@@ -1220,8 +1221,8 @@ bool StringConstant::isZero(Expr const * expr) {
 
 void StringConstant::reportChange(
     Expr const * expr, ChangeKind kind, std::string const & original,
-    std::string const & replacement, PassThrough pass, char const * rewriteFrom,
-    char const * rewriteTo)
+    std::string const & replacement, PassThrough pass, bool nonArray,
+    char const * rewriteFrom, char const * rewriteTo)
 {
     assert((rewriteFrom == nullptr) == (rewriteTo == nullptr));
     if (pass != PassThrough::No && !calls_.empty()) {
@@ -1259,11 +1260,11 @@ void StringConstant::reportChange(
                         {
                             report(
                                 DiagnosticsEngine::Warning,
-                                ("rewrite call of %0 with call of " + original
-                                 + (" with empty string constant argument as"
-                                    " call of rtl::OUString::isEmpty")),
+                                ("rewrite call of '%0' with call of %1 with"
+                                 " empty string constant argument as call of"
+                                 " 'rtl::OUString::isEmpty'"),
                                 getMemberLocation(call))
-                                << fdecl->getQualifiedNameAsString()
+                                << fdecl->getQualifiedNameAsString() << original
                                 << call->getSourceRange();
                             return;
                         }
@@ -1272,11 +1273,11 @@ void StringConstant::reportChange(
                         {
                             report(
                                 DiagnosticsEngine::Warning,
-                                ("rewrite call of %0 with call of " + original
-                                 + (" with empty string constant argument as"
-                                    " call of !rtl::OUString::isEmpty")),
+                                ("rewrite call of '%0' with call of %1 with"
+                                 " empty string constant argument as call of"
+                                 " '!rtl::OUString::isEmpty'"),
                                 getMemberLocation(call))
-                                << fdecl->getQualifiedNameAsString()
+                                << fdecl->getQualifiedNameAsString() << original
                                 << call->getSourceRange();
                             return;
                         }
@@ -1287,10 +1288,10 @@ void StringConstant::reportChange(
                         {
                             report(
                                 DiagnosticsEngine::Warning,
-                                ("call of %0 with suspicous call of " + original
-                                 + " with empty string constant argument"),
+                                ("call of '%0' with suspicous call of %1 with"
+                                 " empty string constant argument"),
                                 getMemberLocation(call))
-                                << fdecl->getQualifiedNameAsString()
+                                << fdecl->getQualifiedNameAsString() << original
                                 << call->getSourceRange();
                             return;
                         }
@@ -1299,11 +1300,11 @@ void StringConstant::reportChange(
                         {
                             report(
                                 DiagnosticsEngine::Warning,
-                                ("rewrite call of %0 with call of " + original
-                                 + (" with empty string constant argument as"
-                                    " call of rtl::OUString::call")),
+                                ("rewrite call of '%0' with call of %1 with"
+                                 " empty string constant argument as call of"
+                                 " rtl::OUString::call"),
                                 getMemberLocation(call))
-                                << fdecl->getQualifiedNameAsString()
+                                << fdecl->getQualifiedNameAsString() << original
                                 << call->getSourceRange();
                             return;
                         }
@@ -1326,20 +1327,19 @@ void StringConstant::reportChange(
                         {
                             report(
                                 DiagnosticsEngine::Warning,
-                                ("elide call of " + original + " with "
-                                 + describeChangeKind(kind) + " in call of %0"),
+                                "elide call of %0 with %1 in call of '%2'",
                                 getMemberLocation(expr))
+                                << original << describeChangeKind(kind)
                                 << fdecl->getQualifiedNameAsString()
                                 << expr->getSourceRange();
                             return;
                         }
                         report(
                             DiagnosticsEngine::Warning,
-                            ("rewrite call of " + original + " with "
-                             + describeChangeKind(kind)
-                             + (" in call of %0 as (implicit) construction of"
-                                " rtl::OUString")),
+                            ("rewrite call of %0 with %1 in call of '%2' as"
+                             " (implicit) construction of 'OUString'"),
                             getMemberLocation(expr))
+                            << original << describeChangeKind(kind)
                             << fdecl->getQualifiedNameAsString()
                             << expr->getSourceRange();
                         return;
@@ -1356,23 +1356,21 @@ void StringConstant::reportChange(
                         if (pass == PassThrough::EmptyConstantString) {
                             report(
                                 DiagnosticsEngine::Warning,
-                                ("rewrite construction of %0 with call of "
-                                 + original
-                                 + (" with empty string constant argument as"
-                                    " default construction of %0")),
+                                ("rewrite construction of %0 with call of %1"
+                                 " with empty string constant argument as"
+                                 " default construction of %0"),
                                 getMemberLocation(call))
-                                << classdecl->getQualifiedNameAsString()
+                                << classdecl << original
                                 << call->getSourceRange();
                         } else {
                             assert(pass == PassThrough::NonEmptyConstantString);
                             report(
                                 DiagnosticsEngine::Warning,
-                                ("elide call of " + original + " with "
-                                 + describeChangeKind(kind)
-                                 + " in construction of %0"),
+                                ("elide call of %0 with %1 in construction of"
+                                 " %2"),
                                 getMemberLocation(expr))
-                                << classdecl->getQualifiedNameAsString()
-                                << expr->getSourceRange();
+                                << original << describeChangeKind(kind)
+                                << classdecl << expr->getSourceRange();
                         }
                         return;
                     }
@@ -1382,7 +1380,7 @@ void StringConstant::reportChange(
             }
         }
     }
-    if (rewriter != nullptr && rewriteFrom != nullptr) {
+    if (rewriter != nullptr && !nonArray && rewriteFrom != nullptr) {
         SourceLocation loc = getMemberLocation(expr);
         while (compiler.getSourceManager().isMacroArgExpansion(loc)) {
             loc = compiler.getSourceManager().getImmediateMacroCallerLoc(loc);
@@ -1401,10 +1399,10 @@ void StringConstant::reportChange(
     }
     report(
         DiagnosticsEngine::Warning,
-        ("rewrite call of " + original + " with " + describeChangeKind(kind)
-         + " as call of " + replacement),
+        "rewrite call of '%0' with %1 as call of '%2'%3",
         getMemberLocation(expr))
-        << expr->getSourceRange();
+        << original << describeChangeKind(kind) << replacement
+        << adviseNonArray(nonArray) << expr->getSourceRange();
 }
 
 void StringConstant::checkEmpty(
@@ -1423,7 +1421,7 @@ void StringConstant::checkEmpty(
         case TreatEmpty::Error:
             report(
                 DiagnosticsEngine::Warning,
-                "call of %0 with suspicous empty string constant argument",
+                "call of '%0' with suspicous empty string constant argument",
                 getMemberLocation(expr))
                 << callee->getQualifiedNameAsString() << expr->getSourceRange();
             break;
@@ -1450,7 +1448,7 @@ void StringConstant::handleChar(
     if (non) {
         report(
             DiagnosticsEngine::Warning,
-            ("call of %0 with string constant argument containging non-ASCII"
+            ("call of '%0' with string constant argument containging non-ASCII"
              " characters"),
             getMemberLocation(expr))
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
@@ -1459,7 +1457,7 @@ void StringConstant::handleChar(
     if (emb) {
         report(
             DiagnosticsEngine::Warning,
-            ("call of %0 with string constant argument containging embedded"
+            ("call of '%0' with string constant argument containging embedded"
              " NULs"),
             getMemberLocation(expr))
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
@@ -1468,7 +1466,7 @@ void StringConstant::handleChar(
     if (!trm) {
         report(
             DiagnosticsEngine::Warning,
-            ("call of %0 with string constant argument lacking a terminating"
+            ("call of '%0' with string constant argument lacking a terminating"
              " NUL"),
             getMemberLocation(expr))
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
@@ -1483,7 +1481,7 @@ void StringConstant::handleChar(
             ? PassThrough::EmptyConstantString
             : PassThrough::NonEmptyConstantString)
          : PassThrough::No),
-        rewriteFrom, rewriteTo);
+        nonArray, rewriteFrom, rewriteTo);
 }
 
 void StringConstant::handleCharLen(
@@ -1543,7 +1541,7 @@ void StringConstant::handleCharLen(
     if (non) {
         report(
             DiagnosticsEngine::Warning,
-            ("call of %0 with string constant argument containging non-ASCII"
+            ("call of '%0' with string constant argument containging non-ASCII"
              " characters"),
             getMemberLocation(expr))
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
@@ -1555,7 +1553,7 @@ void StringConstant::handleCharLen(
     checkEmpty(expr, callee, treatEmpty, n, &repl);
     reportChange(
         expr, ChangeKind::CharLen, callee->getQualifiedNameAsString(), repl,
-        PassThrough::No, nullptr, nullptr);
+        PassThrough::No, nonArray, nullptr, nullptr);
 }
 
 void StringConstant::handleOUStringCtor(
@@ -1588,8 +1586,8 @@ void StringConstant::handleOUStringCtor(
     if (e3->getNumArgs() == 0) {
         report(
             DiagnosticsEngine::Warning,
-            ("in call of %0, replace default-constructed OUString with an empty"
-             " string literal"),
+            ("in call of '%0', replace default-constructed 'OUString' with an"
+             " empty string literal"),
             e3->getExprLoc())
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
         return;
@@ -1605,8 +1603,8 @@ void StringConstant::handleOUStringCtor(
         if (!explicitFunctionalCastNotation) {
             report(
                 DiagnosticsEngine::Warning,
-                ("in call of %0, replace OUString constructed from a"
-                 " sal_Unicode with an OUStringLiteral1"),
+                ("in call of '%0', replace 'OUString' constructed from a"
+                 " 'sal_Unicode' with an 'OUStringLiteral1'"),
                 e3->getExprLoc())
                 << callee->getQualifiedNameAsString() << expr->getSourceRange();
         }
@@ -1695,10 +1693,112 @@ void StringConstant::handleOUStringCtor(
     }
     report(
         DiagnosticsEngine::Warning,
-        ("in call of %0, replace OUString constructed from a string literal"
+        ("in call of '%0', replace 'OUString' constructed from a string literal"
          " directly with the string literal"),
         e3->getExprLoc())
         << callee->getQualifiedNameAsString() << expr->getSourceRange();
+}
+
+void StringConstant::handleFunArgOstring(
+    CallExpr const * expr, unsigned arg, FunctionDecl const * callee)
+{
+    auto argExpr = expr->getArg(arg)->IgnoreParenImpCasts();
+    unsigned n;
+    bool nonArray;
+    bool non;
+    bool emb;
+    bool trm;
+    if (isStringConstant(argExpr, &n, &nonArray, &non, &emb, &trm)) {
+        if (non || emb) {
+            return;
+        }
+        if (!trm) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("call of '%0' with string constant argument lacking a"
+                 " terminating NUL"),
+                getMemberLocation(expr))
+                << callee->getQualifiedNameAsString() << expr->getSourceRange();
+            return;
+        }
+        std::string repl;
+        checkEmpty(expr, callee, TreatEmpty::Error, n, &repl);
+        if (nonArray) {
+            report(
+                DiagnosticsEngine::Warning,
+                ("in call of '%0' with non-array string constant argument,"
+                 " turn the non-array string constant into an array"),
+                getMemberLocation(expr))
+                << callee->getQualifiedNameAsString() << expr->getSourceRange();
+        }
+    } else if (auto cexpr = lookForCXXConstructExpr(argExpr)) {
+        auto classdecl = cexpr->getConstructor()->getParent();
+        if (loplugin::DeclCheck(classdecl).Class("OString").Namespace("rtl")
+            .GlobalNamespace())
+        {
+            switch (cexpr->getConstructor()->getNumParams()) {
+            case 0:
+                report(
+                    DiagnosticsEngine::Warning,
+                    ("in call of '%0', replace empty %1 constructor with empty"
+                     " string literal"),
+                    cexpr->getLocation())
+                    << callee->getQualifiedNameAsString() << classdecl
+                    << expr->getSourceRange();
+                break;
+            case 2:
+                if (isStringConstant(
+                        cexpr->getArg(0)->IgnoreParenImpCasts(), &n, &nonArray,
+                        &non, &emb, &trm))
+                {
+                    APSInt res;
+                    if (cexpr->getArg(1)->EvaluateAsInt(
+                            res, compiler.getASTContext()))
+                    {
+                        if (res == n && !emb && trm) {
+                            report(
+                                DiagnosticsEngine::Warning,
+                                ("in call of '%0', elide explicit %1"
+                                 " constructor%2"),
+                                cexpr->getLocation())
+                                << callee->getQualifiedNameAsString()
+                                << classdecl << adviseNonArray(nonArray)
+                                << expr->getSourceRange();
+                        }
+                    } else {
+                        if (emb) {
+                            report(
+                                DiagnosticsEngine::Warning,
+                                ("call of %0 constructor with string constant"
+                                 " argument containing embedded NULs"),
+                                cexpr->getLocation())
+                                << classdecl << cexpr->getSourceRange();
+                            return;
+                        }
+                        if (!trm) {
+                            report(
+                                DiagnosticsEngine::Warning,
+                                ("call of %0 constructor with string constant"
+                                 " argument lacking a terminating NUL"),
+                                cexpr->getLocation())
+                                << classdecl << cexpr->getSourceRange();
+                            return;
+                        }
+                        report(
+                            DiagnosticsEngine::Warning,
+                            "in call of '%0', elide explicit %1 constructor%2",
+                            cexpr->getLocation())
+                            << callee->getQualifiedNameAsString() << classdecl
+                            << adviseNonArray(nonArray)
+                            << expr->getSourceRange();
+                    }
+                }
+                break;
+            default:
+                break;
+            }
+        }
+    }
 }
 
 loplugin::Plugin::Registration< StringConstant > X("stringconstant", true);
