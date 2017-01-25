@@ -484,12 +484,10 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
     long nHeight;
     if (pFormat)
     {
-        const SvxFontItem& rFont = ItemGet< SvxFontItem >(*pFormat,
-                                   GetWhichOfScript(RES_CHRATR_FONT,nRubyScript));
+        const auto& rFont = ItemGet<SvxFontItem>(*pFormat, GetWhichOfScript(RES_CHRATR_FONT,nRubyScript));
         sFamilyName = rFont.GetFamilyName();
 
-        const SvxFontHeightItem& rHeight = ItemGet< SvxFontHeightItem >(*pFormat,
-                                           GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
+        const auto& rHeight = ItemGet<SvxFontHeightItem>(*pFormat, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
         nHeight = rHeight.GetHeight();
     }
     else
@@ -499,12 +497,10 @@ void RtfAttributeOutput::StartRuby(const SwTextNode& rNode, sal_Int32 /*nPos*/, 
         const SfxItemPool* pPool = rNode.GetSwAttrSet().GetPool();
         pPool = pPool ? pPool : &m_rExport.m_pDoc->GetAttrPool();
 
-        const SvxFontItem& rFont  = DefaultItemGet< SvxFontItem >(*pPool,
-                                    GetWhichOfScript(RES_CHRATR_FONT,nRubyScript));
+        const auto& rFont = DefaultItemGet<SvxFontItem>(*pPool, GetWhichOfScript(RES_CHRATR_FONT,nRubyScript));
         sFamilyName = rFont.GetFamilyName();
 
-        const SvxFontHeightItem& rHeight = DefaultItemGet< SvxFontHeightItem >
-                                           (*pPool, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
+        const auto& rHeight = DefaultItemGet<SvxFontHeightItem>(*pPool, GetWhichOfScript(RES_CHRATR_FONTSIZE, nRubyScript));
         nHeight = rHeight.GetHeight();
     }
     nHeight = (nHeight + 5)/10;
