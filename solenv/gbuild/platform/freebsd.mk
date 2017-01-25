@@ -68,14 +68,10 @@ gb_COMPILERDEFS := \
 
 ifeq ($(CPUNAME),X86_64)
 gb_CPUDEFS := -D$(CPUNAME)
-else
-gb_CPUDEFS := -DX86
-endif
-
-ifeq ($(CPUNAME),POWERPC64)
+else ifeq ($(CPUNAME),POWERPC64)
 gb_CPUDEFS := -D$(CPUNAME)
 else
-gb_CPUDEFS := -DPOWERPC64
+gb_CPUDEFS := -DX86
 endif
 
 gb_CFLAGS := \
