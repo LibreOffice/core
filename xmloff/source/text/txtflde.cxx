@@ -1067,8 +1067,11 @@ void XMLTextFieldExport::ExportFieldHelper(
     switch (nToken) {
     case FIELD_ID_AUTHOR:
         // author field: fixed, field (sub-)type
-        ProcessBoolean(XML_FIXED,
-                       GetBoolProperty(sPropertyIsFixed, rPropSet), true);
+        if (xPropSetInfo->hasPropertyByName(sPropertyIsFixed))
+        {
+            GetExport().AddAttribute(XML_NAMESPACE_TEXT, XML_FIXED,
+                                 (GetBoolProperty(sPropertyIsFixed, rPropSet) ? XML_TRUE : XML_FALSE) );
+        }
         ExportElement(MapAuthorFieldName(rPropSet), sPresentation);
         break;
 
