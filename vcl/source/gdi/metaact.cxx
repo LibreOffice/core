@@ -1110,7 +1110,7 @@ MetaTextArrayAction::MetaTextArrayAction( const Point& rStartPt,
 {
     const sal_Int32 nAryLen = pDXAry ? mnLen : 0;
 
-    if( nAryLen )
+    if (nAryLen > 0)
     {
         mpDXAry.reset( new long[ nAryLen ] );
         memcpy( mpDXAry.get(), pDXAry, nAryLen * sizeof(long) );
