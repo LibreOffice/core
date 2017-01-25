@@ -721,8 +721,7 @@ SwXAutoTextEntry::SwXAutoTextEntry(SwGlossaries* pGlss, const OUString& rGroupNa
     WeakComponentImplHelper(m_aMutex),
     pGlossaries(pGlss),
     sGroupName(rGroupName),
-    sEntryName(rEntryName),
-    pBodyText ( nullptr )
+    sEntryName(rEntryName)
 {
 }
 
@@ -761,7 +760,7 @@ void SwXAutoTextEntry::Notify( SfxBroadcaster& _rBC, const SfxHint& _rHint )
             if (SfxEventHintId::PrepareCloseDoc == pEventHint->GetEventId())
             {
                 implFlushDocument();
-                xBodyText = nullptr;
+                mxBodyText.clear();
                 EndListening( *xDocSh );
                 xDocSh.Clear();
             }
@@ -791,8 +790,7 @@ void SwXAutoTextEntry::GetBodyText ()
     // start listening at the document
     StartListening( *xDocSh );
 
-    pBodyText = new SwXBodyText ( xDocSh->GetDoc() );
-    xBodyText.set( *pBodyText, uno::UNO_QUERY);
+    mxBodyText = new SwXBodyText ( xDocSh->GetDoc() );
 }
 
 void SwXAutoTextEntry::disposing()
@@ -805,7 +803,7 @@ uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursor() throw(
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    return pBodyText->createTextCursor();
+    return mxBodyText->createTextCursor();
 }
 
 uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
@@ -813,14 +811,14 @@ uno::Reference< text::XTextCursor >  SwXAutoTextEntry::createTextCursorByRange(
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    return pBodyText->createTextCursorByRange ( aTextPosition );
+    return mxBodyText->createTextCursorByRange ( aTextPosition );
 }
 
 void SwXAutoTextEntry::insertString(const uno::Reference< text::XTextRange > & xRange, const OUString& aString, sal_Bool bAbsorb) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    pBodyText->insertString ( xRange, aString, bAbsorb );
+    mxBodyText->insertString ( xRange, aString, bAbsorb );
 }
 
 void SwXAutoTextEntry::insertControlCharacter(const uno::Reference< text::XTextRange > & xRange,
@@ -829,7 +827,7 @@ void SwXAutoTextEntry::insertControlCharacter(const uno::Reference< text::XTextR
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    pBodyText->insertControlCharacter ( xRange, nControlCharacter, bAbsorb );
+    mxBodyText->insertControlCharacter ( xRange, nControlCharacter, bAbsorb );
 }
 
 void SwXAutoTextEntry::insertTextContent(
@@ -839,7 +837,7 @@ void SwXAutoTextEntry::insertTextContent(
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    pBodyText->insertTextContent ( xRange, xContent, bAbsorb );
+    mxBodyText->insertTextContent ( xRange, xContent, bAbsorb );
 }
 
 void SwXAutoTextEntry::removeTextContent(
@@ -848,7 +846,7 @@ void SwXAutoTextEntry::removeTextContent(
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    pBodyText->removeTextContent ( xContent );
+    mxBodyText->removeTextContent ( xContent );
 }
 
 uno::Reference< text::XText >  SwXAutoTextEntry::getText() throw( uno::RuntimeException, std::exception )
@@ -862,28 +860,28 @@ uno::Reference< text::XTextRange >  SwXAutoTextEntry::getStart() throw( uno::Run
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    return pBodyText->getStart();
+    return mxBodyText->getStart();
 }
 
 uno::Reference< text::XTextRange >  SwXAutoTextEntry::getEnd() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    return pBodyText->getEnd();
+    return mxBodyText->getEnd();
 }
 
 OUString SwXAutoTextEntry::getString() throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    return pBodyText->getString();
+    return mxBodyText->getString();
 }
 
 void SwXAutoTextEntry::setString(const OUString& aString) throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     EnsureBodyText();
-    pBodyText->setString( aString );
+    mxBodyText->setString( aString );
 }
 
 void SwXAutoTextEntry::applyTo(const uno::Reference< text::XTextRange > & xTextRange)throw( uno::RuntimeException, std::exception )

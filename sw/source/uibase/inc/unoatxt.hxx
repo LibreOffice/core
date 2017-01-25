@@ -34,7 +34,9 @@
 #include <cppuhelper/basemutex.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <rtl/ref.hxx>
 #include <svtools/unoevent.hxx>
+
 class SwTextBlocks;
 class SwGlossaries;
 class SwDoc;
@@ -172,12 +174,12 @@ class SwXAutoTextEntry
     OUString        sGroupName;
     OUString        sEntryName;
     SwDocShellRef   xDocSh;
-    SwXBodyText*    pBodyText;
-    css::uno::Reference < css::lang::XServiceInfo> xBodyText;
+    rtl::Reference<SwXBodyText>
+                    mxBodyText;
 
     void EnsureBodyText ()
     {
-        if ( !pBodyText )
+        if ( !mxBodyText.is() )
             GetBodyText();
     }
     void GetBodyText ();
