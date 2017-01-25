@@ -555,7 +555,7 @@ namespace svt
                                             // return sal_False prevents leaving the cell
         virtual bool SaveRow();         // commit the current row
 
-        virtual bool IsModified() const {return aController.Is() && aController->IsModified();}
+        virtual bool IsModified() const {return aController.is() && aController->IsModified();}
 
         virtual CellController* GetController(long nRow, sal_uInt16 nCol);
         virtual void InitController(CellControllerRef& rController, long nRow, sal_uInt16 nCol);
@@ -588,7 +588,7 @@ namespace svt
         virtual ~EditBrowseBox() override;
         virtual void dispose() override;
 
-        bool IsEditing() const {return aController.Is();}
+        bool IsEditing() const {return aController.is();}
         void InvalidateStatusCell(long nRow) {RowModified(nRow, 0);}
         void InvalidateHandleColumn();
 

@@ -681,7 +681,7 @@ void OTableEditorCtrl::CellModified( long nRow, sal_uInt16 nColId )
     GetUndoManager().LeaveListAction();
     RowModified(nRow);
     CellControllerRef xController(Controller());
-    if(xController.Is())
+    if(xController.is())
         xController->SetModified();
 
     // Set the Modify flag
@@ -776,7 +776,7 @@ void OTableEditorCtrl::InsertRows( long nRow )
     {
         ::tools::SvRef<SotStorageStream> aStreamRef;
         bool bOk = aTransferData.GetSotStorageStream(SotClipboardFormatId::SBA_TABED,aStreamRef);
-        if (bOk && aStreamRef.Is())
+        if (bOk && aStreamRef.is())
         {
             aStreamRef->Seek(STREAM_SEEK_TO_BEGIN);
             aStreamRef->ResetError();
@@ -876,7 +876,7 @@ void OTableEditorCtrl::SetControlText( long nRow, sal_uInt16 nColId, const OUStr
         GoToRow( nRow );
         GoToColumnId( nColId );
         CellControllerRef xController = Controller();
-        if(xController.Is())
+        if(xController.is())
             xController->GetWindow().SetText( rText );
         else
             RowModified(nRow,nColId);

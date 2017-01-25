@@ -895,7 +895,7 @@ bool OSelectionBrowseBox::SaveModified()
     bool bError         = false;
     bool bListAction    = false;
 
-    if (pEntry.is() && Controller().Is() && Controller()->IsModified())
+    if (pEntry.is() && Controller().is() && Controller()->IsModified())
     {
         // for the Undo-action
         OUString strOldCellContents,sNewValue;
@@ -1162,7 +1162,7 @@ bool OSelectionBrowseBox::SaveModified()
                     bAppendRow = true;
             }
         }
-        if( !bError && Controller().Is() )
+        if( !bError && Controller().is() )
             Controller()->ClearModified();
 
         RowModified(GetCurRow(), GetCurColumnId());

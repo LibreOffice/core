@@ -468,7 +468,7 @@ MSConvertOCXControls::ReadOCXCtlsStream( tools::SvRef<SotStorageStream>& rSrc1, 
                                    sal_Int32 nPos,
                                    sal_Int32 nStreamSize)
 {
-    if ( rSrc1.Is()  )
+    if ( rSrc1.is()  )
     {
         BinaryXInputStream aCtlsStrm( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *rSrc1 ) ), true );
         aCtlsStrm.seek( nPos );
@@ -516,7 +516,7 @@ bool MSConvertOCXControls::importControlFromStream( ::oox::BinaryInputStream& rI
 bool MSConvertOCXControls::ReadOCXStorage( tools::SvRef<SotStorage>& xOleStg,
                                   Reference< XFormComponent > & rxFormComp )
 {
-    if ( xOleStg.Is() )
+    if ( xOleStg.is() )
     {
         tools::SvRef<SotStorageStream> pNameStream = xOleStg->OpenSotStream( "\3OCXNAME");
         BinaryXInputStream aNameStream( Reference< XInputStream >( new utl::OSeekableInputStreamWrapper( *pNameStream ) ), true );

@@ -280,7 +280,7 @@ bool SwEditShell::GetSelectedText( OUString &rBuf, int nHndlParaBrk )
 #endif
         WriterRef xWrt;
         SwReaderWriter::GetWriter( FILTER_TEXT, OUString(), xWrt );
-        if( xWrt.Is() )
+        if( xWrt.is() )
         {
             // write selected areas into a ASCII document
             SwWriter aWriter( aStream, *this);

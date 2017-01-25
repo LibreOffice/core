@@ -201,7 +201,7 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
     // written any more.
     // It is prohibited that Shell and SuperShell directly import the same
     //class.
-    if( GetMetaTypeType() == MetaTypeType::Shell && aSuperClass.Is() )
+    if( GetMetaTypeType() == MetaTypeType::Shell && aSuperClass.is() )
         aSuperClass->FillClasses( rClassList );
 
     // Write all attributes of the imported classes, as long as they have
@@ -221,7 +221,7 @@ void SvMetaClass::InsertSlots( SvSlotElementList& rList, std::vector<sal_uLong>&
     }
 
     // only write superclass if no shell and not in the list
-    if( GetMetaTypeType() != MetaTypeType::Shell && aSuperClass.Is() )
+    if( GetMetaTypeType() != MetaTypeType::Shell && aSuperClass.is() )
     {
         aSuperClass->InsertSlots( rList, rSuperList, rClassList, rPrefix, rBase );
     }
@@ -245,7 +245,7 @@ void SvMetaClass::FillClasses( SvMetaClassList & rList )
     }
 
     // my superclass
-    if( aSuperClass.Is() )
+    if( aSuperClass.is() )
         aSuperClass->FillClasses( rList );
 }
 

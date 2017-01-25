@@ -425,7 +425,7 @@ SdrObject* SwWW8ImplReader::ImportOleBase( Graphic& rGraph,
             {
                 tools::SvRef<SotStorageStream> xObjInfoSrc = xSrc1->OpenSotStream("\3ObjInfo",
                     StreamMode::STD_READ );
-                if ( xObjInfoSrc.Is() && !xObjInfoSrc->GetError() )
+                if ( xObjInfoSrc.is() && !xObjInfoSrc->GetError() )
                 {
                     sal_uInt8 nByte = 0;
                     xObjInfoSrc->ReadUChar( nByte );

@@ -1587,7 +1587,7 @@ bool SwDBManager::MergeMailFiles(SwWrtShell* pSourceShell,
     if( !IsMergeError() && bMT_SHELL )
         // leave docshell available for caller (e.g. MM wizard)
         rMergeDescriptor.pMailMergeConfigItem->SetTargetView( pTargetView );
-    else if( xTargetDocShell.Is() )
+    else if( xTargetDocShell.is() )
         xTargetDocShell->DoClose();
 
     rescheduleGui();

@@ -576,7 +576,7 @@ void SvxShowCharSet::SelectIndex( int nNewIndex, bool bFocus )
     if( !aVscrollSB )
         return;
 
-    if ( !mxFontCharMap.Is() )
+    if ( !mxFontCharMap.is() )
         RecalculateFont( *this );
 
     if( nNewIndex < 0 )
@@ -657,7 +657,7 @@ void SvxShowCharSet::OutputIndex( int nNewIndex )
 
 void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew )
 {
-    if ( !mxFontCharMap.Is() )
+    if ( !mxFontCharMap.is() )
         RecalculateFont( *this );
 
     // get next available char of current font
@@ -1656,7 +1656,7 @@ void SubsetMap::InitList()
 
 void SubsetMap::ApplyCharMap( const FontCharMapRef& rxFontCharMap )
 {
-    if( !rxFontCharMap.Is() )
+    if( !rxFontCharMap.is() )
         return;
 
     // remove subsets that are not matched in any range

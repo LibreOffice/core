@@ -486,7 +486,7 @@ bool OFieldExpressionControl::SaveModified()
                     m_pParent->m_pController->getUndoManager().LeaveListAction();
             }
 
-            if ( Controller().Is() )
+            if ( Controller().is() )
                 Controller()->ClearModified();
             if ( GetRowCount() == m_pParent->getGroups()->getCount() )
             {

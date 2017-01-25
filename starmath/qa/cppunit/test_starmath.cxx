@@ -102,7 +102,7 @@ void Test::tearDown()
     m_pSmCmdBoxWindow.disposeAndClear();
     m_pDispatcher.reset();
     m_xDocShRef->DoClose();
-    m_xDocShRef.Clear();
+    m_xDocShRef.clear();
 
     BootstrapFixture::tearDown();
 }
