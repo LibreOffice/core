@@ -32,7 +32,6 @@ public:
     css::uno::Reference< css::i18n::XBreakIterator > xBreakIter;
 
     ScScriptTypeData() {}
-    ~ScScriptTypeData() {}
 };
 
 #endif

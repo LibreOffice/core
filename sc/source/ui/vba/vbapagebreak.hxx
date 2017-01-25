@@ -42,7 +42,6 @@ public:
                     const css::uno::Reference< css::uno::XComponentContext >& xContext,
                     css::uno::Reference< css::beans::XPropertySet >& xProps,
                     css::sheet::TablePageBreakData aTablePageBreakData) throw (css::uno::RuntimeException);
-    virtual ~ScVbaPageBreak(){}
 
     virtual sal_Int32 SAL_CALL getType( ) throw (css::uno::RuntimeException) SAL_OVERRIDE;
     virtual void SAL_CALL setType(sal_Int32 type) throw (css::uno::RuntimeException) SAL_OVERRIDE;
@@ -62,8 +61,6 @@ public:
                     css::uno::Reference< css::beans::XPropertySet >& xProps,
                     css::sheet::TablePageBreakData aTablePageBreakData) throw (css::uno::RuntimeException):
               ScVbaHPageBreak_BASE( xParent,xContext,xProps,aTablePageBreakData ){}
-
-    virtual ~ScVbaHPageBreak() override {}
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

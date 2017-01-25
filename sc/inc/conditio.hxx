@@ -481,7 +481,6 @@ public:
     ScConditionalFormatList() {}
     ScConditionalFormatList(const ScConditionalFormatList& rList);
     ScConditionalFormatList(ScDocument* pDoc, const ScConditionalFormatList& rList);
-    ~ScConditionalFormatList() {}
 
     void    InsertNew( ScConditionalFormat* pNew );
 

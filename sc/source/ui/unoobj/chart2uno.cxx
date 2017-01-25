@@ -463,10 +463,6 @@ public:
     {
     }
 
-    ~Chart2Positioner()
-    {
-    }
-
     void setHeaders(bool bColHeaders, bool bRowHeaders)
     {
         mbColHeaders = bColHeaders;

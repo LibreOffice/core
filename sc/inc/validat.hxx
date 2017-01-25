@@ -182,7 +182,6 @@ public:
     ScValidationDataList() {}
     ScValidationDataList(const ScValidationDataList& rList);
     ScValidationDataList(ScDocument* pNewDoc, const ScValidationDataList& rList);
-    ~ScValidationDataList() {}
 
     typedef ScValidationDataListDataType::iterator iterator;
     typedef ScValidationDataListDataType::const_iterator const_iterator;

@@ -197,7 +197,6 @@ public:
     typedef std::vector<DynamicKernelArgumentRef> SubArguments;
     virtual void GenSlidingWindowFunction( std::stringstream&,
         const std::string&, SubArguments& ) = 0;
-    virtual ~SlidingFunctionBase() override { }
 };
 
 class Normal : public SlidingFunctionBase

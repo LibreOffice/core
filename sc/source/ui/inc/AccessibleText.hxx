@@ -42,7 +42,6 @@ class ScAccessibleTextData : public SfxListener
 {
 public:
                         ScAccessibleTextData() {}
-    virtual             ~ScAccessibleTextData() override {}
 
     virtual ScAccessibleTextData* Clone() const = 0;
 
@@ -68,7 +67,6 @@ public:
                         ScAccessibleCellBaseTextData(ScDocShell* pDocShellP,
                             const ScAddress& rP)
                             : ScCellTextData(pDocShellP, rP) {}
-    virtual             ~ScAccessibleCellBaseTextData() override {}
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override { ScCellTextData::Notify(rBC, rHint); }
 
     virtual void                UpdateData() override { ScCellTextData::UpdateData(); }

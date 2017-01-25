@@ -64,7 +64,6 @@ public:
     /** Stores the sheet name and marks the sheet index as invalid.
         The sheet index is set while creating the Calc sheet with CreateTable(). */
     explicit            XclImpSupbookTab( const OUString& rTabName );
-                        ~XclImpSupbookTab();
 
     inline const OUString& GetTabName() const { return maTabName; }
 
@@ -561,10 +560,6 @@ XclImpCrn::XclImpCrn( XclImpStream& rStrm, const XclAddress& rXclPos ) :
 
 XclImpSupbookTab::XclImpSupbookTab( const OUString& rTabName ) :
     maTabName( rTabName )
-{
-}
-
-XclImpSupbookTab::~XclImpSupbookTab()
 {
 }
 

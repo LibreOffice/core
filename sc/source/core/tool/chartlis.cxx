@@ -41,7 +41,6 @@ public:
             ScChartUnoData( const uno::Reference< chart::XChartDataChangeEventListener >& rL,
                             const uno::Reference< chart::XChartData >& rS ) :
                     xListener( rL ), xSource( rS ) {}
-            ~ScChartUnoData() {}
 
     const uno::Reference< chart::XChartDataChangeEventListener >& GetListener() const   { return xListener; }
     const uno::Reference< chart::XChartData >& GetSource() const                        { return xSource; }

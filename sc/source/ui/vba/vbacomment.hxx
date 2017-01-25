@@ -54,8 +54,6 @@ public:
         const css::uno::Reference< css::frame::XModel >& xModel,
         const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
 
-    virtual ~ScVbaComment() override {}
-
     // Attributes
     virtual OUString SAL_CALL getAuthor() throw (css::uno::RuntimeException, std::exception) override;
     virtual void SAL_CALL setAuthor( const OUString& _author ) throw (css::uno::RuntimeException, std::exception) override;

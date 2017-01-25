@@ -1943,7 +1943,6 @@ public:
                 rLevel(rLev),
                 bAscending(bAsc)
             {}
-            ~ScDPGlobalMembersOrder() {}
 
     bool operator()( sal_Int32 nIndex1, sal_Int32 nIndex2 ) const;
 };
