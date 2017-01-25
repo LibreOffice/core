@@ -42,6 +42,8 @@
 #include <unomodel.hxx>
 #include <drawdoc.hxx>
 #include <undo/undomanager.hxx>
+#include <sfx2/request.hxx>
+#include <svx/svxids.hrc>
 
 using namespace css;
 
@@ -84,6 +86,7 @@ public:
     void testTdf103083();
     void testTdf104405();
     void testTdf81754();
+    void testTdf105502();
 
     CPPUNIT_TEST_SUITE(SdTiledRenderingTest);
     CPPUNIT_TEST(testRegisterCallback);
@@ -116,6 +119,7 @@ public:
     CPPUNIT_TEST(testTdf103083);
     CPPUNIT_TEST(testTdf104405);
     CPPUNIT_TEST(testTdf81754);
+    CPPUNIT_TEST(testTdf105502);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -1503,6 +1507,55 @@ void SdTiledRenderingTest::testTdf81754()
     CPPUNIT_ASSERT_EQUAL(OUString("Somethingxx"), aEdit.GetText(0));
 
     xDocShRef->DoClose();
+}
+
+void SdTiledRenderingTest::testTdf105502()
+{
+    // Load the document.
+    comphelper::LibreOfficeKit::setActive();
+    SdXImpressDocument* pXImpressDocument = createDoc("tdf105502.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    sd::Window* pWindow = pViewShell->GetActiveWindow();
+    CPPUNIT_ASSERT(pWindow);
+    SdPage* pActualPage = pViewShell->GetActualPage();
+    SdrObject* pObject = pActualPage->GetObj(0);
+    auto pTableObject = dynamic_cast<sdr::table::SdrTableObj*>(pObject);
+    CPPUNIT_ASSERT(pTableObject);
+
+    // Select the first row.
+    sd::View* pView = pViewShell->GetView();
+    pView->MarkObj(pObject, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pObject);
+    rtl::Reference<sdr::SelectionController> xSelectionController(pView->getSelectionController());
+    CPPUNIT_ASSERT(xSelectionController.is());
+    SfxRequest aRequest(pViewShell->GetViewFrame(), SID_TABLE_SELECT_ROW);
+    xSelectionController->Execute(aRequest);
+
+    // Assert that the A1:B1 selection succeeded.
+    CPPUNIT_ASSERT(xSelectionController->hasSelectedCells());
+    sdr::table::CellPos aFirstCell;
+    sdr::table::CellPos aLastCell;
+    xSelectionController->getSelectedCells(aFirstCell, aLastCell);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aFirstCell.mnCol);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aFirstCell.mnRow);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), aLastCell.mnCol);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), aLastCell.mnRow);
+
+    // Grow font size for the selection.
+    comphelper::dispatchCommand(".uno:Grow", {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Assert that the selected A1 has now a larger font than the unselected
+    // A2.
+    xmlDocPtr pXmlDoc = parseXmlDump();
+    sal_Int32 nA1Height = getXPath(pXmlDoc, "//Cell[1]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/attribs[1]/SvxFontHeightItem", "height").toInt32();
+    sal_Int32 nA2Height = getXPath(pXmlDoc, "//Cell[3]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/attribs[1]/SvxFontHeightItem", "height").toInt32();
+    // This failed when FuText::ChangeFontSize() never did "continue" in the
+    // text loop, instead of doing so depending on what IsInSelection() returns.
+    CPPUNIT_ASSERT(nA1Height > nA2Height);
+    xmlFreeDoc(pXmlDoc);
+
+    comphelper::LibreOfficeKit::setActive(false);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdTiledRenderingTest);
