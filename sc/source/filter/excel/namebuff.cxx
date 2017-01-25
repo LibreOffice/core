@@ -47,22 +47,6 @@ sal_uInt32 StringHashEntry::MakeHashCode( const OUString& r )
     return n;
 }
 
-NameBuffer::~NameBuffer()
-{
-    std::vector<StringHashEntry*>::iterator pIter;
-    for ( pIter = maHashes.begin(); pIter != maHashes.end(); ++pIter )
-        delete *pIter;
-}
-
-//void NameBuffer::operator <<( const SpString &rNewString )
-void NameBuffer::operator <<( const OUString &rNewString )
-{
-    OSL_ENSURE( maHashes.size() + nBase < 0xFFFF,
-        "*NameBuffer::GetLastIndex(): Ich hab' die Nase voll!" );
-
-    maHashes.push_back( new StringHashEntry( rNewString ) );
-}
-
 SharedFormulaBuffer::SharedFormulaBuffer( RootData* pRD ) : ExcRoot(pRD) {}
 
 SharedFormulaBuffer::~SharedFormulaBuffer()

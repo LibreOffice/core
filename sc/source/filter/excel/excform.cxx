@@ -29,6 +29,7 @@
 #include <svl/sharedstringpool.hxx>
 
 #include "imp_op.hxx"
+#include "namebuff.hxx"
 #include "root.hxx"
 #include "xltracer.hxx"
 #include "xihelper.hxx"
