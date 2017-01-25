@@ -38,6 +38,7 @@
 #include "root.hxx"
 #include "imp_op.hxx"
 #include "excimp8.hxx"
+#include "namebuff.hxx"
 #include "otlnbuff.hxx"
 #include "xcl97rec.hxx"
 #include "formel.hxx"

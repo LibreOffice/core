@@ -30,8 +30,6 @@
 
 class SvStream;
 
-class NameBuffer;
-
 class XclExpChangeTrack;
 
 // class ExcTable -
@@ -51,8 +49,6 @@ private:
 
     SCTAB                       mnScTab;    // table number SC document
     sal_uInt16                  nExcTab;    // table number Excel document
-
-    std::unique_ptr<NameBuffer> pTabNames;
 
     XclExpNoteListRef           mxNoteList;
 
