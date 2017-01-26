@@ -81,7 +81,7 @@ using namespace xforms;
 
 void Model::ensureAtLeastOneInstance()
 {
-    if( ! mpInstances->hasItems() )
+    if( ! mxInstances->hasItems() )
     {
         // create a default instance
         newInstance( OUString(), OUString(), true );
@@ -92,13 +92,8 @@ void Model::ensureAtLeastOneInstance()
 /** Model default constructor; create empty model */
 Model::Model() :
     msID(),
-    mpBindings( nullptr ),
-    mpSubmissions( nullptr ),
-    mpInstances( new InstanceCollection ),
+    mxInstances( new InstanceCollection ),
     mxNamespaces( new NameContainer<OUString>() ),
-    mxBindings( mpBindings ),
-    mxSubmissions( mpSubmissions ),
-    mxInstances( mpInstances ),
     mbInitialized( false ),
     mbExternalData( true )
 {
@@ -106,11 +101,8 @@ Model::Model() :
 
     // initialize bindings collections
     // (not in initializer list to avoid use of incomplete 'this')
-    mpBindings = new BindingCollection( this );
-    mxBindings = mpBindings;
-
-    mpSubmissions = new SubmissionCollection( this );
-    mxSubmissions = mpSubmissions;
+    mxBindings = new BindingCollection( this );
+    mxSubmissions = new SubmissionCollection( this );
 
     // invariant only holds after construction
     DBG_INVARIANT();
@@ -118,10 +110,6 @@ Model::Model() :
 
 Model::~Model() throw()
 {
-    // give up bindings & submissions; the mxBindings/mxSubmissions
-    // references will then delete them
-    mpBindings = nullptr;
-    mpSubmissions = nullptr;
 }
 
 static Model* lcl_getModel( const Reference<XUnoTunnel>& xTunnel )
@@ -194,14 +182,9 @@ void Model::setExternalData( bool _bData )
 #if OSL_DEBUG_LEVEL > 0
 void Model::dbg_assertInvariant() const
 {
-    assert(mpInstances && "no instances found");
-    assert(mxInstances.is() && "No instance container!");
-
-    assert(mpBindings && "no bindings element");
-    assert(mxBindings.is() && "No Bindings container");
-
-    assert(mpSubmissions && "no submissions element");
-    assert(mxSubmissions.is() && "No Submission container");
+    assert(mxInstances && "no instances found");
+    assert(mxBindings && "no bindings element");
+    assert(mxSubmissions && "no submissions element");
 }
 #endif
 
@@ -262,13 +245,13 @@ MIP Model::queryMIP( const XNode_t& xNode ) const
 
 void Model::rebind()
 {
-    OSL_ENSURE( mpBindings != nullptr, "bindings?" );
+    OSL_ENSURE( mxBindings, "bindings?" );
 
     // iterate over all bindings and call update
-    sal_Int32 nCount = mpBindings->countItems();
+    sal_Int32 nCount = mxBindings->countItems();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        Binding* pBind = Binding::getBinding( mpBindings->Collection<XPropertySet_t>::getItem( i ) );
+        Binding* pBind = Binding::getBinding( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
         OSL_ENSURE( pBind != nullptr, "binding?" );
         pBind->update();
     }
@@ -278,10 +261,10 @@ void Model::rebind()
 void Model::deferNotifications( bool bDefer )
 {
     // iterate over all bindings and defer notifications
-    sal_Int32 nCount = mpBindings->countItems();
+    sal_Int32 nCount = mxBindings->countItems();
     for( sal_Int32 i = 0; i < nCount; i++ )
     {
-        Binding* pBind = Binding::getBinding( mpBindings->Collection<XPropertySet_t>::getItem( i ) );
+        Binding* pBind = Binding::getBinding( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
         OSL_ENSURE( pBind != nullptr, "binding?" );
         pBind->deferNotifications( bDefer );
     }
@@ -353,7 +336,7 @@ bool Model::setSimpleContent( const XNode_t& xConstNode,
 
 void Model::loadInstance( sal_Int32 nInstance )
 {
-    Sequence<PropertyValue> aSequence = mpInstances->getItem( nInstance );
+    Sequence<PropertyValue> aSequence = mxInstances->getItem( nInstance );
 
     // find URL from instance
     OUString sURL;
@@ -376,7 +359,7 @@ void Model::loadInstance( sal_Int32 nInstance )
                     OUString sEmpty;
                     setInstanceData( aSequence, nullptr, &xInstance,
                                      bOnce ? &sEmpty : &sURL, nullptr);
-                    mpInstances->setItem( nInstance, aSequence );
+                    mxInstances->setItem( nInstance, aSequence );
                 }
             }
         }
@@ -390,7 +373,7 @@ void Model::loadInstance( sal_Int32 nInstance )
 void Model::loadInstances()
 {
     // iterate over instance array to get PropertyValue-Sequence
-    const sal_Int32 nInstances = mpInstances->countItems();
+    const sal_Int32 nInstances = mxInstances->countItems();
     for( sal_Int32 nInstance = 0; nInstance < nInstances; nInstance++ )
     {
         loadInstance( nInstance );
@@ -401,10 +384,10 @@ void Model::loadInstances()
 bool Model::isValid() const
 {
     bool bValid = true;
-    sal_Int32 nCount = mpBindings->countItems();
+    sal_Int32 nCount = mxBindings->countItems();
     for( sal_Int32 i = 0; bValid && i < nCount; i++ )
     {
-        Binding* pBind = Binding::getBinding( mpBindings->Collection<XPropertySet_t>::getItem( i ) );
+        Binding* pBind = Binding::getBinding( mxBindings->Collection<XPropertySet_t>::getItem( i ) );
         OSL_ENSURE( pBind != nullptr, "binding?" );
         bValid = pBind->isValid();
     }
@@ -479,10 +462,10 @@ void SAL_CALL Model::submitWithInteraction(
 {
     DBG_INVARIANT();
 
-    if( mpSubmissions->hasItem( sID ) )
+    if( mxSubmissions->hasItem( sID ) )
     {
         Submission* pSubmission =
-            Submission::getSubmission( mpSubmissions->getItem( sID ) );
+            Submission::getSubmission( mxSubmissions->getItem( sID ) );
         OSL_ENSURE( pSubmission != nullptr, "no submission?" );
         OSL_ENSURE( pSubmission->getModel() == Reference<XModel>( this ),
                     "wrong model" );
@@ -514,7 +497,7 @@ css::uno::Reference<css::xforms::XDataTypeRepository> SAL_CALL Model::getDataTyp
 css::uno::Reference<css::container::XSet> Model::getInstances()
     throw( RuntimeException, std::exception )
 {
-    return mxInstances;
+    return mxInstances.get();
 }
 
 css::uno::Reference<css::xml::dom::XDocument> Model::getInstanceDocument( const OUString& rName )
@@ -522,9 +505,9 @@ css::uno::Reference<css::xml::dom::XDocument> Model::getInstanceDocument( const 
 {
     ensureAtLeastOneInstance();
     Reference<XDocument> aInstance;
-    sal_Int32 nInstance = lcl_findInstance( mpInstances, rName );
+    sal_Int32 nInstance = lcl_findInstance( mxInstances.get(), rName );
     if( nInstance != -1 )
-        getInstanceData( mpInstances->getItem( nInstance ),
+        getInstanceData( mxInstances->getItem( nInstance ),
                          nullptr, &aInstance, nullptr, nullptr );
     return aInstance;
 }
@@ -533,9 +516,9 @@ css::uno::Reference<css::xml::dom::XDocument> SAL_CALL Model::getDefaultInstance
     throw( RuntimeException, std::exception )
 {
     ensureAtLeastOneInstance();
-    DBG_ASSERT( mpInstances->countItems() > 0, "no instance?" );
+    DBG_ASSERT( mxInstances->countItems() > 0, "no instance?" );
     Reference<XDocument> aInstance;
-    getInstanceData( mpInstances->getItem( 0 ), nullptr, &aInstance, nullptr, nullptr );
+    getInstanceData( mxInstances->getItem( 0 ), nullptr, &aInstance, nullptr, nullptr );
     return aInstance;
 }
 
@@ -563,14 +546,14 @@ Model::XPropertySet_t Model::getBinding( const OUString& sId )
     throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
-    return mpBindings->hasItem( sId ) ? mpBindings->getItem( sId ) : nullptr;
+    return mxBindings->hasItem( sId ) ? mxBindings->getItem( sId ) : nullptr;
 }
 
 css::uno::Reference<css::container::XSet> Model::getBindings()
     throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
-    return mxBindings;
+    return mxBindings.get();
 }
 
 
@@ -599,8 +582,8 @@ css::uno::Reference<css::xforms::XSubmission> Model::getSubmission( const OUStri
 {
     DBG_INVARIANT();
     css::uno::Reference<css::xforms::XSubmission> xSubmission;
-    if ( mpSubmissions->hasItem( sId ) )
-        xSubmission.set(mpSubmissions->getItem( sId ), css::uno::UNO_QUERY);
+    if ( mxSubmissions->hasItem( sId ) )
+        xSubmission.set(mxSubmissions->getItem( sId ), css::uno::UNO_QUERY);
     return xSubmission;
 }
 
@@ -608,7 +591,7 @@ css::uno::Reference<css::container::XSet> Model::getSubmissions()
     throw( RuntimeException, std::exception )
 {
     DBG_INVARIANT();
-    return mxSubmissions;
+    return mxSubmissions.get();
 }
 
 
