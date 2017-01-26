@@ -54,9 +54,6 @@ public:
                                          SvTreeListEntry* pEntry) override;
     virtual void DragFinished(sal_Int8 nDropAction) override;
 
-    virtual void GetFocus() override;
-    virtual void LoseFocus() override;
-
     void PushEntriesToPivotFieldVector(ScPivotFieldVector& rVector);
 
     void RemoveEntryForItem(ScItemValue* pItemValue);

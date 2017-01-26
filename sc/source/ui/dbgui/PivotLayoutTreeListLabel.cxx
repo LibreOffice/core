@@ -57,10 +57,11 @@ void ScPivotLayoutTreeListLabel::FillLabelFields(ScDPLabelDataVector& rLabelVect
     }
 }
 
-void ScPivotLayoutTreeListLabel::InsertEntryForSourceTarget(SvTreeListEntry* /*pSource*/, SvTreeListEntry* /*pTarget*/)
+void ScPivotLayoutTreeListLabel::InsertEntryForSourceTarget(SvTreeListEntry* pSource, SvTreeListEntry* /*pTarget*/)
 {
-    if(mpParent->mpPreviouslyFocusedListBox.get() != this)
-        mpParent->mpPreviouslyFocusedListBox->RemoveSelection();
+    ScPivotLayoutTreeListBase *pSourceTree = mpParent->FindListBoxFor(pSource);
+    if (pSourceTree)
+        pSourceTree->RemoveSelection();
 }
 
 bool ScPivotLayoutTreeListLabel::IsDataElement(SCCOL nColumn)
