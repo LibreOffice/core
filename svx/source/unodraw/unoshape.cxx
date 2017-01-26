@@ -95,7 +95,7 @@
 
 #include <memory>
 #include <vector>
-
+#include <iostream>
 using namespace ::osl;
 using namespace ::cppu;
 using namespace ::com::sun::star;
@@ -598,6 +598,18 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
         const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
         PropertyEntryVector_t aSrcPropVector = rSrc.getPropertyEntries();
         PropertyEntryVector_t::const_iterator aSrcIt = aSrcPropVector.begin();
+
+        while(aSrcIt != aSrcPropVector.end())
+        {
+            const sal_uInt16 nWID = aSrcIt->nWID;
+            if(SfxItemPool::IsWhich(nWID)
+                    && (nWID < OWN_ATTR_VALUE_START || nWID > OWN_ATTR_VALUE_END)
+                    && rPropSet.GetUsrAnyForID(nWID))
+                rSet.Put(rSet.GetPool()->GetDefaultItem(nWID));
+            ++aSrcIt;
+        }
+
+        aSrcIt = aSrcPropVector.begin();
         while(aSrcIt != aSrcPropVector.end())
         {
             if(aSrcIt->nWID)
@@ -618,9 +630,6 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
                         }
                         else
                         {
-                            if(SfxItemPool::IsWhich(pEntry->nWID))
-                                rSet.Put(rSet.GetPool()->GetDefaultItem(pEntry->nWID));
-                            // set
                             SvxItemPropertySet_setPropertyValue(pEntry, *pUsrAny, rSet);
                         }
                     }
