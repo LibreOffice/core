@@ -20,6 +20,14 @@
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 
+#include <com/sun/star/awt/Gradient.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPage.hpp>
+#include <com/sun/star/drawing/XShapes.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
+
 #include <vcl/scheduler.hxx>
 #include <osl/thread.hxx>
 #include <FactoryIds.hxx>
@@ -51,12 +59,14 @@ public:
     void testTdf96708();
     void testTdf99396();
     void testTdf99396TextEdit();
+    void testFillGradient();
 
     CPPUNIT_TEST_SUITE(SdMiscTest);
     CPPUNIT_TEST(testTdf96206);
     CPPUNIT_TEST(testTdf96708);
     CPPUNIT_TEST(testTdf99396);
     CPPUNIT_TEST(testTdf99396TextEdit);
+    CPPUNIT_TEST(testFillGradient);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -253,6 +263,39 @@ void SdMiscTest::testTdf99396TextEdit()
 
 
     xDocSh->DoClose();
+}
+
+void SdMiscTest::testFillGradient()
+{
+    ::sd::DrawDocShellRef xDocShRef = new ::sd::DrawDocShell(SfxObjectCreateMode::EMBEDDED, false);
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier = getDoc( xDocShRef );
+    uno::Reference<drawing::XDrawPages> xDrawPages = xDrawPagesSupplier->getDrawPages();
+    // Insert a new page.
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPages->insertNewByIndex(0), uno::UNO_QUERY_THROW );
+    uno::Reference<drawing::XShapes> xShapes(xDrawPage,uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> const xDoc(xDocShRef->GetDoc()->getUnoModel(), uno::UNO_QUERY);
+    // Create a rectangle
+    uno::Reference<drawing::XShape> xShape1(xDoc->createInstance("com.sun.star.drawing.RectangleShape"),uno::UNO_QUERY_THROW );
+    uno::Reference<beans::XPropertySet> xPropSet(xShape1, uno::UNO_QUERY_THROW);
+    // Set FillStyle and FillGradient
+    awt::Gradient aGradient;
+    aGradient.StartColor = sal_Int32(RGB_COLORDATA(255, 0, 0));
+    aGradient.EndColor = sal_Int32(RGB_COLORDATA(0, 255, 0));
+    xPropSet->setPropertyValue("FillStyle", uno::makeAny(drawing::FillStyle_GRADIENT));
+    xPropSet->setPropertyValue("FillGradient", uno::makeAny(aGradient));
+    // Add the rectangle to the page.
+    xShapes->add(xShape1);
+
+    // Retrieve the shape and check FillStyle and FillGradient
+    uno::Reference<container::XIndexAccess> xIndexAccess(xDrawPage, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet > xPropSet2(xIndexAccess->getByIndex(0), uno::UNO_QUERY_THROW);
+    drawing::FillStyle eFillStyle;
+    awt::Gradient aGradient2;
+    CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillStyle") >>= eFillStyle);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_GRADIENT,eFillStyle);
+    CPPUNIT_ASSERT(xPropSet2->getPropertyValue("FillGradient") >>= aGradient2);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(RGB_COLORDATA(255, 0, 0)),aGradient2.StartColor);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(RGB_COLORDATA(0, 255, 0)),aGradient2.EndColor);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SdMiscTest);
