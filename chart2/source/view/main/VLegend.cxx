@@ -867,12 +867,9 @@ void VLegend::createShapes(
             sal_Int32 nSymbolHeight = static_cast< sal_Int32 >( fViewFontSize * 0.6  );
             sal_Int32 nSymbolWidth = static_cast< sal_Int32 >( nSymbolHeight );
 
-            ::std::vector< LegendEntryProvider* >::const_iterator       aIter = m_aLegendEntryProviderList.begin();
-            const ::std::vector< LegendEntryProvider* >::const_iterator aEnd  = m_aLegendEntryProviderList.end();
-            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; ++aIter )
+            for (LegendEntryProvider* pLegendEntryProvider : m_aLegendEntryProviderList)
             {
-                LegendEntryProvider* pLegendEntryProvider( *aIter );
-                if( pLegendEntryProvider )
+                if (pLegendEntryProvider)
                 {
                     awt::Size aCurrentRatio = pLegendEntryProvider->getPreferredLegendKeyAspectRatio();
                     sal_Int32 nCurrentWidth = aCurrentRatio.Width;
@@ -886,10 +883,9 @@ void VLegend::createShapes(
             awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeight );
 
             tViewLegendEntryContainer aViewEntries;
-            for( aIter = m_aLegendEntryProviderList.begin(); aIter != aEnd; ++aIter )
+            for(LegendEntryProvider* pLegendEntryProvider : m_aLegendEntryProviderList)
             {
-                LegendEntryProvider* pLegendEntryProvider( *aIter );
-                if( pLegendEntryProvider )
+                if (pLegendEntryProvider)
                 {
                     std::vector< ViewLegendEntry > aNewEntries = pLegendEntryProvider->createLegendEntries( aMaxSymbolExtent, eExpansion, xLegendProp, xLegendContainer, m_xShapeFactory, m_xContext );
                     aViewEntries.insert( aViewEntries.end(), aNewEntries.begin(), aNewEntries.end() );
