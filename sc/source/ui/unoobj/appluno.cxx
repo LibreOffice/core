@@ -259,18 +259,17 @@ void SAL_CALL ScSpreadsheetSettings::setPropertyValue(
     }
     else if (aPropertyName == SC_UNONAME_LINKUPD)
     {
+        // XXX NOTE: this is not css::document::Settings property
+        // LinkUpdateMode but css::sheet::XGlobalSheetSettings attribute
+        // LinkUpdateMode.
         sal_Int16 n;
-        if (!(aValue >>= n) || n < css::document::LinkUpdateModes::NEVER
-            || n > css::document::LinkUpdateModes::GLOBAL_SETTING)
+        if (!(aValue >>= n) || n < 0 || n >= ScLkUpdMode::LM_UNKNOWN)
         {
             throw css::lang::IllegalArgumentException(
-                ("LinkUpdateMode property value must be a SHORT with a value in"
-                 " the range of the css.document.LinkUpdateModes constants"),
+                ("LinkUpdateMode property value must be a SHORT with a value in the range of 0--2"
+                 " as documented for css::sheet::XGlobalSheetSettings attribute LinkUpdateMode"),
                 css::uno::Reference<css::uno::XInterface>(), -1);
         }
-        //TODO: ScLkUpdMode (LM_ALWAYS=0, LM_NEVER=1, LM_ON_DEMAND=2,
-        // LM_UNKNOWN=3) does not match css.document.LinkUpdateModes (NEVER=0,
-        // MANUAL=1, AUTO=2, GLOBAL_SETTINGS=3):
         aAppOpt.SetLinkMode( static_cast<ScLkUpdMode>(n) );
         bSaveApp = true;
     }
