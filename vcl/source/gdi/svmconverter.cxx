@@ -929,6 +929,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                                 //be achieved, don't read it, it's utterly broken.
                                 SAL_WARN("vcl.gdi", "dxary too short, discarding completely");
                                 rIStm.SeekRel(sizeof(sal_Int32) * nDXAryLen);
+                                nLen = 0;
+                                nIndex = 0;
                             }
                             else
                             {
