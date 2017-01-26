@@ -10,6 +10,7 @@
  */
 
 #include "sallogareas.hxx"
+#include "check.hxx"
 
 #include <clang/Lex/Lexer.h>
 
@@ -50,12 +51,11 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
         return true;
     if( const FunctionDecl* func = call->getDirectCallee())
         {
-        // Optimize, getQualifiedNameAsString() is reportedly expensive.
         if( func->getNumParams() == 4 && func->getIdentifier() != NULL
             && ( func->getName() == "sal_detail_log" || func->getName() == "log" ))
             {
-            string qualifiedName = func->getQualifiedNameAsString();
-            if( qualifiedName == "sal_detail_log" || qualifiedName == "sal::detail::log" )
+            auto tc = loplugin::DeclCheck(func);
+            if( tc.Function("sal_detail_log") || tc.Function("log").Namespace("detail").Namespace("sal").GlobalNamespace() )
                 {
                 // The SAL_DETAIL_LOG_STREAM macro expands to two calls to sal::detail::log(),
                 // so do not warn repeatedly about the same macro (the area->getLocStart() of all the calls
@@ -73,7 +73,7 @@ bool SalLogAreas::VisitCallExpr( const CallExpr* call )
                             area->getLocStart());
                     return true;
                     }
-                if( inFunction->getQualifiedNameAsString() == "sal::detail::log" )
+                if( loplugin::DeclCheck(inFunction).Function("log").Namespace("detail").Namespace("sal").GlobalNamespace() )
                     return true; // This function only forwards to sal_detail_log, so ok.
                 if( call->getArg( 1 )->isNullPointerConstant( compiler.getASTContext(),
                     Expr::NPC_ValueDependentIsNotNull ) != Expr::NPCK_NotNull )

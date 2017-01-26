@@ -12,6 +12,7 @@
 
 #include "plugin.hxx"
 #include "compat.hxx"
+#include "check.hxx"
 #include "clang/AST/CXXInheritance.h"
 
 /*
@@ -39,7 +40,7 @@ bool BaseCheckNotSfxPoolItemSubclass(
 #endif
     )
 {
-    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString() == "SfxPoolItem") {
+    if (BaseDefinition && loplugin::TypeCheck(BaseDefinition).Class("SfxPoolItem").GlobalNamespace()) {
         return false;
     }
     return true;
@@ -48,7 +49,7 @@ bool BaseCheckNotSfxPoolItemSubclass(
 bool isDerivedFromSfxPoolItem(const CXXRecordDecl *decl) {
     if (!decl)
         return false;
-    if (decl->getQualifiedNameAsString() == "SfxPoolItem")
+    if (loplugin::TypeCheck(decl).Class("SfxPoolItem").GlobalNamespace())
         return true;
     if (!decl->hasDefinition()) {
         return false;
@@ -70,7 +71,7 @@ bool BaseCheckNotSwMsgPoolItemSubclass(
 #endif
     )
 {
-    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString() == "SwMsgPoolItem") {
+    if (BaseDefinition && loplugin::TypeCheck(BaseDefinition).Class("SwMsgPoolItem")) {
         return false;
     }
     return true;
@@ -79,7 +80,7 @@ bool BaseCheckNotSwMsgPoolItemSubclass(
 bool isDerivedFromSwMsgPoolItem(const CXXRecordDecl *decl) {
     if (!decl)
         return false;
-    if (decl->getQualifiedNameAsString() == "SwMsgPoolItem")
+    if (loplugin::TypeCheck(decl).Class("SwMsgPoolItem").GlobalNamespace())
         return true;
     if (!decl->hasDefinition()) {
         return false;
@@ -118,12 +119,12 @@ bool SfxPoolItem::VisitCXXRecordDecl(const CXXRecordDecl* decl)
         return true;
     }
     // the enum types do some weird stuff involving SfxEnumItemInterface
-    std::string sRecordName = decl->getQualifiedNameAsString();
-    if (sRecordName == "SfxEnumItem" || sRecordName == "SfxAllEnumItem")
+    auto tc = loplugin::TypeCheck(decl);
+    if (tc.Class("SfxEnumItem").GlobalNamespace() || tc.Class("SfxAllEnumItem").GlobalNamespace())
         return true;
 
     // the new field is only used for reading and writing to storage
-    if (sRecordName == "SvxCharSetColorItem")
+    if (tc.Class("SvxCharSetColorItem").GlobalNamespace())
         return true;
 
     for (auto it = decl->method_begin(); it != decl->method_end(); ++it) {

@@ -8,6 +8,7 @@
  */
 
 #include "plugin.hxx"
+#include "check.hxx"
 
 namespace {
 
@@ -26,8 +27,9 @@ Expr const * stripCtor(Expr const * expr) {
     if (e3 == nullptr) {
         return expr;
     }
-    auto const n = e3->getConstructor()->getQualifiedNameAsString();
-    if (n != "rtl::OString::OString" && n != "rtl::OUString::OUString") {
+    auto qt = loplugin::DeclCheck(e3->getConstructor());
+    if (!qt.Function("OString").Class("OString").Namespace("rtl").GlobalNamespace() &&
+        !qt.Function("OUString").Class("OUString").Namespace("rtl").GlobalNamespace()) {
         return expr;
     }
     if (e3->getNumArgs() != 2) {

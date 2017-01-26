@@ -117,8 +117,8 @@ public:
                     // Allow this convenient shortcut:
                     auto td = dyn_cast<TypeDecl>(pCalled->getParent());
                     if (td != nullptr
-                        && (loplugin::TypeCheck(QualType(td->getTypeForDecl(), 0)).Class("OWeakObject").Namespace("cppu")
-                            || loplugin::TypeCheck(QualType(td->getTypeForDecl(), 0)).Class("OWeakAggObject").Namespace("cppu")))
+                        && (loplugin::TypeCheck(td).Class("OWeakObject").Namespace("cppu").GlobalNamespace()
+                            || loplugin::TypeCheck(td).Class("OWeakAggObject").Namespace("cppu").GlobalNamespace()))
                     {
                         return true;
                     }
@@ -131,15 +131,15 @@ public:
         }
 
         // whitelist
-        auto const name(pMethodDecl->getParent()->getQualifiedNameAsString());
-        if (   name == "cppu::OWeakAggObject" // conditional call
-            || name == "cppu::WeakComponentImplHelperBase" // extra magic
-            || name == "cppu::WeakAggComponentImplHelperBase" // extra magic
-            || name == "DOM::CDOMImplementation" // a static oddity
-            || name == "SwXTextFrame" // ambiguous, 3 parents
-            || name == "SwXTextDocument" // ambiguous, ~4 parents
-            || name == "SdStyleSheet" // same extra magic as WeakComponentImplHelperBase
-            || name == "SdXImpressDocument" // same extra magic as WeakComponentImplHelperBase
+        auto tc  = loplugin::TypeCheck(pMethodDecl->getParent());
+        if (   tc.Class("OWeakAggObject").Namespace("cppu").GlobalNamespace() // conditional call
+            || tc.Class("WeakComponentImplHelperBase").Namespace("cppu").GlobalNamespace() // extra magic
+            || tc.Class("WeakAggComponentImplHelperBase").Namespace("cppu").GlobalNamespace() // extra magic
+            || tc.Class("CDOMImplementation").Namespace("DOM").GlobalNamespace() // a static oddity
+            || tc.Class("SwXTextFrame").GlobalNamespace() // ambiguous, 3 parents
+            || tc.Class("SwXTextDocument").GlobalNamespace() // ambiguous, ~4 parents
+            || tc.Class("SdStyleSheet").GlobalNamespace() // same extra magic as WeakComponentImplHelperBase
+            || tc.Class("SdXImpressDocument").GlobalNamespace() // same extra magic as WeakComponentImplHelperBase
            )
         {
             return true;

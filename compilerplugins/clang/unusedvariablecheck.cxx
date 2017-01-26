@@ -17,6 +17,7 @@
 #if !HAVE_GCC_ATTRIBUTE_WARN_UNUSED_STL
 
 #include "compat.hxx"
+#include "check.hxx"
 #include "unusedvariablecheck.hxx"
 
 #include <clang/AST/Attr.h>
@@ -56,11 +57,11 @@ bool BaseCheckNotSomethingInterestingSubclass(
 #endif
     )
 {
-    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString().compare("Dialog") == 0) {
-        return false;
-    }
-    if (BaseDefinition && BaseDefinition->getQualifiedNameAsString().compare("SfxPoolItem") == 0) {
-        return false;
+    if (BaseDefinition) {
+        auto tc = loplugin::TypeCheck(BaseDefinition);
+        if (tc.Class("Dialog").GlobalNamespace() || tc.Class("SfxPoolItem").GlobalNamespace()) {
+            return false;
+        }
     }
     return true;
 }
@@ -68,9 +69,10 @@ bool BaseCheckNotSomethingInterestingSubclass(
 bool isDerivedFromSomethingInteresting(const CXXRecordDecl *decl) {
     if (!decl)
         return false;
-    if (decl->getQualifiedNameAsString() == "Dialog")
+    auto tc = loplugin::TypeCheck(decl);
+    if (tc.Class("Dialog"))
         return true;
-    if (decl->getQualifiedNameAsString() == "SfxPoolItem")
+    if (tc.Class("SfxPoolItem"))
         return true;
     if (!decl->hasDefinition()) {
         return false;
@@ -113,11 +115,14 @@ bool UnusedVariableCheck::VisitVarDecl( const VarDecl* var )
             }
         if( !warn_unused )
             {
-            string n = type->getQualifiedNameAsString();
+            auto tc = loplugin::TypeCheck(type);
             // Check some common non-LO types.
-            if( n == "std::string" || n == "std::basic_string"
-                || n == "std::list" || n == "std::__debug::list"
-                || n == "std::vector" || n == "std::__debug::vector" )
+            if( tc.Class("string").Namespace("std").GlobalNamespace()
+                || tc.Class("basic_string").Namespace("std").GlobalNamespace()
+                || tc.Class("list").Namespace("std").GlobalNamespace()
+                || tc.Class("list").Namespace("__debug").Namespace("std").GlobalNamespace()
+                || tc.Class("vector").Namespace("std").GlobalNamespace()
+                || tc.Class("vector" ).Namespace("__debug").Namespace("std").GlobalNamespace())
                 warn_unused = true;
             if (!warn_unused && isDerivedFromSomethingInteresting(type))
                   warn_unused = true;
