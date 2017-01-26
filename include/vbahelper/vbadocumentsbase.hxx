@@ -61,7 +61,6 @@ private:
 public:
     /// @throws css::uno::RuntimeException
     VbaDocumentsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType );
-    virtual ~VbaDocumentsBase() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() override = 0;

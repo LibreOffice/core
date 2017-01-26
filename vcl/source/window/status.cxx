@@ -46,7 +46,6 @@ class StatusBar::ImplData
 {
 public:
     ImplData();
-    ~ImplData();
 
     VclPtr<VirtualDevice> mpVirDev;
     long                mnItemBorderWidth;
@@ -58,10 +57,6 @@ StatusBar::ImplData::ImplData()
     mpVirDev = nullptr;
     mbDrawItemFrames = false;
     mnItemBorderWidth = 0;
-}
-
-StatusBar::ImplData::~ImplData()
-{
 }
 
 struct ImplStatusItem

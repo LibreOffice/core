@@ -63,7 +63,6 @@ namespace vcl
         FontData& getFont( const PhysicalFontFace*, bool bVertical );
         public:
         PDFFontCache() {}
-        ~PDFFontCache() {}
 
         sal_Int32 getGlyphWidth( const PhysicalFontFace*, sal_GlyphId, bool bVertical, SalGraphics* );
     };

@@ -41,7 +41,6 @@ class DecoToolBox : public ToolBox
 
 public:
     explicit DecoToolBox(vcl::Window* pParent);
-    virtual ~DecoToolBox() override {}
 
     void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 
