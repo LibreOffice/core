@@ -634,12 +634,6 @@ Profile gid_Brand_Profile_Fundamental_Ini
     Dir = GID_BRAND_DIR_ETC;
 End
 
-Profile gid_Brand_Profile_Crashreport_Ini
-    ModuleID = gid_Module_Root_Brand;
-    Name = PROFILENAME(crashreport);
-    Dir = GID_BRAND_DIR_ETC;
-End
-
 #if !defined MACOSX
 Profile gid_Brand_Profile_Redirect_Ini
     ModuleID = gid_Module_Root_Brand;
@@ -770,6 +764,14 @@ ProfileItem gid_Brand_Profileitem_Soffice_Hideeula
     Order = 7;
     Key = "HideEula";
     Value = "1";
+End
+
+ProfileItem gid_Brand_Profileitem_Soffice_CrashDirectory
+    ProfileID = gid_Brand_Profile_Soffice_Ini;
+    ModuleID = gid_Module_Root_Brand;
+    Section = "Bootstrap";
+    Key = "CrashDirectory";
+    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/crash";
 End
 
 ProfileItem gid_Brand_Profileitem_Version_Buildid
@@ -1205,11 +1207,3 @@ ProfileItem gid_Brand_Profileitem_Setup_Install
     Styles = (INIFILETABLE);
 End
 #endif
-
-ProfileItem gid_Brand_Profileitem_CrashReport_Path
-    ProfileID = gid_Brand_Profile_Crashreport_Ini;
-    ModuleID = gid_Module_Root_Brand;
-    Section = "CrashReport";
-    Key = "CrashDirectory";
-    Value = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" PROFILENAME(bootstrap) ":UserInstallation}/crash";
-End
