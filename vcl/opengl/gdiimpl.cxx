@@ -76,6 +76,7 @@ OpenGLSalGraphicsImpl::OpenGLSalGraphicsImpl(SalGraphics& rParent, SalGeometryPr
     , mbUseScissor(false)
     , mbUseStencil(false)
     , mbXORMode(false)
+    , mbAcquiringOpenGLContext(false)
     , mnLineColor(SALCOLOR_NONE)
     , mnFillColor(SALCOLOR_NONE)
 #ifdef DBG_UTIL
@@ -101,7 +102,12 @@ OpenGLSalGraphicsImpl::~OpenGLSalGraphicsImpl()
 
 rtl::Reference<OpenGLContext> OpenGLSalGraphicsImpl::GetOpenGLContext()
 {
-    if( !AcquireContext(true) )
+    if (mbAcquiringOpenGLContext)
+        return nullptr;
+    mbAcquiringOpenGLContext = true;
+    bool bSuccess = AcquireContext(true);
+    mbAcquiringOpenGLContext = false;
+    if (!bSuccess)
         return nullptr;
     return mpContext;
 }
