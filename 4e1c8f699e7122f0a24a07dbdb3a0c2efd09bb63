@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_a84b84af",
+        "filename": "desktop/source/app/crashreport.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-26T13:51:01Z",
+      "side": 1,
+      "message": "(rather unrelated to this change, but I\u0027d drop that getFileURLFromSystemPath and require CrashDirectory to be a URL; the grammars for URLs and native pathnames aren\u0027t necessarily disjoint, so at least theoretically this could corrupt the input; we don\u0027t generally do such \"guess whether it\u0027s actually a pathname rather than a URL\" processing of bootstrap vars)",
+      "revId": "4e1c8f699e7122f0a24a07dbdb3a0c2efd09bb63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_285f9473",
+        "filename": "instsetoo_native/CustomTarget_setup.mk",
+        "patchSetId": 2
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-26T13:51:01Z",
+      "side": 1,
+      "message": "This should be in the [Bootstrap] section for rtl/bootstrap.hxx be able to read it (it might happen to work if it\u0027s in a different section too, but that\u0027s just by accident)",
+      "revId": "4e1c8f699e7122f0a24a07dbdb3a0c2efd09bb63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_4854d853",
+        "filename": "scp2/source/ooo/common_brand.scp",
+        "patchSetId": 2
+      },
+      "lineNbr": 772,
+      "author": {
+        "id": 1000045
+      },
+      "writtenOn": "2017-01-26T13:51:01Z",
+      "side": 1,
+      "message": "ditto",
+      "revId": "4e1c8f699e7122f0a24a07dbdb3a0c2efd09bb63",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
