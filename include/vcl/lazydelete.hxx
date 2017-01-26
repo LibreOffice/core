@@ -227,7 +227,6 @@ namespace vcl
         virtual void doCleanup() override { delete m_pT; m_pT = nullptr; }
     public:
         DeleteOnDeinit( T* i_pT ) : m_pT( i_pT ) { addDeinitContainer( this ); }
-        virtual ~DeleteOnDeinit() override {}
 
         // get contents
         T* get() { return m_pT; }
@@ -261,7 +260,6 @@ namespace vcl
     public:
         DeleteUnoReferenceOnDeinit(const css::uno::Reference<I>& r_xI ) : m_xI( r_xI ) {
             addDeinitContainer( this ); }
-        virtual ~DeleteUnoReferenceOnDeinit() override {}
 
         css::uno::Reference<I> get() { return m_xI; }
 

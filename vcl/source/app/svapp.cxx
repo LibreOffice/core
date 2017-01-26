@@ -184,8 +184,6 @@ struct ImplPostEventData
        ImplPostEventData( sal_uLong nEvent, vcl::Window* pWin, const ScrollEvent& rScrollEvent ) :
         mnEvent( nEvent ), mpWin( pWin ), mnEventId( 0 ), maScrollEvent( rScrollEvent ) {}
 #endif
-
-    ~ImplPostEventData() {}
 };
 
 Application* GetpApp()

@@ -124,7 +124,6 @@ struct Impl_IMEInfos
     bool          bWasCursorOverwrite;
 
     Impl_IMEInfos(sal_Int32 nPos, const OUString& rOldTextAfterStartPos);
-    ~Impl_IMEInfos();
 
     void        CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL);
     void        DestroyAttribs();
@@ -138,10 +137,6 @@ Impl_IMEInfos::Impl_IMEInfos(sal_Int32 nP, const OUString& rOldTextAfterStartPos
     bCursor = true;
     pAttribs = nullptr;
     bWasCursorOverwrite = false;
-}
-
-Impl_IMEInfos::~Impl_IMEInfos()
-{
 }
 
 void Impl_IMEInfos::CopyAttribs(const ExtTextInputAttr* pA, sal_Int32 nL)
