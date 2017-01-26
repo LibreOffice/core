@@ -28,6 +28,7 @@
 #include <com/sun/star/graphic/XGraphicObject.hpp>
 #include <comphelper/propmultiplex.hxx>
 #include <cppuhelper/implbase2.hxx>
+#include <rtl/ref.hxx>
 
 using namespace comphelper;
 
@@ -46,8 +47,7 @@ class OImageControlModel
                 :public OImageControlModel_Base
                 ,public OBoundControlModel
 {
-    css::uno::Reference< css::awt::XImageProducer>    m_xImageProducer;
-    ImageProducer*                                    m_pImageProducer;
+    rtl::Reference<ImageProducer>                     m_xImageProducer;
     bool                                              m_bExternalGraphic;
     bool                                              m_bReadOnly;
     OUString                                          m_sImageURL;
@@ -59,7 +59,7 @@ protected:
     // UNO Anbindung
     virtual css::uno::Sequence< css::uno::Type> _getTypes() override;
 
-    inline ImageProducer* GetImageProducer() { return m_pImageProducer; }
+    inline ImageProducer* GetImageProducer() { return m_xImageProducer.get(); }
 
 public:
     DECLARE_DEFAULT_LEAF_XTOR( OImageControlModel );

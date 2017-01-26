@@ -130,7 +130,6 @@ Sequence<Type> OImageControlModel::_getTypes()
 OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFactory)
     :OBoundControlModel( _rxFactory, VCL_CONTROLMODEL_IMAGECONTROL, FRM_SUN_CONTROL_IMAGECONTROL, false, false, false )
                     // use the old control name for compytibility reasons
-    ,m_pImageProducer( nullptr )
     ,m_bExternalGraphic( true )
     ,m_bReadOnly( false )
     ,m_sImageURL()
@@ -146,7 +145,6 @@ OImageControlModel::OImageControlModel(const Reference<XComponentContext>& _rxFa
 OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, const Reference< XComponentContext >& _rxFactory )
     :OBoundControlModel( _pOriginal, _rxFactory )
                 // use the old control name for compytibility reasons
-    ,m_pImageProducer( nullptr )
     ,m_bExternalGraphic( true )
     ,m_bReadOnly( _pOriginal->m_bReadOnly )
     ,m_sImageURL( _pOriginal->m_sImageURL )
@@ -166,9 +164,8 @@ OImageControlModel::OImageControlModel( const OImageControlModel* _pOriginal, co
 
 void OImageControlModel::implConstruct()
 {
-    m_pImageProducer = new ImageProducer;
-    m_xImageProducer = m_pImageProducer;
-    m_pImageProducer->SetDoneHdl( LINK( this, OImageControlModel, OnImageImportDone ) );
+    m_xImageProducer = new ImageProducer;
+    m_xImageProducer->SetDoneHdl( LINK( this, OImageControlModel, OnImageImportDone ) );
 }
 
 
@@ -615,7 +612,7 @@ void OImageControlModel::doSetControlValue( const Any& _rValue )
     if ( bStartProduction )
     {
         // start production
-        Reference< XImageProducer > xProducer = m_xImageProducer;
+        rtl::Reference< ImageProducer > xProducer = m_xImageProducer;
         {
             // release our mutex once (it's acquired in the calling method!), as starting the image production may
             // result in the locking of the solar mutex (unfortunately the default implementation of our aggregate,
