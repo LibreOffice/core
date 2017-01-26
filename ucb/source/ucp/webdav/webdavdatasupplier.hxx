@@ -21,6 +21,9 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVDATASUPPLIER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVDATASUPPLIER_HXX
 
+#include <sal/config.h>
+
+#include <memory>
 #include <vector>
 #include <rtl/ref.hxx>
 #include <ucbhelper/resultset.hxx>
@@ -34,7 +37,7 @@ class ContentProperties;
 
 class DataSupplier : public ucbhelper::ResultSetDataSupplier
 {
-    DataSupplier_Impl* m_pImpl;
+    std::unique_ptr<DataSupplier_Impl> m_pImpl;
 
 private:
     bool getData();
