@@ -226,16 +226,14 @@ class Parser:
         """
         checks each _tracked_ file in a directory recursively
         """
+
+	# top-level project directory -> use whitelist.
         globalscan = False
-        if re.match(r'.*/core$', os.getcwd()) and directory == '.':
-            globalscan = True
+        if os.path.exists(directory + "/.git/config"):
+           globalscan = True
 
         # Change into the given dir, so "git ls-tree" does work.
-        # If we want to scan the current dir, we must not do so as we are already there.
-        if not globalscan and directory != '.':
-            currentdir = os.getcwd()
-            os.chdir(currentdir.split("core", 1)[0] + "core/")
-            os.chdir(directory)
+        os.chdir(directory)
 
         sock = os.popen(r"git ls-tree -r HEAD --name-only |egrep '\.(c|cc|cpp|cxx|h|hxx|mm)$'")
         lines = sock.readlines()
