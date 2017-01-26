@@ -83,6 +83,8 @@ protected:
 
     bool mbXORMode;
 
+    bool mbAcquiringOpenGLContext;
+
     /**
      * All rendering happens to this off-screen texture. For
      * non-virtual devices, ie. windows - we will blit it and
