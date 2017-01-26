@@ -540,7 +540,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
     Graphic     aGraphic;
     bool    bRetValue = false;
     bool    bHasPreview = false;
-    sal_uInt32  nSignature, nPSStreamPos, nPSSize;
+    sal_uInt32  nSignature = 0, nPSStreamPos, nPSSize = 0;
     sal_uInt32  nSizeWMF = 0;
     sal_uInt32  nPosWMF = 0;
     sal_uInt32  nSizeTIFF = 0;
@@ -585,13 +585,20 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
         nPSStreamPos = nOrigPos;            // no preview available _>so we must get the size manually
         nPSSize = rStream.Seek( STREAM_SEEK_TO_END ) - nOrigPos;
     }
+
     std::unique_ptr<sal_uInt8[]> pHeader( new sal_uInt8[ 22 ] );
     rStream.Seek( nPSStreamPos );
     rStream.ReadBytes(pHeader.get(), 22); // check PostScript header
-    if ( ImplSearchEntry( pHeader.get(), reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10 ) &&
-        ImplSearchEntry( &pHeader[ 15 ], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3 ) )
+    bool bOk = ImplSearchEntry(pHeader.get(), reinterpret_cast<sal_uInt8 const *>("%!PS-Adobe"), 10, 10) &&
+               ImplSearchEntry(&pHeader[ 15 ], reinterpret_cast<sal_uInt8 const *>("EPS"), 3, 3);
+    if (bOk)
     {
-        rStream.Seek( nPSStreamPos );
+        rStream.Seek(nPSStreamPos);
+        bOk = rStream.remainingSize() >= nPSSize;
+        SAL_WARN_IF(!bOk, "filter.eps", "eps claims to be: " << nPSSize << " in size, but only " << rStream.remainingSize() << " remains");
+    }
+    if (bOk)
+    {
         std::unique_ptr<sal_uInt8[]> pBuf( new sal_uInt8[ nPSSize ] );
 
         sal_uInt32 nBufStartPos = rStream.Tell();
