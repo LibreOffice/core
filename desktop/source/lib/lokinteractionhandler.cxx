@@ -64,17 +64,17 @@ LOKInteractionHandler::~LOKInteractionHandler()
 {
 }
 
-OUString SAL_CALL LOKInteractionHandler::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL LOKInteractionHandler::getImplementationName()
 {
     return OUString("com.sun.star.comp.uui.LOKInteractionHandler");
 }
 
-sal_Bool SAL_CALL LOKInteractionHandler::supportsService(OUString const & rServiceName) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL LOKInteractionHandler::supportsService(OUString const & rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL LOKInteractionHandler::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL LOKInteractionHandler::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aNames(3);
     aNames[0] = "com.sun.star.task.InteractionHandler";
@@ -85,13 +85,12 @@ uno::Sequence< OUString > SAL_CALL LOKInteractionHandler::getSupportedServiceNam
     return aNames;
 }
 
-void SAL_CALL LOKInteractionHandler::initialize(uno::Sequence<uno::Any> const & /*rArguments*/) throw (uno::Exception, std::exception)
+void SAL_CALL LOKInteractionHandler::initialize(uno::Sequence<uno::Any> const & /*rArguments*/)
 {
 }
 
 void SAL_CALL LOKInteractionHandler::handle(
         uno::Reference<task::XInteractionRequest> const & xRequest)
-throw (uno::RuntimeException, std::exception)
 {
     // just do the same thing in both cases
     handleInteractionRequest(xRequest);
@@ -325,7 +324,7 @@ bool LOKInteractionHandler::handlePasswordRequest(const uno::Sequence<uno::Refer
 }
 
 sal_Bool SAL_CALL LOKInteractionHandler::handleInteractionRequest(
-        const uno::Reference<task::XInteractionRequest>& xRequest) throw (uno::RuntimeException, std::exception)
+        const uno::Reference<task::XInteractionRequest>& xRequest)
 {
     uno::Sequence<uno::Reference<task::XInteractionContinuation>> const &rContinuations = xRequest->getContinuations();
     uno::Any const request(xRequest->getRequest());

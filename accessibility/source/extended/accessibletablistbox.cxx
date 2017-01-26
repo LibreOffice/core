@@ -75,13 +75,12 @@ namespace accessibility
     // XAccessibleContext ---------------------------------------------------------
 
     sal_Int32 SAL_CALL AccessibleTabListBox::getAccessibleChildCount()
-        throw ( uno::RuntimeException, std::exception )
     {
         return 2; // header and table
     }
 
 
-    Reference< XAccessibleContext > SAL_CALL AccessibleTabListBox::getAccessibleContext() throw ( RuntimeException, std::exception )
+    Reference< XAccessibleContext > SAL_CALL AccessibleTabListBox::getAccessibleContext()
     {
         return this;
     }
@@ -89,7 +88,6 @@ namespace accessibility
 
     Reference< XAccessible > SAL_CALL
     AccessibleTabListBox::getAccessibleChild( sal_Int32 nChildIndex )
-        throw ( IndexOutOfBoundsException, RuntimeException, std::exception )
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();

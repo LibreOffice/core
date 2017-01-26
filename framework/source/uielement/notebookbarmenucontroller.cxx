@@ -128,7 +128,7 @@ void NotebookbarMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >
 }
 
 // XEventListener
-void SAL_CALL NotebookbarMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
+void SAL_CALL NotebookbarMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
@@ -142,7 +142,7 @@ void SAL_CALL NotebookbarMenuController::disposing( const EventObject& ) throw (
 }
 
 // XStatusListener
-void SAL_CALL NotebookbarMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
+void SAL_CALL NotebookbarMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     OUString aFeatureURL( Event.FeatureURL.Complete );
 
@@ -194,7 +194,7 @@ void SAL_CALL NotebookbarMenuController::statusChanged( const FeatureStateEvent&
 }
 
 // XMenuListener
-void SAL_CALL NotebookbarMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL NotebookbarMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
     Reference< css::awt::XPopupMenu >   xPopupMenu;
     Reference< XURLTransformer >        xURLTransformer;
@@ -240,7 +240,7 @@ void SAL_CALL NotebookbarMenuController::itemSelected( const css::awt::MenuEvent
     }
 }
 
-void SAL_CALL NotebookbarMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
+void SAL_CALL NotebookbarMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     OUString aActive;
 
@@ -284,7 +284,7 @@ void SAL_CALL NotebookbarMenuController::itemActivated( const css::awt::MenuEven
 }
 
 // XPopupMenuController
-void SAL_CALL NotebookbarMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu ) throw ( RuntimeException, std::exception )
+void SAL_CALL NotebookbarMenuController::setPopupMenu( const Reference< css::awt::XPopupMenu >& xPopupMenu )
 {
     osl::MutexGuard aLock( m_aMutex );
 

@@ -105,11 +105,11 @@ class ImpTwain : public ::cppu::WeakImplHelper< util::XCloseListener >
                                                 DECL_LINK( ImplDestroyHdl, void*, void );
 
     // from util::XCloseListener
-    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException) override;
-    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) throw (uno::RuntimeException) override;
+    virtual void SAL_CALL queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) override;
+    virtual void SAL_CALL notifyClosing( const lang::EventObject& Source ) override;
 
     // from lang::XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException) override;
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
 
 public:
 
@@ -614,7 +614,7 @@ void ImpTwain::ImplDeregisterCloseListener()
     OSL_FAIL("ImpTwain::ImplDeregisterCloseListener: Could not deregister as close listener!");
 }
 
-void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& /*Source*/, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException)
+void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& /*Source*/, sal_Bool GetsOwnership )
 {
     // shall we re-send the close query later on?
     mbCloseFrameOnExit = GetsOwnership;
@@ -623,13 +623,13 @@ void SAL_CALL ImpTwain::queryClosing( const lang::EventObject& /*Source*/, sal_B
     throw util::CloseVetoException();
 }
 
-void SAL_CALL ImpTwain::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
+void SAL_CALL ImpTwain::notifyClosing( const lang::EventObject& /*Source*/ )
 {
     // should not happen
     OSL_FAIL("ImpTwain::notifyClosing called, but we vetoed the closing before!");
 }
 
-void SAL_CALL ImpTwain::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException)
+void SAL_CALL ImpTwain::disposing( const lang::EventObject& /*Source*/ )
 {
     // we're not holding any references to the frame, thus noop
 }
@@ -774,7 +774,7 @@ void ScannerManager::ReleaseData()
     }
 }
 
-awt::Size ScannerManager::getSize() throw(std::exception)
+awt::Size ScannerManager::getSize()
 {
     awt::Size   aRet;
     HGLOBAL     hDIB = static_cast<HGLOBAL>(mpData);
@@ -799,7 +799,7 @@ awt::Size ScannerManager::getSize() throw(std::exception)
     return aRet;
 }
 
-uno::Sequence< sal_Int8 > ScannerManager::getDIB() throw(std::exception)
+uno::Sequence< sal_Int8 > ScannerManager::getDIB()
 {
     uno::Sequence< sal_Int8 > aRet;
 
@@ -859,7 +859,7 @@ uno::Sequence< sal_Int8 > ScannerManager::getDIB() throw(std::exception)
     return aRet;
 }
 
-uno::Sequence< ScannerContext > SAL_CALL ScannerManager::getAvailableScanners() throw(std::exception)
+uno::Sequence< ScannerContext > SAL_CALL ScannerManager::getAvailableScanners()
 {
     osl::MutexGuard aGuard( maProtector );
     uno::Sequence< ScannerContext >   aRet( 1 );
@@ -871,7 +871,6 @@ uno::Sequence< ScannerContext > SAL_CALL ScannerManager::getAvailableScanners() 
 }
 
 sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rContext, const uno::Reference< lang::XEventListener >& )
-    throw (ScannerException, RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
@@ -885,7 +884,6 @@ sal_Bool SAL_CALL ScannerManager::configureScannerAndScan( ScannerContext& rCont
 }
 
 void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const uno::Reference< lang::XEventListener >& rxListener )
-    throw( ScannerException, std::exception )
 {
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
@@ -898,7 +896,6 @@ void SAL_CALL ScannerManager::startScan( const ScannerContext& rContext, const u
 }
 
 ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
-    throw( ScannerException, std::exception )
 {
     osl::MutexGuard aGuard( maProtector );
     uno::Reference< XScannerManager >   xThis( this );
@@ -910,7 +907,6 @@ ScanError SAL_CALL ScannerManager::getError( const ScannerContext& rContext )
 }
 
 uno::Reference< awt::XBitmap > SAL_CALL ScannerManager::getBitmap( const ScannerContext& /*rContext*/ )
-    throw( ScannerException, std::exception )
 {
     osl::MutexGuard aGuard( maProtector );
     return uno::Reference< awt::XBitmap >( this );

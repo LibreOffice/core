@@ -74,16 +74,16 @@ public:
     StringRepresentation& operator=(const StringRepresentation&) = delete;
 
     // lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (uno::RuntimeException, std::exception) override;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) override;
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // inspection::XStringRepresentation:
-    virtual OUString SAL_CALL convertToControlValue(const uno::Any & PropertyValue) throw (uno::RuntimeException, uno::Exception, std::exception) override;
-    virtual uno::Any SAL_CALL convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType) throw (uno::RuntimeException, uno::Exception, std::exception) override;
+    virtual OUString SAL_CALL convertToControlValue(const uno::Any & PropertyValue) override;
+    virtual uno::Any SAL_CALL convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType) override;
 
     // lang::XInitialization:
-    virtual void SAL_CALL initialize(const uno::Sequence< uno::Any > & aArguments) throw (uno::RuntimeException, uno::Exception, std::exception) override;
+    virtual void SAL_CALL initialize(const uno::Sequence< uno::Any > & aArguments) override;
 
 private:
     virtual ~StringRepresentation() override {}
@@ -142,23 +142,23 @@ StringRepresentation::StringRepresentation(uno::Reference< uno::XComponentContex
 {}
 
 // com.sun.star.uno.XServiceInfo:
-OUString  SAL_CALL StringRepresentation::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString  SAL_CALL StringRepresentation::getImplementationName()
 {
     return comp_StringRepresentation::_getImplementationName();
 }
 
-sal_Bool SAL_CALL StringRepresentation::supportsService(OUString const & serviceName) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL StringRepresentation::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-uno::Sequence< OUString >  SAL_CALL StringRepresentation::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence< OUString >  SAL_CALL StringRepresentation::getSupportedServiceNames()
 {
     return comp_StringRepresentation::_getSupportedServiceNames();
 }
 
 // inspection::XStringRepresentation:
-OUString SAL_CALL StringRepresentation::convertToControlValue(const uno::Any & PropertyValue) throw (uno::RuntimeException, uno::Exception, std::exception)
+OUString SAL_CALL StringRepresentation::convertToControlValue(const uno::Any & PropertyValue)
 {
     OUString sReturn;
     if ( !convertGenericValueToString( PropertyValue, sReturn ) )
@@ -178,7 +178,7 @@ OUString SAL_CALL StringRepresentation::convertToControlValue(const uno::Any & P
     return sReturn;
 }
 
-uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType) throw (uno::RuntimeException, uno::Exception, std::exception)
+uno::Any SAL_CALL StringRepresentation::convertToPropertyValue(const OUString & ControlValue, const uno::Type & ControlValueType)
 {
     uno::Any aReturn;
 
@@ -242,7 +242,7 @@ struct CompareConstants {
 }
 
 // lang::XInitialization:
-void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > & aArguments) throw (uno::RuntimeException, uno::Exception, std::exception)
+void SAL_CALL StringRepresentation::initialize(const uno::Sequence< uno::Any > & aArguments)
 {
     sal_Int32 nLength = aArguments.getLength();
     if ( nLength )

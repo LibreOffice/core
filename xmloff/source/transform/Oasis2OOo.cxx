@@ -41,6 +41,7 @@
 #include "AttrTransformerAction.hxx"
 #include "TransformerActions.hxx"
 #include "FamilyType.hxx"
+#include "XMLFilterRegistration.hxx"
 #include "facreg.hxx"
 #include <comphelper/servicehelper.hxx>
 #include "Oasis2OOo.hxx"
@@ -1924,7 +1925,6 @@ namespace
 
 // XUnoTunnel
 sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 >& rId )
-    throw(RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( theOasis2OOoTransformerUnoTunnelId::get().getSeq().getConstArray(),
@@ -1940,19 +1940,16 @@ sal_Int64 SAL_CALL Oasis2OOoTransformer::getSomething( const Sequence< sal_Int8 
 
 // XServiceInfo
 OUString SAL_CALL Oasis2OOoTransformer::getImplementationName()
-    throw(RuntimeException, std::exception)
 {
     return Oasis2OOoTransformer_getImplementationName();
 }
 
 sal_Bool SAL_CALL Oasis2OOoTransformer::supportsService( const OUString& ServiceName )
-    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL Oasis2OOoTransformer::getSupportedServiceNames(  )
-    throw(RuntimeException, std::exception)
 {
     Sequence<OUString> aSeq(0);
     return aSeq;
@@ -1975,7 +1972,6 @@ Sequence< OUString > SAL_CALL Oasis2OOoTransformer_getSupportedServiceNames()
 
 Reference< XInterface > SAL_CALL Oasis2OOoTransformer_createInstance(
         const Reference< XMultiServiceFactory > &)
-    throw( Exception )
 {
     SAL_INFO("xmloff.transform", "Creating Oasis2OOoTransformer");
     return static_cast<cppu::OWeakObject*>(new Oasis2OOoTransformer);

@@ -273,13 +273,13 @@ void VCLXAccessibleStatusBar::disposing()
 // XServiceInfo
 
 
-OUString VCLXAccessibleStatusBar::getImplementationName() throw (RuntimeException, std::exception)
+OUString VCLXAccessibleStatusBar::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleStatusBar" );
 }
 
 
-Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleStatusBar" };
 }
@@ -288,7 +288,7 @@ Sequence< OUString > VCLXAccessibleStatusBar::getSupportedServiceNames() throw (
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount() throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -296,7 +296,7 @@ sal_Int32 VCLXAccessibleStatusBar::getAccessibleChildCount() throw (RuntimeExcep
 }
 
 
-Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -324,7 +324,7 @@ Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleChild( sal_Int32 
 // XAccessibleComponent
 
 
-Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleAtPoint( const awt::Point& rPoint ) throw (RuntimeException, std::exception)
+Reference< XAccessible > VCLXAccessibleStatusBar::getAccessibleAtPoint( const awt::Point& rPoint )
 {
     OExternalLockGuard aGuard( this );
 

@@ -35,7 +35,6 @@ OGLFrameGrabber::~OGLFrameGrabber()
 }
 
 uno::Reference< css::graphic::XGraphic > SAL_CALL OGLFrameGrabber::grabFrame( double /*fMediaTime*/ )
-        throw ( uno::RuntimeException, std::exception )
 {
     std::unique_ptr<sal_uInt8[]> pBuffer(new sal_uInt8[m_rHandle.viewport.width * m_rHandle.viewport.height * 4]);
     glTFHandle* pHandle = &m_rHandle;
@@ -49,19 +48,17 @@ uno::Reference< css::graphic::XGraphic > SAL_CALL OGLFrameGrabber::grabFrame( do
     return Graphic( aBitmap ).GetXGraphic();
 }
 
-OUString SAL_CALL OGLFrameGrabber::getImplementationName() throw ( uno::RuntimeException, std::exception )
+OUString SAL_CALL OGLFrameGrabber::getImplementationName()
 {
     return OUString("com.sun.star.comp.avmedia.FrameGrabber_OpenGL");
 }
 
 sal_Bool SAL_CALL OGLFrameGrabber::supportsService( const OUString& rServiceName )
-        throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL OGLFrameGrabber::getSupportedServiceNames()
-        throw ( uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.media.FrameGrabber_OpenGL" };
 }

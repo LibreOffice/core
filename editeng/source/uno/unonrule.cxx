@@ -93,7 +93,6 @@ SvxUnoNumberingRules::~SvxUnoNumberingRules() throw()
 
 //XIndexReplace
 void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::Any& Element )
-    throw( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -108,7 +107,7 @@ void SAL_CALL SvxUnoNumberingRules::replaceByIndex( sal_Int32 Index, const uno::
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException, std::exception )
+sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount()
 {
     SolarMutexGuard aGuard;
 
@@ -116,7 +115,6 @@ sal_Int32 SAL_CALL SvxUnoNumberingRules::getCount() throw( RuntimeException, std
 }
 
 Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
-    throw( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -128,39 +126,38 @@ Any SAL_CALL SvxUnoNumberingRules::getByIndex( sal_Int32 Index )
 
 //XElementAccess
 Type SAL_CALL SvxUnoNumberingRules::getElementType()
-    throw( RuntimeException, std::exception )
 {
     return cppu::UnoType<Sequence< beans::PropertyValue >>::get();
 }
 
-sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements() throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SvxUnoNumberingRules::hasElements()
 {
     return true;
 }
 
 // XAnyCompare
-sal_Int16 SAL_CALL SvxUnoNumberingRules::compare( const Any& rAny1, const Any& rAny2 ) throw(RuntimeException, std::exception)
+sal_Int16 SAL_CALL SvxUnoNumberingRules::compare( const Any& rAny1, const Any& rAny2 )
 {
     return SvxUnoNumberingRules::Compare( rAny1, rAny2 );
 }
 
 // XCloneable
-Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  ) throw (RuntimeException, std::exception)
+Reference< XCloneable > SAL_CALL SvxUnoNumberingRules::createClone(  )
 {
     return new SvxUnoNumberingRules(maRule);
 }
 
-OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL SvxUnoNumberingRules::getImplementationName(  )
 {
     return OUString( "SvxUnoNumberingRules" );
 }
 
-sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SvxUnoNumberingRules::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
 {
     OUString aService( "com.sun.star.text.NumberingRules" );
     Sequence< OUString > aSeq( &aService, 1 );
@@ -168,7 +165,6 @@ Sequence< OUString > SAL_CALL SvxUnoNumberingRules::getSupportedServiceNames(  )
 }
 
 Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal_Int32 nIndex) const
-    throw (RuntimeException, std::exception)
 {
     //  NumberingRule aRule;
     const SvxNumberFormat& rFmt = maRule.GetLevel((sal_uInt16) nIndex);
@@ -266,7 +262,6 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
 }
 
 void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::PropertyValue >& rProperties, sal_Int32 nIndex)
-    throw (RuntimeException, IllegalArgumentException, std::exception)
 {
     SvxNumberFormat aFmt(maRule.GetLevel( (sal_uInt16)nIndex ));
     const beans::PropertyValue* pPropArray = rProperties.getConstArray();
@@ -466,7 +461,7 @@ void SvxUnoNumberingRules::setNumberingRuleByIndex(const Sequence<beans::Propert
     maRule.SetLevel( (sal_uInt16)nIndex, aFmt );
 }
 
-const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > const & xRule ) throw( IllegalArgumentException )
+const SvxNumRule& SvxGetNumRule( Reference< XIndexReplace > const & xRule )
 {
     SvxUnoNumberingRules* pRule = SvxUnoNumberingRules::getImplementation( xRule );
     if( pRule == nullptr )
@@ -492,10 +487,10 @@ css::uno::Reference< css::container::XIndexReplace > SvxCreateNumRule( const Svx
 class SvxUnoNumberingRulesCompare : public ::cppu::WeakAggImplHelper1< XAnyCompare >
 {
 public:
-    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL compare( const Any& Any1, const Any& Any2 ) override;
 };
 
-sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const Any& Any1, const Any& Any2 ) throw(RuntimeException, std::exception)
+sal_Int16 SAL_CALL SvxUnoNumberingRulesCompare::compare( const Any& Any1, const Any& Any2 )
 {
     return SvxUnoNumberingRules::Compare( Any1, Any2 );
 }

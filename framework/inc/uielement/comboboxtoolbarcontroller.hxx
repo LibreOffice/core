@@ -46,7 +46,7 @@ class ComboboxToolbarController : public ComplexToolbarController
         virtual ~ComboboxToolbarController() override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() override;
 
         // called from ComboBoxControl
         void Select();

@@ -101,7 +101,6 @@ static sal_Int32 findInSequence( const Sequence< OUString > & seq , const OUStri
 }
 
 void IndexColumns::refresh()
-    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -157,9 +156,6 @@ void IndexColumns::refresh()
 
 void IndexColumns::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& /*future*/ )
-    throw (css::sdbc::SQLException,
-           css::container::ElementExistException,
-           css::uno::RuntimeException, std::exception)
 {
     throw css::sdbc::SQLException(
         "SDBC-POSTGRESQL: IndexesColumns.appendByDescriptor not yet implemented",
@@ -174,9 +170,6 @@ void IndexColumns::appendByDescriptor(
 }
 
 void IndexColumns::dropByName( const OUString& elementName )
-    throw (css::sdbc::SQLException,
-           css::container::NoSuchElementException,
-           css::uno::RuntimeException, std::exception)
 {
     (void) elementName;
     throw css::sdbc::SQLException(
@@ -200,9 +193,6 @@ void IndexColumns::dropByName( const OUString& elementName )
 }
 
 void IndexColumns::dropByIndex( sal_Int32 index )
-    throw (css::sdbc::SQLException,
-           css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     (void) index;
     throw css::sdbc::SQLException(
@@ -240,7 +230,6 @@ void IndexColumns::dropByIndex( sal_Int32 index )
 
 
 Reference< css::beans::XPropertySet > IndexColumns::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new IndexColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -279,7 +268,6 @@ Reference< css::container::XNameAccess > IndexColumnDescriptors::create(
 }
 
 css::uno::Reference< css::beans::XPropertySet > IndexColumnDescriptors::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new IndexColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }

@@ -95,7 +95,6 @@ bool LegendItemConverter::GetItemProperty( tWhichIdType /*nWhichId*/, tPropertyN
 }
 
 bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet& rInItemSet )
-    throw( uno::Exception )
 {
     bool bChanged = false;
 
@@ -166,7 +165,6 @@ bool LegendItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSe
 
 void LegendItemConverter::FillSpecialItem(
     sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-    throw( uno::Exception )
 {
     switch( nWhichId )
     {

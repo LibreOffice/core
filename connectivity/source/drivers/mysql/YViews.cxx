@@ -66,7 +66,7 @@ sdbcx::ObjectType OViews::createObject(const OUString& _rName)
                             );
 }
 
-void OViews::impl_refresh(  ) throw(RuntimeException)
+void OViews::impl_refresh(  )
 {
     static_cast<OMySQLCatalog&>(m_rParent).refreshTables();
 }

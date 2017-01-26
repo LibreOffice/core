@@ -53,8 +53,7 @@ public:
     */
     void AddFactory (
         const OUString& rsURL,
-        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory)
-        throw (css::uno::RuntimeException);
+        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory);
 
     /** Unregister the specified factory.
         @param rsURL
@@ -63,8 +62,7 @@ public:
         @throws css::uno::RuntimeException
     */
     void RemoveFactoryForURL(
-        const OUString& rsURL)
-        throw (css::uno::RuntimeException);
+        const OUString& rsURL);
 
     /** Unregister the specified factory.
         @param rxFactory
@@ -73,8 +71,7 @@ public:
         @throws css::uno::RuntimeException
     */
     void RemoveFactoryForReference(
-        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory)
-        throw (css::uno::RuntimeException);
+        const css::uno::Reference<css::drawing::framework::XResourceFactory>& rxFactory);
 
     /** Return a factory that can create resources specified by the given URL.
         @param rsCompleteURL
@@ -86,8 +83,7 @@ public:
         @throws css::uno::RuntimeException
     */
     css::uno::Reference<css::drawing::framework::XResourceFactory> GetFactory (
-        const OUString& rsURL)
-        throw (css::uno::RuntimeException);
+        const OUString& rsURL);
 
 private:
     ::osl::Mutex maMutex;
@@ -116,8 +112,7 @@ private:
         @throws css::uno::RuntimeException
     */
     css::uno::Reference<css::drawing::framework::XResourceFactory> FindFactory (
-        const OUString& rsURLBase)
-        throw (css::uno::RuntimeException);
+        const OUString& rsURLBase);
 };
 
 } } // end of namespace sd::framework

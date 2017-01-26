@@ -48,7 +48,6 @@ using namespace ::com::sun::star;
 using namespace ::svgi;
 
 bool SVGFilter::implImport(const Sequence< PropertyValue >& rDescriptor)
-    throw (RuntimeException, std::exception)
 {
     utl::MediaDescriptor aMediaDescriptor(rDescriptor);
     uno::Reference<io::XInputStream> xInputStream;

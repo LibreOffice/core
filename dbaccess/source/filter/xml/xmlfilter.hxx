@@ -82,7 +82,7 @@ private:
     bool                                            m_bNewFormat;
 
     /// @throws RuntimeException
-    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
+    bool                            implImport( const Sequence< PropertyValue >& rDescriptor );
 
     /** fills the map with the Properties
         @param  _rValue
@@ -107,15 +107,14 @@ public:
     explicit ODBFilter( const Reference< XComponentContext >& _rxContext );
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) override;
 
     /// @throws css::uno::RuntimeException
-    static OUString SAL_CALL getImplementationName_Static()
-        throw (css::uno::RuntimeException);
+    static OUString SAL_CALL getImplementationName_Static();
 
     /// @throws css::uno::RuntimeException
     static css::uno::Sequence<OUString> SAL_CALL
-    getSupportedServiceNames_Static() throw (css::uno::RuntimeException);
+    getSupportedServiceNames_Static();
 
     static css::uno::Reference<css::uno::XInterface> SAL_CALL Create(
         css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);

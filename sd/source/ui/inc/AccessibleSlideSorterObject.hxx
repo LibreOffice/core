@@ -86,113 +86,88 @@ public:
     //===== XAccessible =======================================================
 
     virtual css::uno::Reference<css::accessibility::XAccessibleContext > SAL_CALL
-        getAccessibleContext()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleContext() override;
 
     //===== XAccessibleEventBroadcaster =======================================
     virtual void SAL_CALL
         addAccessibleEventListener(
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& rxListener)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& rxListener) override;
 
     virtual void SAL_CALL
         removeAccessibleEventListener(
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& rxListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& rxListener ) override;
 
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount() throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleChildCount() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex)
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        getAccessibleChild (sal_Int32 nIndex) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleParent()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleParent() override;
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleIndexInParent()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleIndexInParent() override;
 
     virtual sal_Int16 SAL_CALL
-        getAccessibleRole()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleRole() override;
 
     virtual OUString SAL_CALL
-        getAccessibleDescription()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleDescription() override;
 
     virtual OUString SAL_CALL
-        getAccessibleName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleName() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleRelationSet() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleStateSet() override;
 
     virtual css::lang::Locale SAL_CALL
-        getLocale()
-        throw (css::uno::RuntimeException,
-            css::accessibility::IllegalAccessibleComponentStateException, std::exception) override;
+        getLocale() override;
 
     //=====  XAccessibleComponent  ================================================
 
     virtual sal_Bool SAL_CALL containsPoint (
-        const css::awt::Point& aPoint)
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::awt::Point& aPoint) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint (
-            const css::awt::Point& aPoint)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::awt::Point& aPoint) override;
 
-    virtual css::awt::Rectangle SAL_CALL getBounds()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Rectangle SAL_CALL getBounds() override;
 
-    virtual css::awt::Point SAL_CALL getLocation()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getLocation() override;
 
-    virtual css::awt::Point SAL_CALL getLocationOnScreen()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
 
-    virtual css::awt::Size SAL_CALL getSize()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Size SAL_CALL getSize() override;
 
-    virtual void SAL_CALL grabFocus()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL grabFocus() override;
 
-    virtual sal_Int32 SAL_CALL getForeground()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getForeground() override;
 
-    virtual sal_Int32 SAL_CALL getBackground()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getBackground() override;
 
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getImplementationName() override;
 
     /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
-        supportsService (const OUString& sServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+        supportsService (const OUString& sServiceName) override;
 
     /** Returns a list of all supported services.
     */
     virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedServiceNames() override;
 
 private:
     css::uno::Reference<css::accessibility::XAccessible> mxParent;
@@ -207,8 +182,7 @@ private:
 
         @throws css::lang::DisposedException
     */
-    void ThrowIfDisposed()
-        throw (css::lang::DisposedException);
+    void ThrowIfDisposed();
 
     /** Check whether or not the object has been disposed (or is in the
         state of being disposed).

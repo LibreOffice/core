@@ -119,59 +119,59 @@ public:
     virtual UnoControlModel*    Clone() const = 0;
 
     // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override { return OWeakAggObject::queryInterface(rType); }
+    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override { return OWeakAggObject::queryInterface(rType); }
     void                        SAL_CALL acquire() throw() override;
     void                        SAL_CALL release() throw() override;
 
     // css::uno::XAggregation
-    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
     // css::lang::XUnoTunnel
     static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
-    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
     // css::util::XCloneable
-    css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // css::lang::XTypeProvider
     DECLARE_XTYPEPROVIDER()
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dispose(  ) override;
+    void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // css::beans::XPropertyState
-    css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-    css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    css::beans::PropertyState SAL_CALL getPropertyState( const OUString& PropertyName ) override;
+    css::uno::Sequence< css::beans::PropertyState > SAL_CALL getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
+    void SAL_CALL setPropertyToDefault( const OUString& PropertyName ) override;
+    css::uno::Any SAL_CALL getPropertyDefault( const OUString& aPropertyName ) override;
 
     // css::io::XPersistObject
-    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) throw(css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) throw(css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getServiceName() override;
+    void SAL_CALL write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) override;
+    void SAL_CALL read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) override;
 
     // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName(  ) override;
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ::cppu::OPropertySetHelper
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override = 0;
-    sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException, std::exception) override;
-    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception) override;
+    sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue, css::uno::Any & rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+    void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
     using cppu::OPropertySetHelper::getFastPropertyValue;
     void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // override setValue methods to handle properties of FontDescriptor
     // css::beans::XPropertySet
-    void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
     // css::beans::XFastPropertySet
-    void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& aValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& aValue ) override;
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+    void SAL_CALL setPropertyValues( const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values ) override;
 };
 
 #define UNO_CONTROL_MODEL_REGISTER_PROPERTIES(a) \

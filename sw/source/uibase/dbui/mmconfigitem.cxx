@@ -1639,28 +1639,26 @@ public:
     {
     }
 
-    virtual void SAL_CALL selectionChanged(const EventObject& /*rEvent*/) throw (css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL selectionChanged(const EventObject& /*rEvent*/) override
     {
     }
 
-    virtual void SAL_CALL disposing(const EventObject&) throw (css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL disposing(const EventObject&) override
     {
         m_rParent.stopDBChangeListening();
     }
 
-    virtual void SAL_CALL dispatch(const css::util::URL& rURL, const css::uno::Sequence< css::beans::PropertyValue >& /*rArgs*/)
-        throw (css::uno::RuntimeException,
-               std::exception) override
+    virtual void SAL_CALL dispatch(const css::util::URL& rURL, const css::uno::Sequence< css::beans::PropertyValue >& /*rArgs*/) override
     {
         if (rURL.Complete.equalsAscii(SwXDispatch::GetDBChangeURL()))
             m_rParent.updateCurrentDBDataFromDocument();
     }
 
-    virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) throw(css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) override
     {
     }
 
-    virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) throw(css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >&, const css::util::URL&) override
     {
     }
 };

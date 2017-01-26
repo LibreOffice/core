@@ -48,7 +48,7 @@ class DropdownToolbarController : public ComplexToolbarController
         virtual ~DropdownToolbarController() override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() override;
 
         // called from ListBoxControl
         void Select();

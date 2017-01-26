@@ -199,7 +199,6 @@ sal_Int32 DateToDays( sal_uInt16 nDay, sal_uInt16 nMonth, sal_uInt16 nYear )
  */
 
 void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt16& rYear )
-    throw( lang::IllegalArgumentException )
 {
     if( nDays < 0 )
         throw lang::IllegalArgumentException();
@@ -253,7 +252,7 @@ void DaysToDate( sal_Int32 nDays, sal_uInt16& rDay, sal_uInt16& rMonth, sal_uInt
  *
  */
 
-sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOpt ) throw( uno::RuntimeException )
+sal_Int32 GetNullDate( const uno::Reference< beans::XPropertySet >& xOpt )
 {
     if( xOpt.is() )
     {
@@ -339,7 +338,7 @@ sal_Int32 GetDaysInYears( sal_uInt16 nYear1, sal_uInt16 nYear2 )
 
 
 sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode,
-    sal_Int32* pOptDaysIn1stYear ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    sal_Int32* pOptDaysIn1stYear )
 {
     bool    bNeg = nStartDate > nEndDate;
 
@@ -410,7 +409,7 @@ sal_Int32 GetDiffDate( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEnd
 }
 
 
-double GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+double GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
 {
     sal_Int32   nDays1stYear;
     sal_Int32   nTotalDays = GetDiffDate( nNullDate, nStartDate, nEndDate, nMode, &nDays1stYear );
@@ -419,7 +418,7 @@ double GetYearDiff( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDat
 }
 
 
-sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
 {
     switch( nMode )
     {
@@ -450,7 +449,7 @@ sal_Int32 GetDaysInYear( sal_Int32 nNullDate, sal_Int32 nDate, sal_Int32 nMode )
  *   The calculations are defined in:
  *   Open Document Format for Office Applications version 1.2 Part 2, par. 4.11.7
  */
-double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+double GetYearFrac( sal_Int32 nNullDate, sal_Int32 nStartDate, sal_Int32 nEndDate, sal_Int32 nMode )
 {
     if( nStartDate == nEndDate )
         return 0.0;     // nothing to do...
@@ -654,7 +653,7 @@ double GetGcd( double f1, double f2 )
 }
 
 
-double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+double ConvertToDec( const OUString& aStr, sal_uInt16 nBase, sal_uInt16 nCharLim )
 {
     if ( nBase < 2 || nBase > 36 )
         throw lang::IllegalArgumentException();
@@ -721,7 +720,7 @@ static inline sal_Char GetMaxChar( sal_uInt16 nBase )
 
 
 OUString ConvertFromDec( double fNum, double fMin, double fMax, sal_uInt16 nBase,
-    sal_Int32 nPlaces, sal_Int32 nMaxPlaces, bool bUsePlaces ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    sal_Int32 nPlaces, sal_Int32 nMaxPlaces, bool bUsePlaces )
 {
     fNum = ::rtl::math::approxFloor( fNum );
     fMin = ::rtl::math::approxFloor( fMin );
@@ -987,7 +986,7 @@ OUString GetString( double f, bool bLeadingSign, sal_uInt16 nMaxDig )
 
 
 double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
-    double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    double fRestVal, double fPer, double fRate, sal_Int32 nBase )
 {
     sal_uInt32  nPer = sal_uInt32( fPer );
     double      fUsePer = 1.0 / fRate;
@@ -1032,7 +1031,7 @@ double GetAmordegrc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int
 
 
 double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int32 nFirstPer,
-    double fRestVal, double fPer, double fRate, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    double fRestVal, double fPer, double fRate, sal_Int32 nBase )
 {
     sal_uInt32  nPer = sal_uInt32( fPer );
     double      fOneRate = fCost * fRate;
@@ -1056,7 +1055,7 @@ double GetAmorlinc( sal_Int32 nNullDate, double fCost, sal_Int32 nDate, sal_Int3
 
 
 double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup,
-    double fYield, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    double fYield, sal_Int32 nFreq, sal_Int32 nBase )
 {
     double          fYearfrac = GetYearFrac( nNullDate, nSettle, nMat, nBase );
     double          fNumOfCoups = GetCoupnum( nNullDate, nSettle, nMat, nFreq, nBase );
@@ -1089,7 +1088,7 @@ double GetDuration( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, doub
 
 
 double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nIssue,
-    double fRate, double fPrice, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    double fRate, double fPrice, sal_Int32 nBase )
 {
     double      fIssMat = GetYearFrac( nNullDate, nIssue, nMat, nBase );
     double      fIssSet = GetYearFrac( nNullDate, nIssue, nSettle, nBase );
@@ -1106,7 +1105,7 @@ double GetYieldmat( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
 
 double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /*nMat*/, sal_Int32 /*nIssue*/,
     sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fYield*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
-    sal_Int32 /*nBase*/ ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    sal_Int32 /*nBase*/ )
 {
     // If you change this to not unconditionally throw, the
     // SAL_WNOUNREACHABLE_CODE_PUSH/POP around the caller in
@@ -1116,7 +1115,7 @@ double GetOddfprice( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
 
 
 double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fCoup, double fPrice,
-                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase )
 {
     double      fRate = fCoup;
     double      fPriceN = 0.0;
@@ -1168,7 +1167,7 @@ double getYield_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
 
 
 double getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double fRate, double fYield,
-                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+                    double fRedemp, sal_Int32 nFreq, sal_Int32 nBase )
 {
     double      fFreq = nFreq;
 
@@ -1192,7 +1191,7 @@ double getPrice_( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, double
 
 double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /*nMat*/, sal_Int32 /*nIssue*/,
     sal_Int32 /*nFirstCoup*/, double /*fRate*/, double /*fPrice*/, double /*fRedemp*/, sal_Int32 /*nFreq*/,
-    sal_Int32 /*nBase*/ ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    sal_Int32 /*nBase*/ )
 {
     // If you change this to not unconditionally throw, the
     // SAL_WNOUNREACHABLE_CODE_PUSH/POP around the caller in
@@ -1202,7 +1201,7 @@ double GetOddfyield( sal_Int32 /*nNullDate*/, sal_Int32 /*nSettle*/, sal_Int32 /
 
 
 double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastCoup,
-    double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    double fRate, double fYield, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase )
 {
     double      fFreq = double( nFreq );
     double      fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
@@ -1218,7 +1217,7 @@ double GetOddlprice( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 
 
 double GetOddlyield( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nLastCoup,
-    double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+    double fRate, double fPrice, double fRedemp, sal_Int32 nFreq, sal_Int32 nBase )
 {
     double      fFreq = double( nFreq );
     double      fDCi = GetYearFrac( nNullDate, nLastCoup, nMat, nBase ) * fFreq;
@@ -1274,7 +1273,6 @@ double GetZw( double fZins, double fZzr, double fRmz, double fBw, sal_Int32 nF )
 // COUPPCD: find last coupon date before settlement (can be equal to settlement)
 /// @throws css::lang::IllegalArgumentException
 static void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
-    throw( lang::IllegalArgumentException )
 {
     rDate = rMat;
     rDate.setYear( rSettle.getYear() );
@@ -1285,7 +1283,6 @@ static void lcl_GetCouppcd( ScaDate& rDate, const ScaDate& rSettle, const ScaDat
 }
 
 double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
         throw lang::IllegalArgumentException();
@@ -1298,7 +1295,6 @@ double GetCouppcd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 // COUPNCD: find first coupon date after settlement (is never equal to settlement)
 /// @throws css::lang::IllegalArgumentException
 static void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDate& rMat, sal_Int32 nFreq )
-    throw( lang::IllegalArgumentException )
 {
     rDate = rMat;
     rDate.setYear( rSettle.getYear() );
@@ -1309,7 +1305,6 @@ static void lcl_GetCoupncd( ScaDate& rDate, const ScaDate& rSettle, const ScaDat
 }
 
 double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
         throw lang::IllegalArgumentException();
@@ -1321,7 +1316,6 @@ double GetCoupncd( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_I
 
 // COUPDAYBS: get day count: coupon date before settlement <-> settlement
 double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
         throw lang::IllegalArgumentException();
@@ -1334,7 +1328,6 @@ double GetCoupdaybs( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal
 
 // COUPDAYSNC: get day count: settlement <-> coupon date after settlement
 double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
         throw lang::IllegalArgumentException();
@@ -1351,7 +1344,6 @@ double GetCoupdaysnc( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sa
 
 // COUPDAYS: get day count: coupon date before settlement <-> coupon date after settlement
 double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
         throw lang::IllegalArgumentException();
@@ -1369,7 +1361,6 @@ double GetCoupdays( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_
 
 // COUPNUM: get count of coupon dates
 double GetCoupnum( sal_Int32 nNullDate, sal_Int32 nSettle, sal_Int32 nMat, sal_Int32 nFreq, sal_Int32 nBase )
-    throw( uno::RuntimeException, lang::IllegalArgumentException )
 {
     if( nSettle >= nMat || CHK_Freq )
         throw lang::IllegalArgumentException();
@@ -1492,7 +1483,7 @@ void SortedIndividualInt32List::Insert( sal_Int32 nDay, sal_Int32 nNullDate, boo
 
 
 void SortedIndividualInt32List::Insert(
-        double fDay, sal_Int32 nNullDate, bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        double fDay, sal_Int32 nNullDate, bool bInsertOnWeekend )
 {
     if( (fDay < -2147483648.0) || (fDay > 2147483649.0) )
         throw lang::IllegalArgumentException();
@@ -1526,7 +1517,7 @@ void SortedIndividualInt32List::InsertHolidayList(
         const ScaAnyConverter& rAnyConv,
         const uno::Any& rHolAny,
         sal_Int32 nNullDate,
-        bool bInsertOnWeekend ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bInsertOnWeekend )
 {
     double fDay;
     if( rAnyConv.getDouble( fDay, rHolAny ) )
@@ -1538,7 +1529,7 @@ void SortedIndividualInt32List::InsertHolidayList(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOptions,
         const uno::Any& rHolAny,
-        sal_Int32 nNullDate ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nNullDate )
 {
     rAnyConv.init( xOptions );
     if( rHolAny.getValueTypeClass() == uno::TypeClass_SEQUENCE )
@@ -1565,7 +1556,7 @@ void SortedIndividualInt32List::InsertHolidayList(
 
 
 void ScaDoubleList::Append(
-        const uno::Sequence< uno::Sequence< double > >& rValueSeq ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        const uno::Sequence< uno::Sequence< double > >& rValueSeq )
 {
     const uno::Sequence< double >* pSeqArray = rValueSeq.getConstArray();
     for( sal_Int32 nIndex1 = 0; nIndex1 < rValueSeq.getLength(); nIndex1++ )
@@ -1579,7 +1570,7 @@ void ScaDoubleList::Append(
 
 
 void ScaDoubleList::Append(
-        const uno::Sequence< uno::Sequence< sal_Int32 > >& rValueSeq ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        const uno::Sequence< uno::Sequence< sal_Int32 > >& rValueSeq )
 {
     const uno::Sequence< sal_Int32 >* pSeqArray = rValueSeq.getConstArray();
     for( sal_Int32 nIndex1 = 0; nIndex1 < rValueSeq.getLength(); nIndex1++ )
@@ -1594,7 +1585,7 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
         const uno::Any& rAny,
-        bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bIgnoreEmpty )
 {
     if( auto s = o3tl::tryAccess<
             css::uno::Sequence<css::uno::Sequence<css::uno::Any>>>(rAny) )
@@ -1613,7 +1604,7 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
         const uno::Sequence< uno::Any >& rAnySeq,
-        bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bIgnoreEmpty )
 {
     const uno::Any* pArray = rAnySeq.getConstArray();
     for( sal_Int32 nIndex = 0; nIndex < rAnySeq.getLength(); nIndex++ )
@@ -1624,7 +1615,7 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         const ScaAnyConverter& rAnyConv,
         const uno::Sequence< uno::Sequence< uno::Any > >& rAnySeq,
-        bool bIgnoreEmpty ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        bool bIgnoreEmpty )
 {
     const uno::Sequence< uno::Any >* pArray = rAnySeq.getConstArray();
     for( sal_Int32 nIndex = 0; nIndex < rAnySeq.getLength(); nIndex++ )
@@ -1634,20 +1625,20 @@ void ScaDoubleList::Append(
 void ScaDoubleList::Append(
         ScaAnyConverter& rAnyConv,
         const uno::Reference< beans::XPropertySet >& xOpt,
-        const uno::Sequence< uno::Any >& rAnySeq ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        const uno::Sequence< uno::Any >& rAnySeq )
 {
     rAnyConv.init( xOpt );
     Append( rAnyConv, rAnySeq, true/*bIgnoreEmpty*/ );
 }
 
 
-bool ScaDoubleList::CheckInsert( double ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+bool ScaDoubleList::CheckInsert( double ) const
 {
     return true;
 }
 
 
-bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+bool ScaDoubleListGT0::CheckInsert( double fValue ) const
 {
     if( fValue < 0.0 )
         throw lang::IllegalArgumentException();
@@ -1655,7 +1646,7 @@ bool ScaDoubleListGT0::CheckInsert( double fValue ) const throw( uno::RuntimeExc
 }
 
 
-bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+bool ScaDoubleListGE0::CheckInsert( double fValue ) const
 {
     if( fValue < 0.0 )
         throw lang::IllegalArgumentException();
@@ -1663,7 +1654,7 @@ bool ScaDoubleListGE0::CheckInsert( double fValue ) const throw( uno::RuntimeExc
 }
 
 
-Complex::Complex( const OUString& rStr ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+Complex::Complex( const OUString& rStr )
 {
     if( !ParseString( rStr, *this ) )
         throw lang::IllegalArgumentException();
@@ -1744,7 +1735,7 @@ bool Complex::ParseString( const OUString& rStr, Complex& rCompl )
 }
 
 
-OUString Complex::GetString() const throw( uno::RuntimeException, lang::IllegalArgumentException )
+OUString Complex::GetString() const
 {
     CHK_FINITE(r);
     CHK_FINITE(i);
@@ -1773,7 +1764,7 @@ OUString Complex::GetString() const throw( uno::RuntimeException, lang::IllegalA
 }
 
 
-double Complex::Arg() const throw( uno::RuntimeException, lang::IllegalArgumentException )
+double Complex::Arg() const
 {
     if( r == 0.0 && i == 0.0 )
         throw lang::IllegalArgumentException();
@@ -1787,7 +1778,7 @@ double Complex::Arg() const throw( uno::RuntimeException, lang::IllegalArgumentE
 }
 
 
-void Complex::Power( double fPower ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Power( double fPower )
 {
     if( r == 0.0 && i == 0.0 )
     {
@@ -1827,7 +1818,7 @@ void Complex::Sqrt()
 }
 
 
-void Complex::Sin() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Sin()
 {
     if( !::rtl::math::isValidArcArg( r ) )
         throw lang::IllegalArgumentException();
@@ -1845,7 +1836,7 @@ void Complex::Sin() throw( uno::RuntimeException, lang::IllegalArgumentException
 }
 
 
-void Complex::Cos() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Cos()
 {
     if( !::rtl::math::isValidArcArg( r ) )
         throw lang::IllegalArgumentException();
@@ -1863,7 +1854,7 @@ void Complex::Cos() throw( uno::RuntimeException, lang::IllegalArgumentException
 }
 
 
-void Complex::Div( const Complex& z ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Div( const Complex& z )
 {
     if( z.r == 0 && z.i == 0 )
         throw lang::IllegalArgumentException();
@@ -1890,7 +1881,7 @@ void Complex::Exp()
 }
 
 
-void Complex::Ln() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Ln()
 {
     if( r == 0.0 && i == 0.0 )
         throw lang::IllegalArgumentException();
@@ -1907,21 +1898,21 @@ void Complex::Ln() throw( uno::RuntimeException, lang::IllegalArgumentException 
 }
 
 
-void Complex::Log10() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Log10()
 {
     Ln();
     Mult( 0.434294481903251828 );   // * log10( e )
 }
 
 
-void Complex::Log2() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Log2()
 {
     Ln();
     Mult( 1.442695040888963407 );   // * log2( e )
 }
 
 
-void Complex::Tan() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Tan()
 {
     if ( i )
     {
@@ -1940,7 +1931,7 @@ void Complex::Tan() throw( uno::RuntimeException, lang::IllegalArgumentException
 }
 
 
-void Complex::Sec() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Sec()
 {
     if( i )
     {
@@ -1961,7 +1952,7 @@ void Complex::Sec() throw( uno::RuntimeException, lang::IllegalArgumentException
 }
 
 
-void Complex::Csc() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Csc()
 {
     if( i )
     {
@@ -1982,7 +1973,7 @@ void Complex::Csc() throw( uno::RuntimeException, lang::IllegalArgumentException
 }
 
 
-void Complex::Cot() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Cot()
 {
     if ( i )
     {
@@ -2001,7 +1992,7 @@ void Complex::Cot() throw( uno::RuntimeException, lang::IllegalArgumentException
 }
 
 
-void Complex::Sinh() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Sinh()
 {
     if( !::rtl::math::isValidArcArg( r ) )
         throw lang::IllegalArgumentException();
@@ -2018,7 +2009,7 @@ void Complex::Sinh() throw( uno::RuntimeException, lang::IllegalArgumentExceptio
 }
 
 
-void Complex::Cosh() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Cosh()
 {
     if( !::rtl::math::isValidArcArg( r ) )
         throw lang::IllegalArgumentException();
@@ -2035,7 +2026,7 @@ void Complex::Cosh() throw( uno::RuntimeException, lang::IllegalArgumentExceptio
 }
 
 
-void Complex::Sech() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Sech()
 {
     if ( i )
     {
@@ -2056,7 +2047,7 @@ void Complex::Sech() throw( uno::RuntimeException, lang::IllegalArgumentExceptio
 }
 
 
-void Complex::Csch() throw( uno::RuntimeException, lang::IllegalArgumentException )
+void Complex::Csch()
 {
     if ( i )
     {
@@ -2084,7 +2075,7 @@ ComplexList::~ComplexList()
 }
 
 
-void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, ComplListAppendHandl eAH ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, ComplListAppendHandl eAH )
 {
     sal_Int32   n1, n2;
     sal_Int32   nE1 = r.getLength();
@@ -2112,7 +2103,7 @@ void ComplexList::Append( const uno::Sequence< uno::Sequence< OUString > >& r, C
 }
 
 
-void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListAppendHandl eAH ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+void ComplexList::Append( const uno::Sequence< uno::Any >& aMultPars, ComplListAppendHandl eAH )
 {
     sal_Int32       nEle = aMultPars.getLength();
     bool            bEmpty0 = eAH == AH_EmpyAs0;
@@ -2274,7 +2265,7 @@ sal_Int16 ConvertData::GetMatchingLevel( const OUString& rRef ) const
 
 
 double ConvertData::Convert(
-    double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+    double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const
 {
     if( Class() != r.Class() )
         throw lang::IllegalArgumentException();
@@ -2325,7 +2316,7 @@ ConvertDataLinear::~ConvertDataLinear()
 }
 
 double ConvertDataLinear::Convert(
-    double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const throw( uno::RuntimeException, lang::IllegalArgumentException )
+    double f, const ConvertData& r, sal_Int16 nLevFrom, sal_Int16 nLevTo ) const
 {
     if( Class() != r.Class() )
         throw lang::IllegalArgumentException();
@@ -2547,7 +2538,7 @@ ConvertDataList::~ConvertDataList()
 }
 
 
-double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+double ConvertDataList::Convert( double fVal, const OUString& rFrom, const OUString& rTo )
 {
     ConvertData*    pFrom = nullptr;
     ConvertData*    pTo = nullptr;
@@ -2699,7 +2690,7 @@ sal_Int32 ScaDate::getDaysInYearRange( sal_uInt16 nFrom, sal_uInt16 nTo ) const
     return b30Days ? ((nTo - nFrom + 1) * 360) : ::GetDaysInYears( nFrom, nTo );
 }
 
-void ScaDate::doAddYears( sal_Int32 nYearCount ) throw( lang::IllegalArgumentException )
+void ScaDate::doAddYears( sal_Int32 nYearCount )
 {
     sal_Int32 nNewYear = nYearCount + nYear;
     if( (nNewYear < 0) || (nNewYear > 0x7FFF) )
@@ -2707,7 +2698,7 @@ void ScaDate::doAddYears( sal_Int32 nYearCount ) throw( lang::IllegalArgumentExc
     nYear = static_cast< sal_uInt16 >( nNewYear );
 }
 
-void ScaDate::addMonths( sal_Int32 nMonthCount ) throw( lang::IllegalArgumentException )
+void ScaDate::addMonths( sal_Int32 nMonthCount )
 {
     sal_Int32 nNewMonth = nMonthCount + nMonth;
     if( nNewMonth > 12 )
@@ -2733,7 +2724,7 @@ sal_Int32 ScaDate::getDate( sal_Int32 nNullDate ) const
     return ::DateToDays( nRealDay, nMonth, nYear ) - nNullDate;
 }
 
-sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo ) throw( lang::IllegalArgumentException )
+sal_Int32 ScaDate::getDiff( const ScaDate& rFrom, const ScaDate& rTo )
 {
     if( rFrom > rTo )
         return getDiff( rTo, rFrom );
@@ -2815,7 +2806,7 @@ ScaAnyConverter::~ScaAnyConverter()
 {
 }
 
-void ScaAnyConverter::init( const uno::Reference< beans::XPropertySet >& xPropSet ) throw( uno::RuntimeException )
+void ScaAnyConverter::init( const uno::Reference< beans::XPropertySet >& xPropSet )
 {
     // try to get default number format
     bHasValidFormat = false;
@@ -2839,7 +2830,7 @@ void ScaAnyConverter::init( const uno::Reference< beans::XPropertySet >& xPropSe
     }
 }
 
-double ScaAnyConverter::convertToDouble( const OUString& rString ) const throw( lang::IllegalArgumentException )
+double ScaAnyConverter::convertToDouble( const OUString& rString ) const
 {
     double fValue = 0.0;
     if( bHasValidFormat )
@@ -2866,7 +2857,7 @@ double ScaAnyConverter::convertToDouble( const OUString& rString ) const throw( 
 
 bool ScaAnyConverter::getDouble(
         double& rfResult,
-        const uno::Any& rAny ) const throw( lang::IllegalArgumentException )
+        const uno::Any& rAny ) const
 {
     rfResult = 0.0;
     bool bContainsVal = true;
@@ -2896,7 +2887,7 @@ bool ScaAnyConverter::getDouble(
 bool ScaAnyConverter::getDouble(
         double& rfResult,
         const uno::Reference< beans::XPropertySet >& xPropSet,
-        const uno::Any& rAny ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        const uno::Any& rAny )
 {
     init( xPropSet );
     return getDouble( rfResult, rAny );
@@ -2905,7 +2896,7 @@ bool ScaAnyConverter::getDouble(
 double ScaAnyConverter::getDouble(
         const uno::Reference< beans::XPropertySet >& xPropSet,
         const uno::Any& rAny,
-        double fDefault ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        double fDefault )
 {
     double fResult;
     if( !getDouble( fResult, xPropSet, rAny ) )
@@ -2916,7 +2907,7 @@ double ScaAnyConverter::getDouble(
 bool ScaAnyConverter::getInt32(
         sal_Int32& rnResult,
         const uno::Reference< beans::XPropertySet >& xPropSet,
-        const uno::Any& rAny ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        const uno::Any& rAny )
 {
     double fResult;
     bool bContainsVal = getDouble( fResult, xPropSet, rAny );
@@ -2930,7 +2921,7 @@ bool ScaAnyConverter::getInt32(
 sal_Int32 ScaAnyConverter::getInt32(
         const uno::Reference< beans::XPropertySet >& xPropSet,
         const uno::Any& rAny,
-        sal_Int32 nDefault ) throw( uno::RuntimeException, lang::IllegalArgumentException )
+        sal_Int32 nDefault )
 {
     sal_Int32 nResult;
     if( !getInt32( nResult, xPropSet, rAny ) )

@@ -60,7 +60,6 @@ IMPLEMENT_SERVICE_INFO(OFlatConnection, "com.sun.star.sdbc.drivers.flat.Connecti
 
 
 void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
-    throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     osl_atomic_increment( &m_refCount );
 
@@ -105,7 +104,7 @@ void OFlatConnection::construct(const OUString& url,const Sequence< PropertyValu
     m_bShowDeleted = true; // we do not supported rows for this type
 }
 
-Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XDatabaseMetaData > SAL_CALL OFlatConnection::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
@@ -134,7 +133,7 @@ css::uno::Reference< XTablesSupplier > OFlatConnection::createCatalog()
     return xTab;
 }
 
-Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
@@ -146,7 +145,7 @@ Reference< XStatement > SAL_CALL OFlatConnection::createStatement(  ) throw(SQLE
     return xStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);
@@ -160,7 +159,7 @@ Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareStatement( cons
     return xStmt;
 }
 
-Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const OUString& /*sql*/ ) throw(SQLException, RuntimeException, std::exception)
+Reference< XPreparedStatement > SAL_CALL OFlatConnection::prepareCall( const OUString& /*sql*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_B::rBHelper.bDisposed);

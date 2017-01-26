@@ -115,7 +115,6 @@ void SAL_CALL PresenterTextView::disposing()
 
 // XInitialization
 void SAL_CALL PresenterTextView::initialize (const Sequence<Any>& rArguments)
-    throw (Exception, RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -217,7 +216,6 @@ Any PresenterTextView::SetPropertyValue (
 }
 
 void PresenterTextView::ThrowIfDisposed()
-    throw (css::lang::DisposedException)
 {
     if (PresenterTextViewInterfaceBase::rBHelper.bDisposed
         || PresenterTextViewInterfaceBase::rBHelper.bInDispose

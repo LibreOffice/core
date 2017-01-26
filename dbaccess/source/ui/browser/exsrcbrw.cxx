@@ -49,7 +49,7 @@ extern "C" void SAL_CALL createRegistryInfo_OFormGridView()
     static OMultiInstanceAutoRegistration< SbaExternalSourceBrowser > aAutoRegistration;
 }
 
-Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL SbaExternalSourceBrowser::queryInterface(const Type& _rType)
 {
     Any aRet = SbaXDataBrowserController::queryInterface(_rType);
     if(!aRet.hasValue())
@@ -74,17 +74,17 @@ SbaExternalSourceBrowser::~SbaExternalSourceBrowser()
 
 }
 
-css::uno::Sequence<OUString> SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL SbaExternalSourceBrowser::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
 
-OUString SbaExternalSourceBrowser::getImplementationName_Static() throw(RuntimeException)
+OUString SbaExternalSourceBrowser::getImplementationName_Static()
 {
     return OUString("org.openoffice.comp.dbu.OFormGridView");
 }
 
-css::uno::Sequence<OUString> SbaExternalSourceBrowser::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> SbaExternalSourceBrowser::getSupportedServiceNames_Static()
 {
     css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.FormGridView" };
     return aSupported;
@@ -95,7 +95,7 @@ Reference< XInterface > SAL_CALL SbaExternalSourceBrowser::Create(const Referenc
     return *(new SbaExternalSourceBrowser( comphelper::getComponentContext(_rxFactory)));
 }
 
-OUString SAL_CALL SbaExternalSourceBrowser::getImplementationName() throw(RuntimeException, std::exception)
+OUString SAL_CALL SbaExternalSourceBrowser::getImplementationName()
 {
     return getImplementationName_Static();
 }
@@ -118,7 +118,7 @@ bool SbaExternalSourceBrowser::LoadForm()
     return true;
 }
 
-void SbaExternalSourceBrowser::modified(const css::lang::EventObject& aEvent) throw( RuntimeException, std::exception )
+void SbaExternalSourceBrowser::modified(const css::lang::EventObject& aEvent)
 {
     SbaXDataBrowserController::modified(aEvent);
 
@@ -129,7 +129,7 @@ void SbaExternalSourceBrowser::modified(const css::lang::EventObject& aEvent) th
         static_cast< css::util::XModifyListener*>(aIt.next())->modified(aEvt);
 }
 
-void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, const Sequence< css::beans::PropertyValue>& aArgs) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, const Sequence< css::beans::PropertyValue>& aArgs)
 {
     const css::beans::PropertyValue* pArguments = aArgs.getConstArray();
     if ( aURL.Complete == ".uno:FormSlots/AddGridColumn" )
@@ -239,7 +239,7 @@ void SAL_CALL SbaExternalSourceBrowser::dispatch(const css::util::URL& aURL, con
         SbaXDataBrowserController::dispatch(aURL, aArgs);
 }
 
-Reference< css::frame::XDispatch >  SAL_CALL SbaExternalSourceBrowser::queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException, std::exception )
+Reference< css::frame::XDispatch >  SAL_CALL SbaExternalSourceBrowser::queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags)
 {
     Reference< css::frame::XDispatch >  xReturn;
     if (m_bInQueryDispatch)
@@ -304,17 +304,17 @@ void SAL_CALL SbaExternalSourceBrowser::disposing()
     SbaXDataBrowserController::disposing();
 }
 
-void SAL_CALL SbaExternalSourceBrowser::addModifyListener(const Reference< css::util::XModifyListener > & aListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaExternalSourceBrowser::addModifyListener(const Reference< css::util::XModifyListener > & aListener)
 {
     m_aModifyListeners.addInterface(aListener);
 }
 
-void SAL_CALL SbaExternalSourceBrowser::removeModifyListener(const Reference< css::util::XModifyListener > & aListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaExternalSourceBrowser::removeModifyListener(const Reference< css::util::XModifyListener > & aListener)
 {
     m_aModifyListeners.removeInterface(aListener);
 }
 
-void SAL_CALL SbaExternalSourceBrowser::unloading(const css::lang::EventObject& aEvent) throw( RuntimeException, std::exception )
+void SAL_CALL SbaExternalSourceBrowser::unloading(const css::lang::EventObject& aEvent)
 {
     if (m_pDataSourceImpl && (m_pDataSourceImpl->getAttachedForm() == aEvent.Source))
     {
@@ -408,7 +408,7 @@ void SbaExternalSourceBrowser::ClearView()
         xColContainer->removeByIndex(0);
 }
 
-void SAL_CALL SbaExternalSourceBrowser::disposing(const css::lang::EventObject& Source) throw( RuntimeException, std::exception )
+void SAL_CALL SbaExternalSourceBrowser::disposing(const css::lang::EventObject& Source)
 {
     if (m_pDataSourceImpl && (m_pDataSourceImpl->getAttachedForm() == Source.Source))
     {

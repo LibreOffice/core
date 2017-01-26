@@ -67,7 +67,7 @@ void SlideShowViewListeners::removeListener( const Reference< util::XModifyListe
         maListeners.erase( aIter );
 }
 
-void SlideShowViewListeners::notify( const lang::EventObject& _rEvent ) throw( css::uno::Exception )
+void SlideShowViewListeners::notify( const lang::EventObject& _rEvent )
 {
     ::osl::MutexGuard aGuard( mrMutex );
 
@@ -109,7 +109,7 @@ SlideShowViewPaintListeners::SlideShowViewPaintListeners( ::osl::Mutex& rMutex )
 }
 
 bool SlideShowViewPaintListeners::implTypedNotify( const Reference< awt::XPaintListener >& rListener,
-                                              const awt::PaintEvent&                  rEvent ) throw( uno::Exception )
+                                              const awt::PaintEvent&                  rEvent )
 {
     rListener->windowPaint( rEvent );
     return true; // continue calling listeners
@@ -122,7 +122,7 @@ SlideShowViewMouseListeners::SlideShowViewMouseListeners( ::osl::Mutex& rMutex )
 }
 
 bool SlideShowViewMouseListeners::implTypedNotify( const Reference< awt::XMouseListener >&  rListener,
-                                              const WrappedMouseEvent&                  rEvent ) throw( uno::Exception )
+                                              const WrappedMouseEvent&                  rEvent )
 {
     switch( rEvent.meType )
     {
@@ -153,7 +153,7 @@ SlideShowViewMouseMotionListeners::SlideShowViewMouseMotionListeners( ::osl::Mut
 }
 
 bool SlideShowViewMouseMotionListeners::implTypedNotify( const Reference< awt::XMouseMotionListener >&  rListener,
-                                                    const WrappedMouseMotionEvent&                  rEvent ) throw( uno::Exception )
+                                                    const WrappedMouseMotionEvent&                  rEvent )
 {
     switch( rEvent.meType )
     {
@@ -200,7 +200,7 @@ SlideShowView::SlideShowView( ShowWindow&     rOutputWindow,
 }
 
 // Dispose all internal references
-void SAL_CALL SlideShowView::dispose() throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::dispose()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -227,7 +227,7 @@ void SAL_CALL SlideShowView::dispose() throw (RuntimeException, std::exception)
 }
 
 // Disposing our broadcaster
-void SAL_CALL SlideShowView::disposing( const lang::EventObject& ) throw(RuntimeException, std::exception)
+void SAL_CALL SlideShowView::disposing( const lang::EventObject& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -252,7 +252,7 @@ void SAL_CALL SlideShowView::disposing( const lang::EventObject& ) throw(Runtime
     }
 }
 
-void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e ) throw (RuntimeException)
+void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -276,14 +276,14 @@ void SAL_CALL SlideShowView::paint( const awt::PaintEvent& e ) throw (RuntimeExc
 }
 
 // XSlideShowView methods
-Reference< rendering::XSpriteCanvas > SAL_CALL SlideShowView::getCanvas(  ) throw (RuntimeException, std::exception)
+Reference< rendering::XSpriteCanvas > SAL_CALL SlideShowView::getCanvas(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
     return mpCanvas.get() ? mpCanvas->getUNOSpriteCanvas() : Reference< rendering::XSpriteCanvas >();
 }
 
-void SAL_CALL SlideShowView::clear() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowView::clear()
 {
     // paint background in black
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -307,12 +307,12 @@ void SAL_CALL SlideShowView::clear() throw (css::uno::RuntimeException, std::exc
     }
 }
 
-geometry::IntegerSize2D SAL_CALL SlideShowView::getTranslationOffset( ) throw (RuntimeException, std::exception)
+geometry::IntegerSize2D SAL_CALL SlideShowView::getTranslationOffset( )
 {
         return mTranslationOffset;
 }
 
-geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (RuntimeException, std::exception)
+geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     SolarMutexGuard aSolarGuard;
@@ -373,7 +373,7 @@ geometry::AffineMatrix2D SAL_CALL SlideShowView::getTransformation(  ) throw (Ru
     return ::basegfx::unotools::affineMatrixFromHomMatrix( aRes, aMatrix );
 }
 
-void SAL_CALL SlideShowView::addTransformationChangedListener( const Reference< util::XModifyListener >& xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::addTransformationChangedListener( const Reference< util::XModifyListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -381,7 +381,7 @@ void SAL_CALL SlideShowView::addTransformationChangedListener( const Reference< 
         mpViewListeners->addListener( xListener );
 }
 
-void SAL_CALL SlideShowView::removeTransformationChangedListener( const Reference< util::XModifyListener >& xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::removeTransformationChangedListener( const Reference< util::XModifyListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -389,7 +389,7 @@ void SAL_CALL SlideShowView::removeTransformationChangedListener( const Referenc
         mpViewListeners->removeListener( xListener );
 }
 
-void SAL_CALL SlideShowView::addPaintListener( const Reference< awt::XPaintListener >& xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::addPaintListener( const Reference< awt::XPaintListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -397,7 +397,7 @@ void SAL_CALL SlideShowView::addPaintListener( const Reference< awt::XPaintListe
         mpPaintListeners->addTypedListener( xListener );
 }
 
-void SAL_CALL SlideShowView::removePaintListener( const Reference< awt::XPaintListener >& xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::removePaintListener( const Reference< awt::XPaintListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -405,7 +405,7 @@ void SAL_CALL SlideShowView::removePaintListener( const Reference< awt::XPaintLi
         mpPaintListeners->removeTypedListener( xListener );
 }
 
-void SAL_CALL SlideShowView::addMouseListener( const Reference< awt::XMouseListener >& xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::addMouseListener( const Reference< awt::XMouseListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -413,7 +413,7 @@ void SAL_CALL SlideShowView::addMouseListener( const Reference< awt::XMouseListe
         mpMouseListeners->addTypedListener( xListener );
 }
 
-void SAL_CALL SlideShowView::removeMouseListener( const Reference< awt::XMouseListener >& xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::removeMouseListener( const Reference< awt::XMouseListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -421,7 +421,7 @@ void SAL_CALL SlideShowView::removeMouseListener( const Reference< awt::XMouseLi
         mpMouseListeners->removeTypedListener( xListener );
 }
 
-void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -437,7 +437,7 @@ void SAL_CALL SlideShowView::addMouseMotionListener( const Reference< awt::XMous
         mpMouseMotionListeners->addTypedListener( xListener );
 }
 
-void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XMouseMotionListener >& xListener )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -448,7 +448,7 @@ void SAL_CALL SlideShowView::removeMouseMotionListener( const Reference< awt::XM
     // events, when the last listener is gone.
 }
 
-void SAL_CALL SlideShowView::setMouseCursor( sal_Int16 nPointerShape ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::setMouseCursor( sal_Int16 nPointerShape )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -460,7 +460,7 @@ void SAL_CALL SlideShowView::setMouseCursor( sal_Int16 nPointerShape ) throw (Ru
         mxWindowPeer->setPointer( mxPointer );
 }
 
-awt::Rectangle SAL_CALL SlideShowView::getCanvasArea(  ) throw (RuntimeException, std::exception)
+awt::Rectangle SAL_CALL SlideShowView::getCanvasArea(  )
 {
     awt::Rectangle aRectangle;
 
@@ -493,7 +493,7 @@ void SlideShowView::updateimpl( ::osl::ClearableMutexGuard& rGuard, SlideshowImp
 }
 
 // XWindowListener methods
-void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -509,23 +509,23 @@ void SAL_CALL SlideShowView::windowResized( const awt::WindowEvent& e ) throw (R
     }
 }
 
-void SAL_CALL SlideShowView::windowMoved( const awt::WindowEvent& ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::windowMoved( const awt::WindowEvent& )
 {
     // ignored
 }
 
-void SAL_CALL SlideShowView::windowShown( const lang::EventObject& ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::windowShown( const lang::EventObject& )
 {
     // ignored
 }
 
-void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& ) throw (RuntimeException, std::exception)
+void SAL_CALL SlideShowView::windowHidden( const lang::EventObject& )
 {
     // ignored
 }
 
 // XMouseListener implementation
-void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if( mpSlideShow && mpSlideShow->isInputFreezed() )
@@ -549,7 +549,7 @@ void SAL_CALL SlideShowView::mousePressed( const awt::MouseEvent& e ) throw (uno
     }
 }
 
-void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     if( mbMousePressedEaten )
@@ -572,7 +572,7 @@ void SAL_CALL SlideShowView::mouseReleased( const awt::MouseEvent& e ) throw (un
     }
 }
 
-void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -588,7 +588,7 @@ void SAL_CALL SlideShowView::mouseEntered( const awt::MouseEvent& e ) throw (uno
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
-void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -605,7 +605,7 @@ void SAL_CALL SlideShowView::mouseExited( const awt::MouseEvent& e ) throw (uno:
 }
 
 // XMouseMotionListener implementation
-void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -621,7 +621,7 @@ void SAL_CALL SlideShowView::mouseDragged( const awt::MouseEvent& e ) throw (uno
     updateimpl( aGuard, mpSlideShow ); // warning: clears guard!
 }
 
-void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SlideShowView::mouseMoved( const awt::MouseEvent& e )
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 

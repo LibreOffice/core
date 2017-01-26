@@ -30,8 +30,8 @@ class FilterOptionsContinuation : public comphelper::OInteraction< css::document
     css::uno::Sequence< css::beans::PropertyValue > rProperties;
 
 public:
-    virtual void SAL_CALL setFilterOptions( const css::uno::Sequence< css::beans::PropertyValue >& rProp ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getFilterOptions(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFilterOptions( const css::uno::Sequence< css::beans::PropertyValue >& rProp ) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getFilterOptions(  ) override;
 };
 
 class RequestFilterOptions : public ::cppu::WeakImplHelper< css::task::XInteractionRequest >
@@ -52,12 +52,10 @@ public:
         return m_xOptions->getFilterOptions();
     }
 
-    virtual css::uno::Any SAL_CALL getRequest()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL getRequest() override;
 
     virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation >
-            > SAL_CALL getContinuations()
-        throw( css::uno::RuntimeException, std::exception ) override;
+            > SAL_CALL getContinuations() override;
 };
 
 #endif

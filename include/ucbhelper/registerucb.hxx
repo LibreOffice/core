@@ -89,8 +89,7 @@ UCBHELPER_DLLPUBLIC bool registerAtUcb(
     css::uno::Reference< css::uno::XComponentContext > const & rxContext,
     OUString const & rName,
     OUString const & rArguments,
-    OUString const & rTemplate)
-    throw (css::uno::RuntimeException);
+    OUString const & rTemplate);
 
 }
 #endif // INCLUDED_UCBHELPER_REGISTERUCB_HXX

@@ -80,8 +80,7 @@ public:
 
     virtual void close() override;
 
-    virtual void validate()
-        throw( css::ucb::ResultSetException ) override;
+    virtual void validate() override;
 };
 
 }

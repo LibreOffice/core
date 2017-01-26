@@ -97,10 +97,10 @@ public:
 
 private:
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& /*i_aEvt*/) throw ( RuntimeException, std::exception ) override
+    virtual void SAL_CALL disposing(const css::lang::EventObject& /*i_aEvt*/) override
     {
     }
-    virtual void SAL_CALL rowsChanged(const css::sdb::RowsChangeEvent& i_aEvt) throw ( RuntimeException, std::exception ) override
+    virtual void SAL_CALL rowsChanged(const css::sdb::RowsChangeEvent& i_aEvt) override
     {
         if ( i_aEvt.Action == RowChangeAction::UPDATE )
         {
@@ -138,7 +138,7 @@ public:
     GridFieldValueListener(DbGridControl& _rParent, const Reference< XPropertySet >& xField, sal_uInt16 _nId);
     virtual ~GridFieldValueListener() override;
 
-    virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException ) override;
+    virtual void _propertyChanged(const PropertyChangeEvent& evt) override;
 
     void suspend() { ++m_nSuspended; }
     void resume() { --m_nSuspended; }
@@ -165,7 +165,7 @@ GridFieldValueListener::~GridFieldValueListener()
     dispose();
 }
 
-void GridFieldValueListener::_propertyChanged(const PropertyChangeEvent& _evt) throw( RuntimeException )
+void GridFieldValueListener::_propertyChanged(const PropertyChangeEvent& _evt)
 {
     DBG_ASSERT(m_nSuspended>=0, "GridFieldValueListener::_propertyChanged : resume > suspend !");
     if (m_nSuspended <= 0)
@@ -199,7 +199,7 @@ public:
     DisposeListenerGridBridge(  DbGridControl& _rParent, const Reference< XComponent >& _rxObject);
     virtual ~DisposeListenerGridBridge() override;
 
-    virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) throw( RuntimeException ) override { m_rParent.disposing(_nId, _rEvent); }
+    virtual void disposing(const EventObject& _rEvent, sal_Int16 _nId) override { m_rParent.disposing(_nId, _rEvent); }
 };
 
 DisposeListenerGridBridge::DisposeListenerGridBridge(DbGridControl& _rParent, const Reference< XComponent >& _rxObject)
@@ -254,7 +254,7 @@ public:
     void suspend() { ++m_nSuspended; }
     void resume() { --m_nSuspended; }
 
-    virtual void _propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException, std::exception ) override;
+    virtual void _propertyChanged(const PropertyChangeEvent& evt) override;
 };
 
 FmXGridSourcePropListener::FmXGridSourcePropListener(DbGridControl* _pParent)
@@ -265,7 +265,7 @@ FmXGridSourcePropListener::FmXGridSourcePropListener(DbGridControl* _pParent)
     DBG_ASSERT(m_pParent, "FmXGridSourcePropListener::FmXGridSourcePropListener : invalid parent !");
 }
 
-void FmXGridSourcePropListener::_propertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
+void FmXGridSourcePropListener::_propertyChanged(const PropertyChangeEvent& evt)
 {
     DBG_ASSERT(m_nSuspended>=0, "FmXGridSourcePropListener::_propertyChanged : resume > suspend !");
     if (m_nSuspended <= 0)
@@ -2732,7 +2732,7 @@ void DbGridControl::PostExecuteRowContextMenu(sal_uInt16 /*nRow*/, const PopupMe
     }
 }
 
-void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
+void DbGridControl::DataSourcePropertyChanged(const PropertyChangeEvent& evt)
 {
     SAL_INFO("svx.fmcomp", "DbGridControl::DataSourcePropertyChanged");
     SolarMutexGuard aGuard;

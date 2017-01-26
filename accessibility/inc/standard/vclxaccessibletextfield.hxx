@@ -49,28 +49,21 @@ public:
 
     // XAccessible
     css::uno::Reference< css::accessibility::XAccessibleContext> SAL_CALL
-        getAccessibleContext()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleContext() override;
 
     // XAccessibleContext
-    sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw (css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL getAccessibleChildCount() override;
     css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 i)
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getAccessibleRole()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleChild (sal_Int32 i) override;
+    sal_Int16 SAL_CALL getAccessibleRole() override;
     css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-        getAccessibleParent(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleParent(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
     // Return text field specific services.
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedServiceNames() override;
 
 protected:
     virtual ~VCLXAccessibleTextField() override;

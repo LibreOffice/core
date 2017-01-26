@@ -25,7 +25,7 @@ using namespace ::com::sun::star;
 
 /// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleComponent>
-    getComponent( AtkComponent *pComponent ) throw (uno::RuntimeException)
+    getComponent( AtkComponent *pComponent )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pComponent );
     if (pWrap)

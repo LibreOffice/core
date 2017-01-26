@@ -43,7 +43,7 @@ namespace connectivity
 
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    java_util_Properties* createStringPropertyArray(const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+    java_util_Properties* createStringPropertyArray(const css::uno::Sequence< css::beans::PropertyValue >& info );
 
     jobject convertTypeMapToJavaMap(JNIEnv *pEnv,const css::uno::Reference< css::container::XNameAccess > & _rMap);
 

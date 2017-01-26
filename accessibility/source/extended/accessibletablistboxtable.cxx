@@ -311,14 +311,14 @@ namespace accessibility
 
     // XServiceInfo
 
-    OUString AccessibleTabListBoxTable::getImplementationName() throw (RuntimeException, std::exception)
+    OUString AccessibleTabListBoxTable::getImplementationName()
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTabListBoxTable" );
     }
 
     // XAccessibleSelection
 
-    void SAL_CALL AccessibleTabListBoxTable::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL AccessibleTabListBoxTable::selectAccessibleChild( sal_Int32 nChildIndex )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
@@ -329,7 +329,7 @@ namespace accessibility
         implSelectRow( implGetRow( nChildIndex ), true );
     }
 
-    sal_Bool SAL_CALL AccessibleTabListBoxTable::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL AccessibleTabListBoxTable::isAccessibleChildSelected( sal_Int32 nChildIndex )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
@@ -340,7 +340,7 @@ namespace accessibility
         return m_pTabListBox && m_pTabListBox->IsSelected( m_pTabListBox->GetEntry( implGetRow( nChildIndex ) ) );
     }
 
-    void SAL_CALL AccessibleTabListBoxTable::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL AccessibleTabListBoxTable::clearAccessibleSelection(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
@@ -350,7 +350,7 @@ namespace accessibility
         m_pTabListBox->SetNoSelection();
     }
 
-    void SAL_CALL AccessibleTabListBoxTable::selectAllAccessibleChildren(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL AccessibleTabListBoxTable::selectAllAccessibleChildren(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
@@ -360,7 +360,7 @@ namespace accessibility
         m_pTabListBox->SelectAll();
     }
 
-    sal_Int32 SAL_CALL AccessibleTabListBoxTable::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL AccessibleTabListBoxTable::getSelectedAccessibleChildCount(  )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
@@ -370,7 +370,7 @@ namespace accessibility
         return implGetColumnCount() * implGetSelRowCount();
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleTabListBoxTable::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL AccessibleTabListBoxTable::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );
@@ -386,7 +386,7 @@ namespace accessibility
         return getAccessibleCellAt( nRow, nColumn );
     }
 
-    void SAL_CALL AccessibleTabListBoxTable::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL AccessibleTabListBoxTable::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( getMutex() );

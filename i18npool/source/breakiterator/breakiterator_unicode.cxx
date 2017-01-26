@@ -79,7 +79,7 @@ class OOoRuleBasedBreakIterator : public RuleBasedBreakIterator
 
 // loading ICU breakiterator on demand.
 void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Locale& rLocale,
-        sal_Int16 rBreakType, sal_Int16 nWordType, const sal_Char *rule, const OUString& rText) throw(uno::RuntimeException)
+        sal_Int16 rBreakType, sal_Int16 nWordType, const sal_Char *rule, const OUString& rText)
 {
     bool bNewBreak = false;
     UErrorCode status = U_ZERO_ERROR;
@@ -217,7 +217,6 @@ void SAL_CALL BreakIterator_Unicode::loadICUBreakIterator(const css::lang::Local
 sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
         sal_Int32 nStartPos, const lang::Locale &rLocale,
         sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
-        throw(uno::RuntimeException, std::exception)
 {
     if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) { // for CELL mode
         loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR, 0, "char", Text);
@@ -236,7 +235,6 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::nextCharacters( const OUString& Text,
 sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Text,
         sal_Int32 nStartPos, const lang::Locale& rLocale,
         sal_Int16 nCharacterIteratorMode, sal_Int32 nCount, sal_Int32& nDone )
-        throw(uno::RuntimeException, std::exception)
 {
     if (nCharacterIteratorMode == CharacterIteratorMode::SKIPCELL ) { // for CELL mode
         loadICUBreakIterator(rLocale, LOAD_CHARACTER_BREAKITERATOR, 0, "char", Text);
@@ -254,7 +252,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::previousCharacters( const OUString& Te
 
 
 Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int32 nStartPos,
-    const lang::Locale& rLocale, sal_Int16 rWordType ) throw(uno::RuntimeException, std::exception)
+    const lang::Locale& rLocale, sal_Int16 rWordType )
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
 
@@ -277,7 +275,7 @@ Boundary SAL_CALL BreakIterator_Unicode::nextWord( const OUString& Text, sal_Int
 
 
 Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_Int32 nStartPos,
-        const lang::Locale& rLocale, sal_Int16 rWordType) throw(uno::RuntimeException, std::exception)
+        const lang::Locale& rLocale, sal_Int16 rWordType)
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
 
@@ -300,7 +298,7 @@ Boundary SAL_CALL BreakIterator_Unicode::previousWord(const OUString& Text, sal_
 
 
 Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, sal_Int32 nPos, const lang::Locale& rLocale,
-        sal_Int16 rWordType, sal_Bool bDirection ) throw(uno::RuntimeException, std::exception)
+        sal_Int16 rWordType, sal_Bool bDirection )
 {
     loadICUBreakIterator(rLocale, LOAD_WORD_BREAKITERATOR, rWordType, nullptr, Text);
     sal_Int32 len = Text.getLength();
@@ -334,7 +332,7 @@ Boundary SAL_CALL BreakIterator_Unicode::getWordBoundary( const OUString& Text, 
 
 
 sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
-        const lang::Locale &rLocale ) throw(uno::RuntimeException, std::exception)
+        const lang::Locale &rLocale )
 {
     loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
 
@@ -353,7 +351,7 @@ sal_Int32 SAL_CALL BreakIterator_Unicode::beginOfSentence( const OUString& Text,
 }
 
 sal_Int32 SAL_CALL BreakIterator_Unicode::endOfSentence( const OUString& Text, sal_Int32 nStartPos,
-        const lang::Locale &rLocale ) throw(uno::RuntimeException, std::exception)
+        const lang::Locale &rLocale )
 {
     loadICUBreakIterator(rLocale, LOAD_SENTENCE_BREAKITERATOR, 0, "sent", Text);
 
@@ -372,7 +370,7 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
         const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale& rLocale, sal_Int32 nMinBreakPos,
         const LineBreakHyphenationOptions& hOptions,
-        const LineBreakUserOptions& /*rOptions*/ ) throw(uno::RuntimeException, std::exception)
+        const LineBreakUserOptions& /*rOptions*/ )
 {
     LineBreakResults lbr;
 
@@ -456,19 +454,19 @@ LineBreakResults SAL_CALL BreakIterator_Unicode::getLineBreak(
 }
 
 OUString SAL_CALL
-BreakIterator_Unicode::getImplementationName() throw( uno::RuntimeException, std::exception )
+BreakIterator_Unicode::getImplementationName()
 {
     return OUString::createFromAscii(cBreakIterator);
 }
 
 sal_Bool SAL_CALL
-BreakIterator_Unicode::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
+BreakIterator_Unicode::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-BreakIterator_Unicode::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
+BreakIterator_Unicode::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet { OUString::createFromAscii(cBreakIterator) };
     return aRet;

@@ -53,7 +53,7 @@ Sequence< sal_Int8 > ImageWrapper::GetUnoTunnelId()
 }
 
 // XBitmap
-css::awt::Size SAL_CALL ImageWrapper::getSize() throw ( RuntimeException, std::exception )
+css::awt::Size SAL_CALL ImageWrapper::getSize()
 {
     SolarMutexGuard aGuard;
 
@@ -63,7 +63,7 @@ css::awt::Size SAL_CALL ImageWrapper::getSize() throw ( RuntimeException, std::e
     return css::awt::Size( aBitmapSize.Width(), aBitmapSize.Height() );
 }
 
-Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB() throw ( RuntimeException, std::exception )
+Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB()
 {
     SolarMutexGuard aGuard;
 
@@ -72,7 +72,7 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getDIB() throw ( RuntimeException, s
     return Sequence< sal_Int8 >( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
-Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB() throw ( RuntimeException, std::exception )
+Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB()
 {
     SolarMutexGuard aGuard;
     BitmapEx    aBmpEx( m_aImage.GetBitmapEx() );
@@ -94,7 +94,7 @@ Sequence< sal_Int8 > SAL_CALL ImageWrapper::getMaskDIB() throw ( RuntimeExceptio
 }
 
 // XUnoTunnel
-sal_Int64 SAL_CALL ImageWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw ( RuntimeException, std::exception )
+sal_Int64 SAL_CALL ImageWrapper::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
     if ( aIdentifier == impl_getStaticIdentifier() )
         return reinterpret_cast< sal_Int64 >( this );

@@ -58,7 +58,6 @@ PackageRegistryBackend::~PackageRegistryBackend()
 
 
 void PackageRegistryBackend::disposing( lang::EventObject const & event )
-    throw (RuntimeException, std::exception)
 {
     Reference<deployment::XPackage> xPackage(
         event.Source, UNO_QUERY_THROW );
@@ -139,10 +138,6 @@ void PackageRegistryBackend::disposing()
 Reference<deployment::XPackage> PackageRegistryBackend::bindPackage(
     OUString const & url, OUString const & mediaType, sal_Bool  bRemoved,
     OUString const & identifier, Reference<XCommandEnvironment> const & xCmdEnv )
-    throw (deployment::DeploymentException,
-           deployment::InvalidRemovedParameterException,
-           ucb::CommandFailedException,
-           lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard guard( getMutex() );
     check();
@@ -354,7 +349,7 @@ void Package::check() const
 
 // XComponent
 
-void Package::dispose() throw (RuntimeException, std::exception)
+void Package::dispose()
 {
     //Do not call check here. We must not throw an exception here if the object
     //is being disposed or is already disposed. See com.sun.star.lang.XComponent
@@ -363,7 +358,7 @@ void Package::dispose() throw (RuntimeException, std::exception)
 
 
 void Package::addEventListener(
-    Reference<lang::XEventListener> const & xListener ) throw (RuntimeException, std::exception)
+    Reference<lang::XEventListener> const & xListener )
 {
     //Do not call check here. We must not throw an exception here if the object
     //is being disposed or is already disposed. See com.sun.star.lang.XComponent
@@ -372,7 +367,7 @@ void Package::addEventListener(
 
 
 void Package::removeEventListener(
-    Reference<lang::XEventListener> const & xListener ) throw (RuntimeException, std::exception)
+    Reference<lang::XEventListener> const & xListener )
 {
     //Do not call check here. We must not throw an exception here if the object
     //is being disposed or is already disposed. See com.sun.star.lang.XComponent
@@ -383,7 +378,6 @@ void Package::removeEventListener(
 
 void Package::addModifyListener(
     Reference<util::XModifyListener> const & xListener )
-    throw (RuntimeException, std::exception)
 {
     check();
     rBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
@@ -392,7 +386,6 @@ void Package::addModifyListener(
 
 void Package::removeModifyListener(
     Reference<util::XModifyListener> const & xListener )
-    throw (RuntimeException, std::exception)
 {
     check();
     rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
@@ -411,14 +404,13 @@ void Package::checkAborted(
 // XPackage
 
 Reference<task::XAbortChannel> Package::createAbortChannel()
-    throw (RuntimeException, std::exception)
 {
     check();
     return new AbortChannel;
 }
 
 
-sal_Bool Package::isBundle() throw (RuntimeException, std::exception)
+sal_Bool Package::isBundle()
 {
     return false; // default
 }
@@ -428,11 +420,6 @@ sal_Bool Package::isBundle() throw (RuntimeException, std::exception)
         const css::uno::Reference< css::task::XAbortChannel >&,
         const css::uno::Reference< css::ucb::XCommandEnvironment >&,
         sal_Bool)
-        throw (css::deployment::DeploymentException,
-               css::deployment::ExtensionRemovedException,
-               css::ucb::CommandFailedException,
-               css::ucb::CommandAbortedException,
-               css::uno::RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -442,10 +429,6 @@ sal_Bool Package::isBundle() throw (RuntimeException, std::exception)
 
 sal_Bool Package::checkDependencies(
         const css::uno::Reference< css::ucb::XCommandEnvironment >& )
-        throw (css::deployment::DeploymentException,
-               css::deployment::ExtensionRemovedException,
-               css::ucb::CommandFailedException,
-               css::uno::RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -456,20 +439,17 @@ sal_Bool Package::checkDependencies(
 Sequence< Reference<deployment::XPackage> > Package::getBundle(
     Reference<task::XAbortChannel> const &,
     Reference<XCommandEnvironment> const & )
-    throw (deployment::DeploymentException,
-           CommandFailedException, CommandAbortedException,
-           lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     return Sequence< Reference<deployment::XPackage> >();
 }
 
 
-OUString Package::getName() throw (RuntimeException, std::exception)
+OUString Package::getName()
 {
     return m_name;
 }
 
-beans::Optional<OUString> Package::getIdentifier() throw (RuntimeException, std::exception)
+beans::Optional<OUString> Package::getIdentifier()
 {
     if (m_bRemoved)
         return beans::Optional<OUString>(true, m_identifier);
@@ -478,9 +458,7 @@ beans::Optional<OUString> Package::getIdentifier() throw (RuntimeException, std:
 }
 
 
-OUString Package::getVersion() throw (
-    deployment::ExtensionRemovedException,
-    RuntimeException, std::exception)
+OUString Package::getVersion()
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -488,14 +466,13 @@ OUString Package::getVersion() throw (
 }
 
 
-OUString Package::getURL() throw (RuntimeException, std::exception)
+OUString Package::getURL()
 {
     return m_url;
 }
 
 
-OUString Package::getDisplayName() throw (
-    deployment::ExtensionRemovedException, RuntimeException, std::exception)
+OUString Package::getDisplayName()
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -503,8 +480,7 @@ OUString Package::getDisplayName() throw (
 }
 
 
-OUString Package::getDescription() throw (
-    deployment::ExtensionRemovedException,RuntimeException, std::exception)
+OUString Package::getDescription()
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -512,10 +488,7 @@ OUString Package::getDescription() throw (
 }
 
 
-OUString Package::getLicenseText()throw (
-    deployment::DeploymentException,
-    deployment::ExtensionRemovedException,
-    RuntimeException, std::exception)
+OUString Package::getLicenseText()
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -523,8 +496,7 @@ OUString Package::getLicenseText()throw (
 }
 
 
-Sequence<OUString> Package::getUpdateInformationURLs() throw (
-    deployment::ExtensionRemovedException, RuntimeException, std::exception)
+Sequence<OUString> Package::getUpdateInformationURLs()
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -532,8 +504,7 @@ Sequence<OUString> Package::getUpdateInformationURLs() throw (
 }
 
 
-css::beans::StringPair Package::getPublisherInfo() throw (
-    deployment::ExtensionRemovedException, RuntimeException, std::exception)
+css::beans::StringPair Package::getPublisherInfo()
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -543,7 +514,6 @@ css::beans::StringPair Package::getPublisherInfo() throw (
 
 
 uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContrast*/ )
-    throw (deployment::ExtensionRemovedException, RuntimeException, std::exception )
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -554,7 +524,6 @@ uno::Reference< css::graphic::XGraphic > Package::getIcon( sal_Bool /*bHighContr
 
 
 Reference<deployment::XPackageTypeInfo> Package::getPackageType()
-    throw (RuntimeException, std::exception)
 {
     return m_xPackageType;
 }
@@ -562,9 +531,6 @@ Reference<deployment::XPackageTypeInfo> Package::getPackageType()
 void Package::exportTo(
     OUString const & destFolderURL, OUString const & newTitle,
     sal_Int32 nameClashAction, Reference<XCommandEnvironment> const & xCmdEnv )
-    throw (deployment::ExtensionRemovedException,
-           CommandFailedException, CommandAbortedException, ContentCreationException,
-           RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -610,8 +576,6 @@ void Package::fireModified()
 beans::Optional< beans::Ambiguous<sal_Bool> > Package::isRegistered(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
-    throw (deployment::DeploymentException,
-           CommandFailedException, CommandAbortedException, RuntimeException, std::exception)
 {
     try {
         ::osl::ResettableMutexGuard guard( getMutex() );
@@ -722,10 +686,6 @@ void Package::registerPackage(
     sal_Bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
-    throw (deployment::DeploymentException,
-           deployment::ExtensionRemovedException,
-           CommandFailedException, CommandAbortedException,
-           lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -737,9 +697,6 @@ void Package::revokePackage(
     sal_Bool startup,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv )
-    throw (deployment::DeploymentException,
-           CommandFailedException, CommandAbortedException,
-           lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     processPackage_impl( false /* revoke */, startup, xAbortChannel, xCmdEnv );
 
@@ -761,16 +718,12 @@ PackageRegistryBackend * Package::getMyBackend() const
 }
 
 OUString Package::getRepositoryName()
-    throw (RuntimeException, std::exception)
 {
     PackageRegistryBackend * backEnd = getMyBackend();
     return backEnd->getContext();
 }
 
 beans::Optional< OUString > Package::getRegistrationDataURL()
-        throw (deployment::DeploymentException,
-               deployment::ExtensionRemovedException,
-               css::uno::RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();
@@ -778,7 +731,6 @@ beans::Optional< OUString > Package::getRegistrationDataURL()
 }
 
 sal_Bool Package::isRemoved()
-    throw (RuntimeException, std::exception)
 {
     return m_bRemoved;
 }
@@ -789,32 +741,29 @@ Package::TypeInfo::~TypeInfo()
 
 // XPackageTypeInfo
 
-OUString Package::TypeInfo::getMediaType() throw (RuntimeException, std::exception)
+OUString Package::TypeInfo::getMediaType()
 {
     return m_mediaType;
 }
 
 
 OUString Package::TypeInfo::getDescription()
-    throw (deployment::ExtensionRemovedException, RuntimeException, std::exception)
 {
     return getShortDescription();
 }
 
 
 OUString Package::TypeInfo::getShortDescription()
-    throw (deployment::ExtensionRemovedException, RuntimeException, std::exception)
 {
     return m_shortDescr;
 }
 
-OUString Package::TypeInfo::getFileFilter() throw (RuntimeException, std::exception)
+OUString Package::TypeInfo::getFileFilter()
 {
     return m_fileFilter;
 }
 
 Any Package::TypeInfo::getIcon( sal_Bool /*highContrast*/, sal_Bool /*smallIcon*/ )
-    throw (RuntimeException, std::exception)
 {
     return Any();
 }

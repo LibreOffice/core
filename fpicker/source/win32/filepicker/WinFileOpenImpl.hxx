@@ -55,76 +55,80 @@ public:
 
     // XExecutableDialog
 
-    virtual sal_Int16 SAL_CALL execute(  ) throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    virtual sal_Int16 SAL_CALL execute(  );
 
     // XFilePicker
 
-    virtual void SAL_CALL setDefaultName( const OUString& aName )
-        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) override;
+    virtual void SAL_CALL setDefaultName( const OUString& aName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  )
-        throw(css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    virtual css::uno::Sequence< OUString > SAL_CALL getFiles(  );
 
-    virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory )
-        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException ) override;
+    virtual void SAL_CALL setDisplayDirectory( const OUString& aDirectory ) override;
 
-    virtual OUString SAL_CALL getDisplayDirectory( ) throw ( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    virtual OUString SAL_CALL getDisplayDirectory( );
 
     // XFilterManager
 
-    virtual void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter )
-        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
+    virtual void SAL_CALL appendFilter( const OUString& aTitle, const OUString& aFilter );
 
-    virtual void SAL_CALL setCurrentFilter( const OUString& aTitle )
-        throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
+    virtual void SAL_CALL setCurrentFilter( const OUString& aTitle );
 
-    virtual OUString  SAL_CALL getCurrentFilter( )
-        throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    virtual OUString  SAL_CALL getCurrentFilter( );
 
     // XFilterGroupManager
 
-    virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters )
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
+    virtual void SAL_CALL appendFilterGroup( const OUString& sGroupTitle, const css::uno::Sequence< css::beans::StringPair >& aFilters );
 
     // XFilePickerControlAccess
 
-    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const css::uno::Any& aValue )
-        throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    virtual void SAL_CALL setValue( sal_Int16 aControlId, sal_Int16 aControlAction, const css::uno::Any& aValue );
 
-    virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction )
-        throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    virtual css::uno::Any SAL_CALL getValue( sal_Int16 aControlId, sal_Int16 aControlAction );
 
-    virtual void SAL_CALL enableControl( sal_Int16 aControlId, bool bEnable )
-        throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    virtual void SAL_CALL enableControl( sal_Int16 aControlId, bool bEnable );
 
-    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const OUString& aLabel )
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual void SAL_CALL setLabel( sal_Int16 aControlId, const OUString& aLabel );
 
-    virtual OUString SAL_CALL getLabel( sal_Int16 aControlId )
-        throw ( css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual OUString SAL_CALL getLabel( sal_Int16 aControlId );
 
     // XFilePreview
 
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  )
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedImageFormats(  );
 
-    virtual sal_Int32 SAL_CALL getTargetColorDepth( )
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual sal_Int32 SAL_CALL getTargetColorDepth( );
 
-    virtual sal_Int32 SAL_CALL getAvailableWidth( )
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual sal_Int32 SAL_CALL getAvailableWidth( );
 
-    virtual sal_Int32 SAL_CALL getAvailableHeight( )
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual sal_Int32 SAL_CALL getAvailableHeight( );
 
-    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage )
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
+    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage );
 
-    virtual bool SAL_CALL setShowState( bool bShowState )
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual bool SAL_CALL setShowState( bool bShowState );
 
-    virtual bool SAL_CALL getShowState( )
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual bool SAL_CALL getShowState( );
 
     // XCancelable
 

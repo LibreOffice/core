@@ -25,7 +25,6 @@ UIObjectUnoObj::~UIObjectUnoObj()
 }
 
 css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(const OUString& rID)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (!mpObj)
         throw css::uno::RuntimeException();
@@ -36,7 +35,6 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UIObjectUnoObj::getChild(
 }
 
 void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& rPropValues)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (!mpObj)
         throw css::uno::RuntimeException();
@@ -55,7 +53,6 @@ void SAL_CALL UIObjectUnoObj::executeAction(const OUString& rAction, const css::
 }
 
 css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (!mpObj)
         throw css::uno::RuntimeException();
@@ -74,7 +71,6 @@ css::uno::Sequence<css::beans::PropertyValue> UIObjectUnoObj::getState()
 }
 
 css::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (!mpObj)
         throw css::uno::RuntimeException();
@@ -92,7 +88,6 @@ css::uno::Sequence<OUString> UIObjectUnoObj::getChildren()
 }
 
 OUString SAL_CALL UIObjectUnoObj::getType()
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (!mpObj)
         throw css::uno::RuntimeException();
@@ -101,19 +96,16 @@ OUString SAL_CALL UIObjectUnoObj::getType()
 }
 
 OUString SAL_CALL UIObjectUnoObj::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.uitest.UIObject");
 }
 
 sal_Bool UIObjectUnoObj::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> UIObjectUnoObj::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<OUString> aServiceNames(1);
     aServiceNames[0] = "com.sun.star.ui.test.UIObject";

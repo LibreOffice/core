@@ -43,16 +43,12 @@ public:
     virtual ~ManifestWriter() override;
 
     // XManifestWriter
-    virtual void SAL_CALL writeManifestSequence( const css::uno::Reference< css::io::XOutputStream >& rStream, const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL writeManifestSequence( const css::uno::Reference< css::io::XOutputStream >& rStream, const css::uno::Sequence< css::uno::Sequence< css::beans::PropertyValue > >& rSequence ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // Component constructor
     static OUString static_getImplementationName();

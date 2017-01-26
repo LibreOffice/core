@@ -50,7 +50,6 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
     const Reference< chart2::data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
     const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
-    throw (uno::RuntimeException, std::exception)
 {
     if( ! xSource.is())
         return InterpretedData();
@@ -159,7 +158,6 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::interpretDataSource(
 
 chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
     const chart2::InterpretedData& aInterpretedData )
-    throw (uno::RuntimeException, std::exception)
 {
     InterpretedData aResult( aInterpretedData );
 
@@ -270,7 +268,6 @@ chart2::InterpretedData SAL_CALL BubbleDataInterpreter::reinterpretDataSeries(
 
 sal_Bool SAL_CALL BubbleDataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
-    throw (uno::RuntimeException, std::exception)
 {
     Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
     for( sal_Int32 i=0; i<aSeries.getLength(); ++i )

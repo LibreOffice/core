@@ -29,7 +29,7 @@ using namespace ::com::sun::star;
 
 /// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleEditableText>
-    getEditableText( AtkEditableText *pEditableText ) throw (uno::RuntimeException)
+    getEditableText( AtkEditableText *pEditableText )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pEditableText );
     if (pWrap)

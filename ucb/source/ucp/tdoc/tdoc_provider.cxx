@@ -77,7 +77,6 @@ void SAL_CALL ContentProvider::release()
 }
 
 css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< lang::XTypeProvider* >(this)),
@@ -105,7 +104,6 @@ XSERVICEINFO_COMMOM_IMPL( ContentProvider,
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
 ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
-    throw( css::uno::Exception )
 {
     css::lang::XServiceInfo* pX =
         static_cast<css::lang::XServiceInfo*>(new ContentProvider( ucbhelper::getComponentContext(rSMgr) ));
@@ -132,7 +130,6 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
         const uno::Reference< ucb::XContentIdentifier >& Identifier )
-    throw( ucb::IllegalIdentifierException, uno::RuntimeException, std::exception )
 {
     Uri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
@@ -168,7 +165,6 @@ ContentProvider::queryContent(
 uno::Reference< ucb::XContent > SAL_CALL
 ContentProvider::createDocumentContent(
         const uno::Reference< frame::XModel >& Model )
-    throw ( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     // model -> id -> content identifier -> queryContent
     if ( m_xDocsMgr.is() )
@@ -403,7 +399,6 @@ ContentProvider::queryStorageClone( const OUString & rUri ) const
 uno::Reference< io::XInputStream >
 ContentProvider::queryInputStream( const OUString & rUri,
                                    const OUString & rPassword ) const
-    throw ( packages::WrongPasswordException, css::uno::RuntimeException )
 {
     if ( m_xStgElemFac.is() )
     {
@@ -441,8 +436,6 @@ uno::Reference< io::XOutputStream >
 ContentProvider::queryOutputStream( const OUString & rUri,
                                     const OUString & rPassword,
                                     bool bTruncate ) const
-    throw ( packages::WrongPasswordException,
-            uno::RuntimeException )
 {
     if ( m_xStgElemFac.is() )
     {
@@ -482,7 +475,6 @@ uno::Reference< io::XStream >
 ContentProvider::queryStream( const OUString & rUri,
                               const OUString & rPassword,
                               bool bTruncate ) const
-    throw ( packages::WrongPasswordException, uno::RuntimeException )
 {
     if ( m_xStgElemFac.is() )
     {

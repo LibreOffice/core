@@ -99,9 +99,6 @@ ConditionWaiter::ConditionWaiter(Condition& aCond)
 
 
 ConditionWaiter::ConditionWaiter(Condition& aCond,sal_uInt32 milliSec)
-    throw(
-        ConditionWaiter::timedout
-    )
     : m_aCond(aCond)
 {
     TimeValue aTime;

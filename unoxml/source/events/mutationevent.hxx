@@ -52,11 +52,11 @@ public:
 
     virtual ~CMutationEvent() override;
 
-    virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getRelatedNode() throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getPrevValue() throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNewValue() throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getAttrName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::xml::dom::events::AttrChangeType SAL_CALL getAttrChange() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getRelatedNode() override;
+    virtual OUString SAL_CALL getPrevValue() override;
+    virtual OUString SAL_CALL getNewValue() override;
+    virtual OUString SAL_CALL getAttrName() override;
+    virtual css::xml::dom::events::AttrChangeType SAL_CALL getAttrChange() override;
     virtual void SAL_CALL initMutationEvent(
                            const OUString& typeArg,
                            sal_Bool canBubbleArg,
@@ -65,23 +65,22 @@ public:
                            const OUString& prevValueArg,
                            const OUString& newValueArg,
                            const OUString& attrNameArg,
-                           css::xml::dom::events::AttrChangeType attrChangeArg) throw (css::uno::RuntimeException, std::exception) override;
+                           css::xml::dom::events::AttrChangeType attrChangeArg) override;
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    virtual OUString SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getBubbles() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getCancelable() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::util::Time SAL_CALL getTimeStamp() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL stopPropagation() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL preventDefault() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getType() override;
+    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getTarget() override;
+    virtual css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL getCurrentTarget() override;
+    virtual css::xml::dom::events::PhaseType SAL_CALL getEventPhase() override;
+    virtual sal_Bool SAL_CALL getBubbles() override;
+    virtual sal_Bool SAL_CALL getCancelable() override;
+    virtual css::util::Time SAL_CALL getTimeStamp() override;
+    virtual void SAL_CALL stopPropagation() override;
+    virtual void SAL_CALL preventDefault() override;
     virtual void SAL_CALL initEvent(
         const OUString& eventTypeArg,
         sal_Bool canBubbleArg,
-        sal_Bool cancelableArg)
-        throw (css::uno::RuntimeException, std::exception) override;
+        sal_Bool cancelableArg) override;
 };
 }}
 #endif

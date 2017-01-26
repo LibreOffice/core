@@ -154,7 +154,7 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > >
-            queryMeanings_Impl( OUString& rTerm, const css::lang::Locale& rLocale, const css::beans::PropertyValues& rProperties ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
+            queryMeanings_Impl( OUString& rTerm, const css::lang::Locale& rLocale, const css::beans::PropertyValues& rProperties );
 
     bool    UpdateAlternativesBox_Impl();
     void    LookUp( const OUString &rText );

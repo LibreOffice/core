@@ -68,20 +68,16 @@ public:
         {}
 
     virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Type const & rType ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
         throw () SAL_OVERRIDE;
     virtual void SAL_CALL release()
         throw () SAL_OVERRIDE;
-    virtual void SAL_CALL dispose()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose() SAL_OVERRIDE;
     virtual void SAL_CALL addEventListener(
-        css::uno::Reference< css::lang::XEventListener > const & xListener )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
     virtual void SAL_CALL removeEventListener(
-        css::uno::Reference< css::lang::XEventListener > const & xListener )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
 };
 
 /** Implementation helper base class for components. Inherits from ::cppu::OWeakAggObject and
@@ -113,23 +109,18 @@ public:
         {}
 
     virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Type const & rType ) SAL_OVERRIDE;
     virtual css::uno::Any SAL_CALL queryAggregation(
-        css::uno::Type const & rType )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Type const & rType ) SAL_OVERRIDE;
     virtual void SAL_CALL acquire()
         throw () SAL_OVERRIDE;
     virtual void SAL_CALL release()
         throw () SAL_OVERRIDE;
-    virtual void SAL_CALL dispose()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL dispose() SAL_OVERRIDE;
     virtual void SAL_CALL addEventListener(
-        css::uno::Reference< css::lang::XEventListener > const & xListener )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
     virtual void SAL_CALL removeEventListener(
-        css::uno::Reference< css::lang::XEventListener > const & xListener )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        css::uno::Reference< css::lang::XEventListener > const & xListener ) SAL_OVERRIDE;
 };
 
 /** WeakComponentImplHelper

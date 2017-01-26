@@ -195,7 +195,6 @@ XMLFilter::~XMLFilter()
 // ____ XFilter ____
 sal_Bool SAL_CALL XMLFilter::filter(
     const Sequence< beans::PropertyValue >& aDescriptor )
-    throw (uno::RuntimeException, std::exception)
 {
     bool bResult = false;
 
@@ -234,7 +233,6 @@ sal_Bool SAL_CALL XMLFilter::filter(
 }
 
 void SAL_CALL XMLFilter::cancel()
-    throw (uno::RuntimeException, std::exception)
 {
     // if mutex is locked set "cancel state"
     // note: is currently ignored in filter-method
@@ -247,8 +245,6 @@ void SAL_CALL XMLFilter::cancel()
 // ____ XImporter ____
 void SAL_CALL XMLFilter::setTargetDocument(
     const Reference< lang::XComponent >& Document )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( ! m_xSourceDoc.is(), "Setting target doc while source doc is set" );
@@ -259,8 +255,6 @@ void SAL_CALL XMLFilter::setTargetDocument(
 // ____ XExporter ____
 void SAL_CALL XMLFilter::setSourceDocument(
     const Reference< lang::XComponent >& Document )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     OSL_ENSURE( ! m_xTargetDoc.is(), "Setting source doc while target doc is set" );
@@ -744,19 +738,16 @@ OUString XMLFilter::getMediaType(bool _bOasis)
 }
 
 OUString SAL_CALL XMLFilter::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart2.XMLFilter");
 }
 
 sal_Bool SAL_CALL XMLFilter::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL XMLFilter::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.document.ImportFilter",

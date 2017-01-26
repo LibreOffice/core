@@ -58,15 +58,12 @@ using namespace tdoc_ucp;
 // virtual
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::queryClosing(
          const lang::EventObject& /*Source*/, sal_Bool /*GetsOwnership*/ )
-    throw ( util::CloseVetoException,
-            uno::RuntimeException, std::exception )
 {
 }
 
 
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosing(
          const lang::EventObject& Source )
-    throw ( uno::RuntimeException, std::exception )
 {
     if (!m_pManager) return; // disposed?
 
@@ -83,7 +80,6 @@ void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::notifyClosin
 // virtual
 void SAL_CALL OfficeDocumentsManager::OfficeDocumentsCloseListener::disposing(
         const lang::EventObject& /*Source*/ )
-    throw ( uno::RuntimeException, std::exception )
 {
 }
 
@@ -171,7 +167,6 @@ getDocumentId( const uno::Reference< uno::XInterface > & xDoc )
 // virtual
 void SAL_CALL OfficeDocumentsManager::documentEventOccured(
         const document::DocumentEvent & Event )
-    throw ( uno::RuntimeException, std::exception )
 {
 /*
     Events documentation: OOo Developer's Guide / Writing UNO Components /
@@ -433,7 +428,6 @@ void SAL_CALL OfficeDocumentsManager::documentEventOccured(
 // virtual
 void SAL_CALL OfficeDocumentsManager::disposing(
         const lang::EventObject& /*Source*/ )
-    throw ( uno::RuntimeException, std::exception )
 {
 }
 

@@ -259,7 +259,6 @@ ActiveMSPList::addActiveMSP( const Reference< uno::XInterface >& xComponent,
 
 
 void SAL_CALL ActiveMSPList::disposing( const css::lang::EventObject& Source )
-throw ( css::uno::RuntimeException, std::exception )
 
 {
     try

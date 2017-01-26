@@ -78,7 +78,6 @@ OCommandDefinition::OCommandDefinition( const Reference< XInterface >& _rxContai
 }
 
 css::uno::Sequence<sal_Int8> OCommandDefinition::getImplementationId()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -87,12 +86,12 @@ IMPLEMENT_GETTYPES2(OCommandDefinition,OCommandDefinition_Base,OComponentDefinit
 IMPLEMENT_FORWARD_XINTERFACE2( OCommandDefinition,OComponentDefinition,OCommandDefinition_Base)
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS2(OCommandDefinition,OCommandDefinition_PROP)
 
-OUString SAL_CALL OCommandDefinition::getImplementationName() throw(RuntimeException, std::exception)
+OUString SAL_CALL OCommandDefinition::getImplementationName()
 {
     return OUString("com.sun.star.comp.dba.OCommandDefinition");
 }
 
-css::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNames()
 {
     return {
         "com.sun.star.sdb.QueryDefinition",
@@ -101,7 +100,7 @@ css::uno::Sequence<OUString> SAL_CALL OCommandDefinition::getSupportedServiceNam
     };
 }
 
-void SAL_CALL OCommandDefinition::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)
+void SAL_CALL OCommandDefinition::rename( const OUString& newName )
 {
     try
     {

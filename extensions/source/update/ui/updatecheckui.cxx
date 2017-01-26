@@ -157,39 +157,26 @@ public:
     virtual        ~UpdateCheckUI() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
-        throw (uno::RuntimeException, std::exception) override;
-    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName) override;
+    virtual uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XDocumentEventListener
-    virtual void SAL_CALL documentEventOccured(const document::DocumentEvent& Event)
-        throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing(const lang::EventObject& Event)
-        throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL documentEventOccured(const document::DocumentEvent& Event) override;
+    virtual void SAL_CALL disposing(const lang::EventObject& Event) override;
 
     //XPropertySet
-    virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw ( uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const uno::Any& aValue)
-        throw( beans::UnknownPropertyException, beans::PropertyVetoException,
-               lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
-    virtual uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName)
-        throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
+    virtual uno::Reference< beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+    virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const uno::Any& aValue) override;
+    virtual uno::Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(const OUString& PropertyName,
-                                                    const uno::Reference< beans::XPropertyChangeListener > & aListener)
-        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
+                                                    const uno::Reference< beans::XPropertyChangeListener > & aListener) override;
     virtual void SAL_CALL removePropertyChangeListener(const OUString& PropertyName,
-                                                       const uno::Reference< beans::XPropertyChangeListener > & aListener)
-        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
+                                                       const uno::Reference< beans::XPropertyChangeListener > & aListener) override;
     virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName,
-                                                    const uno::Reference< beans::XVetoableChangeListener > & aListener)
-        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
+                                                    const uno::Reference< beans::XVetoableChangeListener > & aListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName,
-                                                       const uno::Reference< beans::XVetoableChangeListener > & aListener)
-        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override;
+                                                       const uno::Reference< beans::XVetoableChangeListener > & aListener) override;
 };
 
 
@@ -231,19 +218,19 @@ UpdateCheckUI::~UpdateCheckUI()
 
 
 OUString SAL_CALL
-UpdateCheckUI::getImplementationName() throw (uno::RuntimeException, std::exception)
+UpdateCheckUI::getImplementationName()
 {
     return ::getImplementationName();
 }
 
 uno::Sequence< OUString > SAL_CALL
-UpdateCheckUI::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+UpdateCheckUI::getSupportedServiceNames()
 {
     return ::getServiceNames();
 }
 
 sal_Bool SAL_CALL
-UpdateCheckUI::supportsService( OUString const & serviceName ) throw (uno::RuntimeException, std::exception)
+UpdateCheckUI::supportsService( OUString const & serviceName )
 {
     return cppu::supportsService(this, serviceName);
 }
@@ -357,7 +344,6 @@ void UpdateCheckUI::AddMenuBarIcon( SystemWindow *pSysWin, bool bAddEventHdl )
 
 
 void SAL_CALL UpdateCheckUI::documentEventOccured(const document::DocumentEvent& rEvent)
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -369,13 +355,11 @@ void SAL_CALL UpdateCheckUI::documentEventOccured(const document::DocumentEvent&
 
 
 void SAL_CALL UpdateCheckUI::disposing(const lang::EventObject&)
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 
 uno::Reference< beans::XPropertySetInfo > UpdateCheckUI::getPropertySetInfo()
-    throw ( uno::RuntimeException, std::exception )
 {
     return nullptr;
 }
@@ -383,8 +367,6 @@ uno::Reference< beans::XPropertySetInfo > UpdateCheckUI::getPropertySetInfo()
 
 void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
                                      const uno::Any& rValue)
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException,
-           lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -448,7 +430,6 @@ void UpdateCheckUI::setPropertyValue(const OUString& rPropertyName,
 
 
 uno::Any UpdateCheckUI::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -475,7 +456,6 @@ uno::Any UpdateCheckUI::getPropertyValue(const OUString& rPropertyName)
 
 void UpdateCheckUI::addPropertyChangeListener( const OUString& /*aPropertyName*/,
                                                const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     //no bound properties
 }
@@ -483,7 +463,6 @@ void UpdateCheckUI::addPropertyChangeListener( const OUString& /*aPropertyName*/
 
 void UpdateCheckUI::removePropertyChangeListener( const OUString& /*aPropertyName*/,
                                                   const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     //no bound properties
 }
@@ -491,7 +470,6 @@ void UpdateCheckUI::removePropertyChangeListener( const OUString& /*aPropertyNam
 
 void UpdateCheckUI::addVetoableChangeListener( const OUString& /*aPropertyName*/,
                                                const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     //no vetoable properties
 }
@@ -499,7 +477,6 @@ void UpdateCheckUI::addVetoableChangeListener( const OUString& /*aPropertyName*/
 
 void UpdateCheckUI::removeVetoableChangeListener( const OUString& /*aPropertyName*/,
                                                   const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     //no vetoable properties
 }

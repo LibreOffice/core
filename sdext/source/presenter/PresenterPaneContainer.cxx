@@ -355,7 +355,6 @@ void PresenterPaneContainer::ToTop (const SharedPaneDescriptor& rpDescriptor)
 
 void SAL_CALL PresenterPaneContainer::disposing (
     const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     SharedPaneDescriptor pDescriptor (
         FindContentWindow(Reference<awt::XWindow>(rEvent.Source, UNO_QUERY)));

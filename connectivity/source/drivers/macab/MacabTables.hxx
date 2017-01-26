@@ -33,7 +33,7 @@ namespace connectivity
 
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-            virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+            virtual void impl_refresh() override;
 
         public:
             MacabTables(

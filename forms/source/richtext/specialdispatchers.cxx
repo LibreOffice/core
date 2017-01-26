@@ -51,8 +51,6 @@ namespace frm
 
 
     void SAL_CALL OSelectAllDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& /*_rArguments*/ )
-        throw (RuntimeException,
-               std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OSelectAllDispatcher::dispatch: invalid URL!" );
@@ -107,7 +105,7 @@ namespace frm
     }
 
 
-    void SAL_CALL OTextDirectionDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& /*_rArguments*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL OTextDirectionDispatcher::dispatch( const URL& _rURL, const Sequence< PropertyValue >& /*_rArguments*/ )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         OSL_ENSURE( _rURL.Complete == getFeatureURL().Complete, "OTextDirectionDispatcher::dispatch: invalid URL!" );

@@ -31,55 +31,46 @@ namespace xmlscript
 {
 
 Reference< xml::input::XElement > LibElementBase::getParent()
-    throw (RuntimeException, std::exception)
 {
     return mxParent.get();
 }
 
 OUString LibElementBase::getLocalName()
-    throw (RuntimeException, std::exception)
 {
     return _aLocalName;
 }
 
 sal_Int32 LibElementBase::getUid()
-    throw (RuntimeException, std::exception)
 {
     return mxImport->XMLNS_LIBRARY_UID;
 }
 
 Reference< xml::input::XAttributes > LibElementBase::getAttributes()
-    throw (RuntimeException, std::exception)
 {
     return _xAttributes;
 }
 
 void LibElementBase::ignorableWhitespace(
     OUString const & /*rWhitespaces*/ )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
 }
 
 void LibElementBase::characters( OUString const & /*rChars*/ )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     // not used, all characters ignored
 }
 
 void LibElementBase::processingInstruction(
     OUString const & /*rTarget*/, OUString const & /*rData*/ )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
 }
 
 void LibElementBase::endElement()
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
 }
 Reference< xml::input::XElement > LibElementBase::startChildElement(
     sal_Int32 /*nUid*/, OUString const & /*rLocalName*/,
     Reference< xml::input::XAttributes > const & /*xAttributes*/ )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     throw xml::sax::SAXException("unexpected element!", Reference< XInterface >(), Any() );
 }
@@ -104,33 +95,28 @@ LibElementBase::~LibElementBase()
 
 void LibraryImport::startDocument(
     Reference< xml::input::XNamespaceMapping > const & xNamespaceMapping )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     XMLNS_LIBRARY_UID = xNamespaceMapping->getUidByUri( XMLNS_LIBRARY_URI );
     XMLNS_XLINK_UID = xNamespaceMapping->getUidByUri( XMLNS_XLINK_URI );
 }
 
 void LibraryImport::endDocument()
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
 }
 
 void LibraryImport::processingInstruction(
     OUString const & /*rTarget*/, OUString const & /*rData*/ )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
 }
 
 void LibraryImport::setDocumentLocator(
     Reference< xml::sax::XLocator > const & /*xLocator*/ )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
 }
 
 Reference< xml::input::XElement > LibraryImport::startRootElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     if (XMLNS_LIBRARY_UID != nUid)
     {
@@ -167,7 +153,6 @@ LibraryImport::~LibraryImport()
 Reference< xml::input::XElement > LibrariesElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     if (mxImport->XMLNS_LIBRARY_UID != nUid)
     {
@@ -195,7 +180,6 @@ Reference< xml::input::XElement > LibrariesElement::startChildElement(
 }
 
 void LibrariesElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     sal_Int32 nLibCount = mxImport->mpLibArray->mnLibCount = (sal_Int32)mLibDescriptors.size();
     mxImport->mpLibArray->mpLibs.reset( new LibDescriptor[ nLibCount ] );
@@ -211,7 +195,6 @@ void LibrariesElement::endElement()
 Reference< xml::input::XElement > LibraryElement::startChildElement(
     sal_Int32 nUid, OUString const & rLocalName,
     Reference< xml::input::XAttributes > const & xAttributes )
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     if (mxImport->XMLNS_LIBRARY_UID != nUid)
     {
@@ -233,7 +216,6 @@ Reference< xml::input::XElement > LibraryElement::startChildElement(
 }
 
 void LibraryElement::endElement()
-    throw (xml::sax::SAXException, RuntimeException, std::exception)
 {
     sal_Int32 nElementCount = mElements.size();
     Sequence< OUString > aElementNames( nElementCount );

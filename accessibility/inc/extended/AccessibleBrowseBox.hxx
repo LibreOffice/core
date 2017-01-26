@@ -63,15 +63,12 @@ protected:
     // XAccessibleContext
 
     /** @return  The count of visible children. */
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
 
     /** @return  The XAccessible interface of the specified child. */
     virtual css::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL
-    getAccessibleChild( sal_Int32 nChildIndex )
-        throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) override;
+    getAccessibleChild( sal_Int32 nChildIndex ) override;
 
     // XAccessibleComponent
 
@@ -80,20 +77,17 @@ protected:
     */
     virtual css::uno::Reference<
         css::accessibility::XAccessible > SAL_CALL
-    getAccessibleAtPoint( const css::awt::Point& rPoint )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
     /** Grabs the focus to the BrowseBox. */
-    virtual void SAL_CALL grabFocus()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL grabFocus() override;
 
     // XServiceInfo
 
     /** @return
             The name of this class.
     */
-    virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
 public:
     // helper functions
@@ -216,7 +210,7 @@ protected:
 
     // XAccessible
     virtual css::uno::Reference< css::accessibility::XAccessibleContext >
-        SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) override;
+        SAL_CALL getAccessibleContext() override;
 
     // IAccessibleBrowseBox
     virtual css::uno::Reference< css::accessibility::XAccessible >

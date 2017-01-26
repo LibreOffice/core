@@ -147,7 +147,7 @@ m_xStatement.clear();
 m_xMetaData.clear();
 }
 
-Any SAL_CALL MacabResultSet::queryInterface(const Type & rType) throw(RuntimeException)
+Any SAL_CALL MacabResultSet::queryInterface(const Type & rType)
 {
     Any aRet = OPropertySetHelper::queryInterface(rType);
     if (!aRet.hasValue())
@@ -165,7 +165,7 @@ void SAL_CALL MacabResultSet::release() throw()
     MacabResultSet_BASE::release();
 }
 
-Sequence<  Type > SAL_CALL MacabResultSet::getTypes() throw(RuntimeException)
+Sequence<  Type > SAL_CALL MacabResultSet::getTypes()
 {
     OTypeCollection aTypes(
         cppu::UnoType<css::beans::XMultiPropertySet>::get(),
@@ -175,12 +175,12 @@ Sequence<  Type > SAL_CALL MacabResultSet::getTypes() throw(RuntimeException)
     return comphelper::concatSequences(aTypes.getTypes(), MacabResultSet_BASE::getTypes());
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL MacabResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL MacabResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-sal_Int32 SAL_CALL MacabResultSet::findColumn(const OUString& columnName) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSet::findColumn(const OUString& columnName)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -202,7 +202,7 @@ sal_Int32 SAL_CALL MacabResultSet::findColumn(const OUString& columnName) throw(
     return 0; // Never reached
 }
 
-OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -229,7 +229,7 @@ OUString SAL_CALL MacabResultSet::getString(sal_Int32 columnIndex) throw(SQLExce
     return aRet;
 }
 
-sal_Bool SAL_CALL MacabResultSet::getBoolean(sal_Int32) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::getBoolean(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -239,7 +239,7 @@ sal_Bool SAL_CALL MacabResultSet::getBoolean(sal_Int32) throw(SQLException, Runt
     return false;
 }
 
-sal_Int8 SAL_CALL MacabResultSet::getByte(sal_Int32) throw(SQLException, RuntimeException)
+sal_Int8 SAL_CALL MacabResultSet::getByte(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -250,7 +250,7 @@ sal_Int8 SAL_CALL MacabResultSet::getByte(sal_Int32) throw(SQLException, Runtime
     return nRet;
 }
 
-sal_Int16 SAL_CALL MacabResultSet::getShort(sal_Int32) throw(SQLException, RuntimeException)
+sal_Int16 SAL_CALL MacabResultSet::getShort(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -261,7 +261,7 @@ sal_Int16 SAL_CALL MacabResultSet::getShort(sal_Int32) throw(SQLException, Runti
     return nRet;
 }
 
-sal_Int32 SAL_CALL MacabResultSet::getInt(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSet::getInt(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -290,7 +290,7 @@ sal_Int32 SAL_CALL MacabResultSet::getInt(sal_Int32 columnIndex) throw(SQLExcept
     return nRet;
 }
 
-sal_Int64 SAL_CALL MacabResultSet::getLong(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
+sal_Int64 SAL_CALL MacabResultSet::getLong(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -319,7 +319,7 @@ sal_Int64 SAL_CALL MacabResultSet::getLong(sal_Int32 columnIndex) throw(SQLExcep
     return nRet;
 }
 
-float SAL_CALL MacabResultSet::getFloat(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
+float SAL_CALL MacabResultSet::getFloat(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -348,7 +348,7 @@ float SAL_CALL MacabResultSet::getFloat(sal_Int32 columnIndex) throw(SQLExceptio
     return nVal;
 }
 
-double SAL_CALL MacabResultSet::getDouble(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
+double SAL_CALL MacabResultSet::getDouble(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -377,7 +377,7 @@ double SAL_CALL MacabResultSet::getDouble(sal_Int32 columnIndex) throw(SQLExcept
     return nVal;
 }
 
-Sequence< sal_Int8 > SAL_CALL MacabResultSet::getBytes(sal_Int32) throw(SQLException, RuntimeException)
+Sequence< sal_Int8 > SAL_CALL MacabResultSet::getBytes(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -387,7 +387,7 @@ Sequence< sal_Int8 > SAL_CALL MacabResultSet::getBytes(sal_Int32) throw(SQLExcep
     return Sequence< sal_Int8 >();
 }
 
-Date SAL_CALL MacabResultSet::getDate(sal_Int32) throw(SQLException, RuntimeException)
+Date SAL_CALL MacabResultSet::getDate(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -398,7 +398,7 @@ Date SAL_CALL MacabResultSet::getDate(sal_Int32) throw(SQLException, RuntimeExce
     return aRet;
 }
 
-Time SAL_CALL MacabResultSet::getTime(sal_Int32) throw(SQLException, RuntimeException)
+Time SAL_CALL MacabResultSet::getTime(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -409,7 +409,7 @@ Time SAL_CALL MacabResultSet::getTime(sal_Int32) throw(SQLException, RuntimeExce
     return nRet;
 }
 
-DateTime SAL_CALL MacabResultSet::getTimestamp(sal_Int32 columnIndex) throw(SQLException, RuntimeException)
+DateTime SAL_CALL MacabResultSet::getTimestamp(sal_Int32 columnIndex)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -436,7 +436,7 @@ DateTime SAL_CALL MacabResultSet::getTimestamp(sal_Int32 columnIndex) throw(SQLE
     return nRet;
 }
 
-Reference< XInputStream > SAL_CALL MacabResultSet::getBinaryStream(sal_Int32) throw(SQLException, RuntimeException)
+Reference< XInputStream > SAL_CALL MacabResultSet::getBinaryStream(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -446,7 +446,7 @@ Reference< XInputStream > SAL_CALL MacabResultSet::getBinaryStream(sal_Int32) th
     return nullptr;
 }
 
-Reference< XInputStream > SAL_CALL MacabResultSet::getCharacterStream(sal_Int32) throw(SQLException, RuntimeException)
+Reference< XInputStream > SAL_CALL MacabResultSet::getCharacterStream(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -456,7 +456,7 @@ Reference< XInputStream > SAL_CALL MacabResultSet::getCharacterStream(sal_Int32)
     return nullptr;
 }
 
-Any SAL_CALL MacabResultSet::getObject(sal_Int32, const Reference< css::container::XNameAccess >&) throw(SQLException, RuntimeException)
+Any SAL_CALL MacabResultSet::getObject(sal_Int32, const Reference< css::container::XNameAccess >&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -466,7 +466,7 @@ Any SAL_CALL MacabResultSet::getObject(sal_Int32, const Reference< css::containe
     return Any();
 }
 
-Reference< XRef > SAL_CALL MacabResultSet::getRef(sal_Int32) throw(SQLException, RuntimeException)
+Reference< XRef > SAL_CALL MacabResultSet::getRef(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -476,7 +476,7 @@ Reference< XRef > SAL_CALL MacabResultSet::getRef(sal_Int32) throw(SQLException,
     return nullptr;
 }
 
-Reference< XBlob > SAL_CALL MacabResultSet::getBlob(sal_Int32) throw(SQLException, RuntimeException)
+Reference< XBlob > SAL_CALL MacabResultSet::getBlob(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -486,7 +486,7 @@ Reference< XBlob > SAL_CALL MacabResultSet::getBlob(sal_Int32) throw(SQLExceptio
     return nullptr;
 }
 
-Reference< XClob > SAL_CALL MacabResultSet::getClob(sal_Int32) throw(SQLException, RuntimeException)
+Reference< XClob > SAL_CALL MacabResultSet::getClob(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -496,7 +496,7 @@ Reference< XClob > SAL_CALL MacabResultSet::getClob(sal_Int32) throw(SQLExceptio
     return nullptr;
 }
 
-Reference< XArray > SAL_CALL MacabResultSet::getArray(sal_Int32) throw(SQLException, RuntimeException)
+Reference< XArray > SAL_CALL MacabResultSet::getArray(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -506,7 +506,7 @@ Reference< XArray > SAL_CALL MacabResultSet::getArray(sal_Int32) throw(SQLExcept
     return nullptr;
 }
 
-Reference< XResultSetMetaData > SAL_CALL MacabResultSet::getMetaData() throw(SQLException, RuntimeException)
+Reference< XResultSetMetaData > SAL_CALL MacabResultSet::getMetaData()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -518,7 +518,7 @@ Reference< XResultSetMetaData > SAL_CALL MacabResultSet::getMetaData() throw(SQL
     return xMetaData;
 }
 
-sal_Bool SAL_CALL MacabResultSet::isBeforeFirst() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::isBeforeFirst()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -529,7 +529,7 @@ sal_Bool SAL_CALL MacabResultSet::isBeforeFirst() throw(SQLException, RuntimeExc
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::isAfterLast() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::isAfterLast()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -541,7 +541,7 @@ sal_Bool SAL_CALL MacabResultSet::isAfterLast() throw(SQLException, RuntimeExcep
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::isFirst() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::isFirst()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -552,7 +552,7 @@ sal_Bool SAL_CALL MacabResultSet::isFirst() throw(SQLException, RuntimeException
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::isLast() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::isLast()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -564,7 +564,7 @@ sal_Bool SAL_CALL MacabResultSet::isLast() throw(SQLException, RuntimeException)
     return false;
 }
 
-void SAL_CALL MacabResultSet::beforeFirst() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::beforeFirst()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -573,7 +573,7 @@ void SAL_CALL MacabResultSet::beforeFirst() throw(SQLException, RuntimeException
     m_nRowPos = -1;
 }
 
-void SAL_CALL MacabResultSet::afterLast() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::afterLast()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -583,7 +583,7 @@ void SAL_CALL MacabResultSet::afterLast() throw(SQLException, RuntimeException)
     m_nRowPos = nRecords;
 }
 
-void SAL_CALL MacabResultSet::close() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::close()
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -592,7 +592,7 @@ void SAL_CALL MacabResultSet::close() throw(SQLException, RuntimeException)
     dispose();
 }
 
-sal_Bool SAL_CALL MacabResultSet::first() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::first()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -605,7 +605,7 @@ sal_Bool SAL_CALL MacabResultSet::first() throw(SQLException, RuntimeException)
     return true;
 }
 
-sal_Bool SAL_CALL MacabResultSet::last() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::last()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -618,7 +618,7 @@ sal_Bool SAL_CALL MacabResultSet::last() throw(SQLException, RuntimeException)
     return true;
 }
 
-sal_Int32 SAL_CALL MacabResultSet::getRow() throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSet::getRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -626,7 +626,7 @@ sal_Int32 SAL_CALL MacabResultSet::getRow() throw(SQLException, RuntimeException
     return m_nRowPos;
 }
 
-sal_Bool SAL_CALL MacabResultSet::absolute(sal_Int32 row) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::absolute(sal_Int32 row)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -640,7 +640,7 @@ sal_Bool SAL_CALL MacabResultSet::absolute(sal_Int32 row) throw(SQLException, Ru
     return true;
 }
 
-sal_Bool SAL_CALL MacabResultSet::relative(sal_Int32 row) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::relative(sal_Int32 row)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -648,7 +648,7 @@ sal_Bool SAL_CALL MacabResultSet::relative(sal_Int32 row) throw(SQLException, Ru
     return absolute(m_nRowPos + row);
 }
 
-sal_Bool SAL_CALL MacabResultSet::next() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::next()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -656,7 +656,7 @@ sal_Bool SAL_CALL MacabResultSet::next() throw(SQLException, RuntimeException)
     return absolute(m_nRowPos + 1);
 }
 
-sal_Bool SAL_CALL MacabResultSet::previous() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::previous()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -664,7 +664,7 @@ sal_Bool SAL_CALL MacabResultSet::previous() throw(SQLException, RuntimeExceptio
     return absolute(m_nRowPos - 1);
 }
 
-Reference< XInterface > SAL_CALL MacabResultSet::getStatement() throw(SQLException, RuntimeException)
+Reference< XInterface > SAL_CALL MacabResultSet::getStatement()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -673,7 +673,7 @@ Reference< XInterface > SAL_CALL MacabResultSet::getStatement() throw(SQLExcepti
     return xStatement;
 }
 
-sal_Bool SAL_CALL MacabResultSet::rowDeleted() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::rowDeleted()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -681,7 +681,7 @@ sal_Bool SAL_CALL MacabResultSet::rowDeleted() throw(SQLException, RuntimeExcept
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::rowInserted() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::rowInserted()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -689,7 +689,7 @@ sal_Bool SAL_CALL MacabResultSet::rowInserted() throw(SQLException, RuntimeExcep
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::rowUpdated() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::rowUpdated()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -697,7 +697,7 @@ sal_Bool SAL_CALL MacabResultSet::rowUpdated() throw(SQLException, RuntimeExcept
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::wasNull() throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::wasNull()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -705,22 +705,22 @@ sal_Bool SAL_CALL MacabResultSet::wasNull() throw(SQLException, RuntimeException
     return m_bWasNull;
 }
 
-void SAL_CALL MacabResultSet::cancel() throw(RuntimeException)
+void SAL_CALL MacabResultSet::cancel()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::clearWarnings() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::clearWarnings()
 {
 }
 
-Any SAL_CALL MacabResultSet::getWarnings() throw(SQLException, RuntimeException)
+Any SAL_CALL MacabResultSet::getWarnings()
 {
     return Any();
 }
 
-void SAL_CALL MacabResultSet::insertRow() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::insertRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -728,7 +728,7 @@ void SAL_CALL MacabResultSet::insertRow() throw(SQLException, RuntimeException)
     // you only have to implement this if you want to insert new rows
 }
 
-void SAL_CALL MacabResultSet::updateRow() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -736,19 +736,19 @@ void SAL_CALL MacabResultSet::updateRow() throw(SQLException, RuntimeException)
     // only when you allow updates
 }
 
-void SAL_CALL MacabResultSet::deleteRow() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::deleteRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::cancelRowUpdates() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::cancelRowUpdates()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::moveToInsertRow() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::moveToInsertRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -756,122 +756,122 @@ void SAL_CALL MacabResultSet::moveToInsertRow() throw(SQLException, RuntimeExcep
     // only when you allow inserts
 }
 
-void SAL_CALL MacabResultSet::moveToCurrentRow() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::moveToCurrentRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateNull(sal_Int32) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateNull(sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateBoolean(sal_Int32, sal_Bool) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateBoolean(sal_Int32, sal_Bool)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateByte(sal_Int32, sal_Int8) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateByte(sal_Int32, sal_Int8)
 {
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 }
 
-void SAL_CALL MacabResultSet::updateShort(sal_Int32, sal_Int16) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateShort(sal_Int32, sal_Int16)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateInt(sal_Int32, sal_Int32) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateInt(sal_Int32, sal_Int32)
 {
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 }
 
-void SAL_CALL MacabResultSet::updateLong(sal_Int32, sal_Int64) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateLong(sal_Int32, sal_Int64)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateFloat(sal_Int32, float) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateFloat(sal_Int32, float)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateDouble(sal_Int32, double) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateDouble(sal_Int32, double)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateString(sal_Int32, const OUString&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateString(sal_Int32, const OUString&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateBytes(sal_Int32, const Sequence< sal_Int8 >&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateBytes(sal_Int32, const Sequence< sal_Int8 >&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateDate(sal_Int32, const Date&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateDate(sal_Int32, const Date&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateTime(sal_Int32, const css::util::Time&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateTime(sal_Int32, const css::util::Time&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateTimestamp(sal_Int32, const DateTime&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateTimestamp(sal_Int32, const DateTime&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateBinaryStream(sal_Int32, const Reference< XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateBinaryStream(sal_Int32, const Reference< XInputStream >&, sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateCharacterStream(sal_Int32, const Reference< XInputStream >&, sal_Int32) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateCharacterStream(sal_Int32, const Reference< XInputStream >&, sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::refreshRow() throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::refreshRow()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateObject(sal_Int32, const Any&) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateObject(sal_Int32, const Any&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
-void SAL_CALL MacabResultSet::updateNumericObject(sal_Int32, const Any&, sal_Int32) throw(SQLException, RuntimeException)
+void SAL_CALL MacabResultSet::updateNumericObject(sal_Int32, const Any&, sal_Int32)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
 }
 
 // XRowLocate
-Any SAL_CALL MacabResultSet::getBookmark() throw( SQLException,  RuntimeException)
+Any SAL_CALL MacabResultSet::getBookmark()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -892,7 +892,7 @@ Any SAL_CALL MacabResultSet::getBookmark() throw( SQLException,  RuntimeExceptio
     return Any();
 }
 
-sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark) throw( SQLException,  RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -919,7 +919,7 @@ sal_Bool SAL_CALL MacabResultSet::moveToBookmark(const  Any& bookmark) throw( SQ
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, sal_Int32 rows) throw( SQLException,  RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, sal_Int32 rows)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -940,7 +940,7 @@ sal_Bool SAL_CALL MacabResultSet::moveRelativeToBookmark(const  Any& bookmark, s
     return false;
 }
 
-sal_Int32 SAL_CALL MacabResultSet::compareBookmarks(const  Any& firstItem, const  Any& secondItem) throw( SQLException,  RuntimeException)
+sal_Int32 SAL_CALL MacabResultSet::compareBookmarks(const  Any& firstItem, const  Any& secondItem)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -955,12 +955,12 @@ sal_Int32 SAL_CALL MacabResultSet::compareBookmarks(const  Any& firstItem, const
     return CompareBookmark::EQUAL;
 }
 
-sal_Bool SAL_CALL MacabResultSet::hasOrderedBookmarks() throw( SQLException,  RuntimeException)
+sal_Bool SAL_CALL MacabResultSet::hasOrderedBookmarks()
 {
     return false;
 }
 
-sal_Int32 SAL_CALL MacabResultSet::hashBookmark(const  Any& bookmark) throw( SQLException,  RuntimeException)
+sal_Int32 SAL_CALL MacabResultSet::hashBookmark(const  Any& bookmark)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -971,7 +971,7 @@ sal_Int32 SAL_CALL MacabResultSet::hashBookmark(const  Any& bookmark) throw( SQL
 }
 
 // XDeleteRows
-Sequence< sal_Int32 > SAL_CALL MacabResultSet::deleteRows(const  Sequence<  Any >&) throw( SQLException,  RuntimeException)
+Sequence< sal_Int32 > SAL_CALL MacabResultSet::deleteRows(const  Sequence<  Any >&)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(MacabResultSet_BASE::rBHelper.bDisposed);
@@ -1015,7 +1015,6 @@ sal_Bool MacabResultSet::convertFastPropertyValue(
             Any &,
             sal_Int32 nHandle,
             const Any& )
-                throw (css::lang::IllegalArgumentException)
 {
     switch (nHandle)
     {
@@ -1036,7 +1035,6 @@ sal_Bool MacabResultSet::convertFastPropertyValue(
 void MacabResultSet::setFastPropertyValue_NoBroadcast(
             sal_Int32 nHandle,
             const Any& )
-                 throw (Exception)
 {
     switch (nHandle)
     {

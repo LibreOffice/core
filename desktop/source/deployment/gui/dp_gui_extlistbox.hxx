@@ -100,8 +100,7 @@ public:
 
 
     // XEventListener
-    virtual void SAL_CALL disposing(css::lang::EventObject const& evt)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(css::lang::EventObject const& evt) override;
 };
 
 

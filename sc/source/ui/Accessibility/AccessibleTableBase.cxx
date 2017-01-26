@@ -62,7 +62,6 @@ void SAL_CALL ScAccessibleTableBase::disposing()
     //=====  XInterface  =====================================================
 
 uno::Any SAL_CALL ScAccessibleTableBase::queryInterface( uno::Type const & rType )
-    throw (uno::RuntimeException, std::exception)
 {
     if ( rType == cppu::UnoType<XAccessibleTableSelection>::get())
     {
@@ -90,7 +89,6 @@ void SAL_CALL ScAccessibleTableBase::release()
     //=====  XAccessibleTable  ================================================
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -98,7 +96,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowCount(  )
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -106,7 +103,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnCount(  )
 }
 
 OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 nRow )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     OSL_FAIL("Here should be a implementation to fill the description");
 
@@ -118,7 +114,6 @@ OUString SAL_CALL ScAccessibleTableBase::getAccessibleRowDescription( sal_Int32 
 }
 
 OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int32 nColumn )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     OSL_FAIL("Here should be a implementation to fill the description");
 
@@ -130,7 +125,6 @@ OUString SAL_CALL ScAccessibleTableBase::getAccessibleColumnDescription( sal_Int
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -164,7 +158,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRowExtentAt( sal_Int32 nR
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32 nRow, sal_Int32 nColumn )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -198,7 +191,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumnExtentAt( sal_Int32
 }
 
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessibleRowHeaders(  )
-                    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
     OSL_FAIL("Here should be a implementation to fill the row headers");
@@ -208,7 +200,6 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
 }
 
 uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessibleColumnHeaders(  )
-                    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< XAccessibleTable > xAccessibleTable;
     OSL_FAIL("Here should be a implementation to fill the column headers");
@@ -218,7 +209,6 @@ uno::Reference< XAccessibleTable > SAL_CALL ScAccessibleTableBase::getAccessible
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleRows(  )
-                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     uno::Sequence< sal_Int32 > aSequence;
@@ -226,7 +216,6 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
 }
 
 uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessibleColumns(  )
-                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     uno::Sequence< sal_Int32 > aSequence;
@@ -234,21 +223,18 @@ uno::Sequence< sal_Int32 > SAL_CALL ScAccessibleTableBase::getSelectedAccessible
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleRowSelected( sal_Int32 /* nRow */ )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     return false;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleColumnSelected( sal_Int32 /* nColumn */ )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     return false;
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellAt( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
@@ -256,7 +242,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCellA
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCaption(  )
-                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
@@ -264,7 +249,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleCapti
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSummary(  )
-                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     uno::Reference< XAccessible > xAccessible;
@@ -272,7 +256,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessibleTableBase::getAccessibleSumma
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow */, sal_Int32 /* nColumn */ )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     return false;
@@ -281,7 +264,6 @@ sal_Bool SAL_CALL ScAccessibleTableBase::isAccessibleSelected( sal_Int32 /* nRow
 // =====  XAccessibleExtendedTable  ========================================
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sal_Int32 nColumn )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -298,7 +280,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleIndex( sal_Int32 nRow, sa
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildIndex )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -310,7 +291,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleRow( sal_Int32 nChildInde
 }
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildIndex )
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -324,7 +304,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleColumn( sal_Int32 nChildI
 // =====  XAccessibleContext  ==============================================
 
 sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -342,9 +321,6 @@ sal_Int32 SAL_CALL ScAccessibleTableBase::getAccessibleChildCount()
 
 uno::Reference< XAccessible > SAL_CALL
     ScAccessibleTableBase::getAccessibleChild(sal_Int32 nIndex)
-        throw (uno::RuntimeException,
-        lang::IndexOutOfBoundsException,
-        std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -365,14 +341,12 @@ uno::Reference< XAccessible > SAL_CALL
 
 OUString SAL_CALL
     ScAccessibleTableBase::createAccessibleDescription()
-    throw (uno::RuntimeException, std::exception)
 {
     OUString sDesc(ScResId(STR_ACC_TABLE_DESCR));
     return sDesc;
 }
 
 OUString SAL_CALL ScAccessibleTableBase::createAccessibleName()
-    throw (uno::RuntimeException, std::exception)
 {
     OUString sName(SC_RESSTR(STR_ACC_TABLE_NAME));
     OUString sCoreName;
@@ -383,7 +357,6 @@ OUString SAL_CALL ScAccessibleTableBase::createAccessibleName()
 
 uno::Reference<XAccessibleRelationSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleRelationSet()
-    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
     return uno::Reference<XAccessibleRelationSet>();
@@ -391,7 +364,6 @@ uno::Reference<XAccessibleRelationSet> SAL_CALL
 
 uno::Reference<XAccessibleStateSet> SAL_CALL
     ScAccessibleTableBase::getAccessibleStateSet()
-    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("should be implemented in the abrevated class");
     uno::Reference< XAccessibleStateSet > xAccessibleStateSet;
@@ -401,13 +373,11 @@ uno::Reference<XAccessibleStateSet> SAL_CALL
     ///=====  XAccessibleSelection  ===========================================
 
 void SAL_CALL ScAccessibleTableBase::selectAccessibleChild( sal_Int32 /* nChildIndex */ )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
 }
 
 sal_Bool SAL_CALL
         ScAccessibleTableBase::isAccessibleChildSelected( sal_Int32 nChildIndex )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     // I don't need to guard, because the called functions have a guard
     if (nChildIndex < 0 || nChildIndex >= getAccessibleChildCount())
@@ -417,18 +387,15 @@ sal_Bool SAL_CALL
 
 void SAL_CALL
         ScAccessibleTableBase::clearAccessibleSelection(  )
-        throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL ScAccessibleTableBase::selectAllAccessibleChildren()
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 sal_Int32 SAL_CALL
         ScAccessibleTableBase::getSelectedAccessibleChildCount(  )
-        throw (uno::RuntimeException, std::exception)
 {
     sal_Int32 nResult(0);
     return nResult;
@@ -436,21 +403,18 @@ sal_Int32 SAL_CALL
 
 uno::Reference<XAccessible > SAL_CALL
         ScAccessibleTableBase::getSelectedAccessibleChild( sal_Int32 /* nSelectedChildIndex */ )
-        throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     uno::Reference < XAccessible > xAccessible;
     return xAccessible;
 }
 
 void SAL_CALL ScAccessibleTableBase::deselectAccessibleChild( sal_Int32 /* nSelectedChildIndex */ )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
 }
 
     //=====  XServiceInfo  ====================================================
 
 OUString SAL_CALL ScAccessibleTableBase::getImplementationName()
-        throw (uno::RuntimeException, std::exception)
 {
     return OUString("ScAccessibleTableBase");
 }
@@ -458,14 +422,12 @@ OUString SAL_CALL ScAccessibleTableBase::getImplementationName()
     //=====  XTypeProvider  ===================================================
 
 uno::Sequence< uno::Type > SAL_CALL ScAccessibleTableBase::getTypes()
-        throw (uno::RuntimeException, std::exception)
 {
     return comphelper::concatSequences(ScAccessibleTableBaseImpl::getTypes(), ScAccessibleContextBase::getTypes());
 }
 
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessibleTableBase::getImplementationId()
-    throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -488,29 +450,21 @@ void ScAccessibleTableBase::CommitTableModelChange(sal_Int32 nStartRow, sal_Int3
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::selectRow( sal_Int32 )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
-           std::exception)
 {
     return true;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::selectColumn( sal_Int32 )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
-           std::exception)
 {
     return true;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::unselectRow( sal_Int32 )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
-           std::exception)
 {
         return true;
 }
 
 sal_Bool SAL_CALL ScAccessibleTableBase::unselectColumn( sal_Int32 )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException,
-           std::exception)
 {
     return true;
 }

@@ -344,7 +344,7 @@ void SQLExceptionIteratorHelper::next( SQLExceptionInfo& _out_rInfo )
 }
 
 
-void throwFunctionSequenceException(const Reference< XInterface >& Context, const Any& Next)  throw ( css::sdbc::SQLException )
+void throwFunctionSequenceException(const Reference< XInterface >& Context, const Any& Next)
 {
     ::connectivity::SharedResources aResources;
     throw SQLException(
@@ -357,7 +357,7 @@ void throwFunctionSequenceException(const Reference< XInterface >& Context, cons
 }
 
 void throwInvalidIndexException(const css::uno::Reference< css::uno::XInterface >& Context,
-        const css::uno::Any& Next)  throw ( css::sdbc::SQLException )
+        const css::uno::Any& Next)
 {
     ::connectivity::SharedResources aResources;
     throw SQLException(
@@ -370,7 +370,7 @@ void throwInvalidIndexException(const css::uno::Reference< css::uno::XInterface 
 }
 
 void throwFunctionNotSupportedSQLException(const OUString& _rFunctionName,
-    const css::uno::Reference<css::uno::XInterface>& _rxContext) throw (css::sdbc::SQLException)
+    const css::uno::Reference<css::uno::XInterface>& _rxContext)
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
@@ -387,7 +387,7 @@ void throwFunctionNotSupportedSQLException(const OUString& _rFunctionName,
 }
 
 void throwFunctionNotSupportedRuntimeException(const OUString& _rFunctionName,
-    const css::uno::Reference<css::uno::XInterface>& _rxContext) throw (css::uno::RuntimeException)
+    const css::uno::Reference<css::uno::XInterface>& _rxContext)
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
@@ -401,20 +401,17 @@ void throwFunctionNotSupportedRuntimeException(const OUString& _rFunctionName,
 }
 
 void throwGenericSQLException(const OUString& _rMsg, const css::uno::Reference< css::uno::XInterface >& _rxSource)
-    throw (css::sdbc::SQLException)
 {
     throwGenericSQLException(_rMsg, _rxSource, Any());
 }
 
 
 void throwGenericSQLException(const OUString& _rMsg, const Reference< XInterface >& _rxSource, const Any& _rNextException)
-    throw (SQLException)
 {
     throw SQLException( _rMsg, _rxSource, getStandardSQLState( StandardSQLState::GENERAL_ERROR ), 0, _rNextException);
 }
 
 void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, const Reference< XInterface >& _rxContext )
-    throw (SQLException)
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
@@ -432,7 +429,6 @@ void throwFeatureNotImplementedSQLException( const OUString& _rFeatureName, cons
 }
 
 void throwFeatureNotImplementedRuntimeException(const OUString& _rFeatureName, const Reference< XInterface >& _rxContext)
-    throw (RuntimeException)
 {
     ::connectivity::SharedResources aResources;
     const OUString sError( aResources.getResourceStringWithSubstitution(
@@ -444,7 +440,6 @@ void throwFeatureNotImplementedRuntimeException(const OUString& _rFeatureName, c
 }
 
 void throwInvalidColumnException( const OUString& _rColumnName, const Reference< XInterface >& _rxContext)
-    throw (SQLException)
 {
     ::connectivity::SharedResources aResources;
     OUString sErrorMessage( aResources.getResourceStringWithSubstitution(
@@ -454,7 +449,7 @@ void throwInvalidColumnException( const OUString& _rColumnName, const Reference<
 }
 
 void throwSQLException( const OUString& _rMessage, const OUString& _rSQLState,
-        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode, const Any* _pNextException ) throw (SQLException)
+        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode, const Any* _pNextException )
 {
     throw SQLException(
         _rMessage,
@@ -467,7 +462,7 @@ void throwSQLException( const OUString& _rMessage, const OUString& _rSQLState,
 
 
 void throwSQLException( const OUString& _rMessage, StandardSQLState _eSQLState,
-        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode ) throw (SQLException)
+        const Reference< XInterface >& _rxContext, const sal_Int32 _nErrorCode )
 {
     throwSQLException( _rMessage, getStandardSQLState( _eSQLState ), _rxContext, _nErrorCode );
 }

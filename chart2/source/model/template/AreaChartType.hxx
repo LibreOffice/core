@@ -31,25 +31,20 @@ public:
     virtual ~AreaChartType() override;
 
     virtual OUString SAL_CALL
-        getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getImplementationName() override;
     virtual sal_Bool SAL_CALL
-        supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getSupportedServiceNames() override;
 
 protected:
     explicit AreaChartType( const AreaChartType & rOther );
 
     // ____ XChartType ____
-    virtual OUString SAL_CALL getChartType()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getChartType() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 };
 
 } //  namespace chart

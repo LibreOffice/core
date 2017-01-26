@@ -72,7 +72,6 @@ void SAL_CALL HierarchyContentProvider::release()
 }
 
 css::uno::Any SAL_CALL HierarchyContentProvider::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< lang::XTypeProvider* >(this)),
@@ -100,7 +99,6 @@ XSERVICEINFO_COMMOM_IMPL( HierarchyContentProvider,
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
 HierarchyContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
-    throw( css::uno::Exception )
 {
     css::lang::XServiceInfo* pX =
         static_cast<css::lang::XServiceInfo*>(new HierarchyContentProvider( ucbhelper::getComponentContext(rSMgr) ));
@@ -127,7 +125,6 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( HierarchyContentProvider );
 uno::Reference< ucb::XContent > SAL_CALL
 HierarchyContentProvider::queryContent(
         const uno::Reference< ucb::XContentIdentifier >& Identifier )
-    throw( ucb::IllegalIdentifierException, uno::RuntimeException, std::exception )
 {
     HierarchyUri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
@@ -161,7 +158,6 @@ HierarchyContentProvider::queryContent(
 // virtual
 void SAL_CALL HierarchyContentProvider::initialize(
                                 const uno::Sequence< uno::Any >& aArguments )
-    throw( uno::Exception, uno::RuntimeException, std::exception )
 {
     if ( aArguments.getLength() > 0 )
         OSL_FAIL( "HierarchyContentProvider::initialize : not supported!" );

@@ -40,36 +40,32 @@ SwAccessiblePreview::~SwAccessiblePreview()
 }
 
 OUString SwAccessiblePreview::getImplementationName( )
-    throw( RuntimeException, std::exception )
 {
     return OUString( sImplementationName );
 }
 
 sal_Bool SwAccessiblePreview::supportsService( const OUString& rServiceName )
-    throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence<OUString> SwAccessiblePreview::getSupportedServiceNames( )
-    throw( RuntimeException, std::exception )
 {
     return {"com.sun.star.text.AccessibleTextDocumentPageView",
             sAccessibleServiceName};
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessiblePreview::getImplementationId()
-        throw(RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL SwAccessiblePreview::getAccessibleDescription()
 {
     return GetResource( STR_ACCESS_PREVIEW_DOC_NAME );
 }
 
-OUString SAL_CALL SwAccessiblePreview::getAccessibleName() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL SwAccessiblePreview::getAccessibleName()
 {
     return SwAccessibleDocumentBase::getAccessibleName() + " " + GetResource( STR_ACCESS_PREVIEW_DOC_SUFFIX );
 }

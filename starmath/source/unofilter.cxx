@@ -32,21 +32,21 @@ public:
     MathTypeFilter();
 
     // XFilter
-    sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception) override;
-    void SAL_CALL cancel() throw (uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    void SAL_CALL cancel() override;
 
     // XImporter
-    void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (uno::RuntimeException, std::exception) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 MathTypeFilter::MathTypeFilter() = default;
 
-sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw(uno::RuntimeException, std::exception)
+sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     bool bSuccess = false;
     try
@@ -87,26 +87,26 @@ sal_Bool MathTypeFilter::filter(const uno::Sequence<beans::PropertyValue>& rDesc
     return bSuccess;
 }
 
-void MathTypeFilter::cancel() throw(uno::RuntimeException, std::exception)
+void MathTypeFilter::cancel()
 {
 }
 
-void MathTypeFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+void MathTypeFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc)
 {
     m_xDstDoc = xDoc;
 }
 
-OUString MathTypeFilter::getImplementationName() throw(uno::RuntimeException, std::exception)
+OUString MathTypeFilter::getImplementationName()
 {
     return OUString("com.sun.star.comp.Math.MathTypeFilter");
 }
 
-sal_Bool MathTypeFilter::supportsService(const OUString& rServiceName) throw(uno::RuntimeException, std::exception)
+sal_Bool MathTypeFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> MathTypeFilter::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
+uno::Sequence<OUString> MathTypeFilter::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet =
     {

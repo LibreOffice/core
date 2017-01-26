@@ -84,27 +84,22 @@ public:
     explicit DummyPropertySetInfo(const std::map<OUString, uno::Any>& rProps ):
         mrProperties(rProps) {}
 
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& rName )
-        throw(uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& rName ) override;
 
-    virtual beans::Property SAL_CALL getPropertyByName( const OUString& rName )
-        throw(uno::RuntimeException, beans::UnknownPropertyException, std::exception) override;
+    virtual beans::Property SAL_CALL getPropertyByName( const OUString& rName ) override;
 
-    virtual uno::Sequence< beans::Property > SAL_CALL getProperties()
-        throw(uno::RuntimeException, std::exception) override;
+    virtual uno::Sequence< beans::Property > SAL_CALL getProperties() override;
 
 private:
     const std::map<OUString, uno::Any>& mrProperties;
 };
 
 sal_Bool SAL_CALL DummyPropertySetInfo::hasPropertyByName( const OUString& rName )
-    throw(uno::RuntimeException, std::exception)
 {
     return mrProperties.find(rName) != mrProperties.end();
 }
 
 beans::Property SAL_CALL DummyPropertySetInfo::getPropertyByName( const OUString& rName )
-    throw(uno::RuntimeException, beans::UnknownPropertyException, std::exception)
 {
     beans::Property aRet;
     if(mrProperties.find(rName) == mrProperties.end())
@@ -118,7 +113,6 @@ beans::Property SAL_CALL DummyPropertySetInfo::getPropertyByName( const OUString
 }
 
 uno::Sequence< beans::Property > SAL_CALL DummyPropertySetInfo::getProperties()
-    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< beans::Property > aRet(mrProperties.size());
 
@@ -163,57 +157,46 @@ DummyXShape::DummyXShape()
 }
 
 OUString SAL_CALL DummyXShape::getName()
-    throw(uno::RuntimeException, std::exception)
 {
     return maName;
 }
 
 void SAL_CALL DummyXShape::setName( const OUString& rName )
-    throw(uno::RuntimeException, std::exception)
 {
     maName = rName;
 }
 
 awt::Point SAL_CALL DummyXShape::getPosition()
-    throw(uno::RuntimeException, std::exception)
 {
     return maPosition;
 }
 
 void SAL_CALL DummyXShape::setPosition( const awt::Point& rPoint )
-    throw(uno::RuntimeException, std::exception)
 {
     maPosition = rPoint;
 }
 
 awt::Size SAL_CALL DummyXShape::getSize()
-    throw(uno::RuntimeException, std::exception)
 {
     return maSize;
 }
 
 void SAL_CALL DummyXShape::setSize( const awt::Size& rSize )
-    throw(beans::PropertyVetoException, uno::RuntimeException, std::exception)
 {
     maSize = rSize;
 }
 
 OUString SAL_CALL DummyXShape::getShapeType()
-    throw(uno::RuntimeException, std::exception)
 {
     return OUString("dummy shape");
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL DummyXShape::getPropertySetInfo()
-    throw(uno::RuntimeException, std::exception)
 {
     return new DummyPropertySetInfo(maProperties);
 }
 
 void SAL_CALL DummyXShape::setPropertyValue( const OUString& rName, const uno::Any& rValue)
-    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-            lang::IllegalArgumentException, lang::WrappedTargetException,
-            uno::RuntimeException, std::exception)
 {
     SAL_INFO("chart2", "DummyXShape::setProperty: " << rName << " Any");
     maProperties[rName] = rValue;
@@ -224,7 +207,6 @@ void SAL_CALL DummyXShape::setPropertyValue( const OUString& rName, const uno::A
 }
 
 uno::Any SAL_CALL DummyXShape::getPropertyValue( const OUString& rName )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SAL_INFO("chart2.opengl", "DummyXShape::getPropertyValue: " << rName);
     std::map<OUString, uno::Any>::iterator itr = maProperties.find(rName);
@@ -235,29 +217,23 @@ uno::Any SAL_CALL DummyXShape::getPropertyValue( const OUString& rName )
 }
 
 void SAL_CALL DummyXShape::addPropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL DummyXShape::removePropertyChangeListener( const OUString&, const uno::Reference< beans::XPropertyChangeListener >& )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL DummyXShape::addVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL DummyXShape::removeVetoableChangeListener( const OUString&, const uno::Reference< beans::XVetoableChangeListener >& )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL DummyXShape::setPropertyValues( const uno::Sequence< OUString >& rNames,
         const uno::Sequence< uno::Any >& rValues)
-throw (beans::PropertyVetoException, lang::IllegalArgumentException,
-        lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     size_t n = std::min<size_t>(rNames.getLength(), rValues.getLength());
     for(size_t i = 0; i < n; ++i)
@@ -268,7 +244,6 @@ throw (beans::PropertyVetoException, lang::IllegalArgumentException,
 
 uno::Sequence< uno::Any > SAL_CALL DummyXShape::getPropertyValues(
         const uno::Sequence< OUString >& rNames)
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Any > aValues(rNames.getLength());
     for(sal_Int32 i = 0; i < rNames.getLength(); ++i)
@@ -282,22 +257,20 @@ uno::Sequence< uno::Any > SAL_CALL DummyXShape::getPropertyValues(
     return aValues;
 }
 
-void SAL_CALL DummyXShape::addPropertiesChangeListener( const uno::Sequence< OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL DummyXShape::addPropertiesChangeListener( const uno::Sequence< OUString >& , const uno::Reference< beans::XPropertiesChangeListener >& )
 {
 }
 
-void SAL_CALL DummyXShape::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL DummyXShape::removePropertiesChangeListener( const uno::Reference< beans::XPropertiesChangeListener >& )
 {
 }
 
 void SAL_CALL DummyXShape::firePropertiesChangeEvent( const uno::Sequence< OUString >& ,
         const uno::Reference< beans::XPropertiesChangeListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 OUString SAL_CALL DummyXShape::getImplementationName()
-    throw(uno::RuntimeException, std::exception)
 {
     return OUString("DummyXShape");
 }
@@ -316,25 +289,21 @@ uno::Sequence< OUString > const & listSupportedServices()
 }
 
 uno::Sequence< OUString > SAL_CALL DummyXShape::getSupportedServiceNames()
-    throw(uno::RuntimeException, std::exception)
 {
     return listSupportedServices();
 }
 
 sal_Bool SAL_CALL DummyXShape::supportsService( const OUString& rServiceName )
-    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Reference< uno::XInterface > SAL_CALL DummyXShape::getParent()
-    throw(uno::RuntimeException, std::exception)
 {
     return mxParent;
 }
 
 void SAL_CALL DummyXShape::setParent( const uno::Reference< uno::XInterface >& xParent )
-    throw(lang::NoSupportException, uno::RuntimeException, std::exception)
 {
     mxParent = xParent;
 }
@@ -887,16 +856,12 @@ void DummyText::render()
 }
 
 void SAL_CALL DummyText::setPropertyValue( const OUString& rName, const uno::Any& rValue)
-    throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-            lang::IllegalArgumentException, lang::WrappedTargetException,
-            uno::RuntimeException, std::exception)
 {
     SAL_INFO("chart2.opengl", "property value set after image has been created");
     DummyXShape::setPropertyValue(rName, rValue);
 }
 
 void SAL_CALL DummyText::setPosition(const awt::Point& rPosition )
-    throw(uno::RuntimeException, std::exception)
 {
     DummyXShape::setPosition(rPosition);
     if(maTrans.hasValue())
@@ -932,7 +897,6 @@ DummyGroup2D::DummyGroup2D(const OUString& rName)
 }
 
 awt::Point SAL_CALL DummyGroup2D::getPosition()
-    throw(uno::RuntimeException, std::exception)
 {
     long nTop = std::numeric_limits<long>::max();
     long nLeft = std::numeric_limits<long>::max();
@@ -951,7 +915,6 @@ awt::Point SAL_CALL DummyGroup2D::getPosition()
 }
 
 awt::Size SAL_CALL DummyGroup2D::getSize()
-    throw(uno::RuntimeException, std::exception)
 {
     long nTop = std::numeric_limits<long>::max();
     long nLeft = std::numeric_limits<long>::max();
@@ -972,7 +935,6 @@ awt::Size SAL_CALL DummyGroup2D::getSize()
 }
 
 void SAL_CALL DummyGroup2D::setPosition( const awt::Point& rPos )
-    throw(uno::RuntimeException, std::exception)
 {
     for(std::vector<DummyXShape*>::const_iterator itr = maShapes.begin(),
             itrEnd = maShapes.end(); itr != itrEnd; ++itr)
@@ -984,7 +946,6 @@ void SAL_CALL DummyGroup2D::setPosition( const awt::Point& rPos )
 }
 
 void SAL_CALL DummyGroup2D::setSize( const awt::Size& )
-    throw( beans::PropertyVetoException, uno::RuntimeException, std::exception )
 {
     SAL_WARN("chart2.opengl", "set size on group shape");
 }
@@ -1008,7 +969,6 @@ DummyChart* DummyChart::getRootShape()
 }
 
 uno::Any SAL_CALL DummyXShapes::queryInterface( const uno::Type& rType )
-    throw(uno::RuntimeException, std::exception)
 {
     if( rType == cppu::UnoType<drawing::XShapes>::get() )
         return uno::makeAny(uno::Reference<drawing::XShapes>(this));
@@ -1018,7 +978,6 @@ uno::Any SAL_CALL DummyXShapes::queryInterface( const uno::Type& rType )
 }
 
 uno::Any SAL_CALL DummyXShapes::queryAggregation( const uno::Type & rType )
-    throw(uno::RuntimeException, std::exception)
 {
     if( rType == cppu::UnoType<drawing::XShapes>::get() )
         return uno::makeAny(uno::Reference< drawing::XShapes >(this));
@@ -1039,7 +998,6 @@ void DummyXShapes::release()
 }
 
 void SAL_CALL DummyXShapes::add( const uno::Reference< drawing::XShape>& xShape )
-    throw(uno::RuntimeException, std::exception)
 {
     DummyXShape& rChild = dynamic_cast<DummyXShape&>(*xShape.get());
     maUNOShapes.push_back(xShape);
@@ -1048,7 +1006,6 @@ void SAL_CALL DummyXShapes::add( const uno::Reference< drawing::XShape>& xShape 
 }
 
 void SAL_CALL DummyXShapes::remove( const uno::Reference< drawing::XShape>& xShape )
-    throw(uno::RuntimeException, std::exception)
 {
     std::vector< uno::Reference<drawing::XShape> >::iterator itr = std::find(maUNOShapes.begin(), maUNOShapes.end(), xShape);
     if(itr != maUNOShapes.end())
@@ -1063,26 +1020,21 @@ void SAL_CALL DummyXShapes::remove( const uno::Reference< drawing::XShape>& xSha
 }
 
 uno::Type SAL_CALL DummyXShapes::getElementType()
-    throw(uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
 
 sal_Bool SAL_CALL DummyXShapes::hasElements()
-    throw(uno::RuntimeException, std::exception)
 {
     return !maUNOShapes.empty();
 }
 
 sal_Int32 SAL_CALL DummyXShapes::getCount()
-    throw(uno::RuntimeException, std::exception)
 {
     return maUNOShapes.size();
 }
 
 uno::Any SAL_CALL DummyXShapes::getByIndex(sal_Int32 nIndex)
-    throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-            uno::RuntimeException, std::exception)
 {
     uno::Any aShape;
     aShape <<= maUNOShapes[nIndex];
@@ -1108,7 +1060,6 @@ DummyChart::DummyChart():
 }
 
 void SAL_CALL DummyChart::setPosition( const awt::Point& aPosition )
-    throw( uno::RuntimeException, std::exception )
 {
     DummyXShape::setPosition(aPosition);
 }
@@ -1118,7 +1069,6 @@ DummyChart::~DummyChart()
 }
 
 void SAL_CALL DummyChart::setSize( const awt::Size& aSize )
-    throw( beans::PropertyVetoException, uno::RuntimeException, std::exception )
 {
     SAL_INFO("chart2.opengl", "DummyChart::setSize()---aSize.Width = " << aSize.Width << ", aSize.Height = " << aSize.Height);
     int width = aSize.Width;

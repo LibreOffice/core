@@ -49,7 +49,7 @@ sdbcx::ObjectType OTables::createObject(const OUString& _rName)
     return new OAdoTable(this,isCaseSensitive(),m_pCatalog,m_aCollection.GetItem(_rName));
 }
 
-void OTables::impl_refresh(  ) throw(RuntimeException)
+void OTables::impl_refresh(  )
 {
     OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
     m_aCollection.Refresh();

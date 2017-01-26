@@ -30,13 +30,13 @@ class CommandBarControlEnumeration : public ::cppu::WeakImplHelper< container::X
     sal_Int32 m_nCurrentPosition;
 public:
     explicit CommandBarControlEnumeration( CommandBarControls_BASE* pCommandBarControls ) : m_pCommandBarControls( pCommandBarControls ), m_nCurrentPosition( 0 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements() throw ( uno::RuntimeException, std::exception ) override
+    virtual sal_Bool SAL_CALL hasMoreElements() override
     {
         if( m_nCurrentPosition < m_pCommandBarControls->getCount() )
             return true;
         return false;
     }
-    virtual uno::Any SAL_CALL nextElement() throw ( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override
+    virtual uno::Any SAL_CALL nextElement() override
     {
         if( hasMoreElements() )
         {
@@ -47,7 +47,7 @@ public:
     }
 };
 
-ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef const & pHelper, const uno::Reference< container::XIndexAccess>& xBarSettings, const OUString& sResourceUrl ) throw (uno::RuntimeException) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl )
+ScVbaCommandBarControls::ScVbaCommandBarControls( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess>& xIndexAccess, VbaCommandBarHelperRef const & pHelper, const uno::Reference< container::XIndexAccess>& xBarSettings, const OUString& sResourceUrl ) : CommandBarControls_BASE( xParent, xContext, xIndexAccess ), pCBarHelper( pHelper ), m_xBarSettings( xBarSettings ), m_sResourceUrl( sResourceUrl )
 {
     m_bIsMenu = sResourceUrl == ITEM_MENUBAR_URL;
 }
@@ -110,13 +110,13 @@ uno::Sequence< beans::PropertyValue > ScVbaCommandBarControls::CreateToolbarItem
 
 // XEnumerationAccess
 uno::Type SAL_CALL
-ScVbaCommandBarControls::getElementType() throw ( uno::RuntimeException )
+ScVbaCommandBarControls::getElementType()
 {
     return cppu::UnoType<XCommandBarControl>::get();
 }
 
 uno::Reference< container::XEnumeration >
-ScVbaCommandBarControls::createEnumeration() throw ( uno::RuntimeException )
+ScVbaCommandBarControls::createEnumeration()
 {
     return uno::Reference< container::XEnumeration >( new CommandBarControlEnumeration( this ) );
 }
@@ -141,7 +141,7 @@ ScVbaCommandBarControls::createCollectionObject( const uno::Any& aSource )
 
 // Methods
 uno::Any SAL_CALL
-ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*/ ) throw (uno::RuntimeException)
+ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*/ )
 {
     sal_Int32 nPosition = -1;
     if( aIndex.getValueTypeClass() == uno::TypeClass_STRING )
@@ -164,7 +164,7 @@ ScVbaCommandBarControls::Item( const uno::Any& aIndex, const uno::Any& /*aIndex*
 }
 
 uno::Reference< XCommandBarControl > SAL_CALL
-ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const uno::Any& Parameter, const uno::Any& Before, const uno::Any& Temporary ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaCommandBarControls::Add( const uno::Any& Type, const uno::Any& Id, const uno::Any& Parameter, const uno::Any& Before, const uno::Any& Temporary )
 {
     // Parameter is not supported
     // the following name needs to be individually created;
@@ -259,32 +259,32 @@ class VbaDummyIndexAccess : public ::cppu::WeakImplHelper< container::XIndexAcce
 public:
     inline VbaDummyIndexAccess() {}
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
+    virtual ::sal_Int32 SAL_CALL getCount(  ) override
         { return 0; }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 /*Index*/ ) override
         { throw lang::IndexOutOfBoundsException(); }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Type SAL_CALL getElementType(  ) override
         { return cppu::UnoType<XCommandBarControl>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasElements(  ) override
         { return false; }
 };
 
 
 VbaDummyCommandBarControls::VbaDummyCommandBarControls(
         const uno::Reference< XHelperInterface >& xParent,
-        const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException) :
+        const uno::Reference< uno::XComponentContext >& xContext ) :
     CommandBarControls_BASE( xParent, xContext, new VbaDummyIndexAccess )
 {
 }
 
 // XEnumerationAccess
-uno::Type SAL_CALL VbaDummyCommandBarControls::getElementType() throw ( uno::RuntimeException )
+uno::Type SAL_CALL VbaDummyCommandBarControls::getElementType()
 {
     return cppu::UnoType<XCommandBarControl>::get();
 }
 
-uno::Reference< container::XEnumeration > VbaDummyCommandBarControls::createEnumeration() throw ( uno::RuntimeException )
+uno::Reference< container::XEnumeration > VbaDummyCommandBarControls::createEnumeration()
 {
     return uno::Reference< container::XEnumeration >( new CommandBarControlEnumeration( this ) );
 }
@@ -295,13 +295,13 @@ uno::Any VbaDummyCommandBarControls::createCollectionObject( const uno::Any& /*a
 }
 
 // Methods
-uno::Any SAL_CALL VbaDummyCommandBarControls::Item( const uno::Any& /*aIndex*/, const uno::Any& /*aIndex*/ ) throw (uno::RuntimeException)
+uno::Any SAL_CALL VbaDummyCommandBarControls::Item( const uno::Any& /*aIndex*/, const uno::Any& /*aIndex*/ )
 {
     return uno::Any( uno::Reference< XCommandBarControl >() );
 }
 
 uno::Reference< XCommandBarControl > SAL_CALL VbaDummyCommandBarControls::Add(
-        const uno::Any& /*Type*/, const uno::Any& /*Id*/, const uno::Any& /*Parameter*/, const uno::Any& /*Before*/, const uno::Any& /*Temporary*/ ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+        const uno::Any& /*Type*/, const uno::Any& /*Id*/, const uno::Any& /*Parameter*/, const uno::Any& /*Before*/, const uno::Any& /*Temporary*/ )
 {
     return uno::Reference< XCommandBarControl >();
 }

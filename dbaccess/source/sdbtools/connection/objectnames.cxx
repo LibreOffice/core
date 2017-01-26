@@ -364,7 +364,7 @@ namespace sdbtools
     {
     }
 
-    OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 CommandType, const OUString& BaseName ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
+    OUString SAL_CALL ObjectNames::suggestName( ::sal_Int32 CommandType, const OUString& BaseName )
     {
         EntryGuard aGuard( *this );
 
@@ -393,14 +393,14 @@ namespace sdbtools
         return sName;
     }
 
-    OUString SAL_CALL ObjectNames::convertToSQLName( const OUString& Name ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL ObjectNames::convertToSQLName( const OUString& Name )
     {
         EntryGuard aGuard( *this );
         Reference< XDatabaseMetaData > xMeta( getConnection()->getMetaData(), UNO_QUERY_THROW );
         return ::dbtools::convertName2SQLName( Name, xMeta->getExtraNameCharacters() );
     }
 
-    sal_Bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 CommandType, const OUString& Name ) throw (IllegalArgumentException, SQLException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL ObjectNames::isNameUsed( ::sal_Int32 CommandType, const OUString& Name )
     {
         EntryGuard aGuard( *this );
 
@@ -408,7 +408,7 @@ namespace sdbtools
         return !pNameCheck->validateName( Name );
     }
 
-    sal_Bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 CommandType, const OUString& Name ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL ObjectNames::isNameValid( ::sal_Int32 CommandType, const OUString& Name )
     {
         EntryGuard aGuard( *this );
 
@@ -416,7 +416,7 @@ namespace sdbtools
         return pNameCheck->validateName( Name );
     }
 
-    void SAL_CALL ObjectNames::checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name ) throw (SQLException, RuntimeException, std::exception)
+    void SAL_CALL ObjectNames::checkNameForCreate( ::sal_Int32 CommandType, const OUString& Name )
     {
         EntryGuard aGuard( *this );
 

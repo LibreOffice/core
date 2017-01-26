@@ -63,8 +63,7 @@ namespace DOM
     class CDefaultEntityResolver : public cppu::WeakImplHelper< XEntityResolver >
     {
     public:
-        virtual InputSource SAL_CALL resolveEntity( const OUString& sPublicId, const OUString& sSystemId )
-            throw (css::uno::RuntimeException, std::exception) override
+        virtual InputSource SAL_CALL resolveEntity( const OUString& sPublicId, const OUString& sSystemId ) override
         {
             InputSource is;
             is.sPublicId = sPublicId;
@@ -122,44 +121,37 @@ namespace DOM
     }
 
     Sequence< OUString > SAL_CALL CDocumentBuilder::getSupportedServiceNames()
-        throw (RuntimeException, std::exception)
     {
         return CDocumentBuilder::_getSupportedServiceNames();
     }
 
     OUString SAL_CALL CDocumentBuilder::getImplementationName()
-        throw (RuntimeException, std::exception)
     {
         return CDocumentBuilder::_getImplementationName();
     }
 
     sal_Bool SAL_CALL CDocumentBuilder::supportsService(const OUString& aServiceName)
-        throw (RuntimeException, std::exception)
     {
         return cppu::supportsService(this, aServiceName);
     }
 
     Reference< XDOMImplementation > SAL_CALL CDocumentBuilder::getDOMImplementation()
-        throw (RuntimeException, std::exception)
     {
 
         return Reference< XDOMImplementation >();
     }
 
     sal_Bool SAL_CALL CDocumentBuilder::isNamespaceAware()
-        throw (RuntimeException, std::exception)
     {
         return true;
     }
 
     sal_Bool SAL_CALL CDocumentBuilder::isValidating()
-        throw (RuntimeException, std::exception)
     {
         return false;
     }
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::newDocument()
-        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -308,7 +300,6 @@ namespace DOM
     }
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::parse(const Reference< XInputStream >& is)
-        throw (RuntimeException, SAXParseException, IOException, std::exception)
     {
         if (!is.is()) {
             throw RuntimeException();
@@ -345,7 +336,6 @@ namespace DOM
     }
 
     Reference< XDocument > SAL_CALL CDocumentBuilder::parseURI(const OUString& sUri)
-        throw (RuntimeException, SAXParseException, IOException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -369,7 +359,6 @@ namespace DOM
 
     void SAL_CALL
     CDocumentBuilder::setEntityResolver(Reference< XEntityResolver > const& xER)
-        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -377,7 +366,6 @@ namespace DOM
     }
 
     Reference< XEntityResolver > SAL_CALL CDocumentBuilder::getEntityResolver()
-        throw (RuntimeException)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -386,7 +374,6 @@ namespace DOM
 
     void SAL_CALL
     CDocumentBuilder::setErrorHandler(Reference< XErrorHandler > const& xEH)
-        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard const g(m_Mutex);
 

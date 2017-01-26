@@ -44,31 +44,31 @@ protected:
 
 private:
     /// @throws css::uno::RuntimeException
-    void ApplyChange() throw (css::uno::RuntimeException);
+    void ApplyChange();
 
 public:
     /// @throws css::uno::RuntimeException
-    ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl ) throw (css::uno::RuntimeException);
+    ScVbaCommandBarControl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl );
 
     // Attributes
-    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getOnAction() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setOnAction( const OUString& _onaction ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getBeginGroup() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBeginGroup( sal_Bool _begin ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getCaption() override;
+    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
+    virtual OUString SAL_CALL getOnAction() override;
+    virtual void SAL_CALL setOnAction( const OUString& _onaction ) override;
+    virtual sal_Bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual sal_Bool SAL_CALL getEnabled() override;
+    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) override;
+    virtual sal_Bool SAL_CALL getBeginGroup() override;
+    virtual void SAL_CALL setBeginGroup( sal_Bool _begin ) override;
+    virtual sal_Int32 SAL_CALL getType() override
     {
         return ov::office::MsoControlType::msoControlButton;
     }
 
     // Methods
-    virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Controls( const css::uno::Any& aIndex ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Delete(  ) override;
+    virtual css::uno::Any SAL_CALL Controls( const css::uno::Any& aIndex ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;
@@ -80,9 +80,9 @@ class ScVbaCommandBarPopup : public CommandBarPopup_BASE
 {
 public:
     /// @throws css::uno::RuntimeException
-    ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary ) throw (css::uno::RuntimeException);
+    ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary );
 
-    virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Int32 SAL_CALL getType() override
     {
         return ov::office::MsoControlType::msoControlPopup;
     }
@@ -96,9 +96,9 @@ class ScVbaCommandBarButton : public CommandBarButton_BASE
 {
 public:
     /// @throws css::uno::RuntimeException
-    ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary ) throw (css::uno::RuntimeException);
+    ScVbaCommandBarButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xSettings, const VbaCommandBarHelperRef& pHelper, const css::uno::Reference< css::container::XIndexAccess >& xBarSettings, const OUString& sResourceUrl, sal_Int32 nPosition, bool bTemporary );
 
-    virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Int32 SAL_CALL getType() override
     {
         return ov::office::MsoControlType::msoControlButton;
     }

@@ -35,19 +35,18 @@ public:
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::frame::XModel >& xModel,
-        const css::uno::Reference< css::frame::XController >& xController )
-        throw (css::uno::RuntimeException);
+        const css::uno::Reference< css::frame::XController >& xController );
 
     // Attributes
-    virtual css::uno::Any SAL_CALL getView() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setView( const css::uno::Any& _view ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getWindowState() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getView() override;
+    virtual void SAL_CALL setView( const css::uno::Any& _view ) override;
+    virtual css::uno::Any SAL_CALL getWindowState() override;
+    virtual void SAL_CALL setWindowState( const css::uno::Any& _windowstate ) override;
     // Methods
-    virtual void SAL_CALL Activate(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& RouteDocument ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Panes( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL ActivePane() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Activate(  ) override;
+    virtual void SAL_CALL Close( const css::uno::Any& SaveChanges, const css::uno::Any& RouteDocument ) override;
+    virtual css::uno::Any SAL_CALL Panes( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL ActivePane() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

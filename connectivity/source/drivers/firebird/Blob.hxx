@@ -46,16 +46,14 @@ namespace connectivity
             ISC_STATUS_ARRAY    m_statusVector;
 
             /// @throws css::sdbc::SQLException
-            void ensureBlobIsOpened()
-                throw(css::sdbc::SQLException);
+            void ensureBlobIsOpened();
             /**
              * Closes the blob and cleans up resources -- can be used to reset
              * the blob if we e.g. want to read from the beginning again.
              *
              * @throws css::sdbc::SQLException
              */
-            void closeBlob()
-                throw(css::sdbc::SQLException);
+            void closeBlob();
 
         public:
             Blob(isc_db_handle* pDatabaseHandle,
@@ -64,59 +62,31 @@ namespace connectivity
 
             // ---- XBlob ----------------------------------------------------
             virtual sal_Int64 SAL_CALL
-                length()
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                length() override;
             virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-                getBytes(sal_Int64 aPosition, sal_Int32 aLength)
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                getBytes(sal_Int64 aPosition, sal_Int32 aLength) override;
             virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
-                getBinaryStream()
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                getBinaryStream() override;
             virtual sal_Int64 SAL_CALL
                 position(const css::uno::Sequence< sal_Int8 >& rPattern,
-                         sal_Int64 aStart)
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                         sal_Int64 aStart) override;
             virtual sal_Int64 SAL_CALL
                 positionOfBlob(const css::uno::Reference< css::sdbc::XBlob >& rPattern,
-                               sal_Int64 aStart)
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                               sal_Int64 aStart) override;
 
             // ---- XInputStream ----------------------------------------------
             virtual sal_Int32 SAL_CALL
                 readBytes(css::uno::Sequence< sal_Int8 >& rDataOut,
-                          sal_Int32 nBytes)
-                throw(css::io::NotConnectedException,
-                      css::io::BufferSizeExceededException,
-                      css::io::IOException,
-                      css::uno::RuntimeException, std::exception) override;
+                          sal_Int32 nBytes) override;
             virtual sal_Int32 SAL_CALL
                 readSomeBytes(css::uno::Sequence< sal_Int8 >& rDataOut,
-                              sal_Int32 nMaximumBytes)
-                throw(css::io::NotConnectedException,
-                      css::io::BufferSizeExceededException,
-                        css::io::IOException,
-                      css::uno::RuntimeException, std::exception) override;
+                              sal_Int32 nMaximumBytes) override;
             virtual void SAL_CALL
-                skipBytes(sal_Int32 nBytes)
-                throw(css::io::NotConnectedException,
-                      css::io::BufferSizeExceededException,
-                      css::io::IOException,
-                      css::uno::RuntimeException, std::exception) override;
+                skipBytes(sal_Int32 nBytes) override;
             virtual sal_Int32 SAL_CALL
-                available()
-                throw(css::io::NotConnectedException,
-                      css::io::IOException,
-                      css::uno::RuntimeException, std::exception) override;
+                available() override;
             virtual void SAL_CALL
-                closeInput()
-                throw(css::io::NotConnectedException,
-                      css::io::IOException,
-                      css::uno::RuntimeException, std::exception) override;
+                closeInput() override;
 
             // ---- OComponentHelper ------------------------------------------
             virtual void SAL_CALL disposing() override;

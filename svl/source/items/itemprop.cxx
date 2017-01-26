@@ -115,7 +115,6 @@ uno::Sequence<beans::Property> SfxItemPropertyMap::getProperties() const
 }
 
 beans::Property SfxItemPropertyMap::getPropertyByName( const OUString & rName ) const
-    throw( beans::UnknownPropertyException )
 {
     SfxItemPropertyHashMap_t::const_iterator aIter = m_pImpl->find(rName);
     if( aIter == m_pImpl->end() )
@@ -175,7 +174,6 @@ SfxItemPropertySet::~SfxItemPropertySet()
 
 void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
             const SfxItemSet& rSet, Any& rAny ) const
-                        throw(RuntimeException)
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = nullptr;
@@ -204,7 +202,6 @@ void SfxItemPropertySet::getPropertyValue( const SfxItemPropertySimpleEntry& rEn
 
 void SfxItemPropertySet::getPropertyValue( const OUString &rName,
                                            const SfxItemSet& rSet, Any& rAny ) const
-    throw(RuntimeException, UnknownPropertyException)
 {
     // detect which-id
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
@@ -215,7 +212,6 @@ void SfxItemPropertySet::getPropertyValue( const OUString &rName,
 
 Any SfxItemPropertySet::getPropertyValue( const OUString &rName,
                                           const SfxItemSet& rSet ) const
-    throw(RuntimeException, UnknownPropertyException)
 {
     Any aVal;
     getPropertyValue( rName,rSet, aVal );
@@ -225,8 +221,6 @@ Any SfxItemPropertySet::getPropertyValue( const OUString &rName,
 void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEntry,
                                            const Any& aVal,
                                            SfxItemSet& rSet ) const
-    throw(RuntimeException,
-          IllegalArgumentException)
 {
     // get the SfxPoolItem
     const SfxPoolItem* pItem = nullptr;
@@ -252,9 +246,6 @@ void SfxItemPropertySet::setPropertyValue( const SfxItemPropertySimpleEntry& rEn
 void SfxItemPropertySet::setPropertyValue( const OUString &rName,
                                            const Any& aVal,
                                            SfxItemSet& rSet ) const
-    throw(RuntimeException,
-          IllegalArgumentException,
-          UnknownPropertyException)
 {
     const SfxItemPropertySimpleEntry* pEntry = m_aMap.getByName( rName );
     if ( !pEntry )
@@ -281,7 +272,6 @@ PropertyState SfxItemPropertySet::getPropertyState(const SfxItemPropertySimpleEn
 }
 
 PropertyState   SfxItemPropertySet::getPropertyState(const OUString& rName, const SfxItemSet& rSet) const
-    throw(UnknownPropertyException)
 {
     PropertyState eRet = PropertyState_DIRECT_VALUE;
 
@@ -328,7 +318,6 @@ SfxItemPropertySetInfo::SfxItemPropertySetInfo(const SfxItemPropertyMapEntry *pE
 }
 
 Sequence< Property > SAL_CALL SfxItemPropertySetInfo::getProperties(  )
-    throw(RuntimeException, std::exception)
 {
     return m_pImpl->m_pOwnMap->getProperties();
 }
@@ -339,13 +328,11 @@ SfxItemPropertySetInfo::~SfxItemPropertySetInfo()
 }
 
 Property SAL_CALL SfxItemPropertySetInfo::getPropertyByName( const OUString& rName )
-    throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     return m_pImpl->m_pOwnMap->getPropertyByName( rName );
 }
 
 sal_Bool SAL_CALL SfxItemPropertySetInfo::hasPropertyByName( const OUString& rName )
-    throw(RuntimeException, std::exception)
 {
     return m_pImpl->m_pOwnMap->hasPropertyByName( rName );
 }
@@ -361,19 +348,17 @@ SfxExtItemPropertySetInfo::~SfxExtItemPropertySetInfo()
 {
 }
 
-Sequence< Property > SAL_CALL SfxExtItemPropertySetInfo::getProperties(  ) throw(RuntimeException, std::exception)
+Sequence< Property > SAL_CALL SfxExtItemPropertySetInfo::getProperties(  )
 {
     return aExtMap.getProperties();
 }
 
 Property SAL_CALL SfxExtItemPropertySetInfo::getPropertyByName( const OUString& rPropertyName )
-    throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     return aExtMap.getPropertyByName( rPropertyName );
 }
 
 sal_Bool SAL_CALL SfxExtItemPropertySetInfo::hasPropertyByName( const OUString& rPropertyName )
-    throw(RuntimeException, std::exception)
 {
     return aExtMap.hasPropertyByName( rPropertyName );
 }

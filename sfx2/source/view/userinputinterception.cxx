@@ -124,27 +124,27 @@ namespace sfx2
     }
 
 
-    void UserInputInterception::addKeyHandler( const Reference< XKeyHandler >& _rxHandler ) throw (RuntimeException)
+    void UserInputInterception::addKeyHandler( const Reference< XKeyHandler >& _rxHandler )
     {
         if ( _rxHandler.is() )
             m_pData->m_aKeyHandlers.addInterface( _rxHandler );
     }
 
 
-    void UserInputInterception::removeKeyHandler( const Reference< XKeyHandler >& _rxHandler ) throw (RuntimeException)
+    void UserInputInterception::removeKeyHandler( const Reference< XKeyHandler >& _rxHandler )
     {
         m_pData->m_aKeyHandlers.removeInterface( _rxHandler );
     }
 
 
-    void UserInputInterception::addMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler ) throw (RuntimeException)
+    void UserInputInterception::addMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
     {
         if ( _rxHandler.is() )
             m_pData->m_aMouseClickHandlers.addInterface( _rxHandler );
     }
 
 
-    void UserInputInterception::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler ) throw (RuntimeException)
+    void UserInputInterception::removeMouseClickHandler( const Reference< XMouseClickHandler >& _rxHandler )
     {
         m_pData->m_aMouseClickHandlers.removeInterface( _rxHandler );
     }

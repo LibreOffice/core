@@ -42,17 +42,17 @@ DropTargetDropContext::~DropTargetDropContext()
 {
 }
 
-void DropTargetDropContext::acceptDrop( sal_Int8 dragOperation ) throw(std::exception)
+void DropTargetDropContext::acceptDrop( sal_Int8 dragOperation )
 {
     m_rManager.accept( dragOperation, m_aDropWindow, m_nTimestamp );
 }
 
-void DropTargetDropContext::rejectDrop() throw(std::exception)
+void DropTargetDropContext::rejectDrop()
 {
     m_rManager.reject( m_aDropWindow, m_nTimestamp );
 }
 
-void DropTargetDropContext::dropComplete( sal_Bool success ) throw(std::exception)
+void DropTargetDropContext::dropComplete( sal_Bool success )
 {
     m_rManager.dropComplete( success, m_aDropWindow, m_nTimestamp );
 }
@@ -76,12 +76,12 @@ DropTargetDragContext::~DropTargetDragContext()
 {
 }
 
-void DropTargetDragContext::acceptDrag( sal_Int8 dragOperation ) throw(std::exception)
+void DropTargetDragContext::acceptDrag( sal_Int8 dragOperation )
 {
     m_rManager.accept( dragOperation, m_aDropWindow, m_nTimestamp );
 }
 
-void DropTargetDragContext::rejectDrag() throw(std::exception)
+void DropTargetDragContext::rejectDrag()
 {
     m_rManager.reject( m_aDropWindow, m_nTimestamp );
 }
@@ -105,21 +105,21 @@ DragSourceContext::~DragSourceContext()
 {
 }
 
-sal_Int32 DragSourceContext::getCurrentCursor() throw(std::exception)
+sal_Int32 DragSourceContext::getCurrentCursor()
 {
     return m_rManager.getCurrentCursor();
 }
 
-void DragSourceContext::setCursor( sal_Int32 cursorId ) throw(std::exception)
+void DragSourceContext::setCursor( sal_Int32 cursorId )
 {
     m_rManager.setCursor( cursorId, m_aDropWindow, m_nTimestamp );
 }
 
-void DragSourceContext::setImage( sal_Int32 ) throw(std::exception)
+void DragSourceContext::setImage( sal_Int32 )
 {
 }
 
-void DragSourceContext::transferablesFlavorsChanged() throw(std::exception)
+void DragSourceContext::transferablesFlavorsChanged()
 {
     m_rManager.transferablesFlavorsChanged();
 }

@@ -42,11 +42,11 @@ namespace oglcanvas
                     const css::geometry::Matrix2D&                                         fontMatrix );
 
         // XCanvasFont
-        virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::rendering::XTextLayout > SAL_CALL createTextLayout( const css::rendering::StringContext& aText, sal_Int8 nDirection, sal_Int64 nRandomSeed ) override;
+        virtual css::rendering::FontRequest SAL_CALL getFontRequest(  ) override;
+        virtual css::rendering::FontMetrics SAL_CALL getFontMetrics(  ) override;
+        virtual css::uno::Sequence< double > SAL_CALL getAvailableSizes(  ) override;
+        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getExtraFontProperties(  ) override;
 
         const css::geometry::Matrix2D& getFontMatrix() const { return maFontMatrix; }
 

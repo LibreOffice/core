@@ -191,7 +191,6 @@ CDOTransferable::CDOTransferable(
 }
 
 Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
-        throw( UnsupportedFlavorException, IOException, RuntimeException )
 {
     OSL_ASSERT( isValidFlavor( aFlavor ) );
 
@@ -248,7 +247,6 @@ Any SAL_CALL CDOTransferable::getTransferData( const DataFlavor& aFlavor )
 // getTransferDataFlavors
 
 Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
-    throw( RuntimeException )
 {
     return m_FlavorList;
 }
@@ -258,7 +256,6 @@ Sequence< DataFlavor > SAL_CALL CDOTransferable::getTransferDataFlavors(  )
 // DataType
 
 sal_Bool SAL_CALL CDOTransferable::isDataFlavorSupported( const DataFlavor& aFlavor )
-    throw( RuntimeException )
 {
     OSL_ASSERT( isValidFlavor( aFlavor ) );
 
@@ -528,7 +525,6 @@ bool SAL_CALL CDOTransferable::compareDataFlavors(
 }
 
 css::uno::Any SAL_CALL CDOTransferable::getData( const Sequence< sal_Int8>& aProcessId  )
-        throw (css::uno::RuntimeException)
 {
     Any retVal;
 

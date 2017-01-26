@@ -48,7 +48,7 @@ ModelEventListener::~ModelEventListener()
 }
 
 
-void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) throw (uno::RuntimeException, std::exception)
+void ModelEventListener::notifyEvent( const document::EventObject& rEvent )
 {
     if ( rEvent.EventName == "OnFocus" && m_bIndexes)
     {
@@ -102,7 +102,7 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
 }
 
 
-void ModelEventListener::disposing( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception)
+void ModelEventListener::disposing( const lang::EventObject& rEvent )
 {
     try
     {

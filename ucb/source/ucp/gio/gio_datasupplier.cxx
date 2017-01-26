@@ -262,7 +262,7 @@ void DataSupplier::close()
 {
 }
 
-void DataSupplier::validate() throw( ucb::ResultSetException )
+void DataSupplier::validate()
 {
 }
 

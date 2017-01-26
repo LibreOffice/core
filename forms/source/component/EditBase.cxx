@@ -85,7 +85,7 @@ OEditBaseModel::~OEditBaseModel( )
 
 // XPersist
 
-void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
+void OEditBaseModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     OBoundControlModel::write(_rxOutStream);
 
@@ -159,7 +159,7 @@ sal_uInt16 OEditBaseModel::getPersistenceFlags() const
 }
 
 
-void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
+void OEditBaseModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OBoundControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -293,7 +293,6 @@ void OEditBaseModel::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 
 sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue,
                                             sal_Int32 nHandle, const Any& rValue )
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     bool bModified(false);
     switch (nHandle)
@@ -326,7 +325,7 @@ sal_Bool OEditBaseModel::convertFastPropertyValue( Any& rConvertedValue, Any& rO
     return bModified;
 }
 
-void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw ( css::uno::Exception, std::exception)
+void OEditBaseModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     switch (nHandle)
     {

@@ -120,14 +120,14 @@ void SfxStatusDispatcher::ReleaseAll()
     aListeners.disposeAndClear( aObject );
 }
 
-void SAL_CALL SfxStatusDispatcher::dispatch( const css::util::URL&, const css::uno::Sequence< css::beans::PropertyValue >& ) throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL SfxStatusDispatcher::dispatch( const css::util::URL&, const css::uno::Sequence< css::beans::PropertyValue >& )
 {
 }
 
 void SAL_CALL SfxStatusDispatcher::dispatchWithNotification(
     const css::util::URL&,
     const css::uno::Sequence< css::beans::PropertyValue >&,
-    const css::uno::Reference< css::frame::XDispatchResultListener >& ) throw( css::uno::RuntimeException, std::exception )
+    const css::uno::Reference< css::frame::XDispatchResultListener >& )
 {
 }
 
@@ -136,7 +136,7 @@ SfxStatusDispatcher::SfxStatusDispatcher()
 {
 }
 
-void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
     aListeners.addInterface( aURL.Complete, aListener );
     if ( aURL.Complete == ".uno:LifeTime" )
@@ -150,14 +150,14 @@ void SAL_CALL SfxStatusDispatcher::addStatusListener(const css::uno::Reference< 
     }
 }
 
-void SAL_CALL SfxStatusDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL ) throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL SfxStatusDispatcher::removeStatusListener( const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL )
 {
     aListeners.removeInterface( aURL.Complete, aListener );
 }
 
 
 // XUnoTunnel
-sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL SfxOfficeDispatch::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
 {
     if ( aIdentifier == impl_getStaticIdentifier() )
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
@@ -219,7 +219,7 @@ std::unique_ptr< css::uno::ContextLayer > EnsureJavaContext()
 }
 #endif
 
-void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
 {
     // ControllerItem is the Impl class
     if ( pImpl )
@@ -233,7 +233,7 @@ void SAL_CALL SfxOfficeDispatch::dispatch( const css::util::URL& aURL, const css
 
 void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL& aURL,
         const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
-        const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) throw( css::uno::RuntimeException, std::exception )
+        const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
 {
     // ControllerItem is the Impl class
     if ( pImpl )
@@ -245,7 +245,7 @@ void SAL_CALL SfxOfficeDispatch::dispatchWithNotification( const css::util::URL&
     }
 }
 
-void SAL_CALL SfxOfficeDispatch::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL SfxOfficeDispatch::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
     GetListeners().addInterface( aURL.Complete, aListener );
     if ( pImpl )
@@ -605,7 +605,6 @@ void collectUsageInformation(const util::URL& rURL, const uno::Sequence<beans::P
 void SAL_CALL SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
         const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
         const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
-    throw (css::uno::RuntimeException, std::exception)
 {
     collectUsageInformation(aURL, aArgs);
 
@@ -816,7 +815,7 @@ SfxDispatcher* SfxDispatchController_Impl::GetDispatcher()
     return pDispatcher;
 }
 
-void SAL_CALL SfxDispatchController_Impl::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL) throw ( css::uno::RuntimeException )
+void SAL_CALL SfxDispatchController_Impl::addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & aListener, const css::util::URL& aURL)
 {
     SolarMutexGuard aGuard;
     if ( !pDispatch )

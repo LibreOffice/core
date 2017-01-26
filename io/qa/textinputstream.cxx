@@ -42,19 +42,11 @@ private:
     virtual ~Input() override {}
 
     sal_Int32 SAL_CALL readBytes(css::uno::Sequence<sal_Int8> &, sal_Int32)
-        throw (
-            css::io::NotConnectedException,
-            css::io::BufferSizeExceededException, css::io::IOException,
-            css::uno::RuntimeException, std::exception)
         override
     { CPPUNIT_FAIL("readLine is supposed to call readSomeBytes instead"); return 0;}
 
     sal_Int32 SAL_CALL readSomeBytes(
-        css::uno::Sequence<sal_Int8 > & aData, sal_Int32 nMaxBytesToRead)
-        throw (
-            css::io::NotConnectedException,
-            css::io::BufferSizeExceededException, css::io::IOException,
-            css::uno::RuntimeException, ::std::exception) override
+        css::uno::Sequence<sal_Int8 > & aData, sal_Int32 nMaxBytesToRead) override
     {
         assert(nMaxBytesToRead >= 0);
         osl::MutexGuard g(mutex_);
@@ -70,11 +62,7 @@ private:
         return n;
     }
 
-    void SAL_CALL skipBytes(sal_Int32 nBytesToSkip)
-        throw (
-            css::io::NotConnectedException,
-            css::io::BufferSizeExceededException, css::io::IOException,
-            css::uno::RuntimeException, std::exception) override
+    void SAL_CALL skipBytes(sal_Int32 nBytesToSkip) override
     {
         assert(nBytesToSkip >= 0);
         osl::MutexGuard g(mutex_);
@@ -84,10 +72,7 @@ private:
         assert(index_ >= 0 && index_ <= SIZE);
     }
 
-    sal_Int32 SAL_CALL available()
-        throw (
-            css::io::NotConnectedException, css::io::IOException,
-            css::uno::RuntimeException, std::exception) override
+    sal_Int32 SAL_CALL available() override
     {
         osl::MutexGuard g(mutex_);
         checkClosed();
@@ -95,10 +80,7 @@ private:
         return SIZE - index_;
     }
 
-    void SAL_CALL closeInput()
-        throw (
-            css::io::NotConnectedException, css::io::IOException,
-            css::uno::RuntimeException, std::exception) override
+    void SAL_CALL closeInput() override
     {
         osl::MutexGuard g(mutex_);
         checkClosed();

@@ -90,13 +90,11 @@ protected:
 
     SvStream&               mrStm;
 
-    virtual void SAL_CALL   writeBytes( const css::uno::Sequence< sal_Int8 >& rData )
-        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL   writeBytes( const css::uno::Sequence< sal_Int8 >& rData ) override
         { mrStm.WriteBytes(rData.getConstArray(), rData.getLength()); }
-    virtual void SAL_CALL   flush()
-        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL   flush() override
         { mrStm.Flush(); }
-    virtual void SAL_CALL   closeOutput() throw(std::exception) override {}
+    virtual void SAL_CALL   closeOutput() override {}
 
 public:
 

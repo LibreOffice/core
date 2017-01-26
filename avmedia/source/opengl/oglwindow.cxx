@@ -30,7 +30,7 @@ OGLWindow::~OGLWindow()
     dispose();
 }
 
-void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL OGLWindow::update()
 {
     m_xContext->makeCurrent();
     int nRet = gltf_prepare_renderer(&m_rHandle);
@@ -44,36 +44,36 @@ void SAL_CALL OGLWindow::update() throw (css::uno::RuntimeException, std::except
     m_xContext->swapBuffers();
 }
 
-sal_Bool SAL_CALL OGLWindow::setZoomLevel( css::media::ZoomLevel /*eZoomLevel*/ ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGLWindow::setZoomLevel( css::media::ZoomLevel /*eZoomLevel*/ )
 {
     return false;
 }
 
-css::media::ZoomLevel SAL_CALL OGLWindow::getZoomLevel() throw (css::uno::RuntimeException, std::exception)
+css::media::ZoomLevel SAL_CALL OGLWindow::getZoomLevel()
 {
     return media::ZoomLevel_ORIGINAL;
 }
 
-void SAL_CALL OGLWindow::setPointerType( sal_Int32 ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL OGLWindow::setPointerType( sal_Int32 )
 {
 }
 
-OUString SAL_CALL OGLWindow::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OGLWindow::getImplementationName()
 {
     return OUString("com.sun.star.comp.avmedia.Window_OpenGL");
 }
 
-sal_Bool SAL_CALL OGLWindow::supportsService( const OUString& rServiceName ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGLWindow::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OGLWindow::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL OGLWindow::getSupportedServiceNames()
 {
     return { "com.sun.star.media.Window_OpenGL" };
 }
 
-void SAL_CALL OGLWindow::dispose() throw (uno::RuntimeException, std::exception)
+void SAL_CALL OGLWindow::dispose()
 {
     assert(m_rEventHandler.GetParent());
     m_rEventHandler.GetParent()->RemoveEventListener( LINK(this, OGLWindow, FocusGrabber));
@@ -81,17 +81,14 @@ void SAL_CALL OGLWindow::dispose() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL OGLWindow::addEventListener( const uno::Reference< lang::XEventListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::removeEventListener( const uno::Reference< lang::XEventListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 /*nFlags*/ )
-    throw (uno::RuntimeException, std::exception)
 {
     if( m_rHandle.viewport.x != nX || m_rHandle.viewport.x != nY ||
         m_rHandle.viewport.width != nWidth || m_rHandle.viewport.height != nHeight )
@@ -105,14 +102,12 @@ void SAL_CALL OGLWindow::setPosSize( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidt
 }
 
 awt::Rectangle SAL_CALL OGLWindow::getPosSize()
-    throw (uno::RuntimeException, std::exception)
 {
     return awt::Rectangle(m_rHandle.viewport.x, m_rHandle.viewport.y,
                           m_rHandle.viewport.width, m_rHandle.viewport.height);
 }
 
 void SAL_CALL OGLWindow::setVisible( sal_Bool bSet )
-    throw (uno::RuntimeException, std::exception)
 {
     assert(m_rEventHandler.GetParent());
     if( bSet && !m_bVisible )
@@ -130,72 +125,58 @@ void SAL_CALL OGLWindow::setVisible( sal_Bool bSet )
 }
 
 void SAL_CALL OGLWindow::setEnable( sal_Bool )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::setFocus()
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::addWindowListener( const uno::Reference< awt::XWindowListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::removeWindowListener( const uno::Reference< awt::XWindowListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::addFocusListener( const uno::Reference< awt::XFocusListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::removeFocusListener( const uno::Reference< awt::XFocusListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::addKeyListener( const uno::Reference< awt::XKeyListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::removeKeyListener( const uno::Reference< awt::XKeyListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::addMouseListener( const uno::Reference< awt::XMouseListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::removeMouseListener( const uno::Reference< awt::XMouseListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::addPaintListener( const uno::Reference< awt::XPaintListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OGLWindow::removePaintListener( const uno::Reference< awt::XPaintListener >& )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 

@@ -88,11 +88,10 @@ namespace connectivity
                                                                 css::uno::Any & rConvertedValue,
                                                                 css::uno::Any & rOldValue,
                                                                 sal_Int32 nHandle,
-                                                                const css::uno::Any& rValue )
-                                                            throw (css::lang::IllegalArgumentException) override;
+                                                                const css::uno::Any& rValue ) override;
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                                                 sal_Int32 nHandle,
-                                                                const css::uno::Any& rValue)   throw (css::uno::Exception, std::exception) override;
+                                                                const css::uno::Any& rValue) override;
             virtual void SAL_CALL getFastPropertyValue(
                                                                 css::uno::Any& rValue,
                                                                 sal_Int32 nHandle) const override;
@@ -109,7 +108,7 @@ namespace connectivity
                 @throws css::uno::RuntimeException
             */
             virtual StatementType
-                            parseSql( const OUString& sql , bool bAdjusted = false) throw ( css::sdbc::SQLException, css::uno::RuntimeException, std::exception );
+                            parseSql( const OUString& sql , bool bAdjusted = false);
             /** called to initialize a result set, according to a previously parsed SQL statement
             */
             virtual void    initializeResultSet( OResultSet* _pResult );
@@ -145,22 +144,22 @@ namespace connectivity
             virtual void SAL_CALL release() throw() override;
             virtual void SAL_CALL acquire() throw() override;
             // XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
             // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
             // XStatement
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
-            virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
-            virtual sal_Bool SAL_CALL execute( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override ;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override ;
+            virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) override ;
+            virtual sal_Bool SAL_CALL execute( const OUString& sql ) override ;
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override ;
             // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+            virtual void SAL_CALL clearWarnings(  ) override;
             // XCloseable
-            virtual void SAL_CALL close(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL close(  ) override;
 
         protected:
             using OPropertySetHelper::getFastPropertyValue;
@@ -176,7 +175,7 @@ namespace connectivity
             explicit OStatement( OConnection* _pConnection);
             DECLARE_SERVICE_INFO();
 
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;
         };

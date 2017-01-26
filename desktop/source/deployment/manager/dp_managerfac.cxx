@@ -61,7 +61,7 @@ public:
 
     // XPackageManagerFactory
     virtual Reference<deployment::XPackageManager> SAL_CALL getPackageManager(
-        OUString const & context ) throw (RuntimeException, std::exception) override;
+        OUString const & context ) override;
 };
 
 
@@ -114,7 +114,6 @@ void PackageManagerFactoryImpl::disposing()
 
 Reference<deployment::XPackageManager>
 PackageManagerFactoryImpl::getPackageManager( OUString const & context )
-    throw (RuntimeException, std::exception)
 {
     Reference< deployment::XPackageManager > xRet;
     ::osl::ResettableMutexGuard guard( getMutex() );

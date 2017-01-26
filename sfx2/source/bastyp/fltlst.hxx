@@ -42,10 +42,10 @@ class SfxFilterListener final
     public:
         // XRefreshListener
         /// @throws css::uno::RuntimeException
-        void SAL_CALL refreshed( const css::lang::EventObject& aSource ) throw( css::uno::RuntimeException, std::exception );
+        void SAL_CALL refreshed( const css::lang::EventObject& aSource );
         // XEventListener
         /// @throws css::uno::RuntimeException
-        void SAL_CALL disposing( const css::lang::EventObject& aSource ) throw( css::uno::RuntimeException );
+        void SAL_CALL disposing( const css::lang::EventObject& aSource );
 
 };
 

@@ -41,43 +41,43 @@ OResultSetMetaData::~OResultSetMetaData()
 }
 
 
-void OResultSetMetaData::checkColumnIndex(sal_Int32 column)  throw(SQLException, RuntimeException)
+void OResultSetMetaData::checkColumnIndex(sal_Int32 column)
 {
     if(column <= 0 || column > (sal_Int32)(sal_Int32)m_xColumns->get().size())
         throwInvalidIndexException(*this);
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 {
     return getPrecision(column);
 }
 
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 /*column*/ )
 {
     return DataType::VARCHAR; // at the moment there exists only this type
 }
 
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
 {
     return static_cast<sal_Int32>((m_xColumns->get()).size());
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 /*column*/ )
 {
     return false;
 }
 
 
-OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
 
-OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column )
 {
     checkColumnIndex(column);
 
@@ -94,71 +94,71 @@ OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQ
     return sColumnName;
 }
 
-OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 /*column*/ )
 {
     return m_aTableName;
 }
 
-OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getString((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_TYPENAME)));
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column )
 {
     return getColumnName(column);
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getBOOL((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISCURRENCY)));
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 /*column*/ )
 {
     return false;
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 /*column*/ )
 {
     return false;
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getINT32((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_PRECISION)));
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getINT32((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_SCALE)));
 }
 
 
-sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column )
 {
     checkColumnIndex(column);
     return getINT32((m_xColumns->get())[column-1]->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISNULLABLE)));
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ )
 {
     if ( !m_pTable || !m_pTable->getConnection() )
     {
@@ -170,7 +170,7 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 /*column*/ ) throw
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
 {
     checkColumnIndex(column);
     bool bReadOnly = (m_xColumns->get())[column-1]->getPropertySetInfo()->hasPropertyByName(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_FUNCTION)) &&
@@ -180,12 +180,12 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLEx
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     return !isReadOnly(column);
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column )
 {
     return !isReadOnly(column);
 }

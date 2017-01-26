@@ -70,7 +70,7 @@ namespace pcr
     }
 
 
-    Sequence<sal_Int8> SAL_CALL OTabOrderDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
+    Sequence<sal_Int8> SAL_CALL OTabOrderDialog::getImplementationId(  )
     {
         return css::uno::Sequence<sal_Int8>();
     }
@@ -82,25 +82,25 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL OTabOrderDialog::getImplementationName() throw(RuntimeException, std::exception)
+    OUString SAL_CALL OTabOrderDialog::getImplementationName()
     {
         return getImplementationName_static();
     }
 
 
-    OUString OTabOrderDialog::getImplementationName_static() throw(RuntimeException)
+    OUString OTabOrderDialog::getImplementationName_static()
     {
         return OUString("org.openoffice.comp.form.ui.OTabOrderDialog");
     }
 
 
-    css::uno::Sequence<OUString> SAL_CALL OTabOrderDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL OTabOrderDialog::getSupportedServiceNames()
     {
         return getSupportedServiceNames_static();
     }
 
 
-    css::uno::Sequence<OUString> OTabOrderDialog::getSupportedServiceNames_static() throw(RuntimeException)
+    css::uno::Sequence<OUString> OTabOrderDialog::getSupportedServiceNames_static()
     {
         css::uno::Sequence<OUString> aSupported(2);
         aSupported.getArray()[0] = "com.sun.star.form.ui.TabOrderDialog";
@@ -109,7 +109,7 @@ namespace pcr
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL OTabOrderDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
+    Reference<XPropertySetInfo>  SAL_CALL OTabOrderDialog::getPropertySetInfo()
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -135,7 +135,7 @@ namespace pcr
         return VclPtr<TabOrderDialog>::Create( _pParent, m_xTabbingModel, m_xControlContext, m_aContext );
     }
 
-    void OTabOrderDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException, std::exception)
+    void OTabOrderDialog::initialize( const Sequence< Any >& aArguments )
     {
         Reference<css::awt::XTabControllerModel> xTabbingModel;
         Reference<css::awt::XControlContainer> xControlContext;

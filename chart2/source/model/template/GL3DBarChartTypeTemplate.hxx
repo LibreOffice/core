@@ -38,26 +38,21 @@ public:
 
     virtual sal_Bool SAL_CALL matchesTemplate(
         const css::uno::Reference<css::chart2::XDiagram>& xDiagram,
-        sal_Bool bAdaptProperties )
-        throw (css::uno::RuntimeException, std::exception) override;
+        sal_Bool bAdaptProperties ) override;
 
     virtual css::uno::Reference<css::chart2::XChartType> SAL_CALL
-        getChartTypeForNewSeries( const css::uno::Sequence<css::uno::Reference<css::chart2::XChartType> >& xOldChartTypes )
-            throw (css::uno::RuntimeException, ::std::exception) override;
+        getChartTypeForNewSeries( const css::uno::Sequence<css::uno::Reference<css::chart2::XChartType> >& xOldChartTypes ) override;
 
-    virtual sal_Bool SAL_CALL supportsCategories()
-        throw (css::uno::RuntimeException, ::std::exception) override;
+    virtual sal_Bool SAL_CALL supportsCategories() override;
 
     // OPropertySet
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw (css::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
 
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
-        getPropertySetInfo()
-            throw (css::uno::RuntimeException, std::exception) override;
+        getPropertySetInfo() override;
 };
 
 }

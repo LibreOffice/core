@@ -44,7 +44,7 @@ using namespace ::com::sun::star;
 //     the models in ControlModels can be accessed by name
 // also the XDialog is a XControl ( to access the model above
 
-ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext ) throw ( lang::IllegalArgumentException, uno::RuntimeException ) :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), static_cast< ooo::vba::AbstractGeometryAttributes* >(nullptr) ),  mbDispose( true )
+ScVbaUserForm::ScVbaUserForm( uno::Sequence< uno::Any > const& aArgs, uno::Reference< uno::XComponentContext >const& xContext ) :  ScVbaUserForm_BASE( getXSomethingFromArgs< XHelperInterface >( aArgs, 0 ), xContext, getXSomethingFromArgs< uno::XInterface >( aArgs, 1 ), getXSomethingFromArgs< frame::XModel >( aArgs, 2 ), static_cast< ooo::vba::AbstractGeometryAttributes* >(nullptr) ),  mbDispose( true )
 {
     m_xDialog.set( m_xControl, uno::UNO_QUERY_THROW );
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
@@ -59,7 +59,7 @@ ScVbaUserForm::~ScVbaUserForm()
 }
 
 void SAL_CALL
-ScVbaUserForm::Show(  ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::Show(  )
 {
     SAL_INFO("vbahelper", "ScVbaUserForm::Show(  )");
     short aRet = 0;
@@ -102,20 +102,20 @@ ScVbaUserForm::Show(  ) throw (uno::RuntimeException, std::exception)
 }
 
 OUString SAL_CALL
-ScVbaUserForm::getCaption() throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::getCaption()
 {
     OUString sCaption;
     m_xProps->getPropertyValue( "Title" ) >>= sCaption;
     return sCaption;
 }
 void
-ScVbaUserForm::setCaption( const OUString& _caption ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::setCaption( const OUString& _caption )
 {
     m_xProps->setPropertyValue( "Title", uno::makeAny( _caption ) );
 }
 
 sal_Bool SAL_CALL
-ScVbaUserForm::getVisible() throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::getVisible()
 {
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY_THROW );
     uno::Reference< awt::XWindow2 > xControlWindow( xControl->getPeer(), uno::UNO_QUERY_THROW );
@@ -123,7 +123,7 @@ ScVbaUserForm::getVisible() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaUserForm::setVisible( sal_Bool bVis ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::setVisible( sal_Bool bVis )
 {
     if ( bVis )
         Show();
@@ -131,28 +131,28 @@ ScVbaUserForm::setVisible( sal_Bool bVis ) throw (uno::RuntimeException, std::ex
         Hide();
 }
 
-double SAL_CALL ScVbaUserForm::getInnerWidth() throw (uno::RuntimeException, std::exception)
+double SAL_CALL ScVbaUserForm::getInnerWidth()
 {
     return mpGeometryHelper->getInnerWidth();
 }
 
-void SAL_CALL ScVbaUserForm::setInnerWidth( double fInnerWidth ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaUserForm::setInnerWidth( double fInnerWidth )
 {
     mpGeometryHelper->setInnerWidth( fInnerWidth );
 }
 
-double SAL_CALL ScVbaUserForm::getInnerHeight() throw (uno::RuntimeException, std::exception)
+double SAL_CALL ScVbaUserForm::getInnerHeight()
 {
     return mpGeometryHelper->getInnerHeight();
 }
 
-void SAL_CALL ScVbaUserForm::setInnerHeight( double fInnerHeight ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaUserForm::setInnerHeight( double fInnerHeight )
 {
     mpGeometryHelper->setInnerHeight( fInnerHeight );
 }
 
 void SAL_CALL
-ScVbaUserForm::Hide(  ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::Hide(  )
 {
     mbDispose = false;  // hide not dispose
     if ( m_xDialog.is() )
@@ -160,14 +160,14 @@ ScVbaUserForm::Hide(  ) throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaUserForm::RePaint(  ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::RePaint(  )
 {
     // #STUB
     // do nothing
 }
 
 void SAL_CALL
-ScVbaUserForm::UnloadObject(  ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::UnloadObject(  )
 {
     mbDispose = true;
     if ( m_xDialog.is() )
@@ -193,19 +193,19 @@ ScVbaUserForm::getServiceNames()
 }
 
 uno::Reference< beans::XIntrospectionAccess > SAL_CALL
-ScVbaUserForm::getIntrospection(  ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::getIntrospection(  )
 {
     return uno::Reference< beans::XIntrospectionAccess >();
 }
 
 uno::Any SAL_CALL
-ScVbaUserForm::invoke( const OUString& /*aFunctionName*/, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ ) throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception)
+ScVbaUserForm::invoke( const OUString& /*aFunctionName*/, const uno::Sequence< uno::Any >& /*aParams*/, uno::Sequence< ::sal_Int16 >& /*aOutParamIndex*/, uno::Sequence< uno::Any >& /*aOutParam*/ )
 {
     throw uno::RuntimeException(); // unsupported operation
 }
 
 void SAL_CALL
-ScVbaUserForm::setValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException, std::exception)
+ScVbaUserForm::setValue( const OUString& aPropertyName, const uno::Any& aValue )
 {
     uno::Any aObject = getValue( aPropertyName );
 
@@ -249,7 +249,7 @@ ScVbaUserForm::nestedSearch( const OUString& aPropertyName, uno::Reference< awt:
 }
 
 uno::Any SAL_CALL
-ScVbaUserForm::getValue( const OUString& aPropertyName ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+ScVbaUserForm::getValue( const OUString& aPropertyName )
 {
     uno::Any aResult;
 
@@ -274,12 +274,12 @@ ScVbaUserForm::getValue( const OUString& aPropertyName ) throw (beans::UnknownPr
 }
 
 sal_Bool SAL_CALL
-ScVbaUserForm::hasMethod( const OUString& /*aName*/ ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::hasMethod( const OUString& /*aName*/ )
 {
     return false;
 }
 uno::Any SAL_CALL
-ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::Controls( const uno::Any& index )
 {
     // if the dialog already closed we should do nothing, but the VBA will call methods of the Controls objects
     // thus we have to provide a dummy object in this case
@@ -291,7 +291,7 @@ ScVbaUserForm::Controls( const uno::Any& index ) throw (uno::RuntimeException, s
 }
 
 sal_Bool SAL_CALL
-ScVbaUserForm::hasProperty( const OUString& aName ) throw (uno::RuntimeException, std::exception)
+ScVbaUserForm::hasProperty( const OUString& aName )
 {
     uno::Reference< awt::XControl > xControl( m_xDialog, uno::UNO_QUERY );
 

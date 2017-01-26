@@ -35,21 +35,18 @@ class UnoScriptTypeDetector : public cppu::WeakImplHelper
 {
 public:
     // Methods
-    virtual sal_Int32 SAL_CALL beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL endOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) override;
+    virtual sal_Int32 SAL_CALL endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) override;
+    virtual sal_Int16 SAL_CALL getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) override;
+    virtual sal_Int32 SAL_CALL beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) override;
+    virtual sal_Int32 SAL_CALL endOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) override;
+    virtual sal_Int16 SAL_CALL getCTLScriptType( const OUString& Text, sal_Int32 nPos ) override;
 
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-                throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif

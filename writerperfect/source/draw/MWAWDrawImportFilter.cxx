@@ -91,19 +91,16 @@ void MWAWDrawImportFilter::doRegisterHandlers(OdgGenerator &rGenerator)
 
 // XServiceInfo
 OUString SAL_CALL MWAWDrawImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Draw.MWAWDrawImportFilter");
 }
 
 sal_Bool SAL_CALL MWAWDrawImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL MWAWDrawImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

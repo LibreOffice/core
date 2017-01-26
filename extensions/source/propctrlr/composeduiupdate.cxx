@@ -133,16 +133,16 @@ namespace pcr
         void dispose();
 
         // XObjectInspectorUI overridables
-        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException, std::exception) override;
-        virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) throw (NoSupportException, RuntimeException, std::exception) override;
+        virtual void SAL_CALL enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) override;
+        virtual void SAL_CALL enablePropertyUIElements( const OUString& _rPropertyName, ::sal_Int16 _nElements, sal_Bool _bEnable ) override;
+        virtual void SAL_CALL rebuildPropertyUI( const OUString& _rPropertyName ) override;
+        virtual void SAL_CALL showPropertyUI( const OUString& _rPropertyName ) override;
+        virtual void SAL_CALL hidePropertyUI( const OUString& _rPropertyName ) override;
+        virtual void SAL_CALL showCategory( const OUString& _rCategory, sal_Bool _bShow ) override;
+        virtual Reference< XPropertyControl > SAL_CALL getPropertyControl( const OUString& _rPropertyName ) override;
+        virtual void SAL_CALL registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) override;
+        virtual void SAL_CALL revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) override;
+        virtual void SAL_CALL setHelpSectionText( const OUString& HelpText ) override;
 
     protected:
         virtual ~CachedInspectorUI() override;
@@ -225,7 +225,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable ) throw (RuntimeException, std::exception)
+    void CachedInspectorUI::enablePropertyUI( const OUString& _rPropertyName, sal_Bool _bEnable )
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -256,7 +256,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable ) throw (RuntimeException, std::exception)
+    void CachedInspectorUI::enablePropertyUIElements( const OUString& _rPropertyName, sal_Int16 _nElements, sal_Bool _bEnable )
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -270,7 +270,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::rebuildPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception)
+    void CachedInspectorUI::rebuildPropertyUI( const OUString& _rPropertyName )
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -282,7 +282,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::showPropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception)
+    void CachedInspectorUI::showPropertyUI( const OUString& _rPropertyName )
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -296,7 +296,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::hidePropertyUI( const OUString& _rPropertyName ) throw (RuntimeException, std::exception)
+    void CachedInspectorUI::hidePropertyUI( const OUString& _rPropertyName )
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -307,7 +307,7 @@ namespace pcr
     }
 
 
-    void CachedInspectorUI::showCategory( const OUString& _rCategory, sal_Bool _bShow ) throw (RuntimeException, std::exception)
+    void CachedInspectorUI::showCategory( const OUString& _rCategory, sal_Bool _bShow )
     {
         MethodGuard aGuard( *this );
 
@@ -316,7 +316,7 @@ namespace pcr
     }
 
 
-    Reference< XPropertyControl > SAL_CALL CachedInspectorUI::getPropertyControl( const OUString& _rPropertyName ) throw (RuntimeException, std::exception)
+    Reference< XPropertyControl > SAL_CALL CachedInspectorUI::getPropertyControl( const OUString& _rPropertyName )
     {
         MethodGuard aGuard( *this );
         if ( !m_rMaster.shouldContinuePropertyHandling( _rPropertyName ) )
@@ -326,7 +326,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL CachedInspectorUI::registerControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception)
+    void SAL_CALL CachedInspectorUI::registerControlObserver( const Reference< XPropertyControlObserver >& Observer )
     {
         OSL_FAIL( "CachedInspectorUI::registerControlObserver: not expected to be called!" );
             // CachedInspectorUI is used as context for the controls, and we don't expect them to
@@ -335,7 +335,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL CachedInspectorUI::revokeControlObserver( const Reference< XPropertyControlObserver >& Observer ) throw (RuntimeException, std::exception)
+    void SAL_CALL CachedInspectorUI::revokeControlObserver( const Reference< XPropertyControlObserver >& Observer )
     {
         OSL_FAIL( "CachedInspectorUI::revokeControlObserver: not expected to be called!" );
             // CachedInspectorUI is used as context for the controls, and we don't expect them to
@@ -344,7 +344,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL CachedInspectorUI::setHelpSectionText( const OUString& HelpText ) throw (NoSupportException, RuntimeException, std::exception)
+    void SAL_CALL CachedInspectorUI::setHelpSectionText( const OUString& HelpText )
     {
         m_rMaster.getDelegatorUI()->setHelpSectionText( HelpText );
     }

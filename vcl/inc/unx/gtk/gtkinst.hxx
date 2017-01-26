@@ -75,17 +75,12 @@ protected:
     std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector(GdkAtom *targets, gint n_targets);
 public:
 
-    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor)
-        throw(css::datatransfer::UnsupportedFlavorException,
-              css::io::IOException,
-              css::uno::RuntimeException, std::exception) override = 0;
+    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override = 0;
 
     virtual std::vector<css::datatransfer::DataFlavor> getTransferDataFlavorsAsVector() = 0;
 
-    virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors()
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL getTransferDataFlavors() override;
+    virtual sal_Bool SAL_CALL isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor) override;
 };
 
 class GtkDropTarget : public cppu::WeakComponentImplHelper<css::datatransfer::dnd::XDropTarget,
@@ -102,28 +97,22 @@ public:
     virtual ~GtkDropTarget() override;
 
     // XInitialization
-    virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs)
-                                    throw (css::uno::Exception, std::exception) override;
+    virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rArgs) override;
             void        deinitialize();
 
     // XDropTarget
-    virtual void        SAL_CALL addDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&)
-                                    throw (std::exception) override;
-    virtual void        SAL_CALL removeDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&)
-                                    throw (std::exception) override;
-    virtual sal_Bool    SAL_CALL isActive() throw(std::exception) override;
-    virtual void        SAL_CALL setActive(sal_Bool active) throw(std::exception) override;
-    virtual sal_Int8    SAL_CALL getDefaultActions() throw(std::exception) override;
-    virtual void        SAL_CALL setDefaultActions(sal_Int8 actions) throw(std::exception) override;
+    virtual void        SAL_CALL addDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
+    virtual void        SAL_CALL removeDropTargetListener(const css::uno::Reference<css::datatransfer::dnd::XDropTargetListener>&) override;
+    virtual sal_Bool    SAL_CALL isActive() override;
+    virtual void        SAL_CALL setActive(sal_Bool active) override;
+    virtual sal_Int8    SAL_CALL getDefaultActions() override;
+    virtual void        SAL_CALL setDefaultActions(sal_Int8 actions) override;
 
-    OUString SAL_CALL getImplementationName()
-                throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-                throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-                throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void fire_dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee);
     void fire_dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde);
@@ -150,26 +139,22 @@ public:
     virtual ~GtkDragSource() override;
 
     // XDragSource
-    virtual sal_Bool    SAL_CALL isDragImageSupported() throw(std::exception) override;
-    virtual sal_Int32   SAL_CALL getDefaultCursor(sal_Int8 dragAction) throw(std::exception) override;
+    virtual sal_Bool    SAL_CALL isDragImageSupported() override;
+    virtual sal_Int32   SAL_CALL getDefaultCursor(sal_Int8 dragAction) override;
     virtual void        SAL_CALL startDrag(
         const css::datatransfer::dnd::DragGestureEvent& trigger, sal_Int8 sourceActions, sal_Int32 cursor, sal_Int32 image,
         const css::uno::Reference< css::datatransfer::XTransferable >& transferable,
-        const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener) throw(std::exception) override;
+        const css::uno::Reference< css::datatransfer::dnd::XDragSourceListener >& listener) override;
 
     // XInitialization
-    virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any >& rArguments)
-        throw (css::uno::Exception, std::exception) override;
+    virtual void        SAL_CALL initialize(const css::uno::Sequence<css::uno::Any >& rArguments) override;
             void        deinitialize();
 
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     void dragFailed();
     void dragDelete();

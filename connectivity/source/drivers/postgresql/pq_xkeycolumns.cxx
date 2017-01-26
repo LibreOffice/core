@@ -87,7 +87,6 @@ KeyColumns::~KeyColumns()
 
 
 void KeyColumns::refresh()
-    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -159,9 +158,6 @@ void KeyColumns::refresh()
 
 void KeyColumns::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& future )
-    throw (css::sdbc::SQLException,
-           css::container::ElementExistException,
-           css::uno::RuntimeException, std::exception)
 {
     (void) future;
     throw css::sdbc::SQLException(
@@ -179,9 +175,6 @@ void KeyColumns::appendByDescriptor(
 
 
 void KeyColumns::dropByIndex( sal_Int32 index )
-    throw (css::sdbc::SQLException,
-           css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     (void) index;
     throw css::sdbc::SQLException(
@@ -219,7 +212,6 @@ void KeyColumns::dropByIndex( sal_Int32 index )
 
 
 Reference< css::beans::XPropertySet > KeyColumns::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new KeyColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -250,7 +242,6 @@ KeyColumnDescriptors::KeyColumnDescriptors(
 {}
 
 Reference< css::beans::XPropertySet > KeyColumnDescriptors::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new KeyColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }

@@ -199,19 +199,16 @@ public:
 
     // lang::XEventListener
     virtual void SAL_CALL
-        disposing( const lang::EventObject& rSource )
-            throw(uno::RuntimeException, std::exception) override;
+        disposing( const lang::EventObject& rSource ) override;
 
     // linguistic2::XLinguServiceEventListener
     virtual void SAL_CALL
-        processLinguServiceEvent( const linguistic2::LinguServiceEvent& aLngSvcEvent )
-            throw(uno::RuntimeException, std::exception) override;
+        processLinguServiceEvent( const linguistic2::LinguServiceEvent& aLngSvcEvent ) override;
 
     // linguistic2::XDictionaryListEventListener
     virtual void SAL_CALL
         processDictionaryListEvent(
-                const linguistic2::DictionaryListEvent& rDicListEvent )
-            throw(uno::RuntimeException, std::exception) override;
+                const linguistic2::DictionaryListEvent& rDicListEvent ) override;
 
     inline  bool    AddLngSvcMgrListener(
                         const uno::Reference< lang::XEventListener >& rxListener );
@@ -246,7 +243,6 @@ LngSvcMgrListenerHelper::LngSvcMgrListenerHelper(
 
 
 void SAL_CALL LngSvcMgrListenerHelper::disposing( const lang::EventObject& rSource )
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -291,7 +287,6 @@ void LngSvcMgrListenerHelper::AddLngSvcEvt( sal_Int16 nLngSvcEvt )
 void SAL_CALL
     LngSvcMgrListenerHelper::processLinguServiceEvent(
             const linguistic2::LinguServiceEvent& rLngSvcEvent )
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
     AddLngSvcEvt( rLngSvcEvent.nEvent );
@@ -301,7 +296,6 @@ void SAL_CALL
 void SAL_CALL
     LngSvcMgrListenerHelper::processDictionaryListEvent(
             const linguistic2::DictionaryListEvent& rDicListEvent )
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -472,7 +466,6 @@ LngSvcMgr::LngSvcMgr()
 
 // css::util::XModifyListener
 void LngSvcMgr::modified(const lang::EventObject&)
-    throw(uno::RuntimeException, std::exception)
 {
     {
         osl::MutexGuard aGuard(GetLinguMutex());
@@ -532,7 +525,6 @@ void LngSvcMgr::stopListening()
 }
 
 void LngSvcMgr::disposing(const lang::EventObject&)
-    throw (uno::RuntimeException, std::exception)
 {
     stopListening();
 }
@@ -1408,7 +1400,6 @@ void LngSvcMgr::SetCfgServiceLists( ThesaurusDispatcher &rThesDsp )
 
 uno::Reference< linguistic2::XSpellChecker > SAL_CALL
     LngSvcMgr::getSpellChecker()
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 #if OSL_DEBUG_LEVEL > 0
@@ -1428,7 +1419,6 @@ uno::Reference< linguistic2::XSpellChecker > SAL_CALL
 
 uno::Reference< linguistic2::XHyphenator > SAL_CALL
     LngSvcMgr::getHyphenator()
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 #if OSL_DEBUG_LEVEL > 0
@@ -1447,7 +1437,6 @@ uno::Reference< linguistic2::XHyphenator > SAL_CALL
 
 uno::Reference< linguistic2::XThesaurus > SAL_CALL
     LngSvcMgr::getThesaurus()
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 #if OSL_DEBUG_LEVEL > 0
@@ -1467,7 +1456,6 @@ uno::Reference< linguistic2::XThesaurus > SAL_CALL
 sal_Bool SAL_CALL
     LngSvcMgr::addLinguServiceManagerListener(
             const uno::Reference< lang::XEventListener >& xListener )
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -1485,7 +1473,6 @@ sal_Bool SAL_CALL
 sal_Bool SAL_CALL
     LngSvcMgr::removeLinguServiceManagerListener(
             const uno::Reference< lang::XEventListener >& xListener )
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -1505,8 +1492,6 @@ uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getAvailableServices(
             const OUString& rServiceName,
             const lang::Locale& rLocale )
-        throw(uno::RuntimeException,
-              std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -1565,7 +1550,6 @@ uno::Sequence< OUString > SAL_CALL
 uno::Sequence< lang::Locale > SAL_CALL
     LngSvcMgr::getAvailableLocales(
             const OUString& rServiceName )
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -1620,7 +1604,6 @@ void SAL_CALL
             const OUString& rServiceName,
             const lang::Locale& rLocale,
             const uno::Sequence< OUString >& rServiceImplNames )
-        throw(uno::RuntimeException, std::exception)
 {
     SAL_INFO( "linguistic", "linguistic: LngSvcMgr::setConfiguredServices" );
 
@@ -1847,7 +1830,6 @@ uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getConfiguredServices(
             const OUString& rServiceName,
             const lang::Locale& rLocale )
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -1913,7 +1895,6 @@ uno::Sequence< OUString > SAL_CALL
 
 void SAL_CALL
     LngSvcMgr::dispose()
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -1934,7 +1915,6 @@ void SAL_CALL
 void SAL_CALL
     LngSvcMgr::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -1948,7 +1928,6 @@ void SAL_CALL
 void SAL_CALL
     LngSvcMgr::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
-        throw(uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( GetLinguMutex() );
 
@@ -1975,7 +1954,6 @@ bool LngSvcMgr::AddLngSvcEvtBroadcaster(
 
 OUString SAL_CALL
     LngSvcMgr::getImplementationName()
-        throw(uno::RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
@@ -1983,7 +1961,6 @@ OUString SAL_CALL
 
 sal_Bool SAL_CALL
     LngSvcMgr::supportsService( const OUString& ServiceName )
-        throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -1991,7 +1968,6 @@ sal_Bool SAL_CALL
 
 uno::Sequence< OUString > SAL_CALL
     LngSvcMgr::getSupportedServiceNames()
-        throw(uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -2007,7 +1983,6 @@ uno::Sequence< OUString > LngSvcMgr::getSupportedServiceNames_Static()
 /// @throws uno::Exception
 uno::Reference< uno::XInterface > SAL_CALL LngSvcMgr_CreateInstance(
             const uno::Reference< lang::XMultiServiceFactory > & /*rSMgr*/ )
-        throw(uno::Exception, std::exception)
 {
     uno::Reference< uno::XInterface > xService = static_cast<cppu::OWeakObject*>(new LngSvcMgr);
     return xService;

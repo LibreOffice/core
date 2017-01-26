@@ -65,15 +65,15 @@ protected:
 
     //---  XAccessibleComponent  -------------------------------
     /// forward the focus to the contained control(in alive mode)
-    virtual void SAL_CALL grabFocus( ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL grabFocus( ) override;
 
     //---  XAccessibleContext  ---------------------------------
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount( ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw(css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount( ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
 
     //---  XServiceInfo  ---------------------------------------
-    virtual OUString SAL_CALL getImplementationName( ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName( ) override;
 
     //---  XInterface  -----------------------------------------
     DECLARE_XINTERFACE( )
@@ -82,27 +82,27 @@ protected:
     DECLARE_XTYPEPROVIDER( )
 
     //---  XPropertyChangeListener  ----------------------------
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
 
     //---  XComponent  -----------------------------------------
     virtual void SAL_CALL disposing( ) override;
 
     //---  XEventListener  -------------------------------------
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
     //---  XModeChangeListener  --------------------------------
-    virtual void SAL_CALL modeChanged( const css::util::ModeChangeEvent& _rSource ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modeChanged( const css::util::ModeChangeEvent& _rSource ) override;
 
     //---  XAccessibleEventListener ----------------------------
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
     //---  document::XEventListener ----------------------------
     using AccessibleShape::notifyEvent;
 
     // XVclContainerListener
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
 
 protected:
     /** Initialize a new shape.  See the documentation of the base' constructor
@@ -112,20 +112,17 @@ protected:
 
     /// Create a name string that contains the accessible name.
     virtual OUString
-        CreateAccessibleBaseName( )
-        throw(css::uno::RuntimeException) override;
+        CreateAccessibleBaseName( ) override;
 
     /** Create a unique name string that contains the accessible name.  The
         name consists of the base name and the index.
     */
     virtual OUString
-        CreateAccessibleName( )
-        throw(css::uno::RuntimeException, std::exception) override;
+        CreateAccessibleName( ) override;
 
     /// Create a description string that contains the accessible description.
     virtual OUString
-        CreateAccessibleDescription( )
-        throw(css::uno::RuntimeException, std::exception) override;
+        CreateAccessibleDescription( ) override;
 
 #ifdef DBG_UTIL
     /// Set the specified state

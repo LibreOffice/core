@@ -39,7 +39,7 @@ public:
     virtual ~AccDescendantManagerEventListener() override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
     //for selection changed event
     virtual void HandleSelectionChangedEvent(

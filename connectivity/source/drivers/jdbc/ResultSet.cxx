@@ -113,13 +113,13 @@ m_xMetaData.clear();
     SDBThreadAttach::releaseRef();
 }
 
-css::uno::Any SAL_CALL java_sql_ResultSet::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL java_sql_ResultSet::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = OPropertySetHelper::queryInterface(rType);
     return aRet.hasValue() ? aRet : java_sql_ResultSet_BASE::queryInterface(rType);
 }
 
-css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_ResultSet::getTypes(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_ResultSet::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
                                     cppu::UnoType<css::beans::XFastPropertySet>::get(),
@@ -129,13 +129,13 @@ css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_ResultSet::getTypes(  ) t
 }
 
 
-sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const OUString& columnName ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSet::findColumn( const OUString& columnName )
 {
     static jmethodID mID(nullptr);
     return callIntMethodWithStringArg("findColumn",mID,columnName);
 }
 
-Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getBinaryStream( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -145,7 +145,7 @@ Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getBinaryStream(
     return out==nullptr ? nullptr : new java_io_InputStream( t.pEnv, out );
 }
 
-Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getCharacterStream( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -156,14 +156,14 @@ Reference< css::io::XInputStream > SAL_CALL java_sql_ResultSet::getCharacterStre
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::getBoolean( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "getBoolean", mID,columnIndex );
 }
 
 
-sal_Int8 SAL_CALL java_sql_ResultSet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int8 SAL_CALL java_sql_ResultSet::getByte( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     jbyte (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallByteMethod;
@@ -171,7 +171,7 @@ sal_Int8 SAL_CALL java_sql_ResultSet::getByte( sal_Int32 columnIndex ) throw(SQL
 }
 
 
-Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnIndex )
 {
     Sequence< sal_Int8 > aSeq;
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -188,7 +188,7 @@ Sequence< sal_Int8 > SAL_CALL java_sql_ResultSet::getBytes( sal_Int32 columnInde
 }
 
 
-css::util::Date SAL_CALL java_sql_ResultSet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Date SAL_CALL java_sql_ResultSet::getDate( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -198,7 +198,7 @@ css::util::Date SAL_CALL java_sql_ResultSet::getDate( sal_Int32 columnIndex ) th
 }
 
 
-double SAL_CALL java_sql_ResultSet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+double SAL_CALL java_sql_ResultSet::getDouble( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     jdouble (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallDoubleMethod;
@@ -206,7 +206,7 @@ double SAL_CALL java_sql_ResultSet::getDouble( sal_Int32 columnIndex ) throw(SQL
 }
 
 
-float SAL_CALL java_sql_ResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+float SAL_CALL java_sql_ResultSet::getFloat( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     jfloat (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallFloatMethod;
@@ -214,21 +214,21 @@ float SAL_CALL java_sql_ResultSet::getFloat( sal_Int32 columnIndex ) throw(SQLEx
 }
 
 
-sal_Int32 SAL_CALL java_sql_ResultSet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSet::getInt( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     return callIntMethodWithIntArg_ThrowSQL("getInt",mID,columnIndex);
 }
 
 
-sal_Int32 SAL_CALL java_sql_ResultSet::getRow(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSet::getRow(  )
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowSQL("getRow", mID);
 }
 
 
-sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     jlong (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallLongMethod;
@@ -236,7 +236,7 @@ sal_Int64 SAL_CALL java_sql_ResultSet::getLong( sal_Int32 columnIndex ) throw(SQ
 }
 
 
-css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL java_sql_ResultSet::getMetaData(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL java_sql_ResultSet::getMetaData(  )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -245,7 +245,7 @@ css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL java_sql_ResultSet
     return out==nullptr ? nullptr : new java_sql_ResultSetMetaData( t.pEnv, out, *m_pConnection );
 }
 
-Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -256,7 +256,7 @@ Reference< XArray > SAL_CALL java_sql_ResultSet::getArray( sal_Int32 columnIndex
 }
 
 
-Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -265,7 +265,7 @@ Reference< XClob > SAL_CALL java_sql_ResultSet::getClob( sal_Int32 columnIndex )
     return out==nullptr ? nullptr : new java_sql_Clob( t.pEnv, out );
 }
 
-Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -275,7 +275,7 @@ Reference< XBlob > SAL_CALL java_sql_ResultSet::getBlob( sal_Int32 columnIndex )
 }
 
 
-Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -286,7 +286,7 @@ Reference< XRef > SAL_CALL java_sql_ResultSet::getRef( sal_Int32 columnIndex ) t
 }
 
 
-Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
 {
     jobject out(nullptr);
     Any aRet;
@@ -347,7 +347,7 @@ Any SAL_CALL java_sql_ResultSet::getObject( sal_Int32 columnIndex, const Referen
 }
 
 
-sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     jshort (JNIEnv::*pCallMethod)( jobject obj, jmethodID methodID, ... ) = &JNIEnv::CallShortMethod;
@@ -355,14 +355,14 @@ sal_Int16 SAL_CALL java_sql_ResultSet::getShort( sal_Int32 columnIndex ) throw(S
 }
 
 
-OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_ResultSet::getString( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getString",mID,columnIndex);
 }
 
 
-css::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -372,7 +372,7 @@ css::util::Time SAL_CALL java_sql_ResultSet::getTime( sal_Int32 columnIndex ) th
 }
 
 
-css::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnIndex )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     static jmethodID mID(nullptr);
@@ -382,131 +382,131 @@ css::util::DateTime SAL_CALL java_sql_ResultSet::getTimestamp( sal_Int32 columnI
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::isAfterLast(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::isAfterLast(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "isAfterLast", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::isFirst(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::isFirst(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "isFirst", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::isLast(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::isLast(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "isLast", mID );
 }
 
-void SAL_CALL java_sql_ResultSet::beforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::beforeFirst(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("beforeFirst", mID);
 }
 
-void SAL_CALL java_sql_ResultSet::afterLast(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::afterLast(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("afterLast", mID);
 }
 
 
-void SAL_CALL java_sql_ResultSet::close(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::close(  )
 {
     dispose();
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::first(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::first(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "first", mID );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::last(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::last(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "last", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::absolute( sal_Int32 row )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "absolute", mID,row );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::relative( sal_Int32 row ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::relative( sal_Int32 row )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "relative", mID,row );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::previous(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::previous(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "previous", mID );
 }
 
-Reference< XInterface > SAL_CALL java_sql_ResultSet::getStatement(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL java_sql_ResultSet::getStatement(  )
 {
     return m_xStatement;
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::rowDeleted(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::rowDeleted(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "rowDeleted", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::rowInserted(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::rowInserted(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "rowInserted", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::rowUpdated(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::rowUpdated(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "rowUpdated", mID );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::isBeforeFirst(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::isBeforeFirst(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "isBeforeFirst", mID );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSet::next(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::next(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "next", mID );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSet::wasNull(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "wasNull", mID );
 }
 
-void SAL_CALL java_sql_ResultSet::cancel(  ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::cancel(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowRuntime("cancel", mID);
 }
 
-void SAL_CALL java_sql_ResultSet::clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::clearWarnings(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("clearWarnings", mID);
 }
 
-css::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  )
 {
     SDBThreadAttach t;
     static jmethodID mID(nullptr);
@@ -524,100 +524,100 @@ css::uno::Any SAL_CALL java_sql_ResultSet::getWarnings(  ) throw(css::sdbc::SQLE
 }
 
 
-void SAL_CALL java_sql_ResultSet::insertRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::insertRow(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("insertRow", mID);
 }
 
-void SAL_CALL java_sql_ResultSet::updateRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateRow(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateRow", mID);
 }
 
-void SAL_CALL java_sql_ResultSet::deleteRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::deleteRow(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("deleteRow", mID);
 }
 
 
-void SAL_CALL java_sql_ResultSet::cancelRowUpdates(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::cancelRowUpdates(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("cancelRowUpdates", mID);
 }
 
 
-void SAL_CALL java_sql_ResultSet::moveToInsertRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::moveToInsertRow(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("moveToInsertRow", mID);
 }
 
 
-void SAL_CALL java_sql_ResultSet::moveToCurrentRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::moveToCurrentRow(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("moveToCurrentRow", mID);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateNull( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateNull( sal_Int32 columnIndex )
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithIntArg_ThrowSQL("updateNull", mID, columnIndex);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateBoolean( sal_Int32 columnIndex, sal_Bool x )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateBoolean", "(IZ)V", mID, columnIndex, x);
 }
 
-void SAL_CALL java_sql_ResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateByte( sal_Int32 columnIndex, sal_Int8 x )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateByte", "(IB)V", mID, columnIndex, x);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateShort( sal_Int32 columnIndex, sal_Int16 x )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateShort", "(IS)V", mID, columnIndex, x);
 }
 
-void SAL_CALL java_sql_ResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateInt( sal_Int32 columnIndex, sal_Int32 x )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateInt", "(II)V", mID, columnIndex, x);
 }
 
-void SAL_CALL java_sql_ResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateLong( sal_Int32 columnIndex, sal_Int64 x )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateLong", "(IJ)V", mID, columnIndex, x);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateFloat( sal_Int32 columnIndex, float x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateFloat( sal_Int32 columnIndex, float x )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateFloat", "(IF)V", mID, columnIndex, x);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateDouble( sal_Int32 columnIndex, double x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateDouble( sal_Int32 columnIndex, double x )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("updateDouble", "(ID)V", mID, columnIndex, x);
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const OUString& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const OUString& x )
 {
     SDBThreadAttach t;
 
@@ -643,7 +643,7 @@ void SAL_CALL java_sql_ResultSet::updateString( sal_Int32 columnIndex, const OUS
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const css::uno::Sequence< sal_Int8 >& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const css::uno::Sequence< sal_Int8 >& x )
 {
     SDBThreadAttach t;
 
@@ -679,7 +679,7 @@ void SAL_CALL java_sql_ResultSet::updateBytes( sal_Int32 columnIndex, const css:
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const css::util::Date& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const css::util::Date& x )
 {
     java_sql_Date aD(x);
     static jmethodID mID(nullptr);
@@ -687,7 +687,7 @@ void SAL_CALL java_sql_ResultSet::updateDate( sal_Int32 columnIndex, const css::
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const css::util::Time& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const css::util::Time& x )
 {
     java_sql_Time aD(x);
     static jmethodID mID(nullptr);
@@ -695,7 +695,7 @@ void SAL_CALL java_sql_ResultSet::updateTime( sal_Int32 columnIndex, const css::
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x )
 {
     java_sql_Timestamp aD(x);
     static jmethodID mID(nullptr);
@@ -703,7 +703,7 @@ void SAL_CALL java_sql_ResultSet::updateTimestamp( sal_Int32 columnIndex, const 
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length )
 {
     try
     {
@@ -734,7 +734,7 @@ void SAL_CALL java_sql_ResultSet::updateBinaryStream( sal_Int32 columnIndex, con
     }
 }
 
-void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length )
 {
     try
     {
@@ -765,7 +765,7 @@ void SAL_CALL java_sql_ResultSet::updateCharacterStream( sal_Int32 columnIndex, 
     }
 }
 
-void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const css::uno::Any& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const css::uno::Any& x )
 {
     if(!::dbtools::implUpdateObject(this,columnIndex,x))
     {
@@ -779,7 +779,7 @@ void SAL_CALL java_sql_ResultSet::updateObject( sal_Int32 columnIndex, const css
 }
 
 
-void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale )
 {
     //  OSL_FAIL("java_sql_ResultSet::updateNumericObject: NYI");
     try
@@ -821,50 +821,50 @@ void SAL_CALL java_sql_ResultSet::updateNumericObject( sal_Int32 columnIndex, co
     }
 }
 
-sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
+sal_Int32 java_sql_ResultSet::getResultSetConcurrency() const
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("getConcurrency", mID);
 }
 
-sal_Int32 java_sql_ResultSet::getResultSetType() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
+sal_Int32 java_sql_ResultSet::getResultSetType() const
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("getType",mID);
 }
 
-sal_Int32 java_sql_ResultSet::getFetchDirection() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
+sal_Int32 java_sql_ResultSet::getFetchDirection() const
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("getFetchDirection", mID);
 }
 
-sal_Int32 java_sql_ResultSet::getFetchSize() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
+sal_Int32 java_sql_ResultSet::getFetchSize() const
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowRuntime("getFetchSize", mID);
 }
 
-OUString java_sql_ResultSet::getCursorName() const throw(css::sdbc::SQLException, css::uno::RuntimeException)
+OUString java_sql_ResultSet::getCursorName() const
 {
     static jmethodID mID(nullptr);
     return callStringMethod("getCursorName",mID);
 }
 
 
-void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0) throw(css::sdbc::SQLException, css::uno::RuntimeException)
+void java_sql_ResultSet::setFetchDirection(sal_Int32 _par0)
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithIntArg_ThrowRuntime("setFetchDirection", mID, _par0);
 }
 
-void SAL_CALL java_sql_ResultSet::refreshRow(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_ResultSet::refreshRow(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("refreshRow",mID);
 }
 
-void java_sql_ResultSet::setFetchSize(sal_Int32 _par0) throw(css::sdbc::SQLException, css::uno::RuntimeException)
+void java_sql_ResultSet::setFetchSize(sal_Int32 _par0)
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithIntArg_ThrowRuntime("setFetchSize", mID, _par0);
@@ -903,7 +903,6 @@ sal_Bool java_sql_ResultSet::convertFastPropertyValue(
                             css::uno::Any & rOldValue,
                             sal_Int32 nHandle,
                             const css::uno::Any& rValue )
-                                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 {
     bool bRet = false;
     switch(nHandle)
@@ -929,7 +928,6 @@ void java_sql_ResultSet::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const css::uno::Any& rValue
                                                  )
-                                                 throw (css::uno::Exception, std::exception)
 {
     switch(nHandle)
     {
@@ -989,7 +987,7 @@ void SAL_CALL java_sql_ResultSet::release() throw()
     java_sql_ResultSet_BASE::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL java_sql_ResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL java_sql_ResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

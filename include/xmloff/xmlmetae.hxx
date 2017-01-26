@@ -80,36 +80,20 @@ public:
                         const css::util::DateTime& rDateTime );
 
     // css::xml::sax::XDocumentHandler:
-    virtual void SAL_CALL startDocument()
-        throw (css::uno::RuntimeException,
-               css::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL endDocument()
-        throw (css::uno::RuntimeException,
-               css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL startDocument() override;
+    virtual void SAL_CALL endDocument() override;
     virtual void SAL_CALL startElement(const OUString & i_rName,
         const css::uno::Reference<
-                css::xml::sax::XAttributeList > & i_xAttribs)
-        throw (css::uno::RuntimeException,
-               css::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL endElement(const OUString & i_rName)
-        throw (css::uno::RuntimeException,
-               css::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL characters(const OUString & i_rChars)
-        throw (css::uno::RuntimeException,
-               css::xml::sax::SAXException, std::exception) override;
+                css::xml::sax::XAttributeList > & i_xAttribs) override;
+    virtual void SAL_CALL endElement(const OUString & i_rName) override;
+    virtual void SAL_CALL characters(const OUString & i_rChars) override;
     virtual void SAL_CALL ignorableWhitespace(
-        const OUString & i_rWhitespaces)
-        throw (css::uno::RuntimeException,
-               css::xml::sax::SAXException, std::exception) override;
+        const OUString & i_rWhitespaces) override;
     virtual void SAL_CALL processingInstruction(
-        const OUString & i_rTarget, const OUString & i_rData)
-        throw (css::uno::RuntimeException,
-               css::xml::sax::SAXException, std::exception) override;
+        const OUString & i_rTarget, const OUString & i_rData) override;
     virtual void SAL_CALL setDocumentLocator(
         const css::uno::Reference<
-                css::xml::sax::XLocator > & i_xLocator)
-        throw (css::uno::RuntimeException,
-               css::xml::sax::SAXException, std::exception) override;
+                css::xml::sax::XLocator > & i_xLocator) override;
 
 };
 

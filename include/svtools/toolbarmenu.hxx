@@ -61,7 +61,7 @@ protected:
 
     // Forwarded from XStatusListener (subclasses must override this one to get the status updates):
     /// @throws css::uno::RuntimeException
-    virtual void statusChanged(const css::frame::FeatureStateEvent& Event ) throw (css::uno::RuntimeException, std::exception);
+    virtual void statusChanged(const css::frame::FeatureStateEvent& Event );
 
 private:
     css::uno::Reference< css::frame::XFrame >  mxFrame;

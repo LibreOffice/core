@@ -73,7 +73,7 @@ CWinClipbImpl::~CWinClipbImpl( )
     unregisterClipboardViewer( );
 }
 
-Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( RuntimeException )
+Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( )
 {
     // use the shortcut or create a transferable from
     // system clipboard
@@ -110,7 +110,6 @@ Reference< XTransferable > SAL_CALL CWinClipbImpl::getContents( ) throw( Runtime
 void SAL_CALL CWinClipbImpl::setContents(
     const Reference< XTransferable >& xTransferable,
     const Reference< XClipboardOwner >& xClipboardOwner )
-    throw( RuntimeException )
 {
     IDataObjectPtr    pIDataObj;
 
@@ -132,17 +131,17 @@ void SAL_CALL CWinClipbImpl::setContents(
     m_MtaOleClipboard.setClipboard(pIDataObj.get());
 }
 
-OUString SAL_CALL CWinClipbImpl::getName(  ) throw( RuntimeException )
+OUString SAL_CALL CWinClipbImpl::getName(  )
 {
     return m_itsName;
 }
 
-sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  ) throw( RuntimeException )
+sal_Int8 SAL_CALL CWinClipbImpl::getRenderingCapabilities(  )
 {
     return ( Delayed | Persistant );
 }
 
-void SAL_CALL CWinClipbImpl::flushClipboard( ) throw( RuntimeException )
+void SAL_CALL CWinClipbImpl::flushClipboard( )
 {
     // actually it should be ClearableMutexGuard aGuard( m_ClipContentMutex );
     // but it does not work since FlushClipboard does a callback and frees DataObject
@@ -168,7 +167,7 @@ void SAL_CALL CWinClipbImpl::unregisterClipboardViewer( )
     m_MtaOleClipboard.registerClipViewer( nullptr );
 }
 
-void SAL_CALL CWinClipbImpl::dispose() throw( RuntimeException )
+void SAL_CALL CWinClipbImpl::dispose()
 {
     OSL_ENSURE( !m_pCurrentClipContent, "Clipboard was not flushed before shutdown!" );
 }

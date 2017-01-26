@@ -206,8 +206,7 @@ public:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-        throw(LoadEnvException, css::uno::RuntimeException);
+    LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
     /** @short  deinitialize an instance of this class in the right way.
      */
@@ -221,10 +220,7 @@ public:
                                                                              const OUString&                                        sURL   ,
                                                                              const OUString&                                        sTarget,
                                                                                    sal_Int32                                               nFlags ,
-                                                                             const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
-        throw(css::lang::IllegalArgumentException,
-              css::io::IOException               ,
-              css::uno::RuntimeException         );
+                                                                             const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  );
 
     /** @short  set some changeable parameters for a new load request.
 
@@ -377,8 +373,7 @@ public:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    void impl_reactForLoadingState()
-        throw(LoadEnvException, css::uno::RuntimeException);
+    void impl_reactForLoadingState();
 
 private:
 
@@ -400,8 +395,7 @@ private:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    void impl_detectTypeAndFilter()
-        throw(LoadEnvException, css::uno::RuntimeException, std::exception);
+    void impl_detectTypeAndFilter();
 
     /** @short  tries to use ContentHandler objects for loading.
 
@@ -421,8 +415,7 @@ private:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    bool impl_handleContent()
-        throw(LoadEnvException, css::uno::RuntimeException, std::exception);
+    bool impl_handleContent();
 
     /** @short  tries to use FrameLoader objects for loading.
 
@@ -440,8 +433,7 @@ private:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    bool impl_loadContent()
-        throw(LoadEnvException, css::uno::RuntimeException, std::exception);
+    bool impl_loadContent();
 
     /** @short  checks if the specified content is already loaded.
 
@@ -466,8 +458,7 @@ private:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    css::uno::Reference< css::frame::XFrame > impl_searchAlreadyLoaded()
-        throw(LoadEnvException, css::uno::RuntimeException);
+    css::uno::Reference< css::frame::XFrame > impl_searchAlreadyLoaded();
 
     /** @short  search for any target frame, which seems to be useable
                 for this load request.
@@ -497,8 +488,7 @@ private:
         @throw  A RuntimeException in case any internal process indicates, that
                 the whole runtime can't be used any longer.
      */
-    css::uno::Reference< css::frame::XFrame > impl_searchRecycleTarget()
-        throw(LoadEnvException, css::uno::RuntimeException, std::exception);
+    css::uno::Reference< css::frame::XFrame > impl_searchRecycleTarget();
 
     /** @short  because showing of a frame is needed more than once...
                 it's implemented as an separate method .-)

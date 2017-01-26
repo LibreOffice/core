@@ -39,16 +39,14 @@
 
 #define XTYPEPROVIDER_COMMON_IMPL( Class )                                  \
 css::uno::Sequence< sal_Int8 > SAL_CALL                          \
-Class::getImplementationId()                                                \
-    throw( css::uno::RuntimeException, std::exception )          \
+Class::getImplementationId()          \
 {                                                                           \
       return css::uno::Sequence<sal_Int8>();                                \
 }
 
 #define GETTYPES_IMPL_START( Class )                                        \
 css::uno::Sequence< css::uno::Type > SAL_CALL         \
-Class::getTypes()                                                           \
-    throw( css::uno::RuntimeException, std::exception )          \
+Class::getTypes()          \
 {                                                                           \
     static cppu::OTypeCollection* pCollection = nullptr;                       \
       if ( !pCollection )                                                     \
@@ -161,7 +159,6 @@ GETTYPES_IMPL_END
 
 #define XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                         \
 OUString SAL_CALL Class::getImplementationName()                       \
-    throw( css::uno::RuntimeException, std::exception )          \
 {                                                                           \
     return getImplementationName_Static();                                  \
 }                                                                           \
@@ -173,14 +170,12 @@ OUString Class::getImplementationName_Static()                         \
                                                                             \
 sal_Bool SAL_CALL                                                           \
 Class::supportsService( const OUString& ServiceName )                  \
-    throw( css::uno::RuntimeException, std::exception )          \
 {                                                                           \
     return cppu::supportsService( this, ServiceName );                      \
 }                                                                           \
                                                                             \
 css::uno::Sequence< OUString > SAL_CALL                     \
 Class::getSupportedServiceNames()                                           \
-    throw( css::uno::RuntimeException, std::exception )          \
 {                                                                           \
     return getSupportedServiceNames_Static();                               \
 }

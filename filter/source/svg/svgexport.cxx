@@ -485,7 +485,6 @@ bool EqualityBitmap::operator()( const ObjectRepresentation& rObjRep1,
 
 
 bool SVGFilter::implExport( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException, std::exception)
 {
     Reference< XComponentContext >        xContext( ::comphelper::getProcessComponentContext() ) ;
     Reference< XOutputStream >            xOStm;

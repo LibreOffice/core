@@ -51,37 +51,25 @@ public:
     virtual ~AreaWrapper() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ____ XShape ____
-    virtual css::awt::Point SAL_CALL getPosition()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Size SAL_CALL getSize()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSize( const css::awt::Size& aSize )
-        throw (css::beans::PropertyVetoException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getPosition() override;
+    virtual void SAL_CALL setPosition( const css::awt::Point& aPosition ) override;
+    virtual css::awt::Size SAL_CALL getSize() override;
+    virtual void SAL_CALL setSize( const css::awt::Size& aSize ) override;
 
     // ____ XShapeDescriptor (base of XShape) ____
-    virtual OUString SAL_CALL getShapeType()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getShapeType() override;
 
     // ____ XComponent ____
-    virtual void SAL_CALL dispose()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
     virtual void SAL_CALL addEventListener( const css::uno::Reference<
-                                            css::lang::XEventListener >& xListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+                                            css::lang::XEventListener >& xListener ) override;
     virtual void SAL_CALL removeEventListener( const css::uno::Reference<
-                                               css::lang::XEventListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+                                               css::lang::XEventListener >& aListener ) override;
 
 protected:
     // ____ WrappedPropertySet ____

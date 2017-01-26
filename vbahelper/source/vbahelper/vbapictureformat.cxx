@@ -24,14 +24,13 @@ using namespace com::sun::star;
 ScVbaPictureFormat::ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent,
     const css::uno::Reference< css::uno::XComponentContext >& xContext,
     uno::Reference< drawing::XShape > const & xShape )
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
     : ScVbaPictureFormat_BASE( xParent, xContext ), m_xShape( xShape )
 {
     m_xPropertySet.set( m_xShape, uno::UNO_QUERY_THROW );
 }
 
 void
-ScVbaPictureFormat::checkParameterRangeInDouble( double nRange, double nMin, double nMax ) throw (css::uno::RuntimeException)
+ScVbaPictureFormat::checkParameterRangeInDouble( double nRange, double nMin, double nMax )
 {
     if( nRange < nMin )
     {
@@ -45,7 +44,7 @@ ScVbaPictureFormat::checkParameterRangeInDouble( double nRange, double nMin, dou
 
 // Attributes
 double SAL_CALL
-ScVbaPictureFormat::getBrightness() throw (uno::RuntimeException, std::exception)
+ScVbaPictureFormat::getBrightness()
 {
     sal_Int16 nLuminance = 0;
     m_xPropertySet->getPropertyValue( "AdjustLuminance" ) >>= nLuminance;
@@ -55,7 +54,7 @@ ScVbaPictureFormat::getBrightness() throw (uno::RuntimeException, std::exception
 }
 
 void SAL_CALL
-ScVbaPictureFormat::setBrightness( double _brightness ) throw (uno::RuntimeException, std::exception)
+ScVbaPictureFormat::setBrightness( double _brightness )
 {
     checkParameterRangeInDouble( _brightness, 0.0, 1.0 );
     double fLuminance = _brightness * 200 - 100;
@@ -64,7 +63,7 @@ ScVbaPictureFormat::setBrightness( double _brightness ) throw (uno::RuntimeExcep
 }
 
 double SAL_CALL
-ScVbaPictureFormat::getContrast() throw (uno::RuntimeException, std::exception)
+ScVbaPictureFormat::getContrast()
 {
     sal_Int16 nContrast = 0;
     m_xPropertySet->getPropertyValue( "AdjustContrast" ) >>= nContrast;
@@ -74,7 +73,7 @@ ScVbaPictureFormat::getContrast() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaPictureFormat::setContrast( double _contrast ) throw (uno::RuntimeException, std::exception)
+ScVbaPictureFormat::setContrast( double _contrast )
 {
     checkParameterRangeInDouble( _contrast, 0.0, 1.0 );
     double fContrast = _contrast * 200 - 100;
@@ -85,7 +84,7 @@ ScVbaPictureFormat::setContrast( double _contrast ) throw (uno::RuntimeException
 
 // Methods
 void SAL_CALL
-ScVbaPictureFormat::IncrementBrightness( double increment ) throw (uno::RuntimeException, std::exception)
+ScVbaPictureFormat::IncrementBrightness( double increment )
 {
     double fBrightness = getBrightness();
     fBrightness += increment;
@@ -101,7 +100,7 @@ ScVbaPictureFormat::IncrementBrightness( double increment ) throw (uno::RuntimeE
 }
 
 void SAL_CALL
-ScVbaPictureFormat::IncrementContrast( double increment ) throw (uno::RuntimeException, std::exception)
+ScVbaPictureFormat::IncrementContrast( double increment )
 {
     double nContrast = getContrast();
     nContrast += increment;

@@ -63,68 +63,49 @@ public:
     virtual ~FTPContent() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException,
-               std::exception ) override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException,
-                   std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XContent
-    virtual OUString SAL_CALL getContentType()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getContentType() override;
 
     // XCommandProcessor
     virtual css::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand,
                                             sal_Int32 CommandId,
                                             const css::uno::Reference<
-                                            css::ucb::XCommandEnvironment >& Environment )
-        throw( css::uno::Exception,
-               css::ucb::CommandAbortedException,
-               css::uno::RuntimeException, std::exception ) override;
+                                            css::ucb::XCommandEnvironment >& Environment ) override;
 
-    virtual void SAL_CALL abort(sal_Int32 CommandId)
-        throw( css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL abort(sal_Int32 CommandId) override;
 
     // XContentCreator
     virtual css::uno::Sequence<
         css::ucb::ContentInfo > SAL_CALL
-        queryCreatableContentsInfo(  )
-            throw (css::uno::RuntimeException, std::exception) override;
+        queryCreatableContentsInfo(  ) override;
 
     virtual css::uno::Reference<
         css::ucb::XContent > SAL_CALL
-        createNewContent( const css::ucb::ContentInfo& Info )
-            throw (css::uno::RuntimeException, std::exception) override;
+        createNewContent( const css::ucb::ContentInfo& Info ) override;
 
     // XChild
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
 
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent )
-        throw (css::lang::NoSupportException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< css::ucb::ContentInfo > queryCreatableContentsInfo_Static()
-        throw (css::uno::RuntimeException);
+    static css::uno::Sequence< css::ucb::ContentInfo > queryCreatableContentsInfo_Static();
 
 private:
 

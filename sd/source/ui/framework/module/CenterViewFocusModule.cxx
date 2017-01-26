@@ -102,7 +102,6 @@ void SAL_CALL CenterViewFocusModule::disposing()
 
 void SAL_CALL CenterViewFocusModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     if (mbValid)
     {
@@ -151,7 +150,6 @@ void CenterViewFocusModule::HandleNewView (
 
 void SAL_CALL CenterViewFocusModule::disposing (
     const lang::EventObject& rEvent)
-    throw (RuntimeException, std::exception)
 {
     if (mxConfigurationController.is())
         if (rEvent.Source == mxConfigurationController)

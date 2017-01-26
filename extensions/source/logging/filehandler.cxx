@@ -87,19 +87,19 @@ namespace logging
 
     private:
         // XLogHandler
-        virtual OUString SAL_CALL getEncoding() throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL setEncoding( const OUString& _encoding ) throw (RuntimeException, std::exception) override;
-        virtual Reference< XLogFormatter > SAL_CALL getFormatter() throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL setFormatter( const Reference< XLogFormatter >& _formatter ) throw (RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getLevel() throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL flush(  ) throw (RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL publish( const LogRecord& Record ) throw (RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getEncoding() override;
+        virtual void SAL_CALL setEncoding( const OUString& _encoding ) override;
+        virtual Reference< XLogFormatter > SAL_CALL getFormatter() override;
+        virtual void SAL_CALL setFormatter( const Reference< XLogFormatter >& _formatter ) override;
+        virtual ::sal_Int32 SAL_CALL getLevel() override;
+        virtual void SAL_CALL setLevel( ::sal_Int32 _level ) override;
+        virtual void SAL_CALL flush(  ) override;
+        virtual sal_Bool SAL_CALL publish( const LogRecord& Record ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& _rServiceName ) override;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // OComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -260,7 +260,7 @@ namespace logging
     }
 
 
-    OUString SAL_CALL FileHandler::getEncoding() throw (RuntimeException, std::exception)
+    OUString SAL_CALL FileHandler::getEncoding()
     {
         MethodGuard aGuard( *this );
         OUString sEncoding;
@@ -269,42 +269,42 @@ namespace logging
     }
 
 
-    void SAL_CALL FileHandler::setEncoding( const OUString& _rEncoding ) throw (RuntimeException, std::exception)
+    void SAL_CALL FileHandler::setEncoding( const OUString& _rEncoding )
     {
         MethodGuard aGuard( *this );
         OSL_VERIFY( m_aHandlerHelper.setEncoding( _rEncoding ) );
     }
 
 
-    Reference< XLogFormatter > SAL_CALL FileHandler::getFormatter() throw (RuntimeException, std::exception)
+    Reference< XLogFormatter > SAL_CALL FileHandler::getFormatter()
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getFormatter();
     }
 
 
-    void SAL_CALL FileHandler::setFormatter( const Reference< XLogFormatter >& _rxFormatter ) throw (RuntimeException, std::exception)
+    void SAL_CALL FileHandler::setFormatter( const Reference< XLogFormatter >& _rxFormatter )
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setFormatter( _rxFormatter );
     }
 
 
-    ::sal_Int32 SAL_CALL FileHandler::getLevel() throw (RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL FileHandler::getLevel()
     {
         MethodGuard aGuard( *this );
         return m_aHandlerHelper.getLevel();
     }
 
 
-    void SAL_CALL FileHandler::setLevel( ::sal_Int32 _nLevel ) throw (RuntimeException, std::exception)
+    void SAL_CALL FileHandler::setLevel( ::sal_Int32 _nLevel )
     {
         MethodGuard aGuard( *this );
         m_aHandlerHelper.setLevel( _nLevel );
     }
 
 
-    void SAL_CALL FileHandler::flush(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL FileHandler::flush(  )
     {
         MethodGuard aGuard( *this );
         if(!m_pFile.get())
@@ -317,7 +317,7 @@ namespace logging
     }
 
 
-    sal_Bool SAL_CALL FileHandler::publish( const LogRecord& _rRecord ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL FileHandler::publish( const LogRecord& _rRecord )
     {
         MethodGuard aGuard( *this );
 
@@ -332,17 +332,17 @@ namespace logging
         return true;
     }
 
-    OUString SAL_CALL FileHandler::getImplementationName() throw(RuntimeException, std::exception)
+    OUString SAL_CALL FileHandler::getImplementationName()
     {
         return OUString("com.sun.star.comp.extensions.FileHandler");
     }
 
-    sal_Bool SAL_CALL FileHandler::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+    sal_Bool SAL_CALL FileHandler::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL FileHandler::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL FileHandler::getSupportedServiceNames()
     {
         return { "com.sun.star.logging.FileHandler" };
     }

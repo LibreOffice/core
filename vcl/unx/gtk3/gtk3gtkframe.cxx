@@ -3268,17 +3268,17 @@ public:
     }
 
     // XDropTargetDropContext
-    virtual void SAL_CALL acceptDrop(sal_Int8 dragOperation) throw(std::exception) override
+    virtual void SAL_CALL acceptDrop(sal_Int8 dragOperation) override
     {
         gdk_drag_status(m_pContext, getPreferredDragAction(dragOperation), m_nTime);
     }
 
-    virtual void SAL_CALL rejectDrop() throw(std::exception) override
+    virtual void SAL_CALL rejectDrop() override
     {
         gdk_drag_status(m_pContext, static_cast<GdkDragAction>(0), m_nTime);
     }
 
-    virtual void SAL_CALL dropComplete(sal_Bool bSuccess) throw(std::exception) override
+    virtual void SAL_CALL dropComplete(sal_Bool bSuccess) override
     {
         gtk_drag_finish(m_pContext, bSuccess, false, m_nTime);
     }
@@ -3303,10 +3303,7 @@ public:
     {
     }
 
-    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor)
-        throw(css::datatransfer::UnsupportedFlavorException,
-              css::io::IOException,
-              css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
         css::datatransfer::DataFlavor aFlavor(rFlavor);
         if (aFlavor.MimeType == "text/plain;charset=utf-16")
@@ -3421,12 +3418,12 @@ public:
     {
     }
 
-    virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(std::exception) override
+    virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) override
     {
         gdk_drag_status(m_pContext, getPreferredDragAction(dragOperation), m_nTime);
     }
 
-    virtual void SAL_CALL rejectDrag() throw(std::exception) override
+    virtual void SAL_CALL rejectDrag() override
     {
         gdk_drag_status(m_pContext, static_cast<GdkDragAction>(0), m_nTime);
     }
@@ -4118,7 +4115,7 @@ sal_uIntPtr GtkSalFrame::GetNativeWindowHandle()
 void GtkDragSource::startDrag(const datatransfer::dnd::DragGestureEvent& rEvent,
                               sal_Int8 sourceActions, sal_Int32 /*cursor*/, sal_Int32 /*image*/,
                               const css::uno::Reference<css::datatransfer::XTransferable>& rTrans,
-                              const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener) throw(std::exception)
+                              const css::uno::Reference<css::datatransfer::dnd::XDragSourceListener>& rListener)
 {
     m_xListener = rListener;
     m_xTrans = rTrans;

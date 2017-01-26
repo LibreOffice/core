@@ -1198,42 +1198,36 @@ public:
     explicit ImplementationRegistration( const Reference < XComponentContext > & rSMgr );
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw(RuntimeException, std::exception) override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception) override;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) override;
+    OUString                        SAL_CALL getImplementationName() override;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
 
     // XImplementationRegistration
     virtual void SAL_CALL registerImplementation(
         const OUString& implementationLoader,
         const OUString& location,
-        const Reference < XSimpleRegistry > & xReg)
-        throw(  CannotRegisterImplementationException, RuntimeException, std::exception ) override;
+        const Reference < XSimpleRegistry > & xReg) override;
 
     virtual sal_Bool SAL_CALL revokeImplementation(
         const OUString& location,
-        const Reference < XSimpleRegistry >& xReg)
-        throw( RuntimeException, std::exception ) override;
+        const Reference < XSimpleRegistry >& xReg) override;
 
     virtual Sequence< OUString > SAL_CALL getImplementations(
         const OUString& implementationLoader,
-        const OUString& location)
-        throw( RuntimeException, std::exception ) override;
+        const OUString& location) override;
     virtual Sequence< OUString > SAL_CALL checkInstantiation(
-        const OUString& implementationName)
-        throw( RuntimeException, std::exception ) override;
+        const OUString& implementationName) override;
 
     // XImplementationRegistration2
     virtual void SAL_CALL registerImplementationWithLocation(
         const OUString& implementationLoader,
         const OUString& location,
         const OUString& registeredLocation,
-        const Reference < XSimpleRegistry > & xReg)
-        throw(  CannotRegisterImplementationException, RuntimeException, std::exception ) override;
+        const Reference < XSimpleRegistry > & xReg) override;
 
     // XInitialization
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw(  css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
 private: // helper methods
     void prepareRegister(
@@ -1277,19 +1271,19 @@ ImplementationRegistration::ImplementationRegistration( const Reference < XCompo
 {}
 
 // XServiceInfo
-OUString ImplementationRegistration::getImplementationName() throw(RuntimeException, std::exception)
+OUString ImplementationRegistration::getImplementationName()
 {
     return OUString("com.sun.star.comp.stoc.ImplementationRegistration");
 }
 
 // XServiceInfo
-sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception)
+sal_Bool ImplementationRegistration::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > ImplementationRegistration::getSupportedServiceNames() throw(RuntimeException, std::exception)
+Sequence< OUString > ImplementationRegistration::getSupportedServiceNames()
 {
     Sequence< OUString > seqNames { "com.sun.star.registry.ImplementationRegistration" };
     return seqNames;
@@ -1323,7 +1317,6 @@ Reference< XSimpleRegistry > ImplementationRegistration::getRegistryFromServiceM
 
 void ImplementationRegistration::initialize(
     const css::uno::Sequence< css::uno::Any >& aArgs )
-    throw(  css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
 
     if( aArgs.getLength() != 4 ) {
@@ -1415,7 +1408,6 @@ void ImplementationRegistration::registerImplementationWithLocation(
     const OUString& locationUrl,
     const OUString& registeredLocationUrl,
     const Reference < XSimpleRegistry > & xReg)
-    throw( CannotRegisterImplementationException, RuntimeException, std::exception )
 {
     prepareRegister(
         implementationLoaderUrl, locationUrl, registeredLocationUrl, xReg);
@@ -1516,7 +1508,6 @@ void ImplementationRegistration::registerImplementation(
     const OUString& implementationLoaderUrl,
     const OUString& locationUrl,
     const Reference < XSimpleRegistry > & xReg)
-    throw( CannotRegisterImplementationException, RuntimeException, std::exception )
 {
     prepareRegister(implementationLoaderUrl, locationUrl, locationUrl, xReg);
 }
@@ -1526,7 +1517,6 @@ void ImplementationRegistration::registerImplementation(
 
 sal_Bool ImplementationRegistration::revokeImplementation(const OUString& location,
                                                       const Reference < XSimpleRegistry >& xReg)
-    throw ( RuntimeException, std::exception )
 {
     bool ret = false;
 
@@ -1575,7 +1565,6 @@ sal_Bool ImplementationRegistration::revokeImplementation(const OUString& locati
 Sequence< OUString > ImplementationRegistration::getImplementations(
     const OUString & implementationLoaderUrl,
     const OUString & locationUrl)
-    throw ( RuntimeException, std::exception )
 {
     OUString activatorName;
 
@@ -1643,7 +1632,6 @@ Sequence< OUString > ImplementationRegistration::getImplementations(
 // virtual function checkInstantiation of XImplementationRegistration
 
 Sequence< OUString > ImplementationRegistration::checkInstantiation(const OUString&)
-    throw ( RuntimeException, std::exception )
 {
     OSL_FAIL( "ImplementationRegistration::checkInstantiation not implemented" );
     return Sequence<OUString>();

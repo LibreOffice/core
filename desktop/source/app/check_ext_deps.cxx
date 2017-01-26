@@ -85,21 +85,18 @@ public:
 
     // XCommandEnvironment
     virtual uno::Reference<task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (uno::RuntimeException, std::exception) override;
+    getInteractionHandler() override;
     virtual uno::Reference<ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() throw (uno::RuntimeException, std::exception) override;
+    SAL_CALL getProgressHandler() override;
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
-        uno::Reference<task::XInteractionRequest > const & xRequest )
-        throw (uno::RuntimeException, std::exception) override;
+        uno::Reference<task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( uno::Any const & Status )
-        throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL update( uno::Any const & Status )
-        throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL pop() throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL push( uno::Any const & Status ) override;
+    virtual void SAL_CALL update( uno::Any const & Status ) override;
+    virtual void SAL_CALL pop() override;
 };
 
 
@@ -120,14 +117,12 @@ SilentCommandEnv::~SilentCommandEnv()
 
 
 Reference<task::XInteractionHandler> SilentCommandEnv::getInteractionHandler()
-    throw (uno::RuntimeException, std::exception)
 {
     return this;
 }
 
 
 Reference<ucb::XProgressHandler> SilentCommandEnv::getProgressHandler()
-    throw (uno::RuntimeException, std::exception)
 {
     return this;
 }
@@ -135,7 +130,6 @@ Reference<ucb::XProgressHandler> SilentCommandEnv::getProgressHandler()
 
 // XInteractionHandler
 void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRequest )
-    throw (uno::RuntimeException, std::exception)
 {
     deployment::LicenseException licExc;
 
@@ -184,7 +178,6 @@ void SilentCommandEnv::handle( Reference< task::XInteractionRequest> const & xRe
 
 // XProgressHandler
 void SilentCommandEnv::push( uno::Any const & rStatus )
-    throw (uno::RuntimeException, std::exception)
 {
     OUString sText;
     mnLevel += 1;
@@ -200,7 +193,6 @@ void SilentCommandEnv::push( uno::Any const & rStatus )
 
 
 void SilentCommandEnv::update( uno::Any const & rStatus )
-    throw (uno::RuntimeException, std::exception)
 {
     OUString sText;
     if ( rStatus.hasValue() && ( rStatus >>= sText) )
@@ -210,7 +202,7 @@ void SilentCommandEnv::update( uno::Any const & rStatus )
 }
 
 
-void SilentCommandEnv::pop() throw (uno::RuntimeException, std::exception)
+void SilentCommandEnv::pop()
 {
     mnLevel -= 1;
 }

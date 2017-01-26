@@ -38,7 +38,7 @@ VCLXRegion::~VCLXRegion()
 }
 
 // css::uno::XInterface
-css::uno::Any VCLXRegion::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXRegion::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XRegion* >(this)),
@@ -56,56 +56,56 @@ IMPL_XTYPEPROVIDER_START( VCLXRegion )
 IMPL_XTYPEPROVIDER_END
 
 
-css::awt::Rectangle VCLXRegion::getBounds() throw(css::uno::RuntimeException, std::exception)
+css::awt::Rectangle VCLXRegion::getBounds()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     return AWTRectangle( maRegion.GetBoundRect() );
 }
 
-void VCLXRegion::clear() throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::clear()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maRegion.SetEmpty();
 }
 
-void VCLXRegion::move( sal_Int32 nHorzMove, sal_Int32 nVertMove ) throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::move( sal_Int32 nHorzMove, sal_Int32 nVertMove )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maRegion.Move( nHorzMove, nVertMove );
 }
 
-void VCLXRegion::unionRectangle( const css::awt::Rectangle& rRect ) throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::unionRectangle( const css::awt::Rectangle& rRect )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maRegion.Union( VCLRectangle( rRect ) );
 }
 
-void VCLXRegion::intersectRectangle( const css::awt::Rectangle& rRect ) throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::intersectRectangle( const css::awt::Rectangle& rRect )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maRegion.Intersect( VCLRectangle( rRect ) );
 }
 
-void VCLXRegion::excludeRectangle( const css::awt::Rectangle& rRect ) throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::excludeRectangle( const css::awt::Rectangle& rRect )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maRegion.Exclude( VCLRectangle( rRect ) );
 }
 
-void VCLXRegion::xOrRectangle( const css::awt::Rectangle& rRect ) throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::xOrRectangle( const css::awt::Rectangle& rRect )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maRegion.XOr( VCLRectangle( rRect ) );
 }
 
-void VCLXRegion::unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -113,7 +113,7 @@ void VCLXRegion::unionRegion( const css::uno::Reference< css::awt::XRegion >& rx
         maRegion.Union( VCLUnoHelper::GetRegion( rxRegion ) );
 }
 
-void VCLXRegion::intersectRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::intersectRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -121,7 +121,7 @@ void VCLXRegion::intersectRegion( const css::uno::Reference< css::awt::XRegion >
         maRegion.Intersect( VCLUnoHelper::GetRegion( rxRegion ) );
 }
 
-void VCLXRegion::excludeRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::excludeRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -129,7 +129,7 @@ void VCLXRegion::excludeRegion( const css::uno::Reference< css::awt::XRegion >& 
         maRegion.Exclude( VCLUnoHelper::GetRegion( rxRegion ) );
 }
 
-void VCLXRegion::xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) throw(css::uno::RuntimeException, std::exception)
+void VCLXRegion::xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -137,7 +137,7 @@ void VCLXRegion::xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRe
         maRegion.XOr( VCLUnoHelper::GetRegion( rxRegion ) );
 }
 
-css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles() throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::awt::Rectangle > VCLXRegion::getRectangles()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 

@@ -67,7 +67,7 @@ void OMySQLColumn::construct()
     return *OMySQLColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 
-Sequence< OUString > SAL_CALL OMySQLColumn::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL OMySQLColumn::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSupported { "com.sun.star.sdbcx.Column" };
 

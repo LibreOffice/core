@@ -40,27 +40,27 @@ public:
     virtual ~SwVbaApplication() override;
 
     // XApplication
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XSystem > SAL_CALL getSystem() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::word::XDocument > SAL_CALL getActiveDocument() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::word::XWindow > SAL_CALL getActiveWindow() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XOptions > SAL_CALL getOptions() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XSelection > SAL_CALL getSelection() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Documents( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Addins( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Dialogs( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL ListGalleries( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getDisplayAutoCompleteTips() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDisplayAutoCompleteTips( sal_Bool _displayAutoCompleteTips ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getEnableCancelKey() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEnableCancelKey( sal_Int32 _enableCancelKey ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL CentimetersToPoints( float Centimeters ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName() override;
+    virtual css::uno::Reference< ooo::vba::word::XSystem > SAL_CALL getSystem() override;
+    virtual css::uno::Reference< ov::word::XDocument > SAL_CALL getActiveDocument() override;
+    virtual css::uno::Reference< ov::word::XWindow > SAL_CALL getActiveWindow() override;
+    virtual css::uno::Reference< ooo::vba::word::XOptions > SAL_CALL getOptions() override;
+    virtual css::uno::Reference< ooo::vba::word::XSelection > SAL_CALL getSelection() override;
+    virtual css::uno::Any SAL_CALL CommandBars( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL Documents( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL Addins( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL Dialogs( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL ListGalleries( const css::uno::Any& aIndex ) override;
+    virtual sal_Bool SAL_CALL getDisplayAutoCompleteTips() override;
+    virtual void SAL_CALL setDisplayAutoCompleteTips( sal_Bool _displayAutoCompleteTips ) override;
+    virtual sal_Int32 SAL_CALL getEnableCancelKey() override;
+    virtual void SAL_CALL setEnableCancelKey( sal_Int32 _enableCancelKey ) override;
+    virtual float SAL_CALL CentimetersToPoints( float Centimeters ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 protected:
-    virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Reference< css::frame::XModel > getCurrentDocument() override;
 };
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAAPPLICATION_HXX
 

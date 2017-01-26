@@ -40,12 +40,8 @@ class ActiveDataStreamer :
 
 public:
     // XActiveDataStreamer methods.
-    virtual void SAL_CALL setStream( const css::uno::Reference< css::io::XStream >& xStream )
-        throw( css::uno::RuntimeException,
-               std::exception ) override;
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL getStream()
-        throw( css::uno::RuntimeException,
-               std::exception ) override;
+    virtual void SAL_CALL setStream( const css::uno::Reference< css::io::XStream >& xStream ) override;
+    virtual css::uno::Reference< css::io::XStream > SAL_CALL getStream() override;
 };
 
 } /* namespace ucbhelper */

@@ -130,7 +130,7 @@ void OTools::getValue(  OConnection* _pConnection,
                         bool &_bWasNull,
                         const css::uno::Reference< css::uno::XInterface >& _xInterface,
                         void* _pValue,
-                        SQLLEN _nSize) throw(css::sdbc::SQLException, css::uno::RuntimeException)
+                        SQLLEN _nSize)
 {
     const size_t properSize = sqlTypeLen(_nType);
     if ( properSize == static_cast<size_t>(-1) )
@@ -171,7 +171,7 @@ void OTools::bindValue( OConnection* _pConnection,
                         SQLLEN * const pLen,
                         const css::uno::Reference< css::uno::XInterface >& _xInterface,
                         rtl_TextEncoding _nTextEncoding,
-                        bool _bUseOldTimeDate) throw(css::sdbc::SQLException, css::uno::RuntimeException)
+                        bool _bUseOldTimeDate)
 {
     SQLRETURN nRetcode;
     SQLSMALLINT   fSqlType;
@@ -307,7 +307,7 @@ void OTools::ThrowException(const OConnection* _pConnection,
                             const SQLSMALLINT _nHandleType,
                             const Reference< XInterface >& _xInterface,
                             const bool _bNoFound,
-                            const rtl_TextEncoding _nTextEncoding) throw(SQLException)
+                            const rtl_TextEncoding _nTextEncoding)
 {
     switch(_rRetCode)
     {
@@ -365,7 +365,7 @@ Sequence<sal_Int8> OTools::getBytesValue(const OConnection* _pConnection,
                                          const sal_Int32 columnIndex,
                                          const SQLSMALLINT _fSqlType,
                                          bool &_bWasNull,
-                                         const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+                                         const Reference< XInterface >& _xInterface)
 {
     sal_Int8 aCharArray[2048];
     // First try to fetch the data with the little Buffer:
@@ -418,7 +418,7 @@ OUString OTools::getStringValue(OConnection* _pConnection,
                                        SQLSMALLINT _fSqlType,
                                        bool &_bWasNull,
                                        const Reference< XInterface >& _xInterface,
-                                       const rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
+                                       const rtl_TextEncoding _nTextEncoding)
 {
     OUStringBuffer aData;
     switch(_fSqlType)
@@ -527,7 +527,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                      SQLUSMALLINT _nInfo,
                      OUString &_rValue,
                      const Reference< XInterface >& _xInterface,
-                     rtl_TextEncoding _nTextEncoding) throw(SQLException, RuntimeException)
+                     rtl_TextEncoding _nTextEncoding)
 {
     char aValue[512];
     SQLSMALLINT nValueLen=0;
@@ -542,7 +542,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
                      sal_Int32 &_rValue,
-                     const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+                     const Reference< XInterface >& _xInterface)
 {
     SQLSMALLINT nValueLen;
     _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
@@ -555,7 +555,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
                      SQLUINTEGER &_rValue,
-                     const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+                     const Reference< XInterface >& _xInterface)
 {
     SQLSMALLINT nValueLen;
     _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)
@@ -568,7 +568,7 @@ void OTools::GetInfo(OConnection* _pConnection,
                      SQLHANDLE _aConnectionHandle,
                      SQLUSMALLINT _nInfo,
                      SQLUSMALLINT &_rValue,
-                     const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+                     const Reference< XInterface >& _xInterface)
 {
     SQLSMALLINT nValueLen;
     _rValue = 0;    // in case the driver uses only 16 of the 32 bits (as it does, for example, for SQL_CATALOG_LOCATION)

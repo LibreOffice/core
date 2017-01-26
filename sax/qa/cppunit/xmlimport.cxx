@@ -87,14 +87,14 @@ public:
     const OUString & getString() { return m_aStr; }
 
     // XDocumentHandler
-    virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endDocument() throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endElement( const OUString& aName ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL startDocument() override;
+    virtual void SAL_CALL endDocument() override;
+    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) override;
+    virtual void SAL_CALL endElement( const OUString& aName ) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
+    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) override;
 };
 
 OUString TestDocumentHandler::canonicalform(const OUString &sName, const OUString &sValue, bool isElement)
@@ -139,7 +139,6 @@ OUString TestDocumentHandler::getNamespace(const OUString &sName)
 }
 
 void SAL_CALL TestDocumentHandler::startDocument()
-        throw(SAXException, RuntimeException, exception)
 {
     m_aStr.clear();
     m_aNamespaceStack.clear();
@@ -150,12 +149,10 @@ void SAL_CALL TestDocumentHandler::startDocument()
 
 
 void SAL_CALL TestDocumentHandler::endDocument()
-        throw(SAXException, RuntimeException, exception)
 {
 }
 
 void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs )
-        throw( SAXException, RuntimeException, exception )
 {
     OUString sAttributes;
     m_aCountStack.push(0);
@@ -172,7 +169,6 @@ void SAL_CALL TestDocumentHandler::startElement( const OUString& aName, const Re
 
 
 void SAL_CALL TestDocumentHandler::endElement( const OUString& aName )
-    throw( SAXException, RuntimeException, exception )
 {
     m_aStr = m_aStr + canonicalform(aName, "", true);
     sal_uInt16 nPopQty = m_aCountStack.top();
@@ -183,27 +179,23 @@ void SAL_CALL TestDocumentHandler::endElement( const OUString& aName )
 
 
 void SAL_CALL TestDocumentHandler::characters( const OUString& aChars )
-        throw(SAXException, RuntimeException, exception)
 {
     m_aStr = m_aStr + aChars;
 }
 
 
 void SAL_CALL TestDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces )
-        throw(SAXException, RuntimeException, exception)
 {
     m_aStr = m_aStr + aWhitespaces;
 }
 
 
 void SAL_CALL TestDocumentHandler::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
-        throw(SAXException, RuntimeException, exception)
 {
 }
 
 
 void SAL_CALL TestDocumentHandler::setDocumentLocator( const Reference< XLocator >& /*xLocator*/ )
-        throw(SAXException, RuntimeException, exception)
 {
 }
 
@@ -213,14 +205,14 @@ public:
     NSDocumentHandler() {}
 
     // XDocumentHandler
-    virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override {}
-    virtual void SAL_CALL endDocument() throw (SAXException, RuntimeException, exception) override {}
-    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endElement( const OUString& /* aName */ ) throw (SAXException, RuntimeException, exception) override {}
-    virtual void SAL_CALL characters( const OUString& /* aChars */ ) throw (SAXException, RuntimeException, exception) override {}
-    virtual void SAL_CALL ignorableWhitespace( const OUString& /* aWhitespaces */ ) throw (SAXException, RuntimeException, exception) override {}
-    virtual void SAL_CALL processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ ) throw (SAXException, RuntimeException, exception) override {}
-    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& /* xLocator */ ) throw (SAXException, RuntimeException, exception) override {}
+    virtual void SAL_CALL startDocument() override {}
+    virtual void SAL_CALL endDocument() override {}
+    virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) override;
+    virtual void SAL_CALL endElement( const OUString& /* aName */ ) override {}
+    virtual void SAL_CALL characters( const OUString& /* aChars */ ) override {}
+    virtual void SAL_CALL ignorableWhitespace( const OUString& /* aWhitespaces */ ) override {}
+    virtual void SAL_CALL processingInstruction( const OUString& /* aTarget */, const OUString& /* aData */ ) override {}
+    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& /* xLocator */ ) override {}
 };
 
 OUString getNamespaceValue( const OUString& rNamespacePrefix )
@@ -252,7 +244,6 @@ OUString resolveNamespace( const OUString& aName )
 }
 
 void SAL_CALL NSDocumentHandler::startElement( const OUString& aName, const Reference< XAttributeList >&/* xAttribs */ )
-        throw( SAXException, RuntimeException, exception )
 {
     if (! (aName == "office:document" || aName == "office:body" || aName == "office:text" ||
         aName == "text:p" || aName == "note:p") )
@@ -275,10 +266,8 @@ public:
     const static OString namespacePrefixes[];
 
     // XFastTokenHandler
-    virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) override;
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) override;
     //FastTokenHandlerBase
     virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const override;
 };
@@ -294,7 +283,6 @@ const OUStringLiteral DummyTokenHandler::namespaceURIs[] = { "http://www.w3.org/
 const OString DummyTokenHandler::namespacePrefixes[] = { "", "w", "Player" };
 
 Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
-    throw (uno::RuntimeException, std::exception)
 {
     OString aUtf8Token;
     if ( ( ( nToken & 0xffff0000 ) != 0 ) ) //namespace
@@ -315,7 +303,6 @@ Sequence< sal_Int8 > DummyTokenHandler::getUTF8Identifier( sal_Int32 nToken )
 }
 
 sal_Int32 DummyTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& rIdentifier )
-    throw (uno::RuntimeException, std::exception)
 {
     return getTokenDirect( reinterpret_cast< const char* >(
                     rIdentifier.getConstArray() ), rIdentifier.getLength() );

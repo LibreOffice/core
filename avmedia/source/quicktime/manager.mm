@@ -39,7 +39,6 @@ Manager::~Manager()
 
 
 uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OUString& rURL )
-    throw (uno::RuntimeException)
 {
     Player*                             pPlayer( new Player( mxMgr ) );
     uno::Reference< media::XPlayer >    xRet( pPlayer );
@@ -55,21 +54,18 @@ uno::Reference< media::XPlayer > SAL_CALL Manager::createPlayer( const ::rtl::OU
 
 
 ::rtl::OUString SAL_CALL Manager::getImplementationName(  )
-    throw (uno::RuntimeException)
 {
     return ::rtl::OUString( AVMEDIA_QUICKTIME_MANAGER_IMPLEMENTATIONNAME );
 }
 
 
 sal_Bool SAL_CALL Manager::supportsService( const ::rtl::OUString& ServiceName )
-    throw (uno::RuntimeException)
 {
     return ( ServiceName == AVMEDIA_QUICKTIME_MANAGER_SERVICENAME );
 }
 
 
 uno::Sequence< ::rtl::OUString > SAL_CALL Manager::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
 {
     return { AVMEDIA_QUICKTIME_MANAGER_SERVICENAME };
 }

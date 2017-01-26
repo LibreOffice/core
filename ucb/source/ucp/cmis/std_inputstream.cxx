@@ -37,7 +37,7 @@ namespace cmis
     {
     }
 
-    uno::Any SAL_CALL StdInputStream::queryInterface( const uno::Type& rType ) throw ( uno::RuntimeException, std::exception )
+    uno::Any SAL_CALL StdInputStream::queryInterface( const uno::Type& rType )
     {
         uno::Any aRet = ::cppu::queryInterface( rType,
                                           ( static_cast< XInputStream* >( this ) ),
@@ -57,8 +57,6 @@ namespace cmis
     }
 
     sal_Int32 SAL_CALL StdInputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw( io::NotConnectedException, io::BufferSizeExceededException,
-               io::IOException, uno::RuntimeException, std::exception)
     {
         osl::MutexGuard aGuard( m_aMutex );
 
@@ -85,8 +83,6 @@ namespace cmis
 
     sal_Int32 SAL_CALL StdInputStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData,
             sal_Int32 nMaxBytesToRead )
-        throw( io::NotConnectedException, io::BufferSizeExceededException,
-               io::IOException, uno::RuntimeException, std::exception)
     {
         osl::MutexGuard aGuard( m_aMutex );
 
@@ -110,8 +106,6 @@ namespace cmis
     }
 
     void SAL_CALL StdInputStream::skipBytes( sal_Int32 nBytesToSkip )
-        throw( io::NotConnectedException, io::BufferSizeExceededException,
-               io::IOException, uno::RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard( m_aMutex );
 
@@ -130,19 +124,16 @@ namespace cmis
     }
 
     sal_Int32 SAL_CALL StdInputStream::available( )
-        throw(io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception )
     {
         return sal::static_int_cast< sal_Int32 >( m_nLength - getPosition() );
     }
 
     void SAL_CALL StdInputStream::closeInput( )
-        throw( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception)
     {
         // No need to implement this for an istream
     }
 
     void SAL_CALL StdInputStream::seek( sal_Int64 location )
-        throw( lang::IllegalArgumentException, io::IOException, uno::RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard( m_aMutex );
 
@@ -167,7 +158,6 @@ namespace cmis
     }
 
     sal_Int64 SAL_CALL StdInputStream::getPosition( )
-        throw( io::IOException, uno::RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard( m_aMutex );
 
@@ -182,7 +172,6 @@ namespace cmis
     }
 
     sal_Int64 SAL_CALL StdInputStream::getLength( )
-        throw ( io::IOException, uno::RuntimeException, std::exception )
     {
         return m_nLength;
     }

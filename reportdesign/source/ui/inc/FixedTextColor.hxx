@@ -39,9 +39,9 @@ namespace rptui
         const OReportController& m_rReportController;
 
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::awt::XVclWindowPeer > getVclWindowPeer(const css::uno::Reference< css::report::XFixedText >& _xComponent) throw(css::uno::RuntimeException);
+        css::uno::Reference< css::awt::XVclWindowPeer > getVclWindowPeer(const css::uno::Reference< css::report::XFixedText >& _xComponent);
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::awt::XControl > getXControl(const css::uno::Reference< css::report::XFixedText >& _xFixedText) throw(css::uno::RuntimeException);
+        css::uno::Reference< css::awt::XControl > getXControl(const css::uno::Reference< css::report::XFixedText >& _xFixedText);
 
         static void setPropertyTextColor(const css::uno::Reference< css::awt::XVclWindowPeer >& _xVclWindowPeer, sal_Int32 _nFormatKey);
 

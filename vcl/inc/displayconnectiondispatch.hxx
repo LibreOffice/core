@@ -49,11 +49,11 @@ public:
     bool dispatchEvent( void* pData, int nBytes );
 
     // XDisplayConnection
-    virtual void SAL_CALL addEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler, sal_Int32 eventMask ) throw(std::exception) override;
-    virtual void SAL_CALL removeEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler ) throw(std::exception) override;
-    virtual void SAL_CALL addErrorHandler( const css::uno::Reference< css::awt::XEventHandler >& handler ) throw(std::exception) override;
-    virtual void SAL_CALL removeErrorHandler( const css::uno::Reference< css::awt::XEventHandler >& handler ) throw(std::exception) override;
-    virtual css::uno::Any SAL_CALL getIdentifier() throw(std::exception) override;
+    virtual void SAL_CALL addEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler, sal_Int32 eventMask ) override;
+    virtual void SAL_CALL removeEventHandler( const css::uno::Any& window, const css::uno::Reference< css::awt::XEventHandler >& handler ) override;
+    virtual void SAL_CALL addErrorHandler( const css::uno::Reference< css::awt::XEventHandler >& handler ) override;
+    virtual void SAL_CALL removeErrorHandler( const css::uno::Reference< css::awt::XEventHandler >& handler ) override;
+    virtual css::uno::Any SAL_CALL getIdentifier() override;
 
 };
 

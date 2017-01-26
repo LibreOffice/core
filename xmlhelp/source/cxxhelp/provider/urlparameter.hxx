@@ -111,8 +111,7 @@ namespace chelp {
     public:
         /// @throws css::ucb::IllegalIdentifierException
         URLParameter( const OUString& aURL,
-                      Databases* pDatabases )
-            throw( css::ucb::IllegalIdentifierException );
+                      Databases* pDatabases );
 
         bool isActive() const { return !m_aActive.isEmpty() && m_aActive == "true"; }
         bool isQuery() const { return m_aId.isEmpty() && !m_aQuery.isEmpty(); }
@@ -219,7 +218,7 @@ namespace chelp {
         void readHelpDataFile();
 
         /// @throws css::ucb::IllegalIdentifierException
-        void parse() throw( css::ucb::IllegalIdentifierException );
+        void parse();
 
         bool scheme();
 

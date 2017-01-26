@@ -71,7 +71,6 @@ GenericToolboxController::~GenericToolboxController()
 }
 
 void SAL_CALL GenericToolboxController::dispose()
-throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
     m_pToolbox.clear();
@@ -80,7 +79,6 @@ throw ( RuntimeException, std::exception )
 }
 
 void SAL_CALL GenericToolboxController::execute( sal_Int16 /*KeyModifier*/ )
-throw ( RuntimeException, std::exception )
 {
     Reference< XDispatch >       xDispatch;
     Reference< XURLTransformer > xURLTransformer;
@@ -124,7 +122,6 @@ throw ( RuntimeException, std::exception )
 }
 
 void GenericToolboxController::statusChanged( const FeatureStateEvent& Event )
-throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 

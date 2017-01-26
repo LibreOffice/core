@@ -33,36 +33,23 @@ public:
 
     SfxUnoPanel(const css::uno::Reference<css::frame::XFrame>& , const OUString&, const OUString&);
 
-    virtual OUString SAL_CALL getId()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getId() override;
 
-    virtual OUString SAL_CALL  getTitle()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTitle( const OUString& newTitle )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL  getTitle() override;
+    virtual void SAL_CALL setTitle( const OUString& newTitle ) override;
 
-    virtual sal_Bool SAL_CALL isExpanded()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL expand( const sal_Bool bCollapseOther )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL collapse( )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isExpanded() override;
+    virtual void SAL_CALL expand( const sal_Bool bCollapseOther ) override;
+    virtual void SAL_CALL collapse( ) override;
 
-    virtual sal_Int32 SAL_CALL getOrderIndex()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setOrderIndex( const sal_Int32 newOrderIndex )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL moveFirst()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL moveLast()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL moveUp()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL moveDown()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getOrderIndex() override;
+    virtual void SAL_CALL setOrderIndex( const sal_Int32 newOrderIndex ) override;
+    virtual void SAL_CALL moveFirst() override;
+    virtual void SAL_CALL moveLast() override;
+    virtual void SAL_CALL moveUp() override;
+    virtual void SAL_CALL moveDown() override;
 
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getDialog()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getDialog() override;
 
 private:
 

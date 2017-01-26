@@ -203,11 +203,11 @@ private:
     void                        InitDefLocales();
     const css::lang::Locale& GetLocale( sal_uInt32 nIndex );
     /// @throws css::uno::RuntimeException
-    ResMgr&                     GetResMgr() throw( css::uno::RuntimeException, std::exception );
+    ResMgr&                     GetResMgr();
     void                        InitData();
 
     /// @throws css::uno::RuntimeException
-    OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException, std::exception );
+    OUString             GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex );
 
 public:
                                 ScaPricingAddIn();
@@ -217,28 +217,28 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
                                 // XAddIn
-    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;
+    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) override;
+    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) override;
+    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
+    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
+    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticName ) override;
+    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticName ) override;
 
                                 // XCompatibilityNames
-    virtual css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) override;
 
                                 // XLocalizable
-    virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::lang::Locale SAL_CALL getLocale() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) override;
+    virtual css::lang::Locale SAL_CALL getLocale() override;
 
                                 // XServiceName
-    virtual OUString SAL_CALL getServiceName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getServiceName() override;
 
                                 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 
     //  methods from own interfaces start here
@@ -248,22 +248,22 @@ public:
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const OUString& put_call, const OUString& in_out,
-            const OUString& continuous, const css::uno::Any& greek ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+            const OUString& continuous, const css::uno::Any& greek ) override;
 
    virtual double SAL_CALL getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const OUString& for_dom, const OUString& in_out,
-            const OUString& barriercont, const css::uno::Any& greekstr ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+            const OUString& barriercont, const css::uno::Any& greekstr ) override;
 
    virtual double SAL_CALL getOptProbHit( double spot, double vol,
             double mu, double T,
-            double barrier_low, double barrier_up ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+            double barrier_low, double barrier_up ) override;
 
    virtual double SAL_CALL getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
-            const css::uno::Any& strikeval, const css::uno::Any& put_call ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+            const css::uno::Any& strikeval, const css::uno::Any& put_call ) override;
 
 };
 

@@ -1161,7 +1161,7 @@ SdrObjClosedKind MotionPathTag::GetMarkedObjectsClosedState() const
 }
 
 // XChangesListener
-void SAL_CALL MotionPathTag::changesOccurred( const ChangesEvent& /*Event*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL MotionPathTag::changesOccurred( const ChangesEvent& /*Event*/ )
 {
     if( mpPathObj && !mbInUpdatePath && (mpEffect->getPath() != msLastPath) )
     {
@@ -1174,13 +1174,13 @@ void SAL_CALL MotionPathTag::changesOccurred( const ChangesEvent& /*Event*/ ) th
     }
 }
 
-void SAL_CALL MotionPathTag::disposing( const EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL MotionPathTag::disposing( const EventObject& /*Source*/ )
 {
     if( mpPathObj )
         Dispose();
 }
 
-Any SAL_CALL MotionPathTag::queryInterface( const css::uno::Type& aType ) throw (RuntimeException, std::exception)
+Any SAL_CALL MotionPathTag::queryInterface( const css::uno::Type& aType )
 {
     if( aType == cppu::UnoType<XChangesListener>::get() )
         return Any( Reference< XChangesListener >( this ) );

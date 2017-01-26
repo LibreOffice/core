@@ -164,28 +164,28 @@ namespace dbaui
         DECLARE_XINTERFACE( )
         DECLARE_XTYPEPROVIDER( )
         // XPropertySet
-        virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // css::lang::XComponent
         virtual void        SAL_CALL disposing() override;
 
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
         // need by registration
         /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static OUString getImplementationName_Static();
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
         static css::uno::Reference< css::uno::XInterface >
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // XController
-        virtual css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Any SAL_CALL getViewData() override;
+        virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) override;
 
     private:
         virtual void    onLoadedMenu(const css::uno::Reference< css::frame::XLayoutManager >& _xLayoutManager) override;

@@ -29,40 +29,40 @@ private:
     OUString msStyleName;
 
     /// @throws css::uno::RuntimeException
-    void Init() throw( css::uno::RuntimeException );
+    void Init();
     /// @throws css::uno::RuntimeException
-    void CreateListTemplate() throw( css::uno::RuntimeException );
+    void CreateListTemplate();
     /// @throws css::uno::RuntimeException
-    void CreateBulletListTemplate() throw( css::uno::RuntimeException );
+    void CreateBulletListTemplate();
     /// @throws css::uno::RuntimeException
-    void CreateNumberListTemplate() throw( css::uno::RuntimeException );
+    void CreateNumberListTemplate();
     /// @throws css::uno::RuntimeException
-    void CreateOutlineNumberListTemplate() throw( css::uno::RuntimeException );
+    void CreateOutlineNumberListTemplate();
     /// @throws css::uno::RuntimeException
-    void CreateOutlineNumberForType1() throw( css::uno::RuntimeException );
+    void CreateOutlineNumberForType1();
     /// @throws css::uno::RuntimeException
-    void CreateOutlineNumberForType2() throw( css::uno::RuntimeException );
+    void CreateOutlineNumberForType2();
     /// @throws css::uno::RuntimeException
-    void CreateOutlineNumberForType3() throw( css::uno::RuntimeException );
+    void CreateOutlineNumberForType3();
     /// @throws css::uno::RuntimeException
-    void CreateOutlineNumberForType4() throw( css::uno::RuntimeException );
+    void CreateOutlineNumberForType4();
     /// @throws css::uno::RuntimeException
-    void CreateOutlineNumberForType5() throw( css::uno::RuntimeException );
+    void CreateOutlineNumberForType5();
     /// @throws css::uno::RuntimeException
-    void CreateOutlineNumberForType6() throw( css::uno::RuntimeException );
+    void CreateOutlineNumberForType6();
     /// @throws css::uno::RuntimeException
-    void CreateOutlineNumberForType7() throw( css::uno::RuntimeException );
+    void CreateOutlineNumberForType7();
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaListHelper( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType ) throw( css::uno::RuntimeException );
+    SwVbaListHelper( const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nGalleryType, sal_Int32 nTemplateType );
 
     sal_Int32 getGalleryType() const { return mnGalleryType; }
     const css::uno::Reference< css::container::XIndexReplace >& getNumberingRules() const { return mxNumberingRules; }
     /// @throws css::uno::RuntimeException
-    css::uno::Any getPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName ) throw( css::uno::RuntimeException );
+    css::uno::Any getPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName );
     /// @throws css::uno::RuntimeException
-    void setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName, const css::uno::Any& aValue ) throw( css::uno::RuntimeException );
+    void setPropertyValueWithNameAndLevel( sal_Int32 nLevel, const OUString& sName, const css::uno::Any& aValue );
 
 };
 

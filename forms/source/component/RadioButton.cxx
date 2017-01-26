@@ -43,7 +43,7 @@ using namespace ::com::sun::star::util;
 using namespace ::com::sun::star::form::binding;
 
 
-css::uno::Sequence<OUString> SAL_CALL ORadioButtonControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL ORadioButtonControl::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -89,7 +89,7 @@ IMPLEMENT_DEFAULT_CLONING( ORadioButtonModel )
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL ORadioButtonModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL ORadioButtonModel::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OReferenceValueComponent::getSupportedServiceNames();
 
@@ -156,7 +156,7 @@ void ORadioButtonModel::SetSiblingPropsTo(const OUString& rPropName, const Any& 
 }
 
 
-void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw (Exception, std::exception)
+void ORadioButtonModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
 {
     OReferenceValueComponent::setFastPropertyValue_NoBroadcast( nHandle, rValue );
 
@@ -248,14 +248,13 @@ void ORadioButtonModel::describeFixedProperties( Sequence< Property >& _rProps )
 }
 
 
-OUString SAL_CALL ORadioButtonModel::getServiceName() throw(RuntimeException, std::exception)
+OUString SAL_CALL ORadioButtonModel::getServiceName()
 {
     return OUString(FRM_COMPONENT_RADIOBUTTON);   // old (non-sun) name for compatibility !
 }
 
 
 void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
-    throw(IOException, RuntimeException, std::exception)
 {
     OReferenceValueComponent::write(_rxOutStream);
 
@@ -272,7 +271,7 @@ void SAL_CALL ORadioButtonModel::write(const Reference<XObjectOutputStream>& _rx
 }
 
 
-void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxInStream) throw(IOException, RuntimeException, std::exception)
+void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OReferenceValueComponent::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -315,7 +314,7 @@ void SAL_CALL ORadioButtonModel::read(const Reference<XObjectInputStream>& _rxIn
 }
 
 
-void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent) throw(RuntimeException)
+void ORadioButtonModel::_propertyChanged(const PropertyChangeEvent& _rEvent)
 {
     if ( _rEvent.PropertyName == PROPERTY_STATE )
     {

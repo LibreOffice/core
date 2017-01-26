@@ -89,32 +89,26 @@ private:
     /// @throws css::uno::Exception
     /// @throws libcmis::Exception
     css::uno::Any open(const css::ucb::OpenCommandArgument2 & rArg,
-        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
-            throw( css::uno::Exception, libcmis::Exception );
+        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws css::uno::Exception
     void transfer( const css::ucb::TransferInfo& rTransferInfo,
-        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
-            throw( css::uno::Exception );
+        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws css::uno::Exception
     void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
         bool bReplaceExisting, const OUString & rMimeType,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
-            throw (css::uno::Exception, std::exception);
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     /// @throws css::uno::Exception
     OUString checkIn( const css::ucb::CheckinArgument& rArg,
-        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
-            throw( css::uno::Exception );
+        const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws css::uno::Exception
-    OUString checkOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
-            throw( css::uno::Exception );
+    OUString checkOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     /// @throws css::uno::Exception
-    OUString cancelCheckOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
-            throw( css::uno::Exception );
+    OUString cancelCheckOut( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     static void copyData( const css::uno::Reference< css::io::XInputStream >& xIn,
         const css::uno::Reference< css::io::XOutputStream >& xOut );
@@ -125,9 +119,7 @@ private:
 
     /// @throws css::uno::Exception
     css::uno::Sequence< css::document::CmisVersion >
-        getAllVersions( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
-            throw(css::uno::Exception,
-                  std::exception);
+        getAllVersions( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
     bool feedSink( const css::uno::Reference< css::uno::XInterface>& aSink,
         const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
@@ -137,15 +129,13 @@ public:
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
-        libcmis::ObjectPtr const & pObject = libcmis::ObjectPtr( ) )
-            throw ( css::ucb::ContentCreationException );
+        libcmis::ObjectPtr const & pObject = libcmis::ObjectPtr( ) );
 
     /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         ContentProvider *pProvider,
         const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
-        bool bIsFolder)
-            throw ( css::ucb::ContentCreationException );
+        bool bIsFolder);
 
     virtual ~Content() override;
 
@@ -162,58 +152,47 @@ public:
     virtual OUString getParentURL() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     virtual OUString SAL_CALL
-    getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationName() override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    getSupportedServiceNames() override;
 
     virtual OUString SAL_CALL
-    getContentType()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    getContentType() override;
 
     virtual css::uno::Any SAL_CALL
         execute( const css::ucb::Command& aCommand,
         sal_Int32 CommandId,
-        const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
-            throw( css::uno::Exception, css::ucb::CommandAbortedException, css::uno::RuntimeException, std::exception ) override;
+        const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override;
 
-    virtual void SAL_CALL abort( sal_Int32 CommandId )
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL abort( sal_Int32 CommandId ) override;
 
     virtual css::uno::Sequence< css::ucb::ContentInfo >
-        SAL_CALL queryCreatableContentsInfo()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        SAL_CALL queryCreatableContentsInfo() override;
 
     virtual css::uno::Reference< css::ucb::XContent >
-        SAL_CALL createNewContent( const css::ucb::ContentInfo& Info )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        SAL_CALL createNewContent( const css::ucb::ContentInfo& Info ) override;
 
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< css::ucb::ContentInfo >
-        queryCreatableContentsInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
-                throw( css::uno::RuntimeException );
+        queryCreatableContentsInfo( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 
     virtual std::list< css::uno::Reference< css::ucb::XContent > > getChildren( ) override;
 
     /// @throws css::uno::RuntimeException
     /// @throws css::ucb::CommandFailedException
     /// @throws libcmis::Exception
-    libcmis::ObjectPtr const & getObject( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception);
+    libcmis::ObjectPtr const & getObject( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv );
 };
 
 }

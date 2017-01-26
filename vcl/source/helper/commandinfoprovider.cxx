@@ -58,8 +58,7 @@ namespace
                 mxFrame->addFrameActionListener(this);
         }
 
-        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
-            throw (css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override
         {
             // The same frame can be reused for a different component, e.g.
             // starting component from the start center, so need to re-init the cached data.
@@ -71,8 +70,7 @@ namespace
             if (mxFrame.is())
                 mxFrame->removeFrameActionListener(this);
         }
-        virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-            throw (RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override
         {
             (void)rEvent;
             mrInfoProvider.SetFrame(nullptr);

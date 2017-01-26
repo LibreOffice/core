@@ -68,10 +68,10 @@ class SwDBTreeList_Impl : public cppu::WeakImplHelper < XContainerListener >
         }
         virtual ~SwDBTreeList_Impl() override;
 
-    virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved( const ContainerEvent& Event ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted( const ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementRemoved( const ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementReplaced( const ContainerEvent& Event ) override;
+    virtual void SAL_CALL disposing( const EventObject& Source ) override;
 
     bool                        HasContext();
     SwWrtShell*                 GetWrtShell() { return m_pWrtShell;}
@@ -94,24 +94,24 @@ SwDBTreeList_Impl::~SwDBTreeList_Impl()
     }
 }
 
-void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  ) throw (RuntimeException, std::exception)
+void SwDBTreeList_Impl::elementInserted( const ContainerEvent&  )
 {
     // information not needed
 }
 
-void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent ) throw (RuntimeException, std::exception)
+void SwDBTreeList_Impl::elementRemoved( const ContainerEvent& rEvent )
 {
     SolarMutexGuard aGuard;
     OUString sSource;
     rEvent.Accessor >>= sSource;
 }
 
-void SwDBTreeList_Impl::disposing( const EventObject&  ) throw (RuntimeException, std::exception)
+void SwDBTreeList_Impl::disposing( const EventObject&  )
 {
     m_xDatabaseContext = nullptr;
 }
 
-void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent ) throw (RuntimeException, std::exception)
+void SwDBTreeList_Impl::elementReplaced( const ContainerEvent& rEvent )
 {
     elementRemoved(rEvent);
 }

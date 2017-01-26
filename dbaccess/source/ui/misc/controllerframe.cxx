@@ -75,16 +75,16 @@ namespace dbaui
         virtual ~FrameWindowActivationListener() override;
 
         // XTopWindowListener
-        virtual void SAL_CALL windowOpened( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowClosing( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowClosed( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowMinimized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowNormalized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowActivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowOpened( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL windowClosing( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL windowClosed( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL windowMinimized( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL windowNormalized( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL windowActivated( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& e ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     private:
         void impl_checkDisposed_throw() const;
@@ -280,44 +280,44 @@ namespace dbaui
             throw DisposedException( OUString(), *const_cast< FrameWindowActivationListener* >( this ) );
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowOpened( const EventObject& /*_rEvent*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FrameWindowActivationListener::windowOpened( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowClosing( const EventObject& /*_rEvent*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FrameWindowActivationListener::windowClosing( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowClosed( const EventObject& /*_rEvent*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FrameWindowActivationListener::windowClosed( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowMinimized( const EventObject& /*_rEvent*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FrameWindowActivationListener::windowMinimized( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowNormalized( const EventObject& /*_rEvent*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FrameWindowActivationListener::windowNormalized( const EventObject& /*_rEvent*/ )
     {
         // not interested in
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowActivated( const EventObject& /*_rEvent*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FrameWindowActivationListener::windowActivated( const EventObject& /*_rEvent*/ )
     {
         impl_checkDisposed_throw();
         lcl_updateActive_nothrow( *m_pData, true );
     }
 
-    void SAL_CALL FrameWindowActivationListener::windowDeactivated( const EventObject& /*_rEvent*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FrameWindowActivationListener::windowDeactivated( const EventObject& /*_rEvent*/ )
     {
         impl_checkDisposed_throw();
         lcl_updateActive_nothrow( *m_pData, false );
     }
 
-    void SAL_CALL FrameWindowActivationListener::disposing( const EventObject& /*_rEvent*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FrameWindowActivationListener::disposing( const EventObject& /*_rEvent*/ )
     {
         dispose();
     }

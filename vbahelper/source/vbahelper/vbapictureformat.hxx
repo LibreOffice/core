@@ -36,22 +36,21 @@ protected:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 private:
     /// @throws css::uno::RuntimeException
-    static void checkParameterRangeInDouble( double nRange, double nMin, double nMax ) throw (css::uno::RuntimeException);
+    static void checkParameterRangeInDouble( double nRange, double nMin, double nMax );
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > const & xShape )
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    ScVbaPictureFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, css::uno::Reference< css::drawing::XShape > const & xShape );
 
     // Attributes
-    virtual double SAL_CALL getBrightness() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBrightness( double _brightness ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getContrast() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setContrast( double _contrast ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getBrightness() override;
+    virtual void SAL_CALL setBrightness( double _brightness ) override;
+    virtual double SAL_CALL getContrast() override;
+    virtual void SAL_CALL setContrast( double _contrast ) override;
 
     // Methods
-    virtual void SAL_CALL IncrementBrightness( double increment ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL IncrementContrast( double increment ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL IncrementBrightness( double increment ) override;
+    virtual void SAL_CALL IncrementContrast( double increment ) override;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBAPICTUREFORMAT_HXX

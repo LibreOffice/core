@@ -55,22 +55,22 @@ public:
     explicit RtfFilter(const uno::Reference<uno::XComponentContext>& xContext);
 
     // XFilter
-    sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception) override;
-    void SAL_CALL cancel() throw (uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    void SAL_CALL cancel() override;
 
     // XImporter
-    void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XExporter
-    void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XInitialization
-    void SAL_CALL initialize(const uno::Sequence<uno::Any>& rArguments) throw (uno::Exception, uno::RuntimeException, std::exception) override;
+    void SAL_CALL initialize(const uno::Sequence<uno::Any>& rArguments) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (uno::RuntimeException, std::exception) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 };
 
@@ -79,7 +79,7 @@ RtfFilter::RtfFilter(const uno::Reference< uno::XComponentContext >& rxContext)
 {
 }
 
-sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor) throw(uno::RuntimeException, std::exception)
+sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor)
 {
     sal_uInt32 nStartTime = osl_getGlobalTimer();
     if (m_xSrcDoc.is())
@@ -162,37 +162,37 @@ sal_Bool RtfFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescrip
     return bResult;
 }
 
-void RtfFilter::cancel() throw(uno::RuntimeException, std::exception)
+void RtfFilter::cancel()
 {
 }
 
-void RtfFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+void RtfFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc)
 {
     m_xSrcDoc = xDoc;
 }
 
-void RtfFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+void RtfFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc)
 {
     m_xDstDoc = xDoc;
 }
 
-void RtfFilter::initialize(const uno::Sequence< uno::Any >& /*aArguments*/) throw(uno::Exception, uno::RuntimeException, std::exception)
+void RtfFilter::initialize(const uno::Sequence< uno::Any >& /*aArguments*/)
 {
     // The DOCX exporter here extracts 'type' of the filter, ie 'Word' or
     // 'Word Template' but we don't need it for RTF.
 }
 
-OUString RtfFilter::getImplementationName() throw(uno::RuntimeException, std::exception)
+OUString RtfFilter::getImplementationName()
 {
     return OUString("com.sun.star.comp.Writer.RtfFilter");
 }
 
-sal_Bool RtfFilter::supportsService(const OUString& rServiceName) throw(uno::RuntimeException, std::exception)
+sal_Bool RtfFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> RtfFilter::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
+uno::Sequence<OUString> RtfFilter::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet =
     {

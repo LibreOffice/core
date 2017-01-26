@@ -60,8 +60,6 @@ TitleBarUpdate::~TitleBarUpdate()
 }
 
 void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
-    throw(css::uno::Exception       ,
-          css::uno::RuntimeException, std::exception)
 {
     // check arguments
     css::uno::Reference< css::frame::XFrame > xFrame;
@@ -93,7 +91,6 @@ void SAL_CALL TitleBarUpdate::initialize(const css::uno::Sequence< css::uno::Any
 }
 
 void SAL_CALL TitleBarUpdate::frameAction(const css::frame::FrameActionEvent& aEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     // we are interested on events only, which must trigger a title bar update
     // because component was changed.
@@ -108,13 +105,11 @@ void SAL_CALL TitleBarUpdate::frameAction(const css::frame::FrameActionEvent& aE
 }
 
 void SAL_CALL TitleBarUpdate::titleChanged(const css::frame::TitleChangedEvent& /* aEvent */)
-    throw (css::uno::RuntimeException, std::exception)
 {
     impl_forceUpdate ();
 }
 
 void SAL_CALL TitleBarUpdate::disposing(const css::lang::EventObject&)
-    throw(css::uno::RuntimeException, std::exception)
 {
     // nothing todo here - because we hold the frame as weak reference only
 }

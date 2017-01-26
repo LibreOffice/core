@@ -140,22 +140,18 @@ PieChartType::~PieChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL PieChartType::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new PieChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL PieChartType::getChartType()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString(CHART2_SERVICE_NAME_CHARTTYPE_PIE);
 }
 
 Reference< chart2::XCoordinateSystem > SAL_CALL
     PieChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     Reference< chart2::XCoordinateSystem > xResult(
         new PolarCoordinateSystem( GetComponentContext(), DimensionCount ));
@@ -190,7 +186,6 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 }
 
 uno::Sequence< OUString > PieChartType::getSupportedPropertyRoles()
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aPropRoles(2);
     aPropRoles[0] = "FillColor";
@@ -201,7 +196,6 @@ uno::Sequence< OUString > PieChartType::getSupportedPropertyRoles()
 
 // ____ OPropertySet ____
 uno::Any PieChartType::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticPieChartTypeDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -218,25 +212,21 @@ uno::Any PieChartType::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PieChartType::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticPieChartTypeInfo::get();
 }
 
 OUString SAL_CALL PieChartType::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.PieChartType");
 }
 
 sal_Bool SAL_CALL PieChartType::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL PieChartType::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_PIE,

@@ -59,7 +59,6 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
     const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
-    throw (uno::RuntimeException, std::exception)
 {
     if( ! xSource.is())
         return InterpretedData();
@@ -134,7 +133,6 @@ InterpretedData SAL_CALL DataInterpreter::interpretDataSource(
 
 InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
     const InterpretedData& aInterpretedData )
-    throw (uno::RuntimeException, std::exception)
 {
     InterpretedData aResult( aInterpretedData );
 
@@ -191,7 +189,6 @@ InterpretedData SAL_CALL DataInterpreter::reinterpretDataSeries(
 // criterion: all series must have exactly one data::XLabeledDataSequence
 sal_Bool SAL_CALL DataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
-    throw (uno::RuntimeException, std::exception)
 {
     Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
     for( sal_Int32 i=0; i<aSeries.getLength(); ++i )
@@ -267,7 +264,6 @@ private:
 
 Reference< data::XDataSource > SAL_CALL DataInterpreter::mergeInterpretedData(
     const InterpretedData& aInterpretedData )
-    throw (uno::RuntimeException, std::exception)
 {
     vector< Reference< data::XLabeledDataSequence > > aResultVec;
     aResultVec.reserve( aInterpretedData.Series.getLength() +
@@ -378,19 +374,16 @@ bool DataInterpreter::UseCategoriesAsX( const Sequence< beans::PropertyValue > &
 }
 
 OUString SAL_CALL DataInterpreter::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart2.DataInterpreter");
 }
 
 sal_Bool SAL_CALL DataInterpreter::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL DataInterpreter::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.chart2.DataInterpreter" };
 }

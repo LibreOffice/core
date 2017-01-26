@@ -64,7 +64,6 @@ TypeDetection::~TypeDetection()
 
 
 OUString SAL_CALL TypeDetection::queryTypeByURL(const OUString& sURL)
-    throw (css::uno::RuntimeException, std::exception)
 {
     OUString sType;
 
@@ -369,7 +368,6 @@ void printFlatDetectionList(const char* caption, const FlatDetection& types)
 
 OUString SAL_CALL TypeDetection::queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
                                                               sal_Bool                                         bAllowDeep )
-    throw (css::uno::RuntimeException, std::exception)
 {
     // make the descriptor more useable :-)
     utl::MediaDescriptor stlDescriptor(lDescriptor);
@@ -1129,7 +1127,6 @@ OUString TypeDetection::impl_askUserForTypeAndFilterIfAllowed(utl::MediaDescript
 
 
 void TypeDetection::impl_openStream(utl::MediaDescriptor& rDescriptor)
-    throw (css::uno::Exception)
 {
     bool bSuccess = false;
     OUString sURL = rDescriptor.getUnpackedValueOrDefault( utl::MediaDescriptor::PROP_URL(), OUString() );

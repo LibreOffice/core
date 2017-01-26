@@ -1020,7 +1020,6 @@ void ScChart2DataProvider::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint
 }
 
 sal_Bool SAL_CALL ScChart2DataProvider::createDataSourcePossible( const uno::Sequence< beans::PropertyValue >& aArguments )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( ! m_pDocument )
@@ -1420,7 +1419,6 @@ void shrinkToDataRange(ScDocument* pDoc, vector<ScTokenRef>& rRefTokens)
 uno::Reference< chart2::data::XDataSource> SAL_CALL
 ScChart2DataProvider::createDataSource(
     const uno::Sequence< beans::PropertyValue >& aArguments )
-    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( ! m_pDocument )
@@ -1780,7 +1778,6 @@ std::pair<OUString, OUString> constructKey(const uno::Reference< chart2::data::X
 
 uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArguments(
     const uno::Reference< chart2::data::XDataSource >& xDataSource )
-    throw (uno::RuntimeException, std::exception)
 {
     ::std::vector< beans::PropertyValue > aResult;
     bool bRowSourceDetected = false;
@@ -2044,7 +2041,6 @@ uno::Sequence< beans::PropertyValue > SAL_CALL ScChart2DataProvider::detectArgum
 }
 
 sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByRangeRepresentationPossible( const OUString& aRangeRepresentation )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( ! m_pDocument )
@@ -2060,8 +2056,6 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByRangeRepresentationP
 uno::Reference< chart2::data::XDataSequence > SAL_CALL
     ScChart2DataProvider::createDataSequenceByRangeRepresentation(
     const OUString& aRangeRepresentation )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< chart2::data::XDataSequence > xResult;
@@ -2087,13 +2081,11 @@ uno::Reference< chart2::data::XDataSequence > SAL_CALL
 uno::Reference<chart2::data::XDataSequence> SAL_CALL
 ScChart2DataProvider::createDataSequenceByValueArray(
     const OUString& /*aRole*/, const OUString& /*aRangeRepresentation*/ )
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     return uno::Reference<chart2::data::XDataSequence>();
 }
 
 uno::Reference< sheet::XRangeSelection > SAL_CALL ScChart2DataProvider::getRangeSelection()
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< sheet::XRangeSelection > xResult;
 
@@ -2106,7 +2098,6 @@ uno::Reference< sheet::XRangeSelection > SAL_CALL ScChart2DataProvider::getRange
 
 sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossible(
     const Sequence<sheet::FormulaToken>& aTokens )
-        throw (uno::RuntimeException, std::exception)
 {
     if (aTokens.getLength() <= 0)
         return false;
@@ -2163,7 +2154,6 @@ sal_Bool SAL_CALL ScChart2DataProvider::createDataSequenceByFormulaTokensPossibl
 Reference<chart2::data::XDataSequence> SAL_CALL
 ScChart2DataProvider::createDataSequenceByFormulaTokens(
     const Sequence<sheet::FormulaToken>& aTokens )
-        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     Reference<chart2::data::XDataSequence> xResult;
     if (aTokens.getLength() <= 0)
@@ -2233,7 +2223,6 @@ ScChart2DataProvider::createDataSequenceByFormulaTokens(
 // XRangeXMLConversion ---------------------------------------------------
 
 OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const OUString& sRangeRepresentation )
-    throw ( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     OUString aRet;
     if (!m_pDocument)
@@ -2258,7 +2247,6 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeToXML( const OUString& sRang
 }
 
 OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXMLRange )
-    throw ( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     if (!m_pDocument)
     {
@@ -2302,7 +2290,7 @@ OUString SAL_CALL ScChart2DataProvider::convertRangeFromXML( const OUString& sXM
 // DataProvider XPropertySet -------------------------------------------------
 
 uno::Reference< beans::XPropertySetInfo> SAL_CALL
-ScChart2DataProvider::getPropertySetInfo() throw( uno::RuntimeException, std::exception)
+ScChart2DataProvider::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -2312,10 +2300,6 @@ ScChart2DataProvider::getPropertySetInfo() throw( uno::RuntimeException, std::ex
 
 void SAL_CALL ScChart2DataProvider::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
-            throw( beans::UnknownPropertyException,
-                    beans::PropertyVetoException,
-                    lang::IllegalArgumentException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
     {
@@ -2328,8 +2312,6 @@ void SAL_CALL ScChart2DataProvider::setPropertyValue(
 
 uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
         const OUString& rPropertyName)
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if ( rPropertyName == SC_UNONAME_INCLUDEHIDDENCELLS )
@@ -2347,8 +2329,6 @@ uno::Any SAL_CALL ScChart2DataProvider::getPropertyValue(
 void SAL_CALL ScChart2DataProvider::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener>& /*xListener*/)
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not yet implemented" );
 }
@@ -2356,8 +2336,6 @@ void SAL_CALL ScChart2DataProvider::addPropertyChangeListener(
 void SAL_CALL ScChart2DataProvider::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener>& /*rListener*/)
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not yet implemented" );
 }
@@ -2365,8 +2343,6 @@ void SAL_CALL ScChart2DataProvider::removePropertyChangeListener(
 void SAL_CALL ScChart2DataProvider::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener>& /*rListener*/)
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not yet implemented" );
 }
@@ -2374,8 +2350,6 @@ void SAL_CALL ScChart2DataProvider::addVetoableChangeListener(
 void SAL_CALL ScChart2DataProvider::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener>& /*rListener*/ )
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "Not yet implemented" );
 }
@@ -2406,7 +2380,7 @@ void ScChart2DataSource::Notify( SfxBroadcaster& /*rBC*/, const SfxHint& rHint)
 }
 
 uno::Sequence< uno::Reference< chart2::data::XLabeledDataSequence> > SAL_CALL
-ScChart2DataSource::getDataSequences() throw ( uno::RuntimeException, std::exception)
+ScChart2DataSource::getDataSequences()
 {
     SolarMutexGuard aGuard;
     return comphelper::containerToSequence(m_aLabeledSequences);
@@ -2964,7 +2938,6 @@ void ScChart2DataSequence::ExternalRefListener::addFileId(sal_uInt16 nFileId)
 }
 
 uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
@@ -2994,7 +2967,6 @@ uno::Sequence< uno::Any> SAL_CALL ScChart2DataSequence::getData()
 // XNumericalDataSequence --------------------------------------------------
 
 uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
@@ -3020,7 +2992,6 @@ uno::Sequence< double > SAL_CALL ScChart2DataSequence::getNumericalData()
 // XTextualDataSequence --------------------------------------------------
 
 uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence<OUString> aSeq;
@@ -3053,7 +3024,6 @@ uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::getTextualData()
 }
 
 OUString SAL_CALL ScChart2DataSequence::getSourceRangeRepresentation()
-            throw ( uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     OUString aStr;
@@ -3168,7 +3138,6 @@ private:
 }
 
 uno::Sequence< OUString > SAL_CALL ScChart2DataSequence::generateLabel(chart2::data::LabelOrigin eOrigin)
-        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( !m_pDocument)
@@ -3223,7 +3192,6 @@ sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
 }
 
 ::sal_Int32 SAL_CALL ScChart2DataSequence::getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     BuildDataCache();
@@ -3257,7 +3225,6 @@ sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
 // XCloneable ================================================================
 
 uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -3281,7 +3248,6 @@ uno::Reference< util::XCloneable > SAL_CALL ScChart2DataSequence::createClone()
 // XModifyBroadcaster ========================================================
 
 void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     // like ScCellRangesBase::addModifyListener
     SolarMutexGuard aGuard;
@@ -3321,7 +3287,6 @@ void SAL_CALL ScChart2DataSequence::addModifyListener( const uno::Reference< uti
 }
 
 void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     // like ScCellRangesBase::removeModifyListener
 
@@ -3364,7 +3329,7 @@ void SAL_CALL ScChart2DataSequence::removeModifyListener( const uno::Reference< 
 // DataSequence XPropertySet -------------------------------------------------
 
 uno::Reference< beans::XPropertySetInfo> SAL_CALL
-ScChart2DataSequence::getPropertySetInfo() throw( uno::RuntimeException, std::exception)
+ScChart2DataSequence::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef =
@@ -3374,10 +3339,6 @@ ScChart2DataSequence::getPropertySetInfo() throw( uno::RuntimeException, std::ex
 
 void SAL_CALL ScChart2DataSequence::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
-            throw( beans::UnknownPropertyException,
-                    beans::PropertyVetoException,
-                    lang::IllegalArgumentException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if ( rPropertyName == SC_UNONAME_ROLE )
     {
@@ -3404,10 +3365,6 @@ void SAL_CALL ScChart2DataSequence::setPropertyValue(
 }
 
 uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rPropertyName)
-    throw(beans::UnknownPropertyException,
-          lang::WrappedTargetException,
-          uno::RuntimeException,
-          std::exception)
 {
     uno::Any aRet;
     if ( rPropertyName == SC_UNONAME_ROLE )
@@ -3446,8 +3403,6 @@ uno::Any SAL_CALL ScChart2DataSequence::getPropertyValue(const OUString& rProper
 void SAL_CALL ScChart2DataSequence::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener>& /*xListener*/)
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     // FIXME: real implementation
     OSL_FAIL( "Not yet implemented" );
@@ -3456,8 +3411,6 @@ void SAL_CALL ScChart2DataSequence::addPropertyChangeListener(
 void SAL_CALL ScChart2DataSequence::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener>& /*rListener*/)
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     // FIXME: real implementation
     OSL_FAIL( "Not yet implemented" );
@@ -3466,8 +3419,6 @@ void SAL_CALL ScChart2DataSequence::removePropertyChangeListener(
 void SAL_CALL ScChart2DataSequence::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener>& /*rListener*/)
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     // FIXME: real implementation
     OSL_FAIL( "Not yet implemented" );
@@ -3476,8 +3427,6 @@ void SAL_CALL ScChart2DataSequence::addVetoableChangeListener(
 void SAL_CALL ScChart2DataSequence::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener>& /*rListener*/)
-            throw( beans::UnknownPropertyException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     // FIXME: real implementation
     OSL_FAIL( "Not yet implemented" );
@@ -3489,7 +3438,6 @@ void ScChart2DataSequence::setDataChangedHint(bool b)
 }
 
 sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
-    throw (uno::RuntimeException, std::exception)
 {
     if(!mbTimeBased)
         return true;
@@ -3523,7 +3471,6 @@ sal_Bool ScChart2DataSequence::switchToNext(sal_Bool bWrap)
 }
 
 void ScChart2DataSequence::setRange(sal_Int32 nStart, sal_Int32 nEnd)
-    throw (uno::RuntimeException, std::exception)
 {
     mnTimeBasedStart = nStart;
     mnTimeBasedEnd = nEnd;
@@ -3531,7 +3478,6 @@ void ScChart2DataSequence::setRange(sal_Int32 nStart, sal_Int32 nEnd)
 }
 
 sal_Bool ScChart2DataSequence::setToPointInTime(sal_Int32 nPoint)
-    throw (uno::RuntimeException, std::exception)
 {
     if(nPoint > mnTimeBasedEnd - mnTimeBasedStart)
         return false;

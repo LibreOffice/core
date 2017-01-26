@@ -42,8 +42,8 @@ public:
     static css::uno::Reference< css::xml::crypto::XCipherContext >
         Create( const css::uno::Sequence< sal_Int8 >& aDerivedKey, const css::uno::Sequence< sal_Int8 >& aInitVector, bool bEncrypt );
 
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext( const css::uno::Sequence< ::sal_Int8 >& aData ) throw (css::lang::IllegalArgumentException, css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose(  ) throw (css::lang::DisposedException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertWithCipherContext( const css::uno::Sequence< ::sal_Int8 >& aData ) override;
+    virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL finalizeCipherContextAndDispose(  ) override;
 };
 
 #endif // INCLUDED_PACKAGE_SOURCE_ZIPAPI_BLOWFISHCONTEXT_HXX

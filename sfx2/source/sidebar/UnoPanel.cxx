@@ -42,7 +42,6 @@ SidebarController* SfxUnoPanel::getSidebarController()
 }
 
 OUString SAL_CALL SfxUnoPanel::getId()
-                               throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -50,7 +49,6 @@ OUString SAL_CALL SfxUnoPanel::getId()
 }
 
 OUString SAL_CALL  SfxUnoPanel::getTitle()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -59,7 +57,6 @@ OUString SAL_CALL  SfxUnoPanel::getTitle()
 }
 
 void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -76,7 +73,6 @@ void SAL_CALL SfxUnoPanel::setTitle( const OUString& newTitle )
 }
 
 sal_Bool SAL_CALL SfxUnoPanel::isExpanded()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -85,7 +81,6 @@ sal_Bool SAL_CALL SfxUnoPanel::isExpanded()
 
 
 void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
-                                throw(uno::RuntimeException, std::exception)
 {
 
     SolarMutexGuard aGuard;
@@ -111,7 +106,6 @@ void SAL_CALL SfxUnoPanel::expand( const sal_Bool bCollapseOther )
 }
 
 void SAL_CALL SfxUnoPanel::collapse()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -121,7 +115,6 @@ void SAL_CALL SfxUnoPanel::collapse()
 }
 
 uno::Reference<awt::XWindow> SAL_CALL SfxUnoPanel::getDialog()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -130,7 +123,6 @@ uno::Reference<awt::XWindow> SAL_CALL SfxUnoPanel::getDialog()
 
 
 sal_Int32 SAL_CALL SfxUnoPanel::getOrderIndex()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -140,7 +132,6 @@ sal_Int32 SAL_CALL SfxUnoPanel::getOrderIndex()
 }
 
 void SAL_CALL SfxUnoPanel::setOrderIndex( const sal_Int32 newOrderIndex )
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -156,7 +147,6 @@ void SAL_CALL SfxUnoPanel::setOrderIndex( const sal_Int32 newOrderIndex )
 }
 
 void SAL_CALL SfxUnoPanel::moveFirst()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -180,7 +170,6 @@ void SAL_CALL SfxUnoPanel::moveFirst()
 }
 
 void SAL_CALL SfxUnoPanel::moveLast()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -204,7 +193,6 @@ void SAL_CALL SfxUnoPanel::moveLast()
 }
 
 void SAL_CALL SfxUnoPanel::moveUp()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();
@@ -237,7 +225,6 @@ void SAL_CALL SfxUnoPanel::moveUp()
 }
 
 void SAL_CALL SfxUnoPanel::moveDown()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SidebarController* pSidebarController = getSidebarController();

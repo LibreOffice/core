@@ -21,7 +21,7 @@
 #include <rtl/byteseq.hxx>
 #include <osl/diagnose.h>
 
-IniParser::IniParser(OUString const & rIniName) throw(css::io::IOException, std::exception)
+IniParser::IniParser(OUString const & rIniName)
 {
     OUString iniUrl;
     if (osl_File_E_None != osl_getFileURLFromSystemPath(rIniName.pData, &iniUrl.pData))

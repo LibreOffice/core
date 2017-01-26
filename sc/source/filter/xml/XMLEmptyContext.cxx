@@ -33,7 +33,6 @@ ScXMLEmptyContext::~ScXMLEmptyContext()
 css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     ScXMLEmptyContext::createFastChildContext( sal_Int32 nElement,
     const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
-    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
     SvXMLImportContext *pContext = new ScXMLEmptyContext( GetScImport(), nElement );
 

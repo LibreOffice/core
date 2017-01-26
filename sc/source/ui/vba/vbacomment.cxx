@@ -42,7 +42,7 @@ ScVbaComment::ScVbaComment(
         const uno::Reference< XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< frame::XModel >& xModel,
-        const uno::Reference< table::XCellRange >& xRange ) throw( lang::IllegalArgumentException, uno::RuntimeException ) :
+        const uno::Reference< table::XCellRange >& xRange ) :
     ScVbaComment_BASE( xParent, xContext ),
     mxModel( xModel, uno::UNO_SET_THROW ),
     mxRange( xRange )
@@ -55,7 +55,7 @@ ScVbaComment::ScVbaComment(
 // private helper functions
 
 uno::Reference< sheet::XSheetAnnotation > SAL_CALL
-ScVbaComment::getAnnotation() throw (uno::RuntimeException)
+ScVbaComment::getAnnotation()
 {
     uno::Reference< table::XCell > xCell( mxRange->getCellByPosition(0, 0), uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSheetAnnotationAnchor > xAnnoAnchor( xCell, uno::UNO_QUERY_THROW );
@@ -63,7 +63,7 @@ ScVbaComment::getAnnotation() throw (uno::RuntimeException)
 }
 
 uno::Reference< sheet::XSheetAnnotations > SAL_CALL
-ScVbaComment::getAnnotations() throw (uno::RuntimeException)
+ScVbaComment::getAnnotations()
 {
     uno::Reference< sheet::XSheetCellRange > xSheetCellRange(mxRange, ::uno::UNO_QUERY_THROW );
     uno::Reference< sheet::XSpreadsheet > xSheet = xSheetCellRange->getSpreadsheet();
@@ -73,7 +73,7 @@ ScVbaComment::getAnnotations() throw (uno::RuntimeException)
 }
 
 sal_Int32 SAL_CALL
-ScVbaComment::getAnnotationIndex() throw (uno::RuntimeException)
+ScVbaComment::getAnnotationIndex()
 {
     uno::Reference< sheet::XSheetAnnotations > xAnnos = getAnnotations();
     table::CellAddress aAddress = getAnnotation()->getPosition();
@@ -98,7 +98,7 @@ ScVbaComment::getAnnotationIndex() throw (uno::RuntimeException)
 }
 
 uno::Reference< excel::XComment > SAL_CALL
-ScVbaComment::getCommentByIndex( sal_Int32 Index ) throw (uno::RuntimeException)
+ScVbaComment::getCommentByIndex( sal_Int32 Index )
 {
     uno::Reference< container::XIndexAccess > xIndexAccess( getAnnotations(), uno::UNO_QUERY_THROW );
     // parent is sheet ( parent of the range which is the parent of the comment )
@@ -110,19 +110,19 @@ ScVbaComment::getCommentByIndex( sal_Int32 Index ) throw (uno::RuntimeException)
 // public vba functions
 
 OUString SAL_CALL
-ScVbaComment::getAuthor() throw (uno::RuntimeException, std::exception)
+ScVbaComment::getAuthor()
 {
     return getAnnotation()->getAuthor();
 }
 
 void SAL_CALL
-ScVbaComment::setAuthor( const OUString& /*_author*/ ) throw (uno::RuntimeException, std::exception)
+ScVbaComment::setAuthor( const OUString& /*_author*/ )
 {
     // #TODO #FIXME  implementation needed
 }
 
 uno::Reference< msforms::XShape > SAL_CALL
-ScVbaComment::getShape() throw (uno::RuntimeException, std::exception)
+ScVbaComment::getShape()
 {
     uno::Reference< sheet::XSheetAnnotationShapeSupplier > xAnnoShapeSupp( getAnnotation(), uno::UNO_QUERY_THROW );
     uno::Reference< drawing::XShape > xAnnoShape( xAnnoShapeSupp->getAnnotationShape(), uno::UNO_SET_THROW );
@@ -133,39 +133,39 @@ ScVbaComment::getShape() throw (uno::RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL
-ScVbaComment::getVisible() throw (uno::RuntimeException, std::exception)
+ScVbaComment::getVisible()
 {
     return getAnnotation()->getIsVisible();
 }
 
 void SAL_CALL
-ScVbaComment::setVisible( sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
+ScVbaComment::setVisible( sal_Bool _visible )
 {
     getAnnotation()->setIsVisible( _visible );
 }
 
 void SAL_CALL
-ScVbaComment::Delete() throw (uno::RuntimeException, std::exception)
+ScVbaComment::Delete()
 {
     getAnnotations()->removeByIndex( getAnnotationIndex() );
 }
 
 uno::Reference< excel::XComment > SAL_CALL
-ScVbaComment::Next() throw (uno::RuntimeException, std::exception)
+ScVbaComment::Next()
 {
     // index: uno = 0, vba = 1
     return getCommentByIndex( getAnnotationIndex() + 2 );
 }
 
 uno::Reference< excel::XComment > SAL_CALL
-ScVbaComment::Previous() throw (uno::RuntimeException, std::exception)
+ScVbaComment::Previous()
 {
     // index: uno = 0, vba = 1
     return getCommentByIndex( getAnnotationIndex() );
 }
 
 OUString SAL_CALL
-ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::Any& Overwrite ) throw (uno::RuntimeException, std::exception)
+ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::Any& Overwrite )
 {
     OUString sText;
     aText >>= sText;

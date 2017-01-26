@@ -106,8 +106,7 @@ namespace connectivity
                                         SQLSMALLINT _nHandleType,
                                         const css::uno::Reference< css::uno::XInterface >& _xInterface,
                                         bool _bNoFound=true,
-                                        rtl_TextEncoding _nTextEncoding = RTL_TEXTENCODING_MS_1252)
-                                        throw(css::sdbc::SQLException);
+                                        rtl_TextEncoding _nTextEncoding = RTL_TEXTENCODING_MS_1252);
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
@@ -116,8 +115,7 @@ namespace connectivity
                                 SQLUSMALLINT _nInfo,
                                 OUString &_rValue,
                                 const css::uno::Reference< css::uno::XInterface >& _xInterface,
-                                rtl_TextEncoding _nTextEncoding)
-                                throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                                rtl_TextEncoding _nTextEncoding);
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
@@ -125,7 +123,7 @@ namespace connectivity
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 sal_Int32 &_rValue,
-                                const css::uno::Reference< css::uno::XInterface >& _xInterface) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                                const css::uno::Reference< css::uno::XInterface >& _xInterface);
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
@@ -133,7 +131,7 @@ namespace connectivity
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 SQLUSMALLINT &_rValue,
-                                const css::uno::Reference< css::uno::XInterface >& _xInterface) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                                const css::uno::Reference< css::uno::XInterface >& _xInterface);
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
@@ -141,7 +139,7 @@ namespace connectivity
                                 SQLHANDLE _aConnectionHandle,
                                 SQLUSMALLINT _nInfo,
                                 SQLUINTEGER &_rValue,
-                                const css::uno::Reference< css::uno::XInterface >& _xInterface) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                                const css::uno::Reference< css::uno::XInterface >& _xInterface);
 
             static sal_Int32 MapOdbcType2Jdbc(SQLSMALLINT _nType);
             static SQLSMALLINT jdbcTypeToOdbc(sal_Int32 jdbcType);
@@ -196,7 +194,7 @@ namespace connectivity
                                                     SQLSMALLINT _fSqlType,
                                                     bool &_bWasNull,
                                                     const css::uno::Reference< css::uno::XInterface >& _xInterface,
-                                                    rtl_TextEncoding _nTextEncoding) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                                                    rtl_TextEncoding _nTextEncoding);
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
@@ -205,7 +203,7 @@ namespace connectivity
                                                                             sal_Int32 columnIndex,
                                                                             SQLSMALLINT _fSqlType,
                                                                             bool &_bWasNull,
-                                                                            const css::uno::Reference< css::uno::XInterface >& _xInterface) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                                                                            const css::uno::Reference< css::uno::XInterface >& _xInterface);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             static void getValue(   OConnection* _pConnection,
@@ -215,7 +213,7 @@ namespace connectivity
                                     bool &_bWasNull,
                                     const css::uno::Reference< css::uno::XInterface >& _xInterface,
                                     void* _pValue,
-                                    SQLLEN _nSize) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                                    SQLLEN _nSize);
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
@@ -229,7 +227,7 @@ namespace connectivity
                                     SQLLEN *pLen,
                                     const css::uno::Reference< css::uno::XInterface >& _xInterface,
                                     rtl_TextEncoding _nTextEncoding,
-                                    bool _bUseOldTimeDate) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+                                    bool _bUseOldTimeDate);
         };
 
             /// @throws css::sdbc::SQLException
@@ -240,7 +238,7 @@ namespace connectivity
                                             SQLSMALLINT _nType,
                                             bool &_bWasNull,
                                             const css::uno::Reference< css::uno::XInterface >& _xInterface,
-                                            T& _rValue) throw(css::sdbc::SQLException, css::uno::RuntimeException)
+                                            T& _rValue)
         {
             OTools::getValue(_pConnection,_aStatementHandle,columnIndex,_nType,_bWasNull,_xInterface,&_rValue,sizeof _rValue);
         }

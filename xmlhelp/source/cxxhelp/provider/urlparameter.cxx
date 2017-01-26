@@ -61,7 +61,6 @@ using namespace chelp;
 
 URLParameter::URLParameter( const OUString& aURL,
                             Databases* pDatabases )
-    throw( css::ucb::IllegalIdentifierException )
     : m_pDatabases( pDatabases ),
       m_aURL( aURL )
 {
@@ -305,42 +304,25 @@ public:
                             Databases*    pDatatabases,
                             bool isRoot );
 
-    virtual Any SAL_CALL queryInterface( const Type& rType ) throw( RuntimeException, std::exception ) override;
+    virtual Any SAL_CALL queryInterface( const Type& rType ) override;
     virtual void SAL_CALL acquire() throw() override;
     virtual void SAL_CALL release() throw() override;
 
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead )
-        throw( NotConnectedException,
-               BufferSizeExceededException,
-               IOException,
-               RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead ) override;
 
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead )
-        throw( NotConnectedException,
-               BufferSizeExceededException,
-               IOException,
-               RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead ) override;
 
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw( NotConnectedException,
-                                                                     BufferSizeExceededException,
-                                                                     IOException,
-                                                                     RuntimeException, std::exception ) override;
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
 
-    virtual sal_Int32 SAL_CALL available() throw( NotConnectedException,
-                                                        IOException,
-                                                        RuntimeException, std::exception ) override;
+    virtual sal_Int32 SAL_CALL available() override;
 
-    virtual void SAL_CALL closeInput() throw( NotConnectedException,
-                                                    IOException,
-                                                    RuntimeException, std::exception ) override;
+    virtual void SAL_CALL closeInput() override;
 
-    virtual void SAL_CALL seek( sal_Int64 location ) throw( IllegalArgumentException,
-                                                            IOException,
-                                                            RuntimeException, std::exception ) override;
+    virtual void SAL_CALL seek( sal_Int64 location ) override;
 
-    virtual sal_Int64 SAL_CALL getPosition() throw( IOException,RuntimeException, std::exception ) override;
+    virtual sal_Int64 SAL_CALL getPosition() override;
 
-    virtual sal_Int64 SAL_CALL getLength() throw( IOException,RuntimeException, std::exception ) override;
+    virtual sal_Int64 SAL_CALL getLength() override;
 
     void addToBuffer( const char* buffer,int len );
 
@@ -397,7 +379,7 @@ void URLParameter::open( const Command& aCommand,
 }
 
 
-void URLParameter::parse() throw( css::ucb::IllegalIdentifierException )
+void URLParameter::parse()
 {
     m_aExpr = m_aURL;
 
@@ -909,7 +891,7 @@ InputStreamTransformer::InputStreamTransformer( URLParameter* urlParam,
 }
 
 
-Any SAL_CALL InputStreamTransformer::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
+Any SAL_CALL InputStreamTransformer::queryInterface( const Type& rType )
 {
     Any aRet = ::cppu::queryInterface( rType,
                                        (static_cast< XInputStream* >(this)),
@@ -932,10 +914,6 @@ void SAL_CALL InputStreamTransformer::release() throw()
 
 
 sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aData,sal_Int32 nBytesToRead )
-    throw( NotConnectedException,
-           BufferSizeExceededException,
-           IOException,
-           RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -956,44 +934,31 @@ sal_Int32 SAL_CALL InputStreamTransformer::readBytes( Sequence< sal_Int8 >& aDat
 
 
 sal_Int32 SAL_CALL InputStreamTransformer::readSomeBytes( Sequence< sal_Int8 >& aData,sal_Int32 nMaxBytesToRead )
-    throw( NotConnectedException,
-           BufferSizeExceededException,
-           IOException,
-           RuntimeException, std::exception)
 {
     return readBytes( aData,nMaxBytesToRead );
 }
 
 
-void SAL_CALL InputStreamTransformer::skipBytes( sal_Int32 nBytesToSkip ) throw( NotConnectedException,
-                                                                                 BufferSizeExceededException,
-                                                                                 IOException,
-                                                                                 RuntimeException, std::exception )
+void SAL_CALL InputStreamTransformer::skipBytes( sal_Int32 nBytesToSkip )
 {
     osl::MutexGuard aGuard( m_aMutex );
     while( nBytesToSkip-- ) ++pos;
 }
 
 
-sal_Int32 SAL_CALL InputStreamTransformer::available() throw( NotConnectedException,
-                                                                    IOException,
-                                                                    RuntimeException, std::exception )
+sal_Int32 SAL_CALL InputStreamTransformer::available()
 {
     osl::MutexGuard aGuard( m_aMutex );
     return len-pos > 0 ? len - pos : 0 ;
 }
 
 
-void SAL_CALL InputStreamTransformer::closeInput() throw( NotConnectedException,
-                                                                IOException,
-                                                                RuntimeException, std::exception )
+void SAL_CALL InputStreamTransformer::closeInput()
 {
 }
 
 
-void SAL_CALL InputStreamTransformer::seek( sal_Int64 location ) throw( IllegalArgumentException,
-                                                                        IOException,
-                                                                        RuntimeException, std::exception )
+void SAL_CALL InputStreamTransformer::seek( sal_Int64 location )
 {
     osl::MutexGuard aGuard( m_aMutex );
     if( location < 0 )
@@ -1006,15 +971,14 @@ void SAL_CALL InputStreamTransformer::seek( sal_Int64 location ) throw( IllegalA
 }
 
 
-sal_Int64 SAL_CALL InputStreamTransformer::getPosition() throw( IOException,
-                                                                      RuntimeException, std::exception )
+sal_Int64 SAL_CALL InputStreamTransformer::getPosition()
 {
     osl::MutexGuard aGuard( m_aMutex );
     return sal_Int64( pos );
 }
 
 
-sal_Int64 SAL_CALL InputStreamTransformer::getLength() throw( IOException,RuntimeException, std::exception )
+sal_Int64 SAL_CALL InputStreamTransformer::getLength()
 {
     osl::MutexGuard aGuard( m_aMutex );
 

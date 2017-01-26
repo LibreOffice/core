@@ -68,13 +68,13 @@ VCLXAccessibleHeaderBar::~VCLXAccessibleHeaderBar()
 // XServiceInfo
 
 
-::rtl::OUString VCLXAccessibleHeaderBar::getImplementationName() throw (RuntimeException, std::exception)
+::rtl::OUString VCLXAccessibleHeaderBar::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleHeaderBar" );
 }
 
 
-Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames()
 {
     Sequence<OUString> aNames { "com.sun.star.awt.AccessibleHeaderBar" };
     return aNames;
@@ -83,7 +83,6 @@ Sequence< ::rtl::OUString > VCLXAccessibleHeaderBar::getSupportedServiceNames() 
 // =======XAccessibleContext=======
 
 sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
-        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -94,7 +93,7 @@ sal_Int32 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleChildCount(  )
     return nCount;
 }
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-        VCLXAccessibleHeaderBar::getAccessibleChild( sal_Int32 i )  throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
+        VCLXAccessibleHeaderBar::getAccessibleChild( sal_Int32 i )
 {
     SolarMutexGuard g;
 
@@ -114,7 +113,7 @@ css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
     return xChild;
 }
 
-sal_Int16 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception)
+sal_Int16 SAL_CALL VCLXAccessibleHeaderBar::getAccessibleRole(  )
 {
     return css::accessibility::AccessibleRole::LIST;
 }

@@ -90,8 +90,7 @@ namespace rptui
         virtual void Resize() override;
 
     protected:
-        virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent)
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) override;
     public:
         OSectionWindow( OViewsWindow* _pParent
                         ,const css::uno::Reference< css::report::XSection >& _xSection

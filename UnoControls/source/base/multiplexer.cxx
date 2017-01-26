@@ -91,7 +91,7 @@ OMRCListenerMultiplexerHelper::~OMRCListenerMultiplexerHelper()
 
 //  XInterface
 
-Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
+Any SAL_CALL OMRCListenerMultiplexerHelper::queryInterface( const Type& rType )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -219,7 +219,7 @@ void OMRCListenerMultiplexerHelper::unadvise(   const   Type&                   
 
 //  XEventListener
 
-void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSource*/ ) throw( RuntimeException, std::exception )
+void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSource*/ )
 {
     MutexGuard aGuard( m_aMutex );
     // peer is disposed, clear the reference
@@ -228,154 +228,154 @@ void SAL_CALL OMRCListenerMultiplexerHelper::disposing( const EventObject& /*aSo
 
 //  XFcousListener
 
-void OMRCListenerMultiplexerHelper::focusGained(const FocusEvent& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::focusGained(const FocusEvent& aEvent )
 {
     MULTIPLEX( XFocusListener, focusGained, FocusEvent, aEvent )
 }
 
 //  XFcousListener
 
-void OMRCListenerMultiplexerHelper::focusLost(const FocusEvent& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::focusLost(const FocusEvent& aEvent )
 {
     MULTIPLEX( XFocusListener, focusLost, FocusEvent, aEvent )
 }
 
 //  XWindowListener
 
-void OMRCListenerMultiplexerHelper::windowResized(const WindowEvent& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowResized(const WindowEvent& aEvent )
 {
     MULTIPLEX( XWindowListener, windowResized, WindowEvent, aEvent )
 }
 
 //  XWindowListener
 
-void OMRCListenerMultiplexerHelper::windowMoved(const WindowEvent& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowMoved(const WindowEvent& aEvent )
 {
     MULTIPLEX( XWindowListener, windowMoved, WindowEvent, aEvent )
 }
 
 //  XWindowListener
 
-void OMRCListenerMultiplexerHelper::windowShown(const EventObject& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowShown(const EventObject& aEvent )
 {
     MULTIPLEX( XWindowListener, windowShown, EventObject, aEvent )
 }
 
 //  XWindowListener
 
-void OMRCListenerMultiplexerHelper::windowHidden(const EventObject& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowHidden(const EventObject& aEvent )
 {
     MULTIPLEX( XWindowListener, windowHidden, EventObject, aEvent )
 }
 
 //  XKeyListener
 
-void OMRCListenerMultiplexerHelper::keyPressed(const KeyEvent& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::keyPressed(const KeyEvent& aEvent)
 {
     MULTIPLEX( XKeyListener, keyPressed, KeyEvent, aEvent )
 }
 
 //  XKeyListener
 
-void OMRCListenerMultiplexerHelper::keyReleased(const KeyEvent& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::keyReleased(const KeyEvent& aEvent)
 {
     MULTIPLEX( XKeyListener, keyReleased, KeyEvent, aEvent )
 }
 
 //  XMouseListener
 
-void OMRCListenerMultiplexerHelper::mousePressed(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::mousePressed(const MouseEvent& aEvent)
 {
     MULTIPLEX( XMouseListener, mousePressed, MouseEvent, aEvent )
 }
 
 //  XMouseListener
 
-void OMRCListenerMultiplexerHelper::mouseReleased(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::mouseReleased(const MouseEvent& aEvent)
 {
     MULTIPLEX( XMouseListener, mouseReleased, MouseEvent, aEvent )
 }
 
 //  XMouseListener
 
-void OMRCListenerMultiplexerHelper::mouseEntered(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::mouseEntered(const MouseEvent& aEvent)
 {
     MULTIPLEX( XMouseListener, mouseEntered, MouseEvent, aEvent )
 }
 
 //  XMouseListener
 
-void OMRCListenerMultiplexerHelper::mouseExited(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::mouseExited(const MouseEvent& aEvent)
 {
     MULTIPLEX( XMouseListener, mouseExited, MouseEvent, aEvent )
 }
 
 //  XMouseMotionListener
 
-void OMRCListenerMultiplexerHelper::mouseDragged(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::mouseDragged(const MouseEvent& aEvent)
 {
     MULTIPLEX( XMouseMotionListener, mouseDragged, MouseEvent, aEvent )
 }
 
 //  XMouseMotionListener
 
-void OMRCListenerMultiplexerHelper::mouseMoved(const MouseEvent& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::mouseMoved(const MouseEvent& aEvent)
 {
     MULTIPLEX( XMouseMotionListener, mouseMoved, MouseEvent, aEvent )
 }
 
 //  XPaintListener
 
-void OMRCListenerMultiplexerHelper::windowPaint(const PaintEvent& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowPaint(const PaintEvent& aEvent)
 {
     MULTIPLEX( XPaintListener, windowPaint, PaintEvent, aEvent )
 }
 
 //  XTopWindowListener
 
-void OMRCListenerMultiplexerHelper::windowOpened(const EventObject& aEvent) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowOpened(const EventObject& aEvent)
 {
     MULTIPLEX( XTopWindowListener, windowOpened, EventObject, aEvent )
 }
 
 //  XTopWindowListener
 
-void OMRCListenerMultiplexerHelper::windowClosing( const EventObject& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowClosing( const EventObject& aEvent )
 {
     MULTIPLEX( XTopWindowListener, windowClosing, EventObject, aEvent )
 }
 
 //  XTopWindowListener
 
-void OMRCListenerMultiplexerHelper::windowClosed( const EventObject& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowClosed( const EventObject& aEvent )
 {
     MULTIPLEX( XTopWindowListener, windowClosed, EventObject, aEvent )
 }
 
 //  XTopWindowListener
 
-void OMRCListenerMultiplexerHelper::windowMinimized( const EventObject& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowMinimized( const EventObject& aEvent )
 {
     MULTIPLEX( XTopWindowListener, windowMinimized, EventObject, aEvent )
 }
 
 //  XTopWindowListener
 
-void OMRCListenerMultiplexerHelper::windowNormalized( const EventObject& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowNormalized( const EventObject& aEvent )
 {
     MULTIPLEX( XTopWindowListener, windowNormalized, EventObject, aEvent )
 }
 
 //  XTopWindowListener
 
-void OMRCListenerMultiplexerHelper::windowActivated( const EventObject& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowActivated( const EventObject& aEvent )
 {
     MULTIPLEX( XTopWindowListener, windowActivated, EventObject, aEvent )
 }
 
 //  XTopWindowListener
 
-void OMRCListenerMultiplexerHelper::windowDeactivated( const EventObject& aEvent ) throw( RuntimeException, std::exception )
+void OMRCListenerMultiplexerHelper::windowDeactivated( const EventObject& aEvent )
 {
     MULTIPLEX( XTopWindowListener, windowDeactivated, EventObject, aEvent )
 }

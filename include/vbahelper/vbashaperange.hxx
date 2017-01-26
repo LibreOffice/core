@@ -61,42 +61,42 @@ protected:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::drawing::XShapes > const & getShapes() throw (css::uno::RuntimeException) ;
+    css::uno::Reference< css::drawing::XShapes > const & getShapes() ;
 public:
     ScVbaShapeRange( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::drawing::XDrawPage>& xDrawShape, const css::uno::Reference< css::frame::XModel >& xModel );
 
     // Methods
-    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ::ooo::vba::msforms::XShape > SAL_CALL Group() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL IncrementRotation( double Increment ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL IncrementLeft( double Increment ) throw (css::uno::RuntimeException, std::exception) override ;
-    virtual void SAL_CALL IncrementTop( double Increment ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XLineFormat > SAL_CALL getLine() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XFillFormat > SAL_CALL getFill() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getLockAspectRatio() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLockAspectRatio( sal_Bool _lockaspectratio ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getLockAnchor() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLockAnchor( sal_Bool _lockanchor ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getRelativeHorizontalPosition() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalposition ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getRelativeVerticalPosition() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL SAL_CALL TextFrame(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL SAL_CALL WrapFormat(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL ZOrder( sal_Int32 ZOrderCmd ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Select(  ) override;
+    virtual css::uno::Reference< ::ooo::vba::msforms::XShape > SAL_CALL Group() override;
+    virtual void SAL_CALL IncrementRotation( double Increment ) override;
+    virtual void SAL_CALL IncrementLeft( double Increment ) override ;
+    virtual void SAL_CALL IncrementTop( double Increment ) override;
+    virtual OUString SAL_CALL getName() override;
+    virtual void SAL_CALL setName( const OUString& _name ) override;
+    virtual double SAL_CALL getHeight() override;
+    virtual void SAL_CALL setHeight( double _height ) override;
+    virtual double SAL_CALL getWidth() override;
+    virtual void SAL_CALL setWidth( double _width ) override;
+    virtual double SAL_CALL getLeft() override;
+    virtual void SAL_CALL setLeft( double _left ) override;
+    virtual double SAL_CALL getTop() override;
+    virtual void SAL_CALL setTop( double _top ) override;
+    virtual css::uno::Reference< ov::msforms::XLineFormat > SAL_CALL getLine() override;
+    virtual css::uno::Reference< ov::msforms::XFillFormat > SAL_CALL getFill() override;
+    virtual sal_Bool SAL_CALL getLockAspectRatio() override;
+    virtual void SAL_CALL setLockAspectRatio( sal_Bool _lockaspectratio ) override;
+    virtual sal_Bool SAL_CALL getLockAnchor() override;
+    virtual void SAL_CALL setLockAnchor( sal_Bool _lockanchor ) override;
+    virtual ::sal_Int32 SAL_CALL getRelativeHorizontalPosition() override;
+    virtual void SAL_CALL setRelativeHorizontalPosition( ::sal_Int32 _relativehorizontalposition ) override;
+    virtual ::sal_Int32 SAL_CALL getRelativeVerticalPosition() override;
+    virtual void SAL_CALL setRelativeVerticalPosition( ::sal_Int32 _relativeverticalposition ) override;
+    virtual css::uno::Any SAL_CALL SAL_CALL TextFrame(  ) override;
+    virtual css::uno::Any SAL_CALL SAL_CALL WrapFormat(  ) override;
+    virtual void SAL_CALL ZOrder( sal_Int32 ZOrderCmd ) override;
     //XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
 };

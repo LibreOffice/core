@@ -57,7 +57,7 @@ OFrames::~OFrames()
 }
 
 //  XFrames
-void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
+void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame )
 {
     SolarMutexGuard g;
 
@@ -80,7 +80,7 @@ void SAL_CALL OFrames::append( const css::uno::Reference< XFrame >& xFrame ) thr
 }
 
 //  XFrames
-void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) throw( RuntimeException, std::exception )
+void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame )
 {
     SolarMutexGuard g;
 
@@ -104,7 +104,7 @@ void SAL_CALL OFrames::remove( const css::uno::Reference< XFrame >& xFrame ) thr
 }
 
 //  XFrames
-Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags ) throw( RuntimeException, std::exception )
+Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int32 nSearchFlags )
 {
     SolarMutexGuard g;
 
@@ -202,7 +202,7 @@ Sequence< css::uno::Reference< XFrame > > SAL_CALL OFrames::queryFrames( sal_Int
 }
 
 //  XIndexAccess
-sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException, std::exception )
+sal_Int32 SAL_CALL OFrames::getCount()
 {
     SolarMutexGuard g;
 
@@ -224,9 +224,7 @@ sal_Int32 SAL_CALL OFrames::getCount() throw( RuntimeException, std::exception )
 
 //  XIndexAccess
 
-Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsException   ,
-                                                            WrappedTargetException      ,
-                                                            RuntimeException, std::exception            )
+Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex )
 {
     SolarMutexGuard g;
 
@@ -253,14 +251,14 @@ Any SAL_CALL OFrames::getByIndex( sal_Int32 nIndex ) throw( IndexOutOfBoundsExce
 }
 
 //  XElementAccess
-Type SAL_CALL OFrames::getElementType() throw( RuntimeException, std::exception )
+Type SAL_CALL OFrames::getElementType()
 {
     // This "container" support XFrame-interfaces only!
     return cppu::UnoType<XFrame>::get();
 }
 
 //  XElementAccess
-sal_Bool SAL_CALL OFrames::hasElements() throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL OFrames::hasElements()
 {
     SolarMutexGuard g;
 

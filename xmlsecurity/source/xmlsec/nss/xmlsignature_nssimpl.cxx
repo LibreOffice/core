@@ -58,9 +58,7 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_NssImpl::generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( css::xml::crypto::XMLSignatureException,
-         css::uno::SecurityException,
-         css::uno::RuntimeException, std::exception )
+)
 {
     xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
@@ -163,9 +161,7 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_NssImpl::validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( css::uno::RuntimeException,
-         css::uno::SecurityException,
-         css::xml::crypto::XMLSignatureException, std::exception ) {
+) {
     xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
@@ -284,12 +280,12 @@ SAL_CALL XMLSignature_NssImpl::validate(
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLSignature_NssImpl::getImplementationName() throw( RuntimeException, std::exception ) {
+OUString SAL_CALL XMLSignature_NssImpl::getImplementationName() {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService( const OUString& serviceName) throw( RuntimeException, std::exception ) {
+sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService( const OUString& serviceName) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -300,7 +296,7 @@ sal_Bool SAL_CALL XMLSignature_NssImpl::supportsService( const OUString& service
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSignature_NssImpl::getSupportedServiceNames() throw( RuntimeException, std::exception ) {
+Sequence< OUString > SAL_CALL XMLSignature_NssImpl::getSupportedServiceNames() {
     return impl_getSupportedServiceNames() ;
 }
 
@@ -311,12 +307,12 @@ Sequence< OUString > XMLSignature_NssImpl::impl_getSupportedServiceNames() {
     return seqServiceNames ;
 }
 
-OUString XMLSignature_NssImpl::impl_getImplementationName() throw( RuntimeException ) {
+OUString XMLSignature_NssImpl::impl_getImplementationName() {
     return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_NssImpl") ;
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSignature_NssImpl::impl_createInstance( const Reference< XMultiServiceFactory >& ) throw( RuntimeException ) {
+Reference< XInterface > SAL_CALL XMLSignature_NssImpl::impl_createInstance( const Reference< XMultiServiceFactory >& ) {
     return Reference< XInterface >( *new XMLSignature_NssImpl ) ;
 }
 

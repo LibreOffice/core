@@ -90,12 +90,12 @@ public:
                             explicit ScannerEventListener( DrawViewShell* pParent ) : mpParent( pParent )  {}
 
     // XEventListener
-    virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   disposing( const lang::EventObject& rEventObject ) override;
 
     void                    ParentDestroyed() { mpParent = nullptr; }
 };
 
-void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScannerEventListener::disposing( const lang::EventObject& rEventObject )
 {
     if( mpParent )
         mpParent->ScannerEvent( rEventObject );

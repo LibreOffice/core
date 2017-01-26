@@ -50,32 +50,27 @@ FilledNetChartType::~FilledNetChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL FilledNetChartType::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new FilledNetChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL FilledNetChartType::getChartType()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString(CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET);
 }
 
 OUString SAL_CALL FilledNetChartType::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.FilledNetChartType");
 }
 
 sal_Bool SAL_CALL FilledNetChartType::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL FilledNetChartType::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_FILLED_NET,

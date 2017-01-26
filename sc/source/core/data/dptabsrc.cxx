@@ -302,7 +302,7 @@ ScDPDimensions* ScDPSource::GetDimensionsObject()
     return pDimensions.get();
 }
 
-uno::Reference<container::XNameAccess> SAL_CALL ScDPSource::getDimensions() throw(uno::RuntimeException, std::exception)
+uno::Reference<container::XNameAccess> SAL_CALL ScDPSource::getDimensions()
 {
     return GetDimensionsObject();
 }
@@ -357,7 +357,6 @@ long ScDPSource::GetSourceDim(long nDim)
 }
 
 uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResults()
-                                                            throw(uno::RuntimeException, std::exception)
 {
     CreateRes_Impl();       // create pColResRoot and pRowResRoot
 
@@ -393,7 +392,6 @@ uno::Sequence< uno::Sequence<sheet::DataResult> > SAL_CALL ScDPSource::getResult
 
 uno::Sequence<double> ScDPSource::getFilteredResults(
             const uno::Sequence<sheet::DataPilotFieldFilter>& aFilters )
-                throw (uno::RuntimeException, std::exception)
 {
     if (maResFilterSet.empty())
         getResults(); // Build result tree first.
@@ -425,25 +423,22 @@ uno::Sequence<double> ScDPSource::getFilteredResults(
     return uno::Sequence<double>();
 }
 
-void SAL_CALL ScDPSource::refresh() throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScDPSource::refresh()
 {
     disposeData();
 }
 
 void SAL_CALL ScDPSource::addRefreshListener( const uno::Reference<util::XRefreshListener >& )
-                                                throw(uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");    //TODO: exception?
 }
 
 void SAL_CALL ScDPSource::removeRefreshListener( const uno::Reference<util::XRefreshListener >& )
-                                                throw(uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");    //TODO: exception?
 }
 
 Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<sheet::DataPilotFieldFilter>& aFilters)
-    throw (uno::RuntimeException, std::exception)
 {
     long nColumnCount = GetData()->GetColumnCount();
 
@@ -1101,7 +1096,6 @@ const uno::Sequence<sheet::MemberResult>* ScDPSource::GetMemberResults( ScDPLeve
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo()
-                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     using beans::PropertyAttribute::READONLY;
@@ -1125,9 +1119,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPSource::getPropertySetInfo(
 }
 
 void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     if (aPropertyName == SC_UNO_DP_COLGRAND)
         bColumnGrand = lcl_GetBoolFromAny(aValue);
@@ -1151,8 +1142,6 @@ void SAL_CALL ScDPSource::setPropertyValue( const OUString& aPropertyName, const
 }
 
 uno::Any SAL_CALL ScDPSource::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_COLGRAND )
@@ -1240,8 +1229,6 @@ void ScDPDimensions::CountChanged()
 // very simple XNameAccess implementation using getCount/getByIndex
 
 uno::Any SAL_CALL ScDPDimensions::getByName( const OUString& aName )
-            throw(container::NoSuchElementException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
@@ -1257,7 +1244,7 @@ uno::Any SAL_CALL ScDPDimensions::getByName( const OUString& aName )
 //    return uno::Any();
 }
 
-uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames() throw(uno::RuntimeException, std::exception)
+uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames()
 {
     long nCount = getCount();
     uno::Sequence<OUString> aSeq(nCount);
@@ -1267,7 +1254,7 @@ uno::Sequence<OUString> SAL_CALL ScDPDimensions::getElementNames() throw(uno::Ru
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName )
 {
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
@@ -1276,12 +1263,12 @@ sal_Bool SAL_CALL ScDPDimensions::hasByName( const OUString& aName ) throw(uno::
     return false;
 }
 
-uno::Type SAL_CALL ScDPDimensions::getElementType() throw(uno::RuntimeException, std::exception)
+uno::Type SAL_CALL ScDPDimensions::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
 
-sal_Bool SAL_CALL ScDPDimensions::hasElements() throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScDPDimensions::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -1355,12 +1342,11 @@ const OUString* ScDPDimension::GetSubtotalName() const
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScDPDimension::getHierarchies()
-                                                    throw(uno::RuntimeException, std::exception)
 {
     return GetHierarchiesObject();
 }
 
-OUString SAL_CALL ScDPDimension::getName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL ScDPDimension::getName()
 {
     if (!aName.isEmpty())
         return aName;
@@ -1368,7 +1354,7 @@ OUString SAL_CALL ScDPDimension::getName() throw(uno::RuntimeException, std::exc
         return pSource->GetData()->getDimensionName( nDim );
 }
 
-void SAL_CALL ScDPDimension::setName( const OUString& rNewName ) throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScDPDimension::setName( const OUString& rNewName )
 {
     //  used after cloning
     aName = rNewName;
@@ -1404,7 +1390,7 @@ ScDPDimension* ScDPDimension::CreateCloneObject()
     return pNew;
 }
 
-uno::Reference<util::XCloneable> SAL_CALL ScDPDimension::createClone() throw(uno::RuntimeException, std::exception)
+uno::Reference<util::XCloneable> SAL_CALL ScDPDimension::createClone()
 {
     return CreateCloneObject();
 }
@@ -1448,7 +1434,6 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetInfo()
-                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1477,9 +1462,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPDimension::getPropertySetIn
 }
 
 void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     if ( aPropertyName == SC_UNO_DP_USEDHIERARCHY )
     {
@@ -1562,8 +1544,6 @@ void SAL_CALL ScDPDimension::setPropertyValue( const OUString& aPropertyName, co
 }
 
 uno::Any SAL_CALL ScDPDimension::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_POSITION )
@@ -1690,8 +1670,6 @@ ScDPHierarchies::~ScDPHierarchies()
 // very simple XNameAccess implementation using getCount/getByIndex
 
 uno::Any SAL_CALL ScDPHierarchies::getByName( const OUString& aName )
-            throw(container::NoSuchElementException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
@@ -1706,7 +1684,7 @@ uno::Any SAL_CALL ScDPHierarchies::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScDPHierarchies::getElementNames() throw(uno::RuntimeException, std::exception)
+uno::Sequence<OUString> SAL_CALL ScDPHierarchies::getElementNames()
 {
     long nCount = getCount();
     uno::Sequence<OUString> aSeq(nCount);
@@ -1716,7 +1694,7 @@ uno::Sequence<OUString> SAL_CALL ScDPHierarchies::getElementNames() throw(uno::R
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName )
 {
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
@@ -1725,12 +1703,12 @@ sal_Bool SAL_CALL ScDPHierarchies::hasByName( const OUString& aName ) throw(uno:
     return false;
 }
 
-uno::Type SAL_CALL ScDPHierarchies::getElementType() throw(uno::RuntimeException, std::exception)
+uno::Type SAL_CALL ScDPHierarchies::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
 
-sal_Bool SAL_CALL ScDPHierarchies::hasElements() throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScDPHierarchies::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -1789,12 +1767,11 @@ ScDPLevels* ScDPHierarchy::GetLevelsObject()
 }
 
 uno::Reference<container::XNameAccess> SAL_CALL ScDPHierarchy::getLevels()
-                                                    throw(uno::RuntimeException, std::exception)
 {
     return GetLevelsObject();
 }
 
-OUString SAL_CALL ScDPHierarchy::getName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL ScDPHierarchy::getName()
 {
     OUString aRet;        //TODO: globstr-ID !!!!
     switch (nHier)
@@ -1815,7 +1792,7 @@ OUString SAL_CALL ScDPHierarchy::getName() throw(uno::RuntimeException, std::exc
     return aRet;
 }
 
-void SAL_CALL ScDPHierarchy::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScDPHierarchy::setName( const OUString& /* rNewName */ )
 {
     OSL_FAIL("not implemented");        //TODO: exception?
 }
@@ -1860,8 +1837,6 @@ ScDPLevels::~ScDPLevels()
 // very simple XNameAccess implementation using getCount/getByIndex
 
 uno::Any SAL_CALL ScDPLevels::getByName( const OUString& aName )
-            throw(container::NoSuchElementException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
@@ -1876,7 +1851,7 @@ uno::Any SAL_CALL ScDPLevels::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScDPLevels::getElementNames() throw(uno::RuntimeException, std::exception)
+uno::Sequence<OUString> SAL_CALL ScDPLevels::getElementNames()
 {
     long nCount = getCount();
     uno::Sequence<OUString> aSeq(nCount);
@@ -1886,7 +1861,7 @@ uno::Sequence<OUString> SAL_CALL ScDPLevels::getElementNames() throw(uno::Runtim
     return aSeq;
 }
 
-sal_Bool SAL_CALL ScDPLevels::hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScDPLevels::hasByName( const OUString& aName )
 {
     long nCount = getCount();
     for (long i=0; i<nCount; i++)
@@ -1895,12 +1870,12 @@ sal_Bool SAL_CALL ScDPLevels::hasByName( const OUString& aName ) throw(uno::Runt
     return false;
 }
 
-uno::Type SAL_CALL ScDPLevels::getElementType() throw(uno::RuntimeException, std::exception)
+uno::Type SAL_CALL ScDPLevels::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
 
-sal_Bool SAL_CALL ScDPLevels::hasElements() throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScDPLevels::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -2053,12 +2028,12 @@ ScDPMembers* ScDPLevel::GetMembersObject()
     return mxMembers.get();
 }
 
-uno::Reference<sheet::XMembersAccess> SAL_CALL ScDPLevel::getMembers() throw(uno::RuntimeException, std::exception)
+uno::Reference<sheet::XMembersAccess> SAL_CALL ScDPLevel::getMembers()
 {
     return GetMembersObject();
 }
 
-uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::RuntimeException, std::exception)
+uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults()
 {
     const uno::Sequence<sheet::MemberResult>* pRes = pSource->GetMemberResults( this );
     if (pRes)
@@ -2067,7 +2042,7 @@ uno::Sequence<sheet::MemberResult> SAL_CALL ScDPLevel::getResults() throw(uno::R
     return uno::Sequence<sheet::MemberResult>(0);       //TODO: Error?
 }
 
-OUString SAL_CALL ScDPLevel::getName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL ScDPLevel::getName()
 {
     long nSrcDim = pSource->GetSourceDim( nDim );
     if ( pSource->IsDateDimension( nSrcDim ) )
@@ -2124,7 +2099,7 @@ OUString SAL_CALL ScDPLevel::getName() throw(uno::RuntimeException, std::excepti
     return pDim->getName();
 }
 
-void SAL_CALL ScDPLevel::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScDPLevel::setName( const OUString& /* rNewName */ )
 {
     OSL_FAIL("not implemented");        //TODO: exception?
 }
@@ -2143,7 +2118,6 @@ uno::Sequence<sal_Int16> ScDPLevel::getSubTotals() const
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
-                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2165,9 +2139,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPLevel::getPropertySetInfo()
 }
 
 void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
         bShowEmpty = lcl_GetBoolFromAny(aValue);
@@ -2198,8 +2169,6 @@ void SAL_CALL ScDPLevel::setPropertyValue( const OUString& aPropertyName, const 
 }
 
 uno::Any SAL_CALL ScDPLevel::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_SHOWEMPTY )
@@ -2354,8 +2323,6 @@ sal_Int32 ScDPMembers::GetIndexFromName( const OUString& rName ) const
 }
 
 uno::Any SAL_CALL ScDPMembers::getByName( const OUString& aName )
-            throw(container::NoSuchElementException,
-                    lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nIndex = GetIndexFromName( aName );
     if ( nIndex >= 0 )
@@ -2369,22 +2336,22 @@ uno::Any SAL_CALL ScDPMembers::getByName( const OUString& aName )
     throw container::NoSuchElementException();
 }
 
-uno::Sequence<OUString> SAL_CALL ScDPMembers::getElementNames() throw(uno::RuntimeException, std::exception)
+uno::Sequence<OUString> SAL_CALL ScDPMembers::getElementNames()
 {
     return getElementNames( false );
 }
 
-sal_Bool SAL_CALL ScDPMembers::hasByName( const OUString& aName ) throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScDPMembers::hasByName( const OUString& aName )
 {
     return ( GetIndexFromName( aName ) >= 0 );
 }
 
-uno::Type SAL_CALL ScDPMembers::getElementType() throw(uno::RuntimeException, std::exception)
+uno::Type SAL_CALL ScDPMembers::getElementType()
 {
     return cppu::UnoType<container::XNamed>::get();
 }
 
-sal_Bool SAL_CALL ScDPMembers::hasElements() throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScDPMembers::hasElements()
 {
     return ( getCount() > 0 );
 }
@@ -2394,7 +2361,6 @@ sal_Bool SAL_CALL ScDPMembers::hasElements() throw(uno::RuntimeException, std::e
 // XMembersAccess implementation
 
 uno::Sequence<OUString> SAL_CALL ScDPMembers::getLocaleIndependentElementNames()
-        throw(uno::RuntimeException, std::exception)
 {
     return getElementNames( true );
 }
@@ -2402,7 +2368,6 @@ uno::Sequence<OUString> SAL_CALL ScDPMembers::getLocaleIndependentElementNames()
 // end of XMembersAccess implementation
 
 uno::Sequence<OUString> ScDPMembers::getElementNames( bool bLocaleIndependent ) const
-        throw(uno::RuntimeException, std::exception)
 {
     // Return list of names in sorted order,
     // so it's displayed in that order in the field options dialog.
@@ -2623,12 +2588,12 @@ OUString ScDPMember::GetNameStr( bool bLocaleIndependent ) const
     return OUString();
 }
 
-OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL ScDPMember::getName()
 {
     return GetNameStr( false );
 }
 
-void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ ) throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ )
 {
     OSL_FAIL("not implemented");        //TODO: exception?
 }
@@ -2636,7 +2601,6 @@ void SAL_CALL ScDPMember::setName( const OUString& /* rNewName */ ) throw(uno::R
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo()
-                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -2654,9 +2618,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScDPMember::getPropertySetInfo(
 }
 
 void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     if ( aPropertyName == SC_UNO_DP_ISVISIBLE )
         bVisible = lcl_GetBoolFromAny(aValue);
@@ -2677,8 +2638,6 @@ void SAL_CALL ScDPMember::setPropertyValue( const OUString& aPropertyName, const
 }
 
 uno::Any SAL_CALL ScDPMember::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if ( aPropertyName == SC_UNO_DP_ISVISIBLE )

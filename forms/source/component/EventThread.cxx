@@ -55,7 +55,7 @@ OComponentEventThread::~OComponentEventThread()
     impl_clearEventQueue();
 }
 
-Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL OComponentEventThread::queryInterface(const Type& _rType)
 {
     Any aReturn;
 
@@ -80,7 +80,7 @@ void OComponentEventThread::impl_clearEventQueue()
     m_aFlags.erase( m_aFlags.begin(), m_aFlags.end() );
 }
 
-void OComponentEventThread::disposing( const EventObject& evt ) throw ( css::uno::RuntimeException, std::exception)
+void OComponentEventThread::disposing( const EventObject& evt )
 {
     if( evt.Source == static_cast<XWeak*>(m_xComp.get()) )
     {

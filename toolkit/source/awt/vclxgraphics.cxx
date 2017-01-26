@@ -40,7 +40,7 @@ using namespace com::sun::star;
 
 
 // uno::XInterface
-uno::Any VCLXGraphics::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
+uno::Any VCLXGraphics::queryInterface( const uno::Type & rType )
 {
     uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XGraphics* >(this)),
@@ -153,7 +153,7 @@ void VCLXGraphics::InitOutputDevice( InitOutDevFlags nFlags )
     }
 }
 
-uno::Reference< awt::XDevice > VCLXGraphics::getDevice() throw(uno::RuntimeException, std::exception)
+uno::Reference< awt::XDevice > VCLXGraphics::getDevice()
 {
     SolarMutexGuard aGuard;
 
@@ -166,7 +166,7 @@ uno::Reference< awt::XDevice > VCLXGraphics::getDevice() throw(uno::RuntimeExcep
     return mxDevice;
 }
 
-awt::SimpleFontMetric VCLXGraphics::getFontMetric() throw(uno::RuntimeException, std::exception)
+awt::SimpleFontMetric VCLXGraphics::getFontMetric()
 {
     SolarMutexGuard aGuard;
 
@@ -179,56 +179,56 @@ awt::SimpleFontMetric VCLXGraphics::getFontMetric() throw(uno::RuntimeException,
     return aM;
 }
 
-void VCLXGraphics::setFont( const uno::Reference< awt::XFont >& rxFont ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::setFont( const uno::Reference< awt::XFont >& rxFont )
 {
     SolarMutexGuard aGuard;
 
     maFont = VCLUnoHelper::CreateFont( rxFont );
 }
 
-void VCLXGraphics::selectFont( const awt::FontDescriptor& rDescription ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::selectFont( const awt::FontDescriptor& rDescription )
 {
     SolarMutexGuard aGuard;
 
     maFont = VCLUnoHelper::CreateFont( rDescription, vcl::Font() );
 }
 
-void VCLXGraphics::setTextColor( sal_Int32 nColor ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::setTextColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
     maTextColor = Color( (sal_uInt32)nColor );
 }
 
-void VCLXGraphics::setTextFillColor( sal_Int32 nColor ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::setTextFillColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
     maTextFillColor = Color( (sal_uInt32)nColor );
 }
 
-void VCLXGraphics::setLineColor( sal_Int32 nColor ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::setLineColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
     maLineColor = Color( (sal_uInt32)nColor );
 }
 
-void VCLXGraphics::setFillColor( sal_Int32 nColor ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::setFillColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
     maFillColor = Color( (sal_uInt32)nColor );
 }
 
-void VCLXGraphics::setRasterOp( awt::RasterOperation eROP ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::setRasterOp( awt::RasterOperation eROP )
 {
     SolarMutexGuard aGuard;
 
     meRasterOp = (RasterOp)eROP;
 }
 
-void VCLXGraphics::setClipRegion( const uno::Reference< awt::XRegion >& rxRegion ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::setClipRegion( const uno::Reference< awt::XRegion >& rxRegion )
 {
     SolarMutexGuard aGuard;
 
@@ -239,7 +239,7 @@ void VCLXGraphics::setClipRegion( const uno::Reference< awt::XRegion >& rxRegion
         mpClipRegion = nullptr;
 }
 
-void VCLXGraphics::intersectClipRegion( const uno::Reference< awt::XRegion >& rxRegion ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::intersectClipRegion( const uno::Reference< awt::XRegion >& rxRegion )
 {
     SolarMutexGuard aGuard;
 
@@ -253,7 +253,7 @@ void VCLXGraphics::intersectClipRegion( const uno::Reference< awt::XRegion >& rx
     }
 }
 
-void VCLXGraphics::push(  ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::push(  )
 {
     SolarMutexGuard aGuard;
 
@@ -262,7 +262,7 @@ void VCLXGraphics::push(  ) throw(uno::RuntimeException, std::exception)
         mpOutputDevice->Push();
 }
 
-void VCLXGraphics::pop(  ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::pop(  )
 {
     SolarMutexGuard aGuard;
 
@@ -273,7 +273,6 @@ void VCLXGraphics::pop(  ) throw(uno::RuntimeException, std::exception)
 
 void VCLXGraphics::clear(
     const awt::Rectangle& aRect )
-throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -284,7 +283,7 @@ throw(uno::RuntimeException, std::exception)
     }
 }
 
-void VCLXGraphics::copy( const uno::Reference< awt::XDevice >& rxSource, sal_Int32 nSourceX, sal_Int32 nSourceY, sal_Int32 nSourceWidth, sal_Int32 nSourceHeight, sal_Int32 nDestX, sal_Int32 nDestY, sal_Int32 nDestWidth, sal_Int32 nDestHeight ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::copy( const uno::Reference< awt::XDevice >& rxSource, sal_Int32 nSourceX, sal_Int32 nSourceY, sal_Int32 nSourceWidth, sal_Int32 nSourceHeight, sal_Int32 nDestX, sal_Int32 nDestY, sal_Int32 nDestWidth, sal_Int32 nDestHeight )
 {
     SolarMutexGuard aGuard;
 
@@ -301,7 +300,7 @@ void VCLXGraphics::copy( const uno::Reference< awt::XDevice >& rxSource, sal_Int
     }
 }
 
-void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHandle, sal_Int32 nSourceX, sal_Int32 nSourceY, sal_Int32 nSourceWidth, sal_Int32 nSourceHeight, sal_Int32 nDestX, sal_Int32 nDestY, sal_Int32 nDestWidth, sal_Int32 nDestHeight ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHandle, sal_Int32 nSourceX, sal_Int32 nSourceY, sal_Int32 nSourceWidth, sal_Int32 nSourceHeight, sal_Int32 nDestX, sal_Int32 nDestY, sal_Int32 nDestWidth, sal_Int32 nDestHeight )
 {
     SolarMutexGuard aGuard;
 
@@ -333,7 +332,7 @@ void VCLXGraphics::draw( const uno::Reference< awt::XDisplayBitmap >& rxBitmapHa
     }
 }
 
-void VCLXGraphics::drawPixel( sal_Int32 x, sal_Int32 y ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawPixel( sal_Int32 x, sal_Int32 y )
 {
     SolarMutexGuard aGuard;
 
@@ -344,7 +343,7 @@ void VCLXGraphics::drawPixel( sal_Int32 x, sal_Int32 y ) throw(uno::RuntimeExcep
     }
 }
 
-void VCLXGraphics::drawLine( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawLine( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
 {
     SolarMutexGuard aGuard;
 
@@ -355,7 +354,7 @@ void VCLXGraphics::drawLine( sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32
     }
 }
 
-void VCLXGraphics::drawRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height )
 {
     SolarMutexGuard aGuard;
 
@@ -366,7 +365,7 @@ void VCLXGraphics::drawRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int3
     }
 }
 
-void VCLXGraphics::drawRoundedRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 nHorzRound, sal_Int32 nVertRound ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawRoundedRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 nHorzRound, sal_Int32 nVertRound )
 {
     SolarMutexGuard aGuard;
 
@@ -377,7 +376,7 @@ void VCLXGraphics::drawRoundedRect( sal_Int32 x, sal_Int32 y, sal_Int32 width, s
     }
 }
 
-void VCLXGraphics::drawPolyLine( const uno::Sequence< sal_Int32 >& DataX, const uno::Sequence< sal_Int32 >& DataY ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawPolyLine( const uno::Sequence< sal_Int32 >& DataX, const uno::Sequence< sal_Int32 >& DataY )
 {
     SolarMutexGuard aGuard;
 
@@ -388,7 +387,7 @@ void VCLXGraphics::drawPolyLine( const uno::Sequence< sal_Int32 >& DataX, const 
     }
 }
 
-void VCLXGraphics::drawPolygon( const uno::Sequence< sal_Int32 >& DataX, const uno::Sequence< sal_Int32 >& DataY ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawPolygon( const uno::Sequence< sal_Int32 >& DataX, const uno::Sequence< sal_Int32 >& DataY )
 {
     SolarMutexGuard aGuard;
 
@@ -399,7 +398,7 @@ void VCLXGraphics::drawPolygon( const uno::Sequence< sal_Int32 >& DataX, const u
     }
 }
 
-void VCLXGraphics::drawPolyPolygon( const uno::Sequence< uno::Sequence< sal_Int32 > >& DataX, const uno::Sequence< uno::Sequence< sal_Int32 > >& DataY ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawPolyPolygon( const uno::Sequence< uno::Sequence< sal_Int32 > >& DataX, const uno::Sequence< uno::Sequence< sal_Int32 > >& DataY )
 {
     SolarMutexGuard aGuard;
 
@@ -415,7 +414,7 @@ void VCLXGraphics::drawPolyPolygon( const uno::Sequence< uno::Sequence< sal_Int3
     }
 }
 
-void VCLXGraphics::drawEllipse( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawEllipse( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height )
 {
     SolarMutexGuard aGuard;
 
@@ -426,7 +425,7 @@ void VCLXGraphics::drawEllipse( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_I
     }
 }
 
-void VCLXGraphics::drawArc( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawArc( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
 {
     SolarMutexGuard aGuard;
 
@@ -437,7 +436,7 @@ void VCLXGraphics::drawArc( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32
     }
 }
 
-void VCLXGraphics::drawPie( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawPie( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
 {
     SolarMutexGuard aGuard;
 
@@ -448,7 +447,7 @@ void VCLXGraphics::drawPie( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32
     }
 }
 
-void VCLXGraphics::drawChord( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawChord( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int32 x1, sal_Int32 y1, sal_Int32 x2, sal_Int32 y2 )
 {
     SolarMutexGuard aGuard;
 
@@ -459,7 +458,7 @@ void VCLXGraphics::drawChord( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int
     }
 }
 
-void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, const awt::Gradient& rGradient ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, const awt::Gradient& rGradient )
 {
     SolarMutexGuard aGuard;
 
@@ -478,7 +477,7 @@ void VCLXGraphics::drawGradient( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_
     }
 }
 
-void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const OUString& rText ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const OUString& rText )
 {
     SolarMutexGuard aGuard;
 
@@ -489,7 +488,7 @@ void VCLXGraphics::drawText( sal_Int32 x, sal_Int32 y, const OUString& rText ) t
     }
 }
 
-void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rText, const uno::Sequence< sal_Int32 >& rLongs ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rText, const uno::Sequence< sal_Int32 >& rLongs )
 {
     SolarMutexGuard aGuard;
 
@@ -506,7 +505,7 @@ void VCLXGraphics::drawTextArray( sal_Int32 x, sal_Int32 y, const OUString& rTex
 }
 
 
-void VCLXGraphics::drawImage( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int16 nStyle, const uno::Reference< graphic::XGraphic >& xGraphic ) throw(uno::RuntimeException, std::exception)
+void VCLXGraphics::drawImage( sal_Int32 x, sal_Int32 y, sal_Int32 width, sal_Int32 height, sal_Int16 nStyle, const uno::Reference< graphic::XGraphic >& xGraphic )
 {
     SolarMutexGuard aGuard;
 

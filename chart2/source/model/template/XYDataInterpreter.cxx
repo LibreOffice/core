@@ -50,7 +50,6 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
     const Reference< chart2::data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& aArguments,
     const Sequence< Reference< XDataSeries > >& aSeriesToReUse )
-    throw (uno::RuntimeException, std::exception)
 {
     if( ! xSource.is())
         return InterpretedData();
@@ -143,7 +142,6 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::interpretDataSource(
 
 chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
     const chart2::InterpretedData& aInterpretedData )
-    throw (uno::RuntimeException, std::exception)
 {
     InterpretedData aResult( aInterpretedData );
 
@@ -232,7 +230,6 @@ chart2::InterpretedData SAL_CALL XYDataInterpreter::reinterpretDataSeries(
 // criterion: all series must have exactly two data::XLabeledDataSequences
 sal_Bool SAL_CALL XYDataInterpreter::isDataCompatible(
     const chart2::InterpretedData& aInterpretedData )
-    throw (uno::RuntimeException, std::exception)
 {
     Sequence< Reference< XDataSeries > > aSeries( FlattenSequence( aInterpretedData.Series ));
     for( sal_Int32 i=0; i<aSeries.getLength(); ++i )

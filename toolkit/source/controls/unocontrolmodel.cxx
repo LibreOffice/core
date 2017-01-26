@@ -411,7 +411,7 @@ void UnoControlModel::ImplRegisterProperties( const std::vector< sal_uInt16 > &r
 }
 
 // css::uno::XInterface
-css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any UnoControlModel::queryAggregation( const css::uno::Type & rType )
 {
     Any aRet = UnoControlModel_Base::queryAggregation( rType );
     if ( !aRet.hasValue() )
@@ -429,7 +429,7 @@ IMPLEMENT_FORWARD_REFCOUNT( UnoControlModel, UnoControlModel_Base )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( UnoControlModel, UnoControlModel_Base, ::cppu::OPropertySetHelper )
 
 
-uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(css::uno::RuntimeException, std::exception)
+uno::Reference< util::XCloneable > UnoControlModel::createClone()
 {
     UnoControlModel* pClone = Clone();
     uno::Reference< util::XCloneable > xClone( static_cast<cppu::OWeakObject*>(pClone), uno::UNO_QUERY );
@@ -437,7 +437,7 @@ uno::Reference< util::XCloneable > UnoControlModel::createClone() throw(css::uno
 }
 
 // css::lang::XComponent
-void UnoControlModel::dispose(  ) throw(css::uno::RuntimeException, std::exception)
+void UnoControlModel::dispose(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -451,14 +451,14 @@ void UnoControlModel::dispose(  ) throw(css::uno::RuntimeException, std::excepti
     OPropertySetHelper::disposing();
 }
 
-void UnoControlModel::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void UnoControlModel::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maDisposeListeners.addInterface( rxListener );
 }
 
-void UnoControlModel::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void UnoControlModel::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -467,7 +467,7 @@ void UnoControlModel::removeEventListener( const css::uno::Reference< css::lang:
 
 
 // css::beans::XPropertyState
-css::beans::PropertyState UnoControlModel::getPropertyState( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+css::beans::PropertyState UnoControlModel::getPropertyState( const OUString& PropertyName )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -479,7 +479,7 @@ css::beans::PropertyState UnoControlModel::getPropertyState( const OUString& Pro
     return CompareProperties( aValue, aDefault ) ? css::beans::PropertyState_DEFAULT_VALUE : css::beans::PropertyState_DIRECT_VALUE;
 }
 
-css::uno::Sequence< css::beans::PropertyState > UnoControlModel::getPropertyStates( const css::uno::Sequence< OUString >& PropertyNames ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::beans::PropertyState > UnoControlModel::getPropertyStates( const css::uno::Sequence< OUString >& PropertyNames )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -495,7 +495,7 @@ css::uno::Sequence< css::beans::PropertyState > UnoControlModel::getPropertyStat
     return aStates;
 }
 
-void UnoControlModel::setPropertyToDefault( const OUString& PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+void UnoControlModel::setPropertyToDefault( const OUString& PropertyName )
 {
     Any aDefaultValue;
     {
@@ -505,7 +505,7 @@ void UnoControlModel::setPropertyToDefault( const OUString& PropertyName ) throw
     setPropertyValue( PropertyName, aDefaultValue );
 }
 
-css::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName ) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+css::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -514,7 +514,7 @@ css::uno::Any UnoControlModel::getPropertyDefault( const OUString& rPropertyName
 
 
 // css::io::XPersistObjec
-OUString UnoControlModel::getServiceName(  ) throw(css::uno::RuntimeException, std::exception)
+OUString UnoControlModel::getServiceName(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -522,7 +522,7 @@ OUString UnoControlModel::getServiceName(  ) throw(css::uno::RuntimeException, s
     return OUString();
 }
 
-void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream ) throw(css::io::IOException, css::uno::RuntimeException, std::exception)
+void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputStream >& OutStream )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -755,7 +755,7 @@ void UnoControlModel::write( const css::uno::Reference< css::io::XObjectOutputSt
     }
 }
 
-void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStream >& InStream ) throw(css::io::IOException, css::uno::RuntimeException, std::exception)
+void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStream >& InStream )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -1022,25 +1022,25 @@ void UnoControlModel::read( const css::uno::Reference< css::io::XObjectInputStre
 
 
 // css::lang::XServiceInfo
-OUString UnoControlModel::getImplementationName(  ) throw(css::uno::RuntimeException, std::exception)
+OUString UnoControlModel::getImplementationName(  )
 {
     OSL_FAIL( "This method should be overridden!" );
     return OUString();
 
 }
 
-sal_Bool UnoControlModel::supportsService( const OUString& rServiceName ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool UnoControlModel::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > UnoControlModel::getSupportedServiceNames(  )
 {
     OUString sName( "com.sun.star.awt.UnoControlModel" );
     return Sequence< OUString >( &sName, 1 );
 }
 
-sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue ) throw (IllegalArgumentException, std::exception)
+sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nPropId, const Any& rValue )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -1166,7 +1166,7 @@ sal_Bool UnoControlModel::convertFastPropertyValue( Any & rConvertedValue, Any &
     return !CompareProperties( rConvertedValue, rOldValue );
 }
 
-void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception)
+void UnoControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 nPropId, const css::uno::Any& rValue )
 {
     // Missing: the fake solo properties of the FontDescriptor
 
@@ -1236,7 +1236,7 @@ void UnoControlModel::getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nPr
 }
 
 // css::beans::XPropertySet
-void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const css::uno::Any& rValue )
 {
     sal_Int32 nPropId = 0;
     {
@@ -1251,7 +1251,7 @@ void UnoControlModel::setPropertyValue( const OUString& rPropertyName, const css
 }
 
 // css::beans::XFastPropertySet
-void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const css::uno::Any& rValue ) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const css::uno::Any& rValue )
 {
     if ( ( nPropId >= BASEPROPERTY_FONTDESCRIPTORPART_START ) && ( nPropId <= BASEPROPERTY_FONTDESCRIPTORPART_END ) )
     {
@@ -1286,13 +1286,13 @@ void UnoControlModel::setFastPropertyValue( sal_Int32 nPropId, const css::uno::A
 }
 
 // css::beans::XMultiPropertySet
-css::uno::Reference< css::beans::XPropertySetInfo > UnoControlModel::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > UnoControlModel::getPropertySetInfo(  )
 {
     OSL_FAIL( "UnoControlModel::getPropertySetInfo() not possible!" );
     return css::uno::Reference< css::beans::XPropertySetInfo >();
 }
 
-void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& Values ) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+void UnoControlModel::setPropertyValues( const css::uno::Sequence< OUString >& rPropertyNames, const css::uno::Sequence< css::uno::Any >& Values )
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
 

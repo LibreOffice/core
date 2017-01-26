@@ -73,9 +73,9 @@ class FWE_DLLPUBLIC DispatchHelper : public ::cppu::WeakImplHelper< css::lang::X
         virtual ~DispatchHelper(                                                                    ) override;
 
         // XServiceInfo
-        virtual OUString                        SAL_CALL getImplementationName              (                                   ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual sal_Bool                        SAL_CALL supportsService                    ( const OUString&   sServiceName    ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual css::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames           (                                   ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString                        SAL_CALL getImplementationName              (                                   ) override;
+        virtual sal_Bool                        SAL_CALL supportsService                    ( const OUString&   sServiceName    ) override;
+        virtual css::uno::Sequence< OUString >  SAL_CALL getSupportedServiceNames           (                                   ) override;
 
         static css::uno::Sequence< OUString >   SAL_CALL impl_getStaticSupportedServiceNames(                                   );
         static OUString                         SAL_CALL impl_getStaticImplementationName   (                                   );
@@ -84,7 +84,7 @@ class FWE_DLLPUBLIC DispatchHelper : public ::cppu::WeakImplHelper< css::lang::X
 
         // Helper for registry
         /// @throws css::uno::Exception
-        static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception );
+        static css::uno::Reference< css::uno::XInterface >             SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
         static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL impl_createFactory ( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager );
 
 
@@ -94,8 +94,7 @@ class FWE_DLLPUBLIC DispatchHelper : public ::cppu::WeakImplHelper< css::lang::X
                                         const OUString&                                      sURL              ,
                                         const OUString&                                      sTargetFrameName  ,
                                               sal_Int32                                             nSearchFlags      ,
-                                        const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
-        throw(css::uno::RuntimeException, std::exception) override;
+                                        const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        ) override;
 
         // not a public XDispatchHelper-method, need in sfx2/source/control/statcach.cxx for extensions
         /// @throws css::uno::RuntimeException
@@ -103,19 +102,16 @@ class FWE_DLLPUBLIC DispatchHelper : public ::cppu::WeakImplHelper< css::lang::X
                                         const css::uno::Reference< css::frame::XDispatch >&  xDispatch      ,
                                         const  css::util::URL&                                  aURL        ,
                                         bool                                                    SyncronFlag ,
-                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments   )
-        throw(css::uno::RuntimeException);
+                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments   );
 
 
         // XDispatchResultListener
         virtual void SAL_CALL dispatchFinished(
-                                const css::frame::DispatchResultEvent& aResult )
-        throw(css::uno::RuntimeException, std::exception) override;
+                                const css::frame::DispatchResultEvent& aResult ) override;
 
         // XEventListener
         virtual void SAL_CALL disposing(
-                                const css::lang::EventObject& aEvent )
-        throw(css::uno::RuntimeException, std::exception) override;
+                                const css::lang::EventObject& aEvent ) override;
 };
 
 }

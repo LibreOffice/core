@@ -54,9 +54,9 @@ namespace connectivity
             inline sdbcx::OCollection*      getPrivateViews()   const { return m_pViews; }
             const css::uno::Reference< css::sdbc::XConnection >& getConnection() const { return m_xConnection; }
 
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             // ::cppu::OComponentHelper
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
         };
     }
 }

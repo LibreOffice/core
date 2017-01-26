@@ -39,8 +39,8 @@ class COMPHELPER_DLLPUBLIC ServiceInfoHelper : public css::lang::XServiceInfo
 {
 public:
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // helper
     static void addToSequence( css::uno::Sequence< OUString >& rSeq, std::initializer_list<OUString> services ) throw();

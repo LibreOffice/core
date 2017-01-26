@@ -104,8 +104,7 @@ void tokenizeSQL( const OString & sql, OStringVector &vec  );
 void splitSQL( const OString & sql, OStringVector &vec  );
 std::vector< sal_Int32 > parseIntArray( const OUString & str );
 /// @throws css::sdbc::SQLException
-std::vector< css::uno::Any > parseArray( const OUString & str )
-    throw( css::sdbc::SQLException );
+std::vector< css::uno::Any > parseArray( const OUString & str );
 
 OUString array2String( const css::uno::Sequence< css::uno::Any > &seq );
 

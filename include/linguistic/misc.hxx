@@ -187,11 +187,11 @@ public:
     void            Deactivate();
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
 };
 
 }   // namespace linguistic

@@ -113,12 +113,12 @@ public:
         {}
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) throw (RuntimeException, std::exception) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString & rServiceName ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XMain
-    virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) throw (RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL run( const Sequence< OUString > & rArgs ) override;
 };
 
 
@@ -311,8 +311,7 @@ private:
 public:
     void SAL_CALL callRecursivly(
         const css::uno::Reference< XRecursiveCall >& xCall,
-        sal_Int32 nToCall )
-        throw(css::uno::RuntimeException, std::exception) override
+        sal_Int32 nToCall ) override
         {
             MutexGuard guard( m_mutex );
             if( nToCall )
@@ -1102,7 +1101,6 @@ inline bool makeSurrogate(
 
 
 sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
-    throw (RuntimeException, std::exception)
 {
     bool bRet = false;
     try
@@ -1189,19 +1187,16 @@ sal_Int32 TestBridgeImpl::run( const Sequence< OUString > & rArgs )
 // XServiceInfo
 
 OUString TestBridgeImpl::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return OUString( IMPLNAME );
 }
 
 sal_Bool TestBridgeImpl::supportsService( const OUString & rServiceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > TestBridgeImpl::getSupportedServiceNames()
-    throw (RuntimeException, std::exception)
 {
     return bridge_test::getSupportedServiceNames();
 }

@@ -42,53 +42,49 @@ namespace DOM
         /**
         The number of nodes in this map.
         */
-        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getLength() override;
 
         /**
         Retrieves a node specified by local name
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-            getNamedItem(const OUString& name) throw (css::uno::RuntimeException, std::exception) override;
+            getNamedItem(const OUString& name) override;
 
         /**
         Retrieves a node specified by local name and namespace URI.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL getNamedItemNS(
-                OUString const& namespaceURI, OUString const& localName)
-            throw (css::uno::RuntimeException, std::exception) override;
+                OUString const& namespaceURI, OUString const& localName) override;
 
         /**
         Returns the indexth item in the map.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-            item(sal_Int32 index) throw (css::uno::RuntimeException, std::exception) override;
+            item(sal_Int32 index) override;
 
         /**
         Removes a node specified by name.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-            removeNamedItem(OUString const& name) throw (css::uno::RuntimeException, std::exception) override;
+            removeNamedItem(OUString const& name) override;
 
         /**
         // Removes a node specified by local name and namespace URI.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL removeNamedItemNS(
-                OUString const& namespaceURI, OUString const& localName)
-            throw (css::uno::RuntimeException, std::exception) override;
+                OUString const& namespaceURI, OUString const& localName) override;
 
         /**
         // Adds a node using its nodeName attribute.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-            setNamedItem(css::uno::Reference< css::xml::dom::XNode > const& arg)
-            throw (css::uno::RuntimeException, std::exception) override;
+            setNamedItem(css::uno::Reference< css::xml::dom::XNode > const& arg) override;
 
         /**
         Adds a node using its namespaceURI and localName.
         */
         virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-            setNamedItemNS(css::uno::Reference< css::xml::dom::XNode > const& arg)
-            throw (css::uno::RuntimeException, std::exception) override;
+            setNamedItemNS(css::uno::Reference< css::xml::dom::XNode > const& arg) override;
     };
 }
 

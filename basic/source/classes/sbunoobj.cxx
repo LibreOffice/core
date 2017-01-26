@@ -3826,11 +3826,11 @@ public:
     explicit BasicAllListener_Impl( const OUString& aPrefixName );
 
     // Methods of XAllListener
-    virtual void SAL_CALL firing(const AllEventObject& Event) throw ( RuntimeException, std::exception ) override;
-    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) throw ( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL firing(const AllEventObject& Event) override;
+    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) override;
 
     // Methods of XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source) throw ( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const EventObject& Source) override;
 };
 
 
@@ -3890,12 +3890,12 @@ void BasicAllListener_Impl::firing_impl( const AllEventObject& Event, Any* pRet 
 
 
 // Methods of Listener
-void BasicAllListener_Impl::firing( const AllEventObject& Event ) throw ( RuntimeException, std::exception )
+void BasicAllListener_Impl::firing( const AllEventObject& Event )
 {
     firing_impl( Event, nullptr );
 }
 
-Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( RuntimeException, std::exception )
+Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event )
 {
     Any aRetAny;
     firing_impl( Event, &aRetAny );
@@ -3904,7 +3904,7 @@ Any BasicAllListener_Impl::approveFiring( const AllEventObject& Event ) throw ( 
 
 
 // Methods of XEventListener
-void BasicAllListener_Impl ::disposing(const EventObject& ) throw ( RuntimeException, std::exception )
+void BasicAllListener_Impl ::disposing(const EventObject& )
 {
     SolarMutexGuard guard;
 
@@ -3922,14 +3922,12 @@ public:
         const Reference< XAllListener >& AllListener, const Any& Helper );
 
     // XInvocation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw( RuntimeException, std::exception ) override;
-    virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
-        throw( IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value)
-        throw( UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception ) override;
-    virtual Any SAL_CALL getValue(const OUString& PropertyName) throw( UnknownPropertyException, RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name) throw( RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) throw( RuntimeException, std::exception ) override;
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() override;
+    virtual Any SAL_CALL invoke(const OUString& FunctionName, const Sequence< Any >& Params, Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam) override;
+    virtual void SAL_CALL setValue(const OUString& PropertyName, const Any& Value) override;
+    virtual Any SAL_CALL getValue(const OUString& PropertyName) override;
+    virtual sal_Bool SAL_CALL hasMethod(const OUString& Name) override;
+    virtual sal_Bool SAL_CALL hasProperty(const OUString& Name) override;
 
 private:
     Reference< XAllListener >    m_xAllListener;
@@ -3972,7 +3970,6 @@ InvocationToAllListenerMapper::InvocationToAllListenerMapper
 
 
 Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getIntrospection()
-    throw( RuntimeException, std::exception )
 {
     return Reference< XIntrospectionAccess >();
 }
@@ -3980,8 +3977,6 @@ Reference< XIntrospectionAccess > SAL_CALL InvocationToAllListenerMapper::getInt
 
 Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName, const Sequence< Any >& Params,
     Sequence< sal_Int16 >& OutParamIndex, Sequence< Any >& OutParam)
-        throw( IllegalArgumentException, CannotConvertException,
-        InvocationTargetException, RuntimeException, std::exception )
 {
     (void)OutParamIndex;
     (void)OutParam     ;
@@ -4033,8 +4028,6 @@ Any SAL_CALL InvocationToAllListenerMapper::invoke(const OUString& FunctionName,
 
 
 void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& PropertyName, const Any& Value)
-    throw( UnknownPropertyException, CannotConvertException,
-           InvocationTargetException, RuntimeException, std::exception )
 {
     (void)PropertyName;
     (void)Value;
@@ -4042,7 +4035,6 @@ void SAL_CALL InvocationToAllListenerMapper::setValue(const OUString& PropertyNa
 
 
 Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& PropertyName)
-    throw( UnknownPropertyException, RuntimeException, std::exception )
 {
     (void)PropertyName;
 
@@ -4051,7 +4043,6 @@ Any SAL_CALL InvocationToAllListenerMapper::getValue(const OUString& PropertyNam
 
 
 sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
-    throw( RuntimeException, std::exception )
 {
     Reference< XIdlMethod > xMethod = m_xListenerType->getMethod( Name );
     return xMethod.is();
@@ -4059,7 +4050,6 @@ sal_Bool SAL_CALL InvocationToAllListenerMapper::hasMethod(const OUString& Name)
 
 
 sal_Bool SAL_CALL InvocationToAllListenerMapper::hasProperty(const OUString& Name)
-    throw( RuntimeException, std::exception )
 {
     Reference< XIdlField > xField = m_xListenerType->getField( Name );
     return xField.is();
@@ -4242,25 +4232,21 @@ public:
     ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj );
 
     // XInvocation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() throw(std::exception) override;
-    virtual void SAL_CALL setValue( const OUString& rProperty, const Any& rValue )
-        throw (UnknownPropertyException, RuntimeException, std::exception) override;
-    virtual Any SAL_CALL getValue( const OUString& rProperty )
-        throw (UnknownPropertyException, RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& rName ) throw(std::exception) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& rProp ) throw(std::exception) override;
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection() override;
+    virtual void SAL_CALL setValue( const OUString& rProperty, const Any& rValue ) override;
+    virtual Any SAL_CALL getValue( const OUString& rProperty ) override;
+    virtual sal_Bool SAL_CALL hasMethod( const OUString& rName ) override;
+    virtual sal_Bool SAL_CALL hasProperty( const OUString& rProp ) override;
 
     virtual Any SAL_CALL invoke( const OUString& rFunction,
                                  const Sequence< Any >& rParams,
                                  Sequence< sal_Int16 >& rOutParamIndex,
-                                 Sequence< Any >& rOutParam )
-        throw (CannotConvertException, InvocationTargetException,
-               RuntimeException, std::exception ) override;
+                                 Sequence< Any >& rOutParam ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw(RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener( const Reference< XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const Reference< XEventListener >& aListener ) override;
 };
 
 ModuleInvocationProxy::ModuleInvocationProxy( const OUString& aPrefix, SbxObjectRef xScopeObj )
@@ -4272,13 +4258,12 @@ ModuleInvocationProxy::ModuleInvocationProxy( const OUString& aPrefix, SbxObject
     m_bProxyIsClassModuleObject = xScopeObj.Is() && nullptr != dynamic_cast<const SbClassModuleObject*>( xScopeObj.get() );
 }
 
-Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospection() throw(std::exception)
+Reference< XIntrospectionAccess > SAL_CALL ModuleInvocationProxy::getIntrospection()
 {
     return Reference< XIntrospectionAccess >();
 }
 
 void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const Any& rValue)
-    throw (UnknownPropertyException, RuntimeException, std::exception)
 {
     if( !m_bProxyIsClassModuleObject )
         throw UnknownPropertyException();
@@ -4316,7 +4301,6 @@ void SAL_CALL ModuleInvocationProxy::setValue(const OUString& rProperty, const A
 }
 
 Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
-    throw (UnknownPropertyException, RuntimeException, std::exception)
 {
     if( !m_bProxyIsClassModuleObject )
     {
@@ -4344,12 +4328,12 @@ Any SAL_CALL ModuleInvocationProxy::getValue(const OUString& rProperty)
     return aRet;
 }
 
-sal_Bool SAL_CALL ModuleInvocationProxy::hasMethod( const OUString& ) throw(std::exception)
+sal_Bool SAL_CALL ModuleInvocationProxy::hasMethod( const OUString& )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ModuleInvocationProxy::hasProperty( const OUString& ) throw(std::exception)
+sal_Bool SAL_CALL ModuleInvocationProxy::hasProperty( const OUString& )
 {
     return false;
 }
@@ -4358,8 +4342,6 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
                                             const Sequence< Any >& rParams,
                                             Sequence< sal_Int16 >&,
                                             Sequence< Any >& )
-    throw (CannotConvertException, InvocationTargetException,
-           RuntimeException, std::exception)
 {
     SolarMutexGuard guard;
 
@@ -4426,7 +4408,6 @@ Any SAL_CALL ModuleInvocationProxy::invoke( const OUString& rFunction,
 }
 
 void SAL_CALL ModuleInvocationProxy::dispose()
-    throw(RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -4437,13 +4418,11 @@ void SAL_CALL ModuleInvocationProxy::dispose()
 }
 
 void SAL_CALL ModuleInvocationProxy::addEventListener( const Reference< XEventListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     m_aListeners.addInterface( xListener );
 }
 
 void SAL_CALL ModuleInvocationProxy::removeEventListener( const Reference< XEventListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     m_aListeners.removeInterface( xListener );
 }

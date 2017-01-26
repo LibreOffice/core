@@ -61,8 +61,7 @@ protected:
 protected:
     /** mutex should be locked before called
      */
-    virtual void checkClosed()
-        throw ( css::sdbc::SQLException, css::uno::RuntimeException ) override;
+    virtual void checkClosed() override;
 
     /** unchecked, acquire mutex before calling
      */
@@ -79,16 +78,13 @@ public:
     virtual ~ResultSet() override;
 
 public: // XCloseable
-    virtual void SAL_CALL close(  )
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL close(  ) override;
 
 public: // XResultSetMetaDataSupplier
-    virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  )
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
 
 public: // XColumnLocate
-    virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName )
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
 
 public:
     sal_Int32 guessDataType( sal_Int32 column );

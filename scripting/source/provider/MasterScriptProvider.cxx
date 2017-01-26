@@ -72,7 +72,7 @@ bool endsWith( const OUString& target,
 // XScriptProvider implementation
 
 
-MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext > & xContext ) throw ( RuntimeException ):
+MasterScriptProvider::MasterScriptProvider( const Reference< XComponentContext > & xContext ):
         m_xContext( xContext ), m_bIsValid( false ), m_bInitialised( false ),
         m_bIsPkgMSP( false ), m_pPCache( nullptr )
 {
@@ -94,7 +94,6 @@ MasterScriptProvider::~MasterScriptProvider()
 
 
 void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
-throw ( Exception, RuntimeException, std::exception )
 {
     if ( m_bInitialised )
         return;
@@ -229,8 +228,6 @@ void MasterScriptProvider::createPkgProvider()
 
 Reference< provider::XScript >
 MasterScriptProvider::getScript( const OUString& scriptURI )
-throw ( provider::ScriptFrameworkErrorException,
-        RuntimeException, std::exception )
 {
     if ( !m_bIsValid )
     {
@@ -384,7 +381,6 @@ MasterScriptProvider::providerCache()
 
 OUString SAL_CALL
 MasterScriptProvider::getName()
-        throw ( css::uno::RuntimeException, std::exception )
 {
     if ( !m_bIsPkgMSP )
     {
@@ -414,7 +410,6 @@ MasterScriptProvider::getName()
 
 Sequence< Reference< browse::XBrowseNode > > SAL_CALL
 MasterScriptProvider::getChildNodes()
-        throw ( css::uno::RuntimeException, std::exception )
 {
     if ( !providerCache() )
         throw RuntimeException( "MasterScriptProvider::getAllProviders, cache not initialised" );
@@ -445,7 +440,6 @@ MasterScriptProvider::getChildNodes()
 
 sal_Bool SAL_CALL
 MasterScriptProvider::hasChildNodes()
-        throw ( css::uno::RuntimeException, std::exception )
 {
     return true;
 }
@@ -453,7 +447,6 @@ MasterScriptProvider::hasChildNodes()
 
 sal_Int16 SAL_CALL
 MasterScriptProvider::getType()
-        throw ( css::uno::RuntimeException, std::exception )
 {
     return browse::BrowseNodeTypes::CONTAINER;
 }
@@ -474,7 +467,7 @@ MasterScriptProvider::parseLocationName( const OUString& location )
 
 // Register Package
 void SAL_CALL
-MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement ) throw ( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
 {
     if ( !m_bIsPkgMSP )
     {
@@ -553,7 +546,7 @@ MasterScriptProvider::insertByName( const OUString& aName, const Any& aElement )
 
 // Revoke Package
 void SAL_CALL
-MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
+MasterScriptProvider::removeByName( const OUString& Name )
 {
     if ( !m_bIsPkgMSP )
     {
@@ -624,7 +617,7 @@ MasterScriptProvider::removeByName( const OUString& Name ) throw ( container::No
 
 
 void SAL_CALL
-MasterScriptProvider::replaceByName( const OUString& aName, const Any& aElement ) throw ( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
+MasterScriptProvider::replaceByName( const OUString& aName, const Any& aElement )
 {
     (void)aName;
     (void)aElement;
@@ -637,7 +630,7 @@ MasterScriptProvider::replaceByName( const OUString& aName, const Any& aElement 
 }
 
 Any SAL_CALL
-MasterScriptProvider::getByName( const OUString& aName ) throw ( container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
+MasterScriptProvider::getByName( const OUString& aName )
 {
     (void)aName;
 
@@ -651,7 +644,7 @@ MasterScriptProvider::getByName( const OUString& aName ) throw ( container::NoSu
 }
 
 sal_Bool SAL_CALL
-MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)
+MasterScriptProvider::hasByName( const OUString& aName )
 {
     bool result = false;
     if ( !m_bIsPkgMSP )
@@ -721,7 +714,7 @@ MasterScriptProvider::hasByName( const OUString& aName ) throw (RuntimeException
 
 
 Sequence< OUString > SAL_CALL
-MasterScriptProvider::getElementNames(  ) throw ( RuntimeException, std::exception)
+MasterScriptProvider::getElementNames(  )
 {
     // TODO needs implementing
     Sequence< OUString >  names;
@@ -733,14 +726,14 @@ MasterScriptProvider::getElementNames(  ) throw ( RuntimeException, std::excepti
 }
 
 Type SAL_CALL
-MasterScriptProvider::getElementType(  ) throw ( RuntimeException, std::exception)
+MasterScriptProvider::getElementType(  )
 {
     // TODO needs implementing
     Type t;
     return t;
 }
 
-sal_Bool SAL_CALL MasterScriptProvider::hasElements(  ) throw ( RuntimeException, std::exception)
+sal_Bool SAL_CALL MasterScriptProvider::hasElements(  )
 {
     // TODO needs implementing
     if ( true )
@@ -752,20 +745,17 @@ sal_Bool SAL_CALL MasterScriptProvider::hasElements(  ) throw ( RuntimeException
 
 
 OUString SAL_CALL MasterScriptProvider::getImplementationName( )
-throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.script.provider.MasterScriptProvider"  );
 }
 
 sal_Bool SAL_CALL MasterScriptProvider::supportsService( const OUString& serviceName )
-throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, serviceName);
 }
 
 
 Sequence< OUString > SAL_CALL MasterScriptProvider::getSupportedServiceNames( )
-throw( RuntimeException, std::exception )
 {
     OUString names[3];
 

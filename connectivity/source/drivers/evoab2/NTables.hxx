@@ -30,7 +30,7 @@ namespace connectivity
             css::uno::Reference< css::sdbc::XDatabaseMetaData >       m_xMetaData;
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-            virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+            virtual void impl_refresh() override;
         public:
             OEvoabTables(const css::uno::Reference< css::sdbc::XDatabaseMetaData >& _rMetaData,
                          ::cppu::OWeakObject& _rParent, ::osl::Mutex& _rMutex,

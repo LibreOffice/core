@@ -35,7 +35,6 @@ using namespace ::com::sun::star;
 
     // XNotifyingDispatch
 void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs, const uno::Reference< frame::XDispatchResultListener >& xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     // there is no guarantee, that we are holded alive during this method!
     // May the outside dispatch container will be updated by a CONTEXT_CHANGED
@@ -67,20 +66,20 @@ void SAL_CALL SdUnoModule::dispatchWithNotification( const util::URL& aURL, cons
     }
 }
     // XDispatch
-void SAL_CALL SdUnoModule::dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs ) throw( uno::RuntimeException, std::exception )
+void SAL_CALL SdUnoModule::dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& aArgs )
 {
     dispatchWithNotification(aURL, aArgs, uno::Reference< frame::XDispatchResultListener >());
 }
 
-void SAL_CALL SdUnoModule::addStatusListener(const uno::Reference< frame::XStatusListener > &, const util::URL&) throw( uno::RuntimeException, std::exception )
+void SAL_CALL SdUnoModule::addStatusListener(const uno::Reference< frame::XStatusListener > &, const util::URL&)
 {
 }
 
-void SAL_CALL SdUnoModule::removeStatusListener(const uno::Reference< frame::XStatusListener > &, const util::URL&) throw( uno::RuntimeException, std::exception )
+void SAL_CALL SdUnoModule::removeStatusListener(const uno::Reference< frame::XStatusListener > &, const util::URL&)
 {
 }
 
-uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SdUnoModule::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& seqDescripts ) throw( uno::RuntimeException, std::exception )
+uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SdUnoModule::queryDispatches( const uno::Sequence< frame::DispatchDescriptor >& seqDescripts )
 {
     sal_Int32 nCount = seqDescripts.getLength();
     uno::Sequence< uno::Reference< frame::XDispatch > > lDispatcher( nCount );
@@ -97,7 +96,6 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL SdUnoModule::queryD
 
 // XDispatchProvider
 uno::Reference< frame::XDispatch > SAL_CALL SdUnoModule::queryDispatch( const util::URL& aURL, const OUString&, sal_Int32 )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SdDLL::Init();
@@ -111,17 +109,17 @@ uno::Reference< frame::XDispatch > SAL_CALL SdUnoModule::queryDispatch( const ut
 }
 
 // XServiceInfo
-OUString SAL_CALL SdUnoModule::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL SdUnoModule::getImplementationName(  )
 {
     return OUString( "com.sun.star.comp.Draw.DrawingModule" );
 }
 
-sal_Bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName ) throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SdUnoModule::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL SdUnoModule::getSupportedServiceNames(  )
 {
     uno::Sequence<OUString> aSeq { "com.sun.star.drawing.ModuleDispatcher" };
     return aSeq;

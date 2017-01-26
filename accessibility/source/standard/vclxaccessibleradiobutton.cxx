@@ -134,13 +134,13 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleRadioButton, VCLXAccessibleTextC
 // XServiceInfo
 
 
-OUString VCLXAccessibleRadioButton::getImplementationName() throw (RuntimeException, std::exception)
+OUString VCLXAccessibleRadioButton::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleRadioButton" );
 }
 
 
-Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleRadioButton" };
 }
@@ -149,7 +149,7 @@ Sequence< OUString > VCLXAccessibleRadioButton::getSupportedServiceNames() throw
 // XAccessibleAction
 
 
-sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount( ) throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount( )
 {
     OExternalLockGuard aGuard( this );
 
@@ -157,7 +157,7 @@ sal_Int32 VCLXAccessibleRadioButton::getAccessibleActionCount( ) throw (RuntimeE
 }
 
 
-sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -172,7 +172,7 @@ sal_Bool VCLXAccessibleRadioButton::doAccessibleAction ( sal_Int32 nIndex ) thro
 }
 
 
-OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -183,7 +183,7 @@ OUString VCLXAccessibleRadioButton::getAccessibleActionDescription ( sal_Int32 n
 }
 
 
-Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActionKeyBinding( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActionKeyBinding( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -224,7 +224,7 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleRadioButton::getAccessibleActio
 // XAccessibleValue
 
 
-Any VCLXAccessibleRadioButton::getCurrentValue(  ) throw (RuntimeException, std::exception)
+Any VCLXAccessibleRadioButton::getCurrentValue(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -238,7 +238,7 @@ Any VCLXAccessibleRadioButton::getCurrentValue(  ) throw (RuntimeException, std:
 }
 
 
-sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber ) throw (RuntimeException, std::exception)
+sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber )
 {
     OExternalLockGuard aGuard( this );
 
@@ -263,7 +263,7 @@ sal_Bool VCLXAccessibleRadioButton::setCurrentValue( const Any& aNumber ) throw 
 }
 
 
-Any VCLXAccessibleRadioButton::getMaximumValue(  ) throw (RuntimeException, std::exception)
+Any VCLXAccessibleRadioButton::getMaximumValue(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -274,7 +274,7 @@ Any VCLXAccessibleRadioButton::getMaximumValue(  ) throw (RuntimeException, std:
 }
 
 
-Any VCLXAccessibleRadioButton::getMinimumValue(  ) throw (RuntimeException, std::exception)
+Any VCLXAccessibleRadioButton::getMinimumValue(  )
 {
     OExternalLockGuard aGuard( this );
 

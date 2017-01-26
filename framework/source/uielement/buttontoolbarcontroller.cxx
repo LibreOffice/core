@@ -73,7 +73,6 @@ ButtonToolbarController::~ButtonToolbarController()
 
         // XInterface
 uno::Any SAL_CALL ButtonToolbarController::queryInterface( const uno::Type& rType )
-throw (css::uno::RuntimeException, std::exception)
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -102,7 +101,6 @@ void SAL_CALL ButtonToolbarController::release() throw ()
 // XInitialization
 void SAL_CALL ButtonToolbarController::initialize(
     const css::uno::Sequence< css::uno::Any >& aArguments )
-throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     bool bInitialized( true );
 
@@ -140,7 +138,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 }
 
 // XComponent
-void SAL_CALL ButtonToolbarController::dispose() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL ButtonToolbarController::dispose()
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -159,21 +157,18 @@ void SAL_CALL ButtonToolbarController::dispose() throw (css::uno::RuntimeExcepti
 
 void SAL_CALL ButtonToolbarController::addEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
-throw (css::uno::RuntimeException, std::exception)
 {
     // do nothing
 }
 
 void SAL_CALL ButtonToolbarController::removeEventListener(
     const css::uno::Reference< css::lang::XEventListener >& )
-throw (css::uno::RuntimeException, std::exception)
 {
     // do nothing
 }
 
 // XUpdatable
 void SAL_CALL ButtonToolbarController::update()
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
     if ( m_bDisposed )
@@ -183,7 +178,6 @@ throw (css::uno::RuntimeException, std::exception)
 // XEventListener
 void SAL_CALL ButtonToolbarController::disposing(
     const css::lang::EventObject& Source )
-throw ( css::uno::RuntimeException, std::exception )
 {
     uno::Reference< uno::XInterface > xSource( Source.Source );
 
@@ -198,7 +192,6 @@ throw ( css::uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL ButtonToolbarController::statusChanged( const css::frame::FeatureStateEvent& )
-throw ( css::uno::RuntimeException, std::exception )
 {
     // do nothing
     if ( m_bDisposed )
@@ -207,7 +200,6 @@ throw ( css::uno::RuntimeException, std::exception )
 
 // XToolbarController
 void SAL_CALL ButtonToolbarController::execute( sal_Int16 KeyModifier )
-throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< frame::XDispatch >      xDispatch;
     uno::Reference< frame::XFrame >         xFrame;
@@ -264,7 +256,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL ButtonToolbarController::click()
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -276,7 +267,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL ButtonToolbarController::doubleClick()
-throw (css::uno::RuntimeException, std::exception)
 {
     // do nothing
     if ( m_bDisposed )
@@ -284,7 +274,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createPopupWindow()
-throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_bDisposed )
         throw DisposedException();
@@ -294,7 +283,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 uno::Reference< awt::XWindow > SAL_CALL ButtonToolbarController::createItemWindow(
     const css::uno::Reference< css::awt::XWindow >& )
-throw (css::uno::RuntimeException, std::exception)
 {
     if ( m_bDisposed )
         throw DisposedException();

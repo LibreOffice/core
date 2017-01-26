@@ -71,7 +71,6 @@ void BasicToolBarFactory::Shutdown()
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
-    throw (Exception, RuntimeException, std::exception)
 {
     if (aArguments.getLength() > 0)
     {
@@ -124,7 +123,6 @@ void SAL_CALL BasicToolBarFactory::initialize (const Sequence<Any>& aArguments)
 
 void SAL_CALL BasicToolBarFactory::disposing (
     const lang::EventObject& rEventObject)
-    throw (RuntimeException, std::exception)
 {
     if (rEventObject.Source == mxConfigurationController)
         mxConfigurationController = nullptr;
@@ -134,7 +132,6 @@ void SAL_CALL BasicToolBarFactory::disposing (
 
 Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
     const Reference<XResourceId>& rxToolBarId)
-    throw (RuntimeException, IllegalArgumentException, WrappedTargetException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -152,7 +149,6 @@ Reference<XResource> SAL_CALL BasicToolBarFactory::createResource (
 
 void SAL_CALL BasicToolBarFactory::releaseResource (
     const Reference<XResource>& rxToolBar)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -162,7 +158,6 @@ void SAL_CALL BasicToolBarFactory::releaseResource (
 }
 
 void BasicToolBarFactory::ThrowIfDisposed() const
-    throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

@@ -69,7 +69,7 @@ namespace connectivity { namespace hsqldb
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( HView, HView_Base, HView_IBASE )
 
 
-    void SAL_CALL HView::alterCommand( const OUString& _rNewCommand ) throw (SQLException, RuntimeException, std::exception)
+    void SAL_CALL HView::alterCommand( const OUString& _rNewCommand )
     {
         // not really atomic ... as long as we do not have something like
         //   ALTER VIEW <name> TO <command>

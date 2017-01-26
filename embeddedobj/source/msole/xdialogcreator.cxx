@@ -130,10 +130,6 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceByDia
             const uno::Reference< embed::XStorage >& xStorage,
             const OUString& sEntName,
             const uno::Sequence< beans::PropertyValue >& aInObjArgs )
-    throw ( lang::IllegalArgumentException,
-            io::IOException,
-            uno::Exception,
-            uno::RuntimeException )
 {
     embed::InsertedObjectInfo aObjectInfo;
     uno::Sequence< beans::PropertyValue > aObjArgs( aInObjArgs );
@@ -282,10 +278,6 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
                 const uno::Reference< embed::XStorage >& xStorage,
                 const OUString& sEntryName,
                 const uno::Sequence< beans::PropertyValue >& aObjectArgs )
-        throw ( lang::IllegalArgumentException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException )
 {
     embed::InsertedObjectInfo aObjectInfo;
 
@@ -331,21 +323,18 @@ embed::InsertedObjectInfo SAL_CALL MSOLEDialogObjectCreator::createInstanceInitF
 
 
 OUString SAL_CALL MSOLEDialogObjectCreator::getImplementationName()
-    throw ( uno::RuntimeException )
 {
     return impl_staticGetImplementationName();
 }
 
 
 sal_Bool SAL_CALL MSOLEDialogObjectCreator::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
 uno::Sequence< OUString > SAL_CALL MSOLEDialogObjectCreator::getSupportedServiceNames()
-    throw ( uno::RuntimeException )
 {
     return impl_staticGetSupportedServiceNames();
 }

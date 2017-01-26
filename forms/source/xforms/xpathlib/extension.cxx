@@ -30,7 +30,7 @@ using namespace com::sun::star::xforms;
 using namespace com::sun::star::xml::xpath;
 using namespace com::sun::star::beans;
 
-Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHandle() throw (RuntimeException, std::exception)
+Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHandle()
 {
     Libxml2ExtensionHandle aHandle;
     aHandle.functionLookupFunction = reinterpret_cast< sal_Int64 >( &xforms_lookupFunc );
@@ -40,7 +40,7 @@ Libxml2ExtensionHandle SAL_CALL CLibxml2XFormsExtension::getLibxml2ExtensionHand
     return aHandle;
 }
 
-void SAL_CALL CLibxml2XFormsExtension::initialize(const Sequence< Any >& aSequence) throw (RuntimeException, std::exception)
+void SAL_CALL CLibxml2XFormsExtension::initialize(const Sequence< Any >& aSequence)
 {
     if (aSequence.getLength() == 2
         && (aSequence[0] >>= m_aModel)

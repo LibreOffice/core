@@ -244,7 +244,6 @@ CSysShExec::CSysShExec( const Reference< css::uno::XComponentContext >& xContext
 }
 
 void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aParameter, sal_Int32 nFlags )
-        throw (IllegalArgumentException, SystemShellExecuteException, RuntimeException)
 {
     // parameter checking
     if (0 == aCommand.getLength())
@@ -328,19 +327,16 @@ void SAL_CALL CSysShExec::execute( const OUString& aCommand, const OUString& aPa
 // XServiceInfo
 
 OUString SAL_CALL CSysShExec::getImplementationName(  )
-    throw( RuntimeException )
 {
     return OUString(SYSSHEXEC_IMPL_NAME );
 }
 
 sal_Bool SAL_CALL CSysShExec::supportsService( const OUString& ServiceName )
-    throw( RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL CSysShExec::getSupportedServiceNames(  )
-    throw( RuntimeException )
 {
     return SysShExec_getSupportedServiceNames();
 }

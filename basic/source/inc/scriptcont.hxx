@@ -46,8 +46,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const css::uno::Reference< css::io::XOutputStream >& xOutput
-    )
-        throw(css::uno::Exception) override;
+    ) override;
 
     virtual css::uno::Any SAL_CALL importLibraryElement
     (
@@ -72,9 +71,7 @@ class SfxScriptLibraryContainer : public SfxLibraryContainer, public OldBasicPas
                         const css::uno::Reference< css::ucb::XSimpleFileAccess3 >& rToUseSFI, const css::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
 
     virtual bool implLoadPasswordLibrary( SfxLibrary* pLib, const OUString& Name,
-                                          bool bVerifyPasswordOnly=false )
-            throw(css::lang::WrappedTargetException,
-                  css::uno::RuntimeException, std::exception) override;
+                                          bool bVerifyPasswordOnly=false ) override;
 
     virtual void onNewRootStorage() override;
 
@@ -93,30 +90,16 @@ public:
 
 
     // Methods XLibraryContainerPassword
-    virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const OUString& Name )
-        throw (css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isLibraryPasswordVerified( const OUString& Name )
-        throw (css::lang::IllegalArgumentException,
-               css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password )
-        throw (css::lang::IllegalArgumentException,
-               css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isLibraryPasswordProtected( const OUString& Name ) override;
+    virtual sal_Bool SAL_CALL isLibraryPasswordVerified( const OUString& Name ) override;
+    virtual sal_Bool SAL_CALL verifyLibraryPassword( const OUString& Name, const OUString& Password ) override;
     virtual void SAL_CALL changeLibraryPassword( const OUString& Name,
-        const OUString& OldPassword, const OUString& NewPassword )
-        throw (css::lang::IllegalArgumentException,
-               css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) override;
+        const OUString& OldPassword, const OUString& NewPassword ) override;
     // XLibraryQueryExecutable
-    virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&) override;
     // Methods XServiceInfo
-    virtual OUString SAL_CALL getImplementationName( )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName( ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
 };
 
 
@@ -161,10 +144,10 @@ public:
     DECLARE_XTYPEPROVIDER()
 
     // XVBAModuleInfo
-    virtual css::script::ModuleInfo SAL_CALL getModuleInfo( const OUString& ModuleName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasModuleInfo( const OUString& ModuleName ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL insertModuleInfo( const OUString& ModuleName, const css::script::ModuleInfo& ModuleInfo ) throw (css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeModuleInfo( const OUString& ModuleName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::script::ModuleInfo SAL_CALL getModuleInfo( const OUString& ModuleName ) override;
+    virtual sal_Bool SAL_CALL hasModuleInfo( const OUString& ModuleName ) override;
+    virtual void SAL_CALL insertModuleInfo( const OUString& ModuleName, const css::script::ModuleInfo& ModuleInfo ) override;
+    virtual void SAL_CALL removeModuleInfo( const OUString& ModuleName ) override;
 
     static bool containsValidModule( const css::uno::Any& _rElement );
 

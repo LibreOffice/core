@@ -47,22 +47,22 @@ class ScVbaFormatConditions: public CollTestImplHelper< ov::excel::XFormatCondit
     css::uno::Reference< css::beans::XPropertySet > mxParentRangePropertySet;
 public:
     /// @throws css::script::BasicErrorException
-    void notifyRange() throw ( css::script::BasicErrorException );
+    void notifyRange();
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< ov::excel::XFormatCondition > Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    css::uno::Reference< ov::excel::XFormatCondition > Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2, const css::uno::Reference< ov::excel::XStyle >& _xCalcStyle );
     /// @throws css::script::BasicErrorException
-    static OUString getA1Formula(const css::uno::Any& _aFormula) throw ( css::script::BasicErrorException );
+    static OUString getA1Formula(const css::uno::Any& _aFormula);
     OUString getStyleName();
     /// @throws css::script::BasicErrorException
-    void removeFormatCondition( const OUString& _sStyleName, bool _bRemoveStyle) throw ( css::script::BasicErrorException );
+    void removeFormatCondition( const OUString& _sStyleName, bool _bRemoveStyle);
     const css::uno::Reference< css::sheet::XSheetConditionalEntries >& getSheetConditionalEntries() const { return mxSheetConditionalEntries; }
     // XFormatConditions
-    virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::excel::XFormatCondition > SAL_CALL Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Delete(  ) override;
+    virtual css::uno::Reference< ov::excel::XFormatCondition > SAL_CALL Add( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) override;
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     virtual css::uno::Any createCollectionObject(const css::uno::Any&) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;

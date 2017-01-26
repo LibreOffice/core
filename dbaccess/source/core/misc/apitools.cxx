@@ -43,7 +43,7 @@ OSubComponent::~OSubComponent()
 }
 
 // css::lang::XTypeProvider
-Sequence< Type > OSubComponent::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > OSubComponent::getTypes()
 {
     OTypeCollection aTypes(cppu::UnoType<XComponent>::get(),
                            cppu::UnoType<XTypeProvider>::get(),
@@ -103,7 +103,7 @@ void OSubComponent::release() throw ( )
     OWeakAggObject::release();
 }
 
-Any OSubComponent::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any OSubComponent::queryInterface( const Type & rType )
 {
     Any aReturn;
     if (!rType.equals(cppu::UnoType<XAggregation>::get()))

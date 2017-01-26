@@ -46,21 +46,18 @@ CertificateContainer::searchMap( const OUString & url, const OUString & certific
 
 bool
 CertificateContainer::isTemporaryCertificate ( const OUString & url, const OUString & certificate_name )
-    throw(css::uno::RuntimeException)
 {
     return searchMap( url, certificate_name, certMap);
 }
 
 bool
 CertificateContainer::isCertificateTrust ( const OUString & url, const OUString & certificate_name )
-    throw(css::uno::RuntimeException)
 {
     return searchMap( url, certificate_name, certTrustMap);
 }
 
 sal_Bool
 CertificateContainer::addCertificate( const OUString & url, const OUString & certificate_name, sal_Bool trust )
-    throw(css::uno::RuntimeException, std::exception)
 {
     certMap.insert( Map::value_type( url, certificate_name ) );
 
@@ -72,7 +69,7 @@ CertificateContainer::addCertificate( const OUString & url, const OUString & cer
 }
 
 ::security::CertificateContainerStatus
-CertificateContainer::hasCertificate( const OUString & url, const OUString & certificate_name ) throw(css::uno::RuntimeException, std::exception)
+CertificateContainer::hasCertificate( const OUString & url, const OUString & certificate_name )
 {
     if ( isTemporaryCertificate( url, certificate_name ) )
     {
@@ -88,28 +85,24 @@ CertificateContainer::hasCertificate( const OUString & url, const OUString & cer
 
 OUString SAL_CALL
 CertificateContainer::getImplementationName( )
-    throw(css::uno::RuntimeException, std::exception)
 {
     return impl_getStaticImplementationName();
 }
 
 sal_Bool SAL_CALL
 CertificateContainer::supportsService( const OUString& ServiceName )
-    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > SAL_CALL
 CertificateContainer::getSupportedServiceNames(  )
-    throw(css::uno::RuntimeException, std::exception)
 {
     return impl_getStaticSupportedServiceNames();
 }
 
 Sequence< OUString > SAL_CALL
 CertificateContainer::impl_getStaticSupportedServiceNames(  )
-    throw(css::uno::RuntimeException)
 {
     Sequence< OUString > aRet { "com.sun.star.security.CertificateContainer" };
     return aRet;
@@ -117,13 +110,11 @@ CertificateContainer::impl_getStaticSupportedServiceNames(  )
 
 OUString SAL_CALL
 CertificateContainer::impl_getStaticImplementationName()
-    throw(css::uno::RuntimeException)
 {
     return OUString("com.sun.star.security.CertificateContainer");
 }
 
 Reference< XInterface > SAL_CALL CertificateContainer::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
-    throw( RuntimeException )
 {
     return Reference< XInterface >( *new CertificateContainer( xServiceManager ) );
 }

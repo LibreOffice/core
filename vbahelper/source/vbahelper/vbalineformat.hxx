@@ -38,37 +38,37 @@ protected:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     static sal_Int32 convertLineStartEndNameToArrowheadStyle( const OUString& sLineName );
     /// @throws css::uno::RuntimeException
-    static OUString convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadStyle ) throw (css::uno::RuntimeException);
+    static OUString convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadStyle );
 public:
     ScVbaLineFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
 
     // Attributes
-    virtual sal_Int32 SAL_CALL getBeginArrowheadStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBeginArrowheadStyle( sal_Int32 _beginarrowheadstyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getBeginArrowheadLength() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBeginArrowheadLength( sal_Int32 _beginarrowheadlength ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getBeginArrowheadWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBeginArrowheadWidth( sal_Int32 _beginarrowheadwidth ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getEndArrowheadStylel() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEndArrowheadStylel( sal_Int32 _endarrowheadstylel ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getEndArrowheadLength() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEndArrowheadLength( sal_Int32 _endarrowheadlength ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getEndArrowheadWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEndArrowheadWidth( sal_Int32 _endarrowheadwidth ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getWeight() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setWeight( double _weight ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getTransparency() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTransparency( double _transparency ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setStyle( sal_Int16 _style ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getDashStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDashStyle( sal_Int32 _dashstyle ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getBeginArrowheadStyle() override;
+    virtual void SAL_CALL setBeginArrowheadStyle( sal_Int32 _beginarrowheadstyle ) override;
+    virtual sal_Int32 SAL_CALL getBeginArrowheadLength() override;
+    virtual void SAL_CALL setBeginArrowheadLength( sal_Int32 _beginarrowheadlength ) override;
+    virtual sal_Int32 SAL_CALL getBeginArrowheadWidth() override;
+    virtual void SAL_CALL setBeginArrowheadWidth( sal_Int32 _beginarrowheadwidth ) override;
+    virtual sal_Int32 SAL_CALL getEndArrowheadStylel() override;
+    virtual void SAL_CALL setEndArrowheadStylel( sal_Int32 _endarrowheadstylel ) override;
+    virtual sal_Int32 SAL_CALL getEndArrowheadLength() override;
+    virtual void SAL_CALL setEndArrowheadLength( sal_Int32 _endarrowheadlength ) override;
+    virtual sal_Int32 SAL_CALL getEndArrowheadWidth() override;
+    virtual void SAL_CALL setEndArrowheadWidth( sal_Int32 _endarrowheadwidth ) override;
+    virtual double SAL_CALL getWeight() override;
+    virtual void SAL_CALL setWeight( double _weight ) override;
+    virtual sal_Bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual double SAL_CALL getTransparency() override;
+    virtual void SAL_CALL setTransparency( double _transparency ) override;
+    virtual sal_Int16 SAL_CALL getStyle() override;
+    virtual void SAL_CALL setStyle( sal_Int16 _style ) override;
+    virtual sal_Int32 SAL_CALL getDashStyle() override;
+    virtual void SAL_CALL setDashStyle( sal_Int32 _dashstyle ) override;
 
     // Methods
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL BackColor() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL ForeColor() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL BackColor() override;
+    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL ForeColor() override;
 };
 
 #endif // INCLUDED_VBAHELPER_SOURCE_VBAHELPER_VBALINEFORMAT_HXX

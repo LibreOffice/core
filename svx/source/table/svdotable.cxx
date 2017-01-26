@@ -224,10 +224,10 @@ public:
     SdrTableObjImpl& operator=( const SdrTableObjImpl& rSource );
 
     // XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     void update();
 
@@ -556,7 +556,7 @@ void SdrTableObjImpl::DragEdge( bool mbHorizontal, int nEdge, sal_Int32 nOffset 
 // XModifyListener
 
 
-void SAL_CALL SdrTableObjImpl::modified( const css::lang::EventObject& /*aEvent*/ ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SdrTableObjImpl::modified( const css::lang::EventObject& /*aEvent*/ )
 {
     update();
 }
@@ -636,7 +636,7 @@ void SdrTableObjImpl::dumpAsXml(xmlTextWriterPtr pWriter) const
 // XEventListener
 
 
-void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SdrTableObjImpl::disposing( const css::lang::EventObject& /*Source*/ )
 {
     mxActiveCell.clear();
     mxTable.clear();

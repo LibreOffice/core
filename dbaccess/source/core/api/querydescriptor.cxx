@@ -66,7 +66,6 @@ OQueryDescriptor::~OQueryDescriptor()
 }
 
 css::uno::Sequence<sal_Int8> OQueryDescriptor::getImplementationId()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -100,7 +99,7 @@ void OQueryDescriptor::registerProperties()
                     &m_aLayoutInformation, cppu::UnoType<decltype(m_aLayoutInformation)>::get());
 }
 
-Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+Reference< XPropertySetInfo > SAL_CALL OQueryDescriptor::getPropertySetInfo(  )
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
@@ -147,7 +146,7 @@ OQueryDescriptor_Base::~OQueryDescriptor_Base()
 
 }
 
-sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException, std::exception)
+sal_Int64 SAL_CALL OQueryDescriptor_Base::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
 {
     if (_rIdentifier.getLength() != 16)
         return 0;
@@ -179,7 +178,7 @@ void OQueryDescriptor_Base::clearColumns( )
     setColumnsOutOfDate();
 }
 
-Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (RuntimeException, std::exception)
+Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( )
 {
     MutexGuard aGuard(m_rMutex);
 
@@ -209,17 +208,17 @@ Reference< XNameAccess > SAL_CALL OQueryDescriptor_Base::getColumns( ) throw (Ru
     return m_pColumns;
 }
 
-OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL OQueryDescriptor_Base::getImplementationName(  )
 {
     return OUString("com.sun.star.sdb.OQueryDescriptor");
 }
 
-sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL OQueryDescriptor_Base::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL OQueryDescriptor_Base::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSupported(2);
     aSupported.getArray()[0] = SERVICE_SDB_DATASETTINGS;

@@ -33,30 +33,17 @@ namespace cmis
 
             virtual ~StdOutputStream( ) override;
 
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
-                throw ( css::uno::RuntimeException, std::exception ) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
 
             virtual void SAL_CALL acquire ( ) throw ( ) override;
 
             virtual void SAL_CALL release ( ) throw ( ) override;
 
-            virtual void SAL_CALL writeBytes ( const css::uno::Sequence< sal_Int8 >& aData )
-                throw ( css::io::NotConnectedException,
-                        css::io::BufferSizeExceededException,
-                        css::io::IOException,
-                        css::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL writeBytes ( const css::uno::Sequence< sal_Int8 >& aData ) override;
 
-            virtual void SAL_CALL flush ( )
-                throw ( css::io::NotConnectedException,
-                        css::io::BufferSizeExceededException,
-                        css::io::IOException,
-                        css::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL flush ( ) override;
 
-            virtual void SAL_CALL closeOutput ( )
-                throw ( css::io::NotConnectedException,
-                        css::io::BufferSizeExceededException,
-                        css::io::IOException,
-                        css::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL closeOutput ( ) override;
 
         private:
 

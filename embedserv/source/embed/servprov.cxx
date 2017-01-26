@@ -120,19 +120,16 @@ EmbedServer_Impl::~EmbedServer_Impl()
 }
 
 OUString EmbedServer_Impl::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.ole.EmbedServer");
 }
 
 sal_Bool EmbedServer_Impl::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> EmbedServer_Impl::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{
         "com.sun.star.document.OleEmbeddedServerRegistration"};

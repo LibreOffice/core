@@ -173,16 +173,13 @@ public:
     DECL_LINK( VisibilityNotification, SvxStyleBox_Impl&, void );
 protected:
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments)
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
     // XUpdatable
-    virtual void SAL_CALL update()
-            throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL update() override;
 
     // XComponent
-    virtual void SAL_CALL dispose()
-            throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
 
 private:
 
@@ -221,16 +218,16 @@ public:
     virtual ~SvxColorToolBoxControl() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
     virtual void Select(sal_uInt16 nSelectModifier) override;
 
     // XSubToolbarController
-    virtual sal_Bool SAL_CALL opensSubToolbar() throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getSubToolbarName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL functionSelected( const OUString& rCommand ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL updateImage() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL opensSubToolbar() override;
+    virtual OUString SAL_CALL getSubToolbarName() override;
+    virtual void SAL_CALL functionSelected( const OUString& rCommand ) override;
+    virtual void SAL_CALL updateImage() override;
 
     void setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);
 };
@@ -265,8 +262,7 @@ public:
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
-        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 };
 
 

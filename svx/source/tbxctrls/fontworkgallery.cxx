@@ -248,7 +248,7 @@ class FontworkAlignmentWindow : public ToolbarMenu
 public:
     FontworkAlignmentWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
 
-    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( RuntimeException ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
 private:
     svt::ToolboxController& mrController;
@@ -299,7 +299,7 @@ void FontworkAlignmentWindow::implSetAlignment( int nSurface, bool bEnabled )
     }
 }
 
-void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( RuntimeException )
+void FontworkAlignmentWindow::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
     if( Event.FeatureURL.Main.equals( msFontworkAlignment ) )
     {
@@ -342,12 +342,11 @@ public:
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     using  svt::PopupWindowController::createPopupWindow;
 };
@@ -366,7 +365,6 @@ VclPtr<vcl::Window> FontworkAlignmentControl::createPopupWindow( vcl::Window* pP
 
 // XInitialization
 void SAL_CALL FontworkAlignmentControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -385,26 +383,26 @@ OUString SAL_CALL FontworkAlignmentControl_getImplementationName()
 }
 
 
-Sequence< OUString > SAL_CALL FontworkAlignmentControl_getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > SAL_CALL FontworkAlignmentControl_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > SAL_CALL SAL_CALL FontworkAlignmentControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+Reference< XInterface > SAL_CALL SAL_CALL FontworkAlignmentControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
     return *new FontworkAlignmentControl( comphelper::getComponentContext(rSMgr) );
 }
 
 
-OUString SAL_CALL FontworkAlignmentControl::getImplementationName(  ) throw (RuntimeException, std::exception)
+OUString SAL_CALL FontworkAlignmentControl::getImplementationName(  )
 {
     return FontworkAlignmentControl_getImplementationName();
 }
 
 
-Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL FontworkAlignmentControl::getSupportedServiceNames(  )
 {
     return FontworkAlignmentControl_getSupportedServiceNames();
 }
@@ -414,7 +412,7 @@ class FontworkCharacterSpacingWindow : public ToolbarMenu
 public:
     FontworkCharacterSpacingWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
 
-    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 private:
     svt::ToolboxController& mrController;
 
@@ -483,7 +481,7 @@ void FontworkCharacterSpacingWindow::implSetKernCharacterPairs( bool, bool bEnab
 }
 
 
-void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException )
+void FontworkCharacterSpacingWindow::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
     if( Event.FeatureURL.Main.equals( msFontworkCharacterSpacing ) )
     {
@@ -568,12 +566,11 @@ public:
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     using svt::PopupWindowController::createPopupWindow;
 };
@@ -592,7 +589,6 @@ VclPtr<vcl::Window> FontworkCharacterSpacingControl::createPopupWindow( vcl::Win
 
 // XInitialization
 void SAL_CALL FontworkCharacterSpacingControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -611,26 +607,26 @@ OUString SAL_CALL FontworkCharacterSpacingControl_getImplementationName()
 }
 
 
-Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl_getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 
-Reference< XInterface > SAL_CALL SAL_CALL FontworkCharacterSpacingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr ) throw( RuntimeException )
+Reference< XInterface > SAL_CALL SAL_CALL FontworkCharacterSpacingControl_createInstance( const Reference< XMultiServiceFactory >& rSMgr )
 {
     return *new FontworkCharacterSpacingControl( comphelper::getComponentContext(rSMgr) );
 }
 
 
-OUString SAL_CALL FontworkCharacterSpacingControl::getImplementationName(  ) throw (RuntimeException, std::exception)
+OUString SAL_CALL FontworkCharacterSpacingControl::getImplementationName(  )
 {
     return FontworkCharacterSpacingControl_getImplementationName();
 }
 
 
-Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL FontworkCharacterSpacingControl::getSupportedServiceNames(  )
 {
     return FontworkCharacterSpacingControl_getSupportedServiceNames();
 }

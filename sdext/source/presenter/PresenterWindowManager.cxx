@@ -216,7 +216,6 @@ void PresenterWindowManager::SetPaneBorderPainter (
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterWindowManager::windowResized (const awt::WindowEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     if (rEvent.Source == mxParentWindow)
@@ -237,7 +236,6 @@ void SAL_CALL PresenterWindowManager::windowResized (const awt::WindowEvent& rEv
 }
 
 void SAL_CALL PresenterWindowManager::windowMoved (const awt::WindowEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     if (rEvent.Source != mxParentWindow)
@@ -251,13 +249,11 @@ void SAL_CALL PresenterWindowManager::windowMoved (const awt::WindowEvent& rEven
 }
 
 void SAL_CALL PresenterWindowManager::windowShown (const lang::EventObject& rEvent)
-    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
 
 void SAL_CALL PresenterWindowManager::windowHidden (const lang::EventObject& rEvent)
-    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
@@ -265,7 +261,6 @@ void SAL_CALL PresenterWindowManager::windowHidden (const lang::EventObject& rEv
 //----- XPaintListener --------------------------------------------------------
 
 void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -298,14 +293,12 @@ void SAL_CALL PresenterWindowManager::windowPaint (const awt::PaintEvent& rEvent
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterWindowManager::mousePressed (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     mbIsMouseClickPending = true;
 }
 
 void SAL_CALL PresenterWindowManager::mouseReleased (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     if (mbIsMouseClickPending)
     {
@@ -315,14 +308,12 @@ void SAL_CALL PresenterWindowManager::mouseReleased (const css::awt::MouseEvent&
 }
 
 void SAL_CALL PresenterWindowManager::mouseEntered (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     mbIsMouseClickPending = false;
 }
 
 void SAL_CALL PresenterWindowManager::mouseExited (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     mbIsMouseClickPending = false;
@@ -331,13 +322,11 @@ void SAL_CALL PresenterWindowManager::mouseExited (const css::awt::MouseEvent& r
 //----- XFocusListener --------------------------------------------------------
 
 void SAL_CALL PresenterWindowManager::focusGained (const css::awt::FocusEvent& /*rEvent*/)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 }
 
 void SAL_CALL PresenterWindowManager::focusLost (const css::awt::FocusEvent& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     (void)rEvent;
@@ -346,7 +335,6 @@ void SAL_CALL PresenterWindowManager::focusLost (const css::awt::FocusEvent& rEv
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL PresenterWindowManager::disposing (const lang::EventObject& rEvent)
-    throw (RuntimeException, std::exception)
 {
     if (rEvent.Source == mxParentWindow)
         mxParentWindow = nullptr;
@@ -1117,7 +1105,6 @@ void PresenterWindowManager::Update()
 }
 
 void PresenterWindowManager::ThrowIfDisposed() const
-    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

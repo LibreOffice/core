@@ -99,7 +99,7 @@ css::uno::Sequence< css::beans::Property > UnoPropertyArrayHelper::getProperties
     return aProps;
 }
 
-css::beans::Property UnoPropertyArrayHelper::getPropertyByName(const OUString& rPropertyName) throw (css::beans::UnknownPropertyException)
+css::beans::Property UnoPropertyArrayHelper::getPropertyByName(const OUString& rPropertyName)
 {
     css::beans::Property aProp;
     sal_uInt16 nId = GetPropertyId( rPropertyName );

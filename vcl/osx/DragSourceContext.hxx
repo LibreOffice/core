@@ -39,17 +39,13 @@ public:
   DragSourceContext(const DragSourceContext&) = delete;
   DragSourceContext& operator=(const DragSourceContext&) = delete;
 
-  virtual sal_Int32 SAL_CALL getCurrentCursor(  )
-    throw( css::uno::RuntimeException, std::exception) override;
+  virtual sal_Int32 SAL_CALL getCurrentCursor(  ) override;
 
-  virtual void SAL_CALL setCursor( sal_Int32 cursorId )
-    throw( css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL setCursor( sal_Int32 cursorId ) override;
 
-  virtual void SAL_CALL setImage( sal_Int32 imageId )
-    throw( css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL setImage( sal_Int32 imageId ) override;
 
-  virtual void SAL_CALL transferablesFlavorsChanged(  )
-    throw( css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL transferablesFlavorsChanged(  ) override;
 };
 
 #endif // INCLUDED_VCL_OSX_DRAGSOURCECONTEXT_HXX

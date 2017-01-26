@@ -55,15 +55,12 @@ public:
 
                                 // XNumberFormatsSupplier
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
-                                getNumberFormatSettings()
-                                    throw(css::uno::RuntimeException, std::exception) override;
+                                getNumberFormatSettings() override;
     virtual css::uno::Reference< css::util::XNumberFormats > SAL_CALL
-                                getNumberFormats()
-                                    throw(css::uno::RuntimeException, std::exception) override;
+                                getNumberFormats() override;
 
                                 // XUnoTunnel
-    virtual sal_Int64 SAL_CALL  getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
-                                        throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL  getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static SvNumberFormatsSupplierObj* getImplementation( const css::uno::Reference<

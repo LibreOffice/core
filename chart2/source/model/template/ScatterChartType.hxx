@@ -36,44 +36,34 @@ public:
     virtual ~ScatterChartType() override;
 
     virtual OUString SAL_CALL
-        getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getImplementationName() override;
     virtual sal_Bool SAL_CALL
-        supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getSupportedServiceNames() override;
 
 protected:
     explicit ScatterChartType( const ScatterChartType & rOther );
 
     // ____ XChartType ____
-    virtual OUString SAL_CALL getChartType()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getChartType() override;
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedMandatoryRoles()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedMandatoryRoles() override;
     virtual css::uno::Reference< css::chart2::XCoordinateSystem > SAL_CALL
-        createCoordinateSystem( ::sal_Int32 DimensionCount )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        createCoordinateSystem( ::sal_Int32 DimensionCount ) override;
 
     // ____ OPropertySet ____
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(css::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getPropertySetInfo() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 };
 
 } //  namespace chart

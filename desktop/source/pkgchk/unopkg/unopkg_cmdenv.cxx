@@ -64,7 +64,7 @@ class CommandEnvironmentImpl
     Reference< XProgressHandler > m_xLogFile;
 
     /// @throws RuntimeException
-    void update_( Any const & Status ) throw (RuntimeException);
+    void update_( Any const & Status );
     void printLicense(const OUString & sName,const OUString& sLicense,
                       bool & accept, bool & decline);
 
@@ -79,19 +79,17 @@ public:
 
     // XCommandEnvironment
     virtual Reference< task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (RuntimeException, std::exception) override;
-    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler()
-        throw (RuntimeException, std::exception) override;
+    getInteractionHandler() override;
+    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler() override;
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
-        Reference< task::XInteractionRequest > const & xRequest )
-        throw (RuntimeException, std::exception) override;
+        Reference< task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL pop() throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL push( Any const & Status ) override;
+    virtual void SAL_CALL update( Any const & Status ) override;
+    virtual void SAL_CALL pop() override;
 };
 
 
@@ -188,14 +186,13 @@ void CommandEnvironmentImpl::printLicense(
 // XCommandEnvironment
 
 Reference< task::XInteractionHandler >
-CommandEnvironmentImpl::getInteractionHandler() throw (RuntimeException, std::exception)
+CommandEnvironmentImpl::getInteractionHandler()
 {
     return this;
 }
 
 
 Reference< XProgressHandler > CommandEnvironmentImpl::getProgressHandler()
-    throw (RuntimeException, std::exception)
 {
     return this;
 }
@@ -204,7 +201,6 @@ Reference< XProgressHandler > CommandEnvironmentImpl::getProgressHandler()
 
 void CommandEnvironmentImpl::handle(
     Reference<task::XInteractionRequest> const & xRequest )
-    throw (RuntimeException, std::exception)
 {
     Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == TypeClass_EXCEPTION );
@@ -323,7 +319,6 @@ void CommandEnvironmentImpl::handle(
 // XProgressHandler
 
 void CommandEnvironmentImpl::push( Any const & Status )
-    throw (RuntimeException, std::exception)
 {
     update_( Status );
     OSL_ASSERT( m_logLevel >= 0 );
@@ -334,7 +329,6 @@ void CommandEnvironmentImpl::push( Any const & Status )
 
 
 void CommandEnvironmentImpl::update_( Any const & Status )
-    throw (RuntimeException)
 {
     if (! Status.hasValue())
         return;
@@ -376,7 +370,6 @@ void CommandEnvironmentImpl::update_( Any const & Status )
 
 
 void CommandEnvironmentImpl::update( Any const & Status )
-    throw (RuntimeException, std::exception)
 {
     update_( Status );
     if (m_xLogFile.is())
@@ -384,7 +377,7 @@ void CommandEnvironmentImpl::update( Any const & Status )
 }
 
 
-void CommandEnvironmentImpl::pop() throw (RuntimeException, std::exception)
+void CommandEnvironmentImpl::pop()
 {
     OSL_ASSERT( m_logLevel > 0 );
     --m_logLevel;

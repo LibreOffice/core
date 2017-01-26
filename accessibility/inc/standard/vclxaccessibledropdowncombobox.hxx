@@ -37,12 +37,10 @@ public:
     VCLXAccessibleDropDownComboBox (VCLXWindow* pVCLXindow);
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
     // Return drop down combo box specific services.
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedServiceNames() override;
 
 protected:
     virtual ~VCLXAccessibleDropDownComboBox() override;

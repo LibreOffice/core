@@ -31,7 +31,6 @@
 #endif
 
 bool JavaOptions::initOptions(int ac, char* av[], bool bCmdFile)
-    throw( IllegalArgument )
 {
     bool    ret = true;
     sal_uInt16  i=0;

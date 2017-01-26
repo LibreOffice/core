@@ -45,7 +45,7 @@ public:
     using SbxValue::GetObject;
     SbxVariable* GetObject();
     /// @throws css::uno::RuntimeException
-    void SetUnoObject( const css::uno::Any& aObj )throw ( css::uno::RuntimeException, std::exception ) ;
+    void SetUnoObject( const css::uno::Any& aObj ) ;
 };
 
 class FormObjEventListenerImpl;

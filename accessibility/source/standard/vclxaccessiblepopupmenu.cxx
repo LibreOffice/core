@@ -51,13 +51,13 @@ bool VCLXAccessiblePopupMenu::IsFocused()
 // XServiceInfo
 
 
-OUString VCLXAccessiblePopupMenu::getImplementationName() throw (RuntimeException, std::exception)
+OUString VCLXAccessiblePopupMenu::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessiblePopupMenu" );
 }
 
 
-Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessiblePopupMenu" };
 }
@@ -66,7 +66,7 @@ Sequence< OUString > VCLXAccessiblePopupMenu::getSupportedServiceNames() throw (
 // XAccessibleContext
 
 
-sal_Int32 VCLXAccessiblePopupMenu::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessiblePopupMenu::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -74,7 +74,7 @@ sal_Int32 VCLXAccessiblePopupMenu::getAccessibleIndexInParent(  ) throw (Runtime
 }
 
 
-sal_Int16 VCLXAccessiblePopupMenu::getAccessibleRole(  ) throw (RuntimeException, std::exception)
+sal_Int16 VCLXAccessiblePopupMenu::getAccessibleRole(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -85,7 +85,7 @@ sal_Int16 VCLXAccessiblePopupMenu::getAccessibleRole(  ) throw (RuntimeException
 // XAccessibleExtendedComponent
 
 
-sal_Int32 VCLXAccessiblePopupMenu::getBackground(  ) throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessiblePopupMenu::getBackground(  )
 {
     OExternalLockGuard aGuard( this );
 

@@ -97,39 +97,39 @@ namespace reportdesign
 
         // XContainer
         /// @throws css::uno::RuntimeException
-        void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
+        void addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener );
         /// @throws css::uno::RuntimeException
-        void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw (css::uno::RuntimeException);
+        void removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener );
 
         // XElementAccess
         /// @throws css::uno::RuntimeException
-        bool hasElements(  ) throw (css::uno::RuntimeException);
+        bool hasElements(  );
 
         // XIndexReplace
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::WrappedTargetException
         /// @throws css::uno::RuntimeException
-        void replaceByIndex( ::sal_Int32 Index, const css::uno::Any& Element ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+        void replaceByIndex( ::sal_Int32 Index, const css::uno::Any& Element );
 
         // XIndexContainer
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::WrappedTargetException
         /// @throws css::uno::RuntimeException
-        void insertByIndex( ::sal_Int32 Index, const css::uno::Any& Element ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+        void insertByIndex( ::sal_Int32 Index, const css::uno::Any& Element );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::WrappedTargetException
         /// @throws css::uno::RuntimeException
-        void removeByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+        void removeByIndex( ::sal_Int32 Index );
 
         // XIndexAccess
         /// @throws css::uno::RuntimeException
-        ::sal_Int32 getCount(  ) throw (css::uno::RuntimeException);
+        ::sal_Int32 getCount(  );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::lang::WrappedTargetException
         /// @throws css::uno::RuntimeException
-        css::uno::Any getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+        css::uno::Any getByIndex( ::sal_Int32 Index );
 
         static bool isInterfaceForbidden(const css::uno::Type& _rType);
     };

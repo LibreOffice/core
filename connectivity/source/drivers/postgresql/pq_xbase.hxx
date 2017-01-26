@@ -85,8 +85,7 @@ public: //XInterface
     virtual void SAL_CALL acquire() throw() override { ReflectionBase_BASE::acquire(); }
     virtual void SAL_CALL release() throw() override { ReflectionBase_BASE::release(); }
     virtual css::uno::Any  SAL_CALL queryInterface(
-        const css::uno::Type & reqType )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Type & reqType ) override;
 
 public: // OPropertySetHelper
     virtual cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
@@ -95,13 +94,11 @@ public: // OPropertySetHelper
         css::uno::Any & rConvertedValue,
         css::uno::Any & rOldValue,
         sal_Int32 nHandle,
-        const css::uno::Any& rValue )
-        throw (css::lang::IllegalArgumentException) override;
+        const css::uno::Any& rValue ) override;
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
-        const css::uno::Any& rValue )
-        throw (css::uno::Exception, std::exception) override;
+        const css::uno::Any& rValue ) override;
 
     using ::cppu::OPropertySetHelper::getFastPropertyValue;
 
@@ -110,30 +107,24 @@ public: // OPropertySetHelper
         sal_Int32 nHandle ) const override;
 
     // XPropertySet
-    css::uno::Reference < css::beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo()
-        throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference < css::beans::XPropertySetInfo >  SAL_CALL getPropertySetInfo() override;
 
 public: // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 public: // XTypeProvider, first implemented by OPropertySetHelper
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual css::uno::Sequence< sal_Int8> SAL_CALL getImplementationId() override;
 
 public: // XDataDescriptorFactory
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+    createDataDescriptor(  ) override = 0;
 
 public: // XNamed
-    virtual OUString SAL_CALL getName(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName(  ) override;
+    virtual void SAL_CALL setName( const OUString& aName ) override;
 
 };
 

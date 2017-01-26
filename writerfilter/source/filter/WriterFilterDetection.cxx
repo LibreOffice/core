@@ -37,20 +37,20 @@ public:
     explicit WriterFilterDetection();
 
     //XExtendedFilterDetection
-    OUString SAL_CALL detect(uno::Sequence<beans::PropertyValue>& Descriptor) throw (uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL detect(uno::Sequence<beans::PropertyValue>& Descriptor) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 /// @throws uno::RuntimeException
-uno::Sequence<OUString> SAL_CALL WriterFilterDetection_getSupportedServiceNames() throw (uno::RuntimeException);
+uno::Sequence<OUString> SAL_CALL WriterFilterDetection_getSupportedServiceNames();
 
 WriterFilterDetection::WriterFilterDetection() = default;
 
-OUString WriterFilterDetection::detect(uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception)
+OUString WriterFilterDetection::detect(uno::Sequence<beans::PropertyValue>& rDescriptor)
 {
     OUString sTypeName;
     bool bWord = false;
@@ -102,7 +102,7 @@ OUString WriterFilterDetection::detect(uno::Sequence<beans::PropertyValue>& rDes
     return sTypeName;
 }
 
-uno::Sequence<OUString> WriterFilterDetection_getSupportedServiceNames() throw (uno::RuntimeException)
+uno::Sequence<OUString> WriterFilterDetection_getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet =
     {
@@ -111,17 +111,17 @@ uno::Sequence<OUString> WriterFilterDetection_getSupportedServiceNames() throw (
     return aRet;
 }
 
-OUString WriterFilterDetection::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString WriterFilterDetection::getImplementationName()
 {
     return OUString("com.sun.star.comp.Writer.WriterFilterDetector");
 }
 
-sal_Bool WriterFilterDetection::supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception)
+sal_Bool WriterFilterDetection::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> WriterFilterDetection::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence<OUString> WriterFilterDetection::getSupportedServiceNames()
 {
     return WriterFilterDetection_getSupportedServiceNames();
 }

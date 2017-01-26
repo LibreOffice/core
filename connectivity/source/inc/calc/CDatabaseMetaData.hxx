@@ -33,14 +33,14 @@ namespace connectivity
         class OCalcDatabaseMetaData :   public file::ODatabaseMetaData
         {
             virtual css::uno::Reference< css::sdbc::XResultSet > impl_getTypeInfo_throw() override;
-            virtual OUString SAL_CALL getURL(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMaxBinaryLiteralLength(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMaxCharLiteralLength(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMaxColumnNameLength(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMaxColumnsInIndex(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMaxColumnsInTable(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual OUString SAL_CALL getURL(  ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const OUString& columnNamePattern ) override;
+            virtual sal_Int32 SAL_CALL getMaxBinaryLiteralLength(  ) override;
+            virtual sal_Int32 SAL_CALL getMaxCharLiteralLength(  ) override;
+            virtual sal_Int32 SAL_CALL getMaxColumnNameLength(  ) override;
+            virtual sal_Int32 SAL_CALL getMaxColumnsInIndex(  ) override;
+            virtual sal_Int32 SAL_CALL getMaxColumnsInTable(  ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTables( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern, const css::uno::Sequence< OUString >& types ) override;
         protected:
             virtual ~OCalcDatabaseMetaData() override;
         public:

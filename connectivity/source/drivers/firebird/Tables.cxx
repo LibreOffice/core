@@ -36,7 +36,6 @@ using namespace ::com::sun::star::uno;
 
 //----- OCollection -----------------------------------------------------------
 void Tables::impl_refresh()
-    throw(RuntimeException)
 {
     static_cast<Catalog&>(m_rParent).refreshTables();
 }

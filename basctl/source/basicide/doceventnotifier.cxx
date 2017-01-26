@@ -73,10 +73,10 @@ namespace basctl
         virtual ~Impl () override;
 
         // XDocumentEventListener
-        virtual void SAL_CALL documentEventOccured( const DocumentEvent& Event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL documentEventOccured( const DocumentEvent& Event ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const csslang::EventObject& Event ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const csslang::EventObject& Event ) override;
 
         // ComponentHelper
         virtual void SAL_CALL disposing() override;
@@ -115,7 +115,7 @@ namespace basctl
         }
     }
 
-    void SAL_CALL DocumentEventNotifier::Impl::documentEventOccured( const DocumentEvent& _rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL DocumentEventNotifier::Impl::documentEventOccured( const DocumentEvent& _rEvent )
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -168,7 +168,7 @@ namespace basctl
         }
     }
 
-    void SAL_CALL DocumentEventNotifier::Impl::disposing( const csslang::EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL DocumentEventNotifier::Impl::disposing( const csslang::EventObject& /*Event*/ )
     {
         SolarMutexGuard aSolarGuard;
         ::osl::MutexGuard aGuard( m_aMutex );

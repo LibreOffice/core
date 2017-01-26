@@ -26,14 +26,14 @@ using namespace connectivity::sdbcx;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 
-OUString SAL_CALL OIndexColumn::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OIndexColumn::getImplementationName(  )
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VIndexColumnDescription");
     return OUString("com.sun.star.sdbcx.VIndex");
 }
 
-css::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames(  )
 {
     css::uno::Sequence< OUString > aSupported(1);
     if(isNew())
@@ -44,7 +44,7 @@ css::uno::Sequence< OUString > SAL_CALL OIndexColumn::getSupportedServiceNames( 
     return aSupported;
 }
 
-sal_Bool SAL_CALL OIndexColumn::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OIndexColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

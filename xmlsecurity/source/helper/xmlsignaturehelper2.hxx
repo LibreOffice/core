@@ -68,37 +68,27 @@ public:
     void setNextHandler(const css::uno::Reference< css::xml::sax::XDocumentHandler >& xNextHandler);
 
     // css::xml::crypto::sax::XSignatureCreationResultListener
-    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus creationResult )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus creationResult ) override;
 
     // css::xml::crypto::sax::XSignatureVerifyResultListener
-    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus verifyResult )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus verifyResult ) override;
 
     // css::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
 
-    virtual void SAL_CALL startDocument(  )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startDocument(  ) override;
 
-    virtual void SAL_CALL endDocument(  )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endDocument(  ) override;
 
-    virtual void SAL_CALL endElement( const OUString& aName )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endElement( const OUString& aName ) override;
 
-    virtual void SAL_CALL characters( const OUString& aChars )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
 
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
 
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
 
-    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 };
 
 // XUriBinding
@@ -112,11 +102,9 @@ public:
     UriBindingHelper();
     explicit UriBindingHelper( const css::uno::Reference < css::embed::XStorage >& rxStorage );
 
-    void SAL_CALL setUriBinding( const OUString& uri, const css::uno::Reference< css::io::XInputStream >& aInputStream )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setUriBinding( const OUString& uri, const css::uno::Reference< css::io::XInputStream >& aInputStream ) override;
 
-    css::uno::Reference< css::io::XInputStream > SAL_CALL getUriBinding( const OUString& uri )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::io::XInputStream > SAL_CALL getUriBinding( const OUString& uri ) override;
 
     static css::uno::Reference < css::io::XInputStream > OpenInputStream( const css::uno::Reference < css::embed::XStorage >& rxStore, const OUString& rURI );
 };

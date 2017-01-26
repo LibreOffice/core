@@ -65,7 +65,7 @@ sdbcx::ObjectType ODbaseIndexColumns::createObject(const OUString& _rName)
 }
 
 
-void ODbaseIndexColumns::impl_refresh() throw(RuntimeException)
+void ODbaseIndexColumns::impl_refresh()
 {
     m_pIndex->refreshColumns();
 }

@@ -74,47 +74,36 @@ class OTextInputStream : public WeakImplHelper< XTextInputStream2, XServiceInfo 
     /// @throws IOException
     /// @throws RuntimeException
     OUString implReadString( const Sequence< sal_Unicode >& Delimiters,
-        bool bRemoveDelimiter, bool bFindLineEnd )
-            throw(IOException, RuntimeException);
+        bool bRemoveDelimiter, bool bFindLineEnd );
     /// @throws IOException
     /// @throws RuntimeException
-    sal_Int32 implReadNext() throw(IOException, RuntimeException);
+    sal_Int32 implReadNext();
 
 public:
     OTextInputStream();
     virtual ~OTextInputStream() override;
 
     // Methods XTextInputStream
-    virtual OUString SAL_CALL readLine(  )
-        throw(IOException, RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter )
-        throw(IOException, RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isEOF(  )
-        throw(IOException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEncoding( const OUString& Encoding ) throw(RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL readLine(  ) override;
+    virtual OUString SAL_CALL readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter ) override;
+    virtual sal_Bool SAL_CALL isEOF(  ) override;
+    virtual void SAL_CALL setEncoding( const OUString& Encoding ) override;
 
     // Methods XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL available(  )
-        throw(NotConnectedException, IOException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL closeInput(  )
-        throw(NotConnectedException, IOException, RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
+    virtual sal_Int32 SAL_CALL available(  ) override;
+    virtual void SAL_CALL closeInput(  ) override;
 
     // Methods XActiveDataSink
-    virtual void SAL_CALL setInputStream( const Reference< XInputStream >& aStream )
-        throw(RuntimeException, std::exception) override;
-    virtual Reference< XInputStream > SAL_CALL getInputStream()
-        throw(RuntimeException, std::exception) override;
+    virtual void SAL_CALL setInputStream( const Reference< XInputStream >& aStream ) override;
+    virtual Reference< XInputStream > SAL_CALL getInputStream() override;
 
     // Methods XServiceInfo
-        virtual OUString              SAL_CALL getImplementationName() throw(std::exception) override;
-        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) override;
-        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) override;
+        virtual OUString              SAL_CALL getImplementationName() override;
+        virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
+        virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
 };
 
 OTextInputStream::OTextInputStream()
@@ -154,20 +143,17 @@ void OTextInputStream::implResizeBuffer()
 // XTextInputStream
 
 OUString OTextInputStream::readLine(  )
-    throw(IOException, RuntimeException, std::exception)
 {
     static Sequence< sal_Unicode > aDummySeq;
     return implReadString( aDummySeq, true, true );
 }
 
 OUString OTextInputStream::readString( const Sequence< sal_Unicode >& Delimiters, sal_Bool bRemoveDelimiter )
-        throw(IOException, RuntimeException, std::exception)
 {
     return implReadString( Delimiters, bRemoveDelimiter, false );
 }
 
 sal_Bool OTextInputStream::isEOF()
-    throw(IOException, RuntimeException, std::exception)
 {
     bool bRet = false;
     if( mnCharsInBuffer == 0 && mbReachedEOF )
@@ -178,7 +164,6 @@ sal_Bool OTextInputStream::isEOF()
 
 OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimiters,
                                            bool bRemoveDelimiter, bool bFindLineEnd )
-        throw(IOException, RuntimeException)
 {
     OUString aRetStr;
     if( !mbEncodingInitialized )
@@ -283,7 +268,6 @@ OUString OTextInputStream::implReadString( const Sequence< sal_Unicode >& Delimi
 
 
 sal_Int32 OTextInputStream::implReadNext()
-        throw(IOException, RuntimeException)
 {
     sal_Int32 nFreeBufferSize = mnBufferSize - mnCharsInBuffer;
     if( nFreeBufferSize < READ_BYTE_COUNT )
@@ -370,7 +354,6 @@ sal_Int32 OTextInputStream::implReadNext()
 }
 
 void OTextInputStream::setEncoding( const OUString& Encoding )
-    throw(RuntimeException, std::exception)
 {
     OString aOEncodingStr = OUStringToOString( Encoding, RTL_TEXTENCODING_ASCII_US );
     rtl_TextEncoding encoding = rtl_getTextEncodingFromMimeCharset( aOEncodingStr.getStr() );
@@ -387,31 +370,26 @@ void OTextInputStream::setEncoding( const OUString& Encoding )
 // XInputStream
 
 sal_Int32 OTextInputStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     return mxStream->readBytes( aData, nBytesToRead );
 }
 
 sal_Int32 OTextInputStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
-    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     return mxStream->readSomeBytes( aData, nMaxBytesToRead );
 }
 
 void OTextInputStream::skipBytes( sal_Int32 nBytesToSkip )
-    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
 {
     mxStream->skipBytes( nBytesToSkip );
 }
 
 sal_Int32 OTextInputStream::available(  )
-    throw(NotConnectedException, IOException, RuntimeException, std::exception)
 {
     return mxStream->available();
 }
 
 void OTextInputStream::closeInput(  )
-    throw(NotConnectedException, IOException, RuntimeException, std::exception)
 {
     mxStream->closeInput();
 }
@@ -420,13 +398,11 @@ void OTextInputStream::closeInput(  )
 // XActiveDataSink
 
 void OTextInputStream::setInputStream( const Reference< XInputStream >& aStream )
-    throw(RuntimeException, std::exception)
 {
     mxStream = aStream;
 }
 
 Reference< XInputStream > OTextInputStream::getInputStream()
-    throw(RuntimeException, std::exception)
 {
     return mxStream;
 }
@@ -449,17 +425,17 @@ Sequence< OUString > TextInputStream_getSupportedServiceNames()
     return seqNames;
 }
 
-OUString OTextInputStream::getImplementationName() throw(std::exception)
+OUString OTextInputStream::getImplementationName()
 {
     return TextInputStream_getImplementationName();
 }
 
-sal_Bool OTextInputStream::supportsService(const OUString& ServiceName) throw(std::exception)
+sal_Bool OTextInputStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > OTextInputStream::getSupportedServiceNames() throw(std::exception)
+Sequence< OUString > OTextInputStream::getSupportedServiceNames()
 {
     return TextInputStream_getSupportedServiceNames();
 }

@@ -108,7 +108,6 @@ void SAL_CALL AccessibleBrowseBox::disposing()
 // css::accessibility::XAccessibleContext
 
 sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
-    throw ( uno::RuntimeException, std::exception )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -119,7 +118,6 @@ sal_Int32 SAL_CALL AccessibleBrowseBox::getAccessibleChildCount()
 
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
-    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -147,7 +145,6 @@ AccessibleBrowseBox::getAccessibleChild( sal_Int32 nChildIndex )
 
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
-    throw ( uno::RuntimeException, std::exception )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -177,7 +174,6 @@ AccessibleBrowseBox::getAccessibleAtPoint( const awt::Point& rPoint )
 
 
 void SAL_CALL AccessibleBrowseBox::grabFocus()
-    throw ( uno::RuntimeException, std::exception )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -188,7 +184,6 @@ void SAL_CALL AccessibleBrowseBox::grabFocus()
 // XServiceInfo
 
 OUString SAL_CALL AccessibleBrowseBox::getImplementationName()
-    throw ( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBox" );
 }
@@ -318,7 +313,7 @@ void AccessibleBrowseBoxAccess::dispose()
 }
 
 
-css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibleContext() throw ( RuntimeException, std::exception )
+css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleBrowseBoxAccess::getAccessibleContext()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

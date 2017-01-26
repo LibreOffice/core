@@ -71,7 +71,7 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface(
         const css::uno::Type& aType
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -93,66 +93,60 @@ public:
 
     //  XTypeProvider
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     //  XAggregation
 
     css::uno::Any SAL_CALL queryAggregation(
         const css::uno::Type& aType
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     //  XControl
 
     virtual void SAL_CALL createPeer(
         const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
         const css::uno::Reference< css::awt::XWindowPeer >&   xParent
-    ) throw ( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     virtual sal_Bool SAL_CALL setModel(
         const css::uno::Reference< css::awt::XControlModel >& xModel
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
 
     //  XComponent
 
-    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispose() override;
 
     //  XView
 
     virtual sal_Bool SAL_CALL setGraphics(
         const css::uno::Reference< css::awt::XGraphics >& xDevice
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
-    virtual css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XGraphics > SAL_CALL getGraphics() override;
 
     //  XConnectionPointContainer
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getConnectionPointTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getConnectionPointTypes() override;
 
     virtual css::uno::Reference< css::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
         const css::uno::Type& aType
-    ) throw ( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     virtual void SAL_CALL advise(
         const css::uno::Type&                                aType       ,
         const css::uno::Reference< css::uno::XInterface >&    xListener
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     virtual void SAL_CALL unadvise(
         const css::uno::Type&                                aType ,
         const css::uno::Reference< css::uno::XInterface >&    xListener
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     //  impl but public methods to register service!
 
@@ -172,12 +166,12 @@ protected:
         css::uno::Any&       rOldValue         ,
         sal_Int32           nHandle           ,
         const css::uno::Any& rValue
-    ) throw( css::lang::IllegalArgumentException ) override;
+    ) override;
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle ,
         const css::uno::Any& rValue
-    ) throw ( css::uno::Exception, std::exception ) override;
+    ) override;
 
     virtual void SAL_CALL getFastPropertyValue( css::uno::Any&   rValue  ,
                                                 sal_Int32       nHandle ) const override;
@@ -186,8 +180,7 @@ protected:
 
     //  XPropertySet
 
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
     //  BaseControl
 

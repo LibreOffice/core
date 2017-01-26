@@ -57,17 +57,13 @@ public:
     // XInitialization
 
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence<css::uno::Any>& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XDispatchProvider
 
@@ -75,20 +71,18 @@ public:
         queryDispatch (
             const css::util::URL& aURL,
             const OUString& aTargetFrameName,
-            sal_Int32 nSearchFlags )
-        throw(css::uno::RuntimeException, std::exception) override;
+            sal_Int32 nSearchFlags ) override;
 
     virtual css::uno::Sequence<css::uno::Reference<css::frame::XDispatch> > SAL_CALL
         queryDispatches(
-            const css::uno::Sequence< css::frame::DispatchDescriptor>& rDescriptors)
-        throw(css::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< css::frame::DispatchDescriptor>& rDescriptors) override;
 
 private:
     class Dispatch;
     ::rtl::Reference<PresenterController> mpPresenterController;
 
     /// @throws css::lang::DisposedException
-    void ThrowIfDisposed() const throw (css::lang::DisposedException);
+    void ThrowIfDisposed() const;
 };
 
 } }

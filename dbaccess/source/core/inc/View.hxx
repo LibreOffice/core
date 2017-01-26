@@ -51,7 +51,7 @@ namespace dbaccess
         DECLARE_XTYPEPROVIDER()
 
         // XAlterView
-        virtual void SAL_CALL alterCommand( const OUString& NewCommand ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL alterCommand( const OUString& NewCommand ) override;
 
     protected:
         virtual ~View() override;

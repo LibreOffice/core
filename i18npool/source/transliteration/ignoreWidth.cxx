@@ -30,7 +30,6 @@ namespace com { namespace sun { namespace star { namespace i18n {
 
 OUString SAL_CALL
 ignoreWidth::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException, std::exception)
 {
     rtl::Reference< fullwidthToHalfwidth > t1(new fullwidthToHalfwidth);
     return t1->transliterate(inStr, startPos, nCount, offset);
@@ -38,7 +37,6 @@ ignoreWidth::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCoun
 
 Sequence< OUString > SAL_CALL
 ignoreWidth::transliterateRange( const OUString& str1, const OUString& str2 )
-  throw(RuntimeException, std::exception)
 {
     rtl::Reference< fullwidthToHalfwidth > t1(new fullwidthToHalfwidth);
     rtl::Reference< halfwidthToFullwidth > t2(new halfwidthToFullwidth);
@@ -47,7 +45,7 @@ ignoreWidth::transliterateRange( const OUString& str1, const OUString& str2 )
 }
 
 sal_Unicode SAL_CALL
-ignoreWidth::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException, std::exception)
+ignoreWidth::transliterateChar2Char( sal_Unicode inChar)
 {
     rtl::Reference< fullwidthToHalfwidth > t1(new fullwidthToHalfwidth);
     return t1->transliterateChar2Char(inChar);

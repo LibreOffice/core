@@ -94,7 +94,6 @@ CWinFileOpenImpl::~CWinFileOpenImpl()
 // we expect the directory in URL format
 
 void CWinFileOpenImpl::setDisplayDirectory(const OUString& aDirectory)
-    throw( IllegalArgumentException, uno::RuntimeException )
 {
     OUString aSysDirectory;
     if( aDirectory.getLength() > 0)
@@ -121,13 +120,12 @@ void CWinFileOpenImpl::setDisplayDirectory(const OUString& aDirectory)
 
 // we return the directory in URL format
 
-OUString CWinFileOpenImpl::getDisplayDirectory() throw(uno::RuntimeException)
+OUString CWinFileOpenImpl::getDisplayDirectory()
 {
     return m_FilePickerState->getDisplayDirectory(this);
 }
 
 void SAL_CALL CWinFileOpenImpl::setDefaultName(const OUString& aName)
-    throw( IllegalArgumentException, uno::RuntimeException )
 {
     // we don't set the default name directly
     // because this influences how the file open
@@ -146,14 +144,13 @@ void SAL_CALL CWinFileOpenImpl::setDefaultName(const OUString& aName)
 //    the first entry is the path url, all other entries are file names
 
 uno::Sequence<OUString> SAL_CALL CWinFileOpenImpl::getFiles()
-    throw(uno::RuntimeException)
 {
     return m_FilePickerState->getFiles(this);
 }
 
 // shows the FileOpen/FileSave dialog
 
-sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
+sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  )
 {
     sal_Int16 rc = CFileOpenDialog::doModal();
 
@@ -174,7 +171,6 @@ sal_Int16 SAL_CALL CWinFileOpenImpl::execute(  ) throw(uno::RuntimeException)
 // empty
 
 void SAL_CALL CWinFileOpenImpl::appendFilter(const OUString& aTitle, const OUString& aFilter)
-    throw(IllegalArgumentException, uno::RuntimeException)
 {
     bool bRet = m_filterContainer->addFilter(aTitle, aFilter);
 
@@ -197,7 +193,6 @@ void SAL_CALL CWinFileOpenImpl::appendFilter(const OUString& aTitle, const OUStr
 // sets a current filter
 
 void SAL_CALL CWinFileOpenImpl::setCurrentFilter(const OUString& aTitle)
-    throw( IllegalArgumentException, uno::RuntimeException)
 {
     sal_Int32 filterPos = m_filterContainer->getFilterPos(aTitle);
 
@@ -212,7 +207,7 @@ void SAL_CALL CWinFileOpenImpl::setCurrentFilter(const OUString& aTitle)
 
 // returns the currently selected filter
 
-OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter() throw(uno::RuntimeException)
+OUString SAL_CALL CWinFileOpenImpl::getCurrentFilter()
 {
     sal_uInt32 nIndex = getSelectedFilterIndex();
 
@@ -236,7 +231,6 @@ inline void SAL_CALL CWinFileOpenImpl::appendFilterGroupSeparator()
 // XFilterGroupManager
 
 void SAL_CALL CWinFileOpenImpl::appendFilterGroup(const OUString& sGroupTitle, const uno::Sequence<beans::StringPair>& aFilters)
-    throw (IllegalArgumentException, uno::RuntimeException)
 {
     (void) sGroupTitle; // avoid warning
     OSL_ENSURE(0 == sGroupTitle.getLength(), "appendFilterGroup: Parameter 'GroupTitle' currently ignored");
@@ -272,7 +266,6 @@ static bool filterControlCommand( sal_Int16 nControlId )
 }
 
 void SAL_CALL CWinFileOpenImpl::setValue(sal_Int16 aControlId, sal_Int16 aControlAction, const uno::Any& aValue)
-    throw(uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
     if ( !filterControlCommand( aControlId ))
@@ -283,7 +276,6 @@ void SAL_CALL CWinFileOpenImpl::setValue(sal_Int16 aControlId, sal_Int16 aContro
 // we assume that there are only checkboxes or comboboxes
 
 uno::Any SAL_CALL CWinFileOpenImpl::getValue(sal_Int16 aControlId, sal_Int16 aControlAction)
-    throw(uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
     if ( !filterControlCommand( aControlId ))
@@ -295,7 +287,6 @@ uno::Any SAL_CALL CWinFileOpenImpl::getValue(sal_Int16 aControlId, sal_Int16 aCo
 // enables a custom template element
 
 void SAL_CALL CWinFileOpenImpl::enableControl(sal_Int16 ControlID, bool bEnable)
-    throw(uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
     if ( !filterControlCommand( ControlID ))
@@ -303,7 +294,6 @@ void SAL_CALL CWinFileOpenImpl::enableControl(sal_Int16 ControlID, bool bEnable)
 }
 
 void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const OUString& aLabel )
-    throw (uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
     if ( !filterControlCommand( aControlId ))
@@ -311,7 +301,6 @@ void SAL_CALL CWinFileOpenImpl::setLabel( sal_Int16 aControlId, const OUString& 
 }
 
 OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
-        throw (uno::RuntimeException)
 {
     OSL_ASSERT(m_FilePickerState);
     if ( !filterControlCommand( aControlId ))
@@ -321,43 +310,36 @@ OUString SAL_CALL CWinFileOpenImpl::getLabel( sal_Int16 aControlId )
 }
 
 uno::Sequence<sal_Int16> SAL_CALL CWinFileOpenImpl::getSupportedImageFormats()
-    throw (uno::RuntimeException)
 {
     return CPreviewAdapter::getSupportedImageFormats();
 }
 
 sal_Int32 SAL_CALL CWinFileOpenImpl::getTargetColorDepth()
-    throw (uno::RuntimeException)
 {
     return m_Preview->getTargetColorDepth();
 }
 
 sal_Int32 SAL_CALL CWinFileOpenImpl::getAvailableWidth()
-        throw (uno::RuntimeException)
 {
     return m_Preview->getAvailableWidth();
 }
 
 sal_Int32 SAL_CALL CWinFileOpenImpl::getAvailableHeight()
-    throw (uno::RuntimeException)
 {
     return m_Preview->getAvailableHeight();
 }
 
 void SAL_CALL CWinFileOpenImpl::setImage(sal_Int16 aImageFormat, const uno::Any& aImage)
-    throw (IllegalArgumentException, uno::RuntimeException)
 {
     m_Preview->setImage(aImageFormat,aImage);
 }
 
 bool SAL_CALL CWinFileOpenImpl::setShowState(bool bShowState)
-        throw (uno::RuntimeException)
 {
     return m_Preview->setShowState(bShowState);
 }
 
 bool SAL_CALL CWinFileOpenImpl::getShowState()
-    throw (uno::RuntimeException)
 {
     return m_Preview->getShowState();
 }

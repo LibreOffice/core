@@ -1810,7 +1810,6 @@ OOo2OasisTransformer::~OOo2OasisTransformer() throw()
 }
 
 Any OOo2OasisTransformer::queryInterface( const Type& rType )
-    throw (RuntimeException, std::exception)
 {
     Any aRet;
     if ( rType == cppu::UnoType<XImporter>::get())
@@ -1834,7 +1833,6 @@ Any OOo2OasisTransformer::queryInterface( const Type& rType )
 // XImporter
 void SAL_CALL OOo2OasisTransformer::setTargetDocument(
         const Reference< XComponent >& xDoc )
-    throw( IllegalArgumentException, RuntimeException, std::exception)
 {
     if( !GetDocHandler().is() )
     {
@@ -1855,7 +1853,6 @@ void SAL_CALL OOo2OasisTransformer::setTargetDocument(
 // XFilter
 sal_Bool SAL_CALL OOo2OasisTransformer::filter(
         const Sequence< PropertyValue >& aDescriptor )
-    throw ( RuntimeException, std::exception)
 {
     Reference< XFilter> xFilter( GetDocHandler(), UNO_QUERY );
     OSL_ENSURE( xFilter.is(), "doc handler is not a filter" );
@@ -1866,7 +1863,6 @@ sal_Bool SAL_CALL OOo2OasisTransformer::filter(
 }
 
 void SAL_CALL OOo2OasisTransformer::cancel(  )
-    throw ( RuntimeException, std::exception)
 {
     Reference< XFilter> xFilter( GetDocHandler(), UNO_QUERY );
     OSL_ENSURE( xFilter.is(), "doc handler is not a filter" );
@@ -1877,13 +1873,11 @@ void SAL_CALL OOo2OasisTransformer::cancel(  )
 // XInitialize
 void SAL_CALL OOo2OasisTransformer::initialize(
                 const Sequence< Any >& rArguments )
-    throw( Exception, RuntimeException, std::exception )
 {
     Initialize( rArguments );
 }
 
 void SAL_CALL OOo2OasisTransformer::startDocument()
-    throw( SAXException, RuntimeException, std::exception )
 {
     if( !GetDocHandler().is() )
     {
@@ -1898,7 +1892,6 @@ void SAL_CALL OOo2OasisTransformer::startDocument()
 
 void SAL_CALL OOo2OasisTransformer::Initialize(
                 const Sequence< Any >& rArguments )
-    throw( Exception, RuntimeException )
 {
     OSL_ENSURE( !GetDocHandler().is(), "duplication initialization" );
 
@@ -1944,7 +1937,6 @@ namespace
 
 // XUnoTunnel
 sal_Int64 SAL_CALL OOo2OasisTransformer::getSomething( const Sequence< sal_Int8 >& rId )
-    throw(RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( theOOo2OasisTransformerUnoTunnelId::get().getSeq().getConstArray(),
@@ -1960,19 +1952,16 @@ sal_Int64 SAL_CALL OOo2OasisTransformer::getSomething( const Sequence< sal_Int8 
 
 // XServiceInfo
 OUString SAL_CALL OOo2OasisTransformer::getImplementationName()
-    throw(RuntimeException, std::exception)
 {
     return m_aImplName;
 }
 
 sal_Bool SAL_CALL OOo2OasisTransformer::supportsService( const OUString& ServiceName )
-    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL OOo2OasisTransformer::getSupportedServiceNames(  )
-    throw(RuntimeException, std::exception)
 {
     Sequence<OUString> aSeq(0);
     return aSeq;
@@ -1980,7 +1969,7 @@ Sequence< OUString > SAL_CALL OOo2OasisTransformer::getSupportedServiceNames(  )
 
 // XTypeProvider
 Sequence< css::uno::Type > SAL_CALL
-    OOo2OasisTransformer::getTypes() throw(RuntimeException, std::exception)
+    OOo2OasisTransformer::getTypes()
 {
     Sequence< css::uno::Type > aTypes( XMLTransformerBase::getTypes() );
 
@@ -2010,7 +1999,6 @@ Sequence< OUString > SAL_CALL OOo2OasisTransformer_getSupportedServiceNames() th
 
 Reference< XInterface > SAL_CALL OOo2OasisTransformer_createInstance(
         const Reference< XMultiServiceFactory > & )
-    throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer());
 }
@@ -2030,7 +2018,6 @@ Sequence< OUString > SAL_CALL className##_getSupportedServiceNames() throw()\
                                                                         \
 Reference< XInterface > SAL_CALL className##_createInstance(            \
         const Reference< XMultiServiceFactory > & )                     \
-    throw( Exception )                                                  \
 {                                                                       \
     return static_cast<cppu::OWeakObject*>(new OOo2OasisTransformer( implName,      \
                                          subServiceName ));              \

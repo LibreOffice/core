@@ -154,7 +154,7 @@ Reference< XResultSet > ODbaseDatabaseMetaData::impl_getTypeInfo_throw(  )
 
 Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
-        const OUString& columnNamePattern ) throw(SQLException, RuntimeException, std::exception)
+        const OUString& columnNamePattern )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -254,7 +254,7 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getColumns(
 
 Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     const Any& /*catalog*/, const OUString& /*schema*/, const OUString& table,
-        sal_Bool unique, sal_Bool /*approximate*/ ) throw(SQLException, RuntimeException, std::exception)
+        sal_Bool unique, sal_Bool /*approximate*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -328,48 +328,48 @@ Reference< XResultSet > SAL_CALL ODbaseDatabaseMetaData::getIndexInfo(
     return xRef;
 }
 
-OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL ODbaseDatabaseMetaData::getURL(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return "sdbc:dbase:" + m_pConnection->getURL();
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxBinaryLiteralLength(  )
 {
     return SAL_MAX_INT32;
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxCharLiteralLength(  )
 {
     return 254;
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnNameLength(  )
 {
     return 10;
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInIndex(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL ODbaseDatabaseMetaData::getMaxColumnsInTable(  )
 {
     return 128;
 }
 
-sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithAddColumn(  )
 {
     return true;
 }
 
-sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODbaseDatabaseMetaData::supportsAlterTableWithDropColumn(  )
 {
     return false;
 }
 
-sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODbaseDatabaseMetaData::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

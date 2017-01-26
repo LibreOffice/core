@@ -36,31 +36,31 @@ public:
     /// @throws css::uno::RuntimeException
     ScVbaHyperlink(
         const css::uno::Sequence< css::uno::Any >& rArgs,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     /// @throws css::uno::RuntimeException
     ScVbaHyperlink(
         const css::uno::Reference< ov::XHelperInterface >& rxAnchor,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
         const css::uno::Any& rAddress, const css::uno::Any& rSubAddress,
-        const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay ) throw (css::uno::RuntimeException);
+        const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay );
 
     virtual ~ScVbaHyperlink() override;
 
     // Attributes
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& rName ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getAddress() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAddress( const OUString& rAddress ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getSubAddress() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSubAddress( const OUString& rSubAddress ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getScreenTip() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setScreenTip( const OUString& rScreenTip ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getTextToDisplay() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTextToDisplay( const OUString& rTextToDisplay ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName() override;
+    virtual void SAL_CALL setName( const OUString& rName ) override;
+    virtual OUString SAL_CALL getAddress() override;
+    virtual void SAL_CALL setAddress( const OUString& rAddress ) override;
+    virtual OUString SAL_CALL getSubAddress() override;
+    virtual void SAL_CALL setSubAddress( const OUString& rSubAddress ) override;
+    virtual OUString SAL_CALL getScreenTip() override;
+    virtual void SAL_CALL setScreenTip( const OUString& rScreenTip ) override;
+    virtual OUString SAL_CALL getTextToDisplay() override;
+    virtual void SAL_CALL setTextToDisplay( const OUString& rTextToDisplay ) override;
+    virtual sal_Int32 SAL_CALL getType() override;
+    virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getRange() override;
+    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() override;
 
     // XHelperInterface
     VBAHELPER_DECL_XHELPERINTERFACE
@@ -69,11 +69,11 @@ private:
     typedef ::std::pair< OUString, OUString > UrlComponents;
 
     /// @throws css::uno::RuntimeException
-    void ensureTextField() throw (css::uno::RuntimeException);
+    void ensureTextField();
     /// @throws css::uno::RuntimeException
-    UrlComponents getUrlComponents() throw (css::uno::RuntimeException);
+    UrlComponents getUrlComponents();
     /// @throws css::uno::RuntimeException
-    void setUrlComponents( const UrlComponents& rUrlComp ) throw (css::uno::RuntimeException);
+    void setUrlComponents( const UrlComponents& rUrlComp );
 
 private:
     css::uno::Reference< css::table::XCell > mxCell;

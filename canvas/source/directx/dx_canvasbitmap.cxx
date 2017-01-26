@@ -74,7 +74,7 @@ namespace dxcanvas
         }
     };
 
-    uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )  throw (uno::RuntimeException)
+    uno::Any SAL_CALL CanvasBitmap::getFastPropertyValue( sal_Int32 nHandle )
     {
         uno::Any aRes;
         // 0 ... get BitmapEx
@@ -239,17 +239,17 @@ namespace dxcanvas
         return aRes;
     }
 
-    OUString SAL_CALL CanvasBitmap::getImplementationName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL CanvasBitmap::getImplementationName(  )
     {
         return OUString( "DXCanvas.CanvasBitmap" );
     }
 
-    sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL CanvasBitmap::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  ) throw (uno::RuntimeException)
+    uno::Sequence< OUString > SAL_CALL CanvasBitmap::getSupportedServiceNames(  )
     {
         return { "com.sun.star.rendering.CanvasBitmap" };
     }

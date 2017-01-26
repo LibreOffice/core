@@ -43,29 +43,22 @@ public:
 
     // XInitialization
     virtual void SAL_CALL
-    initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw( css::uno::Exception,
-               css::uno::RuntimeException, std::exception ) override;
+    initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     virtual sal_Bool SAL_CALL
-    supportsService( const OUString& ServiceName )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    supportsService( const OUString& ServiceName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    getSupportedServiceNames() override;
 
     // XCommandEnvironment
     virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL
-    getInteractionHandler()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    getInteractionHandler() override;
     virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL
-    getProgressHandler()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    getProgressHandler() override;
 
     // Non-UNO interfaces
     static OUString  getImplementationName_Static();

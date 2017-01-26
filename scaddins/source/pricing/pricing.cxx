@@ -182,7 +182,7 @@ const lang::Locale& ScaPricingAddIn::GetLocale( sal_uInt32 nIndex )
     return (nIndex < sizeof( pLang )) ? pDefLocales[ nIndex ] : aFuncLoc;
 }
 
-ResMgr& ScaPricingAddIn::GetResMgr() throw( uno::RuntimeException, std::exception )
+ResMgr& ScaPricingAddIn::GetResMgr()
 {
     if( !pResMgr )
     {
@@ -216,7 +216,7 @@ void ScaPricingAddIn::InitData()
     }
 }
 
-OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( uno::RuntimeException, std::exception )
+OUString ScaPricingAddIn::GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex )
 {
     OUString aRet;
 
@@ -246,50 +246,50 @@ uno::Sequence< OUString > ScaPricingAddIn::getSupportedServiceNames_Static()
 }
 
 // XServiceName
-OUString SAL_CALL ScaPricingAddIn::getServiceName() throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL ScaPricingAddIn::getServiceName()
 {
     // name of specific AddIn service
     return OUString( MY_SERVICE );
 }
 
 // XServiceInfo
-OUString SAL_CALL ScaPricingAddIn::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL ScaPricingAddIn::getImplementationName()
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName ) throw( uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL ScaPricingAddIn::supportsService( const OUString& aServiceName )
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL ScaPricingAddIn::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SAL_CALL ScaPricingAddIn::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
 
 // XLocalizable
-void SAL_CALL ScaPricingAddIn::setLocale( const lang::Locale& eLocale ) throw( uno::RuntimeException, std::exception )
+void SAL_CALL ScaPricingAddIn::setLocale( const lang::Locale& eLocale )
 {
     aFuncLoc = eLocale;
     InitData();     // change of locale invalidates resources!
 }
 
-lang::Locale SAL_CALL ScaPricingAddIn::getLocale() throw( uno::RuntimeException, std::exception )
+lang::Locale SAL_CALL ScaPricingAddIn::getLocale()
 {
     return aFuncLoc;
 }
 
 // function descriptions start here
 // XAddIn
-OUString SAL_CALL ScaPricingAddIn::getProgrammaticFuntionName( const OUString& ) throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL ScaPricingAddIn::getProgrammaticFuntionName( const OUString& )
 {
     //  not used by calc
     //  (but should be implemented for other uses of the AddIn service)
     return OUString();
 }
 
-OUString SAL_CALL ScaPricingAddIn::getDisplayFunctionName( const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL ScaPricingAddIn::getDisplayFunctionName( const OUString& aProgrammaticName )
 {
     OUString aRet;
 
@@ -310,7 +310,7 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayFunctionName( const OUString& aProg
     return aRet;
 }
 
-OUString SAL_CALL ScaPricingAddIn::getFunctionDescription( const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL ScaPricingAddIn::getFunctionDescription( const OUString& aProgrammaticName )
 {
     OUString aRet;
 
@@ -323,7 +323,7 @@ OUString SAL_CALL ScaPricingAddIn::getFunctionDescription( const OUString& aProg
 }
 
 OUString SAL_CALL ScaPricingAddIn::getDisplayArgumentName(
-        const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( uno::RuntimeException, std::exception )
+        const OUString& aProgrammaticName, sal_Int32 nArgument )
 {
     OUString aRet;
 
@@ -342,7 +342,7 @@ OUString SAL_CALL ScaPricingAddIn::getDisplayArgumentName(
 }
 
 OUString SAL_CALL ScaPricingAddIn::getArgumentDescription(
-        const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( uno::RuntimeException, std::exception )
+        const OUString& aProgrammaticName, sal_Int32 nArgument )
 {
     OUString aRet;
 
@@ -361,7 +361,7 @@ OUString SAL_CALL ScaPricingAddIn::getArgumentDescription(
 }
 
 OUString SAL_CALL ScaPricingAddIn::getProgrammaticCategoryName(
-        const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
+        const OUString& aProgrammaticName )
 {
     OUString aRet;
 
@@ -389,14 +389,14 @@ OUString SAL_CALL ScaPricingAddIn::getProgrammaticCategoryName(
 }
 
 OUString SAL_CALL ScaPricingAddIn::getDisplayCategoryName(
-        const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
+        const OUString& aProgrammaticName )
 {
     return getProgrammaticCategoryName( aProgrammaticName );
 }
 
 // XCompatibilityNames
 uno::Sequence< sheet::LocalizedName > SAL_CALL ScaPricingAddIn::getCompatibilityNames(
-        const OUString& aProgrammaticName ) throw( uno::RuntimeException, std::exception )
+        const OUString& aProgrammaticName )
 {
     auto fDataIt = std::find_if( pFuncDataList->begin(), pFuncDataList->end(),
                                  FindScaFuncData( aProgrammaticName ) );
@@ -527,7 +527,7 @@ double SAL_CALL ScaPricingAddIn::getOptBarrier( double spot, double vol,
             double r, double rf, double T, double strike,
             double barrier_low, double barrier_up, double rebate,
             const OUString& put_call, const OUString& in_out,
-            const OUString& barriercont, const uno::Any& greekstr ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
+            const OUString& barriercont, const uno::Any& greekstr )
 {
     bs::types::PutCall pc;
     bs::types::BarrierKIO kio;
@@ -553,7 +553,7 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
             double r, double rf, double T,
             double barrier_low, double barrier_up,
             const OUString& for_dom, const OUString& in_out,
-            const OUString& barriercont, const uno::Any& greekstr ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
+            const OUString& barriercont, const uno::Any& greekstr )
 {
     bs::types::ForDom fd;
     bs::types::BarrierKIO kio;
@@ -577,7 +577,7 @@ double SAL_CALL ScaPricingAddIn::getOptTouch( double spot, double vol,
 // OPT_PRB_HIT(...)
 double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
             double mu, double T,
-            double barrier_low, double barrier_up ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
+            double barrier_low, double barrier_up )
 {
     // read and check input values
     if( spot<=0.0 || vol<=0.0 || T<0.0 ) {
@@ -593,7 +593,7 @@ double SAL_CALL ScaPricingAddIn::getOptProbHit( double spot, double vol,
 double SAL_CALL ScaPricingAddIn::getOptProbInMoney( double spot, double vol,
             double mu, double T,
             double barrier_low, double barrier_up,
-            const uno::Any& strikeval, const uno::Any& put_call ) throw( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
+            const uno::Any& strikeval, const uno::Any& put_call )
 {
     bs::types::PutCall pc=bs::types::Call;
     double  K;

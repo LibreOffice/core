@@ -69,7 +69,6 @@ Interceptor::dispatch(
     const util::URL& URL,
     const uno::Sequence<
     beans::PropertyValue >& Arguments )
-    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if( m_pDocHolder )
@@ -122,9 +121,6 @@ Interceptor::addStatusListener(
     const uno::Reference<
     frame::XStatusListener >& Control,
     const util::URL& URL )
-    throw (
-        uno::RuntimeException, std::exception
-    )
 {
     if(!Control.is())
         return;
@@ -201,9 +197,6 @@ Interceptor::removeStatusListener(
     const uno::Reference<
     frame::XStatusListener >& Control,
     const util::URL& URL )
-    throw (
-        uno::RuntimeException, std::exception
-    )
 {
     if(!(Control.is() && m_pStatCL))
         return;
@@ -218,9 +211,6 @@ Interceptor::removeStatusListener(
 uno::Sequence< OUString >
 SAL_CALL
 Interceptor::getInterceptedURLs(  )
-    throw (
-        uno::RuntimeException, std::exception
-    )
 {
     // now implemented as update
 
@@ -235,9 +225,6 @@ Interceptor::queryDispatch(
     const util::URL& URL,
     const OUString& TargetFrameName,
     sal_Int32 SearchFlags )
-    throw (
-        uno::RuntimeException, std::exception
-    )
 {
     osl::MutexGuard aGuard(m_aMutex);
     if(URL.Complete == m_aInterceptedURL[0])
@@ -264,9 +251,6 @@ Interceptor::queryDispatch(
 uno::Sequence< uno::Reference< frame::XDispatch > > SAL_CALL
 Interceptor::queryDispatches(
     const uno::Sequence<frame::DispatchDescriptor >& Requests )
-    throw (
-        uno::RuntimeException, std::exception
-    )
 {
     uno::Sequence< uno::Reference< frame::XDispatch > > aRet;
     osl::MutexGuard aGuard(m_aMutex);
@@ -297,9 +281,6 @@ Interceptor::queryDispatches(
 
 uno::Reference< frame::XDispatchProvider > SAL_CALL
 Interceptor::getSlaveDispatchProvider(  )
-    throw (
-        uno::RuntimeException, std::exception
-    )
 {
     osl::MutexGuard aGuard(m_aMutex);
     return m_xSlaveDispatchProvider;
@@ -308,9 +289,6 @@ Interceptor::getSlaveDispatchProvider(  )
 void SAL_CALL
 Interceptor::setSlaveDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& NewDispatchProvider )
-    throw (
-        uno::RuntimeException, std::exception
-    )
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_xSlaveDispatchProvider = NewDispatchProvider;
@@ -319,9 +297,6 @@ Interceptor::setSlaveDispatchProvider(
 
 uno::Reference< frame::XDispatchProvider > SAL_CALL
 Interceptor::getMasterDispatchProvider(  )
-    throw (
-        uno::RuntimeException, std::exception
-    )
 {
     osl::MutexGuard aGuard(m_aMutex);
     return m_xMasterDispatchProvider;
@@ -331,9 +306,6 @@ Interceptor::getMasterDispatchProvider(  )
 void SAL_CALL
 Interceptor::setMasterDispatchProvider(
     const uno::Reference< frame::XDispatchProvider >& NewSupplier )
-    throw (
-        uno::RuntimeException, std::exception
-    )
 {
     osl::MutexGuard aGuard(m_aMutex);
     m_xMasterDispatchProvider = NewSupplier;

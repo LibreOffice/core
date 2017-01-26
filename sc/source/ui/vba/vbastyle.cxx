@@ -27,7 +27,7 @@ using namespace ::com::sun::star;
 static const char DISPLAYNAME[] = "DisplayName";
 
 uno::Reference< container::XNameAccess >
-ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xModel ) throw ( uno::RuntimeException )
+ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< style::XStyleFamiliesSupplier > xStyleSupplier( xModel, uno::UNO_QUERY_THROW);
     uno::Reference< container::XNameAccess > xStylesAccess( xStyleSupplier->getStyleFamilies()->getByName("CellStyles"), uno::UNO_QUERY_THROW );
@@ -37,14 +37,14 @@ ScVbaStyle::getStylesNameContainer( const uno::Reference< frame::XModel >& xMode
 /// @throws script::BasicErrorException
 /// @throws uno::RuntimeException
 static uno::Reference< beans::XPropertySet >
-lcl_getStyleProps( const OUString& sStyleName, const uno::Reference< frame::XModel >& xModel ) throw ( script::BasicErrorException, uno::RuntimeException )
+lcl_getStyleProps( const OUString& sStyleName, const uno::Reference< frame::XModel >& xModel )
 {
 
     uno::Reference< beans::XPropertySet > xStyleProps( ScVbaStyle::getStylesNameContainer( xModel )->getByName( sStyleName ), uno::UNO_QUERY_THROW );
     return xStyleProps;
 }
 
-void ScVbaStyle::initialise() throw ( uno::RuntimeException, script::BasicErrorException )
+void ScVbaStyle::initialise()
 {
     if (!mxModel.is() )
         DebugHelper::basicexception(ERRCODE_BASIC_METHOD_FAILED, "XModel Interface could not be retrieved" );
@@ -63,7 +63,6 @@ void ScVbaStyle::initialise() throw ( uno::RuntimeException, script::BasicErrorE
 ScVbaStyle::ScVbaStyle( const uno::Reference< ov::XHelperInterface >& xParent,
                         const uno::Reference< uno::XComponentContext > & xContext,
                         const OUString& sStyleName, const uno::Reference< frame::XModel >& _xModel )
-                    throw ( script::BasicErrorException, uno::RuntimeException )
     :  ScVbaStyle_BASE( xParent, xContext, lcl_getStyleProps( sStyleName, _xModel ), _xModel, false )
 {
     try
@@ -80,7 +79,6 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent,
                         const uno::Reference< uno::XComponentContext > & xContext,
                         const uno::Reference< beans::XPropertySet >& _xPropertySet,
                         const uno::Reference< frame::XModel >& _xModel )
-                    throw ( script::BasicErrorException, uno::RuntimeException )
     : ScVbaStyle_BASE( xParent, xContext, _xPropertySet, _xModel, false )
 {
     try
@@ -94,25 +92,25 @@ ScVbaStyle::ScVbaStyle( const uno::Reference< XHelperInterface >& xParent,
 }
 
 sal_Bool SAL_CALL
-ScVbaStyle::BuiltIn() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaStyle::BuiltIn()
 {
     return !mxStyle->isUserDefined();
 
 }
 void SAL_CALL
-ScVbaStyle::setName( const OUString& Name ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaStyle::setName( const OUString& Name )
 {
     mxStyle->setName(Name);
 }
 
 OUString SAL_CALL
-ScVbaStyle::getName() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaStyle::getName()
 {
     return mxStyle->getName();
 }
 
 void SAL_CALL
-ScVbaStyle::setNameLocal( const OUString& NameLocal ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaStyle::setNameLocal( const OUString& NameLocal )
 {
     try
     {
@@ -125,7 +123,7 @@ ScVbaStyle::setNameLocal( const OUString& NameLocal ) throw (script::BasicErrorE
 }
 
 OUString SAL_CALL
-ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaStyle::getNameLocal()
 {
     OUString sName;
     try
@@ -140,7 +138,7 @@ ScVbaStyle::getNameLocal() throw (script::BasicErrorException, uno::RuntimeExcep
 }
 
 void SAL_CALL
-ScVbaStyle::Delete() throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaStyle::Delete()
 {
     try
     {
@@ -153,13 +151,13 @@ ScVbaStyle::Delete() throw (script::BasicErrorException, uno::RuntimeException, 
 }
 
 void SAL_CALL
-ScVbaStyle::setMergeCells( const uno::Any& /*MergeCells*/ ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaStyle::setMergeCells( const uno::Any& /*MergeCells*/ )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
 }
 
 uno::Any SAL_CALL
-ScVbaStyle::getMergeCells(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaStyle::getMergeCells(  )
 {
     DebugHelper::basicexception(ERRCODE_BASIC_NOT_IMPLEMENTED, OUString());
     return uno::Any();

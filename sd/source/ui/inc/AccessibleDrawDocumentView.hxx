@@ -59,34 +59,27 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleChildCount() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex)
-        throw (css::uno::RuntimeException,
-            css::lang::IndexOutOfBoundsException, std::exception) override;
+        getAccessibleChild (sal_Int32 nIndex) override;
 
     virtual OUString SAL_CALL
-        getAccessibleName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleName() override;
 
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
-        disposing (const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject) override;
 
     //=====  XPropertyChangeListener  =========================================
 
     virtual void SAL_CALL
-        propertyChange (const css::beans::PropertyChangeEvent& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+        propertyChange (const css::beans::PropertyChangeEvent& rEventObject) override;
     //=====  XInterface  ======================================================
 
     virtual css::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType)
-        throw (css::uno::RuntimeException, std::exception) override;
+        queryInterface (const css::uno::Type & rType) override;
 
     virtual void SAL_CALL
         acquire()
@@ -98,28 +91,21 @@ public:
 
     //=====  XAccessibleGroupPosition  =========================================
     virtual css::uno::Sequence< sal_Int32 > SAL_CALL
-        getGroupPosition( const css::uno::Any& rAny )
-        throw (css::uno::RuntimeException,
-               css::lang::IndexOutOfBoundsException, std::exception) override;
-    virtual OUString SAL_CALL getObjectLink( const css::uno::Any& accoject )
-        throw (css::uno::RuntimeException,
-               std::exception) override;
+        getGroupPosition( const css::uno::Any& rAny ) override;
+    virtual OUString SAL_CALL getObjectLink( const css::uno::Any& accoject ) override;
 
 protected:
 
     //=====  XServiceInfo  ====================================================
 
     virtual OUString SAL_CALL
-        getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getImplementationName() override;
 
     virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedServiceNames() override;
 
     virtual bool
-        implIsSelected( sal_Int32 nAccessibleChildIndex )
-        throw (css::uno::RuntimeException) override;
+        implIsSelected( sal_Int32 nAccessibleChildIndex ) override;
 
     /** Select or deselect the specified child or all children if the given
         index has the special value ACCESSIBLE_SELECTION_CHILD_ALL.
@@ -135,8 +121,7 @@ protected:
             reps. children.
     */
     virtual void
-        implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect )
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException) override;
+        implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect ) override;
 private:
     ::sd::ViewShell* mpSdViewSh;
 
@@ -157,15 +142,13 @@ protected:
 
     /// Create an accessible name that contains the current view mode.
     virtual OUString
-        CreateAccessibleName ()
-        throw (css::uno::RuntimeException, std::exception) override;
+        CreateAccessibleName () override;
 
     /** Create an accessible description that contains the current
         view mode.
     */
     virtual OUString
-        CreateAccessibleDescription ()
-        throw (css::uno::RuntimeException, std::exception) override;
+        CreateAccessibleDescription () override;
 
     /** Make sure that the currently focused shape sends a FOCUSED state
         change event indicating that it has (regained) the focus.
@@ -181,8 +164,7 @@ protected:
 
     //=====  XAccessibleGetAccFromXShape  ============================================
     css::uno::Sequence< css::uno::Any >
-        SAL_CALL getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType)
-        throw ( css::uno::RuntimeException, std::exception ) override;
+        SAL_CALL getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType) override;
     css::uno::Reference< css::accessibility::XAccessible >
         GetSelAccContextInTable();
 

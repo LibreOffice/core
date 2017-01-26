@@ -124,7 +124,7 @@ public:
     }
 
     // XEventListener
-    void SAL_CALL OXReportControllerObserver::disposing(const lang::EventObject& e) throw( uno::RuntimeException, std::exception )
+    void SAL_CALL OXReportControllerObserver::disposing(const lang::EventObject& e)
     {
         (void) e;
         // check if it's an object we have cached information about
@@ -146,7 +146,7 @@ public:
     }
 
     // XPropertyChangeListener
-    void SAL_CALL OXReportControllerObserver::propertyChange(const beans::PropertyChangeEvent& _rEvent) throw(uno::RuntimeException, std::exception)
+    void SAL_CALL OXReportControllerObserver::propertyChange(const beans::PropertyChangeEvent& _rEvent)
     {
         (void) _rEvent;
         ::osl::ClearableMutexGuard aGuard( m_pImpl->m_aMutex );
@@ -298,7 +298,7 @@ void OXReportControllerObserver::switchListening( const uno::Reference< uno::XIn
 }
 
 
-void SAL_CALL OXReportControllerObserver::modified( const lang::EventObject& /*aEvent*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OXReportControllerObserver::modified( const lang::EventObject& /*aEvent*/ )
 {
 }
 
@@ -344,7 +344,7 @@ void OXReportControllerObserver::RemoveElement(const uno::Reference< uno::XInter
 }
 // XContainerListener
 
-void SAL_CALL OXReportControllerObserver::elementInserted(const container::ContainerEvent& evt) throw(uno::RuntimeException, std::exception)
+void SAL_CALL OXReportControllerObserver::elementInserted(const container::ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
@@ -358,7 +358,7 @@ void SAL_CALL OXReportControllerObserver::elementInserted(const container::Conta
 }
 
 
-void SAL_CALL OXReportControllerObserver::elementReplaced(const container::ContainerEvent& evt) throw(uno::RuntimeException, std::exception)
+void SAL_CALL OXReportControllerObserver::elementReplaced(const container::ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );
@@ -372,7 +372,7 @@ void SAL_CALL OXReportControllerObserver::elementReplaced(const container::Conta
 }
 
 
-void SAL_CALL OXReportControllerObserver::elementRemoved(const container::ContainerEvent& evt) throw(uno::RuntimeException, std::exception)
+void SAL_CALL OXReportControllerObserver::elementRemoved(const container::ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_pImpl->m_aMutex );

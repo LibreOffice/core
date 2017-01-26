@@ -28,13 +28,11 @@ class DummyTokenHandler : public cppu::WeakImplHelper< xml::sax::XFastTokenHandl
 public:
              DummyTokenHandler() {}
 
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence<sal_Int8>& )
-        throw (uno::RuntimeException, std::exception) override
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const uno::Sequence<sal_Int8>& ) override
     {
         return FastToken::DONTKNOW;
     }
-    virtual uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 )
-        throw (uno::RuntimeException, std::exception) override
+    virtual uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 ) override
     {
         CPPUNIT_ASSERT_MESSAGE( "getUTF8Identifier: unexpected call", false );
         return uno::Sequence<sal_Int8>();

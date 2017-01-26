@@ -259,7 +259,6 @@ void SAL_CALL PropertyValueSet::release()
 }
 
 css::uno::Any SAL_CALL PropertyValueSet::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< XTypeProvider* >(this)),
@@ -283,7 +282,6 @@ XTYPEPROVIDER_IMPL_3( PropertyValueSet,
 
 // virtual
 sal_Bool SAL_CALL PropertyValueSet::wasNull()
-    throw( SQLException, RuntimeException, std::exception )
 {
     // This method can not be implemented correctly!!! Imagine different
     // threads doing a getXYZ - wasNull calling sequence on the same
@@ -294,7 +292,6 @@ sal_Bool SAL_CALL PropertyValueSet::wasNull()
 
 // virtual
 OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( OUString, PropsSet::String, aString );
 }
@@ -302,7 +299,6 @@ OUString SAL_CALL PropertyValueSet::getString( sal_Int32 columnIndex )
 
 // virtual
 sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( bool, PropsSet::Boolean, bBoolean );
 }
@@ -310,7 +306,6 @@ sal_Bool SAL_CALL PropertyValueSet::getBoolean( sal_Int32 columnIndex )
 
 // virtual
 sal_Int8 SAL_CALL PropertyValueSet::getByte( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( sal_Int8, PropsSet::Byte, nByte );
 }
@@ -318,7 +313,6 @@ sal_Int8 SAL_CALL PropertyValueSet::getByte( sal_Int32 columnIndex )
 
 // virtual
 sal_Int16 SAL_CALL PropertyValueSet::getShort( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( sal_Int16, PropsSet::Short, nShort );
 }
@@ -326,7 +320,6 @@ sal_Int16 SAL_CALL PropertyValueSet::getShort( sal_Int32 columnIndex )
 
 // virtual
 sal_Int32 SAL_CALL PropertyValueSet::getInt( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( sal_Int32, PropsSet::Int, nInt );
 }
@@ -334,7 +327,6 @@ sal_Int32 SAL_CALL PropertyValueSet::getInt( sal_Int32 columnIndex )
 
 // virtual
 sal_Int64 SAL_CALL PropertyValueSet::getLong( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( sal_Int64, PropsSet::Long, nLong );
 }
@@ -342,7 +334,6 @@ sal_Int64 SAL_CALL PropertyValueSet::getLong( sal_Int32 columnIndex )
 
 // virtual
 float SAL_CALL PropertyValueSet::getFloat( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( float, PropsSet::Float, nFloat );
 }
@@ -350,7 +341,6 @@ float SAL_CALL PropertyValueSet::getFloat( sal_Int32 columnIndex )
 
 // virtual
 double SAL_CALL PropertyValueSet::getDouble( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( double, PropsSet::Double, nDouble );
 }
@@ -359,7 +349,6 @@ double SAL_CALL PropertyValueSet::getDouble( sal_Int32 columnIndex )
 // virtual
 Sequence< sal_Int8 > SAL_CALL
 PropertyValueSet::getBytes( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( Sequence< sal_Int8 >, PropsSet::Bytes, aBytes );
 }
@@ -367,7 +356,6 @@ PropertyValueSet::getBytes( sal_Int32 columnIndex )
 
 // virtual
 Date SAL_CALL PropertyValueSet::getDate( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( Date, PropsSet::Date, aDate );
 }
@@ -375,7 +363,6 @@ Date SAL_CALL PropertyValueSet::getDate( sal_Int32 columnIndex )
 
 // virtual
 Time SAL_CALL PropertyValueSet::getTime( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( Time, PropsSet::Time, aTime );
 }
@@ -383,7 +370,6 @@ Time SAL_CALL PropertyValueSet::getTime( sal_Int32 columnIndex )
 
 // virtual
 DateTime SAL_CALL PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( DateTime, PropsSet::Timestamp, aTimestamp );
 }
@@ -392,7 +378,6 @@ DateTime SAL_CALL PropertyValueSet::getTimestamp( sal_Int32 columnIndex )
 // virtual
 Reference< XInputStream > SAL_CALL
 PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL(
         Reference< XInputStream >, PropsSet::BinaryStream, xBinaryStream );
@@ -402,7 +387,6 @@ PropertyValueSet::getBinaryStream( sal_Int32 columnIndex )
 // virtual
 Reference< XInputStream > SAL_CALL
 PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL(
         Reference< XInputStream >, PropsSet::CharacterStream, xCharacterStream );
@@ -413,7 +397,6 @@ PropertyValueSet::getCharacterStream( sal_Int32 columnIndex )
 Any SAL_CALL PropertyValueSet::getObject(
                                     sal_Int32 columnIndex,
                                          const Reference< XNameAccess >& )
-    throw( SQLException, RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -541,7 +524,6 @@ Any SAL_CALL PropertyValueSet::getObject(
 
 // virtual
 Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( Reference< XRef >, PropsSet::Ref, xRef );
 }
@@ -549,7 +531,6 @@ Reference< XRef > SAL_CALL PropertyValueSet::getRef( sal_Int32 columnIndex )
 
 // virtual
 Reference< XBlob > SAL_CALL PropertyValueSet::getBlob( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( Reference< XBlob >, PropsSet::Blob, xBlob );
 }
@@ -557,7 +538,6 @@ Reference< XBlob > SAL_CALL PropertyValueSet::getBlob( sal_Int32 columnIndex )
 
 // virtual
 Reference< XClob > SAL_CALL PropertyValueSet::getClob( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( Reference< XClob >, PropsSet::Clob, xClob );
 }
@@ -565,7 +545,6 @@ Reference< XClob > SAL_CALL PropertyValueSet::getClob( sal_Int32 columnIndex )
 
 // virtual
 Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
-    throw( SQLException, RuntimeException, std::exception )
 {
     GETVALUE_IMPL( Reference< XArray >, PropsSet::Array, xArray );
 }
@@ -576,7 +555,6 @@ Reference< XArray > SAL_CALL PropertyValueSet::getArray( sal_Int32 columnIndex )
 
 // virtual
 sal_Int32 SAL_CALL PropertyValueSet::findColumn( const OUString& columnName )
-    throw( SQLException, RuntimeException, std::exception )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

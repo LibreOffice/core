@@ -85,20 +85,16 @@ public:
     ///=====  XAccessibleComponent  ============================================
 
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint )
-        throw (css::uno::RuntimeException, std::exception) override;
+        SAL_CALL getAccessibleAtPoint( const css::awt::Point& rPoint ) override;
 
-    virtual void SAL_CALL grabFocus(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL grabFocus(  ) override;
 
 protected:
     /// Return the object's current bounding box relative to the desktop.
-    virtual Rectangle GetBoundingBoxOnScreen() const
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual Rectangle GetBoundingBoxOnScreen() const override;
 
     /// Return the object's current bounding box relative to the parent object.
-    virtual Rectangle GetBoundingBox() const
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual Rectangle GetBoundingBox() const override;
 
 public:
     ///=====  XAccessibleContext  ==============================================
@@ -106,49 +102,38 @@ public:
     /// Return the number of currently visible children.
     /// override to calculate this on demand
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount()
-                    throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleChildCount() override;
 
     /// Return the specified child or NULL if index is invalid.
     /// override to calculate this on demand
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild(sal_Int32 nIndex)
-        throw (css::uno::RuntimeException,
-                css::lang::IndexOutOfBoundsException, std::exception) override;
+        getAccessibleChild(sal_Int32 nIndex) override;
 
     /// Return the set of current states.
     virtual css::uno::Reference<
             css::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleStateSet() override;
 
     virtual css::uno::Reference<
         css::accessibility::XAccessibleRelationSet> SAL_CALL
-           getAccessibleRelationSet()
-        throw (css::uno::RuntimeException, std::exception) override;
+           getAccessibleRelationSet() override;
 
     ///=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getImplementationName() override;
 
     /** Returns a list of all supported services.
     */
     virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedServiceNames() override;
 
-    virtual css::uno::Any SAL_CALL getExtendedAttributes()
-        throw (css::lang::IndexOutOfBoundsException,
-               css::uno::RuntimeException,
-               std::exception) override;
+    virtual css::uno::Any SAL_CALL getExtendedAttributes() override;
 
     // Override this method to handle cell's ParaIndent attribute specially.
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes )
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
 private:
     ScTabViewShell* mpViewShell;
     ScAccessibleDocument* mpAccDoc;

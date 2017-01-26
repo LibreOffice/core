@@ -42,8 +42,7 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL ColorPicker_createInstance(
     css::uno::Reference<css::uno::XComponentContext> const &);
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence<OUString> SAL_CALL ColorPicker_getSupportedServiceNames()
-    throw (css::uno::RuntimeException);
+css::uno::Sequence<OUString> SAL_CALL ColorPicker_getSupportedServiceNames();
 }
 
 #endif

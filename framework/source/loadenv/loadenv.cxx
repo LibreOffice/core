@@ -108,23 +108,18 @@ class LoadEnvListener : public ::cppu::WeakImplHelper< css::frame::XLoadEventLis
         }
 
         // frame.XLoadEventListener
-        virtual void SAL_CALL loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL loadFinished(const css::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
 
-        virtual void SAL_CALL loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >& xLoader) override;
 
         // frame.XDispatchResultListener
-        virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& aEvent) override;
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 };
 
 LoadEnv::LoadEnv(const css::uno::Reference< css::uno::XComponentContext >& xContext)
-    throw(LoadEnvException, css::uno::RuntimeException)
     : m_xContext(xContext)
     , m_nSearchFlags(0)
     , m_eFeature(E_NO_FEATURE)
@@ -145,9 +140,6 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::loadComponentFromURL(const
                                                                            const OUString&                                        sTarget,
                                                                                  sal_Int32                                               nFlags ,
                                                                            const css::uno::Sequence< css::beans::PropertyValue >&        lArgs  )
-    throw(css::lang::IllegalArgumentException,
-          css::io::IOException               ,
-          css::uno::RuntimeException         )
 {
     css::uno::Reference< css::lang::XComponent > xComponent;
 
@@ -440,7 +432,6 @@ css::uno::Reference< css::lang::XComponent > LoadEnv::getTargetComponent() const
 }
 
 void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::frame::XFrameLoader >&)
-    throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_mutex);
     if (m_bWaitingResult)
@@ -449,7 +440,6 @@ void SAL_CALL LoadEnvListener::loadFinished(const css::uno::Reference< css::fram
 }
 
 void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::frame::XFrameLoader >&)
-    throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_mutex);
     if (m_bWaitingResult)
@@ -458,7 +448,6 @@ void SAL_CALL LoadEnvListener::loadCancelled(const css::uno::Reference< css::fra
 }
 
 void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResultEvent& aEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_mutex);
 
@@ -483,7 +472,6 @@ void SAL_CALL LoadEnvListener::dispatchFinished(const css::frame::DispatchResult
 }
 
 void SAL_CALL LoadEnvListener::disposing(const css::lang::EventObject&)
-    throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_mutex);
     if (m_bWaitingResult)
@@ -711,7 +699,6 @@ bool queryOrcusTypeAndFilter(const uno::Sequence<beans::PropertyValue>& rDescrip
 }
 
 void LoadEnv::impl_detectTypeAndFilter()
-    throw(LoadEnvException, css::uno::RuntimeException, std::exception)
 {
     static sal_Int32       FILTERFLAG_TEMPLATEPATH  = 16;
 
@@ -833,7 +820,6 @@ void LoadEnv::impl_detectTypeAndFilter()
 }
 
 bool LoadEnv::impl_handleContent()
-    throw(LoadEnvException, css::uno::RuntimeException, std::exception)
 {
     // SAFE -> -----------------------------------
     osl::ClearableMutexGuard aReadLock(m_mutex);
@@ -972,7 +958,6 @@ bool LoadEnv::impl_furtherDocsAllowed()
 }
 
 bool LoadEnv::impl_loadContent()
-    throw(LoadEnvException, css::uno::RuntimeException, std::exception)
 {
     // SAFE -> -----------------------------------
     osl::ClearableMutexGuard aWriteLock(m_mutex);
@@ -1201,7 +1186,6 @@ void LoadEnv::impl_jumpToMark(const css::uno::Reference< css::frame::XFrame >& x
 }
 
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchAlreadyLoaded()
-    throw(LoadEnvException, css::uno::RuntimeException)
 {
     osl::MutexGuard g(m_mutex);
 
@@ -1355,7 +1339,6 @@ bool LoadEnv::impl_isFrameAlreadyUsedForLoading(const css::uno::Reference< css::
 }
 
 css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
-    throw(LoadEnvException, css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ..................................
     osl::ClearableMutexGuard aReadLock(m_mutex);
@@ -1487,7 +1470,6 @@ css::uno::Reference< css::frame::XFrame > LoadEnv::impl_searchRecycleTarget()
 }
 
 void LoadEnv::impl_reactForLoadingState()
-    throw(LoadEnvException, css::uno::RuntimeException)
 {
     /*TODO reset action locks */
 

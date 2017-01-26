@@ -57,7 +57,7 @@ namespace dbaccess
         inline virtual void removeMasterContainerListener(){}
 
         // ::connectivity::sdbcx::OCollection
-        virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+        virtual void impl_refresh() override;
 
         virtual OUString getNameForObject(const ::connectivity::sdbcx::ObjectType& _xObject) override;
 

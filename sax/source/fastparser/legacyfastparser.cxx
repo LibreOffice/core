@@ -58,10 +58,8 @@ public:
     void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList );
 
     //XFastNamespaceHandler
-    virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
-                            throw (RuntimeException, exception) override;
-    virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix )
-                            throw (RuntimeException, exception) override;
+    virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI ) override;
+    virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix ) override;
 };
 
 NamespaceHandler::NamespaceHandler()
@@ -85,14 +83,12 @@ void NamespaceHandler::addNSDeclAttributes( rtl::Reference < comphelper::Attribu
 }
 
 void NamespaceHandler::registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
-                            throw (RuntimeException, exception)
 {
     m_aNamespaceDefines.push_back( o3tl::make_unique<NamespaceDefine>(
                                     rNamespacePrefix, rNamespaceURI) );
 }
 
 OUString NamespaceHandler::getNamespaceURI( const OUString&/* rNamespacePrefix */ )
-                            throw (RuntimeException, exception)
 {
     return OUString();
 }
@@ -105,27 +101,20 @@ public:
     SaxLegacyFastParser();
 
 // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments)
-        throw (RuntimeException, Exception, exception) override;
+    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const& rArguments) override;
 
 // The SAX-Parser-Interface
-    virtual void SAL_CALL parseStream(  const InputSource& structSource)
-        throw ( SAXException, IOException, RuntimeException, exception) override;
-    virtual void SAL_CALL setDocumentHandler(const Reference< XDocumentHandler > & xHandler)
-        throw (RuntimeException, exception) override;
-    virtual void SAL_CALL setErrorHandler(const Reference< XErrorHandler > & xHandler)
-        throw (RuntimeException, exception) override;
-    virtual void SAL_CALL setDTDHandler(const Reference < XDTDHandler > & xHandler)
-        throw (RuntimeException, exception) override;
-    virtual void SAL_CALL setEntityResolver(const Reference<  XEntityResolver >& xResolver)
-        throw (RuntimeException, exception) override;
-    virtual void SAL_CALL setLocale( const Locale &locale )
-        throw (RuntimeException, exception) override;
+    virtual void SAL_CALL parseStream(  const InputSource& structSource) override;
+    virtual void SAL_CALL setDocumentHandler(const Reference< XDocumentHandler > & xHandler) override;
+    virtual void SAL_CALL setErrorHandler(const Reference< XErrorHandler > & xHandler) override;
+    virtual void SAL_CALL setDTDHandler(const Reference < XDTDHandler > & xHandler) override;
+    virtual void SAL_CALL setEntityResolver(const Reference<  XEntityResolver >& xResolver) override;
+    virtual void SAL_CALL setLocale( const Locale &locale ) override;
 
 // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (exception) override;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (exception) override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (exception) override;
+    OUString SAL_CALL getImplementationName() override;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
 private:
     Reference< XFastParser > m_xParser;
@@ -150,18 +139,18 @@ public:
                              Reference< XFastTokenHandler > const & xTokenHandler);
 
     // XFastDocumentHandler
-    virtual void SAL_CALL startDocument() throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endDocument() throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL startDocument() override;
+    virtual void SAL_CALL endDocument() override;
+    virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) override;
 
     // XFastContextHandler
-    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endFastElement( sal_Int32 Element ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) throw (SAXException, RuntimeException, exception) override;
-    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) throw (SAXException, RuntimeException, exception) override;
-    virtual void SAL_CALL characters( const OUString& aChars ) throw (SAXException, RuntimeException, exception) override;
+    virtual void SAL_CALL startFastElement( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) override;
+    virtual void SAL_CALL startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) override;
+    virtual void SAL_CALL endFastElement( sal_Int32 Element ) override;
+    virtual void SAL_CALL endUnknownElement( const OUString& Namespace, const OUString& Name ) override;
+    virtual Reference< XFastContextHandler > SAL_CALL createFastChildContext( sal_Int32 nElement, const Reference< XFastAttributeList >& Attribs ) override;
+    virtual Reference< XFastContextHandler > SAL_CALL createUnknownChildContext( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs ) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
 
 };
 
@@ -194,35 +183,30 @@ CallbackDocumentHandler::CallbackDocumentHandler( Reference< XDocumentHandler > 
 }
 
 void SAL_CALL CallbackDocumentHandler::startDocument()
-        throw (SAXException, RuntimeException, exception)
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->startDocument();
 }
 
 void SAL_CALL CallbackDocumentHandler::endDocument()
-        throw (SAXException, RuntimeException, exception)
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->endDocument();
 }
 
 void SAL_CALL CallbackDocumentHandler::setDocumentLocator( const Reference< XLocator >& xLocator )
-        throw (SAXException, RuntimeException, exception)
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->setDocumentLocator( xLocator );
 }
 
 void SAL_CALL CallbackDocumentHandler::startFastElement( sal_Int32 nElement , const Reference< XFastAttributeList >& Attribs  )
-        throw (SAXException, RuntimeException, exception)
 {
     startUnknownElement( CallbackDocumentHandler::getNamespacePrefixFromToken( nElement ),
                          CallbackDocumentHandler::getNameFromToken( nElement ), Attribs );
 }
 
 void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs  )
-        throw (SAXException, RuntimeException, exception)
 {
     if ( m_xDocumentHandler.is() )
     {
@@ -265,7 +249,6 @@ void SAL_CALL CallbackDocumentHandler::startUnknownElement( const OUString& Name
 }
 
 void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
-        throw (SAXException, RuntimeException, exception)
 {
     endUnknownElement( CallbackDocumentHandler::getNamespacePrefixFromToken( nElement ),
                        CallbackDocumentHandler::getNameFromToken( nElement ) );
@@ -273,7 +256,6 @@ void SAL_CALL CallbackDocumentHandler::endFastElement( sal_Int32 nElement )
 
 
 void SAL_CALL CallbackDocumentHandler::endUnknownElement( const OUString& Namespace, const OUString& Name )
-        throw (SAXException, RuntimeException, exception)
 {
     if ( m_xDocumentHandler.is() )
     {
@@ -287,20 +269,17 @@ void SAL_CALL CallbackDocumentHandler::endUnknownElement( const OUString& Namesp
 }
 
 Reference< XFastContextHandler > SAL_CALL CallbackDocumentHandler::createFastChildContext( sal_Int32/* nElement */, const Reference< XFastAttributeList >&/* Attribs */ )
-        throw (SAXException, RuntimeException, exception)
 {
     return this;
 }
 
 
 Reference< XFastContextHandler > SAL_CALL CallbackDocumentHandler::createUnknownChildContext( const OUString&/* Namespace */, const OUString&/* Name */, const Reference< XFastAttributeList >&/* Attribs */ )
-        throw (SAXException, RuntimeException, exception)
 {
     return this;
 }
 
 void SAL_CALL CallbackDocumentHandler::characters( const OUString& aChars )
-        throw (SAXException, RuntimeException, exception)
 {
     if ( m_xDocumentHandler.is() )
         m_xDocumentHandler->characters( aChars );
@@ -314,7 +293,6 @@ SaxLegacyFastParser::SaxLegacyFastParser( ) : m_aNamespaceHandler( new Namespace
 }
 
 void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments )
-    throw (RuntimeException, Exception, exception)
 {
     if (rArguments.getLength())
     {
@@ -343,9 +321,6 @@ void SAL_CALL SaxLegacyFastParser::initialize(Sequence< Any > const& rArguments 
 }
 
 void SaxLegacyFastParser::parseStream( const InputSource& structSource )
-        throw ( SAXException,
-                IOException,
-                RuntimeException, exception)
 {
     m_xParser->setFastDocumentHandler( new CallbackDocumentHandler( m_xDocumentHandler.get(),
                                        m_aNamespaceHandler.get(), m_xTokenHandler.get() ) );
@@ -354,46 +329,41 @@ void SaxLegacyFastParser::parseStream( const InputSource& structSource )
 }
 
 void SaxLegacyFastParser::setDocumentHandler( const Reference< XDocumentHandler > & xHandler )
-        throw (RuntimeException, exception)
 {
     m_xDocumentHandler = xHandler;
 }
 
 void SaxLegacyFastParser::setErrorHandler( const Reference< XErrorHandler > & xHandler )
-        throw (RuntimeException, exception)
 {
     m_xParser->setErrorHandler( xHandler );
 }
 
 void SaxLegacyFastParser::setDTDHandler( const Reference < XDTDHandler > &/* xHandler */ )
-        throw (RuntimeException, exception)
 {
 
 }
 
 void SaxLegacyFastParser::setEntityResolver( const Reference<  XEntityResolver >& xResolver )
-        throw (RuntimeException, exception)
 {
     m_xParser->setEntityResolver( xResolver );
 }
 
 void SaxLegacyFastParser::setLocale( const Locale &locale )
-        throw (RuntimeException, exception)
 {
     m_xParser->setLocale( locale );
 }
 
-OUString SaxLegacyFastParser::getImplementationName() throw (exception)
+OUString SaxLegacyFastParser::getImplementationName()
 {
     return OUString("com.sun.star.comp.extensions.xml.sax.LegacyFastParser");
 }
 
-sal_Bool SaxLegacyFastParser::supportsService(const OUString& ServiceName) throw (exception)
+sal_Bool SaxLegacyFastParser::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SaxLegacyFastParser::getSupportedServiceNames() throw (exception)
+Sequence< OUString > SaxLegacyFastParser::getSupportedServiceNames()
 {
     Sequence<OUString> seq { "com.sun.star.xml.sax.LegacyFastParser" };
     return seq;

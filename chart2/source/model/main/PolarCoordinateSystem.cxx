@@ -55,39 +55,33 @@ PolarCoordinateSystem::~PolarCoordinateSystem()
 
 // ____ XCoordinateSystem ____
 OUString SAL_CALL PolarCoordinateSystem::getCoordinateSystemType()
-    throw (RuntimeException, std::exception)
 {
     return OUString(CHART2_COOSYSTEM_POLAR_SERVICE_NAME);
 }
 
 OUString SAL_CALL PolarCoordinateSystem::getViewServiceName()
-    throw (RuntimeException, std::exception)
 {
     return OUString(CHART2_COOSYSTEM_POLAR_VIEW_SERVICE_NAME);
 }
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL PolarCoordinateSystem::createClone()
-    throw (RuntimeException, std::exception)
 {
     return Reference< util::XCloneable >( new PolarCoordinateSystem( *this ));
 }
 
 // ____ XServiceInfo ____
 OUString SAL_CALL PolarCoordinateSystem::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.PolarCoordinateSystem");
 }
 
 sal_Bool SAL_CALL PolarCoordinateSystem::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { CHART2_COOSYSTEM_POLAR_SERVICE_NAME };
 }
@@ -104,19 +98,16 @@ PolarCoordinateSystem2d::~PolarCoordinateSystem2d()
 
 // ____ XServiceInfo ____
 OUString SAL_CALL PolarCoordinateSystem2d::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart2.PolarCoordinateSystem2d") ;
 }
 
 sal_Bool SAL_CALL PolarCoordinateSystem2d::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem2d::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         CHART2_COOSYSTEM_POLAR_SERVICE_NAME,
@@ -135,19 +126,16 @@ PolarCoordinateSystem3d::~PolarCoordinateSystem3d()
 
 // ____ XServiceInfo ____
 OUString SAL_CALL PolarCoordinateSystem3d::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart2.PolarCoordinateSystem3d");
 }
 
 sal_Bool SAL_CALL PolarCoordinateSystem3d::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL PolarCoordinateSystem3d::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         CHART2_COOSYSTEM_POLAR_SERVICE_NAME,

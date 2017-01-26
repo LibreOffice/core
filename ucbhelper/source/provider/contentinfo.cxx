@@ -69,7 +69,6 @@ void SAL_CALL PropertySetInfo::release()
 }
 
 css::uno::Any SAL_CALL PropertySetInfo::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< lang::XTypeProvider* >(this)),
@@ -89,7 +88,6 @@ XTYPEPROVIDER_IMPL_2( PropertySetInfo,
 
 // virtual
 uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
-    throw( uno::RuntimeException, std::exception )
 {
     if ( !m_pProps )
     {
@@ -155,7 +153,6 @@ uno::Sequence< beans::Property > SAL_CALL PropertySetInfo::getProperties()
 // virtual
 beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
         const OUString& aName )
-    throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     beans::Property aProp;
     if ( queryProperty( aName, aProp ) )
@@ -168,7 +165,6 @@ beans::Property SAL_CALL PropertySetInfo::getPropertyByName(
 // virtual
 sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName(
         const OUString& Name )
-    throw( uno::RuntimeException, std::exception )
 {
     beans::Property aProp;
     return queryProperty( Name, aProp );
@@ -243,7 +239,6 @@ void SAL_CALL CommandProcessorInfo::release()
 }
 
 css::uno::Any SAL_CALL CommandProcessorInfo::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< lang::XTypeProvider* >(this)),
@@ -266,7 +261,6 @@ XTYPEPROVIDER_IMPL_2( CommandProcessorInfo,
 // virtual
 uno::Sequence< css::ucb::CommandInfo > SAL_CALL
 CommandProcessorInfo::getCommands()
-    throw( uno::RuntimeException, std::exception )
 {
     if ( !m_pCommands )
     {
@@ -301,8 +295,6 @@ CommandProcessorInfo::getCommands()
 css::ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByName(
         const OUString& Name )
-    throw( css::ucb::UnsupportedCommandException,
-           uno::RuntimeException, std::exception )
 {
     css::ucb::CommandInfo aInfo;
     if ( queryCommand( Name, aInfo ) )
@@ -315,8 +307,6 @@ CommandProcessorInfo::getCommandInfoByName(
 // virtual
 css::ucb::CommandInfo SAL_CALL
 CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
-    throw( css::ucb::UnsupportedCommandException,
-           uno::RuntimeException, std::exception )
 {
     css::ucb::CommandInfo aInfo;
     if ( queryCommand( Handle, aInfo ) )
@@ -329,7 +319,6 @@ CommandProcessorInfo::getCommandInfoByHandle( sal_Int32 Handle )
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
        const OUString& Name )
-    throw( uno::RuntimeException, std::exception )
 {
     css::ucb::CommandInfo aInfo;
     return queryCommand( Name, aInfo );
@@ -338,7 +327,6 @@ sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByName(
 
 // virtual
 sal_Bool SAL_CALL CommandProcessorInfo::hasCommandByHandle( sal_Int32 Handle )
-    throw( uno::RuntimeException, std::exception )
 {
     css::ucb::CommandInfo aInfo;
     return queryCommand( Handle, aInfo );

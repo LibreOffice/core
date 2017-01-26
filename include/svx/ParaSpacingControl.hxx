@@ -50,24 +50,20 @@ public:
     ParaLRSpacingControl(sal_uInt16 nSlotId, sal_uInt16 nId, ToolBox& rTbx);
     virtual ~ParaLRSpacingControl() override;
 
-    virtual void SAL_CALL dispose()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
 
     virtual void StateChanged(sal_uInt16 nSID, SfxItemState eState,
                               const SfxPoolItem* pState) override;
     virtual VclPtr<vcl::Window> CreateItemWindow(vcl::Window* pParent) override;
 
     // XContextChangeEventListener
-    virtual void SAL_CALL notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent) override;
 
-    virtual ::css::uno::Any SAL_CALL queryInterface(const ::css::uno::Type& aType)
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+    virtual ::css::uno::Any SAL_CALL queryInterface(const ::css::uno::Type& aType) override;
 
     virtual void SAL_CALL acquire() throw () override;
 
-    virtual void SAL_CALL disposing(const ::css::lang::EventObject&)
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+    virtual void SAL_CALL disposing(const ::css::lang::EventObject&) override;
 
     virtual void SAL_CALL release() throw () override;
 

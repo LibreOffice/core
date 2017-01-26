@@ -215,12 +215,12 @@ void MacabDriver::disposing()
 }
 // static ServiceInfo
 
-OUString MacabDriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString MacabDriver::getImplementationName_Static(  )
 {
     return OUString("com.sun.star.comp.sdbc.macab.Driver");
 }
 
-Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  )
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
@@ -229,22 +229,22 @@ Sequence< OUString > MacabDriver::getSupportedServiceNames_Static(  ) throw (Run
     return aSNS;
 }
 
-OUString SAL_CALL MacabDriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL MacabDriver::getImplementationName(  )
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL MacabDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL MacabDriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL MacabDriver::getSupportedServiceNames(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -268,7 +268,6 @@ Reference< XConnection > SAL_CALL MacabDriver::connect( const OUString& url, con
 }
 
 sal_Bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
-        throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -279,33 +278,33 @@ sal_Bool SAL_CALL MacabDriver::acceptsURL( const OUString& url )
     return url == "sdbc:address:macab";
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL MacabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& )
 {
     // if you have something special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL MacabDriver::getMajorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL MacabDriver::getMajorVersion(  )
 {
     return MACAB_DRIVER_VERSION_MAJOR;
 }
 
-sal_Int32 SAL_CALL MacabDriver::getMinorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL MacabDriver::getMinorVersion(  )
 {
     return MACAB_DRIVER_VERSION_MINOR;
 }
 
-void SAL_CALL MacabDriver::queryTermination( const EventObject& ) throw (TerminationVetoException, RuntimeException)
+void SAL_CALL MacabDriver::queryTermination( const EventObject& )
 {
     // nothing to do, nothing to veto
 }
 
-void SAL_CALL MacabDriver::notifyTermination( const EventObject& ) throw (RuntimeException)
+void SAL_CALL MacabDriver::notifyTermination( const EventObject& )
 {
     m_aImplModule.shutdown();
 }
 
-void SAL_CALL MacabDriver::disposing( const EventObject& ) throw (RuntimeException)
+void SAL_CALL MacabDriver::disposing( const EventObject& )
 {
     // not interested in (this is the disposing of the desktop, if any)
 }
@@ -318,7 +317,7 @@ OUString MacabDriver::impl_getConfigurationSettingsPath()
     return aPath.makeStringAndClear();
 }
 
-Reference< XInterface >  SAL_CALL MacabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory ) throw( Exception )
+Reference< XInterface >  SAL_CALL MacabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory )
 {
     return *(new MacabDriver(comphelper::getComponentContext(_rxFactory)));
 }

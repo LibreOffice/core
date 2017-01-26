@@ -42,7 +42,6 @@ VCLStatusIndicator::~VCLStatusIndicator()
 
 void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
                                               sal_Int32        nRange)
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -67,7 +66,6 @@ void SAL_CALL VCLStatusIndicator::start(const OUString& sText ,
 }
 
 void SAL_CALL VCLStatusIndicator::reset()
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     if (m_pStatusBar)
@@ -78,7 +76,6 @@ void SAL_CALL VCLStatusIndicator::reset()
 }
 
 void SAL_CALL VCLStatusIndicator::end()
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -96,7 +93,6 @@ void SAL_CALL VCLStatusIndicator::end()
 }
 
 void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     m_sText = sText;
@@ -105,7 +101,6 @@ void SAL_CALL VCLStatusIndicator::setText(const OUString& sText)
 }
 
 void SAL_CALL VCLStatusIndicator::setValue(sal_Int32 nValue)
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 

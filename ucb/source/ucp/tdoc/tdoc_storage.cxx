@@ -56,8 +56,6 @@ StorageElementFactory::~StorageElementFactory()
 
 uno::Reference< embed::XStorage >
 StorageElementFactory::createTemporaryStorage()
-    throw ( uno::Exception,
-            uno::RuntimeException )
 {
     uno::Reference< embed::XStorage > xStorage;
     uno::Reference< lang::XSingleServiceFactory > xStorageFac;
@@ -80,11 +78,6 @@ StorageElementFactory::createTemporaryStorage()
 uno::Reference< embed::XStorage >
 StorageElementFactory::createStorage( const OUString & rUri,
                                       StorageAccessMode eMode )
-    throw ( embed::InvalidStorageException,
-            lang::IllegalArgumentException,
-            io::IOException,
-            embed::StorageWrappedTargetException,
-            uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -233,12 +226,6 @@ StorageElementFactory::createStorage( const OUString & rUri,
 uno::Reference< io::XInputStream >
 StorageElementFactory::createInputStream( const OUString & rUri,
                                           const OUString & rPassword )
-    throw ( embed::InvalidStorageException,
-            lang::IllegalArgumentException,
-            io::IOException,
-            embed::StorageWrappedTargetException,
-            packages::WrongPasswordException,
-            uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -263,12 +250,6 @@ uno::Reference< io::XOutputStream >
 StorageElementFactory::createOutputStream( const OUString & rUri,
                                            const OUString & rPassword,
                                            bool bTruncate )
-    throw ( embed::InvalidStorageException,
-            lang::IllegalArgumentException,
-            io::IOException,
-            embed::StorageWrappedTargetException,
-            packages::WrongPasswordException,
-            uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -308,12 +289,6 @@ uno::Reference< io::XStream >
 StorageElementFactory::createStream( const OUString & rUri,
                                      const OUString & rPassword,
                                      bool bTruncate )
-    throw ( embed::InvalidStorageException,
-            lang::IllegalArgumentException,
-            io::IOException,
-            embed::StorageWrappedTargetException,
-            packages::WrongPasswordException,
-            uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
 
@@ -358,11 +333,6 @@ void StorageElementFactory::releaseElement( Storage * pElement )
 
 uno::Reference< embed::XStorage > StorageElementFactory::queryParentStorage(
         const OUString & rUri, StorageAccessMode eMode )
-    throw ( embed::InvalidStorageException,
-            lang::IllegalArgumentException,
-            io::IOException,
-            embed::StorageWrappedTargetException,
-            uno::RuntimeException )
 {
     uno::Reference< embed::XStorage > xParentStorage;
 
@@ -384,11 +354,6 @@ uno::Reference< embed::XStorage > StorageElementFactory::queryStorage(
         const uno::Reference< embed::XStorage > & xParentStorage,
         const OUString & rUri,
         StorageAccessMode eMode )
-    throw ( embed::InvalidStorageException,
-            lang::IllegalArgumentException,
-            io::IOException,
-            embed::StorageWrappedTargetException,
-            uno::RuntimeException )
 {
     uno::Reference< embed::XStorage > xStorage;
 
@@ -529,12 +494,6 @@ StorageElementFactory::queryStream(
                 const OUString & rPassword,
                 StorageAccessMode eMode,
                 bool bTruncate )
-    throw ( embed::InvalidStorageException,
-            lang::IllegalArgumentException,
-            io::IOException,
-            embed::StorageWrappedTargetException,
-            packages::WrongPasswordException,
-            uno::RuntimeException )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

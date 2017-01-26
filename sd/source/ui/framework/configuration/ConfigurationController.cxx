@@ -170,7 +170,6 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener,
     const OUString& rsEventType,
     const Any& rUserData)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -181,7 +180,6 @@ void SAL_CALL ConfigurationController::addConfigurationChangeListener (
 
 void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
     const Reference<XConfigurationChangeListener>& rxListener)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -191,7 +189,6 @@ void SAL_CALL ConfigurationController::removeConfigurationChangeListener (
 
 void SAL_CALL ConfigurationController::notifyEvent (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     mpImplementation->mpBroadcaster->NotifyListeners(rEvent);
@@ -200,7 +197,6 @@ void SAL_CALL ConfigurationController::notifyEvent (
 //----- XConfigurationController ----------------------------------------------
 
 void SAL_CALL ConfigurationController::lock()
-    throw (RuntimeException, std::exception)
 {
     OSL_ASSERT(mpImplementation.get()!=nullptr);
     OSL_ASSERT(mpImplementation->mpConfigurationUpdater.get()!=nullptr);
@@ -215,7 +211,6 @@ void SAL_CALL ConfigurationController::lock()
 }
 
 void SAL_CALL ConfigurationController::unlock()
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -233,7 +228,6 @@ void SAL_CALL ConfigurationController::unlock()
 void SAL_CALL ConfigurationController::requestResourceActivation (
     const Reference<XResourceId>& rxResourceId,
     ResourceActivationMode eMode)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
        ThrowIfDisposed();
@@ -291,7 +285,6 @@ void SAL_CALL ConfigurationController::requestResourceActivation (
 
 void SAL_CALL ConfigurationController::requestResourceDeactivation (
     const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -329,7 +322,6 @@ void SAL_CALL ConfigurationController::requestResourceDeactivation (
 
 Reference<XResource> SAL_CALL ConfigurationController::getResource (
     const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -340,7 +332,6 @@ Reference<XResource> SAL_CALL ConfigurationController::getResource (
 }
 
 void SAL_CALL ConfigurationController::update()
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -359,7 +350,6 @@ void SAL_CALL ConfigurationController::update()
 }
 
 sal_Bool SAL_CALL ConfigurationController::hasPendingRequests()
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -369,7 +359,6 @@ sal_Bool SAL_CALL ConfigurationController::hasPendingRequests()
 
 void SAL_CALL ConfigurationController::postChangeRequest (
     const Reference<XConfigurationChangeRequest>& rxRequest)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -378,7 +367,6 @@ void SAL_CALL ConfigurationController::postChangeRequest (
 }
 
 Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfiguration()
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -391,7 +379,6 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getRequestedConfigur
 }
 
 Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfiguration()
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -409,7 +396,6 @@ Reference<XConfiguration> SAL_CALL ConfigurationController::getCurrentConfigurat
 */
 void SAL_CALL ConfigurationController::restoreConfiguration (
     const Reference<XConfiguration>& rxNewConfiguration)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -470,7 +456,6 @@ void SAL_CALL ConfigurationController::restoreConfiguration (
 void SAL_CALL ConfigurationController::addResourceFactory(
     const OUString& sResourceURL,
     const Reference<XResourceFactory>& rxResourceFactory)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -479,7 +464,6 @@ void SAL_CALL ConfigurationController::addResourceFactory(
 
 void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
     const OUString& sResourceURL)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -488,7 +472,6 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForURL(
 
 void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
     const Reference<XResourceFactory>& rxResourceFactory)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -497,7 +480,6 @@ void SAL_CALL ConfigurationController::removeResourceFactoryForReference(
 
 Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory (
     const OUString& sResourceURL)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -508,7 +490,6 @@ Reference<XResourceFactory> SAL_CALL ConfigurationController::getResourceFactory
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArguments)
-    throw (Exception, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
 
@@ -523,7 +504,6 @@ void SAL_CALL ConfigurationController::initialize (const Sequence<Any>& aArgumen
 }
 
 void ConfigurationController::ThrowIfDisposed () const
-    throw (css::lang::DisposedException, css::uno::RuntimeException)
 {
     if (mbIsDisposed)
     {

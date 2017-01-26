@@ -94,7 +94,6 @@ namespace shell { namespace sessioninstall
 void SyncDbusSessionHelper::InstallPackageFiles(
     sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
-    throw (css::uno::RuntimeException, std::exception)
 {
     request("InstallPackageFiles", xid, files, interaction);
 }
@@ -102,7 +101,6 @@ void SyncDbusSessionHelper::InstallPackageFiles(
 void SyncDbusSessionHelper::InstallProvideFiles(
     sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
-    throw (css::uno::RuntimeException, std::exception)
 {
     request("InstallProvideFiles", xid, files, interaction);
 }
@@ -110,7 +108,6 @@ void SyncDbusSessionHelper::InstallProvideFiles(
 void SyncDbusSessionHelper::InstallCatalogs(
     sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
-    throw (css::uno::RuntimeException, std::exception)
 {
     request("InstallCatalogs", xid, files, interaction);
 }
@@ -118,7 +115,6 @@ void SyncDbusSessionHelper::InstallCatalogs(
 void SyncDbusSessionHelper::InstallPackageNames(
     sal_uInt32 xid, css::uno::Sequence<OUString> const & packages,
     OUString const & interaction)
-    throw (css::uno::RuntimeException, std::exception)
 {
     request("InstallPackageNames", xid, packages, interaction);
 }
@@ -126,7 +122,6 @@ void SyncDbusSessionHelper::InstallPackageNames(
 void SyncDbusSessionHelper::InstallMimeTypes(
     sal_uInt32 xid, css::uno::Sequence<OUString> const & mimeTypes,
     OUString const & interaction)
-    throw (css::uno::RuntimeException, std::exception)
 {
     request("InstallMimeTypes", xid, mimeTypes, interaction);
 }
@@ -134,7 +129,6 @@ void SyncDbusSessionHelper::InstallMimeTypes(
 void SyncDbusSessionHelper::InstallFontconfigResources(
     sal_uInt32 xid, css::uno::Sequence<OUString> const & resources,
     OUString const & interaction)
-    throw (css::uno::RuntimeException, std::exception)
 {
     request("InstallFontconfigResources", xid, resources, interaction);
 }
@@ -142,7 +136,6 @@ void SyncDbusSessionHelper::InstallFontconfigResources(
 void SyncDbusSessionHelper::InstallGStreamerResources(
     sal_uInt32 xid, css::uno::Sequence<OUString> const & resources,
     OUString const & interaction)
-    throw (css::uno::RuntimeException, std::exception)
 {
     request("InstallGStreamerResources", xid, resources, interaction);
 }
@@ -150,7 +143,6 @@ void SyncDbusSessionHelper::InstallGStreamerResources(
 void SyncDbusSessionHelper::RemovePackageByFiles(
     sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
-    throw (css::uno::RuntimeException, std::exception)
 {
     request("RemovePackageByFiles", xid, files, interaction);
 }
@@ -158,12 +150,11 @@ void SyncDbusSessionHelper::RemovePackageByFiles(
 void SyncDbusSessionHelper::InstallPrinterDrivers(
     sal_uInt32 xid, css::uno::Sequence<OUString> const & files,
     OUString const & interaction)
-    throw (css::uno::RuntimeException, std::exception)
 {
     request("InstallPrinteDrivers", xid, files, interaction);
 }
 
-    void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, sal_Bool& o_isInstalled ) throw (RuntimeException, std::exception)
+    void SAL_CALL SyncDbusSessionHelper::IsInstalled( const OUString& sPackagename, const OUString& sInteraction, sal_Bool& o_isInstalled )
     {
         const OString sPackagenameAscii = OUStringToOString(sPackagename, RTL_TEXTENCODING_ASCII_US);
         const OString sInteractionAscii = OUStringToOString(sInteraction, RTL_TEXTENCODING_ASCII_US);

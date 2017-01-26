@@ -47,7 +47,6 @@ SEInitializer_MSCryptImpl::~SEInitializer_MSCryptImpl()
 cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     SEInitializer_MSCryptImpl::createSecurityContext(
     const OUString& sCertDB )
-    throw (cssu::RuntimeException)
 {
     const char* n_pCertStore ;
     HCERTSTORE  n_hStoreHandle ;
@@ -118,7 +117,6 @@ cssu::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 }
 
 void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const cssu::Reference< cssxc::XXMLSecurityContext >&)
-    throw (cssu::RuntimeException)
 {
     /*
     cssu::Reference< cssxc::XSecurityEnvironment > xSecEnv
@@ -148,39 +146,33 @@ void SAL_CALL SEInitializer_MSCryptImpl::freeSecurityContext( const cssu::Refere
 }
 
 OUString SEInitializer_MSCryptImpl_getImplementationName()
-    throw (cssu::RuntimeException)
 {
     return OUString( "com.sun.star.xml.security.bridge.xmlsec.SEInitializer_MSCryptImpl" );
 }
 
 cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl_getSupportedServiceNames()
-    throw (cssu::RuntimeException)
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.SEInitializer" };
     return aRet;
 }
 
 cssu::Reference< cssu::XInterface > SAL_CALL SEInitializer_MSCryptImpl_createInstance( const cssu::Reference< cssl::XMultiServiceFactory > & rSMgr)
-    throw( cssu::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new SEInitializer_MSCryptImpl( comphelper::getComponentContext(rSMgr) ));
 }
 
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_MSCryptImpl::getImplementationName()
-    throw (cssu::RuntimeException)
 {
     return SEInitializer_MSCryptImpl_getImplementationName();
 }
 
 sal_Bool SAL_CALL SEInitializer_MSCryptImpl::supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 cssu::Sequence< OUString > SAL_CALL SEInitializer_MSCryptImpl::getSupportedServiceNames()
-    throw (cssu::RuntimeException)
 {
     return SEInitializer_MSCryptImpl_getSupportedServiceNames();
 }

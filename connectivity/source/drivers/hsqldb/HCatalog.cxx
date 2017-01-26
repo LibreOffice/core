@@ -121,7 +121,7 @@ void OHCatalog::refreshUsers()
         m_pUsers = new OUsers(*this,m_aMutex,aVector,m_xConnection,this);
 }
 
-Any SAL_CALL OHCatalog::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OHCatalog::queryInterface( const Type & rType )
 {
     if ( rType == cppu::UnoType<XGroupsSupplier>::get())
         return Any();
@@ -129,7 +129,7 @@ Any SAL_CALL OHCatalog::queryInterface( const Type & rType ) throw(RuntimeExcept
     return OCatalog::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL OHCatalog::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OHCatalog::getTypes(  )
 {
     Sequence< Type > aTypes = OCatalog::getTypes();
     ::std::vector<Type> aOwnTypes;

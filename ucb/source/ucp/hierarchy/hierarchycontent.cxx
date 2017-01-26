@@ -168,7 +168,6 @@ void SAL_CALL HierarchyContent::release()
 
 // virtual
 uno::Any SAL_CALL HierarchyContent::queryInterface( const uno::Type & rType )
-    throw ( uno::RuntimeException, std::exception )
 {
     uno::Any aRet = ContentImplHelper::queryInterface( rType );
 
@@ -197,7 +196,6 @@ XTYPEPROVIDER_COMMON_IMPL( HierarchyContent );
 
 // virtual
 uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
-    throw( uno::RuntimeException, std::exception )
 {
     cppu::OTypeCollection * pCollection = nullptr;
 
@@ -276,7 +274,6 @@ uno::Sequence< uno::Type > SAL_CALL HierarchyContent::getTypes()
 
 // virtual
 OUString SAL_CALL HierarchyContent::getImplementationName()
-    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ucb.HierarchyContent" );
 }
@@ -285,7 +282,6 @@ OUString SAL_CALL HierarchyContent::getImplementationName()
 // virtual
 uno::Sequence< OUString > SAL_CALL
 HierarchyContent::getSupportedServiceNames()
-    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aSNS( 1 );
 
@@ -305,7 +301,6 @@ HierarchyContent::getSupportedServiceNames()
 
 // virtual
 OUString SAL_CALL HierarchyContent::getContentType()
-    throw( uno::RuntimeException, std::exception )
 {
     return m_aProps.getContentType();
 }
@@ -314,7 +309,6 @@ OUString SAL_CALL HierarchyContent::getContentType()
 // virtual
 uno::Reference< ucb::XContentIdentifier > SAL_CALL
 HierarchyContent::getIdentifier()
-    throw( uno::RuntimeException, std::exception )
 {
     // Transient?
     if ( m_eState == TRANSIENT )
@@ -335,9 +329,6 @@ uno::Any SAL_CALL HierarchyContent::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception,
-           ucb::CommandAbortedException,
-           uno::RuntimeException, std::exception )
 {
     uno::Any aRet;
 
@@ -552,7 +543,6 @@ uno::Any SAL_CALL HierarchyContent::execute(
 
 // virtual
 void SAL_CALL HierarchyContent::abort( sal_Int32 /*CommandId*/ )
-    throw( uno::RuntimeException, std::exception )
 {
     // @@@ Generally, no action takes much time...
 }
@@ -564,7 +554,6 @@ void SAL_CALL HierarchyContent::abort( sal_Int32 /*CommandId*/ )
 // virtual
 uno::Sequence< ucb::ContentInfo > SAL_CALL
 HierarchyContent::queryCreatableContentsInfo()
-    throw( uno::RuntimeException, std::exception )
 {
     return m_aProps.getCreatableContentsInfo();
 }
@@ -573,7 +562,6 @@ HierarchyContent::queryCreatableContentsInfo()
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
 HierarchyContent::createNewContent( const ucb::ContentInfo& Info )
-    throw( uno::RuntimeException, std::exception )
 {
     if ( isFolder() )
     {
@@ -1058,7 +1046,6 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         const uno::Sequence< beans::PropertyValue >& rValues,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1363,7 +1350,6 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                                const uno::Reference<
                                     ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1509,7 +1495,6 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
 void HierarchyContent::destroy( bool bDeletePhysical,
                                 const uno::Reference<
                                     ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception, std::exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
 
@@ -1566,7 +1551,6 @@ void HierarchyContent::destroy( bool bDeletePhysical,
 void HierarchyContent::transfer(
             const ucb::TransferInfo& rInfo,
             const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception, std::exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 

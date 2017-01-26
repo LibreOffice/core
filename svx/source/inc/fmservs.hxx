@@ -95,20 +95,17 @@ namespace svxform
 /// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL
 FmXGridControl_NewInstance_Impl(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const &)
-    throw (css::uno::Exception);
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 /// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL
 FormController_NewInstance_Impl(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const &)
-    throw (css::uno::Exception);
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 /// @throws css::uno::Exception
 css::uno::Reference<css::uno::XInterface> SAL_CALL
 LegacyFormController_NewInstance_Impl(
-    css::uno::Reference<css::lang::XMultiServiceFactory> const &)
-    throw (css::uno::Exception);
+    css::uno::Reference<css::lang::XMultiServiceFactory> const &);
 
 #endif // INCLUDED_SVX_SOURCE_INC_FMSERVS_HXX
 

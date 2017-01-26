@@ -79,9 +79,9 @@ public:
     explicit OPropertySetHelperInfo_Impl( IPropertyArrayHelper & rHelper_ );
 
     // XPropertySetInfo-methods
-    virtual Sequence< Property > SAL_CALL getProperties() throw(css::uno::RuntimeException, std::exception) override;
-    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) throw(css::uno::RuntimeException, std::exception) override;
+    virtual Sequence< Property > SAL_CALL getProperties() override;
+    virtual Property SAL_CALL getPropertyByName(const OUString& PropertyName) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName(const OUString& PropertyName) override;
 };
 
 
@@ -97,7 +97,7 @@ OPropertySetHelperInfo_Impl::OPropertySetHelperInfo_Impl(
 /**
  * Return the sequence of properties, which are provided through the constructor.
  */
-Sequence< Property > OPropertySetHelperInfo_Impl::getProperties() throw(css::uno::RuntimeException, std::exception)
+Sequence< Property > OPropertySetHelperInfo_Impl::getProperties()
 {
     return aInfos;
 }
@@ -105,7 +105,7 @@ Sequence< Property > OPropertySetHelperInfo_Impl::getProperties() throw(css::uno
 /**
  * Return the sequence of properties, which are provided through the constructor.
  */
-Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & PropertyName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & PropertyName )
 {
     Property * pR;
     pR = static_cast<Property *>(bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
@@ -121,7 +121,7 @@ Property OPropertySetHelperInfo_Impl::getPropertyByName( const OUString & Proper
 /**
  * Return the sequence of properties, which are provided through the constructor.
  */
-sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool OPropertySetHelperInfo_Impl::hasPropertyByName( const OUString & PropertyName )
 {
     Property * pR;
     pR = static_cast<Property *>(bsearch( &PropertyName, aInfos.getConstArray(), aInfos.getLength(),
@@ -207,7 +207,6 @@ OPropertySetHelper2::~OPropertySetHelper2()
 
 // XInterface
 Any OPropertySetHelper::queryInterface( const css::uno::Type & rType )
-    throw (RuntimeException, std::exception)
 {
     return ::cppu::queryInterface(
         rType,
@@ -217,7 +216,6 @@ Any OPropertySetHelper::queryInterface( const css::uno::Type & rType )
 }
 
 Any OPropertySetHelper2::queryInterface( const css::uno::Type & rType )
-    throw (RuntimeException, std::exception)
 {
     Any cnd(cppu::queryInterface(rType, static_cast< XPropertySetOption * >(this)));
     if ( cnd.hasValue() )
@@ -230,7 +228,6 @@ Any OPropertySetHelper2::queryInterface( const css::uno::Type & rType )
  * called from the derivee's XTypeProvider::getTypes implementation
  */
 css::uno::Sequence< css::uno::Type > OPropertySetHelper::getTypes()
-    throw (RuntimeException)
 {
     return css::uno::Sequence<css::uno::Type>({
         UnoType<css::beans::XPropertySet>::get(),
@@ -261,7 +258,6 @@ Reference < XPropertySetInfo > OPropertySetHelper::createPropertySetInfo(
 // XPropertySet
 void OPropertySetHelper::setPropertyValue(
     const OUString& rPropertyName, const Any& rValue )
-    throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     // get the map table
     IPropertyArrayHelper & rPH = getInfoHelper();
@@ -274,7 +270,6 @@ void OPropertySetHelper::setPropertyValue(
 // XPropertySet
 Any OPropertySetHelper::getPropertyValue(
     const OUString& rPropertyName )
-    throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     // get the map table
     IPropertyArrayHelper & rPH = getInfoHelper();
@@ -288,9 +283,6 @@ Any OPropertySetHelper::getPropertyValue(
 void OPropertySetHelper::addPropertyChangeListener(
     const OUString& rPropertyName,
     const Reference < XPropertyChangeListener > & rxListener )
-     throw(css::beans::UnknownPropertyException,
-           css::lang::WrappedTargetException,
-           css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bInDispose, "do not addPropertyChangeListener in the dispose call" );
@@ -336,9 +328,6 @@ void OPropertySetHelper::addPropertyChangeListener(
 void OPropertySetHelper::removePropertyChangeListener(
     const OUString& rPropertyName,
     const Reference < XPropertyChangeListener >& rxListener )
-    throw(css::beans::UnknownPropertyException,
-          css::lang::WrappedTargetException,
-          css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
@@ -370,9 +359,6 @@ void OPropertySetHelper::removePropertyChangeListener(
 void OPropertySetHelper::addVetoableChangeListener(
     const OUString& rPropertyName,
     const Reference< XVetoableChangeListener > & rxListener )
-    throw(css::beans::UnknownPropertyException,
-          css::lang::WrappedTargetException,
-          css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bInDispose, "do not addVetoableChangeListener in the dispose call" );
@@ -416,9 +402,6 @@ void OPropertySetHelper::addVetoableChangeListener(
 void OPropertySetHelper::removeVetoableChangeListener(
     const OUString& rPropertyName,
     const Reference < XVetoableChangeListener > & rxListener )
-    throw(css::beans::UnknownPropertyException,
-          css::lang::WrappedTargetException,
-          css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
@@ -500,11 +483,6 @@ void OPropertySetHelper::setDependentFastPropertyValue( sal_Int32 i_handle, cons
 
 // XFastPropertySet
 void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
-     throw(css::beans::UnknownPropertyException,
-           css::beans::PropertyVetoException,
-           css::lang::IllegalArgumentException,
-           css::lang::WrappedTargetException,
-           css::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE( !rBHelper.bInDispose, "do not setFastPropertyValue in the dispose call" );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );
@@ -570,9 +548,6 @@ void OPropertySetHelper::setFastPropertyValue( sal_Int32 nHandle, const Any& rVa
 
 // XFastPropertySet
 Any OPropertySetHelper::getFastPropertyValue( sal_Int32 nHandle )
-     throw(css::beans::UnknownPropertyException,
-           css::lang::WrappedTargetException,
-           css::uno::RuntimeException, std::exception)
 
 {
     IPropertyArrayHelper & rInfo = getInfoHelper();
@@ -897,7 +872,6 @@ void OPropertySetHelper::setFastPropertyValues(
 void OPropertySetHelper::setPropertyValues(
     const Sequence<OUString>& rPropertyNames,
     const Sequence<Any>& rValues )
-    throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
         sal_Int32   nSeqLen = rPropertyNames.getLength();
         std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nSeqLen ]);
@@ -911,7 +885,6 @@ void OPropertySetHelper::setPropertyValues(
 
 // XMultiPropertySet
 Sequence<Any> OPropertySetHelper::getPropertyValues( const Sequence<OUString>& rPropertyNames )
-    throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32   nSeqLen = rPropertyNames.getLength();
     std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[ nSeqLen ]);
@@ -936,7 +909,6 @@ Sequence<Any> OPropertySetHelper::getPropertyValues( const Sequence<OUString>& r
 void OPropertySetHelper::addPropertiesChangeListener(
     const Sequence<OUString> & ,
     const Reference < XPropertiesChangeListener > & rListener )
-    throw(css::uno::RuntimeException, std::exception)
 {
     rBHelper.addListener( cppu::UnoType<decltype(rListener)>::get(), rListener );
 }
@@ -944,7 +916,6 @@ void OPropertySetHelper::addPropertiesChangeListener(
 // XMultiPropertySet
 void OPropertySetHelper::removePropertiesChangeListener(
     const Reference < XPropertiesChangeListener > & rListener )
-    throw(css::uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<decltype(rListener)>::get(), rListener );
 }
@@ -953,7 +924,6 @@ void OPropertySetHelper::removePropertiesChangeListener(
 void OPropertySetHelper::firePropertiesChangeEvent(
     const Sequence<OUString>& rPropertyNames,
     const Reference < XPropertiesChangeListener >& rListener )
-    throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nLen = rPropertyNames.getLength();
     std::unique_ptr<sal_Int32[]> pHandles(new sal_Int32[nLen]);
@@ -995,7 +965,6 @@ void OPropertySetHelper::firePropertiesChangeEvent(
 }
 
 void OPropertySetHelper2::enableChangeListenerNotification( sal_Bool bEnable )
-    throw(css::uno::RuntimeException, std::exception)
 {
     m_pReserved->m_bFireEvents = bEnable;
 }
@@ -1111,7 +1080,6 @@ Sequence< Property > OPropertyArrayHelper::getProperties()
 
 
 Property OPropertyArrayHelper::getPropertyByName(const OUString& aPropertyName)
-        throw (UnknownPropertyException)
 {
     Property * pR;
     pR = static_cast<Property *>(bsearch( &aPropertyName, aInfos.getConstArray(), aInfos.getLength(),

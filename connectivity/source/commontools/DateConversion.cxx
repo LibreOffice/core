@@ -234,7 +234,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const OUString& rString,
                                 sal_Int32 nKey,
                                 sal_Int16 nFieldType,
-                                sal_Int16 nKeyType) throw(css::lang::IllegalArgumentException)
+                                sal_Int16 nKeyType)
 {
     if (!rString.isEmpty())
     {
@@ -332,7 +332,7 @@ void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
 void DBTypeConversion::setValue(const Reference<XColumnUpdate>& xVariant,
                                 const Date& rNullDate,
                                 const double& rValue,
-                                sal_Int16 nKeyType) throw(css::lang::IllegalArgumentException)
+                                sal_Int16 nKeyType)
 {
     switch (nKeyType & ~NumberFormat::DEFINED)
     {

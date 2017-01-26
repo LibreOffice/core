@@ -58,7 +58,6 @@ SerfSession::SerfSession(
         const rtl::Reference< DAVSessionFactory > & rSessionFactory,
         const OUString& inUri,
         const ucbhelper::InternetProxyDecider & rProxyDecider )
-    throw ( DAVException )
     : DAVSession( rSessionFactory )
     , m_aMutex()
     , m_aUri( inUri )
@@ -91,7 +90,6 @@ SerfSession::~SerfSession( )
 
 
 void SerfSession::Init( const DAVRequestEnvironment & rEnv )
-  throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     m_aEnv = rEnv;
@@ -100,7 +98,6 @@ void SerfSession::Init( const DAVRequestEnvironment & rEnv )
 
 
 void SerfSession::Init()
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -597,7 +594,6 @@ void SerfSession::PROPFIND( const OUString & inPath,
                             const std::vector< OUString > & inPropNames,
                             std::vector< DAVResource > & ioResources,
                             const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -627,7 +623,6 @@ void SerfSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
                             std::vector< DAVResourceInfo > & ioResInfo,
                             const DAVRequestEnvironment & rEnv )
-    throw( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -655,7 +650,6 @@ void SerfSession::PROPFIND( const OUString & inPath,
 void SerfSession::PROPPATCH( const OUString & inPath,
                              const std::vector< ProppatchValue > & inValues,
                              const DAVRequestEnvironment & rEnv )
-    throw( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -676,7 +670,6 @@ void SerfSession::HEAD( const OUString & inPath,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource,
                         const DAVRequestEnvironment & rEnv )
-    throw( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -703,7 +696,6 @@ void SerfSession::HEAD( const OUString & inPath,
 uno::Reference< io::XInputStream >
 SerfSession::GET( const OUString & inPath,
                   const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -726,7 +718,6 @@ SerfSession::GET( const OUString & inPath,
 void SerfSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -748,7 +739,6 @@ SerfSession::GET( const OUString & inPath,
                   const std::vector< OUString > & inHeaderNames,
                   DAVResource & ioResource,
                   const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -777,7 +767,6 @@ void SerfSession::GET( const OUString & inPath,
                        const std::vector< OUString > & inHeaderNames,
                        DAVResource & ioResource,
                        const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -801,7 +790,6 @@ void SerfSession::GET( const OUString & inPath,
 void SerfSession::PUT( const OUString & inPath,
                        const uno::Reference< io::XInputStream > & inInputStream,
                        const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -828,7 +816,6 @@ SerfSession::POST( const OUString & inPath,
                    const OUString & rReferer,
                    const uno::Reference< io::XInputStream > & inInputStream,
                    const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -863,7 +850,6 @@ void SerfSession::POST( const OUString & inPath,
                         const uno::Reference< io::XInputStream > & inInputStream,
                         uno::Reference< io::XOutputStream > & oOutputStream,
                         const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -892,7 +878,6 @@ void SerfSession::POST( const OUString & inPath,
 
 void SerfSession::MKCOL( const OUString & inPath,
                          const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -912,7 +897,6 @@ void SerfSession::COPY( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
                         bool inOverWrite )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -933,7 +917,6 @@ void SerfSession::MOVE( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
                         bool inOverWrite )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -952,7 +935,6 @@ void SerfSession::MOVE( const OUString & inSourceURL,
 
 void SerfSession::DESTROY( const OUString & inPath,
                            const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1002,7 +984,6 @@ namespace
 void SerfSession::LOCK( const OUString & inPath,
                         ucb::Lock & rLock,
                         const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1020,7 +1001,6 @@ void SerfSession::LOCK( const OUString & inPath,
 sal_Int64 SerfSession::LOCK( const OUString & /*inPath*/,
                              sal_Int64 nTimeout,
                              const DAVRequestEnvironment & /*rEnv*/ )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1084,7 +1064,6 @@ bool SerfSession::LOCK( const OUString& rLock,
 
 void SerfSession::UNLOCK( const OUString & inPath,
                           const DAVRequestEnvironment & rEnv )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1128,7 +1107,6 @@ void SerfSession::UNLOCK( const OUString& rLock )
 
 
 void SerfSession::abort()
-    throw ( DAVException )
 {
     // 11.11.09 (tkr): The following code lines causing crashes if
     // closing a ongoing connection. It turned out that this existing
@@ -1249,7 +1227,6 @@ bool SerfSession::removeExpiredLocktoken( const OUString & /*inURL*/,
 // Common Error Handler
 
 void SerfSession::HandleError( std::shared_ptr<SerfRequestProcessor> rReqProc )
-    throw ( DAVException )
 {
     m_aEnv = DAVRequestEnvironment();
 

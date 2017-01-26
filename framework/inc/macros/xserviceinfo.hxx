@@ -49,17 +49,17 @@ namespace framework{
 
 #define PRIVATE_DEFINE_XSERVICEINFO_BASE( CLASS, XINTERFACECAST, SERVICENAME, IMPLEMENTATIONNAME )                                                  \
                                                                                                                                                     \
-    OUString SAL_CALL CLASS::getImplementationName() throw( css::uno::RuntimeException, std::exception )                                                            \
+    OUString SAL_CALL CLASS::getImplementationName()                                                            \
     {                                                                                                                                               \
         return impl_getStaticImplementationName();                                                                                                  \
     }                                                                                                                                               \
                                                                                                                                                     \
-    sal_Bool SAL_CALL CLASS::supportsService( const OUString& sServiceName ) throw( css::uno::RuntimeException, std::exception )                                    \
+    sal_Bool SAL_CALL CLASS::supportsService( const OUString& sServiceName )                                    \
     {                                                                                                                                               \
         return cppu::supportsService(this, sServiceName);                                                                                           \
     }                                                                                                                                               \
                                                                                                                                                     \
-    css::uno::Sequence< OUString > SAL_CALL CLASS::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )                                   \
+    css::uno::Sequence< OUString > SAL_CALL CLASS::getSupportedServiceNames()                                   \
     {                                                                                                                                               \
         return impl_getStaticSupportedServiceNames();                                                                                               \
     }                                                                                                                                               \
@@ -81,7 +81,7 @@ namespace framework{
     /*            use right EXTERNAL handling of them. That's why you should do nothing in your ctor, which could*/                                 \
     /*            work on your ref count! All other things are allowed. Do work with your own reference - please */                                 \
     /*            use "impl_initService()" method.                                                               */                                 \
-    css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager ) throw( css::uno::Exception )  \
+    css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )  \
     {                                                                                                                                                                                              \
         /* create new instance of service */                                                                                                                                                       \
         CLASS* pClass = new CLASS( xServiceManager );                                                                                                                                              \
@@ -100,7 +100,6 @@ namespace framework{
     /*            work on your ref count! All other things are allowed. Do work with your own reference - please */                                 \
     /*            use "impl_initService()" method.                                                               */                                 \
     css::uno::Reference< css::uno::XInterface > SAL_CALL CLASS::impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& xServiceManager )\
-        throw( css::uno::Exception )                                                                                                                                \
     {                                                                                                                                                               \
         /* retrieve component context from the given service manager */                                                                                             \
         css::uno::Reference< css::uno::XComponentContext > xComponentContext(                                                                                       \
@@ -141,9 +140,9 @@ namespace framework{
 
 #define DECLARE_XSERVICEINFO_NOFACTORY                                                                                                                                                                                                  \
     /* interface XServiceInfo */                                                                                                                                                                                                        \
-    virtual OUString                                        SAL_CALL getImplementationName              (                                   ) throw( css::uno::RuntimeException, std::exception ) override;   \
-    virtual sal_Bool                                        SAL_CALL supportsService                    ( const OUString&   sServiceName    ) throw( css::uno::RuntimeException, std::exception ) override;   \
-    virtual css::uno::Sequence< OUString >                  SAL_CALL getSupportedServiceNames           (                                   ) throw( css::uno::RuntimeException, std::exception ) override;   \
+    virtual OUString                                        SAL_CALL getImplementationName              (                                   ) override;   \
+    virtual sal_Bool                                        SAL_CALL supportsService                    ( const OUString&   sServiceName    ) override;   \
+    virtual css::uno::Sequence< OUString >                  SAL_CALL getSupportedServiceNames           (                                   ) override;   \
     /* Helper for XServiceInfo */                                                                                                                                                                                 \
     static css::uno::Sequence< OUString >                   SAL_CALL impl_getStaticSupportedServiceNames(                                   );                                                                    \
     static OUString                                         SAL_CALL impl_getStaticImplementationName   (                                   );                                                                    \

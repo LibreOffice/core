@@ -29,12 +29,12 @@ class ListLevelsEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 public:
     explicit ListLevelsEnumWrapper( SwVbaListLevels* pLevels ) : pListLevels( pLevels ), nIndex( 1 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nIndex <= pListLevels->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex <= pListLevels->getCount() )
             return pListLevels->Item( uno::makeAny( nIndex++ ), uno::Any() );
@@ -42,11 +42,11 @@ public:
     }
 };
 
-SwVbaListLevels::SwVbaListLevels( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, SwVbaListHelperRef const & pHelper ) throw (uno::RuntimeException) : SwVbaListLevels_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ), pListHelper( pHelper )
+SwVbaListLevels::SwVbaListLevels( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, SwVbaListHelperRef const & pHelper ) : SwVbaListLevels_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ), pListHelper( pHelper )
 {
 }
 
-::sal_Int32 SAL_CALL SwVbaListLevels::getCount() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaListLevels::getCount()
 {
     sal_Int32 nGalleryType = pListHelper->getGalleryType();
     if( nGalleryType == word::WdListGalleryType::wdBulletGallery
@@ -57,7 +57,7 @@ SwVbaListLevels::SwVbaListLevels( const uno::Reference< XHelperInterface >& xPar
     return 0;
 }
 
-uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ )
 {
     sal_Int32 nIndex = 0;
     if( !( Index1 >>= nIndex ) )
@@ -70,13 +70,13 @@ uno::Any SAL_CALL SwVbaListLevels::Item( const uno::Any& Index1, const uno::Any&
 
 // XEnumerationAccess
 uno::Type
-SwVbaListLevels::getElementType() throw (uno::RuntimeException)
+SwVbaListLevels::getElementType()
 {
     return cppu::UnoType<word::XListLevel>::get();
 }
 
 uno::Reference< container::XEnumeration >
-SwVbaListLevels::createEnumeration() throw (uno::RuntimeException)
+SwVbaListLevels::createEnumeration()
 {
     return new ListLevelsEnumWrapper( this );
 }

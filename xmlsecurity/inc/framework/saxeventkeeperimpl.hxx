@@ -215,109 +215,78 @@ public:
     virtual ~SAXEventKeeperImpl() override;
 
     /* XSAXEventKeeper */
-    virtual sal_Int32 SAL_CALL addElementCollector(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeElementCollector( sal_Int32 id )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL addBlocker(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeBlocker( sal_Int32 id )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isBlocking(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL addElementCollector(  ) override;
+    virtual void SAL_CALL removeElementCollector( sal_Int32 id ) override;
+    virtual sal_Int32 SAL_CALL addBlocker(  ) override;
+    virtual void SAL_CALL removeBlocker( sal_Int32 id ) override;
+    virtual sal_Bool SAL_CALL isBlocking(  ) override;
     virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL
-        getElement( sal_Int32 id )
-        throw (css::uno::RuntimeException, std::exception) override;
+        getElement( sal_Int32 id ) override;
     virtual void SAL_CALL setElement(
         sal_Int32 id,
-        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aElement )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aElement ) override;
     virtual css::uno::Reference<
         css::xml::sax::XDocumentHandler > SAL_CALL
         setNextHandler( const css::uno::Reference<
-            css::xml::sax::XDocumentHandler >& xNewHandler )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL printBufferNodeTree()
-        throw (css::uno::RuntimeException, std::exception) override;
+            css::xml::sax::XDocumentHandler >& xNewHandler ) override;
+    virtual OUString SAL_CALL printBufferNodeTree() override;
     virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL
-        getCurrentBlockingNode()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getCurrentBlockingNode() override;
 
     /* XSecuritySAXEventKeeper */
     virtual sal_Int32 SAL_CALL addSecurityElementCollector(
         css::xml::crypto::sax::ElementMarkPriority priority,
-        sal_Bool modifyElement )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSecurityId( sal_Int32 id, sal_Int32 securityId )
-        throw (css::uno::RuntimeException, std::exception) override;
+        sal_Bool modifyElement ) override;
+    virtual void SAL_CALL setSecurityId( sal_Int32 id, sal_Int32 securityId ) override;
 
     /* XReferenceResolvedBroadcaster */
     virtual void SAL_CALL addReferenceResolvedListener(
         sal_Int32 referenceId,
-        const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& listener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& listener ) override;
     virtual void SAL_CALL removeReferenceResolvedListener(
         sal_Int32 referenceId,
-        const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& listener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::crypto::sax::XReferenceResolvedListener >& listener ) override;
 
     /* XSAXEventKeeperStatusChangeBroadcaster */
     virtual void SAL_CALL addSAXEventKeeperStatusChangeListener(
-        const css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >& listener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >& listener ) override;
     virtual void SAL_CALL removeSAXEventKeeperStatusChangeListener(
-        const css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >& listener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::crypto::sax::XSAXEventKeeperStatusChangeListener >& listener ) override;
 
     /* XDocumentHandler */
-    virtual void SAL_CALL startDocument(  )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endDocument(  )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startDocument(  ) override;
+    virtual void SAL_CALL endDocument(  ) override;
     virtual void SAL_CALL startElement(
         const OUString& aName,
         const css::uno::Reference< css::xml::sax::XAttributeList >&
-        xAttribs )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endElement( const OUString& aName )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL characters( const OUString& aChars )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+        xAttribs ) override;
+    virtual void SAL_CALL endElement( const OUString& aName ) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
     virtual void SAL_CALL processingInstruction(
-        const OUString& aTarget, const OUString& aData )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+        const OUString& aTarget, const OUString& aData ) override;
     virtual void SAL_CALL setDocumentLocator(
-        const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     /* XServiceInfo */
-    virtual OUString SAL_CALL getImplementationName(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 /// @throws css::uno::RuntimeException
-OUString SAXEventKeeperImpl_getImplementationName()
-    throw ( css::uno::RuntimeException );
+OUString SAXEventKeeperImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  )
-    throw ( css::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL SAXEventKeeperImpl_getSupportedServiceNames(  );
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
-SAL_CALL SAXEventKeeperImpl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
-    throw ( css::uno::Exception );
+SAL_CALL SAXEventKeeperImpl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
 #endif
 

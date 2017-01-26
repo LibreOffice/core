@@ -63,16 +63,16 @@ namespace oglcanvas
         virtual void disposeThis() override;
 
         // XSprite
-        virtual void SAL_CALL setAlpha( double alpha ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL move( const css::geometry::RealPoint2D&  aNewPos, const css::rendering::ViewState&  viewState, const css::rendering::RenderState& renderState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setPriority( double nPriority ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL show() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL hide() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setAlpha( double alpha ) override;
+        virtual void SAL_CALL move( const css::geometry::RealPoint2D&  aNewPos, const css::rendering::ViewState&  viewState, const css::rendering::RenderState& renderState ) override;
+        virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) override;
+        virtual void SAL_CALL clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) override;
+        virtual void SAL_CALL setPriority( double nPriority ) override;
+        virtual void SAL_CALL show() override;
+        virtual void SAL_CALL hide() override;
 
         // XCustomSprite
-        virtual css::uno::Reference< css::rendering::XCanvas > SAL_CALL getContentCanvas() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::rendering::XCanvas > SAL_CALL getContentCanvas() override;
 
         double getPriority() const { return mfPriority; }
 

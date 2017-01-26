@@ -41,21 +41,17 @@ InputStream::~InputStream()
 }
 
 sal_Int32 SAL_CALL InputStream::available()
-    throw( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception )
 {
     return 0;
 }
 
 void SAL_CALL InputStream::closeInput()
-    throw( io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception )
 {
     if (mpStream)
         g_input_stream_close(G_INPUT_STREAM(mpStream), nullptr, nullptr);
 }
 
 void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
-    throw( io::NotConnectedException, io::BufferSizeExceededException,
-      io::IOException, uno::RuntimeException, std::exception )
 {
     // Conservatively call readBytes and discard the read data, but given this
     // InputStream will always be wrapped in comphelper::OSeekableInputWrapper,
@@ -65,8 +61,6 @@ void SAL_CALL InputStream::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-    throw( io::NotConnectedException, io::BufferSizeExceededException,
-      io::IOException, uno::RuntimeException, std::exception )
 {
     if (!mpStream)
         throw io::NotConnectedException();
@@ -89,8 +83,6 @@ sal_Int32 SAL_CALL InputStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal
 }
 
 sal_Int32 SAL_CALL InputStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
-    throw( io::NotConnectedException, io::BufferSizeExceededException,
-      io::IOException, uno::RuntimeException, std::exception )
 {
     return readBytes(aData, nMaxBytesToRead);
 }

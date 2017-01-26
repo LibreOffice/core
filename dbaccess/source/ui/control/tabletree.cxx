@@ -136,7 +136,7 @@ void OTableTreeListBox::implOnNewConnection( const Reference< XConnection >& _rx
     m_xImageProvider.reset( new ImageProvider( m_xConnection  ) );
 }
 
-void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection ) throw(SQLException, std::exception)
+void OTableTreeListBox::UpdateTableList( const Reference< XConnection >& _rxConnection )
 {
     Sequence< OUString > sTables, sViews;
 

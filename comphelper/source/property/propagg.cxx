@@ -141,7 +141,7 @@ OPropertyArrayAggregationHelper::PropertyOrigin OPropertyArrayAggregationHelper:
 }
 
 
-Property OPropertyArrayAggregationHelper::getPropertyByName( const OUString& _rPropertyName ) throw( UnknownPropertyException )
+Property OPropertyArrayAggregationHelper::getPropertyByName( const OUString& _rPropertyName )
 {
     const Property* pProperty = findPropertyByName( _rPropertyName );
 
@@ -273,7 +273,7 @@ namespace internal
         /// actually forwards a property value to the aggregate
         ///
         /// @throws Exception
-        void    doForward( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception );
+        void    doForward( sal_Int32 _nHandle, const Any& _rValue );
 
         sal_Int32 getCurrentlyForwardedProperty( ) const { return m_nCurrentlyForwarding; }
     };
@@ -298,7 +298,7 @@ namespace internal
     }
 
 
-    void PropertyForwarder::doForward( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception )
+    void PropertyForwarder::doForward( sal_Int32 _nHandle, const Any& _rValue )
     {
         OSL_ENSURE( m_rAggregationHelper.m_xAggregateSet.is(), "PropertyForwarder::doForward: no property set!" );
         if ( m_rAggregationHelper.m_xAggregateSet.is() )
@@ -339,7 +339,7 @@ OPropertySetAggregationHelper::~OPropertySetAggregationHelper()
 }
 
 
-css::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  css::uno::Type& _rType) throw( css::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL OPropertySetAggregationHelper::queryInterface(const  css::uno::Type& _rType)
 {
     css::uno::Any aReturn = OPropertyStateHelper::queryInterface(_rType);
 
@@ -370,7 +370,7 @@ void OPropertySetAggregationHelper::disposing()
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::disposing(const css::lang::EventObject& _rSource) throw ( css::uno::RuntimeException, std::exception)
+void SAL_CALL OPropertySetAggregationHelper::disposing(const css::lang::EventObject& _rSource)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::disposing : don't have an aggregate anymore !");
     if (_rSource.Source == m_xAggregateSet)
@@ -378,7 +378,7 @@ void SAL_CALL OPropertySetAggregationHelper::disposing(const css::lang::EventObj
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent>& _rEvents) throw( css::uno::RuntimeException, std::exception)
+void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent>& _rEvents)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::propertiesChange : have no aggregate !");
 
@@ -426,7 +426,7 @@ void SAL_CALL OPropertySetAggregationHelper::propertiesChange(const css::uno::Se
 }
 
 
-void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const css::beans::PropertyChangeEvent& _rEvent) throw( css::beans::PropertyVetoException,  css::uno::RuntimeException, std::exception)
+void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const css::beans::PropertyChangeEvent& _rEvent)
 {
     OSL_ENSURE(m_xAggregateSet.is(), "OPropertySetAggregationHelper::vetoableChange : have no aggregate !");
 
@@ -438,7 +438,6 @@ void SAL_CALL OPropertySetAggregationHelper::vetoableChange(const css::beans::Pr
 
 
 void OPropertySetAggregationHelper::setAggregation(const css::uno::Reference<  css::uno::XInterface >& _rxDelegate)
-        throw( css::lang::IllegalArgumentException )
 {
     osl::MutexGuard aGuard(rBHelper.rMutex);
 
@@ -478,7 +477,6 @@ void OPropertySetAggregationHelper::startListening()
 
 void SAL_CALL OPropertySetAggregationHelper::addVetoableChangeListener(const OUString& _rPropertyName,
                                                                        const  css::uno::Reference< css::beans::XVetoableChangeListener>& _rxListener)
-                                                                       throw( css::beans::UnknownPropertyException,  css::lang::WrappedTargetException,  css::uno::RuntimeException, std::exception)
 {
     OPropertySetHelper::addVetoableChangeListener(_rPropertyName, _rxListener);
     if (!m_bListening)
@@ -488,7 +486,6 @@ void SAL_CALL OPropertySetAggregationHelper::addVetoableChangeListener(const OUS
 
 void SAL_CALL OPropertySetAggregationHelper::addPropertyChangeListener(const OUString& _rPropertyName,
                                                                        const css::uno::Reference< css::beans::XPropertyChangeListener>& _rxListener)
-                                                                       throw( css::beans::UnknownPropertyException,  css::lang::WrappedTargetException,  css::uno::RuntimeException, std::exception)
 {
     OPropertySetHelper::addPropertyChangeListener(_rPropertyName, _rxListener);
     if (!m_bListening)
@@ -498,7 +495,6 @@ void SAL_CALL OPropertySetAggregationHelper::addPropertyChangeListener(const OUS
 
 void SAL_CALL OPropertySetAggregationHelper::addPropertiesChangeListener(const css::uno::Sequence< OUString >& _rPropertyNames,
                                                                          const css::uno::Reference< css::beans::XPropertiesChangeListener>& _rxListener)
-                                                                         throw( css::uno::RuntimeException, std::exception)
 {
     OPropertySetHelper::addPropertiesChangeListener(_rPropertyNames, _rxListener);
     if (!m_bListening)
@@ -525,9 +521,6 @@ OUString OPropertySetAggregationHelper::getPropertyName( sal_Int32 _nHandle ) co
 
 
 void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue(sal_Int32 _nHandle, const  css::uno::Any& _rValue)
-        throw( css::beans::UnknownPropertyException,  css::beans::PropertyVetoException,
-               css::lang::IllegalArgumentException,  css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     OUString aPropName;
@@ -567,9 +560,6 @@ void OPropertySetAggregationHelper::getFastPropertyValue( css::uno::Any& rValue,
 
 
 css::uno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_Int32 nHandle)
-        throw(   css::beans::UnknownPropertyException,
-                 css::lang::WrappedTargetException,
-                 css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     OUString aPropName;
@@ -592,7 +582,6 @@ css::uno::Any SAL_CALL OPropertySetAggregationHelper::getFastPropertyValue(sal_I
 
 void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
         const Sequence< OUString >& _rPropertyNames, const Sequence< Any >& _rValues )
-    throw ( PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
     OSL_ENSURE( !rBHelper.bInDispose, "OPropertySetAggregationHelper::setPropertyValues : do not use within the dispose call !");
     OSL_ENSURE( !rBHelper.bDisposed, "OPropertySetAggregationHelper::setPropertyValues : object is disposed" );
@@ -767,7 +756,6 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyValues(
 // XPropertyState
 
 css::beans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertyState(const OUString& _rPropertyName)
-            throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName( _rPropertyName );
@@ -792,7 +780,6 @@ css::beans::PropertyState SAL_CALL OPropertySetAggregationHelper::getPropertySta
 
 
 void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString& _rPropertyName)
-        throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName(_rPropertyName);
@@ -825,7 +812,6 @@ void SAL_CALL OPropertySetAggregationHelper::setPropertyToDefault(const OUString
 
 
 css::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const OUString& aPropertyName)
-        throw( css::beans::UnknownPropertyException,  css::lang::WrappedTargetException,  css::uno::RuntimeException, std::exception)
 {
     OPropertyArrayAggregationHelper& rPH = static_cast< OPropertyArrayAggregationHelper& >( getInfoHelper() );
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
@@ -846,7 +832,7 @@ css::uno::Any SAL_CALL OPropertySetAggregationHelper::getPropertyDefault(const O
         return getPropertyDefaultByHandle(nHandle);
 }
 
-sal_Bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException, css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue, sal_Int32 _nHandle, const Any& _rValue )
 {
     bool bModified = false;
 
@@ -866,7 +852,7 @@ sal_Bool SAL_CALL OPropertySetAggregationHelper::convertFastPropertyValue( Any& 
     return bModified;
 }
 
-void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception, std::exception )
+void SAL_CALL OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
 {
     OSL_ENSURE( m_pForwarder->isResponsibleFor( _nHandle ), "OPropertySetAggregationHelper::setFastPropertyValue_NoBroadcast: this is no forwarded property - did you use declareForwardedProperty for it?" );
     if ( m_pForwarder->isResponsibleFor( _nHandle ) )

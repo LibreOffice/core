@@ -87,7 +87,6 @@ static const char arUsingText[] =
 /// @throws RuntimeException
 static bool readOption( OUString * pValue, const sal_Char * pOpt,
                         sal_uInt32 * pnIndex, const OUString & aArg)
-    throw (RuntimeException)
 {
     const OUString dash("-");
     if(!aArg.startsWith(dash))
@@ -147,7 +146,6 @@ void createInstance(
     Reference< T > & rxOut,
     const Reference< XComponentContext > & xContext,
     const OUString & rServiceName )
-    throw (Exception)
 {
     Reference< XMultiComponentFactory > xMgr( xContext->getServiceManager() );
     Reference< XInterface > x( xMgr->createInstanceWithContext( rServiceName, xContext ) );
@@ -172,7 +170,6 @@ void createInstance(
 static Reference< XInterface > loadComponent(
     const Reference< XComponentContext > & xContext,
     const OUString & rImplName, const OUString & rLocation )
-    throw (Exception)
 {
     // determine loader to be used
     sal_Int32 nDot = rLocation.lastIndexOf( '.' );
@@ -255,7 +252,7 @@ class OInstanceProvider
     OUString                          _aInstanceName;
 
     /// @throws Exception
-    inline Reference< XInterface > createInstance() throw (Exception);
+    inline Reference< XInterface > createInstance();
 
 public:
     OInstanceProvider( const Reference< XComponentContext > & xContext,
@@ -272,12 +269,10 @@ public:
         {}
 
     // XInstanceProvider
-    virtual Reference< XInterface > SAL_CALL getInstance( const OUString & rName )
-        throw (NoSuchElementException, RuntimeException, std::exception) override;
+    virtual Reference< XInterface > SAL_CALL getInstance( const OUString & rName ) override;
 };
 
 inline Reference< XInterface > OInstanceProvider::createInstance()
-    throw (Exception)
 {
     Reference< XInterface > xRet;
     if (!_aImplName.isEmpty()) // manually via loader
@@ -294,7 +289,6 @@ inline Reference< XInterface > OInstanceProvider::createInstance()
 }
 
 Reference< XInterface > OInstanceProvider::getInstance( const OUString & rName )
-    throw (NoSuchElementException, RuntimeException, std::exception)
 {
     try
     {
@@ -341,14 +335,12 @@ struct ODisposingListener : public WeakImplHelper< XEventListener >
     Condition cDisposed;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject & rEvt )
-        throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const EventObject & rEvt ) override;
 
     static void waitFor( const Reference< XComponent > & xComp );
 };
 
 void ODisposingListener::disposing( const EventObject & )
-    throw (RuntimeException, std::exception)
 {
     cDisposed.set();
 }

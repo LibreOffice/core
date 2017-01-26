@@ -68,10 +68,7 @@ public:
     // XJob
 
     virtual css::uno::Any SAL_CALL execute(
-        const css::uno::Sequence<css::beans::NamedValue >& Arguments)
-        throw (css::lang::IllegalArgumentException,
-            css::uno::Exception,
-            css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<css::beans::NamedValue >& Arguments) override;
 
 private:
     explicit PresenterScreenJob (const css::uno::Reference<css::uno::XComponentContext>& rxContext);
@@ -123,7 +120,7 @@ public:
 
     // XEventListener
 
-    virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) override;
 
 private:
     css::uno::Reference<css::frame::XModel2 > mxModel;

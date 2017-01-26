@@ -67,7 +67,7 @@ void TableColumn::dispose()
 }
 
 
-void TableColumn::throwIfDisposed() const throw (css::uno::RuntimeException)
+void TableColumn::throwIfDisposed() const
 {
     if( !mxTableModel.is() )
         throw DisposedException();
@@ -90,7 +90,7 @@ TableColumn& TableColumn::operator=( const TableColumn& r )
 // XCellRange
 
 
-Reference< XCell > SAL_CALL TableColumn::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+Reference< XCell > SAL_CALL TableColumn::getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
 {
     throwIfDisposed();
     if( nColumn != 0 )
@@ -100,7 +100,7 @@ Reference< XCell > SAL_CALL TableColumn::getCellByPosition( sal_Int32 nColumn, s
 }
 
 
-Reference< XCellRange > SAL_CALL TableColumn::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+Reference< XCellRange > SAL_CALL TableColumn::getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
 {
     throwIfDisposed();
     if( (nTop >= 0 ) && (nLeft == 0) && (nBottom >= nTop) && (nRight == 0)  )
@@ -111,7 +111,7 @@ Reference< XCellRange > SAL_CALL TableColumn::getCellRangeByPosition( sal_Int32 
 }
 
 
-Reference< XCellRange > SAL_CALL TableColumn::getCellRangeByName( const OUString& /*aRange*/ ) throw (RuntimeException, std::exception)
+Reference< XCellRange > SAL_CALL TableColumn::getCellRangeByName( const OUString& /*aRange*/ )
 {
     return Reference< XCellRange >();
 }
@@ -120,13 +120,13 @@ Reference< XCellRange > SAL_CALL TableColumn::getCellRangeByName( const OUString
 // XNamed
 
 
-OUString SAL_CALL TableColumn::getName() throw (RuntimeException, std::exception)
+OUString SAL_CALL TableColumn::getName()
 {
     return maName;
 }
 
 
-void SAL_CALL TableColumn::setName( const OUString& aName ) throw (RuntimeException, std::exception)
+void SAL_CALL TableColumn::setName( const OUString& aName )
 {
     maName = aName;
 }
@@ -135,7 +135,7 @@ void SAL_CALL TableColumn::setName( const OUString& aName ) throw (RuntimeExcept
 // XFastPropertySet
 
 
-void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& aValue )
 {
     bool bOk = false;
     bool bChange = false;
@@ -223,7 +223,7 @@ void SAL_CALL TableColumn::setFastPropertyValue( sal_Int32 nHandle, const Any& a
 }
 
 
-Any SAL_CALL TableColumn::getFastPropertyValue( sal_Int32 nHandle ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL TableColumn::getFastPropertyValue( sal_Int32 nHandle )
 {
     switch( nHandle )
     {

@@ -200,7 +200,6 @@ XSERVICEINFO_COMMOM_IMPL( UcbPropertiesManager,
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
 UcbPropertiesManager_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
-throw( css::uno::Exception )
 {
     css::lang::XServiceInfo* pX =
         static_cast<css::lang::XServiceInfo*>(new UcbPropertiesManager( rSMgr ));
@@ -223,7 +222,6 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( UcbPropertiesManager );
 
 // virtual
 Sequence< Property > SAL_CALL UcbPropertiesManager::getProperties()
-    throw( RuntimeException, std::exception )
 {
     return m_pProps;
 }
@@ -231,7 +229,6 @@ Sequence< Property > SAL_CALL UcbPropertiesManager::getProperties()
 
 // virtual
 Property SAL_CALL UcbPropertiesManager::getPropertyByName( const OUString& aName )
-    throw( UnknownPropertyException, RuntimeException, std::exception )
 {
     Property aProp;
     if ( queryProperty( aName, aProp ) )
@@ -243,7 +240,6 @@ Property SAL_CALL UcbPropertiesManager::getPropertyByName( const OUString& aName
 
 // virtual
 sal_Bool SAL_CALL UcbPropertiesManager::hasPropertyByName( const OUString& Name )
-    throw( RuntimeException, std::exception )
 {
     Property aProp;
     return queryProperty( Name, aProp );

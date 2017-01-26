@@ -50,29 +50,29 @@ public:
 protected:
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getCount(  ) override;
+    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
 
     // XGalleryThemes
-    virtual OUString SAL_CALL getName(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL update(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL insertURLByIndex( const OUString& URL, ::sal_Int32 Index ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL insertGraphicByIndex( const css::uno::Reference< css::graphic::XGraphic >& Graphic, ::sal_Int32 Index ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL insertDrawingByIndex( const css::uno::Reference< css::lang::XComponent >& Drawing, ::sal_Int32 Index ) throw (css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName(  ) override;
+    virtual void SAL_CALL update(  ) override;
+    virtual ::sal_Int32 SAL_CALL insertURLByIndex( const OUString& URL, ::sal_Int32 Index ) override;
+    virtual ::sal_Int32 SAL_CALL insertGraphicByIndex( const css::uno::Reference< css::graphic::XGraphic >& Graphic, ::sal_Int32 Index ) override;
+    virtual ::sal_Int32 SAL_CALL insertDrawingByIndex( const css::uno::Reference< css::lang::XComponent >& Drawing, ::sal_Int32 Index ) override;
+    virtual void SAL_CALL removeByIndex( ::sal_Int32 Index ) override;
 
     // SfxListener
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

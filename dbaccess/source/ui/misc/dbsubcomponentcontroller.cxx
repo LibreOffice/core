@@ -209,7 +209,7 @@ namespace dbaui
         }
     }
 
-    Any SAL_CALL DBSubComponentController::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
+    Any SAL_CALL DBSubComponentController::queryInterface(const Type& _rType)
     {
         if ( _rType.equals( cppu::UnoType<XScriptInvocationContext>::get() ) )
         {
@@ -221,7 +221,7 @@ namespace dbaui
         return DBSubComponentController_Base::queryInterface( _rType );
     }
 
-    Sequence< Type > SAL_CALL DBSubComponentController::getTypes(  ) throw (RuntimeException, std::exception)
+    Sequence< Type > SAL_CALL DBSubComponentController::getTypes(  )
     {
         Sequence< Type > aTypes( DBSubComponentController_Base::getTypes() );
         if ( !m_pImpl->documentHasScriptSupport() )
@@ -349,7 +349,7 @@ namespace dbaui
         m_pImpl->m_aDataSource.clear();
     }
 
-    void SAL_CALL DBSubComponentController::disposing(const EventObject& _rSource) throw( RuntimeException, std::exception )
+    void SAL_CALL DBSubComponentController::disposing(const EventObject& _rSource)
     {
         if ( _rSource.Source == getConnection() )
         {
@@ -398,7 +398,7 @@ namespace dbaui
         showError( m_pImpl->m_aCurrentError );
     }
 
-    sal_Bool SAL_CALL DBSubComponentController::suspend(sal_Bool bSuspend) throw( RuntimeException, std::exception )
+    sal_Bool SAL_CALL DBSubComponentController::suspend(sal_Bool bSuspend)
     {
         m_pImpl->m_bSuspended = bSuspend;
         if ( !bSuspend && !isConnected() )
@@ -407,7 +407,7 @@ namespace dbaui
         return true;
     }
 
-    sal_Bool SAL_CALL DBSubComponentController::attachModel( const Reference< XModel > & _rxModel) throw( RuntimeException, std::exception )
+    sal_Bool SAL_CALL DBSubComponentController::attachModel( const Reference< XModel > & _rxModel)
     {
         if ( !_rxModel.is() )
             return false;
@@ -529,7 +529,6 @@ namespace dbaui
     }
     // XTitle
     OUString SAL_CALL DBSubComponentController::getTitle()
-        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( getMutex() );
         if ( m_bExternalTitle )
@@ -551,7 +550,7 @@ namespace dbaui
         return m_pImpl->m_nDocStartNumber;
     }
 
-    Reference< XEmbeddedScripts > SAL_CALL DBSubComponentController::getScriptContainer() throw (RuntimeException, std::exception)
+    Reference< XEmbeddedScripts > SAL_CALL DBSubComponentController::getScriptContainer()
     {
         ::osl::MutexGuard aGuard( getMutex() );
         if ( !m_pImpl->documentHasScriptSupport() )
@@ -560,25 +559,25 @@ namespace dbaui
         return Reference< XEmbeddedScripts >( getDatabaseDocument(), UNO_QUERY_THROW );
     }
 
-    void SAL_CALL DBSubComponentController::addModifyListener( const Reference< XModifyListener >& i_Listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL DBSubComponentController::addModifyListener( const Reference< XModifyListener >& i_Listener )
     {
         ::osl::MutexGuard aGuard( getMutex() );
         m_pImpl->m_aModifyListeners.addInterface( i_Listener );
     }
 
-    void SAL_CALL DBSubComponentController::removeModifyListener( const Reference< XModifyListener >& i_Listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL DBSubComponentController::removeModifyListener( const Reference< XModifyListener >& i_Listener )
     {
         ::osl::MutexGuard aGuard( getMutex() );
         m_pImpl->m_aModifyListeners.removeInterface( i_Listener );
     }
 
-    sal_Bool SAL_CALL DBSubComponentController::isModified(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DBSubComponentController::isModified(  )
     {
         ::osl::MutexGuard aGuard( getMutex() );
         return impl_isModified();
     }
 
-    void SAL_CALL DBSubComponentController::setModified( sal_Bool i_bModified ) throw (PropertyVetoException, RuntimeException, std::exception)
+    void SAL_CALL DBSubComponentController::setModified( sal_Bool i_bModified )
     {
         ::osl::ClearableMutexGuard aGuard( getMutex() );
 

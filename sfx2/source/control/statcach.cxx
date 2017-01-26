@@ -65,7 +65,7 @@ BindDispatch_Impl::BindDispatch_Impl( const css::uno::Reference< css::frame::XDi
     aStatus.IsEnabled = true;
 }
 
-void SAL_CALL BindDispatch_Impl::disposing( const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL BindDispatch_Impl::disposing( const css::lang::EventObject& )
 {
     if ( xDisp.is() )
     {
@@ -74,7 +74,7 @@ void SAL_CALL BindDispatch_Impl::disposing( const css::lang::EventObject& ) thro
     }
 }
 
-void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL  BindDispatch_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
 {
     aStatus = rEvent;
     if ( !pCache )

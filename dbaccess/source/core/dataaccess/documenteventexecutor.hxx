@@ -49,9 +49,9 @@ namespace dbaccess
         virtual ~DocumentEventExecutor() override;
 
         // css.document.XDocumentEventListener
-        virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) override;
         // css.lang.XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     private:
         ::std::unique_ptr< DocumentEventExecutor_Data >   m_pData;

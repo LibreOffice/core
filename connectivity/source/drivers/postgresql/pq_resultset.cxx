@@ -61,7 +61,6 @@ namespace pq_sdbc_driver
 {
 
 void ResultSet::checkClosed()
-    throw ( css::sdbc::SQLException, css::uno::RuntimeException )
 {
     if( ! m_result )
     {
@@ -130,7 +129,7 @@ Any ResultSet::getValue( sal_Int32 columnIndex )
 ResultSet::~ResultSet()
 {}
 
-void ResultSet::close(  ) throw (SQLException, RuntimeException, std::exception)
+void ResultSet::close(  )
 {
     Reference< XInterface > owner;
     {
@@ -146,7 +145,7 @@ void ResultSet::close(  ) throw (SQLException, RuntimeException, std::exception)
     }
 }
 
-Reference< XResultSetMetaData > ResultSet::getMetaData(  ) throw (SQLException, RuntimeException, std::exception)
+Reference< XResultSetMetaData > ResultSet::getMetaData(  )
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -155,7 +154,6 @@ Reference< XResultSetMetaData > ResultSet::getMetaData(  ) throw (SQLException, 
 }
 
 sal_Int32 ResultSet::findColumn( const OUString& columnName )
-        throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();

@@ -90,19 +90,16 @@ void StarOfficeWriterImportFilter::doRegisterHandlers(OdtGenerator &rGenerator)
 
 // XServiceInfo
 OUString SAL_CALL StarOfficeWriterImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Writer.StarOfficeWriterImportFilter");
 }
 
 sal_Bool SAL_CALL StarOfficeWriterImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL StarOfficeWriterImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     return Sequence< OUString > {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
 }

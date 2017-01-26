@@ -15,19 +15,16 @@ using namespace ::com::sun::star::uno;
 // XDocumentHandler
 void SAL_CALL
 PersonasDocHandler::startDocument()
-throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL
 PersonasDocHandler::endDocument()
-throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL
 PersonasDocHandler::characters( const OUString & aChars)
-    throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
     if( m_isLearnmoreTag )
         m_vLearnmoreURLs.push_back( aChars );
@@ -35,29 +32,24 @@ PersonasDocHandler::characters( const OUString & aChars)
 
 void SAL_CALL
 PersonasDocHandler::ignorableWhitespace( const OUString & )
-    throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL
 PersonasDocHandler::processingInstruction(
     const OUString &, const OUString & )
-        throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL
 PersonasDocHandler::setDocumentLocator(
     const Reference< xml::sax::XLocator >& )
-        throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL
 PersonasDocHandler::startElement( const OUString& aName,
     const Reference< xml::sax::XAttributeList > &xAttribs )
-        throw ( xml::sax::SAXException,
-            RuntimeException, std::exception )
 {
     if( aName == "searchresults" )
     {
@@ -73,7 +65,6 @@ PersonasDocHandler::startElement( const OUString& aName,
 }
 
 void SAL_CALL PersonasDocHandler::endElement( const OUString & )
-   throw ( xml::sax::SAXException, RuntimeException, std::exception )
 {
 }
 

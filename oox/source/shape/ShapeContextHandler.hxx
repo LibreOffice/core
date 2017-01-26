@@ -57,89 +57,70 @@ public:
     virtual ~ShapeContextHandler() override;
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     virtual sal_Bool SAL_CALL supportsService
-    (const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception) override;
+    (const OUString & ServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    getSupportedServiceNames() override;
 
     // css::xml::sax::XFastContextHandler:
     virtual void SAL_CALL startFastElement
     (::sal_Int32 Element,
-     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual void SAL_CALL startUnknownElement
     (const OUString & Namespace,
      const OUString & Name,
-     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
-    virtual void SAL_CALL endFastElement(::sal_Int32 Element)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL endFastElement(::sal_Int32 Element) override;
 
     virtual void SAL_CALL endUnknownElement
     (const OUString & Namespace,
-     const OUString & Name)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+     const OUString & Name) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     createFastChildContext
     (::sal_Int32 Element,
-     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext
     (const OUString & Namespace,
      const OUString & Name,
-     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+     const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
-    virtual void SAL_CALL characters(const OUString & aChars)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL characters(const OUString & aChars) override;
 
     // css::xml::sax::XFastShapeContextHandler:
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getShape()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getShape() override;
 
-    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getDrawPage()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getDrawPage() override;
 
     virtual void SAL_CALL setDrawPage
-    (const css::uno::Reference< css::drawing::XDrawPage > & the_value)
-        throw (css::uno::RuntimeException, std::exception) override;
+    (const css::uno::Reference< css::drawing::XDrawPage > & the_value) override;
 
-    virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::frame::XModel > SAL_CALL getModel() override;
 
     virtual void SAL_CALL setModel
-    (const css::uno::Reference< css::frame::XModel > & the_value)
-        throw (css::uno::RuntimeException, std::exception) override;
+    (const css::uno::Reference< css::frame::XModel > & the_value) override;
 
-    virtual OUString SAL_CALL getRelationFragmentPath()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getRelationFragmentPath() override;
     virtual void SAL_CALL setRelationFragmentPath
-    (const OUString & the_value)
-        throw (css::uno::RuntimeException, std::exception) override;
+    (const OUString & the_value) override;
 
-    virtual ::sal_Int32 SAL_CALL getStartToken() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setStartToken( ::sal_Int32 _starttoken ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getStartToken() override;
+    virtual void SAL_CALL setStartToken( ::sal_Int32 _starttoken ) override;
 
-    virtual css::awt::Point SAL_CALL getPosition() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setPosition(const css::awt::Point& rPosition) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getPosition() override;
+    virtual void SAL_CALL setPosition(const css::awt::Point& rPosition) override;
 
-    virtual void SAL_CALL setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference<css::document::XDocumentProperties> SAL_CALL getDocumentProperties()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getMediaDescriptor()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDocumentProperties(const css::uno::Reference<css::document::XDocumentProperties>& xDocProps) override;
+    virtual css::uno::Reference<css::document::XDocumentProperties> SAL_CALL getDocumentProperties() override;
+    virtual css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getMediaDescriptor() override;
+    virtual void SAL_CALL setMediaDescriptor(const css::uno::Sequence<css::beans::PropertyValue>& rMediaDescriptor) override;
 
 private:
     ShapeContextHandler(ShapeContextHandler &) = delete;

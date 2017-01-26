@@ -35,7 +35,7 @@ SvxUnoShapeModifyListener::~SvxUnoShapeModifyListener() throw()
 }
 
 // css::util::XModifyListener
-void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) throw( uno::RuntimeException, std::exception )
+void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& )
 {
     SolarMutexGuard aGuard;
     if( mpObj )
@@ -46,7 +46,7 @@ void SAL_CALL SvxUnoShapeModifyListener::modified(const lang::EventObject& ) thr
 }
 
 // css::lang::XEventListener
-void SvxUnoShapeModifyListener::disposing(const lang::EventObject& ) throw( uno::RuntimeException, std::exception )
+void SvxUnoShapeModifyListener::disposing(const lang::EventObject& )
 {
     invalidate();
 }

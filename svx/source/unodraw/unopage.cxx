@@ -104,7 +104,6 @@ void SvxDrawPage::disposing() throw()
 
 // XComponent
 void SvxDrawPage::dispose()
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -159,7 +158,7 @@ void SvxDrawPage::dispose()
 
 }
 
-void SAL_CALL SvxDrawPage::addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL SvxDrawPage::addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
 {
     SolarMutexGuard aGuard;
 
@@ -169,7 +168,7 @@ void SAL_CALL SvxDrawPage::addEventListener( const css::uno::Reference< css::lan
     mrBHelper.addListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
 }
 
-void SAL_CALL SvxDrawPage::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL SvxDrawPage::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
 {
     SolarMutexGuard aGuard;
 
@@ -180,7 +179,6 @@ void SAL_CALL SvxDrawPage::removeEventListener( const css::uno::Reference< css::
 }
 
 void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -218,13 +216,11 @@ void SAL_CALL SvxDrawPage::add( const uno::Reference< drawing::XShape >& xShape 
 }
 
 void SAL_CALL SvxDrawPage::addTop( const uno::Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException, std::exception )
 {
     add(xShape);
 }
 
 void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -262,7 +258,6 @@ void SAL_CALL SvxDrawPage::addBottom( const uno::Reference< drawing::XShape >& x
 }
 
 void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -312,7 +307,6 @@ void SAL_CALL SvxDrawPage::remove( const Reference< drawing::XShape >& xShape )
 
 // css::container::XIndexAccess
 sal_Int32 SAL_CALL SvxDrawPage::getCount()
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -323,7 +317,6 @@ sal_Int32 SAL_CALL SvxDrawPage::getCount()
 }
 
 uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -343,13 +336,11 @@ uno::Any SAL_CALL SvxDrawPage::getByIndex( sal_Int32 Index )
 
 // css::container::XElementAccess
 uno::Type SAL_CALL SvxDrawPage::getElementType()
-    throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
 
 sal_Bool SAL_CALL SvxDrawPage::hasElements()
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -412,7 +403,6 @@ void SvxDrawPage::SelectObjectInView( const Reference< drawing::XShape > & xShap
 }
 
 Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< drawing::XShapes >& xShapes )
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -450,7 +440,6 @@ Reference< drawing::XShapeGroup > SAL_CALL SvxDrawPage::group( const Reference< 
 }
 
 void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGroup )
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -476,7 +465,6 @@ void SAL_CALL SvxDrawPage::ungroup( const Reference< drawing::XShapeGroup >& aGr
 }
 
 SdrObject *SvxDrawPage::CreateSdrObject_(const Reference< drawing::XShape > & xShape)
-    throw (css::uno::RuntimeException, std::exception)
 {
     sal_uInt16 nType = 0;
     SdrInventor nInventor;
@@ -587,7 +575,6 @@ void SvxDrawPage::GetTypeAndInventor( sal_uInt16& rType, SdrInventor& rInventor,
 }
 
 SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *mpPage, OUString const & referer )
-    throw (css::uno::RuntimeException)
 {
     SvxShape* pRet = nullptr;
     switch( nInventor )
@@ -810,7 +797,6 @@ SvxShape* SvxDrawPage::CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInvent
 }
 
 Reference< drawing::XShape >  SvxDrawPage::CreateShape( SdrObject *pObj ) const
-    throw (css::uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xShape( CreateShapeByTypeAndInventor(pObj->GetObjIdentifier(),
                                               pObj->GetObjInventor(),
@@ -838,25 +824,23 @@ SdrObject *SvxDrawPage::CreateSdrObject( const Reference< drawing::XShape > & xS
 }
 
 // css::lang::XServiceInfo
-OUString SAL_CALL SvxDrawPage::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL SvxDrawPage::getImplementationName()
 {
     return OUString("SvxDrawPage");
 }
 
 sal_Bool SAL_CALL SvxDrawPage::supportsService( const OUString& ServiceName )
-    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SAL_CALL SvxDrawPage::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aSeq { "com.sun.star.drawing.ShapeCollection" };
     return aSeq;
 }
 
 SvxShape* CreateSvxShapeByTypeAndInventor(sal_uInt16 nType, SdrInventor nInventor, OUString const & referer)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return SvxDrawPage::CreateShapeByTypeAndInventor( nType, nInventor, nullptr, nullptr, referer );
 }

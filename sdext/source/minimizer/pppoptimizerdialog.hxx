@@ -54,45 +54,36 @@ public:
     virtual ~PPPOptimizerDialog() override;
 
     // XInitialization
-    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
-        const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
-            throw(css::uno::RuntimeException, std::exception) override;
+        const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
 
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
-        const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw( css::uno::RuntimeException, std::exception ) override;
+        const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
 
     // XDispatch
     virtual void SAL_CALL dispatch( const css::util::URL& aURL,
-                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
-        throw( css::uno::RuntimeException, std::exception ) override;
+                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
     virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                const css::util::URL& aURL )
-        throw( css::uno::RuntimeException, std::exception ) override;
+                                                const css::util::URL& aURL ) override;
     virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                const css::util::URL& aURL )
-        throw( css::uno::RuntimeException, std::exception ) override;
+                                                const css::util::URL& aURL ) override;
 };
 
 OUString PPPOptimizerDialog_getImplementationName();
 css::uno::Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames();
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > PPPOptimizerDialog_createInstance( const css::uno::Reference< css::uno::XComponentContext > & rSMgr )
-    throw( css::uno::Exception );
+css::uno::Reference< css::uno::XInterface > PPPOptimizerDialog_createInstance( const css::uno::Reference< css::uno::XComponentContext > & rSMgr );
 
 
 #endif // INCLUDED_SDEXT_SOURCE_MINIMIZER_PPPOPTIMIZERDIALOG_HXX

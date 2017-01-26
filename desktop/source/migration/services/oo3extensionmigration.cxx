@@ -293,20 +293,19 @@ void OO3ExtensionMigration::migrateExtension( const OUString& sSourceDir )
 // XServiceInfo
 
 
-OUString OO3ExtensionMigration::getImplementationName() throw (RuntimeException, std::exception)
+OUString OO3ExtensionMigration::getImplementationName()
 {
     return OO3ExtensionMigration_getImplementationName();
 }
 
 
 sal_Bool OO3ExtensionMigration::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-Sequence< OUString > OO3ExtensionMigration::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > OO3ExtensionMigration::getSupportedServiceNames()
 {
     return OO3ExtensionMigration_getSupportedServiceNames();
 }
@@ -315,7 +314,7 @@ Sequence< OUString > OO3ExtensionMigration::getSupportedServiceNames() throw (Ru
 // XInitialization
 
 
-void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
+void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -345,7 +344,6 @@ void OO3ExtensionMigration::initialize( const Sequence< Any >& aArguments ) thro
 }
 
 Any OO3ExtensionMigration::execute( const Sequence< beans::NamedValue >& )
-    throw (lang::IllegalArgumentException, Exception, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -385,14 +383,12 @@ TmpRepositoryCommandEnv::~TmpRepositoryCommandEnv()
 // XCommandEnvironment
 
 uno::Reference< task::XInteractionHandler > TmpRepositoryCommandEnv::getInteractionHandler()
-throw ( uno::RuntimeException, std::exception )
 {
     return this;
 }
 
 
 uno::Reference< ucb::XProgressHandler > TmpRepositoryCommandEnv::getProgressHandler()
-throw ( uno::RuntimeException, std::exception )
 {
     return this;
 }
@@ -400,7 +396,6 @@ throw ( uno::RuntimeException, std::exception )
 // XInteractionHandler
 void TmpRepositoryCommandEnv::handle(
     uno::Reference< task::XInteractionRequest> const & xRequest )
-    throw ( uno::RuntimeException, std::exception )
 {
     OSL_ASSERT( xRequest->getRequest().getValueTypeClass() == uno::TypeClass_EXCEPTION );
 
@@ -428,17 +423,15 @@ void TmpRepositoryCommandEnv::handle(
 
 // XProgressHandler
 void TmpRepositoryCommandEnv::push( uno::Any const & /*Status*/ )
-throw (uno::RuntimeException, std::exception)
 {
 }
 
 
 void TmpRepositoryCommandEnv::update( uno::Any const & /*Status */)
-throw (uno::RuntimeException, std::exception)
 {
 }
 
-void TmpRepositoryCommandEnv::pop() throw (uno::RuntimeException, std::exception)
+void TmpRepositoryCommandEnv::pop()
 {
 }
 

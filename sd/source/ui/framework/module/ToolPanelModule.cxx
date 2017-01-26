@@ -78,7 +78,6 @@ void ToolPanelModule::SaveResourceState()
 
 void SAL_CALL ToolPanelModule::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     if (!rEvent.Type.equals(FrameworkHelper::msResourceActivationEvent))
         ResourceManager::notifyConfigurationChange(rEvent);

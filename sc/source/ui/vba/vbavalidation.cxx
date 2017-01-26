@@ -52,7 +52,7 @@ lcl_getValidationProps( const uno::Reference< table::XCellRange >& xRange )
 }
 
 sal_Bool SAL_CALL
-ScVbaValidation::getIgnoreBlank() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getIgnoreBlank()
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     bool bBlank = false;
@@ -61,7 +61,7 @@ ScVbaValidation::getIgnoreBlank() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaValidation::setIgnoreBlank( sal_Bool _ignoreblank ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation::setIgnoreBlank( sal_Bool _ignoreblank )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( SC_UNONAME_IGNOREBL, uno::makeAny( _ignoreblank ) );
@@ -69,7 +69,7 @@ ScVbaValidation::setIgnoreBlank( sal_Bool _ignoreblank ) throw (uno::RuntimeExce
 }
 
 sal_Bool SAL_CALL
-ScVbaValidation::getInCellDropdown() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getInCellDropdown()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
     sal_Int32 nShowList = 0;
@@ -78,7 +78,7 @@ ScVbaValidation::getInCellDropdown() throw (uno::RuntimeException, std::exceptio
 }
 
 void SAL_CALL
-ScVbaValidation::setInCellDropdown( sal_Bool  _incelldropdown  ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation::setInCellDropdown( sal_Bool  _incelldropdown  )
 {
     sal_Int32 nDropDown = 0;
     if ( _incelldropdown )
@@ -89,7 +89,7 @@ ScVbaValidation::setInCellDropdown( sal_Bool  _incelldropdown  ) throw (uno::Run
 }
 
 sal_Bool SAL_CALL
-ScVbaValidation::getShowInput() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getShowInput()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
     bool bShowInput = false;
@@ -98,7 +98,7 @@ ScVbaValidation::getShowInput() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaValidation:: setShowInput( sal_Bool _showinput ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation:: setShowInput( sal_Bool _showinput )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps(m_xRange) );
     xProps->setPropertyValue( SC_UNONAME_IGNOREBL, uno::makeAny( _showinput ) );
@@ -106,7 +106,7 @@ ScVbaValidation:: setShowInput( sal_Bool _showinput ) throw (uno::RuntimeExcepti
 }
 
 sal_Bool SAL_CALL
-ScVbaValidation::getShowError() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getShowError()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
     bool bShowError = false;
@@ -115,7 +115,7 @@ ScVbaValidation::getShowError() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaValidation::setShowError( sal_Bool _showerror ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation::setShowError( sal_Bool _showerror )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( SC_UNONAME_SHOWERR, uno::makeAny( _showerror ) );
@@ -123,7 +123,7 @@ ScVbaValidation::setShowError( sal_Bool _showerror ) throw (uno::RuntimeExceptio
 }
 
 OUString SAL_CALL
-ScVbaValidation::getErrorTitle() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getErrorTitle()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
     OUString sErrorTitle;
@@ -132,7 +132,7 @@ ScVbaValidation::getErrorTitle() throw (uno::RuntimeException, std::exception)
 }
 
 void
-ScVbaValidation::setErrorTitle( const OUString& _errormessage ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation::setErrorTitle( const OUString& _errormessage )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( SC_UNONAME_ERRTITLE, uno::makeAny( _errormessage ) );
@@ -140,7 +140,7 @@ ScVbaValidation::setErrorTitle( const OUString& _errormessage ) throw (uno::Runt
 }
 
 OUString SAL_CALL
-ScVbaValidation::getInputMessage() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getInputMessage()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
     OUString sMsg;
@@ -149,7 +149,7 @@ ScVbaValidation::getInputMessage() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaValidation::setInputMessage( const OUString& _inputmessage ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation::setInputMessage( const OUString& _inputmessage )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( SC_UNONAME_INPMESS, uno::makeAny( _inputmessage ) );
@@ -157,7 +157,7 @@ ScVbaValidation::setInputMessage( const OUString& _inputmessage ) throw (uno::Ru
 }
 
 OUString SAL_CALL
-ScVbaValidation::getInputTitle() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getInputTitle()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
     OUString sString;
@@ -166,7 +166,7 @@ ScVbaValidation::getInputTitle() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaValidation::setInputTitle( const OUString& _inputtitle ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation::setInputTitle( const OUString& _inputtitle )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( SC_UNONAME_INPTITLE, uno::makeAny( _inputtitle ) );
@@ -174,7 +174,7 @@ ScVbaValidation::setInputTitle( const OUString& _inputtitle ) throw (uno::Runtim
 }
 
 OUString SAL_CALL
-ScVbaValidation::getErrorMessage() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getErrorMessage()
 {
     uno::Reference< beans::XPropertySet > xProps = lcl_getValidationProps( m_xRange );
     OUString sString;
@@ -183,7 +183,7 @@ ScVbaValidation::getErrorMessage() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaValidation::setErrorMessage( const OUString& _errormessage ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation::setErrorMessage( const OUString& _errormessage )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     xProps->setPropertyValue( SC_UNONAME_ERRMESS, uno::makeAny( _errormessage ) );
@@ -191,7 +191,7 @@ ScVbaValidation::setErrorMessage( const OUString& _errormessage ) throw (uno::Ru
 }
 
 void SAL_CALL
-ScVbaValidation::Delete(  ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation::Delete(  )
 {
     OUString sBlank;
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
@@ -212,7 +212,7 @@ ScVbaValidation::Delete(  ) throw (uno::RuntimeException, std::exception)
 
 // Fix the defect that validatation cannot work when the input should be limited between a lower bound and an upper bound
 void SAL_CALL
-ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const uno::Any& Operator, const uno::Any& Formula1, const uno::Any& Formula2 ) throw (uno::RuntimeException, std::exception)
+ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const uno::Any& Operator, const uno::Any& Formula1, const uno::Any& Formula2 )
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     uno::Reference< sheet::XSheetCondition > xCond( xProps, uno::UNO_QUERY_THROW );
@@ -294,7 +294,7 @@ ScVbaValidation::Add( const uno::Any& Type, const uno::Any& AlertStyle, const un
 }
 
 OUString SAL_CALL
-ScVbaValidation::getFormula1() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getFormula1()
 {
     uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
     OUString sString = xCond->getFormula1();
@@ -315,14 +315,14 @@ ScVbaValidation::getFormula1() throw (uno::RuntimeException, std::exception)
 }
 
 OUString SAL_CALL
-ScVbaValidation::getFormula2() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getFormula2()
 {
         uno::Reference< sheet::XSheetCondition > xCond( lcl_getValidationProps( m_xRange ), uno::UNO_QUERY_THROW );
     return xCond->getFormula2();
 }
 
 sal_Int32 SAL_CALL
-ScVbaValidation::getType() throw (uno::RuntimeException, std::exception)
+ScVbaValidation::getType()
 {
     uno::Reference< beans::XPropertySet > xProps( lcl_getValidationProps( m_xRange ) );
     sheet::ValidationType nValType = sheet::ValidationType_ANY;

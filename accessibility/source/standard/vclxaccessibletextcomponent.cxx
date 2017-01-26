@@ -138,7 +138,7 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( VCLXAccessibleTextComponent, VCLXAccessibleCom
 // XAccessibleText
 
 
-sal_Int32 VCLXAccessibleTextComponent::getCaretPosition() throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessibleTextComponent::getCaretPosition()
 {
     OExternalLockGuard aGuard( this );
 
@@ -146,7 +146,7 @@ sal_Int32 VCLXAccessibleTextComponent::getCaretPosition() throw (RuntimeExceptio
 }
 
 
-sal_Bool VCLXAccessibleTextComponent::setCaretPosition( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+sal_Bool VCLXAccessibleTextComponent::setCaretPosition( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -154,7 +154,7 @@ sal_Bool VCLXAccessibleTextComponent::setCaretPosition( sal_Int32 nIndex ) throw
 }
 
 
-sal_Unicode VCLXAccessibleTextComponent::getCharacter( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+sal_Unicode VCLXAccessibleTextComponent::getCharacter( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -162,7 +162,7 @@ sal_Unicode VCLXAccessibleTextComponent::getCharacter( sal_Int32 nIndex ) throw 
 }
 
 
-Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( sal_Int32 nIndex, const Sequence< OUString >& aRequestedAttributes )
 {
     OExternalLockGuard aGuard( this );
 
@@ -236,7 +236,7 @@ Sequence< PropertyValue > VCLXAccessibleTextComponent::getCharacterAttributes( s
 }
 
 
-awt::Rectangle VCLXAccessibleTextComponent::getCharacterBounds( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+awt::Rectangle VCLXAccessibleTextComponent::getCharacterBounds( sal_Int32 nIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -252,7 +252,7 @@ awt::Rectangle VCLXAccessibleTextComponent::getCharacterBounds( sal_Int32 nIndex
 }
 
 
-sal_Int32 VCLXAccessibleTextComponent::getCharacterCount() throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessibleTextComponent::getCharacterCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -260,7 +260,7 @@ sal_Int32 VCLXAccessibleTextComponent::getCharacterCount() throw (RuntimeExcepti
 }
 
 
-sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint ) throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint )
 {
     OExternalLockGuard aGuard( this );
 
@@ -273,7 +273,7 @@ sal_Int32 VCLXAccessibleTextComponent::getIndexAtPoint( const awt::Point& aPoint
 }
 
 
-OUString VCLXAccessibleTextComponent::getSelectedText() throw (RuntimeException, std::exception)
+OUString VCLXAccessibleTextComponent::getSelectedText()
 {
     OExternalLockGuard aGuard( this );
 
@@ -281,7 +281,7 @@ OUString VCLXAccessibleTextComponent::getSelectedText() throw (RuntimeException,
 }
 
 
-sal_Int32 VCLXAccessibleTextComponent::getSelectionStart() throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessibleTextComponent::getSelectionStart()
 {
     OExternalLockGuard aGuard( this );
 
@@ -289,7 +289,7 @@ sal_Int32 VCLXAccessibleTextComponent::getSelectionStart() throw (RuntimeExcepti
 }
 
 
-sal_Int32 VCLXAccessibleTextComponent::getSelectionEnd() throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessibleTextComponent::getSelectionEnd()
 {
     OExternalLockGuard aGuard( this );
 
@@ -297,7 +297,7 @@ sal_Int32 VCLXAccessibleTextComponent::getSelectionEnd() throw (RuntimeException
 }
 
 
-sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -308,7 +308,7 @@ sal_Bool VCLXAccessibleTextComponent::setSelection( sal_Int32 nStartIndex, sal_I
 }
 
 
-OUString VCLXAccessibleTextComponent::getText() throw (RuntimeException, std::exception)
+OUString VCLXAccessibleTextComponent::getText()
 {
     OExternalLockGuard aGuard( this );
 
@@ -316,7 +316,7 @@ OUString VCLXAccessibleTextComponent::getText() throw (RuntimeException, std::ex
 }
 
 
-OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 
@@ -324,7 +324,7 @@ OUString VCLXAccessibleTextComponent::getTextRange( sal_Int32 nStartIndex, sal_I
 }
 
 
-css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     OExternalLockGuard aGuard( this );
 
@@ -332,7 +332,7 @@ css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextAtIndex( sal
 }
 
 
-css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     OExternalLockGuard aGuard( this );
 
@@ -340,7 +340,7 @@ css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBeforeIndex(
 }
 
 
-css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     OExternalLockGuard aGuard( this );
 
@@ -348,7 +348,7 @@ css::accessibility::TextSegment VCLXAccessibleTextComponent::getTextBehindIndex(
 }
 
 
-sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+sal_Bool VCLXAccessibleTextComponent::copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex )
 {
     OExternalLockGuard aGuard( this );
 

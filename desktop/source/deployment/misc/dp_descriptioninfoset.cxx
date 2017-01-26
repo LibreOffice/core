@@ -65,20 +65,19 @@ public:
     EmptyNodeList(const EmptyNodeList&) = delete;
     const EmptyNodeList& operator=(const EmptyNodeList&) = delete;
 
-    virtual ::sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getLength() override;
 
     virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL
-    item(::sal_Int32 index) throw (css::uno::RuntimeException, std::exception) override;
+    item(::sal_Int32 index) override;
 };
 
 EmptyNodeList::EmptyNodeList() {}
 
-::sal_Int32 EmptyNodeList::getLength() throw (css::uno::RuntimeException, std::exception) {
+::sal_Int32 EmptyNodeList::getLength() {
     return 0;
 }
 
 css::uno::Reference< css::xml::dom::XNode > EmptyNodeList::item(::sal_Int32)
-    throw (css::uno::RuntimeException, std::exception)
 {
     throw css::uno::RuntimeException("bad EmptyNodeList com.sun.star.xml.dom.XNodeList.item call",
         static_cast< ::cppu::OWeakObject * >(this));
@@ -146,14 +145,13 @@ public:
     bool exist() { return m_bExist;}
     // XCommandEnvironment
     virtual css::uno::Reference<css::task::XInteractionHandler > SAL_CALL
-    getInteractionHandler() throw (css::uno::RuntimeException, std::exception) override;
+    getInteractionHandler() override;
     virtual css::uno::Reference<css::ucb::XProgressHandler >
-    SAL_CALL getProgressHandler() throw (css::uno::RuntimeException, std::exception) override;
+    SAL_CALL getProgressHandler() override;
 
     // XInteractionHandler
     virtual void SAL_CALL handle(
-        css::uno::Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::Reference<css::task::XInteractionRequest > const & xRequest ) override;
 };
 
 ExtensionDescription::ExtensionDescription(
@@ -247,13 +245,13 @@ FileDoesNotExistFilter::FileDoesNotExistFilter(
 
     // XCommandEnvironment
 Reference<css::task::XInteractionHandler >
-    FileDoesNotExistFilter::getInteractionHandler() throw (css::uno::RuntimeException, std::exception)
+    FileDoesNotExistFilter::getInteractionHandler()
 {
     return static_cast<css::task::XInteractionHandler*>(this);
 }
 
 Reference<css::ucb::XProgressHandler >
-    FileDoesNotExistFilter::getProgressHandler() throw (css::uno::RuntimeException, std::exception)
+    FileDoesNotExistFilter::getProgressHandler()
 {
     return m_xCommandEnv.is()
         ? m_xCommandEnv->getProgressHandler()
@@ -265,7 +263,6 @@ Reference<css::ucb::XProgressHandler >
 //of FileDoesNotExistFilter, then we do nothing
 void  FileDoesNotExistFilter::handle(
         Reference<css::task::XInteractionRequest > const & xRequest )
-        throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Any request( xRequest->getRequest() );
 

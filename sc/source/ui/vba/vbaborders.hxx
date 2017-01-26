@@ -32,29 +32,29 @@ class ScVbaPalette;
 class ScVbaBorders : public ScVbaBorders_BASE
 {
     // XEnumerationAccess
-    virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) throw (css::uno::RuntimeException) override;
+    virtual css::uno::Any getItemByIntIndex( const sal_Int32 nIndex ) override;
     bool bRangeIsSingleCell;
     css::uno::Reference< css::beans::XPropertySet > m_xProps;
 public:
     ScVbaBorders( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::table::XCellRange >& xRange, ScVbaPalette& rPalette );
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XBorders
 
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
 
-    virtual css::uno::Any SAL_CALL getColor() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setColor( const css::uno::Any& _color ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getColorIndex() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getLineStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLineStyle( const css::uno::Any& _linestyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getWeight() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setWeight( const  css::uno::Any& ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getColor() override;
+    virtual void SAL_CALL setColor( const css::uno::Any& _color ) override;
+    virtual css::uno::Any SAL_CALL getColorIndex() override;
+    virtual void SAL_CALL setColorIndex( const css::uno::Any& _colorindex ) override;
+    virtual css::uno::Any SAL_CALL getLineStyle() override;
+    virtual void SAL_CALL setLineStyle( const css::uno::Any& _linestyle ) override;
+    virtual css::uno::Any SAL_CALL getWeight() override;
+    virtual void SAL_CALL setWeight( const  css::uno::Any& ) override;
     // xxxxBASE
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

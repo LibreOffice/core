@@ -24,58 +24,58 @@
 
 //      class UnoScriptTypeDetector
 sal_Int16 SAL_CALL
-UnoScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection ) throw (css::uno::RuntimeException, std::exception)
+UnoScriptTypeDetector::getScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 defaultScriptDirection )
 {
     return ScriptTypeDetector::getScriptDirection(Text, nPos, defaultScriptDirection);
 }
 
 // return value '-1' means either the direction on nPos is not same as scriptDirection or nPos is out of range.
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction ) throw (css::uno::RuntimeException, std::exception)
+UnoScriptTypeDetector::beginOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
 {
     return ScriptTypeDetector::beginOfScriptDirection(Text, nPos, direction);
 }
 
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction ) throw (css::uno::RuntimeException, std::exception)
+UnoScriptTypeDetector::endOfScriptDirection( const OUString& Text, sal_Int32 nPos, sal_Int16 direction )
 {
     return ScriptTypeDetector::endOfScriptDirection(Text, nPos, direction);
 }
 
 sal_Int16 SAL_CALL
-UnoScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (css::uno::RuntimeException, std::exception)
+UnoScriptTypeDetector::getCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     return ScriptTypeDetector::getCTLScriptType(Text, nPos);
 }
 
 // Begin of Script Type is inclusive.
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (css::uno::RuntimeException, std::exception)
+UnoScriptTypeDetector::beginOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     return ScriptTypeDetector::beginOfCTLScriptType(Text, nPos);
 }
 
 // End of the Script Type is exclusive, the return value pointing to the begin of next script type
 sal_Int32 SAL_CALL
-UnoScriptTypeDetector::endOfCTLScriptType( const OUString& Text, sal_Int32 nPos ) throw (css::uno::RuntimeException, std::exception)
+UnoScriptTypeDetector::endOfCTLScriptType( const OUString& Text, sal_Int32 nPos )
 {
     return ScriptTypeDetector::endOfCTLScriptType(Text, nPos);
 }
 
 OUString SAL_CALL
-UnoScriptTypeDetector::getImplementationName() throw( css::uno::RuntimeException, std::exception )
+UnoScriptTypeDetector::getImplementationName()
 {
     return OUString("com.sun.star.i18n.ScriptTypeDetector");
 }
 
 sal_Bool SAL_CALL
-UnoScriptTypeDetector::supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception )
+UnoScriptTypeDetector::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL
-UnoScriptTypeDetector::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
+UnoScriptTypeDetector::getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > aRet { "com.sun.star.i18n.ScriptTypeDetector" };
     return aRet;

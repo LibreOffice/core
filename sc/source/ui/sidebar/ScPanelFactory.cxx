@@ -54,10 +54,6 @@ ScPanelFactory::~ScPanelFactory()
 Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,
     const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
-    throw(
-        container::NoSuchElementException,
-        lang::IllegalArgumentException,
-        RuntimeException, std::exception)
 {
     Reference<ui::XUIElement> xElement;
 
@@ -124,19 +120,16 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
 }
 
 OUString ScPanelFactory::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("org.apache.openoffice.comp.sc.sidebar.ScPanelFactory");
 }
 
 sal_Bool ScPanelFactory::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> ScPanelFactory::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<OUString> aServiceNames { "com.sun.star.ui.UIElementFactory" };
     return aServiceNames;

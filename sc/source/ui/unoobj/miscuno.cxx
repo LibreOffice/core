@@ -200,14 +200,13 @@ ScIndexEnumeration::~ScIndexEnumeration()
 
 // XEnumeration
 
-sal_Bool SAL_CALL ScIndexEnumeration::hasMoreElements() throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScIndexEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     return ( nPos < xIndex->getCount() );
 }
 
-uno::Any SAL_CALL ScIndexEnumeration::nextElement() throw(container::NoSuchElementException,
-                                        lang::WrappedTargetException, uno::RuntimeException, std::exception)
+uno::Any SAL_CALL ScIndexEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
     uno::Any aReturn;
@@ -223,20 +222,17 @@ uno::Any SAL_CALL ScIndexEnumeration::nextElement() throw(container::NoSuchEleme
 }
 
 OUString SAL_CALL ScIndexEnumeration::getImplementationName()
-    throw(css::uno::RuntimeException, std::exception)
 {
     return OUString("ScIndexEnumeration");
 }
 
 sal_Bool SAL_CALL ScIndexEnumeration::supportsService( const OUString& ServiceName )
-    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString >
     SAL_CALL ScIndexEnumeration::getSupportedServiceNames()
-    throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<OUString> aRet { sServiceName };
     return aRet;
@@ -258,15 +254,12 @@ ScNameToIndexAccess::~ScNameToIndexAccess()
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScNameToIndexAccess::getCount(  ) throw(css::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScNameToIndexAccess::getCount(  )
 {
     return aNames.getLength();
 }
 
 css::uno::Any SAL_CALL ScNameToIndexAccess::getByIndex( sal_Int32 nIndex )
-                                throw(css::lang::IndexOutOfBoundsException,
-                                        css::lang::WrappedTargetException,
-                                        css::uno::RuntimeException, std::exception)
 {
     if ( xNameAccess.is() && nIndex >= 0 && nIndex < aNames.getLength() )
         return xNameAccess->getByName( aNames.getConstArray()[nIndex] );
@@ -277,7 +270,6 @@ css::uno::Any SAL_CALL ScNameToIndexAccess::getByIndex( sal_Int32 nIndex )
 // XElementAccess
 
 css::uno::Type SAL_CALL ScNameToIndexAccess::getElementType(  )
-                                throw(css::uno::RuntimeException, std::exception)
 {
     if ( xNameAccess.is() )
         return xNameAccess->getElementType();
@@ -285,7 +277,7 @@ css::uno::Type SAL_CALL ScNameToIndexAccess::getElementType(  )
         return uno::Type();
 }
 
-sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScNameToIndexAccess::hasElements(  )
 {
     return getCount() > 0;
 }

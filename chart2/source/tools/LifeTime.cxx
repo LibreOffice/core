@@ -110,7 +110,6 @@ void LifeTimeManager::impl_unregisterApiCall(bool bLongLastingCall)
 }
 
 bool LifeTimeManager::dispose()
-    throw(uno::RuntimeException)
 {
     //hold no mutex
     {
@@ -190,7 +189,6 @@ bool CloseableLifeTimeManager::impl_isDisposedOrClosed( bool bAssert )
 }
 
 bool CloseableLifeTimeManager::g_close_startTryClose(bool bDeliverOwnership)
-    throw ( uno::Exception )
 {
     //no mutex is allowed to be acquired
     {
@@ -263,7 +261,6 @@ void CloseableLifeTimeManager::g_close_endTryClose(bool bDeliverOwnership, bool 
 }
 
 bool CloseableLifeTimeManager::g_close_isNeedToCancelLongLastingCalls( bool bDeliverOwnership, util::CloseVetoException& ex )
-    throw ( util::CloseVetoException )
 {
     //this method is called when no closelistener has had a veto during queryclosing
     //the method returns false, if nothing stands against closing anymore
@@ -369,7 +366,6 @@ void CloseableLifeTimeManager::impl_doClose()
 }
 
 void CloseableLifeTimeManager::g_addCloseListener( const uno::Reference< util::XCloseListener > & xListener )
-    throw(uno::RuntimeException)
 {
     osl::Guard< osl::Mutex > aGuard( m_aAccessMutex );
     //Mutex needs to be acquired exactly ones; will be released inbetween

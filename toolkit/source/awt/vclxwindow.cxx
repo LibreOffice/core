@@ -882,7 +882,7 @@ Size VCLXWindow::ImplCalcWindowSize( const Size& rOutSz ) const
 
 
 // css::lang::XUnoTunnel
-sal_Int64 VCLXWindow::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception)
+sal_Int64 VCLXWindow::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( VCLXWindow::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
     {
@@ -906,7 +906,7 @@ VCLXWindow* VCLXWindow::GetImplementation( const css::uno::Reference< css::uno::
 
 
 // css::lang::Component
-void VCLXWindow::dispose(  ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::dispose(  )
 {
     SolarMutexGuard aGuard;
 
@@ -945,14 +945,14 @@ void VCLXWindow::dispose(  ) throw(css::uno::RuntimeException, std::exception)
     }
 }
 
-void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
     mpImpl->getEventListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
@@ -961,7 +961,7 @@ void VCLXWindow::removeEventListener( const css::uno::Reference< css::lang::XEve
 
 
 // css::awt::XWindow
-void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
 {
     SolarMutexGuard aGuard;
 
@@ -974,7 +974,7 @@ void VCLXWindow::setPosSize( sal_Int32 X, sal_Int32 Y, sal_Int32 Width, sal_Int3
     }
 }
 
-css::awt::Rectangle VCLXWindow::getPosSize(  ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Rectangle VCLXWindow::getPosSize(  )
 {
     SolarMutexGuard aGuard;
 
@@ -990,7 +990,7 @@ css::awt::Rectangle VCLXWindow::getPosSize(  ) throw(css::uno::RuntimeException,
     return aBounds;
 }
 
-void VCLXWindow::setVisible( sal_Bool bVisible ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setVisible( sal_Bool bVisible )
 {
     SolarMutexGuard aGuard;
 
@@ -1002,7 +1002,7 @@ void VCLXWindow::setVisible( sal_Bool bVisible ) throw(css::uno::RuntimeExceptio
     }
 }
 
-void VCLXWindow::setEnable( sal_Bool bEnable ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setEnable( sal_Bool bEnable )
 {
     SolarMutexGuard aGuard;
 
@@ -1014,7 +1014,7 @@ void VCLXWindow::setEnable( sal_Bool bEnable ) throw(css::uno::RuntimeException,
     }
 }
 
-void VCLXWindow::setFocus(  ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setFocus(  )
 {
     SolarMutexGuard aGuard;
 
@@ -1022,7 +1022,7 @@ void VCLXWindow::setFocus(  ) throw(css::uno::RuntimeException, std::exception)
         GetWindow()->GrabFocus();
 }
 
-void VCLXWindow::addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::addWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
@@ -1037,7 +1037,7 @@ void VCLXWindow::addWindowListener( const css::uno::Reference< css::awt::XWindow
         GetWindow()->EnableAllResize();
 }
 
-void VCLXWindow::removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::removeWindowListener( const css::uno::Reference< css::awt::XWindowListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
@@ -1048,75 +1048,75 @@ void VCLXWindow::removeWindowListener( const css::uno::Reference< css::awt::XWin
     mpImpl->getWindowListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::addFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getFocusListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::removeFocusListener( const css::uno::Reference< css::awt::XFocusListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getFocusListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::addKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getKeyListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::removeKeyListener( const css::uno::Reference< css::awt::XKeyListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getKeyListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::addMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getMouseListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::removeMouseListener( const css::uno::Reference< css::awt::XMouseListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getMouseListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::addMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getMouseMotionListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::removeMouseMotionListener( const css::uno::Reference< css::awt::XMouseMotionListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getMouseMotionListeners().removeInterface( rxListener );
 }
 
-void VCLXWindow::addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::addPaintListener( const css::uno::Reference< css::awt::XPaintListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getPaintListeners().addInterface( rxListener );
 }
 
-void VCLXWindow::removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::removePaintListener( const css::uno::Reference< css::awt::XPaintListener >& rxListener )
 {
     SolarMutexGuard aGuard;
     mpImpl->getPaintListeners().removeInterface( rxListener );
 }
 
 // css::awt::XWindowPeer
-css::uno::Reference< css::awt::XToolkit > VCLXWindow::getToolkit(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XToolkit > VCLXWindow::getToolkit(  )
 {
     // no guard. nothing to guard here.
     // 82463 - 12/21/00 - fs
     return Application::GetVCLToolkit();
 }
 
-void VCLXWindow::setPointer( const css::uno::Reference< css::awt::XPointer >& rxPointer ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setPointer( const css::uno::Reference< css::awt::XPointer >& rxPointer )
 {
     SolarMutexGuard aGuard;
 
@@ -1129,7 +1129,7 @@ void VCLXWindow::setPointer( const css::uno::Reference< css::awt::XPointer >& rx
     }
 }
 
-void VCLXWindow::setBackground( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setBackground( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
@@ -1149,7 +1149,7 @@ void VCLXWindow::setBackground( sal_Int32 nColor ) throw(css::uno::RuntimeExcept
     }
 }
 
-void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags )
 {
     SolarMutexGuard aGuard;
 
@@ -1157,7 +1157,7 @@ void VCLXWindow::invalidate( sal_Int16 nInvalidateFlags ) throw(css::uno::Runtim
         GetWindow()->Invalidate( static_cast<InvalidateFlags>(nInvalidateFlags) );
 }
 
-void VCLXWindow::invalidateRect( const css::awt::Rectangle& rRect, sal_Int16 nInvalidateFlags ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::invalidateRect( const css::awt::Rectangle& rRect, sal_Int16 nInvalidateFlags )
 {
     SolarMutexGuard aGuard;
 
@@ -1167,7 +1167,7 @@ void VCLXWindow::invalidateRect( const css::awt::Rectangle& rRect, sal_Int16 nIn
 
 
 // css::awt::XVclWindowPeer
-sal_Bool VCLXWindow::isChild( const css::uno::Reference< css::awt::XWindowPeer >& rxPeer ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool VCLXWindow::isChild( const css::uno::Reference< css::awt::XWindowPeer >& rxPeer )
 {
     SolarMutexGuard aGuard;
 
@@ -1182,20 +1182,20 @@ sal_Bool VCLXWindow::isChild( const css::uno::Reference< css::awt::XWindowPeer >
     return bIsChild;
 }
 
-void VCLXWindow::setDesignMode( sal_Bool bOn ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setDesignMode( sal_Bool bOn )
 {
     SolarMutexGuard aGuard;
 
     mpImpl->mbDesignMode = bOn;
 }
 
-sal_Bool VCLXWindow::isDesignMode(  ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool VCLXWindow::isDesignMode(  )
 {
     SolarMutexGuard aGuard;
     return mpImpl->mbDesignMode;
 }
 
-void VCLXWindow::enableClipSiblings( sal_Bool bClip ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::enableClipSiblings( sal_Bool bClip )
 {
     SolarMutexGuard aGuard;
 
@@ -1203,7 +1203,7 @@ void VCLXWindow::enableClipSiblings( sal_Bool bClip ) throw(css::uno::RuntimeExc
         GetWindow()->EnableClipSiblings( bClip );
 }
 
-void VCLXWindow::setForeground( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setForeground( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
@@ -1214,7 +1214,7 @@ void VCLXWindow::setForeground( sal_Int32 nColor ) throw(css::uno::RuntimeExcept
     }
 }
 
-void VCLXWindow::setControlFont( const css::awt::FontDescriptor& rFont ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setControlFont( const css::awt::FontDescriptor& rFont )
 {
     SolarMutexGuard aGuard;
 
@@ -1222,7 +1222,7 @@ void VCLXWindow::setControlFont( const css::awt::FontDescriptor& rFont ) throw(c
         GetWindow()->SetControlFont( VCLUnoHelper::CreateFont( rFont, GetWindow()->GetControlFont() ) );
 }
 
-void VCLXWindow::getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal_Int32& ForegroundColor, sal_Int32& BackgroundColor ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::getStyles( sal_Int16 nType, css::awt::FontDescriptor& Font, sal_Int32& ForegroundColor, sal_Int32& BackgroundColor )
 {
     SolarMutexGuard aGuard;
 
@@ -1377,8 +1377,6 @@ namespace
 }
 
 void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any& Value )
-    throw(css::uno::RuntimeException,
-          std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1908,7 +1906,7 @@ void VCLXWindow::setProperty( const OUString& PropertyName, const css::uno::Any&
     }
 }
 
-css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -2138,7 +2136,7 @@ css::uno::Any VCLXWindow::getProperty( const OUString& PropertyName ) throw(css:
 
 
 // css::awt::XLayoutConstrains
-css::awt::Size VCLXWindow::getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXWindow::getMinimumSize(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2176,12 +2174,12 @@ css::awt::Size VCLXWindow::getMinimumSize(  ) throw(css::uno::RuntimeException, 
     return css::awt::Size( aSz.Width(), aSz.Height() );
 }
 
-css::awt::Size VCLXWindow::getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXWindow::getPreferredSize(  )
 {
     return getMinimumSize();
 }
 
-css::awt::Size VCLXWindow::calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXWindow::calcAdjustedSize( const css::awt::Size& rNewSize )
 {
     SolarMutexGuard aGuard;
 
@@ -2198,7 +2196,7 @@ css::awt::Size VCLXWindow::calcAdjustedSize( const css::awt::Size& rNewSize ) th
 
 
 // css::awt::XView
-sal_Bool VCLXWindow::setGraphics( const css::uno::Reference< css::awt::XGraphics >& rxDevice ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool VCLXWindow::setGraphics( const css::uno::Reference< css::awt::XGraphics >& rxDevice )
 {
     SolarMutexGuard aGuard;
 
@@ -2210,14 +2208,14 @@ sal_Bool VCLXWindow::setGraphics( const css::uno::Reference< css::awt::XGraphics
     return mpImpl->mxViewGraphics.is();
 }
 
-css::uno::Reference< css::awt::XGraphics > VCLXWindow::getGraphics(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XGraphics > VCLXWindow::getGraphics(  )
 {
     SolarMutexGuard aGuard;
 
     return mpImpl->mxViewGraphics;
 }
 
-css::awt::Size VCLXWindow::getSize(  ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXWindow::getSize(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2227,7 +2225,7 @@ css::awt::Size VCLXWindow::getSize(  ) throw(css::uno::RuntimeException, std::ex
     return css::awt::Size( aSz.Width(), aSz.Height() );
 }
 
-void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY )
 {
     SolarMutexGuard aGuard;
 
@@ -2321,7 +2319,7 @@ void VCLXWindow::draw( sal_Int32 nX, sal_Int32 nY ) throw(css::uno::RuntimeExcep
     }
 }
 
-void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(css::uno::RuntimeException, std::exception)
+void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ )
 {
     SolarMutexGuard aGuard;
 
@@ -2338,7 +2336,7 @@ void VCLXWindow::setZoom( float fZoomX, float /*fZoomY*/ ) throw(css::uno::Runti
 }
 
 // css::lang::XEventListener
-void SAL_CALL VCLXWindow::disposing( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::disposing( const css::lang::EventObject& _rSource )
 {
     SolarMutexGuard aGuard;
 
@@ -2353,7 +2351,7 @@ void SAL_CALL VCLXWindow::disposing( const css::lang::EventObject& _rSource ) th
 }
 
 // css::accessibility::XAccessible
-css::uno::Reference< css::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::accessibility::XAccessibleContext > VCLXWindow::getAccessibleContext(  )
 {
     using namespace ::com::sun::star;
 
@@ -2379,7 +2377,7 @@ css::uno::Reference< css::accessibility::XAccessibleContext > VCLXWindow::getAcc
 }
 
 // css::awt::XDockable
-void SAL_CALL VCLXWindow::addDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::addDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener )
 {
     SolarMutexGuard aGuard;
 
@@ -2388,14 +2386,14 @@ void SAL_CALL VCLXWindow::addDockableWindowListener( const css::uno::Reference< 
 
 }
 
-void SAL_CALL VCLXWindow::removeDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::removeDockableWindowListener( const css::uno::Reference< css::awt::XDockableWindowListener >& xListener )
 {
     SolarMutexGuard aGuard;
 
     mpImpl->getDockableWindowListeners().removeInterface( xListener );
 }
 
-void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable )
 {
     SolarMutexGuard aGuard;
 
@@ -2404,7 +2402,7 @@ void SAL_CALL VCLXWindow::enableDocking( sal_Bool bEnable ) throw (css::uno::Run
         pWindow->EnableDocking( bEnable );
 }
 
-sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isFloating(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2415,7 +2413,7 @@ sal_Bool SAL_CALL VCLXWindow::isFloating(  ) throw (css::uno::RuntimeException, 
         return false;
 }
 
-void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating )
 {
     SolarMutexGuard aGuard;
 
@@ -2424,7 +2422,7 @@ void SAL_CALL VCLXWindow::setFloatingMode( sal_Bool bFloating ) throw (css::uno:
         vcl::Window::GetDockingManager()->SetFloatingMode( pWindow, bFloating );
 }
 
-sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isLocked(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2435,7 +2433,7 @@ sal_Bool SAL_CALL VCLXWindow::isLocked(  ) throw (css::uno::RuntimeException, st
         return false;
 }
 
-void SAL_CALL VCLXWindow::lock(  ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::lock(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2444,7 +2442,7 @@ void SAL_CALL VCLXWindow::lock(  ) throw (css::uno::RuntimeException, std::excep
         vcl::Window::GetDockingManager()->Lock( pWindow );
 }
 
-void SAL_CALL VCLXWindow::unlock(  ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::unlock(  )
 {
     SolarMutexGuard aGuard;
 
@@ -2453,12 +2451,12 @@ void SAL_CALL VCLXWindow::unlock(  ) throw (css::uno::RuntimeException, std::exc
         vcl::Window::GetDockingManager()->Unlock( pWindow );
 }
 
-void SAL_CALL VCLXWindow::startPopupMode( const css::awt::Rectangle& ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::startPopupMode( const css::awt::Rectangle& )
 {
     // TODO: remove interface in the next incompatible build
 }
 
-sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  )
 {
     // TODO: remove interface in the next incompatible build
     return false;
@@ -2467,7 +2465,7 @@ sal_Bool SAL_CALL VCLXWindow::isInPopupMode(  ) throw (css::uno::RuntimeExceptio
 
 // css::awt::XWindow2
 
-void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize )
 {
     SolarMutexGuard aGuard;
     VclPtr<vcl::Window> pWindow;
@@ -2481,7 +2479,7 @@ void SAL_CALL VCLXWindow::setOutputSize( const css::awt::Size& aSize ) throw (cs
     }
 }
 
-css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (css::uno::RuntimeException, std::exception)
+css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  )
 {
     SolarMutexGuard aGuard;
     VclPtr<vcl::Window> pWindow;
@@ -2497,7 +2495,7 @@ css::awt::Size SAL_CALL VCLXWindow::getOutputSize(  ) throw (css::uno::RuntimeEx
         return css::awt::Size();
 }
 
-sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isVisible(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2506,7 +2504,7 @@ sal_Bool SAL_CALL VCLXWindow::isVisible(  ) throw (css::uno::RuntimeException, s
         return false;
 }
 
-sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isActive(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2516,7 +2514,7 @@ sal_Bool SAL_CALL VCLXWindow::isActive(  ) throw (css::uno::RuntimeException, st
 
 }
 
-sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::isEnabled(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2525,7 +2523,7 @@ sal_Bool SAL_CALL VCLXWindow::isEnabled(  ) throw (css::uno::RuntimeException, s
         return false;
 }
 
-sal_Bool SAL_CALL VCLXWindow::hasFocus(  ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXWindow::hasFocus(  )
 {
     SolarMutexGuard aGuard;
     if( GetWindow() )
@@ -2550,23 +2548,23 @@ VCLXWindow::GetPropHelper()
 }
 
 css::uno::Sequence< css::beans::Property > SAL_CALL
-VCLXWindow::getProperties() throw (css::uno::RuntimeException, std::exception)
+VCLXWindow::getProperties()
 {
     return GetPropHelper()->getProperties();
 }
 css::beans::Property SAL_CALL
-VCLXWindow::getPropertyByName( const OUString& rName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+VCLXWindow::getPropertyByName( const OUString& rName )
 {
     return GetPropHelper()->getPropertyByName( rName );
 }
 
 sal_Bool SAL_CALL
-VCLXWindow::hasPropertyByName( const OUString& rName ) throw (css::uno::RuntimeException, std::exception)
+VCLXWindow::hasPropertyByName( const OUString& rName )
 {
     return GetPropHelper()->hasPropertyByName( rName );
 }
 
-Reference< XStyleSettings > SAL_CALL VCLXWindow::getStyleSettings() throw (RuntimeException, std::exception)
+Reference< XStyleSettings > SAL_CALL VCLXWindow::getStyleSettings()
 {
     return mpImpl->getStyleSettings();
 }

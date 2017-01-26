@@ -143,29 +143,28 @@ public:
     void OnClose_Impl();
 
     // XCloseable
-    virtual void SAL_CALL close( sal_Bool DeliverOwnership ) throw (css::util::CloseVetoException, css::uno::RuntimeException) override;
-    virtual void SAL_CALL addCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL close( sal_Bool DeliverOwnership ) override;
+    virtual void SAL_CALL addCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
+    virtual void SAL_CALL removeCloseListener( const css::uno::Reference< css::util::XCloseListener >& Listener ) override;
 
     // XTransferable
-    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) throw (css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException) override;
-    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw (css::uno::RuntimeException) override;
-    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) throw (css::uno::RuntimeException) override;
+    virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
+    virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
+    virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL addEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL removeEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) override;
+    virtual void SAL_CALL removeEventListener(const css::uno::Reference < css::lang::XEventListener >& aListener) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XModifiable
-    virtual sal_Bool SAL_CALL isModified() throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL setModified( sal_Bool bModified )
-        throw (css::beans::PropertyVetoException, css::uno::RuntimeException) override;
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener ) throw(css::uno::RuntimeException) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener) throw(css::uno::RuntimeException) override;
+    virtual sal_Bool SAL_CALL isModified() override;
+    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
+    virtual void SAL_CALL addModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener ) override;
+    virtual void SAL_CALL removeModifyListener( const css::uno::Reference < css::util::XModifyListener >& xListener) override;
 };
 
 #endif

@@ -41,9 +41,9 @@ namespace pcr
             const css::uno::Reference< css::uno::XComponentContext >& _rxContext
         );
         /// @throws css::uno::RuntimeException
-        static OUString SAL_CALL getImplementationName_static(  ) throw (css::uno::RuntimeException);
+        static OUString SAL_CALL getImplementationName_static(  );
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  );
 
     protected:
         virtual ~ButtonNavigationHandler() override;
@@ -52,15 +52,15 @@ namespace pcr
 
     protected:
         // XPropertyHandler overriables
-        virtual void                                    SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) throw (css::uno::RuntimeException, css::lang::NullPointerException, std::exception) override;
-        virtual css::uno::Any                           SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-        virtual void                                    SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-        virtual css::beans::PropertyState               SAL_CALL getPropertyState( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString >          SAL_CALL getActuatingProperties( ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void                                    SAL_CALL inspect( const css::uno::Reference< css::uno::XInterface >& _rxIntrospectee ) override;
+        virtual css::uno::Any                           SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
+        virtual void                                    SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;
+        virtual css::beans::PropertyState               SAL_CALL getPropertyState( const OUString& _rPropertyName ) override;
+        virtual css::uno::Sequence< OUString >          SAL_CALL getActuatingProperties( ) override;
         virtual css::inspection::InteractiveSelectionResult
-                                                        SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) override;
-        virtual void                                    SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) override;
-        virtual css::inspection::LineDescriptor         SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) override;
+                                                        SAL_CALL onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool _bPrimary, css::uno::Any& _rData, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI ) override;
+        virtual void                                    SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool _bFirstTimeInit ) override;
+        virtual css::inspection::LineDescriptor         SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
 
         // PropertyHandler overridables
         virtual css::uno::Sequence< css::beans::Property >

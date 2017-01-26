@@ -54,21 +54,21 @@ jclass java_sql_ResultSetMetaData::getMyClass() const
 }
 
 
-sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callIntMethodWithIntArg_ThrowSQL("getColumnDisplaySize",mID,column);
 }
 
 
-sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnType( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callIntMethodWithIntArg_ThrowSQL("getColumnType",mID,column);
 }
 
 
-sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  )
 {
     if ( m_nColumnCount == -1 )
     {
@@ -80,57 +80,57 @@ sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getColumnCount(  ) throw(SQLExcep
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isCaseSensitive", mID,column );
 }
 
-OUString SAL_CALL java_sql_ResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_ResultSetMetaData::getSchemaName( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getSchemaName",mID,column);
 }
 
 
-OUString SAL_CALL java_sql_ResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_ResultSetMetaData::getColumnName( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getColumnName",mID,column);
 }
 
-OUString SAL_CALL java_sql_ResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_ResultSetMetaData::getTableName( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getTableName",mID,column);
 }
 
-OUString SAL_CALL java_sql_ResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_ResultSetMetaData::getCatalogName( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getCatalogName",mID,column);
 }
 
-OUString SAL_CALL java_sql_ResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_ResultSetMetaData::getColumnTypeName( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getColumnTypeName",mID,column);
 }
 
-OUString SAL_CALL java_sql_ResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_ResultSetMetaData::getColumnLabel( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getColumnLabel",mID,column);
 }
 
-OUString SAL_CALL java_sql_ResultSetMetaData::getColumnServiceName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_ResultSetMetaData::getColumnServiceName( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callStringMethodWithIntArg("getColumnClassName",mID,column);
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column )
 {
     if ( m_pConnection->isIgnoreCurrencyEnabled() )
         return false;
@@ -139,59 +139,59 @@ sal_Bool SAL_CALL java_sql_ResultSetMetaData::isCurrency( sal_Int32 column ) thr
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSetMetaData::isAutoIncrement( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isAutoIncrement", mID,column );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSigned( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isSigned", mID,column );
 }
 
-sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getPrecision( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callIntMethodWithIntArg_ThrowSQL("getPrecision",mID,column);
 }
 
-sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSetMetaData::getScale( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callIntMethodWithIntArg_ThrowSQL("getScale",mID,column);
 }
 
-sal_Int32 SAL_CALL java_sql_ResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_ResultSetMetaData::isNullable( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callIntMethodWithIntArg_ThrowSQL("isNullable",mID,column);
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSetMetaData::isSearchable( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isSearchable", mID,column );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSetMetaData::isReadOnly( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isReadOnly", mID,column );
 }
 
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isDefinitelyWritable", mID,column );
 }
 
-sal_Bool SAL_CALL java_sql_ResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_ResultSetMetaData::isWritable( sal_Int32 column )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethodWithIntArg( "isWritable", mID,column );

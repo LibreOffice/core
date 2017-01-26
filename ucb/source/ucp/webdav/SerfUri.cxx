@@ -31,7 +31,6 @@ using namespace http_dav_ucp;
 
 
 SerfUri::SerfUri( const apr_uri_t * inUri )
-    throw ( DAVException )
     : mAprUri( *inUri )
     , mURI()
     , mScheme()
@@ -54,7 +53,6 @@ SerfUri::SerfUri( const apr_uri_t * inUri )
 }
 
 SerfUri::SerfUri( const OUString & inUri )
-    throw ( DAVException )
     : mAprUri()
     , mURI()
     , mScheme()

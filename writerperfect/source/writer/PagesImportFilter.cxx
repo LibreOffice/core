@@ -42,19 +42,16 @@ bool PagesImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUSt
 
 // XServiceInfo
 OUString SAL_CALL PagesImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Writer.PagesImportFilter");
 }
 
 sal_Bool SAL_CALL PagesImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL PagesImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

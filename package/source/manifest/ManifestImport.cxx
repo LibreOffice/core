@@ -96,17 +96,14 @@ ManifestImport::~ManifestImport()
 }
 
 void SAL_CALL ManifestImport::startDocument(  )
-throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL ManifestImport::endDocument(  )
-throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
 }
 
 void ManifestImport::doFileEntry(StringHashMap &rConvertedAttribs)
-throw( uno::RuntimeException )
 {
     aSequence.resize(PKG_SIZE_ENCR_MNFST);
 
@@ -130,7 +127,6 @@ throw( uno::RuntimeException )
 }
 
 void ManifestImport::doEncryptionData(StringHashMap &rConvertedAttribs)
-throw( uno::RuntimeException )
 {
     // If this element exists, then this stream is encrypted and we need
     // to import the initialisation vector, salt and iteration count used
@@ -157,7 +153,6 @@ throw( uno::RuntimeException )
 }
 
 void ManifestImport::doAlgorithm(StringHashMap &rConvertedAttribs)
-throw( uno::RuntimeException )
 {
     if ( !bIgnoreEncryptData ) {
         OUString aString = rConvertedAttribs[sAlgorithmNameAttribute];
@@ -193,7 +188,6 @@ throw( uno::RuntimeException )
 }
 
 void ManifestImport::doKeyDerivation(StringHashMap &rConvertedAttribs)
-throw( uno::RuntimeException )
 {
     if ( !bIgnoreEncryptData ) {
         OUString aString = rConvertedAttribs[sKeyDerivationNameAttribute];
@@ -226,7 +220,6 @@ throw( uno::RuntimeException )
 }
 
 void ManifestImport::doStartKeyAlg(StringHashMap &rConvertedAttribs)
-throw( uno::RuntimeException )
 {
     OUString aString = rConvertedAttribs[sStartKeyAlgNameAttribute];
     if (aString.equals(sSHA256_URL) || aString.equals(sSHA256_URL_ODF12)) {
@@ -240,7 +233,6 @@ throw( uno::RuntimeException )
 }
 
 void SAL_CALL ManifestImport::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
-throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     StringHashMap aConvertedAttribs;
     OUString aConvertedName = PushNameAndNamespaces( aName, xAttribs, aConvertedAttribs );
@@ -305,7 +297,6 @@ bool isEmpty(const css::beans::PropertyValue &rProp)
 }
 
 void SAL_CALL ManifestImport::endElement( const OUString& aName )
-throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     OUString aConvertedName = ConvertName( aName );
     if ( !aStack.empty() && aStack.rbegin()->m_aConvertedName.equals( aConvertedName ) ) {
@@ -325,22 +316,18 @@ throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL ManifestImport::characters( const OUString& /*aChars*/ )
-throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL ManifestImport::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
-throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL ManifestImport::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
-throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL ManifestImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
-throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
 }
 

@@ -90,7 +90,6 @@ Indexes::~Indexes()
 {}
 
 void Indexes::refresh()
-    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -190,9 +189,6 @@ void Indexes::refresh()
 
 void Indexes::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
-    throw (css::sdbc::SQLException,
-           css::container::ElementExistException,
-           css::uno::RuntimeException, std::exception)
 {
     Statics & st = getStatics();
     OUString name = extractStringProperty( descriptor, st.NAME );
@@ -241,9 +237,6 @@ void Indexes::appendByDescriptor(
 }
 
 void Indexes::dropByIndex( sal_Int32 index )
-    throw (css::sdbc::SQLException,
-           css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
 
 
@@ -274,7 +267,6 @@ void Indexes::dropByIndex( sal_Int32 index )
 
 
 css::uno::Reference< css::beans::XPropertySet > Indexes::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new IndexDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -309,7 +301,6 @@ Reference< css::container::XNameAccess > IndexDescriptors::create(
 }
 
 css::uno::Reference< css::beans::XPropertySet > IndexDescriptors::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new IndexDescriptor( m_refMutex, m_origin, m_pSettings );
 }

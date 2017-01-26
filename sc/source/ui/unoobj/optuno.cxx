@@ -198,9 +198,6 @@ ScDocOptionsObj::~ScDocOptionsObj()
 
 void SAL_CALL ScDocOptionsObj::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -211,8 +208,6 @@ void SAL_CALL ScDocOptionsObj::setPropertyValue(
 }
 
 uno::Any SAL_CALL ScDocOptionsObj::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

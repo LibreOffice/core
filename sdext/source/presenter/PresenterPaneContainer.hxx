@@ -168,8 +168,7 @@ public:
     // XEventListener
 
     virtual void SAL_CALL disposing (
-        const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& rEvent) override;
 
 private:
     css::uno::Reference<css::drawing::XPresenterHelper> mxPresenterHelper;

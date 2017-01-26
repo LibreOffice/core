@@ -25,38 +25,30 @@ public:
     virtual ~GL3DBarChartType() override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedPropertyRoles()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedPropertyRoles() override;
     virtual OUString SAL_CALL
-        getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getImplementationName() override;
     virtual sal_Bool SAL_CALL
-        supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getSupportedServiceNames() override;
 
 protected:
     GL3DBarChartType( const GL3DBarChartType& rOther );
 
-    virtual OUString SAL_CALL getChartType()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getChartType() override;
 
     virtual css::uno::Reference<css::util::XCloneable> SAL_CALL
-        createClone()
-            throw (css::uno::RuntimeException, std::exception) override;
+        createClone() override;
 
     // OPropertySet
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw (css::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
 
     virtual cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     // XPropertySet
     virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL
-        getPropertySetInfo()
-            throw (css::uno::RuntimeException, std::exception) override;
+        getPropertySetInfo() override;
 };
 
 }

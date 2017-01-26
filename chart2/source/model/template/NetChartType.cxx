@@ -54,8 +54,6 @@ NetChartType_Base::~NetChartType_Base()
 
 Reference< XCoordinateSystem > SAL_CALL
     NetChartType_Base::createCoordinateSystem( ::sal_Int32 DimensionCount )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     if( DimensionCount != 2 )
         throw lang::IllegalArgumentException(
@@ -89,7 +87,6 @@ Reference< XCoordinateSystem > SAL_CALL
 
 // ____ OPropertySet ____
 uno::Any NetChartType_Base::GetDefaultValue( sal_Int32 /*nHandle*/ ) const
-    throw(beans::UnknownPropertyException)
 {
     return uno::Any();
 }
@@ -134,7 +131,6 @@ struct StaticNetChartTypeInfo : public rtl::StaticAggregate< uno::Reference< bea
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL NetChartType_Base::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticNetChartTypeInfo::get();
 }
@@ -154,32 +150,27 @@ NetChartType::~NetChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL NetChartType::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new NetChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL NetChartType::getChartType()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString(CHART2_SERVICE_NAME_CHARTTYPE_NET);
 }
 
 OUString SAL_CALL NetChartType::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.NetChartType");
 }
 
 sal_Bool SAL_CALL NetChartType::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL NetChartType::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_NET,

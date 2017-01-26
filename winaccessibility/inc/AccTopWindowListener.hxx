@@ -45,16 +45,16 @@ public:
     virtual ~AccTopWindowListener() override;
 
     // XTopWindowListener
-    virtual void SAL_CALL windowOpened( const css::lang::EventObject& e ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL windowClosing( const css::lang::EventObject& e ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL windowClosed( const css::lang::EventObject& e ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL windowMinimized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL windowNormalized( const css::lang::EventObject& e ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL windowActivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& e ) throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL windowOpened( const css::lang::EventObject& e ) override;
+    virtual void SAL_CALL windowClosing( const css::lang::EventObject& e ) override;
+    virtual void SAL_CALL windowClosed( const css::lang::EventObject& e ) override;
+    virtual void SAL_CALL windowMinimized( const css::lang::EventObject& e ) override;
+    virtual void SAL_CALL windowNormalized( const css::lang::EventObject& e ) override;
+    virtual void SAL_CALL windowActivated( const css::lang::EventObject& e ) override;
+    virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& e ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     virtual void AddAllListeners(css::accessibility::XAccessible* pAccessible,css::accessibility::XAccessible* pParentXAcc,HWND pWND );
     //for On-Demand load.

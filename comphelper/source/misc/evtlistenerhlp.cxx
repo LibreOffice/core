@@ -25,7 +25,7 @@ namespace comphelper
             _rxListener) : m_xListener(_rxListener)
     {
     }
-    void SAL_CALL OEventListenerHelper::disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception)
+    void SAL_CALL OEventListenerHelper::disposing( const css::lang::EventObject& Source )
     {
         css::uno::Reference< css::lang::XEventListener> xRef = m_xListener;
         if(xRef.is())

@@ -35,24 +35,24 @@ using namespace ::com::sun::star::lang;
 
 // static ServiceInfo
 
-OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString ODriver::getImplementationName_Static(  )
 {
     return OUString("com.sun.star.comp.sdbc.dbase.ODriver");
 }
 
 
-OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL ODriver::getImplementationName(  )
 {
     return getImplementationName_Static();
 }
 
 
-css::uno::Reference< css::uno::XInterface >  SAL_CALL connectivity::dbase::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception )
+css::uno::Reference< css::uno::XInterface >  SAL_CALL connectivity::dbase::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
 {
     return *(new ODriver( comphelper::getComponentContext(_rxFactory) ));
 }
 
-Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException, std::exception)
+Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
@@ -69,12 +69,12 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
     return xCon;
 }
 
-sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )
 {
     return url.startsWith("sdbc:dbase:");
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException, std::exception)
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
 {
     if ( acceptsURL(url) )
     {

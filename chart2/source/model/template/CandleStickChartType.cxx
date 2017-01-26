@@ -206,20 +206,17 @@ CandleStickChartType::~CandleStickChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL CandleStickChartType::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new CandleStickChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL CandleStickChartType::getChartType()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString(CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK);
 }
 
 uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRoles()
-    throw (uno::RuntimeException, std::exception)
 {
     bool bShowFirst = true;
     bool bShowHiLow = false;
@@ -244,7 +241,6 @@ uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedMandatoryRo
 }
 
 Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
-    throw (uno::RuntimeException, std::exception)
 {
     bool bShowFirst = true;
     bool bShowHiLow = false;
@@ -266,14 +262,12 @@ Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedOptionalRoles()
 }
 
 OUString SAL_CALL CandleStickChartType::getRoleOfSequenceForSeriesLabel()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString("values-last");
 }
 
 // ____ OPropertySet ____
 uno::Any CandleStickChartType::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticCandleStickChartTypeDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -290,14 +284,12 @@ uno::Any CandleStickChartType::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL CandleStickChartType::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticCandleStickChartTypeInfo::get();
 }
 
 void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const uno::Any& rValue )
-    throw (uno::Exception, std::exception)
 {
     if(    nHandle == PROP_CANDLESTICKCHARTTYPE_WHITE_DAY
         || nHandle == PROP_CANDLESTICKCHARTTYPE_BLACK_DAY )
@@ -325,19 +317,16 @@ void SAL_CALL CandleStickChartType::setFastPropertyValue_NoBroadcast(
 }
 
 OUString SAL_CALL CandleStickChartType::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.CandleStickChartType") ;
 }
 
 sal_Bool SAL_CALL CandleStickChartType::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL CandleStickChartType::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_CANDLESTICK,

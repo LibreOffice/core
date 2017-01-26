@@ -29,19 +29,19 @@ BlobHelper::BlobHelper(const css::uno::Sequence< sal_Int8 >& _val) : m_aValue(_v
 {
 }
 
-::sal_Int64 SAL_CALL BlobHelper::length(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+::sal_Int64 SAL_CALL BlobHelper::length(  )
 {
     return m_aValue.getLength();
 }
 
-css::uno::Sequence< ::sal_Int8 > SAL_CALL BlobHelper::getBytes( ::sal_Int64 pos, ::sal_Int32 _length ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Sequence< ::sal_Int8 > SAL_CALL BlobHelper::getBytes( ::sal_Int64 pos, ::sal_Int32 _length )
 {
     if ( sal_Int32(pos + _length) > m_aValue.getLength() )
         throw css::sdbc::SQLException();
     return css::uno::Sequence< ::sal_Int8 >(m_aValue.getConstArray() + sal_Int32(pos),_length);
 }
 
-css::uno::Reference< css::io::XInputStream > SAL_CALL BlobHelper::getBinaryStream(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::io::XInputStream > SAL_CALL BlobHelper::getBinaryStream(  )
 {
     return new ::comphelper::SequenceInputStream(m_aValue);
 }
@@ -53,13 +53,13 @@ css::uno::Reference< css::io::XInputStream > SAL_CALL BlobHelper::getBinaryStrea
 
 SAL_WNOUNREACHABLE_CODE_PUSH
 
-::sal_Int64 SAL_CALL BlobHelper::position( const css::uno::Sequence< ::sal_Int8 >& /*pattern*/, ::sal_Int64 /*start*/ ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+::sal_Int64 SAL_CALL BlobHelper::position( const css::uno::Sequence< ::sal_Int8 >& /*pattern*/, ::sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::position", *this );
     return 0;
 }
 
-::sal_Int64 SAL_CALL BlobHelper::positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& /*pattern*/, ::sal_Int64 /*start*/ ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+::sal_Int64 SAL_CALL BlobHelper::positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& /*pattern*/, ::sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XBlob::positionOfBlob", *this );
     return 0;

@@ -110,48 +110,36 @@ public:
 
     // XWindowListener
 
-    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent) override;
 
     // XPaintListener
 
-    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent) override;
 
     // XMouseListener
 
-    virtual void SAL_CALL mousePressed (const css::awt::MouseEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL mousePressed (const css::awt::MouseEvent& rEvent) override;
 
-    virtual void SAL_CALL mouseReleased (const css::awt::MouseEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL mouseReleased (const css::awt::MouseEvent& rEvent) override;
 
-    virtual void SAL_CALL mouseEntered (const css::awt::MouseEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL mouseEntered (const css::awt::MouseEvent& rEvent) override;
 
-    virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL mouseExited (const css::awt::MouseEvent& rEvent) override;
 
     // XMouseMotionListener
 
-    virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL mouseMoved (const css::awt::MouseEvent& rEvent) override;
 
-    virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL mouseDragged (const css::awt::MouseEvent& rEvent) override;
 
     // lang::XEventListener
-    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
 
     enum Area { Total, Pager, Thumb, PagerUp, PagerDown, PrevButton, NextButton, None,
                 AreaCount = None };

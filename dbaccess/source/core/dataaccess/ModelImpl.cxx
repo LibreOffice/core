@@ -138,17 +138,17 @@ public:
     void dispose();
 
     // XDocumentSubStorageSupplier
-    virtual Reference< XStorage > SAL_CALL getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nMode ) throw (RuntimeException, std::exception) override;
-    virtual Sequence< OUString > SAL_CALL getDocumentSubStoragesNames(  ) throw (IOException, RuntimeException, std::exception) override;
+    virtual Reference< XStorage > SAL_CALL getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nMode ) override;
+    virtual Sequence< OUString > SAL_CALL getDocumentSubStoragesNames(  ) override;
 
     // XTransactionListener
-    virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL commited( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL commited( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     /// disposes all storages managed by this instance
     void disposeStorages();
@@ -302,7 +302,7 @@ bool DocumentStorageAccess::commitEmbeddedStorage( bool _bPreventRootCommits )
 
 }
 
-Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nDesiredMode ) throw (RuntimeException, std::exception)
+Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( const OUString& aStorageName, ::sal_Int32 _nDesiredMode )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     NamedStorages::const_iterator pos = m_aExposedStorages.find( aStorageName );
@@ -315,7 +315,7 @@ Reference< XStorage > SAL_CALL DocumentStorageAccess::getDocumentSubStorage( con
     return pos->second;
 }
 
-Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames(  ) throw (IOException, RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames(  )
 {
     Reference< XStorage > xRootStor( m_pModelImplementation->getRootStorage() );
     if ( !xRootStor.is() )
@@ -334,12 +334,12 @@ Sequence< OUString > SAL_CALL DocumentStorageAccess::getDocumentSubStoragesNames
         :  Sequence< OUString >( &aNames[0], aNames.size() );
 }
 
-void SAL_CALL DocumentStorageAccess::preCommit( const css::lang::EventObject& /*aEvent*/ ) throw (Exception, RuntimeException, std::exception)
+void SAL_CALL DocumentStorageAccess::preCommit( const css::lang::EventObject& /*aEvent*/ )
 {
     // not interested in
 }
 
-void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEvent )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -362,17 +362,17 @@ void SAL_CALL DocumentStorageAccess::commited( const css::lang::EventObject& aEv
     }
 }
 
-void SAL_CALL DocumentStorageAccess::preRevert( const css::lang::EventObject& /*aEvent*/ ) throw (Exception, RuntimeException, std::exception)
+void SAL_CALL DocumentStorageAccess::preRevert( const css::lang::EventObject& /*aEvent*/ )
 {
     // not interested in
 }
 
-void SAL_CALL DocumentStorageAccess::reverted( const css::lang::EventObject& /*aEvent*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL DocumentStorageAccess::reverted( const css::lang::EventObject& /*aEvent*/ )
 {
     // not interested in
 }
 
-void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& Source ) throw ( RuntimeException, std::exception )
+void SAL_CALL DocumentStorageAccess::disposing( const css::lang::EventObject& Source )
 {
     OSL_ENSURE( Reference< XStorage >( Source.Source, UNO_QUERY ).is(), "DocumentStorageAccess::disposing: No storage? What's this?" );
 
@@ -620,7 +620,7 @@ void ODatabaseModelImpl::reset()
     }
 }
 
-void SAL_CALL ODatabaseModelImpl::disposing( const css::lang::EventObject& Source ) throw(RuntimeException)
+void SAL_CALL ODatabaseModelImpl::disposing( const css::lang::EventObject& Source )
 {
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if ( xCon.is() )

@@ -154,7 +154,6 @@ void GraphicDescriptor::implCreate( SvStream& rIStm, const OUString* pURL )
 
 
 uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
-    throw( uno::RuntimeException, std::exception )
 {
     uno::Any aAny;
 
@@ -176,7 +175,6 @@ uno::Any SAL_CALL GraphicDescriptor::queryAggregation( const uno::Type & rType )
 
 
 uno::Any SAL_CALL GraphicDescriptor::queryInterface( const uno::Type & rType )
-    throw( uno::RuntimeException, std::exception )
 {
     return OWeakAggObject::queryInterface( rType );
 }
@@ -197,27 +195,23 @@ void SAL_CALL GraphicDescriptor::release()
 
 
 OUString SAL_CALL GraphicDescriptor::getImplementationName()
-    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.graphic.GraphicDescriptor"  );
 }
 
 sal_Bool SAL_CALL GraphicDescriptor::supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
 uno::Sequence< OUString > SAL_CALL GraphicDescriptor::getSupportedServiceNames()
-    throw( uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.graphic.GraphicDescriptor" };
 }
 
 
 uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
-    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< uno::Type >  aTypes( 6 );
     uno::Type*                  pTypes = aTypes.getArray();
@@ -233,7 +227,6 @@ uno::Sequence< uno::Type > SAL_CALL GraphicDescriptor::getTypes()
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
-    throw( uno::RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -265,17 +258,12 @@ uno::Sequence< sal_Int8 > SAL_CALL GraphicDescriptor::getImplementationId()
 
 
 void GraphicDescriptor::_setPropertyValues( const comphelper::PropertyMapEntry** /*ppEntries*/, const uno::Any* /*pValues*/ )
-    throw( beans::UnknownPropertyException,
-           beans::PropertyVetoException,
-           lang::IllegalArgumentException,
-              lang::WrappedTargetException )
 {
     // we only have readonly attributes
 }
 
 
 void GraphicDescriptor::_getPropertyValues( const comphelper::PropertyMapEntry** ppEntries, uno::Any* pValues )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 

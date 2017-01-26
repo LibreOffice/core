@@ -38,14 +38,14 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::lang;
 
 
-OUString SAL_CALL OIndex::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OIndex::getImplementationName(  )
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VIndexDescriptor");
     return OUString("com.sun.star.sdbcx.VIndex");
 }
 
-css::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  )
 {
     css::uno::Sequence< OUString > aSupported(1);
     if(isNew())
@@ -56,7 +56,7 @@ css::uno::Sequence< OUString > SAL_CALL OIndex::getSupportedServiceNames(  ) thr
     return aSupported;
 }
 
-sal_Bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OIndex::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -100,7 +100,7 @@ OIndex::~OIndex( )
     return *OIndex_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 
-Any SAL_CALL OIndex::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OIndex::queryInterface( const Type & rType )
 {
     Any aRet = ODescriptor::queryInterface( rType);
     if(!aRet.hasValue())
@@ -113,7 +113,7 @@ Any SAL_CALL OIndex::queryInterface( const Type & rType ) throw(RuntimeException
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OIndex::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OIndex::getTypes(  )
 {
     if(isNew())
         return ::comphelper::concatSequences(ODescriptor::getTypes(),ODescriptor_BASE::getTypes());
@@ -142,7 +142,7 @@ void OIndex::disposing()
         m_pColumns->disposing();
 }
 
-Reference< css::container::XNameAccess > SAL_CALL OIndex::getColumns(  ) throw(RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL OIndex::getColumns(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
@@ -165,7 +165,7 @@ Reference< css::container::XNameAccess > SAL_CALL OIndex::getColumns(  ) throw(R
     return m_pColumns.get();
 }
 
-Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(RuntimeException, std::exception)
+Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(ODescriptor_BASE::rBHelper.bDisposed);
@@ -174,17 +174,17 @@ Reference< XPropertySet > SAL_CALL OIndex::createDataDescriptor(  ) throw(Runtim
     return this;
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OIndex::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OIndex::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-OUString SAL_CALL OIndex::getName(  ) throw(css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OIndex::getName(  )
 {
     return m_Name;
 }
 
-void SAL_CALL OIndex::setName( const OUString& /*aName*/ ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL OIndex::setName( const OUString& /*aName*/ )
 {
 }
 

@@ -43,7 +43,7 @@ public:
         , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget
         , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
         , const OUString& rCID
-                ) throw (css::uno::RuntimeException ) override;
+                ) override;
 
     virtual void setTransformationSceneToScreen( const css::drawing::HomogenMatrix& rMatrix ) override;
 
@@ -51,8 +51,7 @@ public:
 
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
-          , const ExplicitIncrementData& rIncrement )
-                throw (css::uno::RuntimeException) override;
+          , const ExplicitIncrementData& rIncrement ) override;
 
     virtual void initAxisLabelProperties(
                     const css::awt::Size& rFontReferenceSize

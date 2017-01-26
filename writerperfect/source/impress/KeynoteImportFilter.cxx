@@ -69,7 +69,6 @@ bool KeynoteImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OU
 
 // XExtendedFilterDetection
 OUString SAL_CALL KeynoteImportFilter::detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor)
-throw(css::uno::RuntimeException, std::exception)
 {
     sal_Int32 nLength = Descriptor.getLength();
     sal_Int32 nNewLength = nLength + 2;
@@ -241,19 +240,16 @@ throw(css::uno::RuntimeException, std::exception)
 
 // XServiceInfo
 OUString SAL_CALL KeynoteImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Impress.KeynoteImportFilter");
 }
 
 sal_Bool SAL_CALL KeynoteImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL KeynoteImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

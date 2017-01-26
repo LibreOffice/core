@@ -527,7 +527,6 @@ bool MediaDescriptor::impl_addInputStream( bool bLockFile )
 }
 
 bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< css::io::XInputStream >& _rxPostData )
-    throw(css::uno::RuntimeException)
 {
     if ( !_rxPostData.is() )
         throw css::lang::IllegalArgumentException("Found invalid PostData.",
@@ -597,7 +596,6 @@ bool MediaDescriptor::impl_openStreamWithPostData( const css::uno::Reference< cs
 
 /*-----------------------------------------------*/
 bool MediaDescriptor::impl_openStreamWithURL( const OUString& sURL, bool bLockFile )
-    throw(css::uno::RuntimeException)
 {
     OUString referer(getUnpackedValueOrDefault(PROP_REFERRER(), OUString()));
     if (SvtSecurityOptions().isUntrustedReferer(referer)) {

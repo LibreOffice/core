@@ -168,7 +168,6 @@ ScatterChartType::~ScatterChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new ScatterChartType( *this ));
 }
@@ -176,8 +175,6 @@ uno::Reference< util::XCloneable > SAL_CALL ScatterChartType::createClone()
 // ____ XChartType ____
 Reference< chart2::XCoordinateSystem > SAL_CALL
     ScatterChartType::createCoordinateSystem( ::sal_Int32 DimensionCount )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     Reference< chart2::XCoordinateSystem > xResult(
         new CartesianCoordinateSystem( GetComponentContext(), DimensionCount ));
@@ -207,13 +204,11 @@ Reference< chart2::XCoordinateSystem > SAL_CALL
 }
 
 OUString SAL_CALL ScatterChartType::getChartType()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString(CHART2_SERVICE_NAME_CHARTTYPE_SCATTER);
 }
 
 uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles()
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aMandRolesSeq(3);
     aMandRolesSeq[0] = "label";
@@ -224,7 +219,6 @@ uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedMandatoryRoles(
 
 // ____ OPropertySet ____
 uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticScatterChartTypeDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -241,25 +235,21 @@ uno::Any ScatterChartType::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ScatterChartType::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticScatterChartTypeInfo::get();
 }
 
 OUString SAL_CALL ScatterChartType::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.ScatterChartType");
 }
 
 sal_Bool SAL_CALL ScatterChartType::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ScatterChartType::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_SCATTER,

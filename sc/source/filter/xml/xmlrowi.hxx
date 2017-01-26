@@ -40,13 +40,11 @@ public:
 
     virtual ~ScXMLTableRowContext() override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 class ScXMLTableRowsContext : public ScXMLImportContext
@@ -67,11 +65,9 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
                         createFastChildContext( sal_Int32 nElement,
-                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
-                        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+                        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
-                        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
 };
 

@@ -33,7 +33,6 @@ using ::rtl::OString;
 #endif
 
 bool CppuOptions::initOptions(int ac, char* av[], bool bCmdFile)
-    throw( IllegalArgument )
 {
     bool    ret = true;
     sal_uInt16  i=0;

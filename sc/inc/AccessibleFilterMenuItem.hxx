@@ -44,40 +44,31 @@ public:
 
     /// XAccessibleContext
 
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-        getAccessibleChild(sal_Int32 nIndex)
-            throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, std::exception) override;
+        getAccessibleChild(sal_Int32 nIndex) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessibleStateSet> SAL_CALL
-        getAccessibleStateSet()
-            throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleStateSet() override;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     /// XAccessibleAction
 
-    virtual ::sal_Int32 SAL_CALL getAccessibleActionCount()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getAccessibleActionCount() override;
 
-    virtual sal_Bool SAL_CALL doAccessibleAction(sal_Int32 nIndex)
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL doAccessibleAction(sal_Int32 nIndex) override;
 
-    virtual OUString SAL_CALL getAccessibleActionDescription(sal_Int32 nIndex)
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getAccessibleActionDescription(sal_Int32 nIndex) override;
 
     virtual css::uno::Reference< css::accessibility::XAccessibleKeyBinding > SAL_CALL
-        getAccessibleActionKeyBinding(sal_Int32 nIndex)
-            throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        getAccessibleActionKeyBinding(sal_Int32 nIndex) override;
 
     /// XInterface
 
     virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & rType )
-            throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::Type const & rType ) override;
 
     virtual void SAL_CALL acquire() throw () override;
     virtual void SAL_CALL release() throw () override;
@@ -88,11 +79,9 @@ public:
 
 protected:
 
-    virtual Rectangle GetBoundingBoxOnScreen() const
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual Rectangle GetBoundingBoxOnScreen() const override;
 
-    virtual Rectangle GetBoundingBox() const
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual Rectangle GetBoundingBox() const override;
 
 private:
     bool isSelected() const;

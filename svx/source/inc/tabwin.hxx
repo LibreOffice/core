@@ -102,7 +102,7 @@ public:
 
 protected:
     // FmXChangeListener
-    virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) override;
 
 protected:
     using SfxControllerItem::GetBindings;

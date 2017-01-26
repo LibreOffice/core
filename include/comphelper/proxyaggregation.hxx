@@ -106,9 +106,9 @@ namespace comphelper
 
         // XInterface and XTypeProvider
         /// @throws css::uno::RuntimeException
-        css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException);
+        css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType );
         /// @throws css::uno::RuntimeException
-        css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException);
+        css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  );
 
     private:
         OProxyAggregation( const OProxyAggregation& ) = delete;
@@ -145,7 +145,7 @@ namespace comphelper
         using OProxyAggregation::getComponentContext;
 
         // XInterface
-        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
@@ -165,11 +165,11 @@ namespace comphelper
         );
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XComponent
         /// @throws css::uno::RuntimeException
-        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) = 0;
+        virtual void SAL_CALL dispose() = 0;
 
     private:
         OComponentProxyAggregationHelper( const OComponentProxyAggregationHelper& ) = delete;
@@ -197,13 +197,13 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER()
 
         // OComponentHelper
-        virtual void SAL_CALL disposing()  throw (css::uno::RuntimeException) override;
+        virtual void SAL_CALL disposing() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) override;
 
         // XComponent/OComponentProxyAggregationHelper
-        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() override;
 
     private:
         OComponentProxyAggregation( const OComponentProxyAggregation& ) = delete;

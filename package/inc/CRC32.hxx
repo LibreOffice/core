@@ -34,20 +34,15 @@ public:
     ~CRC32();
 
     /// @throws css::uno::RuntimeException
-    sal_Int64 SAL_CALL updateStream (css::uno::Reference < css::io::XInputStream > & xStream)
-        throw(css::uno::RuntimeException);
+    sal_Int64 SAL_CALL updateStream (css::uno::Reference < css::io::XInputStream > & xStream);
     /// @throws css::uno::RuntimeException
-    void SAL_CALL updateSegment(const css::uno::Sequence< sal_Int8 > &b, sal_Int32 len)
-        throw(css::uno::RuntimeException);
+    void SAL_CALL updateSegment(const css::uno::Sequence< sal_Int8 > &b, sal_Int32 len);
     /// @throws css::uno::RuntimeException
-    void SAL_CALL update(const css::uno::Sequence< sal_Int8 > &b)
-        throw(css::uno::RuntimeException);
+    void SAL_CALL update(const css::uno::Sequence< sal_Int8 > &b);
     /// @throws css::uno::RuntimeException
-    sal_Int32 SAL_CALL getValue()
-        throw(css::uno::RuntimeException);
+    sal_Int32 SAL_CALL getValue();
     /// @throws css::uno::RuntimeException
-    void SAL_CALL reset()
-        throw(css::uno::RuntimeException);
+    void SAL_CALL reset();
 };
 
 #endif

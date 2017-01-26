@@ -34,7 +34,7 @@ public:
          css::uno::Reference<css::sheet::XSheetOutline> const & outline): ScVbaOutline_BASE( xParent, xContext) , mxOutline(outline)
     {}
 
-    virtual void SAL_CALL ShowLevels( const css::uno::Any& RowLevels, const css::uno::Any& ColumnLevels ) throw (css::uno::RuntimeException, std::exception) override ;
+    virtual void SAL_CALL ShowLevels( const css::uno::Any& RowLevels, const css::uno::Any& ColumnLevels ) override ;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

@@ -101,29 +101,28 @@ public:
     /// @throws css::uno::RuntimeException
     explicit ScVbaHyperlinks(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
-        const css::uno::Reference< css::uno::XComponentContext >& rxContext ) throw (css::uno::RuntimeException);
+        const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     /// @throws css::uno::RuntimeException
     explicit ScVbaHyperlinks(
         const css::uno::Reference< ov::XHelperInterface >& rxParent,
         const css::uno::Reference< css::uno::XComponentContext >& rxContext,
-        const ScVbaHyperlinksRef& rxSheetHlinks, const ScRangeList& rScRanges ) throw (css::uno::RuntimeException);
+        const ScVbaHyperlinksRef& rxSheetHlinks, const ScRangeList& rScRanges );
 
     virtual ~ScVbaHyperlinks() override;
 
     // XHyperlinks
     virtual css::uno::Reference< ov::excel::XHyperlink > SAL_CALL Add(
         const css::uno::Any& rAnchor, const css::uno::Any& rAddress, const css::uno::Any& rSubAddress,
-        const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay )
-            throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Any& rScreenTip, const css::uno::Any& rTextToDisplay ) override;
 
-    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Delete() override;
 
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
 
     // ScVbaCollectionBase
     virtual css::uno::Any createCollectionObject( const css::uno::Any& rSource ) override;

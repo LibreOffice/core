@@ -113,7 +113,7 @@ void FontMenuController::fillPopupMenu( const Sequence< OUString >& rFontNameSeq
 }
 
 // XEventListener
-void SAL_CALL FontMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
+void SAL_CALL FontMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
@@ -128,7 +128,7 @@ void SAL_CALL FontMenuController::disposing( const EventObject& ) throw ( Runtim
 }
 
 // XStatusListener
-void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
+void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     css::awt::FontDescriptor aFontDescriptor;
     Sequence< OUString >           aFontNameSeq;
@@ -147,7 +147,7 @@ void SAL_CALL FontMenuController::statusChanged( const FeatureStateEvent& Event 
 }
 
 // XMenuListener
-void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
+void SAL_CALL FontMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     osl::MutexGuard aLock( m_aMutex );
 
@@ -195,7 +195,7 @@ void FontMenuController::impl_setPopupMenu()
     m_xFontListDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
 
-void SAL_CALL FontMenuController::updatePopupMenu() throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL FontMenuController::updatePopupMenu()
 {
     svt::PopupMenuControllerBase::updatePopupMenu();
 

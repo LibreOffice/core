@@ -92,11 +92,7 @@ public:
     /// @throws css::io::NotConnectedException
     /// @throws css::io::BufferSizeExceededException
     /// @throws css::uno::RuntimeException
-    sal_Int32 readAndConvert( css::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead )
-        throw ( css::io::IOException,
-                css::io::NotConnectedException ,
-                css::io::BufferSizeExceededException ,
-                css::uno::RuntimeException );
+    sal_Int32 readAndConvert( css::uno::Sequence<sal_Int8> &seq , sal_Int32 nMaxToRead );
 
 private:
 

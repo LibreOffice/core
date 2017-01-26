@@ -33,12 +33,10 @@ public:
     explicit AtkListener(AtkObjectWrapper * pWrapper);
 
     // XEventListener
-    virtual void disposing( const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void disposing( const css::lang::EventObject& Source ) override;
 
     // XAccessibleEventListener
-    virtual void notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
 private:
 

@@ -66,57 +66,44 @@ public:
     // XInitialization
     virtual void SAL_CALL
     initialize(css::uno::Sequence< css::uno::Any > const &
-                   rArguments)
-        throw (css::uno::Exception, std::exception) override;
+                   rArguments) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     virtual sal_Bool SAL_CALL
-    supportsService(OUString const & rServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    supportsService(OUString const & rServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    getSupportedServiceNames() override;
 
     // XJavaVM
     virtual css::uno::Any SAL_CALL
-    getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
-        throw (css::uno::RuntimeException, std::exception) override;
+    getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId) override;
 
-    virtual sal_Bool SAL_CALL isVMStarted()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isVMStarted() override;
 
-    virtual sal_Bool SAL_CALL isVMEnabled()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isVMEnabled() override;
 
     // XJavaThreadRegister_11
-    virtual sal_Bool SAL_CALL isThreadAttached()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isThreadAttached() override;
 
-    virtual void SAL_CALL registerThread()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL registerThread() override;
 
-    virtual void SAL_CALL revokeThread()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL revokeThread() override;
 
     // XContainerListener
     virtual void SAL_CALL
-    disposing(css::lang::EventObject const & rSource)
-        throw (css::uno::RuntimeException, std::exception) override;
+    disposing(css::lang::EventObject const & rSource) override;
 
     virtual void SAL_CALL
-    elementInserted(css::container::ContainerEvent const & rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    elementInserted(css::container::ContainerEvent const & rEvent) override;
 
     virtual void SAL_CALL
-    elementRemoved(css::container::ContainerEvent const & rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    elementRemoved(css::container::ContainerEvent const & rEvent) override;
 
     virtual void SAL_CALL
-    elementReplaced(css::container::ContainerEvent const & rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    elementReplaced(css::container::ContainerEvent const & rEvent) override;
 
 private:
     JavaVirtualMachine(JavaVirtualMachine &) = delete;

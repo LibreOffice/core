@@ -126,9 +126,6 @@ FTPURL::FTPURL(const FTPURL& r)
 
 FTPURL::FTPURL(const OUString& url,
                FTPContentProvider* pFCP)
-    throw(
-        malformed_exception
-    )
     : m_pFCP(pFCP),
       m_aUsername("anonymous"),
       m_bShowPassword(false),
@@ -144,9 +141,6 @@ FTPURL::~FTPURL()
 
 
 void FTPURL::parse(const OUString& url)
-    throw(
-        malformed_exception
-    )
 {
     OUString aPassword,aAccount;
     OString aIdent(url.getStr(),
@@ -385,7 +379,6 @@ namespace ftp {
                      urlParAscii.getStr());
 
 oslFileHandle FTPURL::open()
-    throw(curl_exception, std::exception)
 {
     if(m_aPathSegmentVec.empty())
         throw curl_exception(CURLE_FTP_COULDNT_RETR_FILE);
@@ -425,9 +418,6 @@ oslFileHandle FTPURL::open()
 std::vector<FTPDirentry> FTPURL::list(
     sal_Int16 nMode
 ) const
-    throw(
-        curl_exception
-    )
 {
     CURL *curl = m_pFCP->handle();
 
@@ -512,7 +502,6 @@ std::vector<FTPDirentry> FTPURL::list(
 
 
 OUString FTPURL::net_title() const
-    throw(curl_exception, std::exception)
 {
     CURL *curl = m_pFCP->handle();
 
@@ -592,7 +581,6 @@ OUString FTPURL::net_title() const
 
 
 FTPDirentry FTPURL::direntry() const
-    throw (curl_exception, malformed_exception, std::exception)
 {
     OUString nettitle = net_title();
     FTPDirentry aDirentry;
@@ -638,7 +626,6 @@ extern "C" {
 
 
 void FTPURL::insert(bool replaceExisting,void* stream) const
-    throw(curl_exception)
 {
     if(!replaceExisting) {
 //          FTPDirentry aDirentry(direntry());
@@ -670,7 +657,6 @@ void FTPURL::insert(bool replaceExisting,void* stream) const
 
 
 void FTPURL::mkdir(bool ReplaceExisting) const
-    throw (curl_exception, malformed_exception, std::exception)
 {
     OString title;
     if(!m_aPathSegmentVec.empty()) {
@@ -720,7 +706,6 @@ void FTPURL::mkdir(bool ReplaceExisting) const
 
 
 OUString FTPURL::ren(const OUString& NewTitle)
-    throw(curl_exception, std::exception)
 {
     CURL *curl = m_pFCP->handle();
 
@@ -763,7 +748,6 @@ OUString FTPURL::ren(const OUString& NewTitle)
 
 
 void FTPURL::del() const
-    throw(curl_exception, malformed_exception, std::exception)
 {
     FTPDirentry aDirentry(direntry());
 

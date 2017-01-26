@@ -98,16 +98,13 @@ protected:
     // ____ XDispatch ____
     virtual void SAL_CALL dispatch(
         const css::util::URL& URL,
-        const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
     virtual void SAL_CALL addStatusListener(
         const css::uno::Reference< css::frame::XStatusListener >& Control,
-        const css::util::URL& URL )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::util::URL& URL ) override;
     virtual void SAL_CALL removeStatusListener(
         const css::uno::Reference< css::frame::XStatusListener >& Control,
-        const css::util::URL& URL )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::util::URL& URL ) override;
 
     // ____ WeakComponentImplHelperBase ____
     /// is called when this is disposed
@@ -115,13 +112,11 @@ protected:
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source ) override;
 
 protected:
     css::uno::Reference< css::uno::XComponentContext > m_xContext;

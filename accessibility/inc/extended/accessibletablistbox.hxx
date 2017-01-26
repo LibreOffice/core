@@ -61,17 +61,14 @@ public:
     // XAccessibleContext -----------------------------------------------------
 
     /** @return  The count of visible children. */
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
 
     /** @return  The XAccessible interface of the specified child. */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-    getAccessibleChild( sal_Int32 nChildIndex )
-        throw ( css::lang::IndexOutOfBoundsException,
-                css::uno::RuntimeException, std::exception ) override;
+    getAccessibleChild( sal_Int32 nChildIndex ) override;
 
     // XAccessibleContext
-    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() throw ( css::uno::RuntimeException, std::exception ) override;
+    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL getAccessibleContext() override;
 
     // IAccessibleTabListBox
     virtual css::uno::Reference< css::accessibility::XAccessible >

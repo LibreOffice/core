@@ -130,36 +130,36 @@ DatabaseMetaData::DatabaseMetaData(
     init_getPrivs_stmt();
 }
 
-sal_Bool DatabaseMetaData::allProceduresAreCallable(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::allProceduresAreCallable(  )
 {
     // TODO
     return false;
 }
 
-sal_Bool DatabaseMetaData::allTablesAreSelectable(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::allTablesAreSelectable(  )
 {
     return true;
 }
 
-OUString DatabaseMetaData::getURL(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getURL(  )
 {
     // TODO
     // LEM TODO: implement
     return OUString();
 }
 
-OUString DatabaseMetaData::getUserName(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getUserName(  )
 {
     return m_pSettings->user;
 }
 
-sal_Bool DatabaseMetaData::isReadOnly(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::isReadOnly(  )
 {
     return false;
 }
 
 
-sal_Bool DatabaseMetaData::nullsAreSortedHigh(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::nullsAreSortedHigh(  )
 {
     // Whether NULL values are considered, for sorting purposes, LARGER than any other value.
     // Specification: http://download.oracle.com/javase/6/docs/api/java/sql/DatabaseMetaData.html#nullsAreSortedHigh()
@@ -167,51 +167,51 @@ sal_Bool DatabaseMetaData::nullsAreSortedHigh(  ) throw (SQLException, RuntimeEx
     return true;
 }
 
-sal_Bool DatabaseMetaData::nullsAreSortedLow(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::nullsAreSortedLow(  )
 {
     return ! nullsAreSortedHigh();
 }
 
-sal_Bool DatabaseMetaData::nullsAreSortedAtStart(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::nullsAreSortedAtStart(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::nullsAreSortedAtEnd(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::nullsAreSortedAtEnd(  )
 {
     return false;
 }
 
-OUString DatabaseMetaData::getDatabaseProductName(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getDatabaseProductName(  )
 {
     return OUString("PostgreSQL");
 }
 
-OUString DatabaseMetaData::getDatabaseProductVersion(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getDatabaseProductVersion(  )
 {
     return OUString::createFromAscii( PQparameterStatus( m_pSettings->pConnection, "server_version" ) );
 }
-OUString DatabaseMetaData::getDriverName(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getDriverName(  )
 {
     return OUString("postgresql-sdbc");
 }
 
-OUString DatabaseMetaData::getDriverVersion(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getDriverVersion(  )
 {
     return OUString(PQ_SDBC_DRIVER_VERSION);
 }
 
-sal_Int32 DatabaseMetaData::getDriverMajorVersion(  ) throw (RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getDriverMajorVersion(  )
 {
     return PQ_SDBC_MAJOR;
 }
 
-sal_Int32 DatabaseMetaData::getDriverMinorVersion(  ) throw (RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getDriverMinorVersion(  )
 {
     return PQ_SDBC_MINOR;
 }
 
-sal_Bool DatabaseMetaData::usesLocalFiles(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::usesLocalFiles(  )
 {
     // LEM TODO:
     //           http://wiki.openoffice.org/wiki/Documentation/DevGuide/Database/XDatabaseMetaData_Interface
@@ -222,62 +222,62 @@ sal_Bool DatabaseMetaData::usesLocalFiles(  ) throw (SQLException, RuntimeExcept
     return false;
 }
 
-sal_Bool DatabaseMetaData::usesLocalFilePerTable(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::usesLocalFilePerTable(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsMixedCaseIdentifiers(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsMixedCaseIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::storesUpperCaseIdentifiers(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::storesUpperCaseIdentifiers(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::storesLowerCaseIdentifiers(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::storesLowerCaseIdentifiers(  )
 {
     return true;
 }
 
 
-sal_Bool DatabaseMetaData::storesMixedCaseIdentifiers(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::storesMixedCaseIdentifiers(  )
 {
     return false;
 }
 
 
-sal_Bool DatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsMixedCaseQuotedIdentifiers(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::storesUpperCaseQuotedIdentifiers(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::storesUpperCaseQuotedIdentifiers(  )
 {
     return false;
 }
 
 
-sal_Bool DatabaseMetaData::storesLowerCaseQuotedIdentifiers(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::storesLowerCaseQuotedIdentifiers(  )
 {
     return false;
 }
 
 
-sal_Bool DatabaseMetaData::storesMixedCaseQuotedIdentifiers(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::storesMixedCaseQuotedIdentifiers(  )
 {
     return false;
 }
 
 
-OUString DatabaseMetaData::getIdentifierQuoteString(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getIdentifierQuoteString(  )
 {
     return OUString("\"");
 }
 
-OUString DatabaseMetaData::getSQLKeywords(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getSQLKeywords(  )
 {
     // In Java 6, this is all keywords that are not SQL:2003
     // In Java 2 v1.4 and as per LibreOffice SDK doc, this is all keywords that are not SQL92
@@ -312,7 +312,7 @@ OUString DatabaseMetaData::getSQLKeywords(  ) throw (SQLException, RuntimeExcept
         "WINDOW" //SQL:2003
  );
 }
-OUString DatabaseMetaData::getNumericFunctions(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getNumericFunctions(  )
 {
     // See http://www.postgresql.org/docs/9.1/static/functions-math.html
     // LEM TODO: Err... http://wiki.openoffice.org/wiki/Documentation/DevGuide/Database/Support_Scalar_Functions
@@ -353,7 +353,7 @@ OUString DatabaseMetaData::getNumericFunctions(  ) throw (SQLException, RuntimeE
  );
 }
 
-OUString DatabaseMetaData::getStringFunctions(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getStringFunctions(  )
 {
     // See http://www.postgresql.org/docs/9.1/static/functions-string.html
     return OUString(
@@ -407,7 +407,7 @@ OUString DatabaseMetaData::getStringFunctions(  ) throw (SQLException, RuntimeEx
  );
 }
 
-OUString DatabaseMetaData::getSystemFunctions(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getSystemFunctions(  )
 {
     // See http://www.postgresql.org/docs/9.1/static/functions-info.html
     // and http://www.postgresql.org/docs/9.1/static/functions-admin.html
@@ -536,7 +536,7 @@ OUString DatabaseMetaData::getSystemFunctions(  ) throw (SQLException, RuntimeEx
         "pg_sleep"
  );
 }
-OUString DatabaseMetaData::getTimeDateFunctions(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getTimeDateFunctions(  )
 {
     // TODO
     return OUString(
@@ -565,112 +565,112 @@ OUString DatabaseMetaData::getTimeDateFunctions(  ) throw (SQLException, Runtime
         "transaction_timestamp,"
  );
 }
-OUString DatabaseMetaData::getSearchStringEscape(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getSearchStringEscape(  )
 {
     return OUString("\\");
 }
-OUString DatabaseMetaData::getExtraNameCharacters(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getExtraNameCharacters(  )
 {
     return OUString("$");
 }
 
-sal_Bool DatabaseMetaData::supportsAlterTableWithAddColumn(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsAlterTableWithAddColumn(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsAlterTableWithDropColumn(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsAlterTableWithDropColumn(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsColumnAliasing(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsColumnAliasing(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::nullPlusNonNullIsNull(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::nullPlusNonNullIsNull(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsTypeConversion(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsTypeConversion(  )
 {
     // LEM: this is specifically whether the "CONVERT" function is supported
     //      It seems that in PostgreSQL, that function is only for string encoding, so no.
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsConvert( sal_Int32 fromType, sal_Int32 toType )
 {
     (void) fromType; (void) toType;
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsTableCorrelationNames(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsTableCorrelationNames(  )
 {
     // LEM: A correlation name is "bar" in "SELECT foo FROM qux [AS] bar WHERE ..."
     return true;
 }
 
 
-sal_Bool DatabaseMetaData::supportsDifferentTableCorrelationNames(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsDifferentTableCorrelationNames(  )
 {
     return false;
 }
-sal_Bool DatabaseMetaData::supportsExpressionsInOrderBy(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsExpressionsInOrderBy(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsOrderByUnrelated(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsOrderByUnrelated(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsGroupBy(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsGroupBy(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsGroupByUnrelated(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsGroupByUnrelated(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsGroupByBeyondSelect(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsGroupByBeyondSelect(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsLikeEscapeClause(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsLikeEscapeClause(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsMultipleResultSets(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsMultipleResultSets(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsMultipleTransactions(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsMultipleTransactions(  )
 {
     // Allows multiple transactions open at once (on different connections!)
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsNonNullableColumns(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsNonNullableColumns(  )
 {
     return true;
 }
 
 
-sal_Bool DatabaseMetaData::supportsMinimumSQLGrammar(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsMinimumSQLGrammar(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsCoreSQLGrammar(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsCoreSQLGrammar(  )
 {
     // LEM: jdbc driver says not, although the comments in it seem old
     //      fdo#45249 Base query design won't use any aggregate function
@@ -681,123 +681,123 @@ sal_Bool DatabaseMetaData::supportsCoreSQLGrammar(  ) throw (SQLException, Runti
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsExtendedSQLGrammar(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsExtendedSQLGrammar(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsANSI92EntryLevelSQL(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsANSI92EntryLevelSQL(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsANSI92IntermediateSQL(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsANSI92IntermediateSQL(  )
 {
     // LEM: jdbc driver says not, although the comments in it seem old
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsANSI92FullSQL(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsANSI92FullSQL(  )
 {
     // LEM: jdbc driver says not, although the comments in it seem old
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsIntegrityEnhancementFacility(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsIntegrityEnhancementFacility(  )
 {
     // LEM: jdbc driver says yes, although comment says they are not sure what this means...
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsOuterJoins(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsOuterJoins(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsFullOuterJoins(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsFullOuterJoins(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsLimitedOuterJoins(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsLimitedOuterJoins(  )
 {
     return true;
 }
 
 
-OUString DatabaseMetaData::getSchemaTerm(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getSchemaTerm(  )
 {
     return OUString("SCHEMA");
 }
 
-OUString DatabaseMetaData::getProcedureTerm(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getProcedureTerm(  )
 {
     return OUString("function");
 }
 
-OUString DatabaseMetaData::getCatalogTerm(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getCatalogTerm(  )
 {
     return OUString("DATABASE");
 }
 
-sal_Bool DatabaseMetaData::isCatalogAtStart(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::isCatalogAtStart(  )
 {
     return true;
 }
 
-OUString DatabaseMetaData::getCatalogSeparator(  ) throw (SQLException, RuntimeException, std::exception)
+OUString DatabaseMetaData::getCatalogSeparator(  )
 {
     return OUString(".");
 }
 
-sal_Bool DatabaseMetaData::supportsSchemasInDataManipulation(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSchemasInDataManipulation(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsSchemasInProcedureCalls(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSchemasInProcedureCalls(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsSchemasInTableDefinitions(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSchemasInTableDefinitions(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsSchemasInIndexDefinitions(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSchemasInIndexDefinitions(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSchemasInPrivilegeDefinitions(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsCatalogsInDataManipulation(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsCatalogsInDataManipulation(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsCatalogsInProcedureCalls(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsCatalogsInProcedureCalls(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsCatalogsInTableDefinitions(  ) throw (SQLException, RuntimeException, std::exception)
-{
-    return false;
-}
-
-
-sal_Bool DatabaseMetaData::supportsCatalogsInIndexDefinitions(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsCatalogsInTableDefinitions(  )
 {
     return false;
 }
 
 
-sal_Bool DatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsCatalogsInIndexDefinitions(  )
+{
+    return false;
+}
+
+
+sal_Bool DatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  )
 {
     return false;
 }
@@ -807,98 +807,97 @@ sal_Bool DatabaseMetaData::supportsCatalogsInPrivilegeDefinitions(  ) throw (SQL
 // to be supported; see {UPDATE,DELETE} /table/ (...) WHERE CURRENT OF /cursor_name/" syntax
 // and http://www.postgresql.org/docs/9.1/static/view-pg-cursors.html
 // http://www.postgresql.org/docs/9.1/static/libpq-example.html actually uses a cursor :)
-sal_Bool DatabaseMetaData::supportsPositionedDelete(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsPositionedDelete(  )
 {
     // LEM: jdbc driver says not, although the comments in it seem old
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsPositionedUpdate(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsPositionedUpdate(  )
 {
     // LEM: jdbc driver says not, although the comments in it seem old
     return false;
 }
 
 
-sal_Bool DatabaseMetaData::supportsSelectForUpdate(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSelectForUpdate(  )
 {
     return true;
 }
 
 
-sal_Bool DatabaseMetaData::supportsStoredProcedures(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsStoredProcedures(  )
 {
     return true;
 }
 
 
-sal_Bool DatabaseMetaData::supportsSubqueriesInComparisons(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSubqueriesInComparisons(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsSubqueriesInExists(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSubqueriesInExists(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsSubqueriesInIns(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSubqueriesInIns(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsSubqueriesInQuantifieds(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsSubqueriesInQuantifieds(  )
 {
     // LEM: jdbc driver says yes, although comment says they don't know what this means...
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsCorrelatedSubqueries(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsCorrelatedSubqueries(  )
 {
     return true;
 }
-sal_Bool DatabaseMetaData::supportsUnion(  ) throw (SQLException, RuntimeException, std::exception)
-{
-    return true;
-}
-
-sal_Bool DatabaseMetaData::supportsUnionAll(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsUnion(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsOpenCursorsAcrossCommit(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsUnionAll(  )
+{
+    return true;
+}
+
+sal_Bool DatabaseMetaData::supportsOpenCursorsAcrossCommit(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsOpenCursorsAcrossRollback(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsOpenCursorsAcrossRollback(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsOpenStatementsAcrossCommit(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsOpenStatementsAcrossCommit(  )
 {
     return true;
 }
-sal_Bool DatabaseMetaData::supportsOpenStatementsAcrossRollback(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsOpenStatementsAcrossRollback(  )
 {
     return true;
 }
 
-sal_Int32 DatabaseMetaData::getMaxBinaryLiteralLength(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxBinaryLiteralLength(  )
 {
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxCharLiteralLength(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxCharLiteralLength(  )
 {
     return 0;
 }
 
 // Copied / adapted / simplified from JDBC driver
 sal_Int32 DatabaseMetaData::getIntSetting(const OUString& settingName)
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     MutexGuard guard( m_refMutex->mutex );
 
@@ -913,7 +912,6 @@ sal_Int32 DatabaseMetaData::getIntSetting(const OUString& settingName)
 }
 
 sal_Int32 DatabaseMetaData::getMaxNameLength()
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     if ( m_pSettings->maxNameLen == 0)
         m_pSettings->maxNameLen = getIntSetting( "max_identifier_length" );
@@ -922,7 +920,6 @@ sal_Int32 DatabaseMetaData::getMaxNameLength()
 }
 
 sal_Int32 DatabaseMetaData::getMaxIndexKeys()
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     if ( m_pSettings->maxIndexKeys == 0)
         m_pSettings->maxIndexKeys = getIntSetting("max_index_keys");
@@ -930,69 +927,69 @@ sal_Int32 DatabaseMetaData::getMaxIndexKeys()
     return m_pSettings->maxIndexKeys;
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnNameLength(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxColumnNameLength(  )
 {
     return getMaxNameLength();
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInGroupBy(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxColumnsInGroupBy(  )
 {
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInIndex(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxColumnsInIndex(  )
 {
     return getMaxIndexKeys();
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInOrderBy(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxColumnsInOrderBy(  )
 {
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInSelect(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxColumnsInSelect(  )
 {
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxColumnsInTable(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxColumnsInTable(  )
 {
     return 1600;
 }
 
-sal_Int32 DatabaseMetaData::getMaxConnections(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxConnections(  )
 {
     // LEM: The JDBC driver returns an arbitrary 8192; truth is as much as OS / hardware supports
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxCursorNameLength(  ) throw (SQLException, RuntimeException, std::exception) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxCursorNameLength(  ) //TODO, don't know
 {
     return getMaxNameLength();
 }
 
-sal_Int32 DatabaseMetaData::getMaxIndexLength(  ) throw (SQLException, RuntimeException, std::exception) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxIndexLength(  ) //TODO, don't know
 {
     // LEM: that's the index itself, not its name
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxSchemaNameLength(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxSchemaNameLength(  )
 {
     return getMaxNameLength();
 }
 
-sal_Int32 DatabaseMetaData::getMaxProcedureNameLength(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxProcedureNameLength(  )
 {
     return getMaxNameLength();
 }
 
-sal_Int32 DatabaseMetaData::getMaxCatalogNameLength(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxCatalogNameLength(  )
 {
     return getMaxNameLength();
 }
 
-sal_Int32 DatabaseMetaData::getMaxRowSize(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxRowSize(  )
 {
     // jdbc driver says 1GB, but http://www.postgresql.org/about/ says 1.6TB
     // and that 1GB is the maximum _field_ size
@@ -1000,14 +997,14 @@ sal_Int32 DatabaseMetaData::getMaxRowSize(  ) throw (SQLException, RuntimeExcept
     return 0;
 }
 
-sal_Bool DatabaseMetaData::doesMaxRowSizeIncludeBlobs(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::doesMaxRowSizeIncludeBlobs(  )
 {
     // LEM: Err... PostgreSQL basically does not do BLOBs well
     //      In any case, BLOBs do not change the maximal row length AFAIK
     return true;
 }
 
-sal_Int32 DatabaseMetaData::getMaxStatementLength(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxStatementLength(  )
 {
     // LEM: actually, that would be 2^sizeof(size_t)-1
     //      on the server? on the client (because of libpq)? minimum of the two? not sure
@@ -1015,37 +1012,37 @@ sal_Int32 DatabaseMetaData::getMaxStatementLength(  ) throw (SQLException, Runti
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxStatements(  ) throw (SQLException, RuntimeException, std::exception) //TODO, don't know
+sal_Int32 DatabaseMetaData::getMaxStatements(  ) //TODO, don't know
 {
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxTableNameLength(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxTableNameLength(  )
 {
     return getMaxNameLength();
 }
 
-sal_Int32 DatabaseMetaData::getMaxTablesInSelect(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxTablesInSelect(  )
 {
     return 0;
 }
 
-sal_Int32 DatabaseMetaData::getMaxUserNameLength(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getMaxUserNameLength(  )
 {
     return getMaxNameLength();
 }
 
-sal_Int32 DatabaseMetaData::getDefaultTransactionIsolation(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Int32 DatabaseMetaData::getDefaultTransactionIsolation(  )
 {
     return css::sdbc::TransactionIsolation::READ_COMMITTED;
 }
 
-sal_Bool DatabaseMetaData::supportsTransactions(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsTransactions(  )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level )
 {
     if ( level == css::sdbc::TransactionIsolation::READ_COMMITTED
          || level == css::sdbc::TransactionIsolation::SERIALIZABLE
@@ -1057,22 +1054,21 @@ sal_Bool DatabaseMetaData::supportsTransactionIsolationLevel( sal_Int32 level ) 
 }
 
 sal_Bool DatabaseMetaData::supportsDataDefinitionAndDataManipulationTransactions(  )
-    throw (SQLException, RuntimeException, std::exception)
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::supportsDataManipulationTransactionsOnly(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsDataManipulationTransactionsOnly(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::dataDefinitionCausesTransactionCommit(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::dataDefinitionCausesTransactionCommit(  )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  )
 {
     return false;
 }
@@ -1080,7 +1076,7 @@ sal_Bool DatabaseMetaData::dataDefinitionIgnoredInTransactions(  ) throw (SQLExc
 css::uno::Reference< XResultSet > DatabaseMetaData::getProcedures(
     const css::uno::Any& catalog,
     const OUString& schemaPattern,
-    const OUString& procedureNamePattern ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& procedureNamePattern )
 {
     (void) catalog; (void) schemaPattern; (void) procedureNamePattern;
 //        1.  PROCEDURE_CAT string =&gt; procedure catalog (may be NULL )
@@ -1106,7 +1102,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getProcedureColumns(
     const css::uno::Any& catalog,
     const OUString& schemaPattern,
     const OUString& procedureNamePattern,
-    const OUString& columnNamePattern ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& columnNamePattern )
 {
     (void) catalog; (void) schemaPattern; (void) procedureNamePattern; (void) columnNamePattern;
     MutexGuard guard( m_refMutex->mutex );
@@ -1121,7 +1117,6 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getTables(
     const OUString& schemaPattern,
     const OUString& tableNamePattern,
     const css::uno::Sequence< OUString >& types )
-    throw (SQLException, RuntimeException, std::exception)
 {
     (void) catalog; (void) types;
     Statics &statics = getStatics();
@@ -1256,7 +1251,6 @@ namespace
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
-    throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
 
@@ -1291,7 +1285,6 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getSchemas(  )
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
-    throw (SQLException, RuntimeException, std::exception)
 {
     // LEM TODO: return the current catalog like JDBC driver?
     //           at least fake the columns, even if no content
@@ -1301,7 +1294,6 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getCatalogs(  )
 }
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getTableTypes(  )
-    throw (SQLException, RuntimeException, std::exception)
 {
     // LEM TODO: this can be made dynamic, see JDBC driver
     MutexGuard guard( m_refMutex->mutex );
@@ -1457,7 +1449,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumns(
     const css::uno::Any& catalog,
     const OUString& schemaPattern,
     const OUString& tableNamePattern,
-    const OUString& columnNamePattern ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& columnNamePattern )
 {
     (void) catalog;
     // LEM TODO: review in comparison with JDBC driver
@@ -1643,7 +1635,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
     const css::uno::Any& catalog,
     const OUString& schema,
     const OUString& table,
-    const OUString& columnNamePattern ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& columnNamePattern )
 {
     (void) catalog;
 
@@ -1674,7 +1666,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getColumnPrivileges(
 css::uno::Reference< XResultSet > DatabaseMetaData::getTablePrivileges(
     const css::uno::Any&,
     const OUString& schemaPattern,
-    const OUString& tableNamePattern ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& tableNamePattern )
 {
     MutexGuard guard( m_refMutex->mutex );
 
@@ -1702,7 +1694,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getBestRowIdentifier(
     const OUString&,
     const OUString&,
     sal_Int32,
-    sal_Bool ) throw (SQLException, RuntimeException, std::exception)
+    sal_Bool )
 {
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
@@ -1713,7 +1705,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getBestRowIdentifier(
 css::uno::Reference< XResultSet > DatabaseMetaData::getVersionColumns(
     const css::uno::Any&,
     const OUString&,
-    const OUString& ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& )
 {
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
@@ -1724,7 +1716,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getVersionColumns(
 css::uno::Reference< XResultSet > DatabaseMetaData::getPrimaryKeys(
     const css::uno::Any&,
     const OUString& schema,
-    const OUString& table ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& table )
 {
     //LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
@@ -2075,7 +2067,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getImportedExportedKeys(
     const OUString& primaryTable,
     const Any& /* foreignCatalog */,
     const OUString& foreignSchema,
-    const OUString& foreignTable ) throw (SQLException, RuntimeException)
+    const OUString& foreignTable )
 {
     unsigned int i = 0;
     if ( ! primarySchema.isEmpty() )
@@ -2109,7 +2101,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getImportedExportedKeys(
 css::uno::Reference< XResultSet > DatabaseMetaData::getImportedKeys(
     const css::uno::Any& catalog,
     const OUString& schema,
-    const OUString& table ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& table )
 {
     return getImportedExportedKeys(Any(), OUString(), OUString(), catalog, schema, table);
 }
@@ -2117,7 +2109,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getImportedKeys(
 css::uno::Reference< XResultSet > DatabaseMetaData::getExportedKeys(
     const css::uno::Any& catalog,
     const OUString& schema,
-    const OUString& table ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& table )
 {
     return getImportedExportedKeys(catalog, schema, table, Any(), OUString(), OUString());
 }
@@ -2128,7 +2120,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getCrossReference(
     const OUString& primaryTable,
     const css::uno::Any& foreignCatalog,
     const OUString& foreignSchema,
-    const OUString& foreignTable ) throw (SQLException, RuntimeException, std::exception)
+    const OUString& foreignTable )
 {
     return getImportedExportedKeys( primaryCatalog, primarySchema, primaryTable, foreignCatalog, foreignSchema, foreignTable );
 }
@@ -2323,7 +2315,6 @@ namespace
 
 
 css::uno::Reference< XResultSet > DatabaseMetaData::getTypeInfo(  )
-    throw (SQLException, RuntimeException, std::exception)
 {
     // Note: Indexes start at 0 (in the API doc, they start at 1)
     MutexGuard guard( m_refMutex->mutex );
@@ -2378,7 +2369,7 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
     const OUString& schema,
     const OUString& table,
     sal_Bool unique,
-    sal_Bool ) throw (SQLException, RuntimeException, std::exception)
+    sal_Bool )
 {
     //LEM TODO: review
     MutexGuard guard( m_refMutex->mutex );
@@ -2499,7 +2490,6 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getIndexInfo(
 }
 
 sal_Bool DatabaseMetaData::supportsResultSetType( sal_Int32 setType )
-    throw (SQLException, RuntimeException, std::exception)
 {
     if ( setType == css::sdbc::ResultSetType::SCROLL_SENSITIVE )
         return false;
@@ -2508,7 +2498,7 @@ sal_Bool DatabaseMetaData::supportsResultSetType( sal_Int32 setType )
 }
 
 sal_Bool DatabaseMetaData::supportsResultSetConcurrency(
-    sal_Int32 setType, sal_Int32 concurrency ) throw (SQLException, RuntimeException, std::exception)
+    sal_Int32 setType, sal_Int32 concurrency )
 {
     (void) concurrency;
     if ( ! supportsResultSetType( setType ) )
@@ -2517,56 +2507,56 @@ sal_Bool DatabaseMetaData::supportsResultSetConcurrency(
         return true;
 }
 
-sal_Bool DatabaseMetaData::ownUpdatesAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::ownUpdatesAreVisible( sal_Int32 /* setType */ )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::ownDeletesAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::ownDeletesAreVisible( sal_Int32 /* setType */ )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::ownInsertsAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::ownInsertsAreVisible( sal_Int32 /* setType */ )
 {
     return true;
 }
 
-sal_Bool DatabaseMetaData::othersUpdatesAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::othersUpdatesAreVisible( sal_Int32 /* setType */ )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::othersDeletesAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::othersDeletesAreVisible( sal_Int32 /* setType */ )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::othersInsertsAreVisible( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::othersInsertsAreVisible( sal_Int32 /* setType */ )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::updatesAreDetected( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::updatesAreDetected( sal_Int32 /* setType */ )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::deletesAreDetected( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::deletesAreDetected( sal_Int32 /* setType */ )
 {
     return false;
 }
-sal_Bool DatabaseMetaData::insertsAreDetected( sal_Int32 /* setType */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::insertsAreDetected( sal_Int32 /* setType */ )
 {
     return false;
 }
 
-sal_Bool DatabaseMetaData::supportsBatchUpdates(  ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool DatabaseMetaData::supportsBatchUpdates(  )
 {
     return true;
 }
 
-css::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const css::uno::Any&, const OUString&, const OUString&, const css::uno::Sequence< sal_Int32 >& ) throw (SQLException, RuntimeException, std::exception)
+css::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const css::uno::Any&, const OUString&, const OUString&, const css::uno::Sequence< sal_Int32 >& )
 {
     //LEM TODO: implement! See JDBC driver
     MutexGuard guard( m_refMutex->mutex );
@@ -2575,7 +2565,6 @@ css::uno::Reference< XResultSet > DatabaseMetaData::getUDTs( const css::uno::Any
 }
 
 css::uno::Reference< css::sdbc::XConnection > DatabaseMetaData::getConnection()
-    throw (SQLException, RuntimeException, std::exception)
 {
     return m_origin;
 }

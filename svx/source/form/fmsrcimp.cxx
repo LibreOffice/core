@@ -111,7 +111,7 @@ void FmRecordCountListener::DisConnect()
 }
 
 
-void SAL_CALL FmRecordCountListener::disposing(const css::lang::EventObject& /*Source*/) throw( RuntimeException, std::exception )
+void SAL_CALL FmRecordCountListener::disposing(const css::lang::EventObject& /*Source*/)
 {
     DBG_ASSERT(m_xListening.is(), "FmRecordCountListener::disposing should never have been called without a propset !");
     DisConnect();
@@ -129,7 +129,7 @@ void FmRecordCountListener::NotifyCurrentCount()
 }
 
 
-void FmRecordCountListener::propertyChange(const  css::beans::PropertyChangeEvent& /*evt*/) throw(css::uno::RuntimeException, std::exception)
+void FmRecordCountListener::propertyChange(const  css::beans::PropertyChangeEvent& /*evt*/)
 {
     NotifyCurrentCount();
 }

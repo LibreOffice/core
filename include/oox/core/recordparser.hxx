@@ -60,10 +60,7 @@ public:
     /// @throws css::xml::sax::SAXException
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void                parseStream( const RecordInputSource& rInputSource )
-                            throw(  css::xml::sax::SAXException,
-                                    css::io::IOException,
-                                    css::uno::RuntimeException );
+    void                parseStream( const RecordInputSource& rInputSource );
 
     const RecordInputSource& getInputSource() const { return maSource; }
 

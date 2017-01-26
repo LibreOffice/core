@@ -47,7 +47,7 @@ class EditToolbarController : public ComplexToolbarController
         virtual ~EditToolbarController() override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() override;
 
         // called from EditControl
         void Modify();

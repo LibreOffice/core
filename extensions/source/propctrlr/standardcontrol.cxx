@@ -76,7 +76,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OTimeControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OTimeControl::setValue( const Any& _rValue )
     {
         util::Time aUNOTime;
         if ( !( _rValue >>= aUNOTime ) )
@@ -91,7 +91,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL OTimeControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OTimeControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
@@ -102,7 +102,7 @@ namespace pcr
     }
 
 
-    Type SAL_CALL OTimeControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OTimeControl::getValueType()
     {
         return ::cppu::UnoType<util::Time>::get();
     }
@@ -127,7 +127,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL ODateControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL ODateControl::setValue( const Any& _rValue )
     {
         util::Date aUNODate;
         if ( !( _rValue >>= aUNODate ) )
@@ -143,7 +143,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL ODateControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL ODateControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
@@ -155,7 +155,7 @@ namespace pcr
     }
 
 
-    Type SAL_CALL ODateControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL ODateControl::getValueType()
     {
         return ::cppu::UnoType<util::Date>::get();
     }
@@ -174,7 +174,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OEditControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OEditControl::setValue( const Any& _rValue )
     {
         OUString sText;
         if ( m_bIsPassword )
@@ -193,7 +193,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL OEditControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OEditControl::getValue()
     {
         Any aPropValue;
 
@@ -210,7 +210,7 @@ namespace pcr
     }
 
 
-    Type SAL_CALL OEditControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OEditControl::getValueType()
     {
         return m_bIsPassword ? ::cppu::UnoType<sal_Int16>::get() : ::cppu::UnoType<OUString>::get();
     }
@@ -266,7 +266,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL ODateTimeControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL ODateTimeControl::setValue( const Any& _rValue )
     {
         if ( !_rValue.hasValue() )
         {
@@ -286,7 +286,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL ODateTimeControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL ODateTimeControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
@@ -314,7 +314,7 @@ namespace pcr
     }
 
 
-    Type SAL_CALL ODateTimeControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL ODateTimeControl::getValueType()
     {
         return ::cppu::UnoType<util::DateTime>::get();
     }
@@ -416,14 +416,14 @@ namespace pcr
     }
 
 
-    Any SAL_CALL OHyperlinkControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OHyperlinkControl::getValue()
     {
         OUString sText = getTypedControlWindow()->GetText();
         return makeAny( sText );
     }
 
 
-    void SAL_CALL OHyperlinkControl::setValue( const Any& _value ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OHyperlinkControl::setValue( const Any& _value )
     {
         OUString sText;
         _value >>= sText;
@@ -431,20 +431,20 @@ namespace pcr
     }
 
 
-    Type SAL_CALL OHyperlinkControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OHyperlinkControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
 
 
-    void SAL_CALL OHyperlinkControl::addActionListener( const Reference< XActionListener >& listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL OHyperlinkControl::addActionListener( const Reference< XActionListener >& listener )
     {
         if ( listener.is() )
             m_aActionListeners.addInterface( listener );
     }
 
 
-    void SAL_CALL OHyperlinkControl::removeActionListener( const Reference< XActionListener >& listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL OHyperlinkControl::removeActionListener( const Reference< XActionListener >& listener )
     {
         m_aActionListeners.removeInterface( listener );
     }
@@ -486,19 +486,19 @@ namespace pcr
     }
 
 
-    ::sal_Int16 SAL_CALL ONumericControl::getDecimalDigits() throw (RuntimeException, std::exception)
+    ::sal_Int16 SAL_CALL ONumericControl::getDecimalDigits()
     {
         return getTypedControlWindow()->GetDecimalDigits();
     }
 
 
-    void SAL_CALL ONumericControl::setDecimalDigits( ::sal_Int16 _decimaldigits ) throw (RuntimeException, std::exception)
+    void SAL_CALL ONumericControl::setDecimalDigits( ::sal_Int16 _decimaldigits )
     {
         getTypedControlWindow()->SetDecimalDigits( _decimaldigits );
     }
 
 
-    Optional< double > SAL_CALL ONumericControl::getMinValue() throw (RuntimeException, std::exception)
+    Optional< double > SAL_CALL ONumericControl::getMinValue()
     {
         Optional< double > aReturn( true, 0 );
 
@@ -512,7 +512,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL ONumericControl::setMinValue( const Optional< double >& _minvalue ) throw (RuntimeException, std::exception)
+    void SAL_CALL ONumericControl::setMinValue( const Optional< double >& _minvalue )
     {
         if ( !_minvalue.IsPresent )
             getTypedControlWindow()->SetMin( ::std::numeric_limits< sal_Int64 >::min() );
@@ -521,7 +521,7 @@ namespace pcr
     }
 
 
-    Optional< double > SAL_CALL ONumericControl::getMaxValue() throw (RuntimeException, std::exception)
+    Optional< double > SAL_CALL ONumericControl::getMaxValue()
     {
         Optional< double > aReturn( true, 0 );
 
@@ -535,7 +535,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL ONumericControl::setMaxValue( const Optional< double >& _maxvalue ) throw (RuntimeException, std::exception)
+    void SAL_CALL ONumericControl::setMaxValue( const Optional< double >& _maxvalue )
     {
         if ( !_maxvalue.IsPresent )
             getTypedControlWindow()->SetMax( ::std::numeric_limits< sal_Int64 >::max() );
@@ -544,13 +544,13 @@ namespace pcr
     }
 
 
-    ::sal_Int16 SAL_CALL ONumericControl::getDisplayUnit() throw (RuntimeException, std::exception)
+    ::sal_Int16 SAL_CALL ONumericControl::getDisplayUnit()
     {
         return VCLUnoHelper::ConvertToMeasurementUnit( getTypedControlWindow()->GetUnit(), 1 );
     }
 
 
-    void SAL_CALL ONumericControl::setDisplayUnit( ::sal_Int16 _displayunit ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    void SAL_CALL ONumericControl::setDisplayUnit( ::sal_Int16 _displayunit )
     {
         if ( ( _displayunit < MeasureUnit::MM_100TH ) || ( _displayunit > MeasureUnit::PERCENT ) )
             throw IllegalArgumentException();
@@ -573,13 +573,13 @@ namespace pcr
     }
 
 
-    ::sal_Int16 SAL_CALL ONumericControl::getValueUnit() throw (RuntimeException, std::exception)
+    ::sal_Int16 SAL_CALL ONumericControl::getValueUnit()
     {
         return VCLUnoHelper::ConvertToMeasurementUnit( m_eValueUnit, m_nFieldToUNOValueFactor );
     }
 
 
-    void SAL_CALL ONumericControl::setValueUnit( ::sal_Int16 _valueunit ) throw (RuntimeException, std::exception)
+    void SAL_CALL ONumericControl::setValueUnit( ::sal_Int16 _valueunit )
     {
         if ( ( _valueunit < MeasureUnit::MM_100TH ) || ( _valueunit > MeasureUnit::PERCENT ) )
             throw IllegalArgumentException();
@@ -587,7 +587,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL ONumericControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL ONumericControl::setValue( const Any& _rValue )
     {
         if ( !_rValue.hasValue() )
         {
@@ -620,7 +620,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL ONumericControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL ONumericControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
@@ -632,7 +632,7 @@ namespace pcr
     }
 
 
-    Type SAL_CALL ONumericControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL ONumericControl::getValueType()
     {
         return ::cppu::UnoType<double>::get();
     }
@@ -662,7 +662,7 @@ namespace pcr
     {
     }
 
-    void SAL_CALL OColorControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OColorControl::setValue( const Any& _rValue )
     {
         if ( _rValue.hasValue() )
         {
@@ -675,7 +675,7 @@ namespace pcr
             getTypedControlWindow()->SetNoSelection();
     }
 
-    Any SAL_CALL OColorControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OColorControl::getValue()
     {
         Any aPropValue;
         if (!getTypedControlWindow()->IsNoSelection())
@@ -686,7 +686,7 @@ namespace pcr
         return aPropValue;
     }
 
-    Type SAL_CALL OColorControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OColorControl::getValueType()
     {
         return ::cppu::UnoType<sal_Int32>::get();
     }
@@ -713,7 +713,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL OListboxControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OListboxControl::getValue()
     {
         OUString sControlValue( getTypedControlWindow()->GetSelectEntry() );
 
@@ -724,13 +724,13 @@ namespace pcr
     }
 
 
-    Type SAL_CALL OListboxControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OListboxControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
 
 
-    void SAL_CALL OListboxControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OListboxControl::setValue( const Any& _rValue )
     {
         if ( !_rValue.hasValue() )
             getTypedControlWindow()->SetNoSelection();
@@ -751,24 +751,24 @@ namespace pcr
     }
 
 
-    void SAL_CALL OListboxControl::clearList() throw (RuntimeException, std::exception)
+    void SAL_CALL OListboxControl::clearList()
     {
         getTypedControlWindow()->Clear();
     }
 
 
-    void SAL_CALL OListboxControl::prependListEntry( const OUString& NewEntry ) throw (RuntimeException, std::exception)
+    void SAL_CALL OListboxControl::prependListEntry( const OUString& NewEntry )
     {
         getTypedControlWindow()->InsertEntry( NewEntry, 0 );
     }
 
 
-    void SAL_CALL OListboxControl::appendListEntry( const OUString& NewEntry ) throw (RuntimeException, std::exception)
+    void SAL_CALL OListboxControl::appendListEntry( const OUString& NewEntry )
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
     }
 
-    Sequence< OUString > SAL_CALL OListboxControl::getListEntries(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL OListboxControl::getListEntries(  )
     {
         const sal_Int32 nCount = getTypedControlWindow()->GetEntryCount();
         Sequence< OUString > aRet(nCount);
@@ -801,7 +801,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OComboboxControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OComboboxControl::setValue( const Any& _rValue )
     {
         OUString sText;
         _rValue >>= sText;
@@ -809,36 +809,36 @@ namespace pcr
     }
 
 
-    Any SAL_CALL OComboboxControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OComboboxControl::getValue()
     {
         return makeAny( OUString( getTypedControlWindow()->GetText() ) );
     }
 
 
-    Type SAL_CALL OComboboxControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OComboboxControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
 
 
-    void SAL_CALL OComboboxControl::clearList() throw (RuntimeException, std::exception)
+    void SAL_CALL OComboboxControl::clearList()
     {
         getTypedControlWindow()->Clear();
     }
 
 
-    void SAL_CALL OComboboxControl::prependListEntry( const OUString& NewEntry ) throw (RuntimeException, std::exception)
+    void SAL_CALL OComboboxControl::prependListEntry( const OUString& NewEntry )
     {
         getTypedControlWindow()->InsertEntry( NewEntry, 0 );
     }
 
 
-    void SAL_CALL OComboboxControl::appendListEntry( const OUString& NewEntry ) throw (RuntimeException, std::exception)
+    void SAL_CALL OComboboxControl::appendListEntry( const OUString& NewEntry )
     {
         getTypedControlWindow()->InsertEntry( NewEntry );
     }
 
-    Sequence< OUString > SAL_CALL OComboboxControl::getListEntries(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL OComboboxControl::getListEntries(  )
     {
         const sal_Int32 nCount = getTypedControlWindow()->GetEntryCount();
         Sequence< OUString > aRet(nCount);
@@ -1271,7 +1271,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OMultilineEditControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OMultilineEditControl::setValue( const Any& _rValue )
     {
         impl_checkDisposed_throw();
 
@@ -1297,7 +1297,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL OMultilineEditControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OMultilineEditControl::getValue()
     {
         impl_checkDisposed_throw();
 
@@ -1315,7 +1315,7 @@ namespace pcr
     }
 
 
-    Type SAL_CALL OMultilineEditControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OMultilineEditControl::getValueType()
     {
         if ( getTypedControlWindow()->getOperationMode() == eMultiLineText )
             return ::cppu::UnoType<OUString>::get();

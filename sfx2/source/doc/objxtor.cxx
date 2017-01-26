@@ -153,25 +153,23 @@ class SfxModelListener_Impl : public ::cppu::WeakImplHelper< css::util::XCloseLi
     SfxObjectShell* mpDoc;
 public:
     explicit SfxModelListener_Impl( SfxObjectShell* pDoc ) : mpDoc(pDoc) {};
-    virtual void SAL_CALL queryClosing( const css::lang::EventObject& aEvent, sal_Bool bDeliverOwnership )
-        throw ( css::uno::RuntimeException, css::util::CloseVetoException, std::exception) override ;
-    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent ) throw ( css::uno::RuntimeException, std::exception ) override ;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw ( css::uno::RuntimeException, std::exception ) override ;
+    virtual void SAL_CALL queryClosing( const css::lang::EventObject& aEvent, sal_Bool bDeliverOwnership ) override ;
+    virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent ) override ;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override ;
 
 };
 
 void SAL_CALL SfxModelListener_Impl::queryClosing( const css::lang::EventObject& , sal_Bool )
-    throw ( css::uno::RuntimeException, css::util::CloseVetoException, std::exception)
 {
 }
 
-void SAL_CALL SfxModelListener_Impl::notifyClosing( const css::lang::EventObject& ) throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL SfxModelListener_Impl::notifyClosing( const css::lang::EventObject& )
 {
     SolarMutexGuard aSolarGuard;
     mpDoc->Broadcast( SfxHint(SfxHintId::Deinitializing) );
 }
 
-void SAL_CALL SfxModelListener_Impl::disposing( const css::lang::EventObject& _rEvent ) throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL SfxModelListener_Impl::disposing( const css::lang::EventObject& _rEvent )
 {
     // am I ThisComponent in AppBasic?
     SolarMutexGuard aSolarGuard;

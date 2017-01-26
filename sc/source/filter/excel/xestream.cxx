@@ -1050,9 +1050,6 @@ ScDocShell* XclExpXmlStream::getDocShell()
 }
 
 bool XclExpXmlStream::exportDocument()
-    throw (css::uno::RuntimeException,
-           css::ucb::ContentCreationException,
-           std::exception)
 {
     ScDocShell* pShell = getDocShell();
     ScDocument& rDoc = pShell->GetDocument();
@@ -1145,7 +1142,7 @@ bool XclExpXmlStream::exportDocument()
     return new ::oox::xls::ExcelVbaProject( getComponentContext(), Reference< XSpreadsheetDocument >( getModel(), UNO_QUERY ) );
 }
 
-OUString XclExpXmlStream::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+OUString XclExpXmlStream::getImplementationName()
 {
     return OUString( "TODO" );
 }

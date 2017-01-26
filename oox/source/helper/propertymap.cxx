@@ -104,18 +104,18 @@ public:
     explicit            GenericPropertySet( const PropertyMap& rPropMap );
 
     // XPropertySet
-    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception) override;
-    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) override;
+    virtual Reference< XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const Any& aValue ) override;
+    virtual Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+    virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& xListener ) override;
+    virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const Reference< XPropertyChangeListener >& aListener ) override;
+    virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
+    virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const Reference< XVetoableChangeListener >& aListener ) override;
 
     // XPropertySetInfo
-    virtual Sequence< Property > SAL_CALL getProperties() throw (RuntimeException, std::exception) override;
-    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) throw (UnknownPropertyException, RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw (RuntimeException, std::exception) override;
+    virtual Sequence< Property > SAL_CALL getProperties() override;
+    virtual Property SAL_CALL getPropertyByName( const OUString& aName ) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 
 private:
     osl::Mutex mMutex;
@@ -127,18 +127,18 @@ GenericPropertySet::GenericPropertySet( const PropertyMap& rPropMap )
     rPropMap.fillPropertyNameMap(maPropMap);
 }
 
-Reference< XPropertySetInfo > SAL_CALL GenericPropertySet::getPropertySetInfo() throw (RuntimeException, std::exception)
+Reference< XPropertySetInfo > SAL_CALL GenericPropertySet::getPropertySetInfo()
 {
     return this;
 }
 
-void SAL_CALL GenericPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL GenericPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
 {
     ::osl::MutexGuard aGuard( mMutex );
     maPropMap[ rPropertyName ] = rValue;
 }
 
-Any SAL_CALL GenericPropertySet::getPropertyValue( const OUString& rPropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL GenericPropertySet::getPropertyValue( const OUString& rPropertyName )
 {
     PropertyNameMap::iterator aIt = maPropMap.find( rPropertyName );
     if( aIt == maPropMap.end() )
@@ -147,13 +147,13 @@ Any SAL_CALL GenericPropertySet::getPropertyValue( const OUString& rPropertyName
 }
 
 // listeners are not supported by this implementation
-void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) {}
-void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) {}
-void SAL_CALL GenericPropertySet::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) {}
-void SAL_CALL GenericPropertySet::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception) {}
+void SAL_CALL GenericPropertySet::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >& ) {}
+void SAL_CALL GenericPropertySet::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) {}
+void SAL_CALL GenericPropertySet::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) {}
+void SAL_CALL GenericPropertySet::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) {}
 
 // XPropertySetInfo
-Sequence< Property > SAL_CALL GenericPropertySet::getProperties() throw (RuntimeException, std::exception)
+Sequence< Property > SAL_CALL GenericPropertySet::getProperties()
 {
     Sequence< Property > aSeq( static_cast< sal_Int32 >( maPropMap.size() ) );
     Property* pProperty = aSeq.getArray();
@@ -167,7 +167,7 @@ Sequence< Property > SAL_CALL GenericPropertySet::getProperties() throw (Runtime
     return aSeq;
 }
 
-Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
+Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& rPropertyName )
 {
     PropertyNameMap::iterator aIt = maPropMap.find( rPropertyName );
     if( aIt == maPropMap.end() )
@@ -180,7 +180,7 @@ Property SAL_CALL GenericPropertySet::getPropertyByName( const OUString& rProper
     return aProperty;
 }
 
-sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rPropertyName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL GenericPropertySet::hasPropertyByName( const OUString& rPropertyName )
 {
     return maPropMap.find( rPropertyName ) != maPropMap.end();
 }

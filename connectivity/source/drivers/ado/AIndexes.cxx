@@ -43,7 +43,7 @@ sdbcx::ObjectType OIndexes::createObject(const OUString& _rName)
     return new OAdoIndex(isCaseSensitive(),m_pConnection,m_aCollection.GetItem(_rName));
 }
 
-void OIndexes::impl_refresh() throw(RuntimeException)
+void OIndexes::impl_refresh()
 {
     m_aCollection.Refresh();
 }

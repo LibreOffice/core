@@ -968,8 +968,7 @@ public:
     virtual ~ScXMLImport() throw() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& aArguments ) override;
 
     // namespace office
     // NB: in contrast to other CreateFooContexts, this particular one handles
@@ -1155,14 +1154,10 @@ public:
     void SetStylesToRangesFinished();
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
-    virtual void SAL_CALL startDocument()
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL endDocument()
-        throw(css::xml::sax::SAXException,
-              css::uno::RuntimeException,
-              std::exception) override;
+    virtual void SAL_CALL startDocument() override;
+    virtual void SAL_CALL endDocument() override;
 
     virtual void DisposingModel() override;
 

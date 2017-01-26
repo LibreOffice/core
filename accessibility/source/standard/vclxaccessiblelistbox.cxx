@@ -60,14 +60,12 @@ bool VCLXAccessibleListBox::IsValid() const
 // XServiceInfo
 
 OUString VCLXAccessibleListBox::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleListBox" );
 }
 
 
 Sequence< OUString > VCLXAccessibleListBox::getSupportedServiceNames()
-    throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();

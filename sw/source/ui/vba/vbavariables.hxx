@@ -37,8 +37,8 @@ public:
     SwVbaVariables( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertyAccess >& rUserDefined );
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaVariables_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
@@ -46,7 +46,7 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     // XVariables
-    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rValue ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rValue ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBAVARIABLES_HXX

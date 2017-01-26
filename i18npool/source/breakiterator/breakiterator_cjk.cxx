@@ -39,7 +39,7 @@ BreakIterator_CJK::BreakIterator_CJK()
 
 Boundary SAL_CALL
 BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
-        const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException, std::exception)
+        const lang::Locale& nLocale, sal_Int16 wordType)
 {
     if (m_xDict) {
         result = m_xDict->previousWord(text, anyPos, wordType);
@@ -56,7 +56,7 @@ BreakIterator_CJK::previousWord(const OUString& text, sal_Int32 anyPos,
 
 Boundary SAL_CALL
 BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
-        const lang::Locale& nLocale, sal_Int16 wordType) throw(RuntimeException, std::exception)
+        const lang::Locale& nLocale, sal_Int16 wordType)
 {
     if (m_xDict) {
         result = m_xDict->nextWord(text, anyPos, wordType);
@@ -74,7 +74,6 @@ BreakIterator_CJK::nextWord(const OUString& text, sal_Int32 anyPos,
 Boundary SAL_CALL
 BreakIterator_CJK::getWordBoundary( const OUString& text, sal_Int32 anyPos,
         const lang::Locale& nLocale, sal_Int16 wordType, sal_Bool bDirection )
-        throw(RuntimeException, std::exception)
 {
     if (m_xDict) {
         result = m_xDict->getWordBoundary(text, anyPos, wordType, bDirection);
@@ -90,7 +89,7 @@ LineBreakResults SAL_CALL BreakIterator_CJK::getLineBreak(
         const OUString& Text, sal_Int32 nStartPos,
         const lang::Locale& /*rLocale*/, sal_Int32 /*nMinBreakPos*/,
         const LineBreakHyphenationOptions& /*hOptions*/,
-        const LineBreakUserOptions& bOptions ) throw(RuntimeException, std::exception)
+        const LineBreakUserOptions& bOptions )
 {
     LineBreakResults lbr;
 

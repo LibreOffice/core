@@ -254,7 +254,7 @@ SwScannerEventListener::~SwScannerEventListener()
 {
 }
 
-void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject) throw(uno::RuntimeException, std::exception)
+void SAL_CALL SwScannerEventListener::disposing( const EventObject& rEventObject)
 {
 #if defined(_WIN32) || defined UNX
     SolarMutexGuard aGuard;
@@ -268,12 +268,10 @@ SwClipboardChangeListener::~SwClipboardChangeListener()
 }
 
 void SAL_CALL SwClipboardChangeListener::disposing( const EventObject& /*rEventObject*/ )
-    throw ( RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL SwClipboardChangeListener::changedContents( const css::datatransfer::clipboard::ClipboardEvent& rEventObject )
-    throw (RuntimeException, std::exception)
 
 {
     const SolarMutexGuard aGuard;

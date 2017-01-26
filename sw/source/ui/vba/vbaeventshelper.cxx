@@ -45,7 +45,7 @@ SwVbaEventsHelper::~SwVbaEventsHelper()
 }
 
 bool SwVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
-        const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& /*rArgs*/ ) throw (uno::RuntimeException)
+        const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& /*rArgs*/ )
 {
     switch( rInfo.mnEventId )
     {
@@ -63,20 +63,20 @@ bool SwVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
 }
 
 uno::Sequence< uno::Any > SwVbaEventsHelper::implBuildArgumentList( const EventHandlerInfo& /*rInfo*/,
-        const uno::Sequence< uno::Any >& /*rArgs*/ ) throw (lang::IllegalArgumentException)
+        const uno::Sequence< uno::Any >& /*rArgs*/ )
 {
     // no event handler expects any arguments
     return uno::Sequence< uno::Any >();
 }
 
 void SwVbaEventsHelper::implPostProcessEvent( EventQueue& /*rEventQueue*/,
-        const EventHandlerInfo& /*rInfo*/, bool /*bCancel*/ ) throw (uno::RuntimeException)
+        const EventHandlerInfo& /*rInfo*/, bool /*bCancel*/ )
 {
     // nothing to do after any event
 }
 
 OUString SwVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& /*rInfo*/,
-        const uno::Sequence< uno::Any >& /*rArgs*/ ) const throw (lang::IllegalArgumentException)
+        const uno::Sequence< uno::Any >& /*rArgs*/ ) const
 {
     // TODO: get actual codename from document
     return OUString( "ThisDocument" );

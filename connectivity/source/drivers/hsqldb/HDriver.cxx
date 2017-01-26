@@ -75,7 +75,7 @@ namespace connectivity
 
     namespace hsqldb
     {
-        Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFac) throw( Exception )
+        Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFac)
         {
             return *(new ODriverDelegator(comphelper::getComponentContext(_rxFac)));
         }
@@ -168,7 +168,7 @@ namespace connectivity
     }
 
 
-    Reference< XConnection > SAL_CALL ODriverDelegator::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException, std::exception)
+    Reference< XConnection > SAL_CALL ODriverDelegator::connect( const OUString& url, const Sequence< PropertyValue >& info )
     {
         Reference< XConnection > xConnection;
         if ( acceptsURL(url) )
@@ -382,7 +382,7 @@ namespace connectivity
     }
 
 
-    sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url ) throw (SQLException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url )
     {
         sal_Bool bEnabled = false;
         javaFrameworkError e = jfw_getEnabled(&bEnabled);
@@ -404,7 +404,7 @@ namespace connectivity
     }
 
 
-    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, RuntimeException, std::exception)
+    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
     {
         if ( !acceptsURL(url) )
             return Sequence< DriverPropertyInfo >();
@@ -434,19 +434,19 @@ namespace connectivity
     }
 
 
-    sal_Int32 SAL_CALL ODriverDelegator::getMajorVersion(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL ODriverDelegator::getMajorVersion(  )
     {
         return 1;
     }
 
 
-    sal_Int32 SAL_CALL ODriverDelegator::getMinorVersion(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL ODriverDelegator::getMinorVersion(  )
     {
         return 0;
     }
 
 
-    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByConnection( const Reference< XConnection >& connection ) throw (SQLException, RuntimeException, std::exception)
+    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByConnection( const Reference< XConnection >& connection )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(ODriverDelegator_BASE::rBHelper.bDisposed);
@@ -472,7 +472,7 @@ namespace connectivity
     }
 
 
-    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException, std::exception)
+    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info )
     {
         if ( ! acceptsURL(url) )
         {
@@ -487,12 +487,12 @@ namespace connectivity
     // XServiceInfo
 
 
-    OUString ODriverDelegator::getImplementationName_Static(  ) throw(RuntimeException)
+    OUString ODriverDelegator::getImplementationName_Static(  )
     {
         return OUString("com.sun.star.sdbcx.comp.hsqldb.Driver");
     }
 
-    Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+    Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  )
     {
         Sequence< OUString > aSNS( 2 );
         aSNS[0] = "com.sun.star.sdbc.Driver";
@@ -500,22 +500,22 @@ namespace connectivity
         return aSNS;
     }
 
-    OUString SAL_CALL ODriverDelegator::getImplementationName(  ) throw(RuntimeException, std::exception)
+    OUString SAL_CALL ODriverDelegator::getImplementationName(  )
     {
         return getImplementationName_Static();
     }
 
-    sal_Bool SAL_CALL ODriverDelegator::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+    sal_Bool SAL_CALL ODriverDelegator::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL ODriverDelegator::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL ODriverDelegator::getSupportedServiceNames(  )
     {
         return getSupportedServiceNames_Static();
     }
 
-    void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ ) throw (SQLException, css::container::ElementExistException, RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::createCatalog( const Sequence< PropertyValue >& /*info*/ )
     {
         ::dbtools::throwFeatureNotImplementedSQLException( "XCreateCatalog::createCatalog", *this );
     }
@@ -555,7 +555,7 @@ namespace connectivity
             m_aConnections.erase(_aIter);
     }
 
-    void SAL_CALL ODriverDelegator::disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::disposing( const css::lang::EventObject& Source )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         Reference<XConnection> xCon(Source.Source,UNO_QUERY);
@@ -625,7 +625,7 @@ namespace connectivity
         }
     }
 
-    void SAL_CALL ODriverDelegator::preCommit( const css::lang::EventObject& aEvent ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::preCommit( const css::lang::EventObject& aEvent )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -668,15 +668,15 @@ namespace connectivity
         }
     }
 
-    void SAL_CALL ODriverDelegator::commited( const css::lang::EventObject& /*aEvent*/ ) throw (css::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::commited( const css::lang::EventObject& /*aEvent*/ )
     {
     }
 
-    void SAL_CALL ODriverDelegator::preRevert( const css::lang::EventObject& /*aEvent*/ ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::preRevert( const css::lang::EventObject& /*aEvent*/ )
     {
     }
 
-    void SAL_CALL ODriverDelegator::reverted( const css::lang::EventObject& /*aEvent*/ ) throw (css::uno::RuntimeException, std::exception)
+    void SAL_CALL ODriverDelegator::reverted( const css::lang::EventObject& /*aEvent*/ )
     {
     }
 

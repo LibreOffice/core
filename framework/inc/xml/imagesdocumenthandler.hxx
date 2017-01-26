@@ -68,43 +68,25 @@ class OReadImagesDocumentHandler : public ::cppu::WeakImplHelper< css::xml::sax:
         virtual ~OReadImagesDocumentHandler() override;
 
         // XDocumentHandler
-        virtual void SAL_CALL startDocument()
-        throw ( css::xml::sax::SAXException,
-                css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL startDocument() override;
 
-        virtual void SAL_CALL endDocument()
-        throw(  css::xml::sax::SAXException,
-                css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL endDocument() override;
 
         virtual void SAL_CALL startElement(
             const OUString& aName,
-            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs)
-        throw (css::xml::sax::SAXException,
-               css::uno::RuntimeException,
-               std::exception) override;
+            const css::uno::Reference< css::xml::sax::XAttributeList > &xAttribs) override;
 
-        virtual void SAL_CALL endElement(const OUString& aName)
-        throw (css::xml::sax::SAXException,
-               css::uno::RuntimeException,
-               std::exception) override;
+        virtual void SAL_CALL endElement(const OUString& aName) override;
 
-        virtual void SAL_CALL characters(const OUString& aChars)
-        throw(  css::xml::sax::SAXException,
-                css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL characters(const OUString& aChars) override;
 
-        virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
-        throw(  css::xml::sax::SAXException,
-                css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
 
         virtual void SAL_CALL processingInstruction(const OUString& aTarget,
-                                                    const OUString& aData)
-        throw(  css::xml::sax::SAXException,
-                css::uno::RuntimeException, std::exception ) override;
+                                                    const OUString& aData) override;
 
         virtual void SAL_CALL setDocumentLocator(
-            const css::uno::Reference< css::xml::sax::XLocator > &xLocator)
-        throw(  css::xml::sax::SAXException,
-                css::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::xml::sax::XLocator > &xLocator) override;
 
     private:
         OUString getErrorLineString();
@@ -141,34 +123,24 @@ class OWriteImagesDocumentHandler final
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void WriteImagesDocument() throw
-            ( css::xml::sax::SAXException,
-              css::uno::RuntimeException );
+        void WriteImagesDocument();
 
     private:
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void WriteImageList( const ImageListItemDescriptor* ) throw
-            ( css::xml::sax::SAXException,
-              css::uno::RuntimeException );
+        void WriteImageList( const ImageListItemDescriptor* );
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void WriteExternalImageList( const ExternalImageItemListDescriptor* ) throw
-            ( css::xml::sax::SAXException,
-              css::uno::RuntimeException );
+        void WriteExternalImageList( const ExternalImageItemListDescriptor* );
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void WriteImage( const ImageItemDescriptor* ) throw
-            ( css::xml::sax::SAXException,
-              css::uno::RuntimeException );
+        void WriteImage( const ImageItemDescriptor* );
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void WriteExternalImage( const ExternalImageItemDescriptor* ) throw
-            ( css::xml::sax::SAXException,
-              css::uno::RuntimeException );
+        void WriteExternalImage( const ExternalImageItemDescriptor* );
 
         const ImageListsDescriptor&                               m_aImageListsItems;
         css::uno::Reference< css::xml::sax::XDocumentHandler >    m_xWriteDocumentHandler;

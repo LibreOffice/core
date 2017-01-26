@@ -61,7 +61,7 @@ OStatementBase::~OStatementBase()
 }
 
 // css::lang::XTypeProvider
-Sequence< Type > OStatementBase::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > OStatementBase::getTypes()
 {
     OTypeCollection aTypes(cppu::UnoType<XPropertySet>::get(),
                            cppu::UnoType<XWarningsSupplier>::get(),
@@ -80,7 +80,7 @@ Sequence< Type > OStatementBase::getTypes() throw (RuntimeException, std::except
 }
 
 // css::uno::XInterface
-Any OStatementBase::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
+Any OStatementBase::queryInterface( const Type & rType )
 {
     Any aIface = OSubComponent::queryInterface( rType );
     if (!aIface.hasValue())
@@ -160,7 +160,7 @@ void OStatementBase::disposing()
 }
 
 // XCloseable
-void OStatementBase::close() throw( SQLException, RuntimeException, std::exception )
+void OStatementBase::close()
 {
     {
         MutexGuard aGuard( m_aMutex );
@@ -170,7 +170,7 @@ void OStatementBase::close() throw( SQLException, RuntimeException, std::excepti
 }
 
 // OPropertySetHelper
-Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (RuntimeException, std::exception)
+Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo()
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
@@ -198,7 +198,7 @@ Reference< XPropertySetInfo > OStatementBase::getPropertySetInfo() throw (Runtim
     return *getArrayHelper();
 }
 
-sal_Bool OStatementBase::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw( IllegalArgumentException, RuntimeException, std::exception)
+sal_Bool OStatementBase::convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
 {
     bool bModified(false);
     switch (nHandle)
@@ -232,7 +232,7 @@ sal_Bool OStatementBase::convertFastPropertyValue(Any & rConvertedValue, Any & r
     return bModified;
 }
 
-void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
+void OStatementBase::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     switch ( nHandle )
     {
@@ -287,7 +287,7 @@ void OStatementBase::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) cons
 }
 
 // XWarningsSupplier
-Any OStatementBase::getWarnings() throw( SQLException, RuntimeException, std::exception )
+Any OStatementBase::getWarnings()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -295,7 +295,7 @@ Any OStatementBase::getWarnings() throw( SQLException, RuntimeException, std::ex
     return Reference< XWarningsSupplier >(m_xAggregateAsSet, UNO_QUERY)->getWarnings();
 }
 
-void OStatementBase::clearWarnings() throw( SQLException, RuntimeException, std::exception )
+void OStatementBase::clearWarnings()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -304,7 +304,7 @@ void OStatementBase::clearWarnings() throw( SQLException, RuntimeException, std:
 }
 
 // css::util::XCancellable
-void OStatementBase::cancel() throw( RuntimeException, std::exception )
+void OStatementBase::cancel()
 {
     // no blocking as cancel is typically called from a different thread
     ClearableMutexGuard aCancelGuard(m_aCancelMutex);
@@ -314,7 +314,7 @@ void OStatementBase::cancel() throw( RuntimeException, std::exception )
 }
 
 // XMultipleResults
-Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -327,7 +327,7 @@ Reference< XResultSet > SAL_CALL OStatementBase::getResultSet(  ) throw(SQLExcep
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getResultSet();
 }
 
-sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -340,7 +340,7 @@ sal_Int32 SAL_CALL OStatementBase::getUpdateCount(  ) throw(SQLException, Runtim
     return Reference< XMultipleResults >(m_xAggregateAsSet, UNO_QUERY)->getUpdateCount();
 }
 
-sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OStatementBase::getMoreResults(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -357,7 +357,7 @@ sal_Bool SAL_CALL OStatementBase::getMoreResults(  ) throw(SQLException, Runtime
 }
 
 // XPreparedBatchExecution
-void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OStatementBase::addBatch(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -370,7 +370,7 @@ void SAL_CALL OStatementBase::addBatch(  ) throw(SQLException, RuntimeException,
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch();
 }
 
-void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OStatementBase::clearBatch(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -383,7 +383,7 @@ void SAL_CALL OStatementBase::clearBatch(  ) throw(SQLException, RuntimeExceptio
     Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
 }
 
-Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLException, RuntimeException, std::exception)
+Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -399,7 +399,7 @@ Sequence< sal_Int32 > SAL_CALL OStatementBase::executeBatch(  ) throw(SQLExcepti
     return Reference< XPreparedBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->executeBatch();
 }
 
-Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  ) throw (SQLException, RuntimeException, std::exception)
+Reference< XResultSet > SAL_CALL OStatementBase::getGeneratedValues(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -424,24 +424,24 @@ IMPLEMENT_FORWARD_XINTERFACE2( OStatement, OStatementBase, OStatement_IFACE );
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OStatement, OStatementBase, OStatement_IFACE );
 
 // XServiceInfo
-OUString OStatement::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString OStatement::getImplementationName(  )
 {
     return OUString("com.sun.star.sdb.OStatement");
 }
 
-sal_Bool OStatement::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool OStatement::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OStatement::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > OStatement::getSupportedServiceNames(  )
 {
     Sequence<OUString> aSNS { SERVICE_SDBC_STATEMENT };
     return aSNS;
 }
 
 // XStatement
-Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
+Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -467,7 +467,7 @@ Reference< XResultSet > OStatement::executeQuery( const OUString& _rSQL ) throw(
     return xResultSet;
 }
 
-sal_Int32 OStatement::executeUpdate( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
+sal_Int32 OStatement::executeUpdate( const OUString& _rSQL )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -478,7 +478,7 @@ sal_Int32 OStatement::executeUpdate( const OUString& _rSQL ) throw( SQLException
     return m_xAggregateStatement->executeUpdate( sSQL );
 }
 
-sal_Bool OStatement::execute( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
+sal_Bool OStatement::execute( const OUString& _rSQL )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -489,7 +489,7 @@ sal_Bool OStatement::execute( const OUString& _rSQL ) throw( SQLException, Runti
     return m_xAggregateStatement->execute( sSQL );
 }
 
-void OStatement::addBatch( const OUString& _rSQL ) throw( SQLException, RuntimeException, std::exception )
+void OStatement::addBatch( const OUString& _rSQL )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -503,7 +503,7 @@ void OStatement::addBatch( const OUString& _rSQL ) throw( SQLException, RuntimeE
     Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->addBatch( sSQL );
 }
 
-void OStatement::clearBatch( ) throw( SQLException, RuntimeException, std::exception )
+void OStatement::clearBatch( )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -515,7 +515,7 @@ void OStatement::clearBatch( ) throw( SQLException, RuntimeException, std::excep
     Reference< XBatchExecution >(m_xAggregateAsSet, UNO_QUERY)->clearBatch();
 }
 
-Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeException, std::exception )
+Sequence< sal_Int32 > OStatement::executeBatch( )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -527,7 +527,7 @@ Sequence< sal_Int32 > OStatement::executeBatch( ) throw( SQLException, RuntimeEx
 }
 
 
-Reference< XConnection > OStatement::getConnection() throw( SQLException, RuntimeException, std::exception )
+Reference< XConnection > OStatement::getConnection()
 {
     return Reference< XConnection >( m_xParent, UNO_QUERY );
 }

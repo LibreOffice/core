@@ -52,22 +52,18 @@ public:
     /// @throws css::io::BufferSizeExceededException
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException);
+    sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead );
     // XSeekable
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL seek( sal_Int64 location )
-        throw(css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException);
+    void SAL_CALL seek( sal_Int64 location );
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    sal_Int64 SAL_CALL getPosition(  )
-        throw(css::io::IOException, css::uno::RuntimeException);
+    sal_Int64 SAL_CALL getPosition(  );
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    sal_Int64 SAL_CALL getLength(  )
-        throw(css::io::IOException, css::uno::RuntimeException);
+    sal_Int64 SAL_CALL getLength(  );
 
     sal_uInt16 ReadUInt16();
     sal_uInt32 ReadUInt32();

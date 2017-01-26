@@ -390,7 +390,6 @@ void SAL_CALL
 TaskManager::startTask(
     sal_Int32 CommandId,
     const uno::Reference< XCommandEnvironment >& xCommandEnv )
-    throw( DuplicateCommandIdentifierException )
 {
     osl::MutexGuard aGuard( m_aMutex );
     TaskMap::iterator it = m_aTaskMap.find( CommandId );
@@ -571,9 +570,6 @@ TaskManager::associate( const OUString& aUnqPath,
                   const OUString& PropertyName,
                   const uno::Any& DefaultValue,
                   const sal_Int16 Attributes )
-    throw( beans::PropertyExistException,
-           beans::IllegalTypeException,
-           uno::RuntimeException )
 {
     MyProperty newProperty( false,
                             PropertyName,
@@ -611,9 +607,6 @@ TaskManager::associate( const OUString& aUnqPath,
 void SAL_CALL
 TaskManager::deassociate( const OUString& aUnqPath,
             const OUString& PropertyName )
-  throw( beans::UnknownPropertyException,
-     beans::NotRemoveableException,
-     uno::RuntimeException )
 {
     MyProperty oldProperty( PropertyName );
 

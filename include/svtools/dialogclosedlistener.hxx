@@ -50,10 +50,10 @@ namespace svt
         inline void SetDialogClosedLink( const Link<css::ui::dialogs::DialogClosedEvent*,void>& rLink ) { m_aDialogClosedLink = rLink; }
 
         // XDialogClosedListener methods
-        virtual void SAL_CALL   dialogClosed( const css::ui::dialogs::DialogClosedEvent& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL   dialogClosed( const css::ui::dialogs::DialogClosedEvent& aEvent ) override;
 
         // XEventListener methods
-        virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL   disposing( const css::lang::EventObject& Source ) override;
     };
 
 

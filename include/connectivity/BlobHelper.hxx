@@ -31,11 +31,11 @@ namespace connectivity
     public:
         BlobHelper(const css::uno::Sequence< sal_Int8 >& _val);
     private:
-        virtual ::sal_Int64 SAL_CALL length(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getBytes( ::sal_Int64 pos, ::sal_Int32 length ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int64 SAL_CALL position( const css::uno::Sequence< ::sal_Int8 >& pattern, ::sal_Int64 start ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int64 SAL_CALL positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& pattern, ::sal_Int64 start ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int64 SAL_CALL length(  ) override;
+        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getBytes( ::sal_Int64 pos, ::sal_Int32 length ) override;
+        virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream(  ) override;
+        virtual ::sal_Int64 SAL_CALL position( const css::uno::Sequence< ::sal_Int8 >& pattern, ::sal_Int64 start ) override;
+        virtual ::sal_Int64 SAL_CALL positionOfBlob( const css::uno::Reference< css::sdbc::XBlob >& pattern, ::sal_Int64 start ) override;
     };
 }
 

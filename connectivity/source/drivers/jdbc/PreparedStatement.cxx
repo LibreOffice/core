@@ -71,7 +71,7 @@ jclass java_sql_PreparedStatement::getMyClass() const
 }
 
 
-css::uno::Any SAL_CALL java_sql_PreparedStatement::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL java_sql_PreparedStatement::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = OStatement_BASE2::queryInterface(rType);
     return aRet.hasValue() ? aRet : ::cppu::queryInterface( rType,
@@ -81,7 +81,7 @@ css::uno::Any SAL_CALL java_sql_PreparedStatement::queryInterface( const css::un
                                         static_cast< XPreparedBatchExecution*>(this));
 }
 
-css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_PreparedStatement::getTypes(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_PreparedStatement::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<XPreparedStatement>::get(),
                                     cppu::UnoType<XParameters>::get(),
@@ -92,7 +92,7 @@ css::uno::Sequence< css::uno::Type > SAL_CALL java_sql_PreparedStatement::getTyp
 }
 
 
-sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  )
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTING_PREPARED );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -105,7 +105,7 @@ sal_Bool SAL_CALL java_sql_PreparedStatement::execute(  ) throw(css::sdbc::SQLEx
 }
 
 
-sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -118,7 +118,7 @@ sal_Int32 SAL_CALL java_sql_PreparedStatement::executeUpdate(  ) throw(css::sdbc
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -140,13 +140,13 @@ void SAL_CALL java_sql_PreparedStatement::setString( sal_Int32 parameterIndex, c
 }
 
 
-css::uno::Reference< css::sdbc::XConnection > SAL_CALL java_sql_PreparedStatement::getConnection(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::sdbc::XConnection > SAL_CALL java_sql_PreparedStatement::getConnection(  )
 {
     return Reference< XConnection >(m_pConnection.get());
 }
 
 
-css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_PreparedStatement::executeQuery(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_PreparedStatement::executeQuery(  )
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTING_PREPARED_QUERY );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -161,7 +161,7 @@ css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_PreparedStatement
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_BOOLEAN_PARAMETER, parameterIndex, bool(x) );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -174,7 +174,7 @@ void SAL_CALL java_sql_PreparedStatement::setBoolean( sal_Int32 parameterIndex, 
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_BYTE_PARAMETER, parameterIndex, (sal_Int32)x );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -187,7 +187,7 @@ void SAL_CALL java_sql_PreparedStatement::setByte( sal_Int32 parameterIndex, sal
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, const css::util::Date& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, const css::util::Date& x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_DATE_PARAMETER, parameterIndex, x );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -201,7 +201,7 @@ void SAL_CALL java_sql_PreparedStatement::setDate( sal_Int32 parameterIndex, con
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_TIME_PARAMETER, parameterIndex, x );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -215,7 +215,7 @@ void SAL_CALL java_sql_PreparedStatement::setTime( sal_Int32 parameterIndex, con
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_TIMESTAMP_PARAMETER, parameterIndex, x );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -228,7 +228,7 @@ void SAL_CALL java_sql_PreparedStatement::setTimestamp( sal_Int32 parameterIndex
     callVoidMethod_ThrowSQL("setTimestamp", "(ILjava/sql/Timestamp;)V", mID, parameterIndex, aD.getJavaObject());
 }
 
-void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_DOUBLE_PARAMETER, parameterIndex, x );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -241,7 +241,7 @@ void SAL_CALL java_sql_PreparedStatement::setDouble( sal_Int32 parameterIndex, d
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_FLOAT_PARAMETER, parameterIndex, x );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -254,7 +254,7 @@ void SAL_CALL java_sql_PreparedStatement::setFloat( sal_Int32 parameterIndex, fl
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_INT_PARAMETER, parameterIndex, x );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -267,7 +267,7 @@ void SAL_CALL java_sql_PreparedStatement::setInt( sal_Int32 parameterIndex, sal_
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_LONG_PARAMETER, parameterIndex, x );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -280,7 +280,7 @@ void SAL_CALL java_sql_PreparedStatement::setLong( sal_Int32 parameterIndex, sal
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_NULL_PARAMETER, parameterIndex, sqlType );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -293,31 +293,31 @@ void SAL_CALL java_sql_PreparedStatement::setNull( sal_Int32 parameterIndex, sal
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XClob >& /*x*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XClob >& /*x*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setClob", *this );
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XBlob >& /*x*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XBlob >& /*x*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setBlob", *this );
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XArray >& /*x*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XArray >& /*x*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setArray", *this );
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XRef >& /*x*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const css::uno::Reference< css::sdbc::XRef >& /*x*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XParameters::setRef", *this );
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const css::uno::Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_OBJECT_NULL_PARAMETER, parameterIndex );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -377,7 +377,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectWithInfo( sal_Int32 parameter
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_OBJECT_NULL_PARAMETER, parameterIndex );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -390,7 +390,7 @@ void SAL_CALL java_sql_PreparedStatement::setObjectNull( sal_Int32 parameterInde
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, const css::uno::Any& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, const css::uno::Any& x )
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
@@ -403,7 +403,7 @@ void SAL_CALL java_sql_PreparedStatement::setObject( sal_Int32 parameterIndex, c
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_SHORT_PARAMETER, parameterIndex, x );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -416,7 +416,7 @@ void SAL_CALL java_sql_PreparedStatement::setShort( sal_Int32 parameterIndex, sa
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, const css::uno::Sequence< sal_Int8 >& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, const css::uno::Sequence< sal_Int8 >& x )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_BYTES_PARAMETER, parameterIndex );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -449,7 +449,7 @@ void SAL_CALL java_sql_PreparedStatement::setBytes( sal_Int32 parameterIndex, co
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_CHARSTREAM_PARAMETER, parameterIndex );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -508,7 +508,7 @@ void SAL_CALL java_sql_PreparedStatement::setCharacterStream( sal_Int32 paramete
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_BINARYSTREAM_PARAMETER, parameterIndex );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -567,7 +567,7 @@ void SAL_CALL java_sql_PreparedStatement::setBinaryStream( sal_Int32 parameterIn
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::clearParameters(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::clearParameters(  )
 {
     m_aLogger.log( LogLevel::FINER, STR_LOG_CLEAR_PARAMETERS );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -582,7 +582,7 @@ void SAL_CALL java_sql_PreparedStatement::clearParameters(  ) throw(css::sdbc::S
     } //t.pEnv
 }
 
-void SAL_CALL java_sql_PreparedStatement::clearBatch(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::clearBatch(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -595,7 +595,7 @@ void SAL_CALL java_sql_PreparedStatement::clearBatch(  ) throw(css::sdbc::SQLExc
 }
 
 
-void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL java_sql_PreparedStatement::addBatch( )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -608,7 +608,7 @@ void SAL_CALL java_sql_PreparedStatement::addBatch( ) throw(css::sdbc::SQLExcept
 }
 
 
-css::uno::Sequence< sal_Int32 > SAL_CALL java_sql_PreparedStatement::executeBatch(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int32 > SAL_CALL java_sql_PreparedStatement::executeBatch(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -627,7 +627,7 @@ css::uno::Sequence< sal_Int32 > SAL_CALL java_sql_PreparedStatement::executeBatc
     return aSeq;
 }
 
-css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL java_sql_PreparedStatement::getMetaData(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL java_sql_PreparedStatement::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);

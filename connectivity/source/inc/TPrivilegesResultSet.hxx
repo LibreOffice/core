@@ -40,7 +40,7 @@ namespace connectivity
         // ::cppu::OComponentHelper
         virtual void SAL_CALL disposing() override;
         // XResultSet
-        virtual sal_Bool SAL_CALL next(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL next(  ) override;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TPRIVILEGESRESULTSET_HXX

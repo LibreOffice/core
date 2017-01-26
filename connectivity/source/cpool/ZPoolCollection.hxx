@@ -111,33 +111,33 @@ namespace connectivity
                                                         const css::uno::Reference< css::uno::XInterface>& _xTreeNode)throw();
 
     // XDriverManager
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& url ) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnectionWithInfo( const OUString& url, const css::uno::Sequence< css::beans::PropertyValue >& info ) override;
+        virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) override;
+        virtual sal_Int32 SAL_CALL getLoginTimeout(  ) override;
 
     //XDriverAccess
-        virtual css::uno::Reference< css::sdbc::XDriver > SAL_CALL getDriverByURL( const OUString& url ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XDriver > SAL_CALL getDriverByURL( const OUString& url ) override;
     // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XServiceInfo - static methods
         static css::uno::Reference< css::uno::XInterface > SAL_CALL CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
         /// @throws css::uno::RuntimeException
-        static OUString SAL_CALL getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        static OUString SAL_CALL getImplementationName_Static(  );
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) override;
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) override;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_CPOOL_ZPOOLCOLLECTION_HXX

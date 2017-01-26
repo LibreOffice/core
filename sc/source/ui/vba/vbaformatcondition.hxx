@@ -46,23 +46,23 @@ public:
                           const css::uno::Reference< css::sheet::XSheetConditionalEntry >& _xSheetConditionalEntry,
                           const css::uno::Reference< ov::excel::XStyle >&,
                           const css::uno::Reference< ov::excel::XFormatConditions >& _xFormatConditions,
-                          const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::uno::RuntimeException, css::script::BasicErrorException );
+                          const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
 
     /// @throws css::script::BasicErrorException
-    void notifyRange() throw ( css::script::BasicErrorException );
+    void notifyRange();
     /// @throws css::script::BasicErrorException
-    static css::sheet::ConditionOperator retrieveAPIType(sal_Int32 _nVBAType, const css::uno::Reference< css::sheet::XSheetCondition >& _xSheetCondition ) throw( css::script::BasicErrorException );
+    static css::sheet::ConditionOperator retrieveAPIType(sal_Int32 _nVBAType, const css::uno::Reference< css::sheet::XSheetCondition >& _xSheetCondition );
 
     //Methods
-    virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Modify( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL Type(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 Operator( bool  ) throw (css::script::BasicErrorException) override;
-    virtual ::sal_Int32 SAL_CALL Operator(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
-    virtual void setFormula1( const css::uno::Any& _aFormula1) throw ( css::script::BasicErrorException ) override;
-    virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& Index ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Delete(  ) override;
+    virtual void SAL_CALL Modify( ::sal_Int32 Type, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) override;
+    virtual ::sal_Int32 SAL_CALL Type(  ) override;
+    virtual ::sal_Int32 Operator( bool  ) override;
+    virtual ::sal_Int32 SAL_CALL Operator(  ) override;
+    virtual void setFormula1( const css::uno::Any& _aFormula1) override;
+    virtual css::uno::Reference< ::ooo::vba::excel::XInterior > SAL_CALL Interior(  ) override;
+    virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& Index ) override;
+    virtual css::uno::Reference< ::ooo::vba::excel::XFont > SAL_CALL Font(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

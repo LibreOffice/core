@@ -43,7 +43,7 @@ AccWindowEventListener::~AccWindowEventListener()
  *  Uno's event notifier when event is captured
  *  @param AccessibleEventObject: the event object which contains information about event
  */
-void  AccWindowEventListener::notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException)
+void  AccWindowEventListener::notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
 {
     SolarMutexGuard g;
 

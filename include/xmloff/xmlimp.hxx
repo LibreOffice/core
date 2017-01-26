@@ -129,10 +129,8 @@ public:
     void addNSDeclAttributes( rtl::Reference < comphelper::AttributeList >& rAttrList );
 
     //XFastNamespaceHandler
-    virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
-                            throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix )
-                            throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI ) override;
+    virtual OUString SAL_CALL getNamespaceURI( const OUString& rNamespacePrefix ) override;
 };
 
 
@@ -257,92 +255,68 @@ public:
     virtual ~SvXMLImport() throw() override;
 
     // css::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startDocument()
-        throw (css::xml::sax::SAXException,
-               css::uno::RuntimeException,
-               std::exception) override;
-    virtual void SAL_CALL endDocument()
-        throw(css::xml::sax::SAXException,
-              css::uno::RuntimeException,
-              std::exception) override;
+    virtual void SAL_CALL startDocument() override;
+    virtual void SAL_CALL endDocument() override;
     virtual void SAL_CALL startElement(const OUString& aName,
-        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs)
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL endElement(const OUString& aName)
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL characters(const OUString& aChars)
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces)
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList > & xAttribs) override;
+    virtual void SAL_CALL endElement(const OUString& aName) override;
+    virtual void SAL_CALL characters(const OUString& aChars) override;
+    virtual void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
     virtual void SAL_CALL processingInstruction(const OUString& aTarget,
-                                                const OUString& aData)
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator)
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
+                                                const OUString& aData) override;
+    virtual void SAL_CALL setDocumentLocator(const css::uno::Reference< css::xml::sax::XLocator > & xLocator) override;
 
     // ::css::xml::sax::XFastContextHandler
     virtual void SAL_CALL startFastElement(sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
     virtual void SAL_CALL startUnknownElement(const OUString & Namespace,
         const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
-    virtual void SAL_CALL endFastElement(sal_Int32 Element)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 Element) override;
     virtual void SAL_CALL endUnknownElement(const OUString & Namespace,
-        const OUString & Name)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+        const OUString & Name) override;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     createFastChildContext(sal_Int32 Element,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
     createUnknownChildContext(const OUString & Namespace, const OUString & Name,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList > & Attribs) override;
 
     // css::xml::sax::XExtendedDocumentHandler
-    virtual void SAL_CALL startCDATA() throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL endCDATA() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL comment(const OUString& sComment)
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL allowLineBreak()
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL unknown(const OUString& sString)
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL startCDATA() override;
+    virtual void SAL_CALL endCDATA() override;
+    virtual void SAL_CALL comment(const OUString& sComment) override;
+    virtual void SAL_CALL allowLineBreak() override;
+    virtual void SAL_CALL unknown(const OUString& sString) override;
 
     // XFastParser
-    virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) throw (css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL parseStream( const css::xml::sax::InputSource& aInputSource ) override;
+    virtual void SAL_CALL setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) override;
+    virtual void SAL_CALL setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) override;
+    virtual void SAL_CALL registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) override;
+    virtual OUString SAL_CALL getNamespaceURL( const OUString& rPrefix ) override;
+    virtual void SAL_CALL setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) override;
+    virtual void SAL_CALL setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) override;
+    virtual void SAL_CALL setLocale( const css::lang::Locale& rLocale ) override;
+    virtual void SAL_CALL setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual void SAL_CALL cancel(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  )
-        throw(css::uno::RuntimeException, std::exception) final override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(css::uno::RuntimeException, std::exception) final override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(css::uno::RuntimeException, std::exception) final override;
+    virtual OUString SAL_CALL getImplementationName(  ) final override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) final override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) final override;
 
     // may be called by certain subclasses that handle document meta-data
     // override to provide customized handling of document statistics

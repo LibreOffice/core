@@ -77,56 +77,42 @@ public:
 
     // XServiceInfo
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
 
-    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispose() override;
 
     virtual void SAL_CALL
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     virtual void SAL_CALL
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
 
     // XDynamicResultSet
 
-    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getStaticResultSet()
-        throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getStaticResultSet() override;
 
     virtual void SAL_CALL
-    setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener >& Listener )
-        throw( css::ucb::ListenerAlreadySetException, css::uno::RuntimeException, std::exception ) override;
+    setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener >& Listener ) override;
 
     virtual void SAL_CALL
-    connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache )
-        throw( css::ucb::ListenerAlreadySetException,
-               css::ucb::AlreadyInitializedException,
-               css::ucb::ServiceNotFoundException,
-               css::uno::RuntimeException, std::exception ) override;
+    connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache ) override;
 
     virtual sal_Int16 SAL_CALL
-    getCapabilities()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getCapabilities() override;
 
 
     // own methods:
 
     /// @throws css::uno::RuntimeException
-    void impl_disposing( const css::lang::EventObject& Source )
-        throw( css::uno::RuntimeException );
+    void impl_disposing( const css::lang::EventObject& Source );
 
     /// @throws css::uno::RuntimeException
-    void impl_notify( const css::ucb::ListEvent& Changes )
-        throw( css::uno::RuntimeException );
+    void impl_notify( const css::ucb::ListEvent& Changes );
 };
 
 class SortedDynamicResultSetListener: public cppu::WeakImplHelper <
@@ -142,13 +128,11 @@ public:
     // XEventListener ( base of XDynamicResultSetListener )
 
     virtual void SAL_CALL
-    disposing( const css::lang::EventObject& Source )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    disposing( const css::lang::EventObject& Source ) override;
 
     // XDynamicResultSetListener
 
-    virtual void SAL_CALL notify( const css::ucb::ListEvent& Changes )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL notify( const css::ucb::ListEvent& Changes ) override;
 
     // own methods:
 
@@ -177,12 +161,9 @@ public:
 
     // XSortedDynamicResultSetFactory
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     static OUString getImplementationName_Static();
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
@@ -190,8 +171,7 @@ public:
     createSortedDynamicResultSet(
                 const css::uno::Reference< css::ucb::XDynamicResultSet > & Source,
                 const css::uno::Sequence< css::ucb::NumberedSortingInfo > & Info,
-                const css::uno::Reference< css::ucb::XAnyCompareFactory > & CompareFactory )
-        throw( css::uno::RuntimeException, std::exception ) override;
+                const css::uno::Reference< css::ucb::XAnyCompareFactory > & CompareFactory ) override;
 };
 
 #endif

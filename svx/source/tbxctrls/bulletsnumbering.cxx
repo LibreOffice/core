@@ -37,8 +37,7 @@ public:
     virtual ~NumberingPopup() override;
     virtual void dispose() override;
 
-    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent )
-        throw ( css::uno::RuntimeException ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
 class NumberingToolBoxControl : public svt::PopupWindowController
@@ -50,18 +49,14 @@ public:
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     using svt::ToolboxController::createPopupWindow;
 };
@@ -144,7 +139,6 @@ void NumberingPopup::dispose()
 }
 
 void NumberingPopup::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException )
 {
     mpValueSet->SetNoSelection();
 
@@ -208,7 +202,6 @@ VclPtr<vcl::Window> NumberingToolBoxControl::createPopupWindow( vcl::Window* pPa
 
 
 void SAL_CALL NumberingToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     ToolBox* pToolBox = nullptr;
     sal_uInt16 nId = 0;
@@ -222,7 +215,6 @@ void SAL_CALL NumberingToolBoxControl::statusChanged( const css::frame::FeatureS
 }
 
 void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -239,13 +231,11 @@ void SAL_CALL NumberingToolBoxControl::initialize( const css::uno::Sequence< css
 }
 
 OUString SAL_CALL NumberingToolBoxControl::getImplementationName()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.svx.NumberingToolBoxControl" );
 }
 
 css::uno::Sequence< OUString > SAL_CALL NumberingToolBoxControl::getSupportedServiceNames()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence<OUString> aRet { "com.sun.star.frame.ToolbarController" };
     return aRet;

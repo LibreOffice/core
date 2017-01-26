@@ -164,8 +164,6 @@ bool OZipFileAccess::StringGoodForPattern_Impl( const OUString& aString,
 
 // XInitialization
 void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArguments )
-    throw ( uno::Exception,
-            uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -258,9 +256,6 @@ void SAL_CALL OZipFileAccess::initialize( const uno::Sequence< uno::Any >& aArgu
 
 // XNameAccess
 uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
-    throw ( container::NoSuchElementException,
-            lang::WrappedTargetException,
-            uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -308,7 +303,6 @@ uno::Any SAL_CALL OZipFileAccess::getByName( const OUString& aName )
 }
 
 uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
-    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -342,7 +336,6 @@ uno::Sequence< OUString > SAL_CALL OZipFileAccess::getElementNames()
 }
 
 sal_Bool SAL_CALL OZipFileAccess::hasByName( const OUString& aName )
-    throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -358,7 +351,6 @@ sal_Bool SAL_CALL OZipFileAccess::hasByName( const OUString& aName )
 }
 
 uno::Type SAL_CALL OZipFileAccess::getElementType()
-    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -372,7 +364,6 @@ uno::Type SAL_CALL OZipFileAccess::getElementType()
 }
 
 sal_Bool SAL_CALL OZipFileAccess::hasElements()
-    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -387,9 +378,6 @@ sal_Bool SAL_CALL OZipFileAccess::hasElements()
 
 // XZipFileAccess
 uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( const OUString& aPatternString )
-    throw ( container::NoSuchElementException,
-            io::IOException, packages::WrongPasswordException, packages::zip::ZipException,
-            uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -422,7 +410,6 @@ uno::Reference< io::XInputStream > SAL_CALL OZipFileAccess::getStreamByPattern( 
 
 // XComponent
 void SAL_CALL OZipFileAccess::dispose()
-    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -449,7 +436,6 @@ void SAL_CALL OZipFileAccess::dispose()
 }
 
 void SAL_CALL OZipFileAccess::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -462,7 +448,6 @@ void SAL_CALL OZipFileAccess::addEventListener( const uno::Reference< lang::XEve
 }
 
 void SAL_CALL OZipFileAccess::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutexHolder->GetMutex() );
 
@@ -493,19 +478,16 @@ uno::Reference< uno::XInterface > SAL_CALL OZipFileAccess::impl_staticCreateSelf
 }
 
 OUString SAL_CALL OZipFileAccess::getImplementationName()
-    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetImplementationName();
 }
 
 sal_Bool SAL_CALL OZipFileAccess::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL OZipFileAccess::getSupportedServiceNames()
-    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetSupportedServiceNames();
 }

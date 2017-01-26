@@ -581,7 +581,6 @@ NeonSession::NeonSession( const rtl::Reference< DAVSessionFactory > & rSessionFa
                           const OUString& inUri,
                           const uno::Sequence< beans::NamedValue >& rFlags,
                           const ucbhelper::InternetProxyDecider & rProxyDecider )
-    throw ( std::exception )
     : DAVSession( rSessionFactory )
     , m_nProxyPort( 0 )
     , m_aFlags( rFlags )
@@ -610,7 +609,6 @@ NeonSession::~NeonSession( )
 }
 
 void NeonSession::Init( const DAVRequestEnvironment & rEnv )
-    throw (css::uno::RuntimeException, std::exception)
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     m_aEnv = rEnv;
@@ -618,7 +616,6 @@ void NeonSession::Init( const DAVRequestEnvironment & rEnv )
 }
 
 void NeonSession::Init()
-    throw (css::uno::RuntimeException, std::exception)
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -843,7 +840,6 @@ bool NeonSession::UsesProxy()
 void NeonSession::OPTIONS( const OUString & inPath,
                            DAVOptions & rOptions, // contains the name+values of every header
                            const DAVRequestEnvironment & rEnv )
-    throw( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -964,7 +960,6 @@ void NeonSession::PROPFIND( const OUString & inPath,
                             const std::vector< OUString > & inPropNames,
                             std::vector< DAVResource > & ioResources,
                             const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
 
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
@@ -998,7 +993,6 @@ void NeonSession::PROPFIND( const OUString & inPath,
                             const Depth inDepth,
                             std::vector< DAVResourceInfo > & ioResInfo,
                             const DAVRequestEnvironment & rEnv )
-    throw( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "PROPFIND - relative URL: <" << inPath << "> Depth: " << inDepth );
@@ -1033,7 +1027,6 @@ void NeonSession::PROPFIND( const OUString & inPath,
 void NeonSession::PROPPATCH( const OUString & inPath,
                              const std::vector< ProppatchValue > & inValues,
                              const DAVRequestEnvironment & rEnv )
-    throw( std::exception )
 {
     SAL_INFO( "ucb.ucp.webdav", "PROPPATCH - relative URL <" << inPath << ">" );
 
@@ -1164,7 +1157,6 @@ void NeonSession::HEAD( const OUString &  inPath,
                         const std::vector< OUString > & inHeaderNames,
                         DAVResource & ioResource,
                         const DAVRequestEnvironment & rEnv )
-    throw( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "HEAD - relative URL <" << inPath << ">" );
@@ -1184,7 +1176,6 @@ void NeonSession::HEAD( const OUString &  inPath,
 uno::Reference< io::XInputStream >
 NeonSession::GET( const OUString & inPath,
                   const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "GET - relative URL <" << inPath << ">" );
@@ -1208,7 +1199,6 @@ NeonSession::GET( const OUString & inPath,
 void NeonSession::GET( const OUString & inPath,
                        uno::Reference< io::XOutputStream > & ioOutputStream,
                        const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "GET - relative URL <" << inPath << ">" );
@@ -1231,7 +1221,6 @@ NeonSession::GET( const OUString & inPath,
                   const std::vector< OUString > & inHeaderNames,
                   DAVResource & ioResource,
                   const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "GET - relative URL <" << inPath << ">" );
@@ -1259,7 +1248,6 @@ void NeonSession::GET0( const OUString & inPath,
                   const std::vector< OUString > & inHeaderNames,
                   DAVResource & ioResource,
                   const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "GET - relative URL <" << inPath << ">" );
@@ -1285,7 +1273,6 @@ void NeonSession::GET( const OUString & inPath,
                        const std::vector< OUString > & inHeaderNames,
                        DAVResource & ioResource,
                        const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "GET - relative URL <" << inPath << ">" );
@@ -1309,7 +1296,6 @@ void NeonSession::GET( const OUString & inPath,
 void NeonSession::PUT( const OUString & inPath,
                        const uno::Reference< io::XInputStream > & inInputStream,
                        const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "PUT - relative URL <" << inPath << ">" );
@@ -1336,7 +1322,6 @@ NeonSession::POST( const OUString & inPath,
                    const OUString & rReferer,
                    const uno::Reference< io::XInputStream > & inInputStream,
                    const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "POST - relative URL <" << inPath << ">" );
@@ -1370,7 +1355,6 @@ void NeonSession::POST( const OUString & inPath,
                         const uno::Reference< io::XInputStream > & inInputStream,
                         uno::Reference< io::XOutputStream > & oOutputStream,
                         const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "POST - relative URL <" << inPath << ">" );
@@ -1397,7 +1381,6 @@ void NeonSession::POST( const OUString & inPath,
 
 void NeonSession::MKCOL( const OUString & inPath,
                          const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "MKCOL - relative URL <" << inPath << ">" );
@@ -1415,7 +1398,6 @@ void NeonSession::COPY( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
                         bool inOverWrite )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "COPY - inSourceURL: "<<inSourceURL<<" inDestinationURL: "<<inDestinationURL);
@@ -1442,7 +1424,6 @@ void NeonSession::MOVE( const OUString & inSourceURL,
                         const OUString & inDestinationURL,
                         const DAVRequestEnvironment & rEnv,
                         bool inOverWrite )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "MOVE - inSourceURL: "<<inSourceURL<<" inDestinationURL: "<<inDestinationURL);
@@ -1465,7 +1446,6 @@ void NeonSession::MOVE( const OUString & inSourceURL,
 
 void NeonSession::DESTROY( const OUString & inPath,
                            const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "DESTROY - relative URL <" << inPath << ">" );
@@ -1512,7 +1492,6 @@ namespace
 void NeonSession::LOCK( const OUString & inPath,
                         ucb::Lock & rLock,
                         const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
     SAL_INFO( "ucb.ucp.webdav", "LOCK (create) - relative URL: <" << inPath << ">" );
@@ -1651,7 +1630,6 @@ bool NeonSession::LOCK( NeonLock * pLock,
 
 void NeonSession::UNLOCK( const OUString & inPath,
                           const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     osl::Guard< osl::Mutex > theGuard( m_aMutex );
 
@@ -1717,7 +1695,6 @@ bool NeonSession::UNLOCK( NeonLock * pLock )
 }
 
 void NeonSession::abort()
-    throw ( std::exception )
 {
     SAL_INFO( "ucb.ucp.webdav", "neon commands cannot be aborted" );
 }
@@ -1823,7 +1800,6 @@ bool NeonSession::removeExpiredLocktoken( const OUString & inURL,
 void NeonSession::HandleError( int nError,
                                const OUString & inPath,
                                const DAVRequestEnvironment & rEnv )
-    throw ( std::exception )
 {
     m_aEnv = DAVRequestEnvironment();
 

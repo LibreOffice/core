@@ -67,73 +67,59 @@ public:
     UrlReference(const UrlReference&) = delete;
     UrlReference& operator=(const UrlReference&) = delete;
 
-    virtual OUString SAL_CALL getUriReference()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getUriReference() override
     { return base_.getUriReference(); }
 
-    virtual sal_Bool SAL_CALL isAbsolute() throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL isAbsolute() override
     { return base_.isAbsolute(); }
 
-    virtual OUString SAL_CALL getScheme()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getScheme() override
     { return base_.getScheme(); }
 
-    virtual OUString SAL_CALL getSchemeSpecificPart()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getSchemeSpecificPart() override
     { return base_.getSchemeSpecificPart(); }
 
-    virtual sal_Bool SAL_CALL isHierarchical()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL isHierarchical() override
     { return base_.isHierarchical(); }
 
-    virtual sal_Bool SAL_CALL hasAuthority()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasAuthority() override
     { return base_.hasAuthority(); }
 
-    virtual OUString SAL_CALL getAuthority()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getAuthority() override
     { return base_.getAuthority(); }
 
-    virtual OUString SAL_CALL getPath()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getPath() override
     { return base_.getPath(); }
 
-    virtual sal_Bool SAL_CALL hasRelativePath()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasRelativePath() override
     { return base_.hasRelativePath(); }
 
-    virtual ::sal_Int32 SAL_CALL getPathSegmentCount()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual ::sal_Int32 SAL_CALL getPathSegmentCount() override
     { return base_.getPathSegmentCount(); }
 
-    virtual OUString SAL_CALL getPathSegment(sal_Int32 index)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getPathSegment(sal_Int32 index) override
     { return base_.getPathSegment(index); }
 
-    virtual sal_Bool SAL_CALL hasQuery() throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasQuery() override
     { return base_.hasQuery(); }
 
-    virtual OUString SAL_CALL getQuery()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getQuery() override
     { return base_.getQuery(); }
 
-    virtual sal_Bool SAL_CALL hasFragment() throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasFragment() override
     { return base_.hasFragment(); }
 
-    virtual OUString SAL_CALL getFragment()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getFragment() override
     { return base_.getFragment(); }
 
-    virtual void SAL_CALL setFragment(OUString const & fragment)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL setFragment(OUString const & fragment) override
     { base_.setFragment(fragment); }
 
-    virtual void SAL_CALL clearFragment() throw (css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL clearFragment() override
     { base_.clearFragment(); }
 
     virtual OUString SAL_CALL expand(
-        css::uno::Reference< css::util::XMacroExpander > const & expander)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        css::uno::Reference< css::util::XMacroExpander > const & expander) override;
 
 private:
     virtual ~UrlReference() override {}
@@ -143,7 +129,6 @@ private:
 
 OUString UrlReference::expand(
     css::uno::Reference< css::util::XMacroExpander > const & expander)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     OSL_ASSERT(expander.is());
     return expander->expandMacros(
@@ -161,40 +146,34 @@ public:
     Parser(const Parser&) = delete;
     Parser& operator=(const Parser&) = delete;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     virtual sal_Bool SAL_CALL supportsService(
-        OUString const & serviceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+        OUString const & serviceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    getSupportedServiceNames() override;
 
     virtual css::uno::Reference< css::uri::XUriReference > SAL_CALL
     parse(
         OUString const & scheme,
-        OUString const & schemeSpecificPart)
-        throw (css::uno::RuntimeException, std::exception) override;
+        OUString const & schemeSpecificPart) override;
 
 private:
     virtual ~Parser() override {}
 };
 
 OUString Parser::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand");
 }
 
 sal_Bool Parser::supportsService(OUString const & serviceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > s { "com.sun.star.uri.UriSchemeParser_vndDOTsunDOTstarDOTexpand" };
     return s;
@@ -202,7 +181,6 @@ css::uno::Sequence< OUString > Parser::getSupportedServiceNames()
 
 css::uno::Reference< css::uri::XUriReference > Parser::parse(
     OUString const & scheme, OUString const & schemeSpecificPart)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (!parseSchemeSpecificPart(schemeSpecificPart)) {
         return css::uno::Reference< css::uri::XUriReference >();

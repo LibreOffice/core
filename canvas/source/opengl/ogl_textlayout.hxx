@@ -43,23 +43,23 @@ namespace oglcanvas
         virtual void SAL_CALL disposing() override;
 
         // XTextLayout
-        virtual css::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > SAL_CALL queryTextShapes(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryInkMeasures(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryMeasures(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< double > SAL_CALL queryLogicalAdvancements(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL applyLogicalAdvancements( const css::uno::Sequence< double >& aAdvancements ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::geometry::RealRectangle2D SAL_CALL queryTextBounds(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual double SAL_CALL justify( double nSize ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual double SAL_CALL combinedJustify( const css::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::rendering::TextHit SAL_CALL getTextHit( const css::geometry::RealPoint2D& aHitPoint ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::rendering::Caret SAL_CALL getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, sal_Bool bExcludeLigatures ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual double SAL_CALL getBaselineOffset(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int8 SAL_CALL getMainTextDirection(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::rendering::XCanvasFont > SAL_CALL getFont(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::rendering::StringContext SAL_CALL getText(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Reference< css::rendering::XPolyPolygon2D > > SAL_CALL queryTextShapes(  ) override;
+        virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryInkMeasures(  ) override;
+        virtual css::uno::Sequence< css::geometry::RealRectangle2D > SAL_CALL queryMeasures(  ) override;
+        virtual css::uno::Sequence< double > SAL_CALL queryLogicalAdvancements(  ) override;
+        virtual void SAL_CALL applyLogicalAdvancements( const css::uno::Sequence< double >& aAdvancements ) override;
+        virtual css::geometry::RealRectangle2D SAL_CALL queryTextBounds(  ) override;
+        virtual double SAL_CALL justify( double nSize ) override;
+        virtual double SAL_CALL combinedJustify( const css::uno::Sequence< css::uno::Reference< css::rendering::XTextLayout > >& aNextLayouts, double nSize ) override;
+        virtual css::rendering::TextHit SAL_CALL getTextHit( const css::geometry::RealPoint2D& aHitPoint ) override;
+        virtual css::rendering::Caret SAL_CALL getCaret( sal_Int32 nInsertionIndex, sal_Bool bExcludeLigatures ) override;
+        virtual sal_Int32 SAL_CALL getNextInsertionIndex( sal_Int32 nStartIndex, sal_Int32 nCaretAdvancement, sal_Bool bExcludeLigatures ) override;
+        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryVisualHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL queryLogicalHighlighting( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+        virtual double SAL_CALL getBaselineOffset(  ) override;
+        virtual sal_Int8 SAL_CALL getMainTextDirection(  ) override;
+        virtual css::uno::Reference< css::rendering::XCanvasFont > SAL_CALL getFont(  ) override;
+        virtual css::rendering::StringContext SAL_CALL getText(  ) override;
 
         bool draw( const css::rendering::ViewState&         rViewState,
                    const css::rendering::RenderState&       rRenderState,

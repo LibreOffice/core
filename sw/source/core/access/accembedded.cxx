@@ -49,7 +49,6 @@ SwAccessibleEmbeddedObject::~SwAccessibleEmbeddedObject()
 // XInterface
 css::uno::Any SAL_CALL
     SwAccessibleEmbeddedObject::queryInterface (const css::uno::Type & rType)
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Any aReturn = SwAccessibleNoTextFrame::queryInterface (rType);
     if ( ! aReturn.hasValue())
@@ -73,19 +72,16 @@ void SAL_CALL
 }
 
 OUString SAL_CALL SwAccessibleEmbeddedObject::getImplementationName()
-        throw( uno::RuntimeException, std::exception )
 {
     return OUString(sImplementationName);
 }
 
 sal_Bool SAL_CALL SwAccessibleEmbeddedObject::supportsService(const OUString& sTestServiceName)
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sTestServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServiceNames()
-        throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -95,14 +91,12 @@ uno::Sequence< OUString > SAL_CALL SwAccessibleEmbeddedObject::getSupportedServi
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwAccessibleEmbeddedObject::getImplementationId()
-        throw(uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 // XAccessibleExtendedAttributes
 css::uno::Any SAL_CALL SwAccessibleEmbeddedObject::getExtendedAttributes()
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

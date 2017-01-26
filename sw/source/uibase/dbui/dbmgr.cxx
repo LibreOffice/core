@@ -206,7 +206,7 @@ class SwDBManager::ConnectionDisposedListener_Impl
 private:
     SwDBManager * m_pDBManager;
 
-    virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
 
 public:
     explicit ConnectionDisposedListener_Impl(SwDBManager& rMgr);
@@ -224,10 +224,10 @@ class SwDataSourceRemovedListener : public cppu::WeakImplHelper<sdb::XDatabaseRe
 public:
     explicit SwDataSourceRemovedListener(SwDBManager& rDBManager);
     virtual ~SwDataSourceRemovedListener() override;
-    virtual void SAL_CALL registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL changedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing(const lang::EventObject& rObject) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) override;
+    virtual void SAL_CALL revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) override;
+    virtual void SAL_CALL changedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) override;
+    virtual void SAL_CALL disposing(const lang::EventObject& rObject) override;
     void Dispose();
 };
 
@@ -245,11 +245,11 @@ SwDataSourceRemovedListener::~SwDataSourceRemovedListener()
         m_xDatabaseContext->removeDatabaseRegistrationsListener(this);
 }
 
-void SAL_CALL SwDataSourceRemovedListener::registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& /*rEvent*/) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwDataSourceRemovedListener::registeredDatabaseLocation(const sdb::DatabaseRegistrationEvent& /*rEvent*/)
 {
 }
 
-void SAL_CALL SwDataSourceRemovedListener::revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwDataSourceRemovedListener::revokedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent)
 {
     if (!m_pDBManager || m_pDBManager->getEmbeddedName().isEmpty())
         return;
@@ -277,13 +277,13 @@ void SAL_CALL SwDataSourceRemovedListener::revokedDatabaseLocation(const sdb::Da
     m_pDBManager->setEmbeddedName(OUString(), *pDocShell);
 }
 
-void SAL_CALL SwDataSourceRemovedListener::changedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwDataSourceRemovedListener::changedDatabaseLocation(const sdb::DatabaseRegistrationEvent& rEvent)
 {
     if (rEvent.OldLocation != rEvent.NewLocation)
         revokedDatabaseLocation(rEvent);
 }
 
-void SwDataSourceRemovedListener::disposing(const lang::EventObject& /*rObject*/) throw (uno::RuntimeException, std::exception)
+void SwDataSourceRemovedListener::disposing(const lang::EventObject& /*rObject*/)
 {
     m_xDatabaseContext.clear();
 }
@@ -3068,7 +3068,6 @@ SwDBManager::ConnectionDisposedListener_Impl::ConnectionDisposedListener_Impl(Sw
 }
 
 void SwDBManager::ConnectionDisposedListener_Impl::disposing( const lang::EventObject& rSource )
-        throw (uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 

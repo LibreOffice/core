@@ -59,21 +59,17 @@ namespace pdfi
                                           css::uno::XComponentContext >& xContext );
 
         // XFilter
-        virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<css::beans::PropertyValue>& rFilterData ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL cancel() throw(std::exception) override;
+        virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<css::beans::PropertyValue>& rFilterData ) override;
+        virtual void SAL_CALL cancel() override;
 
         // XImporter
-        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument )
-            throw( css::lang::IllegalArgumentException, std::exception ) override;
+        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument ) override;
 
-        OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) override;
+        OUString SAL_CALL getImplementationName() override;
 
-        sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-            throw (css::uno::RuntimeException, std::exception) override;
+        sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 
     typedef ::cppu::WeakComponentImplHelper<
@@ -133,20 +129,16 @@ namespace pdfi
         // XImportFilter
         virtual sal_Bool SAL_CALL importer( const css::uno::Sequence< css::beans::PropertyValue >& rSourceData,
                                             const css::uno::Reference< css::xml::sax::XDocumentHandler >& rHdl,
-                                            const css::uno::Sequence< OUString >& rUserData ) throw( css::uno::RuntimeException, std::exception ) override;
+                                            const css::uno::Sequence< OUString >& rUserData ) override;
 
         // XImporter
-        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument )
-            throw( css::lang::IllegalArgumentException, std::exception ) override;
+        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDocument ) override;
 
-        OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) override;
+        OUString SAL_CALL getImplementationName() override;
 
-        sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-            throw (css::uno::RuntimeException, std::exception) override;
+        sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 }
 

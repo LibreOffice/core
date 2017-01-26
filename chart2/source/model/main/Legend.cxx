@@ -201,14 +201,12 @@ Legend::~Legend()
 
 // ____ XCloneable ____
 Reference< util::XCloneable > SAL_CALL Legend::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return Reference< util::XCloneable >( new Legend( *this ));
 }
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL Legend::addModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -222,7 +220,6 @@ void SAL_CALL Legend::addModifyListener( const Reference< util::XModifyListener 
 }
 
 void SAL_CALL Legend::removeModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -237,14 +234,12 @@ void SAL_CALL Legend::removeModifyListener( const Reference< util::XModifyListen
 
 // ____ XModifyListener ____
 void SAL_CALL Legend::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL Legend::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
@@ -257,7 +252,6 @@ void Legend::firePropertyChangeEvent()
 
 // ____ OPropertySet ____
 Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
-    throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticLegendDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -273,26 +267,22 @@ Any Legend::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL Legend::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticLegendInfo::get();
 }
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL Legend::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart2.Legend");
 }
 
 sal_Bool SAL_CALL Legend::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL Legend::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart2.Legend",

@@ -38,7 +38,7 @@ RtfExportFilter::RtfExportFilter(const uno::Reference< uno::XComponentContext >&
 
 RtfExportFilter::~RtfExportFilter() = default;
 
-sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor) throw(uno::RuntimeException, std::exception)
+sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor)
 {
     utl::MediaDescriptor aMediaDesc = aDescriptor;
     uno::Reference<io::XStream> xStream = aMediaDesc.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_STREAMFOROUTPUT(), uno::Reference< io::XStream >());
@@ -87,11 +87,11 @@ sal_Bool RtfExportFilter::filter(const uno::Sequence< beans::PropertyValue >& aD
     return true;
 }
 
-void RtfExportFilter::cancel() throw(uno::RuntimeException, std::exception)
+void RtfExportFilter::cancel()
 {
 }
 
-void RtfExportFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+void RtfExportFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc)
 {
     m_xSrcDoc = xDoc;
 }
@@ -108,7 +108,7 @@ uno::Sequence< OUString > SAL_CALL RtfExport_getSupportedServiceNames() throw()
     return uno::Sequence< OUString > { "com.sun.star.document.ExportFilter" };
 }
 
-uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::Reference< uno::XComponentContext >& xCtx) throw(uno::Exception)
+uno::Reference< uno::XInterface > SAL_CALL RtfExport_createInstance(const uno::Reference< uno::XComponentContext >& xCtx)
 {
     return static_cast<cppu::OWeakObject*>(new RtfExportFilter(xCtx));
 }

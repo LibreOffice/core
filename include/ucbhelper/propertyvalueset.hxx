@@ -75,8 +75,7 @@ public:
     virtual ~PropertyValueSet() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -84,107 +83,63 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
 
     // XRow
     virtual sal_Bool SAL_CALL
-    wasNull()
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    wasNull() override;
     virtual OUString SAL_CALL
-    getString( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getString( sal_Int32 columnIndex ) override;
     virtual sal_Bool SAL_CALL
-    getBoolean( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getBoolean( sal_Int32 columnIndex ) override;
     virtual sal_Int8 SAL_CALL
-    getByte( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getByte( sal_Int32 columnIndex ) override;
     virtual sal_Int16 SAL_CALL
-    getShort( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getShort( sal_Int32 columnIndex ) override;
     virtual sal_Int32 SAL_CALL
-    getInt( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getInt( sal_Int32 columnIndex ) override;
     virtual sal_Int64 SAL_CALL
-    getLong( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getLong( sal_Int32 columnIndex ) override;
     virtual float SAL_CALL
-    getFloat( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getFloat( sal_Int32 columnIndex ) override;
     virtual double SAL_CALL
-    getDouble( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getDouble( sal_Int32 columnIndex ) override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getBytes( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getBytes( sal_Int32 columnIndex ) override;
     virtual css::util::Date SAL_CALL
-    getDate( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getDate( sal_Int32 columnIndex ) override;
     virtual css::util::Time SAL_CALL
-    getTime( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getTime( sal_Int32 columnIndex ) override;
     virtual css::util::DateTime SAL_CALL
-    getTimestamp( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getTimestamp( sal_Int32 columnIndex ) override;
     virtual css::uno::Reference<
                 css::io::XInputStream > SAL_CALL
-    getBinaryStream( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getBinaryStream( sal_Int32 columnIndex ) override;
     virtual css::uno::Reference<
                 css::io::XInputStream > SAL_CALL
-    getCharacterStream( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getCharacterStream( sal_Int32 columnIndex ) override;
     virtual css::uno::Any SAL_CALL
     getObject( sal_Int32 columnIndex,
                const css::uno::Reference<
-                   css::container::XNameAccess >& typeMap )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+                   css::container::XNameAccess >& typeMap ) override;
     virtual css::uno::Reference<
                 css::sdbc::XRef > SAL_CALL
-    getRef( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getRef( sal_Int32 columnIndex ) override;
     virtual css::uno::Reference<
                 css::sdbc::XBlob > SAL_CALL
-    getBlob( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getBlob( sal_Int32 columnIndex ) override;
     virtual css::uno::Reference<
                 css::sdbc::XClob > SAL_CALL
-    getClob( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getClob( sal_Int32 columnIndex ) override;
     virtual css::uno::Reference<
                 css::sdbc::XArray > SAL_CALL
-    getArray( sal_Int32 columnIndex )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    getArray( sal_Int32 columnIndex ) override;
 
     // XColumnLocate
     virtual sal_Int32 SAL_CALL
-    findColumn( const OUString& columnName )
-        throw( css::sdbc::SQLException,
-               css::uno::RuntimeException, std::exception ) override;
+    findColumn( const OUString& columnName ) override;
 
 
     // Non-interface methods

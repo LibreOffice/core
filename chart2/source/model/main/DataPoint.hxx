@@ -57,60 +57,46 @@ public:
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
     explicit DataPoint( const DataPoint & rOther );
 
     // ____ OPropertySet ____
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(css::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
-          const css::uno::Any& rValue )
-        throw (css::uno::Exception, std::exception) override;
+          const css::uno::Any& rValue ) override;
 
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getPropertySetInfo() override;
 
     // ____ XCloneable ____
     // Note: m_xParentProperties are not cloned!
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // ____ XChild ____
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent() override;
     virtual void SAL_CALL setParent(
-        const css::uno::Reference< css::uno::XInterface >& Parent )
-        throw (css::lang::NoSupportException,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source ) override;
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;

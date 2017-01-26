@@ -27,13 +27,13 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-ScVbaTextFrame::ScVbaTextFrame( uno::Sequence< uno::Any> const & args, uno::Reference< uno::XComponentContext> const & xContext ) throw ( lang::IllegalArgumentException ) :  ScVbaTextFrame_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext, getXSomethingFromArgs< drawing::XShape >( args, 1, false ) )
+ScVbaTextFrame::ScVbaTextFrame( uno::Sequence< uno::Any> const & args, uno::Reference< uno::XComponentContext> const & xContext ) :  ScVbaTextFrame_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0 ), xContext, getXSomethingFromArgs< drawing::XShape >( args, 1, false ) )
 {
 }
 
 // Methods
 uno::Any SAL_CALL
-ScVbaTextFrame::Characters() throw (uno::RuntimeException, std::exception)
+ScVbaTextFrame::Characters()
 {
     uno::Reference< text::XSimpleText > xSimpleText( m_xShape, uno::UNO_QUERY_THROW );
     ScVbaPalette aPalette( SfxObjectShell::Current() );

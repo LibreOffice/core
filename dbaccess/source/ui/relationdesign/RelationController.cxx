@@ -92,23 +92,23 @@ using namespace ::dbaui;
 using namespace ::comphelper;
 using namespace ::osl;
 
-OUString SAL_CALL ORelationController::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL ORelationController::getImplementationName()
 {
     return getImplementationName_Static();
 }
 
-OUString ORelationController::getImplementationName_Static() throw( RuntimeException )
+OUString ORelationController::getImplementationName_Static()
 {
     return OUString("org.openoffice.comp.dbu.ORelationDesign");
 }
 
-Sequence< OUString> ORelationController::getSupportedServiceNames_Static() throw( RuntimeException )
+Sequence< OUString> ORelationController::getSupportedServiceNames_Static()
 {
     Sequence<OUString> aSupported { "com.sun.star.sdb.RelationDesign" };
     return aSupported;
 }
 
-Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames() throw(RuntimeException, std::exception)
+Sequence< OUString> SAL_CALL ORelationController::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }

@@ -35,27 +35,27 @@ private:
 
 private:
     /// @throws css::uno::RuntimeException
-    void makeWrap() throw (css::uno::RuntimeException);
+    void makeWrap();
     /// @throws css::uno::RuntimeException
-    float getDistance( const OUString& sName ) throw (css::uno::RuntimeException);
+    float getDistance( const OUString& sName );
     /// @throws css::uno::RuntimeException
-    void setDistance( const OUString& sName, float _distance ) throw (css::uno::RuntimeException);
+    void setDistance( const OUString& sName, float _distance );
 
 public:
     SwVbaWrapFormat(  css::uno::Sequence< css::uno::Any > const& aArgs, css::uno::Reference< css::uno::XComponentContext >const& xContext );
 
-    virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getSide() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSide( ::sal_Int32 _side ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getDistanceTop() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDistanceTop( float _distancetop ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getDistanceBottom() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDistanceBottom( float _distancebottom ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getDistanceLeft() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDistanceLeft( float _distanceleft ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getDistanceRight() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDistanceRight( float _distanceright ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getType() override;
+    virtual void SAL_CALL setType( ::sal_Int32 _type ) override;
+    virtual ::sal_Int32 SAL_CALL getSide() override;
+    virtual void SAL_CALL setSide( ::sal_Int32 _side ) override;
+    virtual float SAL_CALL getDistanceTop() override;
+    virtual void SAL_CALL setDistanceTop( float _distancetop ) override;
+    virtual float SAL_CALL getDistanceBottom() override;
+    virtual void SAL_CALL setDistanceBottom( float _distancebottom ) override;
+    virtual float SAL_CALL getDistanceLeft() override;
+    virtual void SAL_CALL setDistanceLeft( float _distanceleft ) override;
+    virtual float SAL_CALL getDistanceRight() override;
+    virtual void SAL_CALL setDistanceRight( float _distanceright ) override;
 
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

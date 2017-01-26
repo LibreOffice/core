@@ -257,7 +257,7 @@ bool FmFieldWin::PreNotify( NotifyEvent& _rNEvt )
 }
 
 
-void FmFieldWin::_propertyChanged(const css::beans::PropertyChangeEvent& evt) throw( css::uno::RuntimeException, std::exception )
+void FmFieldWin::_propertyChanged(const css::beans::PropertyChangeEvent& evt)
 {
     css::uno::Reference< css::form::XForm >  xForm(evt.Source, css::uno::UNO_QUERY);
     UpdateContent(xForm);

@@ -43,13 +43,9 @@ class Enumeration
 public:
     explicit Enumeration( css::container::XIndexAccess* );
 
-    virtual sal_Bool SAL_CALL hasMoreElements()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL hasMoreElements() override;
 
-    virtual css::uno::Any SAL_CALL nextElement()
-        throw( css::container::NoSuchElementException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL nextElement() override;
 };
 
 #endif

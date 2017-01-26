@@ -94,17 +94,15 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
     // Creating a SdrObject using it's Description.
     // Can be used by derived classes to support their owen Shapes (e.g. Controls).
     /// @throws css::uno::RuntimeException
-    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape )
-        throw (css::uno::RuntimeException, std::exception);
+    virtual SdrObject *CreateSdrObject_( const css::uno::Reference< css::drawing::XShape >& xShape );
 
     /// @throws css::uno::RuntimeException
-    static SvxShape* CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *pPage = nullptr, OUString const & referer = OUString() ) throw (css::uno::RuntimeException);
+    static SvxShape* CreateShapeByTypeAndInventor( sal_uInt16 nType, SdrInventor nInventor, SdrObject *pObj, SvxDrawPage *pPage = nullptr, OUString const & referer = OUString() );
 
     // The following method is called if a SvxShape object is to be created.
     // Derived classes can create a derivation or an SvxShape aggregating object.
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Reference< css::drawing::XShape > CreateShape( SdrObject *pObj ) const
-        throw (css::uno::RuntimeException, std::exception);
+    virtual css::uno::Reference< css::drawing::XShape > CreateShape( SdrObject *pObj ) const;
 
     UNO3_GETIMPLEMENTATION_DECL( SvxDrawPage )
 
@@ -112,36 +110,34 @@ class SVX_DLLPUBLIC SvxDrawPage : public ::cppu::WeakAggImplHelper6< css::drawin
     virtual void SAL_CALL release() throw() override;
 
     // XShapes
-    virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape )
-        throw (css::uno::RuntimeException,
-               std::exception) override;
+    virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XShapes2
-    virtual void SAL_CALL addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addTop( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void SAL_CALL addBottom( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() override ;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XShapeGrouper
-    virtual css::uno::Reference< css::drawing::XShapeGroup > SAL_CALL group( const css::uno::Reference< css::drawing::XShapes >& xShapes ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL ungroup( const css::uno::Reference< css::drawing::XShapeGroup >& aGroup ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::drawing::XShapeGroup > SAL_CALL group( const css::uno::Reference< css::drawing::XShapes >& xShapes ) override;
+    virtual void SAL_CALL ungroup( const css::uno::Reference< css::drawing::XShapeGroup >& aGroup ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 };
 
 #endif

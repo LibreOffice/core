@@ -71,7 +71,7 @@ void KabConnection::construct()
 }
 // XServiceInfo
 
-Reference< XStatement > SAL_CALL KabConnection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XStatement > SAL_CALL KabConnection::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -83,7 +83,7 @@ Reference< XStatement > SAL_CALL KabConnection::createStatement(  ) throw(SQLExc
     return xReturn;
 }
 
-Reference< XPreparedStatement > SAL_CALL KabConnection::prepareStatement( const OUString& _sSql ) throw(SQLException, RuntimeException, std::exception)
+Reference< XPreparedStatement > SAL_CALL KabConnection::prepareStatement( const OUString& _sSql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -95,7 +95,7 @@ Reference< XPreparedStatement > SAL_CALL KabConnection::prepareStatement( const 
     return xReturn;
 }
 
-Reference< XPreparedStatement > SAL_CALL KabConnection::prepareCall( const OUString& ) throw(SQLException, RuntimeException, std::exception)
+Reference< XPreparedStatement > SAL_CALL KabConnection::prepareCall( const OUString& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -104,7 +104,7 @@ Reference< XPreparedStatement > SAL_CALL KabConnection::prepareCall( const OUStr
     return nullptr;
 }
 
-OUString SAL_CALL KabConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL KabConnection::nativeSQL( const OUString& _sSql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     // when you need to transform SQL92 to you driver specific you can do it here
@@ -112,14 +112,14 @@ OUString SAL_CALL KabConnection::nativeSQL( const OUString& _sSql ) throw(SQLExc
     return _sSql;
 }
 
-void SAL_CALL KabConnection::setAutoCommit( sal_Bool ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::setAutoCommit( sal_Bool )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
     // here you  have to set your commit mode please have a look at the jdbc documentation to get a clear explanation
 }
 
-sal_Bool SAL_CALL KabConnection::getAutoCommit(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabConnection::getAutoCommit(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -129,7 +129,7 @@ sal_Bool SAL_CALL KabConnection::getAutoCommit(  ) throw(SQLException, RuntimeEx
     return true;
 }
 
-void SAL_CALL KabConnection::commit(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::commit(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -137,7 +137,7 @@ void SAL_CALL KabConnection::commit(  ) throw(SQLException, RuntimeException, st
     // when you database does support transactions you should commit here
 }
 
-void SAL_CALL KabConnection::rollback(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::rollback(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -145,7 +145,7 @@ void SAL_CALL KabConnection::rollback(  ) throw(SQLException, RuntimeException, 
     // same as commit but for the other case
 }
 
-sal_Bool SAL_CALL KabConnection::isClosed(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabConnection::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -153,7 +153,7 @@ sal_Bool SAL_CALL KabConnection::isClosed(  ) throw(SQLException, RuntimeExcepti
     return KabConnection_BASE::rBHelper.bDisposed;
 }
 
-Reference< XDatabaseMetaData > SAL_CALL KabConnection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XDatabaseMetaData > SAL_CALL KabConnection::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -170,7 +170,7 @@ Reference< XDatabaseMetaData > SAL_CALL KabConnection::getMetaData(  ) throw(SQL
     return xMetaData;
 }
 
-void SAL_CALL KabConnection::setReadOnly( sal_Bool ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::setReadOnly( sal_Bool )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -178,7 +178,7 @@ void SAL_CALL KabConnection::setReadOnly( sal_Bool ) throw(SQLException, Runtime
     // set you connection to readonly
 }
 
-sal_Bool SAL_CALL KabConnection::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabConnection::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -187,7 +187,7 @@ sal_Bool SAL_CALL KabConnection::isReadOnly(  ) throw(SQLException, RuntimeExcep
     return false;
 }
 
-void SAL_CALL KabConnection::setCatalog( const OUString& ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::setCatalog( const OUString& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -195,7 +195,7 @@ void SAL_CALL KabConnection::setCatalog( const OUString& ) throw(SQLException, R
     // if your database doesn't work with catalogs you go to next method otherwise you know what to do
 }
 
-OUString SAL_CALL KabConnection::getCatalog(  ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL KabConnection::getCatalog(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -205,7 +205,7 @@ OUString SAL_CALL KabConnection::getCatalog(  ) throw(SQLException, RuntimeExcep
     return OUString();
 }
 
-void SAL_CALL KabConnection::setTransactionIsolation( sal_Int32 ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::setTransactionIsolation( sal_Int32 )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -214,7 +214,7 @@ void SAL_CALL KabConnection::setTransactionIsolation( sal_Int32 ) throw(SQLExcep
     // please have a look at @see com.sun.star.sdbc.TransactionIsolation
 }
 
-sal_Int32 SAL_CALL KabConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabConnection::getTransactionIsolation(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -224,7 +224,7 @@ sal_Int32 SAL_CALL KabConnection::getTransactionIsolation(  ) throw(SQLException
     return TransactionIsolation::NONE;
 }
 
-Reference< css::container::XNameAccess > SAL_CALL KabConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL KabConnection::getTypeMap(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabConnection_BASE::rBHelper.bDisposed);
@@ -234,13 +234,13 @@ Reference< css::container::XNameAccess > SAL_CALL KabConnection::getTypeMap(  ) 
     return nullptr;
 }
 
-void SAL_CALL KabConnection::setTypeMap( const Reference< css::container::XNameAccess >& ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::setTypeMap( const Reference< css::container::XNameAccess >& )
 {
     // the other way around
 }
 
 // XCloseable
-void SAL_CALL KabConnection::close(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::close(  )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -250,13 +250,13 @@ void SAL_CALL KabConnection::close(  ) throw(SQLException, RuntimeException, std
 }
 
 // XWarningsSupplier
-Any SAL_CALL KabConnection::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL KabConnection::getWarnings(  )
 {
     // when you collected some warnings -> return it
     return Any();
 }
 
-void SAL_CALL KabConnection::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabConnection::clearWarnings(  )
 {
     // you should clear your collected warnings here
 }

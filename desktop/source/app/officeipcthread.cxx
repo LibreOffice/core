@@ -318,19 +318,17 @@ oslSignalAction SAL_CALL SalMainPipeExchangeSignal_impl(void* /*pData*/, oslSign
 
 // XServiceInfo
 OUString SAL_CALL RequestHandlerController::getImplementationName()
-throw ( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.RequestHandlerController" );
 }
 
 sal_Bool RequestHandlerController::supportsService(
-    OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
+    OUString const & ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL RequestHandlerController::getSupportedServiceNames()
-throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > aSeq( 0 );
     return aSeq;
@@ -338,13 +336,11 @@ throw ( RuntimeException, std::exception )
 
 // XEventListener
 void SAL_CALL RequestHandlerController::disposing( const EventObject& )
-throw( RuntimeException, std::exception )
 {
 }
 
 // XTerminateListener
 void SAL_CALL RequestHandlerController::queryTermination( const EventObject& )
-throw( TerminationVetoException, RuntimeException, std::exception )
 {
     // Desktop ask about pending request through our office ipc pipe. We have to
     // be sure that no pending request is waiting because framework is not able to
@@ -357,7 +353,6 @@ throw( TerminationVetoException, RuntimeException, std::exception )
 }
 
 void SAL_CALL RequestHandlerController::notifyTermination( const EventObject& )
-throw( RuntimeException, std::exception )
 {
 }
 

@@ -120,11 +120,11 @@ public:
 
 private:
     // FmXChangeListener
-    virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void _propertyChanged(const css::beans::PropertyChangeEvent& evt) override;
     // OContainerListener
-    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) override;
+    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) override;
+    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) override;
 };
 
 } // rptui

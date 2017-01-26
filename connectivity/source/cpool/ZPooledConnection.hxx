@@ -49,10 +49,10 @@ namespace connectivity
                           const css::uno::Reference< css::reflection::XProxyFactory >& _rxProxyFactory);
 
         //XPooledConnection
-        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
     };
 
 }

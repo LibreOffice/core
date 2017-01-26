@@ -492,13 +492,13 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER3( SvtRemoteFilePicker, SvtFilePicker, OCommonPic
 // XExecutableDialog functions
 
 
-void SAL_CALL SvtFilePicker::setTitle( const OUString& _rTitle ) throw (RuntimeException, std::exception)
+void SAL_CALL SvtFilePicker::setTitle( const OUString& _rTitle )
 {
     OCommonPicker::setTitle( _rTitle );
 }
 
 
-sal_Int16 SAL_CALL SvtFilePicker::execute(  ) throw (RuntimeException, std::exception)
+sal_Int16 SAL_CALL SvtFilePicker::execute(  )
 {
     return OCommonPicker::execute();
 }
@@ -507,15 +507,13 @@ sal_Int16 SAL_CALL SvtFilePicker::execute(  ) throw (RuntimeException, std::exce
 // XAsynchronousExecutableDialog functions
 
 
-void SAL_CALL SvtFilePicker::setDialogTitle( const OUString& _rTitle ) throw (RuntimeException, std::exception)
+void SAL_CALL SvtFilePicker::setDialogTitle( const OUString& _rTitle )
 {
     setTitle( _rTitle );
 }
 
 
 void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< css::ui::dialogs::XDialogClosedListener >& xListener )
-    throw (RuntimeException,
-           std::exception)
 {
     m_xDlgClosedListener = xListener;
     prepareDialog();
@@ -528,7 +526,7 @@ void SAL_CALL SvtFilePicker::startExecuteModal( const Reference< css::ui::dialog
 // XFilePicker functions
 
 
-void SAL_CALL SvtFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( RuntimeException, std::exception )
+void SAL_CALL SvtFilePicker::setMultiSelectionMode( sal_Bool bMode )
 {
     checkAlive();
 
@@ -536,7 +534,7 @@ void SAL_CALL SvtFilePicker::setMultiSelectionMode( sal_Bool bMode ) throw( Runt
     m_bMultiSelection = bMode;
 }
 
-void SAL_CALL SvtFilePicker::setDefaultName( const OUString& aName ) throw( RuntimeException, std::exception )
+void SAL_CALL SvtFilePicker::setDefaultName( const OUString& aName )
 {
     checkAlive();
 
@@ -545,7 +543,6 @@ void SAL_CALL SvtFilePicker::setDefaultName( const OUString& aName ) throw( Runt
 }
 
 void SAL_CALL SvtFilePicker::setDisplayDirectory( const OUString& aDirectory )
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -553,7 +550,7 @@ void SAL_CALL SvtFilePicker::setDisplayDirectory( const OUString& aDirectory )
     m_aDisplayDirectory = aDirectory;
 }
 
-OUString SAL_CALL SvtFilePicker::getDisplayDirectory() throw( RuntimeException, std::exception )
+OUString SAL_CALL SvtFilePicker::getDisplayDirectory()
 {
     checkAlive();
 
@@ -579,7 +576,7 @@ OUString SAL_CALL SvtFilePicker::getDisplayDirectory() throw( RuntimeException, 
         return m_aDisplayDirectory;
 }
 
-Sequence< OUString > SAL_CALL SvtFilePicker::getSelectedFiles() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SvtFilePicker::getSelectedFiles()
 {
     checkAlive();
 
@@ -603,7 +600,7 @@ Sequence< OUString > SAL_CALL SvtFilePicker::getSelectedFiles() throw( RuntimeEx
     return aFiles;
 }
 
-Sequence< OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SvtFilePicker::getFiles()
 {
     Sequence< OUString > aFiles = getSelectedFiles();
     if (aFiles.getLength() > 1)
@@ -618,7 +615,6 @@ Sequence< OUString > SAL_CALL SvtFilePicker::getFiles() throw( RuntimeException,
 void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
                                        sal_Int16 nControlAction,
                                        const Any& rValue )
-    throw( RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -661,7 +657,6 @@ void SAL_CALL SvtFilePicker::setValue( sal_Int16 nElementID,
 
 
 Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAction )
-    throw( RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -696,7 +691,6 @@ Any SAL_CALL SvtFilePicker::getValue( sal_Int16 nElementID, sal_Int16 nControlAc
 
 
 void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValue )
-    throw ( RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -736,7 +730,6 @@ void SAL_CALL SvtFilePicker::setLabel( sal_Int16 nLabelID, const OUString& rValu
 
 
 OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
-    throw ( RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -769,7 +762,6 @@ OUString SAL_CALL SvtFilePicker::getLabel( sal_Int16 nLabelID )
 
 
 void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, sal_Bool bEnable )
-    throw( RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -811,7 +803,7 @@ void SAL_CALL SvtFilePicker::enableControl( sal_Int16 nElementID, sal_Bool bEnab
 // XFilePickerNotifier functions
 
 
-void SAL_CALL SvtFilePicker::addFilePickerListener( const Reference< XFilePickerListener >& xListener ) throw ( RuntimeException, std::exception )
+void SAL_CALL SvtFilePicker::addFilePickerListener( const Reference< XFilePickerListener >& xListener )
 {
     checkAlive();
 
@@ -820,7 +812,7 @@ void SAL_CALL SvtFilePicker::addFilePickerListener( const Reference< XFilePicker
 }
 
 
-void SAL_CALL SvtFilePicker::removeFilePickerListener( const Reference< XFilePickerListener >& ) throw ( RuntimeException, std::exception )
+void SAL_CALL SvtFilePicker::removeFilePickerListener( const Reference< XFilePickerListener >& )
 {
     checkAlive();
 
@@ -833,7 +825,6 @@ void SAL_CALL SvtFilePicker::removeFilePickerListener( const Reference< XFilePic
 
 
 Sequence< sal_Int16 > SAL_CALL SvtFilePicker::getSupportedImageFormats()
-    throw ( RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -846,7 +837,7 @@ Sequence< sal_Int16 > SAL_CALL SvtFilePicker::getSupportedImageFormats()
 }
 
 
-sal_Int32 SAL_CALL SvtFilePicker::getTargetColorDepth() throw ( RuntimeException, std::exception )
+sal_Int32 SAL_CALL SvtFilePicker::getTargetColorDepth()
 {
     checkAlive();
 
@@ -860,7 +851,7 @@ sal_Int32 SAL_CALL SvtFilePicker::getTargetColorDepth() throw ( RuntimeException
 }
 
 
-sal_Int32 SAL_CALL SvtFilePicker::getAvailableWidth() throw ( RuntimeException, std::exception )
+sal_Int32 SAL_CALL SvtFilePicker::getAvailableWidth()
 {
     checkAlive();
 
@@ -874,7 +865,7 @@ sal_Int32 SAL_CALL SvtFilePicker::getAvailableWidth() throw ( RuntimeException, 
 }
 
 
-sal_Int32 SAL_CALL SvtFilePicker::getAvailableHeight() throw ( RuntimeException, std::exception )
+sal_Int32 SAL_CALL SvtFilePicker::getAvailableHeight()
 {
     checkAlive();
 
@@ -889,7 +880,6 @@ sal_Int32 SAL_CALL SvtFilePicker::getAvailableHeight() throw ( RuntimeException,
 
 
 void SAL_CALL SvtFilePicker::setImage( sal_Int16 aImageFormat, const Any& rImage )
-    throw ( IllegalArgumentException, RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -900,7 +890,6 @@ void SAL_CALL SvtFilePicker::setImage( sal_Int16 aImageFormat, const Any& rImage
 
 
 sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool )
-    throw ( RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -928,7 +917,7 @@ sal_Bool SAL_CALL SvtFilePicker::setShowState( sal_Bool )
 }
 
 
-sal_Bool SAL_CALL SvtFilePicker::getShowState() throw ( RuntimeException, std::exception )
+sal_Bool SAL_CALL SvtFilePicker::getShowState()
 {
     checkAlive();
 
@@ -947,7 +936,6 @@ sal_Bool SAL_CALL SvtFilePicker::getShowState() throw ( RuntimeException, std::e
 
 void SAL_CALL SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
                                                 const Sequence< StringPair >& aFilters )
-    throw ( IllegalArgumentException, RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -975,7 +963,6 @@ void SAL_CALL SvtFilePicker::appendFilterGroup( const OUString& sGroupTitle,
 
 void SAL_CALL SvtFilePicker::appendFilter( const OUString& aTitle,
                                            const OUString& aFilter )
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -994,7 +981,6 @@ void SAL_CALL SvtFilePicker::appendFilter( const OUString& aTitle,
 
 
 void SAL_CALL SvtFilePicker::setCurrentFilter( const OUString& aTitle )
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -1010,7 +996,6 @@ void SAL_CALL SvtFilePicker::setCurrentFilter( const OUString& aTitle )
 
 
 OUString SAL_CALL SvtFilePicker::getCurrentFilter()
-    throw( RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -1025,7 +1010,6 @@ OUString SAL_CALL SvtFilePicker::getCurrentFilter()
 
 
 void SAL_CALL SvtFilePicker::initialize( const Sequence< Any >& _rArguments )
-    throw ( Exception, RuntimeException, std::exception )
 {
     checkAlive();
 
@@ -1108,19 +1092,19 @@ bool SvtFilePicker::implHandleInitializationArgument( const OUString& _rName, co
 
 
 /* XServiceInfo */
-OUString SAL_CALL SvtFilePicker::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL SvtFilePicker::getImplementationName()
 {
     return impl_getStaticImplementationName();
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SvtFilePicker::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SvtFilePicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SvtFilePicker::getSupportedServiceNames()
 {
     return impl_getStaticSupportedServiceNames();
 }
@@ -1140,7 +1124,7 @@ OUString SvtFilePicker::impl_getStaticImplementationName()
 
 /* Helper for registry */
 Reference< XInterface > SAL_CALL SvtFilePicker::impl_createInstance(
-    const Reference< XComponentContext >& ) throw( Exception )
+    const Reference< XComponentContext >& )
 {
     return Reference< XInterface >( *new SvtFilePicker );
 }
@@ -1172,19 +1156,19 @@ VclPtr<SvtFileDialog_Base> SvtRemoteFilePicker::implCreateDialog( vcl::Window* _
 
 
 /* XServiceInfo */
-OUString SAL_CALL SvtRemoteFilePicker::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL SvtRemoteFilePicker::getImplementationName()
 {
     return impl_getStaticImplementationName();
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SvtRemoteFilePicker::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SvtRemoteFilePicker::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SvtRemoteFilePicker::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SvtRemoteFilePicker::getSupportedServiceNames()
 {
     return impl_getStaticSupportedServiceNames();
 }
@@ -1204,7 +1188,7 @@ OUString SvtRemoteFilePicker::impl_getStaticImplementationName()
 
 /* Helper for registry */
 Reference< XInterface > SAL_CALL SvtRemoteFilePicker::impl_createInstance(
-    const Reference< XComponentContext >& ) throw( Exception )
+    const Reference< XComponentContext >& )
 {
     return Reference< XInterface >( *new SvtRemoteFilePicker );
 }

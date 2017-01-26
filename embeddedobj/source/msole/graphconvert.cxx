@@ -102,7 +102,7 @@ MainThreadNotificationRequest::MainThreadNotificationRequest( const ::rtl::Refer
 , m_nAspect( nAspect )
 {}
 
-void SAL_CALL MainThreadNotificationRequest::notify (const uno::Any& ) throw (uno::RuntimeException)
+void SAL_CALL MainThreadNotificationRequest::notify (const uno::Any& )
 {
     if ( m_pObject )
     {

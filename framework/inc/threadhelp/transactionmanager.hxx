@@ -110,10 +110,10 @@ class FWI_DLLPUBLIC TransactionManager
         EWorkingMode       getWorkingMode               (                                              ) const;
         /// @throws css::uno::RuntimeException
         /// @throws css::lang::DisposedException
-        void               registerTransaction          ( EExceptionMode eMode ) throw( css::uno::RuntimeException, css::lang::DisposedException );
+        void               registerTransaction          ( EExceptionMode eMode );
         /// @throws css::uno::RuntimeException
         /// @throws css::lang::DisposedException
-        void               unregisterTransaction        (                                              ) throw( css::uno::RuntimeException, css::lang::DisposedException );
+        void               unregisterTransaction        (                                              );
 
     private:
 

@@ -727,7 +727,7 @@ void SAL_CALL ODbaseTable::disposing()
     m_aColumns = nullptr;
 }
 
-Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL ODbaseTable::getTypes(  )
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     ::std::vector<Type> aOwnTypes;
@@ -748,7 +748,7 @@ Sequence< Type > SAL_CALL ODbaseTable::getTypes(  ) throw(RuntimeException, std:
 }
 
 
-Any SAL_CALL ODbaseTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL ODbaseTable::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XKeysSupplier>::get()||
         rType == cppu::UnoType<XDataDescriptorFactory>::get())
@@ -776,7 +776,7 @@ Sequence< sal_Int8 > ODbaseTable::getUnoTunnelImplementationId()
 
 // css::lang::XUnoTunnel
 
-sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
+sal_Int64 ODbaseTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
@@ -2146,7 +2146,7 @@ bool ODbaseTable::WriteMemo(const ORowSetValue& aVariable, std::size_t& rBlockNr
 
 
 // XAlterTable
-void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException, std::exception)
+void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -2165,7 +2165,7 @@ void SAL_CALL ODbaseTable::alterColumnByName( const OUString& colName, const Ref
     }
 }
 
-void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
+void SAL_CALL ODbaseTable::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -2301,7 +2301,7 @@ Reference< XDatabaseMetaData> ODbaseTable::getMetaData() const
     return getConnection()->getMetaData();
 }
 
-void SAL_CALL ODbaseTable::rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception)
+void SAL_CALL ODbaseTable::rename( const OUString& newName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -2357,7 +2357,7 @@ namespace
     }
 }
 
-void SAL_CALL ODbaseTable::renameImpl( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception)
+void SAL_CALL ODbaseTable::renameImpl( const OUString& newName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 

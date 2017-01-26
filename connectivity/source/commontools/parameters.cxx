@@ -1096,7 +1096,7 @@ namespace dbtools
             m_xInnerParamUpdate->clearParameters( );
     }
 
-    void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw( RuntimeException, std::exception )
+    void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues )
     {
         m_aValues = _rValues;
     }

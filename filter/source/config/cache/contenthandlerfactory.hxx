@@ -66,17 +66,12 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
 
         // XMultiServiceFactory
 
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sHandler)
-            throw(css::uno::Exception       ,
-                  css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance(const OUString& sHandler) override;
 
         virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(const OUString&                     sHandler  ,
-                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments)
-            throw(css::uno::Exception       ,
-                  css::uno::RuntimeException, std::exception) override;
+                                                                                                 const css::uno::Sequence< css::uno::Any >& lArguments) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames()
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
 
     // static uno helper!
@@ -122,21 +117,21 @@ class ContentHandlerFactory : public ::cppu::ImplInheritanceHelper< BaseContaine
 
 
       // Overrides to resolve ambiguity
-      virtual css::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
+      virtual css::uno::Any SAL_CALL getByName( const ::rtl::OUString& aName ) override
         { return BaseContainer::getByName(aName); }
-      virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() throw (css::uno::RuntimeException, std::exception) override
+      virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getElementNames() override
         { return BaseContainer::getElementNames(); }
-      virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) throw (css::uno::RuntimeException, std::exception) override
+      virtual sal_Bool SAL_CALL hasByName( const ::rtl::OUString& aName ) override
         { return BaseContainer::hasByName(aName); }
 
-      virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override
+      virtual css::uno::Type SAL_CALL getElementType() override
         { return BaseContainer::getElementType(); }
-      virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) override
+      virtual sal_Bool SAL_CALL hasElements() override
         { return BaseContainer::hasElements(); }
 
-      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const ::rtl::OUString& Query ) throw (css::uno::RuntimeException, std::exception) override
+      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery( const ::rtl::OUString& Query ) override
         { return BaseContainer::createSubSetEnumerationByQuery(Query); }
-      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties( const css::uno::Sequence< css::beans::NamedValue >& Properties ) throw (css::uno::RuntimeException, std::exception) override
+      virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties( const css::uno::Sequence< css::beans::NamedValue >& Properties ) override
         { return BaseContainer::createSubSetEnumerationByProperties(Properties); }
 
 

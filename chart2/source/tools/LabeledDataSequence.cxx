@@ -66,14 +66,12 @@ LabeledDataSequence::~LabeledDataSequence()
 
 // ____ XLabeledDataSequence ____
 uno::Reference< chart2::data::XDataSequence > SAL_CALL LabeledDataSequence::getValues()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_xData;
 }
 
 void SAL_CALL LabeledDataSequence::setValues(
     const uno::Reference< chart2::data::XDataSequence >& xSequence )
-    throw (uno::RuntimeException, std::exception)
 {
     if( m_xData != xSequence )
     {
@@ -84,14 +82,12 @@ void SAL_CALL LabeledDataSequence::setValues(
 }
 
 uno::Reference< chart2::data::XDataSequence > SAL_CALL LabeledDataSequence::getLabel()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_xLabel;
 }
 
 void SAL_CALL LabeledDataSequence::setLabel(
     const uno::Reference< chart2::data::XDataSequence >& xSequence )
-    throw (uno::RuntimeException, std::exception)
 {
     if( m_xLabel != xSequence )
     {
@@ -103,7 +99,6 @@ void SAL_CALL LabeledDataSequence::setLabel(
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL LabeledDataSequence::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< chart2::data::XDataSequence > xNewValues( m_xData );
     uno::Reference< chart2::data::XDataSequence > xNewLabel( m_xLabel );
@@ -122,7 +117,6 @@ uno::Reference< util::XCloneable > SAL_CALL LabeledDataSequence::createClone()
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL LabeledDataSequence::addModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -136,7 +130,6 @@ void SAL_CALL LabeledDataSequence::addModifyListener( const Reference< util::XMo
 }
 
 void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -150,19 +143,16 @@ void SAL_CALL LabeledDataSequence::removeModifyListener( const Reference< util::
 }
 
 OUString SAL_CALL LabeledDataSequence::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart2.LabeledDataSequence");
 }
 
 sal_Bool SAL_CALL LabeledDataSequence::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL LabeledDataSequence::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.chart2.data.LabeledDataSequence" };
 }

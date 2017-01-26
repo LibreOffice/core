@@ -107,40 +107,32 @@ class ConfigurationAccess_WindowState : public  ::cppu::WeakImplHelper< XNameCon
         virtual                   ~ConfigurationAccess_WindowState() override;
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XNameContainer
-        virtual void SAL_CALL removeByName( const OUString& sName )
-            throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL removeByName( const OUString& sName ) override;
 
-        virtual void SAL_CALL insertByName( const OUString& sName, const css::uno::Any&   aPropertySet )
-            throw(css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL insertByName( const OUString& sName, const css::uno::Any&   aPropertySet ) override;
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& sName, const css::uno::Any& aPropertySet )
-            throw(css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL replaceByName( const OUString& sName, const css::uno::Any& aPropertySet ) override;
 
         // XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType() override;
 
-        virtual sal_Bool SAL_CALL hasElements()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasElements() override;
 
         // container.XContainerListener
-        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
-        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
-        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) override;
+        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) override;
+        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) override;
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const EventObject& aEvent ) override;
 
     protected:
         enum WindowStateMask
@@ -251,7 +243,6 @@ ConfigurationAccess_WindowState::~ConfigurationAccess_WindowState()
 
 // XNameAccess
 Any SAL_CALL ConfigurationAccess_WindowState::getByName( const OUString& rResourceURL )
-throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     // SAFE
     osl::MutexGuard g(m_aMutex);
@@ -270,7 +261,6 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::e
 }
 
 Sequence< OUString > SAL_CALL ConfigurationAccess_WindowState::getElementNames()
-throw ( RuntimeException, std::exception )
 {
     // SAFE
     osl::MutexGuard g(m_aMutex);
@@ -288,7 +278,6 @@ throw ( RuntimeException, std::exception )
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasByName( const OUString& rResourceURL )
-throw (css::uno::RuntimeException, std::exception)
 {
     // SAFE
     osl::MutexGuard g(m_aMutex);
@@ -308,13 +297,11 @@ throw (css::uno::RuntimeException, std::exception)
 
 // XElementAccess
 Type SAL_CALL ConfigurationAccess_WindowState::getElementType()
-throw ( RuntimeException, std::exception )
 {
     return( cppu::UnoType<Sequence< PropertyValue >>::get() );
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_WindowState::hasElements()
-throw ( RuntimeException, std::exception )
 {
     // SAFE
     osl::MutexGuard g(m_aMutex);
@@ -333,7 +320,6 @@ throw ( RuntimeException, std::exception )
 
 // XNameContainer
 void SAL_CALL ConfigurationAccess_WindowState::removeByName( const OUString& rResourceURL )
-throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
 {
     // SAFE
     osl::ResettableMutexGuard g(m_aMutex);
@@ -368,7 +354,6 @@ throw( NoSuchElementException, WrappedTargetException, RuntimeException, std::ex
 }
 
 void SAL_CALL ConfigurationAccess_WindowState::insertByName( const OUString& rResourceURL, const css::uno::Any& aPropertySet )
-throw( IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception )
 {
     // SAFE
     osl::ResettableMutexGuard g(m_aMutex);
@@ -433,7 +418,6 @@ throw( IllegalArgumentException, ElementExistException, WrappedTargetException, 
 
 // XNameReplace
 void SAL_CALL ConfigurationAccess_WindowState::replaceByName( const OUString& rResourceURL, const css::uno::Any& aPropertySet )
-throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
 {
     // SAFE
     osl::ResettableMutexGuard g(m_aMutex);
@@ -504,21 +488,21 @@ throw( IllegalArgumentException, NoSuchElementException, WrappedTargetException,
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_WindowState::elementInserted( const ContainerEvent& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_WindowState::elementInserted( const ContainerEvent& )
 {
     // do nothing - next time someone wants to retrieve this node we will find it in the configuration
 }
 
-void SAL_CALL ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_WindowState::elementRemoved ( const ContainerEvent& )
 {
 }
 
-void SAL_CALL ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_WindowState::elementReplaced( const ContainerEvent& )
 {
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_WindowState::disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_WindowState::disposing( const EventObject& aEvent )
 {
     // SAFE
     // remove our reference to the config access
@@ -1269,39 +1253,31 @@ public:
     explicit WindowStateConfiguration( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~WindowStateConfiguration() override;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.framework.WindowStateConfiguration");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.ui.WindowStateConfiguration"};
     }
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw ( css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     typedef std::unordered_map< OUString,
                                 OUString,
@@ -1372,7 +1348,6 @@ WindowStateConfiguration::~WindowStateConfiguration()
 }
 
 Any SAL_CALL WindowStateConfiguration::getByName( const OUString& aModuleIdentifier )
-throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
@@ -1404,7 +1379,6 @@ throw (css::container::NoSuchElementException, css::lang::WrappedTargetException
 }
 
 Sequence< OUString > SAL_CALL WindowStateConfiguration::getElementNames()
-throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
@@ -1412,7 +1386,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL WindowStateConfiguration::hasByName( const OUString& aName )
-throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(cppu::WeakComponentImplHelperBase::rBHelper.rMutex);
 
@@ -1422,13 +1395,11 @@ throw (css::uno::RuntimeException, std::exception)
 
 // XElementAccess
 Type SAL_CALL WindowStateConfiguration::getElementType()
-throw (css::uno::RuntimeException, std::exception)
 {
     return( cppu::UnoType<XNameAccess>::get());
 }
 
 sal_Bool SAL_CALL WindowStateConfiguration::hasElements()
-throw (css::uno::RuntimeException, std::exception)
 {
     // We always have at least one module. So it is valid to return true!
     return true;

@@ -137,31 +137,25 @@ class SubstitutePathVariables : private cppu::BaseMutex,
 public:
     explicit SubstitutePathVariables(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.framework.PathSubstitution");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.util.PathSubstitution"};
     }
 
     // XStringSubstitution
-    virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
-        throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable )
-        throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired ) override;
+    virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) override;
+    virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) override;
 
 protected:
     void            SetPredefinedPathVariables();
@@ -177,15 +171,12 @@ protected:
     // XStringSubstitution implementation methods
     /// @throws css::container::NoSuchElementException
     /// @throws css::uno::RuntimeException
-    OUString impl_substituteVariable( const OUString& aText, bool bSustRequired )
-        throw (css::container::NoSuchElementException, css::uno::RuntimeException);
+    OUString impl_substituteVariable( const OUString& aText, bool bSustRequired );
     /// @throws css::uno::RuntimeException
-    OUString impl_reSubstituteVariables( const OUString& aText )
-        throw (css::uno::RuntimeException);
+    OUString impl_reSubstituteVariables( const OUString& aText );
     /// @throws css::container::NoSuchElementException
     /// @throws css::uno::RuntimeException
-    OUString const & impl_getSubstituteVariableValue( const OUString& variable )
-        throw (css::container::NoSuchElementException, css::uno::RuntimeException);
+    OUString const & impl_getSubstituteVariableValue( const OUString& variable );
 
 private:
     typedef std::unordered_map<OUString, PreDefVariable, OUStringHash>
@@ -234,21 +225,18 @@ SubstitutePathVariables::SubstitutePathVariables( const Reference< XComponentCon
 
 // XStringSubstitution
 OUString SAL_CALL SubstitutePathVariables::substituteVariables( const OUString& aText, sal_Bool bSubstRequired )
-throw ( NoSuchElementException, RuntimeException, std::exception )
 {
     osl::MutexGuard g(rBHelper.rMutex);
     return impl_substituteVariable( aText, bSubstRequired );
 }
 
 OUString SAL_CALL SubstitutePathVariables::reSubstituteVariables( const OUString& aText )
-throw ( RuntimeException, std::exception )
 {
     osl::MutexGuard g(rBHelper.rMutex);
     return impl_reSubstituteVariables( aText );
 }
 
 OUString SAL_CALL SubstitutePathVariables::getSubstituteVariableValue( const OUString& aVariable )
-throw ( NoSuchElementException, RuntimeException, std::exception )
 {
     osl::MutexGuard g(rBHelper.rMutex);
     return impl_getSubstituteVariableValue( aVariable );
@@ -326,7 +314,6 @@ OUString SubstitutePathVariables::GetPathVariableValue() const
 }
 
 OUString SubstitutePathVariables::impl_substituteVariable( const OUString& rText, bool bSubstRequired )
-throw ( NoSuchElementException, RuntimeException )
 {
     // This is maximal recursive depth supported!
     const sal_Int32 nMaxRecursiveDepth = 8;
@@ -513,7 +500,6 @@ throw ( NoSuchElementException, RuntimeException )
 }
 
 OUString SubstitutePathVariables::impl_reSubstituteVariables( const OUString& rURL )
-throw ( RuntimeException )
 {
     OUString aURL;
 
@@ -594,7 +580,6 @@ throw ( RuntimeException )
 
 // This method support both request schemes "$("<varname>")" or "<varname>".
 OUString const & SubstitutePathVariables::impl_getSubstituteVariableValue( const OUString& rVariable )
-throw ( NoSuchElementException, RuntimeException )
 {
     OUString aVariable;
 

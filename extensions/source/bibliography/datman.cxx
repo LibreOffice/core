@@ -555,7 +555,7 @@ void BibInterceptorHelper::ReleaseInterceptor()
 }
 
 css::uno::Reference< css::frame::XDispatch > SAL_CALL
-    BibInterceptorHelper::queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) throw (css::uno::RuntimeException, std::exception)
+    BibInterceptorHelper::queryDispatch( const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
 {
     Reference< XDispatch > xReturn;
 
@@ -570,7 +570,7 @@ css::uno::Reference< css::frame::XDispatch > SAL_CALL
 }
 
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
-    BibInterceptorHelper::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw (css::uno::RuntimeException, std::exception)
+    BibInterceptorHelper::queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts )
 {
     Sequence< Reference< XDispatch> > aReturn( aDescripts.getLength() );
     Reference< XDispatch >* pReturn = aReturn.getArray();
@@ -584,23 +584,23 @@ css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL
 
 // XDispatchProviderInterceptor
 css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
-    BibInterceptorHelper::getSlaveDispatchProvider(  ) throw (css::uno::RuntimeException, std::exception)
+    BibInterceptorHelper::getSlaveDispatchProvider(  )
 {
     return xSlaveDispatchProvider;
 }
 
-void SAL_CALL BibInterceptorHelper::setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL BibInterceptorHelper::setSlaveDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewSlaveDispatchProvider )
 {
     xSlaveDispatchProvider = xNewSlaveDispatchProvider;
 }
 
 css::uno::Reference< css::frame::XDispatchProvider > SAL_CALL
-    BibInterceptorHelper::getMasterDispatchProvider(  ) throw (css::uno::RuntimeException, std::exception)
+    BibInterceptorHelper::getMasterDispatchProvider(  )
 {
     return xMasterDispatchProvider;
 }
 
-void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL BibInterceptorHelper::setMasterDispatchProvider( const css::uno::Reference< css::frame::XDispatchProvider >& xNewMasterDispatchProvider )
 {
     xMasterDispatchProvider = xNewMasterDispatchProvider;
 }
@@ -1104,7 +1104,7 @@ void BibDataManager::setActiveDataTable(const OUString& rTable)
 }
 
 
-void SAL_CALL BibDataManager::load(  ) throw (RuntimeException, std::exception)
+void SAL_CALL BibDataManager::load(  )
 {
     if ( isLoaded() )
         // nothing to do
@@ -1123,7 +1123,7 @@ void SAL_CALL BibDataManager::load(  ) throw (RuntimeException, std::exception)
 }
 
 
-void SAL_CALL BibDataManager::unload(  ) throw (RuntimeException, std::exception)
+void SAL_CALL BibDataManager::unload(  )
 {
     if ( !isLoaded() )
         // nothing to do
@@ -1149,7 +1149,7 @@ void SAL_CALL BibDataManager::unload(  ) throw (RuntimeException, std::exception
 }
 
 
-void SAL_CALL BibDataManager::reload(  ) throw (RuntimeException, std::exception)
+void SAL_CALL BibDataManager::reload(  )
 {
     if ( !isLoaded() )
         // nothing to do
@@ -1174,7 +1174,7 @@ void SAL_CALL BibDataManager::reload(  ) throw (RuntimeException, std::exception
 }
 
 
-sal_Bool SAL_CALL BibDataManager::isLoaded(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL BibDataManager::isLoaded(  )
 {
     Reference< XLoadable >xFormAsLoadable( m_xForm, UNO_QUERY );
     DBG_ASSERT( xFormAsLoadable.is() || !m_xForm.is(), "BibDataManager::isLoaded: invalid form!");
@@ -1186,13 +1186,13 @@ sal_Bool SAL_CALL BibDataManager::isLoaded(  ) throw (RuntimeException, std::exc
 }
 
 
-void SAL_CALL BibDataManager::addLoadListener( const Reference< XLoadListener >& aListener ) throw (RuntimeException, std::exception)
+void SAL_CALL BibDataManager::addLoadListener( const Reference< XLoadListener >& aListener )
 {
     m_aLoadListeners.addInterface( aListener );
 }
 
 
-void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener >& aListener ) throw (RuntimeException, std::exception)
+void SAL_CALL BibDataManager::removeLoadListener( const Reference< XLoadListener >& aListener )
 {
     m_aLoadListeners.removeInterface( aListener );
 }
@@ -1412,13 +1412,13 @@ void SAL_CALL BibDataManager::disposing()
 }
 
 
-void BibDataManager::disposing( const EventObject& /*Source*/ ) throw( css::uno::RuntimeException, std::exception )
+void BibDataManager::disposing( const EventObject& /*Source*/ )
 {
     // not interested in
 }
 
 
-void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
+void BibDataManager::propertyChange(const beans::PropertyChangeEvent& evt)
 {
     try
     {

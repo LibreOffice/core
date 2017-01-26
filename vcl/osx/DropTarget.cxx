@@ -350,7 +350,6 @@ void SAL_CALL DropTarget::disposing()
 }
 
 void SAL_CALL DropTarget::initialize(const Sequence< Any >& aArguments)
-    throw(Exception, std::exception)
 {
     if (aArguments.getLength() < 2)
     {
@@ -387,59 +386,57 @@ SAL_WNODEPRECATED_DECLARATIONS_POP
 }
 
 void SAL_CALL DropTarget::addDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
-    throw(RuntimeException, std::exception)
 {
     rBHelper.addListener(cppu::UnoType<decltype(dtl)>::get(), dtl);
 }
 
 void SAL_CALL DropTarget::removeDropTargetListener(const uno::Reference<XDropTargetListener>& dtl)
-    throw(RuntimeException, std::exception)
 {
     rBHelper.removeListener(cppu::UnoType<decltype(dtl)>::get(), dtl);
 }
 
-sal_Bool SAL_CALL DropTarget::isActive(  ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL DropTarget::isActive(  )
 {
     return mbActive;
 }
 
-void SAL_CALL DropTarget::setActive(sal_Bool active) throw(RuntimeException, std::exception)
+void SAL_CALL DropTarget::setActive(sal_Bool active)
 {
     mbActive = active;
 }
 
-sal_Int8 SAL_CALL DropTarget::getDefaultActions() throw(RuntimeException, std::exception)
+sal_Int8 SAL_CALL DropTarget::getDefaultActions()
 {
     return mDefaultActions;
 }
 
-void SAL_CALL DropTarget::setDefaultActions(sal_Int8 actions) throw(RuntimeException, std::exception)
+void SAL_CALL DropTarget::setDefaultActions(sal_Int8 actions)
 {
     OSL_ENSURE( actions < 8, "No valid default actions");
     mDefaultActions= actions;
 }
 
-void SAL_CALL DropTarget::acceptDrag(sal_Int8 dragOperation) throw (RuntimeException, std::exception)
+void SAL_CALL DropTarget::acceptDrag(sal_Int8 dragOperation)
 {
     mSelectedDropAction = dragOperation;
 }
 
-void SAL_CALL DropTarget::rejectDrag() throw (RuntimeException, std::exception)
+void SAL_CALL DropTarget::rejectDrag()
 {
     mSelectedDropAction = DNDConstants::ACTION_NONE;
 }
 
-void SAL_CALL DropTarget::acceptDrop(sal_Int8 dropOperation) throw( RuntimeException, std::exception)
+void SAL_CALL DropTarget::acceptDrop(sal_Int8 dropOperation)
 {
     mSelectedDropAction = dropOperation;
 }
 
-void SAL_CALL DropTarget::rejectDrop() throw (RuntimeException, std::exception)
+void SAL_CALL DropTarget::rejectDrop()
 {
     mSelectedDropAction = DNDConstants::ACTION_NONE;
 }
 
-void SAL_CALL DropTarget::dropComplete(sal_Bool success) throw (RuntimeException, std::exception)
+void SAL_CALL DropTarget::dropComplete(sal_Bool success)
 {
     // Reset the internal transferable used as shortcut in case this is
     // an internal D&D operation
@@ -529,17 +526,17 @@ void DropTarget::fire_dropActionChanged(const DropTargetDragEvent& dtde)
     }
 }
 
-OUString SAL_CALL DropTarget::getImplementationName() throw (RuntimeException, std::exception)
+OUString SAL_CALL DropTarget::getImplementationName()
 {
     return dropTarget_getImplementationName();
 }
 
-sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  )
 {
     return dropTarget_getSupportedServiceNames();
 }

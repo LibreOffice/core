@@ -120,19 +120,15 @@ public:
     virtual ~SwXMLImport() throw() override;
 
     // css::xml::sax::XDocumentHandler
-    virtual void SAL_CALL startDocument()
-        throw (css::xml::sax::SAXException,
-               css::uno::RuntimeException,
-               std::exception) override;
-    virtual void SAL_CALL endDocument()
-        throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL startDocument() override;
+    virtual void SAL_CALL endDocument() override;
 
     // XUnoTunnel
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     void                    InsertStyles( bool bAuto );
     void                    FinishStyles();

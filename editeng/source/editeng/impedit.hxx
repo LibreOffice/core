@@ -261,20 +261,12 @@ private:
 protected:
 
     // DragAndDropClient
-    void dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& dge)
-        throw (css::uno::RuntimeException,
-               std::exception) override;
-    void dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde )
-        throw (css::uno::RuntimeException,
-               std::exception) override;
-    void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
-        throw (css::uno::RuntimeException,
-               std::exception) override;
-    void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (css::uno::RuntimeException, std::exception) override;
-    void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) throw (css::uno::RuntimeException, std::exception) override;
-    void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde)
-        throw (css::uno::RuntimeException,
-               std::exception) override;
+    void dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& dge) override;
+    void dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde ) override;
+    void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde) override;
+    void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) override;
+    void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) override;
+    void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde) override;
 
     void ShowDDCursor( const Rectangle& rRect );
     void HideDDCursor();

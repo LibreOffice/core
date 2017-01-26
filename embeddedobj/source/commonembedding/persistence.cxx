@@ -928,11 +928,6 @@ void SAL_CALL OCommonEmbeddedObject::setPersistentEntry(
                     sal_Int32 nEntryConnectionMode,
                     const uno::Sequence< beans::PropertyValue >& lArguments,
                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // the type of the object must be already set
     // a kind of typedetection should be done in the factory
@@ -1154,11 +1149,6 @@ void SAL_CALL OCommonEmbeddedObject::storeToEntry( const uno::Reference< embed::
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lArguments,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1285,11 +1275,6 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lArguments,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // TODO: use lObjArgs
 
@@ -1429,9 +1414,6 @@ void SAL_CALL OCommonEmbeddedObject::storeAsEntry( const uno::Reference< embed::
 
 
 void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
-        throw ( embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1510,8 +1492,6 @@ void SAL_CALL OCommonEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
 
 sal_Bool SAL_CALL OCommonEmbeddedObject::hasEntry()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1530,8 +1510,6 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::hasEntry()
 
 
 OUString SAL_CALL OCommonEmbeddedObject::getEntryName()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1554,10 +1532,6 @@ OUString SAL_CALL OCommonEmbeddedObject::getEntryName()
 
 
 void SAL_CALL OCommonEmbeddedObject::storeOwn()
-        throw ( embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // during switching from Activated to Running and from Running to Loaded states the object will
     // ask container to store the object, the container has to make decision
@@ -1650,8 +1624,6 @@ void SAL_CALL OCommonEmbeddedObject::storeOwn()
 
 
 sal_Bool SAL_CALL OCommonEmbeddedObject::isReadonly()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1676,11 +1648,6 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::isReadonly()
 void SAL_CALL OCommonEmbeddedObject::reload(
                 const uno::Sequence< beans::PropertyValue >& lArguments,
                 const uno::Sequence< beans::PropertyValue >& lObjArgs )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // TODO: use lObjArgs
     // for now this method is used only to switch readonly state
@@ -1796,7 +1763,7 @@ void SAL_CALL OCommonEmbeddedObject::reload(
     }
 }
 
-sal_Bool SAL_CALL OCommonEmbeddedObject::isStored() throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OCommonEmbeddedObject::isStored()
 {
     uno::Reference<container::XNameAccess> xNA(m_xObjectStorage, uno::UNO_QUERY);
     if (!xNA.is())
@@ -1808,11 +1775,6 @@ sal_Bool SAL_CALL OCommonEmbeddedObject::isStored() throw (css::uno::RuntimeExce
 
 void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
                                                 const OUString& sEntName )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1898,8 +1860,6 @@ void SAL_CALL OCommonEmbeddedObject::breakLink( const uno::Reference< embed::XSt
 
 
 sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -1910,9 +1870,6 @@ sal_Bool SAL_CALL  OCommonEmbeddedObject::isLink()
 
 
 OUString SAL_CALL OCommonEmbeddedObject::getLinkURL()
-        throw ( embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

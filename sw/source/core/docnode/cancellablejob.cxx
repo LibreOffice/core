@@ -25,7 +25,7 @@ CancellableJob::CancellableJob( const rtl::Reference< ObservableThread >& rThrea
 }
 
 // css::util::XCancellable:
-void SAL_CALL CancellableJob::cancel() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL CancellableJob::cancel()
 {
     mrThread->join();
 }

@@ -60,52 +60,50 @@ public:
     // css::uno::XInterface
     DECLARE_XINTERFACE( )
 
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
     // css::lang::XServiceInfo
     DECLARE_SERVICE_INFO();
 
     // XComponentLoader
-    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL loadComponentFromURL( const OUString& URL, const OUString& TargetFrameName, sal_Int32 SearchFlags, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) throw (css::io::IOException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::lang::XComponent > SAL_CALL loadComponentFromURL( const OUString& URL, const OUString& TargetFrameName, sal_Int32 SearchFlags, const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     // css::lang::XMultiServiceFactory
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     // XCommandProcessor
-    virtual css::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) throw (css::uno::Exception, css::ucb::CommandAbortedException, css::uno::RuntimeException, std::exception) override ;
+    virtual css::uno::Any SAL_CALL execute( const css::ucb::Command& aCommand, sal_Int32 CommandId, const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment ) override ;
 
     // XHierarchicalNameAccess
-    virtual css::uno::Any SAL_CALL getByHierarchicalName( const OUString& _sName ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasByHierarchicalName( const OUString& _sName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByHierarchicalName( const OUString& _sName ) override;
+    virtual sal_Bool SAL_CALL hasByHierarchicalName( const OUString& _sName ) override;
 
     // XHierarchicalNameContainer
-    virtual void SAL_CALL insertByHierarchicalName( const OUString& aName, const css::uno::Any& aElement ) throw (css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeByHierarchicalName( const OUString& Name ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL insertByHierarchicalName( const OUString& aName, const css::uno::Any& aElement ) override;
+    virtual void SAL_CALL removeByHierarchicalName( const OUString& Name ) override;
 
     // XHierarchicalName
-    virtual OUString SAL_CALL getHierarchicalName(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL composeHierarchicalName( const OUString& aRelativeName ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getHierarchicalName(  ) override;
+    virtual OUString SAL_CALL composeHierarchicalName( const OUString& aRelativeName ) override;
 
     // XNameContainer
-    virtual void SAL_CALL removeByName( const OUString& _rName ) throw(css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeByName( const OUString& _rName ) override;
 
     // XHierarchicalNameReplace
-    virtual void SAL_CALL replaceByHierarchicalName( const OUString& aName, const css::uno::Any& aElement ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL replaceByHierarchicalName( const OUString& aName, const css::uno::Any& aElement ) override;
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
     // XTransactedObject
-    virtual void SAL_CALL commit(  ) throw (css::io::IOException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL revert(  ) throw (css::io::IOException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL commit(  ) override;
+    virtual void SAL_CALL revert(  ) override;
 
     // XRename
-    virtual void SAL_CALL rename( const OUString& newName ) throw (css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL rename( const OUString& newName ) override;
 
     // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;

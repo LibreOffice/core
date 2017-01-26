@@ -88,10 +88,10 @@ namespace svxform
         explicit FormScriptListener( FormScriptingEnvironment * pScriptExecutor );
 
         // XScriptListener
-        virtual void SAL_CALL firing( const ScriptEvent& aEvent ) throw (RuntimeException, std::exception) override;
-        virtual Any SAL_CALL approveFiring( const ScriptEvent& aEvent ) throw (InvocationTargetException, RuntimeException, std::exception) override;
+        virtual void SAL_CALL firing( const ScriptEvent& aEvent ) override;
+        virtual Any SAL_CALL approveFiring( const ScriptEvent& aEvent ) override;
         // XEventListener
-        virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const EventObject& Source ) override;
 
         // lifetime control
         void SAL_CALL dispose();
@@ -722,7 +722,7 @@ namespace svxform
     }
 
 
-    void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL FormScriptListener::firing( const ScriptEvent& _rEvent )
     {
        if ( _rEvent.ScriptType == "VBAInterop" )
            return; // not handled here
@@ -743,7 +743,7 @@ namespace svxform
     }
 
 
-    Any SAL_CALL FormScriptListener::approveFiring( const ScriptEvent& _rEvent ) throw (InvocationTargetException, RuntimeException, std::exception)
+    Any SAL_CALL FormScriptListener::approveFiring( const ScriptEvent& _rEvent )
     {
         Any aResult;
 
@@ -755,7 +755,7 @@ namespace svxform
     }
 
 
-    void SAL_CALL FormScriptListener::disposing( const EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FormScriptListener::disposing( const EventObject& /*Source*/ )
     {
         // not interested in
     }
@@ -785,8 +785,7 @@ namespace svxform
             bool mbQuitBlocked;
         public:
             // XTerminateListener
-            virtual void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/)
-                throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override
+            virtual void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override
             {
                 mbQuitBlocked = true;
 #if HAVE_FEATURE_SCRIPTING
@@ -795,16 +794,14 @@ namespace svxform
                 throw css::frame::TerminationVetoException();
             }
 
-            virtual void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/)
-                throw(css::uno::RuntimeException, std::exception) override
+            virtual void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
             {
                 mbQuitBlocked = false;
             }
 
             using cppu::WeakComponentImplHelperBase::disposing;
 
-            virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-                throw(css::uno::RuntimeException, std::exception) override
+            virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
             {
                 const bool bShutDown = (rEvent.Source == m_xDesktop);
                 if (bShutDown && m_xDesktop.is())
@@ -815,20 +812,17 @@ namespace svxform
             }
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName()
-                throw (css::uno::RuntimeException, std::exception) override
+            virtual OUString SAL_CALL getImplementationName() override
             {
                 return OUString("com.sun.star.comp.svx.StarBasicQuitGuard");
             }
 
-            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-                throw (css::uno::RuntimeException, std::exception) override
+            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
             {
                 return cppu::supportsService(this, ServiceName);
             }
 
-            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-                throw (css::uno::RuntimeException, std::exception) override
+            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
             {
                 css::uno::Sequence<OUString> aSeq { "com.sun.star.svx.StarBasicQuitGuard" };
                 return aSeq;

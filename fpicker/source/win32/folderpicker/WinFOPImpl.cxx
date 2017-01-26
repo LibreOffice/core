@@ -48,7 +48,6 @@ CWinFolderPickerImpl::CWinFolderPickerImpl( CFolderPicker* aFolderPicker ) :
 // OS the FolderPicker starts in the root of the file system hierarchy
 
 void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirectory )
-    throw( IllegalArgumentException, RuntimeException )
 {
     OUString sysDir;
 
@@ -82,7 +81,6 @@ void SAL_CALL CWinFolderPickerImpl::setDisplayDirectory( const OUString& aDirect
 // we return the directory in URL format
 
 OUString CWinFolderPickerImpl::getDisplayDirectory( )
-    throw( RuntimeException )
 {
     // call base class method to get the directory in system format
     OUString displayDirectory = CMtaFolderPicker::getDisplayDirectory( );
@@ -94,7 +92,7 @@ OUString CWinFolderPickerImpl::getDisplayDirectory( )
     return displayDirectoryURL;
 }
 
-OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException )
+OUString SAL_CALL CWinFolderPickerImpl::getDirectory( )
 {
     OUString sysDir = CMtaFolderPicker::getDirectory( );
     OUString dirURL;
@@ -105,7 +103,7 @@ OUString SAL_CALL CWinFolderPickerImpl::getDirectory( ) throw( RuntimeException 
     return dirURL;
 }
 
-sal_Int16 SAL_CALL CWinFolderPickerImpl::execute( ) throw( RuntimeException )
+sal_Int16 SAL_CALL CWinFolderPickerImpl::execute( )
 {
     return m_nLastDlgResult = CMtaFolderPicker::browseForFolder( ) ?
         css::ui::dialogs::ExecutableDialogResults::OK :

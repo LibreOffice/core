@@ -34,14 +34,12 @@ using namespace ::com::sun::star::beans;
 
 
 OUString PDFDialog_getImplementationName ()
-    throw (RuntimeException)
 {
     return OUString ( "com.sun.star.comp.PDF.PDFDialog" );
 }
 
 
 Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
-    throw (RuntimeException)
 {
     Sequence<OUString> aRet { SERVICE_NAME };
     return aRet;
@@ -49,7 +47,6 @@ Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames()
 
 
 Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new PDFDialog( comphelper::getComponentContext(rSMgr) ));
 }
@@ -70,21 +67,18 @@ PDFDialog::~PDFDialog()
 
 
 Sequence< sal_Int8 > SAL_CALL PDFDialog::getImplementationId()
-    throw(RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 
 OUString SAL_CALL PDFDialog::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return PDFDialog_getImplementationName();
 }
 
 
 Sequence< OUString > SAL_CALL PDFDialog::getSupportedServiceNames()
-    throw (RuntimeException, std::exception)
 {
     return PDFDialog_getSupportedServiceNames();
 }
@@ -107,7 +101,6 @@ void PDFDialog::executedDialog( sal_Int16 nExecutionResult )
 
 
 Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
-    throw(RuntimeException, std::exception)
 {
     Reference< XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -129,7 +122,6 @@ Reference< XPropertySetInfo > SAL_CALL PDFDialog::getPropertySetInfo()
 
 
 Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
-    throw ( RuntimeException, std::exception )
 {
     sal_Int32 i, nCount;
 
@@ -150,7 +142,6 @@ Sequence< PropertyValue > SAL_CALL PDFDialog::getPropertyValues()
 
 
 void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rProps )
-    throw ( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception )
 {
     maMediaDescriptor = rProps;
 
@@ -166,7 +157,6 @@ void SAL_CALL PDFDialog::setPropertyValues( const Sequence< PropertyValue >& rPr
 
 
 void SAL_CALL PDFDialog::setSourceDocument( const Reference< XComponent >& xDoc )
-    throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     mxSrcDoc = xDoc;
 }

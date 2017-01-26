@@ -106,7 +106,7 @@ RootItemContainer::~RootItemContainer()
 {
 }
 
-Any SAL_CALL RootItemContainer::queryInterface( const Type& _rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL RootItemContainer::queryInterface( const Type& _rType )
 {
     Any aRet = RootItemContainer_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -114,7 +114,7 @@ Any SAL_CALL RootItemContainer::queryInterface( const Type& _rType ) throw(Runti
     return aRet;
 }
 
-Sequence< Type > SAL_CALL RootItemContainer::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL RootItemContainer::getTypes(  )
 {
     return comphelper::concatSequences(
         RootItemContainer_BASE::getTypes(),
@@ -140,7 +140,7 @@ Reference< XIndexAccess > RootItemContainer::deepCopyContainer( const Reference<
 }
 
 // XUnoTunnel
-sal_Int64 RootItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception)
+sal_Int64 RootItemContainer::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier )
 {
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( RootItemContainer::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) )
         return sal::static_int_cast< sal_Int64 >( reinterpret_cast< sal_IntPtr >( this ));
@@ -166,7 +166,6 @@ RootItemContainer* RootItemContainer::GetImplementation( const css::uno::Referen
 
 // XElementAccess
 sal_Bool SAL_CALL RootItemContainer::hasElements()
-throw ( RuntimeException, std::exception )
 {
     ShareGuard aLock( m_aShareMutex );
     return ( !m_aItemVector.empty() );
@@ -174,14 +173,12 @@ throw ( RuntimeException, std::exception )
 
 // XIndexAccess
 sal_Int32 SAL_CALL RootItemContainer::getCount()
-throw ( RuntimeException, std::exception )
 {
     ShareGuard aLock( m_aShareMutex );
     return m_aItemVector.size();
 }
 
 Any SAL_CALL RootItemContainer::getByIndex( sal_Int32 Index )
-throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ShareGuard aLock( m_aShareMutex );
     if ( sal_Int32( m_aItemVector.size()) > Index )
@@ -192,7 +189,6 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
 
 // XIndexContainer
 void SAL_CALL RootItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
-throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     Sequence< PropertyValue > aSeq;
     if ( aItem >>= aSeq )
@@ -214,7 +210,6 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
 }
 
 void SAL_CALL RootItemContainer::removeByIndex( sal_Int32 nIndex )
-throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     ShareGuard aLock( m_aShareMutex );
     if ( (sal_Int32)m_aItemVector.size() > nIndex )
@@ -226,7 +221,6 @@ throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std
 }
 
 void SAL_CALL RootItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
-throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     Sequence< PropertyValue > aSeq;
     if ( aItem >>= aSeq )
@@ -242,13 +236,11 @@ throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetExcept
 }
 
 Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithContext( const Reference< XComponentContext >& )
-throw ( Exception, RuntimeException, std::exception)
 {
     return static_cast<OWeakObject *>(new ItemContainer( m_aShareMutex ));
 }
 
 Reference< XInterface > SAL_CALL RootItemContainer::createInstanceWithArgumentsAndContext( const Sequence< Any >&, const Reference< XComponentContext >& )
-throw (Exception, RuntimeException, std::exception)
 {
     return static_cast<OWeakObject *>(new ItemContainer( m_aShareMutex ));
 }
@@ -258,7 +250,6 @@ sal_Bool SAL_CALL RootItemContainer::convertFastPropertyValue( Any&       aConve
                                                                Any&       aOldValue       ,
                                                                sal_Int32  nHandle         ,
                                                                const Any& aValue             )
-throw( css::lang::IllegalArgumentException )
 {
     //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
@@ -281,7 +272,6 @@ throw( css::lang::IllegalArgumentException )
 
 void SAL_CALL RootItemContainer::setFastPropertyValue_NoBroadcast( sal_Int32               nHandle ,
                                                                    const css::uno::Any&    aValue  )
-throw( css::uno::Exception, std::exception )
 {
     switch( nHandle )
     {
@@ -329,7 +319,6 @@ void SAL_CALL RootItemContainer::getFastPropertyValue( css::uno::Any& aValue  ,
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL RootItemContainer::getPropertySetInfo()
-throw (css::uno::RuntimeException, std::exception)
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!

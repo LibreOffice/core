@@ -60,7 +60,6 @@ const SwStartNode* SwXRedlineText::GetStartNode() const
 }
 
 uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
-    throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
 
@@ -83,7 +82,6 @@ uno::Any SwXRedlineText::queryInterface( const uno::Type& rType )
 }
 
 uno::Sequence<uno::Type> SwXRedlineText::getTypes()
-    throw(uno::RuntimeException, std::exception)
 {
     // SwXText::getTypes()
     uno::Sequence<uno::Type> aTypes = SwXText::getTypes();
@@ -97,13 +95,11 @@ uno::Sequence<uno::Type> SwXRedlineText::getTypes()
 }
 
 uno::Sequence<sal_Int8> SwXRedlineText::getImplementationId()
-    throw(uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -147,7 +143,6 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursor()
 
 uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursorByRange(
     const uno::Reference<text::XTextRange> & aTextRange)
-        throw( uno::RuntimeException, std::exception )
 {
     uno::Reference<text::XTextCursor> xCursor = createTextCursor();
     xCursor->gotoRange(aTextRange->getStart(), false);
@@ -156,7 +151,6 @@ uno::Reference<text::XTextCursor> SwXRedlineText::createTextCursorByRange(
 }
 
 uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwPaM aPam(aNodeIndex);
@@ -165,12 +159,12 @@ uno::Reference<container::XEnumeration> SwXRedlineText::createEnumeration()
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_REDLINE);
 }
 
-uno::Type SwXRedlineText::getElementType(  ) throw(uno::RuntimeException, std::exception)
+uno::Type SwXRedlineText::getElementType(  )
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SwXRedlineText::hasElements(  ) throw(uno::RuntimeException, std::exception)
+sal_Bool SwXRedlineText::hasElements(  )
 {
     return true;    // we always have a content index
 }
@@ -227,7 +221,6 @@ static uno::Sequence<beans::PropertyValue> lcl_GetSuccessorProperties(const SwRa
 }
 
 uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     Validate();
@@ -258,7 +251,7 @@ uno::Any SwXRedlinePortion::getPropertyValue( const OUString& rPropertyName )
     return aRet;
 }
 
-void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
+void SwXRedlinePortion::Validate()
 {
     SwUnoCursor& rUnoCursor = GetCursor();
     //search for the redline
@@ -271,12 +264,12 @@ void SwXRedlinePortion::Validate() throw( uno::RuntimeException )
         throw uno::RuntimeException();
 }
 
-uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence< sal_Int8 > SAL_CALL SwXRedlinePortion::getImplementationId(  )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRangeRedline& rRedline ) throw(std::exception)
+uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, const SwRangeRedline& rRedline )
 {
     uno::Any aRet;
     if(rPropertyName == UNO_NAME_REDLINE_AUTHOR)
@@ -315,7 +308,7 @@ uno::Any  SwXRedlinePortion::GetPropertyValue( const OUString& rPropertyName, co
 }
 
 uno::Sequence< beans::PropertyValue > SwXRedlinePortion::CreateRedlineProperties(
-    const SwRangeRedline& rRedline, bool bIsStart ) throw (std::exception)
+    const SwRangeRedline& rRedline, bool bIsStart )
 {
     uno::Sequence< beans::PropertyValue > aRet(12);
     const SwRedlineData* pNext = rRedline.GetRedlineData().Next();
@@ -378,7 +371,7 @@ SwXRedline::~SwXRedline()
 {
 }
 
-uno::Reference< beans::XPropertySetInfo > SwXRedline::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
+uno::Reference< beans::XPropertySetInfo > SwXRedline::getPropertySetInfo(  )
 {
     static uno::Reference< beans::XPropertySetInfo >  xRef =
         aSwMapProvider.GetPropertySet(PROPERTY_MAP_REDLINE)->getPropertySetInfo();
@@ -386,8 +379,6 @@ uno::Reference< beans::XPropertySetInfo > SwXRedline::getPropertySetInfo(  ) thr
 }
 
 void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any& aValue )
-    throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
-        lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -427,7 +418,6 @@ void SwXRedline::setPropertyValue( const OUString& rPropertyName, const uno::Any
 }
 
 uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -499,25 +489,21 @@ uno::Any SwXRedline::getPropertyValue( const OUString& rPropertyName )
 void SwXRedline::addPropertyChangeListener(
     const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SwXRedline::removePropertyChangeListener(
     const OUString& /*aPropertyName*/, const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SwXRedline::addVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
 void SwXRedline::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
-        throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
 }
 
@@ -531,7 +517,7 @@ void SwXRedline::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
     }
 }
 
-uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration() throw( uno::RuntimeException, std::exception )
+uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration()
 {
     SolarMutexGuard aGuard;
     uno::Reference< container::XEnumeration > xRet;
@@ -547,19 +533,19 @@ uno::Reference< container::XEnumeration >  SwXRedline::createEnumeration() throw
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_REDLINE);
 }
 
-uno::Type SwXRedline::getElementType(  ) throw(uno::RuntimeException, std::exception)
+uno::Type SwXRedline::getElementType(  )
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SwXRedline::hasElements(  ) throw(uno::RuntimeException, std::exception)
+sal_Bool SwXRedline::hasElements(  )
 {
     if(!pDoc)
         throw uno::RuntimeException();
     return nullptr != pRedline->GetContentIdx();
 }
 
-uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor() throw( uno::RuntimeException, std::exception )
+uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor()
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -597,13 +583,11 @@ uno::Reference< text::XTextCursor >  SwXRedline::createTextCursor() throw( uno::
 
 uno::Reference< text::XTextCursor >  SwXRedline::createTextCursorByRange(
     const uno::Reference< text::XTextRange > & /*aTextPosition*/)
-        throw( uno::RuntimeException, std::exception )
 {
     throw uno::RuntimeException();
 }
 
 uno::Any SwXRedline::queryInterface( const uno::Type& rType )
-    throw(uno::RuntimeException, std::exception)
 {
     uno::Any aRet = SwXText::queryInterface(rType);
     if(!aRet.hasValue())
@@ -614,7 +598,6 @@ uno::Any SwXRedline::queryInterface( const uno::Type& rType )
 }
 
 uno::Sequence<uno::Type> SwXRedline::getTypes()
-    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<uno::Type> aTypes = SwXText::getTypes();
     uno::Sequence<uno::Type> aBaseTypes = SwXRedlineBaseClass::getTypes();
@@ -628,7 +611,6 @@ uno::Sequence<uno::Type> SwXRedline::getTypes()
 }
 
 uno::Sequence<sal_Int8> SwXRedline::getImplementationId()
-    throw(uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }

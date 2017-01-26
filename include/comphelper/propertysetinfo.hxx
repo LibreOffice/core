@@ -77,9 +77,9 @@ public:
     /** removes an already added PropertyMapEntry which string in mpName equals to aName */
     void remove( const OUString& aName ) throw();
 
-    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::beans::Property > SAL_CALL getProperties() override;
+    virtual css::beans::Property SAL_CALL getPropertyByName( const OUString& aName ) override;
+    virtual sal_Bool SAL_CALL hasPropertyByName( const OUString& Name ) override;
 };
 
 }

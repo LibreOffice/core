@@ -64,45 +64,45 @@ public:
     virtual ~SVTXGridControl() override;
 
     // XGridDataListener
-    virtual void SAL_CALL rowsInserted( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL rowsRemoved( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL dataChanged( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL rowHeadingChanged( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL rowsInserted( const css::awt::grid::GridDataEvent& Event ) override;
+    virtual void SAL_CALL rowsRemoved( const css::awt::grid::GridDataEvent& Event ) override;
+    virtual void SAL_CALL dataChanged( const css::awt::grid::GridDataEvent& Event ) override;
+    virtual void SAL_CALL rowHeadingChanged( const css::awt::grid::GridDataEvent& Event ) override;
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     // XGridControl
-    virtual ::sal_Int32 SAL_CALL getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getCurrentColumn(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getCurrentRow(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, css::util::VetoException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getRowAtPoint(::sal_Int32 x, ::sal_Int32 y) override;
+    virtual ::sal_Int32 SAL_CALL getColumnAtPoint(::sal_Int32 x, ::sal_Int32 y) override;
+    virtual ::sal_Int32 SAL_CALL getCurrentColumn(  ) override;
+    virtual ::sal_Int32 SAL_CALL getCurrentRow(  ) override;
+    virtual void SAL_CALL goToCell( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex ) override;
 
     // XGridRowSelection
-    virtual void SAL_CALL selectRow( ::sal_Int32 i_rowIndex ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, std::exception ) override;
-    virtual void SAL_CALL selectAllRows() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, std::exception ) override;
-    virtual void SAL_CALL deselectAllRows() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasSelectedRows() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isRowSelected(::sal_Int32 index) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL selectRow( ::sal_Int32 i_rowIndex ) override;
+    virtual void SAL_CALL selectAllRows() override;
+    virtual void SAL_CALL deselectRow( ::sal_Int32 i_rowIndex ) override;
+    virtual void SAL_CALL deselectAllRows() override;
+    virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getSelectedRows() override;
+    virtual sal_Bool SAL_CALL hasSelectedRows() override;
+    virtual sal_Bool SAL_CALL isRowSelected(::sal_Int32 index) override;
+    virtual void SAL_CALL addSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
+    virtual void SAL_CALL removeSelectionListener(const css::uno::Reference< css::awt::grid::XGridSelectionListener > & listener) override;
 
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dispose(  ) override;
 
     // XWindow
-    void SAL_CALL setEnable( sal_Bool bEnable ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setEnable( sal_Bool bEnable ) override;
 
 protected:
     // VCLXWindow

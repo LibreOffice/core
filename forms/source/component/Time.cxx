@@ -56,7 +56,7 @@ Sequence<Type> OTimeControl::_getTypes()
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL OTimeControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL OTimeControl::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -72,7 +72,7 @@ css::uno::Sequence<OUString> SAL_CALL OTimeControl::getSupportedServiceNames() t
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OTimeModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL OTimeModel::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -136,7 +136,7 @@ OTimeModel::~OTimeModel( )
 IMPLEMENT_DEFAULT_CLONING( OTimeModel )
 
 
-OUString SAL_CALL OTimeModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OTimeModel::getServiceName()
 {
     return OUString(FRM_COMPONENT_TIMEFIELD); // old (non-sun) name for compatibility !
 }
@@ -172,7 +172,7 @@ void SAL_CALL OTimeModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle 
 
 
 sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
-        sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException, RuntimeException, std::exception)
+        sal_Int32 _nHandle, const Any& _rValue )
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         return convertFormatKeyPropertyValue(_rConvertedValue, _rOldValue, _rValue);
@@ -181,7 +181,7 @@ sal_Bool SAL_CALL OTimeModel::convertFastPropertyValue(Any& _rConvertedValue, An
 }
 
 
-void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( css::uno::Exception, std::exception)
+void SAL_CALL OTimeModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         setFormatKeyPropertyValue(_rValue);

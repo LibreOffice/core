@@ -49,25 +49,25 @@ class MenuBarWrapper : public UIConfigElementWrapperBase,
         MenuBarManager* GetMenuBarManager() const { return static_cast< MenuBarManager* >( m_xMenuBarManager.get() ); }
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
         // XUIElement
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getRealInterface() override;
 
         // XUIElementSettings
-        virtual void SAL_CALL updateSettings(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL updateSettings(  ) override;
 
         // XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType() override;
+        virtual sal_Bool SAL_CALL hasElements() override;
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 
     private:
         virtual void impl_fillNewData() override;

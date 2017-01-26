@@ -97,13 +97,11 @@ namespace connectivity
                                 css::uno::Any & rConvertedValue,
                                 css::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue )
-                                    throw (css::lang::IllegalArgumentException) override;
+                                const css::uno::Any& rValue ) override;
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const css::uno::Any& rValue
-                                     )
-                                     throw (css::uno::Exception, std::exception) override;
+                                     ) override;
             virtual void SAL_CALL getFastPropertyValue(
                                     css::uno::Any& rValue,
                                     sal_Int32 nHandle
@@ -119,99 +117,99 @@ namespace connectivity
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;
             // XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;
             //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
             // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
             // XResultSet
-            virtual sal_Bool SAL_CALL next(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isBeforeFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isAfterLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL beforeFirst(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL afterLast(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL first(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL last(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL absolute( sal_Int32 row ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL relative( sal_Int32 rows ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL previous(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL refreshRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL rowUpdated(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL rowInserted(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL rowDeleted(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getStatement(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL next(  ) override;
+            virtual sal_Bool SAL_CALL isBeforeFirst(  ) override;
+            virtual sal_Bool SAL_CALL isAfterLast(  ) override;
+            virtual sal_Bool SAL_CALL isFirst(  ) override;
+            virtual sal_Bool SAL_CALL isLast(  ) override;
+            virtual void SAL_CALL beforeFirst(  ) override;
+            virtual void SAL_CALL afterLast(  ) override;
+            virtual sal_Bool SAL_CALL first(  ) override;
+            virtual sal_Bool SAL_CALL last(  ) override;
+            virtual sal_Int32 SAL_CALL getRow(  ) override;
+            virtual sal_Bool SAL_CALL absolute( sal_Int32 row ) override;
+            virtual sal_Bool SAL_CALL relative( sal_Int32 rows ) override;
+            virtual sal_Bool SAL_CALL previous(  ) override;
+            virtual void SAL_CALL refreshRow(  ) override;
+            virtual sal_Bool SAL_CALL rowUpdated(  ) override;
+            virtual sal_Bool SAL_CALL rowInserted(  ) override;
+            virtual sal_Bool SAL_CALL rowDeleted(  ) override;
+            virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getStatement(  ) override;
             // XRow
-            virtual sal_Bool SAL_CALL wasNull(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getInt( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL getArray( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL wasNull(  ) override;
+            virtual OUString SAL_CALL getString( sal_Int32 columnIndex ) override;
+            virtual sal_Bool SAL_CALL getBoolean( sal_Int32 columnIndex ) override;
+            virtual sal_Int8 SAL_CALL getByte( sal_Int32 columnIndex ) override;
+            virtual sal_Int16 SAL_CALL getShort( sal_Int32 columnIndex ) override;
+            virtual sal_Int32 SAL_CALL getInt( sal_Int32 columnIndex ) override;
+            virtual sal_Int64 SAL_CALL getLong( sal_Int32 columnIndex ) override;
+            virtual float SAL_CALL getFloat( sal_Int32 columnIndex ) override;
+            virtual double SAL_CALL getDouble( sal_Int32 columnIndex ) override;
+            virtual css::uno::Sequence< sal_Int8 > SAL_CALL getBytes( sal_Int32 columnIndex ) override;
+            virtual css::util::Date SAL_CALL getDate( sal_Int32 columnIndex ) override;
+            virtual css::util::Time SAL_CALL getTime( sal_Int32 columnIndex ) override;
+            virtual css::util::DateTime SAL_CALL getTimestamp( sal_Int32 columnIndex ) override;
+            virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getBinaryStream( sal_Int32 columnIndex ) override;
+            virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getCharacterStream( sal_Int32 columnIndex ) override;
+            virtual css::uno::Any SAL_CALL getObject( sal_Int32 columnIndex, const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
+            virtual css::uno::Reference< css::sdbc::XRef > SAL_CALL getRef( sal_Int32 columnIndex ) override;
+            virtual css::uno::Reference< css::sdbc::XBlob > SAL_CALL getBlob( sal_Int32 columnIndex ) override;
+            virtual css::uno::Reference< css::sdbc::XClob > SAL_CALL getClob( sal_Int32 columnIndex ) override;
+            virtual css::uno::Reference< css::sdbc::XArray > SAL_CALL getArray( sal_Int32 columnIndex ) override;
             // XResultSetMetaDataSupplier
-            virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XResultSetMetaData > SAL_CALL getMetaData(  ) override;
             // XCancellable
-            virtual void SAL_CALL cancel(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL cancel(  ) override;
             // XCloseable
-            virtual void SAL_CALL close(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL close(  ) override;
             // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+            virtual void SAL_CALL clearWarnings(  ) override;
             // XColumnLocate
-            virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL findColumn( const OUString& columnName ) override;
 
             // XResultSetUpdate
-            virtual void SAL_CALL insertRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL deleteRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL cancelRowUpdates(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL moveToInsertRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL moveToCurrentRow(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL insertRow(  ) override;
+            virtual void SAL_CALL updateRow(  ) override;
+            virtual void SAL_CALL deleteRow(  ) override;
+            virtual void SAL_CALL cancelRowUpdates(  ) override;
+            virtual void SAL_CALL moveToInsertRow(  ) override;
+            virtual void SAL_CALL moveToCurrentRow(  ) override;
             // XRowUpdate
-            virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, sal_Bool x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateLong( sal_Int32 columnIndex, sal_Int64 x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateString( sal_Int32 columnIndex, const OUString& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const css::uno::Sequence< sal_Int8 >& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const css::util::Date& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const css::util::Time& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const css::uno::Any& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL updateNull( sal_Int32 columnIndex ) override;
+            virtual void SAL_CALL updateBoolean( sal_Int32 columnIndex, sal_Bool x ) override;
+            virtual void SAL_CALL updateByte( sal_Int32 columnIndex, sal_Int8 x ) override;
+            virtual void SAL_CALL updateShort( sal_Int32 columnIndex, sal_Int16 x ) override;
+            virtual void SAL_CALL updateInt( sal_Int32 columnIndex, sal_Int32 x ) override;
+            virtual void SAL_CALL updateLong( sal_Int32 columnIndex, sal_Int64 x ) override;
+            virtual void SAL_CALL updateFloat( sal_Int32 columnIndex, float x ) override;
+            virtual void SAL_CALL updateDouble( sal_Int32 columnIndex, double x ) override;
+            virtual void SAL_CALL updateString( sal_Int32 columnIndex, const OUString& x ) override;
+            virtual void SAL_CALL updateBytes( sal_Int32 columnIndex, const css::uno::Sequence< sal_Int8 >& x ) override;
+            virtual void SAL_CALL updateDate( sal_Int32 columnIndex, const css::util::Date& x ) override;
+            virtual void SAL_CALL updateTime( sal_Int32 columnIndex, const css::util::Time& x ) override;
+            virtual void SAL_CALL updateTimestamp( sal_Int32 columnIndex, const css::util::DateTime& x ) override;
+            virtual void SAL_CALL updateBinaryStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+            virtual void SAL_CALL updateCharacterStream( sal_Int32 columnIndex, const css::uno::Reference< css::io::XInputStream >& x, sal_Int32 length ) override;
+            virtual void SAL_CALL updateObject( sal_Int32 columnIndex, const css::uno::Any& x ) override;
+            virtual void SAL_CALL updateNumericObject( sal_Int32 columnIndex, const css::uno::Any& x, sal_Int32 scale ) override;
             // XRowLocate
-            virtual css::uno::Any SAL_CALL getBookmark(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL getBookmark(  ) override;
+            virtual sal_Bool SAL_CALL moveToBookmark( const css::uno::Any& bookmark ) override;
+            virtual sal_Bool SAL_CALL moveRelativeToBookmark( const css::uno::Any& bookmark, sal_Int32 rows ) override;
+            virtual sal_Int32 SAL_CALL compareBookmarks( const css::uno::Any& first, const css::uno::Any& second ) override;
+            virtual sal_Bool SAL_CALL hasOrderedBookmarks(  ) override;
+            virtual sal_Int32 SAL_CALL hashBookmark( const css::uno::Any& bookmark ) override;
             // XDeleteRows
-            virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< css::uno::Any >& rows ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< sal_Int32 > SAL_CALL deleteRows( const css::uno::Sequence< css::uno::Any >& rows ) override;
 
 protected:
             //MQuery                   m_aQuery;
@@ -241,7 +239,7 @@ protected:
             void parseParameter( const OSQLParseNode* pNode, OUString& rMatchString );
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void fillRowData() throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
+            void fillRowData();
             void analyseWhereClause( const OSQLParseNode*                 parseTree,
                                      MQueryExpression                    &queryExpression);
 
@@ -257,12 +255,10 @@ protected:
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            bool fetchRow(sal_Int32 rowIndex,bool bForceReload=false) throw( css::sdbc::SQLException,
-                                                          css::uno::RuntimeException);
+            bool fetchRow(sal_Int32 rowIndex,bool bForceReload=false);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            bool fetchCurrentRow() throw( css::sdbc::SQLException,
-                                                          css::uno::RuntimeException);
+            bool fetchCurrentRow();
             static bool pushCard(sal_uInt32 ) { return true; }
             bool validRow( sal_uInt32 nRow );
             bool seekRow( eRowPosition pos, sal_Int32 nOffset = 0 );
@@ -271,15 +267,14 @@ protected:
             sal_Int32 getRowForCardNumber(sal_Int32 nCardNum);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            const ORowSetValue& getValue(sal_Int32 rowIndex, sal_Int32 columnIndex)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            const ORowSetValue& getValue(sal_Int32 rowIndex, sal_Int32 columnIndex);
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void updateValue(sal_Int32 columnIndex,const ORowSetValue& x ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void updateValue(sal_Int32 columnIndex,const ORowSetValue& x );
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static void checkPendingUpdate() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            static void checkPendingUpdate();
             sal_Int32 getCurrentCardNumber();
 
 public:
@@ -287,9 +282,7 @@ public:
             // MozAddressbook Specific methods
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void SAL_CALL executeQuery() throw(css::sdbc::SQLException,
-                                               css::uno::RuntimeException,
-                                               std::exception);
+            void SAL_CALL executeQuery();
 
             void setTable(OTable* _rTable);
 
@@ -311,7 +304,7 @@ public:
             inline sal_Int32 mapColumn(sal_Int32 column);
 
             /// @throws css::sdbc::SQLException
-            void checkIndex(sal_Int32 columnIndex ) throw(css::sdbc::SQLException);
+            void checkIndex(sal_Int32 columnIndex );
 
             static void setBoundedColumns(
                 const OValueRow& _rRow,

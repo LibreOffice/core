@@ -35,14 +35,13 @@ public:
     DECLARE_DEFAULT_LEAF_XTOR( OCurrencyModel );
 
     // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    OUString SAL_CALL getImplementationName() override
     { return OUString("com.sun.star.form.OCurrencyModel"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // css::io::XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw ( ::com::sun ::star::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getServiceName() override;
 
     // OControlModel's property handling
     virtual void describeFixedProperties(
@@ -59,7 +58,7 @@ protected:
     virtual void            resetNoBroadcast() override;
 
 protected:
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
     void implConstruct();
 };
@@ -69,11 +68,10 @@ class OCurrencyControl: public OBoundControl
 public:
     explicit OCurrencyControl(const css::uno::Reference< css::uno::XComponentContext>& _rxContext);
     // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    OUString SAL_CALL getImplementationName() override
     { return OUString("com.sun.star.form.OCurrencyControl"); }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 

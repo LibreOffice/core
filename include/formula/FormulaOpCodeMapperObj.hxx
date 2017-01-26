@@ -63,26 +63,19 @@ protected:
 private:
                             // XFormulaOpCodeMapper
                             // Attributes
-    virtual ::sal_Int32 SAL_CALL getOpCodeExternal() throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getOpCodeUnknown() throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getOpCodeExternal() override;
+    virtual ::sal_Int32 SAL_CALL getOpCodeUnknown() override;
                             // Methods
     virtual css::uno::Sequence< css::sheet::FormulaToken > SAL_CALL getMappings(
                                     const css::uno::Sequence< OUString >& rNames,
-                                    sal_Int32 nLanguage )
-                                throw ( css::lang::IllegalArgumentException,
-                                        css::uno::RuntimeException, std::exception) override;
+                                    sal_Int32 nLanguage ) override;
     virtual css::uno::Sequence< css::sheet::FormulaOpCodeMapEntry > SAL_CALL getAvailableMappings(
-                                    sal_Int32 nLanguage, sal_Int32 nGroups )
-                                throw ( css::lang::IllegalArgumentException,
-                                        css::uno::RuntimeException, std::exception) override;
+                                    sal_Int32 nLanguage, sal_Int32 nGroups ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
 

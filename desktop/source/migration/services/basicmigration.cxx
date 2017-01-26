@@ -151,20 +151,19 @@ namespace migration
     // XServiceInfo
 
 
-    OUString BasicMigration::getImplementationName() throw (RuntimeException, std::exception)
+    OUString BasicMigration::getImplementationName()
     {
         return BasicMigration_getImplementationName();
     }
 
 
     sal_Bool BasicMigration::supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
 
-    Sequence< OUString > BasicMigration::getSupportedServiceNames() throw (RuntimeException, std::exception)
+    Sequence< OUString > BasicMigration::getSupportedServiceNames()
     {
         return BasicMigration_getSupportedServiceNames();
     }
@@ -173,7 +172,7 @@ namespace migration
     // XInitialization
 
 
-    void BasicMigration::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
+    void BasicMigration::initialize( const Sequence< Any >& aArguments )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -200,7 +199,6 @@ namespace migration
 
 
     Any BasicMigration::execute( const Sequence< beans::NamedValue >& )
-        throw (lang::IllegalArgumentException, Exception, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

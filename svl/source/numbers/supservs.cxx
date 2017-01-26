@@ -53,7 +53,7 @@ SvNumberFormatsSupplierServiceObject::~SvNumberFormatsSupplierServiceObject()
     }
 }
 
-Any SAL_CALL SvNumberFormatsSupplierServiceObject::queryAggregation( const Type& _rType ) throw (RuntimeException, std::exception)
+Any SAL_CALL SvNumberFormatsSupplierServiceObject::queryAggregation( const Type& _rType )
 {
     Any aReturn = ::cppu::queryInterface(_rType,
         static_cast< XInitialization* >(this),
@@ -66,7 +66,7 @@ Any SAL_CALL SvNumberFormatsSupplierServiceObject::queryAggregation( const Type&
     return aReturn;
 }
 
-void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< Any >& _rArguments ) throw(Exception, RuntimeException, std::exception)
+void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< Any >& _rArguments )
 {
     ::osl::MutexGuard aGuard( getSharedMutex() );
 
@@ -107,37 +107,37 @@ void SAL_CALL SvNumberFormatsSupplierServiceObject::initialize( const Sequence< 
     SetNumberFormatter(m_pOwnFormatter);
 }
 
-OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL SvNumberFormatsSupplierServiceObject::getImplementationName(  )
 {
     return OUString("com.sun.star.uno.util.numbers.SvNumberFormatsSupplierServiceObject");
 }
 
-sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SvNumberFormatsSupplierServiceObject::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SvNumberFormatsSupplierServiceObject::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSupported { "com.sun.star.util.NumberFormatsSupplier" };
     return aSupported;
 }
 
-Reference< XPropertySet > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumberFormatSettings() throw(RuntimeException, std::exception)
+Reference< XPropertySet > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumberFormatSettings()
 {
     ::osl::MutexGuard aGuard( getSharedMutex() );
     implEnsureFormatter();
     return SvNumberFormatsSupplierObj::getNumberFormatSettings();
 }
 
-Reference< XNumberFormats > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumberFormats() throw(RuntimeException, std::exception)
+Reference< XNumberFormats > SAL_CALL SvNumberFormatsSupplierServiceObject::getNumberFormats()
 {
     ::osl::MutexGuard aGuard( getSharedMutex() );
     implEnsureFormatter();
     return SvNumberFormatsSupplierObj::getNumberFormats();
 }
 
-sal_Int64 SAL_CALL SvNumberFormatsSupplierServiceObject::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw (RuntimeException, std::exception)
+sal_Int64 SAL_CALL SvNumberFormatsSupplierServiceObject::getSomething( const Sequence< sal_Int8 >& aIdentifier )
 {
     sal_Int64 nReturn = SvNumberFormatsSupplierObj::getSomething( aIdentifier );
     if ( nReturn )

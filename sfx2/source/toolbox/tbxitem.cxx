@@ -242,7 +242,7 @@ unsigned short SfxToolBoxControl::GetSlotId() const
 }
 
 
-void SAL_CALL SfxToolBoxControl::dispose() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::dispose()
 {
     if ( m_bDisposed )
         return;
@@ -421,7 +421,6 @@ void SfxToolBoxControl::Dispatch( const OUString& aCommand, css::uno::Sequence< 
 
 // XStatusListener
 void SAL_CALL SfxToolBoxControl::statusChanged( const FeatureStateEvent& rEvent )
-throw ( css::uno::RuntimeException, std::exception )
 {
     SfxViewFrame* pViewFrame = nullptr;
     Reference < XController > xController;
@@ -539,25 +538,25 @@ throw ( css::uno::RuntimeException, std::exception )
 }
 
 // XToolbarController
-void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::execute( sal_Int16 KeyModifier )
 {
     SolarMutexGuard aGuard;
     Select( (sal_uInt16)KeyModifier );
 }
 
-void SAL_CALL SfxToolBoxControl::click() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::click()
 {
     SolarMutexGuard aGuard;
     Click();
 }
 
-void SAL_CALL SfxToolBoxControl::doubleClick() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SfxToolBoxControl::doubleClick()
 {
     SolarMutexGuard aGuard;
     DoubleClick();
 }
 
-Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() throw (css::uno::RuntimeException, std::exception)
+Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow()
 {
     SolarMutexGuard aGuard;
     VclPtr<vcl::Window> pWindow = CreatePopupWindow();
@@ -567,7 +566,7 @@ Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createPopupWindow() t
         return Reference< css::awt::XWindow >();
 }
 
-Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< css::awt::XWindow >& rParent ) throw (css::uno::RuntimeException, std::exception)
+Reference< css::awt::XWindow > SAL_CALL SfxToolBoxControl::createItemWindow( const Reference< css::awt::XWindow >& rParent )
 {
     SolarMutexGuard aGuard;
     return VCLUnoHelper::GetInterface( CreateItemWindow( VCLUnoHelper::GetWindow( rParent )));
@@ -706,8 +705,7 @@ class SfxFrameStatusListener : public svt::FrameStatusListener
                                 SfxPopupWindow* pCallee );
 
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event )
-            throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
     private:
         VclPtr<SfxPopupWindow> m_pCallee;
@@ -723,7 +721,6 @@ SfxFrameStatusListener::SfxFrameStatusListener(
 
 // XStatusListener
 void SAL_CALL SfxFrameStatusListener::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-throw ( css::uno::RuntimeException, std::exception )
 {
     m_pCallee->statusChanged( rEvent );
 }

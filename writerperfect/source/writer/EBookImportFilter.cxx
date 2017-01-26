@@ -90,19 +90,16 @@ bool EBookImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUSt
 
 // XServiceInfo
 OUString SAL_CALL EBookImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Writer.EBookImportFilter");
 }
 
 sal_Bool SAL_CALL EBookImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL EBookImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

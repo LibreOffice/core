@@ -45,8 +45,7 @@ namespace fileaccess {
 
         // XInterface
         virtual css::uno::Any SAL_CALL
-        queryInterface( const css::uno::Type& aType )
-            throw( css::uno::RuntimeException, std::exception) override;
+        queryInterface( const css::uno::Type& aType ) override;
 
         virtual void SAL_CALL
         acquire()
@@ -59,26 +58,19 @@ namespace fileaccess {
         // XCommandInfo
 
         virtual css::uno::Sequence< css::ucb::CommandInfo > SAL_CALL
-        getCommands()
-            throw( css::uno::RuntimeException, std::exception) override;
+        getCommands() override;
 
         virtual css::ucb::CommandInfo SAL_CALL
-        getCommandInfoByName( const OUString& Name )
-            throw( css::ucb::UnsupportedCommandException,
-                   css::uno::RuntimeException, std::exception) override;
+        getCommandInfoByName( const OUString& Name ) override;
 
         virtual css::ucb::CommandInfo SAL_CALL
-        getCommandInfoByHandle( sal_Int32 Handle )
-            throw( css::ucb::UnsupportedCommandException,
-                   css::uno::RuntimeException, std::exception ) override;
+        getCommandInfoByHandle( sal_Int32 Handle ) override;
 
         virtual sal_Bool SAL_CALL
-        hasCommandByName( const OUString& Name )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        hasCommandByName( const OUString& Name ) override;
 
         virtual sal_Bool SAL_CALL
-        hasCommandByHandle( sal_Int32 Handle )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        hasCommandByHandle( sal_Int32 Handle ) override;
 
 
     private:

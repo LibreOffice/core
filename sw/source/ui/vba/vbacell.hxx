@@ -34,20 +34,20 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaCell( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nColumn, sal_Int32 nRow ) throw ( css::uno::RuntimeException );
+    SwVbaCell( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nColumn, sal_Int32 nRow );
     virtual ~SwVbaCell() override;
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setWidth( ::sal_Int32 _width ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getHeightRule() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getWidth() override;
+    virtual void SAL_CALL setWidth( ::sal_Int32 _width ) override;
+    virtual css::uno::Any SAL_CALL getHeight() override;
+    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) override;
+    virtual ::sal_Int32 SAL_CALL getHeightRule() override;
+    virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) override;
 
     // Methods
-    virtual void SAL_CALL SetWidth( float width, sal_Int32 rulestyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL SetWidth( float width, sal_Int32 rulestyle ) override;
+    virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

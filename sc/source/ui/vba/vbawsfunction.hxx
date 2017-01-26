@@ -33,13 +33,13 @@ class ScVbaWSFunction :  public ScVbaWSFunction_BASE
 public:
     ScVbaWSFunction( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-    virtual css::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection()  throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const css::uno::Sequence< css::uno::Any >& Params, css::uno::Sequence< sal_Int16 >& OutParamIndex, css::uno::Sequence< css::uno::Any >& OutParam) throw(css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual void  SAL_CALL setValue(const OUString& PropertyName, const css::uno::Any& Value) throw(css::beans::UnknownPropertyException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any  SAL_CALL getValue(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool  SAL_CALL hasMethod(const OUString& Name)  throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool  SAL_CALL hasProperty(const OUString& Name)  throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getExactName( const OUString& aApproximateName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XIntrospectionAccess >  SAL_CALL getIntrospection() override;
+    virtual css::uno::Any  SAL_CALL invoke(const OUString& FunctionName, const css::uno::Sequence< css::uno::Any >& Params, css::uno::Sequence< sal_Int16 >& OutParamIndex, css::uno::Sequence< css::uno::Any >& OutParam) override;
+    virtual void  SAL_CALL setValue(const OUString& PropertyName, const css::uno::Any& Value) override;
+    virtual css::uno::Any  SAL_CALL getValue(const OUString& PropertyName) override;
+    virtual sal_Bool  SAL_CALL hasMethod(const OUString& Name) override;
+    virtual sal_Bool  SAL_CALL hasProperty(const OUString& Name) override;
+    virtual OUString SAL_CALL getExactName( const OUString& aApproximateName ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

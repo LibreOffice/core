@@ -81,7 +81,7 @@ sdbcx::ObjectType OEvoabColumns::createObject(const OUString& _rName)
     return xRet;
 }
 
-void OEvoabColumns::impl_refresh() throw(RuntimeException)
+void OEvoabColumns::impl_refresh()
 {
     m_pTable->refreshColumns();
 }

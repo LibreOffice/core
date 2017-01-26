@@ -58,26 +58,26 @@ public:
     virtual void SAL_CALL release() throw() override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override ;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() override ;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     // XShapes
-    virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL add( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
+    virtual void SAL_CALL remove( const css::uno::Reference< css::drawing::XShape >& xShape ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 SvxShapeCollection::SvxShapeCollection() throw()
@@ -120,7 +120,6 @@ void SvxShapeCollection::release() throw()
 
 // XComponent
 void SvxShapeCollection::dispose()
-    throw(css::uno::RuntimeException, std::exception)
 {
     // An frequently programming error is to release the last
     // reference to this object in the disposing message.
@@ -178,39 +177,38 @@ void SvxShapeCollection::dispose()
 }
 
 // XComponent
-void SAL_CALL SvxShapeCollection::addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL SvxShapeCollection::addEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
 {
     mrBHelper.addListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
 }
 
 // XComponent
-void SAL_CALL SvxShapeCollection::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL SvxShapeCollection::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
 {
     mrBHelper.removeListener( cppu::UnoType<decltype(aListener)>::get() , aListener );
 }
 
 // XShapes
 
-void SAL_CALL SvxShapeCollection::add( const Reference< drawing::XShape >& xShape ) throw( uno::RuntimeException, std::exception )
+void SAL_CALL SvxShapeCollection::add( const Reference< drawing::XShape >& xShape )
 {
     maShapeContainer.addInterface( xShape );
 }
 
 
-void SAL_CALL SvxShapeCollection::remove( const uno::Reference< drawing::XShape >& xShape ) throw( uno::RuntimeException, std::exception )
+void SAL_CALL SvxShapeCollection::remove( const uno::Reference< drawing::XShape >& xShape )
 {
     maShapeContainer.removeInterface( xShape );
 }
 
 
-sal_Int32 SAL_CALL SvxShapeCollection::getCount() throw( uno::RuntimeException, std::exception )
+sal_Int32 SAL_CALL SvxShapeCollection::getCount()
 {
     return maShapeContainer.getLength();
 }
 
 
 uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
-    throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     if( Index < 0 || Index >= getCount() )
         throw lang::IndexOutOfBoundsException();
@@ -222,30 +220,28 @@ uno::Any SAL_CALL SvxShapeCollection::getByIndex( sal_Int32 Index )
 }
 
 // XElementAccess
-uno::Type SAL_CALL SvxShapeCollection::getElementType() throw( uno::RuntimeException, std::exception )
+uno::Type SAL_CALL SvxShapeCollection::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SAL_CALL SvxShapeCollection::hasElements() throw( uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL SvxShapeCollection::hasElements()
 {
     return getCount() != 0;
 }
 
 // XServiceInfo
 OUString SAL_CALL SvxShapeCollection::getImplementationName()
-    throw( uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.drawing.SvxShapeCollection");
 }
 
 sal_Bool SAL_CALL SvxShapeCollection::supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService( this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SAL_CALL SvxShapeCollection::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aSeq(2);
     aSeq.getArray()[0] = "com.sun.star.drawing.Shapes";

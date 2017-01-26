@@ -90,7 +90,7 @@ namespace dbaui
         InvalidateFeature( ID_BROWSER_REDO );
     }
 
-    Reference< XUndoManager > SAL_CALL OSingleDocumentController::getUndoManager(  ) throw (RuntimeException, std::exception)
+    Reference< XUndoManager > SAL_CALL OSingleDocumentController::getUndoManager(  )
     {
         return m_pData->m_xUndoManager.get();
     }

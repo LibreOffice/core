@@ -919,7 +919,7 @@ void CustomAnimationEffect::setFill( sal_Int16 nFill )
         mxNode->setFill( nFill );
 }
 
-Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const throw (Exception)
+Reference< XAnimationNode > CustomAnimationEffect::createAfterEffectNode() const
 {
     DBG_ASSERT( mbHasAfterEffect, "sd::CustomAnimationEffect::createAfterEffectNode(), this node has no after effect!" );
 
@@ -1995,7 +1995,6 @@ bool stl_CustomAnimationEffect_search_node_predict::operator()( const CustomAnim
 
 /// @throws Exception
 static bool implFindNextContainer( Reference< XTimeContainer >& xParent, Reference< XTimeContainer >& xCurrent, Reference< XTimeContainer >& xNext )
- throw(Exception)
 {
     Reference< XEnumerationAccess > xEnumerationAccess( xParent, UNO_QUERY_THROW );
     Reference< XEnumeration > xEnumeration( xEnumerationAccess->createEnumeration() );
@@ -2971,19 +2970,19 @@ class AnimationChangeListener : public cppu::WeakImplHelper< XChangesListener >
 public:
     explicit AnimationChangeListener( MainSequence* pMainSequence ) : mpMainSequence( pMainSequence ) {}
 
-    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 private:
     MainSequence* mpMainSequence;
 };
 
-void SAL_CALL AnimationChangeListener::changesOccurred( const css::util::ChangesEvent& ) throw (RuntimeException, std::exception)
+void SAL_CALL AnimationChangeListener::changesOccurred( const css::util::ChangesEvent& )
 {
     if( mpMainSequence )
         mpMainSequence->startRecreateTimer();
 }
 
-void SAL_CALL AnimationChangeListener::disposing( const css::lang::EventObject& ) throw (RuntimeException, std::exception)
+void SAL_CALL AnimationChangeListener::disposing( const css::lang::EventObject& )
 {
 }
 

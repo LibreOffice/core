@@ -64,7 +64,7 @@ namespace dbaui
         virtual void            Execute( sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs ) override;
 
         // XUndoManagerSupplier
-        virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL getUndoManager(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::document::XUndoManager > SAL_CALL getUndoManager(  ) override;
 
         // XEventListener
         using OSingleDocumentController_Base::disposing;

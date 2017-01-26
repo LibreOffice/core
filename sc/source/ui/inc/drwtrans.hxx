@@ -96,7 +96,7 @@ public:
     ScDragSrc           GetDragSourceFlags() const      { return nDragSourceFlags; }
 
     static ScDrawTransferObj* GetOwnClipboard( vcl::Window* pUIWin );
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
     const ScRangeListVector& GetProtectedChartRangesVector() const { return m_aProtectedChartRangesVector; }

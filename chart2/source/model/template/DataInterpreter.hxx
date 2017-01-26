@@ -36,12 +36,9 @@ public:
     virtual ~DataInterpreter() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // convenience methods
     static  OUString GetRole( const css::uno::Reference< css::chart2::data::XDataSequence > & xSeq );
@@ -66,17 +63,13 @@ protected:
     virtual css::chart2::InterpretedData SAL_CALL interpretDataSource(
         const css::uno::Reference< css::chart2::data::XDataSource >& xSource,
         const css::uno::Sequence< css::beans::PropertyValue >& aArguments,
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aSeriesToReUse )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XDataSeries > >& aSeriesToReUse ) override;
     virtual css::chart2::InterpretedData SAL_CALL reinterpretDataSeries(
-        const css::chart2::InterpretedData& aInterpretedData )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::chart2::InterpretedData& aInterpretedData ) override;
     virtual sal_Bool SAL_CALL isDataCompatible(
-        const css::chart2::InterpretedData& aInterpretedData )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::chart2::InterpretedData& aInterpretedData ) override;
     virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL mergeInterpretedData(
-        const css::chart2::InterpretedData& aInterpretedData )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::chart2::InterpretedData& aInterpretedData ) override;
 };
 
 } // namespace chart

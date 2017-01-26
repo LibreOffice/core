@@ -117,21 +117,21 @@ public:
     virtual void PositionAndSizeChange( const css::beans::PropertyChangeEvent& evt );
     /// @throws css::container::NoSuchElementException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL NameChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::container::NoSuchElementException, css::uno::RuntimeException);
+    void SAL_CALL NameChange( const  css::beans::PropertyChangeEvent& evt );
     /// @throws css::uno::RuntimeException
-    void SAL_CALL TabIndexChange( const  css::beans::PropertyChangeEvent& evt ) throw( css::uno::RuntimeException);
+    void SAL_CALL TabIndexChange( const  css::beans::PropertyChangeEvent& evt );
 
     // PropertyChangeListener
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _propertyChange(const css::beans::PropertyChangeEvent& evt) throw (css::uno::RuntimeException, std::exception);
+    void SAL_CALL _propertyChange(const css::beans::PropertyChangeEvent& evt);
 
     // ContainerListener
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _elementInserted( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
+    void SAL_CALL _elementInserted( const css::container::ContainerEvent& Event );
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _elementReplaced( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
+    void SAL_CALL _elementReplaced( const css::container::ContainerEvent& Event );
     /// @throws css::uno::RuntimeException
-    void SAL_CALL _elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException);
+    void SAL_CALL _elementRemoved( const css::container::ContainerEvent& Event );
 
     virtual void SetLayer(SdrLayerID nLayer) override;
     void MakeDataAware( const css::uno::Reference< css::frame::XModel >& xModel );

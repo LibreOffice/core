@@ -40,12 +40,9 @@ private:
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL recalculateRegression(
         const css::uno::Sequence<double>& aXValues,
-        const css::uno::Sequence<double>& aYValues )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<double>& aYValues ) override;
 
-    virtual double SAL_CALL getCurveValue( double x )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getCurveValue( double x ) override;
 
     virtual css::uno::Sequence<css::geometry::RealPoint2D> SAL_CALL getCurveValues(
         double min,
@@ -53,9 +50,7 @@ private:
         sal_Int32 nPointCount,
         const css::uno::Reference<css::chart2::XScaling>& xScalingX,
         const css::uno::Reference<css::chart2::XScaling>& xScalingY,
-        sal_Bool bMaySkipPointsInCalculation )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        sal_Bool bMaySkipPointsInCalculation ) override;
 
     // formula is: f(x) = x ^ m_fSlope * m_fSign * m_fIntercept
     double m_fSlope;

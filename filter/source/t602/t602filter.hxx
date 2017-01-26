@@ -53,20 +53,6 @@ typedef enum {
 
 enum class tnode {START,READCH,EOL,POCMD,EXPCMD,SETCMD,SETCH,WRITE,EEND,QUIT};
 
-/// @throws css::uno::RuntimeException
-OUString getImplementationName()
-    throw ( css::uno::RuntimeException );
-
-/// @throws css::uno::RuntimeException
-css::uno::Sequence < OUString > getSupportedServiceNames()
-    throw ( css::uno::RuntimeException );
-
-/// @throws css::uno::Exception
-css::uno::Reference < css::uno::XInterface > SAL_CALL
-    CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > &r)
-    throw ( css::uno::Exception );
-
-
 // class T602ImportFilter
 
 
@@ -106,35 +92,23 @@ class T602ImportFilterDialog : public cppu::WeakImplHelper <
     virtual ~T602ImportFilterDialog() override;
 
     // XExecutableDialog
-       virtual void SAL_CALL setTitle( const OUString& aTitle )
-            throw (css::uno::RuntimeException, std::exception) override;
-       virtual sal_Int16 SAL_CALL execute()
-            throw (css::uno::RuntimeException, std::exception) override;
+       virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
+       virtual sal_Int16 SAL_CALL execute() override;
 
     // XLocalizable
-        virtual void SAL_CALL setLocale( const css::lang::Locale& eLocale )
-            throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::lang::Locale SAL_CALL getLocale()
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setLocale( const css::lang::Locale& eLocale ) override;
+        virtual css::lang::Locale SAL_CALL getLocale() override;
 
     // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  )
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XPropertyAccess
         virtual css::uno::Sequence< css::beans::PropertyValue >
-                            SAL_CALL getPropertyValues() throw (css::uno::RuntimeException, std::exception) override;
+                            SAL_CALL getPropertyValues() override;
         virtual void SAL_CALL   setPropertyValues( const css::uno::Sequence<
-                                    css::beans::PropertyValue >& aProps )
-                                throw (css::beans::UnknownPropertyException,
-                                        css::beans::PropertyVetoException,
-                                        css::lang::IllegalArgumentException,
-                                        css::lang::WrappedTargetException,
-                                        css::uno::RuntimeException, std::exception) override;
+                                    css::beans::PropertyValue >& aProps ) override;
 
 public:
     explicit T602ImportFilterDialog();
@@ -250,8 +224,7 @@ private:
     void wrtfnt();
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-        throw (css::uno::RuntimeException);
+    bool SAL_CALL importImpl( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor );
 
     public:
         explicit T602ImportFilter(const css::uno::Reference<css::lang::XMultiServiceFactory > &r );
@@ -259,68 +232,46 @@ private:
         virtual ~T602ImportFilter() override;
 
     // XFilter
-        virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL cancel(  )
-            throw (css::uno::RuntimeException, std::exception) override {};
+        virtual sal_Bool SAL_CALL filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+        virtual void SAL_CALL cancel(  ) override {};
 
     // XImporter
-        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
-            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     // XExtendedTypeDetection
         virtual OUString SAL_CALL detect(
-            css::uno::Sequence< css::beans::PropertyValue >& Descriptor )
-            throw( css::uno::RuntimeException, std::exception ) override;
+            css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 
     // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  )
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         bool SAL_CALL test();
 };
 
 /// @throws css::uno::RuntimeException
-OUString T602ImportFilter_getImplementationName()
-    throw ( css::uno::RuntimeException );
+OUString T602ImportFilter_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-bool SAL_CALL T602ImportFilter_supportsService( const OUString& ServiceName )
-    throw ( css::uno::RuntimeException );
-
-/// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  )
-    throw ( css::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL T602ImportFilter_getSupportedServiceNames(  );
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
-SAL_CALL T602ImportFilter_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
-    throw ( css::uno::Exception );
+SAL_CALL T602ImportFilter_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
 /// @throws css::uno::RuntimeException
-OUString T602ImportFilterDialog_getImplementationName()
-    throw ( css::uno::RuntimeException );
+OUString T602ImportFilterDialog_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-bool SAL_CALL T602ImportFilterDialog_supportsService( const OUString& ServiceName )
-    throw ( css::uno::RuntimeException );
-
-/// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  )
-    throw ( css::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL T602ImportFilterDialog_getSupportedServiceNames(  );
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
-SAL_CALL T602ImportFilterDialog_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
-    throw ( css::uno::Exception );
+SAL_CALL T602ImportFilterDialog_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
 }
 

@@ -56,7 +56,7 @@ namespace connectivity
                      css::lang::XComponent* _pObject);
 
         /// @throws css::lang::DisposedException
-        void checkDisposed(bool _bThrow) throw ( css::lang::DisposedException );
+        void checkDisposed(bool _bThrow);
 
 
         template <class TYPE>

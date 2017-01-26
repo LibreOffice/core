@@ -57,9 +57,9 @@ public:
                      Reference<XComponentContext> const & xContext );
 
     // XProgressHandler
-    virtual void SAL_CALL push( Any const & Status ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL update( Any const & Status ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL pop() throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL push( Any const & Status ) override;
+    virtual void SAL_CALL update( Any const & Status ) override;
+    virtual void SAL_CALL pop() override;
 };
 
 
@@ -146,7 +146,6 @@ void ProgressLogImpl::log_write( OString const & text )
 // XProgressHandler
 
 void ProgressLogImpl::push( Any const & Status )
-    throw (RuntimeException, std::exception)
 {
     update( Status );
     OSL_ASSERT( m_log_level >= 0 );
@@ -155,7 +154,6 @@ void ProgressLogImpl::push( Any const & Status )
 
 
 void ProgressLogImpl::update( Any const & Status )
-    throw (RuntimeException, std::exception)
 {
     if (! Status.hasValue())
         return;
@@ -179,7 +177,7 @@ void ProgressLogImpl::update( Any const & Status )
 }
 
 
-void ProgressLogImpl::pop() throw (RuntimeException, std::exception)
+void ProgressLogImpl::pop()
 {
     OSL_ASSERT( m_log_level > 0 );
     --m_log_level;

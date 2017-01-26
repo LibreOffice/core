@@ -49,27 +49,31 @@ public:
 protected:
     CWinClipbImpl( const OUString& aClipboardName, CWinClipboard* theWinClipboard );
 
-    css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getContents(  )
-        throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    css::uno::Reference< css::datatransfer::XTransferable > SAL_CALL getContents(  );
 
+    /// @throws css::uno::RuntimeException
     void SAL_CALL setContents(
         const css::uno::Reference< css::datatransfer::XTransferable >& xTransferable,
-        const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-        throw( css::uno::RuntimeException );
+        const css::uno::Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner );
 
-    OUString SAL_CALL getName(  ) throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    OUString SAL_CALL getName(  );
 
     // XClipboardEx
 
-    static sal_Int8 SAL_CALL getRenderingCapabilities(  ) throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    static sal_Int8 SAL_CALL getRenderingCapabilities(  );
 
     // XFlushableClipboard
 
-    void SAL_CALL flushClipboard( ) throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    void SAL_CALL flushClipboard( );
 
     // XComponent
 
-    void SAL_CALL dispose( ) throw( css::uno::RuntimeException );
+    /// @throws css::uno::RuntimeException
+    void SAL_CALL dispose( );
 
     // member functions
 

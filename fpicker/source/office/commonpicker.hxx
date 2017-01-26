@@ -114,14 +114,14 @@ namespace svt
 
         // XEventListner
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 
         // property set related methods
 
 
         // XPropertySet pure methods
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
         // OPropertySetHelper pure methods
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
         // OPropertyArrayUsageHelper pure methods
@@ -129,40 +129,40 @@ namespace svt
 
         // OPropertySetHelper overridden methods
         virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
-                sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw (css::uno::Exception, std::exception) override;
+                sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
 
 
         // XExecutableDialog functions
 
         /// @throws css::uno::RuntimeException
-        virtual void SAL_CALL           setTitle( const OUString& _rTitle ) throw( css::uno::RuntimeException, std::exception );
+        virtual void SAL_CALL           setTitle( const OUString& _rTitle );
         /// @throws css::uno::RuntimeException
-        virtual sal_Int16 SAL_CALL      execute() throw( css::uno::RuntimeException, std::exception );
+        virtual sal_Int16 SAL_CALL      execute();
 
 
         // XControlAccess functions
 
-        virtual void SAL_CALL setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const css::uno::Any& aValue ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Any SAL_CALL getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setControlProperty( const OUString& aControlName, const OUString& aControlProperty, const css::uno::Any& aValue ) override;
+        virtual css::uno::Any SAL_CALL getControlProperty( const OUString& aControlName, const OUString& aControlProperty ) override;
 
 
         // XControlInformation functions
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedControls(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL isControlSupported( const OUString& aControlName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedControlProperties( const OUString& aControlName ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedControls(  ) override;
+        virtual sal_Bool SAL_CALL isControlSupported( const OUString& aControlName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedControlProperties( const OUString& aControlName ) override;
+        virtual sal_Bool SAL_CALL isControlPropertySupported( const OUString& aControlName, const OUString& aControlProperty ) override;
 
 
         // XCancellable functions
 
-        virtual void SAL_CALL cancel(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL cancel(  ) override;
 
 
         // XInitialization functions
 
 
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
 
         // misc

@@ -35,8 +35,8 @@ public:
     Calendar_hijri();
 
 protected:
-    void mapToGregorian() throw(css::uno::RuntimeException) override;
-    void mapFromGregorian() throw(css::uno::RuntimeException) override;
+    void mapToGregorian() override;
+    void mapFromGregorian() override;
 
     // radians per degree (pi/180)
     static const double RadPerDeg;

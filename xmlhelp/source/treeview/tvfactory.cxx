@@ -45,20 +45,17 @@ TVFactory::~TVFactory()
 
 OUString SAL_CALL
 TVFactory::getImplementationName()
-    throw( RuntimeException, std::exception )
 {
     return TVFactory::getImplementationName_static();
 }
 
 sal_Bool SAL_CALL TVFactory::supportsService( const OUString& ServiceName )
-    throw( RuntimeException, std::exception )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > SAL_CALL
 TVFactory::getSupportedServiceNames()
-    throw( RuntimeException, std::exception )
 {
     return TVFactory::getSupportedServiceNames_static();
 }
@@ -68,8 +65,6 @@ TVFactory::getSupportedServiceNames()
 Reference< XInterface > SAL_CALL
 TVFactory::createInstance(
     const OUString& aServiceSpecifier )
-    throw( Exception,
-           RuntimeException, std::exception )
 {
     Sequence< Any > seq( 1 );
     seq[0] <<= PropertyValue(
@@ -86,8 +81,6 @@ Reference< XInterface > SAL_CALL
 TVFactory::createInstanceWithArguments(
     const OUString& /*ServiceSpecifier*/,
     const Sequence< Any >& Arguments )
-    throw( Exception,
-           RuntimeException, std::exception )
 {
     if( ! m_xHDS.is() )
     {
@@ -127,7 +120,6 @@ TVFactory::createInstanceWithArguments(
 
 Sequence< OUString > SAL_CALL
 TVFactory::getAvailableServiceNames( )
-    throw( RuntimeException, std::exception )
 {
     Sequence<OUString> seq { "com.sun.star.ucb.HierarchyDataReadAccess" };
     return seq;

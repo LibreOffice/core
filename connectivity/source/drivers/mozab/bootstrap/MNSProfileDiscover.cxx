@@ -139,7 +139,7 @@ namespace connectivity
             }
         }
 
-        OUString ProfileAccess::getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException)
+        OUString ProfileAccess::getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName )
         {
             sal_Int32 index=product;
             ProductStruct &rProduct = m_ProductProfileList[index];
@@ -152,13 +152,13 @@ namespace connectivity
                 return rProduct.mProfileList[profileName]->getProfilePath();
         }
 
-        ::sal_Int32 ProfileAccess::getProfileCount( css::mozilla::MozillaProductType product) throw (css::uno::RuntimeException)
+        ::sal_Int32 ProfileAccess::getProfileCount( css::mozilla::MozillaProductType product)
         {
             sal_Int32 index=product;
             ProductStruct &rProduct = m_ProductProfileList[index];
             return static_cast< ::sal_Int32 >(rProduct.mProfileList.size());
         }
-        ::sal_Int32 ProfileAccess::getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list ) throw (css::uno::RuntimeException)
+        ::sal_Int32 ProfileAccess::getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list )
         {
             sal_Int32 index=product;
             ProductStruct &rProduct = m_ProductProfileList[index];
@@ -176,7 +176,7 @@ namespace connectivity
             return static_cast< ::sal_Int32 >(rProduct.mProfileList.size());
         }
 
-        OUString ProfileAccess::getDefaultProfile( css::mozilla::MozillaProductType product ) throw (css::uno::RuntimeException)
+        OUString ProfileAccess::getDefaultProfile( css::mozilla::MozillaProductType product )
         {
             sal_Int32 index=product;
             ProductStruct &rProduct = m_ProductProfileList[index];
@@ -193,14 +193,14 @@ namespace connectivity
             ProfileStruct * aProfile = (*rProduct.mProfileList.begin()).second;
             return aProfile->getProfileName();
         }
-        bool ProfileAccess::isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException)
+        bool ProfileAccess::isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName )
         {
             (void)product; /* avoid warning about unused parameter */
             (void)profileName; /* avoid warning about unused parameter */
             return true;
         }
 
-        bool ProfileAccess::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException)
+        bool ProfileAccess::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName )
         {
             sal_Int32 index=product;
             ProductStruct &rProduct = m_ProductProfileList[index];

@@ -49,8 +49,7 @@ public:
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
                         createFastChildContext(
                             sal_Int32 nElement,
-                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs )
-                        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+                            const css::uno::Reference< css::xml::sax::XFastAttributeList >& rxAttribs ) override;
 
 private:
     RelationsRef        mxRelations;

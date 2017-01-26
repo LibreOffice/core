@@ -51,29 +51,29 @@ protected:
 
     /// @throws css::uno::RuntimeException
     VbaPageSetupBase( const css::uno::Reference< ov::XHelperInterface >& xParent,
-                    const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
+                    const css::uno::Reference< css::uno::XComponentContext >& xContext );
 public:
     virtual ~VbaPageSetupBase() override {}
 
     // Attribute
-    virtual double SAL_CALL getTopMargin() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTopMargin( double margin ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getBottomMargin() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBottomMargin( double margin ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getRightMargin() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setRightMargin( double margin ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getLeftMargin() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLeftMargin( double margin ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getTopMargin() override;
+    virtual void SAL_CALL setTopMargin( double margin ) override;
+    virtual double SAL_CALL getBottomMargin() override;
+    virtual void SAL_CALL setBottomMargin( double margin ) override;
+    virtual double SAL_CALL getRightMargin() override;
+    virtual void SAL_CALL setRightMargin( double margin ) override;
+    virtual double SAL_CALL getLeftMargin() override;
+    virtual void SAL_CALL setLeftMargin( double margin ) override;
     /// @throws css::uno::RuntimeException
-    virtual double SAL_CALL getHeaderMargin() throw (css::uno::RuntimeException);
+    virtual double SAL_CALL getHeaderMargin();
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL setHeaderMargin( double margin ) throw (css::uno::RuntimeException);
+    virtual void SAL_CALL setHeaderMargin( double margin );
     /// @throws css::uno::RuntimeException
-    virtual double SAL_CALL getFooterMargin() throw (css::uno::RuntimeException);
+    virtual double SAL_CALL getFooterMargin();
     /// @throws css::uno::RuntimeException
-    virtual void SAL_CALL setFooterMargin( double margin ) throw (css::uno::RuntimeException);
-    virtual sal_Int32 SAL_CALL getOrientation() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setOrientation( sal_Int32 orientation ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFooterMargin( double margin );
+    virtual sal_Int32 SAL_CALL getOrientation() override;
+    virtual void SAL_CALL setOrientation( sal_Int32 orientation ) override;
 };
 #endif
 

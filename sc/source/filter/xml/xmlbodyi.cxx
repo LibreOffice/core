@@ -198,7 +198,6 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLBodyContext::createFastChildContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
     if ( pSheetData && pSheetData->HasStartPos() )
@@ -237,7 +236,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 }
 
 void SAL_CALL ScXMLBodyContext::characters(const OUString &)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
     if ( pSheetData && pSheetData->HasStartPos() )
@@ -250,7 +248,6 @@ void SAL_CALL ScXMLBodyContext::characters(const OUString &)
 }
 
 void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 /*nElement*/)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
     if ( pSheetData && pSheetData->HasStartPos() )

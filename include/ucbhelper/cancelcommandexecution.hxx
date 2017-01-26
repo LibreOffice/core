@@ -56,8 +56,7 @@ namespace ucbhelper
 UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::uno::Any & rException,
                              const css::uno::Reference<
                                 css::ucb::XCommandEnvironment > &
-                                    xEnv )
-    throw( css::uno::Exception );
+                                    xEnv );
 
 /** Cancel the execution of a command by throwing the appropriate exception.
     If an Interaction Handler is given with the command environment and the
@@ -94,8 +93,7 @@ UCBHELPER_DLLPUBLIC void cancelCommandExecution( const css::ucb::IOErrorCode eEr
                              const css::uno::Sequence< css::uno::Any > & rArgs,
                              const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
                              const OUString & rMessage = OUString(),
-                             const css::uno::Reference< css::ucb::XCommandProcessor > & xContext = nullptr )
-    throw( css::uno::Exception );
+                             const css::uno::Reference< css::ucb::XCommandProcessor > & xContext = nullptr );
 }
 
 #endif // INCLUDED_UCBHELPER_CANCELCOMMANDEXECUTION_HXX

@@ -192,21 +192,19 @@ class Job : public  ::cppu::WeakImplHelper<
 
         // XJobListener
         virtual void SAL_CALL jobFinished( const css::uno::Reference< css::task::XAsyncJob >& xJob,
-                                           const css::uno::Any&                               aResult ) throw(css::uno::RuntimeException, std::exception) override;
+                                           const css::uno::Any&                               aResult ) override;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination ( const css::lang::EventObject& aEvent ) throw(css::frame::TerminationVetoException,
-                                                                                              css::uno::RuntimeException, std::exception          ) override;
-        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception          ) override;
+        virtual void SAL_CALL queryTermination ( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
 
         // XCloseListener
         virtual void SAL_CALL queryClosing ( const css::lang::EventObject& aEvent         ,
-                                                   sal_Bool                bGetsOwnership ) throw(css::util::CloseVetoException,
-                                                                                                  css::uno::RuntimeException, std::exception   ) override;
-        virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent         ) throw(css::uno::RuntimeException, std::exception   ) override;
+                                                   sal_Bool                bGetsOwnership ) override;
+        virtual void SAL_CALL notifyClosing( const css::lang::EventObject& aEvent         ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
 };
 
 } // namespace framework

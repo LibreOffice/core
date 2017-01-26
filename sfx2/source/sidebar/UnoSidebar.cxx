@@ -36,7 +36,6 @@ SidebarController* SfxUnoSidebar::getSidebarController()
 }
 
 void SAL_CALL SfxUnoSidebar::showDecks ( const sal_Bool bVisible )
-                            throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -52,7 +51,6 @@ void SAL_CALL SfxUnoSidebar::showDecks ( const sal_Bool bVisible )
 }
 
 void SAL_CALL SfxUnoSidebar::setVisible ( const sal_Bool bVisible )
-                            throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -69,7 +67,6 @@ void SAL_CALL SfxUnoSidebar::setVisible ( const sal_Bool bVisible )
 }
 
 sal_Bool SAL_CALL SfxUnoSidebar::isVisible()
-                            throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -79,7 +76,6 @@ sal_Bool SAL_CALL SfxUnoSidebar::isVisible()
 }
 
 uno::Reference<frame::XFrame> SAL_CALL SfxUnoSidebar::getFrame()
-                            throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -90,7 +86,6 @@ uno::Reference<frame::XFrame> SAL_CALL SfxUnoSidebar::getFrame()
 }
 
 uno::Reference<ui::XDecks> SAL_CALL SfxUnoSidebar::getDecks()
-                            throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -99,7 +94,6 @@ uno::Reference<ui::XDecks> SAL_CALL SfxUnoSidebar::getDecks()
 }
 
 uno::Reference<ui::XSidebar> SAL_CALL SfxUnoSidebar::getSidebar()
-                            throw (uno::RuntimeException, std::exception)
 {
     return getSidebarController();
 }

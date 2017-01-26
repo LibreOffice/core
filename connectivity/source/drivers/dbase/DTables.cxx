@@ -56,7 +56,7 @@ sdbcx::ObjectType ODbaseTables::createObject(const OUString& _rName)
     return xRet;
 }
 
-void ODbaseTables::impl_refresh(  ) throw(RuntimeException)
+void ODbaseTables::impl_refresh(  )
 {
     static_cast<ODbaseCatalog*>(&m_rParent)->refreshTables();
 }
@@ -124,7 +124,7 @@ void ODbaseTables::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     }
 }
 
-Any SAL_CALL ODbaseTables::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL ODbaseTables::queryInterface( const Type & rType )
 {
     typedef sdbcx::OCollection OTables_BASE;
     return OTables_BASE::queryInterface(rType);

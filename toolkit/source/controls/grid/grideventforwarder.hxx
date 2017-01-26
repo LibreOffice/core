@@ -52,18 +52,18 @@ namespace toolkit
         virtual void SAL_CALL release() throw() override;
 
         // XGridDataListener
-        virtual void SAL_CALL rowsInserted( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL rowsRemoved( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL dataChanged( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL rowHeadingChanged( const css::awt::grid::GridDataEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL rowsInserted( const css::awt::grid::GridDataEvent& Event ) override;
+        virtual void SAL_CALL rowsRemoved( const css::awt::grid::GridDataEvent& Event ) override;
+        virtual void SAL_CALL dataChanged( const css::awt::grid::GridDataEvent& Event ) override;
+        virtual void SAL_CALL rowHeadingChanged( const css::awt::grid::GridDataEvent& Event ) override;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
+        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
+        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& i_event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& i_event ) override;
 
     private:
         UnoGridControl& m_parent;

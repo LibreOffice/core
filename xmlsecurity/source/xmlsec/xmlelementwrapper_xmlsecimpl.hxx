@@ -59,19 +59,14 @@ public:
     /* XXMLElementWrapper */
 
     /* css::lang::XUnoTunnel */
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
     /// @throws css::uno::RuntimeException
-    static css::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId()
-        throw(css::uno::RuntimeException);
+    static css::uno::Sequence < sal_Int8 > getUnoTunnelImplementationId();
 
     /* css::lang::XServiceInfo */
-    virtual OUString SAL_CALL getImplementationName(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 public:
     /*
@@ -89,18 +84,15 @@ public:
 };
 
 /// @throws css::uno::RuntimeException
-OUString XMLElementWrapper_XmlSecImpl_getImplementationName()
-    throw ( css::uno::RuntimeException );
+OUString XMLElementWrapper_XmlSecImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
-    throw ( css::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  );
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 SAL_CALL XMLElementWrapper_XmlSecImpl_createInstance(
-    const css::uno::Reference< css::uno::XComponentContext > &)
-    throw ( css::uno::Exception );
+    const css::uno::Reference< css::uno::XComponentContext > &);
 
 #endif
 

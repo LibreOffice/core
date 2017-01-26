@@ -53,58 +53,51 @@ ScAccessibleFilterMenuItem::~ScAccessibleFilterMenuItem()
 }
 
 sal_Int32 ScAccessibleFilterMenuItem::getAccessibleChildCount()
-    throw (RuntimeException, std::exception)
 {
     return 0;
 }
 
 Reference<XAccessible> ScAccessibleFilterMenuItem::getAccessibleChild(sal_Int32 /*nIndex*/)
-    throw (RuntimeException, IndexOutOfBoundsException, std::exception)
 {
     throw IndexOutOfBoundsException();
 }
 
 Reference<XAccessibleStateSet> ScAccessibleFilterMenuItem::getAccessibleStateSet()
-    throw (RuntimeException, std::exception)
 {
     updateStateSet();
     return mxStateSet;
 }
 
 OUString ScAccessibleFilterMenuItem::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return OUString("ScAccessibleFilterMenuItem");
 }
 
 // XAccessibleAction
 
-sal_Int32 ScAccessibleFilterMenuItem::getAccessibleActionCount() throw (RuntimeException, std::exception)
+sal_Int32 ScAccessibleFilterMenuItem::getAccessibleActionCount()
 {
     return 1;
 }
 
 sal_Bool ScAccessibleFilterMenuItem::doAccessibleAction(sal_Int32 /*nIndex*/)
-    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     mpWindow->executeMenuItem(mnMenuPos);
     return true;
 }
 
 OUString ScAccessibleFilterMenuItem::getAccessibleActionDescription(sal_Int32 /*nIndex*/)
-    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     return OUString("click");
 }
 
 Reference<XAccessibleKeyBinding> ScAccessibleFilterMenuItem::getAccessibleActionKeyBinding(
-    sal_Int32 /*nIndex*/) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    sal_Int32 /*nIndex*/)
 {
     return Reference<XAccessibleKeyBinding>();
 }
 
 Any SAL_CALL ScAccessibleFilterMenuItem::queryInterface( uno::Type const & rType )
-    throw (RuntimeException, std::exception)
 {
     Any any = ScAccessibleContextBase::queryInterface(rType);
     if (any.hasValue())
@@ -134,7 +127,6 @@ void ScAccessibleFilterMenuItem::setEnabled(bool bEnabled)
 }
 
 Rectangle ScAccessibleFilterMenuItem::GetBoundingBoxOnScreen() const
-    throw (RuntimeException, std::exception)
 {
     if (!mpWindow->IsVisible())
         return Rectangle();
@@ -148,7 +140,6 @@ Rectangle ScAccessibleFilterMenuItem::GetBoundingBoxOnScreen() const
 }
 
 Rectangle ScAccessibleFilterMenuItem::GetBoundingBox() const
-    throw (RuntimeException, std::exception)
 {
     if (!mpWindow->IsVisible())
         return Rectangle();

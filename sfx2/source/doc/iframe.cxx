@@ -65,44 +65,40 @@ class IFrameObject : public ::cppu::WeakImplHelper <
 public:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    IFrameObject(const css::uno::Reference < css::uno::XComponentContext>& rxContext, const css::uno::Sequence< css::uno::Any >& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+    IFrameObject(const css::uno::Reference < css::uno::XComponentContext>& rxContext, const css::uno::Sequence< css::uno::Any >& aArguments);
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.sfx2.IFrameObject");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         css::uno::Sequence< OUString > aSeq { "com.sun.star.frame.SpecialEmbeddedObject" };
         return aSeq;
     }
 
     virtual sal_Bool SAL_CALL load( const css::uno::Sequence < css::beans::PropertyValue >& lDescriptor,
-            const css::uno::Reference < css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL cancel() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) throw( css::util::CloseVetoException, css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override ;
-    virtual void SAL_CALL setTitle( const OUString& aTitle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int16 SAL_CALL execute(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference < css::frame::XFrame >& xFrame ) override;
+    virtual void SAL_CALL cancel() override;
+    virtual void SAL_CALL close( sal_Bool bDeliverOwnership ) override;
+    virtual void SAL_CALL addCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) override;
+    virtual void SAL_CALL removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& xListener ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override ;
+    virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
+    virtual ::sal_Int16 SAL_CALL execute(  ) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener > & aListener) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener > & aListener) override;
+    virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
+    virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
 };
 
 class IFrameWindow_Impl : public vcl::Window
@@ -149,7 +145,6 @@ const SfxItemPropertyMapEntry* lcl_GetIFramePropertyMap_Impl()
 }
 
 IFrameObject::IFrameObject(const uno::Reference < uno::XComponentContext >& rxContext, const css::uno::Sequence< css::uno::Any >& aArguments)
-    throw ( uno::Exception, uno::RuntimeException )
     : mxContext( rxContext )
     , maPropMap( lcl_GetIFramePropertyMap_Impl() )
 {
@@ -160,7 +155,6 @@ IFrameObject::IFrameObject(const uno::Reference < uno::XComponentContext >& rxCo
 sal_Bool SAL_CALL IFrameObject::load(
     const uno::Sequence < css::beans::PropertyValue >& /*lDescriptor*/,
     const uno::Reference < frame::XFrame >& xFrame )
-throw( uno::RuntimeException, std::exception )
 {
     if ( SvtMiscOptions().IsPluginsEnabled() )
     {
@@ -206,7 +200,7 @@ throw( uno::RuntimeException, std::exception )
     return false;
 }
 
-void SAL_CALL IFrameObject::cancel() throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::cancel()
 {
     try
     {
@@ -220,31 +214,30 @@ void SAL_CALL IFrameObject::cancel() throw( css::uno::RuntimeException, std::exc
     }
 }
 
-void SAL_CALL IFrameObject::close( sal_Bool /*bDeliverOwnership*/ ) throw( css::util::CloseVetoException, css::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::close( sal_Bool /*bDeliverOwnership*/ )
 {
 }
 
-void SAL_CALL IFrameObject::addCloseListener( const css::uno::Reference < css::util::XCloseListener >& ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::addCloseListener( const css::uno::Reference < css::util::XCloseListener >& )
 {
 }
 
-void SAL_CALL IFrameObject::removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::removeCloseListener( const css::uno::Reference < css::util::XCloseListener >& )
 {
 }
 
-void SAL_CALL IFrameObject::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL IFrameObject::disposing( const css::lang::EventObject& )
 {
     cancel();
 }
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL IFrameObject::getPropertySetInfo() throw( css::uno::RuntimeException, std::exception )
+uno::Reference< beans::XPropertySetInfo > SAL_CALL IFrameObject::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo > xInfo = new SfxItemPropertySetInfo( maPropMap );
     return xInfo;
 }
 
 void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, const uno::Any& aAny)
-    throw ( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
     if( !pEntry )
@@ -325,7 +318,6 @@ void SAL_CALL IFrameObject::setPropertyValue(const OUString& aPropertyName, cons
 }
 
 uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
-        throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     const SfxItemPropertySimpleEntry*  pEntry = maPropMap.getByName( aPropertyName );
     if( !pEntry )
@@ -382,23 +374,23 @@ uno::Any SAL_CALL IFrameObject::getPropertyValue(const OUString& aPropertyName)
     return aAny;
 }
 
-void SAL_CALL IFrameObject::addPropertyChangeListener(const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener > & ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::addPropertyChangeListener(const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener > & )
 {
 }
 
-void SAL_CALL IFrameObject::removePropertyChangeListener(const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener > & ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::removePropertyChangeListener(const OUString&, const css::uno::Reference< css::beans::XPropertyChangeListener > & )
 {
 }
 
-void SAL_CALL IFrameObject::addVetoableChangeListener(const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener > & ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::addVetoableChangeListener(const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener > & )
 {
 }
 
-void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener > & ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const css::uno::Reference< css::beans::XVetoableChangeListener > & )
 {
 }
 
-::sal_Int16 SAL_CALL IFrameObject::execute() throw (css::uno::RuntimeException, std::exception)
+::sal_Int16 SAL_CALL IFrameObject::execute()
 {
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     ScopedVclPtr<VclAbstractDialog> pDlg(pFact->CreateEditObjectDialog( ".uno:InsertObjectFloatingFrame", mxObj ));
@@ -407,7 +399,7 @@ void SAL_CALL IFrameObject::removeVetoableChangeListener(const OUString&, const 
     return 0;
 }
 
-void SAL_CALL IFrameObject::setTitle( const OUString& ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL IFrameObject::setTitle( const OUString& )
 {
 }
 

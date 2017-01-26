@@ -43,13 +43,11 @@ ByteChucker::~ByteChucker()
 }
 
 void ByteChucker::WriteBytes( const Sequence< sal_Int8 >& aData )
-    throw(NotConnectedException, BufferSizeExceededException, IOException, RuntimeException)
 {
     xStream->writeBytes(aData);
 }
 
 sal_Int64 ByteChucker::GetPosition(  )
-        throw(IOException, RuntimeException)
 {
     return xSeek->getPosition();
 }

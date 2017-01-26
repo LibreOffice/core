@@ -84,19 +84,16 @@ BridgeFactory::BridgeFactory():
 BridgeFactory::~BridgeFactory() {}
 
 OUString BridgeFactory::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return static_getImplementationName();
 }
 
 sal_Bool BridgeFactory::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence< OUString > BridgeFactory::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return static_getSupportedServiceNames();
 }
@@ -106,9 +103,6 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
     css::uno::Reference< css::connection::XConnection > const & aConnection,
     css::uno::Reference< css::bridge::XInstanceProvider > const &
         anInstanceProvider)
-    throw (
-        css::bridge::BridgeExistsException, css::lang::IllegalArgumentException,
-        css::uno::RuntimeException, std::exception)
 {
     rtl::Reference< Bridge > b;
     {
@@ -141,7 +135,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::createBridge(
 }
 
 css::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
-    OUString const & sName) throw (css::uno::RuntimeException, std::exception)
+    OUString const & sName)
 {
     osl::MutexGuard g(m_aMutex);
     BridgeMap::iterator i(named_.find(sName));
@@ -150,7 +144,7 @@ css::uno::Reference< css::bridge::XBridge > BridgeFactory::getBridge(
 }
 
 css::uno::Sequence< css::uno::Reference< css::bridge::XBridge > >
-BridgeFactory::getExistingBridges() throw (css::uno::RuntimeException, std::exception) {
+BridgeFactory::getExistingBridges() {
     osl::MutexGuard g(m_aMutex);
     if (unnamed_.size() > SAL_MAX_INT32) {
         throw css::uno::RuntimeException(

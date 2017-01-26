@@ -73,7 +73,6 @@ bool EncryptorImpl::checkReady() const
 }
 
 void EncryptorImpl::notifyResultListener() const
-    throw (Exception, RuntimeException)
 /****** DecryptorImpl/notifyResultListener ***********************************
  *
  *   NAME
@@ -90,7 +89,6 @@ void EncryptorImpl::notifyResultListener() const
 void EncryptorImpl::startEngine( const Reference<
     cssxc::XXMLEncryptionTemplate >&
     xEncryptionTemplate)
-        throw (Exception, RuntimeException)
 /****** EncryptorImpl/startEngine ********************************************
  *
  *   NAME
@@ -136,7 +134,6 @@ void EncryptorImpl::startEngine( const Reference<
 
 /* XReferenceCollector */
 void SAL_CALL EncryptorImpl::setReferenceCount(sal_Int32)
-    throw (Exception, RuntimeException, std::exception)
 {
     /*
      * dummy method, because there is only one reference in
@@ -146,27 +143,23 @@ void SAL_CALL EncryptorImpl::setReferenceCount(sal_Int32)
 }
 
 void SAL_CALL EncryptorImpl::setReferenceId( sal_Int32 id )
-    throw (Exception, RuntimeException, std::exception)
 {
     m_nReferenceId = id;
 }
 
 /* XEncryptionResultBroadcaster */
 void SAL_CALL EncryptorImpl::addEncryptionResultListener( const Reference< cssxc::sax::XEncryptionResultListener >& listener )
-        throw (Exception, RuntimeException, std::exception)
 {
     m_xResultListener = listener;
     tryToPerform();
 }
 
 void SAL_CALL EncryptorImpl::removeEncryptionResultListener( const Reference< cssxc::sax::XEncryptionResultListener >&)
-        throw (RuntimeException, std::exception)
 {
 }
 
 /* XInitialization */
 void SAL_CALL EncryptorImpl::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException, std::exception)
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
@@ -183,13 +176,11 @@ void SAL_CALL EncryptorImpl::initialize( const Sequence< Any >& aArguments )
 
 
 OUString EncryptorImpl_getImplementationName ()
-    throw (RuntimeException)
 {
     return OUString ( IMPLEMENTATION_NAME );
 }
 
 Sequence< OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.Encryptor" };
     return aRet;
@@ -197,26 +188,22 @@ Sequence< OUString > SAL_CALL EncryptorImpl_getSupportedServiceNames(  )
 
 Reference< XInterface > SAL_CALL EncryptorImpl_createInstance(
     const Reference< cssl::XMultiServiceFactory >& xMSF)
-    throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new EncryptorImpl( comphelper::getComponentContext( xMSF ) ));
 }
 
 /* XServiceInfo */
 OUString SAL_CALL EncryptorImpl::getImplementationName(  )
-    throw (RuntimeException, std::exception)
 {
     return EncryptorImpl_getImplementationName();
 }
 
 sal_Bool SAL_CALL EncryptorImpl::supportsService( const OUString& rServiceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL EncryptorImpl::getSupportedServiceNames(  )
-    throw (RuntimeException, std::exception)
 {
     return EncryptorImpl_getSupportedServiceNames();
 }

@@ -1901,7 +1901,7 @@ public:
         assert(mpCallback);
     }
 
-    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
     {
         boost::property_tree::ptree aTree;
         aTree.put("commandName", maCommand.getStr());
@@ -1920,7 +1920,7 @@ public:
         mpCallback->queue(LOK_CALLBACK_UNO_COMMAND_RESULT, aPayload.getStr());
     }
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) throw (css::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) override {}
 };
 
 static void doc_postUnoCommand(LibreOfficeKitDocument* pThis, const char* pCommand, const char* pArguments, bool bNotifyWhenFinished)

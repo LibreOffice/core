@@ -37,7 +37,6 @@ OPropertyChangeListener::~OPropertyChangeListener()
 
 
 void OPropertyChangeListener::_disposing(const EventObject&)
-    throw (RuntimeException, std::exception)
 {
     // nothing to do here
 }
@@ -108,7 +107,7 @@ void OPropertyChangeMultiplexer::dispose()
 
 // XEventListener
 
-void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSource) throw( RuntimeException, std::exception)
+void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSource)
 {
     if (m_pListener)
     {
@@ -129,7 +128,7 @@ void SAL_CALL OPropertyChangeMultiplexer::disposing( const  EventObject& _rSourc
 
 // XPropertyChangeListener
 
-void SAL_CALL OPropertyChangeMultiplexer::propertyChange( const  PropertyChangeEvent& _rEvent ) throw( RuntimeException, std::exception)
+void SAL_CALL OPropertyChangeMultiplexer::propertyChange( const  PropertyChangeEvent& _rEvent )
 {
     if (m_pListener && !locked())
         m_pListener->_propertyChanged(_rEvent);

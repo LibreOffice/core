@@ -126,7 +126,7 @@ namespace frm
     }
 
 
-    Any SAL_CALL ONavigationBarModel::queryAggregation( const Type& _rType ) throw ( RuntimeException, std::exception )
+    Any SAL_CALL ONavigationBarModel::queryAggregation( const Type& _rType )
     {
         Any aReturn = ONavigationBarModel_BASE::queryInterface( _rType );
 
@@ -143,13 +143,13 @@ namespace frm
     IMPLEMENT_DEFAULT_CLONING( ONavigationBarModel )
 
 
-    OUString SAL_CALL ONavigationBarModel::getImplementationName()  throw(RuntimeException, std::exception)
+    OUString SAL_CALL ONavigationBarModel::getImplementationName()
     {
         return OUString( "com.sun.star.comp.form.ONavigationBarModel" );
     }
 
 
-    Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames()  throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL ONavigationBarModel::getSupportedServiceNames()
     {
         Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames_Static();
         aSupported.realloc( aSupported.getLength() + 2 );
@@ -160,7 +160,7 @@ namespace frm
         return aSupported;
     }
 
-    OUString SAL_CALL ONavigationBarModel::getServiceName() throw ( RuntimeException, std::exception )
+    OUString SAL_CALL ONavigationBarModel::getServiceName()
     {
         return OUString(FRM_SUN_COMPONENT_NAVTOOLBAR);
     }
@@ -179,7 +179,7 @@ namespace frm
     #define PERSIST_SHOW_FILTERSORT 0x0040
 
 
-    void SAL_CALL ONavigationBarModel::write( const Reference< XObjectOutputStream >& _rxOutStream ) throw ( IOException, RuntimeException, std::exception )
+    void SAL_CALL ONavigationBarModel::write( const Reference< XObjectOutputStream >& _rxOutStream )
     {
         // open a section for compatibility - if we later on write additional members,
         // then older versions can skip them
@@ -252,7 +252,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ONavigationBarModel::read( const Reference< XObjectInputStream >& _rxInStream ) throw ( IOException, RuntimeException, std::exception )
+    void SAL_CALL ONavigationBarModel::read( const Reference< XObjectInputStream >& _rxInStream )
     {
         OStreamSection aEnsureBlockCompat( _rxInStream );
 
@@ -331,7 +331,7 @@ namespace frm
 
 
     sal_Bool SAL_CALL ONavigationBarModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
-        sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException, RuntimeException, std::exception )
+        sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified = false;
 
@@ -352,7 +352,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ONavigationBarModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception, std::exception )
+    void SAL_CALL ONavigationBarModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
     {
         if ( isRegisteredProperty( _nHandle ) )
         {

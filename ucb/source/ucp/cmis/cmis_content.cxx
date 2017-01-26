@@ -287,7 +287,6 @@ namespace cmis
     Content::Content( const uno::Reference< uno::XComponentContext >& rxContext,
         ContentProvider *pProvider, const uno::Reference< ucb::XContentIdentifier >& Identifier,
         libcmis::ObjectPtr const & pObject )
-            throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_pSession( nullptr ),
@@ -306,7 +305,6 @@ namespace cmis
     Content::Content( const uno::Reference< uno::XComponentContext >& rxContext, ContentProvider *pProvider,
         const uno::Reference< ucb::XContentIdentifier >& Identifier,
         bool bIsFolder )
-            throw ( ucb::ContentCreationException )
         : ContentImplHelper( rxContext, pProvider, Identifier ),
         m_pProvider( pProvider ),
         m_pSession( nullptr ),
@@ -497,7 +495,7 @@ namespace cmis
     }
 
 
-    libcmis::ObjectPtr const & Content::getObject( const uno::Reference< ucb::XCommandEnvironment >& xEnv ) throw (css::uno::RuntimeException, css::ucb::CommandFailedException, libcmis::Exception)
+    libcmis::ObjectPtr const & Content::getObject( const uno::Reference< ucb::XCommandEnvironment >& xEnv )
     {
         // can't get the session for some reason
         // the recent file opening at start up is an example.
@@ -974,7 +972,6 @@ namespace cmis
 
     uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-            throw( uno::Exception, libcmis::Exception )
     {
         bool bIsFolder = isFolder( xEnv );
 
@@ -1042,7 +1039,6 @@ namespace cmis
 
     OUString Content::checkIn( const ucb::CheckinArgument& rArg,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-            throw( uno::Exception )
     {
         ucbhelper::Content aSourceContent( rArg.SourceURL, xEnv, comphelper::getProcessComponentContext( ) );
         uno::Reference< io::XInputStream > xIn = aSourceContent.openStream( );
@@ -1113,7 +1109,6 @@ namespace cmis
     }
 
     OUString Content::checkOut( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-            throw( uno::Exception )
     {
         OUString aRet;
         try
@@ -1160,7 +1155,6 @@ namespace cmis
     }
 
     OUString Content::cancelCheckOut( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-            throw( uno::Exception )
     {
         OUString aRet;
         try
@@ -1226,7 +1220,6 @@ namespace cmis
     }
 
     uno::Sequence< document::CmisVersion> Content::getAllVersions( const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-            throw( uno::Exception, std::exception )
     {
         try
         {
@@ -1268,7 +1261,6 @@ namespace cmis
 
     void Content::transfer( const ucb::TransferInfo& rTransferInfo,
         const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-            throw( uno::Exception )
     {
         // If the source isn't on the same CMIS repository, then simply copy
         INetURLObject aSourceUrl( rTransferInfo.SourceURL );
@@ -1292,7 +1284,6 @@ namespace cmis
     void Content::insert( const uno::Reference< io::XInputStream > & xInputStream,
         bool bReplaceExisting, const OUString& rMimeType,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-            throw (uno::Exception, std::exception)
     {
         if ( !xInputStream.is() )
         {
@@ -1736,25 +1727,24 @@ namespace cmis
         ContentImplHelper::release();
     }
 
-    uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType ) throw ( uno::RuntimeException, std::exception )
+    uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
     {
         uno::Any aRet = cppu::queryInterface( rType, static_cast< ucb::XContentCreator * >( this ) );
         return aRet.hasValue() ? aRet : ContentImplHelper::queryInterface(rType);
     }
 
-    OUString SAL_CALL Content::getImplementationName() throw( uno::RuntimeException, std::exception )
+    OUString SAL_CALL Content::getImplementationName()
     {
        return OUString("com.sun.star.comp.CmisContent");
     }
 
     uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
-           throw( uno::RuntimeException, std::exception )
     {
            uno::Sequence<OUString> aSNS { "com.sun.star.ucb.CmisContent" };
            return aSNS;
     }
 
-    OUString SAL_CALL Content::getContentType() throw( uno::RuntimeException, std::exception )
+    OUString SAL_CALL Content::getContentType()
     {
         OUString sRet;
         try
@@ -1781,7 +1771,6 @@ namespace cmis
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-            throw( uno::Exception, ucb::CommandAbortedException, uno::RuntimeException, std::exception )
     {
         SAL_INFO( "ucb.ucp.cmis", "Content::execute( ) - " << aCommand.Name );
         uno::Any aRet;
@@ -1906,20 +1895,19 @@ namespace cmis
         return aRet;
     }
 
-    void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ ) throw( uno::RuntimeException, std::exception )
+    void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
     {
         SAL_INFO( "ucb.ucp.cmis", "TODO - Content::abort()" );
         // TODO Implement me
     }
 
     uno::Sequence< ucb::ContentInfo > SAL_CALL Content::queryCreatableContentsInfo()
-            throw( uno::RuntimeException, std::exception )
     {
         return queryCreatableContentsInfo( uno::Reference< ucb::XCommandEnvironment >() );
     }
 
     uno::Reference< ucb::XContent > SAL_CALL Content::createNewContent(
-            const ucb::ContentInfo& Info ) throw( uno::RuntimeException, std::exception )
+            const ucb::ContentInfo& Info )
     {
         bool create_document;
 
@@ -1949,7 +1937,7 @@ namespace cmis
         }
     }
 
-    uno::Sequence< uno::Type > SAL_CALL Content::getTypes() throw( uno::RuntimeException, std::exception )
+    uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
     {
         try
         {
@@ -1999,7 +1987,6 @@ namespace cmis
 
     uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
         const uno::Reference< ucb::XCommandEnvironment >& xEnv)
-            throw( uno::RuntimeException )
     {
         try
         {

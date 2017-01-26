@@ -51,9 +51,7 @@ namespace tdoc_ucp {
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
-        createTemporaryStorage()
-            throw ( css::uno::Exception,
-                    css::uno::RuntimeException );
+        createTemporaryStorage();
 
         /// @throws css::embed::InvalidStorageException
         /// @throws css::lang::IllegalArgumentException
@@ -61,12 +59,7 @@ namespace tdoc_ucp {
         /// @throws css::embed::StorageWrappedTargetException
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
-        createStorage( const OUString & rUri, StorageAccessMode eMode )
-            throw ( css::embed::InvalidStorageException,
-                    css::lang::IllegalArgumentException,
-                    css::io::IOException,
-                    css::embed::StorageWrappedTargetException,
-                    css::uno::RuntimeException );
+        createStorage( const OUString & rUri, StorageAccessMode eMode );
 
         /// @throws css::embed::InvalidStorageException
         /// @throws css::lang::IllegalArgumentException
@@ -76,13 +69,7 @@ namespace tdoc_ucp {
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::io::XInputStream >
         createInputStream( const OUString & rUri,
-                           const OUString & rPassword )
-            throw ( css::embed::InvalidStorageException,
-                    css::lang::IllegalArgumentException,
-                    css::io::IOException,
-                    css::embed::StorageWrappedTargetException,
-                    css::packages::WrongPasswordException,
-                    css::uno::RuntimeException );
+                           const OUString & rPassword );
 
         /// @throws css::embed::InvalidStorageException
         /// @throws css::lang::IllegalArgumentException
@@ -93,13 +80,7 @@ namespace tdoc_ucp {
         css::uno::Reference< css::io::XOutputStream >
         createOutputStream( const OUString & rUri,
                             const OUString & rPassword,
-                            bool bTruncate )
-            throw ( css::embed::InvalidStorageException,
-                    css::lang::IllegalArgumentException,
-                    css::io::IOException,
-                    css::embed::StorageWrappedTargetException,
-                    css::packages::WrongPasswordException,
-                    css::uno::RuntimeException );
+                            bool bTruncate );
 
         /// @throws css::embed::InvalidStorageException
         /// @throws css::lang::IllegalArgumentException
@@ -110,13 +91,7 @@ namespace tdoc_ucp {
         css::uno::Reference< css::io::XStream >
         createStream( const OUString & rUri,
                       const OUString & rPassword,
-                      bool bTruncate )
-            throw ( css::embed::InvalidStorageException,
-                    css::lang::IllegalArgumentException,
-                    css::io::IOException,
-                    css::embed::StorageWrappedTargetException,
-                    css::packages::WrongPasswordException,
-                    css::uno::RuntimeException );
+                      bool bTruncate );
 
     private:
         friend class Storage;
@@ -130,12 +105,7 @@ namespace tdoc_ucp {
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::embed::XStorage >
         queryParentStorage( const OUString & rUri,
-                            StorageAccessMode eMode )
-            throw ( css::embed::InvalidStorageException,
-                    css::lang::IllegalArgumentException,
-                    css::io::IOException,
-                    css::embed::StorageWrappedTargetException,
-                    css::uno::RuntimeException );
+                            StorageAccessMode eMode );
 
         /// @throws css::embed::InvalidStorageException
         /// @throws css::lang::IllegalArgumentException
@@ -146,12 +116,7 @@ namespace tdoc_ucp {
         queryStorage( const css::uno::Reference<
                         css::embed::XStorage > & xParentStorage,
                       const OUString & rUri,
-                      StorageAccessMode eMode )
-            throw ( css::embed::InvalidStorageException,
-                    css::lang::IllegalArgumentException,
-                    css::io::IOException,
-                    css::embed::StorageWrappedTargetException,
-                    css::uno::RuntimeException );
+                      StorageAccessMode eMode );
 
         /// @throws css::embed::InvalidStorageException
         /// @throws css::lang::IllegalArgumentException
@@ -165,13 +130,7 @@ namespace tdoc_ucp {
                      const OUString & rPassword,
                      const OUString & rUri,
                      StorageAccessMode eMode,
-                     bool bTruncate /* ignored for read-only streams */ )
-            throw ( css::embed::InvalidStorageException,
-                    css::lang::IllegalArgumentException,
-                    css::io::IOException,
-                    css::embed::StorageWrappedTargetException,
-                    css::packages::WrongPasswordException,
-                    css::uno::RuntimeException );
+                     bool bTruncate /* ignored for read-only streams */ );
 
         struct ltstrbool
         {

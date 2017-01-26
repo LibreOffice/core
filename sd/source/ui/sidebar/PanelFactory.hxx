@@ -57,11 +57,7 @@ public:
 
     css::uno::Reference<css::ui::XUIElement> SAL_CALL createUIElement (
         const ::rtl::OUString& rsResourceURL,
-        const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
-        throw(
-            css::container::NoSuchElementException,
-            css::lang::IllegalArgumentException,
-            css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 };
 
 } } // end of namespace sd::sidebar

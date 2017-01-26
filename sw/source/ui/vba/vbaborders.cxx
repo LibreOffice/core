@@ -150,7 +150,7 @@ protected:
 public:
     SwVbaBorder( const uno::Reference< beans::XPropertySet > & xProps, const uno::Reference< uno::XComponentContext >& xContext, sal_Int32 lineType ) : SwVbaBorder_Base( uno::Reference< XHelperInterface >( xProps, uno::UNO_QUERY ), xContext ), m_xProps( xProps ), m_LineType( lineType ) {}
 
-    uno::Any SAL_CALL getLineStyle() throw (uno::RuntimeException, std::exception) override
+    uno::Any SAL_CALL getLineStyle() override
     {
         sal_Int32 nLineStyle = word::WdLineStyle::wdLineStyleNone;
         table::BorderLine aBorderLine;
@@ -171,7 +171,7 @@ public:
         }
         return uno::makeAny( nLineStyle );
     }
-    void SAL_CALL setLineStyle( const uno::Any& _linestyle ) throw (uno::RuntimeException, std::exception) override
+    void SAL_CALL setLineStyle( const uno::Any& _linestyle ) override
     {
         // Urk no choice but to silently ignore we don't support this attribute
         // #TODO would be nice to support the word line styles
@@ -251,11 +251,11 @@ public:
     {
     }
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
+    virtual ::sal_Int32 SAL_CALL getCount(  ) override
     {
         return SAL_N_ELEMENTS( supportedIndexTable );
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
 
         sal_Int32 nIndex = getTableIndex( Index );
@@ -266,11 +266,11 @@ public:
         }
         throw lang::IndexOutOfBoundsException();
     }
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Type SAL_CALL getElementType(  ) override
     {
         return  cppu::UnoType<word::XBorder>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasElements(  ) override
     {
         return true;
     }
@@ -288,12 +288,12 @@ class RangeBorderEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 public:
     explicit RangeBorderEnumWrapper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : m_xIndexAccess( xIndexAccess ), nIndex( 0 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nIndex < m_xIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex < m_xIndexAccess->getCount() )
             return m_xIndexAccess->getByIndex( nIndex++ );
@@ -308,7 +308,7 @@ SwVbaBorders::SwVbaBorders( const uno::Reference< XHelperInterface >& xParent, c
 }
 
 uno::Reference< container::XEnumeration >
-SwVbaBorders::createEnumeration() throw (uno::RuntimeException)
+SwVbaBorders::createEnumeration()
 {
     return new RangeBorderEnumWrapper( m_xIndexAccess );
 }
@@ -320,24 +320,24 @@ SwVbaBorders::createCollectionObject( const css::uno::Any& aSource )
 }
 
 uno::Type
-SwVbaBorders::getElementType() throw (uno::RuntimeException)
+SwVbaBorders::getElementType()
 {
     return cppu::UnoType<word::XBorders>::get();
 }
 
 uno::Any
-SwVbaBorders::getItemByIntIndex( const sal_Int32 nIndex )  throw (uno::RuntimeException)
+SwVbaBorders::getItemByIntIndex( const sal_Int32 nIndex )
 {
     return createCollectionObject( m_xIndexAccess->getByIndex( nIndex ) );
 }
 
-sal_Bool SAL_CALL SwVbaBorders::getShadow() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaBorders::getShadow()
 {
     // always return False for table border in MS Word
     return false;
 }
 
-void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaBorders::setShadow( sal_Bool /*_shadow*/ )
 {
     // not support in Table border in Word
     // TODO:

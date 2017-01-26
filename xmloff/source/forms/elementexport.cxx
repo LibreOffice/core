@@ -308,7 +308,7 @@ namespace xmloff
         exportOuterAttributes();
     }
 
-    void OControlExport::exportSubTags() throw (Exception, std::exception)
+    void OControlExport::exportSubTags()
     {
         // for the upcoming exportRemainingProperties:
         // if a control has the LabelControl property, this is not stored with the control itself, but instead with

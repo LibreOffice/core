@@ -53,7 +53,6 @@ OSpecialEmbeddedObject::OSpecialEmbeddedObject( const uno::Reference< uno::XComp
 
 
 uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType )
-        throw( uno::RuntimeException, std::exception )
 {
     uno::Any aReturn;
 
@@ -74,10 +73,6 @@ uno::Any SAL_CALL OSpecialEmbeddedObject::queryInterface( const uno::Type& rType
 
 
 embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualRepresentation( sal_Int64 nAspect )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -100,10 +95,6 @@ embed::VisualRepresentation SAL_CALL OSpecialEmbeddedObject::getPreferredVisualR
 }
 
 void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, const awt::Size& aSize )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -119,10 +110,6 @@ void SAL_CALL OSpecialEmbeddedObject::setVisualAreaSize( sal_Int64 nAspect, cons
 }
 
 awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -142,8 +129,6 @@ awt::Size SAL_CALL OSpecialEmbeddedObject::getVisualAreaSize( sal_Int64 nAspect 
 }
 
 sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
-        throw ( uno::Exception,
-                uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -159,10 +144,6 @@ sal_Int32 SAL_CALL OSpecialEmbeddedObject::getMapUnit( sal_Int64 nAspect )
 }
 
 void SAL_CALL OSpecialEmbeddedObject::changeState( sal_Int32 nNewState )
-        throw ( css::embed::UnreachableStateException,
-                css::embed::WrongStateException,
-                css::uno::Exception,
-                css::uno::RuntimeException, std::exception )
 {
     if ( nNewState == embed::EmbedStates::UI_ACTIVE )
         nNewState = embed::EmbedStates::INPLACE_ACTIVE;
@@ -170,11 +151,6 @@ void SAL_CALL OSpecialEmbeddedObject::changeState( sal_Int32 nNewState )
 }
 
 void SAL_CALL OSpecialEmbeddedObject::doVerb( sal_Int32 nVerbID )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                embed::UnreachableStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )

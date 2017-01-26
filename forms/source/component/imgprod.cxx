@@ -176,7 +176,7 @@ ImageProducer::~ImageProducer()
 
 
 // XInterface
-css::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::lang::XInitialization* >(this)),
@@ -186,8 +186,6 @@ css::uno::Any ImageProducer::queryInterface( const css::uno::Type & rType ) thro
 
 
 void ImageProducer::addConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer )
-    throw(css::uno::RuntimeException,
-          std::exception)
 {
     DBG_ASSERT( rxConsumer.is(), "::AddConsumer(...): No consumer referenced!" );
     if( rxConsumer.is() )
@@ -195,7 +193,7 @@ void ImageProducer::addConsumer( const css::uno::Reference< css::awt::XImageCons
 }
 
 
-void ImageProducer::removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer ) throw(css::uno::RuntimeException, std::exception)
+void ImageProducer::removeConsumer( const css::uno::Reference< css::awt::XImageConsumer >& rxConsumer )
 {
     ConsumerList_t::reverse_iterator riter = std::find(maConsList.rbegin(),maConsList.rend(),rxConsumer);
 
@@ -257,7 +255,7 @@ void ImageProducer::NewDataAvailable()
 }
 
 
-void ImageProducer::startProduction() throw(css::uno::RuntimeException, std::exception)
+void ImageProducer::startProduction()
 {
     if( !maConsList.empty() || maDoneHdl.IsSet() )
     {
@@ -516,7 +514,7 @@ void ImageProducer::ImplUpdateConsumer( const Graphic& rGraphic )
 }
 
 
-void ImageProducer::initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
+void ImageProducer::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
 {
     if ( aArguments.getLength() == 1 )
     {

@@ -1520,14 +1520,12 @@ Metadatable::JoinMetadatable(Metadatable const & i_rOther,
 
 // css::rdf::XNode:
 OUString SAL_CALL MetadatableMixin::getStringValue()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return getNamespace() + getLocalName();
 }
 
 // css::rdf::XURI:
 OUString SAL_CALL MetadatableMixin::getLocalName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     beans::StringPair mdref( getMetadataReference() );
@@ -1544,7 +1542,6 @@ OUString SAL_CALL MetadatableMixin::getLocalName()
 }
 
 OUString SAL_CALL MetadatableMixin::getNamespace()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const uno::Reference< frame::XModel > xModel( GetModel() );
@@ -1555,7 +1552,6 @@ OUString SAL_CALL MetadatableMixin::getNamespace()
 // css::rdf::XMetadatable:
 beans::StringPair SAL_CALL
 MetadatableMixin::getMetadataReference()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1573,7 +1569,6 @@ throw (uno::RuntimeException, std::exception)
 void SAL_CALL
 MetadatableMixin::setMetadataReference(
     const beans::StringPair & i_rReference)
-throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1589,7 +1584,6 @@ throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
 }
 
 void SAL_CALL MetadatableMixin::ensureMetadataReference()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

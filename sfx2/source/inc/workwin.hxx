@@ -166,19 +166,19 @@ class LayoutManagerListener : public ::cppu::WeakImplHelper<
 
         //  XComponent
 
-        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
+        virtual void SAL_CALL dispose() override;
 
 
         //  XEventListener
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
 
 
         // XLayoutManagerEventListener
 
-        virtual void SAL_CALL layoutEvent( const css::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const css::uno::Any& aInfo ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL layoutEvent( const css::lang::EventObject& aSource, ::sal_Int16 eLayoutEvent, const css::uno::Any& aInfo ) override;
 
     private:
         bool                                             m_bHasFrame;

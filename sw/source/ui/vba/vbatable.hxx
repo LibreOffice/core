@@ -33,14 +33,14 @@ class SwVbaTable : public SwVbaTable_BASE
     css::uno::Reference< css::text::XTextTable > mxTextTable;
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const css::uno::Reference< css::text::XTextTable >& xTextTable) throw ( css::uno::RuntimeException);
-    virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL Range(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Select(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getName( ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Columns( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
+    SwVbaTable( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& rDocument, const css::uno::Reference< css::text::XTextTable >& xTextTable);
+    virtual css::uno::Reference< ::ooo::vba::word::XRange > SAL_CALL Range(  ) override;
+    virtual void SAL_CALL Select(  ) override;
+    virtual void SAL_CALL Delete(  ) override;
+    virtual OUString SAL_CALL getName( ) override;
+    virtual css::uno::Any SAL_CALL Borders( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL Columns( const css::uno::Any& aIndex ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

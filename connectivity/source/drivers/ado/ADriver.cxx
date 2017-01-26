@@ -78,12 +78,12 @@ void ODriver::disposing()
 }
 // static ServiceInfo
 
-OUString ODriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString ODriver::getImplementationName_Static(  )
 {
     return OUString("com.sun.star.comp.sdbc.ado.ODriver");
 }
 
-Sequence< OUString > ODriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< OUString > ODriver::getSupportedServiceNames_Static(  )
 {
     Sequence< OUString > aSNS( 2 );
     aSNS[0] = "com.sun.star.sdbc.Driver";
@@ -91,30 +91,30 @@ Sequence< OUString > ODriver::getSupportedServiceNames_Static(  ) throw (Runtime
     return aSNS;
 }
 
-css::uno::Reference< css::uno::XInterface >  SAL_CALL connectivity::ado::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception )
+css::uno::Reference< css::uno::XInterface >  SAL_CALL connectivity::ado::ODriver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
 {
     return *(new ODriver(_rxFactory));
 }
 
 
-OUString SAL_CALL ODriver::getImplementationName(  ) throw(RuntimeException)
+OUString SAL_CALL ODriver::getImplementationName(  )
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL ODriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException)
+sal_Bool SAL_CALL ODriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Sequence< OUString > SAL_CALL ODriver::getSupportedServiceNames(  ) throw(RuntimeException)
+Sequence< OUString > SAL_CALL ODriver::getSupportedServiceNames(  )
 {
     return getSupportedServiceNames_Static();
 }
 
 
-Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const Sequence< PropertyValue >& info )
 {
     if ( ! acceptsURL(url) )
         return nullptr;
@@ -130,7 +130,6 @@ Reference< XConnection > SAL_CALL ODriver::connect( const OUString& url, const S
 }
 
 sal_Bool SAL_CALL ODriver::acceptsURL( const OUString& url )
-        throw(SQLException, RuntimeException)
 {
     return url.startsWith("sdbc:ado:");
 }
@@ -145,7 +144,7 @@ void ODriver::impl_checkURL_throw(const OUString& _sUrl)
     } // if ( !acceptsURL(_sUrl) )
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException)
+Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& /*info*/ )
 {
     impl_checkURL_throw(url);
     if ( acceptsURL(url) )
@@ -182,18 +181,18 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL ODriver::getMajorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL ODriver::getMajorVersion(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL ODriver::getMinorVersion(  ) throw(RuntimeException)
+sal_Int32 SAL_CALL ODriver::getMinorVersion(  )
 {
     return 0;
 }
 
 // XDataDefinitionSupplier
-Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( const Reference< css::sdbc::XConnection >& connection ) throw(css::sdbc::SQLException, RuntimeException)
+Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( const Reference< css::sdbc::XConnection >& connection )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if (ODriver_BASE::rBHelper.bDisposed)
@@ -233,14 +232,14 @@ Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByConnection( co
     return xTab;
 }
 
-Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw(css::sdbc::SQLException, RuntimeException)
+Reference< XTablesSupplier > SAL_CALL ODriver::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info )
 {
     impl_checkURL_throw(url);
     return getDataDefinitionByConnection(connect(url,info));
 }
 
 
-void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >& _xInterface) throw(SQLException, RuntimeException)
+void ADOS::ThrowException(ADOConnection* _pAdoCon,const Reference< XInterface >& _xInterface)
 {
     ADOErrors *pErrors = nullptr;
     _pAdoCon->get_Errors(&pErrors);

@@ -135,7 +135,7 @@ SlideShow::SlideShow( SdDrawDocument* pDoc )
 {
 }
 
-void SlideShow::ThrowIfDisposed() const throw (RuntimeException)
+void SlideShow::ThrowIfDisposed() const
 {
     if( mpDoc == nullptr )
         throw DisposedException();
@@ -226,17 +226,17 @@ void SlideShow::CreateController(  ViewShell* pViewSh, ::sd::View* pView, vcl::W
 }
 
 // XServiceInfo
-OUString SAL_CALL SlideShow::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL SlideShow::getImplementationName(  )
 {
     return OUString( "com.sun.star.comp.sd.SlideShow" );
 }
 
-sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SlideShow::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  )
 {
     OUString aService( "com.sun.star.presentation.Presentation" );
     Sequence< OUString > aSeq( &aService, 1 );
@@ -244,14 +244,14 @@ Sequence< OUString > SAL_CALL SlideShow::getSupportedServiceNames(  ) throw(Runt
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo() throw(RuntimeException, std::exception)
+Reference< XPropertySetInfo > SAL_CALL SlideShow::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     static Reference< XPropertySetInfo > xInfo = maPropSet.getPropertySetInfo();
     return xInfo;
  }
 
-void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
 {
     SolarMutexGuard aGuard;
     ThrowIfDisposed();
@@ -513,7 +513,7 @@ void SAL_CALL SlideShow::setPropertyValue( const OUString& aPropertyName, const 
         mpDoc->SetChanged();
 }
 
-Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
     ThrowIfDisposed();
@@ -579,25 +579,25 @@ Any SAL_CALL SlideShow::getPropertyValue( const OUString& PropertyName ) throw(U
     }
 }
 
-void SAL_CALL SlideShow::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL SlideShow::addPropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  )
 {
 }
 
-void SAL_CALL SlideShow::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL SlideShow::removePropertyChangeListener( const OUString& , const Reference< XPropertyChangeListener >&  )
 {
 }
 
-void SAL_CALL SlideShow::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL SlideShow::addVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  )
 {
 }
 
-void SAL_CALL SlideShow::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL SlideShow::removeVetoableChangeListener( const OUString& , const Reference< XVetoableChangeListener >&  )
 {
 }
 
 // XPresentation
 
-void SAL_CALL SlideShow::start() throw(RuntimeException, std::exception)
+void SAL_CALL SlideShow::start()
 {
     const Sequence< PropertyValue > aArguments;
     startWithArguments( aArguments );
@@ -631,7 +631,6 @@ void SlideShow::SetExitAfterPresenting(bool bExit)
 }
 
 void SAL_CALL SlideShow::end()
-    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -774,7 +773,7 @@ void SAL_CALL SlideShow::end()
     }
 }
 
-void SAL_CALL SlideShow::rehearseTimings() throw(RuntimeException, std::exception)
+void SAL_CALL SlideShow::rehearseTimings()
 {
     Sequence< PropertyValue > aArguments(1);
     aArguments[0].Name = "RehearseTimings";
@@ -785,7 +784,6 @@ void SAL_CALL SlideShow::rehearseTimings() throw(RuntimeException, std::exceptio
 // XPresentation2
 
 void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rArguments)
-    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ThrowIfDisposed();
@@ -846,13 +844,13 @@ void SAL_CALL SlideShow::startWithArguments(const Sequence< PropertyValue >& rAr
 
 }
 
-sal_Bool SAL_CALL SlideShow::isRunning(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SlideShow::isRunning(  )
 {
     SolarMutexGuard aGuard;
     return mxController.is() && mxController->isRunning();
 }
 
-Reference< XSlideShowController > SAL_CALL SlideShow::getController(  ) throw (RuntimeException, std::exception)
+Reference< XSlideShowController > SAL_CALL SlideShow::getController(  )
 {
     ThrowIfDisposed();
 

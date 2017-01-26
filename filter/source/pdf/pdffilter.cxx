@@ -171,7 +171,6 @@ IMPL_LINK( FocusWindowWaitCursor, DestroyedLink, VclWindowEvent&, rEvent, void )
 
 
 sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException, std::exception)
 {
     FocusWindowWaitCursor aCur;
 
@@ -181,59 +180,54 @@ sal_Bool SAL_CALL PDFFilter::filter( const Sequence< PropertyValue >& rDescripto
 }
 
 
-void SAL_CALL PDFFilter::cancel( ) throw (RuntimeException, std::exception)
+void SAL_CALL PDFFilter::cancel( )
 {
 }
 
 
 void SAL_CALL PDFFilter::setSourceDocument( const Reference< XComponent >& xDoc )
-    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     mxSrcDoc = xDoc;
 }
 
 
 void SAL_CALL PDFFilter::initialize( const css::uno::Sequence< css::uno::Any >& )
-    throw (Exception, RuntimeException, std::exception)
 {
 }
 
 
 OUString PDFFilter_getImplementationName ()
-    throw (RuntimeException)
 {
     return OUString ( "com.sun.star.comp.PDF.PDFFilter" );
 }
 
 
-Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL PDFFilter_getSupportedServiceNames(  )
 {
     Sequence<OUString> aRet { "com.sun.star.document.PDFFilter" };
     return aRet;
 }
 
 
-Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
+Reference< XInterface > SAL_CALL PDFFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new PDFFilter( comphelper::getComponentContext(rSMgr) ));
 }
 
 
 OUString SAL_CALL PDFFilter::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return PDFFilter_getImplementationName();
 }
 
 
 sal_Bool SAL_CALL PDFFilter::supportsService( const OUString& rServiceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 
-css::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL PDFFilter::getSupportedServiceNames(  )
 {
     return PDFFilter_getSupportedServiceNames();
 }

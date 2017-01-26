@@ -105,7 +105,6 @@ void SAL_CALL FileProvider::init()
 void SAL_CALL
 FileProvider::initialize(
     const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException, std::exception)
 {
     if( ! m_pMyShell ) {
         OUString config;
@@ -121,20 +120,17 @@ FileProvider::initialize(
 // XServiceInfo methods.
 OUString SAL_CALL
 FileProvider::getImplementationName()
-    throw( RuntimeException, std::exception )
 {
     return fileaccess::TaskManager::getImplementationName_static();
 }
 
 sal_Bool SAL_CALL FileProvider::supportsService(const OUString& ServiceName )
-  throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL
 FileProvider::getSupportedServiceNames()
-  throw( RuntimeException, std::exception )
 {
     return fileaccess::TaskManager::getSupportedServiceNames_static();
 }
@@ -165,8 +161,6 @@ FileProvider::CreateInstance(
 Reference< XContent > SAL_CALL
 FileProvider::queryContent(
     const Reference< XContentIdentifier >& xIdentifier )
-    throw( IllegalIdentifierException,
-           RuntimeException, std::exception)
 {
     init();
     OUString aUnc;
@@ -184,7 +178,6 @@ sal_Int32 SAL_CALL
 FileProvider::compareContentIds(
                 const Reference< XContentIdentifier >& Id1,
                 const Reference< XContentIdentifier >& Id2 )
-  throw( RuntimeException, std::exception )
 {
     init();
     OUString aUrl1 = Id1->getContentIdentifier();
@@ -241,7 +234,6 @@ FileProvider::compareContentIds(
 Reference< XContentIdentifier > SAL_CALL
 FileProvider::createContentIdentifier(
                       const OUString& ContentId )
-  throw( RuntimeException, std::exception )
 {
     init();
     FileContentIdentifier* p = new FileContentIdentifier( ContentId,false );
@@ -260,8 +252,7 @@ public:
 
     // XInterface
     virtual Any SAL_CALL
-    queryInterface( const Type& aType )
-        throw( RuntimeException, std::exception) override;
+    queryInterface( const Type& aType ) override;
 
     virtual void SAL_CALL
     acquire()
@@ -273,17 +264,13 @@ public:
 
 
     virtual Sequence< Property > SAL_CALL
-    getProperties()
-        throw( RuntimeException, std::exception ) override;
+    getProperties() override;
 
     virtual Property SAL_CALL
-    getPropertyByName( const OUString& aName )
-        throw( UnknownPropertyException,
-               RuntimeException, std::exception) override;
+    getPropertyByName( const OUString& aName ) override;
 
     virtual sal_Bool SAL_CALL
-    hasPropertyByName( const OUString& Name )
-        throw( RuntimeException, std::exception ) override;
+    hasPropertyByName( const OUString& Name ) override;
 
 
 private:
@@ -328,7 +315,6 @@ XPropertySetInfoImpl2::release()
 
 Any SAL_CALL
 XPropertySetInfoImpl2::queryInterface( const Type& rType )
-    throw( RuntimeException, std::exception )
 {
     Any aRet = cppu::queryInterface( rType,
                                           (static_cast< XPropertySetInfo* >(this)) );
@@ -338,8 +324,6 @@ XPropertySetInfoImpl2::queryInterface( const Type& rType )
 
 Property SAL_CALL
 XPropertySetInfoImpl2::getPropertyByName( const OUString& aName )
-    throw( UnknownPropertyException,
-           RuntimeException, std::exception)
 {
     for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
         if( m_seq[i].Name == aName )
@@ -351,7 +335,6 @@ XPropertySetInfoImpl2::getPropertyByName( const OUString& aName )
 
 Sequence< Property > SAL_CALL
 XPropertySetInfoImpl2::getProperties()
-    throw( RuntimeException, std::exception )
 {
     return m_seq;
 }
@@ -360,7 +343,6 @@ XPropertySetInfoImpl2::getProperties()
 sal_Bool SAL_CALL
 XPropertySetInfoImpl2::hasPropertyByName(
     const OUString& aName )
-    throw( RuntimeException, std::exception )
 {
     for( sal_Int32 i = 0; i < m_seq.getLength(); ++i )
         if( m_seq[i].Name == aName )
@@ -401,7 +383,6 @@ void SAL_CALL FileProvider::initProperties()
 
 Reference< XPropertySetInfo > SAL_CALL
 FileProvider::getPropertySetInfo(  )
-    throw( RuntimeException, std::exception )
 {
     initProperties();
     return m_xPropertySetInfo;
@@ -411,11 +392,6 @@ FileProvider::getPropertySetInfo(  )
 void SAL_CALL
 FileProvider::setPropertyValue( const OUString& aPropertyName,
                                 const Any& )
-    throw( UnknownPropertyException,
-           PropertyVetoException,
-           IllegalArgumentException,
-           WrappedTargetException,
-           RuntimeException, std::exception )
 {
     if( aPropertyName == "FileSystemNotation" ||
         aPropertyName == "HomeDirectory"      ||
@@ -429,9 +405,6 @@ FileProvider::setPropertyValue( const OUString& aPropertyName,
 Any SAL_CALL
 FileProvider::getPropertyValue(
     const OUString& aPropertyName )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException, std::exception )
 {
     initProperties();
     if( aPropertyName == "FileSystemNotation" )
@@ -455,9 +428,6 @@ void SAL_CALL
 FileProvider::addPropertyChangeListener(
     const OUString&,
     const Reference< XPropertyChangeListener >& )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException, std::exception)
 {
     return;
 }
@@ -467,9 +437,6 @@ void SAL_CALL
 FileProvider::removePropertyChangeListener(
     const OUString&,
     const Reference< XPropertyChangeListener >& )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException, std::exception )
 {
     return;
 }
@@ -478,9 +445,6 @@ void SAL_CALL
 FileProvider::addVetoableChangeListener(
     const OUString&,
     const Reference< XVetoableChangeListener >& )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException, std::exception )
 {
     return;
 }
@@ -490,9 +454,6 @@ void SAL_CALL
 FileProvider::removeVetoableChangeListener(
     const OUString&,
     const Reference< XVetoableChangeListener >& )
-    throw( UnknownPropertyException,
-           WrappedTargetException,
-           RuntimeException, std::exception)
 {
     return;
 }
@@ -502,7 +463,6 @@ FileProvider::removeVetoableChangeListener(
 
 sal_Int32 SAL_CALL
 FileProvider::getFileProviderLocality( const OUString& BaseURL )
-    throw( RuntimeException, std::exception )
 {
     // If the base URL is a 'file' URL, return 10 (very 'local'), otherwise
     // return -1 (missmatch).  What is missing is a fast comparison to ASCII,
@@ -518,7 +478,6 @@ FileProvider::getFileProviderLocality( const OUString& BaseURL )
 
 OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const OUString&,
                                                                const OUString& SystemPath )
-    throw( RuntimeException, std::exception )
 {
     OUString aNormalizedPath;
     if ( osl::FileBase::getFileURLFromSystemPath( SystemPath,aNormalizedPath ) != osl::FileBase::E_None )
@@ -528,7 +487,6 @@ OUString SAL_CALL FileProvider::getFileURLFromSystemPath( const OUString&,
 }
 
 OUString SAL_CALL FileProvider::getSystemPathFromFileURL( const OUString& URL )
-    throw( RuntimeException, std::exception )
 {
     OUString aSystemPath;
     if (osl::FileBase::getSystemPathFromFileURL( URL,aSystemPath ) != osl::FileBase::E_None )

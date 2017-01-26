@@ -116,7 +116,7 @@ namespace dxcanvas
         SpriteCanvasBaseT::disposeThis();
     }
 
-    sal_Bool SAL_CALL SpriteCanvas::showBuffer( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL SpriteCanvas::showBuffer( sal_Bool bUpdateAll )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -126,7 +126,7 @@ namespace dxcanvas
         return mbIsVisible && SpriteCanvasBaseT::showBuffer( bUpdateAll );
     }
 
-    sal_Bool SAL_CALL SpriteCanvas::switchBuffer( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL SpriteCanvas::switchBuffer( sal_Bool bUpdateAll )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -136,7 +136,7 @@ namespace dxcanvas
         return mbIsVisible && SpriteCanvasBaseT::switchBuffer( bUpdateAll );
     }
 
-    sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll ) throw (uno::RuntimeException)
+    sal_Bool SAL_CALL SpriteCanvas::updateScreen( sal_Bool bUpdateAll )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -149,7 +149,7 @@ namespace dxcanvas
             mbSurfaceDirty );
     }
 
-    OUString SAL_CALL SpriteCanvas::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL SpriteCanvas::getServiceName(  )
     {
         return OUString( SPRITECANVAS_SERVICE_NAME );
     }

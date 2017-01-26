@@ -311,7 +311,6 @@ namespace drawinglayer
         }
 
         sal_Int64 SAL_CALL PatternFillPrimitive2D::estimateUsage()
-            throw (css::uno::RuntimeException)
         {
             size_t nRet(0);
             for (auto& it : getChildren())

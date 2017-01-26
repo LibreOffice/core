@@ -29,7 +29,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaColumn::SwVbaColumn( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nIndex ) throw ( uno::RuntimeException ) :
+SwVbaColumn::SwVbaColumn( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nIndex ) :
     SwVbaColumn_BASE( rParent, rContext ), mxTextTable( xTextTable ), mnIndex( nIndex )
 {
     mxTableColumns = mxTextTable->getColumns();
@@ -40,14 +40,14 @@ SwVbaColumn::~SwVbaColumn()
 }
 
 sal_Int32 SAL_CALL
-SwVbaColumn::getWidth( ) throw ( css::uno::RuntimeException, std::exception )
+SwVbaColumn::getWidth( )
 {
     SwVbaTableHelper aTableHelper( mxTextTable );
     return aTableHelper.GetColWidth( mnIndex );
 }
 
 void SAL_CALL
-SwVbaColumn::setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException, std::exception )
+SwVbaColumn::setWidth( sal_Int32 _width )
 {
 
     SwVbaTableHelper aTableHelper( mxTextTable );
@@ -55,12 +55,12 @@ SwVbaColumn::setWidth( sal_Int32 _width ) throw ( css::uno::RuntimeException, st
 }
 
 void SAL_CALL
-SwVbaColumn::Select( ) throw ( uno::RuntimeException, std::exception )
+SwVbaColumn::Select( )
 {
     SelectColumn( getCurrentWordDoc(mxContext), mxTextTable, mnIndex, mnIndex );
 }
 
-void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn ) throw ( uno::RuntimeException )
+void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartColumn, sal_Int32 nEndColumn )
 {
     OUStringBuffer aRangeName;
     OUString sStartCol = SwVbaTableHelper::getColumnStr( nStartColumn );

@@ -157,27 +157,23 @@ void ModifyEventForwarder::DisposeAndClear( const Reference< uno::XWeak > & xSou
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL ModifyEventForwarder::addModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     AddListener( aListener );
 }
 
 void SAL_CALL ModifyEventForwarder::removeModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     RemoveListener( aListener );
 }
 
 // ____ XModifyListener ____
 void SAL_CALL ModifyEventForwarder::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException, std::exception)
 {
    lcl_fireModifyEvent( m_aModifyListeners, Reference< uno::XWeak >(), &aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL ModifyEventForwarder::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }

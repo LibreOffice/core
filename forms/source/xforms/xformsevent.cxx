@@ -29,57 +29,56 @@ using com::sun::star::uno::RuntimeException;
 
 void SAL_CALL XFormsEventConcrete::initXFormsEvent(const OUString& typeArg,
     sal_Bool canBubbleArg, sal_Bool cancelableArg)
-    throw (RuntimeException, std::exception)
 {
     initEvent(typeArg, canBubbleArg, cancelableArg);
 }
 
-OUString SAL_CALL XFormsEventConcrete::getType() throw (RuntimeException, std::exception)
+OUString SAL_CALL XFormsEventConcrete::getType()
 {
     return m_eventType;
 }
 
-css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getTarget() throw (RuntimeException, std::exception)
+css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getTarget()
 {
     return m_target;
 }
 
-css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getCurrentTarget() throw (RuntimeException, std::exception)
+css::uno::Reference< css::xml::dom::events::XEventTarget > SAL_CALL XFormsEventConcrete::getCurrentTarget()
 {
     return m_currentTarget;
 }
 
-css::xml::dom::events::PhaseType SAL_CALL XFormsEventConcrete::getEventPhase() throw (RuntimeException, std::exception)
+css::xml::dom::events::PhaseType SAL_CALL XFormsEventConcrete::getEventPhase()
 {
     return css::xml::dom::events::PhaseType_CAPTURING_PHASE;
 }
 
-sal_Bool SAL_CALL XFormsEventConcrete::getBubbles() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL XFormsEventConcrete::getBubbles()
 {
     return m_bubbles;
 }
 
-sal_Bool SAL_CALL XFormsEventConcrete::getCancelable() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL XFormsEventConcrete::getCancelable()
 {
     return m_cancelable;
 }
 
-css::util::Time SAL_CALL XFormsEventConcrete::getTimeStamp() throw (RuntimeException, std::exception)
+css::util::Time SAL_CALL XFormsEventConcrete::getTimeStamp()
 {
     return m_time;
 }
 
-void SAL_CALL XFormsEventConcrete::stopPropagation() throw (RuntimeException, std::exception)
+void SAL_CALL XFormsEventConcrete::stopPropagation()
 {
     if(m_cancelable)
         m_canceled = true;
 }
-void SAL_CALL XFormsEventConcrete::preventDefault() throw (RuntimeException, std::exception)
+void SAL_CALL XFormsEventConcrete::preventDefault()
 {
 }
 
 void SAL_CALL XFormsEventConcrete::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
-    sal_Bool cancelableArg) throw (RuntimeException, std::exception)
+    sal_Bool cancelableArg)
 {
     m_eventType = eventTypeArg;
     m_bubbles = canBubbleArg;

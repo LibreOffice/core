@@ -44,7 +44,7 @@ namespace connectivity
             OAdoView(bool _bCase, ADOView* _pView=nullptr);
 
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOView getImpl() const { return m_aView;}

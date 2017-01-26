@@ -51,7 +51,7 @@ namespace canvas
         mxTarget.clear();
     }
 
-    sal_Int8 SAL_CALL CachedPrimitiveBase::redraw( const rendering::ViewState& aState ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+    sal_Int8 SAL_CALL CachedPrimitiveBase::redraw( const rendering::ViewState& aState )
     {
         ::basegfx::B2DHomMatrix aUsedTransformation;
         ::basegfx::B2DHomMatrix aNewTransformation;
@@ -76,17 +76,17 @@ namespace canvas
                          bSameViewTransforms );
     }
 
-    OUString SAL_CALL CachedPrimitiveBase::getImplementationName(  ) throw (uno::RuntimeException, std::exception)
+    OUString SAL_CALL CachedPrimitiveBase::getImplementationName(  )
     {
         return OUString("canvas::CachedPrimitiveBase");
     }
 
-    sal_Bool SAL_CALL CachedPrimitiveBase::supportsService( const OUString& ServiceName ) throw (uno::RuntimeException, std::exception)
+    sal_Bool SAL_CALL CachedPrimitiveBase::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    uno::Sequence< OUString > SAL_CALL CachedPrimitiveBase::getSupportedServiceNames(  ) throw (uno::RuntimeException, std::exception)
+    uno::Sequence< OUString > SAL_CALL CachedPrimitiveBase::getSupportedServiceNames(  )
     {
         return { "com.sun.star.rendering.CachedBitmap" };
     }

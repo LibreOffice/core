@@ -71,7 +71,7 @@ public:
 
     // from FilterBase
     virtual bool importDocument() throw() override;
-    virtual bool exportDocument() throw (css::uno::RuntimeException, std::exception) override;
+    virtual bool exportDocument() override;
 
     // only needed for import, leave them empty, refactor later XmlFilterBase to export and import base?
     virtual oox::vml::Drawing* getVmlDrawing() override { return nullptr; }
@@ -132,7 +132,7 @@ private:
 
     void AddLayoutIdAndRelation( const ::sax_fastparser::FSHelperPtr& pFS, sal_Int32 nLayoutFileId );
 
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     ::sax_fastparser::FSHelperPtr mPresentationFS;
 

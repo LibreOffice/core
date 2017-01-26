@@ -121,7 +121,7 @@ namespace cairocanvas
         CanvasBaseT::disposeThis();
     }
 
-    OUString SAL_CALL Canvas::getServiceName(  ) throw (uno::RuntimeException, std::exception)
+    OUString SAL_CALL Canvas::getServiceName(  )
     {
         return OUString( CANVAS_SERVICE_NAME );
     }

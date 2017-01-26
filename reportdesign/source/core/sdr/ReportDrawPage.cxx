@@ -47,7 +47,6 @@ OReportDrawPage::OReportDrawPage(SdrPage* _pPage
 }
 
 SdrObject* OReportDrawPage::CreateSdrObject_(const uno::Reference< drawing::XShape > & xDescr)
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< report::XReportComponent> xReportComponent(xDescr,uno::UNO_QUERY);
     if ( xReportComponent.is() )
@@ -56,7 +55,6 @@ SdrObject* OReportDrawPage::CreateSdrObject_(const uno::Reference< drawing::XSha
 }
 
 uno::Reference< drawing::XShape >  OReportDrawPage::CreateShape( SdrObject *pObj ) const
-    throw (uno::RuntimeException, std::exception)
 {
     OObjectBase* pBaseObj = dynamic_cast<OObjectBase*>(pObj);
     if ( !pBaseObj )

@@ -135,13 +135,11 @@ SwXTextPortion::~SwXTextPortion()
 }
 
 uno::Reference< text::XText >  SwXTextPortion::getText()
-throw( uno::RuntimeException, std::exception )
 {
     return m_xParentText;
 }
 
 uno::Reference< text::XTextRange >  SwXTextPortion::getStart()
-throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >  xRet;
@@ -154,7 +152,6 @@ throw( uno::RuntimeException, std::exception )
 }
 
 uno::Reference< text::XTextRange >  SwXTextPortion::getEnd()
-throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >  xRet;
@@ -167,7 +164,6 @@ throw( uno::RuntimeException, std::exception )
 }
 
 OUString SwXTextPortion::getString()
-throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     OUString aText;
@@ -184,7 +180,7 @@ throw( uno::RuntimeException, std::exception )
     return aText;
 }
 
-void SwXTextPortion::setString(const OUString& aString) throw( uno::RuntimeException, std::exception )
+void SwXTextPortion::setString(const OUString& aString)
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -193,7 +189,6 @@ void SwXTextPortion::setString(const OUString& aString) throw( uno::RuntimeExcep
 }
 
 uno::Reference< beans::XPropertySetInfo >  SwXTextPortion::getPropertySetInfo()
-throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     //! PropertySetInfo for text portion extensions
@@ -211,8 +206,6 @@ throw( uno::RuntimeException, std::exception )
 
 void SwXTextPortion::setPropertyValue(const OUString& rPropertyName,
     const uno::Any& aValue)
-    throw( beans::UnknownPropertyException,
-        beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -382,7 +375,6 @@ void SwXTextPortion::GetPropertyValue(
 
 uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
         const uno::Sequence< OUString >& rPropertyNames )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException )
 {
     sal_Int32 nLength = rPropertyNames.getLength();
     const OUString *pPropertyNames = rPropertyNames.getConstArray();
@@ -412,7 +404,6 @@ uno::Sequence< uno::Any > SAL_CALL SwXTextPortion::GetPropertyValues_Impl(
 
 uno::Any SwXTextPortion::getPropertyValue(
     const OUString& rPropertyName)
-        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aPropertyNames { rPropertyName };
@@ -422,8 +413,6 @@ uno::Any SwXTextPortion::getPropertyValue(
 void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
-    throw( beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException,
-            lang::WrappedTargetException, uno::RuntimeException)
 {
     SwUnoCursor& rUnoCursor = GetCursor();
 
@@ -450,8 +439,6 @@ void SAL_CALL SwXTextPortion::SetPropertyValues_Impl(
 void SwXTextPortion::setPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues )
-        throw(beans::PropertyVetoException, lang::IllegalArgumentException,
-            lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -472,7 +459,6 @@ void SwXTextPortion::setPropertyValues(
 
 uno::Sequence< uno::Any > SwXTextPortion::getPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames )
-        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
@@ -498,7 +484,6 @@ uno::Sequence< uno::Any > SwXTextPortion::getPropertyValues(
 uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames,
         const uno::Sequence< uno::Any >& rValues )
-    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -566,7 +551,6 @@ uno::Sequence< beans::SetPropertyTolerantFailed > SAL_CALL SwXTextPortion::setPr
 
 uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -585,7 +569,6 @@ uno::Sequence< beans::GetPropertyTolerantResult > SAL_CALL SwXTextPortion::getPr
 
 uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::getDirectPropertyValuesTolerant(
         const uno::Sequence< OUString >& rPropertyNames )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return GetPropertyValuesTolerant_Impl( rPropertyNames, true );
@@ -594,7 +577,6 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
 uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion::GetPropertyValuesTolerant_Impl(
         const uno::Sequence< OUString >& rPropertyNames,
         bool bDirectValuesOnly )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -695,45 +677,40 @@ uno::Sequence< beans::GetDirectPropertyTolerantResult > SAL_CALL SwXTextPortion:
 void SwXTextPortion::addPropertiesChangeListener(
     const uno::Sequence< OUString >& /*aPropertyNames*/,
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-        throw(uno::RuntimeException, std::exception)
 {}
 
 void SwXTextPortion::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-        throw(uno::RuntimeException, std::exception)
 {}
 
 void SwXTextPortion::firePropertiesChangeEvent(
     const uno::Sequence< OUString >& /*aPropertyNames*/,
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-        throw(uno::RuntimeException, std::exception)
 {}
 
 void SwXTextPortion::addPropertyChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener > & /*xListener*/)
-        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
 
-void SwXTextPortion::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXTextPortion::removePropertyChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
-void SwXTextPortion::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXTextPortion::addVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
-void SwXTextPortion::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXTextPortion::removeVetoableChangeListener(const OUString& /*rPropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
 beans::PropertyState SwXTextPortion::getPropertyState(const OUString& rPropertyName)
-            throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     beans::PropertyState eRet = beans::PropertyState_DEFAULT_VALUE;
@@ -754,7 +731,6 @@ beans::PropertyState SwXTextPortion::getPropertyState(const OUString& rPropertyN
 
 uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
         const uno::Sequence< OUString >& rPropertyNames)
-        throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -777,7 +753,6 @@ uno::Sequence< beans::PropertyState > SwXTextPortion::getPropertyStates(
 }
 
 void SwXTextPortion::setPropertyToDefault(const OUString& rPropertyName)
-                throw( beans::UnknownPropertyException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -787,7 +762,6 @@ void SwXTextPortion::setPropertyToDefault(const OUString& rPropertyName)
 }
 
 uno::Any SwXTextPortion::getPropertyDefault(const OUString& rPropertyName)
-        throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -799,7 +773,6 @@ uno::Any SwXTextPortion::getPropertyDefault(const OUString& rPropertyName)
 }
 
 uno::Reference< container::XEnumeration >  SwXTextPortion::createContentEnumeration(const OUString& /*aServiceName*/)
-        throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwUnoCursor& rUnoCursor = GetCursor();
@@ -818,7 +791,6 @@ const uno::Sequence< sal_Int8 > & SwXTextPortion::getUnoTunnelId()
 }
 
 sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -830,7 +802,6 @@ sal_Int64 SwXTextPortion::getSomething( const uno::Sequence< sal_Int8 >& rId )
 }
 
 uno::Sequence< OUString > SwXTextPortion::getAvailableServiceNames()
-throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Sequence<OUString> aRet { "com.sun.star.text.TextContent" };
@@ -838,18 +809,16 @@ throw( uno::RuntimeException, std::exception )
 }
 
 OUString SwXTextPortion::getImplementationName()
-throw( uno::RuntimeException, std::exception )
 {
     return OUString("SwXTextPortion");
 }
 
-sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextPortion::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SwXTextPortion::getSupportedServiceNames()
-throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence< OUString > aRet(7);
     OUString* pArray = aRet.getArray();

@@ -49,8 +49,7 @@ public:
     Foo(const Foo&) = delete;
     const Foo& operator=(const Foo&) = delete;
 
-    virtual Any SAL_CALL queryInterface(const Type & _type)
-        throw (RuntimeException, std::exception) override
+    virtual Any SAL_CALL queryInterface(const Type & _type) override
     {
         if (_type == cppu::UnoType<XInterface>::get())
         {

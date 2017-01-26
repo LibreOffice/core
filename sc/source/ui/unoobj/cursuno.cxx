@@ -46,7 +46,7 @@ ScCellCursorObj::~ScCellCursorObj()
 {
 }
 
-uno::Any SAL_CALL ScCellCursorObj::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
+uno::Any SAL_CALL ScCellCursorObj::queryInterface( const uno::Type& rType )
 {
     SC_QUERYINTERFACE( sheet::XSheetCellCursor )
     SC_QUERYINTERFACE( sheet::XUsedAreaCursor )
@@ -65,7 +65,7 @@ void SAL_CALL ScCellCursorObj::release() throw()
     ScCellRangeObj::release();
 }
 
-uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes() throw(uno::RuntimeException, std::exception)
+uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes()
 {
     static uno::Sequence<uno::Type> aTypes;
     if ( aTypes.getLength() == 0 )
@@ -86,14 +86,14 @@ uno::Sequence<uno::Type> SAL_CALL ScCellCursorObj::getTypes() throw(uno::Runtime
     return aTypes;
 }
 
-uno::Sequence<sal_Int8> SAL_CALL ScCellCursorObj::getImplementationId() throw(uno::RuntimeException, std::exception)
+uno::Sequence<sal_Int8> SAL_CALL ScCellCursorObj::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 // XSheetCellCursor
 
-void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScCellCursorObj::collapseToCurrentRegion()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -119,7 +119,6 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentRegion() throw(uno::RuntimeExcep
 }
 
 void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
-    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -151,7 +150,7 @@ void SAL_CALL ScCellCursorObj::collapseToCurrentArray()
     }*/
 }
 
-void SAL_CALL ScCellCursorObj::collapseToMergedArea() throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScCellCursorObj::collapseToMergedArea()
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -169,7 +168,7 @@ void SAL_CALL ScCellCursorObj::collapseToMergedArea() throw(uno::RuntimeExceptio
     }
 }
 
-void SAL_CALL ScCellCursorObj::expandToEntireColumns() throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScCellCursorObj::expandToEntireColumns()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -182,7 +181,7 @@ void SAL_CALL ScCellCursorObj::expandToEntireColumns() throw(uno::RuntimeExcepti
     SetNewRange( aNewRange );
 }
 
-void SAL_CALL ScCellCursorObj::expandToEntireRows() throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScCellCursorObj::expandToEntireRows()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -196,7 +195,6 @@ void SAL_CALL ScCellCursorObj::expandToEntireRows() throw(uno::RuntimeException,
 }
 
 void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRows )
-                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( nColumns <= 0 || nRows <= 0 )
@@ -232,7 +230,6 @@ void SAL_CALL ScCellCursorObj::collapseToSize( sal_Int32 nColumns, sal_Int32 nRo
 // XUsedAreaCursor
 
 void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
-    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -260,7 +257,6 @@ void SAL_CALL ScCellCursorObj::gotoStartOfUsedArea(sal_Bool bExpand)
 }
 
 void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
-                                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     ScDocShell* pDocSh = GetDocShell();
@@ -289,7 +285,7 @@ void SAL_CALL ScCellCursorObj::gotoEndOfUsedArea( sal_Bool bExpand )
 
 // XCellCursor
 
-void SAL_CALL ScCellCursorObj::gotoStart() throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScCellCursorObj::gotoStart()
 {
     //  this is similar to collapseToCurrentRegion
     //! something like gotoEdge with 4 possible directions is needed
@@ -317,7 +313,7 @@ void SAL_CALL ScCellCursorObj::gotoStart() throw(uno::RuntimeException, std::exc
     }
 }
 
-void SAL_CALL ScCellCursorObj::gotoEnd() throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScCellCursorObj::gotoEnd()
 {
     //  this is similar to collapseToCurrentRegion
     //! something like gotoEdge with 4 possible directions is needed
@@ -345,7 +341,7 @@ void SAL_CALL ScCellCursorObj::gotoEnd() throw(uno::RuntimeException, std::excep
     }
 }
 
-void SAL_CALL ScCellCursorObj::gotoNext() throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScCellCursorObj::gotoNext()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -367,7 +363,7 @@ void SAL_CALL ScCellCursorObj::gotoNext() throw(uno::RuntimeException, std::exce
     SetNewRange( ScRange( nNewX, nNewY, nTab ) );
 }
 
-void SAL_CALL ScCellCursorObj::gotoPrevious() throw(uno::RuntimeException, std::exception)
+void SAL_CALL ScCellCursorObj::gotoPrevious()
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -390,7 +386,6 @@ void SAL_CALL ScCellCursorObj::gotoPrevious() throw(uno::RuntimeException, std::
 }
 
 void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset )
-                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     const ScRangeList& rRanges = GetRangeList();
@@ -416,7 +411,6 @@ void SAL_CALL ScCellCursorObj::gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nR
 // XSheetCellRange
 
 uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellCursorObj::getSpreadsheet()
-                                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getSpreadsheet();
@@ -426,7 +420,6 @@ uno::Reference<sheet::XSpreadsheet> SAL_CALL ScCellCursorObj::getSpreadsheet()
 
 uno::Reference<table::XCell> SAL_CALL ScCellCursorObj::getCellByPosition(
                                         sal_Int32 nColumn, sal_Int32 nRow )
-                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getCellByPosition(nColumn,nRow);
@@ -434,14 +427,13 @@ uno::Reference<table::XCell> SAL_CALL ScCellCursorObj::getCellByPosition(
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByPosition(
                 sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom )
-                                throw(lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getCellRangeByPosition(nLeft,nTop,nRight,nBottom);
 }
 
 uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
-                        const OUString& rRange ) throw(uno::RuntimeException, std::exception)
+                        const OUString& rRange )
 {
     SolarMutexGuard aGuard;
     return ScCellRangeObj::getCellRangeByName(rRange);
@@ -449,19 +441,17 @@ uno::Reference<table::XCellRange> SAL_CALL ScCellCursorObj::getCellRangeByName(
 
 // XServiceInfo
 
-OUString SAL_CALL ScCellCursorObj::getImplementationName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL ScCellCursorObj::getImplementationName()
 {
     return OUString( "ScCellCursorObj" );
 }
 
 sal_Bool SAL_CALL ScCellCursorObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScCellCursorObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException, std::exception)
 {
     //  get all service names from cell range
     uno::Sequence<OUString> aParentSeq(ScCellRangeObj::getSupportedServiceNames());

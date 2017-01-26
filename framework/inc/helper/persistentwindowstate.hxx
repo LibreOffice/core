@@ -79,17 +79,13 @@ class PersistentWindowState :   public  ::cppu::WeakImplHelper<
         virtual ~PersistentWindowState(                                                                   ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
-            throw(css::uno::Exception       ,
-                  css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments) override;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
     // helper
 

@@ -107,26 +107,19 @@ class COMPHELPER_DLLPUBLIC NumberedCollection : private ::cppu::BaseMutex
 
 
         /** @see css.frame.XUntitledNumbers */
-        virtual ::sal_Int32 SAL_CALL leaseNumber(const css::uno::Reference< css::uno::XInterface >& xComponent)
-            throw (css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException, std::exception         ) override;
+        virtual ::sal_Int32 SAL_CALL leaseNumber(const css::uno::Reference< css::uno::XInterface >& xComponent) override;
 
 
         /** @see css.frame.XUntitledNumbers */
-        virtual void SAL_CALL releaseNumber(::sal_Int32 nNumber)
-            throw (css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException, std::exception         ) override;
+        virtual void SAL_CALL releaseNumber(::sal_Int32 nNumber) override;
 
 
         /** @see css.frame.XUntitledNumbers */
-        virtual void SAL_CALL releaseNumberForComponent(const css::uno::Reference< css::uno::XInterface >& xComponent)
-            throw (css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException, std::exception         ) override;
+        virtual void SAL_CALL releaseNumberForComponent(const css::uno::Reference< css::uno::XInterface >& xComponent) override;
 
 
         /** @see css.frame.XUntitledNumbers */
-        virtual OUString SAL_CALL getUntitledPrefix()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getUntitledPrefix() override;
 
 
     // internal

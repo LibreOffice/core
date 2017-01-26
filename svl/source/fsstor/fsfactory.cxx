@@ -56,8 +56,6 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::impl_staticCreateSe
 }
 
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
-    throw ( uno::Exception,
-            uno::RuntimeException, std::exception )
 {
     OUString aTempURL;
 
@@ -86,8 +84,6 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstance()
  */
 uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithArguments(
             const uno::Sequence< uno::Any >& aArguments )
-    throw ( uno::Exception,
-            uno::RuntimeException, std::exception )
 {
     sal_Int32 nArgNum = aArguments.getLength();
     OSL_ENSURE( nArgNum < 4, "Wrong parameter number" );
@@ -159,19 +155,16 @@ uno::Reference< uno::XInterface > SAL_CALL FSStorageFactory::createInstanceWithA
 }
 
 OUString SAL_CALL FSStorageFactory::getImplementationName()
-    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetImplementationName();
 }
 
 sal_Bool SAL_CALL FSStorageFactory::supportsService( const OUString& ServiceName )
-    throw ( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL FSStorageFactory::getSupportedServiceNames()
-    throw ( uno::RuntimeException, std::exception )
 {
     return impl_staticGetSupportedServiceNames();
 }

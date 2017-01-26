@@ -28,18 +28,14 @@ class OrcusFormatDetect : public ::cppu::WeakImplHelper<
 public:
     explicit            OrcusFormatDetect();
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName)
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     virtual OUString SAL_CALL
-                        detect( css::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq )
-                            throw( css::uno::RuntimeException, std::exception ) override;
+                        detect( css::uno::Sequence< css::beans::PropertyValue >& rMediaDescSeq ) override;
 
 private:
 };
@@ -49,25 +45,21 @@ OrcusFormatDetect::OrcusFormatDetect()
 }
 
 OUString OrcusFormatDetect::getImplementationName()
-        throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("");
 }
 
 sal_Bool OrcusFormatDetect::supportsService(const OUString& /*rServiceName*/)
-        throw( css::uno::RuntimeException, std::exception )
 {
     return false;
 }
 
 css::uno::Sequence<OUString> OrcusFormatDetect::getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception )
 {
     return css::uno::Sequence<OUString>();
 }
 
 OUString OrcusFormatDetect::detect(css::uno::Sequence<css::beans::PropertyValue>& rMediaDescSeq)
-        throw( css::uno::RuntimeException, std::exception )
 {
     utl::MediaDescriptor aMediaDescriptor( rMediaDescSeq );
     bool bAborted = aMediaDescriptor.getUnpackedValueOrDefault(utl::MediaDescriptor::PROP_ABORTED(), false);

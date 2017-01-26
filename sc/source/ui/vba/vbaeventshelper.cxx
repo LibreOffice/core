@@ -55,7 +55,7 @@ namespace {
     @throws lang::IllegalArgumentException
     @throws uno::RuntimeException
 */
-SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+SCTAB lclGetTabFromArgs( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex )
 {
     VbaEventsHelperBase::checkArgument( rArgs, nIndex );
 
@@ -127,28 +127,28 @@ public:
     void stopControllerListening( const uno::Reference< frame::XController >& rxController );
 
     // XTopWindowListener
-    virtual void SAL_CALL windowOpened( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowClosing( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowClosed( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowMinimized( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowNormalized( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowActivated( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowDeactivated( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowOpened( const lang::EventObject& rEvent ) override;
+    virtual void SAL_CALL windowClosing( const lang::EventObject& rEvent ) override;
+    virtual void SAL_CALL windowClosed( const lang::EventObject& rEvent ) override;
+    virtual void SAL_CALL windowMinimized( const lang::EventObject& rEvent ) override;
+    virtual void SAL_CALL windowNormalized( const lang::EventObject& rEvent ) override;
+    virtual void SAL_CALL windowActivated( const lang::EventObject& rEvent ) override;
+    virtual void SAL_CALL windowDeactivated( const lang::EventObject& rEvent ) override;
 
     // XWindowListener
-    virtual void SAL_CALL windowResized( const awt::WindowEvent& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowMoved( const awt::WindowEvent& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowShown( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowHidden( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowResized( const awt::WindowEvent& rEvent ) override;
+    virtual void SAL_CALL windowMoved( const awt::WindowEvent& rEvent ) override;
+    virtual void SAL_CALL windowShown( const lang::EventObject& rEvent ) override;
+    virtual void SAL_CALL windowHidden( const lang::EventObject& rEvent ) override;
 
     // XBorderResizeListener
-    virtual void SAL_CALL borderWidthsChanged( const uno::Reference< uno::XInterface >& rSource, const frame::BorderWidths& aNewSize ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL borderWidthsChanged( const uno::Reference< uno::XInterface >& rSource, const frame::BorderWidths& aNewSize ) override;
 
     // XChangesListener
-    virtual void SAL_CALL changesOccurred( const util::ChangesEvent& rEvent ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL changesOccurred( const util::ChangesEvent& rEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const lang::EventObject& rEvent ) override;
 
 private:
     /** Starts listening to the document model. */
@@ -250,27 +250,27 @@ void ScVbaEventListener::stopControllerListening( const uno::Reference< frame::X
     }
 }
 
-void SAL_CALL ScVbaEventListener::windowOpened( const lang::EventObject& /*rEvent*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowOpened( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowClosing( const lang::EventObject& /*rEvent*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowClosing( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowClosed( const lang::EventObject& /*rEvent*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowClosed( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowMinimized( const lang::EventObject& /*rEvent*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowMinimized( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowNormalized( const lang::EventObject& /*rEvent*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowNormalized( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -291,7 +291,7 @@ void SAL_CALL ScVbaEventListener::windowActivated( const lang::EventObject& rEve
     }
 }
 
-void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -307,7 +307,7 @@ void SAL_CALL ScVbaEventListener::windowDeactivated( const lang::EventObject& rE
     }
 }
 
-void SAL_CALL ScVbaEventListener::windowResized( const awt::WindowEvent& rEvent ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowResized( const awt::WindowEvent& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -319,19 +319,19 @@ void SAL_CALL ScVbaEventListener::windowResized( const awt::WindowEvent& rEvent 
     }
 }
 
-void SAL_CALL ScVbaEventListener::windowMoved( const awt::WindowEvent& /*rEvent*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowMoved( const awt::WindowEvent& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowShown( const lang::EventObject& /*rEvent*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowShown( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::windowHidden( const lang::EventObject& /*rEvent*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::windowHidden( const lang::EventObject& /*rEvent*/ )
 {
 }
 
-void SAL_CALL ScVbaEventListener::borderWidthsChanged( const uno::Reference< uno::XInterface >& rSource, const frame::BorderWidths& /*aNewSize*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::borderWidthsChanged( const uno::Reference< uno::XInterface >& rSource, const frame::BorderWidths& /*aNewSize*/ )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -344,7 +344,7 @@ void SAL_CALL ScVbaEventListener::borderWidthsChanged( const uno::Reference< uno
     }
 }
 
-void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEvent ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -399,7 +399,7 @@ void SAL_CALL ScVbaEventListener::changesOccurred( const util::ChangesEvent& rEv
     }
 }
 
-void SAL_CALL ScVbaEventListener::disposing( const lang::EventObject& rEvent ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventListener::disposing( const lang::EventObject& rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -569,7 +569,7 @@ ScVbaEventsHelper::~ScVbaEventsHelper()
 {
 }
 
-void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& rEvent ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& rEvent )
 {
     static const uno::Sequence< uno::Any > saEmptyArgs;
     if( (rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::OPENDOC )) ||
@@ -624,13 +624,11 @@ void SAL_CALL ScVbaEventsHelper::notifyEvent( const css::document::EventObject& 
 }
 
 OUString ScVbaEventsHelper::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("ScVbaEventsHelper");
 }
 
 css::uno::Sequence<OUString> ScVbaEventsHelper::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{
         "com.sun.star.script.vba.VBASpreadsheetEventProcessor"};
@@ -639,7 +637,7 @@ css::uno::Sequence<OUString> ScVbaEventsHelper::getSupportedServiceNames()
 // protected ------------------------------------------------------------------
 
 bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
-        const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& rArgs ) throw (uno::RuntimeException)
+        const EventHandlerInfo& rInfo, const uno::Sequence< uno::Any >& rArgs )
 {
     // document and document shell are needed during event processing
     if( !mpShell || !mpDoc )
@@ -689,7 +687,7 @@ bool ScVbaEventsHelper::implPrepareEvent( EventQueue& rEventQueue,
 }
 
 uno::Sequence< uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventHandlerInfo& rInfo,
-        const uno::Sequence< uno::Any >& rArgs ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+        const uno::Sequence< uno::Any >& rArgs )
 {
     // fill arguments for workbook events associated to sheet events according to sheet events, sheet will be added below
     bool bSheetEventAsBookEvent = rInfo.mnEventId > USERDEFINED_START;
@@ -780,7 +778,7 @@ uno::Sequence< uno::Any > ScVbaEventsHelper::implBuildArgumentList( const EventH
 }
 
 void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
-        const EventHandlerInfo& rInfo, bool bCancel ) throw (uno::RuntimeException)
+        const EventHandlerInfo& rInfo, bool bCancel )
 {
     switch( rInfo.mnEventId )
     {
@@ -801,7 +799,6 @@ void ScVbaEventsHelper::implPostProcessEvent( EventQueue& rEventQueue,
 
 OUString ScVbaEventsHelper::implGetDocumentModuleName( const EventHandlerInfo& rInfo,
         const uno::Sequence< uno::Any >& rArgs ) const
-    throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     bool bSheetEvent = false;
     rInfo.maUserData >>= bSheetEvent;
@@ -841,7 +838,7 @@ bool lclSelectionChanged( const ScRangeList& rLeft, const ScRangeList& rRight )
 
 } // namespace
 
-bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) throw (lang::IllegalArgumentException, uno::RuntimeException)
+bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex )
 {
     uno::Reference< uno::XInterface > xOldSelection( maOldSelection, uno::UNO_QUERY );
     uno::Reference< uno::XInterface > xNewSelection = getXSomethingFromArgs< uno::XInterface >( rArgs, nIndex, false );
@@ -853,7 +850,6 @@ bool ScVbaEventsHelper::isSelectionChanged( const uno::Sequence< uno::Any >& rAr
 }
 
 uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
-        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     // extract sheet index, will throw, if parameter is invalid
     SCTAB nTab = lclGetTabFromArgs( rArgs, nIndex );
@@ -861,7 +857,6 @@ uno::Any ScVbaEventsHelper::createWorksheet( const uno::Sequence< uno::Any >& rA
 }
 
 uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
-        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     // it is possible to pass an existing VBA Range object
     uno::Reference< excel::XRange > xVbaRange = getXSomethingFromArgs< excel::XRange >( rArgs, nIndex );
@@ -889,7 +884,6 @@ uno::Any ScVbaEventsHelper::createRange( const uno::Sequence< uno::Any >& rArgs,
 }
 
 uno::Any ScVbaEventsHelper::createHyperlink( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
-        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     uno::Reference< table::XCell > xCell = getXSomethingFromArgs< table::XCell >( rArgs, nIndex, false );
     uno::Sequence< uno::Any > aArgs( 2 );
@@ -900,7 +894,6 @@ uno::Any ScVbaEventsHelper::createHyperlink( const uno::Sequence< uno::Any >& rA
 }
 
 uno::Any ScVbaEventsHelper::createWindow( const uno::Sequence< uno::Any >& rArgs, sal_Int32 nIndex ) const
-        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Any > aArgs( 3 );
     aArgs[ 0 ] <<= getVBADocument( mxModel );

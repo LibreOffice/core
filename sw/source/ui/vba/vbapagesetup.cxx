@@ -32,7 +32,7 @@ using namespace ::ooo::vba;
 SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent,
                 const uno::Reference< uno::XComponentContext >& xContext,
                 const uno::Reference< frame::XModel >& xModel,
-                const uno::Reference< beans::XPropertySet >& xProps ) throw (uno::RuntimeException):
+                const uno::Reference< beans::XPropertySet >& xProps ):
            SwVbaPageSetup_BASE( xParent, xContext )
 {
     mxModel.set( xModel, uno::UNO_QUERY_THROW );
@@ -41,13 +41,13 @@ SwVbaPageSetup::SwVbaPageSetup(const uno::Reference< XHelperInterface >& xParent
     mnOrientLandscape = word::WdOrientation::wdOrientLandscape;
 }
 
-double SAL_CALL SwVbaPageSetup::getGutter() throw (uno::RuntimeException, std::exception)
+double SAL_CALL SwVbaPageSetup::getGutter()
 {
     // not support in Writer
     return 0;
 }
 
-void SAL_CALL SwVbaPageSetup::setGutter( double _gutter ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaPageSetup::setGutter( double _gutter )
 {
     // default add gutter into left margin
     if( _gutter != 0 )
@@ -57,7 +57,7 @@ void SAL_CALL SwVbaPageSetup::setGutter( double _gutter ) throw (uno::RuntimeExc
     }
 }
 
-double SAL_CALL SwVbaPageSetup::getHeaderDistance() throw (uno::RuntimeException, std::exception)
+double SAL_CALL SwVbaPageSetup::getHeaderDistance()
 {
     bool isHeaderOn = false;
     mxPageProps->getPropertyValue("HeaderIsOn") >>= isHeaderOn;
@@ -75,7 +75,7 @@ double SAL_CALL SwVbaPageSetup::getHeaderDistance() throw (uno::RuntimeException
      * @param: headerDistance is the value that is set in MS Word for the distance from the top of the page
      *          to the header
      */
-void SAL_CALL SwVbaPageSetup::setHeaderDistance( double _headerdistance ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaPageSetup::setHeaderDistance( double _headerdistance )
 {
     sal_Int32 newHeaderDistance = Millimeter::getInHundredthsOfOneMillimeter( _headerdistance );
     bool isHeaderOn = false;
@@ -100,7 +100,7 @@ void SAL_CALL SwVbaPageSetup::setHeaderDistance( double _headerdistance ) throw 
     mxPageProps->setPropertyValue("HeaderHeight", uno::makeAny( newHeaderHeight ) );
 }
 
-double SAL_CALL SwVbaPageSetup::getFooterDistance() throw (uno::RuntimeException, std::exception)
+double SAL_CALL SwVbaPageSetup::getFooterDistance()
 {
     bool isFooterOn = false;
     mxPageProps->getPropertyValue("FooterIsOn") >>= isFooterOn;
@@ -109,7 +109,7 @@ double SAL_CALL SwVbaPageSetup::getFooterDistance() throw (uno::RuntimeException
     return VbaPageSetupBase::getFooterMargin();
 }
 
-void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance )
 {
     sal_Int32 newFooterDistance = Millimeter::getInHundredthsOfOneMillimeter( _footerdistance );
     bool isFooterOn = false;
@@ -134,7 +134,7 @@ void SAL_CALL SwVbaPageSetup::setFooterDistance( double _footerdistance ) throw 
     mxPageProps->setPropertyValue("FooterHeight", uno::makeAny( newFooterHeight ) );
 }
 
-sal_Bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter()
 {
     OUString pageStyle = getStyleOfFirstPage();
     if ( pageStyle == "First Page" )
@@ -143,7 +143,7 @@ sal_Bool SAL_CALL SwVbaPageSetup::getDifferentFirstPageHeaderFooter() throw (uno
     return false;
 }
 
-void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status )
 {
     if( status == getDifferentFirstPageHeaderFooter() )
         return;
@@ -201,7 +201,7 @@ void SAL_CALL SwVbaPageSetup::setDifferentFirstPageHeaderFooter( sal_Bool status
     xFirstPageProps->setPropertyValue("RightMargin", uno::makeAny( nRightMargin ) );
 }
 
-OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException)
+OUString SwVbaPageSetup::getStyleOfFirstPage()
 {
     OUString styleFirstPage;
     uno::Reference< text::XPageCursor > xPageCursor( word::getXTextViewCursor( mxModel ), uno::UNO_QUERY_THROW );
@@ -223,7 +223,7 @@ OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException)
     return styleFirstPage;
 }
 
-::sal_Int32 SAL_CALL SwVbaPageSetup::getSectionStart() throw (uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL SwVbaPageSetup::getSectionStart()
 {
     // FIXME:
     sal_Int32 wdSectionStart = word::WdSectionStart::wdSectionNewPage;
@@ -238,7 +238,7 @@ OUString SwVbaPageSetup::getStyleOfFirstPage() throw (uno::RuntimeException)
     return wdSectionStart;
 }
 
-void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 /*_sectionstart*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 /*_sectionstart*/ )
 {
     // fail to find corresponding feature in Writer
     // #FIXME:

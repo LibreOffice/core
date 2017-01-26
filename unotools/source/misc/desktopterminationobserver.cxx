@@ -67,11 +67,11 @@ namespace utl
 
         private:
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const EventObject& Event ) throw (TerminationVetoException, RuntimeException, std::exception) override;
-            virtual void SAL_CALL notifyTermination( const EventObject& Event ) throw (RuntimeException, std::exception) override;
+            virtual void SAL_CALL queryTermination( const EventObject& Event ) override;
+            virtual void SAL_CALL notifyTermination( const EventObject& Event ) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
         };
 
         OObserverImpl::OObserverImpl()
@@ -105,7 +105,7 @@ namespace utl
             }
         }
 
-        void SAL_CALL OObserverImpl::queryTermination( const EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
+        void SAL_CALL OObserverImpl::queryTermination( const EventObject& /*Event*/ )
         {
             Listeners aToNotify;
             {
@@ -123,7 +123,7 @@ namespace utl
             }
         }
 
-        void SAL_CALL OObserverImpl::notifyTermination( const EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
+        void SAL_CALL OObserverImpl::notifyTermination( const EventObject& /*Event*/ )
         {
             // get the listeners
             Listeners aToNotify;
@@ -150,7 +150,7 @@ namespace utl
             }
         }
 
-        void SAL_CALL OObserverImpl::disposing( const EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
+        void SAL_CALL OObserverImpl::disposing( const EventObject& /*Event*/ )
         {
 #if OSL_DEBUG_LEVEL > 0
             ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );

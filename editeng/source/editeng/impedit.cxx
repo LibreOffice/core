@@ -1721,8 +1721,6 @@ void ImpEditView::ShowDDCursor( const Rectangle& rRect )
 }
 
 void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& rDGE)
-     throw (css::uno::RuntimeException,
-            std::exception)
 {
     DBG_ASSERT( !pDragAndDropInfo, "dragGestureRecognized - DragAndDropInfo exist!" );
 
@@ -1805,8 +1803,6 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
 }
 
 void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE )
-    throw (css::uno::RuntimeException,
-           std::exception)
 {
     SolarMutexGuard aVclGuard;
 
@@ -1900,8 +1896,6 @@ void ImpEditView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent
 }
 
 void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
-    throw (css::uno::RuntimeException,
-           std::exception)
 {
     SolarMutexGuard aVclGuard;
 
@@ -1974,7 +1968,7 @@ void ImpEditView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE
     }
 }
 
-void ImpEditView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE ) throw (css::uno::RuntimeException, std::exception)
+void ImpEditView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rDTDEE )
 {
     SolarMutexGuard aVclGuard;
 
@@ -2001,7 +1995,7 @@ void ImpEditView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEv
     dragOver( rDTDEE );
 }
 
-void ImpEditView::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw (css::uno::RuntimeException, std::exception)
+void ImpEditView::dragExit( const css::datatransfer::dnd::DropTargetEvent& )
 {
     SolarMutexGuard aVclGuard;
 
@@ -2015,8 +2009,6 @@ void ImpEditView::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) thr
 }
 
 void ImpEditView::dragOver(const css::datatransfer::dnd::DropTargetDragEvent& rDTDE)
-    throw (css::uno::RuntimeException,
-           std::exception)
 {
     SolarMutexGuard aVclGuard;
 

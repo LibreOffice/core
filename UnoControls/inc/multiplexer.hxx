@@ -100,8 +100,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -154,88 +153,65 @@ public:
 
     //  XEventListener
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject& aSource)
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& aSource) override;
 
     //  XFocusListener
 
-    virtual void SAL_CALL focusGained(const css::awt::FocusEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL focusGained(const css::awt::FocusEvent& aEvent ) override;
 
-    virtual void SAL_CALL focusLost(const css::awt::FocusEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL focusLost(const css::awt::FocusEvent& aEvent ) override;
 
     //  XWindowListener
 
-    virtual void SAL_CALL windowResized(const css::awt::WindowEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowResized(const css::awt::WindowEvent& aEvent ) override;
 
-    virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowMoved(const css::awt::WindowEvent& aEvent ) override;
 
-    virtual void SAL_CALL windowShown(const css::lang::EventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowShown(const css::lang::EventObject& aEvent ) override;
 
-    virtual void SAL_CALL windowHidden(const css::lang::EventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowHidden(const css::lang::EventObject& aEvent ) override;
 
     //  XKeyListener
 
-    virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& aEvent ) override;
 
-    virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& aEvent ) override;
 
     //  XMouseListener
 
-    virtual void SAL_CALL mousePressed(const css::awt::MouseEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL mousePressed(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseReleased(const css::awt::MouseEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL mouseReleased(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseEntered(const css::awt::MouseEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL mouseEntered(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseExited(const css::awt::MouseEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL mouseExited(const css::awt::MouseEvent& aEvent ) override;
 
     //  XMouseMotionListener
 
-    virtual void SAL_CALL mouseDragged(const css::awt::MouseEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL mouseDragged(const css::awt::MouseEvent& aEvent ) override;
 
-    virtual void SAL_CALL mouseMoved(const css::awt::MouseEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL mouseMoved(const css::awt::MouseEvent& aEvent ) override;
 
     //  XPaintListener
 
-    virtual void SAL_CALL windowPaint(const css::awt::PaintEvent& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowPaint(const css::awt::PaintEvent& aEvent ) override;
 
     //  XTopWindowListener
 
-    virtual void SAL_CALL windowOpened( const css::lang::EventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowOpened( const css::lang::EventObject& aEvent ) override;
 
-    virtual void SAL_CALL windowClosing( const css::lang::EventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowClosing( const css::lang::EventObject& aEvent ) override;
 
-    virtual void SAL_CALL windowClosed( const css::lang::EventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowClosed( const css::lang::EventObject& aEvent ) override;
 
-    virtual void SAL_CALL windowMinimized( const css::lang::EventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowMinimized( const css::lang::EventObject& aEvent ) override;
 
-    virtual void SAL_CALL windowNormalized( const css::lang::EventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowNormalized( const css::lang::EventObject& aEvent ) override;
 
-    virtual void SAL_CALL windowActivated( const css::lang::EventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowActivated( const css::lang::EventObject& aEvent ) override;
 
-    virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL windowDeactivated( const css::lang::EventObject& aEvent ) override;
 
 //  protected methods
 

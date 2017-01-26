@@ -174,20 +174,20 @@ public:
         mxParaStyles.set( xStyleFamilies->getByName("ParagraphStyles"), uno::UNO_QUERY_THROW  );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override { return  cppu::UnoType<style::XStyle>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) override { return getCount() > 0; }
+    virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<style::XStyle>::get(); }
+    virtual sal_Bool SAL_CALL hasElements(  ) override { return getCount() > 0; }
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         return cachePos;
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         return mxParaStyles->getElementNames();
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
         // search in the MSOStyleName table first
         for( const MSOStyleNameTable* pTable = aMSOStyleNameTable; pTable->pMSOStyleName != nullptr; pTable++ )
@@ -227,12 +227,12 @@ public:
     }
 
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
+    virtual ::sal_Int32 SAL_CALL getCount(  ) override
     {
         uno::Reference< container::XIndexAccess > xIndexAccess( mxParaStyles, uno::UNO_QUERY_THROW );
         return xIndexAccess->getCount();
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0 || Index >= getCount() )
             throw lang::IndexOutOfBoundsException();
@@ -241,7 +241,7 @@ public:
         return xIndexAccess->getByIndex( Index );
     }
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
         throw uno::RuntimeException("Not implemented" );
     }
@@ -253,12 +253,12 @@ class StylesEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 public:
     explicit StylesEnumWrapper( SwVbaStyles* _pStyles ) : pStyles( _pStyles ), nIndex( 1 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nIndex <= pStyles->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex <= pStyles->getCount() )
             return pStyles->Item( uno::makeAny( nIndex++ ), uno::Any() );
@@ -267,7 +267,6 @@ public:
 };
 
 SwVbaStyles::SwVbaStyles( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< frame::XModel >& xModel )
-    throw ( script::BasicErrorException, uno::RuntimeException )
     : SwVbaStyles_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new StyleCollectionHelper( xModel )  ) ), mxModel( xModel )
 {
     mxMSF.set( mxModel, uno::UNO_QUERY_THROW );
@@ -281,20 +280,19 @@ SwVbaStyles::createCollectionObject(const uno::Any& aObject)
 }
 
 uno::Type SAL_CALL
-SwVbaStyles::getElementType() throw (uno::RuntimeException)
+SwVbaStyles::getElementType()
 {
     return cppu::UnoType<word::XStyle>::get();
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
-SwVbaStyles::createEnumeration() throw (uno::RuntimeException)
+SwVbaStyles::createEnumeration()
 {
     return new StylesEnumWrapper( this );
 }
 
 uno::Any SAL_CALL
 SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 )
-    throw (lang::IndexOutOfBoundsException, script::BasicErrorException, uno::RuntimeException)
 {
     //handle WdBuiltinStyle
     sal_Int32 nIndex = 0;

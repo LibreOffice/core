@@ -101,18 +101,18 @@ OResultColumn::~OResultColumn()
 }
 
 // css::lang::XTypeProvider
-Sequence< sal_Int8 > OResultColumn::getImplementationId() throw (RuntimeException, std::exception)
+Sequence< sal_Int8 > OResultColumn::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo
-OUString OResultColumn::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString OResultColumn::getImplementationName(  )
 {
     return OUString("com.sun.star.sdb.OResultColumn");
 }
 
-Sequence< OUString > OResultColumn::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > OResultColumn::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSNS( 2 );
     aSNS[0] = SERVICE_SDBCX_COLUMN;

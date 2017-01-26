@@ -136,7 +136,7 @@ static Image RetrieveImage( Reference< css::frame::XFrame >& rFrame,
 }
 
 // XComponent
-void SAL_CALL AddonsToolBarManager::dispose() throw( RuntimeException, std::exception )
+void SAL_CALL AddonsToolBarManager::dispose()
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 

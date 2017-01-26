@@ -107,7 +107,7 @@ extern "C" void SAL_CALL createRegistryInfo_SbaXGridControl()
     static OMultiInstanceAutoRegistration< SbaXGridControl > aAutoRegistration;
 }
 
-css::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL SbaXGridControl::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
@@ -119,17 +119,17 @@ Reference< XInterface > SAL_CALL SbaXGridControl::Create(const Reference<XMultiS
 
 // SbaXGridControl
 
-OUString SAL_CALL SbaXGridControl::getImplementationName() throw(std::exception)
+OUString SAL_CALL SbaXGridControl::getImplementationName()
 {
     return getImplementationName_Static();
 }
 
-OUString SbaXGridControl::getImplementationName_Static() throw( RuntimeException )
+OUString SbaXGridControl::getImplementationName_Static()
 {
     return OUString("com.sun.star.comp.dbu.SbaXGridControl");
 }
 
-Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static() throw( RuntimeException )
+Sequence< OUString> SbaXGridControl::getSupportedServiceNames_Static()
 {
     Sequence< OUString> aSupported(3);
     aSupported[0] = "com.sun.star.form.control.InteractionGridControl";
@@ -171,13 +171,13 @@ FmXGridPeer* SbaXGridControl::imp_CreatePeer(vcl::Window* pParent)
     return pReturn;
 }
 
-Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL SbaXGridControl::queryInterface(const Type& _rType)
 {
     Any aRet = FmXGridControl::queryInterface(_rType);
     return aRet.hasValue() ? aRet : ::cppu::queryInterface(_rType,static_cast<css::frame::XDispatch*>(this));
 }
 
-Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  ) throw (RuntimeException, std::exception)
+Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  )
 {
     Sequence< Type > aTypes = FmXGridControl::getTypes();
 
@@ -188,12 +188,12 @@ Sequence< Type > SAL_CALL SbaXGridControl::getTypes(  ) throw (RuntimeException,
     return aTypes;
 }
 
-Sequence< sal_Int8 > SAL_CALL SbaXGridControl::getImplementationId(  ) throw (RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL SbaXGridControl::getImplementationId(  )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > & rToolkit, const Reference< css::awt::XWindowPeer > & rParentPeer) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > & rToolkit, const Reference< css::awt::XWindowPeer > & rParentPeer)
 {
     FmXGridControl::createPeer(rToolkit, rParentPeer);
 
@@ -212,14 +212,14 @@ void SAL_CALL SbaXGridControl::createPeer(const Reference< css::awt::XToolkit > 
         }
 }
 
-void SAL_CALL SbaXGridControl::dispatch(const css::util::URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridControl::dispatch(const css::util::URL& aURL, const Sequence< PropertyValue >& aArgs)
 {
     Reference< css::frame::XDispatch >  xDisp(getPeer(), UNO_QUERY);
     if (xDisp.is())
         xDisp->dispatch(aURL, aArgs);
 }
 
-void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListener > & _rxListener, const URL& _rURL ) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListener > & _rxListener, const URL& _rURL )
 {
     ::osl::MutexGuard aGuard( GetMutex() );
     if ( _rxListener.is() )
@@ -246,7 +246,7 @@ void SAL_CALL SbaXGridControl::addStatusListener( const Reference< XStatusListen
     }
 }
 
-void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< css::frame::XStatusListener > & _rxListener, const css::util::URL& _rURL) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< css::frame::XStatusListener > & _rxListener, const css::util::URL& _rURL)
 {
     ::osl::MutexGuard aGuard( GetMutex() );
 
@@ -264,7 +264,7 @@ void SAL_CALL SbaXGridControl::removeStatusListener(const Reference< css::frame:
     xMultiplexer->removeInterface( _rxListener );
 }
 
-void SAL_CALL SbaXGridControl::dispose() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridControl::dispose()
 {
     SolarMutexGuard aGuard;
 
@@ -297,7 +297,7 @@ SbaXGridPeer::~SbaXGridPeer()
 {
 }
 
-void SAL_CALL SbaXGridPeer::dispose() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridPeer::dispose()
 {
     EventObject aEvt(*this);
 
@@ -338,7 +338,7 @@ void SbaXGridPeer::NotifyStatusChanged(const css::util::URL& _rUrl, const Refere
     }
 }
 
-Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType)
 {
     Any aRet = ::cppu::queryInterface(_rType,static_cast<css::frame::XDispatch*>(this));
     if(aRet.hasValue())
@@ -346,7 +346,7 @@ Any SAL_CALL SbaXGridPeer::queryInterface(const Type& _rType) throw (RuntimeExce
     return FmXGridPeer::queryInterface(_rType);
 }
 
-Reference< css::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( RuntimeException, std::exception )
+Reference< css::frame::XDispatch >  SAL_CALL SbaXGridPeer::queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags)
 {
     if  (   ( aURL.Complete == ".uno:GridSlots/BrowserAttribs" ) || ( aURL.Complete == ".uno:GridSlots/RowHeight" )
         ||  ( aURL.Complete == ".uno:GridSlots/ColumnAttribs" )  || ( aURL.Complete == ".uno:GridSlots/ColumnWidth" )
@@ -393,7 +393,7 @@ SbaXGridPeer::DispatchType SbaXGridPeer::classifyDispatchURL( const URL& _rURL )
     return eURLType;
 }
 
-void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyValue >& aArgs)
 {
     VclPtr< SbaGridControl > pGrid = GetAs< SbaGridControl >();
     if (!pGrid)
@@ -491,7 +491,7 @@ void SAL_CALL SbaXGridPeer::dispatch(const URL& aURL, const Sequence< PropertyVa
     }
 }
 
-void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
 {
     ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
     if (!pCont)
@@ -501,7 +501,7 @@ void SAL_CALL SbaXGridPeer::addStatusListener(const Reference< css::frame::XStat
     NotifyStatusChanged(aURL, xControl);
 }
 
-void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXGridPeer::removeStatusListener(const Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL)
 {
     ::cppu::OInterfaceContainerHelper* pCont = m_aStatusListeners.getContainer(aURL);
     if ( pCont )
@@ -518,7 +518,7 @@ const Sequence< sal_Int8 > & SbaXGridPeer::getUnoTunnelId()
     return theSbaXGridPeerUnoTunnelId::get().getSeq();
 }
 
-Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > SAL_CALL SbaXGridPeer::getTypes()
 {
     Sequence< Type > aTypes = FmXGridPeer::getTypes();
     sal_Int32 nOldLen = aTypes.getLength();
@@ -529,7 +529,7 @@ Sequence< Type > SAL_CALL SbaXGridPeer::getTypes() throw (RuntimeException, std:
 }
 
 // return implementation specific data
-sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId ) throw(css::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL SbaXGridPeer::getSomething( const Sequence< sal_Int8 > & rId )
 {
     if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast< sal_Int64 >( this );

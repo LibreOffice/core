@@ -25,13 +25,13 @@ ScVbaPropValue::ScVbaPropValue( PropListener* pListener ) : m_pListener( pListen
 }
 
 css::uno::Any SAL_CALL
-ScVbaPropValue::getValue() throw (css::uno::RuntimeException, std::exception)
+ScVbaPropValue::getValue()
 {
     return m_pListener->getValueEvent();
 }
 
 void SAL_CALL
-ScVbaPropValue::setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException, std::exception)
+ScVbaPropValue::setValue( const css::uno::Any& _value )
 {
     m_pListener->setValueEvent( _value );
 }

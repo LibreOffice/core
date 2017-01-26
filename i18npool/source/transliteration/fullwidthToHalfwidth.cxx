@@ -41,7 +41,6 @@ fullwidthToHalfwidth::fullwidthToHalfwidth()
  */
 OUString SAL_CALL
 fullwidthToHalfwidth::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException, std::exception)
 {
     // Decomposition: GA --> KA + voice-mark
     const OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
@@ -55,7 +54,6 @@ fullwidthToHalfwidth::transliterate( const OUString& inStr, sal_Int32 startPos, 
 
 sal_Unicode SAL_CALL
 fullwidthToHalfwidth::transliterateChar2Char( sal_Unicode inChar)
-  throw(RuntimeException, MultipleCharsOutputException, std::exception)
 {
     sal_Unicode newChar = widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
     if (newChar == 0xFFFF)
@@ -76,7 +74,6 @@ fullwidthKatakanaToHalfwidthKatakana::fullwidthKatakanaToHalfwidthKatakana()
  */
 OUString SAL_CALL
 fullwidthKatakanaToHalfwidthKatakana::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException, std::exception)
 {
     // Decomposition: GA --> KA + voice-mark
     const OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
@@ -90,7 +87,6 @@ fullwidthKatakanaToHalfwidthKatakana::transliterate( const OUString& inStr, sal_
 
 sal_Unicode SAL_CALL
 fullwidthKatakanaToHalfwidthKatakana::transliterateChar2Char( sal_Unicode inChar )
-  throw(RuntimeException, MultipleCharsOutputException, std::exception)
 {
     sal_Unicode newChar = widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
     if (newChar == 0xFFFF)
@@ -111,7 +107,6 @@ fullwidthToHalfwidthLikeASC::fullwidthToHalfwidthLikeASC()
  */
 OUString SAL_CALL
 fullwidthToHalfwidthLikeASC::transliterate( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
-  throw(RuntimeException, std::exception)
 {
     // Decomposition: GA --> KA + voice-mark
     const OUString& newStr = widthfolding::decompose_ja_voiced_sound_marks (inStr, startPos, nCount, offset, useOffset);
@@ -126,7 +121,6 @@ fullwidthToHalfwidthLikeASC::transliterate( const OUString& inStr, sal_Int32 sta
 
 sal_Unicode SAL_CALL
 fullwidthToHalfwidthLikeASC::transliterateChar2Char( sal_Unicode inChar )
-  throw(RuntimeException, MultipleCharsOutputException, std::exception)
 {
     sal_Unicode newChar = widthfolding::decompose_ja_voiced_sound_marksChar2Char (inChar);
     if (newChar == 0xFFFF)

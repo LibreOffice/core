@@ -32,7 +32,6 @@ DAVSessionFactory::~DAVSessionFactory()
 rtl::Reference< DAVSession > DAVSessionFactory::createDAVSession(
                 const OUString & inUri,
                 const uno::Reference< uno::XComponentContext > & rxContext )
-    throw( DAVException )
 {
     osl::MutexGuard aGuard( m_aMutex );
 

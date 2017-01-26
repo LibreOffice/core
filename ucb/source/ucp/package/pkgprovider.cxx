@@ -62,8 +62,7 @@ public:
 
     // XInterface
     virtual uno::Any SAL_CALL
-    queryInterface( const uno::Type& aType )
-        throw( uno::RuntimeException, std::exception ) override
+    queryInterface( const uno::Type& aType ) override
     { return m_xNA->queryInterface( aType ); }
     virtual void SAL_CALL
     acquire() throw() override
@@ -74,12 +73,10 @@ public:
 
     // XHierarchicalNameAccess
     virtual uno::Any SAL_CALL
-    getByHierarchicalName( const OUString& aName )
-        throw( container::NoSuchElementException, uno::RuntimeException, std::exception ) override
+    getByHierarchicalName( const OUString& aName ) override
     { return m_xNA->getByHierarchicalName( aName ); }
     virtual sal_Bool SAL_CALL
-    hasByHierarchicalName( const OUString& aName )
-        throw( uno::RuntimeException, std::exception ) override
+    hasByHierarchicalName( const OUString& aName ) override
     { return m_xNA->hasByHierarchicalName( aName ); }
 };
 
@@ -128,7 +125,6 @@ void SAL_CALL ContentProvider::release()
 }
 
 css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< lang::XTypeProvider* >(this)),
@@ -154,7 +150,6 @@ XSERVICEINFO_COMMOM_IMPL( ContentProvider,
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
 ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
-    throw( css::uno::Exception )
 {
     css::lang::XServiceInfo* pX =
         static_cast<css::lang::XServiceInfo*>(new ContentProvider( ucbhelper::getComponentContext(rSMgr) ));
@@ -180,7 +175,6 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( ContentProvider );
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL ContentProvider::queryContent(
             const uno::Reference< ucb::XContentIdentifier >& Identifier )
-    throw( ucb::IllegalIdentifierException, uno::RuntimeException, std::exception )
 {
     if ( !Identifier.is() )
         return uno::Reference< ucb::XContent >();

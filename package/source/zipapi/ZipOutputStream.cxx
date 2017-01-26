@@ -76,13 +76,11 @@ void ZipOutputStream::addDeflatingThread( ZipOutputEntry *pEntry, comphelper::Th
 }
 
 void ZipOutputStream::rawWrite( const Sequence< sal_Int8 >& rBuffer )
-    throw(IOException, RuntimeException)
 {
     m_aChucker.WriteBytes( rBuffer );
 }
 
 void ZipOutputStream::rawCloseEntry( bool bEncrypt )
-    throw(IOException, RuntimeException)
 {
     assert(m_pCurrentEntry && "Forgot to call writeLOC()?");
     if ( m_pCurrentEntry->nMethod == DEFLATED && ( m_pCurrentEntry->nFlag & 8 ) )
@@ -164,7 +162,6 @@ void ZipOutputStream::reduceScheduledThreadsToGivenNumberOrLess(sal_Int32 nThrea
 }
 
 void ZipOutputStream::finish()
-    throw(IOException, RuntimeException, std::exception)
 {
     assert(!m_aZipList.empty() && "Zip file must have at least one entry!");
 
@@ -201,7 +198,6 @@ const css::uno::Reference< css::io::XOutputStream >& ZipOutputStream::getStream(
 }
 
 void ZipOutputStream::writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
-    throw(IOException, RuntimeException)
 {
     m_aChucker.WriteInt32( ENDSIG );
     m_aChucker.WriteInt16( 0 );
@@ -225,7 +221,6 @@ static sal_uInt32 getTruncated( sal_Int64 nNum, bool *pIsTruncated )
 }
 
 void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
-    throw(IOException, RuntimeException)
 {
     if ( !::comphelper::OStorageHelper::IsValidZipEntryFileName( rEntry.sPath, true ) )
         throw IOException("Unexpected character is used in file name." );
@@ -265,7 +260,6 @@ void ZipOutputStream::writeCEN( const ZipEntry &rEntry )
 }
 
 void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
-    throw(IOException, RuntimeException)
 {
     bool bWrite64Header = false;
 
@@ -284,7 +278,6 @@ void ZipOutputStream::writeEXT( const ZipEntry &rEntry )
 }
 
 void ZipOutputStream::writeLOC( ZipEntry *pEntry, bool bEncrypt )
-    throw(IOException, RuntimeException)
 {
     assert(!m_pCurrentEntry && "Forgot to close an entry with rawCloseEntry()?");
     m_pCurrentEntry = pEntry;

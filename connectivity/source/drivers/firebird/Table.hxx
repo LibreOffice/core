@@ -64,26 +64,18 @@ namespace connectivity
              */
             virtual void SAL_CALL alterColumnByName(
                     const ::rtl::OUString& rColName,
-                    const css::uno::Reference< css::beans::XPropertySet >& rDescriptor)
-                throw(css::sdbc::SQLException,
-                      css::container::NoSuchElementException,
-                      css::uno::RuntimeException, std::exception) override;
+                    const css::uno::Reference< css::beans::XPropertySet >& rDescriptor) override;
 
             // XRename -- UNSUPPORTED
-            virtual void SAL_CALL rename(const ::rtl::OUString& sName)
-                throw(css::sdbc::SQLException,
-                      css::container::ElementExistException,
-                      css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL rename(const ::rtl::OUString& sName) override;
 
             //XInterface
             virtual css::uno::Any
-                    SAL_CALL queryInterface(const css::uno::Type & rType)
-                throw(css::uno::RuntimeException, std::exception) override;
+                    SAL_CALL queryInterface(const css::uno::Type & rType) override;
 
             //XTypeProvider
             virtual css::uno::Sequence< css::uno::Type >
-                    SAL_CALL getTypes()
-                throw(css::uno::RuntimeException, std::exception) override;
+                    SAL_CALL getTypes() override;
 
         };
 

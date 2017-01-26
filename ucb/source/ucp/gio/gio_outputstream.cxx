@@ -41,8 +41,6 @@ OutputStream::~OutputStream()
 }
 
 void SAL_CALL OutputStream::writeBytes( const css::uno::Sequence< sal_Int8 >& rData )
-    throw( io::NotConnectedException, io::BufferSizeExceededException,
-           io::IOException, uno::RuntimeException, std::exception)
 {
     if (!mpStream)
         throw io::NotConnectedException();
@@ -53,8 +51,6 @@ void SAL_CALL OutputStream::writeBytes( const css::uno::Sequence< sal_Int8 >& rD
 }
 
 void SAL_CALL OutputStream::flush()
-    throw( io::NotConnectedException, io::BufferSizeExceededException,
-           io::IOException, uno::RuntimeException, std::exception )
 {
     if (!mpStream)
         throw io::NotConnectedException();
@@ -65,14 +61,12 @@ void SAL_CALL OutputStream::flush()
 }
 
 void SAL_CALL OutputStream::closeOutput()
-    throw( io::NotConnectedException, io::IOException,
-           uno::RuntimeException, std::exception )
 {
     if (mpStream)
         g_output_stream_close(G_OUTPUT_STREAM(mpStream), nullptr, nullptr);
 }
 
-uno::Any OutputStream::queryInterface( const uno::Type &type ) throw( uno::RuntimeException, std::exception )
+uno::Any OutputStream::queryInterface( const uno::Type &type )
 {
     uno::Any aRet = ::cppu::queryInterface ( type,
         static_cast< XOutputStream * >( this ) );

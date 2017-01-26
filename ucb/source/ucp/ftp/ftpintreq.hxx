@@ -40,9 +40,7 @@ namespace ftp {
 
         XInteractionApproveImpl();
 
-        virtual void SAL_CALL select()
-            throw (css::uno::RuntimeException,
-                   std::exception) override;
+        virtual void SAL_CALL select() override;
 
         bool isSelected() const { return m_bSelected;}
 
@@ -59,8 +57,7 @@ namespace ftp {
 
         XInteractionDisapproveImpl();
 
-        virtual void SAL_CALL select()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL select() override;
 
     private:
 

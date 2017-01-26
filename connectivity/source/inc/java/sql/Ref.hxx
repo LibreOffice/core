@@ -43,7 +43,7 @@ namespace connectivity
         java_sql_Ref( JNIEnv * pEnv, jobject myObj );
 
         // XRef
-        virtual OUString SAL_CALL getBaseTypeName(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getBaseTypeName(  ) override;
     };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_JAVA_SQL_REF_HXX

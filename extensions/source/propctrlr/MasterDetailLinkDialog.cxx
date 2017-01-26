@@ -40,7 +40,7 @@ namespace pcr
     {
     }
 
-    Sequence<sal_Int8> SAL_CALL MasterDetailLinkDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
+    Sequence<sal_Int8> SAL_CALL MasterDetailLinkDialog::getImplementationId(  )
     {
         return css::uno::Sequence<sal_Int8>();
     }
@@ -52,32 +52,32 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL MasterDetailLinkDialog::getImplementationName() throw(RuntimeException, std::exception)
+    OUString SAL_CALL MasterDetailLinkDialog::getImplementationName()
     {
         return getImplementationName_static();
     }
 
 
-    OUString MasterDetailLinkDialog::getImplementationName_static() throw(RuntimeException)
+    OUString MasterDetailLinkDialog::getImplementationName_static()
     {
         return OUString("org.openoffice.comp.form.ui.MasterDetailLinkDialog");
     }
 
 
-    css::uno::Sequence<OUString> SAL_CALL MasterDetailLinkDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL MasterDetailLinkDialog::getSupportedServiceNames()
     {
         return getSupportedServiceNames_static();
     }
 
 
-    css::uno::Sequence<OUString> MasterDetailLinkDialog::getSupportedServiceNames_static() throw(RuntimeException)
+    css::uno::Sequence<OUString> MasterDetailLinkDialog::getSupportedServiceNames_static()
     {
         css::uno::Sequence<OUString> aSupported { "com.sun.star.form.MasterDetailLinkDialog" };
         return aSupported;
     }
 
 
-    Reference<XPropertySetInfo>  SAL_CALL MasterDetailLinkDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
+    Reference<XPropertySetInfo>  SAL_CALL MasterDetailLinkDialog::getPropertySetInfo()
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;

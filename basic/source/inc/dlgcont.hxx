@@ -46,8 +46,7 @@ class SfxDialogLibraryContainer : public SfxLibraryContainer
         const css::uno::Reference< css::container::XNameContainer>& xLibrary,
         const OUString& aElementName,
         const css::uno::Reference< css::io::XOutputStream >& xOutput
-    )
-        throw(css::uno::Exception) override;
+    ) override;
 
     virtual css::uno::Any SAL_CALL importLibraryElement
     (
@@ -73,23 +72,17 @@ public:
 
     // Methods XStorageBasedLibraryContainer
     virtual void SAL_CALL storeLibrariesToStorage(
-        const css::uno::Reference< css::embed::XStorage >& RootStorage )
-            throw (css::uno::RuntimeException,
-                   css::lang::WrappedTargetException,
-                   std::exception) override;
+        const css::uno::Reference< css::embed::XStorage >& RootStorage ) override;
 
     // Resource handling
     css::uno::Reference< css::resource::XStringResourcePersistence >
         implCreateStringResource( class SfxDialogLibrary* pDialog );
 
     // Methods XServiceInfo
-    virtual OUString SAL_CALL getImplementationName( )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName( ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames( ) override;
     // XLibraryQueryExecutable
-    virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL HasExecutableCode(const OUString&) override;
 };
 
 
@@ -135,7 +128,7 @@ public:
 
     // XStringResourceSupplier
     virtual css::uno::Reference< css::resource::XStringResourceResolver >
-        SAL_CALL getStringResource(  ) throw (css::uno::RuntimeException, std::exception) override;
+        SAL_CALL getStringResource(  ) override;
 
     const OUString& getName()
         { return m_aName; }

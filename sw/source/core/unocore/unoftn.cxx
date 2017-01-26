@@ -174,14 +174,13 @@ const uno::Sequence< sal_Int8 > & SwXFootnote::getUnoTunnelId()
 
 sal_Int64 SAL_CALL
 SwXFootnote::getSomething(const uno::Sequence< sal_Int8 >& rId)
-throw (uno::RuntimeException, std::exception)
 {
     const sal_Int64 nRet( ::sw::UnoTunnelImpl<SwXFootnote>(rId, this) );
     return (nRet) ? nRet : SwXText::getSomething(rId);
 }
 
 OUString SAL_CALL
-SwXFootnote::getImplementationName() throw (uno::RuntimeException, std::exception)
+SwXFootnote::getImplementationName()
 {
     return OUString("SwXFootnote");
 }
@@ -199,13 +198,12 @@ static const size_t g_nServicesEndnote( SAL_N_ELEMENTS(g_ServicesFootnote) );
 static const size_t g_nServicesFootnote( g_nServicesEndnote - 1 ); // NB: omit!
 
 sal_Bool SAL_CALL SwXFootnote::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXFootnote::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+SwXFootnote::getSupportedServiceNames()
 {
     SolarMutexGuard g;
     return ::sw::GetSupportedServiceNamesImpl(
@@ -214,7 +212,7 @@ SwXFootnote::getSupportedServiceNames() throw (uno::RuntimeException, std::excep
 }
 
 uno::Sequence< uno::Type > SAL_CALL
-SwXFootnote::getTypes() throw (uno::RuntimeException, std::exception)
+SwXFootnote::getTypes()
 {
     const uno::Sequence< uno::Type > aTypes = SwXFootnote_Base::getTypes();
     const uno::Sequence< uno::Type > aTextTypes = SwXText::getTypes();
@@ -222,14 +220,13 @@ SwXFootnote::getTypes() throw (uno::RuntimeException, std::exception)
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL
-SwXFootnote::getImplementationId() throw (uno::RuntimeException, std::exception)
+SwXFootnote::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 uno::Any SAL_CALL
 SwXFootnote::queryInterface(const uno::Type& rType)
-throw (uno::RuntimeException, std::exception)
 {
     const uno::Any ret = SwXFootnote_Base::queryInterface(rType);
     return (ret.getValueType() == cppu::UnoType<void>::get())
@@ -237,7 +234,7 @@ throw (uno::RuntimeException, std::exception)
         :   ret;
 }
 
-OUString SAL_CALL SwXFootnote::getLabel() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL SwXFootnote::getLabel()
 {
     SolarMutexGuard aGuard;
 
@@ -259,7 +256,7 @@ OUString SAL_CALL SwXFootnote::getLabel() throw (uno::RuntimeException, std::exc
 }
 
 void SAL_CALL
-SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException, std::exception)
+SwXFootnote::setLabel(const OUString& aLabel)
 {
     SolarMutexGuard aGuard;
     OUString newLabel(aLabel);
@@ -290,7 +287,6 @@ SwXFootnote::setLabel(const OUString& aLabel) throw (uno::RuntimeException, std:
 
 void SAL_CALL
 SwXFootnote::attach(const uno::Reference< text::XTextRange > & xTextRange)
-throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -357,7 +353,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
-SwXFootnote::getAnchor() throw (uno::RuntimeException, std::exception)
+SwXFootnote::getAnchor()
 {
     SolarMutexGuard aGuard;
 
@@ -373,7 +369,7 @@ SwXFootnote::getAnchor() throw (uno::RuntimeException, std::exception)
     return xRet;
 }
 
-void SAL_CALL SwXFootnote::dispose() throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwXFootnote::dispose()
 {
     SolarMutexGuard aGuard;
 
@@ -390,7 +386,6 @@ void SAL_CALL SwXFootnote::dispose() throw (uno::RuntimeException, std::exceptio
 void SAL_CALL
 SwXFootnote::addEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.addInterface(xListener);
@@ -399,7 +394,6 @@ throw (uno::RuntimeException, std::exception)
 void SAL_CALL
 SwXFootnote::removeEventListener(
     const uno::Reference< lang::XEventListener > & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.removeInterface(xListener);
@@ -420,13 +414,13 @@ const SwStartNode *SwXFootnote::GetStartNode() const
 }
 
 uno::Reference< text::XTextCursor >
-SwXFootnote::CreateCursor() throw (uno::RuntimeException)
+SwXFootnote::CreateCursor()
 {
     return createTextCursor();
 }
 
 uno::Reference< text::XTextCursor > SAL_CALL
-SwXFootnote::createTextCursor() throw (uno::RuntimeException, std::exception)
+SwXFootnote::createTextCursor()
 {
     SolarMutexGuard aGuard;
 
@@ -446,7 +440,6 @@ SwXFootnote::createTextCursor() throw (uno::RuntimeException, std::exception)
 uno::Reference< text::XTextCursor > SAL_CALL
 SwXFootnote::createTextCursorByRange(
     const uno::Reference< text::XTextRange > & xTextPosition)
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -475,7 +468,7 @@ throw (uno::RuntimeException, std::exception)
 }
 
 uno::Reference< container::XEnumeration > SAL_CALL
-SwXFootnote::createEnumeration() throw (uno::RuntimeException, std::exception)
+SwXFootnote::createEnumeration()
 {
     SolarMutexGuard aGuard;
 
@@ -488,19 +481,18 @@ SwXFootnote::createEnumeration() throw (uno::RuntimeException, std::exception)
     return SwXParagraphEnumeration::Create(this, pUnoCursor, CURSOR_FOOTNOTE);
 }
 
-uno::Type SAL_CALL SwXFootnote::getElementType() throw (uno::RuntimeException, std::exception)
+uno::Type SAL_CALL SwXFootnote::getElementType()
 {
     return cppu::UnoType<text::XTextRange>::get();
 }
 
-sal_Bool SAL_CALL SwXFootnote::hasElements() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwXFootnote::hasElements()
 {
     return true;
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXFootnote::getPropertySetInfo()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     static uno::Reference< beans::XPropertySetInfo > xRet =
@@ -511,9 +503,6 @@ throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL
 SwXFootnote::setPropertyValue(const OUString&, const uno::Any&)
-throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-        lang::IllegalArgumentException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     //no values to be set
     throw lang::IllegalArgumentException();
@@ -521,8 +510,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
 uno::Any SAL_CALL
 SwXFootnote::getPropertyValue(const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -562,8 +549,6 @@ void SAL_CALL
 SwXFootnote::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXFootnote::addPropertyChangeListener(): not implemented");
 }
@@ -572,8 +557,6 @@ void SAL_CALL
 SwXFootnote::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXFootnote::removePropertyChangeListener(): not implemented");
 }
@@ -582,8 +565,6 @@ void SAL_CALL
 SwXFootnote::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXFootnote::addVetoableChangeListener(): not implemented");
 }
@@ -592,8 +573,6 @@ void SAL_CALL
 SwXFootnote::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXFootnote::removeVetoableChangeListener(): not implemented");
 }

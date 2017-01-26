@@ -50,43 +50,43 @@ public:
     virtual ~GridColumn() override;
 
     // css::awt::grid::XGridColumn
-    virtual css::uno::Any SAL_CALL getIdentifier() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setIdentifier(const css::uno::Any & value) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getColumnWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setColumnWidth(::sal_Int32 the_value) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getMaxWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMaxWidth(::sal_Int32 the_value) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getMinWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMinWidth(::sal_Int32 the_value) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getResizeable() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setResizeable(sal_Bool the_value) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getFlexibility() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFlexibility( ::sal_Int32 _flexibility ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getTitle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTitle(const OUString & value) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getHelpText() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHelpText(const OUString & value) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getIndex() throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getDataColumnIndex() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDataColumnIndex( ::sal_Int32 i_dataColumnIndex ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::style::HorizontalAlignment SAL_CALL getHorizontalAlign() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHorizontalAlign(css::style::HorizontalAlignment align) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getIdentifier() override;
+    virtual void SAL_CALL setIdentifier(const css::uno::Any & value) override;
+    virtual ::sal_Int32 SAL_CALL getColumnWidth() override;
+    virtual void SAL_CALL setColumnWidth(::sal_Int32 the_value) override;
+    virtual ::sal_Int32 SAL_CALL getMaxWidth() override;
+    virtual void SAL_CALL setMaxWidth(::sal_Int32 the_value) override;
+    virtual ::sal_Int32 SAL_CALL getMinWidth() override;
+    virtual void SAL_CALL setMinWidth(::sal_Int32 the_value) override;
+    virtual sal_Bool SAL_CALL getResizeable() override;
+    virtual void SAL_CALL setResizeable(sal_Bool the_value) override;
+    virtual ::sal_Int32 SAL_CALL getFlexibility() override;
+    virtual void SAL_CALL setFlexibility( ::sal_Int32 _flexibility ) override;
+    virtual OUString SAL_CALL getTitle() override;
+    virtual void SAL_CALL setTitle(const OUString & value) override;
+    virtual OUString SAL_CALL getHelpText() override;
+    virtual void SAL_CALL setHelpText(const OUString & value) override;
+    virtual ::sal_Int32 SAL_CALL getIndex() override;
+    virtual ::sal_Int32 SAL_CALL getDataColumnIndex() override;
+    virtual void SAL_CALL setDataColumnIndex( ::sal_Int32 i_dataColumnIndex ) override;
+    virtual css::style::HorizontalAlignment SAL_CALL getHorizontalAlign() override;
+    virtual void SAL_CALL setHorizontalAlign(css::style::HorizontalAlignment align) override;
+    virtual void SAL_CALL addGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
+    virtual void SAL_CALL removeGridColumnListener( const css::uno::Reference< css::awt::grid::XGridColumnListener >& xListener ) override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
 
     // XCloneable (base of XGridColumn)
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XUnoTunnel and friends
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& i_identifier ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& i_identifier ) override;
     static css::uno::Sequence< sal_Int8 > getUnoTunnelId() throw();
     static GridColumn* getImplementation( const css::uno::Reference< css::uno::XInterface >& i_component );
 

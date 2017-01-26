@@ -67,7 +67,7 @@ void OHSQLColumn::construct()
     return *OHSQLColumn_PROP::getArrayHelper(isNew() ? 1 : 0);
 }
 
-Sequence< OUString > SAL_CALL OHSQLColumn::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL OHSQLColumn::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSupported { "com.sun.star.sdbcx.Column" };
 

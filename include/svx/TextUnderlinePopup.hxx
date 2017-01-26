@@ -37,8 +37,7 @@ public:
     virtual ~TextUnderlinePopup() override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     virtual VclPtr<SfxPopupWindow> CreatePopupWindow() override;
 };

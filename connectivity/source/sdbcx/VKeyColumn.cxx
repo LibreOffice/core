@@ -27,14 +27,14 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::uno;
 using namespace cppu;
 
-OUString SAL_CALL OKeyColumn::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OKeyColumn::getImplementationName(  )
 {
     if(isNew())
         return OUString("com.sun.star.sdbcx.VKeyColumnDescription");
     return OUString("com.sun.star.sdbcx.VKeyColumn");
 }
 
-css::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  )
 {
     css::uno::Sequence< OUString > aSupported(1);
     if(isNew())
@@ -45,7 +45,7 @@ css::uno::Sequence< OUString > SAL_CALL OKeyColumn::getSupportedServiceNames(  )
     return aSupported;
 }
 
-sal_Bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OKeyColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }

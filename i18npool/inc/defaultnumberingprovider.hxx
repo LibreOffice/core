@@ -49,49 +49,36 @@ public:
     //XDefaultNumberingProvider
     virtual css::uno::Sequence< css::uno::Reference<
         css::container::XIndexAccess > > SAL_CALL
-        getDefaultOutlineNumberings( const css::lang::Locale& aLocale )
-        throw(css::uno::RuntimeException, std::exception) override;
+        getDefaultOutlineNumberings( const css::lang::Locale& aLocale ) override;
 
     virtual css::uno::Sequence< css::uno::Sequence<
         css::beans::PropertyValue > > SAL_CALL
-        getDefaultContinuousNumberingLevels( const css::lang::Locale& aLocale )
-        throw(css::uno::RuntimeException, std::exception) override;
+        getDefaultContinuousNumberingLevels( const css::lang::Locale& aLocale ) override;
 
     //XNumberingFormatter
     virtual OUString SAL_CALL makeNumberingString(
         const css::uno::Sequence<
         css::beans::PropertyValue >& aProperties,
-        const css::lang::Locale& aLocale )
-        throw(css::lang::IllegalArgumentException,
-        css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& aLocale ) override;
 
     //XNumberingTypeInfo
-    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedNumberingTypes(  )
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getNumberingType( const OUString& NumberingIdentifier )
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasNumberingType( const OUString& NumberingIdentifier )
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNumberingIdentifier( sal_Int16 NumberingType )
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedNumberingTypes(  ) override;
+    virtual sal_Int16 SAL_CALL getNumberingType( const OUString& NumberingIdentifier ) override;
+    virtual sal_Bool SAL_CALL hasNumberingType( const OUString& NumberingIdentifier ) override;
+    virtual OUString SAL_CALL getNumberingIdentifier( sal_Int16 NumberingType ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-                throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 private:
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
     css::uno::Reference < css::container::XHierarchicalNameAccess > xHierarchicalNameAccess;
     std::unique_ptr<TransliterationImpl> translit;
     /// @throws css::uno::RuntimeException
-    OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index )
-        throw(css::uno::RuntimeException, std::exception);
+    OUString SAL_CALL makeNumberingIdentifier( sal_Int16 index );
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL isScriptFlagEnabled(const OUString& aName )
-        throw(css::uno::RuntimeException);
+    bool SAL_CALL isScriptFlagEnabled(const OUString& aName );
 };
 } } } }
 

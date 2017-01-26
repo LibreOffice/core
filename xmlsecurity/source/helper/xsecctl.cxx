@@ -911,7 +911,6 @@ SignatureInformations XSecController::getSignatureInformations() const
  */
 
 void SAL_CALL XSecController::blockingStatusChanged( sal_Bool isBlocking )
-    throw (cssu::RuntimeException, std::exception)
 {
     this->m_bIsBlocking = isBlocking;
     checkChainingStatus();
@@ -919,14 +918,12 @@ void SAL_CALL XSecController::blockingStatusChanged( sal_Bool isBlocking )
 
 void SAL_CALL XSecController::collectionStatusChanged(
     sal_Bool isInsideCollectedElement )
-    throw (cssu::RuntimeException, std::exception)
 {
     this->m_bIsCollectingElement = isInsideCollectedElement;
     checkChainingStatus();
 }
 
 void SAL_CALL XSecController::bufferStatusChanged( sal_Bool /*isBufferEmpty*/)
-    throw (cssu::RuntimeException, std::exception)
 {
 
 }
@@ -935,7 +932,6 @@ void SAL_CALL XSecController::bufferStatusChanged( sal_Bool /*isBufferEmpty*/)
  * XSignatureCreationResultListener
  */
 void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
-        throw (css::uno::RuntimeException, std::exception)
 {
     int index = findSignatureInfor(securityId);
     assert(index != -1 && "Signature Not Found!");
@@ -947,7 +943,6 @@ void SAL_CALL XSecController::signatureCreated( sal_Int32 securityId, css::xml::
  * XSignatureVerifyResultListener
  */
 void SAL_CALL XSecController::signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
-        throw (css::uno::RuntimeException, std::exception)
 {
     int index = findSignatureInfor(securityId);
     assert(index != -1 && "Signature Not Found!");

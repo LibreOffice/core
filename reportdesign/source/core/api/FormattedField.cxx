@@ -81,7 +81,7 @@ OFormattedField::~OFormattedField()
 
 IMPLEMENT_FORWARD_REFCOUNT( OFormattedField, FormattedFieldBase )
 
-uno::Any SAL_CALL OFormattedField::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException, std::exception)
+uno::Any SAL_CALL OFormattedField::queryInterface( const uno::Type& _rType )
 {
     uno::Any aReturn = FormattedFieldBase::queryInterface(_rType);
     if ( !aReturn.hasValue() )
@@ -93,7 +93,7 @@ uno::Any SAL_CALL OFormattedField::queryInterface( const uno::Type& _rType ) thr
 }
 
 
-void SAL_CALL OFormattedField::dispose() throw(uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::dispose()
 {
     FormattedFieldPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
@@ -101,18 +101,18 @@ void SAL_CALL OFormattedField::dispose() throw(uno::RuntimeException, std::excep
     m_xFunction.clear();
 }
 
-OUString OFormattedField::getImplementationName_Static(  ) throw(uno::RuntimeException, std::exception)
+OUString OFormattedField::getImplementationName_Static(  )
 {
     return OUString("com.sun.star.comp.report.OFormattedField");
 }
 
 
-OUString SAL_CALL OFormattedField::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL OFormattedField::getImplementationName(  )
 {
     return getImplementationName_Static();
 }
 
-uno::Sequence< OUString > OFormattedField::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence< OUString > OFormattedField::getSupportedServiceNames_Static(  )
 {
     uno::Sequence< OUString > aServices(2);
     aServices[0] = SERVICE_FORMATTEDFIELD;
@@ -121,12 +121,12 @@ uno::Sequence< OUString > OFormattedField::getSupportedServiceNames_Static(  ) t
     return aServices;
 }
 
-uno::Sequence< OUString > SAL_CALL OFormattedField::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL OFormattedField::getSupportedServiceNames(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-sal_Bool SAL_CALL OFormattedField::supportsService(const OUString& ServiceName) throw( uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL OFormattedField::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -138,12 +138,12 @@ REPORTCOMPONENT_NOMASTERDETAIL(OFormattedField)
 REPORTCONTROLFORMAT_IMPL(OFormattedField,m_aProps.aFormatProperties)
 
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL OFormattedField::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL OFormattedField::getPropertySetInfo(  )
 {
     return FormattedFieldPropertySet::getPropertySetInfo();
 }
 
-void SAL_CALL OFormattedField::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
 {
     // special case here /// TODO check
     if ( !aValue.hasValue() && aPropertyName == PROPERTY_FORMATKEY )
@@ -152,68 +152,68 @@ void SAL_CALL OFormattedField::setPropertyValue( const OUString& aPropertyName, 
         FormattedFieldPropertySet::setPropertyValue( aPropertyName, aValue );
 }
 
-uno::Any SAL_CALL OFormattedField::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+uno::Any SAL_CALL OFormattedField::getPropertyValue( const OUString& PropertyName )
 {
     return FormattedFieldPropertySet::getPropertyValue( PropertyName);
 }
 
-void SAL_CALL OFormattedField::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
 {
     FormattedFieldPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 
-void SAL_CALL OFormattedField::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
 {
     FormattedFieldPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 
-void SAL_CALL OFormattedField::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
 {
     FormattedFieldPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 
-void SAL_CALL OFormattedField::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
 {
     FormattedFieldPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 
 // XReportControlModel
-OUString SAL_CALL OFormattedField::getDataField() throw ( beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+OUString SAL_CALL OFormattedField::getDataField()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aDataField;
 }
 
-void SAL_CALL OFormattedField::setDataField( const OUString& _datafield ) throw (lang::IllegalArgumentException, beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::setDataField( const OUString& _datafield )
 {
     set(PROPERTY_DATAFIELD,_datafield,m_aProps.aDataField);
 }
 
-sal_Bool SAL_CALL OFormattedField::getPrintWhenGroupChange() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFormattedField::getPrintWhenGroupChange()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.bPrintWhenGroupChange;
 }
 
-void SAL_CALL OFormattedField::setPrintWhenGroupChange( sal_Bool _printwhengroupchange ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::setPrintWhenGroupChange( sal_Bool _printwhengroupchange )
 {
     set(PROPERTY_PRINTWHENGROUPCHANGE,_printwhengroupchange,m_aProps.bPrintWhenGroupChange);
 }
 
-OUString SAL_CALL OFormattedField::getConditionalPrintExpression() throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+OUString SAL_CALL OFormattedField::getConditionalPrintExpression()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aProps.aConditionalPrintExpression;
 }
 
-void SAL_CALL OFormattedField::setConditionalPrintExpression( const OUString& _conditionalprintexpression ) throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::setConditionalPrintExpression( const OUString& _conditionalprintexpression )
 {
     set(PROPERTY_CONDITIONALPRINTEXPRESSION,_conditionalprintexpression,m_aProps.aConditionalPrintExpression);
 }
 
 
 // XCloneable
-uno::Reference< util::XCloneable > SAL_CALL OFormattedField::createClone(  ) throw (uno::RuntimeException, std::exception)
+uno::Reference< util::XCloneable > SAL_CALL OFormattedField::createClone(  )
 {
     uno::Reference< report::XReportComponent> xSource = this;
     uno::Reference< report::XFormattedField> xSet(cloneObject(xSource,m_aProps.aComponent.m_xFactory,SERVICE_FORMATTEDFIELD),uno::UNO_QUERY_THROW);
@@ -234,18 +234,18 @@ uno::Reference< util::XCloneable > SAL_CALL OFormattedField::createClone(  ) thr
 
 // XFormattedField
 
-::sal_Int32 SAL_CALL OFormattedField::getFormatKey() throw (uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL OFormattedField::getFormatKey()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_nFormatKey;
 }
 
-void SAL_CALL OFormattedField::setFormatKey(::sal_Int32 _formatkey) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::setFormatKey(::sal_Int32 _formatkey)
 {
     set(PROPERTY_FORMATKEY,_formatkey,m_nFormatKey);
 }
 
-uno::Reference< util::XNumberFormatsSupplier > SAL_CALL OFormattedField::getFormatsSupplier() throw (uno::RuntimeException, std::exception)
+uno::Reference< util::XNumberFormatsSupplier > SAL_CALL OFormattedField::getFormatsSupplier()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( !m_xFormatsSupplier.is() )
@@ -263,101 +263,101 @@ uno::Reference< util::XNumberFormatsSupplier > SAL_CALL OFormattedField::getForm
     return m_xFormatsSupplier;
 }
 
-void SAL_CALL OFormattedField::setFormatsSupplier( const uno::Reference< util::XNumberFormatsSupplier >& _formatssupplier ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::setFormatsSupplier( const uno::Reference< util::XNumberFormatsSupplier >& _formatssupplier )
 {
     set(PROPERTY_FORMATSSUPPLIER,_formatssupplier,m_xFormatsSupplier);
 }
 
 // XChild
-uno::Reference< uno::XInterface > SAL_CALL OFormattedField::getParent(  ) throw (uno::RuntimeException, std::exception)
+uno::Reference< uno::XInterface > SAL_CALL OFormattedField::getParent(  )
 {
     return OShapeHelper::getParent(this);
 }
 
-void SAL_CALL OFormattedField::setParent( const uno::Reference< uno::XInterface >& Parent ) throw (lang::NoSupportException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::setParent( const uno::Reference< uno::XInterface >& Parent )
 {
     OShapeHelper::setParent(Parent,this);
 }
 
-uno::Reference< report::XFormatCondition > SAL_CALL OFormattedField::createFormatCondition(  ) throw (uno::Exception, uno::RuntimeException, std::exception)
+uno::Reference< report::XFormatCondition > SAL_CALL OFormattedField::createFormatCondition(  )
 {
     return new OFormatCondition(m_aProps.aComponent.m_xContext);
 }
 
 // XContainer
-void SAL_CALL OFormattedField::addContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::addContainerListener( const uno::Reference< container::XContainerListener >& xListener )
 {
     m_aProps.addContainerListener(xListener);
 }
 
-void SAL_CALL OFormattedField::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener )
 {
     m_aProps.removeContainerListener(xListener);
 }
 
 // XElementAccess
-uno::Type SAL_CALL OFormattedField::getElementType(  ) throw (uno::RuntimeException, std::exception)
+uno::Type SAL_CALL OFormattedField::getElementType(  )
 {
     return cppu::UnoType<report::XFormatCondition>::get();
 }
 
-sal_Bool SAL_CALL OFormattedField::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFormattedField::hasElements(  )
 {
     return m_aProps.hasElements();
 }
 
 // XIndexContainer
-void SAL_CALL OFormattedField::insertByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::insertByIndex( ::sal_Int32 Index, const uno::Any& Element )
 {
     m_aProps.insertByIndex(Index,Element);
 }
 
-void SAL_CALL OFormattedField::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::removeByIndex( ::sal_Int32 Index )
 {
     m_aProps.removeByIndex(Index);
 }
 
 // XIndexReplace
-void SAL_CALL OFormattedField::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element )
 {
     m_aProps.replaceByIndex(Index,Element);
 }
 
 // XIndexAccess
-::sal_Int32 SAL_CALL OFormattedField::getCount(  ) throw (uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL OFormattedField::getCount(  )
 {
     return m_aProps.getCount();
 }
 
-uno::Any SAL_CALL OFormattedField::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+uno::Any SAL_CALL OFormattedField::getByIndex( ::sal_Int32 Index )
 {
     return m_aProps.getByIndex( Index );
 }
 
 // XShape
-awt::Point SAL_CALL OFormattedField::getPosition(  ) throw (uno::RuntimeException, std::exception)
+awt::Point SAL_CALL OFormattedField::getPosition(  )
 {
     return OShapeHelper::getPosition(this);
 }
 
-void SAL_CALL OFormattedField::setPosition( const awt::Point& aPosition ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::setPosition( const awt::Point& aPosition )
 {
     OShapeHelper::setPosition(aPosition,this);
 }
 
-awt::Size SAL_CALL OFormattedField::getSize(  ) throw (uno::RuntimeException, std::exception)
+awt::Size SAL_CALL OFormattedField::getSize(  )
 {
     return OShapeHelper::getSize(this);
 }
 
-void SAL_CALL OFormattedField::setSize( const awt::Size& aSize ) throw (beans::PropertyVetoException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormattedField::setSize( const awt::Size& aSize )
 {
     OShapeHelper::setSize(aSize,this);
 }
 
 
 // XShapeDescriptor
-OUString SAL_CALL OFormattedField::getShapeType(  ) throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL OFormattedField::getShapeType(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     if ( m_aProps.aComponent.m_xShape.is() )

@@ -69,7 +69,7 @@ namespace rptui
         virtual void            Resize() override;
         virtual bool            EventNotify( NotifyEvent& rNEvt ) override;
         // OPropertyChangeListener
-        virtual void            _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException, std::exception) override;
+        virtual void            _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) override;
     public:
         OScrollWindowHelper( ODesignView* _pReportDesignView);
         virtual ~OScrollWindowHelper() override;

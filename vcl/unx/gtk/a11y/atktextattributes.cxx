@@ -209,7 +209,7 @@ String2Float( uno::Any& rAny, const gchar * value )
 
 /// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleComponent>
-    getComponent( AtkText *pText ) throw (uno::RuntimeException)
+    getComponent( AtkText *pText )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pText );
     if (pWrap)

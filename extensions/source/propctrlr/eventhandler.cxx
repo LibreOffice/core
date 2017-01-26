@@ -329,12 +329,12 @@ namespace pcr
         ScriptEventDescriptor getNormalizedDescriptorByName( const OUString& _rEventName ) const;
 
         // XNameReplace
-        virtual void SAL_CALL replaceByName( const OUString& _rName, const Any& aElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) override;
-        virtual Any SAL_CALL getByName( const OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception) override;
-        virtual Sequence< OUString > SAL_CALL getElementNames(  ) throw (RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasByName( const OUString& _rName ) throw (RuntimeException, std::exception) override;
-        virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL replaceByName( const OUString& _rName, const Any& aElement ) override;
+        virtual Any SAL_CALL getByName( const OUString& _rName ) override;
+        virtual Sequence< OUString > SAL_CALL getElementNames(  ) override;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& _rName ) override;
+        virtual Type SAL_CALL getElementType(  ) override;
+        virtual sal_Bool SAL_CALL hasElements(  ) override;
 
     protected:
         virtual ~EventHolder( ) override;
@@ -375,7 +375,7 @@ namespace pcr
         return pos->second;
     }
 
-    void SAL_CALL EventHolder::replaceByName( const OUString& _rName, const Any& _rElement ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+    void SAL_CALL EventHolder::replaceByName( const OUString& _rName, const Any& _rElement )
     {
         EventMap::iterator pos = m_aEventNameAccess.find( _rName );
         if ( pos == m_aEventNameAccess.end() )
@@ -390,7 +390,7 @@ namespace pcr
         pos->second.ScriptCode = aExtractor.getOrDefault( "Script", OUString() );
     }
 
-    Any SAL_CALL EventHolder::getByName( const OUString& _rName ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+    Any SAL_CALL EventHolder::getByName( const OUString& _rName )
     {
         ScriptEventDescriptor aDescriptor( impl_getDescriptor_throw( _rName ) );
 
@@ -403,7 +403,7 @@ namespace pcr
         return makeAny( aScriptDescriptor );
     }
 
-    Sequence< OUString > SAL_CALL EventHolder::getElementNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL EventHolder::getElementNames(  )
     {
         Sequence< OUString > aReturn( m_aEventIndexAccess.size() );
         OUString* pReturn = aReturn.getArray();
@@ -425,18 +425,18 @@ namespace pcr
         return aReturn;
     }
 
-    sal_Bool SAL_CALL EventHolder::hasByName( const OUString& _rName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL EventHolder::hasByName( const OUString& _rName )
     {
         EventMap::const_iterator pos = m_aEventNameAccess.find( _rName );
         return pos != m_aEventNameAccess.end();
     }
 
-    Type SAL_CALL EventHolder::getElementType(  ) throw (RuntimeException, std::exception)
+    Type SAL_CALL EventHolder::getElementType(  )
     {
         return cppu::UnoType<Sequence< PropertyValue >>::get();
     }
 
-    sal_Bool SAL_CALL EventHolder::hasElements(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL EventHolder::hasElements(  )
     {
         return !m_aEventNameAccess.empty();
     }
@@ -456,27 +456,27 @@ namespace pcr
     {
     }
 
-    OUString SAL_CALL EventHandler::getImplementationName(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL EventHandler::getImplementationName(  )
     {
         return getImplementationName_static();
     }
 
-    sal_Bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL EventHandler::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames(  )
     {
         return getSupportedServiceNames_static();
     }
 
-    OUString SAL_CALL EventHandler::getImplementationName_static(  ) throw (RuntimeException)
+    OUString SAL_CALL EventHandler::getImplementationName_static(  )
     {
         return OUString(  "com.sun.star.comp.extensions.EventHandler"  );
     }
 
-    Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  ) throw (RuntimeException)
+    Sequence< OUString > SAL_CALL EventHandler::getSupportedServiceNames_static(  )
     {
         Sequence<OUString> aSupported { "com.sun.star.form.inspection.EventHandler" };
         return aSupported;
@@ -487,7 +487,7 @@ namespace pcr
         return *( new EventHandler( _rxContext ) );
     }
 
-    void SAL_CALL EventHandler::inspect( const Reference< XInterface >& _rxIntrospectee ) throw (RuntimeException, NullPointerException, std::exception)
+    void SAL_CALL EventHandler::inspect( const Reference< XInterface >& _rxIntrospectee )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -526,7 +526,7 @@ namespace pcr
         }
     }
 
-    Any SAL_CALL EventHandler::getPropertyValue( const OUString& _rPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
+    Any SAL_CALL EventHandler::getPropertyValue( const OUString& _rPropertyName )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -550,7 +550,7 @@ namespace pcr
         return makeAny( aPropertyValue );
     }
 
-    void SAL_CALL EventHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
+    void SAL_CALL EventHandler::setPropertyValue( const OUString& _rPropertyName, const Any& _rValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -580,7 +580,7 @@ namespace pcr
         m_aPropertyListeners.notify( aEvent, &XPropertyChangeListener::propertyChange );
     }
 
-    Any SAL_CALL EventHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue ) throw (UnknownPropertyException, RuntimeException, std::exception)
+    Any SAL_CALL EventHandler::convertToPropertyValue( const OUString& _rPropertyName, const Any& _rControlValue )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -607,7 +607,7 @@ namespace pcr
         return makeAny( aAssignedScript );
     }
 
-    Any SAL_CALL EventHandler::convertToControlValue( const OUString& /*_rPropertyName*/, const Any& _rPropertyValue, const Type& _rControlValueType ) throw (UnknownPropertyException, RuntimeException, std::exception)
+    Any SAL_CALL EventHandler::convertToControlValue( const OUString& /*_rPropertyName*/, const Any& _rPropertyValue, const Type& _rControlValueType )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -671,12 +671,12 @@ namespace pcr
         return makeAny( sScript );
     }
 
-    PropertyState SAL_CALL EventHandler::getPropertyState( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException, std::exception)
+    PropertyState SAL_CALL EventHandler::getPropertyState( const OUString& /*_rPropertyName*/ )
     {
         return PropertyState_DIRECT_VALUE;
     }
 
-    void SAL_CALL EventHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (NullPointerException, RuntimeException, std::exception)
+    void SAL_CALL EventHandler::addPropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !_rxListener.is() )
@@ -684,13 +684,13 @@ namespace pcr
         m_aPropertyListeners.addListener( _rxListener );
     }
 
-    void SAL_CALL EventHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener ) throw (RuntimeException, std::exception)
+    void SAL_CALL EventHandler::removePropertyChangeListener( const Reference< XPropertyChangeListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         m_aPropertyListeners.removeListener( _rxListener );
     }
 
-    Sequence< Property > SAL_CALL EventHandler::getSupportedProperties() throw (RuntimeException, std::exception)
+    Sequence< Property > SAL_CALL EventHandler::getSupportedProperties()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !m_bEventsMapInitialized )
@@ -758,13 +758,13 @@ namespace pcr
         return comphelper::mapValuesToSequence( aOrderedProperties );
     }
 
-    Sequence< OUString > SAL_CALL EventHandler::getSupersededProperties( ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL EventHandler::getSupersededProperties( )
     {
         // none
         return Sequence< OUString >( );
     }
 
-    Sequence< OUString > SAL_CALL EventHandler::getActuatingProperties( ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL EventHandler::getActuatingProperties( )
     {
         // none
         return Sequence< OUString >( );
@@ -772,7 +772,6 @@ namespace pcr
 
     LineDescriptor SAL_CALL EventHandler::describePropertyLine( const OUString& _rPropertyName,
         const Reference< XPropertyControlFactory >& _rxControlFactory )
-        throw (UnknownPropertyException, NullPointerException, RuntimeException, std::exception)
     {
         if ( !_rxControlFactory.is() )
             throw NullPointerException();
@@ -793,12 +792,12 @@ namespace pcr
         return aDescriptor;
     }
 
-    sal_Bool SAL_CALL EventHandler::isComposable( const OUString& /*_rPropertyName*/ ) throw (UnknownPropertyException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL EventHandler::isComposable( const OUString& /*_rPropertyName*/ )
     {
         return false;
     }
 
-    InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI ) throw (UnknownPropertyException, NullPointerException, RuntimeException, std::exception)
+    InteractiveSelectionResult SAL_CALL EventHandler::onInteractivePropertySelection( const OUString& _rPropertyName, sal_Bool /*_bPrimary*/, Any& /*_rData*/, const Reference< XObjectInspectorUI >& _rxInspectorUI )
     {
         if ( !_rxInspectorUI.is() )
             throw NullPointerException();
@@ -872,7 +871,7 @@ namespace pcr
         return InteractiveSelectionResult_Success;
     }
 
-    void SAL_CALL EventHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ ) throw (NullPointerException, RuntimeException, std::exception)
+    void SAL_CALL EventHandler::actuatingPropertyChanged( const OUString& /*_rActuatingPropertyName*/, const Any& /*_rNewValue*/, const Any& /*_rOldValue*/, const Reference< XObjectInspectorUI >& /*_rxInspectorUI*/, sal_Bool /*_bFirstTimeInit*/ )
     {
         OSL_FAIL( "EventHandler::actuatingPropertyChanged: no actuating properties -> no callback (well, this is how it *should* be!)" );
     }
@@ -886,7 +885,7 @@ namespace pcr
         m_xComponent.clear();
     }
 
-    sal_Bool SAL_CALL EventHandler::suspend( sal_Bool /*_bSuspend*/ ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL EventHandler::suspend( sal_Bool /*_bSuspend*/ )
     {
         return true;
     }

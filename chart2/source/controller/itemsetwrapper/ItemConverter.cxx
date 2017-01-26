@@ -152,14 +152,12 @@ void ItemConverter::FillItemSet( SfxItemSet & rOutItemSet ) const
 
 void ItemConverter::FillSpecialItem(
     sal_uInt16 /*nWhichId*/, SfxItemSet & /*rOutItemSet*/ ) const
-    throw (uno::Exception, std::exception)
 {
     OSL_FAIL( "ItemConverter: Unhandled special item found!" );
 }
 
 bool ItemConverter::ApplySpecialItem(
     sal_uInt16 /*nWhichId*/, const SfxItemSet & /*rItemSet*/ )
-    throw( uno::Exception )
 {
     OSL_FAIL( "ItemConverter: Unhandled special item found!" );
     return false;

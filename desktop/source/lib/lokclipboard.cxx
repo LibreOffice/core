@@ -13,19 +13,17 @@
 using namespace com::sun::star;
 
 uno::Reference<datatransfer::XTransferable> SAL_CALL LOKClipboard::getContents()
-throw (uno::RuntimeException, std::exception)
 {
     return m_xTransferable;
 }
 
 void SAL_CALL LOKClipboard::setContents(const uno::Reference<datatransfer::XTransferable>& xTransferable,
                                         const uno::Reference<datatransfer::clipboard::XClipboardOwner>& /*xClipboardOwner*/)
-throw (uno::RuntimeException, std::exception)
 {
     m_xTransferable = xTransferable;
 }
 
-OUString SAL_CALL LOKClipboard::getName() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL LOKClipboard::getName()
 {
     return OUString();
 }
@@ -37,7 +35,6 @@ LOKTransferable::LOKTransferable(const char* pMimeType, const char* pData, std::
 }
 
 uno::Any SAL_CALL LOKTransferable::getTransferData(const datatransfer::DataFlavor& rFlavor)
-throw(datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
 {
     uno::Any aRet;
     if (rFlavor.DataType == cppu::UnoType<OUString>::get())
@@ -70,13 +67,11 @@ std::vector<datatransfer::DataFlavor> LOKTransferable::getTransferDataFlavorsAsV
 }
 
 uno::Sequence<datatransfer::DataFlavor> SAL_CALL LOKTransferable::getTransferDataFlavors()
-throw(uno::RuntimeException, std::exception)
 {
     return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
 }
 
 sal_Bool SAL_CALL LOKTransferable::isDataFlavorSupported(const datatransfer::DataFlavor& rFlavor)
-throw(uno::RuntimeException, std::exception)
 {
     const std::vector<datatransfer::DataFlavor> aFlavors = getTransferDataFlavorsAsVector();
     return std::find_if(aFlavors.begin(), aFlavors.end(), [&rFlavor](const datatransfer::DataFlavor& i)

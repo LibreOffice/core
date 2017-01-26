@@ -69,28 +69,19 @@ public:
     ~IUnknownWrapper_Impl() override;
 
     //XInterface
-    Any SAL_CALL queryInterface(const Type& t)
-        throw (RuntimeException) override;
+    Any SAL_CALL queryInterface(const Type& t) override;
 
     // XInvokation
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  )
-        throw(RuntimeException) override;
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
     virtual Any SAL_CALL invoke( const OUString& aFunctionName,
                                  const Sequence< Any >& aParams,
                                  Sequence< sal_Int16 >& aOutParamIndex,
-                                 Sequence< Any >& aOutParam )
-        throw(IllegalArgumentException, CannotConvertException,
-              InvocationTargetException, RuntimeException) override;
+                                 Sequence< Any >& aOutParam ) override;
     virtual void SAL_CALL setValue( const OUString& aPropertyName,
-                                    const Any& aValue )
-        throw(UnknownPropertyException, CannotConvertException,
-              InvocationTargetException, RuntimeException) override;
-    virtual Any SAL_CALL getValue( const OUString& aPropertyName )
-        throw(UnknownPropertyException, RuntimeException) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName )
-        throw(RuntimeException) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName )
-        throw(RuntimeException) override;
+                                    const Any& aValue ) override;
+    virtual Any SAL_CALL getValue( const OUString& aPropertyName ) override;
+    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
+    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
 
     // XBridgeSupplier2
     // This interface is implemented to provide a safe way to obtain the original
@@ -100,25 +91,23 @@ public:
     virtual Any SAL_CALL createBridge( const Any& modelDepObject,
                                        const Sequence< sal_Int8 >& aProcessId,
                                        sal_Int16 sourceModelType,
-                                       sal_Int16 destModelType )
-        throw(IllegalArgumentException, RuntimeException) override;
+                                       sal_Int16 destModelType ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
-        throw(Exception, RuntimeException) override;
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
 
     // XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException) override { return m_sDefaultMember; }
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return m_sDefaultMember; }
 
     // XDefaultMethod
-    virtual OUString SAL_CALL getDefaultMethodName(  ) throw (css::uno::RuntimeException) override { return m_sDefaultMember; }
+    virtual OUString SAL_CALL getDefaultMethodName(  ) override { return m_sDefaultMember; }
 
-    virtual css::uno::Any SAL_CALL invokeGetProperty( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException) override;
-    virtual css::uno::Any SAL_CALL invokePutProperty( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any SAL_CALL invokeGetProperty( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
+    virtual css::uno::Any SAL_CALL invokePutProperty( const OUString& aFunctionName, const css::uno::Sequence< css::uno::Any >& aParams, css::uno::Sequence< ::sal_Int16 >& aOutParamIndex, css::uno::Sequence< css::uno::Any >& aOutParam ) override;
 
     // XDirectInvocation
-    virtual css::uno::Any SAL_CALL directInvoke( const OUString& aName, const css::uno::Sequence< css::uno::Any >& aParams ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException) override;
-    virtual sal_Bool SAL_CALL hasMember( const OUString& aName ) throw (css::uno::RuntimeException) override;
+    virtual css::uno::Any SAL_CALL directInvoke( const OUString& aName, const css::uno::Sequence< css::uno::Any >& aParams ) override;
+    virtual sal_Bool SAL_CALL hasMember( const OUString& aName ) override;
 
 
     Any  invokeWithDispIdComTlb(FuncDesc& aFuncDesc,

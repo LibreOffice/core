@@ -92,12 +92,10 @@ public:
         PrepareListener_Impl();
 
         // css.frame.XStatusListener
-        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent)
-          throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent) override;
 
         // css.lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-          throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
         bool IsSet() const {return m_bState;}
 };
@@ -107,7 +105,7 @@ PrepareListener_Impl::PrepareListener_Impl() :
 {
 }
 
-void PrepareListener_Impl::statusChanged(const css::frame::FeatureStateEvent& rEvent) throw(css::uno::RuntimeException, std::exception)
+void PrepareListener_Impl::statusChanged(const css::frame::FeatureStateEvent& rEvent)
 {
     if( rEvent.IsEnabled )
         rEvent.State >>= m_bState;
@@ -115,7 +113,7 @@ void PrepareListener_Impl::statusChanged(const css::frame::FeatureStateEvent& rE
         m_bState = false;
 }
 
-void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/) throw(css::uno::RuntimeException, std::exception)
+void PrepareListener_Impl::disposing(const css::lang::EventObject& /*rEvent*/)
 {
 }
 

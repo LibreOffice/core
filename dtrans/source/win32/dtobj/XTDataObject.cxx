@@ -100,8 +100,7 @@ public:
         : maTransferable(rTransferable)
     {}
 
-    virtual void SAL_CALL notify(css::uno::Any const &)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL notify(css::uno::Any const &) override
     {
         maTransferable.set(nullptr);
     }

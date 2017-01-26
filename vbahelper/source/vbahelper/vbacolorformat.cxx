@@ -56,7 +56,7 @@ ScVbaColorFormat::ScVbaColorFormat( const uno::Reference< XHelperInterface >& xP
 
 // Attribute
 sal_Int32 SAL_CALL
-ScVbaColorFormat::getRGB() throw (uno::RuntimeException, std::exception)
+ScVbaColorFormat::getRGB()
 {
     sal_Int32 nRGB = 0;
     switch( m_nColorFormatType )
@@ -82,7 +82,7 @@ ScVbaColorFormat::getRGB() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaColorFormat::setRGB( sal_Int32 _rgb ) throw (uno::RuntimeException, std::exception)
+ScVbaColorFormat::setRGB( sal_Int32 _rgb )
 {
     sal_Int32 nRGB = XLRGBToOORGB( _rgb );
     switch( m_nColorFormatType )
@@ -113,7 +113,7 @@ ScVbaColorFormat::setRGB( sal_Int32 _rgb ) throw (uno::RuntimeException, std::ex
 }
 
 sal_Int32 SAL_CALL
-ScVbaColorFormat::getSchemeColor() throw (uno::RuntimeException, std::exception)
+ScVbaColorFormat::getSchemeColor()
 {
     sal_Int32 nColor = getRGB();
     // #TODO I guess the number of elements is determined by the correct scheme
@@ -143,7 +143,7 @@ ScVbaColorFormat::getSchemeColor() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor ) throw (uno::RuntimeException, std::exception)
+ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor )
 {
     // the table is 0 based
     sal_Int32 nColor = MsoColorIndices::getColorIndex( _schemecolor );

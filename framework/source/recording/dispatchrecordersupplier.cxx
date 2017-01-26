@@ -83,7 +83,7 @@ DispatchRecorderSupplier::~DispatchRecorderSupplier()
 
     @change     09.04.2002 by Andreas Schluens
  */
-void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Reference< css::frame::XDispatchRecorder >& xRecorder )
 {
     SolarMutexGuard g;
     m_xDispatchRecorder=xRecorder;
@@ -103,7 +103,7 @@ void SAL_CALL DispatchRecorderSupplier::setDispatchRecorder( const css::uno::Ref
 
     @change     09.04.2002 by Andreas Schluens
  */
-css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSupplier::getDispatchRecorder() throw (css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSupplier::getDispatchRecorder()
 {
     SolarMutexGuard g;
     return m_xDispatchRecorder;
@@ -124,7 +124,7 @@ css::uno::Reference< css::frame::XDispatchRecorder > SAL_CALL DispatchRecorderSu
  */
 void SAL_CALL DispatchRecorderSupplier::dispatchAndRecord( const css::util::URL&                                  aURL        ,
                                                            const css::uno::Sequence< css::beans::PropertyValue >& lArguments  ,
-                                                           const css::uno::Reference< css::frame::XDispatch >&    xDispatcher ) throw (css::uno::RuntimeException, std::exception)
+                                                           const css::uno::Reference< css::frame::XDispatch >&    xDispatcher )
 {
     SolarMutexClearableGuard aReadLock;
     css::uno::Reference< css::frame::XDispatchRecorder > xRecorder = m_xDispatchRecorder;

@@ -31,17 +31,17 @@ using namespace ::com::sun::star::form;
 using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::util;
 
-OUString SAL_CALL OFormsCollection::getServiceName() throw(RuntimeException, std::exception)
+OUString SAL_CALL OFormsCollection::getServiceName()
 {
     return OUString("com.sun.star.form.Forms");
 }
 
-Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  ) throw(RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL OFormsCollection::getImplementationId(  )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Sequence<Type> SAL_CALL OFormsCollection::getTypes() throw(RuntimeException, std::exception)
+Sequence<Type> SAL_CALL OFormsCollection::getTypes()
 {
     return concatSequences(OInterfaceContainer::getTypes(), FormsCollectionComponentBase::getTypes(), OFormsCollection_BASE::getTypes());
 }
@@ -69,7 +69,7 @@ OFormsCollection::~OFormsCollection()
     }
 }
 
-Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(RuntimeException, std::exception)
+Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType)
 {
     Any aReturn = OFormsCollection_BASE::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -83,17 +83,17 @@ Any SAL_CALL OFormsCollection::queryAggregation(const Type& _rType) throw(Runtim
     return aReturn;
 }
 
-OUString SAL_CALL OFormsCollection::getImplementationName() throw(RuntimeException, std::exception)
+OUString SAL_CALL OFormsCollection::getImplementationName()
 {
     return OUString("com.sun.star.form.OFormsCollection");
 }
 
-sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL OFormsCollection::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL OFormsCollection::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL OFormsCollection::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aReturn(2);
 
@@ -104,7 +104,7 @@ css::uno::Sequence<OUString> SAL_CALL OFormsCollection::getSupportedServiceNames
 }
 
 // XCloneable
-Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  ) throw (RuntimeException, std::exception)
+Reference< XCloneable > SAL_CALL OFormsCollection::createClone(  )
 {
     OFormsCollection* pClone = new OFormsCollection( *this );
     osl_atomic_increment( &pClone->m_refCount );
@@ -127,13 +127,13 @@ void OFormsCollection::disposing()
 
 //XChild
 
-void OFormsCollection::setParent(const css::uno::Reference<css::uno::XInterface>& Parent) throw( NoSupportException, RuntimeException, std::exception )
+void OFormsCollection::setParent(const css::uno::Reference<css::uno::XInterface>& Parent)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     m_xParent = Parent;
 }
 
-css::uno::Reference<css::uno::XInterface>  OFormsCollection::getParent() throw( RuntimeException, std::exception )
+css::uno::Reference<css::uno::XInterface>  OFormsCollection::getParent()
 {
     return m_xParent;
 }

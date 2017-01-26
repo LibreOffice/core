@@ -106,7 +106,6 @@ static sal_Int32 string2keyrule( const OUString & rule )
 }
 
 void Keys::refresh()
-    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -207,9 +206,6 @@ void Keys::refresh()
 
 void Keys::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
-    throw (css::sdbc::SQLException,
-           css::container::ElementExistException,
-           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
 
@@ -226,9 +222,6 @@ void Keys::appendByDescriptor(
 
 
 void Keys::dropByIndex( sal_Int32 index )
-    throw (css::sdbc::SQLException,
-           css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
@@ -257,7 +250,6 @@ void Keys::dropByIndex( sal_Int32 index )
 
 
 css::uno::Reference< css::beans::XPropertySet > Keys::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new KeyDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -292,7 +284,6 @@ Reference< css::container::XIndexAccess > KeyDescriptors::create(
 }
 
 css::uno::Reference< css::beans::XPropertySet > KeyDescriptors::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new KeyDescriptor( m_refMutex, m_origin, m_pSettings );
 }

@@ -33,14 +33,14 @@ VCLXPointer::~VCLXPointer()
 // css::lang::XUnoTunnel
 IMPL_XUNOTUNNEL( VCLXPointer )
 
-void VCLXPointer::setType( sal_Int32 nType ) throw(css::uno::RuntimeException, std::exception)
+void VCLXPointer::setType( sal_Int32 nType )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     maPointer = Pointer( (PointerStyle)nType );
 }
 
-sal_Int32 VCLXPointer::getType() throw(css::uno::RuntimeException, std::exception)
+sal_Int32 VCLXPointer::getType()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -48,19 +48,16 @@ sal_Int32 VCLXPointer::getType() throw(css::uno::RuntimeException, std::exceptio
 }
 
 OUString VCLXPointer::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("stardiv.Toolkit.VCLXPointer");
 }
 
 sal_Bool VCLXPointer::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> VCLXPointer::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{
         "com.sun.star.awt.Pointer", "stardiv.vcl.Pointer"};

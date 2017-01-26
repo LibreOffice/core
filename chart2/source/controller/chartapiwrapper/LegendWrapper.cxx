@@ -57,10 +57,8 @@ class WrappedLegendAlignmentProperty : public WrappedProperty
 public:
     WrappedLegendAlignmentProperty();
 
-    virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) override;
-    virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) override;
+    virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
 
 protected:
     virtual Any convertInnerToOuterValue( const Any& rInnerValue ) const override;
@@ -73,7 +71,6 @@ WrappedLegendAlignmentProperty::WrappedLegendAlignmentProperty()
 }
 
 Any WrappedLegendAlignmentProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
     if( xInnerPropertySet.is() )
@@ -94,7 +91,6 @@ Any WrappedLegendAlignmentProperty::getPropertyValue( const Reference< beans::XP
 }
 
 void WrappedLegendAlignmentProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if(xInnerPropertySet.is())
     {
@@ -280,13 +276,11 @@ LegendWrapper::~LegendWrapper()
 
 // ____ XShape ____
 awt::Point SAL_CALL LegendWrapper::getPosition()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetLegendPosition();
 }
 
 void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
@@ -302,14 +296,11 @@ void SAL_CALL LegendWrapper::setPosition( const awt::Point& aPosition )
 }
 
 awt::Size SAL_CALL LegendWrapper::getSize()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetLegendSize();
 }
 
 void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
-    throw (beans::PropertyVetoException,
-           uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
     if( xProp.is() )
@@ -327,14 +318,12 @@ void SAL_CALL LegendWrapper::setSize( const awt::Size& aSize )
 
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL LegendWrapper::getShapeType()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.chart.ChartLegend" );
 }
 
 // ____ XComponent ____
 void SAL_CALL LegendWrapper::dispose()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
@@ -345,14 +334,12 @@ void SAL_CALL LegendWrapper::dispose()
 
 void SAL_CALL LegendWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL LegendWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }
@@ -415,19 +402,16 @@ const std::vector< WrappedProperty* > LegendWrapper::createWrappedProperties()
 }
 
 OUString SAL_CALL LegendWrapper::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.Legend");
 }
 
 sal_Bool SAL_CALL LegendWrapper::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL LegendWrapper::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart.ChartLegend",

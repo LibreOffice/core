@@ -168,17 +168,17 @@ namespace basprov
     }
 
     // XServiceInfo
-    OUString BasicProviderImpl::getImplementationName(  ) throw (RuntimeException, std::exception)
+    OUString BasicProviderImpl::getImplementationName(  )
     {
         return getImplementationName_BasicProviderImpl();
     }
 
-    sal_Bool BasicProviderImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool BasicProviderImpl::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    Sequence< OUString > BasicProviderImpl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > BasicProviderImpl::getSupportedServiceNames(  )
     {
         return getSupportedServiceNames_BasicProviderImpl();
     }
@@ -187,7 +187,7 @@ namespace basprov
     // XInitialization
 
 
-    void BasicProviderImpl::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
+    void BasicProviderImpl::initialize( const Sequence< Any >& aArguments )
     {
         // TODO
 
@@ -278,7 +278,6 @@ namespace basprov
 
 
     Reference < provider::XScript > BasicProviderImpl::getScript( const OUString& scriptURI )
-        throw ( provider::ScriptFrameworkErrorException, RuntimeException, std::exception)
     {
         // TODO
 
@@ -394,13 +393,13 @@ namespace basprov
     // XBrowseNode
 
 
-    OUString BasicProviderImpl::getName(  ) throw (RuntimeException, std::exception)
+    OUString BasicProviderImpl::getName(  )
     {
         return OUString("Basic");
     }
 
 
-    Sequence< Reference< browse::XBrowseNode > > BasicProviderImpl::getChildNodes(  ) throw (RuntimeException, std::exception)
+    Sequence< Reference< browse::XBrowseNode > > BasicProviderImpl::getChildNodes(  )
     {
         SolarMutexGuard aGuard;
 
@@ -457,7 +456,7 @@ namespace basprov
     }
 
 
-    sal_Bool BasicProviderImpl::hasChildNodes(  ) throw (RuntimeException, std::exception)
+    sal_Bool BasicProviderImpl::hasChildNodes(  )
     {
         SolarMutexGuard aGuard;
 
@@ -478,7 +477,7 @@ namespace basprov
     }
 
 
-    sal_Int16 BasicProviderImpl::getType(  ) throw (RuntimeException, std::exception)
+    sal_Int16 BasicProviderImpl::getType(  )
     {
         return browse::BrowseNodeTypes::CONTAINER;
     }

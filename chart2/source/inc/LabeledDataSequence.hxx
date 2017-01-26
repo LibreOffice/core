@@ -55,37 +55,27 @@ public:
     virtual ~LabeledDataSequence() override;
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
     // ____ XLabeledDataSequence ____
-    virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getValues()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getValues() override;
     virtual void SAL_CALL setValues(
-        const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getLabel()
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence ) override;
+    virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL getLabel() override;
     virtual void SAL_CALL setLabel(
-        const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::data::XDataSequence >& xSequence ) override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
 private:
     css::uno::Reference< css::chart2::data::XDataSequence > m_xData;

@@ -45,23 +45,24 @@ public:
     // dtor
     virtual ~PreviewBase();
 
-    virtual sal_Int32 SAL_CALL getTargetColorDepth()
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual sal_Int32 SAL_CALL getTargetColorDepth();
 
-    virtual sal_Int32 SAL_CALL getAvailableWidth()
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual sal_Int32 SAL_CALL getAvailableWidth();
 
-    virtual sal_Int32 SAL_CALL getAvailableHeight()
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual sal_Int32 SAL_CALL getAvailableHeight();
 
-    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage )
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
+    virtual void SAL_CALL setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage );
 
-    virtual bool SAL_CALL setShowState( bool bShowState )
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual bool SAL_CALL setShowState( bool bShowState );
 
-    virtual bool SAL_CALL getShowState()
-        throw (css::uno::RuntimeException);
+    /// @throws css::uno::RuntimeException
+    virtual bool SAL_CALL getShowState();
 
     virtual void SAL_CALL getImage(sal_Int16& aImageFormat,css::uno::Any& aImage);
 

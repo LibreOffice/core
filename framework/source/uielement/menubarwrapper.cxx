@@ -91,7 +91,7 @@ MenuBarWrapper::~MenuBarWrapper()
 {
 }
 
-void SAL_CALL MenuBarWrapper::dispose() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL MenuBarWrapper::dispose()
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -110,7 +110,7 @@ void SAL_CALL MenuBarWrapper::dispose() throw (css::uno::RuntimeException, std::
 }
 
 // XInitialization
-void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
+void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard g;
 
@@ -198,7 +198,7 @@ void SAL_CALL MenuBarWrapper::initialize( const Sequence< Any >& aArguments ) th
 }
 
 // XUIElementSettings
-void SAL_CALL MenuBarWrapper::updateSettings() throw ( RuntimeException, std::exception )
+void SAL_CALL MenuBarWrapper::updateSettings()
 {
     SolarMutexGuard g;
 
@@ -250,13 +250,11 @@ void MenuBarWrapper::fillPopupControllerCache()
 
 // XElementAccess
 Type SAL_CALL MenuBarWrapper::getElementType()
-throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<XDispatchProvider>::get();
 }
 
 sal_Bool SAL_CALL MenuBarWrapper::hasElements()
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -270,9 +268,6 @@ throw (css::uno::RuntimeException, std::exception)
 // XNameAccess
 Any SAL_CALL MenuBarWrapper::getByName(
     const OUString& aName )
-throw ( container::NoSuchElementException,
-        lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -293,7 +288,6 @@ throw ( container::NoSuchElementException,
 }
 
 Sequence< OUString > SAL_CALL MenuBarWrapper::getElementNames()
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -307,7 +301,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 sal_Bool SAL_CALL MenuBarWrapper::hasByName(
     const OUString& aName )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -324,7 +317,7 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 // XUIElement
-Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface() throw ( RuntimeException, std::exception )
+Reference< XInterface > SAL_CALL MenuBarWrapper::getRealInterface()
 {
     if ( m_bDisposed )
         throw DisposedException();

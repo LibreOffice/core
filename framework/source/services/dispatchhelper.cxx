@@ -78,7 +78,6 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
                                 const OUString&                                      sTargetFrameName  ,
                                       sal_Int32                                             nSearchFlags      ,
                                 const css::uno::Sequence< css::beans::PropertyValue >&      lArguments        )
-    throw(css::uno::RuntimeException, std::exception)
 {
     // check for valid parameters
     if (
@@ -113,7 +112,6 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
                                  const  css::util::URL&                                 aURL        ,
                                  bool                                                   SyncronFlag ,
                                  const css::uno::Sequence< css::beans::PropertyValue >& lArguments  )
-                                 throw(css::uno::RuntimeException)
 {
     css::uno::Reference< css::uno::XInterface > xTHIS(static_cast< ::cppu::OWeakObject* >(this), css::uno::UNO_QUERY);
     m_aResult.clear();
@@ -167,7 +165,6 @@ css::uno::Any SAL_CALL DispatchHelper::executeDispatch(
                 describes the result of the dispatch operation
  */
 void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResultEvent& aResult )
-    throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_mutex);
     m_aResult <<= aResult;
@@ -181,7 +178,6 @@ void SAL_CALL DispatchHelper::dispatchFinished( const css::frame::DispatchResult
                 describe the source of this event and MUST be our save broadcaster!
  */
 void SAL_CALL DispatchHelper::disposing( const css::lang::EventObject& )
-    throw(css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_mutex);
     m_aResult.clear();

@@ -80,7 +80,7 @@ namespace drawinglayer
         {
         }
 
-        Primitive2DSequence SAL_CALL BasePrimitive2D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
+        Primitive2DSequence SAL_CALL BasePrimitive2D::getDecomposition( const uno::Sequence< beans::PropertyValue >& rViewParameters )
         {
             const geometry::ViewInformation2D aViewInformation(rViewParameters);
             Primitive2DContainer aContainer;
@@ -88,14 +88,13 @@ namespace drawinglayer
             return comphelper::containerToSequence(aContainer);
         }
 
-        css::geometry::RealRectangle2D SAL_CALL BasePrimitive2D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters ) throw ( uno::RuntimeException, std::exception )
+        css::geometry::RealRectangle2D SAL_CALL BasePrimitive2D::getRange( const uno::Sequence< beans::PropertyValue >& rViewParameters )
         {
             const geometry::ViewInformation2D aViewInformation(rViewParameters);
             return basegfx::unotools::rectangle2DFromB2DRectangle(getB2DRange(aViewInformation));
         }
 
         sal_Int64 SAL_CALL BasePrimitive2D::estimateUsage()
-            throw (css::uno::RuntimeException)
         {
             return 0; // for now ignore the objects themselves
         }

@@ -26,7 +26,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaParagraph::SwVbaParagraph( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& xDocument, const uno::Reference< text::XTextRange >& xTextRange ) throw ( uno::RuntimeException ) :
+SwVbaParagraph::SwVbaParagraph( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextDocument >& xDocument, const uno::Reference< text::XTextRange >& xTextRange ) :
     SwVbaParagraph_BASE( rParent, rContext ), mxTextDocument( xDocument ), mxTextRange( xTextRange )
 {
 }
@@ -36,20 +36,20 @@ SwVbaParagraph::~SwVbaParagraph()
 }
 
 uno::Reference< word::XRange > SAL_CALL
-SwVbaParagraph::getRange( ) throw ( uno::RuntimeException, std::exception )
+SwVbaParagraph::getRange( )
 {
     return uno::Reference< word::XRange >( new SwVbaRange( this, mxContext, mxTextDocument, mxTextRange->getStart(), mxTextRange->getEnd(), mxTextRange->getText() ) );
 }
 
 uno::Any SAL_CALL
-SwVbaParagraph::getStyle( ) throw ( uno::RuntimeException, std::exception )
+SwVbaParagraph::getStyle( )
 {
     uno::Reference< word::XRange > xRange = getRange();
     return xRange->getStyle();
 }
 
 void SAL_CALL
-SwVbaParagraph::setStyle( const uno::Any& style ) throw ( uno::RuntimeException, std::exception )
+SwVbaParagraph::setStyle( const uno::Any& style )
 {
     uno::Reference< word::XRange > xRange = getRange();
     xRange->setStyle( style );
@@ -80,7 +80,7 @@ private:
     uno::Reference< text::XTextDocument > mxTextDocument;
 
     /// @throws uno::RuntimeException
-    uno::Reference< container::XEnumeration > getEnumeration() throw (uno::RuntimeException)
+    uno::Reference< container::XEnumeration > getEnumeration()
     {
         uno::Reference< container::XEnumerationAccess > xParEnumAccess( mxTextDocument->getText(), uno::UNO_QUERY_THROW );
         return xParEnumAccess->createEnumeration();
@@ -88,14 +88,14 @@ private:
 
 public:
     /// @throws uno::RuntimeException
-    explicit ParagraphCollectionHelper( const uno::Reference< text::XTextDocument >& xDocument ) throw (uno::RuntimeException): mxTextDocument( xDocument )
+    explicit ParagraphCollectionHelper( const uno::Reference< text::XTextDocument >& xDocument ): mxTextDocument( xDocument )
     {
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override { return  cppu::UnoType<text::XTextRange>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) override { return true; }
+    virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<text::XTextRange>::get(); }
+    virtual sal_Bool SAL_CALL hasElements(  ) override { return true; }
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
+    virtual ::sal_Int32 SAL_CALL getCount(  ) override
     {
         sal_Int32 nCount = 0;
         uno::Reference< container::XEnumeration > xParEnum = getEnumeration();
@@ -109,7 +109,7 @@ public:
         }
         return nCount;
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if( Index < getCount() )
         {
@@ -129,24 +129,24 @@ public:
         throw lang::IndexOutOfBoundsException();
     }
     // XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
         return getEnumeration();
     }
 };
 
-SwVbaParagraphs::SwVbaParagraphs( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xDocument ) throw (uno::RuntimeException) : SwVbaParagraphs_BASE( xParent, xContext, new ParagraphCollectionHelper( xDocument ) ), mxTextDocument( xDocument )
+SwVbaParagraphs::SwVbaParagraphs( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xDocument ) : SwVbaParagraphs_BASE( xParent, xContext, new ParagraphCollectionHelper( xDocument ) ), mxTextDocument( xDocument )
 {
 }
 
 // XEnumerationAccess
 uno::Type
-SwVbaParagraphs::getElementType() throw (uno::RuntimeException)
+SwVbaParagraphs::getElementType()
 {
     return cppu::UnoType<word::XParagraph>::get();
 }
 uno::Reference< container::XEnumeration >
-SwVbaParagraphs::createEnumeration() throw (uno::RuntimeException)
+SwVbaParagraphs::createEnumeration()
 {
     uno::Reference< container::XEnumerationAccess > xEnumerationAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
     return xEnumerationAccess->createEnumeration();

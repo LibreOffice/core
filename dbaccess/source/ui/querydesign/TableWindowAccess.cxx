@@ -59,26 +59,26 @@ namespace dbaui
 
         VCLXAccessibleComponent::ProcessWindowEvent( rVclWindowEvent );
     }
-    Any SAL_CALL OTableWindowAccess::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)
+    Any SAL_CALL OTableWindowAccess::queryInterface( const Type& aType )
     {
         Any aRet(VCLXAccessibleComponent::queryInterface( aType ));
         return aRet.hasValue() ? aRet : OTableWindowAccess_BASE::queryInterface( aType );
     }
-    Sequence< Type > SAL_CALL OTableWindowAccess::getTypes(  ) throw (RuntimeException, std::exception)
+    Sequence< Type > SAL_CALL OTableWindowAccess::getTypes(  )
     {
         return ::comphelper::concatSequences(VCLXAccessibleComponent::getTypes(),OTableWindowAccess_BASE::getTypes());
     }
-    OUString SAL_CALL OTableWindowAccess::getImplementationName() throw(RuntimeException, std::exception)
+    OUString SAL_CALL OTableWindowAccess::getImplementationName()
     {
         return OUString("org.openoffice.comp.dbu.TableWindowAccessibility");
     }
-    Sequence< OUString > SAL_CALL OTableWindowAccess::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL OTableWindowAccess::getSupportedServiceNames()
     {
         return { "com.sun.star.accessibility.Accessible",
                  "com.sun.star.accessibility.AccessibleContext" };
     }
     // XAccessibleContext
-    sal_Int32 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OTableWindowAccess::getAccessibleChildCount(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         sal_Int32 nCount = 0;
@@ -90,7 +90,7 @@ namespace dbaui
         }
         return nCount;
     }
-    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleChild( sal_Int32 i )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         Reference< XAccessible > aRet;
@@ -118,7 +118,7 @@ namespace dbaui
         }
         return aRet;
     }
-    sal_Int32 SAL_CALL OTableWindowAccess::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OTableWindowAccess::getAccessibleIndexInParent(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         sal_Int32 nIndex = -1;
@@ -134,17 +134,17 @@ namespace dbaui
         }
         return nIndex;
     }
-    sal_Int16 SAL_CALL OTableWindowAccess::getAccessibleRole(  ) throw (RuntimeException, std::exception)
+    sal_Int16 SAL_CALL OTableWindowAccess::getAccessibleRole(  )
     {
         return AccessibleRole::PANEL; // ? or may be an AccessibleRole::WINDOW
     }
-    Reference< XAccessibleRelationSet > SAL_CALL OTableWindowAccess::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
+    Reference< XAccessibleRelationSet > SAL_CALL OTableWindowAccess::getAccessibleRelationSet(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         return this;
     }
     // XAccessibleComponent
-    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleAtPoint( const awt::Point& _aPoint ) throw (RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL OTableWindowAccess::getAccessibleAtPoint( const awt::Point& _aPoint )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         Reference< XAccessible > aRet;
@@ -174,12 +174,12 @@ namespace dbaui
         return xReturn;
     }
 
-    sal_Int32 SAL_CALL OTableWindowAccess::getRelationCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OTableWindowAccess::getRelationCount(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         return m_pTable ? m_pTable->getTableView()->getConnectionCount(m_pTable) : sal_Int32(0);
     }
-    AccessibleRelation SAL_CALL OTableWindowAccess::getRelation( sal_Int32 nIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    AccessibleRelation SAL_CALL OTableWindowAccess::getRelation( sal_Int32 nIndex )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         if( nIndex < 0 || nIndex >= getRelationCount() )
@@ -196,13 +196,13 @@ namespace dbaui
         }
         return aRet;
     }
-    sal_Bool SAL_CALL OTableWindowAccess::containsRelation( sal_Int16 aRelationType ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OTableWindowAccess::containsRelation( sal_Int16 aRelationType )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         return      AccessibleRelationType::CONTROLLER_FOR == aRelationType
                 &&  m_pTable && m_pTable->getTableView()->ExistsAConn(m_pTable);
     }
-    AccessibleRelation SAL_CALL OTableWindowAccess::getRelationByType( sal_Int16 aRelationType ) throw (RuntimeException, std::exception)
+    AccessibleRelation SAL_CALL OTableWindowAccess::getRelationByType( sal_Int16 aRelationType )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         if( AccessibleRelationType::CONTROLLER_FOR == aRelationType && m_pTable)
@@ -226,11 +226,11 @@ namespace dbaui
         }
         return AccessibleRelation();
     }
-    OUString SAL_CALL OTableWindowAccess::getTitledBorderText(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL OTableWindowAccess::getTitledBorderText(  )
     {
         return getAccessibleName(  );
     }
-    OUString SAL_CALL OTableWindowAccess::getAccessibleName(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL OTableWindowAccess::getAccessibleName(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex  );
         OUString sAccessibleName;
@@ -238,7 +238,7 @@ namespace dbaui
             sAccessibleName = m_pTable->getTitle();
         return sAccessibleName;
     }
-    Reference< XAccessibleContext > SAL_CALL OTableWindowAccess::getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception)
+    Reference< XAccessibleContext > SAL_CALL OTableWindowAccess::getAccessibleContext(  )
     {
         return this;
     }

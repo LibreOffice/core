@@ -139,12 +139,12 @@ namespace connectivity
         css::uno::Reference< css::sdbc::XConnection> getConnection() const;
 
         // XRename
-        virtual void SAL_CALL rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL rename( const OUString& newName ) override;
 
         // XAlterTable
-        virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
         // XNamed
-        virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getName() override;
 
         // helper method to get key properties
         std::shared_ptr<sdbcx::KeyProperties> getKeyProperties(const OUString& _sName) const;

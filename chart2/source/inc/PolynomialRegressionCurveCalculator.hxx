@@ -36,16 +36,13 @@ protected:
         const css::uno::Reference<css::util::XNumberFormatter>& xNumFormatter,
         sal_Int32 nNumberFormatKey, sal_Int32* pFormulaMaxWidth = nullptr ) const override;
 
-    virtual double SAL_CALL getCurveValue( double x )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getCurveValue( double x ) override;
 
 private:
     // ____ XRegressionCurveCalculator ____
     virtual void SAL_CALL recalculateRegression(
         const css::uno::Sequence<double>& aXValues,
-        const css::uno::Sequence<double>& aYValues )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<double>& aYValues ) override;
 
     std::vector<double> mCoefficients;
 };

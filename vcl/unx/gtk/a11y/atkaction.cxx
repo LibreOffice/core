@@ -45,7 +45,7 @@ getAsConst( const OString& rString )
 
 /// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleAction>
-        getAction( AtkAction *action ) throw (uno::RuntimeException)
+        getAction( AtkAction *action )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( action );
 

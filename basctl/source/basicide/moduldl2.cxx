@@ -80,7 +80,7 @@ public:
     {
     }
 
-    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) throw (css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL handle( const Reference< task::XInteractionRequest >& rRequest ) override
     {
         if ( m_xHandler.is() )
         {
@@ -1154,20 +1154,16 @@ public:
     {}
 
     // Methods
-    virtual Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler()
-        throw(RuntimeException, std::exception) override;
-    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler()
-        throw(RuntimeException, std::exception) override;
+    virtual Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler() override;
+    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler() override;
 };
 
 Reference< task::XInteractionHandler > OLibCommandEnvironment::getInteractionHandler()
-    throw(RuntimeException, std::exception)
 {
     return mxInteraction;
 }
 
 Reference< XProgressHandler > OLibCommandEnvironment::getProgressHandler()
-    throw(RuntimeException, std::exception)
 {
     Reference< XProgressHandler > xRet;
     return xRet;

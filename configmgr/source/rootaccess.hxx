@@ -80,25 +80,17 @@ public:
 
     virtual void SAL_CALL addChangesListener(
         css::uno::Reference< css::util::XChangesListener >
-            const & aListener)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const & aListener) override;
 
     virtual void SAL_CALL removeChangesListener(
         css::uno::Reference< css::util::XChangesListener >
-            const & aListener)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const & aListener) override;
 
-    virtual void SAL_CALL commitChanges()
-        throw (
-            css::lang::WrappedTargetException,
-            css::uno::RuntimeException,
-            std::exception) override;
+    virtual void SAL_CALL commitChanges() override;
 
-    virtual sal_Bool SAL_CALL hasPendingChanges()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasPendingChanges() override;
 
-    virtual css::util::ChangesSet SAL_CALL getPendingChanges()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::util::ChangesSet SAL_CALL getPendingChanges() override;
 
 private:
     virtual ~RootAccess() override;
@@ -128,11 +120,9 @@ private:
     virtual void clearListeners() throw () override;
 
     virtual css::uno::Any SAL_CALL queryInterface(
-        css::uno::Type const & aType)
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::Type const & aType) override;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     typedef
         std::multiset<

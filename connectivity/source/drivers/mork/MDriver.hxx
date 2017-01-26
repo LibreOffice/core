@@ -44,35 +44,28 @@ private:
 
     virtual ~MorkDriver() override {}
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    getSupportedServiceNames() override;
 
     virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connect(
         OUString const & url,
-        css::uno::Sequence< css::beans::PropertyValue > const & info)
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        css::uno::Sequence< css::beans::PropertyValue > const & info) override;
 
     virtual sal_Bool SAL_CALL acceptsURL(
-        OUString const & url)
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        OUString const & url) override;
 
     virtual css::uno::Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL
     getPropertyInfo(
         OUString const & url,
-        css::uno::Sequence< css::beans::PropertyValue > const & info)
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        css::uno::Sequence< css::beans::PropertyValue > const & info) override;
 
-    virtual sal_Int32 SAL_CALL getMajorVersion()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getMajorVersion() override;
 
-    virtual sal_Int32 SAL_CALL getMinorVersion()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getMinorVersion() override;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
     css::uno::Reference< css::lang::XMultiServiceFactory > m_xFactory;

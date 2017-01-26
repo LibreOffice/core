@@ -55,26 +55,23 @@ public:
     virtual                                 ~ScannerManager() override;
 
     // XScannerManager
-    virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() throw(std::exception) override;
-    virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) throw( ScannerException, std::exception ) override;
-    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< css::lang::XEventListener >& rxListener ) throw (ScannerException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const Reference< css::lang::XEventListener >& rxListener ) throw( ScannerException, std::exception ) override;
-    virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) throw( ScannerException, std::exception ) override;
-    virtual Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const ScannerContext& scanner_context ) throw( ScannerException, std::exception ) override;
+    virtual Sequence< ScannerContext > SAL_CALL  getAvailableScanners() override;
+    virtual sal_Bool SAL_CALL               configureScanner( ScannerContext& scanner_context ) override;
+    virtual sal_Bool SAL_CALL               configureScannerAndScan( ScannerContext& scanner_context, const Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual void SAL_CALL                   startScan( const ScannerContext& scanner_context, const Reference< css::lang::XEventListener >& rxListener ) override;
+    virtual ScanError SAL_CALL              getError( const ScannerContext& scanner_context ) override;
+    virtual Reference< css::awt::XBitmap > SAL_CALL    getBitmap( const ScannerContext& scanner_context ) override;
 
     // XBitmap
-    virtual css::awt::Size SAL_CALL              getSize() throw(std::exception) override;
-    virtual Sequence< sal_Int8 > SAL_CALL        getDIB() throw(std::exception) override;
-    virtual Sequence< sal_Int8 > SAL_CALL        getMaskDIB() throw(std::exception) override;
+    virtual css::awt::Size SAL_CALL              getSize() override;
+    virtual Sequence< sal_Int8 > SAL_CALL        getDIB() override;
+    virtual Sequence< sal_Int8 > SAL_CALL        getMaskDIB() override;
 
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // Misc
     static OUString                         getImplementationName_Static() throw();
@@ -87,7 +84,7 @@ public:
  };
 
 /// @throws Exception
-Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& rxFactory ) throw( Exception );
+Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& rxFactory );
 
 #endif
 

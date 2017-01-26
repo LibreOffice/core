@@ -65,12 +65,9 @@ public:
     virtual ~Diagram() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -81,20 +78,17 @@ protected:
     explicit Diagram( const Diagram & rOther );
 
     // ____ OPropertySet ____
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw(css::beans::UnknownPropertyException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getPropertySetInfo() override;
 
     // ____ XFastPropertySet ____
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue )
-        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
     /// make original interface function visible again
     using ::com::sun::star::beans::XFastPropertySet::getFastPropertyValue;
@@ -103,75 +97,54 @@ protected:
         css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
     // ____ XDiagram ____
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getWall()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getFloor()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::chart2::XLegend > SAL_CALL getLegend()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getWall() override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getFloor() override;
+    virtual css::uno::Reference< css::chart2::XLegend > SAL_CALL getLegend() override;
     virtual void SAL_CALL setLegend( const css::uno::Reference<
-                                     css::chart2::XLegend >& xLegend )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::chart2::XColorScheme > SAL_CALL getDefaultColorScheme()
-        throw (css::uno::RuntimeException, std::exception) override;
+                                     css::chart2::XLegend >& xLegend ) override;
+    virtual css::uno::Reference< css::chart2::XColorScheme > SAL_CALL getDefaultColorScheme() override;
     virtual void SAL_CALL setDefaultColorScheme(
-        const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XColorScheme >& xColorScheme ) override;
     virtual void SAL_CALL setDiagramData(
         const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource,
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
-            throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
 
     // ____ XCoordinateSystemContainer ____
     virtual void SAL_CALL addCoordinateSystem(
-        const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
     virtual void SAL_CALL removeCoordinateSystem(
-        const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys )
-        throw (css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > SAL_CALL getCoordinateSystems()
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XCoordinateSystem >& aCoordSys ) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > > SAL_CALL getCoordinateSystems() override;
     virtual void SAL_CALL setCoordinateSystems(
-        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > >& aCoordinateSystems )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Reference< css::chart2::XCoordinateSystem > >& aCoordinateSystems ) override;
 
     // ____ XTitled ____
     virtual css::uno::Reference<
-        css::chart2::XTitle > SAL_CALL getTitleObject()
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::chart2::XTitle > SAL_CALL getTitleObject() override;
     virtual void SAL_CALL setTitleObject( const css::uno::Reference<
-                                          css::chart2::XTitle >& Title )
-        throw (css::uno::RuntimeException, std::exception) override;
+                                          css::chart2::XTitle >& Title ) override;
 
     // ____ X3DDefaultSetter ____
-    virtual void SAL_CALL set3DSettingsToDefault() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefaultRotation() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefaultIllumination() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL set3DSettingsToDefault() override;
+    virtual void SAL_CALL setDefaultRotation() override;
+    virtual void SAL_CALL setDefaultIllumination() override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source ) override;
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;

@@ -46,8 +46,8 @@ public:
     virtual ~ScVbaNames() override;
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // Methods
     virtual css::uno::Any SAL_CALL Add( const css::uno::Any& aName ,
@@ -60,9 +60,7 @@ public:
                     const css::uno::Any& aRefersToLocal,
                     const css::uno::Any& aCategoryLocal,
                     const css::uno::Any& aRefersToR1C1,
-                    const css::uno::Any& aRefersToR1C1Local )
-        throw (css::uno::RuntimeException,
-               std::exception) override;
+                    const css::uno::Any& aRefersToR1C1Local ) override;
 
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
 

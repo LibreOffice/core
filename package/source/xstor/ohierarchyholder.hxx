@@ -92,18 +92,13 @@ public:
     void RemoveStreamHierarchically( OStringList_Impl& aListPath );
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     // XTransactionListener
-    virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL commited( const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL preCommit( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL commited( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL preRevert( const css::lang::EventObject& aEvent ) override;
+    virtual void SAL_CALL reverted( const css::lang::EventObject& aEvent ) override;
 
 };
 

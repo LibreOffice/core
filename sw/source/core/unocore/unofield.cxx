@@ -462,14 +462,12 @@ const uno::Sequence< sal_Int8 > & SwXFieldMaster::getUnoTunnelId()
 
 sal_Int64 SAL_CALL
 SwXFieldMaster::getSomething(const uno::Sequence< sal_Int8 >& rId)
-throw (uno::RuntimeException, std::exception)
 {
     return ::sw::UnoTunnelImpl<SwXFieldMaster>(rId, this);
 }
 
 OUString SAL_CALL
 SwXFieldMaster::getImplementationName()
-throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXFieldMaster");
 }
@@ -507,13 +505,12 @@ OUString getServiceName(const sal_uInt16 aId)
 }
 
 sal_Bool SAL_CALL SwXFieldMaster::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXFieldMaster::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+SwXFieldMaster::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -565,7 +562,6 @@ SwXFieldMaster::CreateXFieldMaster(SwDoc * pDoc, SwFieldType *const pType,
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL
 SwXFieldMaster::getPropertySetInfo()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference< beans::XPropertySetInfo >  aRef =
@@ -576,9 +572,6 @@ throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL SwXFieldMaster::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
-throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-       lang::IllegalArgumentException, lang::WrappedTargetException,
-       uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwFieldType* pType = GetFieldType(true);
@@ -815,8 +808,6 @@ SwFieldType* SwXFieldMaster::GetFieldType(bool const bDontCreate) const
 
 uno::Any SAL_CALL
 SwXFieldMaster::getPropertyValue(const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -955,28 +946,27 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     return aRet;
 }
 
-void SwXFieldMaster::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXFieldMaster::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
-void SwXFieldMaster::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXFieldMaster::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
-void SwXFieldMaster::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXFieldMaster::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
-void SwXFieldMaster::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXFieldMaster::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
 void SAL_CALL SwXFieldMaster::dispose()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwFieldType *const pFieldType = GetFieldType(true);
@@ -1008,7 +998,6 @@ throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL SwXFieldMaster::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.addInterface(xListener);
@@ -1016,7 +1005,6 @@ throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL SwXFieldMaster::removeEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.removeInterface(xListener);
@@ -1185,7 +1173,6 @@ const uno::Sequence< sal_Int8 > & SwXTextField::getUnoTunnelId()
 
 sal_Int64 SAL_CALL
 SwXTextField::getSomething(const uno::Sequence< sal_Int8 >& rId)
-throw (uno::RuntimeException, std::exception)
 {
     return ::sw::UnoTunnelImpl<SwXTextField>(rId, this);
 }
@@ -1257,7 +1244,6 @@ SwServiceType SwXTextField::GetServiceId() const
 
 void SAL_CALL SwXTextField::attachTextFieldMaster(
         const uno::Reference< beans::XPropertySet > & xFieldMaster)
-throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1280,7 +1266,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL
-SwXTextField::getTextFieldMaster() throw (uno::RuntimeException, std::exception)
+SwXTextField::getTextFieldMaster()
 {
     SolarMutexGuard aGuard;
     SwFieldType* pType = nullptr;
@@ -1302,7 +1288,6 @@ SwXTextField::getTextFieldMaster() throw (uno::RuntimeException, std::exception)
 }
 
 OUString SAL_CALL SwXTextField::getPresentation(sal_Bool bShowCommand)
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1316,7 +1301,6 @@ throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL SwXTextField::attach(
         const uno::Reference< text::XTextRange > & xTextRange)
-throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (m_pImpl->m_bIsDescriptor)
@@ -2044,7 +2028,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
-SwXTextField::getAnchor() throw (uno::RuntimeException, std::exception)
+SwXTextField::getAnchor()
 {
     SolarMutexGuard aGuard;
 
@@ -2081,7 +2065,7 @@ SwXTextField::getAnchor() throw (uno::RuntimeException, std::exception)
     return xRange;
 }
 
-void SAL_CALL SwXTextField::dispose() throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwXTextField::dispose()
 {
     SolarMutexGuard aGuard;
     SwField const*const pField = m_pImpl->GetField();
@@ -2102,7 +2086,6 @@ void SAL_CALL SwXTextField::dispose() throw (uno::RuntimeException, std::excepti
 
 void SAL_CALL SwXTextField::addEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.addInterface(xListener);
@@ -2110,7 +2093,6 @@ throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL SwXTextField::removeEventListener(
         const uno::Reference<lang::XEventListener> & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.removeInterface(xListener);
@@ -2118,7 +2100,6 @@ throw (uno::RuntimeException, std::exception)
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXTextField::getPropertySetInfo()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     // no static
@@ -2141,9 +2122,6 @@ throw (uno::RuntimeException, std::exception)
 void SAL_CALL
 SwXTextField::setPropertyValue(
         const OUString& rPropertyName, const uno::Any& rValue)
-throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-    lang::IllegalArgumentException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwField const*const pField = m_pImpl->GetField();
@@ -2294,8 +2272,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 }
 
 uno::Any SAL_CALL SwXTextField::getPropertyValue(const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -2484,27 +2460,27 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     return aRet;
 }
 
-void SwXTextField::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXTextField::addPropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
-void SwXTextField::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXTextField::removePropertyChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XPropertyChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
-void SwXTextField::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXTextField::addVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
-void SwXTextField::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/) throw( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
+void SwXTextField::removeVetoableChangeListener(const OUString& /*PropertyName*/, const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
 {
     OSL_FAIL("not implemented");
 }
 
-void SAL_CALL SwXTextField::update() throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwXTextField::update()
 {
     SolarMutexGuard aGuard;
     SwField * pField = const_cast<SwField*>(m_pImpl->GetField());
@@ -2560,7 +2536,6 @@ void SAL_CALL SwXTextField::update() throw (uno::RuntimeException, std::exceptio
 }
 
 OUString SAL_CALL SwXTextField::getImplementationName()
-throw (uno::RuntimeException, std::exception)
 {
     return OUString("SwXTextField");
 }
@@ -2580,13 +2555,11 @@ static OUString OldNameToNewName_Impl( const OUString &rOld )
 }
 
 sal_Bool SAL_CALL SwXTextField::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SwXTextField::getSupportedServiceNames()
-throw (uno::RuntimeException, std::exception)
 {
     const OUString sServiceName =
         SwXServiceProvider::GetProviderName(m_pImpl->m_nServiceId);
@@ -2651,17 +2624,17 @@ const SwField*  SwXTextField::Impl::GetField() const
     return nullptr;
 }
 
-OUString SwXTextFieldMasters::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SwXTextFieldMasters::getImplementationName()
 {
     return OUString("SwXTextFieldMasters");
 }
 
-sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextFieldMasters::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXTextFieldMasters::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet { "com.sun.star.text.TextFieldMasters" };
     return aRet;
@@ -2727,7 +2700,6 @@ static sal_uInt16 lcl_GetIdByName( OUString& rName, OUString& rTypeName )
 }
 
 uno::Any SwXTextFieldMasters::getByName(const OUString& rName)
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!GetDoc())
@@ -2787,7 +2759,6 @@ bool SwXTextFieldMasters::getInstanceName(
 }
 
 uno::Sequence< OUString > SwXTextFieldMasters::getElementNames()
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!GetDoc())
@@ -2811,7 +2782,7 @@ uno::Sequence< OUString > SwXTextFieldMasters::getElementNames()
     return comphelper::containerToSequence(aFieldNames);
 }
 
-sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName)
 {
     SolarMutexGuard aGuard;
     if(!GetDoc())
@@ -2828,13 +2799,13 @@ sal_Bool SwXTextFieldMasters::hasByName(const OUString& rName) throw( uno::Runti
     return bRet;
 }
 
-uno::Type  SwXTextFieldMasters::getElementType() throw( uno::RuntimeException, std::exception )
+uno::Type  SwXTextFieldMasters::getElementType()
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 
 }
 
-sal_Bool SwXTextFieldMasters::hasElements() throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextFieldMasters::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -2853,17 +2824,17 @@ public:
     Impl() : m_RefreshListeners(m_Mutex) { }
 };
 
-OUString SwXTextFieldTypes::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SwXTextFieldTypes::getImplementationName()
 {
     return OUString("SwXTextFieldTypes");
 }
 
-sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextFieldTypes::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXTextFieldTypes::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet { "com.sun.star.text.TextFields" };
     return aRet;
@@ -2887,7 +2858,6 @@ void SwXTextFieldTypes::Invalidate()
 }
 
 uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration()
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -2895,12 +2865,12 @@ uno::Reference< container::XEnumeration >  SwXTextFieldTypes::createEnumeration(
     return new SwXFieldEnumeration(*GetDoc());
 }
 
-uno::Type  SwXTextFieldTypes::getElementType() throw( uno::RuntimeException, std::exception )
+uno::Type  SwXTextFieldTypes::getElementType()
 {
     return cppu::UnoType<text::XDependentTextField>::get();
 }
 
-sal_Bool SwXTextFieldTypes::hasElements() throw( uno::RuntimeException, std::exception )
+sal_Bool SwXTextFieldTypes::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!IsValid())
@@ -2908,7 +2878,7 @@ sal_Bool SwXTextFieldTypes::hasElements() throw( uno::RuntimeException, std::exc
     return true; // they always exist
 }
 
-void SAL_CALL SwXTextFieldTypes::refresh() throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwXTextFieldTypes::refresh()
 {
     {
         SolarMutexGuard aGuard;
@@ -2926,7 +2896,6 @@ void SAL_CALL SwXTextFieldTypes::refresh() throw (uno::RuntimeException, std::ex
 
 void SAL_CALL SwXTextFieldTypes::addRefreshListener(
         const uno::Reference<util::XRefreshListener> & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_RefreshListeners.addInterface(xListener);
@@ -2934,7 +2903,6 @@ throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL SwXTextFieldTypes::removeRefreshListener(
         const uno::Reference<util::XRefreshListener> & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_RefreshListeners.removeInterface(xListener);
@@ -2962,19 +2930,18 @@ protected:
 };
 
 OUString SAL_CALL
-SwXFieldEnumeration::getImplementationName() throw (uno::RuntimeException, std::exception)
+SwXFieldEnumeration::getImplementationName()
 {
     return OUString("SwXFieldEnumeration");
 }
 
 sal_Bool SAL_CALL SwXFieldEnumeration::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXFieldEnumeration::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+SwXFieldEnumeration::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet { "com.sun.star.text.FieldEnumeration" };
     return aRet;
@@ -3020,7 +2987,6 @@ SwXFieldEnumeration::~SwXFieldEnumeration()
 }
 
 sal_Bool SAL_CALL SwXFieldEnumeration::hasMoreElements()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -3028,8 +2994,6 @@ throw (uno::RuntimeException, std::exception)
 }
 
 uno::Any SAL_CALL SwXFieldEnumeration::nextElement()
-throw (container::NoSuchElementException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

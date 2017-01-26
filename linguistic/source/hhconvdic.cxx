@@ -57,7 +57,7 @@ using namespace i18n;
 
 // from i18npool/source/textconversion/textconversion_ko.cxx
 /// @throws RuntimeException
-sal_Int16 SAL_CALL checkScriptType(sal_Unicode c) throw (RuntimeException)
+sal_Int16 SAL_CALL checkScriptType(sal_Unicode c)
 {
   UErrorCode status = U_ZERO_ERROR;
 
@@ -96,7 +96,6 @@ HHConvDic::~HHConvDic()
 void SAL_CALL HHConvDic::addEntry(
         const OUString& aLeftText,
         const OUString& aRightText )
-    throw (IllegalArgumentException, container::ElementExistException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -109,21 +108,18 @@ void SAL_CALL HHConvDic::addEntry(
 
 
 OUString SAL_CALL HHConvDic::getImplementationName(  )
-    throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.lingu2.HHConvDic" );
 }
 
 
 sal_Bool SAL_CALL HHConvDic::supportsService( const OUString& rServiceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 
 uno::Sequence< OUString > SAL_CALL HHConvDic::getSupportedServiceNames(  )
-    throw (RuntimeException, std::exception)
 {
     return { SN_CONV_DICTIONARY, SN_HH_CONV_DICTIONARY };
 }

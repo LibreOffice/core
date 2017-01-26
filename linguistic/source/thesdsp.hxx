@@ -67,19 +67,15 @@ public:
 
     // XSupportedLocales
     virtual css::uno::Sequence< css::lang::Locale > SAL_CALL
-        getLocales()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getLocales() override;
     virtual sal_Bool SAL_CALL
-        hasLocale( const css::lang::Locale& aLocale )
-            throw(css::uno::RuntimeException, std::exception) override;
+        hasLocale( const css::lang::Locale& aLocale ) override;
 
     // XThesaurus
     virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XMeaning > > SAL_CALL
         queryMeanings( const OUString& aTerm,
                 const css::lang::Locale& aLocale,
-                const css::beans::PropertyValues& aProperties )
-            throw(css::lang::IllegalArgumentException,
-                  css::uno::RuntimeException, std::exception) override;
+                const css::beans::PropertyValues& aProperties ) override;
 
     // LinguDispatcher
     virtual void

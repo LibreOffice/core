@@ -51,8 +51,8 @@ public:
                                 const css::util::URL& rURL,
                                 SfxStateCache* pStateCache, const SfxSlot* pSlot );
 
-    virtual void SAL_CALL           statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL           disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL           statusChanged( const css::frame::FeatureStateEvent& Event ) override;
+    virtual void SAL_CALL           disposing( const css::lang::EventObject& Source ) override;
 
     void                    Release();
     const css::frame::FeatureStateEvent& GetStatus() const { return aStatus;}

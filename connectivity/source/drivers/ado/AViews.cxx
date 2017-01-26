@@ -45,7 +45,7 @@ sdbcx::ObjectType OViews::createObject(const OUString& _rName)
     return pView;
 }
 
-void OViews::impl_refresh(  ) throw(RuntimeException)
+void OViews::impl_refresh(  )
 {
     m_aCollection.Refresh();
 }

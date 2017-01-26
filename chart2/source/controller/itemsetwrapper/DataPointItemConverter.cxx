@@ -288,7 +288,6 @@ bool DataPointItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNa
 
 bool DataPointItemConverter::ApplySpecialItem(
     sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-    throw( uno::Exception )
 {
     bool bChanged = false;
 
@@ -548,7 +547,6 @@ bool DataPointItemConverter::ApplySpecialItem(
 
 void DataPointItemConverter::FillSpecialItem(
     sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-    throw( uno::Exception )
 {
     switch( nWhichId )
     {

@@ -61,28 +61,22 @@ public:
     virtual void SAL_CALL acquire() throw() override { ReflectionBase::acquire(); }
     virtual void SAL_CALL release() throw() override { ReflectionBase::release(); }
     virtual css::uno::Any  SAL_CALL queryInterface(
-        const css::uno::Type & reqType )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Type & reqType ) override;
 
     // XTypeProvider, first implemented by OPropertySetHelper
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual css::uno::Sequence< sal_Int8> SAL_CALL getImplementationId() override;
 
     // XDataDescriptorFactory
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override;
+    createDataDescriptor(  ) override;
 
     // XRename
-    virtual void SAL_CALL rename( const OUString& newName )
-        throw (css::sdbc::SQLException,
-               css::container::ElementExistException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL rename( const OUString& newName ) override;
 
     // XNamed
-    virtual OUString SAL_CALL getName(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName(  ) override;
+    virtual void SAL_CALL setName( const OUString& aName ) override;
 
 };
 
@@ -96,7 +90,7 @@ public:
 
     // XDataDescriptorFactory
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override;
+    createDataDescriptor(  ) override;
 };
 
 }

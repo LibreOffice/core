@@ -1223,31 +1223,31 @@ void SdStyleSheetPool::RemoveStyleFamily( const SdPage* pPage )
     }
 }
 
-void SdStyleSheetPool::throwIfDisposed() throw(css::uno::RuntimeException)
+void SdStyleSheetPool::throwIfDisposed()
 {
     if( mpDoc == nullptr )
         throw DisposedException();
 }
 
 // XServiceInfo
-OUString SAL_CALL SdStyleSheetPool::getImplementationName() throw(RuntimeException, std::exception)
+OUString SAL_CALL SdStyleSheetPool::getImplementationName()
 {
     return OUString( "SdStyleSheetPool" );
 }
 
-sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SdStyleSheetPool::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL SdStyleSheetPool::getSupportedServiceNames() throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SdStyleSheetPool::getSupportedServiceNames()
 {
     OUString aStr("com.sun.star.style.StyleFamilies");
     return Sequence< OUString >( &aStr, 1 );
 }
 
 // XNameAccess
-Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName )
 {
     throwIfDisposed();
 
@@ -1269,7 +1269,7 @@ Any SAL_CALL SdStyleSheetPool::getByName( const OUString& aName ) throw(NoSuchEl
     throw NoSuchElementException();
 }
 
-Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames()
 {
     throwIfDisposed();
 
@@ -1288,7 +1288,7 @@ Sequence< OUString > SAL_CALL SdStyleSheetPool::getElementNames() throw(RuntimeE
     return aNames;
 }
 
-sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName )
 {
     throwIfDisposed();
 
@@ -1312,28 +1312,28 @@ sal_Bool SAL_CALL SdStyleSheetPool::hasByName( const OUString& aName ) throw(Run
 
 // XElementAccess
 
-Type SAL_CALL SdStyleSheetPool::getElementType() throw(RuntimeException, std::exception)
+Type SAL_CALL SdStyleSheetPool::getElementType()
 {
     throwIfDisposed();
 
     return cppu::UnoType<XNameAccess>::get();
 }
 
-sal_Bool SAL_CALL SdStyleSheetPool::hasElements() throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SdStyleSheetPool::hasElements()
 {
     return true;
 }
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL SdStyleSheetPool::getCount() throw(RuntimeException, std::exception)
+sal_Int32 SAL_CALL SdStyleSheetPool::getCount()
 {
     throwIfDisposed();
 
     return maStyleFamilyMap.size() + 3;
 }
 
-Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index )
 {
     switch( Index )
     {
@@ -1362,7 +1362,7 @@ Any SAL_CALL SdStyleSheetPool::getByIndex( sal_Int32 Index ) throw(IndexOutOfBou
 
 // XComponent
 
-void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException, std::exception)
+void SAL_CALL SdStyleSheetPool::dispose()
 {
     if( mpDoc )
     {
@@ -1393,11 +1393,11 @@ void SAL_CALL SdStyleSheetPool::dispose() throw (RuntimeException, std::exceptio
     }
 }
 
-void SAL_CALL SdStyleSheetPool::addEventListener( const Reference< XEventListener >& /*xListener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SdStyleSheetPool::addEventListener( const Reference< XEventListener >& /*xListener*/ )
 {
 }
 
-void SAL_CALL SdStyleSheetPool::removeEventListener( const Reference< XEventListener >& /*aListener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SdStyleSheetPool::removeEventListener( const Reference< XEventListener >& /*aListener*/ )
 {
 }
 

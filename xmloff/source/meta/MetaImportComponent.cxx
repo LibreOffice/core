@@ -49,8 +49,7 @@ protected:
         const css::uno::Reference< css::xml::sax::XAttributeList > & xAttrList ) override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
-        throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 };
 
 // global functions to support the component
@@ -93,7 +92,6 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
 
 void SAL_CALL XMLMetaImportComponent::setTargetDocument(
     const uno::Reference< lang::XComponent >& xDoc )
-    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     mxDocProps.set( xDoc, uno::UNO_QUERY );
     if( !mxDocProps.is() )

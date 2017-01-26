@@ -684,7 +684,7 @@ void OAccessibleMenuBaseComponent::disposing()
 // XServiceInfo
 
 
-sal_Bool OAccessibleMenuBaseComponent::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool OAccessibleMenuBaseComponent::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
@@ -693,7 +693,7 @@ sal_Bool OAccessibleMenuBaseComponent::supportsService( const OUString& rService
 // XAccessible
 
 
-Reference< XAccessibleContext > OAccessibleMenuBaseComponent::getAccessibleContext(  ) throw (RuntimeException, std::exception)
+Reference< XAccessibleContext > OAccessibleMenuBaseComponent::getAccessibleContext(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -704,7 +704,7 @@ Reference< XAccessibleContext > OAccessibleMenuBaseComponent::getAccessibleConte
 // XAccessibleContext
 
 
-Reference< XAccessibleStateSet > OAccessibleMenuBaseComponent::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
+Reference< XAccessibleStateSet > OAccessibleMenuBaseComponent::getAccessibleStateSet(  )
 {
     OExternalLockGuard aGuard( this );
 

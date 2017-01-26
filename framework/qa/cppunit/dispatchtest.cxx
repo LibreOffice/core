@@ -45,17 +45,17 @@ public:
     int getUnexpected();
 
     // frame::XInterceptorInfo
-    virtual uno::Sequence<OUString> SAL_CALL getInterceptedURLs() throw (uno::RuntimeException, std::exception) override;
+    virtual uno::Sequence<OUString> SAL_CALL getInterceptedURLs() override;
 
     // frame::XDispatchProviderInterceptor
-    virtual void SAL_CALL setMasterDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier) throw (uno::RuntimeException, std::exception) override;
-    virtual uno::Reference<frame::XDispatchProvider> SAL_CALL getMasterDispatchProvider() throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSlaveDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier) throw (uno::RuntimeException, std::exception) override;
-    virtual uno::Reference<frame::XDispatchProvider> SAL_CALL getSlaveDispatchProvider() throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMasterDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier) override;
+    virtual uno::Reference<frame::XDispatchProvider> SAL_CALL getMasterDispatchProvider() override;
+    virtual void SAL_CALL setSlaveDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier) override;
+    virtual uno::Reference<frame::XDispatchProvider> SAL_CALL getSlaveDispatchProvider() override;
 
     // frame::XDispatchProvider
-    virtual uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& xRequests) throw (uno::RuntimeException, std::exception) override;
-    virtual uno::Reference<frame::XDispatch> SAL_CALL queryDispatch(const util::URL& rURL, const OUString& rTargetFrameName, sal_Int32 SearchFlags) throw (uno::RuntimeException, std::exception) override;
+    virtual uno::Sequence<uno::Reference<frame::XDispatch>> SAL_CALL queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& xRequests) override;
+    virtual uno::Reference<frame::XDispatch> SAL_CALL queryDispatch(const util::URL& rURL, const OUString& rTargetFrameName, sal_Int32 SearchFlags) override;
 };
 
 MyInterceptor::MyInterceptor()
@@ -80,32 +80,32 @@ int MyInterceptor::getUnexpected()
     return nRet;
 }
 
-uno::Sequence<OUString> MyInterceptor::getInterceptedURLs() throw (uno::RuntimeException, std::exception)
+uno::Sequence<OUString> MyInterceptor::getInterceptedURLs()
 {
     return m_aDisabledCommands;
 }
 
-void MyInterceptor::setMasterDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier) throw (uno::RuntimeException, std::exception)
+void MyInterceptor::setMasterDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier)
 {
     m_xMaster = xNewSupplier;
 }
 
-uno::Reference<frame::XDispatchProvider> MyInterceptor::getMasterDispatchProvider() throw (uno::RuntimeException, std::exception)
+uno::Reference<frame::XDispatchProvider> MyInterceptor::getMasterDispatchProvider()
 {
     return m_xMaster;
 }
 
-void MyInterceptor::setSlaveDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier) throw (uno::RuntimeException, std::exception)
+void MyInterceptor::setSlaveDispatchProvider(const uno::Reference<frame::XDispatchProvider>& xNewSupplier)
 {
     m_xSlave = xNewSupplier;
 }
 
-uno::Reference<frame::XDispatchProvider> MyInterceptor::getSlaveDispatchProvider() throw (uno::RuntimeException, std::exception)
+uno::Reference<frame::XDispatchProvider> MyInterceptor::getSlaveDispatchProvider()
 {
     return m_xSlave;
 }
 
-uno::Sequence<uno::Reference<frame::XDispatch>> MyInterceptor::queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& rRequests) throw (uno::RuntimeException, std::exception)
+uno::Sequence<uno::Reference<frame::XDispatch>> MyInterceptor::queryDispatches(const uno::Sequence<frame::DispatchDescriptor>& rRequests)
 {
     uno::Sequence<uno::Reference<frame::XDispatch>> aResult(rRequests.getLength());
 
@@ -118,7 +118,6 @@ uno::Sequence<uno::Reference<frame::XDispatch>> MyInterceptor::queryDispatches(c
 }
 
 uno::Reference<frame::XDispatch> MyInterceptor::queryDispatch(const util::URL& rURL, const OUString& /*rTargetFrameName*/, sal_Int32 /*SearchFlags*/)
-throw (uno::RuntimeException, std::exception)
 {
     if (std::find(m_aDisabledCommands.begin(), m_aDisabledCommands.end(), rURL.Complete) != m_aDisabledCommands.end())
         ++m_nExpected;

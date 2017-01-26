@@ -90,21 +90,18 @@ void SAL_CALL StatusbarItem::disposing()
 }
 
 OUString SAL_CALL StatusbarItem::getCommand()
-throw (RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( m_aMutex );
     return m_aCommand;
 }
 
 ::sal_uInt16 SAL_CALL StatusbarItem::getItemId()
-throw (RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( m_aMutex );
     return m_nId;
 }
 
 ::sal_uInt32 SAL_CALL StatusbarItem::getWidth()
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -114,14 +111,12 @@ throw (RuntimeException, std::exception)
 }
 
 ::sal_uInt16 SAL_CALL StatusbarItem::getStyle()
-throw (RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard( m_aMutex );
     return m_nStyle;
 }
 
 ::sal_Int32 SAL_CALL StatusbarItem::getOffset()
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -131,7 +126,6 @@ throw (RuntimeException, std::exception)
 }
 
 css::awt::Rectangle SAL_CALL StatusbarItem::getItemRect()
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     css::awt::Rectangle aAWTRect;
@@ -148,7 +142,6 @@ throw (RuntimeException, std::exception)
 }
 
 OUString SAL_CALL StatusbarItem::getText()
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -158,7 +151,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL StatusbarItem::setText( const OUString& rText )
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -166,7 +158,6 @@ throw (RuntimeException, std::exception)
 }
 
 OUString SAL_CALL StatusbarItem::getHelpText()
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -176,7 +167,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL StatusbarItem::setHelpText( const OUString& rHelpText )
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -184,7 +174,6 @@ throw (RuntimeException, std::exception)
 }
 
 OUString SAL_CALL StatusbarItem::getQuickHelpText()
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -194,7 +183,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL StatusbarItem::setQuickHelpText( const OUString& rQuickHelpText )
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -202,7 +190,6 @@ throw (RuntimeException, std::exception)
 }
 
 OUString SAL_CALL StatusbarItem::getAccessibleName()
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -212,7 +199,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL StatusbarItem::setAccessibleName( const OUString& rAccessibleName )
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -220,7 +206,6 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL StatusbarItem::getVisible()
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )
@@ -230,7 +215,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL StatusbarItem::setVisible( sal_Bool bVisible )
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( !m_pStatusBar )
@@ -246,7 +230,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL StatusbarItem::repaint(  )
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if ( m_pStatusBar )

@@ -27,19 +27,15 @@ public:
     SafeModeUI();
 
     // css.lang.XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 
     virtual css::uno::Any SAL_CALL dispatchWithReturnValue(const css::util::URL& aURL,
-                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
-        throw(css::uno::RuntimeException, std::exception) override;
+                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 };
 
 SafeModeUI::SafeModeUI()
@@ -47,19 +43,16 @@ SafeModeUI::SafeModeUI()
 }
 
 OUString SAL_CALL SafeModeUI::getImplementationName()
-    throw(css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.svx.SafeModeUI");
 }
 
 sal_Bool SAL_CALL SafeModeUI::supportsService(const OUString& sServiceName)
-    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL SafeModeUI::getSupportedServiceNames()
-    throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > lServiceNames { "com.sun.star.dialog.SafeModeUI" };
     return lServiceNames;
@@ -67,7 +60,6 @@ css::uno::Sequence< OUString > SAL_CALL SafeModeUI::getSupportedServiceNames()
 
 css::uno::Any SAL_CALL SafeModeUI::dispatchWithReturnValue(const css::util::URL&,
                                                    const css::uno::Sequence< css::beans::PropertyValue >& )
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     css::uno::Any aRet;

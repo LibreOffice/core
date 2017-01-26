@@ -869,7 +869,7 @@ const css::uno::Sequence< sal_Int8 >& ScTransferObj::getUnoTunnelId()
     return theScTransferUnoTunnelId::get().getSeq();
 }
 
-sal_Int64 SAL_CALL ScTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception )
+sal_Int64 SAL_CALL ScTransferObj::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet;
     if( ( rId.getLength() == 16 ) &&

@@ -173,7 +173,7 @@ public:
         const css::uno::Reference< css::xml::sax::XAttributeList >& xAttrList );
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 };
 
 #endif // INCLUDED_XMLOFF_INC_SCHXMLIMPORT_HXX

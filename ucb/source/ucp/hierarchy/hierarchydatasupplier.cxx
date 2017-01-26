@@ -384,7 +384,6 @@ void HierarchyResultSetDataSupplier::close()
 
 // virtual
 void HierarchyResultSetDataSupplier::validate()
-    throw( ucb::ResultSetException )
 {
 }
 

@@ -720,12 +720,11 @@ bool DispatchWatcher::executeDispatchRequests( const std::vector<DispatchRequest
 
 
 void SAL_CALL DispatchWatcher::disposing( const css::lang::EventObject& )
-    throw(css::uno::RuntimeException, std::exception)
 {
 }
 
 
-void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException, std::exception )
+void SAL_CALL DispatchWatcher::dispatchFinished( const DispatchResultEvent& )
 {
     osl::ClearableMutexGuard aGuard(m_mutex);
     sal_Int16 nCount = --m_nRequestCount;

@@ -99,11 +99,11 @@ namespace dbaui
 
     class OViewController : public OQueryController
     {
-        virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) override
+        virtual OUString SAL_CALL getImplementationName() override
         {
             return getImplementationName_Static();
         }
-        virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(RuntimeException, std::exception) override
+        virtual Sequence< OUString> SAL_CALL getSupportedServiceNames() override
         {
             return getSupportedServiceNames_Static();
         }
@@ -113,12 +113,12 @@ namespace dbaui
 
         // need by registration
         /// @throws RuntimeException
-        static OUString getImplementationName_Static() throw( RuntimeException )
+        static OUString getImplementationName_Static()
         {
             return OUString("org.openoffice.comp.dbu.OViewDesign");
         }
         /// @throws RuntimeException
-        static Sequence< OUString > getSupportedServiceNames_Static() throw( RuntimeException )
+        static Sequence< OUString > getSupportedServiceNames_Static()
         {
             Sequence<OUString> aSupported { "com.sun.star.sdb.ViewDesign" };
             return aSupported;
@@ -295,23 +295,23 @@ namespace
     }
 }
 
-OUString SAL_CALL OQueryController::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL OQueryController::getImplementationName()
 {
     return getImplementationName_Static();
 }
 
-OUString OQueryController::getImplementationName_Static() throw( RuntimeException )
+OUString OQueryController::getImplementationName_Static()
 {
     return OUString("org.openoffice.comp.dbu.OQueryDesign");
 }
 
-Sequence< OUString> OQueryController::getSupportedServiceNames_Static() throw( RuntimeException )
+Sequence< OUString> OQueryController::getSupportedServiceNames_Static()
 {
     Sequence<OUString> aSupported { "com.sun.star.sdb.QueryDesign" };
     return aSupported;
 }
 
-Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames() throw(RuntimeException, std::exception)
+Sequence< OUString> SAL_CALL OQueryController::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
@@ -357,7 +357,7 @@ OQueryController::~OQueryController()
 IMPLEMENT_FORWARD_XINTERFACE2( OQueryController, OJoinController, OQueryController_PBase )
 IMPLEMENT_FORWARD_XTYPEPROVIDER2( OQueryController, OJoinController, OQueryController_PBase )
 
-Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo() throw(RuntimeException, std::exception)
+Reference< XPropertySetInfo > SAL_CALL OQueryController::getPropertySetInfo()
 {
     Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -1137,7 +1137,7 @@ void OQueryController::impl_onModifyChanged()
     InvalidateFeature(ID_BROWSER_QUERY_EXECUTE);
 }
 
-void SAL_CALL OQueryController::disposing( const EventObject& Source ) throw(RuntimeException, std::exception)
+void SAL_CALL OQueryController::disposing( const EventObject& Source )
 {
     SolarMutexGuard aGuard;
 
@@ -1954,7 +1954,7 @@ bool OQueryController::allowQueries() const
     return !bCreatingView;
 }
 
-Any SAL_CALL OQueryController::getViewData() throw( RuntimeException, std::exception )
+Any SAL_CALL OQueryController::getViewData()
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -1966,7 +1966,7 @@ Any SAL_CALL OQueryController::getViewData() throw( RuntimeException, std::excep
     return makeAny( aViewSettings.getPropertyValues() );
 }
 
-void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/) throw( RuntimeException, std::exception )
+void SAL_CALL OQueryController::restoreViewData(const Any& /*Data*/)
 {
     // TODO
 }

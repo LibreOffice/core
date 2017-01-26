@@ -64,15 +64,15 @@ protected:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::container::XIndexAccess > getShapesByArrayIndices( const css::uno::Any& Index ) throw (css::uno::RuntimeException);
+    css::uno::Reference< css::container::XIndexAccess > getShapesByArrayIndices( const css::uno::Any& Index );
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::drawing::XShape > createShape( const OUString& service ) throw (css::uno::RuntimeException);
+    css::uno::Reference< css::drawing::XShape > createShape( const OUString& service );
     /// @throws css::uno::RuntimeException
-    css::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const css::uno::Any& rRange ) throw (css::uno::RuntimeException);
+    css::uno::Any AddRectangle( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const css::uno::Any& rRange );
     /// @throws css::uno::RuntimeException
-    css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const css::uno::Any& rRange ) throw (css::uno::RuntimeException);
+    css::uno::Any AddEllipse( sal_Int32 startX, sal_Int32 startY, sal_Int32 nLineWidth, sal_Int32 nLineHeight, const css::uno::Any& rRange );
     /// @throws css::uno::RuntimeException
-    css::uno::Any AddTextboxInWriter( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (css::uno::RuntimeException);
+    css::uno::Any AddTextboxInWriter( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight );
     OUString createName( const OUString& sName );
     //TODO helperapi using a writer document
     //css::awt::Point calculateTopLeftMargin( css::uno::Reference< ov::XHelperInterface > xDocument );
@@ -80,20 +80,20 @@ protected:
 public:
     ScVbaShapes( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::container::XIndexAccess >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel );
     /// @throws css::uno::RuntimeException
-    static void setDefaultShapeProperties( const css::uno::Reference< css::drawing::XShape >& xShape ) throw (css::uno::RuntimeException);
+    static void setDefaultShapeProperties( const css::uno::Reference< css::drawing::XShape >& xShape );
     static void setShape_NameProperty( const css::uno::Reference< css::drawing::XShape >& xShape, const OUString& sName );
     //XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
-    virtual void SAL_CALL SelectAll() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL SelectAll() override;
     //helper::calc
-    virtual css::uno::Any SAL_CALL AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_Int32 endY ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL AddTextbox( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XShapeRange > SAL_CALL Range( const css::uno::Any& shapes ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL AddLine( sal_Int32 StartX, sal_Int32 StartY, sal_Int32 endX, sal_Int32 endY ) override;
+    virtual css::uno::Any SAL_CALL AddShape( sal_Int32 _nType, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
+    virtual css::uno::Any SAL_CALL AddTextbox( sal_Int32 _nOrientation, sal_Int32 _nLeft, sal_Int32 _nTop, sal_Int32 _nWidth, sal_Int32 _nHeight ) override;
+    virtual css::uno::Reference< ov::msforms::XShapeRange > SAL_CALL Range( const css::uno::Any& shapes ) override;
     // ScVbaCollectionBaseImpl
-    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) throw (css::uno::RuntimeException) override;
+    virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
 };
 
 #endif // INCLUDED_VBAHELPER_VBASHAPES_HXX

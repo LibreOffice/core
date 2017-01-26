@@ -43,7 +43,7 @@ SIDEModel::~SIDEModel()
 {
 }
 
-uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
+uno::Any SAL_CALL SIDEModel::queryInterface( const uno::Type& rType )
 {
     uno::Any aRet =  ::cppu::queryInterface ( rType,
                                     // OWeakObject interfaces
@@ -67,7 +67,7 @@ void SAL_CALL SIDEModel::release() throw()
     OWeakObject::release();
 }
 
-uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  )
 {
     uno::Sequence< uno::Type > aTypes = SfxBaseModel::getTypes();
     sal_Int32 nLen = aTypes.getLength();
@@ -78,7 +78,7 @@ uno::Sequence< uno::Type > SAL_CALL SIDEModel::getTypes(  ) throw(uno::RuntimeEx
     return aTypes;
 }
 
-OUString SIDEModel::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SIDEModel::getImplementationName()
 {
     return getImplementationName_Static();
 }
@@ -88,11 +88,11 @@ OUString SIDEModel::getImplementationName_Static()
     return OUString( "com.sun.star.comp.basic.BasicIDE" );
 }
 
-sal_Bool SIDEModel::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
+sal_Bool SIDEModel::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
-uno::Sequence< OUString > SIDEModel::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SIDEModel::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
@@ -103,7 +103,7 @@ uno::Sequence< OUString > SIDEModel::getSupportedServiceNames_Static()
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & ) throw( uno::Exception )
+                const uno::Reference< lang::XMultiServiceFactory > & )
 {
     SolarMutexGuard aGuard;
     EnsureIde();
@@ -112,25 +112,23 @@ uno::Reference< uno::XInterface > SAL_CALL SIDEModel_createInstance(
 }
 
 //  XStorable
-void SAL_CALL SIDEModel::store() throw (io::IOException, uno::RuntimeException, std::exception)
+void SAL_CALL SIDEModel::store()
 {
     notImplemented();
 }
 
 void SAL_CALL SIDEModel::storeAsURL( const OUString&, const uno::Sequence< beans::PropertyValue >& )
-        throw (io::IOException, uno::RuntimeException, std::exception)
 {
     notImplemented();
 }
 
 void SAL_CALL SIDEModel::storeToURL( const OUString&,
         const uno::Sequence< beans::PropertyValue >& )
-        throw (io::IOException, uno::RuntimeException, std::exception)
 {
     notImplemented();
 }
 
-void  SIDEModel::notImplemented() throw ( io::IOException )
+void  SIDEModel::notImplemented()
 {
     throw io::IOException("Can't store IDE model" );
 }

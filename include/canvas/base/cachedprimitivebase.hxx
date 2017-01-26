@@ -60,12 +60,12 @@ namespace canvas
         virtual void SAL_CALL disposing() override;
 
         // XCachedPrimitive
-        virtual ::sal_Int8 SAL_CALL redraw( const css::rendering::ViewState& aState ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int8 SAL_CALL redraw( const css::rendering::ViewState& aState ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     protected:
         virtual ~CachedPrimitiveBase() override; // we're a ref-counted UNO class. _We_ destroy ourselves.

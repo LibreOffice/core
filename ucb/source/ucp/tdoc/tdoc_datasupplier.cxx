@@ -378,7 +378,6 @@ void ResultSetDataSupplier::close()
 
 // virtual
 void ResultSetDataSupplier::validate()
-    throw( ucb::ResultSetException )
 {
     if ( m_pImpl->m_bThrowException )
         throw ucb::ResultSetException();

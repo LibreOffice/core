@@ -211,19 +211,17 @@ ScFunctionAcceess_get_implementation(css::uno::XComponentContext*, css::uno::Seq
 }
 
 // XServiceInfo
-OUString SAL_CALL ScFunctionAccess::getImplementationName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL ScFunctionAccess::getImplementationName()
 {
     return OUString("stardiv.StarCalc.ScFunctionAccess");
 }
 
 sal_Bool SAL_CALL ScFunctionAccess::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException, std::exception)
 {
     return {SCFUNCTIONACCESS_SERVICE, SCDOCSETTINGS_SERVICE};
 }
@@ -231,7 +229,6 @@ uno::Sequence<OUString> SAL_CALL ScFunctionAccess::getSupportedServiceNames()
 // XPropertySet (document settings)
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFunctionAccess::getPropertySetInfo()
-                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     static uno::Reference<beans::XPropertySetInfo> aRef(
@@ -241,9 +238,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScFunctionAccess::getPropertySe
 
 void SAL_CALL ScFunctionAccess::setPropertyValue(
                         const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -266,8 +260,6 @@ void SAL_CALL ScFunctionAccess::setPropertyValue(
 }
 
 uno::Any SAL_CALL ScFunctionAccess::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -459,8 +451,6 @@ static void processSequences( ScDocument* pDoc, const uno::Any& rArg, ScTokenArr
 
 uno::Any SAL_CALL ScFunctionAccess::callFunction( const OUString& aName,
                             const uno::Sequence<uno::Any>& aArguments )
-                throw (container::NoSuchElementException, lang::IllegalArgumentException,
-                       uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

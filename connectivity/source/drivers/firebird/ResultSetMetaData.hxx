@@ -44,7 +44,7 @@ namespace connectivity
             virtual ~OResultSetMetaData() override;
 
             /// @throws css::sdbc::SQLException
-            void verifyValidColumn(sal_Int32 column) throw(css::sdbc::SQLException);
+            void verifyValidColumn(sal_Int32 column);
         public:
             // a constructor, which is required for returning objects:
             OResultSetMetaData(Connection* pConnection,
@@ -53,48 +53,27 @@ namespace connectivity
                 , m_pSqlda(pSqlda)
             {}
 
-            virtual sal_Int32 SAL_CALL getColumnCount()
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isAutoIncrement(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isCaseSensitive(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isSearchable(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isCurrency(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL isNullable(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isSigned(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getColumnDisplaySize(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual ::rtl::OUString SAL_CALL getColumnLabel(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual ::rtl::OUString SAL_CALL getColumnName(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual ::rtl::OUString SAL_CALL getSchemaName(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getPrecision(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getScale(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual ::rtl::OUString SAL_CALL getTableName(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual ::rtl::OUString SAL_CALL getCatalogName(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getColumnType(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual ::rtl::OUString SAL_CALL getColumnTypeName(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isReadOnly(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isWritable(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isDefinitelyWritable(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual ::rtl::OUString SAL_CALL getColumnServiceName(sal_Int32 column)
-                throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int32 SAL_CALL getColumnCount() override;
+            virtual sal_Bool SAL_CALL isAutoIncrement(sal_Int32 column) override;
+            virtual sal_Bool SAL_CALL isCaseSensitive(sal_Int32 column) override;
+            virtual sal_Bool SAL_CALL isSearchable(sal_Int32 column) override;
+            virtual sal_Bool SAL_CALL isCurrency(sal_Int32 column) override;
+            virtual sal_Int32 SAL_CALL isNullable(sal_Int32 column) override;
+            virtual sal_Bool SAL_CALL isSigned(sal_Int32 column) override;
+            virtual sal_Int32 SAL_CALL getColumnDisplaySize(sal_Int32 column) override;
+            virtual ::rtl::OUString SAL_CALL getColumnLabel(sal_Int32 column) override;
+            virtual ::rtl::OUString SAL_CALL getColumnName(sal_Int32 column) override;
+            virtual ::rtl::OUString SAL_CALL getSchemaName(sal_Int32 column) override;
+            virtual sal_Int32 SAL_CALL getPrecision(sal_Int32 column) override;
+            virtual sal_Int32 SAL_CALL getScale(sal_Int32 column) override;
+            virtual ::rtl::OUString SAL_CALL getTableName(sal_Int32 column) override;
+            virtual ::rtl::OUString SAL_CALL getCatalogName(sal_Int32 column) override;
+            virtual sal_Int32 SAL_CALL getColumnType(sal_Int32 column) override;
+            virtual ::rtl::OUString SAL_CALL getColumnTypeName(sal_Int32 column) override;
+            virtual sal_Bool SAL_CALL isReadOnly(sal_Int32 column) override;
+            virtual sal_Bool SAL_CALL isWritable(sal_Int32 column) override;
+            virtual sal_Bool SAL_CALL isDefinitelyWritable(sal_Int32 column) override;
+            virtual ::rtl::OUString SAL_CALL getColumnServiceName(sal_Int32 column) override;
         };
     }
 }

@@ -41,18 +41,17 @@ public:
     UnoControlTabPageModel( css::uno::Reference< css::uno::XComponentContext > const & i_factory);
 
     // css::io::XPersistObject
-    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getServiceName() override;
 
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     // XInitialization
-    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments)
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize (const css::uno::Sequence<css::uno::Any>& rArguments) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
 
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -72,24 +71,21 @@ public:
     virtual ~UnoControlTabPage() override;
     OUString             GetComponentServiceName() override;
 
-    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
+    void SAL_CALL dispose() override;
 
      // css::awt::XWindowListener
-    virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowShown( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL windowHidden( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) override;
+    virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) override;
+    virtual void SAL_CALL windowShown( const css::lang::EventObject& e ) override;
+    virtual void SAL_CALL windowHidden( const css::lang::EventObject& e ) override;
     // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif // INCLUDED_TOOLKIT_CONTROLS_TABPAGEMODEL_HXX

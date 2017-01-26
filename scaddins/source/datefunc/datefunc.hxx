@@ -191,11 +191,11 @@ private:
     void                        InitDefLocales();
     const css::lang::Locale& GetLocale( sal_uInt32 nIndex );
     /// @throws css::uno::RuntimeException
-    ResMgr&                     GetResMgr() throw( css::uno::RuntimeException, std::exception );
+    ResMgr&                     GetResMgr();
     void                        InitData();
 
     /// @throws css::uno::RuntimeException
-    OUString                    GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex ) throw( css::uno::RuntimeException, std::exception );
+    OUString                    GetFuncDescrStr( sal_uInt16 nResId, sal_uInt16 nStrIndex );
 
 public:
                                 ScaDateAddIn();
@@ -204,28 +204,28 @@ public:
     static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
                                 // XAddIn
-    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getProgrammaticFuntionName( const OUString& aDisplayName ) override;
+    virtual OUString SAL_CALL getDisplayFunctionName( const OUString& aProgrammaticName ) override;
+    virtual OUString SAL_CALL getFunctionDescription( const OUString& aProgrammaticName ) override;
+    virtual OUString SAL_CALL getDisplayArgumentName( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
+    virtual OUString SAL_CALL getArgumentDescription( const OUString& aProgrammaticName, sal_Int32 nArgument ) override;
+    virtual OUString SAL_CALL getProgrammaticCategoryName( const OUString& aProgrammaticName ) override;
+    virtual OUString SAL_CALL getDisplayCategoryName( const OUString& aProgrammaticName ) override;
 
                                 // XCompatibilityNames
-    virtual css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::sheet::LocalizedName > SAL_CALL getCompatibilityNames( const OUString& aProgrammaticName ) override;
 
                                 // XLocalizable
-    virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::lang::Locale SAL_CALL getLocale() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL       setLocale( const css::lang::Locale& eLocale ) override;
+    virtual css::lang::Locale SAL_CALL getLocale() override;
 
                                 // XServiceName
-    virtual OUString SAL_CALL getServiceName() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getServiceName() override;
 
                                 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL   supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     //  methods from own interfaces start here
 
@@ -233,45 +233,37 @@ public:
     virtual sal_Int32 SAL_CALL  getDiffWeeks(
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
-                                    sal_Int32 nMode )
-                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+                                    sal_Int32 nMode ) override;
 
     virtual sal_Int32 SAL_CALL  getDiffMonths(
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
-                                    sal_Int32 nMode )
-                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+                                    sal_Int32 nMode ) override;
 
     virtual sal_Int32 SAL_CALL  getDiffYears(
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
                                     sal_Int32 nEndDate, sal_Int32 nStartDate,
-                                    sal_Int32 nMode )
-                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+                                    sal_Int32 nMode ) override;
 
     virtual sal_Int32 SAL_CALL  getIsLeapYear(
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
-                                    sal_Int32 nDate )
-                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+                                    sal_Int32 nDate ) override;
 
     virtual sal_Int32 SAL_CALL  getDaysInMonth(
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
-                                    sal_Int32 nDate )
-                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+                                    sal_Int32 nDate ) override;
 
     virtual sal_Int32 SAL_CALL  getDaysInYear(
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
-                                    sal_Int32 nDate )
-                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+                                    sal_Int32 nDate ) override;
 
     virtual sal_Int32 SAL_CALL  getWeeksInYear(
                                     const css::uno::Reference< css::beans::XPropertySet >& xOptions,
-                                    sal_Int32 nDate )
-                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+                                    sal_Int32 nDate ) override;
 
                                 // XMiscFunctions
     virtual OUString SAL_CALL getRot13(
-                                    const OUString& aSrcText )
-                                throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
+                                    const OUString& aSrcText ) override;
 };
 
 #endif // INCLUDED_SCADDINS_SOURCE_DATEFUNC_DATEFUNC_HXX

@@ -47,21 +47,16 @@ public:
     const Factory& operator=(const Factory&) = delete;
 
     // XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName()
-        throw (uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( OUString const& name )
-        throw (uno::RuntimeException, std::exception) override;
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( OUString const& name ) override;
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     // XSingleComponentFactory:
     virtual uno::Reference<uno::XInterface> SAL_CALL createInstanceWithContext(
-        uno::Reference<uno::XComponentContext> const& xContext )
-        throw (uno::Exception, std::exception) override;
+        uno::Reference<uno::XComponentContext> const& xContext ) override;
     virtual uno::Reference<uno::XInterface> SAL_CALL
     createInstanceWithArgumentsAndContext(
     uno::Sequence<uno::Any> const& args,
-    uno::Reference<uno::XComponentContext> const& xContext )
-        throw (uno::Exception, std::exception) override;
+    uno::Reference<uno::XComponentContext> const& xContext ) override;
 
 private:
     virtual ~Factory() override;
@@ -75,19 +70,16 @@ ServiceDecl::Factory::~Factory()
 
 // XServiceInfo:
 OUString ServiceDecl::Factory::getImplementationName()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_rServiceDecl.getImplementationName();
 }
 
 sal_Bool ServiceDecl::Factory::supportsService( OUString const& name )
-    throw (uno::RuntimeException, std::exception)
 {
     return m_rServiceDecl.supportsService(name);
 }
 
 uno::Sequence<OUString> ServiceDecl::Factory::getSupportedServiceNames()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_rServiceDecl.getSupportedServiceNames();
 }
@@ -95,7 +87,6 @@ uno::Sequence<OUString> ServiceDecl::Factory::getSupportedServiceNames()
 // XSingleComponentFactory:
 uno::Reference<uno::XInterface> ServiceDecl::Factory::createInstanceWithContext(
     uno::Reference<uno::XComponentContext> const& xContext )
-    throw (uno::Exception, std::exception)
 {
     return m_rServiceDecl.m_createFunc(
         m_rServiceDecl, uno::Sequence<uno::Any>(), xContext );
@@ -105,7 +96,6 @@ uno::Reference<uno::XInterface>
 ServiceDecl::Factory::createInstanceWithArgumentsAndContext(
     uno::Sequence<uno::Any > const& args,
     uno::Reference<uno::XComponentContext> const& xContext )
-    throw (uno::Exception, std::exception)
 {
     return m_rServiceDecl.m_createFunc(
         m_rServiceDecl, args, xContext );

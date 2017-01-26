@@ -44,9 +44,9 @@ namespace x11 {
         virtual ~DropTargetDropContext() override;
 
         // XDropTargetDropContext
-        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) throw(std::exception) override;
-        virtual void SAL_CALL rejectDrop() throw(std::exception) override;
-        virtual void SAL_CALL dropComplete( sal_Bool success ) throw(std::exception) override;
+        virtual void SAL_CALL acceptDrop( sal_Int8 dragOperation ) override;
+        virtual void SAL_CALL rejectDrop() override;
+        virtual void SAL_CALL dropComplete( sal_Bool success ) override;
     };
 
     class DropTargetDragContext :
@@ -61,8 +61,8 @@ namespace x11 {
         virtual ~DropTargetDragContext() override;
 
         // XDropTargetDragContext
-        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw(std::exception) override;
-        virtual void SAL_CALL rejectDrag() throw(std::exception) override;
+        virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) override;
+        virtual void SAL_CALL rejectDrag() override;
     };
 
     class DragSourceContext :
@@ -77,10 +77,10 @@ namespace x11 {
         virtual ~DragSourceContext() override;
 
         // XDragSourceContext
-        virtual sal_Int32   SAL_CALL getCurrentCursor() throw(std::exception) override;
-        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) throw(std::exception) override;
-        virtual void        SAL_CALL setImage( sal_Int32 imageId ) throw(std::exception) override;
-        virtual void        SAL_CALL transferablesFlavorsChanged() throw(std::exception) override;
+        virtual sal_Int32   SAL_CALL getCurrentCursor() override;
+        virtual void        SAL_CALL setCursor( sal_Int32 cursorId ) override;
+        virtual void        SAL_CALL setImage( sal_Int32 imageId ) override;
+        virtual void        SAL_CALL transferablesFlavorsChanged() override;
     };
 } // namespace
 

@@ -28,7 +28,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaFrame::SwVbaFrame( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< frame::XModel >& rModel, const css::uno::Reference< text::XTextFrame >& xTextFrame ) throw ( css::uno::RuntimeException ) :
+SwVbaFrame::SwVbaFrame( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const css::uno::Reference< frame::XModel >& rModel, const css::uno::Reference< text::XTextFrame >& xTextFrame ) :
     SwVbaFrame_BASE( rParent, rContext ), mxModel( rModel ), mxTextFrame( xTextFrame )
 {
 }
@@ -37,7 +37,7 @@ SwVbaFrame::~SwVbaFrame()
 {
 }
 
-void SAL_CALL SwVbaFrame::Select() throw ( uno::RuntimeException, std::exception )
+void SAL_CALL SwVbaFrame::Select()
 {
     uno::Reference< view::XSelectionSupplier > xSelectSupp( mxModel->getCurrentController(), uno::UNO_QUERY_THROW );
     xSelectSupp->select( uno::makeAny( mxTextFrame ) );

@@ -40,16 +40,16 @@ public:
     virtual ~VCLXSystemDependentWindow() override;
 
     // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XSystemDependendtWindowPeer
-    css::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getWindowHandle( const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 };
 
 

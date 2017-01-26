@@ -171,7 +171,6 @@ void DAVResourceAccess::OPTIONS(
     DAVOptions & rOptions,
     const css::uno::Reference<
     css::ucb::XCommandEnvironment > & xEnv )
-    throw ( DAVException )
 {
     initialize();
 
@@ -212,7 +211,6 @@ void DAVResourceAccess::PROPFIND(
     const std::vector< OUString > & rPropertyNames,
     std::vector< DAVResource > & rResources,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -255,7 +253,6 @@ void DAVResourceAccess::PROPFIND(
     const Depth nDepth,
     std::vector< DAVResourceInfo > & rResInfo,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -295,7 +292,6 @@ void DAVResourceAccess::PROPFIND(
 void DAVResourceAccess::PROPPATCH(
     const std::vector< ProppatchValue >& rValues,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -335,7 +331,6 @@ void DAVResourceAccess::HEAD(
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -374,7 +369,6 @@ void DAVResourceAccess::HEAD(
 
 uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -416,7 +410,6 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
 void DAVResourceAccess::GET(
     uno::Reference< io::XOutputStream > & rStream,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -455,7 +448,6 @@ uno::Reference< io::XInputStream > DAVResourceAccess::GET(
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw (css::uno::RuntimeException, DAVException)
 {
     initialize();
 
@@ -501,7 +493,6 @@ void DAVResourceAccess::GET0(
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -544,7 +535,6 @@ void DAVResourceAccess::GET(
     const std::vector< OUString > & rHeaderNames,
     DAVResource & rResource,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -583,7 +573,6 @@ void DAVResourceAccess::GET(
 
 
 void DAVResourceAccess::abort()
-  throw( DAVException )
 {
     initialize();
     m_xSession->abort();
@@ -594,7 +583,6 @@ namespace {
 
     /// @throws DAVException
     void resetInputStream( const uno::Reference< io::XInputStream > & rStream )
-        throw( DAVException )
     {
         try
         {
@@ -622,7 +610,6 @@ namespace {
 void DAVResourceAccess::PUT(
     const uno::Reference< io::XInputStream > & rStream,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw (css::uno::RuntimeException, DAVException)
 {
     initialize();
 
@@ -671,7 +658,6 @@ uno::Reference< io::XInputStream > DAVResourceAccess::POST(
     const OUString & rReferer,
     const uno::Reference< io::XInputStream > & rInputStream,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-  throw (css::uno::RuntimeException, DAVException)
 {
     initialize();
 
@@ -735,7 +721,6 @@ void DAVResourceAccess::POST(
     const uno::Reference< io::XInputStream > & rInputStream,
     uno::Reference< io::XOutputStream > & rOutputStream,
     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-  throw (css::uno::RuntimeException, DAVException)
 {
     initialize();
 
@@ -793,7 +778,6 @@ void DAVResourceAccess::POST(
 
 void DAVResourceAccess::MKCOL(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -833,7 +817,6 @@ void DAVResourceAccess::COPY(
     const OUString & rDestinationURI,
     bool bOverwrite,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -875,7 +858,6 @@ void DAVResourceAccess::MOVE(
     const OUString & rDestinationURI,
     bool bOverwrite,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -914,7 +896,6 @@ void DAVResourceAccess::MOVE(
 
 void DAVResourceAccess::DESTROY(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw( DAVException )
 {
     initialize();
 
@@ -953,7 +934,6 @@ void DAVResourceAccess::DESTROY(
 void DAVResourceAccess::LOCK(
     ucb::Lock & inLock,
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw ( DAVException )
 {
     initialize();
 
@@ -1037,7 +1017,6 @@ sal_Int64 DAVResourceAccess::LOCK(
 
 void DAVResourceAccess::UNLOCK(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw ( DAVException )
 {
     initialize();
 
@@ -1073,7 +1052,6 @@ void DAVResourceAccess::UNLOCK(
 
 
 void DAVResourceAccess::setFlags( const uno::Sequence< beans::NamedValue >& rFlags )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_aFlags = rFlags;
@@ -1081,7 +1059,6 @@ void DAVResourceAccess::setFlags( const uno::Sequence< beans::NamedValue >& rFla
 
 
 void DAVResourceAccess::setURL( const OUString & rNewURL )
-    throw( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     m_aURL  = rNewURL;
@@ -1091,7 +1068,6 @@ void DAVResourceAccess::setURL( const OUString & rNewURL )
 
 // init dav session and path
 void DAVResourceAccess::initialize()
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
     if ( m_aPath.isEmpty() )
@@ -1189,7 +1165,6 @@ void DAVResourceAccess::getUserRequestHeaders(
 // This function member implements the control on cyclical redirections
 bool DAVResourceAccess::detectRedirectCycle(
                                 const OUString& rRedirectURL )
-    throw ( DAVException )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1236,7 +1211,6 @@ void DAVResourceAccess::resetUri()
 
 
 bool DAVResourceAccess::handleException( const DAVException & e, int errorCount )
-    throw ( DAVException )
 {
     switch ( e.getError() )
     {

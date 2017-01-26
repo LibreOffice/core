@@ -115,17 +115,17 @@ namespace vclcanvas
         maCanvasHelper.clear();
     }
 
-    OUString SAL_CALL CanvasCustomSprite::getImplementationName() throw( uno::RuntimeException, std::exception )
+    OUString SAL_CALL CanvasCustomSprite::getImplementationName()
     {
         return OUString( "VCLCanvas.CanvasCustomSprite" );
     }
 
-    sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName ) throw( uno::RuntimeException, std::exception )
+    sal_Bool SAL_CALL CanvasCustomSprite::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService( this, ServiceName );
     }
 
-    uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()  throw( uno::RuntimeException, std::exception )
+    uno::Sequence< OUString > SAL_CALL CanvasCustomSprite::getSupportedServiceNames()
     {
         return { "com.sun.star.rendering.CanvasCustomSprite" };
     }

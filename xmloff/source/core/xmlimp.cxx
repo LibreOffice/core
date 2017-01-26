@@ -84,7 +84,7 @@ public:
     explicit SvXMLImportEventListener(SvXMLImport* pImport);
 
                             // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) override;
 };
 
 SvXMLImportEventListener::SvXMLImportEventListener(SvXMLImport* pTempImport)
@@ -94,7 +94,6 @@ SvXMLImportEventListener::SvXMLImportEventListener(SvXMLImport* pTempImport)
 
 // XEventListener
 void SAL_CALL SvXMLImportEventListener::disposing( const lang::EventObject& )
-    throw(uno::RuntimeException, std::exception)
 {
     if (pImport)
     {
@@ -420,7 +419,6 @@ namespace
 
 // XUnoTunnel
 sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw( uno::RuntimeException, std::exception )
 {
     if( rId.getLength() == 16 &&
         0 == memcmp( theSvXMLImportUnoTunnelId::get().getSeq().getConstArray(),
@@ -433,7 +431,6 @@ sal_Int64 SAL_CALL SvXMLImport::getSomething( const uno::Sequence< sal_Int8 >& r
 
 // XFastParser
 void SAL_CALL SvXMLImport::parseStream( const xml::sax::InputSource& aInputSource )
-    throw (xml::sax::SAXException, io::IOException, uno::RuntimeException, std::exception)
 {
     if ( mxFastDocumentHandler.is() )
         mxParser->setFastDocumentHandler( mxFastDocumentHandler );
@@ -445,58 +442,47 @@ void SAL_CALL SvXMLImport::parseStream( const xml::sax::InputSource& aInputSourc
 }
 
 void SAL_CALL SvXMLImport::setFastDocumentHandler( const uno::Reference< xml::sax::XFastDocumentHandler >& Handler )
-    throw (uno::RuntimeException, std::exception)
 {
     mxFastDocumentHandler = Handler;
 }
 
 void SAL_CALL SvXMLImport::setTokenHandler( const uno::Reference< xml::sax::XFastTokenHandler >& Handler )
-    throw (uno::RuntimeException, std::exception)
 {
     mxParser->setTokenHandler( Handler );
 }
 
 void SAL_CALL SvXMLImport::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
-    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     mxParser->registerNamespace( NamespaceURL, NamespaceToken );
 }
 
 OUString SAL_CALL SvXMLImport::getNamespaceURL( const OUString& rPrefix )
-    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     return mxParser->getNamespaceURL( rPrefix );
 }
 
 void SAL_CALL SvXMLImport::setErrorHandler( const uno::Reference< xml::sax::XErrorHandler >& Handler )
-    throw (uno::RuntimeException, std::exception)
 {
     mxParser->setErrorHandler( Handler );
 }
 
 void SAL_CALL SvXMLImport::setEntityResolver( const uno::Reference< xml::sax::XEntityResolver >& Resolver )
-    throw (uno::RuntimeException, std::exception)
 {
     mxParser->setEntityResolver( Resolver );
 }
 
 void SAL_CALL SvXMLImport::setLocale( const lang::Locale& rLocale )
-    throw (uno::RuntimeException, std::exception)
 {
     mxParser->setLocale( rLocale );
 }
 
 void SAL_CALL SvXMLImport::setNamespaceHandler( const uno::Reference< xml::sax::XFastNamespaceHandler >& Handler)
-    throw (uno::RuntimeException, std::exception)
 {
     mxParser->setNamespaceHandler( Handler );
 }
 
 
 void SAL_CALL SvXMLImport::startDocument()
-    throw (xml::sax::SAXException,
-           uno::RuntimeException,
-           std::exception)
 {
     SAL_INFO( "xmloff.core", "{ SvXMLImport::startDocument" );
     if( !mxGraphicResolver.is() || !mxEmbeddedResolver.is() )
@@ -532,9 +518,6 @@ void SAL_CALL SvXMLImport::startDocument()
 }
 
 void SAL_CALL SvXMLImport::endDocument()
-    throw(xml::sax::SAXException,
-          uno::RuntimeException,
-          std::exception)
 {
     SAL_INFO( "xmloff.core", "} SvXMLImport::endDocument" );
     //  #i9518# All the stuff that accesses the document has to be done here, not in the dtor,
@@ -676,7 +659,6 @@ std::unique_ptr<SvXMLNamespaceMap> SvXMLImport::processNSAttributes(
 
 void SAL_CALL SvXMLImport::startElement( const OUString& rName,
                                          const uno::Reference< xml::sax::XAttributeList >& xAttrList )
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     //    SAL_INFO("svg", "startElement " << rName);
     // Process namespace attributes. This must happen before creating the
@@ -732,7 +714,6 @@ void SAL_CALL SvXMLImport::endElement( const OUString&
 rName
 #endif
 )
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     if (maContexts.empty())
     {
@@ -772,7 +753,6 @@ rName
 }
 
 void SAL_CALL SvXMLImport::characters( const OUString& rChars )
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     if ( !maFastContexts.empty() )
     {
@@ -793,18 +773,15 @@ void SvXMLImport::Characters( const OUString& rChars )
 }
 
 void SAL_CALL SvXMLImport::ignorableWhitespace( const OUString& )
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SvXMLImport::processingInstruction( const OUString&,
                                        const OUString& )
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& rLocator )
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     mxLocator = rLocator;
 }
@@ -812,7 +789,6 @@ void SAL_CALL SvXMLImport::setDocumentLocator( const uno::Reference< xml::sax::X
 // XFastContextHandler
 void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     //Namespace handling is unnecessary. It is done by the fastparser itself.
     uno::Reference<XFastContextHandler> xContext;
@@ -850,7 +826,6 @@ void SAL_CALL SvXMLImport::startFastElement (sal_Int32 Element,
 
 void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const OUString & rLocalName,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     uno::Reference<XFastContextHandler> xContext;
     if (!maFastContexts.empty())
@@ -869,7 +844,6 @@ void SAL_CALL SvXMLImport::startUnknownElement (const OUString & rPrefix, const 
 }
 
 void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     if (!maFastContexts.empty())
     {
@@ -885,7 +859,6 @@ void SAL_CALL SvXMLImport::endFastElement (sal_Int32 Element)
 }
 
 void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     if (!maFastContexts.empty())
     {
@@ -899,7 +872,6 @@ void SAL_CALL SvXMLImport::endUnknownElement (const OUString & rPrefix, const OU
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     SvXMLImport::createFastChildContext (sal_Int32,
     const uno::Reference< xml::sax::XFastAttributeList > &)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     return this;
 }
@@ -907,32 +879,28 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     SvXMLImport::createUnknownChildContext (const OUString &, const OUString &,
     const uno::Reference< xml::sax::XFastAttributeList > &)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     return this;
 }
 
 // XExtendedDocumentHandler
-void SAL_CALL SvXMLImport::startCDATA() throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL SvXMLImport::startCDATA()
 {
 }
 
-void SAL_CALL SvXMLImport::endCDATA() throw(uno::RuntimeException, std::exception)
+void SAL_CALL SvXMLImport::endCDATA()
 {
 }
 
 void SAL_CALL SvXMLImport::comment( const OUString& )
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SvXMLImport::allowLineBreak()
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL SvXMLImport::unknown( const OUString& )
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
@@ -944,7 +912,6 @@ void SvXMLImport::SetStatistics(const uno::Sequence< beans::NamedValue> &)
 
 // XImporter
 void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
-    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     mxModel.set( xDoc, UNO_QUERY );
     if( !mxModel.is() )
@@ -980,19 +947,16 @@ void SAL_CALL SvXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 
 // XFilter
 sal_Bool SAL_CALL SvXMLImport::filter( const uno::Sequence< beans::PropertyValue >& )
-    throw (uno::RuntimeException, std::exception)
 {
     return false;
 }
 
 void SAL_CALL SvXMLImport::cancel(  )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
 // XInitialize
 void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
-    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     const sal_Int32 nAnyCount = aArguments.getLength();
     const uno::Any* pAny = aArguments.getConstArray();
@@ -1098,19 +1062,16 @@ void SAL_CALL SvXMLImport::initialize( const uno::Sequence< uno::Any >& aArgumen
 
 // XServiceInfo
 OUString SAL_CALL SvXMLImport::getImplementationName()
-    throw(uno::RuntimeException, std::exception)
 {
     return mpImpl->implementationName;
 }
 
 sal_Bool SAL_CALL SvXMLImport::supportsService( const OUString& rServiceName )
-    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SvXMLImport::getSupportedServiceNames(  )
-    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aSeq(2);
     aSeq[0] = "com.sun.star.document.ImportFilter";
@@ -2118,14 +2079,12 @@ void SvXMLImportFastNamespaceHandler::addNSDeclAttributes( rtl::Reference < comp
 }
 
 void SvXMLImportFastNamespaceHandler::registerNamespace( const OUString& rNamespacePrefix, const OUString& rNamespaceURI )
-                            throw (uno::RuntimeException, std::exception)
 {
     m_aNamespaceDefines.push_back( o3tl::make_unique<NamespaceDefine>(
                                     rNamespacePrefix, rNamespaceURI) );
 }
 
 OUString SvXMLImportFastNamespaceHandler::getNamespaceURI( const OUString&/* rNamespacePrefix */ )
-                            throw (uno::RuntimeException, std::exception)
 {
     return OUString();
 }

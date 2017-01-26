@@ -44,7 +44,7 @@ sdbcx::ObjectType OGroups::createObject(const OUString& _rName)
     return new OAdoGroup(m_pCatalog,isCaseSensitive(),_rName);
 }
 
-void OGroups::impl_refresh() throw(RuntimeException)
+void OGroups::impl_refresh()
 {
     m_aCollection.Refresh();
 }

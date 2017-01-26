@@ -159,13 +159,11 @@ std::vector<css::datatransfer::DataFlavor> GtkTransferable::getTransferDataFlavo
 
 
 css::uno::Sequence<css::datatransfer::DataFlavor> SAL_CALL GtkTransferable::getTransferDataFlavors()
-        throw(css::uno::RuntimeException, std::exception)
 {
     return comphelper::containerToSequence(getTransferDataFlavorsAsVector());
 }
 
 sal_Bool SAL_CALL GtkTransferable::isDataFlavorSupported(const css::datatransfer::DataFlavor& rFlavor)
-        throw(css::uno::RuntimeException, std::exception)
 {
     const std::vector<css::datatransfer::DataFlavor> aAll =
         getTransferDataFlavorsAsVector();
@@ -188,11 +186,7 @@ public:
      * XTransferable
      */
 
-    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor)
-        throw(css::datatransfer::UnsupportedFlavorException,
-              css::io::IOException,
-              css::uno::RuntimeException, std::exception
-              ) override
+    virtual css::uno::Any SAL_CALL getTransferData(const css::datatransfer::DataFlavor& rFlavor) override
     {
         GtkClipboard* clipboard = gtk_clipboard_get(m_nSelection);
         if (rFlavor.MimeType == "text/plain;charset=utf-16")
@@ -270,71 +264,64 @@ public:
      * XServiceInfo
      */
 
-    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception ) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /*
      * XClipboard
      */
 
-    virtual Reference< css::datatransfer::XTransferable > SAL_CALL getContents()
-        throw(RuntimeException, std::exception) override;
+    virtual Reference< css::datatransfer::XTransferable > SAL_CALL getContents() override;
 
     virtual void SAL_CALL setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
-        const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-        throw(RuntimeException, std::exception) override;
+        const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner ) override;
 
-    virtual OUString SAL_CALL getName()
-        throw(RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName() override;
 
     /*
      * XClipboardEx
      */
 
-    virtual sal_Int8 SAL_CALL getRenderingCapabilities()
-        throw(RuntimeException, std::exception) override;
+    virtual sal_Int8 SAL_CALL getRenderingCapabilities() override;
 
     /*
      * XFlushableClipboard
      */
-    virtual void SAL_CALL flushClipboard()
-        throw(RuntimeException, std::exception) override;
+    virtual void SAL_CALL flushClipboard() override;
 
     /*
      * XClipboardNotifier
      */
     virtual void SAL_CALL addClipboardListener(
-        const Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
-        throw(RuntimeException, std::exception) override;
+        const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
     virtual void SAL_CALL removeClipboardListener(
-        const Reference< css::datatransfer::clipboard::XClipboardListener >& listener )
-        throw(RuntimeException, std::exception) override;
+        const Reference< css::datatransfer::clipboard::XClipboardListener >& listener ) override;
 
     void ClipboardGet(GtkClipboard *clipboard, GtkSelectionData *selection_data, guint info);
     void ClipboardClear(GtkClipboard *clipboard);
     void OwnerPossiblyChanged(GtkClipboard *clipboard, GdkEvent *event);
 };
 
-OUString VclGtkClipboard::getImplementationName() throw( RuntimeException, std::exception )
+OUString VclGtkClipboard::getImplementationName()
 {
     return OUString("com.sun.star.datatransfer.VclGtkClipboard");
 }
 
-Sequence< OUString > VclGtkClipboard::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > VclGtkClipboard::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { "com.sun.star.datatransfer.clipboard.SystemClipboard" };
     return aRet;
 }
 
-sal_Bool VclGtkClipboard::supportsService( const OUString& ServiceName ) throw( RuntimeException, std::exception )
+sal_Bool VclGtkClipboard::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents() throw( RuntimeException, std::exception )
+Reference< css::datatransfer::XTransferable > VclGtkClipboard::getContents()
 {
     if (!m_aContents.is())
     {
@@ -536,7 +523,6 @@ VclGtkClipboard::VclGtkClipboard(GdkAtom nSelection)
 }
 
 void VclGtkClipboard::flushClipboard()
-  throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -603,7 +589,6 @@ std::vector<GtkTargetEntry> VclToGtkHelper::FormatsToGtk(const css::uno::Sequenc
 void VclGtkClipboard::setContents(
         const Reference< css::datatransfer::XTransferable >& xTrans,
         const Reference< css::datatransfer::clipboard::XClipboardOwner >& xClipboardOwner )
-    throw(RuntimeException, std::exception)
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
     Reference< datatransfer::clipboard::XClipboardOwner > xOldOwner( m_aOwner );
@@ -655,18 +640,17 @@ void VclGtkClipboard::setContents(
     }
 }
 
-OUString VclGtkClipboard::getName() throw( RuntimeException, std::exception )
+OUString VclGtkClipboard::getName()
 {
     return (m_nSelection == GDK_SELECTION_CLIPBOARD) ? OUString("CLIPBOARD") : OUString("PRIMARY");
 }
 
-sal_Int8 VclGtkClipboard::getRenderingCapabilities() throw( RuntimeException, std::exception )
+sal_Int8 VclGtkClipboard::getRenderingCapabilities()
 {
     return 0;
 }
 
 void VclGtkClipboard::addClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
-    throw( RuntimeException, std::exception )
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -674,7 +658,6 @@ void VclGtkClipboard::addClipboardListener( const Reference< datatransfer::clipb
 }
 
 void VclGtkClipboard::removeClipboardListener( const Reference< datatransfer::clipboard::XClipboardListener >& listener )
-    throw( RuntimeException, std::exception )
 {
     osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -713,19 +696,16 @@ GtkDropTarget::GtkDropTarget()
 }
 
 OUString SAL_CALL GtkDropTarget::getImplementationName()
-            throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.datatransfer.dnd.VclGtkDropTarget");
 }
 
 sal_Bool SAL_CALL GtkDropTarget::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> SAL_CALL GtkDropTarget::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GtkDropTarget" };
     return aRet;
@@ -743,7 +723,7 @@ void GtkDropTarget::deinitialize()
     m_bActive = false;
 }
 
-void GtkDropTarget::initialize(const Sequence<Any>& rArguments) throw( Exception, std::exception )
+void GtkDropTarget::initialize(const Sequence<Any>& rArguments)
 {
     if (rArguments.getLength() < 2)
     {
@@ -765,14 +745,14 @@ void GtkDropTarget::initialize(const Sequence<Any>& rArguments) throw( Exception
     m_bActive = true;
 }
 
-void GtkDropTarget::addDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener) throw(std::exception)
+void GtkDropTarget::addDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
     m_aListeners.push_back( xListener );
 }
 
-void GtkDropTarget::removeDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener) throw(std::exception)
+void GtkDropTarget::removeDropTargetListener( const Reference< css::datatransfer::dnd::XDropTargetListener >& xListener)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -827,22 +807,22 @@ void GtkDropTarget::fire_dragExit(const css::datatransfer::dnd::DropTargetEvent&
     }
 }
 
-sal_Bool GtkDropTarget::isActive() throw(std::exception)
+sal_Bool GtkDropTarget::isActive()
 {
     return m_bActive;
 }
 
-void GtkDropTarget::setActive(sal_Bool bActive) throw(std::exception)
+void GtkDropTarget::setActive(sal_Bool bActive)
 {
     m_bActive = bActive;
 }
 
-sal_Int8 GtkDropTarget::getDefaultActions() throw(std::exception)
+sal_Int8 GtkDropTarget::getDefaultActions()
 {
     return m_nDefaultActions;
 }
 
-void GtkDropTarget::setDefaultActions(sal_Int8 nDefaultActions) throw(std::exception)
+void GtkDropTarget::setDefaultActions(sal_Int8 nDefaultActions)
 {
     m_nDefaultActions = nDefaultActions;
 }
@@ -869,17 +849,17 @@ void GtkDragSource::deinitialize()
     m_pFrame = nullptr;
 }
 
-sal_Bool GtkDragSource::isDragImageSupported() throw(std::exception)
+sal_Bool GtkDragSource::isDragImageSupported()
 {
     return true;
 }
 
-sal_Int32 GtkDragSource::getDefaultCursor( sal_Int8 ) throw(std::exception)
+sal_Int32 GtkDragSource::getDefaultCursor( sal_Int8 )
 {
     return 0;
 }
 
-void GtkDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArguments) throw(Exception, std::exception)
+void GtkDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArguments)
 {
     if (rArguments.getLength() < 2)
     {
@@ -901,19 +881,16 @@ void GtkDragSource::initialize(const css::uno::Sequence<css::uno::Any >& rArgume
 }
 
 OUString SAL_CALL GtkDragSource::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.datatransfer.dnd.VclGtkDragSource");
 }
 
 sal_Bool SAL_CALL GtkDragSource::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> SAL_CALL GtkDragSource::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     Sequence<OUString> aRet { "com.sun.star.datatransfer.dnd.GtkDragSource" };
     return aRet;

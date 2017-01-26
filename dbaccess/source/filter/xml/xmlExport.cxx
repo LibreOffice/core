@@ -68,18 +68,18 @@ namespace dbaxml
     {
     public:
         /// @throws RuntimeException
-        static OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
+        static OUString SAL_CALL getImplementationName_Static(  );
         /// @throws RuntimeException
-        static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
         static Reference< XInterface > SAL_CALL Create(const Reference< css::lang::XMultiServiceFactory >&);
     };
     class ODBFullExportHelper
     {
     public:
         /// @throws RuntimeException
-        static OUString SAL_CALL getImplementationName_Static(  ) throw (RuntimeException);
+        static OUString SAL_CALL getImplementationName_Static(  );
         /// @throws RuntimeException
-        static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(RuntimeException);
+        static Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
         static Reference< XInterface > SAL_CALL Create(const Reference< css::lang::XMultiServiceFactory >&);
     };
 }
@@ -112,12 +112,12 @@ namespace dbaxml
         return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), getImplementationName_Static(), SvXMLExportFlags::SETTINGS | SvXMLExportFlags::PRETTY ));
     }
 
-    OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    OUString SAL_CALL ODBExportHelper::getImplementationName_Static(  )
     {
         return OUString("com.sun.star.comp.sdb.XMLSettingsExporter");
     }
 
-    Sequence< OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ODBExportHelper::getSupportedServiceNames_Static(  )
     {
         Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
         return aSupported;
@@ -127,11 +127,11 @@ namespace dbaxml
     {
         return static_cast< XServiceInfo* >(new ODBExport(comphelper::getComponentContext(_rxORB), getImplementationName_Static(), SvXMLExportFlags::ALL));
     }
-    OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  ) throw (RuntimeException)
+    OUString SAL_CALL ODBFullExportHelper::getImplementationName_Static(  )
     {
         return OUString("com.sun.star.comp.sdb.XMLFullExporter");
     }
-    Sequence< OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  ) throw(RuntimeException)
+    Sequence< OUString > SAL_CALL ODBFullExportHelper::getSupportedServiceNames_Static(  )
     {
         Sequence< OUString > aSupported { "com.sun.star.document.ExportFilter" };
         return aSupported;
@@ -253,13 +253,11 @@ ODBExport::ODBExport(const Reference< XComponentContext >& _rxContext, OUString 
 }
 
 OUString ODBExport::getImplementationName_Static()
-    throw (css::uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.sdb.DBExportFilter");
 }
 
 css::uno::Sequence<OUString> ODBExport::getSupportedServiceNames_Static()
-    throw (css::uno::RuntimeException)
 {
     css::uno::Sequence<OUString> s { "com.sun.star.document.ExportFilter" };
     return s;
@@ -1387,7 +1385,7 @@ SvXMLAutoStylePoolP* ODBExport::CreateAutoStylePool()
     return new OXMLAutoStylePoolP(*this);
 }
 
-void SAL_CALL ODBExport::setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL ODBExport::setSourceDocument( const Reference< XComponent >& xDoc )
 {
     Reference<XOfficeDatabaseDocument> xOfficeDoc(xDoc,UNO_QUERY_THROW);
     m_xDataSource.set(xOfficeDoc->getDataSource(),UNO_QUERY_THROW);

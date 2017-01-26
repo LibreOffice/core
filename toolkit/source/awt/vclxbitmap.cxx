@@ -30,7 +30,7 @@
 
 
 // css::uno::XInterface
-css::uno::Any VCLXBitmap::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXBitmap::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XBitmap* >(this)),
@@ -51,7 +51,7 @@ IMPL_XTYPEPROVIDER_END
 
 
 // css::awt::XBitmap
-css::awt::Size VCLXBitmap::getSize() throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXBitmap::getSize()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -59,7 +59,7 @@ css::awt::Size VCLXBitmap::getSize() throw(css::uno::RuntimeException, std::exce
     return aSize;
 }
 
-css::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB() throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -68,7 +68,7 @@ css::uno::Sequence< sal_Int8 > VCLXBitmap::getDIB() throw(css::uno::RuntimeExcep
     return css::uno::Sequence<sal_Int8>( static_cast<sal_Int8 const *>(aMem.GetData()), aMem.Tell() );
 }
 
-css::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB() throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int8 > VCLXBitmap::getMaskDIB()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 

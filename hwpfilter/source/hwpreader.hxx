@@ -84,8 +84,8 @@ public:
     /**
      * parseStream does Parser-startup initializations
      */
-    virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel() throw(RuntimeException, std::exception) override {}
+    virtual sal_Bool SAL_CALL filter(const Sequence< PropertyValue >& aDescriptor) override;
+    virtual void SAL_CALL cancel() override {}
     void SAL_CALL setDocumentHandler(Reference< XDocumentHandler > const & xHandler)
     {
         m_rxDocumentHandler = xHandler;
@@ -162,21 +162,19 @@ public:
 
 public:
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor )
-        throw( RuntimeException, std::exception ) override;
-    virtual void SAL_CALL cancel() throw(RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
+    virtual void SAL_CALL cancel() override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override;
-    Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
+    Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
+    sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) override;
 
 public:
     Reference< XFilter > rFilter;
@@ -185,7 +183,7 @@ public:
 
 /// @throws Exception
 Reference< XInterface > HwpImportFilter_CreateInstance(
-    const Reference< XMultiServiceFactory >& rSMgr ) throw( Exception )
+    const Reference< XMultiServiceFactory >& rSMgr )
 {
     HwpImportFilter *p = new HwpImportFilter( rSMgr );
 
@@ -224,19 +222,17 @@ HwpImportFilter::~HwpImportFilter()
 }
 
 sal_Bool HwpImportFilter::filter( const Sequence< PropertyValue >& aDescriptor )
-    throw( RuntimeException, std::exception )
 {
     // delegate to IchitaroImpoter
     return rFilter->filter( aDescriptor );
 }
 
-void HwpImportFilter::cancel() throw(css::uno::RuntimeException, std::exception)
+void HwpImportFilter::cancel()
 {
     rFilter->cancel();
 }
 
 void HwpImportFilter::setTargetDocument( const Reference< XComponent >& xDoc )
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
         // delegate
     rImporter->setTargetDocument( xDoc );
@@ -247,18 +243,18 @@ OUString HwpImportFilter::getImplementationName_Static() throw()
     return OUString( IMPLEMENTATION_NAME );
 }
 
-OUString HwpImportFilter::getImplementationName() throw(css::uno::RuntimeException, std::exception)
+OUString HwpImportFilter::getImplementationName()
 {
     return OUString( IMPLEMENTATION_NAME );
 }
 
-sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool HwpImportFilter::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 //XExtendedFilterDetection
-OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor ) throw (css::uno::RuntimeException, std::exception)
+OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue >& rDescriptor )
 {
     OUString sTypeName;
 
@@ -284,7 +280,7 @@ OUString HwpImportFilter::detect( css::uno::Sequence< css::beans::PropertyValue 
     return sTypeName;
 }
 
-Sequence< OUString> HwpImportFilter::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
+Sequence< OUString> HwpImportFilter::getSupportedServiceNames()
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();

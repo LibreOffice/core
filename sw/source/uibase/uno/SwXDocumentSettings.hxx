@@ -47,23 +47,13 @@ protected:
      * _postSetValues */
     VclPtr<SfxPrinter>      mpPrinter;
 
-    virtual void _preSetValues ()
-        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
-    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const css::uno::Any &rValue )
-        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
-               css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override;
-    virtual void _postSetValues ()
-        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
+    virtual void _preSetValues () override;
+    virtual void _setSingleValue( const comphelper::PropertyInfo & rInfo, const css::uno::Any &rValue ) override;
+    virtual void _postSetValues () override;
 
-    virtual void _preGetValues ()
-        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
-    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue )
-        throw (css::beans::UnknownPropertyException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException) override;
-    virtual void _postGetValues ()
-        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException ) override;
+    virtual void _preGetValues () override;
+    virtual void _getSingleValue( const comphelper::PropertyInfo & rInfo, css::uno::Any & rValue ) override;
+    virtual void _postGetValues () override;
 protected:
     virtual ~SwXDocumentSettings()
         throw() override;
@@ -71,24 +61,20 @@ public:
     SwXDocumentSettings( SwXTextDocument* pModel );
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
     virtual void SAL_CALL acquire(  )
         throw () override;
     virtual void SAL_CALL release(  )
         throw () override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  )
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 };
 #endif
 

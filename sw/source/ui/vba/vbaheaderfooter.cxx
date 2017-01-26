@@ -29,27 +29,27 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaHeaderFooter::SwVbaHeaderFooter( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& rProps, bool isHeader, sal_Int32 index ) throw ( uno::RuntimeException ) : SwVbaHeaderFooter_BASE( rParent, rContext ), mxModel( xModel ), mxPageStyleProps( rProps ), mbHeader( isHeader ), mnIndex( index )
+SwVbaHeaderFooter::SwVbaHeaderFooter( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& rProps, bool isHeader, sal_Int32 index ) : SwVbaHeaderFooter_BASE( rParent, rContext ), mxModel( xModel ), mxPageStyleProps( rProps ), mbHeader( isHeader ), mnIndex( index )
 {
 }
 
-sal_Bool SAL_CALL SwVbaHeaderFooter::getIsHeader() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaHeaderFooter::getIsHeader()
 {
     return mbHeader;
 }
 
-sal_Bool SAL_CALL SwVbaHeaderFooter::getLinkToPrevious() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaHeaderFooter::getLinkToPrevious()
 {
     // seems always false
     return false;
 }
 
-void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( sal_Bool /*_linktoprevious*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaHeaderFooter::setLinkToPrevious( sal_Bool /*_linktoprevious*/ )
 {
     // not support in Writer
 }
 
-uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange() throw (uno::RuntimeException, std::exception)
+uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange()
 {
     OUString sPropsNameText;
     if( mbHeader )
@@ -71,7 +71,7 @@ uno::Reference< word::XRange > SAL_CALL SwVbaHeaderFooter::getRange() throw (uno
 }
 
 uno::Any SAL_CALL
-SwVbaHeaderFooter::Shapes( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
+SwVbaHeaderFooter::Shapes( const uno::Any& index )
 {
     // #FIXME: only get the shapes in the current header/footer
     uno::Reference< drawing::XDrawPageSupplier > xDrawPageSupplier( mxModel, uno::UNO_QUERY_THROW );

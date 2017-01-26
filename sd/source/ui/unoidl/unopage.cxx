@@ -329,7 +329,7 @@ const css::uno::Sequence< sal_Int8 > & SdGenericDrawPage::getUnoTunnelId() throw
     return theSdGenericDrawPageUnoTunnelId::get().getSeq();
 }
 
-sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL SdGenericDrawPage::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
         if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
             rId.getConstArray(), 16 ) )
@@ -361,7 +361,7 @@ SdGenericDrawPage::~SdGenericDrawPage() throw()
 {
 }
 
-void SdGenericDrawPage::throwIfDisposed() const throw (css::uno::RuntimeException )
+void SdGenericDrawPage::throwIfDisposed() const
 {
     if( (SvxFmDrawPage::mpModel == nullptr) || (mpModel == nullptr) || (SvxFmDrawPage::mpPage == nullptr) )
         throw lang::DisposedException();
@@ -399,7 +399,6 @@ void SdGenericDrawPage::UpdateModel()
 
 // this is called whenever a SdrObject must be created for a empty api shape wrapper
 SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShape >& xShape )
-    throw (css::uno::RuntimeException, std::exception)
 {
     if( nullptr == SvxFmDrawPage::mpPage || !xShape.is() )
         return nullptr;
@@ -542,7 +541,6 @@ SdrObject * SdGenericDrawPage::CreateSdrObject_( const Reference< drawing::XShap
 
 // XInterface
 Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
-    throw(uno::RuntimeException, std::exception)
 {
     Any aAny;
 
@@ -597,7 +595,6 @@ Any SAL_CALL SdGenericDrawPage::queryInterface( const uno::Type & rType )
 
 // XPropertySet
 Reference< beans::XPropertySetInfo > SAL_CALL SdGenericDrawPage::getPropertySetInfo()
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -605,12 +602,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL SdGenericDrawPage::getPropertySetI
 }
 
 void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
-    throw (beans::UnknownPropertyException,
-           beans::PropertyVetoException,
-           lang::IllegalArgumentException,
-           lang::WrappedTargetException,
-           uno::RuntimeException,
-           std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1018,7 +1009,6 @@ void SAL_CALL SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName
 }
 
 Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
-    throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1332,13 +1322,13 @@ Any SAL_CALL SdGenericDrawPage::getPropertyValue( const OUString& PropertyName )
     return aAny;
 }
 
-void SAL_CALL SdGenericDrawPage::addPropertyChangeListener( const OUString& , const Reference< beans::XPropertyChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
-void SAL_CALL SdGenericDrawPage::removePropertyChangeListener( const OUString& , const Reference< beans::XPropertyChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
-void SAL_CALL SdGenericDrawPage::addVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
-void SAL_CALL SdGenericDrawPage::removeVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) throw(beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception) {}
+void SAL_CALL SdGenericDrawPage::addPropertyChangeListener( const OUString& , const Reference< beans::XPropertyChangeListener >&  ) {}
+void SAL_CALL SdGenericDrawPage::removePropertyChangeListener( const OUString& , const Reference< beans::XPropertyChangeListener >&  ) {}
+void SAL_CALL SdGenericDrawPage::addVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) {}
+void SAL_CALL SdGenericDrawPage::removeVetoableChangeListener( const OUString& , const Reference< beans::XVetoableChangeListener >&  ) {}
 
 // XMultiPropertySet
-void SAL_CALL SdGenericDrawPage::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues ) throw (beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SdGenericDrawPage::setPropertyValues( const Sequence< OUString >& aPropertyNames, const Sequence< Any >& aValues )
 {
     if( aPropertyNames.getLength() != aValues.getLength() )
         throw lang::IllegalArgumentException();
@@ -1360,7 +1350,7 @@ void SAL_CALL SdGenericDrawPage::setPropertyValues( const Sequence< OUString >& 
     }
 }
 
-Sequence< Any > SAL_CALL SdGenericDrawPage::getPropertyValues( const Sequence< OUString >& aPropertyNames ) throw (RuntimeException, std::exception)
+Sequence< Any > SAL_CALL SdGenericDrawPage::getPropertyValues( const Sequence< OUString >& aPropertyNames )
 {
     const OUString* pNames = aPropertyNames.getConstArray();
     sal_uInt32 nCount = aPropertyNames.getLength();
@@ -1383,20 +1373,19 @@ Sequence< Any > SAL_CALL SdGenericDrawPage::getPropertyValues( const Sequence< O
     return aValues;
 }
 
-void SAL_CALL SdGenericDrawPage::addPropertiesChangeListener( const Sequence< OUString >& , const Reference< beans::XPropertiesChangeListener >&  ) throw (RuntimeException, std::exception)
+void SAL_CALL SdGenericDrawPage::addPropertiesChangeListener( const Sequence< OUString >& , const Reference< beans::XPropertiesChangeListener >&  )
 {
 }
 
-void SAL_CALL SdGenericDrawPage::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >&  ) throw (RuntimeException, std::exception)
+void SAL_CALL SdGenericDrawPage::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >&  )
 {
 }
 
-void SAL_CALL SdGenericDrawPage::firePropertiesChangeEvent( const Sequence< OUString >& , const Reference< beans::XPropertiesChangeListener >&  ) throw (RuntimeException, std::exception)
+void SAL_CALL SdGenericDrawPage::firePropertiesChangeEvent( const Sequence< OUString >& , const Reference< beans::XPropertiesChangeListener >&  )
 {
 }
 
 Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) const
-    throw (RuntimeException, std::exception)
 {
     DBG_ASSERT( GetPage(), "SdGenericDrawPage::CreateShape(), can't create shape for disposed page!" );
     DBG_ASSERT( pObj, "SdGenericDrawPage::CreateShape(), invalid call with pObj == 0!" );
@@ -1529,7 +1518,6 @@ Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) co
 
 // XServiceInfo
 Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
-    throw(uno::RuntimeException, std::exception)
 {
     Sequence< OUString > aSeq( SvxFmDrawPage::getSupportedServiceNames() );
     comphelper::ServiceInfoHelper::addToSequence( aSeq, {"com.sun.star.drawing.GenericDrawPage",
@@ -1540,17 +1528,16 @@ Sequence< OUString > SAL_CALL SdGenericDrawPage::getSupportedServiceNames()
 
 // XLinkTargetSupplier
 Reference< container::XNameAccess > SAL_CALL SdGenericDrawPage::getLinks(  )
-    throw(uno::RuntimeException, std::exception)
 {
     return new SdPageLinkTargets( this );
 }
 
-void SdGenericDrawPage::setBackground( const Any& ) throw(lang::IllegalArgumentException, std::exception)
+void SdGenericDrawPage::setBackground( const Any& )
 {
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
 
-void SdGenericDrawPage::getBackground( Any& ) throw(std::exception)
+void SdGenericDrawPage::getBackground( Any& )
 {
     OSL_FAIL( "Don't call me, I'm useless!" );
 }
@@ -1595,7 +1582,6 @@ void SdGenericDrawPage::setBookmarkURL( OUString& rURL )
 }
 
 Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Reference< drawing::XShapes >& xShapes )
-    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -1631,7 +1617,6 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::combine( const Referenc
 }
 
 void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGroup )
-    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -1649,7 +1634,6 @@ void SAL_CALL SdGenericDrawPage::split( const Reference< drawing::XShape >& xGro
 }
 
 Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< drawing::XShapes >& xShapes )
-    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -1682,7 +1666,6 @@ Reference< drawing::XShape > SAL_CALL SdGenericDrawPage::bind( const Reference< 
 }
 
 void SAL_CALL SdGenericDrawPage::unbind( const Reference< drawing::XShape >& xShape )
-    throw( uno::RuntimeException, std::exception )
 {
     ::SolarMutexGuard aGuard;
 
@@ -1896,7 +1879,7 @@ void SdGenericDrawPage::disposing() throw()
 }
 
 // XAnimationNodeSupplier
-Reference< XAnimationNode > SAL_CALL SdGenericDrawPage::getAnimationNode() throw (uno::RuntimeException, std::exception)
+Reference< XAnimationNode > SAL_CALL SdGenericDrawPage::getAnimationNode()
 {
     ::SolarMutexGuard aGuard;
 
@@ -1920,13 +1903,11 @@ SdPageLinkTargets::~SdPageLinkTargets() throw()
 
 // XElementAccess
 uno::Type SAL_CALL SdPageLinkTargets::getElementType()
-    throw(uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<beans::XPropertySet>::get();
 }
 
 sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1953,7 +1934,6 @@ sal_Bool SAL_CALL SdPageLinkTargets::hasElements()
 
 // XNameAccess
 Any SAL_CALL SdPageLinkTargets::getByName( const OUString& aName )
-    throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1972,7 +1952,6 @@ Any SAL_CALL SdPageLinkTargets::getByName( const OUString& aName )
 }
 
 Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2014,7 +1993,6 @@ Sequence< OUString > SAL_CALL SdPageLinkTargets::getElementNames()
 }
 
 sal_Bool SAL_CALL SdPageLinkTargets::hasByName( const OUString& aName )
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2044,19 +2022,16 @@ SdrObject* SdPageLinkTargets::FindObject( const OUString& rName ) const throw()
 
 // XServiceInfo
 OUString SAL_CALL SdPageLinkTargets::getImplementationName()
-    throw(uno::RuntimeException, std::exception)
 {
     return OUString( "SdPageLinkTargets" );
 }
 
 sal_Bool SAL_CALL SdPageLinkTargets::supportsService( const OUString& ServiceName )
-    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 Sequence< OUString > SAL_CALL SdPageLinkTargets::getSupportedServiceNames()
-    throw(uno::RuntimeException, std::exception)
 {
     Sequence< OUString > aSeq { "com.sun.star.document.LinkTargets" };
     return aSeq;
@@ -2074,7 +2049,6 @@ SdDrawPage::~SdDrawPage() throw()
 
 // XInterface
 Any SAL_CALL SdDrawPage::queryInterface( const uno::Type & rType )
-    throw(uno::RuntimeException, std::exception)
 {
     if( rType == cppu::UnoType<drawing::XMasterPageTarget>::get() )
     {
@@ -2106,7 +2080,7 @@ void SAL_CALL SdDrawPage::release() throw()
 UNO3_GETIMPLEMENTATION2_IMPL( SdDrawPage, SdGenericDrawPage );
 
 // XTypeProvider
-Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeException, std::exception)
+Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes()
 {
     ::SolarMutexGuard aGuard;
 
@@ -2154,7 +2128,7 @@ Sequence< uno::Type > SAL_CALL SdDrawPage::getTypes() throw(uno::RuntimeExceptio
     return maTypeSequence;
 }
 
-Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId() throw(uno::RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL SdDrawPage::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -2253,12 +2227,12 @@ OUString SdDrawPage::getUiNameFromPageApiName( const OUString& rApiName )
 }
 
 // XServiceInfo
-OUString SAL_CALL SdDrawPage::getImplementationName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL SdDrawPage::getImplementationName()
 {
     return OUString( "SdDrawPage" );
 }
 
-Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames()
 {
     ::SolarMutexGuard aGuard;
 
@@ -2274,14 +2248,12 @@ Sequence< OUString > SAL_CALL SdDrawPage::getSupportedServiceNames() throw(uno::
 }
 
 sal_Bool SAL_CALL SdDrawPage::supportsService( const OUString& ServiceName )
-    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 // XNamed
 void SAL_CALL SdDrawPage::setName( const OUString& rName )
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2360,7 +2332,6 @@ void SAL_CALL SdDrawPage::setName( const OUString& rName )
 }
 
 OUString SAL_CALL SdDrawPage::getName()
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2371,7 +2342,6 @@ OUString SAL_CALL SdDrawPage::getName()
 
 // XMasterPageTarget
 Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2394,7 +2364,6 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getMasterPage(  )
 }
 
 void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& xMasterPage )
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2433,7 +2402,6 @@ void SAL_CALL SdDrawPage::setMasterPage( const Reference< drawing::XDrawPage >& 
 
 // XPresentationPage
 Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getNotesPage()
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2453,39 +2421,33 @@ Reference< drawing::XDrawPage > SAL_CALL SdDrawPage::getNotesPage()
 
 // XIndexAccess
 sal_Int32 SAL_CALL SdDrawPage::getCount()
-    throw(uno::RuntimeException, std::exception)
 {
     return SdGenericDrawPage::getCount();
 }
 
 Any SAL_CALL SdDrawPage::getByIndex( sal_Int32 Index )
-    throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     return SdGenericDrawPage::getByIndex( Index );
 }
 
 // XElementAccess
 uno::Type SAL_CALL SdDrawPage::getElementType()
-    throw(uno::RuntimeException, std::exception)
 {
     return SdGenericDrawPage::getElementType();
 }
 
 sal_Bool SAL_CALL SdDrawPage::hasElements()
-    throw(uno::RuntimeException, std::exception)
 {
     return SdGenericDrawPage::hasElements();
 }
 
 // XShapes
-void SAL_CALL SdDrawPage::add( const Reference< drawing::XShape >& xShape ) throw(uno::RuntimeException, std::exception)
+void SAL_CALL SdDrawPage::add( const Reference< drawing::XShape >& xShape )
 {
     SdGenericDrawPage::add( xShape );
 }
 
 void SAL_CALL SdDrawPage::remove( const Reference< drawing::XShape >& xShape )
-    throw (uno::RuntimeException,
-           std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2506,7 +2468,6 @@ void SAL_CALL SdDrawPage::remove( const Reference< drawing::XShape >& xShape )
 }
 
 void SdDrawPage::setBackground( const Any& rValue )
-    throw( lang::IllegalArgumentException )
 {
     Reference< beans::XPropertySet > xSet;
 
@@ -2571,7 +2532,7 @@ void SdDrawPage::setBackground( const Any& rValue )
 }
 
 // XAnnotationAccess:
-Reference< XAnnotation > SAL_CALL SdGenericDrawPage::createAndInsertAnnotation() throw (RuntimeException, std::exception)
+Reference< XAnnotation > SAL_CALL SdGenericDrawPage::createAndInsertAnnotation()
 {
     if( !GetPage() )
         throw DisposedException();
@@ -2581,12 +2542,12 @@ Reference< XAnnotation > SAL_CALL SdGenericDrawPage::createAndInsertAnnotation()
     return xRet;
 }
 
-void SAL_CALL SdGenericDrawPage::removeAnnotation(const Reference< XAnnotation > & annotation) throw (RuntimeException, IllegalArgumentException, std::exception)
+void SAL_CALL SdGenericDrawPage::removeAnnotation(const Reference< XAnnotation > & annotation)
 {
     GetPage()->removeAnnotation(annotation);
 }
 
-Reference< XAnnotationEnumeration > SAL_CALL SdGenericDrawPage::createAnnotationEnumeration() throw (RuntimeException, std::exception)
+Reference< XAnnotationEnumeration > SAL_CALL SdGenericDrawPage::createAnnotationEnumeration()
 {
     return ::sd::createAnnotationEnumeration( GetPage()->getAnnotations() );
 }
@@ -2637,12 +2598,12 @@ public:
     explicit SdNavigationOrderAccess(SdrPage* pPage);
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException, std::exception) override;
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount(  ) override;
+    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) override;
+    virtual Type SAL_CALL getElementType(  ) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) override;
 
 private:
     std::vector< Reference< XShape > > maShapes;
@@ -2665,12 +2626,12 @@ SdNavigationOrderAccess::SdNavigationOrderAccess( SdrPage* pPage )
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL SdNavigationOrderAccess::getCount(  ) throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL SdNavigationOrderAccess::getCount(  )
 {
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
-Any SAL_CALL SdNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL SdNavigationOrderAccess::getByIndex( sal_Int32 Index )
 {
     if( (Index < 0) || (Index > getCount()) )
         throw IndexOutOfBoundsException();
@@ -2679,12 +2640,12 @@ Any SAL_CALL SdNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (Index
 }
 
 // XElementAccess
-Type SAL_CALL SdNavigationOrderAccess::getElementType(  ) throw (RuntimeException, std::exception)
+Type SAL_CALL SdNavigationOrderAccess::getElementType(  )
 {
     return cppu::UnoType<XShape>::get();
 }
 
-sal_Bool SAL_CALL SdNavigationOrderAccess::hasElements(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SdNavigationOrderAccess::hasElements(  )
 {
     return !maShapes.empty();
 }
@@ -2713,7 +2674,6 @@ SdMasterPage::~SdMasterPage() throw()
 
 // XInterface
 Any SAL_CALL SdMasterPage::queryInterface( const uno::Type & rType )
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2750,7 +2710,7 @@ void SAL_CALL SdMasterPage::release() throw()
 UNO3_GETIMPLEMENTATION2_IMPL( SdMasterPage, SdGenericDrawPage );
 
 // XTypeProvider
-Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeException, std::exception)
+Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes()
 {
     ::SolarMutexGuard aGuard;
 
@@ -2797,18 +2757,18 @@ Sequence< uno::Type > SAL_CALL SdMasterPage::getTypes() throw(uno::RuntimeExcept
     return maTypeSequence;
 }
 
-Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId() throw(uno::RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL SdMasterPage::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 // XServiceInfo
-OUString SAL_CALL SdMasterPage::getImplementationName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL SdMasterPage::getImplementationName()
 {
     return OUString( "SdMasterPage" );
 }
 
-Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames()
 {
     ::SolarMutexGuard aGuard;
 
@@ -2824,13 +2784,12 @@ Sequence< OUString > SAL_CALL SdMasterPage::getSupportedServiceNames() throw(uno
 }
 
 sal_Bool SAL_CALL SdMasterPage::supportsService( const OUString& ServiceName )
-    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 // XElementAccess
-sal_Bool SAL_CALL SdMasterPage::hasElements() throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SdMasterPage::hasElements()
 {
     ::SolarMutexGuard aGuard;
 
@@ -2843,14 +2802,12 @@ sal_Bool SAL_CALL SdMasterPage::hasElements() throw(uno::RuntimeException, std::
 }
 
 uno::Type SAL_CALL SdMasterPage::getElementType()
-    throw(uno::RuntimeException, std::exception)
 {
     return SdGenericDrawPage::getElementType();
 }
 
 // XIndexAccess
 sal_Int32 SAL_CALL SdMasterPage::getCount()
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2860,7 +2817,6 @@ sal_Int32 SAL_CALL SdMasterPage::getCount()
 }
 
 Any SAL_CALL SdMasterPage::getByIndex( sal_Int32 Index )
-    throw(lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -2871,7 +2827,6 @@ Any SAL_CALL SdMasterPage::getByIndex( sal_Int32 Index )
 
 // intern
 void SdMasterPage::setBackground( const Any& rValue )
-    throw( lang::IllegalArgumentException, std::exception )
 {
     // we need at least an beans::XPropertySet
     Reference< beans::XPropertySet > xInputSet( rValue, UNO_QUERY );
@@ -2976,7 +2931,7 @@ void SdMasterPage::setBackground( const Any& rValue )
     }
 }
 
-void SdMasterPage::getBackground( Any& rValue ) throw (std::exception)
+void SdMasterPage::getBackground( Any& rValue )
 {
     if( GetModel() ) try
     {
@@ -3034,7 +2989,6 @@ void SdMasterPage::getBackground( Any& rValue ) throw (std::exception)
 
 // XNamed
 void SAL_CALL SdMasterPage::setName( const OUString& rName )
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -3077,7 +3031,6 @@ void SAL_CALL SdMasterPage::setName( const OUString& rName )
 }
 
 OUString SAL_CALL SdMasterPage::getName(  )
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -3094,7 +3047,6 @@ OUString SAL_CALL SdMasterPage::getName(  )
 
 // XPresentationPage
 Reference< drawing::XDrawPage > SAL_CALL SdMasterPage::getNotesPage()
-    throw(uno::RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -3113,14 +3065,12 @@ Reference< drawing::XDrawPage > SAL_CALL SdMasterPage::getNotesPage()
 }
 
 // XShapes
-void SAL_CALL SdMasterPage::add( const Reference< drawing::XShape >& xShape ) throw(uno::RuntimeException, std::exception)
+void SAL_CALL SdMasterPage::add( const Reference< drawing::XShape >& xShape )
 {
     SdGenericDrawPage::add( xShape );
 }
 
 void SAL_CALL SdMasterPage::remove( const Reference< drawing::XShape >& xShape )
-    throw (uno::RuntimeException,
-           std::exception)
 {
     ::SolarMutexGuard aGuard;
 

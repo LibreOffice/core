@@ -71,7 +71,6 @@ namespace
 // XUnoTunnel
 sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething(
         const Sequence< sal_Int8 >& rId )
-    throw( RuntimeException, std::exception )
 {
     if( rId.getLength() == 16 &&
         0 == memcmp( theXMLMutableAttributeListUnoTunnelId::get().getSeq().getConstArray(),
@@ -83,48 +82,41 @@ sal_Int64 SAL_CALL XMLMutableAttributeList::getSomething(
 }
 
 sal_Int16 SAL_CALL XMLMutableAttributeList::getLength()
-        throw( RuntimeException, std::exception )
 {
     return m_xAttrList->getLength();
 }
 
 
 OUString SAL_CALL XMLMutableAttributeList::getNameByIndex(sal_Int16 i)
-        throw( RuntimeException, std::exception )
 {
     return m_xAttrList->getNameByIndex( i );
 }
 
 
 OUString SAL_CALL XMLMutableAttributeList::getTypeByIndex(sal_Int16 i)
-        throw( RuntimeException, std::exception )
 {
     return m_xAttrList->getTypeByIndex( i );
 }
 
 OUString SAL_CALL  XMLMutableAttributeList::getValueByIndex(sal_Int16 i)
-    throw( RuntimeException, std::exception )
 {
     return m_xAttrList->getValueByIndex( i );
 }
 
 OUString SAL_CALL XMLMutableAttributeList::getTypeByName(
         const OUString& rName )
-        throw( RuntimeException, std::exception )
 {
     return m_xAttrList->getTypeByName( rName );
 }
 
 OUString SAL_CALL XMLMutableAttributeList::getValueByName(
         const OUString& rName)
-        throw( RuntimeException, std::exception )
 {
     return m_xAttrList->getValueByName( rName );
 }
 
 
 Reference< XCloneable > XMLMutableAttributeList::createClone()
-        throw( RuntimeException, std::exception )
 {
     // A cloned list will be a read only list!
     Reference< XCloneable >  r = new SvXMLAttributeList( m_xAttrList );

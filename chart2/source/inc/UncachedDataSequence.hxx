@@ -91,12 +91,9 @@ public:
     virtual ~UncachedDataSequence() override;
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /// merge XInterface implementations
     DECLARE_XINTERFACE()
@@ -106,78 +103,54 @@ public:
 protected:
     // ____ XPropertySet ____
     /// @see css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
     /// @see ::comphelper::OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     /// @see ::comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
 
     // ____ XDataSequence ____
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getData()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getSourceRangeRepresentation()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getData() override;
+    virtual OUString SAL_CALL getSourceRangeRepresentation() override;
     virtual css::uno::Sequence< OUString > SAL_CALL generateLabel(
-        css::chart2::data::LabelOrigin nLabelOrigin )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex )
-        throw (css::lang::IndexOutOfBoundsException,
-               css::uno::RuntimeException, std::exception) override;
+        css::chart2::data::LabelOrigin nLabelOrigin ) override;
+    virtual ::sal_Int32 SAL_CALL getNumberFormatKeyByIndex( ::sal_Int32 nIndex ) override;
 
     // ____ XNumericalDataSequence ____
     /// @see css::chart::data::XNumericalDataSequence
-    virtual css::uno::Sequence< double > SAL_CALL getNumericalData() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< double > SAL_CALL getNumericalData() override;
 
     // ____ XTextualDataSequence ____
     /// @see css::chart::data::XTextualDataSequence
-    virtual css::uno::Sequence< OUString > SAL_CALL getTextualData() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getTextualData() override;
 
     // ____ XIndexReplace ____
-    virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const css::uno::Any& Element )
-        throw (css::lang::IllegalArgumentException,
-               css::lang::IndexOutOfBoundsException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL replaceByIndex( ::sal_Int32 Index, const css::uno::Any& Element ) override;
 
     // ____ XIndexAccess (base of XIndexReplace) ____
-    virtual ::sal_Int32 SAL_CALL getCount()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index )
-        throw (css::lang::IndexOutOfBoundsException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
 
     // ____ XElementAccess (base of XIndexAccess) ____
-    virtual css::uno::Type SAL_CALL getElementType()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     // ____ XNamed (for setting a new range representation) ____
-    virtual OUString SAL_CALL getName()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& aName )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName() override;
+    virtual void SAL_CALL setName( const OUString& aName ) override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // ____ XModifiable ____
-    virtual sal_Bool SAL_CALL isModified()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setModified( sal_Bool bModified )
-        throw (css::beans::PropertyVetoException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isModified() override;
+    virtual void SAL_CALL setModified( sal_Bool bModified ) override;
 
     // ____ XModifyBroadcaster (base of XModifiable) ____
     virtual void SAL_CALL addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     void fireModifyEvent();
 

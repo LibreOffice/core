@@ -86,7 +86,6 @@ void DNDEventDispatcher::designate_currentwindow(vcl::Window *pWindow)
 }
 
 void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
-    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -122,7 +121,6 @@ void SAL_CALL DNDEventDispatcher::drop( const DropTargetDropEvent& dtde )
 }
 
 void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtdee )
-    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
     Point location( dtdee.LocationX, dtdee.LocationY );
@@ -146,7 +144,6 @@ void SAL_CALL DNDEventDispatcher::dragEnter( const DropTargetDragEnterEvent& dtd
 }
 
 void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
-    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -158,7 +155,6 @@ void SAL_CALL DNDEventDispatcher::dragExit( const DropTargetEvent& /*dte*/ )
 }
 
 void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
-    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -195,7 +191,6 @@ void SAL_CALL DNDEventDispatcher::dragOver( const DropTargetDragEvent& dtde )
 }
 
 void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& dtde )
-    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -232,7 +227,6 @@ void SAL_CALL DNDEventDispatcher::dropActionChanged( const DropTargetDragEvent& 
 }
 
 void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent& dge )
-    throw(RuntimeException, std::exception)
 {
     osl::MutexGuard aImplGuard( m_aMutex );
 
@@ -244,15 +238,14 @@ void SAL_CALL DNDEventDispatcher::dragGestureRecognized( const DragGestureEvent&
 }
 
 void SAL_CALL DNDEventDispatcher::disposing( const EventObject& )
-    throw(RuntimeException, std::exception)
 {
 }
 
-void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 /*dropAction*/ ) throw(RuntimeException, std::exception)
+void SAL_CALL DNDEventDispatcher::acceptDrag( sal_Int8 /*dropAction*/ )
 {
 }
 
-void SAL_CALL DNDEventDispatcher::rejectDrag() throw(RuntimeException, std::exception)
+void SAL_CALL DNDEventDispatcher::rejectDrag()
 {
 }
 
@@ -260,7 +253,6 @@ sal_Int32 DNDEventDispatcher::fireDragEnterEvent( vcl::Window *pWindow,
     const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
     const Point& rLocation, const sal_Int8 nSourceActions, const Sequence< DataFlavor >& aFlavorList
 )
-    throw(RuntimeException)
 {
     sal_Int32 n = 0;
 
@@ -292,7 +284,6 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( vcl::Window *pWindow,
     const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
     const Point& rLocation, const sal_Int8 nSourceActions
 )
-    throw(RuntimeException)
 {
     sal_Int32 n = 0;
 
@@ -317,7 +308,7 @@ sal_Int32 DNDEventDispatcher::fireDragOverEvent( vcl::Window *pWindow,
     return n;
 }
 
-sal_Int32 DNDEventDispatcher::fireDragExitEvent( vcl::Window *pWindow ) throw(RuntimeException)
+sal_Int32 DNDEventDispatcher::fireDragExitEvent( vcl::Window *pWindow )
 {
     sal_Int32 n = 0;
 
@@ -344,7 +335,6 @@ sal_Int32 DNDEventDispatcher::fireDropActionChangedEvent( vcl::Window *pWindow,
     const Reference< XDropTargetDragContext >& xContext, const sal_Int8 nDropAction,
     const Point& rLocation, const sal_Int8 nSourceActions
 )
-    throw(RuntimeException)
 {
     sal_Int32 n = 0;
 
@@ -373,7 +363,6 @@ sal_Int32 DNDEventDispatcher::fireDropEvent( vcl::Window *pWindow,
     const Reference< XDropTargetDropContext >& xContext, const sal_Int8 nDropAction, const Point& rLocation,
     const sal_Int8 nSourceActions, const Reference< XTransferable >& xTransferable
 )
-    throw(RuntimeException)
 {
     sal_Int32 n = 0;
 
@@ -412,7 +401,6 @@ sal_Int32 DNDEventDispatcher::fireDragGestureEvent( vcl::Window *pWindow,
     const Reference< XDragSource >& xSource, const Any& event,
     const Point& rOrigin, const sal_Int8 nDragAction
 )
-    throw(css::uno::RuntimeException)
 {
     sal_Int32 n = 0;
 

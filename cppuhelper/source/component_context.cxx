@@ -93,8 +93,7 @@ public:
         Reference< lang::XComponent > const & xSource,
         Reference< lang::XComponent > const & xTarget );
 
-    virtual void SAL_CALL disposing( lang::EventObject const & rSource )
-        throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( lang::EventObject const & rSource ) override;
 };
 
 inline void DisposingForwarder::listen(
@@ -108,7 +107,6 @@ inline void DisposingForwarder::listen(
 }
 
 void DisposingForwarder::disposing( lang::EventObject const & )
-    throw (RuntimeException, std::exception)
 {
     m_xTarget->dispose();
     m_xTarget.clear();
@@ -156,43 +154,29 @@ public:
     virtual ~ComponentContext() override;
 
     // XComponentContext
-    virtual Any SAL_CALL getValueByName( OUString const & rName )
-        throw (RuntimeException, std::exception) override;
-    virtual Reference<lang::XMultiComponentFactory> SAL_CALL getServiceManager()
-        throw (RuntimeException, std::exception) override;
+    virtual Any SAL_CALL getValueByName( OUString const & rName ) override;
+    virtual Reference<lang::XMultiComponentFactory> SAL_CALL getServiceManager() override;
 
     // XNameContainer
     virtual void SAL_CALL insertByName(
-        OUString const & name, Any const & element )
-        throw (lang::IllegalArgumentException, container::ElementExistException,
-               lang::WrappedTargetException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeByName( OUString const & name )
-        throw (container::NoSuchElementException,
-               lang::WrappedTargetException, RuntimeException, std::exception) override;
+        OUString const & name, Any const & element ) override;
+    virtual void SAL_CALL removeByName( OUString const & name ) override;
     // XNameReplace
     virtual void SAL_CALL replaceByName(
-        OUString const & name, Any const & element )
-        throw (lang::IllegalArgumentException,container::NoSuchElementException,
-               lang::WrappedTargetException, RuntimeException, std::exception) override;
+        OUString const & name, Any const & element ) override;
     // XNameAccess
-    virtual Any SAL_CALL getByName( OUString const & name )
-        throw (container::NoSuchElementException,
-               lang::WrappedTargetException, RuntimeException, std::exception) override;
-    virtual Sequence<OUString> SAL_CALL getElementNames()
-        throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasByName( OUString const & name )
-        throw (RuntimeException, std::exception) override;
+    virtual Any SAL_CALL getByName( OUString const & name ) override;
+    virtual Sequence<OUString> SAL_CALL getElementNames() override;
+    virtual sal_Bool SAL_CALL hasByName( OUString const & name ) override;
     // XElementAccess
-    virtual Type SAL_CALL getElementType() throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw (RuntimeException, std::exception) override;
+    virtual Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 };
 
 // XNameContainer
 
 void ComponentContext::insertByName(
     OUString const & name, Any const & element )
-    throw (lang::IllegalArgumentException, container::ElementExistException,
-           lang::WrappedTargetException, RuntimeException, std::exception)
 {
     t_map::mapped_type entry(
         new ContextEntry(
@@ -211,8 +195,6 @@ void ComponentContext::insertByName(
 
 
 void ComponentContext::removeByName( OUString const & name )
-        throw (container::NoSuchElementException,
-               lang::WrappedTargetException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     t_map::iterator iFind( m_map.find( name ) );
@@ -229,8 +211,6 @@ void ComponentContext::removeByName( OUString const & name )
 
 void ComponentContext::replaceByName(
     OUString const & name, Any const & element )
-    throw (lang::IllegalArgumentException,container::NoSuchElementException,
-           lang::WrappedTargetException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     t_map::const_iterator const iFind( m_map.find( name ) );
@@ -254,15 +234,12 @@ void ComponentContext::replaceByName(
 // XNameAccess
 
 Any ComponentContext::getByName( OUString const & name )
-    throw (container::NoSuchElementException,
-           lang::WrappedTargetException, RuntimeException, std::exception)
 {
     return getValueByName( name );
 }
 
 
 Sequence<OUString> ComponentContext::getElementNames()
-    throw (RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     Sequence<OUString> ret( m_map.size() );
@@ -277,7 +254,6 @@ Sequence<OUString> ComponentContext::getElementNames()
 
 
 sal_Bool ComponentContext::hasByName( OUString const & name )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard guard( m_mutex );
     return m_map.find( name ) != m_map.end();
@@ -285,13 +261,13 @@ sal_Bool ComponentContext::hasByName( OUString const & name )
 
 // XElementAccess
 
-Type ComponentContext::getElementType() throw (RuntimeException, std::exception)
+Type ComponentContext::getElementType()
 {
     return cppu::UnoType<void>::get();
 }
 
 
-sal_Bool ComponentContext::hasElements() throw (RuntimeException, std::exception)
+sal_Bool ComponentContext::hasElements()
 {
     MutexGuard guard( m_mutex );
     return ! m_map.empty();
@@ -395,7 +371,6 @@ Any ComponentContext::lookupMap( OUString const & rName )
 
 
 Any ComponentContext::getValueByName( OUString const & rName )
-    throw (RuntimeException, std::exception)
 {
     // to determine the root context:
     if ( rName == "_root" )
@@ -415,7 +390,6 @@ Any ComponentContext::getValueByName( OUString const & rName )
 }
 
 Reference< lang::XMultiComponentFactory > ComponentContext::getServiceManager()
-    throw (RuntimeException, std::exception)
 {
     if ( !m_xSMgr.is() )
     {

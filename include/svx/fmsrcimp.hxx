@@ -84,10 +84,10 @@ public:
     //  virtual sal_Bool queryInterface(css::uno::Uik aUik, css::uno::Reference< css::uno::XInterface >& rOut);
 
     // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
     // css::beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
     void DisConnect();
 

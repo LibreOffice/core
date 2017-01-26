@@ -42,25 +42,25 @@ namespace connectivity
         ParameterSubstitution& operator=( const ParameterSubstitution& ) = delete;
     public:
         /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        static OUString getImplementationName_Static(  );
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  ) throw (css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static(  );
         static css::uno::Reference< css::uno::XInterface > create( const css::uno::Reference< css::uno::XComponentContext >  & xContext);
     protected:
         ParameterSubstitution(const css::uno::Reference< css::uno::XComponentContext >& _rxContext );
         virtual ~ParameterSubstitution() override {}
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
         // XStringSubstitution
-        virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL substituteVariables( const OUString& aText, sal_Bool bSubstRequired ) override;
+        virtual OUString SAL_CALL reSubstituteVariables( const OUString& aText ) override;
+        virtual OUString SAL_CALL getSubstituteVariableValue( const OUString& variable ) override;
     };
 
 } // connectivity

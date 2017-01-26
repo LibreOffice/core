@@ -48,22 +48,18 @@ public:
     virtual ~ChartFrameLoader() override;
 
     // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::frame::XFrameLoader
 
     virtual sal_Bool SAL_CALL
         load( const css::uno::Sequence< css::beans::PropertyValue >& rMediaDescriptor
-                ,const css::uno::Reference< css::frame::XFrame >& xFrame )
-                            throw (css::uno::RuntimeException, std::exception) override;
+                ,const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
 
     virtual void SAL_CALL
-        cancel()            throw (css::uno::RuntimeException, std::exception) override;
+        cancel() override;
 };
 
 } //namespace chart

@@ -90,15 +90,15 @@ class SwXSelChgLstnr_Impl : public cppu::WeakImplHelper
 public:
     explicit SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg);
 
-    virtual void SAL_CALL selectionChanged( const EventObject& aEvent ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL selectionChanged( const EventObject& aEvent ) override;
+    virtual void SAL_CALL disposing( const EventObject& Source ) override;
 };
 
 SwXSelChgLstnr_Impl::SwXSelChgLstnr_Impl(SwMailMergeDlg& rParentDlg) :
     rParent(rParentDlg)
 {}
 
-void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (RuntimeException, std::exception)
+void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  )
 {
     //call the parent to enable selection mode
     Sequence <Any> aSelection;
@@ -115,7 +115,7 @@ void SwXSelChgLstnr_Impl::selectionChanged( const EventObject&  ) throw (Runtime
     }
 }
 
-void SwXSelChgLstnr_Impl::disposing( const EventObject&  ) throw (RuntimeException, std::exception)
+void SwXSelChgLstnr_Impl::disposing( const EventObject&  )
 {
     OSL_FAIL("disposing");
 }

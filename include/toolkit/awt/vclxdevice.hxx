@@ -64,33 +64,33 @@ public:
     void                    SetCreatedWithToolkit( bool bCreatedWithToolkit );
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::lang::XUnoTunnel
     static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
     static VCLXDevice*                                          GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace );
-    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XDevice,
-    css::uno::Reference< css::awt::XGraphics >    SAL_CALL createGraphics(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::awt::XDevice >      SAL_CALL createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) throw(css::uno::RuntimeException, std::exception) override;
-    css::awt::DeviceInfo                                       SAL_CALL getInfo() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< css::awt::FontDescriptor > SAL_CALL getFontDescriptors(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::awt::XFont >        SAL_CALL getFont( const css::awt::FontDescriptor& aDescriptor ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::awt::XBitmap >      SAL_CALL createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::awt::XDisplayBitmap > SAL_CALL createDisplayBitmap( const css::uno::Reference< css::awt::XBitmap >& Bitmap ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XGraphics >    SAL_CALL createGraphics(  ) override;
+    css::uno::Reference< css::awt::XDevice >      SAL_CALL createDevice( sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    css::awt::DeviceInfo                                       SAL_CALL getInfo() override;
+    css::uno::Sequence< css::awt::FontDescriptor > SAL_CALL getFontDescriptors(  ) override;
+    css::uno::Reference< css::awt::XFont >        SAL_CALL getFont( const css::awt::FontDescriptor& aDescriptor ) override;
+    css::uno::Reference< css::awt::XBitmap >      SAL_CALL createBitmap( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight ) override;
+    css::uno::Reference< css::awt::XDisplayBitmap > SAL_CALL createDisplayBitmap( const css::uno::Reference< css::awt::XBitmap >& Bitmap ) override;
 
     // css::awt::XUnitConversion
-    css::awt::Point SAL_CALL convertPointToLogic( const css::awt::Point& aPoint, ::sal_Int16 TargetUnit ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    css::awt::Point SAL_CALL convertPointToPixel( const css::awt::Point& aPoint, ::sal_Int16 SourceUnit ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    css::awt::Size SAL_CALL convertSizeToLogic( const css::awt::Size& aSize, ::sal_Int16 TargetUnit ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    css::awt::Size SAL_CALL convertSizeToPixel( const css::awt::Size& aSize, ::sal_Int16 SourceUnit ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    css::awt::Point SAL_CALL convertPointToLogic( const css::awt::Point& aPoint, ::sal_Int16 TargetUnit ) override;
+    css::awt::Point SAL_CALL convertPointToPixel( const css::awt::Point& aPoint, ::sal_Int16 SourceUnit ) override;
+    css::awt::Size SAL_CALL convertSizeToLogic( const css::awt::Size& aSize, ::sal_Int16 TargetUnit ) override;
+    css::awt::Size SAL_CALL convertSizeToPixel( const css::awt::Size& aSize, ::sal_Int16 SourceUnit ) override;
 
 
 };

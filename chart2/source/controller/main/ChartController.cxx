@@ -341,19 +341,16 @@ bool ChartController::impl_isDisposedOrSuspended() const
 // lang::XServiceInfo
 
 OUString SAL_CALL ChartController::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString(CHART_CONTROLLER_SERVICE_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL ChartController::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ChartController::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         CHART_CONTROLLER_SERVICE_NAME,
@@ -393,7 +390,6 @@ uno::Reference<ui::XSidebar> getSidebarFromModel(const uno::Reference<frame::XMo
 
 void SAL_CALL ChartController::attachFrame(
     const uno::Reference<frame::XFrame>& xFrame )
-        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -508,7 +504,6 @@ void SAL_CALL ChartController::attachFrame(
 
 //XModeChangeListener
 void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent )
-    throw (uno::RuntimeException, std::exception)
 {
     //adjust controller to view status changes
 
@@ -572,7 +567,6 @@ void SAL_CALL ChartController::modeChanged( const util::ModeChangeEvent& rEvent 
 }
 
 sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XModel > & xModel )
-        throw(uno::RuntimeException, std::exception)
 {
     impl_invalidateAccessible();
 
@@ -661,7 +655,6 @@ sal_Bool SAL_CALL ChartController::attachModel( const uno::Reference< frame::XMo
 }
 
 uno::Reference< frame::XFrame > SAL_CALL ChartController::getFrame()
-    throw(uno::RuntimeException, std::exception)
 {
     //provides access to owner frame of this controller
     //return the frame containing this controller
@@ -670,7 +663,6 @@ uno::Reference< frame::XFrame > SAL_CALL ChartController::getFrame()
 }
 
 uno::Reference< frame::XModel > SAL_CALL ChartController::getModel()
-    throw(uno::RuntimeException, std::exception)
 {
     //provides access to currently attached model
     //returns the currently attached model
@@ -684,7 +676,6 @@ uno::Reference< frame::XModel > SAL_CALL ChartController::getModel()
 }
 
 uno::Any SAL_CALL ChartController::getViewData()
-    throw(uno::RuntimeException, std::exception)
 {
     //provides access to current view status
     //set of data that can be used to restore the current view status at later time
@@ -703,7 +694,6 @@ uno::Any SAL_CALL ChartController::getViewData()
 
 void SAL_CALL ChartController::restoreViewData(
     const uno::Any& /* Value */ )
-        throw(uno::RuntimeException, std::exception)
 {
     //restores the view status using the data gotten from a previous call to XController::getViewData()
 
@@ -715,7 +705,6 @@ void SAL_CALL ChartController::restoreViewData(
 }
 
 sal_Bool SAL_CALL ChartController::suspend( sal_Bool bSuspend )
-    throw(uno::RuntimeException, std::exception)
 {
     //is called to prepare the controller for closing the view
     //bSuspend==true: force the controller to suspend his work
@@ -774,7 +763,6 @@ void ChartController::impl_deleteDrawViewController()
 // XComponent (base of XController)
 
 void SAL_CALL ChartController::dispose()
-    throw(uno::RuntimeException, std::exception)
 {
     m_bDisposed = true;
 
@@ -892,7 +880,6 @@ void SAL_CALL ChartController::dispose()
 
 void SAL_CALL ChartController::addEventListener(
     const uno::Reference<lang::XEventListener>& xListener )
-        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
@@ -904,7 +891,6 @@ void SAL_CALL ChartController::addEventListener(
 
 void SAL_CALL ChartController::removeEventListener(
     const uno::Reference<lang::XEventListener>& xListener )
-        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( m_aLifeTimeManager.impl_isDisposed(false) )
@@ -918,7 +904,6 @@ void SAL_CALL ChartController::removeEventListener(
 void SAL_CALL ChartController::queryClosing(
     const lang::EventObject& rSource,
     sal_Bool /*bGetsOwnership*/ )
-        throw(util::CloseVetoException, uno::RuntimeException, std::exception)
 {
     //do not use the m_aControllerMutex here because this call is not allowed to block
 
@@ -938,7 +923,6 @@ void SAL_CALL ChartController::queryClosing(
 
 void SAL_CALL ChartController::notifyClosing(
     const lang::EventObject& rSource )
-        throw(uno::RuntimeException, std::exception)
 {
     //Listener should deregister himself and release all references to the closing object.
 
@@ -990,7 +974,6 @@ bool ChartController::impl_releaseThisModel(
 // util::XEventListener (base of XCloseListener)
 void SAL_CALL ChartController::disposing(
     const lang::EventObject& rSource )
-        throw(uno::RuntimeException, std::exception)
 {
     if( !impl_releaseThisModel( rSource.Source ))
     {
@@ -1003,7 +986,6 @@ void SAL_CALL ChartController::layoutEvent(
     const lang::EventObject& aSource,
     sal_Int16 eLayoutEvent,
     const uno::Any& /* aInfo */ )
-        throw (uno::RuntimeException, std::exception)
 {
     if( eLayoutEvent == frame::LayoutManagerEvents::MERGEDMENUBAR )
     {
@@ -1084,7 +1066,6 @@ uno::Reference<frame::XDispatch> SAL_CALL
         const util::URL& rURL,
         const OUString& rTargetFrameName,
         sal_Int32 /* nSearchFlags */)
-            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1099,7 +1080,6 @@ uno::Reference<frame::XDispatch> SAL_CALL
 uno::Sequence<uno::Reference<frame::XDispatch > >
     ChartController::queryDispatches(
         const uno::Sequence<frame::DispatchDescriptor>& xDescripts )
-            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -1115,7 +1095,6 @@ uno::Sequence<uno::Reference<frame::XDispatch > >
 void SAL_CALL ChartController::dispatch(
     const util::URL& rURL,
     const uno::Sequence< beans::PropertyValue >& rArgs )
-        throw (uno::RuntimeException, std::exception)
 {
     OUString aCommand = rURL.Path;
 
@@ -1298,7 +1277,6 @@ void SAL_CALL ChartController::dispatch(
 void SAL_CALL ChartController::addStatusListener(
     const uno::Reference<frame::XStatusListener >& /* xControl */,
     const util::URL& /* aURL */ )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
 }
@@ -1306,7 +1284,6 @@ void SAL_CALL ChartController::addStatusListener(
 void SAL_CALL ChartController::removeStatusListener(
     const uno::Reference<frame::XStatusListener >& /* xControl */,
     const util::URL& /* aURL */ )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
 }
@@ -1314,14 +1291,12 @@ void SAL_CALL ChartController::removeStatusListener(
 // XContextMenuInterception (optional interface)
 void SAL_CALL ChartController::registerContextMenuInterceptor(
     const uno::Reference< ui::XContextMenuInterceptor >& /* xInterceptor */)
-        throw(uno::RuntimeException, std::exception)
 {
     //@todo
 }
 
 void SAL_CALL ChartController::releaseContextMenuInterceptor(
     const uno::Reference< ui::XContextMenuInterceptor > & /* xInterceptor */)
-        throw(uno::RuntimeException, std::exception)
 {
     //@todo
 }
@@ -1392,8 +1367,6 @@ void ChartController::executeDispatch_MoveSeries( bool bForward )
 // ____ XMultiServiceFactory ____
 uno::Reference< uno::XInterface > SAL_CALL
     ChartController::createInstance( const OUString& aServiceSpecifier )
-    throw (uno::Exception,
-           uno::RuntimeException, std::exception)
 {
     uno::Reference< uno::XInterface > xResult;
 
@@ -1406,7 +1379,6 @@ uno::Reference< uno::XInterface > SAL_CALL
     ChartController::createInstanceWithArguments(
         const OUString& ServiceSpecifier,
         const uno::Sequence< uno::Any >& /* Arguments */ )
-            throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     // ignore Arguments
     return createInstance( ServiceSpecifier );
@@ -1414,7 +1386,6 @@ uno::Reference< uno::XInterface > SAL_CALL
 
 uno::Sequence< OUString > SAL_CALL
     ChartController::getAvailableServiceNames()
-        throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aServiceNames { CHART_ACCESSIBLE_TEXT_SERVICE_NAME };
     return aServiceNames;
@@ -1423,7 +1394,6 @@ uno::Sequence< OUString > SAL_CALL
 // ____ XModifyListener ____
 void SAL_CALL ChartController::modified(
     const lang::EventObject& /* aEvent */ )
-        throw (uno::RuntimeException, std::exception)
 {
     // the source can also be a subobject of the ChartModel
     // @todo: change the source in ChartModel to always be the model itself ?

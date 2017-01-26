@@ -33,18 +33,18 @@ public:
         const css::uno::Reference< ov::XHelperInterface >& rParent,
         const css::uno::Reference< css::uno::XComponentContext >& rContext,
         const css::uno::Reference< css::frame::XModel >& rModel,
-        const css::uno::Reference< css::sheet::XViewPane >& rViewPane ) throw (css::uno::RuntimeException);
+        const css::uno::Reference< css::sheet::XViewPane >& rViewPane );
 
     // XPane attributes
-    virtual sal_Int32 SAL_CALL getScrollColumn() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setScrollColumn( sal_Int32 _scrollcolumn ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getScrollRow() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setScrollRow( sal_Int32 _scrollrow ) throw (css::uno::RuntimeException, std::exception) override;
-     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getScrollColumn() override;
+    virtual void SAL_CALL setScrollColumn( sal_Int32 _scrollcolumn ) override;
+    virtual sal_Int32 SAL_CALL getScrollRow() override;
+    virtual void SAL_CALL setScrollRow( sal_Int32 _scrollrow ) override;
+     virtual css::uno::Reference< ov::excel::XRange > SAL_CALL getVisibleRange() override;
 
     // XPane methods
-    virtual void SAL_CALL SmallScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL LargeScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL SmallScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) override;
+    virtual void SAL_CALL LargeScroll( const css::uno::Any& Down, const css::uno::Any& Up, const css::uno::Any& ToRight, const css::uno::Any& ToLeft ) override;
 
 protected:
     css::uno::Reference< css::frame::XModel > m_xModel;

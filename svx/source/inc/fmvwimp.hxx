@@ -105,15 +105,15 @@ public:
         //const SdrPageViewWinRec*, FmXFormView* pView);
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) throw(css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 Index) override;
 
     // XFormControllerContext
-    virtual void SAL_CALL makeVisible( const css::uno::Reference< css::awt::XControl >& Control ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL makeVisible( const css::uno::Reference< css::awt::XControl >& Control ) override;
 
     const ::std::vector< css::uno::Reference< css::form::runtime::XFormController > >& GetList() {return m_aControllerList;}
 
@@ -194,20 +194,20 @@ public:
     // UNO Anbindung
 
 // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 // css::container::XContainerListener
-    virtual void SAL_CALL elementInserted(const  css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced(const  css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved(const  css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted(const  css::container::ContainerEvent& rEvent) override;
+    virtual void SAL_CALL elementReplaced(const  css::container::ContainerEvent& rEvent) override;
+    virtual void SAL_CALL elementRemoved(const  css::container::ContainerEvent& rEvent) override;
 
 // css::form::XFormControllerListener
-    virtual void SAL_CALL formActivated(const css::lang::EventObject& rEvent) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL formDeactivated(const css::lang::EventObject& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL formActivated(const css::lang::EventObject& rEvent) override;
+    virtual void SAL_CALL formDeactivated(const css::lang::EventObject& rEvent) override;
 
     // XFocusListener
-    virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL focusGained( const css::awt::FocusEvent& e ) override;
+    virtual void SAL_CALL focusLost( const css::awt::FocusEvent& e ) override;
 
     FmFormView* getView() const {return m_pView;}
     PFormViewPageWindowAdapter  findWindow( const css::uno::Reference< css::awt::XControlContainer >& _rxCC ) const;

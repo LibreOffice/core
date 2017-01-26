@@ -38,19 +38,16 @@ bool AbiWordImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OU
 
 // XServiceInfo
 OUString SAL_CALL AbiWordImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Writer.AbiWordImportFilter");
 }
 
 sal_Bool SAL_CALL AbiWordImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL AbiWordImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

@@ -37,7 +37,6 @@ FrameWindowPane::~FrameWindowPane() throw()
 }
 
 sal_Bool SAL_CALL FrameWindowPane::isAnchorOnly()
-    throw (RuntimeException, std::exception)
 {
     return false;
 }

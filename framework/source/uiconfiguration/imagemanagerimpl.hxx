@@ -95,62 +95,56 @@ namespace framework
             void dispose();
             void initialize( const css::uno::Sequence< css::uno::Any >& aArguments );
             /// @throws css::uno::RuntimeException
-            void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException);
+            void addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener );
             /// @throws css::uno::RuntimeException
-            void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException);
+            void removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener );
 
             // XImageManager
             /// @throws css::uno::RuntimeException
             /// @throws css::lang::IllegalAccessException
-            void reset() throw (css::uno::RuntimeException, css::lang::IllegalAccessException);
+            void reset();
             /// @throws css::uno::RuntimeException
-            css::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType ) throw (css::uno::RuntimeException);
+            css::uno::Sequence< OUString > getAllImageNames( ::sal_Int16 nImageType );
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::uno::RuntimeException
-            bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+            bool hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL );
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::uno::RuntimeException
-            css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
-            /// @throws css::lang::IllegalArgumentException
-            /// @throws css::lang::IllegalAccessException
-            /// @throws css::uno::RuntimeException
-            void replaceImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence, const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence ) throw (css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException, std::exception);
+            css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > > getImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence );
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::lang::IllegalAccessException
             /// @throws css::uno::RuntimeException
-            void removeImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aResourceURLSequence ) throw (css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException);
+            void replaceImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence, const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicsSequence );
+            /// @throws css::lang::IllegalArgumentException
+            /// @throws css::lang::IllegalAccessException
+            /// @throws css::uno::RuntimeException
+            void removeImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aResourceURLSequence );
             /// @throws css::container::ElementExistException
             /// @throws css::lang::IllegalArgumentException
             /// @throws css::lang::IllegalAccessException
             /// @throws css::uno::RuntimeException
-            void insertImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence, const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence ) throw (css::container::ElementExistException, css::lang::IllegalArgumentException, css::lang::IllegalAccessException, css::uno::RuntimeException);
+            void insertImages( ::sal_Int16 nImageType, const css::uno::Sequence< OUString >& aCommandURLSequence, const css::uno::Sequence< css::uno::Reference< css::graphic::XGraphic > >& aGraphicSequence );
 
             // XUIConfiguration
             /// @throws css::uno::RuntimeException
-            void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) throw (css::uno::RuntimeException);
+            void addConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener );
             /// @throws css::uno::RuntimeException
-            void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener ) throw (css::uno::RuntimeException);
+            void removeConfigurationListener( const css::uno::Reference< css::ui::XUIConfigurationListener >& Listener );
 
             // XUIConfigurationPersistence
             /// @throws css::uno::Exception
             /// @throws css::uno::RuntimeException
-            void reload() throw (css::uno::Exception, css::uno::RuntimeException, std::exception);
+            void reload();
             /// @throws css::uno::Exception
             /// @throws css::uno::RuntimeException
-            void store()
-                throw (css::uno::Exception,
-                       css::uno::RuntimeException,
-                       std::exception);
+            void store();
             /// @throws css::uno::Exception
             /// @throws css::uno::RuntimeException
-            void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage )
-                throw (css::uno::Exception,
-                       css::uno::RuntimeException,
-                       std::exception);
+            void storeToStorage( const css::uno::Reference< css::embed::XStorage >& Storage );
             /// @throws css::uno::RuntimeException
-            bool isModified() throw (css::uno::RuntimeException);
+            bool isModified();
             /// @throws css::uno::RuntimeException
-            bool isReadOnly() throw (css::uno::RuntimeException);
+            bool isReadOnly();
 
             void clear();
 

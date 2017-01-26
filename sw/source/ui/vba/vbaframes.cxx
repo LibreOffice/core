@@ -37,15 +37,15 @@ private:
     sal_Int32 nCurrentPos;
 public:
     /// @throws uno::RuntimeException
-    FramesEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess,  const uno::Reference< frame::XModel >& xModel  ) throw ( uno::RuntimeException ) : mxParent( xParent ), mxContext( xContext), mxIndexAccess( xIndexAccess ), mxModel( xModel ), nCurrentPos(0)
+    FramesEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XIndexAccess >& xIndexAccess,  const uno::Reference< frame::XModel >& xModel  ) : mxParent( xParent ), mxContext( xContext), mxIndexAccess( xIndexAccess ), mxModel( xModel ), nCurrentPos(0)
     {
     }
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nCurrentPos < mxIndexAccess->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !hasMoreElements() )
             throw container::NoSuchElementException();
@@ -61,13 +61,13 @@ SwVbaFrames::SwVbaFrames( const uno::Reference< XHelperInterface >& xParent, con
 }
 // XEnumerationAccess
 uno::Type
-SwVbaFrames::getElementType() throw (uno::RuntimeException)
+SwVbaFrames::getElementType()
 {
     return cppu::UnoType<word::XFrame>::get();
 }
 
 uno::Reference< container::XEnumeration >
-SwVbaFrames::createEnumeration() throw (uno::RuntimeException)
+SwVbaFrames::createEnumeration()
 {
     return new FramesEnumeration( this, mxContext,m_xIndexAccess, mxModel );
 }

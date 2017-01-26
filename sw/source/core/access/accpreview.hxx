@@ -42,27 +42,24 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getImplementationName() override;
 
     /** Return whether the specified service is supported by this class.
     */
     virtual sal_Bool SAL_CALL
-        supportsService (const OUString& sServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+        supportsService (const OUString& sServiceName) override;
 
     /** Returns a list of all supported services.  In this case that is just
         the AccessibleContext service.
     */
     virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
-    OUString SAL_CALL getAccessibleDescription() throw (css::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getAccessibleName() throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getAccessibleDescription() override;
+    OUString SAL_CALL getAccessibleName() override;
     virtual void InvalidateFocus_() override;
 };
 

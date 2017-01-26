@@ -129,7 +129,7 @@ class ProgressCmdEnv
     void updateProgress();
 
     /// @throws uno::RuntimeException
-    void update_( uno::Any const & Status ) throw ( uno::RuntimeException );
+    void update_( uno::Any const & Status );
 
 public:
     /** When param bAskWhenInstalling = true, then the user is asked if he
@@ -158,21 +158,16 @@ public:
     inline void setWarnUser( bool bNewVal ) { m_bWarnUser = bNewVal; }
 
     // XCommandEnvironment
-    virtual uno::Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler()
-        throw ( uno::RuntimeException, std::exception ) override;
-    virtual uno::Reference< ucb::XProgressHandler > SAL_CALL getProgressHandler()
-        throw ( uno::RuntimeException, std::exception ) override;
+    virtual uno::Reference< task::XInteractionHandler > SAL_CALL getInteractionHandler() override;
+    virtual uno::Reference< ucb::XProgressHandler > SAL_CALL getProgressHandler() override;
 
     // XInteractionHandler
-    virtual void SAL_CALL handle( uno::Reference< task::XInteractionRequest > const & xRequest )
-        throw ( uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL handle( uno::Reference< task::XInteractionRequest > const & xRequest ) override;
 
     // XProgressHandler
-    virtual void SAL_CALL push( uno::Any const & Status )
-        throw ( uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL update( uno::Any const & Status )
-        throw ( uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL pop() throw ( uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL push( uno::Any const & Status ) override;
+    virtual void SAL_CALL update( uno::Any const & Status ) override;
+    virtual void SAL_CALL pop() override;
 };
 
 
@@ -310,14 +305,12 @@ void ProgressCmdEnv::updateProgress()
 // XCommandEnvironment
 
 uno::Reference< task::XInteractionHandler > ProgressCmdEnv::getInteractionHandler()
-    throw ( uno::RuntimeException, std::exception )
 {
     return this;
 }
 
 
 uno::Reference< ucb::XProgressHandler > ProgressCmdEnv::getProgressHandler()
-    throw ( uno::RuntimeException, std::exception )
 {
     return this;
 }
@@ -326,7 +319,6 @@ uno::Reference< ucb::XProgressHandler > ProgressCmdEnv::getProgressHandler()
 // XInteractionHandler
 
 void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const & xRequest )
-    throw ( uno::RuntimeException, std::exception )
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
@@ -534,14 +526,12 @@ void ProgressCmdEnv::handle( uno::Reference< task::XInteractionRequest > const &
 // XProgressHandler
 
 void ProgressCmdEnv::push( uno::Any const & rStatus )
-    throw( uno::RuntimeException, std::exception )
 {
     update_( rStatus );
 }
 
 
 void ProgressCmdEnv::update_( uno::Any const & rStatus )
-    throw( uno::RuntimeException )
 {
     OUString text;
     if ( rStatus.hasValue() && !( rStatus >>= text) )
@@ -561,14 +551,12 @@ void ProgressCmdEnv::update_( uno::Any const & rStatus )
 
 
 void ProgressCmdEnv::update( uno::Any const & rStatus )
-    throw( uno::RuntimeException, std::exception )
 {
     update_( rStatus );
 }
 
 
 void ProgressCmdEnv::pop()
-    throw( uno::RuntimeException, std::exception )
 {
     update_( uno::Any() ); // no message
 }

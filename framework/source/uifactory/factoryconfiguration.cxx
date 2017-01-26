@@ -134,7 +134,7 @@ void ConfigurationAccess_ControllerFactory::removeServiceFromCommandModule(
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const ContainerEvent& aEvent )
 {
     OUString   aCommand;
     OUString   aModule;
@@ -154,7 +154,7 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementInserted( const Cont
     }
 }
 
-void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const ContainerEvent& aEvent )
 {
     OUString   aCommand;
     OUString   aModule;
@@ -172,13 +172,13 @@ void SAL_CALL ConfigurationAccess_ControllerFactory::elementRemoved ( const Cont
     }
 }
 
-void SAL_CALL ConfigurationAccess_ControllerFactory::elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_ControllerFactory::elementReplaced( const ContainerEvent& aEvent )
 {
     elementInserted(aEvent);
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_ControllerFactory::disposing( const EventObject& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_ControllerFactory::disposing( const EventObject& )
 {
     // remove our reference to the config access
     osl::MutexGuard g(m_mutex);

@@ -38,16 +38,16 @@ private:
 
 private:
     /// @throws css::uno::RuntimeException
-    void removeBookmarkByName( const OUString& rName ) throw (css::uno::RuntimeException);
+    void removeBookmarkByName( const OUString& rName );
 
 public:
     SwVbaBookmarks( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::container::XIndexAccess >& xBookmarks, const css::uno::Reference< css::frame::XModel >& xModel );
 
     /// @throws css::uno::RuntimeException
-    static void addBookmarkByName( const css::uno::Reference< css::frame::XModel >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange ) throw (css::uno::RuntimeException);
+    static void addBookmarkByName( const css::uno::Reference< css::frame::XModel >& xModel, const OUString& rName, const css::uno::Reference< css::text::XTextRange >& rTextRange );
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaBookmarks_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
@@ -55,13 +55,13 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     // XBookmarks
-    virtual sal_Int32 SAL_CALL getDefaultSorting() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefaultSorting( sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getShowHidden() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setShowHidden( sal_Bool _hidden ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getDefaultSorting() override;
+    virtual void SAL_CALL setDefaultSorting( sal_Int32 _type ) override;
+    virtual sal_Bool SAL_CALL getShowHidden() override;
+    virtual void SAL_CALL setShowHidden( sal_Bool _hidden ) override;
 
-    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rRange ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL Exists( const OUString& rName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL Add( const OUString& rName, const css::uno::Any& rRange ) override;
+    virtual sal_Bool SAL_CALL Exists( const OUString& rName ) override;
 };
 
 #endif // INCLUDED_SW_SOURCE_UI_VBA_VBABOOKMARKS_HXX

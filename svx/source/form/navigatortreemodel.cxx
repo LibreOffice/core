@@ -61,13 +61,13 @@ namespace svxform
 
     // XPropertyChangeListener
 
-    void SAL_CALL OFormComponentObserver::disposing(const EventObject& Source) throw( RuntimeException, std::exception )
+    void SAL_CALL OFormComponentObserver::disposing(const EventObject& Source)
     {
         Remove( Source.Source );
     }
 
 
-    void SAL_CALL OFormComponentObserver::propertyChange(const PropertyChangeEvent& evt) throw(RuntimeException, std::exception)
+    void SAL_CALL OFormComponentObserver::propertyChange(const PropertyChangeEvent& evt)
     {
         if( !m_pNavModel ) return;
         if( evt.PropertyName != FM_PROP_NAME ) return;
@@ -92,7 +92,7 @@ namespace svxform
 
     // XContainerListener
 
-    void SAL_CALL OFormComponentObserver::elementInserted(const ContainerEvent& evt) throw(RuntimeException, std::exception)
+    void SAL_CALL OFormComponentObserver::elementInserted(const ContainerEvent& evt)
     {
         if (IsLocked() || !m_pNavModel)
             return;
@@ -131,7 +131,7 @@ namespace svxform
     }
 
 
-    void SAL_CALL OFormComponentObserver::elementReplaced(const ContainerEvent& evt) throw(RuntimeException, std::exception)
+    void SAL_CALL OFormComponentObserver::elementReplaced(const ContainerEvent& evt)
     {
         if (IsLocked() || !m_pNavModel)
             return;
@@ -179,7 +179,7 @@ namespace svxform
     }
 
 
-    void SAL_CALL OFormComponentObserver::elementRemoved(const ContainerEvent& evt) throw(RuntimeException, std::exception)
+    void SAL_CALL OFormComponentObserver::elementRemoved(const ContainerEvent& evt)
     {
         Reference< XInterface > xElement;
         evt.Element >>= xElement;

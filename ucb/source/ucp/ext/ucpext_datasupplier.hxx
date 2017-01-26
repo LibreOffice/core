@@ -65,7 +65,7 @@ namespace ucb { namespace ucp { namespace ext
 
         virtual void close() override;
 
-        virtual void validate() throw( css::ucb::ResultSetException ) override;
+        virtual void validate() override;
 
     private:
         std::unique_ptr< DataSupplier_Impl >    m_pImpl;

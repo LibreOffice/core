@@ -80,13 +80,13 @@ void VCLXAccessibleSvxFindReplaceDialog::FillAccessibleRelationSet( utl::Accessi
 // XServiceInfo
 
 
-OUString VCLXAccessibleSvxFindReplaceDialog::getImplementationName() throw (RuntimeException, std::exception)
+OUString VCLXAccessibleSvxFindReplaceDialog::getImplementationName()
 {
     return OUString( "VCLXAccessibleSvxFindReplaceDialog" );
 }
 
 
-Sequence< OUString > VCLXAccessibleSvxFindReplaceDialog::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > VCLXAccessibleSvxFindReplaceDialog::getSupportedServiceNames()
 {
     Sequence< OUString > aNames { "VCLXAccessibleSvxFindReplaceDialog" };
     return aNames;

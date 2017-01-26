@@ -42,18 +42,18 @@ public:
     ScVbaAssistant( const css::uno::Reference< ov::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext );
     virtual ~ScVbaAssistant() override;
     // XAssistant
-    virtual sal_Bool SAL_CALL getOn() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setOn( sal_Bool _on ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTop( ::sal_Int32 _top ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLeft( ::sal_Int32 _left ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getAnimation() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAnimation( ::sal_Int32 _animation ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getOn() override;
+    virtual void SAL_CALL setOn( sal_Bool _on ) override;
+    virtual sal_Bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual ::sal_Int32 SAL_CALL getTop() override;
+    virtual void SAL_CALL setTop( ::sal_Int32 _top ) override;
+    virtual ::sal_Int32 SAL_CALL getLeft() override;
+    virtual void SAL_CALL setLeft( ::sal_Int32 _left ) override;
+    virtual ::sal_Int32 SAL_CALL getAnimation() override;
+    virtual void SAL_CALL setAnimation( ::sal_Int32 _animation ) override;
 
-    virtual OUString SAL_CALL Name(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL Name(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

@@ -417,10 +417,6 @@ uno::Sequence< sal_Int32 > const & OCommonEmbeddedObject::GetIntermediateStatesS
 
 
 void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
-        throw ( embed::UnreachableStateException,
-                embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     {
         ::osl::ResettableMutexGuard aGuard( m_aMutex );
@@ -487,8 +483,6 @@ void SAL_CALL OCommonEmbeddedObject::changeState( sal_Int32 nNewState )
 
 
 uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStates()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -502,8 +496,6 @@ uno::Sequence< sal_Int32 > SAL_CALL OCommonEmbeddedObject::getReachableStates()
 
 
 sal_Int32 SAL_CALL OCommonEmbeddedObject::getCurrentState()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -517,11 +509,6 @@ sal_Int32 SAL_CALL OCommonEmbeddedObject::getCurrentState()
 
 
 void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                embed::UnreachableStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
         //TODO: a gross hack to avoid deadlocks when this is called from the
@@ -564,8 +551,6 @@ void SAL_CALL OCommonEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
 
 uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSupportedVerbs()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -580,8 +565,6 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OCommonEmbeddedObject::getSuppor
 
 void SAL_CALL OCommonEmbeddedObject::setClientSite(
                 const uno::Reference< embed::XEmbeddedClient >& xClient )
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -600,8 +583,6 @@ void SAL_CALL OCommonEmbeddedObject::setClientSite(
 
 
 uno::Reference< embed::XEmbeddedClient > SAL_CALL OCommonEmbeddedObject::getClientSite()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -615,9 +596,6 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OCommonEmbeddedObject::getClie
 
 
 void SAL_CALL OCommonEmbeddedObject::update()
-        throw ( embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -632,8 +610,6 @@ void SAL_CALL OCommonEmbeddedObject::update()
 
 
 void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -651,8 +627,6 @@ void SAL_CALL OCommonEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 
 
 sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 )
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     if ( m_bDisposed )
         throw lang::DisposedException(); // TODO
@@ -662,7 +636,6 @@ sal_Int64 SAL_CALL OCommonEmbeddedObject::getStatus( sal_Int64 )
 
 
 void SAL_CALL OCommonEmbeddedObject::setContainerName( const OUString& sName )
-        throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -671,12 +644,12 @@ void SAL_CALL OCommonEmbeddedObject::setContainerName( const OUString& sName )
     m_aContainerName = sName;
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL OCommonEmbeddedObject::getParent() throw (css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::uno::XInterface > SAL_CALL OCommonEmbeddedObject::getParent()
 {
     return m_xParent;
 }
 
-void SAL_CALL OCommonEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OCommonEmbeddedObject::setParent( const css::uno::Reference< css::uno::XInterface >& xParent )
 {
     m_xParent = xParent;
     if ( m_nObjectState != -1 && m_nObjectState != embed::EmbedStates::LOADED )
@@ -688,7 +661,7 @@ void SAL_CALL OCommonEmbeddedObject::setParent( const css::uno::Reference< css::
 }
 
 // XDefaultSizeTransmitter
-void SAL_CALL OCommonEmbeddedObject::setDefaultSize( const css::awt::Size& rSize_100TH_MM ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL OCommonEmbeddedObject::setDefaultSize( const css::awt::Size& rSize_100TH_MM )
 {
     //#i103460# charts do not necessaryly have an own size within ODF files, in this case they need to use the size settings from the surrounding frame, which is made available with this method
     m_aDefaultSizeForChart_In_100TH_MM = rSize_100TH_MM;

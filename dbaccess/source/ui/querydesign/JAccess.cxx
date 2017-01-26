@@ -37,7 +37,7 @@ namespace dbaui
         ,m_pTableView(_pTableView)
     {
     }
-    OUString SAL_CALL OJoinDesignViewAccess::getImplementationName() throw(RuntimeException, std::exception)
+    OUString SAL_CALL OJoinDesignViewAccess::getImplementationName()
     {
         return OUString("org.openoffice.comp.dbu.JoinViewAccessibility");
     }
@@ -47,7 +47,7 @@ namespace dbaui
         m_pTableView = nullptr;
     }
     // XAccessibleContext
-    sal_Int32 SAL_CALL OJoinDesignViewAccess::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OJoinDesignViewAccess::getAccessibleChildCount(  )
     {
         // TODO may be this will change to only visible windows
         // this is the same assumption mt implements
@@ -57,7 +57,7 @@ namespace dbaui
             nChildCount = m_pTableView->GetTabWinCount() + m_pTableView->getTableConnections().size();
         return nChildCount;
     }
-    Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL OJoinDesignViewAccess::getAccessibleChild( sal_Int32 i )
     {
         Reference< XAccessible > aRet;
         ::osl::MutexGuard aGuard( m_aMutex  );
@@ -79,11 +79,11 @@ namespace dbaui
             throw IndexOutOfBoundsException();
         return aRet;
     }
-    sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  ) throw (RuntimeException, std::exception)
+    sal_Int16 SAL_CALL OJoinDesignViewAccess::getAccessibleRole(  )
     {
         return AccessibleRole::VIEW_PORT;
     }
-    Reference< XAccessibleContext > SAL_CALL OJoinDesignViewAccess::getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception)
+    Reference< XAccessibleContext > SAL_CALL OJoinDesignViewAccess::getAccessibleContext(  )
     {
         return this;
     }

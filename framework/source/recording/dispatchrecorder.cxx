@@ -100,14 +100,14 @@ DispatchRecorder::~DispatchRecorder()
 }
 
 // generate header
-void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::frame::XFrame >& ) throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL DispatchRecorder::startRecording( const css::uno::Reference< css::frame::XFrame >& )
 {
     /* SAFE{ */
     /* } */
 }
 
 void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
-                                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException, std::exception )
+                                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     OUString aTarget;
 
@@ -116,7 +116,7 @@ void SAL_CALL DispatchRecorder::recordDispatch( const css::util::URL& aURL,
 }
 
 void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& aURL,
-                                                          const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) throw( css::uno::RuntimeException, std::exception )
+                                                          const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
 {
     OUString aTarget;
 
@@ -125,13 +125,13 @@ void SAL_CALL  DispatchRecorder::recordDispatchAsComment( const css::util::URL& 
     m_aStatements.push_back( aStatement );
 }
 
-void SAL_CALL DispatchRecorder::endRecording() throw( css::uno::RuntimeException, std::exception )
+void SAL_CALL DispatchRecorder::endRecording()
 {
     SolarMutexGuard g;
     m_aStatements.clear();
 }
 
-OUString SAL_CALL DispatchRecorder::getRecordedMacro() throw( css::uno::RuntimeException, std::exception )
+OUString SAL_CALL DispatchRecorder::getRecordedMacro()
 {
     SolarMutexGuard g;
 
@@ -374,22 +374,22 @@ void SAL_CALL DispatchRecorder::implts_recordMacro( const OUString& aURL,
     /* } */
 }
 
-css::uno::Type SAL_CALL DispatchRecorder::getElementType() throw (css::uno::RuntimeException, std::exception)
+css::uno::Type SAL_CALL DispatchRecorder::getElementType()
 {
     return cppu::UnoType<css::frame::DispatchStatement>::get();
 }
 
-sal_Bool SAL_CALL DispatchRecorder::hasElements()  throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DispatchRecorder::hasElements()
 {
     return (! m_aStatements.empty());
 }
 
-sal_Int32 SAL_CALL DispatchRecorder::getCount() throw (css::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL DispatchRecorder::getCount()
 {
     return m_aStatements.size();
 }
 
-css::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+css::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)
 {
     if (idx >= (sal_Int32)m_aStatements.size()) {
         throw css::lang::IndexOutOfBoundsException( "Dispatch recorder out of bounds"  );
@@ -401,7 +401,7 @@ css::uno::Any SAL_CALL DispatchRecorder::getByIndex(sal_Int32 idx)  throw (css::
     return element;
 }
 
-void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::Any& element) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
+void SAL_CALL DispatchRecorder::replaceByIndex(sal_Int32 idx, const css::uno::Any& element)
 {
     if (element.getValueType() !=
         cppu::UnoType<css::frame::DispatchStatement>::get()) {

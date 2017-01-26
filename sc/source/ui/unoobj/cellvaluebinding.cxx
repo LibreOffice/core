@@ -95,7 +95,7 @@ namespace calc
         // for the cell)
     }
 
-    Reference< XPropertySetInfo > SAL_CALL OCellValueBinding::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+    Reference< XPropertySetInfo > SAL_CALL OCellValueBinding::getPropertySetInfo(  )
     {
         return createPropertySetInfo( getInfoHelper() ) ;
     }
@@ -124,7 +124,7 @@ namespace calc
             _rValue <<= xCellAddress->getCellAddress( );
     }
 
-    Sequence< Type > SAL_CALL OCellValueBinding::getSupportedValueTypes(  ) throw (RuntimeException, std::exception)
+    Sequence< Type > SAL_CALL OCellValueBinding::getSupportedValueTypes(  )
     {
         checkDisposed( );
         checkInitialized( );
@@ -154,7 +154,7 @@ namespace calc
         return aTypes;
     }
 
-    sal_Bool SAL_CALL OCellValueBinding::supportsType( const Type& aType ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OCellValueBinding::supportsType( const Type& aType )
     {
         checkDisposed( );
         checkInitialized( );
@@ -170,7 +170,7 @@ namespace calc
         return false;
     }
 
-    Any SAL_CALL OCellValueBinding::getValue( const Type& aType ) throw (IncompatibleTypesException, RuntimeException, std::exception)
+    Any SAL_CALL OCellValueBinding::getValue( const Type& aType )
     {
         checkDisposed( );
         checkInitialized( );
@@ -255,7 +255,7 @@ namespace calc
         return aReturn;
     }
 
-    void SAL_CALL OCellValueBinding::setValue( const Any& aValue ) throw (IncompatibleTypesException, NoSupportException, RuntimeException, std::exception)
+    void SAL_CALL OCellValueBinding::setValue( const Any& aValue )
     {
         checkDisposed( );
         checkInitialized( );
@@ -413,17 +413,17 @@ namespace calc
         }
     }
 
-    OUString SAL_CALL OCellValueBinding::getImplementationName(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL OCellValueBinding::getImplementationName(  )
     {
         return OUString( "com.sun.star.comp.sheet.OCellValueBinding" );
     }
 
-    sal_Bool SAL_CALL OCellValueBinding::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OCellValueBinding::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL OCellValueBinding::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL OCellValueBinding::getSupportedServiceNames(  )
     {
         Sequence< OUString > aServices( m_bListPos ? 3 : 2 );
         aServices[ 0 ] = "com.sun.star.table.CellValueBinding";
@@ -433,13 +433,13 @@ namespace calc
         return aServices;
     }
 
-    void SAL_CALL OCellValueBinding::addModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException, std::exception)
+    void SAL_CALL OCellValueBinding::addModifyListener( const Reference< XModifyListener >& _rxListener )
     {
        if ( _rxListener.is() )
            m_aModifyListeners.addInterface( _rxListener );
     }
 
-    void SAL_CALL OCellValueBinding::removeModifyListener( const Reference< XModifyListener >& _rxListener ) throw (RuntimeException, std::exception)
+    void SAL_CALL OCellValueBinding::removeModifyListener( const Reference< XModifyListener >& _rxListener )
     {
        if ( _rxListener.is() )
            m_aModifyListeners.removeInterface( _rxListener );
@@ -468,12 +468,12 @@ namespace calc
         }
     }
 
-    void SAL_CALL OCellValueBinding::modified( const EventObject& /* aEvent */ ) throw (RuntimeException, std::exception)
+    void SAL_CALL OCellValueBinding::modified( const EventObject& /* aEvent */ )
     {
         notifyModified();
     }
 
-    void SAL_CALL OCellValueBinding::disposing( const EventObject& aEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL OCellValueBinding::disposing( const EventObject& aEvent )
     {
         Reference<XInterface> xCellInt( m_xCell, UNO_QUERY );
         if ( xCellInt == aEvent.Source )
@@ -484,7 +484,7 @@ namespace calc
         }
     }
 
-    void SAL_CALL OCellValueBinding::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
+    void SAL_CALL OCellValueBinding::initialize( const Sequence< Any >& _rArguments )
     {
         if ( m_bInitialized )
             throw Exception();

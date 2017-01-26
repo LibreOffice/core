@@ -87,7 +87,7 @@ void SAL_CALL ViewShellWrapper::disposing()
     mpViewShell.reset();
 }
 
-uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) throw(uno::RuntimeException, std::exception)
+uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType )
 {
     if( mpSlideSorterViewShell &&
         rType == cppu::UnoType<view::XSelectionSupplier>::get() )
@@ -102,20 +102,18 @@ uno::Any SAL_CALL ViewShellWrapper::queryInterface( const uno::Type & rType ) th
 //----- XResource -------------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL ViewShellWrapper::getResourceId()
-    throw (RuntimeException, std::exception)
 {
     return mxViewId;
 }
 
 sal_Bool SAL_CALL ViewShellWrapper::isAnchorOnly()
-    throw (RuntimeException, std::exception)
 {
     return false;
 }
 
 //----- XSelectionSupplier --------------------------------------------------
 
-sal_Bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection ) throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection )
 {
     if (!mpSlideSorterViewShell)
         return false;
@@ -152,7 +150,6 @@ sal_Bool SAL_CALL ViewShellWrapper::select( const css::uno::Any& aSelection ) th
 }
 
 uno::Any SAL_CALL ViewShellWrapper::getSelection()
-    throw (uno::RuntimeException, std::exception)
 {
     Any aResult;
 
@@ -177,11 +174,11 @@ uno::Any SAL_CALL ViewShellWrapper::getSelection()
     return aResult;
 }
 
-void SAL_CALL ViewShellWrapper::addSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& ) throw(uno::RuntimeException, std::exception)
+void SAL_CALL ViewShellWrapper::addSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& )
 {
 }
 
-void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& ) throw(uno::RuntimeException, std::exception)
+void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Reference< view::XSelectionChangeListener >& )
 {
 }
 
@@ -189,7 +186,6 @@ void SAL_CALL ViewShellWrapper::removeSelectionChangeListener( const uno::Refere
 
 sal_Bool SAL_CALL ViewShellWrapper::relocateToAnchor (
     const Reference<XResource>& xResource)
-    throw (RuntimeException, std::exception)
 {
     bool bResult (false);
 
@@ -236,7 +232,6 @@ const Sequence<sal_Int8>& ViewShellWrapper::getUnoTunnelId()
 }
 
 sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId)
-    throw (RuntimeException, std::exception)
 {
     sal_Int64 nResult = 0;
 
@@ -252,7 +247,6 @@ sal_Int64 SAL_CALL ViewShellWrapper::getSomething (const Sequence<sal_Int8>& rId
 //===== awt::XWindowListener ==================================================
 
 void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
     ViewShell* pViewShell (mpViewShell.get());
@@ -261,13 +255,11 @@ void SAL_CALL ViewShellWrapper::windowResized (const awt::WindowEvent& rEvent)
 }
 
 void SAL_CALL ViewShellWrapper::windowMoved (const awt::WindowEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
 
 void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject& rEvent)
-    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
     ViewShell* pViewShell (mpViewShell.get());
@@ -276,7 +268,6 @@ void SAL_CALL ViewShellWrapper::windowShown (const lang::EventObject& rEvent)
 }
 
 void SAL_CALL ViewShellWrapper::windowHidden (const lang::EventObject& rEvent)
-    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
@@ -284,7 +275,6 @@ void SAL_CALL ViewShellWrapper::windowHidden (const lang::EventObject& rEvent)
 //===== XEventListener ========================================================
 
 void SAL_CALL ViewShellWrapper::disposing (const lang::EventObject& rEvent)
-    throw (RuntimeException, std::exception)
 {
     if (rEvent.Source == mxWindow)
         mxWindow = nullptr;

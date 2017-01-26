@@ -40,19 +40,19 @@ jclass java_sql_Array::getMyClass() const
     return theClass;
 }
 
-OUString SAL_CALL java_sql_Array::getBaseTypeName(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+OUString SAL_CALL java_sql_Array::getBaseTypeName(  )
 {
     static jmethodID mID(nullptr);
     return callStringMethod("getBaseTypeName",mID);
 }
 
-sal_Int32 SAL_CALL java_sql_Array::getBaseType(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_Array::getBaseType(  )
 {
     static jmethodID mID(nullptr);
     return callIntMethod_ThrowSQL("getBaseType", mID);
 }
 
-css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArray( const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
@@ -70,7 +70,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArray( const css
     return css::uno::Sequence< css::uno::Any >();
 }
 
-css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
@@ -88,7 +88,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL java_sql_Array::getArrayAtIndex( sa
     return css::uno::Sequence< css::uno::Any >();
 }
 
-css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultSet( const css::uno::Reference< css::container::XNameAccess >& typeMap ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultSet( const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
@@ -108,7 +108,7 @@ css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultS
     return nullptr;
 }
 
-css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultSetAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Array::getResultSetAtIndex( sal_Int32 index, sal_Int32 count, const css::uno::Reference< css::container::XNameAccess >& typeMap )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {

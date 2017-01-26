@@ -42,28 +42,27 @@ public:
     bool isSelectedSheets();
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // XWorksheets
-    virtual css::uno::Any SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setVisible( const css::uno::Any& _visible ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before, const css::uno::Any& After, const css::uno::Any& Count, const css::uno::Any& Type ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( const css::uno::Any& _visible ) override;
+    virtual css::uno::Any SAL_CALL Add( const css::uno::Any& Before, const css::uno::Any& After, const css::uno::Any& Count, const css::uno::Any& Type ) override;
+    virtual void SAL_CALL Delete(  ) override;
+    virtual void SAL_CALL PrintOut( const css::uno::Any& From, const css::uno::Any& To, const css::uno::Any& Copies, const css::uno::Any& Preview, const css::uno::Any& ActivePrinter, const css::uno::Any& PrintToFile, const css::uno::Any& Collate, const css::uno::Any& PrToFileName ) override;
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
-    virtual void SAL_CALL Select( const css::uno::Any& Replace ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Copy ( const css::uno::Any& Before, const css::uno::Any& After) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL PrintPreview( const css::uno::Any& EnableChanges ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Select( const css::uno::Any& Replace ) override;
+    virtual void SAL_CALL Copy ( const css::uno::Any& Before, const css::uno::Any& After) override;
+    virtual void SAL_CALL PrintPreview( const css::uno::Any& EnableChanges ) override;
     // ScVbaWorksheets_BASE
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 )
-        throw (css::lang::IndexOutOfBoundsException, css::script::BasicErrorException, css::uno::RuntimeException) override;
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& Index2 ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    static bool nameExists( css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+    static bool nameExists( css::uno::Reference <css::sheet::XSpreadsheetDocument>& xSpreadDoc, const OUString & name, SCTAB& nTab );
 };
 
 #endif // INCLUDED_SC_SOURCE_UI_VBA_VBAWORKSHEETS_HXX

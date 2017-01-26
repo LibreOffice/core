@@ -102,7 +102,7 @@ public:
     void EndListening(bool bRemoveListener = true);
     // PropertyChangeListener
     /// @throws css::uno::RuntimeException
-    virtual void _propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException);
+    virtual void _propertyChange( const  css::beans::PropertyChangeEvent& evt );
     virtual void initializeOle() {}
 
     bool        supportsService( const OUString& _sServiceName ) const;
@@ -235,7 +235,7 @@ protected:
 
 public:
 
-    virtual void _propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw(css::uno::RuntimeException) override;
+    virtual void _propertyChange( const  css::beans::PropertyChangeEvent& evt ) override;
 
     /** creates the m_xMediator when it doesn't already exist.
         @param  _bReverse   when set to <TRUE/> then the properties from the uno control will be copied into report control

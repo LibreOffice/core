@@ -89,35 +89,32 @@ public:
   virtual void SAL_CALL disposing() override;
 
   // XInitialization
-  virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-    throw(css::uno::Exception, std::exception) override;
+  virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
   // XDropTarget
-  virtual void SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl )
-    throw(css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
 
-  virtual void SAL_CALL removeDropTargetListener( const css::uno::Reference<  css::datatransfer::dnd::XDropTargetListener >& dtl )
-    throw(css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL removeDropTargetListener( const css::uno::Reference<  css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
 
   // Default is not active
-  virtual sal_Bool SAL_CALL isActive() throw(css::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL setActive(sal_Bool isActive) throw(css::uno::RuntimeException, std::exception) override;
-  virtual sal_Int8 SAL_CALL getDefaultActions() throw(css::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL setDefaultActions(sal_Int8 actions) throw(css::uno::RuntimeException, std::exception) override;
+  virtual sal_Bool SAL_CALL isActive() override;
+  virtual void SAL_CALL setActive(sal_Bool isActive) override;
+  virtual sal_Int8 SAL_CALL getDefaultActions() override;
+  virtual void SAL_CALL setDefaultActions(sal_Int8 actions) override;
 
   // XDropTargetDragContext
-  virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) throw(css::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL rejectDrag() throw(css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL acceptDrag(sal_Int8 dragOperation) override;
+  virtual void SAL_CALL rejectDrag() override;
 
   // XDropTargetDragContext
-  virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) throw (css::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL rejectDrop() throw (css::uno::RuntimeException, std::exception) override;
-  virtual void SAL_CALL dropComplete(sal_Bool success) throw (css::uno::RuntimeException, std::exception) override;
+  virtual void SAL_CALL acceptDrop(sal_Int8 dropOperation) override;
+  virtual void SAL_CALL rejectDrop() override;
+  virtual void SAL_CALL dropComplete(sal_Bool success) override;
 
   // XServiceInfo
-  virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
-  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception) override;
-  virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+  virtual OUString SAL_CALL getImplementationName() override;
+  virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+  virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
   // NSDraggingDestination protocol functions
   NSDragOperation draggingEntered(id sender);

@@ -109,7 +109,7 @@ protected:
     virtual bool                    WriteObject( tools::SvRef<SotStorageStream>& rxOStm, void* pUserObject, SotClipboardFormatId nUserObjectId, const css::datatransfer::DataFlavor& rFlavor ) override;
     virtual void                    ObjectReleased() override;
 
-    virtual sal_Int64 SAL_CALL      getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Int64 SAL_CALL      getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 
 private:
 

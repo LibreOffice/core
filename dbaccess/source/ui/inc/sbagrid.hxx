@@ -63,32 +63,32 @@ namespace dbaui
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaXGridControl, FmXGridControl)
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
         // css::lang::XServiceInfo
-        OUString SAL_CALL getImplementationName() throw(std::exception) override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(std::exception) override;
+        OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
         // need by registration
         /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static OUString getImplementationName_Static();
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
         static css::uno::Reference< css::uno::XInterface >
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
+        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
         // css::lang::XComponent
-        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() override;
 
-        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit > & rToolkit, const css::uno::Reference< css::awt::XWindowPeer > & rParentPeer) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit > & rToolkit, const css::uno::Reference< css::awt::XWindowPeer > & rParentPeer) override;
 
     protected:
         virtual FmXGridPeer*    imp_CreatePeer(vcl::Window* pParent) override;
@@ -110,24 +110,24 @@ namespace dbaui
         // UNO
         virtual void SAL_CALL  acquire() throw() override { FmXGridPeer::acquire(); }
         virtual void SAL_CALL release() throw() override { FmXGridPeer::release(); }
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
-        sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 > & rId ) throw (css::uno::RuntimeException, std::exception) override;
+        sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 > & rId ) override;
         static SbaXGridPeer* getImplementation(const css::uno::Reference< css::uno::XInterface>& _rxIFace);
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs) override;
+        virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+        virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
         // css::frame::XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
 
         // css::lang::XComponent
-        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() override;
 
     protected:
         virtual VclPtr<FmGridControl>  imp_CreateControl(vcl::Window* pParent, WinBits nStyle) override;

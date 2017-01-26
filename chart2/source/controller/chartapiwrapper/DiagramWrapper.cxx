@@ -635,7 +635,6 @@ DiagramWrapper::~DiagramWrapper()
 
 // ____ XDiagram ____
 OUString SAL_CALL DiagramWrapper::getDiagramType()
-    throw (uno::RuntimeException, std::exception)
 {
     OUString aRet;
 
@@ -682,8 +681,6 @@ OUString SAL_CALL DiagramWrapper::getDiagramType()
 
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getDataRowProperties( sal_Int32 nRow )
-    throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException, std::exception)
 {
     if( nRow < 0 )
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
@@ -703,8 +700,6 @@ Reference<
 
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getDataPointProperties( sal_Int32 nCol, sal_Int32 nRow )
-    throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException, std::exception)
 {
     if( nCol < 0 || nRow < 0 )
         throw lang::IndexOutOfBoundsException("DataSeries index invalid",
@@ -727,14 +722,12 @@ Reference<
 
 // ____ XShape (base of XDiagram) ____
 awt::Point SAL_CALL DiagramWrapper::getPosition()
-    throw (uno::RuntimeException, std::exception)
 {
     awt::Point aPosition = ToPoint( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aPosition;
 }
 
 void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
-    throw (uno::RuntimeException, std::exception)
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
@@ -759,15 +752,12 @@ void SAL_CALL DiagramWrapper::setPosition( const awt::Point& aPosition )
 }
 
 awt::Size SAL_CALL DiagramWrapper::getSize()
-    throw (uno::RuntimeException, std::exception)
 {
     awt::Size aSize = ToSize( m_spChart2ModelContact->GetDiagramRectangleIncludingAxes() );
     return aSize;
 }
 
 void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
-    throw (beans::PropertyVetoException,
-           uno::RuntimeException, std::exception)
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     Reference< beans::XPropertySet > xProp( this->getInnerPropertySet() );
@@ -794,14 +784,13 @@ void SAL_CALL DiagramWrapper::setSize( const awt::Size& aSize )
 
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL DiagramWrapper::getShapeType()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.chart.Diagram" );
 }
 
 // ____ XDiagramPositioning ____
 
-void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::RuntimeException, std::exception)
+void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning()
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
@@ -811,7 +800,7 @@ void SAL_CALL DiagramWrapper::setAutomaticDiagramPositioning() throw (uno::Runti
         xDiaProps->setPropertyValue( "RelativePosition", Any() );
     }
 }
-sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  )
 {
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -823,7 +812,7 @@ sal_Bool SAL_CALL DiagramWrapper::isAutomaticDiagramPositioning(  ) throw (uno::
     }
     return true;
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectangle& rPositionRect )
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
@@ -831,7 +820,7 @@ void SAL_CALL DiagramWrapper::setDiagramPositionExcludingAxes( const awt::Rectan
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::makeAny(true) );
 }
-sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning()
 {
     uno::Reference< beans::XPropertySet > xDiaProps( this->getDiagram(), uno::UNO_QUERY );
     if( xDiaProps.is() )
@@ -847,11 +836,11 @@ sal_Bool SAL_CALL DiagramWrapper::isExcludingDiagramPositioning() throw (uno::Ru
     }
     return false;
 }
-awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionExcludingAxes(  ) throw (uno::RuntimeException, std::exception)
+awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionExcludingAxes(  )
 {
     return m_spChart2ModelContact->GetDiagramRectangleExcludingAxes();
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectangle& rPositionRect )
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     DiagramHelper::setDiagramPositioning( m_spChart2ModelContact->getChartModel(), rPositionRect );
@@ -859,24 +848,23 @@ void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxes( const awt::Rectan
     if( xDiaProps.is() )
         xDiaProps->setPropertyValue("PosSizeExcludeAxes", uno::makeAny(false) );
 }
-awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  ) throw (uno::RuntimeException, std::exception)
+awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxes(  )
 {
     return m_spChart2ModelContact->GetDiagramRectangleIncludingAxes();
 }
-void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL DiagramWrapper::setDiagramPositionIncludingAxesAndAxisTitles( const awt::Rectangle& rPositionRect )
 {
     ControllerLockGuardUNO aCtrlLockGuard( m_spChart2ModelContact->getChartModel() );
     awt::Rectangle aRect( m_spChart2ModelContact->SubstractAxisTitleSizes(rPositionRect) );
     DiagramWrapper::setDiagramPositionIncludingAxes( aRect );
 }
-css::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxisTitles(  ) throw (css::uno::RuntimeException, std::exception)
+css::awt::Rectangle SAL_CALL DiagramWrapper::calculateDiagramPositionIncludingAxesAndAxisTitles(  )
 {
     return m_spChart2ModelContact->GetDiagramRectangleIncludingTitle();
 }
 
 // ____ XAxisSupplier ____
 Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< XAxis > xAxis;
     if(!nDimensionIndex)
@@ -901,7 +889,6 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getAxis( sal_Int32 nDimensionIndex )
 }
 
 Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensionIndex )
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< XAxis > xAxis;
     if(!nDimensionIndex)
@@ -921,7 +908,6 @@ Reference< XAxis > SAL_CALL DiagramWrapper::getSecondaryAxis( sal_Int32 nDimensi
 
 // ____ XAxisZSupplier ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
@@ -931,7 +917,6 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getZAxisTitle()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZMainGrid()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
@@ -941,7 +926,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZMainGrid()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZHelpGrid()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(2) );
@@ -951,7 +935,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZHelpGrid()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
-    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xZAxis.is())
         m_xZAxis = new AxisWrapper( AxisWrapper::Z_AXIS, m_spChart2ModelContact );
@@ -960,7 +943,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getZAxis()
 
 // ____ XTwoAxisXSupplier ____
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
-    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xSecondXAxis.is())
         m_xSecondXAxis = new AxisWrapper( AxisWrapper::SECOND_X_AXIS, m_spChart2ModelContact );
@@ -969,7 +951,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryXAxis()
 
 // ____ XAxisXSupplier (base of XTwoAxisXSupplier) ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
@@ -979,7 +960,6 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getXAxisTitle()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXAxis()
-    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xXAxis.is())
         m_xXAxis = new AxisWrapper( AxisWrapper::X_AXIS, m_spChart2ModelContact );
@@ -987,7 +967,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXAxis()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXMainGrid()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
@@ -997,7 +976,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXMainGrid()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(0) );
@@ -1008,7 +986,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getXHelpGrid()
 
 // ____ XTwoAxisYSupplier ____
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
-    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xSecondYAxis.is())
         m_xSecondYAxis = new AxisWrapper( AxisWrapper::SECOND_Y_AXIS, m_spChart2ModelContact );
@@ -1017,7 +994,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getSecondaryYAxis()
 
 // ____ XAxisYSupplier (base of XTwoAxisYSupplier) ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
@@ -1027,7 +1003,6 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getYAxisTitle()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYAxis()
-    throw (uno::RuntimeException, std::exception)
 {
     if( ! m_xYAxis.is())
         m_xYAxis = new AxisWrapper( AxisWrapper::Y_AXIS, m_spChart2ModelContact );
@@ -1035,7 +1010,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYAxis()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYMainGrid()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
@@ -1045,7 +1019,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYMainGrid()
 }
 
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYHelpGrid()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xRet;
     Reference< XAxis > xAxis( getAxis(1) );
@@ -1056,7 +1029,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getYHelpGrid()
 
 // ____ XSecondAxisTitleSupplier ____
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getSecondaryAxis(0) );
@@ -1066,7 +1038,6 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondXAxisTitle()
 }
 
 Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< drawing::XShape > xRet;
     Reference< XAxis > xAxis( getSecondaryAxis(1) );
@@ -1078,7 +1049,6 @@ Reference< drawing::XShape > SAL_CALL DiagramWrapper::getSecondYAxisTitle()
 // ____ XStatisticDisplay ____
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getUpBar()
-    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xUpBarWrapper.is() )
     {
@@ -1089,7 +1059,6 @@ Reference<
 
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getDownBar()
-    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xDownBarWrapper.is() )
     {
@@ -1100,7 +1069,6 @@ Reference<
 
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getMinMaxLine()
-    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xMinMaxLineWrapper.is() )
     {
@@ -1111,7 +1079,6 @@ Reference<
 
 // ____ X3DDisplay ____
 Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getWall()
-    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xWall.is() )
     {
@@ -1122,7 +1089,6 @@ Reference< beans::XPropertySet > SAL_CALL DiagramWrapper::getWall()
 
 Reference<
     beans::XPropertySet > SAL_CALL DiagramWrapper::getFloor()
-    throw (uno::RuntimeException, std::exception)
 {
     if( !m_xFloor.is() )
     {
@@ -1133,7 +1099,6 @@ Reference<
 
 // ____ X3DDefaultSetter ____
 void SAL_CALL DiagramWrapper::set3DSettingsToDefault()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
     if( x3DDefaultSetter.is() )
@@ -1141,7 +1106,6 @@ void SAL_CALL DiagramWrapper::set3DSettingsToDefault()
 }
 
 void SAL_CALL DiagramWrapper::setDefaultRotation()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
     if( x3DDefaultSetter.is() )
@@ -1149,7 +1113,6 @@ void SAL_CALL DiagramWrapper::setDefaultRotation()
 }
 
 void SAL_CALL DiagramWrapper::setDefaultIllumination()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< X3DDefaultSetter > x3DDefaultSetter( m_spChart2ModelContact->getChart2Diagram(), uno::UNO_QUERY );
     if( x3DDefaultSetter.is() )
@@ -1158,7 +1121,6 @@ void SAL_CALL DiagramWrapper::setDefaultIllumination()
 
 // ____ XComponent ____
 void SAL_CALL DiagramWrapper::dispose()
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
 
@@ -1180,14 +1142,12 @@ void SAL_CALL DiagramWrapper::dispose()
 
 void SAL_CALL DiagramWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL DiagramWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }
@@ -1198,14 +1158,11 @@ class WrappedDataRowSourceProperty : public WrappedProperty
 public:
     explicit WrappedDataRowSourceProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1221,7 +1178,6 @@ WrappedDataRowSourceProperty::WrappedDataRowSourceProperty(const std::shared_ptr
 }
 
 void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     css::chart::ChartDataRowSource eChartDataRowSource = css::chart::ChartDataRowSource_ROWS;
     if( ! (rOuterValue >>= eChartDataRowSource) )
@@ -1257,7 +1213,6 @@ void WrappedDataRowSourceProperty::setPropertyValue( const Any& rOuterValue, con
 }
 
 Any WrappedDataRowSourceProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     OUString aRangeString;
     bool bUseColumns = true;
@@ -1280,7 +1235,6 @@ Any WrappedDataRowSourceProperty::getPropertyValue( const Reference< beans::XPro
 }
 
 Any WrappedDataRowSourceProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
     aRet <<= css::chart::ChartDataRowSource_COLUMNS;
@@ -1295,14 +1249,11 @@ class WrappedStackingProperty : public WrappedProperty
 public:
     WrappedStackingProperty(StackMode eStackMode, const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected: //methods
     bool    detectInnerValue( StackMode& eInnerStackMode ) const;
@@ -1346,7 +1297,6 @@ bool WrappedStackingProperty::detectInnerValue( StackMode& eStackMode ) const
 }
 
 void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
@@ -1375,7 +1325,6 @@ void WrappedStackingProperty::setPropertyValue( const Any& rOuterValue, const Re
 }
 
 Any WrappedStackingProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     StackMode eInnerStackMode;
     if( detectInnerValue( eInnerStackMode ) )
@@ -1387,7 +1336,6 @@ Any WrappedStackingProperty::getPropertyValue( const Reference< beans::XProperty
 }
 
 Any WrappedStackingProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
     aRet <<= false;
@@ -1400,14 +1348,11 @@ class WrappedDim3DProperty : public WrappedProperty
 public:
     explicit WrappedDim3DProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1423,7 +1368,6 @@ WrappedDim3DProperty::WrappedDim3DProperty(const std::shared_ptr<Chart2ModelCont
 }
 
 void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bNew3D = false;
     if( ! (rOuterValue >>= bNew3D) )
@@ -1441,7 +1385,6 @@ void WrappedDim3DProperty::setPropertyValue( const Any& rOuterValue, const Refer
 }
 
 Any WrappedDim3DProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() )
@@ -1453,7 +1396,6 @@ Any WrappedDim3DProperty::getPropertyValue( const Reference< beans::XPropertySet
 }
 
 Any WrappedDim3DProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
     aRet <<= false;
@@ -1466,14 +1408,11 @@ class WrappedVerticalProperty : public WrappedProperty
 public:
     explicit WrappedVerticalProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1489,7 +1428,6 @@ WrappedVerticalProperty::WrappedVerticalProperty(const std::shared_ptr<Chart2Mod
 }
 
 void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bNewVertical = false;
     if( ! (rOuterValue >>= bNewVertical) )
@@ -1509,7 +1447,6 @@ void WrappedVerticalProperty::setPropertyValue( const Any& rOuterValue, const Re
 }
 
 Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() )
@@ -1524,7 +1461,6 @@ Any WrappedVerticalProperty::getPropertyValue( const Reference< beans::XProperty
 }
 
 Any WrappedVerticalProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
     aRet <<= false;
@@ -1537,14 +1473,11 @@ class WrappedNumberOfLinesProperty : public WrappedProperty
 public:
     explicit WrappedNumberOfLinesProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected: //methods
     bool    detectInnerValue( uno::Any& rInnerValue ) const;
@@ -1597,7 +1530,6 @@ bool WrappedNumberOfLinesProperty::detectInnerValue( uno::Any& rInnerValue ) con
 }
 
 void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Int32 nNewValue;
     if( ! (rOuterValue >>= nNewValue) )
@@ -1664,7 +1596,6 @@ void WrappedNumberOfLinesProperty::setPropertyValue( const Any& rOuterValue, con
 }
 
 Any WrappedNumberOfLinesProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
     if( !detectInnerValue( aRet ) )
@@ -1673,7 +1604,6 @@ Any WrappedNumberOfLinesProperty::getPropertyValue( const Reference< beans::XPro
 }
 
 Any WrappedNumberOfLinesProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
     aRet <<= sal_Int32( 0 );
@@ -1686,14 +1616,11 @@ class WrappedAttributedDataPointsProperty : public WrappedProperty
 public:
     explicit WrappedAttributedDataPointsProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1709,7 +1636,6 @@ WrappedAttributedDataPointsProperty::WrappedAttributedDataPointsProperty(const s
 }
 
 void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     uno::Sequence< uno::Sequence< sal_Int32 > > aNewValue;
     if( ! (rOuterValue >>= aNewValue) )
@@ -1748,7 +1674,6 @@ void WrappedAttributedDataPointsProperty::setPropertyValue( const Any& rOuterVal
 }
 
 Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Reference< chart2::XDiagram >    xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     Reference< beans::XPropertySet > xDiaProp( xDiagram, uno::UNO_QUERY );
@@ -1781,7 +1706,6 @@ Any WrappedAttributedDataPointsProperty::getPropertyValue( const Reference< bean
 }
 
 Any WrappedAttributedDataPointsProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
     uno::Sequence< uno::Sequence< sal_Int32 > > aSeq;
@@ -1795,14 +1719,11 @@ class WrappedSolidTypeProperty : public WrappedProperty
 public:
     explicit WrappedSolidTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1818,7 +1739,6 @@ WrappedSolidTypeProperty::WrappedSolidTypeProperty(const std::shared_ptr<Chart2M
 }
 
 void WrappedSolidTypeProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     sal_Int32 nNewSolidType = css::chart::ChartSolidType::RECTANGULAR_SOLID;
     if( ! (rOuterValue >>= nNewSolidType) )
@@ -1838,7 +1758,6 @@ void WrappedSolidTypeProperty::setPropertyValue( const Any& rOuterValue, const R
 }
 
 Any WrappedSolidTypeProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Reference< chart2::XDiagram > xDiagram( m_spChart2ModelContact->getChart2Diagram() );
     if( xDiagram.is() )
@@ -1853,7 +1772,6 @@ Any WrappedSolidTypeProperty::getPropertyValue( const Reference< beans::XPropert
 }
 
 Any WrappedSolidTypeProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return uno::makeAny( css::chart::ChartSolidType::RECTANGULAR_SOLID );
 }
@@ -1863,14 +1781,11 @@ class WrappedAutomaticSizeProperty : public WrappedProperty
 public:
     WrappedAutomaticSizeProperty();
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyValue( const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
 
-    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
+    virtual css::uno::Any getPropertyDefault( const css::uno::Reference< css::beans::XPropertyState >& xInnerPropertyState ) const override;
 };
 
 WrappedAutomaticSizeProperty::WrappedAutomaticSizeProperty()
@@ -1879,7 +1794,6 @@ WrappedAutomaticSizeProperty::WrappedAutomaticSizeProperty()
 }
 
 void WrappedAutomaticSizeProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     if( xInnerPropertySet.is() )
     {
@@ -1904,7 +1818,6 @@ void WrappedAutomaticSizeProperty::setPropertyValue( const Any& rOuterValue, con
 }
 
 Any WrappedAutomaticSizeProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
     if( xInnerPropertySet.is() )
@@ -1917,7 +1830,6 @@ Any WrappedAutomaticSizeProperty::getPropertyValue( const Reference< beans::XPro
 }
 
 Any WrappedAutomaticSizeProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet;
     aRet <<= false;
@@ -1930,10 +1842,8 @@ class WrappedIncludeHiddenCellsProperty : public WrappedProperty
 public:
     explicit WrappedIncludeHiddenCellsProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact);
 
-    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException) override;
-    virtual Any getPropertyValue(const Reference<beans::XPropertySet>& xInnerPropertySet) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) override;
+    virtual void setPropertyValue( const css::uno::Any& rOuterValue, const css::uno::Reference< css::beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual Any getPropertyValue(const Reference<beans::XPropertySet>& xInnerPropertySet) const override;
 
 private: //member
     std::shared_ptr< Chart2ModelContact >   m_spChart2ModelContact;
@@ -1946,7 +1856,6 @@ WrappedIncludeHiddenCellsProperty::WrappedIncludeHiddenCellsProperty(const std::
 }
 
 void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bNewValue = false;
     if( ! (rOuterValue >>= bNewValue) )
@@ -1956,7 +1865,6 @@ void WrappedIncludeHiddenCellsProperty::setPropertyValue( const Any& rOuterValue
 }
 
 Any WrappedIncludeHiddenCellsProperty::getPropertyValue( const Reference< beans::XPropertySet >& /*xInnerPropertySet*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     bool bValue = ChartModelHelper::isIncludeHiddenCells( m_spChart2ModelContact->getChartModel() );
     return uno::Any(bValue);
@@ -1964,14 +1872,12 @@ Any WrappedIncludeHiddenCellsProperty::getPropertyValue( const Reference< beans:
 
 // ____ XDiagramProvider ____
 Reference< chart2::XDiagram > SAL_CALL DiagramWrapper::getDiagram()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->getChart2Diagram();
 }
 
 void SAL_CALL DiagramWrapper::setDiagram(
     const Reference< chart2::XDiagram >& /*xDiagram*/ )
-    throw (uno::RuntimeException, std::exception)
 {
     //@todo: remove this method from interface
     OSL_FAIL("DiagramWrapper::setDiagram is not implemented, should be removed and not be called" );
@@ -2022,19 +1928,16 @@ const std::vector< WrappedProperty* > DiagramWrapper::createWrappedProperties()
 }
 
 OUString SAL_CALL DiagramWrapper::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.Diagram");
 }
 
 sal_Bool SAL_CALL DiagramWrapper::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL DiagramWrapper::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart.Diagram",

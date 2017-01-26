@@ -56,7 +56,7 @@ Sequence<Type> ODateControl::_getTypes()
 }
 
 
-css::uno::Sequence<OUString> SAL_CALL ODateControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL ODateControl::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -120,7 +120,7 @@ IMPLEMENT_DEFAULT_CLONING( ODateModel )
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -145,7 +145,7 @@ css::uno::Sequence<OUString> SAL_CALL ODateModel::getSupportedServiceNames() thr
 }
 
 
-OUString SAL_CALL ODateModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
+OUString SAL_CALL ODateModel::getServiceName()
 {
     return OUString(FRM_COMPONENT_DATEFIELD); // old (non-sun) name for compatibility !
 }
@@ -181,7 +181,7 @@ void SAL_CALL ODateModel::getFastPropertyValue(Any& _rValue, sal_Int32 _nHandle 
 
 
 sal_Bool SAL_CALL ODateModel::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
-        sal_Int32 _nHandle, const Any& _rValue ) throw(IllegalArgumentException, RuntimeException, std::exception)
+        sal_Int32 _nHandle, const Any& _rValue )
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         return convertFormatKeyPropertyValue(_rConvertedValue, _rOldValue, _rValue);
@@ -190,7 +190,7 @@ sal_Bool SAL_CALL ODateModel::convertFastPropertyValue(Any& _rConvertedValue, An
 }
 
 
-void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw ( css::uno::Exception, std::exception)
+void SAL_CALL ODateModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
 {
     if (PROPERTY_ID_FORMATKEY == _nHandle)
         setFormatKeyPropertyValue(_rValue);

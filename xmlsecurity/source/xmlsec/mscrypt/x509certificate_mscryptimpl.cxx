@@ -181,7 +181,7 @@ X509Certificate_MSCryptImpl::~X509Certificate_MSCryptImpl() {
 }
 
 //Methods from XCertificate
-sal_Int16 SAL_CALL X509Certificate_MSCryptImpl::getVersion() throw ( css::uno::RuntimeException) {
+sal_Int16 SAL_CALL X509Certificate_MSCryptImpl::getVersion() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         return ( char )m_pCertContext->pCertInfo->dwVersion ;
     } else {
@@ -189,7 +189,7 @@ sal_Int16 SAL_CALL X509Certificate_MSCryptImpl::getVersion() throw ( css::uno::R
     }
 }
 
-css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSerialNumber() throw ( css::uno::RuntimeException) {
+css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSerialNumber() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         Sequence< sal_Int8 > serial( m_pCertContext->pCertInfo->SerialNumber.cbData ) ;
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->SerialNumber.cbData ; i ++ )
@@ -201,7 +201,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSerialNu
     }
 }
 
-OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() throw ( css::uno::RuntimeException) {
+OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         DWORD cbIssuer ;
 
@@ -247,7 +247,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getIssuerName() throw ( css::uno:
     }
 }
 
-OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectName() throw ( css::uno::RuntimeException)
+OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectName()
 {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr )
     {
@@ -291,7 +291,7 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectName() throw ( css::uno
     }
 }
 
-css::util::DateTime SAL_CALL X509Certificate_MSCryptImpl::getNotValidBefore() throw ( css::uno::RuntimeException ) {
+css::util::DateTime SAL_CALL X509Certificate_MSCryptImpl::getNotValidBefore() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         SYSTEMTIME explTime ;
         DateTime dateTime ;
@@ -317,7 +317,7 @@ css::util::DateTime SAL_CALL X509Certificate_MSCryptImpl::getNotValidBefore() th
     }
 }
 
-css::util::DateTime SAL_CALL X509Certificate_MSCryptImpl::getNotValidAfter() throw ( css::uno::RuntimeException) {
+css::util::DateTime SAL_CALL X509Certificate_MSCryptImpl::getNotValidAfter() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         SYSTEMTIME explTime ;
         DateTime dateTime ;
@@ -343,7 +343,7 @@ css::util::DateTime SAL_CALL X509Certificate_MSCryptImpl::getNotValidAfter() thr
     }
 }
 
-css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getIssuerUniqueID() throw ( css::uno::RuntimeException) {
+css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getIssuerUniqueID() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         Sequence< sal_Int8 > issuerUid( m_pCertContext->pCertInfo->IssuerUniqueId.cbData ) ;
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->IssuerUniqueId.cbData; i ++ )
@@ -355,7 +355,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getIssuerUn
     }
 }
 
-css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectUniqueID() throw ( css::uno::RuntimeException ) {
+css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectUniqueID() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr ) {
         Sequence< sal_Int8 > subjectUid( m_pCertContext->pCertInfo->SubjectUniqueId.cbData ) ;
         for( unsigned int i = 0 ; i < m_pCertContext->pCertInfo->SubjectUniqueId.cbData; i ++ )
@@ -367,7 +367,7 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectU
     }
 }
 
-css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL X509Certificate_MSCryptImpl::getExtensions() throw ( css::uno::RuntimeException ) {
+css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL X509Certificate_MSCryptImpl::getExtensions() {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr && m_pCertContext->pCertInfo->cExtension != 0 ) {
         CertificateExtension_XmlSecImpl* xExtn ;
         Sequence< Reference< XCertificateExtension > > xExtns( m_pCertContext->pCertInfo->cExtension ) ;
@@ -396,7 +396,7 @@ css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > 
     }
 }
 
-css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl::findCertificateExtension( const css::uno::Sequence< sal_Int8 >& /*oid*/ ) throw (css::uno::RuntimeException) {
+css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certificate_MSCryptImpl::findCertificateExtension( const css::uno::Sequence< sal_Int8 >& /*oid*/ ) {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr && m_pCertContext->pCertInfo->cExtension != 0 ) {
         CertificateExtension_XmlSecImpl* xExtn ;
 
@@ -421,7 +421,7 @@ css::uno::Reference< css::security::XCertificateExtension > SAL_CALL X509Certifi
 }
 
 
-css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getEncoded() throw ( css::uno::RuntimeException) {
+css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getEncoded() {
     if( m_pCertContext != nullptr && m_pCertContext->cbCertEncoded > 0 ) {
         Sequence< sal_Int8 > rawCert( m_pCertContext->cbCertEncoded ) ;
 
@@ -454,7 +454,7 @@ const CERT_CONTEXT* X509Certificate_MSCryptImpl::getMswcryCert() const {
     }
 }
 
-void X509Certificate_MSCryptImpl::setRawCert( Sequence< sal_Int8 > const & rawCert ) throw ( css::uno::RuntimeException) {
+void X509Certificate_MSCryptImpl::setRawCert( Sequence< sal_Int8 > const & rawCert ) {
     if( m_pCertContext != nullptr ) {
         CertFreeCertificateContext( m_pCertContext ) ;
         m_pCertContext = nullptr ;
@@ -466,7 +466,7 @@ void X509Certificate_MSCryptImpl::setRawCert( Sequence< sal_Int8 > const & rawCe
 }
 
 /* XUnoTunnel */
-sal_Int64 SAL_CALL X509Certificate_MSCryptImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier ) throw( RuntimeException ) {
+sal_Int64 SAL_CALL X509Certificate_MSCryptImpl::getSomething( const Sequence< sal_Int8 >& aIdentifier ) {
     if( aIdentifier.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(), aIdentifier.getConstArray(), 16 ) ) {
         return reinterpret_cast<sal_Int64>(this);
     }
@@ -535,7 +535,6 @@ css::uno::Sequence< sal_Int8 > getThumbprint(const CERT_CONTEXT* pCertContext, D
 }
 
 OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyAlgorithm()
-    throw ( css::uno::RuntimeException)
 {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr )
     {
@@ -549,7 +548,6 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyAlgorithm()
 }
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectPublicKeyValue()
-    throw ( css::uno::RuntimeException)
 {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr )
     {
@@ -570,7 +568,6 @@ css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSubjectP
 }
 
 OUString SAL_CALL X509Certificate_MSCryptImpl::getSignatureAlgorithm()
-    throw ( css::uno::RuntimeException)
 {
     if( m_pCertContext != nullptr && m_pCertContext->pCertInfo != nullptr )
     {
@@ -583,25 +580,22 @@ OUString SAL_CALL X509Certificate_MSCryptImpl::getSignatureAlgorithm()
     }
 }
 
-uno::Sequence<sal_Int8> X509Certificate_MSCryptImpl::getSHA256Thumbprint() throw (uno::RuntimeException, std::exception)
+uno::Sequence<sal_Int8> X509Certificate_MSCryptImpl::getSHA256Thumbprint()
 {
     return getThumbprint(m_pCertContext, CERT_SHA256_HASH_PROP_ID);
 }
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getSHA1Thumbprint()
-    throw ( css::uno::RuntimeException)
 {
     return getThumbprint(m_pCertContext, CERT_SHA1_HASH_PROP_ID);
 }
 
 css::uno::Sequence< sal_Int8 > SAL_CALL X509Certificate_MSCryptImpl::getMD5Thumbprint()
-    throw ( css::uno::RuntimeException)
 {
     return getThumbprint(m_pCertContext, CERT_MD5_HASH_PROP_ID);
 }
 
 sal_Int32 SAL_CALL X509Certificate_MSCryptImpl::getCertificateUsage(  )
-    throw ( css::uno::RuntimeException)
 {
     sal_Int32 usage =
         CERT_DATA_ENCIPHERMENT_KEY_USAGE |

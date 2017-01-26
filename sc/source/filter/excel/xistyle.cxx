@@ -79,23 +79,23 @@ public:
     explicit PaletteIndex( const ColorDataVec& rColorDataTable ) : maColorData( rColorDataTable ) {}
 
     // Methods XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) override
+    virtual ::sal_Int32 SAL_CALL getCount() override
     {
          return  maColorData.size();
     }
 
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         //--Index;  // apparently the palette is already 1 based
         return uno::makeAny( sal_Int32( maColorData[ Index ] ) );
     }
 
     // Methods XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) override
+    virtual uno::Type SAL_CALL getElementType() override
     {
         return ::cppu::UnoType<sal_Int32>::get();
     }
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasElements() override
     {
         return (maColorData.size() > 0);
     }

@@ -69,24 +69,23 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( ORoadmapEntry, ORoadmapEntry_Base, ::comphelpe
 
 css::uno::Reference< css:: beans::XPropertySetInfo > SAL_CALL
     ORoadmapEntry::getPropertySetInfo()
-    throw(css::uno::RuntimeException, std::exception)
 {
     return css::uno::Reference< css::beans::XPropertySetInfo >(
         createPropertySetInfo( getInfoHelper() ) );
 }
 
-OUString SAL_CALL ORoadmapEntry::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL ORoadmapEntry::getImplementationName(  )
 {
     OUString aStr("com.sun.star.comp.toolkit.RoadmapItem");
     return aStr;
 }
 
-sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ORoadmapEntry::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL ORoadmapEntry::getSupportedServiceNames(  )
 {
     css::uno::Sequence<OUString> aRet { "com.sun.star.awt.RoadmapItem" };
     return aRet;

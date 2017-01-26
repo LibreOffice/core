@@ -31,8 +31,8 @@ public:
     virtual ~VCLXAccessibleSvxFindReplaceDialog() override;
     virtual void FillAccessibleRelationSet( utl::AccessibleRelationSetHelper& rRelationSet ) override;
     // XServiceInfo
-    virtual ::rtl::OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::rtl::OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
 

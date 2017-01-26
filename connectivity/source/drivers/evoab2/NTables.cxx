@@ -75,7 +75,7 @@ ObjectType OEvoabTables::createObject(const OUString& aName)
     return xRet;
 }
 
-void OEvoabTables::impl_refresh(  ) throw(RuntimeException)
+void OEvoabTables::impl_refresh(  )
 {
     static_cast<OEvoabCatalog&>(m_rParent).refreshTables();
 }

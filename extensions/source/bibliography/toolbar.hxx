@@ -55,12 +55,10 @@ public:
 
     // css::lang::XEventListener
     // we do not hold References to dispatches, so there is nothing to do on disposal
-    virtual void    SAL_CALL disposing(const css::lang::EventObject& /*Source*/)
-                                            throw( css::uno::RuntimeException, std::exception ) override {};
+    virtual void    SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override {};
 
     // css::frame::XStatusListener
-    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
-                                            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
 };
 
@@ -71,8 +69,7 @@ public:
     BibTBListBoxListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     virtual ~BibTBListBoxListener() override;
 
-    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
-                                            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
 };
 
@@ -83,8 +80,7 @@ public:
     BibTBEditListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     virtual ~BibTBEditListener() override;
 
-    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
-                                            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
 };
 
@@ -95,8 +91,7 @@ public:
     BibTBQueryMenuListener(BibToolBar *pTB, const OUString& aStr, sal_uInt16 nId);
     virtual ~BibTBQueryMenuListener() override;
 
-    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event)
-                                            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void    SAL_CALL statusChanged(const css::frame::FeatureStateEvent& Event) override;
 
 };
 
@@ -176,8 +171,7 @@ class BibToolBar:   public ToolBox
         void    SelectFilterItem(sal_uInt16 nId);
 
         /// @throws css::uno::RuntimeException
-        void    statusChanged(const css::frame::FeatureStateEvent& Event)
-                                            throw( css::uno::RuntimeException );
+        void    statusChanged(const css::frame::FeatureStateEvent& Event);
 
         void    SetDatMan(BibDataManager& rDatMan) {pDatMan = &rDatMan;}
         void    SendDispatch(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue >& rArgs);

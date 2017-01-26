@@ -45,14 +45,12 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
         {
         }
 
-        virtual void SAL_CALL select()
-            throw (css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL select() override
         {
             m_bSelected = true;
         }
 
-        void SAL_CALL setName(const OUString& Name)
-            throw(css::uno::RuntimeException, std::exception) override
+        void SAL_CALL setName(const OUString& Name) override
         {
             m_aNewName = Name;
         }
@@ -84,8 +82,7 @@ class XInteractionSupplyNameImpl : public cppu::WeakImplHelper<
         {
         }
 
-        virtual void SAL_CALL select()
-            throw (css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL select() override
         {
             m_bSelected = true;
         }

@@ -514,12 +514,12 @@ public:
     explicit XoNavigationOrderAccess( std::vector< Reference< XShape > >& rShapes );
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  ) throw (RuntimeException, std::exception) override;
-    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount(  ) override;
+    virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // XElementAccess
-    virtual Type SAL_CALL getElementType(  ) throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (RuntimeException, std::exception) override;
+    virtual Type SAL_CALL getElementType(  ) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) override;
 
 private:
     std::vector< Reference< XShape > > maShapes;
@@ -531,12 +531,12 @@ XoNavigationOrderAccess::XoNavigationOrderAccess( std::vector< Reference< XShape
 }
 
 // XIndexAccess
-sal_Int32 SAL_CALL XoNavigationOrderAccess::getCount(  ) throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL XoNavigationOrderAccess::getCount(  )
 {
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
-Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index )
 {
     if( (Index < 0) || (Index > getCount()) )
         throw IndexOutOfBoundsException();
@@ -545,12 +545,12 @@ Any SAL_CALL XoNavigationOrderAccess::getByIndex( sal_Int32 Index ) throw (Index
 }
 
 // XElementAccess
-Type SAL_CALL XoNavigationOrderAccess::getElementType(  ) throw (RuntimeException, std::exception)
+Type SAL_CALL XoNavigationOrderAccess::getElementType(  )
 {
     return cppu::UnoType<XShape>::get();
 }
 
-sal_Bool SAL_CALL XoNavigationOrderAccess::hasElements(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL XoNavigationOrderAccess::hasElements(  )
 {
     return !maShapes.empty();
 }

@@ -195,7 +195,6 @@ SpellAlternatives::~SpellAlternatives()
 
 
 OUString SAL_CALL SpellAlternatives::getWord()
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aWord;
@@ -203,7 +202,6 @@ OUString SAL_CALL SpellAlternatives::getWord()
 
 
 Locale SAL_CALL SpellAlternatives::getLocale()
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return LanguageTag::convertToLocale( nLanguage );
@@ -211,7 +209,6 @@ Locale SAL_CALL SpellAlternatives::getLocale()
 
 
 sal_Int16 SAL_CALL SpellAlternatives::getFailureType()
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return nType;
@@ -219,7 +216,6 @@ sal_Int16 SAL_CALL SpellAlternatives::getFailureType()
 
 
 sal_Int16 SAL_CALL SpellAlternatives::getAlternativesCount()
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return (sal_Int16) aAlt.getLength();
@@ -227,7 +223,6 @@ sal_Int16 SAL_CALL SpellAlternatives::getAlternativesCount()
 
 
 Sequence< OUString > SAL_CALL SpellAlternatives::getAlternatives()
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aAlt;
@@ -235,7 +230,6 @@ Sequence< OUString > SAL_CALL SpellAlternatives::getAlternatives()
 
 
 void SAL_CALL SpellAlternatives::setAlternatives( const uno::Sequence< OUString >& rAlternatives )
-throw (uno::RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     aAlt = rAlternatives;
@@ -243,7 +237,6 @@ throw (uno::RuntimeException, std::exception)
 
 
 void SAL_CALL SpellAlternatives::setFailureType( sal_Int16 nFailureType )
-throw (uno::RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     nType = nFailureType;

@@ -47,7 +47,7 @@ OSimpleLogRing::~OSimpleLogRing()
 
 // XSimpleLogRing
 
-void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -63,7 +63,7 @@ void SAL_CALL OSimpleLogRing::logString( const OUString& aMessage ) throw (uno::
 }
 
 
-uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -82,7 +82,7 @@ uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getCollectedLog() throw (uno:
 
 // XInitialization
 
-void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception)
+void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bInitialized )
@@ -107,17 +107,17 @@ void SAL_CALL OSimpleLogRing::initialize( const uno::Sequence< uno::Any >& aArgu
 }
 
 // XServiceInfo
-OUString SAL_CALL OSimpleLogRing::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL OSimpleLogRing::getImplementationName()
 {
     return OUString("com.sun.star.comp.logging.SimpleLogRing");
 }
 
-sal_Bool SAL_CALL OSimpleLogRing::supportsService( const OUString& aServiceName ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OSimpleLogRing::supportsService( const OUString& aServiceName )
 {
     return cppu::supportsService(this, aServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL OSimpleLogRing::getSupportedServiceNames()
 {
     return { "com.sun.star.logging.SimpleLogRing" };
 }

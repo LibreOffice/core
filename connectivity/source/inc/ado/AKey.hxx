@@ -37,7 +37,7 @@ namespace connectivity
             OConnection*    m_pConnection;
         protected:
             void fillPropertyValues();
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception) override;
+            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
         public:
             virtual void refreshColumns() override;
         public:
@@ -45,7 +45,7 @@ namespace connectivity
             OAdoKey(bool _bCase,OConnection* _pConnection);
 
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOKey        getImpl() const { return m_aKey;}

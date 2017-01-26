@@ -43,19 +43,16 @@ SwAccessibleGraphic::~SwAccessibleGraphic()
 }
 
 OUString SAL_CALL SwAccessibleGraphic::getImplementationName()
-        throw( RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.Writer.SwAccessibleGraphic");
 }
 
 sal_Bool SAL_CALL SwAccessibleGraphic::supportsService(const OUString& sTestServiceName)
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sTestServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
-        throw( uno::RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -65,14 +62,12 @@ Sequence< OUString > SAL_CALL SwAccessibleGraphic::getSupportedServiceNames()
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessibleGraphic::getImplementationId()
-        throw(RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 //  Return this object's role.
 sal_Int16 SAL_CALL SwAccessibleGraphic::getAccessibleRole()
-        throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

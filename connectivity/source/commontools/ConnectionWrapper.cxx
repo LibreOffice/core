@@ -105,13 +105,13 @@ OConnectionWrapper::~OConnectionWrapper()
 
 // XServiceInfo
 
-OUString SAL_CALL OConnectionWrapper::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OConnectionWrapper::getImplementationName(  )
 {
     return OUString( "com.sun.star.sdbc.drivers.OConnectionWrapper" );
 }
 
 
-css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceNames(  )
 {
     // first collect the services which are supported by our aggregate
     Sequence< OUString > aSupported;
@@ -132,19 +132,19 @@ css::uno::Sequence< OUString > SAL_CALL OConnectionWrapper::getSupportedServiceN
 }
 
 
-sal_Bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OConnectionWrapper::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Any SAL_CALL OConnectionWrapper::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
+Any SAL_CALL OConnectionWrapper::queryInterface( const Type& _rType )
 {
     Any aReturn = OConnection_BASE::queryInterface(_rType);
     return aReturn.hasValue() ? aReturn : (m_xProxyConnection.is() ? m_xProxyConnection->queryAggregation(_rType) : aReturn);
 }
 
-Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (css::uno::RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  )
 {
     return ::comphelper::concatSequences(
         OConnection_BASE::getTypes(),
@@ -153,7 +153,7 @@ Sequence< Type > SAL_CALL OConnectionWrapper::getTypes(  ) throw (css::uno::Runt
 }
 
 // css::lang::XUnoTunnel
-sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException, std::exception)
+sal_Int64 SAL_CALL OConnectionWrapper::getSomething( const Sequence< sal_Int8 >& rId )
 {
     if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
         return reinterpret_cast< sal_Int64 >( this );

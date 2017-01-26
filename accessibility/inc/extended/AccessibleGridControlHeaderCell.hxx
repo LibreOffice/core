@@ -32,23 +32,22 @@ namespace accessibility
                         ::svt::table::IAccessibleTable& _rTable,
                         ::svt::table::AccessibleTableControlObjType  _eObjType);
         /** @return  The count of visible children. */
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
 
         /** @return  The XAccessible interface of the specified child. */
         virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-            getAccessibleChild( sal_Int32 nChildIndex ) throw ( css::lang::IndexOutOfBoundsException,css::uno::RuntimeException, std::exception ) override;
+            getAccessibleChild( sal_Int32 nChildIndex ) override;
 
         /** @return  The index of this object among the parent's children. */
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
 
         /** Grabs the focus to the GridControl. */
-        virtual void SAL_CALL grabFocus() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL grabFocus() override;
 
         // XInterface
 
         /** Queries for a new interface. */
-        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType )
-            throw ( css::uno::RuntimeException, std::exception ) override;
+        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& rType ) override;
 
         /** Aquires the object (calls acquire() on base class). */
         virtual void SAL_CALL acquire() throw () override;
@@ -59,13 +58,12 @@ namespace accessibility
 
         /** @return  The XAccessibleContext interface of this object. */
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
-        getAccessibleContext()
-            throw ( css::uno::RuntimeException, std::exception ) override;
+        getAccessibleContext() override;
 
         /** @return
                 The name of this class.
         */
-        virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getImplementationName() override;
 
         /** Creates a new AccessibleStateSetHelper and fills it with states of the
             current object.

@@ -64,7 +64,7 @@ OPreparedStatement::~OPreparedStatement()
 }
 
 // css::lang::XTypeProvider
-Sequence< Type > OPreparedStatement::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > OPreparedStatement::getTypes()
 {
     OTypeCollection aTypes(cppu::UnoType<XServiceInfo>::get(),
                            cppu::UnoType<XPreparedStatement>::get(),
@@ -76,13 +76,13 @@ Sequence< Type > OPreparedStatement::getTypes() throw (RuntimeException, std::ex
     return aTypes.getTypes();
 }
 
-Sequence< sal_Int8 > OPreparedStatement::getImplementationId() throw (RuntimeException, std::exception)
+Sequence< sal_Int8 > OPreparedStatement::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 // css::uno::XInterface
-Any OPreparedStatement::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
+Any OPreparedStatement::queryInterface( const Type & rType )
 {
     Any aIface = OStatementBase::queryInterface( rType );
     if (!aIface.hasValue())
@@ -109,17 +109,17 @@ void OPreparedStatement::release() throw ()
 }
 
 // XServiceInfo
-OUString OPreparedStatement::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString OPreparedStatement::getImplementationName(  )
 {
     return OUString("com.sun.star.sdb.OPreparedStatement");
 }
 
-sal_Bool OPreparedStatement::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool OPreparedStatement::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OPreparedStatement::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > OPreparedStatement::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[0] = SERVICE_SDBC_PREPAREDSTATEMENT;
@@ -139,7 +139,7 @@ void OPreparedStatement::disposing()
 }
 
 // css::sdbcx::XColumnsSupplier
-Reference< css::container::XNameAccess > OPreparedStatement::getColumns() throw( RuntimeException, std::exception )
+Reference< css::container::XNameAccess > OPreparedStatement::getColumns()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -173,7 +173,7 @@ Reference< css::container::XNameAccess > OPreparedStatement::getColumns() throw(
 }
 
 // XResultSetMetaDataSupplier
-Reference< XResultSetMetaData > OPreparedStatement::getMetaData() throw( SQLException, RuntimeException, std::exception )
+Reference< XResultSetMetaData > OPreparedStatement::getMetaData()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -181,7 +181,7 @@ Reference< XResultSetMetaData > OPreparedStatement::getMetaData() throw( SQLExce
 }
 
 // XPreparedStatement
-Reference< XResultSet >  OPreparedStatement::executeQuery() throw( SQLException, RuntimeException, std::exception )
+Reference< XResultSet >  OPreparedStatement::executeQuery()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -200,7 +200,7 @@ Reference< XResultSet >  OPreparedStatement::executeQuery() throw( SQLException,
     return xResultSet;
 }
 
-sal_Int32 OPreparedStatement::executeUpdate() throw( SQLException, RuntimeException, std::exception )
+sal_Int32 OPreparedStatement::executeUpdate()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -210,7 +210,7 @@ sal_Int32 OPreparedStatement::executeUpdate() throw( SQLException, RuntimeExcept
     return Reference< XPreparedStatement >( m_xAggregateAsSet, UNO_QUERY_THROW )->executeUpdate();
 }
 
-sal_Bool OPreparedStatement::execute() throw( SQLException, RuntimeException, std::exception )
+sal_Bool OPreparedStatement::execute()
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -220,13 +220,13 @@ sal_Bool OPreparedStatement::execute() throw( SQLException, RuntimeException, st
     return Reference< XPreparedStatement >( m_xAggregateAsSet, UNO_QUERY_THROW )->execute();
 }
 
-Reference< XConnection > OPreparedStatement::getConnection() throw( SQLException, RuntimeException, std::exception )
+Reference< XConnection > OPreparedStatement::getConnection()
 {
     return Reference< XConnection > (m_xParent, UNO_QUERY);
 }
 
 // XParameters
-void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 sqlType )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -234,7 +234,7 @@ void SAL_CALL OPreparedStatement::setNull( sal_Int32 parameterIndex, sal_Int32 s
     m_xAggregateAsParameters->setNull(parameterIndex, sqlType);
 }
 
-void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -242,7 +242,7 @@ void SAL_CALL OPreparedStatement::setObjectNull( sal_Int32 parameterIndex, sal_I
     m_xAggregateAsParameters->setObjectNull(parameterIndex, sqlType, typeName);
 }
 
-void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -250,7 +250,7 @@ void SAL_CALL OPreparedStatement::setBoolean( sal_Int32 parameterIndex, sal_Bool
     m_xAggregateAsParameters->setBoolean(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -258,7 +258,7 @@ void SAL_CALL OPreparedStatement::setByte( sal_Int32 parameterIndex, sal_Int8 x 
     m_xAggregateAsParameters->setByte(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -266,7 +266,7 @@ void SAL_CALL OPreparedStatement::setShort( sal_Int32 parameterIndex, sal_Int16 
     m_xAggregateAsParameters->setShort(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -274,7 +274,7 @@ void SAL_CALL OPreparedStatement::setInt( sal_Int32 parameterIndex, sal_Int32 x 
     m_xAggregateAsParameters->setInt(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -282,7 +282,7 @@ void SAL_CALL OPreparedStatement::setLong( sal_Int32 parameterIndex, sal_Int64 x
     m_xAggregateAsParameters->setLong(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -290,7 +290,7 @@ void SAL_CALL OPreparedStatement::setFloat( sal_Int32 parameterIndex, float x ) 
     m_xAggregateAsParameters->setFloat(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -298,7 +298,7 @@ void SAL_CALL OPreparedStatement::setDouble( sal_Int32 parameterIndex, double x 
     m_xAggregateAsParameters->setDouble(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUString& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -306,7 +306,7 @@ void SAL_CALL OPreparedStatement::setString( sal_Int32 parameterIndex, const OUS
     m_xAggregateAsParameters->setString(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -314,7 +314,7 @@ void SAL_CALL OPreparedStatement::setBytes( sal_Int32 parameterIndex, const Sequ
     m_xAggregateAsParameters->setBytes(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const css::util::Date& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const css::util::Date& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -322,7 +322,7 @@ void SAL_CALL OPreparedStatement::setDate( sal_Int32 parameterIndex, const css::
     m_xAggregateAsParameters->setDate(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::util::Time& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -330,7 +330,7 @@ void SAL_CALL OPreparedStatement::setTime( sal_Int32 parameterIndex, const css::
     m_xAggregateAsParameters->setTime(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const css::util::DateTime& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -338,7 +338,7 @@ void SAL_CALL OPreparedStatement::setTimestamp( sal_Int32 parameterIndex, const 
     m_xAggregateAsParameters->setTimestamp(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -346,7 +346,7 @@ void SAL_CALL OPreparedStatement::setBinaryStream( sal_Int32 parameterIndex, con
     m_xAggregateAsParameters->setBinaryStream(parameterIndex, x, length);
 }
 
-void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -354,7 +354,7 @@ void SAL_CALL OPreparedStatement::setCharacterStream( sal_Int32 parameterIndex, 
     m_xAggregateAsParameters->setCharacterStream(parameterIndex, x, length);
 }
 
-void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -362,7 +362,7 @@ void SAL_CALL OPreparedStatement::setObject( sal_Int32 parameterIndex, const Any
     m_xAggregateAsParameters->setObject(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -370,7 +370,7 @@ void SAL_CALL OPreparedStatement::setObjectWithInfo( sal_Int32 parameterIndex, c
     m_xAggregateAsParameters->setObjectWithInfo(parameterIndex, x, targetSqlType, scale);
 }
 
-void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Reference< XRef >& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -378,7 +378,7 @@ void SAL_CALL OPreparedStatement::setRef( sal_Int32 parameterIndex, const Refere
     m_xAggregateAsParameters->setRef(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Reference< XBlob >& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -386,7 +386,7 @@ void SAL_CALL OPreparedStatement::setBlob( sal_Int32 parameterIndex, const Refer
     m_xAggregateAsParameters->setBlob(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Reference< XClob >& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -394,7 +394,7 @@ void SAL_CALL OPreparedStatement::setClob( sal_Int32 parameterIndex, const Refer
     m_xAggregateAsParameters->setClob(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Reference< XArray >& x )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -402,7 +402,7 @@ void SAL_CALL OPreparedStatement::setArray( sal_Int32 parameterIndex, const Refe
     m_xAggregateAsParameters->setArray(parameterIndex, x);
 }
 
-void SAL_CALL OPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OPreparedStatement::clearParameters(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);

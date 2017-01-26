@@ -52,7 +52,7 @@ namespace connectivity
             OMySQLColumn();
             virtual void construct() override;
 
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         };
     }
 }

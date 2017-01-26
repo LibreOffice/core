@@ -29,7 +29,7 @@ namespace cmis
             m_pStream->setstate( ios::eofbit );
     }
 
-    uno::Any SAL_CALL StdOutputStream::queryInterface( const uno::Type& rType ) throw ( uno::RuntimeException, std::exception )
+    uno::Any SAL_CALL StdOutputStream::queryInterface( const uno::Type& rType )
     {
         uno::Any aRet = ::cppu::queryInterface( rType, ( static_cast< XOutputStream* >( this ) ) );
 
@@ -47,8 +47,6 @@ namespace cmis
     }
 
     void SAL_CALL StdOutputStream::writeBytes ( const uno::Sequence< sal_Int8 >& aData )
-        throw ( io::NotConnectedException, io::BufferSizeExceededException,
-                io::IOException, uno::RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard( m_aMutex );
 
@@ -67,8 +65,6 @@ namespace cmis
     }
 
     void SAL_CALL StdOutputStream::flush ( )
-        throw ( io::NotConnectedException, io::BufferSizeExceededException,
-                io::IOException, uno::RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard( m_aMutex );
 
@@ -87,8 +83,6 @@ namespace cmis
     }
 
     void SAL_CALL StdOutputStream::closeOutput ( )
-        throw ( io::NotConnectedException, io::BufferSizeExceededException,
-                io::IOException, uno::RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard( m_aMutex );
 

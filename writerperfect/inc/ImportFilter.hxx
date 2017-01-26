@@ -70,8 +70,7 @@ public:
     }
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence< css::beans::PropertyValue > &rDescriptor)
-    throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence< css::beans::PropertyValue > &rDescriptor) override
     {
         utl::MediaDescriptor aDescriptor(rDescriptor);
         css::uno::Reference < css::io::XInputStream > xInputStream;
@@ -106,8 +105,7 @@ public:
         return this->doImportDocument(input, exporter, aDescriptor);
     }
 
-    virtual void SAL_CALL cancel()
-    throw (css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL cancel() override
     {
     }
 
@@ -116,15 +114,13 @@ public:
     {
         return mxDoc;
     }
-    virtual void SAL_CALL setTargetDocument(const css::uno::Reference< css::lang::XComponent > &xDoc)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL setTargetDocument(const css::uno::Reference< css::lang::XComponent > &xDoc) override
     {
         mxDoc = xDoc;
     }
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor)
-    throw(css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor) override
     {
         OUString sTypeName;
         sal_Int32 nLength = Descriptor.getLength();
@@ -161,8 +157,7 @@ public:
     }
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > &aArguments)
-    throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > &aArguments) override
     {
         css::uno::Sequence < css::beans::PropertyValue > aAnySeq;
         sal_Int32 nLength = aArguments.getLength();

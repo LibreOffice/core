@@ -406,7 +406,7 @@ void OTableContainer::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     m_bInDrop = false;
 }
 
-void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) throw (RuntimeException, std::exception)
+void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     OUString sName;
@@ -424,11 +424,11 @@ void SAL_CALL OTableContainer::elementInserted( const ContainerEvent& Event ) th
     }
 }
 
-void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL OTableContainer::elementRemoved( const ContainerEvent& /*Event*/ )
 {
 }
 
-void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event ) throw (RuntimeException, std::exception)
+void SAL_CALL OTableContainer::elementReplaced( const ContainerEvent& Event )
 {
     // create a new config entry
     {
@@ -448,7 +448,7 @@ void SAL_CALL OTableContainer::disposing()
     m_pTableMediator = nullptr;
 }
 
-void SAL_CALL OTableContainer::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL OTableContainer::disposing( const css::lang::EventObject& /*Source*/ )
 {
 }
 

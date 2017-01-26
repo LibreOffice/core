@@ -42,7 +42,6 @@ PolynomialRegressionCurveCalculator::~PolynomialRegressionCurveCalculator()
 void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aXValues,
     const uno::Sequence< double >& aYValues )
-    throw (uno::RuntimeException, std::exception)
 {
     rtl::math::setNan(&m_fCorrelationCoeffitient);
 
@@ -199,8 +198,6 @@ void SAL_CALL PolynomialRegressionCurveCalculator::recalculateRegression(
 }
 
 double SAL_CALL PolynomialRegressionCurveCalculator::getCurveValue( double x )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     double fResult;
     rtl::math::setNan(&fResult);

@@ -231,7 +231,7 @@ void SAL_CALL AnnotationManagerImpl::disposing ()
 }
 
 // XEventListener
-void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObject& aEvent )
 {
     if( aEvent.EventName == "OnAnnotationInserted" || aEvent.EventName == "OnAnnotationRemoved" || aEvent.EventName == "OnAnnotationChanged" )
     {
@@ -239,7 +239,7 @@ void SAL_CALL AnnotationManagerImpl::notifyEvent( const css::document::EventObje
     }
 }
 
-void SAL_CALL AnnotationManagerImpl::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL AnnotationManagerImpl::disposing( const css::lang::EventObject& /*Source*/ )
 {
 }
 

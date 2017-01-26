@@ -49,7 +49,7 @@ OComponentAccess::~OComponentAccess()
 }
 
 //  XEnumerationAccess
-css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration() throw( RuntimeException, std::exception )
+css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration()
 {
     SolarMutexGuard g;
 
@@ -76,7 +76,7 @@ css::uno::Reference< XEnumeration > SAL_CALL OComponentAccess::createEnumeration
 }
 
 //  XElementAccess
-Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException, std::exception )
+Type SAL_CALL OComponentAccess::getElementType()
 {
     // Elements in list an enumeration are components!
     // Return the uno-type of XComponent.
@@ -84,7 +84,7 @@ Type SAL_CALL OComponentAccess::getElementType() throw( RuntimeException, std::e
 }
 
 //  XElementAccess
-sal_Bool SAL_CALL OComponentAccess::hasElements() throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL OComponentAccess::hasElements()
 {
     SolarMutexGuard g;
 

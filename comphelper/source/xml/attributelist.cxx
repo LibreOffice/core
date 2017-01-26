@@ -53,17 +53,17 @@ struct AttributeList_Impl
     ::std::vector<struct TagAttribute_Impl> vecAttribute;
 };
 
-sal_Int16 SAL_CALL AttributeList::getLength() throw( css::uno::RuntimeException, std::exception )
+sal_Int16 SAL_CALL AttributeList::getLength()
 {
     return (sal_Int16)(m_pImpl->vecAttribute.size());
 }
 
-OUString SAL_CALL AttributeList::getNameByIndex(sal_Int16 i) throw( css::uno::RuntimeException, std::exception )
+OUString SAL_CALL AttributeList::getNameByIndex(sal_Int16 i)
 {
     return ( i < static_cast < sal_Int16 > (m_pImpl->vecAttribute.size()) ) ? m_pImpl->vecAttribute[i].sName : OUString();
 }
 
-OUString SAL_CALL AttributeList::getTypeByIndex(sal_Int16 i) throw( css::uno::RuntimeException, std::exception )
+OUString SAL_CALL AttributeList::getTypeByIndex(sal_Int16 i)
 {
     if( i < static_cast < sal_Int16 > (m_pImpl->vecAttribute.size() ) ) {
         return m_pImpl->vecAttribute[i].sType;
@@ -71,12 +71,12 @@ OUString SAL_CALL AttributeList::getTypeByIndex(sal_Int16 i) throw( css::uno::Ru
     return OUString();
 }
 
-OUString SAL_CALL  AttributeList::getValueByIndex(sal_Int16 i) throw( css::uno::RuntimeException, std::exception )
+OUString SAL_CALL  AttributeList::getValueByIndex(sal_Int16 i)
 {
     return ( i < static_cast < sal_Int16 > (m_pImpl->vecAttribute.size() ) ) ? m_pImpl->vecAttribute[i].sValue : OUString();
 }
 
-OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName ) throw( css::uno::RuntimeException, std::exception )
+OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName )
 {
     ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
@@ -88,7 +88,7 @@ OUString SAL_CALL AttributeList::getTypeByName( const OUString& sName ) throw( c
     return OUString();
 }
 
-OUString SAL_CALL AttributeList::getValueByName(const OUString& sName) throw( css::uno::RuntimeException, std::exception )
+OUString SAL_CALL AttributeList::getValueByName(const OUString& sName)
 {
     ::std::vector<struct TagAttribute_Impl>::iterator ii = m_pImpl->vecAttribute.begin();
 
@@ -127,7 +127,7 @@ void AttributeList::Clear()
     m_pImpl->vecAttribute.clear();
 }
 
-css::uno::Reference< css::util::XCloneable > AttributeList::createClone() throw (css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::util::XCloneable > AttributeList::createClone()
 
 {
     AttributeList *p = new AttributeList( *this );

@@ -147,18 +147,13 @@ public:
     /// @throws uno::RuntimeException
     void SAL_CALL SetPropertyValues_Impl(
             const uno::Sequence< OUString >& rPropertyNames,
-            const uno::Sequence< uno::Any >& aValues)
-        throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-                lang::IllegalArgumentException, lang::WrappedTargetException,
-                uno::RuntimeException, std::exception);
+            const uno::Sequence< uno::Any >& aValues);
     /// @throws beans::UnknownPropertyException
     /// @throws lang::WrappedTargetException,
     /// @throws uno::RuntimeException
     uno::Sequence< uno::Any > SAL_CALL
         GetPropertyValues_Impl(
-            const uno::Sequence< OUString >& rPropertyNames)
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-                uno::RuntimeException, std::exception);
+            const uno::Sequence< OUString >& rPropertyNames);
 protected:
     // SwClient
     virtual void Modify(const SfxPoolItem *pOld, const SfxPoolItem *pNew) override;
@@ -234,13 +229,12 @@ const uno::Sequence< sal_Int8 > & SwXTextSection::getUnoTunnelId()
 
 sal_Int64 SAL_CALL
 SwXTextSection::getSomething(const uno::Sequence< sal_Int8 >& rId)
-throw (uno::RuntimeException, std::exception)
 {
     return ::sw::UnoTunnelImpl<SwXTextSection>(rId, this);
 }
 
 uno::Reference< text::XTextSection > SAL_CALL
-SwXTextSection::getParentSection() throw (uno::RuntimeException, std::exception)
+SwXTextSection::getParentSection()
 {
     SolarMutexGuard aGuard;
 
@@ -253,7 +247,7 @@ SwXTextSection::getParentSection() throw (uno::RuntimeException, std::exception)
 }
 
 uno::Sequence< uno::Reference< text::XTextSection > > SAL_CALL
-SwXTextSection::getChildSections() throw (uno::RuntimeException, std::exception)
+SwXTextSection::getChildSections()
 {
     SolarMutexGuard aGuard;
 
@@ -273,7 +267,6 @@ SwXTextSection::getChildSections() throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL
 SwXTextSection::attach(const uno::Reference< text::XTextRange > & xTextRange)
-throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -440,7 +433,7 @@ throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 }
 
 uno::Reference< text::XTextRange > SAL_CALL
-SwXTextSection::getAnchor() throw (uno::RuntimeException, std::exception)
+SwXTextSection::getAnchor()
 {
     SolarMutexGuard aGuard;
 
@@ -466,7 +459,7 @@ SwXTextSection::getAnchor() throw (uno::RuntimeException, std::exception)
     return xRet;
 }
 
-void SAL_CALL SwXTextSection::dispose() throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwXTextSection::dispose()
 {
     SolarMutexGuard aGuard;
 
@@ -479,7 +472,6 @@ void SAL_CALL SwXTextSection::dispose() throw (uno::RuntimeException, std::excep
 
 void SAL_CALL SwXTextSection::addEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.addInterface(xListener);
@@ -487,14 +479,13 @@ throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL SwXTextSection::removeEventListener(
         const uno::Reference< lang::XEventListener > & xListener)
-throw (uno::RuntimeException, std::exception)
 {
     // no need to lock here as m_pImpl is const and container threadsafe
     m_pImpl->m_EventListeners.removeInterface(xListener);
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
-SwXTextSection::getPropertySetInfo() throw (uno::RuntimeException, std::exception)
+SwXTextSection::getPropertySetInfo()
 {
     SolarMutexGuard g;
 
@@ -557,9 +548,6 @@ lcl_UpdateSection(SwSectionFormat *const pFormat,
 void SwXTextSection::Impl::SetPropertyValues_Impl(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues)
-throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-        lang::IllegalArgumentException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     if(rPropertyNames.getLength() != rValues.getLength())
     {
@@ -919,8 +907,6 @@ void SAL_CALL
 SwXTextSection::setPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames,
     const uno::Sequence< uno::Any >& rValues)
-throw (beans::PropertyVetoException, lang::IllegalArgumentException,
-        lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -941,9 +927,6 @@ throw (beans::PropertyVetoException, lang::IllegalArgumentException,
 
 void SwXTextSection::setPropertyValue(
     const OUString& rPropertyName, const uno::Any& rValue)
-throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-        lang::IllegalArgumentException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -956,8 +939,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 uno::Sequence< uno::Any >
 SwXTextSection::Impl::GetPropertyValues_Impl(
         const uno::Sequence< OUString > & rPropertyNames )
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     SwSectionFormat *const pFormat = GetSectionFormat();
     if (!pFormat && !m_bIsDescriptor)
@@ -1263,7 +1244,6 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 uno::Sequence< uno::Any > SAL_CALL
 SwXTextSection::getPropertyValues(
     const uno::Sequence< OUString >& rPropertyNames)
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< uno::Any > aValues;
@@ -1289,8 +1269,6 @@ throw (uno::RuntimeException, std::exception)
 
 uno::Any SAL_CALL
 SwXTextSection::getPropertyValue(const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1301,14 +1279,12 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
 void SAL_CALL SwXTextSection::addPropertiesChangeListener(
     const uno::Sequence< OUString >& /*aPropertyNames*/,
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXTextSection::addPropertiesChangeListener(): not implemented");
 }
 
 void SAL_CALL SwXTextSection::removePropertiesChangeListener(
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXTextSection::removePropertiesChangeListener(): not implemented");
 }
@@ -1316,7 +1292,6 @@ throw (uno::RuntimeException, std::exception)
 void SAL_CALL SwXTextSection::firePropertiesChangeEvent(
     const uno::Sequence< OUString >& /*aPropertyNames*/,
     const uno::Reference< beans::XPropertiesChangeListener >& /*xListener*/ )
-        throw(uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXTextSection::firePropertiesChangeEvent(): not implemented");
 }
@@ -1325,8 +1300,6 @@ void SAL_CALL
 SwXTextSection::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXTextSection::addPropertyChangeListener(): not implemented");
 }
@@ -1335,8 +1308,6 @@ void SAL_CALL
 SwXTextSection::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXTextSection::removePropertyChangeListener(): not implemented");
 }
@@ -1345,8 +1316,6 @@ void SAL_CALL
 SwXTextSection::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXTextSection::addVetoableChangeListener(): not implemented");
 }
@@ -1355,15 +1324,12 @@ void SAL_CALL
 SwXTextSection::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     OSL_FAIL("SwXTextSection::removeVetoableChangeListener(): not implemented");
 }
 
 beans::PropertyState SAL_CALL
 SwXTextSection::getPropertyState(const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1374,7 +1340,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 uno::Sequence< beans::PropertyState > SAL_CALL
 SwXTextSection::getPropertyStates(
         const uno::Sequence< OUString >& rPropertyNames)
-throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1456,7 +1421,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 
 void SAL_CALL
 SwXTextSection::setPropertyToDefault(const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1599,8 +1563,6 @@ throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 
 uno::Any SAL_CALL
 SwXTextSection::getPropertyDefault(const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1653,7 +1615,7 @@ throw (beans::UnknownPropertyException, lang::WrappedTargetException,
     return aRet;
 }
 
-OUString SAL_CALL SwXTextSection::getName() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL SwXTextSection::getName()
 {
     SolarMutexGuard aGuard;
 
@@ -1675,7 +1637,6 @@ OUString SAL_CALL SwXTextSection::getName() throw (uno::RuntimeException, std::e
 }
 
 void SAL_CALL SwXTextSection::setName(const OUString& rName)
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -1723,7 +1684,7 @@ throw (uno::RuntimeException, std::exception)
 }
 
 OUString SAL_CALL
-SwXTextSection::getImplementationName() throw (uno::RuntimeException, std::exception)
+SwXTextSection::getImplementationName()
 {
     return OUString("SwXTextSection");
 }
@@ -1736,13 +1697,12 @@ static char const*const g_ServicesTextSection[] =
 };
 
 sal_Bool SAL_CALL SwXTextSection::supportsService(const OUString& rServiceName)
-throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL
-SwXTextSection::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+SwXTextSection::getSupportedServiceNames()
 {
     return ::sw::GetSupportedServiceNamesImpl(
                 SAL_N_ELEMENTS(g_ServicesTextSection),

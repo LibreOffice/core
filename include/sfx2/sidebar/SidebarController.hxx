@@ -86,24 +86,19 @@ public:
     static void unregisterSidebarForFrame(SidebarController* pController, const css::uno::Reference<css::frame::XController>& xFrame);
 
     // ui::XContextChangeEventListener
-    virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing (const css::lang::EventObject& rEventObject)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing (const css::lang::EventObject& rEventObject) override;
 
     // beans::XPropertyChangeListener
-    virtual void SAL_CALL propertyChange (const css::beans::PropertyChangeEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL propertyChange (const css::beans::PropertyChangeEvent& rEvent) override;
 
     // frame::XStatusListener
-    virtual void SAL_CALL statusChanged (const css::frame::FeatureStateEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL statusChanged (const css::frame::FeatureStateEvent& rEvent) override;
 
     // ui::XSidebar
-    virtual void SAL_CALL requestLayout()
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL requestLayout() override;
 
     void NotifyResize();
 

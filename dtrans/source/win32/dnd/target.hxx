@@ -117,24 +117,21 @@ public:
     // Must be called.
     virtual void SAL_CALL disposing() override;
    // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
-        throw(Exception, RuntimeException) override;
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
 
     // XDropTarget
-    virtual void SAL_CALL addDropTargetListener( const Reference< XDropTargetListener >& dtl )
-        throw(RuntimeException) override;
-    virtual void SAL_CALL removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
-        throw(RuntimeException) override;
+    virtual void SAL_CALL addDropTargetListener( const Reference< XDropTargetListener >& dtl ) override;
+    virtual void SAL_CALL removeDropTargetListener( const Reference< XDropTargetListener >& dtl ) override;
     // Default is not active
-    virtual sal_Bool SAL_CALL isActive(  ) throw(RuntimeException) override;
-    virtual void SAL_CALL setActive( sal_Bool isActive ) throw(RuntimeException) override;
-    virtual sal_Int8 SAL_CALL getDefaultActions(  ) throw(RuntimeException) override;
-    virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) throw(RuntimeException) override;
+    virtual sal_Bool SAL_CALL isActive(  ) override;
+    virtual void SAL_CALL setActive( sal_Bool isActive ) override;
+    virtual sal_Int8 SAL_CALL getDefaultActions(  ) override;
+    virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // Functions called from the IDropTarget implementation ( m_pDropTarget)
     virtual HRESULT DragEnter(

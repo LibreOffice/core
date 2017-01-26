@@ -58,8 +58,7 @@ class FastParser
 {
 public:
     /// @throws css::uno::RuntimeException
-    explicit            FastParser()
-                            throw( css::uno::RuntimeException );
+    explicit            FastParser();
 
                         FastParser(const FastParser&) = delete;
                         FastParser& operator=(const FastParser&) = delete;
@@ -70,15 +69,13 @@ public:
         @throws css::lang::IllegalArgumentException
         @throws css::uno::RuntimeException
     */
-    void                registerNamespace( sal_Int32 nNamespaceId )
-                            throw( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+    void                registerNamespace( sal_Int32 nNamespaceId );
 
     /** Sets the passed document handler that will receive the SAX parser events.
         @throws css::uno::RuntimeException
     */
     void                setDocumentHandler(
-                            const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& rxDocHandler )
-                            throw( css::uno::RuntimeException );
+                            const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& rxDocHandler );
 
     /** Parses the passed SAX input source.
         @param bCloseStream  True = closes the stream in the input source after parsing.
@@ -86,8 +83,7 @@ public:
         @throws css::io::IOException
         @throws css::uno::RuntimeException
     */
-    void                parseStream( const css::xml::sax::InputSource& rInputSource, bool bCloseStream = false )
-                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception );
+    void                parseStream( const css::xml::sax::InputSource& rInputSource, bool bCloseStream = false );
 
     /** Parses the passed input stream.
         @param bCloseStream  True = closes the passed stream after parsing.
@@ -97,8 +93,7 @@ public:
     */
     void                parseStream(
                             const css::uno::Reference< css::io::XInputStream >& rxInStream,
-                            const OUString& rStreamName )
-                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception );
+                            const OUString& rStreamName );
 
     /** Parses a stream from the passed storage with the specified name.
         @param bCloseStream  True = closes the stream after parsing.
@@ -106,8 +101,7 @@ public:
         @throws css::io::IOException
         @throws css::uno::RuntimeException
     */
-    void                parseStream( StorageBase& rStorage, const OUString& rStreamName )
-                            throw( css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception );
+    void                parseStream( StorageBase& rStorage, const OUString& rStreamName );
 
     const css::uno::Reference< css::xml::sax::XFastTokenHandler >&
                getTokenHandler() const { return mxTokenHandler; }

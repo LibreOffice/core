@@ -46,11 +46,9 @@ public:
     static bool checkCommandFile(std::vector< std::string > & rArgs, char const * filename);
 
     /// @throws IllegalArgument
-    bool initOptions(std::vector< std::string > & rArgs)
-        throw(IllegalArgument);
+    bool initOptions(std::vector< std::string > & rArgs);
     /// @throws IllegalArgument
-    static bool badOption(char const * reason, std::string const & rArg)
-        throw(IllegalArgument);
+    static bool badOption(char const * reason, std::string const & rArg);
     bool setOption(char const * option, std::string const & rArg);
 
     OString prepareHelp();
@@ -59,8 +57,7 @@ public:
     const OString&   getProgramName() const { return m_program;}
     bool                isValid(const OString& option);
     /// @throws IllegalArgument
-    const OString&   getOption(const OString& option)
-        throw( IllegalArgument );
+    const OString&   getOption(const OString& option);
 
     const std::vector< OString >& getInputFiles() const { return m_inputFiles; }
     bool readStdin() const { return m_stdin; }

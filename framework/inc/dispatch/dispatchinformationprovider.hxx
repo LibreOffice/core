@@ -54,11 +54,9 @@ class DispatchInformationProvider : public  ::cppu::WeakImplHelper< css::frame::
 
         virtual ~DispatchInformationProvider() override;
 
-        virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< sal_Int16 > SAL_CALL getSupportedCommandGroups() override;
 
-        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL getConfigurableDispatchInformation(sal_Int16 nCommandGroup) override;
 
     // helper
     private:

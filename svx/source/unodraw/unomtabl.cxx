@@ -71,25 +71,25 @@ public:
     void SAL_CALL ImplInsertByName( const OUString& aName, const uno::Any& aElement );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) throw( uno::RuntimeException, std::exception) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const  OUString& ServiceName ) override;
+    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeByName( const  OUString& Name ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL insertByName( const  OUString& aName, const  uno::Any& aElement ) override;
+    virtual void SAL_CALL removeByName( const  OUString& Name ) override;
 
     // XNameReplace
-    virtual void SAL_CALL replaceByName( const  OUString& aName, const  uno::Any& aElement ) throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL replaceByName( const  OUString& aName, const  uno::Any& aElement ) override;
 
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const  OUString& aName ) throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) throw( uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) throw( uno::RuntimeException, std::exception) override;
+    virtual uno::Any SAL_CALL getByName( const  OUString& aName ) override;
+    virtual uno::Sequence<  OUString > SAL_CALL getElementNames(  ) override;
+    virtual sal_Bool SAL_CALL hasByName( const  OUString& aName ) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw( uno::RuntimeException, std::exception) override;
+    virtual uno::Type SAL_CALL getElementType(  ) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) override;
 };
 
 SvxUnoMarkerTable::SvxUnoMarkerTable( SdrModel* pModel ) throw()
@@ -129,18 +129,17 @@ void SvxUnoMarkerTable::Notify( SfxBroadcaster&, const SfxHint& rHint ) throw()
         dispose();
 }
 
-sal_Bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceName ) throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SvxUnoMarkerTable::supportsService( const  OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-OUString SAL_CALL SvxUnoMarkerTable::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL SvxUnoMarkerTable::getImplementationName()
 {
     return OUString("SvxUnoMarkerTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getSupportedServiceNames(  )
-    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence<OUString> aSNS { "com.sun.star.drawing.MarkerTable" };
     return aSNS;
@@ -166,7 +165,6 @@ void SAL_CALL SvxUnoMarkerTable::ImplInsertByName( const OUString& aName, const 
 
 // XNameContainer
 void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const uno::Any& aElement )
-    throw( lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -179,7 +177,6 @@ void SAL_CALL SvxUnoMarkerTable::insertByName( const OUString& aApiName, const u
 }
 
 void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
-    throw( container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -214,7 +211,6 @@ void SAL_CALL SvxUnoMarkerTable::removeByName( const OUString& aApiName )
 
 // XNameReplace
 void SAL_CALL SvxUnoMarkerTable::replaceByName( const OUString& aApiName, const uno::Any& aElement )
-    throw( lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -298,7 +294,6 @@ static bool getByNameFromPool( const OUString& rSearchName, SfxItemPool* pPool, 
 
 // XNameAccess
 uno::Any SAL_CALL SvxUnoMarkerTable::getByName( const OUString& aApiName )
-    throw( container::NoSuchElementException,  lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -341,7 +336,6 @@ static void createNamesForPool( SfxItemPool* pPool, sal_uInt16 nWhich, std::set<
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -357,7 +351,6 @@ uno::Sequence< OUString > SAL_CALL SvxUnoMarkerTable::getElementNames()
 }
 
 sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -392,13 +385,11 @@ sal_Bool SAL_CALL SvxUnoMarkerTable::hasByName( const OUString& aName )
 
 // XElementAccess
 uno::Type SAL_CALL SvxUnoMarkerTable::getElementType(  )
-    throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<drawing::PointSequence>::get();
 }
 
 sal_Bool SAL_CALL SvxUnoMarkerTable::hasElements(  )
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 

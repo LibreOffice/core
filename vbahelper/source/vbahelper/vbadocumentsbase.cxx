@@ -71,12 +71,12 @@ class DocumentsEnumImpl : public ::cppu::WeakImplHelper< container::XEnumeration
 
 public:
     /// @throws uno::RuntimeException
-    DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, const Documents& docs ) throw ( uno::RuntimeException ) :  m_xContext( xContext ), m_documents( docs )
+    DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext, const Documents& docs ) :  m_xContext( xContext ), m_documents( docs )
     {
         m_it = m_documents.begin();
     }
     /// @throws uno::RuntimeException
-    explicit DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) throw ( uno::RuntimeException ) :  m_xContext( xContext )
+    explicit DocumentsEnumImpl( const uno::Reference< uno::XComponentContext >& xContext ) :  m_xContext( xContext )
     {
         uno::Reference< frame::XDesktop2 > xDesktop = frame::Desktop::create( m_xContext );
         uno::Reference< container::XEnumeration > xComponents = xDesktop->getComponents()->createEnumeration();
@@ -89,12 +89,12 @@ public:
         m_it = m_documents.begin();
     }
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return m_it != m_documents.end();
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( !hasMoreElements() )
         {
@@ -123,7 +123,7 @@ class DocumentsAccessImpl : public DocumentsAccessImpl_BASE
     VbaDocumentsBase::DOCUMENT_TYPE meDocType;
 public:
     /// @throws uno::RuntimeException
-    DocumentsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) throw (uno::RuntimeException, std::exception) :m_xContext( xContext ), meDocType( eDocType )
+    DocumentsAccessImpl( const uno::Reference< uno::XComponentContext >& xContext, VbaDocumentsBase::DOCUMENT_TYPE eDocType ) :m_xContext( xContext ), meDocType( eDocType )
     {
         uno::Reference< container::XEnumeration > xEnum = new DocumentsEnumImpl( m_xContext );
         sal_Int32 nIndex=0;
@@ -144,16 +144,16 @@ public:
     }
 
     //XEnumerationAccess
-    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Reference< container::XEnumeration > SAL_CALL createEnumeration(  ) override
     {
         return new DocumentsEnumImpl( m_xContext, m_documents );
     }
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
+    virtual ::sal_Int32 SAL_CALL getCount(  ) override
     {
         return m_documents.size();
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw ( lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         if ( Index < 0
             || static_cast< Documents::size_type >(Index) >= m_documents.size() )
@@ -162,18 +162,18 @@ public:
     }
 
     //XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Type SAL_CALL getElementType(  ) override
     {
         return cppu::UnoType<frame::XModel>::get();
     }
 
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasElements(  ) override
     {
         return (!m_documents.empty());
     }
 
     //XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         if ( it == namesToIndices.end() )
@@ -182,12 +182,12 @@ public:
 
     }
 
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         return comphelper::mapKeysToSequence( namesToIndices );
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
         NameIndexHash::const_iterator it = namesToIndices.find( aName );
         return (it != namesToIndices.end());
@@ -195,7 +195,7 @@ public:
 
 };
 
-VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType ) throw (uno::RuntimeException) : VbaDocumentsBase_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new DocumentsAccessImpl( xContext, eDocType ) ) ), meDocType( eDocType )
+VbaDocumentsBase::VbaDocumentsBase( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType ) : VbaDocumentsBase_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >( new DocumentsAccessImpl( xContext, eDocType ) ) ), meDocType( eDocType )
 {
 }
 
@@ -225,7 +225,7 @@ void lclSetupComponent( const uno::Reference< lang::XComponent >& rxComponent, b
 
 } // namespace
 
-uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException, std::exception)
+uno::Any VbaDocumentsBase::createDocument()
 {
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );
@@ -258,7 +258,7 @@ uno::Any VbaDocumentsBase::createDocument() throw (uno::RuntimeException, std::e
 }
 
 // #TODO# #FIXME# can any of the unused params below be used?
-uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps ) throw (uno::RuntimeException)
+uno::Any VbaDocumentsBase::openDocument( const OUString& rFileName, const uno::Any& ReadOnly, const uno::Sequence< beans::PropertyValue >& rProps )
 {
     // #163808# determine state of Application.ScreenUpdating and Application.Interactive symbols (before new document is opened)
     uno::Reference< XApplicationBase > xApplication( Application(), uno::UNO_QUERY );

@@ -37,7 +37,7 @@ private:
     static float getMSWordLineSpacing( css::style::LineSpacing& rLineSpacing );
     static sal_Int32 getMSWordLineSpacingRule( css::style::LineSpacing& rLineSpacing );
     /// @throws css::uno::RuntimeException
-    sal_Int16 getCharHeight() throw (css::uno::RuntimeException);
+    sal_Int16 getCharHeight();
     static sal_Int32 getOOoAlignment( sal_Int32 _alignment );
     static sal_Int32 getMSWordAlignment( sal_Int32 _alignment );
 
@@ -46,38 +46,38 @@ public:
     virtual ~SwVbaParagraphFormat() override;
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getAlignment() throw (css::uno::RuntimeException, css::script::BasicErrorException, std::exception) override;
-    virtual void SAL_CALL setAlignment( ::sal_Int32 _alignment ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getFirstLineIndent() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFirstLineIndent( float _firstlineindent ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getKeepTogether() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setKeepTogether( const css::uno::Any& _keeptogether ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getKeepWithNext() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setKeepWithNext( const css::uno::Any& _keepwithnext ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getHyphenation() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHyphenation( const css::uno::Any& _hyphenation ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getLineSpacing() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLineSpacing( float _linespacing ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getLineSpacingRule() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLineSpacingRule( ::sal_Int32 _linespacingrule ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getNoLineNumber() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setNoLineNumber( const css::uno::Any& _nolinenumber ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getOutlineLevel() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setOutlineLevel( ::sal_Int32 _outlinelevel ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getPageBreakBefore() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setPageBreakBefore( const css::uno::Any& _pagebreakbefore ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getSpaceBefore() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSpaceBefore( float _spacebefore ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getSpaceAfter() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSpaceAfter( float _spaceafter ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getLeftIndent() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLeftIndent( float _leftindent ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getRightIndent() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setRightIndent( float _rightindent ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getTabStops() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTabStops( const css::uno::Any& _tabstops ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getWidowControl() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setWidowControl( const css::uno::Any& _widowcontrol ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getAlignment() override;
+    virtual void SAL_CALL setAlignment( ::sal_Int32 _alignment ) override;
+    virtual float SAL_CALL getFirstLineIndent() override;
+    virtual void SAL_CALL setFirstLineIndent( float _firstlineindent ) override;
+    virtual css::uno::Any SAL_CALL getKeepTogether() override;
+    virtual void SAL_CALL setKeepTogether( const css::uno::Any& _keeptogether ) override;
+    virtual css::uno::Any SAL_CALL getKeepWithNext() override;
+    virtual void SAL_CALL setKeepWithNext( const css::uno::Any& _keepwithnext ) override;
+    virtual css::uno::Any SAL_CALL getHyphenation() override;
+    virtual void SAL_CALL setHyphenation( const css::uno::Any& _hyphenation ) override;
+    virtual float SAL_CALL getLineSpacing() override;
+    virtual void SAL_CALL setLineSpacing( float _linespacing ) override;
+    virtual ::sal_Int32 SAL_CALL getLineSpacingRule() override;
+    virtual void SAL_CALL setLineSpacingRule( ::sal_Int32 _linespacingrule ) override;
+    virtual css::uno::Any SAL_CALL getNoLineNumber() override;
+    virtual void SAL_CALL setNoLineNumber( const css::uno::Any& _nolinenumber ) override;
+    virtual ::sal_Int32 SAL_CALL getOutlineLevel() override;
+    virtual void SAL_CALL setOutlineLevel( ::sal_Int32 _outlinelevel ) override;
+    virtual css::uno::Any SAL_CALL getPageBreakBefore() override;
+    virtual void SAL_CALL setPageBreakBefore( const css::uno::Any& _pagebreakbefore ) override;
+    virtual float SAL_CALL getSpaceBefore() override;
+    virtual void SAL_CALL setSpaceBefore( float _spacebefore ) override;
+    virtual float SAL_CALL getSpaceAfter() override;
+    virtual void SAL_CALL setSpaceAfter( float _spaceafter ) override;
+    virtual float SAL_CALL getLeftIndent() override;
+    virtual void SAL_CALL setLeftIndent( float _leftindent ) override;
+    virtual float SAL_CALL getRightIndent() override;
+    virtual void SAL_CALL setRightIndent( float _rightindent ) override;
+    virtual css::uno::Any SAL_CALL getTabStops() override;
+    virtual void SAL_CALL setTabStops( const css::uno::Any& _tabstops ) override;
+    virtual css::uno::Any SAL_CALL getWidowControl() override;
+    virtual void SAL_CALL setWidowControl( const css::uno::Any& _widowcontrol ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

@@ -69,7 +69,7 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
         ,const OUString& _rName
         ,const OUString& _rType
         ,const OUString& _rDesc
-        ,const Reference< XNameAccess >& _xColumnDefinitions) throw(SQLException)
+        ,const Reference< XNameAccess >& _xColumnDefinitions)
     :OTable_Base(_pTables,_rxConn,_rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers(), _rName, _rType, _rDesc, _rSchema, _rCatalog )
     ,m_xColumnDefinitions(_xColumnDefinitions)
     ,m_nPrivileges(0)
@@ -84,7 +84,6 @@ ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
 
 ODBTable::ODBTable(connectivity::sdbcx::OCollection* _pTables
                    ,const Reference< XConnection >& _rxConn)
-                throw(SQLException)
     :OTable_Base(_pTables,_rxConn, _rxConn->getMetaData().is() && _rxConn->getMetaData()->supportsMixedCaseQuotedIdentifiers())
     ,m_nPrivileges(-1)
 {
@@ -131,7 +130,7 @@ void ODBTable::columnDropped(const OUString& _sName)
     }
 }
 
-Sequence< sal_Int8 > ODBTable::getImplementationId() throw (RuntimeException, std::exception)
+Sequence< sal_Int8 > ODBTable::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -248,7 +247,7 @@ void ODBTable::construct()
 // XServiceInfo
 IMPLEMENT_SERVICE_INFO1(ODBTable, "com.sun.star.sdb.dbaccess.ODBTable", SERVICE_SDBCX_TABLE)
 
-Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL ODBTable::queryInterface( const Type & rType )
 {
     if(rType == cppu::UnoType<XRename>::get()&& !getRenameService().is() )
         return Any();
@@ -257,7 +256,7 @@ Any SAL_CALL ODBTable::queryInterface( const Type & rType ) throw(RuntimeExcepti
     return OTable_Base::queryInterface( rType);
 }
 
-Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL ODBTable::getTypes(  )
 {
     Type aRenameType = cppu::UnoType<XRename>::get();
     Type aAlterType = cppu::UnoType<XAlterTable>::get();
@@ -278,7 +277,7 @@ Sequence< Type > SAL_CALL ODBTable::getTypes(  ) throw(RuntimeException, std::ex
 }
 
 // XRename,
-void SAL_CALL ODBTable::rename( const OUString& _rNewName ) throw(SQLException, ElementExistException, RuntimeException, std::exception)
+void SAL_CALL ODBTable::rename( const OUString& _rNewName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -291,7 +290,7 @@ void SAL_CALL ODBTable::rename( const OUString& _rNewName ) throw(SQLException, 
 }
 
 // XAlterTable,
-void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Reference< XPropertySet >& _rxDescriptor ) throw(SQLException, NoSuchElementException, RuntimeException, std::exception)
+void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Reference< XPropertySet >& _rxDescriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(connectivity::sdbcx::OTableDescriptor_BASE::rBHelper.bDisposed);
@@ -306,7 +305,7 @@ void SAL_CALL ODBTable::alterColumnByName( const OUString& _rName, const Referen
     m_pColumns->refresh();
 }
 
-sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId ) throw(RuntimeException, std::exception)
+sal_Int64 SAL_CALL ODBTable::getSomething( const Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet(0);
     if (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )

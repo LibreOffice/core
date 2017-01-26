@@ -554,8 +554,7 @@ public:
             readAndCopy(nRemaining);
     }
 
-    virtual sal_Int32 SAL_CALL readBytes( uno::Sequence<sal_Int8>& rData, sal_Int32 nBytesToRead )
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    virtual sal_Int32 SAL_CALL readBytes( uno::Sequence<sal_Int8>& rData, sal_Int32 nBytesToRead ) override
     {
         if (!hasBytes())
             return 0;
@@ -572,14 +571,12 @@ public:
         return nReadSize;
     }
 
-    virtual sal_Int32 SAL_CALL readSomeBytes( ::css::uno::Sequence<sal_Int8>& rData, sal_Int32 nMaxBytesToRead )
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    virtual sal_Int32 SAL_CALL readSomeBytes( ::css::uno::Sequence<sal_Int8>& rData, sal_Int32 nMaxBytesToRead ) override
     {
         return readBytes(rData, nMaxBytesToRead);
     }
 
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override
     {
         if (!hasBytes())
             return;
@@ -587,8 +584,7 @@ public:
         mnPos += nBytesToSkip;
     }
 
-    virtual sal_Int32 SAL_CALL available()
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    virtual sal_Int32 SAL_CALL available() override
     {
         if (!hasBytes())
             return 0;
@@ -596,8 +592,7 @@ public:
         return remainingSize();
     }
 
-    virtual void SAL_CALL closeInput()
-        throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override
+    virtual void SAL_CALL closeInput() override
     {
     }
 };

@@ -167,71 +167,64 @@ public:
     DECLARE_XTYPEPROVIDER()
 
     // XComponent
-    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XController
-    virtual sal_Bool SAL_CALL suspend( sal_Bool Suspend ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL suspend( sal_Bool Suspend ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XSelectionSupplier
-    virtual sal_Bool SAL_CALL select( const css::uno::Any& aSelection ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getSelection(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL select( const css::uno::Any& aSelection ) override;
+    virtual css::uno::Any SAL_CALL getSelection(  ) override;
+    virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+    virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
     // XFormLayerAccess
-    virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const css::uno::Reference< css::form::XForm >& Form ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isFormDesignMode(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFormDesignMode( sal_Bool DesignMode ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::form::runtime::XFormController > SAL_CALL getFormController( const css::uno::Reference< css::form::XForm >& Form ) override;
+    virtual sal_Bool SAL_CALL isFormDesignMode(  ) override;
+    virtual void SAL_CALL setFormDesignMode( sal_Bool DesignMode ) override;
 
     // XControlAccess
-    virtual css::uno::Reference< css::awt::XControl > SAL_CALL getControl( const css::uno::Reference< css::awt::XControlModel >& xModel ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::XControl > SAL_CALL getControl( const css::uno::Reference< css::awt::XControlModel >& xModel ) override;
 
     // XDrawView
     virtual void SAL_CALL
         setCurrentPage (
             const css::uno::Reference<
-            css::drawing::XDrawPage >& xPage)
-        throw(css::uno::RuntimeException, std::exception) override;
+            css::drawing::XDrawPage >& xPage) override;
 
     virtual css::uno::Reference<
         css::drawing::XDrawPage > SAL_CALL
-        getCurrentPage()
-        throw(css::uno::RuntimeException, std::exception) override;
+        getCurrentPage() override;
 
     // lang::XEventListener
     virtual void SAL_CALL
-        disposing (const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject) override;
 
     // view::XSelectionChangeListener
     virtual void  SAL_CALL
-        selectionChanged (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+        selectionChanged (const css::lang::EventObject& rEvent) override;
 
     // XControllerManager
 
     virtual css::uno::Reference<css::drawing::framework::XConfigurationController> SAL_CALL
-        getConfigurationController()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getConfigurationController() override;
 
     virtual css::uno::Reference<css::drawing::framework::XModuleController> SAL_CALL
-        getModuleController()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getModuleController() override;
 
     // XUnoTunnel
 
-    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId) override;
 
 protected:
     /** This method must return the name to index table. This table
@@ -268,24 +261,21 @@ protected:
         css::uno::Any & rConvertedValue,
         css::uno::Any & rOldValue,
         sal_Int32 nHandle,
-        const css::uno::Any& rValue )
-        throw (css::lang::IllegalArgumentException) override;
+        const css::uno::Any& rValue ) override;
 
     /** The same as setFastProperyValue, but no exception is thrown and nHandle
         is always valid. You must not broadcast the changes in this method.
      */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
         sal_Int32 nHandle,
-        const css::uno::Any& rValue )
-        throw (css::uno::Exception, std::exception) override;
+        const css::uno::Any& rValue ) override;
 
     /** When the called object has been disposed already this method throws
         a Disposed exception and does not return.
 
         @throws css::lang::DisposedException
     */
-    void ThrowIfDisposed() const
-        throw (css::lang::DisposedException);
+    void ThrowIfDisposed() const;
 
     using cppu::OPropertySetHelper::disposing;
     using cppu::OPropertySetHelper::getFastPropertyValue;

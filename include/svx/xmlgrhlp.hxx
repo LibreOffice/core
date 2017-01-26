@@ -102,12 +102,12 @@ public:
 public:
 
     // XGraphicObjectResolver
-    virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL resolveGraphicObjectURL( const OUString& aURL ) override;
 
     // XBinaryStreamResolver
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream( const OUString& rURL ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL createOutputStream(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL resolveOutputStream( const css::uno::Reference< css::io::XOutputStream >& rxBinaryStream ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream( const OUString& rURL ) override;
+    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL createOutputStream(  ) override;
+    virtual OUString SAL_CALL resolveOutputStream( const css::uno::Reference< css::io::XOutputStream >& rxBinaryStream ) override;
 };
 
 #endif

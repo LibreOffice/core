@@ -93,22 +93,19 @@ private:
     static void sendStartElement(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler2,
-        const xmlNodePtr pNode)
-        throw (css::xml::sax::SAXException);
+        const xmlNodePtr pNode);
 
     /// @throws css::xml::sax::SAXException
     static void sendEndElement(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler2,
-        const xmlNodePtr pNode)
-        throw (css::xml::sax::SAXException);
+        const xmlNodePtr pNode);
 
     /// @throws css::xml::sax::SAXException
     static void sendNode(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xHandler2,
-        const xmlNodePtr pNode)
-        throw (css::xml::sax::SAXException);
+        const xmlNodePtr pNode);
 
     static OString getNodeQName(const xmlNodePtr pNode);
 
@@ -129,135 +126,102 @@ public:
     virtual ~XMLDocumentWrapper_XmlSecImpl() override;
 
     /* css::xml::wrapper::XXMLDocumentWrapper */
-    virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL getCurrentElement(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL getCurrentElement(  ) override;
 
     virtual void SAL_CALL setCurrentElement( const css::uno::Reference<
-        css::xml::wrapper::XXMLElementWrapper >& element )
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::xml::wrapper::XXMLElementWrapper >& element ) override;
 
-    virtual void SAL_CALL removeCurrentElement(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeCurrentElement(  ) override;
 
     virtual sal_Bool SAL_CALL isCurrent( const css::uno::Reference<
-        css::xml::wrapper::XXMLElementWrapper >& node )
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::xml::wrapper::XXMLElementWrapper >& node ) override;
 
-    virtual sal_Bool SAL_CALL isCurrentElementEmpty(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isCurrentElementEmpty(  ) override;
 
     virtual OUString SAL_CALL getNodeName( const css::uno::Reference<
-        css::xml::wrapper::XXMLElementWrapper >& node )
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::xml::wrapper::XXMLElementWrapper >& node ) override;
 
     virtual void SAL_CALL clearUselessData(
         const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node,
         const css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > >& reservedDescendants,
-        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& stopAtNode )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& stopAtNode ) override;
 
     virtual void SAL_CALL collapse( const css::uno::Reference<
-        css::xml::wrapper::XXMLElementWrapper >& node )
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::xml::wrapper::XXMLElementWrapper >& node ) override;
 
     virtual void SAL_CALL generateSAXEvents(
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& handler,
         const css::uno::Reference< css::xml::sax::XDocumentHandler >& xEventKeeperHandler,
         const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& startNode,
-        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& endNode )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& endNode ) override;
 
     virtual void SAL_CALL getTree(
-        const css::uno::Reference< css::xml::sax::XDocumentHandler >& handler )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XDocumentHandler >& handler ) override;
 
     virtual void SAL_CALL rebuildIDLink(
-        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& node ) override;
 
     /* css::xml::sax::XDocumentHandler */
-    virtual void SAL_CALL startDocument(  )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startDocument(  ) override;
 
-    virtual void SAL_CALL endDocument(  )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endDocument(  ) override;
 
     virtual void SAL_CALL startElement(
         const OUString& aName,
-        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
 
-    virtual void SAL_CALL endElement( const OUString& aName )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL endElement( const OUString& aName ) override;
 
-    virtual void SAL_CALL characters( const OUString& aChars )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
 
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
 
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
 
-    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
     /* css::xml::csax::XCompressedDocumentHandler */
-    virtual void SAL_CALL compressedStartDocument(  )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL compressedStartDocument(  ) override;
 
-    virtual void SAL_CALL compressedEndDocument(  )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL compressedEndDocument(  ) override;
 
     virtual void SAL_CALL compressedStartElement(
         const OUString& aName,
-        const css::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::xml::csax::XMLAttribute >& aAttributes ) override;
 
-    virtual void SAL_CALL compressedEndElement( const OUString& aName )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL compressedEndElement( const OUString& aName ) override;
 
-    virtual void SAL_CALL compressedCharacters( const OUString& aChars )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL compressedCharacters( const OUString& aChars ) override;
 
-    virtual void SAL_CALL compressedIgnorableWhitespace( const OUString& aWhitespaces )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL compressedIgnorableWhitespace( const OUString& aWhitespaces ) override;
 
-    virtual void SAL_CALL compressedProcessingInstruction( const OUString& aTarget, const OUString& aData )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL compressedProcessingInstruction( const OUString& aTarget, const OUString& aData ) override;
 
     virtual void SAL_CALL compressedSetDocumentLocator(
         sal_Int32 columnNumber,
         sal_Int32 lineNumber,
         const OUString& publicId,
-        const OUString& systemId )
-        throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+        const OUString& systemId ) override;
 
     /* css::lang::XServiceInfo */
-    virtual OUString SAL_CALL getImplementationName(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 /// @throws css::uno::RuntimeException
-OUString XMLDocumentWrapper_XmlSecImpl_getImplementationName()
-    throw ( css::uno::RuntimeException );
+OUString XMLDocumentWrapper_XmlSecImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
 css::uno::Sequence< OUString > SAL_CALL
-    XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames(  )
-    throw ( css::uno::RuntimeException );
+    XMLDocumentWrapper_XmlSecImpl_getSupportedServiceNames(  );
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 SAL_CALL XMLDocumentWrapper_XmlSecImpl_createInstance(
-    const css::uno::Reference< css::uno::XComponentContext > &)
-    throw ( css::uno::Exception );
+    const css::uno::Reference< css::uno::XComponentContext > &);
 
 #endif
 

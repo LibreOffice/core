@@ -53,7 +53,7 @@ XMLMetaExportComponent::~XMLMetaExportComponent()
 {
 }
 
-void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc ) throw(::com::sun::star::lang::IllegalArgumentException, ::com::sun::star::uno::RuntimeException, std::exception)
+void SAL_CALL XMLMetaExportComponent::setSourceDocument( const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent >& xDoc )
 {
     try
     {
@@ -199,7 +199,6 @@ OUString SAL_CALL XMLMetaExportOOO_getImplementationName() throw()
 
 uno::Reference< uno::XInterface > SAL_CALL XMLMetaExportOOO_createInstance(
         const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new XMLMetaExportComponent( comphelper::getComponentContext(rSMgr), XMLMetaExportOOO_getImplementationName(), SvXMLExportFlags::META));
 }

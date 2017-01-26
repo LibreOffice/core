@@ -107,247 +107,154 @@ public:
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(
-            const css::uno::Sequence< sal_Int8 >& rIdentifier)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< sal_Int8 >& rIdentifier) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService(
-            const OUString& rServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedServiceNames() override;
 
     // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getPropertySetInfo() override;
     virtual void SAL_CALL setPropertyValue(
             const OUString& rPropertyName,
-            const css::uno::Any& rValue)
-        throw (css::beans::UnknownPropertyException,
-                css::beans::PropertyVetoException,
-                css::lang::IllegalArgumentException,
-                css::lang::WrappedTargetException,
-                css::uno::RuntimeException, std::exception) override;
+            const css::uno::Any& rValue) override;
     virtual css::uno::Any SAL_CALL getPropertyValue(
-            const OUString& rPropertyName)
-        throw (css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException,
-                css::uno::RuntimeException, std::exception) override;
+            const OUString& rPropertyName) override;
     virtual void SAL_CALL addPropertyChangeListener(
             const OUString& rPropertyName,
             const css::uno::Reference<
-                css::beans::XPropertyChangeListener >& xListener)
-        throw (css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException,
-                css::uno::RuntimeException, std::exception) override;
+                css::beans::XPropertyChangeListener >& xListener) override;
     virtual void SAL_CALL removePropertyChangeListener(
             const OUString& rPropertyName,
             const css::uno::Reference<
-                css::beans::XPropertyChangeListener >& xListener)
-        throw (css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException,
-                css::uno::RuntimeException, std::exception) override;
+                css::beans::XPropertyChangeListener >& xListener) override;
     virtual void SAL_CALL addVetoableChangeListener(
             const OUString& rPropertyName,
             const css::uno::Reference<
-                css::beans::XVetoableChangeListener >& xListener)
-        throw (css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException,
-                css::uno::RuntimeException, std::exception) override;
+                css::beans::XVetoableChangeListener >& xListener) override;
     virtual void SAL_CALL removeVetoableChangeListener(
             const OUString& rPropertyName,
             const css::uno::Reference<
-                css::beans::XVetoableChangeListener >& xListener)
-        throw (css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException,
-                css::uno::RuntimeException, std::exception) override;
+                css::beans::XVetoableChangeListener >& xListener) override;
 
     // XPropertyState
     virtual css::beans::PropertyState SAL_CALL
-        getPropertyState(const OUString& rPropertyName)
-        throw (css::beans::UnknownPropertyException,
-                css::uno::RuntimeException, std::exception) override;
+        getPropertyState(const OUString& rPropertyName) override;
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL
         getPropertyStates(
-            const css::uno::Sequence< OUString >& rPropertyNames)
-        throw (css::beans::UnknownPropertyException,
-                css::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< OUString >& rPropertyNames) override;
     virtual void SAL_CALL setPropertyToDefault(
-            const OUString& rPropertyName)
-        throw (css::beans::UnknownPropertyException,
-                css::uno::RuntimeException, std::exception) override;
+            const OUString& rPropertyName) override;
     virtual css::uno::Any SAL_CALL getPropertyDefault(
-            const OUString& rPropertyName)
-        throw (css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException,
-                css::uno::RuntimeException, std::exception) override;
+            const OUString& rPropertyName) override;
 
     // XMultiPropertySet
     virtual void SAL_CALL setPropertyValues(
             const css::uno::Sequence< OUString >& aPropertyNames,
-            const css::uno::Sequence< css::uno::Any >& aValues )
-        throw (
-            css::beans::PropertyVetoException,
-            css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< css::uno::Any >& aValues ) override;
 
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL
-        getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames )
-        throw (css::uno::RuntimeException, std::exception) override;
+        getPropertyValues( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     virtual void SAL_CALL addPropertiesChangeListener(
         const css::uno::Sequence< OUString >& aPropertyNames,
-        const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     virtual void SAL_CALL removePropertiesChangeListener(
-        const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     virtual void SAL_CALL firePropertiesChangeEvent(
         const css::uno::Sequence< OUString >& aPropertyNames,
-        const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener ) override;
 
     // XMultiPropertyStates
-    virtual void SAL_CALL setAllPropertiesToDefault()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setAllPropertiesToDefault() override;
     virtual void SAL_CALL setPropertiesToDefault(
-            const css::uno::Sequence< OUString >&  rPropertyNames)
-        throw (css::beans::UnknownPropertyException,
-                css::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< OUString >&  rPropertyNames) override;
     virtual css::uno::Sequence< css::uno::Any >
         SAL_CALL getPropertyDefaults(
-            const css::uno::Sequence< OUString >&  rPropertyNames)
-        throw (css::beans::UnknownPropertyException,
-                css::lang::WrappedTargetException,
-                css::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< OUString >&  rPropertyNames) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >  SAL_CALL
-        createEnumeration()
-        throw (css::uno::RuntimeException, std::exception) override;
+        createEnumeration() override;
 
     // XContentEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
-        createContentEnumeration(const OUString& rServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+        createContentEnumeration(const OUString& rServiceName) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getAvailableServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAvailableServiceNames() override;
 
     // XSortable
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
-        createSortDescriptor()
-        throw (css::uno::RuntimeException, std::exception) override;
+        createSortDescriptor() override;
     virtual void SAL_CALL sort(
-            const css::uno::Sequence< css::beans::PropertyValue >& xDescriptor)
-        throw (css::uno::RuntimeException,
-               std::exception) override;
+            const css::uno::Sequence< css::beans::PropertyValue >& xDescriptor) override;
 
     // XDocumentInsertable
     virtual void SAL_CALL insertDocumentFromURL(
             const OUString& rURL,
-            const css::uno::Sequence< css::beans::PropertyValue >& rOptions)
-        throw (css::lang::IllegalArgumentException,
-                css::io::IOException,
-                css::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< css::beans::PropertyValue >& rOptions) override;
 
     // XTextRange
     virtual css::uno::Reference< css::text::XText >
-        SAL_CALL getText()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getString()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setString(const OUString& rString)
-        throw (css::uno::RuntimeException, std::exception) override;
+        SAL_CALL getText() override;
+    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getStart() override;
+    virtual css::uno::Reference< css::text::XTextRange > SAL_CALL getEnd() override;
+    virtual OUString SAL_CALL getString() override;
+    virtual void SAL_CALL setString(const OUString& rString) override;
 
     // XTextCursor
-    virtual void SAL_CALL collapseToStart()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL collapseToEnd()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isCollapsed()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL goLeft(sal_Int16 nCount, sal_Bool bExpand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL goRight(sal_Int16 nCount, sal_Bool bExpand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL gotoStart(sal_Bool bExpand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL gotoEnd(sal_Bool bExpand)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL collapseToStart() override;
+    virtual void SAL_CALL collapseToEnd() override;
+    virtual sal_Bool SAL_CALL isCollapsed() override;
+    virtual sal_Bool SAL_CALL goLeft(sal_Int16 nCount, sal_Bool bExpand) override;
+    virtual sal_Bool SAL_CALL goRight(sal_Int16 nCount, sal_Bool bExpand) override;
+    virtual void SAL_CALL gotoStart(sal_Bool bExpand) override;
+    virtual void SAL_CALL gotoEnd(sal_Bool bExpand) override;
     virtual void SAL_CALL gotoRange(
             const css::uno::Reference< css::text::XTextRange >& xRange,
-            sal_Bool bExpand)
-        throw (css::uno::RuntimeException, std::exception) override;
+            sal_Bool bExpand) override;
 
     // XWordCursor
-    virtual sal_Bool SAL_CALL isStartOfWord()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isEndOfWord()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoNextWord(sal_Bool bExpand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoPreviousWord(sal_Bool bExpand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoEndOfWord(sal_Bool bExpand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoStartOfWord(sal_Bool bExpand)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isStartOfWord() override;
+    virtual sal_Bool SAL_CALL isEndOfWord() override;
+    virtual sal_Bool SAL_CALL gotoNextWord(sal_Bool bExpand) override;
+    virtual sal_Bool SAL_CALL gotoPreviousWord(sal_Bool bExpand) override;
+    virtual sal_Bool SAL_CALL gotoEndOfWord(sal_Bool bExpand) override;
+    virtual sal_Bool SAL_CALL gotoStartOfWord(sal_Bool bExpand) override;
 
     // XSentenceCursor
-    virtual sal_Bool SAL_CALL isStartOfSentence()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isEndOfSentence()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoNextSentence(sal_Bool Expand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoPreviousSentence(sal_Bool Expand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoStartOfSentence(sal_Bool Expand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoEndOfSentence(sal_Bool Expand)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isStartOfSentence() override;
+    virtual sal_Bool SAL_CALL isEndOfSentence() override;
+    virtual sal_Bool SAL_CALL gotoNextSentence(sal_Bool Expand) override;
+    virtual sal_Bool SAL_CALL gotoPreviousSentence(sal_Bool Expand) override;
+    virtual sal_Bool SAL_CALL gotoStartOfSentence(sal_Bool Expand) override;
+    virtual sal_Bool SAL_CALL gotoEndOfSentence(sal_Bool Expand) override;
 
     // XParagraphCursor
-    virtual sal_Bool SAL_CALL isStartOfParagraph()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isEndOfParagraph()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoStartOfParagraph(sal_Bool Expand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoEndOfParagraph(sal_Bool Expand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoNextParagraph(sal_Bool Expand)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL gotoPreviousParagraph(sal_Bool Expand)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isStartOfParagraph() override;
+    virtual sal_Bool SAL_CALL isEndOfParagraph() override;
+    virtual sal_Bool SAL_CALL gotoStartOfParagraph(sal_Bool Expand) override;
+    virtual sal_Bool SAL_CALL gotoEndOfParagraph(sal_Bool Expand) override;
+    virtual sal_Bool SAL_CALL gotoNextParagraph(sal_Bool Expand) override;
+    virtual sal_Bool SAL_CALL gotoPreviousParagraph(sal_Bool Expand) override;
 
     // XRedline
     virtual void SAL_CALL makeRedline(
             const OUString& rRedlineType,
-            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties)
-        throw (css::lang::IllegalArgumentException,
-                css::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< css::beans::PropertyValue >& RedlineProperties) override;
 
     //XMarkingAccess
-    virtual void SAL_CALL invalidateMarkings(::sal_Int32 nType)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL invalidateMarkings(::sal_Int32 nType) override;
 
 };
 

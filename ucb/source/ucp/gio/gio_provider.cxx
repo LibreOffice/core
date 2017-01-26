@@ -30,8 +30,6 @@ namespace gio
 uno::Reference< css::ucb::XContent > SAL_CALL
 ContentProvider::queryContent(
             const uno::Reference< css::ucb::XContentIdentifier >& Identifier )
-    throw( css::ucb::IllegalIdentifierException,
-           uno::RuntimeException, std::exception )
 {
     SAL_INFO("ucb.ucp.gio", "QueryContent: " << Identifier->getContentIdentifier());
     osl::MutexGuard aGuard( m_aMutex );
@@ -80,7 +78,6 @@ void SAL_CALL ContentProvider::release()
 }
 
 css::uno::Any SAL_CALL ContentProvider::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< lang::XTypeProvider* >(this)),
@@ -100,7 +97,6 @@ XSERVICEINFO_COMMOM_IMPL( ContentProvider,
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
 ContentProvider_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
-    throw( css::uno::Exception )
 {
     css::lang::XServiceInfo* pX =
         static_cast<css::lang::XServiceInfo*>(new ContentProvider( ucbhelper::getComponentContext(rSMgr) ));

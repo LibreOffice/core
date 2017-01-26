@@ -93,41 +93,41 @@ namespace connectivity
             ODatabaseMetaDataBase(const css::uno::Reference< css::sdbc::XConnection >& _rxConnection,const css::uno::Sequence< css::beans::PropertyValue >& _rInfo);
 
             // XDatabaseMetaData2
-            virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getConnectionInfo(  ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getConnectionInfo(  ) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTypeInfo(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedures( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedureColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern, const OUString& columnNamePattern ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getSchemas(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getCatalogs(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumnPrivileges( const css::uno::Any& catalog, const OUString& schema, const OUString& table, const OUString& columnNamePattern ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTablePrivileges( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getBestRowIdentifier( const css::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope, sal_Bool nullable ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getVersionColumns( const css::uno::Any& catalog, const OUString& schema, const OUString& table ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getImportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getExportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getCrossReference( const css::uno::Any& primaryCatalog, const OUString& primarySchema, const OUString& primaryTable, const css::uno::Any& foreignCatalog, const OUString& foreignSchema, const OUString& foreignTable ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getIndexInfo( const css::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Bool unique, sal_Bool approximate ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTypeInfo(  ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedures( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getProcedureColumns( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& procedureNamePattern, const OUString& columnNamePattern ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getSchemas(  ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getCatalogs(  ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getColumnPrivileges( const css::uno::Any& catalog, const OUString& schema, const OUString& table, const OUString& columnNamePattern ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getTablePrivileges( const css::uno::Any& catalog, const OUString& schemaPattern, const OUString& tableNamePattern ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getBestRowIdentifier( const css::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Int32 scope, sal_Bool nullable ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getVersionColumns( const css::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getPrimaryKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getImportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getExportedKeys( const css::uno::Any& catalog, const OUString& schema, const OUString& table ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getCrossReference( const css::uno::Any& primaryCatalog, const OUString& primarySchema, const OUString& primaryTable, const css::uno::Any& foreignCatalog, const OUString& foreignSchema, const OUString& foreignTable ) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getIndexInfo( const css::uno::Any& catalog, const OUString& schema, const OUString& table, sal_Bool unique, sal_Bool approximate ) override;
 
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
             // cached database information
-            virtual OUString SAL_CALL getIdentifierQuoteString(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isCatalogAtStart(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual OUString SAL_CALL getCatalogSeparator(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsCatalogsInTableDefinitions(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsSchemasInTableDefinitions(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsCatalogsInDataManipulation(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsSchemasInDataManipulation(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsMixedCaseQuotedIdentifiers(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsAlterTableWithAddColumn(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsAlterTableWithDropColumn(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMaxStatements(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getMaxTablesInSelect(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL storesMixedCaseQuotedIdentifiers(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual OUString SAL_CALL getIdentifierQuoteString(  ) override;
+            virtual sal_Bool SAL_CALL isCatalogAtStart(  ) override;
+            virtual OUString SAL_CALL getCatalogSeparator(  ) override;
+            virtual sal_Bool SAL_CALL supportsCatalogsInTableDefinitions(  ) override;
+            virtual sal_Bool SAL_CALL supportsSchemasInTableDefinitions(  ) override;
+            virtual sal_Bool SAL_CALL supportsCatalogsInDataManipulation(  ) override;
+            virtual sal_Bool SAL_CALL supportsSchemasInDataManipulation(  ) override;
+            virtual sal_Bool SAL_CALL supportsMixedCaseQuotedIdentifiers(  ) override;
+            virtual sal_Bool SAL_CALL supportsAlterTableWithAddColumn(  ) override;
+            virtual sal_Bool SAL_CALL supportsAlterTableWithDropColumn(  ) override;
+            virtual sal_Int32 SAL_CALL getMaxStatements(  ) override;
+            virtual sal_Int32 SAL_CALL getMaxTablesInSelect(  ) override;
+            virtual sal_Bool SAL_CALL storesMixedCaseQuotedIdentifiers(  ) override;
         };
 }
 #endif // INCLUDED_CONNECTIVITY_SOURCE_INC_TDATABASEMETADATABASE_HXX

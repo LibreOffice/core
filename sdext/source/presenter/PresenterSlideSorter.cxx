@@ -426,7 +426,6 @@ void PresenterSlideSorter::SetActiveState (const bool bIsActive)
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterSlideSorter::disposing (const lang::EventObject& rEventObject)
-    throw (RuntimeException, std::exception)
 {
     if (rEventObject.Source == mxWindow)
     {
@@ -451,7 +450,6 @@ void SAL_CALL PresenterSlideSorter::disposing (const lang::EventObject& rEventOb
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterSlideSorter::windowResized (const awt::WindowEvent& rEvent)
-    throw (uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
@@ -460,14 +458,12 @@ void SAL_CALL PresenterSlideSorter::windowResized (const awt::WindowEvent& rEven
 }
 
 void SAL_CALL PresenterSlideSorter::windowMoved (const awt::WindowEvent& rEvent)
-    throw (uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
 }
 
 void SAL_CALL PresenterSlideSorter::windowShown (const lang::EventObject& rEvent)
-    throw (uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
@@ -476,7 +472,6 @@ void SAL_CALL PresenterSlideSorter::windowShown (const lang::EventObject& rEvent
 }
 
 void SAL_CALL PresenterSlideSorter::windowHidden (const lang::EventObject& rEvent)
-    throw (uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     ThrowIfDisposed();
@@ -485,7 +480,6 @@ void SAL_CALL PresenterSlideSorter::windowHidden (const lang::EventObject& rEven
 //----- XPaintListener --------------------------------------------------------
 
 void SAL_CALL PresenterSlideSorter::windowPaint (const css::awt::PaintEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 
@@ -503,7 +497,6 @@ void SAL_CALL PresenterSlideSorter::windowPaint (const css::awt::PaintEvent& rEv
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterSlideSorter::mousePressed (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     css::awt::MouseEvent rTemp =rEvent;
     /// check whether RTL interface or not
@@ -516,7 +509,6 @@ void SAL_CALL PresenterSlideSorter::mousePressed (const css::awt::MouseEvent& rE
 }
 
 void SAL_CALL PresenterSlideSorter::mouseReleased (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     css::awt::MouseEvent rTemp =rEvent;
     /// check whether RTL interface or not
@@ -547,13 +539,11 @@ void SAL_CALL PresenterSlideSorter::mouseReleased (const css::awt::MouseEvent& r
 }
 
 void SAL_CALL PresenterSlideSorter::mouseEntered (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 }
 
 void SAL_CALL PresenterSlideSorter::mouseExited (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     mnSlideIndexMousePressed = -1;
@@ -564,7 +554,6 @@ void SAL_CALL PresenterSlideSorter::mouseExited (const css::awt::MouseEvent& rEv
 //----- XMouseMotionListener --------------------------------------------------
 
 void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (mpMouseOverManager.get() != nullptr)
     {
@@ -594,7 +583,6 @@ void SAL_CALL PresenterSlideSorter::mouseMoved (const css::awt::MouseEvent& rEve
 }
 
 void SAL_CALL PresenterSlideSorter::mouseDragged (const css::awt::MouseEvent& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 }
@@ -602,14 +590,12 @@ void SAL_CALL PresenterSlideSorter::mouseDragged (const css::awt::MouseEvent& rE
 //----- XResourceId -----------------------------------------------------------
 
 Reference<XResourceId> SAL_CALL PresenterSlideSorter::getResourceId()
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return mxViewId;
 }
 
 sal_Bool SAL_CALL PresenterSlideSorter::isAnchorOnly()
-    throw (RuntimeException, std::exception)
 {
     return false;
 }
@@ -618,7 +604,6 @@ sal_Bool SAL_CALL PresenterSlideSorter::isAnchorOnly()
 
 void SAL_CALL PresenterSlideSorter::propertyChange (
     const css::beans::PropertyChangeEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 }
@@ -627,7 +612,6 @@ void SAL_CALL PresenterSlideSorter::propertyChange (
 
 void SAL_CALL PresenterSlideSorter::notifyPreviewCreation (
     sal_Int32 nSlideIndex)
-    throw(css::uno::RuntimeException, std::exception)
 {
     OSL_ASSERT(mpLayout.get()!=nullptr);
 
@@ -638,7 +622,6 @@ void SAL_CALL PresenterSlideSorter::notifyPreviewCreation (
 //----- XDrawView -------------------------------------------------------------
 
 void SAL_CALL PresenterSlideSorter::setCurrentPage (const Reference<drawing::XDrawPage>& rxSlide)
-    throw (RuntimeException, std::exception)
 {
     (void)rxSlide;
 
@@ -670,7 +653,6 @@ void SAL_CALL PresenterSlideSorter::setCurrentPage (const Reference<drawing::XDr
 }
 
 Reference<drawing::XDrawPage> SAL_CALL PresenterSlideSorter::getCurrentPage()
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     return nullptr;
@@ -1108,7 +1090,6 @@ bool PresenterSlideSorter::ProvideCanvas()
 }
 
 void PresenterSlideSorter::ThrowIfDisposed()
-    throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

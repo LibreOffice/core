@@ -217,116 +217,94 @@ public:
     VCLXToolkit();
 
     // css::awt::XToolkitExperimental
-    virtual void SAL_CALL processEventsToIdle()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL processEventsToIdle() override;
 
-    virtual sal_Int64 SAL_CALL getOpenGLBufferSwapCounter()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getOpenGLBufferSwapCounter() override;
 
-    virtual void SAL_CALL setDeterministicScheduling(sal_Bool bDeterministicMode)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDeterministicScheduling(sal_Bool bDeterministicMode) override;
 
-    virtual void SAL_CALL pause(sal_Int32 nMilliseconds)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL pause(sal_Int32 nMilliseconds) override;
 
     // css::awt::XToolkit
-    css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::awt::Rectangle                                        SAL_CALL getWorkArea(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL createWindow( const css::awt::WindowDescriptor& Descriptor ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > SAL_CALL createWindows( const css::uno::Sequence< css::awt::WindowDescriptor >& Descriptors ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::awt::XDevice >      SAL_CALL createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw
-(css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::awt::XRegion >      SAL_CALL createRegion(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL getDesktopWindow(  ) override;
+    css::awt::Rectangle                                        SAL_CALL getWorkArea(  ) override;
+    css::uno::Reference< css::awt::XWindowPeer >  SAL_CALL createWindow( const css::awt::WindowDescriptor& Descriptor ) override;
+    css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > SAL_CALL createWindows( const css::uno::Sequence< css::awt::WindowDescriptor >& Descriptors ) override;
+    css::uno::Reference< css::awt::XDevice >      SAL_CALL createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) override;
+    css::uno::Reference< css::awt::XRegion >      SAL_CALL createRegion(  ) override;
 
     // css::awt::XSystemChildFactory
-    css::uno::Reference< css::awt::XWindowPeer > SAL_CALL createSystemChild( const css::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::awt::XWindowPeer > SAL_CALL createSystemChild( const css::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& ProcessId, sal_Int16 SystemType ) override;
 
     // css::awt::XMessageBoxFactory
-    virtual css::uno::Reference< css::awt::XMessageBox > SAL_CALL createMessageBox( const css::uno::Reference< css::awt::XWindowPeer >& aParent, css::awt::MessageBoxType eType, ::sal_Int32 aButtons, const OUString& aTitle, const OUString& aMessage ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::XMessageBox > SAL_CALL createMessageBox( const css::uno::Reference< css::awt::XWindowPeer >& aParent, css::awt::MessageBoxType eType, ::sal_Int32 aButtons, const OUString& aTitle, const OUString& aMessage ) override;
 
     // css::awt::XDataTransfer
-    css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL getDragGestureRecognizer( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::datatransfer::dnd::XDragSource > SAL_CALL getDragSource( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::datatransfer::dnd::XDropTarget > SAL_CALL getDropTarget( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const OUString& clipboardName ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL getDragGestureRecognizer( const css::uno::Reference< css::awt::XWindow >& window ) override;
+    css::uno::Reference< css::datatransfer::dnd::XDragSource > SAL_CALL getDragSource( const css::uno::Reference< css::awt::XWindow >& window ) override;
+    css::uno::Reference< css::datatransfer::dnd::XDropTarget > SAL_CALL getDropTarget( const css::uno::Reference< css::awt::XWindow >& window ) override;
+    css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL getClipboard( const OUString& clipboardName ) override;
 
     // css::lang::XServiceInfo
-    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName(  ) override;
+    sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // css::awt::XExtendedToolkit:
 
-    virtual ::sal_Int32 SAL_CALL getTopWindowCount()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getTopWindowCount() override;
 
     virtual css::uno::Reference< css::awt::XTopWindow >
-    SAL_CALL getTopWindow(::sal_Int32 nIndex)
-        throw (css::uno::RuntimeException, std::exception) override;
+    SAL_CALL getTopWindow(::sal_Int32 nIndex) override;
 
     virtual css::uno::Reference< css::awt::XTopWindow >
-    SAL_CALL getActiveTopWindow()
-        throw (css::uno::RuntimeException, std::exception) override;
+    SAL_CALL getActiveTopWindow() override;
 
     virtual void SAL_CALL addTopWindowListener(
         css::uno::Reference<
-        css::awt::XTopWindowListener > const & rListener)
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::awt::XTopWindowListener > const & rListener) override;
 
     virtual void SAL_CALL removeTopWindowListener(
         css::uno::Reference<
-        css::awt::XTopWindowListener > const & rListener)
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::awt::XTopWindowListener > const & rListener) override;
 
     virtual void SAL_CALL addKeyHandler(
         css::uno::Reference<
-        css::awt::XKeyHandler > const & rHandler)
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::awt::XKeyHandler > const & rHandler) override;
 
     virtual void SAL_CALL removeKeyHandler(
         css::uno::Reference<
-        css::awt::XKeyHandler > const & rHandler)
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::awt::XKeyHandler > const & rHandler) override;
 
     virtual void SAL_CALL addFocusListener(
         css::uno::Reference<
-        css::awt::XFocusListener > const & rListener)
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::awt::XFocusListener > const & rListener) override;
 
     virtual void SAL_CALL removeFocusListener(
         css::uno::Reference<
-        css::awt::XFocusListener > const & rListener)
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::awt::XFocusListener > const & rListener) override;
 
     virtual void SAL_CALL fireFocusGained(
         css::uno::Reference<
-        css::uno::XInterface > const & source)
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::XInterface > const & source) override;
 
     virtual void SAL_CALL fireFocusLost(
         css::uno::Reference<
-        css::uno::XInterface > const & source)
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::XInterface > const & source) override;
 
     // css::awt::XReschedule:
-    virtual void SAL_CALL reschedule()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL reschedule() override;
 
     // css:awt:XToolkitRobot
-    virtual void SAL_CALL keyPress( const css::awt::KeyEvent & aKeyEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL keyPress( const css::awt::KeyEvent & aKeyEvent ) override;
 
-    virtual void SAL_CALL keyRelease( const css::awt::KeyEvent & aKeyEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL keyRelease( const css::awt::KeyEvent & aKeyEvent ) override;
 
-    virtual void SAL_CALL mousePress( const css::awt::MouseEvent & aMouseEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL mousePress( const css::awt::MouseEvent & aMouseEvent ) override;
 
-    virtual void SAL_CALL mouseRelease( const css::awt::MouseEvent & aMouseEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL mouseRelease( const css::awt::MouseEvent & aMouseEvent ) override;
 
-    virtual void SAL_CALL mouseMove( const css::awt::MouseEvent & aMouseEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL mouseMove( const css::awt::MouseEvent & aMouseEvent ) override;
 
 };
 
@@ -765,14 +743,14 @@ void SAL_CALL VCLXToolkit::disposing()
 }
 
 
-css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::getDesktopWindow(  )
 {
     css::uno::Reference< css::awt::XWindowPeer > xRef;
     // 07/00: AppWindow doesn't exist anymore...
     return xRef;
 }
 
-css::awt::Rectangle VCLXToolkit::getWorkArea(  ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Rectangle VCLXToolkit::getWorkArea(  )
 {
     sal_Int32 nDisplay = Application::GetDisplayBuiltInScreen();
     Rectangle aWorkRect = Application::GetScreenPosSizePixel( nDisplay );
@@ -784,12 +762,12 @@ css::awt::Rectangle VCLXToolkit::getWorkArea(  ) throw(css::uno::RuntimeExceptio
     return aNotherRect;
 }
 
-css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createWindow( const css::awt::WindowDescriptor& rDescriptor ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createWindow( const css::awt::WindowDescriptor& rDescriptor )
 {
     return ImplCreateWindow( rDescriptor, WinBits(0) );
 }
 
-css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevice( sal_Int32 Width, sal_Int32 Height )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -806,7 +784,7 @@ css::uno::Reference< css::awt::XDevice > VCLXToolkit::createScreenCompatibleDevi
     return xRef;
 }
 
-css::uno::Reference< css::awt::XRegion > VCLXToolkit::createRegion(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XRegion > VCLXToolkit::createRegion(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -1339,7 +1317,7 @@ css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::ImplCreateWindow(
     return xRef;
 }
 
-css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::createWindows( const css::uno::Sequence< css::awt::WindowDescriptor >& rDescriptors ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::createWindows( const css::uno::Sequence< css::awt::WindowDescriptor >& rDescriptors )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -1359,7 +1337,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindowPeer > > VCLXToolkit::
 }
 
 // css::awt::XSystemChildFactory
-css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( const css::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::awt::XWindowPeer > VCLXToolkit::createSystemChild( const css::uno::Any& Parent, const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 nSystemType )
 {
     VclPtr<vcl::Window> pChildWindow;
     if ( nSystemType == SYSTEM_DEPENDENT_TYPE )
@@ -1442,7 +1420,7 @@ css::uno::Reference< css::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessage
     css::awt::MessageBoxType eType,
     ::sal_Int32 aButtons,
     const OUString& aTitle,
-    const OUString& aMessage ) throw (css::uno::RuntimeException, std::exception)
+    const OUString& aMessage )
 {
     css::awt::WindowDescriptor aDescriptor;
 
@@ -1505,7 +1483,7 @@ css::uno::Reference< css::awt::XMessageBox > SAL_CALL VCLXToolkit::createMessage
     return xMsgBox;
 }
 
-css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL VCLXToolkit::getDragGestureRecognizer( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL VCLXToolkit::getDragGestureRecognizer( const css::uno::Reference< css::awt::XWindow >& window )
 {
     SolarMutexGuard g;
 
@@ -1517,7 +1495,7 @@ css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer > SAL_CALL V
     return css::uno::Reference< css::datatransfer::dnd::XDragGestureRecognizer >();
 }
 
-css::uno::Reference< css::datatransfer::dnd::XDragSource > SAL_CALL VCLXToolkit::getDragSource( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::datatransfer::dnd::XDragSource > SAL_CALL VCLXToolkit::getDragSource( const css::uno::Reference< css::awt::XWindow >& window )
 {
     SolarMutexGuard g;
 
@@ -1529,7 +1507,7 @@ css::uno::Reference< css::datatransfer::dnd::XDragSource > SAL_CALL VCLXToolkit:
     return css::uno::Reference< css::datatransfer::dnd::XDragSource >();
 }
 
-css::uno::Reference< css::datatransfer::dnd::XDropTarget > SAL_CALL VCLXToolkit::getDropTarget( const css::uno::Reference< css::awt::XWindow >& window ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::datatransfer::dnd::XDropTarget > SAL_CALL VCLXToolkit::getDropTarget( const css::uno::Reference< css::awt::XWindow >& window )
 {
     SolarMutexGuard g;
 
@@ -1541,7 +1519,7 @@ css::uno::Reference< css::datatransfer::dnd::XDropTarget > SAL_CALL VCLXToolkit:
     return css::uno::Reference< css::datatransfer::dnd::XDropTarget >();
 }
 
-css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToolkit::getClipboard( const OUString& clipboardName ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToolkit::getClipboard( const OUString& clipboardName )
 {
     if( clipboardName.isEmpty() )
     {
@@ -1564,17 +1542,17 @@ css::uno::Reference< css::datatransfer::clipboard::XClipboard > SAL_CALL VCLXToo
 }
 
 // XServiceInfo
-OUString VCLXToolkit::getImplementationName() throw(css::uno::RuntimeException, std::exception)
+OUString VCLXToolkit::getImplementationName()
 {
     return OUString("stardiv.Toolkit.VCLXToolkit");
 }
 
-sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool VCLXToolkit::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-css::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames()
 {
     return css::uno::Sequence<OUString>{
         "com.sun.star.awt.Toolkit", "stardiv.vcl.VclToolkit"};
@@ -1584,7 +1562,6 @@ css::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames() throw(css
 
 // virtual
 ::sal_Int32 SAL_CALL VCLXToolkit::getTopWindowCount()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return static_cast< ::sal_Int32 >(::Application::GetTopWindowCount());
         // XXX  numeric overflow
@@ -1593,7 +1570,6 @@ css::uno::Sequence< OUString > VCLXToolkit::getSupportedServiceNames() throw(css
 // virtual
 css::uno::Reference< css::awt::XTopWindow > SAL_CALL
 VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
-    throw (css::uno::RuntimeException, std::exception)
 {
     vcl::Window * p = ::Application::GetTopWindow(static_cast< long >(nIndex));
         // XXX  numeric overflow
@@ -1604,7 +1580,7 @@ VCLXToolkit::getTopWindow(::sal_Int32 nIndex)
 
 // virtual
 css::uno::Reference< css::awt::XTopWindow > SAL_CALL
-VCLXToolkit::getActiveTopWindow() throw (css::uno::RuntimeException, std::exception)
+VCLXToolkit::getActiveTopWindow()
 {
     vcl::Window * p = ::Application::GetActiveTopWindow();
     return css::uno::Reference< css::awt::XTopWindow >(
@@ -1615,7 +1591,6 @@ VCLXToolkit::getActiveTopWindow() throw (css::uno::RuntimeException, std::except
 // virtual
 void SAL_CALL VCLXToolkit::addTopWindowListener(
     css::uno::Reference< css::awt::XTopWindowListener > const & rListener)
-    throw (css::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE(rListener.is(), "Null rListener");
     ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
@@ -1637,7 +1612,6 @@ void SAL_CALL VCLXToolkit::addTopWindowListener(
 // virtual
 void SAL_CALL VCLXToolkit::removeTopWindowListener(
     css::uno::Reference< css::awt::XTopWindowListener > const & rListener)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(rBHelper.rMutex);
     if (!(rBHelper.bDisposed || rBHelper.bInDispose)
@@ -1652,7 +1626,6 @@ void SAL_CALL VCLXToolkit::removeTopWindowListener(
 // virtual
 void SAL_CALL VCLXToolkit::addKeyHandler(
     css::uno::Reference< css::awt::XKeyHandler > const & rHandler)
-    throw (css::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE(rHandler.is(), "Null rHandler");
     ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
@@ -1673,7 +1646,6 @@ void SAL_CALL VCLXToolkit::addKeyHandler(
 // virtual
 void SAL_CALL VCLXToolkit::removeKeyHandler(
     css::uno::Reference< css::awt::XKeyHandler > const & rHandler)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(rBHelper.rMutex);
     if (!(rBHelper.bDisposed || rBHelper.bInDispose)
@@ -1687,7 +1659,6 @@ void SAL_CALL VCLXToolkit::removeKeyHandler(
 // virtual
 void SAL_CALL VCLXToolkit::addFocusListener(
     css::uno::Reference< css::awt::XFocusListener > const & rListener)
-    throw (css::uno::RuntimeException, std::exception)
 {
     OSL_ENSURE(rListener.is(), "Null rListener");
     ::osl::ClearableMutexGuard aGuard(rBHelper.rMutex);
@@ -1709,7 +1680,6 @@ void SAL_CALL VCLXToolkit::addFocusListener(
 // virtual
 void SAL_CALL VCLXToolkit::removeFocusListener(
     css::uno::Reference< css::awt::XFocusListener > const & rListener)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(rBHelper.rMutex);
     if (!(rBHelper.bDisposed || rBHelper.bInDispose)
@@ -1725,7 +1695,6 @@ void SAL_CALL VCLXToolkit::removeFocusListener(
 void SAL_CALL VCLXToolkit::fireFocusGained(
     css::uno::Reference<
     css::uno::XInterface > const &)
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -1733,7 +1702,6 @@ void SAL_CALL VCLXToolkit::fireFocusGained(
 void SAL_CALL VCLXToolkit::fireFocusLost(
     css::uno::Reference<
     css::uno::XInterface > const &)
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -1919,7 +1887,6 @@ void VCLXToolkit::callFocusListeners(::VclSimpleEvent const * pEvent,
 // css::awt::XReschedule:
 
 void SAL_CALL VCLXToolkit::reschedule()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     Application::Reschedule(true);
@@ -1928,14 +1895,12 @@ void SAL_CALL VCLXToolkit::reschedule()
 // css::awt::XToolkitExperimental
 
 void SAL_CALL VCLXToolkit::processEventsToIdle()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     Scheduler::ProcessEventsToIdle();
 }
 
 sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
-    throw (css::uno::RuntimeException, std::exception)
 {
 #if HAVE_FEATURE_OPENGL
     return OpenGLWrapper::getBufferSwapCounter();
@@ -1945,14 +1910,12 @@ sal_Int64 SAL_CALL VCLXToolkit::getOpenGLBufferSwapCounter()
 }
 
 void SAL_CALL VCLXToolkit::setDeterministicScheduling(sal_Bool bDeterministicMode)
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     Scheduler::SetDeterministicMode(bDeterministicMode);
 }
 
 void SAL_CALL VCLXToolkit::pause(sal_Int32 nMilliseconds)
-    throw (css::uno::RuntimeException, std::exception)
 {
     new Pause(nMilliseconds);
 }
@@ -1960,7 +1923,6 @@ void SAL_CALL VCLXToolkit::pause(sal_Int32 nMilliseconds)
 // css:awt:XToolkitRobot
 
 void SAL_CALL VCLXToolkit::keyPress( const css::awt::KeyEvent & aKeyEvent )
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY );
     if( !xWindow.is() )
@@ -1975,7 +1937,6 @@ void SAL_CALL VCLXToolkit::keyPress( const css::awt::KeyEvent & aKeyEvent )
 }
 
 void SAL_CALL VCLXToolkit::keyRelease( const css::awt::KeyEvent & aKeyEvent )
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference<css::awt::XWindow> xWindow ( aKeyEvent.Source, css::uno::UNO_QUERY );
     if( !xWindow.is() )
@@ -1991,7 +1952,6 @@ void SAL_CALL VCLXToolkit::keyRelease( const css::awt::KeyEvent & aKeyEvent )
 
 
 void SAL_CALL VCLXToolkit::mousePress( const css::awt::MouseEvent & aMouseEvent )
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY );
     if( !xWindow.is() )
@@ -2006,7 +1966,6 @@ void SAL_CALL VCLXToolkit::mousePress( const css::awt::MouseEvent & aMouseEvent 
 }
 
 void SAL_CALL VCLXToolkit::mouseRelease( const css::awt::MouseEvent & aMouseEvent )
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY );
     if( !xWindow.is() )
@@ -2021,7 +1980,6 @@ void SAL_CALL VCLXToolkit::mouseRelease( const css::awt::MouseEvent & aMouseEven
 }
 
 void SAL_CALL VCLXToolkit::mouseMove( const css::awt::MouseEvent & aMouseEvent )
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference<css::awt::XWindow> xWindow ( aMouseEvent.Source, css::uno::UNO_QUERY );
     if( !xWindow.is() )

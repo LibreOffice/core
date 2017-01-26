@@ -40,28 +40,24 @@ class ToolBarFactory :  public MenuBarFactory
 public:
     explicit ToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.framework.ToolBarFactory");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.ui.ToolBarFactory"};
     }
 
     // XUIElementFactory
     virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement(
-            const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args )
-        throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
+            const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 };
 
 ToolBarFactory::ToolBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext ) :
@@ -73,7 +69,6 @@ ToolBarFactory::ToolBarFactory( const css::uno::Reference< css::uno::XComponentC
 Reference< XUIElement > SAL_CALL ToolBarFactory::createUIElement(
     const OUString& ResourceURL,
     const Sequence< PropertyValue >& Args )
-throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception )
 {
     Reference< css::ui::XUIElement > xToolBar(
            static_cast<OWeakObject *>(new ToolBarWrapper(m_xContext)), UNO_QUERY);

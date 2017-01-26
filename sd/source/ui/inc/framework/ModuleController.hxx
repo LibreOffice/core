@@ -72,14 +72,12 @@ public:
 
     // XModuleController
 
-    virtual void SAL_CALL requestResource(const OUString& rsResourceURL)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL requestResource(const OUString& rsResourceURL) override;
 
     // XInitialization
 
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence<css::uno::Any>& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<css::uno::Any>& aArguments) override;
 
 private:
     css::uno::Reference<
@@ -92,8 +90,7 @@ private:
 
     /// @throws std::exception
     ModuleController (
-        const css::uno::Reference<css::uno::XComponentContext>& rxContext)
-        throw (std::exception);
+        const css::uno::Reference<css::uno::XComponentContext>& rxContext);
     ModuleController (const ModuleController&) = delete;
     virtual ~ModuleController() throw() override;
 

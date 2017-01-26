@@ -110,26 +110,24 @@ public:
             ,bool _bTable = true
         );
 
-    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override;
 
 // css::uno::XInterface
     DECLARE_XINTERFACE( )
 
     // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( css::uno::Sequence< css::uno::Any > const & rArguments) throw (css::uno::Exception, std::exception) override;
+    virtual void SAL_CALL initialize( css::uno::Sequence< css::uno::Any > const & rArguments) override;
 
     // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
     // XColumnsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getColumns(  ) override;
 
     // OPropertySetHelper
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
@@ -147,7 +145,7 @@ protected:
 
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
-                                    const css::uno::Any& rValue) throw (css::uno::Exception, std::exception) override;
+                                    const css::uno::Any& rValue) override;
 
     // OContentHelper overridables
     virtual OUString determineContentType() const override;

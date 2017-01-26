@@ -53,7 +53,6 @@ FrameStatusListener::~FrameStatusListener()
 
 // XInterface
 Any SAL_CALL FrameStatusListener::queryInterface( const Type& rType )
-throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -81,7 +80,6 @@ void SAL_CALL FrameStatusListener::release() throw ()
 
 // XComponent
 void SAL_CALL FrameStatusListener::dispose()
-throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -115,20 +113,17 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL FrameStatusListener::addEventListener( const Reference< XEventListener >& )
-throw ( RuntimeException, std::exception )
 {
     // helper class for status updates - no need to support listener
 }
 
 void SAL_CALL FrameStatusListener::removeEventListener( const Reference< XEventListener >& )
-throw ( RuntimeException, std::exception )
 {
     // helper class for status updates - no need to support listener
 }
 
 // XEventListener
 void SAL_CALL FrameStatusListener::disposing( const EventObject& Source )
-throw ( RuntimeException, std::exception )
 {
     Reference< XInterface > xSource( Source.Source );
 
@@ -149,7 +144,6 @@ throw ( RuntimeException, std::exception )
 }
 
 void FrameStatusListener::frameAction( const FrameActionEvent& Action )
-throw ( RuntimeException, std::exception )
 {
     if ( Action.Action == FrameAction_CONTEXT_CHANGED )
         bindListener();

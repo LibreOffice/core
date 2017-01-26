@@ -66,17 +66,17 @@ public:
     // noncopyable
     OTableContainerListener(const OTableContainerListener&) = delete;
     const OTableContainerListener& operator=(const OTableContainerListener&) = delete;
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& /*Event*/ ) throw (RuntimeException, std::exception) override
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& /*Event*/ ) override
     {
     }
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (RuntimeException, std::exception) override
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override
     {
         OUString sName;
         Event.Accessor  >>= sName;
         if ( m_aRefNames.find(sName) != m_aRefNames.end() )
             m_pComponent->refreshKeys();
     }
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (RuntimeException, std::exception) override
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override
     {
         OUString sOldComposedName,sNewComposedName;
         Event.ReplacedElement   >>= sOldComposedName;
@@ -85,7 +85,7 @@ public:
             m_pComponent->refreshKeys();
     }
     // XEventListener
-    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) throw (RuntimeException, std::exception) override
+    virtual void SAL_CALL disposing( const EventObject& /*_rSource*/ ) override
     {
     }
     void clear() { m_pComponent = nullptr; }
@@ -492,7 +492,7 @@ OUString OTableHelper::getRenameStart() const
 }
 
 // XRename
-void SAL_CALL OTableHelper::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException, std::exception)
+void SAL_CALL OTableHelper::rename( const OUString& newName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -542,7 +542,7 @@ Reference< XDatabaseMetaData> OTableHelper::getMetaData() const
     return m_pImpl->m_xMetaData;
 }
 
-void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor ) throw(SQLException, css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
+void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -560,7 +560,7 @@ void SAL_CALL OTableHelper::alterColumnByIndex( sal_Int32 index, const Reference
 }
 
 
-OUString SAL_CALL OTableHelper::getName() throw(RuntimeException, std::exception)
+OUString SAL_CALL OTableHelper::getName()
 {
     OUString sComposedName;
     sComposedName = ::dbtools::composeTableName(getMetaData(),m_CatalogName,m_SchemaName,m_Name,false,::dbtools::EComposeRule::InDataManipulation);

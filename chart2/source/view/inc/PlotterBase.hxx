@@ -54,7 +54,7 @@ public:
         , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget
         , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
         , const OUString& rCID
-                ) throw (css::uno::RuntimeException, std::exception);
+                );
 
     virtual void setScales( const ::std::vector< ExplicitScaleData >& rScales, bool bSwapXAndYAxis );
 

@@ -339,7 +339,6 @@ void DataSupplier::close()
 }
 
 void DataSupplier::validate()
-    throw( ResultSetException )
 {
 }
 

@@ -40,13 +40,11 @@ public:
 
     /// @throws css::uno::Exception
     void addFile( css::uno::Reference< css::uno::XInterface >& xRootFolder,
-                  const OUString& rSourceFile )
-        throw( css::uno::Exception, std::exception );
+                  const OUString& rSourceFile );
 
     /// @throws css::uno::Exception
     css::uno::Reference< css::uno::XInterface > addFolder( css::uno::Reference< css::uno::XInterface >& xRootFolder,
-                                                           const OUString& rName )
-        throw( css::uno::Exception, std::exception );
+                                                           const OUString& rName );
 
     void addFolderWithContent( css::uno::Reference< css::uno::XInterface >& xRootFolder,
                                const OUString& rDirURL );

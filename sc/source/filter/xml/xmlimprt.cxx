@@ -115,7 +115,7 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_getSupportedServiceNames() throw(
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
 {
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_ALL);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_getImplementationName(), SvXMLImportFlags::ALL ));
@@ -133,7 +133,7 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Meta_getSupportedServiceNames() t
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Meta_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
 {
     // return (cppu::OWeakObject*)new ScXMLImport(IMPORT_META);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Meta_getImplementationName(), SvXMLImportFlags::META ));
@@ -151,7 +151,7 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Styles_getSupportedServiceNames()
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Styles_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
 {
     // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlagsSTYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Styles_getImplementationName(), SvXMLImportFlags::STYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::FONTDECLS));
@@ -169,7 +169,7 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Content_getSupportedServiceNames(
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Content_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
 {
     // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlags::META|SvXMLImportFlags::STYLES|SvXMLImportFlags::MASTERSTYLES|SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::SETTINGS|SvXMLImportFlags::FONTDECLS);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Content_getImplementationName(), SvXMLImportFlags::AUTOSTYLES|SvXMLImportFlags::CONTENT|SvXMLImportFlags::SCRIPTS|SvXMLImportFlags::FONTDECLS));
@@ -187,7 +187,7 @@ uno::Sequence< OUString > SAL_CALL ScXMLImport_Settings_getSupportedServiceNames
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScXMLImport_Settings_createInstance(
-    const uno::Reference< lang::XMultiServiceFactory > & rSMgr ) throw( uno::Exception )
+    const uno::Reference< lang::XMultiServiceFactory > & rSMgr )
 {
     // return (cppu::OWeakObject*)new ScXMLImport(SvXMLImportFlags::SETTINGS);
     return static_cast<cppu::OWeakObject*>(new ScXMLImport( comphelper::getComponentContext(rSMgr), ScXMLImport_Settings_getImplementationName(), SvXMLImportFlags::SETTINGS ));
@@ -244,18 +244,14 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 
     virtual void SAL_CALL startFastElement (sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
 
-    virtual void SAL_CALL characters(const OUString & aChars)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL characters(const OUString & aChars) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 ScXMLDocContext_Impl::ScXMLDocContext_Impl( ScXMLImport& rImport, sal_uInt16 nPrfx,
@@ -292,16 +288,13 @@ public:
         const uno::Reference<xml::sax::XAttributeList>& i_xAttrList) override;
 
     virtual void SAL_CALL startFastElement (sal_Int32 nElement,
-        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList)
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+        const css::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList) override;
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
-            throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 ScXMLFlatDocContext_Impl::ScXMLFlatDocContext_Impl( ScXMLImport& i_rImport,
@@ -342,7 +335,6 @@ SvXMLImportContext *ScXMLFlatDocContext_Impl::CreateChildContext(
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     ScXMLFlatDocContext_Impl::createFastChildContext( sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     if ( nElement != ( NAMESPACE_TOKEN( XML_NAMESPACE_OFFICE ) | XML_META ) )
         return ScXMLDocContext_Impl::createFastChildContext( nElement, xAttrList );
@@ -352,13 +344,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
 void SAL_CALL ScXMLFlatDocContext_Impl::startFastElement(sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     SvXMLMetaDocumentContext::startFastElement( nElement, xAttrList );
 }
 
 void SAL_CALL ScXMLFlatDocContext_Impl::endFastElement(sal_Int32 nElement)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     SvXMLMetaDocumentContext::endFastElement( nElement );
 }
@@ -371,8 +361,7 @@ public:
 
     virtual css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
         createFastChildContext( sal_Int32 nElement,
-        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList )
-        throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+        const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList ) override;
 };
 
 ScXMLBodyContext_Impl::ScXMLBodyContext_Impl( ScXMLImport& rImport, sal_Int32 /*nElement*/,
@@ -384,7 +373,6 @@ ScXMLImportContext( rImport )
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     ScXMLBodyContext_Impl::createFastChildContext( sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     return GetScImport().CreateBodyContext( nElement, xAttrList );
 }
@@ -437,7 +425,6 @@ SvXMLImportContext *ScXMLDocContext_Impl::CreateChildContext( sal_uInt16 nPrefix
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
     ScXMLDocContext_Impl::createFastChildContext( sal_Int32 nElement,
     const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     SvXMLImportContext *pContext(nullptr);
 
@@ -463,17 +450,14 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 
 void SAL_CALL ScXMLDocContext_Impl::startFastElement(sal_Int32 /*nElement*/,
     const uno::Reference< xml::sax::XFastAttributeList > & /*xAttrList*/)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 }
 
 void SAL_CALL ScXMLDocContext_Impl::endFastElement(sal_Int32 /*nElement*/)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 }
 
 void SAL_CALL ScXMLDocContext_Impl::characters(const OUString &)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
 }
 
@@ -2335,7 +2319,6 @@ ScXMLImport::~ScXMLImport() throw()
 }
 
 void ScXMLImport::initialize( const css::uno::Sequence<css::uno::Any>& aArguments )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     SvXMLImport::initialize(aArguments);
 
@@ -3068,7 +3051,6 @@ void ScXMLImport::SetStylesToRangesFinished()
 
 // XImporter
 void SAL_CALL ScXMLImport::setTargetDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
-throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::setTargetDocument( xDoc );
@@ -3090,7 +3072,6 @@ throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exce
 
 // css::xml::sax::XDocumentHandler
 void SAL_CALL ScXMLImport::startDocument()
-throw( css::xml::sax::SAXException, css::uno::RuntimeException, std::exception )
 {
     ScXMLImport::MutexGuard aGuard(*this);
     SvXMLImport::startDocument();
@@ -3300,9 +3281,6 @@ void ScXMLImport::SetStringRefSyntaxIfMissing()
 }
 
 void SAL_CALL ScXMLImport::endDocument()
-    throw(css::xml::sax::SAXException,
-          css::uno::RuntimeException,
-          std::exception)
 {
     ScXMLImport::MutexGuard aGuard(*this);
     if (getImportFlags() & SvXMLImportFlags::CONTENT)

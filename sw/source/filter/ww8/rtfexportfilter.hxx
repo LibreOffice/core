@@ -51,12 +51,11 @@ public:
     virtual ~RtfExportFilter() override;
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel() throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence<css::beans::PropertyValue>& aDescriptor) override;
+    virtual void SAL_CALL cancel() override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc)
-    throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument(const css::uno::Reference<css::lang::XComponent>& xDoc) override;
 
     RtfWriter m_aWriter;
 };
@@ -64,7 +63,7 @@ public:
 OUString RtfExport_getImplementationName();
 css::uno::Sequence<OUString> SAL_CALL RtfExport_getSupportedServiceNames() throw();
 /// @throws css::uno::Exception
-css::uno::Reference<css::uno::XInterface> SAL_CALL RtfExport_createInstance(const css::uno::Reference<css::uno::XComponentContext>& xCtx) throw(css::uno::Exception);
+css::uno::Reference<css::uno::XInterface> SAL_CALL RtfExport_createInstance(const css::uno::Reference<css::uno::XComponentContext>& xCtx);
 
 #define IMPL_NAME_RTFEXPORT "com.sun.star.comp.Writer.RtfExport"
 

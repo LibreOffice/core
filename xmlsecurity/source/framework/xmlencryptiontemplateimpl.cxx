@@ -39,51 +39,45 @@ XMLEncryptionTemplateImpl::~XMLEncryptionTemplateImpl() {
 
 /* XXMLEncryptionTemplate */
 void SAL_CALL XMLEncryptionTemplateImpl::setTemplate( const Reference< XXMLElementWrapper >& aTemplate )
-    throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     m_xTemplate = aTemplate ;
 }
 
 /* XXMLEncryptionTemplate */
 Reference< XXMLElementWrapper > SAL_CALL XMLEncryptionTemplateImpl::getTemplate()
-throw (css::uno::RuntimeException, std::exception)
 {
     return m_xTemplate ;
 }
 
 /* XXMLEncryptionTemplate */
-void SAL_CALL XMLEncryptionTemplateImpl::setTarget( const Reference< XXMLElementWrapper >& aTarget )
-    throw( css::lang::IllegalArgumentException, std::exception ) {
+void SAL_CALL XMLEncryptionTemplateImpl::setTarget( const Reference< XXMLElementWrapper >& aTarget ) {
     m_xTarget = aTarget ;
 }
 
 /* XXMLEncryptionTemplate */
 Reference< XXMLElementWrapper > SAL_CALL XMLEncryptionTemplateImpl::getTarget()
-throw (css::uno::RuntimeException, std::exception)
 {
     return m_xTarget ;
 }
 
 void SAL_CALL XMLEncryptionTemplateImpl::setStatus(
     css::xml::crypto::SecurityOperationStatus status )
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     m_nStatus = status;
 }
 
 css::xml::crypto::SecurityOperationStatus SAL_CALL XMLEncryptionTemplateImpl::getStatus(  )
-    throw (css::uno::RuntimeException, std::exception)
 {
     return m_nStatus;
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLEncryptionTemplateImpl::getImplementationName() throw( RuntimeException, std::exception ) {
+OUString SAL_CALL XMLEncryptionTemplateImpl::getImplementationName() {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLEncryptionTemplateImpl::supportsService( const OUString& serviceName) throw( RuntimeException, std::exception ) {
+sal_Bool SAL_CALL XMLEncryptionTemplateImpl::supportsService( const OUString& serviceName) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -94,7 +88,7 @@ sal_Bool SAL_CALL XMLEncryptionTemplateImpl::supportsService( const OUString& se
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLEncryptionTemplateImpl::getSupportedServiceNames() throw( RuntimeException, std::exception ) {
+Sequence< OUString > SAL_CALL XMLEncryptionTemplateImpl::getSupportedServiceNames() {
     return impl_getSupportedServiceNames() ;
 }
 
@@ -105,12 +99,12 @@ Sequence< OUString > XMLEncryptionTemplateImpl::impl_getSupportedServiceNames() 
     return seqServiceNames;
 }
 
-OUString XMLEncryptionTemplateImpl::impl_getImplementationName() throw( RuntimeException ) {
+OUString XMLEncryptionTemplateImpl::impl_getImplementationName() {
     return OUString("com.sun.star.xml.security.framework.XMLEncryptionTemplateImpl") ;
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLEncryptionTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) throw( RuntimeException ) {
+Reference< XInterface > SAL_CALL XMLEncryptionTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) {
     return Reference< XInterface >( *new XMLEncryptionTemplateImpl ) ;
 }
 

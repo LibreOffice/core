@@ -57,30 +57,30 @@ namespace rptui
         virtual ~DefaultComponentInspectorModel() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XObjectInspectorModel
-        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getHandlerFactories() throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getHasHelpSection() throw (css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() throw (css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getIsReadOnly() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setIsReadOnly( sal_Bool _isreadonly ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Any > SAL_CALL getHandlerFactories() override;
+        virtual sal_Bool SAL_CALL getHasHelpSection() override;
+        virtual ::sal_Int32 SAL_CALL getMinHelpTextLines() override;
+        virtual ::sal_Int32 SAL_CALL getMaxHelpTextLines() override;
+        virtual sal_Bool SAL_CALL getIsReadOnly() override;
+        virtual void SAL_CALL setIsReadOnly( sal_Bool _isreadonly ) override;
 
-        virtual css::uno::Sequence< css::inspection::PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const OUString& PropertyName ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::inspection::PropertyCategoryDescriptor > SAL_CALL describeCategories(  ) override;
+        virtual ::sal_Int32 SAL_CALL getPropertyOrderIndex( const OUString& PropertyName ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     public:
         // XServiceInfo - static versions
         /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static(  ) throw(css::uno::RuntimeException);
+        static OUString getImplementationName_Static(  );
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > getSupportedServiceNames_static(  );
         static css::uno::Reference< css::uno::XInterface > SAL_CALL
                         create(const css::uno::Reference< css::uno::XComponentContext >&);
 

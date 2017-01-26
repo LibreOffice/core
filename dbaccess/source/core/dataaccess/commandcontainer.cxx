@@ -57,7 +57,6 @@ IMPLEMENT_FORWARD_XINTERFACE2( OCommandContainer,ODefinitionContainer,OCommandCo
 IMPLEMENT_GETTYPES2(OCommandContainer,ODefinitionContainer,OCommandContainer_BASE);
 
 css::uno::Sequence<sal_Int8> OCommandContainer::getImplementationId()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -74,12 +73,12 @@ Reference< XContent > OCommandContainer::createObject( const OUString& _rName)
         return static_cast< css::sdb::XQueryDefinition * > ( new OCommandDefinition( *this, _rName, m_aContext, pElementContent ) );
 }
 
-Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ ) throw (Exception, RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL OCommandContainer::createInstanceWithArguments(const Sequence< Any >& /*aArguments*/ )
 {
     return createInstance( );
 }
 
-Reference< XInterface > SAL_CALL OCommandContainer::createInstance( ) throw (Exception, RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL OCommandContainer::createInstance( )
 {
     if(m_bTables)
         return css::sdb::TableDefinition::createDefault( m_aContext );

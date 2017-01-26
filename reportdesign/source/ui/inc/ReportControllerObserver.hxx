@@ -60,18 +60,18 @@ namespace rptui
         OXReportControllerObserver(const OReportController& _rController);
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) override;
+        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) override;
+        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 
 
         void AddElement(const css::uno::Reference< css::uno::XInterface>& Element);

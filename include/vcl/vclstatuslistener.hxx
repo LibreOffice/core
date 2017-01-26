@@ -34,11 +34,9 @@ private:
     css::util::URL maCommandURL;
 
 public:
-    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
-    void SAL_CALL disposing(const css::lang::EventObject& /*Source*/)
-        throw( css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL disposing(const css::lang::EventObject& /*Source*/) override;
 
     void dispose();
 };
@@ -71,14 +69,12 @@ VclStatusListener<T>::VclStatusListener(T* widget, const rtl::OUString& aCommand
 
 template<class T>
 void VclStatusListener<T>::statusChanged(const css::frame::FeatureStateEvent& rEvent)
-            throw(css::uno::RuntimeException, std::exception)
 {
     mWidget->statusChanged(rEvent);
 }
 
 template<class T>
 void VclStatusListener<T>::disposing(const css::lang::EventObject& /*Source*/)
-            throw( css::uno::RuntimeException, std::exception )
 {
     mxDispatch.clear();
 }

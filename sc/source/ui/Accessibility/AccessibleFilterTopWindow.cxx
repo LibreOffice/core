@@ -42,14 +42,14 @@ ScAccessibleFilterTopWindow::~ScAccessibleFilterTopWindow()
 
 // XAccessibleContext
 
-sal_Int32 ScAccessibleFilterTopWindow::getAccessibleChildCount() throw (RuntimeException, std::exception)
+sal_Int32 ScAccessibleFilterTopWindow::getAccessibleChildCount()
 {
     sal_Int32 nMenuCount = getMenuItemCount();
     return nMenuCount + 6;
 }
 
 Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChild(
-    sal_Int32 nIndex) throw (RuntimeException, IndexOutOfBoundsException, std::exception)
+    sal_Int32 nIndex)
 {
     if (nIndex >= getAccessibleChildCount())
         throw IndexOutOfBoundsException();
@@ -82,7 +82,7 @@ Reference<XAccessible> ScAccessibleFilterTopWindow::getAccessibleChild(
     return Reference<XAccessible>();
 }
 
-OUString ScAccessibleFilterTopWindow::getImplementationName() throw (RuntimeException, std::exception)
+OUString ScAccessibleFilterTopWindow::getImplementationName()
 {
     return OUString("ScAccessibleFilterTopWindow");
 }

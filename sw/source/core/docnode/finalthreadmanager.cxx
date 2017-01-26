@@ -278,24 +278,24 @@ FinalThreadManager::~FinalThreadManager()
 }
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL FinalThreadManager::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL FinalThreadManager::getImplementationName()
 {
     return OUString("com.sun.star.util.comp.FinalThreadManager");
 }
 
-sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL FinalThreadManager::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL FinalThreadManager::getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > s { "com.sun.star.util.JobManager" };
     return s;
 }
 
 // css::util::XJobManager:
-void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::util::XCancellable > & Job)
 {
     osl::MutexGuard aGuard(maMutex);
 
@@ -308,14 +308,14 @@ void SAL_CALL FinalThreadManager::registerJob(const css::uno::Reference< css::ut
     }
 }
 
-void SAL_CALL FinalThreadManager::releaseJob(const css::uno::Reference< css::util::XCancellable > & Job) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL FinalThreadManager::releaseJob(const css::uno::Reference< css::util::XCancellable > & Job)
 {
     osl::MutexGuard aGuard(maMutex);
 
     maThreads.remove( Job );
 }
 
-void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL FinalThreadManager::cancelAllJobs()
 {
     std::list< css::uno::Reference< css::util::XCancellable > > aThreads;
     {
@@ -349,7 +349,7 @@ void SAL_CALL FinalThreadManager::cancelAllJobs() throw (css::uno::RuntimeExcept
 }
 
 // css::frame::XTerminateListener
-void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject& ) throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception)
+void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject& )
 {
     osl::MutexGuard aGuard(maMutex);
 
@@ -393,7 +393,7 @@ void SAL_CALL FinalThreadManager::queryTermination( const css::lang::EventObject
     return;
 }
 
-void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObject& )
 {
     if ( mpPauseThreadStarting != nullptr )
     {
@@ -404,7 +404,7 @@ void SAL_CALL FinalThreadManager::cancelTermination( const css::lang::EventObjec
     return;
 }
 
-void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObject& )
 {
     if ( mpTerminateOfficeThread != nullptr )
     {
@@ -434,7 +434,7 @@ void SAL_CALL FinalThreadManager::notifyTermination( const css::lang::EventObjec
 }
 
 // ::com::sun:star::lang::XEventListener (inherited via css::frame::XTerminateListener)
-void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL FinalThreadManager::disposing( const css::lang::EventObject& )
 {
     // nothing to do, because instance doesn't hold any references of observed objects
 }

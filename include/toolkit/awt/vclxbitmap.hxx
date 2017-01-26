@@ -52,23 +52,23 @@ public:
 
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::lang::XUnoTunnel
     static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
     static VCLXBitmap*                                          GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace );
-    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XBitmap
-    css::awt::Size                 SAL_CALL getSize() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getDIB() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size                 SAL_CALL getSize() override;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getDIB() override;
+    css::uno::Sequence< sal_Int8 > SAL_CALL getMaskDIB() override;
 };
 
 

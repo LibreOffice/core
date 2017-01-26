@@ -346,7 +346,6 @@ void InformationDialog::execute()
 
 
 void OKActionListener::actionPerformed( const ActionEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( rEvent.ActionCommand == "button" )
     {
@@ -354,7 +353,6 @@ void OKActionListener::actionPerformed( const ActionEvent& rEvent )
     }
 }
 void OKActionListener::disposing( const css::lang::EventObject& /* Source */ )
-    throw ( css::uno::RuntimeException, std::exception )
 {
 }
 

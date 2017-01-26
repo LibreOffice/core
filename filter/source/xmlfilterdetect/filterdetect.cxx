@@ -51,7 +51,7 @@ OUString supportedByType( const OUString& clipBoardFormat,  const OUString& resu
 
 }
 
-OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::PropertyValue >& aArguments ) throw( css::uno::RuntimeException, std::exception )
+OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::PropertyValue >& aArguments )
 {
     OUString sTypeName;
     OUString sUrl;
@@ -175,7 +175,6 @@ OUString SAL_CALL FilterDetect::detect( css::uno::Sequence< css::beans::Property
 
 // XInitialization
 void SAL_CALL FilterDetect::initialize( const Sequence< Any >& /*aArguments*/ )
-    throw (Exception, RuntimeException, std::exception)
 {
 }
 
@@ -197,19 +196,16 @@ Reference< XInterface > FilterDetect_createInstance( const Reference< XComponent
 
 // XServiceInfo
 OUString SAL_CALL FilterDetect::getImplementationName(  )
-    throw (RuntimeException, std::exception)
 {
     return FilterDetect_getImplementationName();
 }
 
 sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames(  )
-    throw (RuntimeException, std::exception)
 {
     return FilterDetect_getSupportedServiceNames();
 }

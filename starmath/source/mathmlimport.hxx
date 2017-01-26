@@ -91,12 +91,10 @@ public:
     virtual ~SmXMLImport() throw () override;
 
     // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
-    void SAL_CALL endDocument()
-        throw( css::xml::sax::SAXException,
-        css::uno::RuntimeException, std::exception ) override;
+    void SAL_CALL endDocument() override;
 
     SvXMLImportContext *CreateContext(sal_uInt16 nPrefix,
         const OUString &rLocalName,

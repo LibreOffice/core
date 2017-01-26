@@ -31,7 +31,7 @@ namespace connectivity
     ParameterSubstitution::ParameterSubstitution(const css::uno::Reference< css::uno::XComponentContext >& _rxContext ) : m_xContext(_rxContext)
     {
     }
-    void SAL_CALL ParameterSubstitution::initialize( const uno::Sequence< uno::Any >& _aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception)
+    void SAL_CALL ParameterSubstitution::initialize( const uno::Sequence< uno::Any >& _aArguments )
     {
         ::osl::MutexGuard aGuard(m_aMutex);
         comphelper::SequenceAsHashMap aArgs(_aArguments);
@@ -40,27 +40,27 @@ namespace connectivity
         m_xConnection = xConnection;
     }
 
-    OUString ParameterSubstitution::getImplementationName_Static(  ) throw(RuntimeException)
+    OUString ParameterSubstitution::getImplementationName_Static(  )
     {
         return OUString("org.openoffice.comp.helper.ParameterSubstitution");
     }
 
-    OUString SAL_CALL ParameterSubstitution::getImplementationName(  ) throw(RuntimeException, std::exception)
+    OUString SAL_CALL ParameterSubstitution::getImplementationName(  )
     {
         return getImplementationName_Static();
     }
 
-    sal_Bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+    sal_Bool SAL_CALL ParameterSubstitution::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL ParameterSubstitution::getSupportedServiceNames(  )
     {
         return getSupportedServiceNames_Static();
     }
 
-    Sequence< OUString > ParameterSubstitution::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+    Sequence< OUString > ParameterSubstitution::getSupportedServiceNames_Static(  )
     {
         Sequence<OUString> aSNS { "com.sun.star.sdb.ParameterSubstitution" };
         return aSNS;
@@ -72,7 +72,7 @@ namespace connectivity
         return *(new ParameterSubstitution(_xContext));
     }
 
-    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, sal_Bool /*bSubstRequired*/ ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
+    OUString SAL_CALL ParameterSubstitution::substituteVariables( const OUString& _sText, sal_Bool /*bSubstRequired*/ )
     {
         OUString sRet = _sText;
         uno::Reference< sdbc::XConnection > xConnection = m_xConnection;
@@ -99,12 +99,12 @@ namespace connectivity
         return sRet;
     }
 
-    OUString SAL_CALL ParameterSubstitution::reSubstituteVariables( const OUString& _sText ) throw (css::uno::RuntimeException, std::exception)
+    OUString SAL_CALL ParameterSubstitution::reSubstituteVariables( const OUString& _sText )
     {
         return _sText;
     }
 
-    OUString SAL_CALL ParameterSubstitution::getSubstituteVariableValue( const OUString& /*variable*/ ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception)
+    OUString SAL_CALL ParameterSubstitution::getSubstituteVariableValue( const OUString& /*variable*/ )
     {
         throw container::NoSuchElementException();
     }

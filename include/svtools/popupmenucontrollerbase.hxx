@@ -63,43 +63,43 @@ namespace svt
             virtual ~PopupMenuControllerBase() override;
 
             // XServiceInfo
-            virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
-            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+            virtual OUString SAL_CALL getImplementationName(  ) override = 0;
+            virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override = 0;
 
             // XPopupMenuController
-            virtual void SAL_CALL setPopupMenu( const css::uno::Reference< css::awt::XPopupMenu >& PopupMenu ) throw (css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL updatePopupMenu() throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL setPopupMenu( const css::uno::Reference< css::awt::XPopupMenu >& PopupMenu ) override;
+            virtual void SAL_CALL updatePopupMenu() override;
 
             // XInitialization
-            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
             // XStatusListener
-            virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override = 0;
+            virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override = 0;
 
             // XMenuListener
-            virtual void SAL_CALL itemHighlighted( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL itemDeactivated( const css::awt::MenuEvent& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL itemHighlighted( const css::awt::MenuEvent& rEvent ) override;
+            virtual void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) override;
+            virtual void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) override;
+            virtual void SAL_CALL itemDeactivated( const css::awt::MenuEvent& rEvent ) override;
 
             // XDispatchProvider
-            virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) throw( css::uno::RuntimeException, std::exception ) override;
-            virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) throw( css::uno::RuntimeException, std::exception ) override;
+            virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch( const css::util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) override;
+            virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptor ) override;
 
             // XDispatch
-            virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& seqProperties ) throw( css::uno::RuntimeException, std::exception ) override;
-            virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception ) override;
-            virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& seqProperties ) override;
+            virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
+            virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 
             // XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
             void dispatchCommand( const OUString& sCommandURL, const css::uno::Sequence< css::beans::PropertyValue >& rArgs, const OUString& sTarget = OUString() );
 
     protected:
             /// @throws css::uno::RuntimeException
-            void throwIfDisposed() throw ( css::uno::RuntimeException );
+            void throwIfDisposed();
 
             /** helper method to cause statusChanged is called once for the given command url */
             void SAL_CALL updateCommand( const OUString& rCommandURL );

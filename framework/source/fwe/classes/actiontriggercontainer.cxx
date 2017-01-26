@@ -43,7 +43,6 @@ ActionTriggerContainer::~ActionTriggerContainer()
 
 // XInterface
 Any SAL_CALL ActionTriggerContainer::queryInterface( const Type& aType )
-throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 aType ,
@@ -71,7 +70,6 @@ void ActionTriggerContainer::release() throw()
 
 // XMultiServiceFactory
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstance( const OUString& aServiceSpecifier )
-throw ( css::uno::Exception, RuntimeException, std::exception)
 {
     if ( aServiceSpecifier == SERVICENAME_ACTIONTRIGGER )
         return static_cast<OWeakObject *>( new ActionTriggerPropertySet());
@@ -84,13 +82,11 @@ throw ( css::uno::Exception, RuntimeException, std::exception)
 }
 
 Reference< XInterface > SAL_CALL ActionTriggerContainer::createInstanceWithArguments( const OUString& ServiceSpecifier, const Sequence< Any >& /*Arguments*/ )
-throw ( Exception, RuntimeException, std::exception)
 {
     return createInstance( ServiceSpecifier );
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerContainer::getAvailableServiceNames()
-throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > aSeq( 3 );
 
@@ -103,26 +99,23 @@ throw ( RuntimeException, std::exception )
 
 // XServiceInfo
 OUString SAL_CALL ActionTriggerContainer::getImplementationName()
-throw ( RuntimeException, std::exception )
 {
     return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGERCONTAINER );
 }
 
 sal_Bool SAL_CALL ActionTriggerContainer::supportsService( const OUString& ServiceName )
-throw ( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerContainer::getSupportedServiceNames()
-throw ( RuntimeException, std::exception )
 {
     Sequence< OUString > seqServiceNames { SERVICENAME_ACTIONTRIGGERCONTAINER };
     return seqServiceNames;
 }
 
 // XTypeProvider
-Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeException, std::exception )
+Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes()
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -152,7 +145,7 @@ Sequence< Type > SAL_CALL ActionTriggerContainer::getTypes() throw ( RuntimeExce
     return pTypeCollection->getTypes();
 }
 
-Sequence< sal_Int8 > SAL_CALL ActionTriggerContainer::getImplementationId() throw ( RuntimeException, std::exception )
+Sequence< sal_Int8 > SAL_CALL ActionTriggerContainer::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }

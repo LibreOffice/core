@@ -137,7 +137,7 @@ extern "C" SAL_DLLPUBLIC_EXPORT bool SAL_CALL TestImportHWP(const OUString &rURL
     return true;
 }
 
-sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor) throw(RuntimeException, std::exception)
+sal_Bool HwpReader::filter(const Sequence< PropertyValue >& rDescriptor)
 {
     utl::MediaDescriptor aDescriptor(rDescriptor);
     aDescriptor.addInputStream();

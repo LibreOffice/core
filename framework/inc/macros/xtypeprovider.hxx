@@ -51,7 +51,7 @@ ________________________________________________________________________________
 //  implementation of XTypeProvider::getImplementationId()
 
 #define PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                               \
-    css::uno::Sequence< sal_Int8 > SAL_CALL CLASS::getImplementationId() throw( css::uno::RuntimeException, std::exception )          \
+    css::uno::Sequence< sal_Int8 > SAL_CALL CLASS::getImplementationId()          \
     {                                                                                                                                           \
         return css::uno::Sequence<sal_Int8>();                                                                                                  \
     }
@@ -83,7 +83,7 @@ ________________________________________________________________________________
 
 #define PRIVATE_DEFINE_XTYPEPROVIDER( CLASS, TYPES )                                                                                            \
     PRIVATE_DEFINE_XTYPEPROVIDER_GETIMPLEMENTATIONID( CLASS )                                                                                   \
-    css::uno::Sequence< css::uno::Type > SAL_CALL CLASS::getTypes() throw( css::uno::RuntimeException, std::exception )  \
+    css::uno::Sequence< css::uno::Type > SAL_CALL CLASS::getTypes()  \
     {                                                                                                                                           \
         /* Optimize this method !                                       */                                                                      \
         /* We initialize a static variable only one time.               */                                                                      \
@@ -112,8 +112,8 @@ ________________________________________________________________________________
 //  declaration of XTypeProvider
 
 #define FWK_DECLARE_XTYPEPROVIDER                                                                                                                               \
-    virtual css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes           () throw( css::uno::RuntimeException, std::exception ) override;\
-    virtual css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes           () override;\
+    virtual css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
 //  public
 //  implementation of XTypeProvider

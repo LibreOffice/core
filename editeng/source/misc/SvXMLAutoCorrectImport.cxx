@@ -60,7 +60,6 @@ SvXMLWordListContext::SvXMLWordListContext(
 
 css::uno::Reference<XFastContextHandler> SAL_CALL SvXMLWordListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
     if ( Element == SvXMLAutoCorrectToken::BLOCK )
         return new SvXMLWordContext (rLocalRef, Element, xAttrList);
@@ -139,7 +138,6 @@ SvXMLExceptionListContext::SvXMLExceptionListContext(
 
 css::uno::Reference<xml::sax::XFastContextHandler> SAL_CALL SvXMLExceptionListContext::createFastChildContext(
     sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
     if ( Element == SvXMLAutoCorrectToken::BLOCK )
         return new SvXMLExceptionContext (rLocalRef, Element, xAttrList);

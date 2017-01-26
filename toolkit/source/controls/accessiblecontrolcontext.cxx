@@ -118,21 +118,21 @@ namespace toolkit
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleControlContext::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OAccessibleControlContext::getAccessibleChildCount(  )
     {
         // we do not have children
         return 0;
     }
 
 
-    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleChild( sal_Int32 ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleChild( sal_Int32 )
     {
         // we do not have children
         throw IndexOutOfBoundsException();
     }
 
 
-    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleParent(  ) throw (RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleParent(  )
     {
         OContextEntryGuard aGuard( this );
         OSL_ENSURE( implGetForeignControlledParent().is(), "OAccessibleControlContext::getAccessibleParent: somebody forgot to set a parent!" );
@@ -142,33 +142,33 @@ namespace toolkit
     }
 
 
-    sal_Int16 SAL_CALL OAccessibleControlContext::getAccessibleRole(  ) throw (RuntimeException, std::exception)
+    sal_Int16 SAL_CALL OAccessibleControlContext::getAccessibleRole(  )
     {
         return AccessibleRole::SHAPE;
     }
 
 
-    OUString SAL_CALL OAccessibleControlContext::getAccessibleDescription(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL OAccessibleControlContext::getAccessibleDescription(  )
     {
         OContextEntryGuard aGuard( this );
         return getModelStringProperty( "HelpText" );
     }
 
 
-    OUString SAL_CALL OAccessibleControlContext::getAccessibleName(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL OAccessibleControlContext::getAccessibleName(  )
     {
         OContextEntryGuard aGuard( this );
         return getModelStringProperty( "Name" );
     }
 
 
-    Reference< XAccessibleRelationSet > SAL_CALL OAccessibleControlContext::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
+    Reference< XAccessibleRelationSet > SAL_CALL OAccessibleControlContext::getAccessibleRelationSet(  )
     {
         return nullptr;
     }
 
 
-    Reference< XAccessibleStateSet > SAL_CALL OAccessibleControlContext::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
+    Reference< XAccessibleStateSet > SAL_CALL OAccessibleControlContext::getAccessibleStateSet(  )
     {
         ::osl::MutexGuard aGuard( GetMutex() );
             // no OContextEntryGuard here, as we do not want to throw an exception in case we're not alive anymore
@@ -188,7 +188,7 @@ namespace toolkit
     }
 
 
-    void SAL_CALL OAccessibleControlContext::disposing( const EventObject& _rSource ) throw ( RuntimeException, std::exception )
+    void SAL_CALL OAccessibleControlContext::disposing( const EventObject& _rSource )
     {
         OSL_ENSURE( Reference< XPropertySet >( _rSource.Source, UNO_QUERY ).get() == m_xControlModel.get(),
             "OAccessibleControlContext::disposing: where did this come from?" );
@@ -237,7 +237,7 @@ namespace toolkit
     }
 
 
-    awt::Rectangle OAccessibleControlContext::implGetBounds(  ) throw (RuntimeException)
+    awt::Rectangle OAccessibleControlContext::implGetBounds(  )
     {
         SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...
@@ -297,20 +297,20 @@ namespace toolkit
     }
 
 
-    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleAtPoint( const awt::Point& /* _rPoint */ ) throw (RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL OAccessibleControlContext::getAccessibleAtPoint( const awt::Point& /* _rPoint */ )
     {
         // no children at all
         return nullptr;
     }
 
 
-    void SAL_CALL OAccessibleControlContext::grabFocus(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL OAccessibleControlContext::grabFocus(  )
     {
         OSL_FAIL( "OAccessibleControlContext::grabFocus: !isFocusTraversable, but grabFocus!" );
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleControlContext::getForeground(  ) throw (css::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OAccessibleControlContext::getForeground(  )
     {
         SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...
@@ -336,7 +336,7 @@ namespace toolkit
     }
 
 
-    sal_Int32 SAL_CALL OAccessibleControlContext::getBackground(  ) throw (css::uno::RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OAccessibleControlContext::getBackground(  )
     {
         SolarMutexGuard aSolarGuard;
             // want to do some VCL stuff here ...

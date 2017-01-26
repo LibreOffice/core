@@ -23,7 +23,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaTabStop::SwVbaTabStop( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext ) throw ( uno::RuntimeException ) : SwVbaTabStop_BASE( rParent, rContext )
+SwVbaTabStop::SwVbaTabStop( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext ) : SwVbaTabStop_BASE( rParent, rContext )
 {
 }
 

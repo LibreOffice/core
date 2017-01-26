@@ -75,7 +75,7 @@ class DisposeListener : public ::cppu::WeakImplHelper< css::lang::XEventListener
             ,   m_pData ( pData  )
         {}
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aSource ) throw (css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aSource ) override
         {
             css::uno::Reference< css::lang::XEventListener > xSelfHold( this );
 

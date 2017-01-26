@@ -129,19 +129,19 @@ namespace dbaccess
         m_pData = nullptr;
     }
 
-    void SAL_CALL SubComponentLoader::windowResized( const WindowEvent& i_rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL SubComponentLoader::windowResized( const WindowEvent& i_rEvent )
     {
         // not interested in
         (void)i_rEvent;
     }
 
-    void SAL_CALL SubComponentLoader::windowMoved( const WindowEvent& i_rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL SubComponentLoader::windowMoved( const WindowEvent& i_rEvent )
     {
         // not interested in
         (void)i_rEvent;
     }
 
-    void SAL_CALL SubComponentLoader::windowShown( const EventObject& i_rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL SubComponentLoader::windowShown( const EventObject& i_rEvent )
     {
         (void)i_rEvent;
 
@@ -149,13 +149,13 @@ namespace dbaccess
         m_pData->xAppComponentWindow->removeWindowListener( this );
     }
 
-    void SAL_CALL SubComponentLoader::windowHidden( const EventObject& i_rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL SubComponentLoader::windowHidden( const EventObject& i_rEvent )
     {
         // not interested in
         (void)i_rEvent;
     }
 
-    void SAL_CALL SubComponentLoader::disposing( const EventObject& i_rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL SubComponentLoader::disposing( const EventObject& i_rEvent )
     {
         // not interested in
         (void)i_rEvent;

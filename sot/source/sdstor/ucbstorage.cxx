@@ -91,14 +91,14 @@ public:
     explicit FileStreamWrapper_Impl(const OUString& rName);
     virtual ~FileStreamWrapper_Impl() override;
 
-    virtual void SAL_CALL seek( sal_Int64 _nLocation ) throw ( IllegalArgumentException, IOException, RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getPosition(  ) throw ( IOException, RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getLength(  ) throw ( IOException, RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception ) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception ) override;
-    virtual void      SAL_CALL skipBytes(sal_Int32 nBytesToSkip) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL available() throw( NotConnectedException, RuntimeException, std::exception ) override;
-    virtual void      SAL_CALL closeInput() throw( NotConnectedException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL seek( sal_Int64 _nLocation ) override;
+    virtual sal_Int64 SAL_CALL getPosition(  ) override;
+    virtual sal_Int64 SAL_CALL getLength(  ) override;
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) override;
+    virtual void      SAL_CALL skipBytes(sal_Int32 nBytesToSkip) override;
+    virtual sal_Int32 SAL_CALL available() override;
+    virtual void      SAL_CALL closeInput() override;
 
 protected:
     void checkConnected();
@@ -130,7 +130,6 @@ FileStreamWrapper_Impl::~FileStreamWrapper_Impl()
 
 
 sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-                throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception )
 {
     if ( m_aURL.isEmpty() )
     {
@@ -159,7 +158,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readBytes(Sequence< sal_Int8 >& aData
 }
 
 
-sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     if ( m_aURL.isEmpty() )
     {
@@ -182,7 +181,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::readSomeBytes(Sequence< sal_Int8 >& a
 }
 
 
-void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip) throw( NotConnectedException, BufferSizeExceededException, RuntimeException, std::exception )
+void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip)
 {
     if ( m_aURL.isEmpty() )
         return;
@@ -195,7 +194,7 @@ void SAL_CALL FileStreamWrapper_Impl::skipBytes(sal_Int32 nBytesToSkip) throw( N
 }
 
 
-sal_Int32 SAL_CALL FileStreamWrapper_Impl::available() throw( NotConnectedException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL FileStreamWrapper_Impl::available()
 {
     if ( m_aURL.isEmpty() )
         return 0;
@@ -217,7 +216,7 @@ sal_Int32 SAL_CALL FileStreamWrapper_Impl::available() throw( NotConnectedExcept
 }
 
 
-void SAL_CALL FileStreamWrapper_Impl::closeInput() throw( NotConnectedException, RuntimeException, std::exception )
+void SAL_CALL FileStreamWrapper_Impl::closeInput()
 {
     if ( m_aURL.isEmpty() )
         return;
@@ -233,7 +232,7 @@ void SAL_CALL FileStreamWrapper_Impl::closeInput() throw( NotConnectedException,
 }
 
 
-void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException, std::exception)
+void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation )
 {
     if ( m_aURL.isEmpty() )
         return;
@@ -246,7 +245,7 @@ void SAL_CALL FileStreamWrapper_Impl::seek( sal_Int64 _nLocation ) throw (Illega
 }
 
 
-sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  ) throw (IOException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  )
 {
     if ( m_aURL.isEmpty() )
         return 0;
@@ -260,7 +259,7 @@ sal_Int64 SAL_CALL FileStreamWrapper_Impl::getPosition(  ) throw (IOException, R
 }
 
 
-sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  ) throw (IOException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL FileStreamWrapper_Impl::getLength(  )
 {
     if ( m_aURL.isEmpty() )
         return 0;

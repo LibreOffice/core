@@ -82,7 +82,6 @@ Tables::~Tables()
 {}
 
 void Tables::refresh()
-    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -236,9 +235,6 @@ static void appendKeyList(
 
 void Tables::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
-    throw (css::sdbc::SQLException,
-           css::container::ElementExistException,
-           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     Reference< XStatement > stmt =
@@ -313,9 +309,6 @@ void Tables::appendByDescriptor(
 }
 
 void Tables::dropByIndex( sal_Int32 index )
-    throw (css::sdbc::SQLException,
-           css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
@@ -355,7 +348,6 @@ void Tables::dropByIndex( sal_Int32 index )
 
 
 css::uno::Reference< css::beans::XPropertySet > Tables::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new TableDescriptor( m_refMutex, m_origin, m_pSettings );
 }

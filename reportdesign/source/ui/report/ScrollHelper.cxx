@@ -372,7 +372,6 @@ void OScrollWindowHelper::DataChanged( const DataChangedEvent& rDCEvt )
 }
 
 void OScrollWindowHelper::_propertyChanged(const beans::PropertyChangeEvent& /*_rEvent*/)
-    throw (uno::RuntimeException, std::exception)
 {
     m_aReportWindow->notifySizeChanged();
 }

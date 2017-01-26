@@ -185,20 +185,19 @@ bool IsUserWordbook( const OUString& rFile )
     // XServiceInfo
 
 
-    OUString WordbookMigration::getImplementationName() throw (RuntimeException, std::exception)
+    OUString WordbookMigration::getImplementationName()
     {
         return WordbookMigration_getImplementationName();
     }
 
 
     sal_Bool WordbookMigration::supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
 
-    Sequence< OUString > WordbookMigration::getSupportedServiceNames() throw (RuntimeException, std::exception)
+    Sequence< OUString > WordbookMigration::getSupportedServiceNames()
     {
         return WordbookMigration_getSupportedServiceNames();
     }
@@ -207,7 +206,7 @@ bool IsUserWordbook( const OUString& rFile )
     // XInitialization
 
 
-    void WordbookMigration::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
+    void WordbookMigration::initialize( const Sequence< Any >& aArguments )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -234,7 +233,6 @@ bool IsUserWordbook( const OUString& rFile )
 
 
     Any WordbookMigration::execute( const Sequence< beans::NamedValue >& )
-        throw (lang::IllegalArgumentException, Exception, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 

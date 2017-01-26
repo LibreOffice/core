@@ -35,13 +35,11 @@ SvXMLAutoCorrectTokenHandler::~SvXMLAutoCorrectTokenHandler()
 }
 
 sal_Int32 SAL_CALL SvXMLAutoCorrectTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& Identifier )
-     throw (css::uno::RuntimeException, std::exception)
 {
     return getTokenDirect( reinterpret_cast< const char* >( Identifier.getConstArray() ), Identifier.getLength() );
 }
 
 Sequence< sal_Int8 > SAL_CALL SvXMLAutoCorrectTokenHandler::getUTF8Identifier( sal_Int32 )
-     throw (css::uno::RuntimeException, std::exception)
 {
     return Sequence< sal_Int8 >();
 }

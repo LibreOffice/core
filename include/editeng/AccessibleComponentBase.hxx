@@ -54,70 +54,57 @@ public:
         inside this object.
     */
     virtual sal_Bool SAL_CALL containsPoint (
-        const css::awt::Point& aPoint)
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::awt::Point& aPoint) override;
 
     /** The default implementation returns an empty reference.
     */
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
         getAccessibleAtPoint (
-            const css::awt::Point& aPoint)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::awt::Point& aPoint) override;
 
     /** The default implementation returns an empty rectangle.
     */
-    virtual css::awt::Rectangle SAL_CALL getBounds()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Rectangle SAL_CALL getBounds() override;
 
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the location.
     */
-    virtual css::awt::Point SAL_CALL getLocation()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getLocation() override;
 
     /** The default implementation returns an empty position, i.e. the
     * result of the default constructor of css::awt::Point.
     */
-    virtual css::awt::Point SAL_CALL getLocationOnScreen()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
 
     /** The default implementation uses the result of
         <member>getBounds</member> to determine the size.
     */
-    virtual css::awt::Size SAL_CALL getSize()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Size SAL_CALL getSize() override;
 
     /** The default implementation does nothing.
     */
-    virtual void SAL_CALL grabFocus()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL grabFocus() override;
 
     /** Returns black as the default foreground color.
     */
-    virtual sal_Int32 SAL_CALL getForeground()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getForeground() override;
 
     /** Returns white as the default background color.
     */
-    virtual sal_Int32 SAL_CALL getBackground()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getBackground() override;
 
     //=====  XAccessibleExtendedComponent  ====================================
     virtual css::uno::Reference< css::awt::XFont > SAL_CALL
-        getFont()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getTitledBorderText()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getToolTipText()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getFont() override;
+    virtual OUString SAL_CALL getTitledBorderText() override;
+    virtual OUString SAL_CALL getToolTipText() override;
 
 
     //=====  XTypeProvider  ===================================================
 
     /// @throws css::uno::RuntimeException
     virtual css::uno::Sequence< css::uno::Type> SAL_CALL
-        getTypes()
-        throw (css::uno::RuntimeException, std::exception);
+        getTypes();
 
 };
 

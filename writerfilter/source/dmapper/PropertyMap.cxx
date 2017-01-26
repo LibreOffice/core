@@ -1105,11 +1105,6 @@ bool SectionPropertyMap::FloatingTableConversion(FloatingTableInfo& rInfo)
 }
 
 void SectionPropertyMap::InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl )
-throw ( css::beans::UnknownPropertyException,
-        css::beans::PropertyVetoException,
-        css::lang::IllegalArgumentException,
-        css::lang::WrappedTargetException,
-        css::uno::RuntimeException, std::exception )
 {
     const uno::Reference< container::XNameContainer >& xPageStyles = rDM_Impl.GetPageStyles();
     const uno::Reference < lang::XMultiServiceFactory >& xTextFactory = rDM_Impl.GetTextFactory();

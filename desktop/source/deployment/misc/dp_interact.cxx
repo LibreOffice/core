@@ -52,11 +52,10 @@ public:
     // XInterface
     virtual void SAL_CALL acquire() throw () override;
     virtual void SAL_CALL release() throw () override;
-    virtual Any SAL_CALL queryInterface( Type const & type )
-        throw (RuntimeException, std::exception) override;
+    virtual Any SAL_CALL queryInterface( Type const & type ) override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select() throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL select() override;
 };
 
 // XInterface
@@ -74,7 +73,6 @@ void InteractionContinuationImpl::release() throw ()
 
 
 Any InteractionContinuationImpl::queryInterface( Type const & type )
-    throw (RuntimeException, std::exception)
 {
     if (type.isAssignableFrom( m_type )) {
         Reference<task::XInteractionContinuation> xThis(this);
@@ -86,7 +84,7 @@ Any InteractionContinuationImpl::queryInterface( Type const & type )
 
 // XInteractionContinuation
 
-void InteractionContinuationImpl::select() throw (RuntimeException, std::exception)
+void InteractionContinuationImpl::select()
 {
     *m_pselect = true;
 }
@@ -127,7 +125,7 @@ bool interactContinuation( Any const & request,
 
 // XAbortChannel
 
-void AbortChannel::sendAbort() throw (RuntimeException, std::exception)
+void AbortChannel::sendAbort()
 {
     m_aborted = true;
     if (m_xNext.is())

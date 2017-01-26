@@ -79,25 +79,25 @@ class SfxTerminateListener_Impl : public ::cppu::WeakImplHelper< XTerminateListe
 public:
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( const EventObject& aEvent ) throw( TerminationVetoException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL notifyTermination( const EventObject& aEvent ) throw( RuntimeException, std::exception ) override;
-    virtual void SAL_CALL disposing( const EventObject& Source ) throw( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL queryTermination( const EventObject& aEvent ) override;
+    virtual void SAL_CALL notifyTermination( const EventObject& aEvent ) override;
+    virtual void SAL_CALL disposing( const EventObject& Source ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) throw (RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& sServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
-void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& ) throw( RuntimeException, std::exception )
+void SAL_CALL SfxTerminateListener_Impl::disposing( const EventObject& )
 {
 }
 
-void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& ) throw(TerminationVetoException, RuntimeException, std::exception )
+void SAL_CALL SfxTerminateListener_Impl::queryTermination( const EventObject& )
 {
 }
 
-void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent ) throw(RuntimeException, std::exception )
+void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& aEvent )
 {
     Reference< XDesktop > xDesktop( aEvent.Source, UNO_QUERY );
     if( xDesktop.is() )
@@ -126,17 +126,17 @@ void SAL_CALL SfxTerminateListener_Impl::notifyTermination( const EventObject& a
     Application::Quit();
 }
 
-OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName() throw (RuntimeException, std::exception)
+OUString SAL_CALL SfxTerminateListener_Impl::getImplementationName()
 {
     return OUString("com.sun.star.comp.sfx2.SfxTerminateListener");
 }
 
-sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SfxTerminateListener_Impl::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
-Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SfxTerminateListener_Impl::getSupportedServiceNames()
 {
     // Note: That service  does not really exists .-)
     // But this implementation is not thought to be registered really within our service.rdb.

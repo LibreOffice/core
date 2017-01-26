@@ -100,7 +100,7 @@ namespace vclcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas,   GraphicDeviceBase_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getServiceName(  ) override;
 
         // RepaintTarget
         virtual bool repaint( const GraphicObjectSharedPtr&                 rGrf,

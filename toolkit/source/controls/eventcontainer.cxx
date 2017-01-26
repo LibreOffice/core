@@ -42,13 +42,11 @@ namespace toolkit
 
 // Methods XElementAccess
 Type ScriptEventContainer::getElementType()
-    throw(RuntimeException, std::exception)
 {
     return mType;
 }
 
 sal_Bool ScriptEventContainer::hasElements()
-    throw(RuntimeException, std::exception)
 {
     bool bRet = (mnElementCount > 0);
     return bRet;
@@ -56,7 +54,6 @@ sal_Bool ScriptEventContainer::hasElements()
 
 // Methods XNameAccess
 Any ScriptEventContainer::getByName( const OUString& aName )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
@@ -69,13 +66,11 @@ Any ScriptEventContainer::getByName( const OUString& aName )
 }
 
 Sequence< OUString > ScriptEventContainer::getElementNames()
-    throw(RuntimeException, std::exception)
 {
     return mNames;
 }
 
 sal_Bool ScriptEventContainer::hasByName( const OUString& aName )
-    throw(RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     bool bRet = ( aIt != mHashMap.end() );
@@ -85,7 +80,6 @@ sal_Bool ScriptEventContainer::hasByName( const OUString& aName )
 
 // Methods XNameReplace
 void ScriptEventContainer::replaceByName( const OUString& aName, const Any& aElement )
-    throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
@@ -112,7 +106,6 @@ void ScriptEventContainer::replaceByName( const OUString& aName, const Any& aEle
 
 // Methods XNameContainer
 void ScriptEventContainer::insertByName( const OUString& aName, const Any& aElement )
-    throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
@@ -140,7 +133,6 @@ void ScriptEventContainer::insertByName( const OUString& aName, const Any& aElem
 }
 
 void ScriptEventContainer::removeByName( const OUString& Name )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( Name );
     if( aIt == mHashMap.end() )
@@ -172,12 +164,12 @@ void ScriptEventContainer::removeByName( const OUString& Name )
 }
 
 // Methods XContainer
-void ScriptEventContainer::addContainerListener( const css::uno::Reference< css::container::XContainerListener >& l ) throw(css::uno::RuntimeException, std::exception)
+void ScriptEventContainer::addContainerListener( const css::uno::Reference< css::container::XContainerListener >& l )
 {
     maContainerListeners.addInterface( l );
 }
 
-void ScriptEventContainer::removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& l ) throw(css::uno::RuntimeException, std::exception)
+void ScriptEventContainer::removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& l )
 {
     maContainerListeners.removeInterface( l );
 }

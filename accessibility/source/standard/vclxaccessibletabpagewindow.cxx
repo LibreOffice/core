@@ -66,7 +66,7 @@ VCLXAccessibleTabPageWindow::~VCLXAccessibleTabPageWindow()
 // OCommonAccessibleComponent
 
 
-awt::Rectangle VCLXAccessibleTabPageWindow::implGetBounds() throw (RuntimeException)
+awt::Rectangle VCLXAccessibleTabPageWindow::implGetBounds()
 {
     awt::Rectangle aBounds( 0, 0, 0, 0 );
 
@@ -100,7 +100,7 @@ void VCLXAccessibleTabPageWindow::disposing()
 // XAccessibleContext
 
 
-Reference< XAccessible > VCLXAccessibleTabPageWindow::getAccessibleParent(  ) throw (RuntimeException, std::exception)
+Reference< XAccessible > VCLXAccessibleTabPageWindow::getAccessibleParent(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -128,7 +128,7 @@ Reference< XAccessible > VCLXAccessibleTabPageWindow::getAccessibleParent(  ) th
 }
 
 
-sal_Int32 VCLXAccessibleTabPageWindow::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
+sal_Int32 VCLXAccessibleTabPageWindow::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 

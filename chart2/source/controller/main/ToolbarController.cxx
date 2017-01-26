@@ -44,12 +44,10 @@ ChartToolbarController::~ChartToolbarController()
 }
 
 void ChartToolbarController::execute(sal_Int16 /*nKeyModifier*/)
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void ChartToolbarController::click()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference<css::frame::XFrame> xActiveFrame = mxFramesSupplier->getActiveFrame();
     if (!xActiveFrame.is())
@@ -69,61 +67,51 @@ void ChartToolbarController::click()
 }
 
 void ChartToolbarController::doubleClick()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SAL_INFO("chart2", "double clicked");
 }
 
 
 css::uno::Reference<css::awt::XWindow> ChartToolbarController::createPopupWindow()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Reference<css::awt::XWindow>();
 }
 
 css::uno::Reference<css::awt::XWindow> ChartToolbarController::createItemWindow(
         const css::uno::Reference<css::awt::XWindow>& /*rParent*/)
-        throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Reference<css::awt::XWindow>();
 }
 
 void ChartToolbarController::statusChanged(const css::frame::FeatureStateEvent& /*rEvent*/)
-        throw (css::uno::RuntimeException, std::exception)
 {
 
 }
 
 void ChartToolbarController::disposing(const css::lang::EventObject& /*rSource*/)
-        throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void ChartToolbarController::initialize(const css::uno::Sequence<css::uno::Any>& /*rAny*/)
-    throw (css::uno::Exception, std::exception)
 {
 }
 
 void ChartToolbarController::update()
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 
 OUString ChartToolbarController::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.chart2.Chart2ToolboxController");
 }
 
 sal_Bool ChartToolbarController::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> ChartToolbarController::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return { "com.sun.star.frame.ToolbarController" };
 }

@@ -58,12 +58,9 @@ public:
     virtual ~Axis() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     /// merge XInterface implementations
      DECLARE_XINTERFACE()
@@ -77,59 +74,44 @@ protected:
     void Init( const Axis & rOther );
 
     // ____ OPropertySet ____
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw (css::beans::UnknownPropertyException,
-               css::uno::RuntimeException) override;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const override;
 
     // ____ OPropertySet ____
     virtual ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() override;
 
     // ____ XPropertySet ____
     virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getPropertySetInfo() override;
 
     // ____ XAxis ____
-    virtual void SAL_CALL setScaleData( const css::chart2::ScaleData& rScaleData )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::chart2::ScaleData SAL_CALL getScaleData()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getGridProperties()
-                    throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubGridProperties()
-                    throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubTickProperties()
-                    throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setScaleData( const css::chart2::ScaleData& rScaleData ) override;
+    virtual css::chart2::ScaleData SAL_CALL getScaleData() override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getGridProperties() override;
+    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubGridProperties() override;
+    virtual css::uno::Sequence< css::uno::Reference< css::beans::XPropertySet > > SAL_CALL getSubTickProperties() override;
 
     // ____ XTitled ____
-    virtual css::uno::Reference< css::chart2::XTitle > SAL_CALL getTitleObject()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::chart2::XTitle > SAL_CALL getTitleObject() override;
     virtual void SAL_CALL setTitleObject(
-        const css::uno::Reference< css::chart2::XTitle >& Title )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::XTitle >& Title ) override;
 
     // ____ XCloneable ____
     // Note: the coordinate systems are not cloned!
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
 
     // ____ XModifyBroadcaster ____
     virtual void SAL_CALL addModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
     virtual void SAL_CALL removeModifyListener(
-        const css::uno::Reference< css::util::XModifyListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // ____ XModifyListener ____
     virtual void SAL_CALL modified(
-        const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source ) override;
 
     // ____ OPropertySet ____
     virtual void firePropertyChangeEvent() override;

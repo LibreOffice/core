@@ -42,26 +42,26 @@ public:
                     virtual ~VCLXContainer() override;
 
     // css::uno::XInterface
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >        SAL_CALL getImplementationId() override;
 
     // css::awt::XVclContainer
-    void SAL_CALL addVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > SAL_CALL getWindows(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) override;
+    void SAL_CALL removeVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& l ) override;
+    css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > SAL_CALL getWindows(  ) override;
 
     // css::awt::XVclContainerPeer
-    void SAL_CALL enableDialogControl( sal_Bool bEnable ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& WindowOrder, const css::uno::Sequence< css::uno::Any >& Tabs, sal_Bool GroupControl ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Windows ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL enableDialogControl( sal_Bool bEnable ) override;
+    void SAL_CALL setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& WindowOrder, const css::uno::Sequence< css::uno::Any >& Tabs, sal_Bool GroupControl ) override;
+    void SAL_CALL setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Windows ) override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }

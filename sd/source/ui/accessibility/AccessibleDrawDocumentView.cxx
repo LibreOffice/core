@@ -185,7 +185,6 @@ rtl::Reference<AccessiblePageShape> AccessibleDrawDocumentView::CreateDrawPageSh
 
 sal_Int32 SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChildCount()
-    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -200,7 +199,6 @@ sal_Int32 SAL_CALL
 
 uno::Reference<XAccessible> SAL_CALL
     AccessibleDrawDocumentView::getAccessibleChild (sal_Int32 nIndex)
-    throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -234,7 +232,6 @@ uno::Reference<XAccessible> SAL_CALL
 
 OUString SAL_CALL
     AccessibleDrawDocumentView::getAccessibleName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -272,7 +269,6 @@ OUString SAL_CALL
 
 void SAL_CALL
     AccessibleDrawDocumentView::disposing (const lang::EventObject& rEventObject)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -290,7 +286,6 @@ void SAL_CALL
 
 void SAL_CALL
     AccessibleDrawDocumentView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -382,14 +377,12 @@ void SAL_CALL
 
 OUString SAL_CALL
     AccessibleDrawDocumentView::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleDrawDocumentView");
 }
 
 css::uno::Sequence< OUString> SAL_CALL
     AccessibleDrawDocumentView::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     // Get list of supported service names from base class...
@@ -408,7 +401,6 @@ css::uno::Sequence< OUString> SAL_CALL
 
 uno::Any SAL_CALL
     AccessibleDrawDocumentView::queryInterface (const uno::Type & rType)
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Any aReturn = AccessibleDocumentViewBase::queryInterface (rType);
     if ( ! aReturn.hasValue())
@@ -433,7 +425,6 @@ void SAL_CALL
 //=====  XAccessibleGroupPosition  =========================================
 uno::Sequence< sal_Int32 > SAL_CALL
     AccessibleDrawDocumentView::getGroupPosition( const uno::Any& rAny )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -507,7 +498,6 @@ uno::Sequence< sal_Int32 > SAL_CALL
 }
 
 OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -541,7 +531,6 @@ OUString AccessibleDrawDocumentView::getObjectLink( const uno::Any& rAny )
 
 /// Create a name for this view.
 OUString AccessibleDrawDocumentView::CreateAccessibleName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     OUString sName;
 
@@ -594,7 +583,6 @@ OUString AccessibleDrawDocumentView::CreateAccessibleName()
 */
 OUString
     AccessibleDrawDocumentView::CreateAccessibleDescription()
-    throw (css::uno::RuntimeException, std::exception)
 {
     OUString sDescription;
 
@@ -646,7 +634,6 @@ OUString
 */
 bool
     AccessibleDrawDocumentView::implIsSelected( sal_Int32 nAccessibleChildIndex )
-    throw (uno::RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
@@ -688,7 +675,6 @@ bool
 */
 void
     AccessibleDrawDocumentView::implSelect( sal_Int32 nAccessibleChildIndex, bool bSelect )
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException)
 {
     const SolarMutexGuard aSolarGuard;
     uno::Reference< view::XSelectionSupplier >  xSel( mxController, uno::UNO_QUERY );
@@ -828,7 +814,6 @@ void SAL_CALL AccessibleDrawDocumentView::disposing()
 
 css::uno::Sequence< css::uno::Any >
         SAL_CALL AccessibleDrawDocumentView::getAccFlowTo(const css::uno::Any& rAny, sal_Int32 nType)
-        throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 

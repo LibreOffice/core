@@ -66,7 +66,7 @@ void OFileCatalog::refreshTables()
 }
 
 
-Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OFileCatalog::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XGroupsSupplier>::get()||
         rType == cppu::UnoType<XUsersSupplier>::get()||
@@ -78,7 +78,7 @@ Any SAL_CALL OFileCatalog::queryInterface( const Type & rType ) throw(RuntimeExc
     return OFileCatalog_BASE::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL OFileCatalog::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OFileCatalog::getTypes(  )
 {
     typedef sdbcx::OCatalog OFileCatalog_BASE;
 

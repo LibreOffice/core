@@ -45,19 +45,16 @@ public:
     PrimitiveFactory2D(): PrimitiveFactory2DImplBase(m_aMutex) {}
 
             // Methods from XPrimitiveFactory2D
-    virtual css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXShape( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Sequence< css::beans::PropertyValue >& aParms ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, const css::uno::Sequence< css::beans::PropertyValue >& aParms ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXShape( const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Sequence< css::beans::PropertyValue >& aParms ) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL createPrimitivesFromXDrawPage( const css::uno::Reference< css::drawing::XDrawPage >& xDrawPage, const css::uno::Sequence< css::beans::PropertyValue >& aParms ) override;
 
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    OUString SAL_CALL getImplementationName() override
     { return OUString("com.sun.star.comp.graphic.PrimitiveFactory2D"); }
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return css::uno::Sequence<OUString>{
             "com.sun.star.graphic.PrimitiveFactory2D"};
@@ -66,7 +63,7 @@ public:
 
 css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXShape(
     const uno::Reference< drawing::XShape >& xShape,
-    const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException, std::exception)
+    const uno::Sequence< beans::PropertyValue >& /*aParms*/ )
 {
     css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 
@@ -86,7 +83,7 @@ css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL
 
 css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > SAL_CALL PrimitiveFactory2D::createPrimitivesFromXDrawPage(
     const uno::Reference< drawing::XDrawPage >& xDrawPage,
-    const uno::Sequence< beans::PropertyValue >& /*aParms*/ ) throw (uno::RuntimeException, std::exception)
+    const uno::Sequence< beans::PropertyValue >& /*aParms*/ )
 {
     css::uno::Sequence< css::uno::Reference< css::graphic::XPrimitive2D > > aRetval;
 

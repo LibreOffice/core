@@ -45,21 +45,17 @@ private:
 
     virtual ~UUIInteractionRequestStringResolver() override;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     virtual sal_Bool SAL_CALL supportsService(OUString const &
-                          rServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+                          rServiceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    getSupportedServiceNames() override;
 
     virtual css::beans::Optional< OUString > SAL_CALL
     getStringFromInformationalRequest(
-        const css::uno::Reference< css::task::XInteractionRequest >& Request )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 };
 
 #endif // INCLUDED_UUI_SOURCE_REQUESTSTRINGRESOLVER_HXX

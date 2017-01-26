@@ -45,7 +45,7 @@ OCurrencyControl::OCurrencyControl(const Reference<XComponentContext>& _rxFactor
 {
 }
 
-css::uno::Sequence<OUString> SAL_CALL OCurrencyControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL OCurrencyControl::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -133,7 +133,7 @@ IMPLEMENT_DEFAULT_CLONING( OCurrencyModel )
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OCurrencyModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL OCurrencyModel::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -165,7 +165,7 @@ void OCurrencyModel::describeFixedProperties( Sequence< Property >& _rProps ) co
 }
 
 
-OUString SAL_CALL OCurrencyModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OCurrencyModel::getServiceName()
 {
     return OUString(FRM_COMPONENT_CURRENCYFIELD); // old (non-sun) name for compatibility !
 }

@@ -57,7 +57,7 @@ SbPropertyValues::~SbPropertyValues()
     m_xInfo.clear();
 }
 
-Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo() throw( RuntimeException, std::exception )
+Reference< XPropertySetInfo > SbPropertyValues::getPropertySetInfo()
 {
     // create on demand?
     if (!m_xInfo.is())
@@ -96,11 +96,6 @@ size_t SbPropertyValues::GetIndex_Impl( const OUString &rPropName ) const
 void SbPropertyValues::setPropertyValue(
                     const OUString& aPropertyName,
                     const Any& aValue)
-                    throw (css::beans::UnknownPropertyException,
-                    css::beans::PropertyVetoException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::WrappedTargetException,
-                    css::uno::RuntimeException, std::exception)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
     PropertyValue & rPropVal = m_aPropVals[nIndex];
@@ -110,9 +105,6 @@ void SbPropertyValues::setPropertyValue(
 
 Any SbPropertyValues::getPropertyValue(
                     const OUString& aPropertyName)
-                    throw(css::beans::UnknownPropertyException,
-                    css::lang::WrappedTargetException,
-                    css::uno::RuntimeException, std::exception)
 {
     size_t const nIndex = GetIndex_Impl( aPropertyName );
     return m_aPropVals[nIndex].Value;
@@ -122,7 +114,6 @@ Any SbPropertyValues::getPropertyValue(
 void SbPropertyValues::addPropertyChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
-                    throw (std::exception)
 {
     (void)aPropertyName;
 }
@@ -131,7 +122,6 @@ void SbPropertyValues::addPropertyChangeListener(
 void SbPropertyValues::removePropertyChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XPropertyChangeListener >& )
-                    throw (std::exception)
 {
     (void)aPropertyName;
 }
@@ -140,7 +130,6 @@ void SbPropertyValues::removePropertyChangeListener(
 void SbPropertyValues::addVetoableChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
-                    throw(std::exception)
 {
     (void)aPropertyName;
 }
@@ -149,24 +138,18 @@ void SbPropertyValues::addVetoableChangeListener(
 void SbPropertyValues::removeVetoableChangeListener(
                     const OUString& aPropertyName,
                     const Reference< XVetoableChangeListener >& )
-                    throw(std::exception)
 {
     (void)aPropertyName;
 }
 
 
-Sequence< PropertyValue > SbPropertyValues::getPropertyValues() throw (css::uno::RuntimeException, std::exception)
+Sequence< PropertyValue > SbPropertyValues::getPropertyValues()
 {
     return comphelper::containerToSequence(m_aPropVals);
 }
 
 
 void SbPropertyValues::setPropertyValues(const Sequence< PropertyValue >& rPropertyValues )
-                     throw (css::beans::UnknownPropertyException,
-                     css::beans::PropertyVetoException,
-                     css::lang::IllegalArgumentException,
-                     css::lang::WrappedTargetException,
-                     css::uno::RuntimeException, std::exception)
 {
     if (!m_aPropVals.empty())
         throw IllegalArgumentException();

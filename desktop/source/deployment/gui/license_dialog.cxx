@@ -293,13 +293,13 @@ LicenseDialog::LicenseDialog( Sequence<Any> const& args,
 
 // XExecutableDialog
 
-void LicenseDialog::setTitle( OUString const & ) throw (RuntimeException, std::exception)
+void LicenseDialog::setTitle( OUString const & )
 {
 
 }
 
 
-sal_Int16 LicenseDialog::execute() throw (RuntimeException, std::exception)
+sal_Int16 LicenseDialog::execute()
 {
     return vcl::solarthread::syncExecute(
         std::bind(&LicenseDialog::solar_execute, this));

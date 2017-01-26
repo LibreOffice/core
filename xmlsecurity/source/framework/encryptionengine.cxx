@@ -74,7 +74,6 @@ bool EncryptionEngine::checkReady() const
 }
 
 void EncryptionEngine::tryToPerform( )
-        throw (Exception, RuntimeException)
 /****** EncryptionEngine/tryToPerform ****************************************
  *
  *   NAME
@@ -152,7 +151,6 @@ void EncryptionEngine::clearUp( ) const
 
 /* XBlockerMonitor */
 void SAL_CALL EncryptionEngine::setBlockerId( sal_Int32 id )
-    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     m_nIdOfBlocker = id;
     tryToPerform();

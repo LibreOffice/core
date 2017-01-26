@@ -100,14 +100,12 @@ public:
                  Reference<XComponentContext> const & xComponentContext );
 
     // XUpdatable
-    virtual void SAL_CALL update() throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL update() override;
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
-    getSupportedPackageTypes() throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
-        throw (deployment::DeploymentException,
-               uno::RuntimeException, std::exception) override;
+    getSupportedPackageTypes() override;
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType) override;
 
 };
 
@@ -184,7 +182,7 @@ bool BackendImpl::hasActiveEntry(OUString const & url)
 
 // XUpdatable
 
-void BackendImpl::update() throw (RuntimeException, std::exception)
+void BackendImpl::update()
 {
     // Nothing to do here after fixing i70283!?
 }
@@ -192,7 +190,7 @@ void BackendImpl::update() throw (RuntimeException, std::exception)
 // XPackageRegistry
 
 Sequence< Reference<deployment::XPackageTypeInfo> >
-BackendImpl::getSupportedPackageTypes() throw (RuntimeException, std::exception)
+BackendImpl::getSupportedPackageTypes()
 {
     return m_typeInfos;
 }
@@ -203,8 +201,6 @@ void BackendImpl::revokeEntryFromDb(OUString const & url)
 }
 
 void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
-        throw (deployment::DeploymentException,
-               uno::RuntimeException, std::exception)
 {
     if (m_backendDb.get())
         m_backendDb->removeEntry(url);

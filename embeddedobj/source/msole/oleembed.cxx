@@ -438,10 +438,6 @@ bool OleEmbeddedObject::TryToConvertToOOo()
 
 
 void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
-        throw ( embed::UnreachableStateException,
-                embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -596,8 +592,6 @@ void SAL_CALL OleEmbeddedObject::changeState( sal_Int32 nNewState )
 
 
 uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -638,8 +632,6 @@ uno::Sequence< sal_Int32 > SAL_CALL OleEmbeddedObject::getReachableStates()
 
 
 sal_Int32 SAL_CALL OleEmbeddedObject::getCurrentState()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -805,11 +797,6 @@ namespace
 
 
 void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                embed::UnreachableStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -941,8 +928,6 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
 
 
 uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedVerbs()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -982,8 +967,6 @@ uno::Sequence< embed::VerbDescriptor > SAL_CALL OleEmbeddedObject::getSupportedV
 
 void SAL_CALL OleEmbeddedObject::setClientSite(
                 const uno::Reference< embed::XEmbeddedClient >& xClient )
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1012,8 +995,6 @@ void SAL_CALL OleEmbeddedObject::setClientSite(
 
 
 uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSite()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1037,9 +1018,6 @@ uno::Reference< embed::XEmbeddedClient > SAL_CALL OleEmbeddedObject::getClientSi
 
 
 void SAL_CALL OleEmbeddedObject::update()
-        throw ( embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1072,8 +1050,6 @@ void SAL_CALL OleEmbeddedObject::update()
 
 
 void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1103,8 +1079,6 @@ void SAL_CALL OleEmbeddedObject::setUpdateMode( sal_Int32 nMode )
 sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
     nAspect
 )
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;
@@ -1144,7 +1118,6 @@ sal_Int64 SAL_CALL OleEmbeddedObject::getStatus( sal_Int64
 
 
 void SAL_CALL OleEmbeddedObject::setContainerName( const OUString& sName )
-        throw ( uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbeddedObject > xWrappedObject = m_xWrappedObject;

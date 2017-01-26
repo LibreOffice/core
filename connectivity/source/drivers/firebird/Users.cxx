@@ -41,7 +41,6 @@ Users::Users(const uno::Reference< XDatabaseMetaData >& rMetaData,
 
 //----- OCollection -----------------------------------------------------------
 void Users::impl_refresh()
-    throw(RuntimeException)
 {
     // TODO: IMPLEMENT ME
 }

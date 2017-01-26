@@ -55,8 +55,7 @@ public:
                   const css::uno::Reference< css::drawing::XShapes >& xLogicTarget
                 , const css::uno::Reference< css::drawing::XShapes >& xFinalTarget
                 , const css::uno::Reference< css::lang::XMultiServiceFactory >& xFactory
-                , css::uno::Reference< css::drawing::XShapes >& xLogicTargetForSeriesBehindAxis )
-                        throw (css::uno::RuntimeException, std::exception);
+                , css::uno::Reference< css::drawing::XShapes >& xLogicTargetForSeriesBehindAxis );
 
     void setParticle( const OUString& rCooSysParticle );
 

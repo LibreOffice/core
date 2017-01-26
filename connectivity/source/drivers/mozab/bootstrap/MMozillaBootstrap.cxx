@@ -70,17 +70,17 @@ void MozillaBootstrap::disposing()
     OMozillaBootstrap_BASE::disposing();
 }
 
-OUString SAL_CALL MozillaBootstrap::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL MozillaBootstrap::getImplementationName(  )
 {
     return OUString(MOZAB_MozillaBootstrap_IMPL_NAME);
 }
 
-sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL MozillaBootstrap::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  )
 {
     // which service is supported
     // for more information @see com.sun.star.mozilla.MozillaBootstrap
@@ -89,55 +89,55 @@ Sequence< OUString > SAL_CALL MozillaBootstrap::getSupportedServiceNames(  ) thr
 
 
 // XProfileDiscover
-::sal_Int32 SAL_CALL MozillaBootstrap::getProfileCount( css::mozilla::MozillaProductType product) throw (css::uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL MozillaBootstrap::getProfileCount( css::mozilla::MozillaProductType product)
 {
     return m_ProfileAccess->getProfileCount(product);
 }
-::sal_Int32 SAL_CALL MozillaBootstrap::getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list ) throw (css::uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL MozillaBootstrap::getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list )
 {
     return m_ProfileAccess->getProfileList(product,list);
 }
-OUString SAL_CALL MozillaBootstrap::getDefaultProfile( css::mozilla::MozillaProductType product ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL MozillaBootstrap::getDefaultProfile( css::mozilla::MozillaProductType product )
 {
     return m_ProfileAccess->getDefaultProfile(product);
 }
-OUString SAL_CALL MozillaBootstrap::getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL MozillaBootstrap::getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName )
 {
     return m_ProfileAccess->getProfilePath(product,profileName);
 }
-sal_Bool SAL_CALL MozillaBootstrap::isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL MozillaBootstrap::isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName )
 {
     return m_ProfileAccess->isProfileLocked(product,profileName);
 }
-sal_Bool SAL_CALL MozillaBootstrap::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL MozillaBootstrap::getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName )
 {
     return m_ProfileAccess->getProfileExists(product,profileName);
 }
 
 // XProfileManager
-::sal_Int32 SAL_CALL MozillaBootstrap::bootupProfile( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL MozillaBootstrap::bootupProfile( css::mozilla::MozillaProductType product, const OUString& profileName )
 {
     (void)product; /* avoid warning about unused parameter */
     (void)profileName; /* avoid warning about unused parameter */
         return -1;
 }
-::sal_Int32 SAL_CALL MozillaBootstrap::shutdownProfile(  ) throw (css::uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL MozillaBootstrap::shutdownProfile(  )
 {
     return -1;
 }
-css::mozilla::MozillaProductType SAL_CALL MozillaBootstrap::getCurrentProduct(  ) throw (css::uno::RuntimeException, std::exception)
+css::mozilla::MozillaProductType SAL_CALL MozillaBootstrap::getCurrentProduct(  )
 {
     return css::mozilla::MozillaProductType_Default;
 }
-OUString SAL_CALL MozillaBootstrap::getCurrentProfile(  ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL MozillaBootstrap::getCurrentProfile(  )
 {
     return OUString();
 }
-sal_Bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  ) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL MozillaBootstrap::isCurrentProfileLocked(  )
 {
     return true;
 }
-OUString SAL_CALL MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProductType product, const OUString& profileName )
 {
     (void)product; /* avoid warning about unused parameter */
     (void)profileName; /* avoid warning about unused parameter */
@@ -145,7 +145,7 @@ OUString SAL_CALL MozillaBootstrap::setCurrentProfile( css::mozilla::MozillaProd
 }
 
 // XProxyRunner
-::sal_Int32 SAL_CALL MozillaBootstrap::Run( const css::uno::Reference< css::mozilla::XCodeProxy >& aCode ) throw (css::uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL MozillaBootstrap::Run( const css::uno::Reference< css::mozilla::XCodeProxy >& aCode )
 {
     (void)aCode; /* avoid warning about unused parameter */
     return -1;

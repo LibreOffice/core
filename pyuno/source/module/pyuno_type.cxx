@@ -126,7 +126,7 @@ PyRef getAnyClass( const Runtime & r )
 }
 
 
-sal_Unicode PyChar2Unicode( PyObject *obj ) throw ( RuntimeException )
+sal_Unicode PyChar2Unicode( PyObject *obj )
 {
     PyRef value( PyObject_GetAttrString( obj, "value" ), SAL_NO_ACQUIRE );
     if( ! PyUnicode_Check( value.get() ) )
@@ -145,7 +145,7 @@ sal_Unicode PyChar2Unicode( PyObject *obj ) throw ( RuntimeException )
     return c;
 }
 
-Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
+Any PyEnum2Enum( PyObject *obj )
 {
     Any ret;
     PyRef typeName( PyObject_GetAttrString( obj,"typeName" ), SAL_NO_ACQUIRE);
@@ -202,7 +202,7 @@ Any PyEnum2Enum( PyObject *obj ) throw ( RuntimeException )
 }
 
 
-Type PyType2Type( PyObject * o ) throw(RuntimeException )
+Type PyType2Type( PyObject * o )
 {
     PyRef pyName( PyObject_GetAttrString( o, "typeName" ), SAL_NO_ACQUIRE);
     if( !PyStr_Check( pyName.get() ) )

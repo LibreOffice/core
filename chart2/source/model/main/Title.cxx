@@ -265,21 +265,18 @@ Title::~Title()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL Title::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new Title( *this ));
 }
 
 // ____ XTitle ____
 uno::Sequence< uno::Reference< chart2::XFormattedString > > SAL_CALL Title::getText()
-    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return m_aStrings;
 }
 
 void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XFormattedString > >& rNewStrings )
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Reference< chart2::XFormattedString > > aOldStrings;
     {
@@ -297,7 +294,6 @@ void SAL_CALL Title::setText( const uno::Sequence< uno::Reference< chart2::XForm
 
 // ____ OPropertySet ____
 uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticTitleDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -313,14 +309,12 @@ uno::Any Title::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Title::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticTitleInfo::get();
 }
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -334,7 +328,6 @@ void SAL_CALL Title::addModifyListener( const uno::Reference< util::XModifyListe
 }
 
 void SAL_CALL Title::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -349,14 +342,12 @@ void SAL_CALL Title::removeModifyListener( const uno::Reference< util::XModifyLi
 
 // ____ XModifyListener ____
 void SAL_CALL Title::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL Title::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
@@ -373,19 +364,16 @@ void Title::fireModifyEvent()
 }
 
 OUString SAL_CALL Title::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart2.Title");
 }
 
 sal_Bool SAL_CALL Title::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL Title::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart2.Title",

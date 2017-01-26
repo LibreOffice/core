@@ -78,25 +78,25 @@ namespace pcr
         );
 
         /// @throws css::uno::RuntimeException
-        static OUString SAL_CALL getImplementationName_static(  ) throw (css::uno::RuntimeException);
+        static OUString SAL_CALL getImplementationName_static(  );
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  ) throw (css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_static(  );
 
         virtual ~SubmissionPropertyHandler() override;
 
     protected:
         // XPropertyHandler overriables
-        virtual css::uno::Any               SAL_CALL getPropertyValue( const OUString& _rPropertyName ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-        virtual void                        SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any               SAL_CALL getPropertyValue( const OUString& _rPropertyName ) override;
+        virtual void                        SAL_CALL setPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rValue ) override;
         virtual css::uno::Sequence< OUString >
-                                            SAL_CALL getActuatingProperties( ) throw (css::uno::RuntimeException, std::exception) override;
+                                            SAL_CALL getActuatingProperties( ) override;
         virtual css::uno::Sequence< OUString >
-                                            SAL_CALL getSupersededProperties( ) throw (css::uno::RuntimeException, std::exception) override;
+                                            SAL_CALL getSupersededProperties( ) override;
         virtual css::inspection::LineDescriptor
-                                            SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) throw (css::beans::UnknownPropertyException, css::lang::NullPointerException, css::uno::RuntimeException, std::exception) override;
-        virtual void                        SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) throw (css::lang::NullPointerException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Any               SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rControlValue ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Any               SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) throw (css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+                                            SAL_CALL describePropertyLine( const OUString& _rPropertyName, const css::uno::Reference< css::inspection::XPropertyControlFactory >& _rxControlFactory ) override;
+        virtual void                        SAL_CALL actuatingPropertyChanged( const OUString& _rActuatingPropertyName, const css::uno::Any& _rNewValue, const css::uno::Any& _rOldValue, const css::uno::Reference< css::inspection::XObjectInspectorUI >& _rxInspectorUI, sal_Bool ) override;
+        virtual css::uno::Any               SAL_CALL convertToPropertyValue( const OUString& _rPropertyName, const css::uno::Any& _rControlValue ) override;
+        virtual css::uno::Any               SAL_CALL convertToControlValue( const OUString& _rPropertyName, const css::uno::Any& _rPropertyValue, const css::uno::Type& _rControlValueType ) override;
 
         // PropertyHandler overridables
         virtual css::uno::Sequence< css::beans::Property >
@@ -105,7 +105,7 @@ namespace pcr
 
     private:
         // OPropertyChangeListener
-        virtual void _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException) override;
+        virtual void _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) override;
     };
 
 

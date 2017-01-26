@@ -58,8 +58,7 @@ protected:
     // ____ XDispatch ____
     virtual void SAL_CALL dispatch(
         const css::util::URL& URL,
-        const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     // ____ WeakComponentImplHelperBase ____
     /// is called when this is disposed
@@ -67,13 +66,11 @@ protected:
 
     // ____ XModifyListener (override from CommandDispatch) ____
     virtual void SAL_CALL modified(
-        const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XModifyListener) ____
     virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source ) override;
 
     virtual void fireStatusEvent(
         const OUString & rURL,
@@ -81,8 +78,7 @@ protected:
 
     // ____ XSelectionChangeListener ____
     virtual void SAL_CALL selectionChanged(
-        const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent ) override;
 
 private:
     css::uno::Reference< css::util::XModifiable > m_xModifiable;

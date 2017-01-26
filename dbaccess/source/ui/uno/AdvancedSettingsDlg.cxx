@@ -43,22 +43,22 @@ namespace dbaui
 
     public:
         // XTypeProvider
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
         // XServiceInfo - static methods
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
         /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static OUString getImplementationName_Static();
         static css::uno::Reference< css::uno::XInterface >
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // OPropertyArrayUsageHelper
@@ -72,7 +72,7 @@ namespace dbaui
         :ODatabaseAdministrationDialog(_rxORB)
     {
     }
-    Sequence<sal_Int8> SAL_CALL OAdvancedSettingsDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
+    Sequence<sal_Int8> SAL_CALL OAdvancedSettingsDialog::getImplementationId(  )
     {
         return css::uno::Sequence<sal_Int8>();
     }
@@ -82,28 +82,28 @@ namespace dbaui
         return *(new OAdvancedSettingsDialog( comphelper::getComponentContext(_rxFactory) ));
     }
 
-    OUString SAL_CALL OAdvancedSettingsDialog::getImplementationName() throw(RuntimeException, std::exception)
+    OUString SAL_CALL OAdvancedSettingsDialog::getImplementationName()
     {
         return getImplementationName_Static();
     }
 
-    OUString OAdvancedSettingsDialog::getImplementationName_Static() throw(RuntimeException)
+    OUString OAdvancedSettingsDialog::getImplementationName_Static()
     {
         return OUString("org.openoffice.comp.dbu.OAdvancedSettingsDialog");
     }
 
-    css::uno::Sequence<OUString> SAL_CALL OAdvancedSettingsDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    css::uno::Sequence<OUString> SAL_CALL OAdvancedSettingsDialog::getSupportedServiceNames()
     {
         return getSupportedServiceNames_Static();
     }
 
-    css::uno::Sequence<OUString> OAdvancedSettingsDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+    css::uno::Sequence<OUString> OAdvancedSettingsDialog::getSupportedServiceNames_Static()
     {
         css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.AdvancedDatabaseSettingsDialog" };
         return aSupported;
     }
 
-    Reference<XPropertySetInfo>  SAL_CALL OAdvancedSettingsDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
+    Reference<XPropertySetInfo>  SAL_CALL OAdvancedSettingsDialog::getPropertySetInfo()
     {
         Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;

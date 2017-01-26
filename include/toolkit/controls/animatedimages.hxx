@@ -45,38 +45,38 @@ namespace toolkit
         virtual UnoControlModel*        Clone() const override;
 
         // XPropertySet
-        css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+        css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
         // XPersistObject
-        OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
+        OUString SAL_CALL getServiceName() override;
 
         // XServiceInfo
-        OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-        css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+        OUString SAL_CALL getImplementationName(  ) override;
+        css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XAnimatedImages
-        virtual ::sal_Int32 SAL_CALL getStepTime() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setStepTime( ::sal_Int32 _steptime ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getAutoRepeat() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setAutoRepeat( sal_Bool _autorepeat ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int16 SAL_CALL getScaleMode() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setScaleMode( ::sal_Int16 _scalemode ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getImageSetCount(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getImageSet( ::sal_Int32 i_index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL insertImageSet( ::sal_Int32 i_index, const css::uno::Sequence< OUString >& i_imageURLs ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL replaceImageSet( ::sal_Int32 i_index, const css::uno::Sequence< OUString >& i_imageURLs ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeImageSet( ::sal_Int32 i_index ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int32 SAL_CALL getStepTime() override;
+        virtual void SAL_CALL setStepTime( ::sal_Int32 _steptime ) override;
+        virtual sal_Bool SAL_CALL getAutoRepeat() override;
+        virtual void SAL_CALL setAutoRepeat( sal_Bool _autorepeat ) override;
+        virtual ::sal_Int16 SAL_CALL getScaleMode() override;
+        virtual void SAL_CALL setScaleMode( ::sal_Int16 _scalemode ) override;
+        virtual ::sal_Int32 SAL_CALL getImageSetCount(  ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getImageSet( ::sal_Int32 i_index ) override;
+        virtual void SAL_CALL insertImageSet( ::sal_Int32 i_index, const css::uno::Sequence< OUString >& i_imageURLs ) override;
+        virtual void SAL_CALL replaceImageSet( ::sal_Int32 i_index, const css::uno::Sequence< OUString >& i_imageURLs ) override;
+        virtual void SAL_CALL removeImageSet( ::sal_Int32 i_index ) override;
 
         // XAnimatedImages::XContainer
-        virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& i_listener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& i_listener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& i_listener ) override;
+        virtual void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& i_listener ) override;
 
     protected:
                                         virtual ~AnimatedImagesControlModel() override;
 
         css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
         ::cppu::IPropertyArrayHelper&   SAL_CALL getInfoHelper() override;
-        void SAL_CALL                   setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw (css::uno::Exception, std::exception) override;
+        void SAL_CALL                   setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
     private:
         std::unique_ptr< AnimatedImagesControlModel_Data > m_xData;

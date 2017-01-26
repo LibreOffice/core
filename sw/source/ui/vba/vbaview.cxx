@@ -48,7 +48,7 @@ using namespace ::com::sun::star;
 static const sal_Int32 DEFAULT_BODY_DISTANCE = 500;
 
 SwVbaView::SwVbaView( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,
-    const uno::Reference< frame::XModel >& rModel ) throw ( uno::RuntimeException ) :
+    const uno::Reference< frame::XModel >& rModel ) :
     SwVbaView_BASE( rParent, rContext ), mxModel( rModel )
 {
     uno::Reference< frame::XController > xController = mxModel->getCurrentController();
@@ -65,7 +65,7 @@ SwVbaView::~SwVbaView()
 }
 
 ::sal_Int32 SAL_CALL
-SwVbaView::getSeekView() throw (css::uno::RuntimeException, std::exception)
+SwVbaView::getSeekView()
 {
     // FIXME: if the view cursor is in table, field, section and frame
     // handle if the cursor is in table
@@ -116,7 +116,7 @@ SwVbaView::getSeekView() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException, css::script::BasicErrorException, std::exception)
+SwVbaView::setSeekView( ::sal_Int32 _seekview )
 {
     // FIXME: save the current cursor position, if the cursor is in the main
     // document, so we can jump back to this position, if the macro sets
@@ -179,19 +179,19 @@ SwVbaView::setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeExceptio
 }
 
 ::sal_Int32 SAL_CALL
-SwVbaView::getSplitSpecial() throw (css::uno::RuntimeException, std::exception)
+SwVbaView::getSplitSpecial()
 {
     return word::WdSpecialPane::wdPaneNone;
 }
 
 void SAL_CALL
-SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */) throw (css::uno::RuntimeException, std::exception)
+SwVbaView::setSplitSpecial( ::sal_Int32/* _splitspecial */)
 {
     // not support in Writer
 }
 
 sal_Bool SAL_CALL
-SwVbaView::getTableGridLines() throw (css::uno::RuntimeException, std::exception)
+SwVbaView::getTableGridLines()
 {
     bool bShowTableGridLine = false;
     mxViewSettings->getPropertyValue("ShowTableBoundaries") >>= bShowTableGridLine;
@@ -199,13 +199,13 @@ SwVbaView::getTableGridLines() throw (css::uno::RuntimeException, std::exception
 }
 
 void SAL_CALL
-SwVbaView::setTableGridLines( sal_Bool _tablegridlines ) throw (css::uno::RuntimeException, std::exception)
+SwVbaView::setTableGridLines( sal_Bool _tablegridlines )
 {
     mxViewSettings->setPropertyValue("ShowTableBoundaries", uno::makeAny( _tablegridlines ) );
 }
 
 ::sal_Int32 SAL_CALL
-SwVbaView::getType() throw (css::uno::RuntimeException, std::exception)
+SwVbaView::getType()
 {
     // FIXME: handle wdPrintPreview type
     bool bOnlineLayout = false;
@@ -214,7 +214,7 @@ SwVbaView::getType() throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception)
+SwVbaView::setType( ::sal_Int32 _type )
 {
     // FIXME: handle wdPrintPreview type
     switch( _type )
@@ -241,7 +241,7 @@ SwVbaView::setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::
     }
 }
 
-uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) throw (uno::RuntimeException, script::BasicErrorException, std::exception)
+uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType )
 {
     mxModel->lockControllers();
 

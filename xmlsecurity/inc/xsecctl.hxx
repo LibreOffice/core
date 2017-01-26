@@ -403,25 +403,20 @@ public:
     /*
      * XSAXEventKeeperStatusChangeListener
      */
-    virtual void SAL_CALL blockingStatusChanged( sal_Bool isBlocking )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL blockingStatusChanged( sal_Bool isBlocking ) override;
     virtual void SAL_CALL collectionStatusChanged(
-        sal_Bool isInsideCollectedElement )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL bufferStatusChanged( sal_Bool isBufferEmpty )
-        throw (css::uno::RuntimeException, std::exception) override;
+        sal_Bool isInsideCollectedElement ) override;
+    virtual void SAL_CALL bufferStatusChanged( sal_Bool isBufferEmpty ) override;
 
     /*
      * XSignatureCreationResultListener
      */
-    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL signatureCreated( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult ) override;
 
     /*
      * XSignatureVerifyResultListener
      */
-    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL signatureVerified( sal_Int32 securityId, css::xml::crypto::SecurityOperationStatus nResult ) override;
 
     /// Writes XML elements inside a single OOXML signature's <Signature> element.
     bool WriteOOXMLSignature(const css::uno::Reference<css::embed::XStorage>& xRootStorage, const css::uno::Reference<css::xml::sax::XDocumentHandler>& xDocumentHandler);

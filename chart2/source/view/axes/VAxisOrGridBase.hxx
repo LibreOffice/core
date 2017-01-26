@@ -43,8 +43,7 @@ public:
     /// @throws css::uno::RuntimeException
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
-          , const ExplicitIncrementData& rIncrement )
-                throw (css::uno::RuntimeException);
+          , const ExplicitIncrementData& rIncrement );
     void set3DWallPositions( CuboidPlanePosition eLeftWallPos, CuboidPlanePosition eBackWallPos, CuboidPlanePosition eBottomPos );
 
     virtual TickFactory* createTickFactory();

@@ -74,7 +74,6 @@ ToggleButtonToolbarController::~ToggleButtonToolbarController()
 }
 
 void SAL_CALL ToggleButtonToolbarController::dispose()
-throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
     ComplexToolbarController::dispose();
@@ -93,7 +92,6 @@ Sequence<PropertyValue> ToggleButtonToolbarController::getExecuteArgs(sal_Int16 
 }
 
 uno::Reference< awt::XWindow > SAL_CALL ToggleButtonToolbarController::createPopupWindow()
-throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xWindow;
 

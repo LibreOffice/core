@@ -40,7 +40,7 @@ namespace connectivity
             static ObjectTypeEnum MapObjectType(sal_Int32 ObjType);
         protected:
             virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue,sal_Int32 nHandle) const override;
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception) override;
+            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
 
         public:
             virtual void refreshUsers() override;
@@ -49,14 +49,14 @@ namespace connectivity
             OAdoGroup(OCatalog* _pParent,bool _bCase, const OUString& Name);
 
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             // XAuthorizable
-            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
+            virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
+            virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+            virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
 
             WpADOGroup getImpl() const { return m_aGroup; }
         };

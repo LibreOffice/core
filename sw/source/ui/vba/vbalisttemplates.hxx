@@ -34,13 +34,13 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaListTemplates( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nType ) throw (css::uno::RuntimeException);
+    SwVbaListTemplates( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextDocument >& xTextDoc, sal_Int32 nType );
 
-    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/ ) throw ( css::uno::RuntimeException ) override;
+    virtual ::sal_Int32 SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/ ) override;
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaListTemplates_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;

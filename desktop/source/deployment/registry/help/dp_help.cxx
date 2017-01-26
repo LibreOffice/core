@@ -84,9 +84,7 @@ class BackendImpl : public ::dp_registry::backend::PackageRegistryBackend
         bool extensionContainsCompiledHelp();
 
         //XPackage
-        virtual css::beans::Optional< OUString > SAL_CALL getRegistrationDataURL()
-            throw (deployment::DeploymentException, deployment::ExtensionRemovedException,
-                   css::uno::RuntimeException, std::exception) override;
+        virtual css::beans::Optional< OUString > SAL_CALL getRegistrationDataURL() override;
     };
     friend class PackageImpl;
 
@@ -118,10 +116,8 @@ public:
 
     // XPackageRegistry
     virtual Sequence< Reference<deployment::XPackageTypeInfo> > SAL_CALL
-        getSupportedPackageTypes() throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType)
-        throw (deployment::DeploymentException,
-               uno::RuntimeException, std::exception) override;
+        getSupportedPackageTypes() override;
+    virtual void SAL_CALL packageRemoved(OUString const & url, OUString const & mediaType) override;
 
 };
 
@@ -156,14 +152,12 @@ BackendImpl::BackendImpl(
 // XPackageRegistry
 
 Sequence< Reference<deployment::XPackageTypeInfo> >
-BackendImpl::getSupportedPackageTypes() throw (RuntimeException, std::exception)
+BackendImpl::getSupportedPackageTypes()
 {
     return m_typeInfos;
 }
 
 void BackendImpl::packageRemoved(OUString const & url, OUString const & /*mediaType*/)
-        throw (deployment::DeploymentException,
-               uno::RuntimeException, std::exception)
 {
     if (m_backendDb.get())
         m_backendDb->removeEntry(url);
@@ -343,9 +337,6 @@ void BackendImpl::PackageImpl::processPackage_(
 }
 
 beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
-    throw (deployment::DeploymentException,
-           deployment::ExtensionRemovedException,
-           css::uno::RuntimeException, std::exception)
 {
     if (m_bRemoved)
         throw deployment::ExtensionRemovedException();

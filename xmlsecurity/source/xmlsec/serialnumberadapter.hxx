@@ -37,11 +37,10 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL create(
     css::uno::Reference< css::uno::XComponentContext > const &);
 
 /// @throws css::uno::RuntimeException
-OUString implementationName() throw (css::uno::RuntimeException);
+OUString implementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > serviceNames()
-    throw (css::uno::RuntimeException);
+css::uno::Sequence< OUString > serviceNames();
 
 } }
 

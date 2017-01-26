@@ -81,37 +81,36 @@ namespace xforms
         DECLARE_XINTERFACE()
         DECLARE_XTYPEPROVIDER()
 
-        virtual OUString SAL_CALL getName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setName( const OUString& aName ) throw (css::uno::RuntimeException, css::util::VetoException, std::exception) override;
-        virtual OUString SAL_CALL getPattern() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setPattern( const OUString& _pattern ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int16 SAL_CALL getWhiteSpaceTreatment() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception) override;
-        virtual sal_Bool SAL_CALL getIsBasic() throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int16 SAL_CALL getTypeClass() throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getName(  ) override;
+        virtual void SAL_CALL setName( const OUString& aName ) override;
+        virtual OUString SAL_CALL getPattern() override;
+        virtual void SAL_CALL setPattern( const OUString& _pattern ) override;
+        virtual sal_Int16 SAL_CALL getWhiteSpaceTreatment() override;
+        virtual void SAL_CALL setWhiteSpaceTreatment( sal_Int16 _whitespacetreatment ) override;
+        virtual sal_Bool SAL_CALL getIsBasic() override;
+        virtual sal_Int16 SAL_CALL getTypeClass() override;
 
-        virtual sal_Bool SAL_CALL validate( const OUString& value ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL explainInvalid( const OUString& value ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL validate( const OUString& value ) override;
+        virtual OUString SAL_CALL explainInvalid( const OUString& value ) override;
 
         // XPropertySet - is a base of XDataType and needs to be disambiguated
-        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
+        virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
     public:
         OXSDDataType* clone( const OUString& _rNewName ) const;
 
     protected:
         // XPropertySet and friends
-        virtual sal_Bool SAL_CALL   convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw(css::lang::IllegalArgumentException) override;
+        virtual sal_Bool SAL_CALL   convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
         virtual void SAL_CALL       setFastPropertyValue_NoBroadcast(
                                         sal_Int32 nHandle,
                                         const css::uno::Any& rValue
-                                    )
-                                    throw (css::uno::Exception, std::exception) override;
+                                    ) override;
 
         // --- own overridables ---
         // helper for implementing cloning of data types
@@ -174,8 +173,7 @@ namespace xforms
         virtual void SAL_CALL       setFastPropertyValue_NoBroadcast(
                                         sal_Int32 nHandle,
                                         const css::uno::Any& rValue
-                                    )
-                                    throw (css::uno::Exception, std::exception) override;
+                                    ) override;
 
         // OXSDDataType overridables
         virtual bool            _getValue( const OUString& value, double& fValue );
@@ -236,7 +234,7 @@ namespace xforms
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const SAL_OVERRIDE;
 
         // XPropertySet
-        virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException) SAL_OVERRIDE;
+        virtual css::uno::Reference<css::beans::XPropertySetInfo> SAL_CALL getPropertySetInfo() SAL_OVERRIDE;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() SAL_OVERRIDE;
     };
 

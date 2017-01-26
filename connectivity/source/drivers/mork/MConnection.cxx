@@ -61,7 +61,7 @@ void SAL_CALL OConnection::release() throw()
 }
 
 
-void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)  throw(SQLException)
+void OConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
 {
     (void) info; // avoid warnings
     SAL_INFO("connectivity.mork", "=> OConnection::construct()" );
@@ -176,7 +176,7 @@ void OConnection::construct(const OUString& url,const Sequence< PropertyValue >&
 IMPLEMENT_SERVICE_INFO(OConnection, "com.sun.star.sdbc.drivers.mork.OConnection", "com.sun.star.sdbc.Connection")
 
 
-Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XStatement > SAL_CALL OConnection::createStatement(  )
 {
     SAL_INFO("connectivity.mork", "=> OConnection::createStatement()" );
 
@@ -190,7 +190,7 @@ Reference< XStatement > SAL_CALL OConnection::createStatement(  ) throw(SQLExcep
     return xReturn;
 }
 
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& _sSql ) throw(SQLException, RuntimeException, std::exception)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OUString& _sSql )
 {
     SAL_INFO("connectivity.mork", "=> OConnection::prepareStatement()" );
     SAL_INFO("connectivity.mork", "OConnection::prepareStatement( " << _sSql << " )");
@@ -209,7 +209,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement( const OU
     return xReturn;
 }
 
-Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& _sSql ) throw(SQLException, RuntimeException, std::exception)
+Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUString& _sSql )
 {
     SAL_INFO("connectivity.mork", "=> OConnection::prepareCall()" );
     SAL_INFO("connectivity.mork", "sql: " << _sSql);
@@ -218,7 +218,7 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall( const OUStrin
     return nullptr;
 }
 
-OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql )
 {
     SAL_INFO("connectivity.mork", "=> OConnection::nativeSQL()" );
     SAL_INFO("connectivity.mork", "sql: " << _sSql);
@@ -230,12 +230,12 @@ OUString SAL_CALL OConnection::nativeSQL( const OUString& _sSql ) throw(SQLExcep
     return _sSql;
 }
 
-void SAL_CALL OConnection::setAutoCommit( sal_Bool /*autoCommit*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::setAutoCommit( sal_Bool /*autoCommit*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setAutoCommit", *this );
 }
 
-sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OConnection::getAutoCommit(  )
 {
     // you have to distinguish which if you are in autocommit mode or not
     // at normal case true should be fine here
@@ -243,17 +243,17 @@ sal_Bool SAL_CALL OConnection::getAutoCommit(  ) throw(SQLException, RuntimeExce
     return true;
 }
 
-void SAL_CALL OConnection::commit(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::commit(  )
 {
     // when you database does support transactions you should commit here
 }
 
-void SAL_CALL OConnection::rollback(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::rollback(  )
 {
     // same as commit but for the other case
 }
 
-sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OConnection::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -261,7 +261,7 @@ sal_Bool SAL_CALL OConnection::isClosed(  ) throw(SQLException, RuntimeException
     return OConnection_BASE::rBHelper.bDisposed;
 }
 
-Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  )
 {
     SAL_INFO("connectivity.mork", "=> OConnection::getMetaData()" );
 
@@ -280,51 +280,51 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData(  ) throw(SQLEx
     return xMetaData;
 }
 
-void SAL_CALL OConnection::setReadOnly( sal_Bool /*readOnly*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::setReadOnly( sal_Bool /*readOnly*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setReadOnly", *this );
 }
 
-sal_Bool SAL_CALL OConnection::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OConnection::isReadOnly(  )
 {
     // return if your connection to readonly
     return false;
 }
 
-void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::setCatalog( const OUString& /*catalog*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setCatalog", *this );
 }
 
-OUString SAL_CALL OConnection::getCatalog(  ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OConnection::getCatalog(  )
 {
     return OUString();
 }
 
-void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::setTransactionIsolation( sal_Int32 /*level*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTransactionIsolation", *this );
 }
 
-sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OConnection::getTransactionIsolation(  )
 {
     // please have a look at @see com.sun.star.sdbc.TransactionIsolation
     return TransactionIsolation::NONE;
 }
 
-Reference< css::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL OConnection::getTypeMap(  )
 {
     // if your driver has special database types you can return it here
     return nullptr;
 }
 
-void SAL_CALL OConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XConnection::setTypeMap", *this );
 }
 
 // XCloseable
-void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::close(  )
 {
     // we just dispose us
     {
@@ -336,13 +336,13 @@ void SAL_CALL OConnection::close(  ) throw(SQLException, RuntimeException, std::
 }
 
 // XWarningsSupplier
-Any SAL_CALL OConnection::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OConnection::getWarnings(  )
 {
     // when you collected some warnings -> return it
     return Any();
 }
 
-void SAL_CALL OConnection::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OConnection::clearWarnings(  )
 {
     // you should clear your collected warnings here
 }

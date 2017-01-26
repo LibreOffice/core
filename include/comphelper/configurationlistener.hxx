@@ -89,13 +89,11 @@ public:
     void dispose();
 
     // XPropertyChangeListener implementation
-    virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(css::lang::EventObject const &) override;
 
     /// Notify of the property change
     virtual void SAL_CALL propertyChange(
-        css::beans::PropertyChangeEvent const &rEvt )
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::beans::PropertyChangeEvent const &rEvt ) override;
 };
 
 template< typename uno_type > ConfigurationListenerProperty< uno_type >::ConfigurationListenerProperty(const rtl::Reference< ConfigurationListener > &xListener, const OUString &rProp )

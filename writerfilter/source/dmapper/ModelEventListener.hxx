@@ -34,8 +34,8 @@ public:
     ModelEventListener(bool bIndexes, bool bControls);
     virtual ~ModelEventListener() override;
 
-    virtual void SAL_CALL notifyEvent(const css::document::EventObject& Event) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyEvent(const css::document::EventObject& Event) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 };
 }//namespace writerfilter

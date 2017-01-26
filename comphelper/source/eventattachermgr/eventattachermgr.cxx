@@ -98,37 +98,26 @@ public:
                               const Reference< XComponentContext >& rContext );
 
     // Methods of XEventAttacherManager
-    virtual void SAL_CALL registerScriptEvent(sal_Int32 Index, const ScriptEventDescriptor& ScriptEvent)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL registerScriptEvents(sal_Int32 Index, const Sequence< ScriptEventDescriptor >& ScriptEvents)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL revokeScriptEvent(sal_Int32 Index, const OUString& ListenerType, const OUString& EventMethod, const OUString& removeListenerParam)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL revokeScriptEvents(sal_Int32 Index)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL insertEntry(sal_Int32 Index)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removeEntry(sal_Int32 Index)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
-    virtual Sequence< ScriptEventDescriptor > SAL_CALL getScriptEvents(sal_Int32 Index)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL attach(sal_Int32 Index, const Reference< XInterface >& Object, const Any& Helper)
-        throw( IllegalArgumentException, ServiceNotRegisteredException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL detach(sal_Int32 nIndex, const Reference< XInterface >& xObject)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addScriptListener(const Reference< XScriptListener >& aListener)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removeScriptListener(const Reference< XScriptListener >& Listener)
-        throw( IllegalArgumentException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL registerScriptEvent(sal_Int32 Index, const ScriptEventDescriptor& ScriptEvent) override;
+    virtual void SAL_CALL registerScriptEvents(sal_Int32 Index, const Sequence< ScriptEventDescriptor >& ScriptEvents) override;
+    virtual void SAL_CALL revokeScriptEvent(sal_Int32 Index, const OUString& ListenerType, const OUString& EventMethod, const OUString& removeListenerParam) override;
+    virtual void SAL_CALL revokeScriptEvents(sal_Int32 Index) override;
+    virtual void SAL_CALL insertEntry(sal_Int32 Index) override;
+    virtual void SAL_CALL removeEntry(sal_Int32 Index) override;
+    virtual Sequence< ScriptEventDescriptor > SAL_CALL getScriptEvents(sal_Int32 Index) override;
+    virtual void SAL_CALL attach(sal_Int32 Index, const Reference< XInterface >& Object, const Any& Helper) override;
+    virtual void SAL_CALL detach(sal_Int32 nIndex, const Reference< XInterface >& xObject) override;
+    virtual void SAL_CALL addScriptListener(const Reference< XScriptListener >& aListener) override;
+    virtual void SAL_CALL removeScriptListener(const Reference< XScriptListener >& Listener) override;
 
     // Methods of XPersistObject
-    virtual OUString SAL_CALL getServiceName() throw( RuntimeException, std::exception ) override;
-    virtual void SAL_CALL write(const Reference< XObjectOutputStream >& OutStream) throw( IOException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) throw( IOException, RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getServiceName() override;
+    virtual void SAL_CALL write(const Reference< XObjectOutputStream >& OutStream) override;
+    virtual void SAL_CALL read(const Reference< XObjectInputStream >& InStream) override;
 
 private:
     /// @throws Exception
-    Reference< XIdlReflection > getReflection() throw( Exception );
+    Reference< XIdlReflection > getReflection();
 
     /** checks if <arg>_nIndex</arg> is a valid index, throws an <type>IllegalArgumentException</type> if not
     @param _nIndex
@@ -149,18 +138,17 @@ class AttacherAllListener_Impl : public WeakImplHelper< XAllListener >
     OUString                            aScriptCode;
 
     /// @throws CannotConvertException
-    void convertToEventReturn( Any & rRet, const Type & rRetType )
-        throw( CannotConvertException );
+    void convertToEventReturn( Any & rRet, const Type & rRetType );
 public:
     AttacherAllListener_Impl( ImplEventAttacherManager* pManager_, const OUString &rScriptType_,
                                 const OUString & rScriptCode_ );
 
     // Methods of XAllListener
-    virtual void SAL_CALL firing(const AllEventObject& Event) throw( RuntimeException, std::exception ) override;
-    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) throw( InvocationTargetException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL firing(const AllEventObject& Event) override;
+    virtual Any SAL_CALL approveFiring(const AllEventObject& Event) override;
 
     // Methods of XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const EventObject& Source) override;
 };
 
 
@@ -179,7 +167,6 @@ AttacherAllListener_Impl::AttacherAllListener_Impl
 
 // Methods of XAllListener
 void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
-    throw( RuntimeException, std::exception )
 {
     ScriptEvent aScriptEvent;
     aScriptEvent.Source         = static_cast<OWeakObject *>(mxManager.get()); // get correct XInterface
@@ -199,7 +186,6 @@ void SAL_CALL AttacherAllListener_Impl::firing(const AllEventObject& Event)
 
 // Convert to the standard event return
 void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rRetType )
-    throw( CannotConvertException )
 {
     // no return value? Set to the specified values
     if( rRet.getValueType().getTypeClass() == TypeClass_VOID )
@@ -244,7 +230,6 @@ void AttacherAllListener_Impl::convertToEventReturn( Any & rRet, const Type & rR
 
 // Methods of XAllListener
 Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Event )
-    throw( InvocationTargetException, RuntimeException, std::exception )
 {
     ScriptEvent aScriptEvent;
     aScriptEvent.Source         = static_cast<OWeakObject *>(mxManager.get()); // get correct XInterface
@@ -340,14 +325,12 @@ Any SAL_CALL AttacherAllListener_Impl::approveFiring( const AllEventObject& Even
 
 // Methods of XEventListener
 void SAL_CALL AttacherAllListener_Impl::disposing(const EventObject& )
-    throw( RuntimeException, std::exception )
 {
     // It is up to the container to release the object
 }
 
 // Constructor method for EventAttacherManager
 Reference< XEventAttacherManager > createEventAttacherManager( const Reference< XComponentContext > & rxContext )
-    throw( Exception )
 {
     Reference< XIntrospection > xIntrospection = theIntrospection::get( rxContext );
     return new ImplEventAttacherManager( xIntrospection, rxContext );
@@ -380,7 +363,7 @@ ImplEventAttacherManager::ImplEventAttacherManager( const Reference< XIntrospect
     }
 }
 
-Reference< XIdlReflection > ImplEventAttacherManager::getReflection() throw( Exception )
+Reference< XIdlReflection > ImplEventAttacherManager::getReflection()
 {
     Guard< Mutex > aGuard( aLock );
     // Do we already have a service? If not, create one.
@@ -407,7 +390,6 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvent
     sal_Int32 nIndex,
     const ScriptEventDescriptor& ScriptEvent
 )
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
 
@@ -445,7 +427,6 @@ void SAL_CALL ImplEventAttacherManager::registerScriptEvents
     sal_Int32 nIndex,
     const Sequence< ScriptEventDescriptor >& ScriptEvents
 )
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
 
@@ -471,7 +452,6 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
     const OUString& EventMethod,
     const OUString& ToRemoveListenerParam
 )
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
 
@@ -506,7 +486,6 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvent
 
 
 void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
@@ -521,7 +500,6 @@ void SAL_CALL ImplEventAttacherManager::revokeScriptEvents(sal_Int32 nIndex )
 
 
 void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     if( nIndex < 0 )
@@ -536,7 +514,6 @@ void SAL_CALL ImplEventAttacherManager::insertEntry(sal_Int32 nIndex)
 
 
 void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
@@ -550,7 +527,6 @@ void SAL_CALL ImplEventAttacherManager::removeEntry(sal_Int32 nIndex)
 
 
 Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEvents(sal_Int32 nIndex)
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     ::std::deque<AttacherIndex_Impl>::iterator aIt = implCheckIndex( nIndex );
@@ -559,7 +535,6 @@ Sequence< ScriptEventDescriptor > SAL_CALL ImplEventAttacherManager::getScriptEv
 
 
 void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference< XInterface >& xObject, const Any & Helper)
-    throw( IllegalArgumentException, ServiceNotRegisteredException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     if( nIndex < 0 || !xObject.is() )
@@ -621,7 +596,6 @@ void SAL_CALL ImplEventAttacherManager::attach(sal_Int32 nIndex, const Reference
 
 
 void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference< XInterface >& xObject)
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     //return;
@@ -659,14 +633,12 @@ void SAL_CALL ImplEventAttacherManager::detach(sal_Int32 nIndex, const Reference
 }
 
 void SAL_CALL ImplEventAttacherManager::addScriptListener(const Reference< XScriptListener >& aListener)
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     aScriptListeners.addInterface( aListener );
 }
 
 void SAL_CALL ImplEventAttacherManager::removeScriptListener(const Reference< XScriptListener >& aListener)
-    throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     aScriptListeners.removeInterface( aListener );
@@ -675,13 +647,11 @@ void SAL_CALL ImplEventAttacherManager::removeScriptListener(const Reference< XS
 
 // Methods of XPersistObject
 OUString SAL_CALL ImplEventAttacherManager::getServiceName()
-    throw( RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.uno.script.EventAttacherManager" );
 }
 
 void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStream >& OutStream)
-    throw( IOException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     // Don't run without XMarkableStream
@@ -721,7 +691,6 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
 }
 
 void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream >& InStream)
-    throw( IOException, RuntimeException, std::exception )
 {
     Guard< Mutex > aGuard( aLock );
     // Don't run without XMarkableStream

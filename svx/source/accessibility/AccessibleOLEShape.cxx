@@ -45,30 +45,24 @@ AccessibleOLEShape::~AccessibleOLEShape()
 
 // XAccessibleAction
 sal_Int32 SAL_CALL AccessibleOLEShape::getAccessibleActionCount()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return 0;
 }
 
 
 sal_Bool SAL_CALL AccessibleOLEShape::doAccessibleAction (sal_Int32 /*nIndex*/)
-    throw (lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException();
 }
 
 
 OUString SAL_CALL AccessibleOLEShape::getAccessibleActionDescription (sal_Int32 /*nIndex*/)
-    throw (css::lang::IndexOutOfBoundsException,
-        css::uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException();
 }
 
 
 Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActionKeyBinding (sal_Int32 /*nIndex*/)
-    throw (css::lang::IndexOutOfBoundsException,
-        css::uno::RuntimeException, std::exception)
 {
     throw lang::IndexOutOfBoundsException();
 }
@@ -76,7 +70,6 @@ Reference<XAccessibleKeyBinding> SAL_CALL AccessibleOLEShape::getAccessibleActio
 // XInterface
 css::uno::Any SAL_CALL
     AccessibleOLEShape::queryInterface (const css::uno::Type & rType)
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Any aReturn = AccessibleShape::queryInterface (rType);
     if ( ! aReturn.hasValue())
@@ -104,7 +97,6 @@ void SAL_CALL
 // XServiceInfo
 OUString SAL_CALL
     AccessibleOLEShape::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleOLEShape");
 }
@@ -112,7 +104,6 @@ OUString SAL_CALL
 
 css::uno::Sequence< OUString> SAL_CALL
     AccessibleOLEShape::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     // Get list of supported service names from base class...
@@ -130,7 +121,6 @@ css::uno::Sequence< OUString> SAL_CALL
 // XTypeProvider
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleOLEShape::getTypes()
-    throw (uno::RuntimeException, std::exception)
 {
     // Get list of types from the context base implementation...
     uno::Sequence<uno::Type> aTypeList (AccessibleShape::getTypes());
@@ -146,7 +136,6 @@ uno::Sequence<uno::Type> SAL_CALL
 
 // XAccessibleExtendedAttributes
 uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     uno::Any strRet;
     ::rtl::OUString style;
@@ -162,7 +151,6 @@ uno::Any SAL_CALL AccessibleOLEShape::getExtendedAttributes()
 /// Set this object's name if is different to the current name.
 OUString
     AccessibleOLEShape::CreateAccessibleBaseName()
-    throw (css::uno::RuntimeException)
 {
     OUString sName;
 
@@ -194,7 +182,6 @@ OUString
 
 OUString
     AccessibleOLEShape::CreateAccessibleDescription()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return CreateAccessibleName ();
 }

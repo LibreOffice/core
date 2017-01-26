@@ -199,7 +199,6 @@ void XMLErrors::AddRecord(
 }
 
 void XMLErrors::ThrowErrorAsSAXException(sal_Int32 nIdMask)
-    throw( SAXParseException )
 {
     // search first error/warning that matches the nIdMask
     for( ErrorList::iterator aIter = aErrors.begin();

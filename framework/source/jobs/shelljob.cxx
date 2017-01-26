@@ -65,9 +65,6 @@ ShellJob::~ShellJob()
 }
 
 css::uno::Any SAL_CALL ShellJob::execute(const css::uno::Sequence< css::beans::NamedValue >& lJobArguments)
-    throw(css::lang::IllegalArgumentException,
-          css::uno::Exception                ,
-          css::uno::RuntimeException, std::exception         )
 {
     ::comphelper::SequenceAsHashMap lArgs  (lJobArguments);
     /** address job configuration inside argument set provided on method execute(). */

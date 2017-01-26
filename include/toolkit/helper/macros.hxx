@@ -25,7 +25,7 @@
 #include <comphelper/servicehelper.hxx>
 
 #define IMPL_XUNOTUNNEL_MINIMAL( ClassName ) \
-sal_Int64 ClassName::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception) \
+sal_Int64 ClassName::getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) \
 { \
     if( ( rIdentifier.getLength() == 16 ) && ( 0 == memcmp( ClassName::GetUnoTunnelId().getConstArray(), rIdentifier.getConstArray(), 16 ) ) ) \
     { \
@@ -51,14 +51,14 @@ ClassName* ClassName::GetImplementation( const css::uno::Reference< css::uno::XI
 }
 
 #define IMPL_IMPLEMENTATION_ID( ClassName ) \
-css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() throw(css::uno::RuntimeException, std::exception) \
+css::uno::Sequence< sal_Int8 > ClassName::getImplementationId() \
 { \
     return css::uno::Sequence<sal_Int8>(); \
 }
 
 #define IMPL_XTYPEPROVIDER_START( ClassName )   \
 IMPL_IMPLEMENTATION_ID( ClassName ) \
-css::uno::Sequence< css::uno::Type > ClassName::getTypes() throw(css::uno::RuntimeException, std::exception) \
+css::uno::Sequence< css::uno::Type > ClassName::getTypes() \
 { \
     static ::cppu::OTypeCollection* pCollection = nullptr; \
     if( !pCollection ) \
@@ -84,10 +84,10 @@ class ClassName : public ListenerMultiplexerBase, public InterfaceName \
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override; \
+    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override; \
     void                        SAL_CALL acquire() throw() override; \
     void                        SAL_CALL release() throw() override; \
-    void                        SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+    void                        SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 
 #define DECL_LISTENERMULTIPLEXER_START_DLLPUB( ClassName, InterfaceName ) \
@@ -95,10 +95,10 @@ class TOOLKIT_DLLPUBLIC ClassName : public ListenerMultiplexerBase, public Inter
 { \
 public: \
     ClassName( ::cppu::OWeakObject& rSource ); \
-    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override; \
+    css::uno::Any  SAL_CALL queryInterface( const css::uno::Type & rType ) override; \
     void                        SAL_CALL acquire() throw() override; \
     void                        SAL_CALL release() throw() override; \
-    void                        SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+    void                        SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 
 #define DECL_LISTENERMULTIPLEXER_END \
@@ -112,14 +112,14 @@ ClassName::ClassName( ::cppu::OWeakObject& rSource ) \
 } \
 void SAL_CALL ClassName::acquire() throw() { ListenerMultiplexerBase::acquire(); } \
 void SAL_CALL ClassName::release() throw() { ListenerMultiplexerBase::release(); } \
-css::uno::Any ClassName::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) \
+css::uno::Any ClassName::queryInterface( const css::uno::Type & rType ) \
 { \
     css::uno::Any aRet = ::cppu::queryInterface( rType, \
                                         (static_cast< css::lang::XEventListener* >(this)), \
                                         (static_cast< InterfaceName* >(this)) ); \
     return (aRet.hasValue() ? aRet : ListenerMultiplexerBase::queryInterface( rType )); \
 } \
-void ClassName::disposing( const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception) \
+void ClassName::disposing( const css::lang::EventObject& ) \
 { \
 }
 
@@ -185,16 +185,16 @@ void ClassName::disposing( const css::lang::EventObject& ) throw(css::uno::Runti
 }
 
 #define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_EXCEPTION( ClassName, InterfaceName, MethodName, EventType, Exception ) \
-void ClassName::MethodName( const EventType& evt ) throw(css::uno::RuntimeException, Exception, std::exception) \
+void ClassName::MethodName( const EventType& evt ) \
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType )
 
 #define IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ClassName, InterfaceName, MethodName, EventType ) \
-void ClassName::MethodName( const EventType& evt ) throw(css::uno::RuntimeException, std::exception) \
+void ClassName::MethodName( const EventType& evt ) \
 IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD_BODY( ClassName, InterfaceName, MethodName, EventType )
 
 #define DECLIMPL_SERVICEINFO_DERIVED( ImplName, BaseClass, ServiceName ) \
-    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override { return OUString("stardiv.Toolkit." #ImplName ); } \
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override   \
+    OUString SAL_CALL getImplementationName(  ) override { return OUString("stardiv.Toolkit." #ImplName ); } \
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override   \
                             { \
                                 css::uno::Sequence< OUString > aNames = BaseClass::getSupportedServiceNames( ); \
                                 aNames.realloc( aNames.getLength() + 1 ); \

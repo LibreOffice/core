@@ -39,47 +39,35 @@ public:
     const ChartToolbarController& operator=(const ChartToolbarController&) = delete;
 
     // XToolbarContoller
-    virtual void SAL_CALL execute(sal_Int16 nKeyModifier)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL execute(sal_Int16 nKeyModifier) override;
 
-    virtual void SAL_CALL click()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL click() override;
 
-    virtual void SAL_CALL doubleClick()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL doubleClick() override;
 
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createPopupWindow()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL createPopupWindow() override;
 
     virtual css::uno::Reference<css::awt::XWindow> SAL_CALL
-        createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent)
-        throw (css::uno::RuntimeException, std::exception) override;
+        createItemWindow(const css::uno::Reference<css::awt::XWindow>& rParent) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& rEvent) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& rSource)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& rSource) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rAny)
-        throw (css::uno::Exception, std::exception) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& rAny) override;
 
     // XUpdatable
-    virtual void SAL_CALL update()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL update() override;
 
     using cppu::WeakComponentImplHelperBase::disposing;
 

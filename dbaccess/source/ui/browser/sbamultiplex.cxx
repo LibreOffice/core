@@ -25,7 +25,7 @@ using namespace dbaui;
 // XStatusListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXStatusMultiplexer, css::frame::XStatusListener)
 
-void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStateEvent& e) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SbaXStatusMultiplexer::statusChanged(const css::frame::FeatureStateEvent& e)
 {
     m_aLastKnownStatus = e;
     m_aLastKnownStatus.Source = &m_rParent;
@@ -72,14 +72,14 @@ IMPLEMENT_LISTENER_MULTIPLEXER_BOOL_METHOD(SbaXResetMultiplexer, css::form::XRes
 IMPLEMENT_LISTENER_MULTIPLEXER_VOID_METHOD(SbaXResetMultiplexer, css::form::XResetListener, resetted, css::lang::EventObject)
 
 // css::beans::XPropertyChangeListener
-IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, css::beans::XPropertyChangeListener, propertyChange, css::beans::PropertyChangeEvent, (css::uno::RuntimeException, std::exception))
+IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXPropertyChangeMultiplexer, css::beans::XPropertyChangeListener, propertyChange, css::beans::PropertyChangeEvent)
 
 // css::beans::XVetoableChangeListener
-IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, css::beans::XVetoableChangeListener, vetoableChange, css::beans::PropertyChangeEvent, (css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception))
+IMPLEMENT_PROPERTY_MULTIPLEXER(SbaXVetoableChangeMultiplexer, css::beans::XVetoableChangeListener, vetoableChange, css::beans::PropertyChangeEvent)
 
 // css::beans::XPropertiesChangeListener
 IMPLEMENT_LISTENER_MULTIPLEXER_CORE(SbaXPropertiesChangeMultiplexer, css::beans::XPropertiesChangeListener);
-void SbaXPropertiesChangeMultiplexer::propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent>& aEvts) throw(css::uno::RuntimeException, std::exception)
+void SbaXPropertiesChangeMultiplexer::propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent>& aEvts)
 {
     // the SbaXPropertiesChangeMultiplexer doesn't care about the property names a listener logs on for, it simply
     // forwards _all_ changes to _all_ listeners

@@ -47,7 +47,6 @@ ContentIdentifier::~ContentIdentifier()
 // XContentIdentifier methods.
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentIdentifier()
-    throw( RuntimeException, std::exception )
 {
     return m_aContentId;
 }
@@ -55,7 +54,6 @@ OUString SAL_CALL ContentIdentifier::getContentIdentifier()
 
 // virtual
 OUString SAL_CALL ContentIdentifier::getContentProviderScheme()
-    throw( RuntimeException, std::exception )
 {
     if ( m_aProviderScheme.isEmpty() && !m_aContentId.isEmpty() )
     {

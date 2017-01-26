@@ -28,7 +28,7 @@ class SwVbaTabStop : public SwVbaTabStop_BASE
 {
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaTabStop( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext ) throw ( css::uno::RuntimeException );
+    SwVbaTabStop( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext );
     virtual ~SwVbaTabStop() override;
 
     // XHelperInterface

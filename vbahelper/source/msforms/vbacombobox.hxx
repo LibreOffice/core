@@ -41,46 +41,46 @@ public:
     ScVbaComboBox( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper );
 
     // Attributes
-    virtual css::uno::Any SAL_CALL getListIndex() throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getListCount() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setListIndex( const css::uno::Any& _value ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setStyle( sal_Int32 nStyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getDropButtonStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDropButtonStyle( sal_Int32 nDropButtonStyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getDragBehavior() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDragBehavior( sal_Int32 nDragBehavior ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getEnterFieldBehavior() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEnterFieldBehavior( sal_Int32 nEnterFieldBehavior ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getListStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setListStyle( sal_Int32 nListStyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getTextAlign() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTextAlign( sal_Int32 nTextAlign ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getTextLength() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getBackColor() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getLocked() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getLinkedCell() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getListIndex() override;
+    virtual ::sal_Int32 SAL_CALL getListCount() override;
+    virtual void SAL_CALL setListIndex( const css::uno::Any& _value ) override;
+    virtual css::uno::Any SAL_CALL getValue() override;
+    virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+    virtual OUString SAL_CALL getText() override;
+    virtual void SAL_CALL setText( const OUString& _text ) override;
+    virtual sal_Int32 SAL_CALL getStyle() override;
+    virtual void SAL_CALL setStyle( sal_Int32 nStyle ) override;
+    virtual sal_Int32 SAL_CALL getDropButtonStyle() override;
+    virtual void SAL_CALL setDropButtonStyle( sal_Int32 nDropButtonStyle ) override;
+    virtual sal_Int32 SAL_CALL getDragBehavior() override;
+    virtual void SAL_CALL setDragBehavior( sal_Int32 nDragBehavior ) override;
+    virtual sal_Int32 SAL_CALL getEnterFieldBehavior() override;
+    virtual void SAL_CALL setEnterFieldBehavior( sal_Int32 nEnterFieldBehavior ) override;
+    virtual sal_Int32 SAL_CALL getListStyle() override;
+    virtual void SAL_CALL setListStyle( sal_Int32 nListStyle ) override;
+    virtual sal_Int32 SAL_CALL getTextAlign() override;
+    virtual void SAL_CALL setTextAlign( sal_Int32 nTextAlign ) override;
+    virtual sal_Int32 SAL_CALL getTextLength() override;
+    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
+    virtual sal_Int32 SAL_CALL getBackColor() override;
+    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
+    virtual sal_Bool SAL_CALL getAutoSize() override;
+    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) override;
+    virtual sal_Bool SAL_CALL getLocked() override;
+    virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) override;
+    virtual OUString SAL_CALL getLinkedCell() override;
+    virtual void SAL_CALL setLinkedCell( const OUString& _linkedcell ) override;
 
     // Methods
-    virtual void SAL_CALL AddItem( const css::uno::Any& pvargItem, const css::uno::Any& pvargIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeItem( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Clear(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL List( const css::uno::Any& pvargIndex, const css::uno::Any& pvarColumn ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL AddItem( const css::uno::Any& pvargItem, const css::uno::Any& pvargIndex ) override;
+    virtual void SAL_CALL removeItem( const css::uno::Any& index ) override;
+    virtual void SAL_CALL Clear(  ) override;
+    virtual css::uno::Any SAL_CALL List( const css::uno::Any& pvargIndex, const css::uno::Any& pvarColumn ) override;
     // XControl
-    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) override;
 
     // XDefaultProperty
-        OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException, std::exception) override { return OUString("Value"); }
+        OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Value"); }
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

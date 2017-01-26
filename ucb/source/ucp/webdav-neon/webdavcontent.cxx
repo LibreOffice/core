@@ -221,7 +221,6 @@ Content::Content(
           ContentProvider* pProvider,
           const uno::Reference< ucb::XContentIdentifier >& Identifier,
           rtl::Reference< DAVSessionFactory > const & rSessionFactory )
-  throw (ucb::ContentCreationException, css::uno::RuntimeException)
 : ContentImplHelper( rxContext, pProvider, Identifier ),
   m_eResourceType( UNKNOWN ),
   m_eResourceTypeForLocks( UNKNOWN ),
@@ -255,7 +254,6 @@ Content::Content(
             const uno::Reference< ucb::XContentIdentifier >& Identifier,
             rtl::Reference< DAVSessionFactory > const & rSessionFactory,
             bool isCollection )
-  throw (ucb::ContentCreationException, css::uno::RuntimeException)
 : ContentImplHelper( rxContext, pProvider, Identifier ),
   m_eResourceType( UNKNOWN ),
   m_eResourceTypeForLocks( UNKNOWN ),
@@ -306,7 +304,6 @@ void SAL_CALL Content::release()
 
 // virtual
 uno::Any SAL_CALL Content::queryInterface( const uno::Type & rType )
-    throw ( uno::RuntimeException, std::exception )
 {
     // Note: isFolder may require network activities! So call it only
     //       if it is really necessary!!!
@@ -353,7 +350,6 @@ XTYPEPROVIDER_COMMON_IMPL( Content );
 
 // virtual
 uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
-    throw( uno::RuntimeException, std::exception )
 {
     bool bFolder = false;
     try
@@ -446,7 +442,6 @@ uno::Sequence< uno::Type > SAL_CALL Content::getTypes()
 
 // virtual
 OUString SAL_CALL Content::getImplementationName()
-    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ucb.WebDAVContent" );
 }
@@ -454,7 +449,6 @@ OUString SAL_CALL Content::getImplementationName()
 
 // virtual
 uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
-    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence<OUString> aSNS { WEBDAV_CONTENT_SERVICE_NAME };
     return aSNS;
@@ -466,7 +460,6 @@ uno::Sequence< OUString > SAL_CALL Content::getSupportedServiceNames()
 
 // virtual
 OUString SAL_CALL Content::getContentType()
-    throw( uno::RuntimeException, std::exception )
 {
     bool bFolder = false;
     try
@@ -497,9 +490,6 @@ uno::Any SAL_CALL Content::execute(
         const ucb::Command& aCommand,
         sal_Int32 /*CommandId*/,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception,
-           ucb::CommandAbortedException,
-           uno::RuntimeException, std::exception )
 {
     SAL_INFO( "ucb.ucp.webdav", "Content::execute: start: command: " <<
               aCommand.Name << ", env: " <<
@@ -843,7 +833,6 @@ uno::Any SAL_CALL Content::execute(
 
 // virtual
 void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
-    throw( uno::RuntimeException, std::exception )
 {
     try
     {
@@ -870,11 +859,6 @@ void SAL_CALL Content::abort( sal_Int32 /*CommandId*/ )
 
 void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
                            const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw( beans::PropertyExistException,
-           beans::IllegalTypeException,
-           lang::IllegalArgumentException,
-           uno::RuntimeException,
-           std::exception )
 {
 //    if ( m_bTransient )
 //   @@@ ???
@@ -1012,10 +996,6 @@ void Content::addProperty( const ucb::PropertyCommandArgument& aCmdArg,
 
 void Content::removeProperty( const OUString& Name,
                               const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw( beans::UnknownPropertyException,
-           beans::NotRemoveableException,
-           uno::RuntimeException,
-           std::exception )
 {
 
     // Try to remove property from server.
@@ -1105,10 +1085,6 @@ void Content::removeProperty( const OUString& Name,
 void SAL_CALL Content::addProperty( const OUString& Name,
                                     sal_Int16 Attributes,
                                     const uno::Any& DefaultValue )
-    throw( beans::PropertyExistException,
-           beans::IllegalTypeException,
-           lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception )
 {
     beans::Property aProperty;
     aProperty.Name = Name;
@@ -1122,9 +1098,6 @@ void SAL_CALL Content::addProperty( const OUString& Name,
 
 // virtual
 void SAL_CALL Content::removeProperty( const OUString& Name )
-    throw( beans::UnknownPropertyException,
-           beans::NotRemoveableException,
-           uno::RuntimeException, std::exception )
 {
     removeProperty( Name,
                     uno::Reference< ucb::XCommandEnvironment >() );
@@ -1137,7 +1110,6 @@ void SAL_CALL Content::removeProperty( const OUString& Name )
 // virtual
 uno::Sequence< ucb::ContentInfo > SAL_CALL
 Content::queryCreatableContentsInfo()
-    throw( uno::RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1172,7 +1144,6 @@ Content::queryCreatableContentsInfo()
 // virtual
 uno::Reference< ucb::XContent > SAL_CALL
 Content::createNewContent( const ucb::ContentInfo& Info )
-    throw( uno::RuntimeException, std::exception )
 {
     osl::Guard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1339,7 +1310,6 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 uno::Reference< sdbc::XRow > Content::getPropertyValues(
                 const uno::Sequence< beans::Property >& rProperties,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw ( uno::Exception, std::exception )
 {
     std::unique_ptr< ContentProperties > xProps;
     std::unique_ptr< ContentProperties > xCachedProps;
@@ -1795,7 +1765,6 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
 uno::Sequence< uno::Any > Content::setPropertyValues(
                 const uno::Sequence< beans::PropertyValue >& rValues,
                 const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw ( uno::Exception, std::exception )
 {
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     rtl::Reference< ContentProvider >            xProvider;
@@ -2199,7 +2168,6 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
 uno::Any Content::open(
                 const ucb::OpenCommandArgument3 & rArg,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw (uno::Exception, std::exception)
 {
     uno::Any aRet;
 
@@ -2395,7 +2363,6 @@ uno::Any Content::open(
 void Content::post(
                 const ucb::PostCommandArgument2 & rArg,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-    throw( uno::Exception, std::exception )
 {
     uno::Reference< io::XActiveDataSink > xSink( rArg.Sink, uno::UNO_QUERY );
     if ( xSink.is() )
@@ -2533,7 +2500,6 @@ void Content::insert(
         const uno::Reference< io::XInputStream > & xInputStream,
         bool bReplaceExisting,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception, std::exception )
 {
     bool bTransient, bCollection;
     OUString aEscapedTitle;
@@ -2796,7 +2762,6 @@ void Content::insert(
 void Content::transfer(
         const ucb::TransferInfo & rArgs,
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception, std::exception )
 {
     uno::Reference< ucb::XContentIdentifier >    xIdentifier;
     uno::Reference< ucb::XContentProvider >      xProvider;
@@ -3045,7 +3010,6 @@ void Content::transfer(
 
 
 void Content::destroy( bool bDeletePhysical )
-    throw( uno::Exception, std::exception )
 {
     // @@@ take care about bDeletePhysical -> trashcan support
     uno::Reference< ucb::XContent > xThis = this;
@@ -3269,7 +3233,6 @@ Content::ResourceType Content::resourceTypeForLocks(
 
 void Content::lock(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception, std::exception )
 {
 // prepare aURL to be used in exception, see below
     OUString aURL;
@@ -3417,7 +3380,6 @@ void Content::lock(
 
 void Content::unlock(
         const uno::Reference< ucb::XCommandEnvironment >& Environment )
-    throw( uno::Exception, std::exception )
 {
 
     try
@@ -3560,7 +3522,6 @@ bool Content::exchangeIdentity(
 
 bool Content::isFolder(
             const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw( uno::Exception, std::exception )
 {
     {
         osl::MutexGuard aGuard( m_aMutex );
@@ -3765,7 +3726,6 @@ void Content::cancelCommandExecution(
                 const DAVException & e,
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv,
                 bool bWrite /* = sal_False */ )
-    throw ( uno::Exception, std::exception )
 {
     ucbhelper::cancelCommandExecution( MapDAVException( e, bWrite ), xEnv );
     // Unreachable
@@ -3806,7 +3766,6 @@ Content::ResourceType Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv,
                     const std::unique_ptr< DAVResourceAccess > & rResAccess,
                     bool * networkAccessAllowed)
-    throw ( uno::Exception, std::exception )
 {
     {
         osl::MutexGuard g(m_aMutex);
@@ -3988,7 +3947,6 @@ Content::ResourceType Content::getResourceType(
 
 Content::ResourceType Content::getResourceType(
                     const uno::Reference< ucb::XCommandEnvironment >& xEnv )
-    throw ( uno::Exception, std::exception )
 {
     std::unique_ptr< DAVResourceAccess > xResAccess;
     {
@@ -4037,7 +3995,6 @@ void Content::getResourceOptions(
                     DAVOptions& rDAVOptions,
                     const std::unique_ptr< DAVResourceAccess > & rResAccess,
                     bool * networkAccessAllowed )
-    throw ( css::uno::Exception, std::exception )
 {
     OUString aRedirURL;
     OUString aTargetURL = rResAccess->getURL();

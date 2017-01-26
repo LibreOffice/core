@@ -16,7 +16,6 @@ using lang::XServiceInfo;
 using lang::XTypeProvider;
 
 void unotools::misc::ServiceDocumenter::showCoreDocs(const Reference<XServiceInfo>& xService)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if(!xService.is())
         return;
@@ -26,7 +25,6 @@ void unotools::misc::ServiceDocumenter::showCoreDocs(const Reference<XServiceInf
 }
 
 void unotools::misc::ServiceDocumenter::showInterfaceDocs(const Reference<XTypeProvider>& xTypeProvider)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if(!xTypeProvider.is())
         return;
@@ -43,7 +41,6 @@ void unotools::misc::ServiceDocumenter::showInterfaceDocs(const Reference<XTypeP
 }
 
 void unotools::misc::ServiceDocumenter::showServiceDocs(const Reference<XServiceInfo>& xService)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if(!xService.is())
         return;

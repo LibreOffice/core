@@ -37,22 +37,18 @@ public:
 
     virtual sal_Bool SAL_CALL loadAlgorithm(
         const css::lang::Locale& rLocale,
-        const OUString& SortAlgorithm, sal_Int32 collatorOptions )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const OUString& SortAlgorithm, sal_Int32 collatorOptions ) override;
 
     virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry,
-        const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const OUString& PhoneticEntry, const css::lang::Locale& rLocale ) override;
 
     virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,
         const OUString& PhoneticEntry1, const css::lang::Locale& rLocale1,
         const OUString& IndexEntry2, const OUString& PhoneticEntry2,
-        const css::lang::Locale& rLocale2 )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale2 ) override;
 
     virtual OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
-        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm ) override;
 
 private:
     std::unique_ptr<Index> index;
@@ -87,10 +83,10 @@ public:
     ~Index();
 
     /// @throws css::uno::RuntimeException
-    void init(const css::lang::Locale& rLocale, const OUString& algorithm) throw (css::uno::RuntimeException, std::exception);
+    void init(const css::lang::Locale& rLocale, const OUString& algorithm);
 
     /// @throws css::uno::RuntimeException
-    void makeIndexKeys(const css::lang::Locale &rLocale, const OUString &algorithm) throw (css::uno::RuntimeException, std::exception);
+    void makeIndexKeys(const css::lang::Locale &rLocale, const OUString &algorithm);
     sal_Int16 getIndexWeight(const OUString& rIndexEntry);
     OUString getIndexDescription(const OUString& rIndexEntry);
 

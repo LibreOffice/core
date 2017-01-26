@@ -61,7 +61,7 @@ SbaXFormAdapter::~SbaXFormAdapter()
 
 }
 
-Sequence< Type > SAL_CALL SbaXFormAdapter::getTypes(  ) throw (RuntimeException, std::exception)
+Sequence< Type > SAL_CALL SbaXFormAdapter::getTypes(  )
 {
     return ::comphelper::concatSequences(
         SbaXFormAdapter_BASE1::getTypes(),
@@ -70,12 +70,12 @@ Sequence< Type > SAL_CALL SbaXFormAdapter::getTypes(  ) throw (RuntimeException,
     );
 }
 
-Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getImplementationId(  ) throw (RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getImplementationId(  )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Any SAL_CALL SbaXFormAdapter::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL SbaXFormAdapter::queryInterface(const Type& _rType)
 {
     Any aReturn = SbaXFormAdapter_BASE1::queryInterface( _rType );
 
@@ -196,7 +196,7 @@ void SbaXFormAdapter::AttachForm(const Reference< css::sdbc::XRowSet >& xNewMast
 }
 
 // css::sdbc::XCloseable
-void SAL_CALL SbaXFormAdapter::close() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::close()
 {
     Reference< css::sdbc::XCloseable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -204,7 +204,7 @@ void SAL_CALL SbaXFormAdapter::close() throw( css::sdbc::SQLException, RuntimeEx
 }
 
 // css::sdbc::XResultSetMetaDataSupplier
-Reference< css::sdbc::XResultSetMetaData > SAL_CALL SbaXFormAdapter::getMetaData() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XResultSetMetaData > SAL_CALL SbaXFormAdapter::getMetaData()
 {
     Reference< css::sdbc::XResultSetMetaDataSupplier >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -213,7 +213,7 @@ Reference< css::sdbc::XResultSetMetaData > SAL_CALL SbaXFormAdapter::getMetaData
 }
 
 // css::sdbc::XColumnLocate
-sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName)
 {
     Reference< css::sdbc::XColumnLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -225,7 +225,7 @@ sal_Int32 SAL_CALL SbaXFormAdapter::findColumn(const OUString& columnName) throw
 }
 
 // css::sdbcx::XColumnsSupplier
-Reference< css::container::XNameAccess > SAL_CALL SbaXFormAdapter::getColumns() throw( RuntimeException, std::exception )
+Reference< css::container::XNameAccess > SAL_CALL SbaXFormAdapter::getColumns()
 {
     Reference< css::sdbcx::XColumnsSupplier >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -234,7 +234,7 @@ Reference< css::container::XNameAccess > SAL_CALL SbaXFormAdapter::getColumns() 
 }
 
 // css::sdbc::XRow
-sal_Bool SAL_CALL SbaXFormAdapter::wasNull() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::wasNull()
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -242,7 +242,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::wasNull() throw( css::sdbc::SQLException, Run
     return true;
 }
 
-OUString SAL_CALL SbaXFormAdapter::getString(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+OUString SAL_CALL SbaXFormAdapter::getString(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -250,7 +250,7 @@ OUString SAL_CALL SbaXFormAdapter::getString(sal_Int32 columnIndex) throw( css::
     return OUString();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::getBoolean(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::getBoolean(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -258,7 +258,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::getBoolean(sal_Int32 columnIndex) throw( css:
     return false;
 }
 
-sal_Int8 SAL_CALL SbaXFormAdapter::getByte(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int8 SAL_CALL SbaXFormAdapter::getByte(sal_Int32 columnIndex)
 
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
@@ -267,7 +267,7 @@ sal_Int8 SAL_CALL SbaXFormAdapter::getByte(sal_Int32 columnIndex) throw( css::sd
     return 0;
 }
 
-sal_Int16 SAL_CALL SbaXFormAdapter::getShort(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int16 SAL_CALL SbaXFormAdapter::getShort(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -275,7 +275,7 @@ sal_Int16 SAL_CALL SbaXFormAdapter::getShort(sal_Int32 columnIndex) throw( css::
     return 0;
 }
 
-sal_Int32 SAL_CALL SbaXFormAdapter::getInt(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::getInt(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -283,7 +283,7 @@ sal_Int32 SAL_CALL SbaXFormAdapter::getInt(sal_Int32 columnIndex) throw( css::sd
     return 0;
 }
 
-sal_Int64 SAL_CALL SbaXFormAdapter::getLong(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int64 SAL_CALL SbaXFormAdapter::getLong(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -291,7 +291,7 @@ sal_Int64 SAL_CALL SbaXFormAdapter::getLong(sal_Int32 columnIndex) throw( css::s
     return 0;
 }
 
-float SAL_CALL SbaXFormAdapter::getFloat(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+float SAL_CALL SbaXFormAdapter::getFloat(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -299,7 +299,7 @@ float SAL_CALL SbaXFormAdapter::getFloat(sal_Int32 columnIndex) throw( css::sdbc
     return 0.0;
 }
 
-double SAL_CALL SbaXFormAdapter::getDouble(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+double SAL_CALL SbaXFormAdapter::getDouble(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -307,7 +307,7 @@ double SAL_CALL SbaXFormAdapter::getDouble(sal_Int32 columnIndex) throw( css::sd
     return 0.0;
 }
 
-Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getBytes(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getBytes(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -315,7 +315,7 @@ Sequence< sal_Int8 > SAL_CALL SbaXFormAdapter::getBytes(sal_Int32 columnIndex) t
     return Sequence <sal_Int8> ();
 }
 
-css::util::Date SAL_CALL SbaXFormAdapter::getDate(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+css::util::Date SAL_CALL SbaXFormAdapter::getDate(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -323,7 +323,7 @@ css::util::Date SAL_CALL SbaXFormAdapter::getDate(sal_Int32 columnIndex) throw( 
     return css::util::Date();
 }
 
-css::util::Time SAL_CALL SbaXFormAdapter::getTime(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+css::util::Time SAL_CALL SbaXFormAdapter::getTime(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -331,7 +331,7 @@ css::util::Time SAL_CALL SbaXFormAdapter::getTime(sal_Int32 columnIndex) throw( 
     return css::util::Time();
 }
 
-css::util::DateTime SAL_CALL SbaXFormAdapter::getTimestamp(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+css::util::DateTime SAL_CALL SbaXFormAdapter::getTimestamp(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -339,7 +339,7 @@ css::util::DateTime SAL_CALL SbaXFormAdapter::getTimestamp(sal_Int32 columnIndex
     return css::util::DateTime();
 }
 
-Reference< css::io::XInputStream > SAL_CALL SbaXFormAdapter::getBinaryStream(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::io::XInputStream > SAL_CALL SbaXFormAdapter::getBinaryStream(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -347,7 +347,7 @@ Reference< css::io::XInputStream > SAL_CALL SbaXFormAdapter::getBinaryStream(sal
     return Reference< css::io::XInputStream > ();
 }
 
-Reference< css::io::XInputStream > SAL_CALL SbaXFormAdapter::getCharacterStream(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::io::XInputStream > SAL_CALL SbaXFormAdapter::getCharacterStream(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -355,7 +355,7 @@ Reference< css::io::XInputStream > SAL_CALL SbaXFormAdapter::getCharacterStream(
     return Reference< css::io::XInputStream > ();
 }
 
-Any SAL_CALL SbaXFormAdapter::getObject(sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getObject(sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -363,7 +363,7 @@ Any SAL_CALL SbaXFormAdapter::getObject(sal_Int32 columnIndex, const Reference< 
     return Any();
 }
 
-Reference< css::sdbc::XRef > SAL_CALL SbaXFormAdapter::getRef(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XRef > SAL_CALL SbaXFormAdapter::getRef(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -371,7 +371,7 @@ Reference< css::sdbc::XRef > SAL_CALL SbaXFormAdapter::getRef(sal_Int32 columnIn
     return Reference< css::sdbc::XRef > ();
 }
 
-Reference< css::sdbc::XBlob > SAL_CALL SbaXFormAdapter::getBlob(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XBlob > SAL_CALL SbaXFormAdapter::getBlob(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -379,7 +379,7 @@ Reference< css::sdbc::XBlob > SAL_CALL SbaXFormAdapter::getBlob(sal_Int32 column
     return Reference< css::sdbc::XBlob > ();
 }
 
-Reference< css::sdbc::XClob > SAL_CALL SbaXFormAdapter::getClob(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XClob > SAL_CALL SbaXFormAdapter::getClob(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -387,7 +387,7 @@ Reference< css::sdbc::XClob > SAL_CALL SbaXFormAdapter::getClob(sal_Int32 column
     return Reference< css::sdbc::XClob > ();
 }
 
-Reference< css::sdbc::XArray > SAL_CALL SbaXFormAdapter::getArray(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XArray > SAL_CALL SbaXFormAdapter::getArray(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRow >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -396,7 +396,7 @@ Reference< css::sdbc::XArray > SAL_CALL SbaXFormAdapter::getArray(sal_Int32 colu
 }
 
 // css::sdbcx::XRowLocate
-Any SAL_CALL SbaXFormAdapter::getBookmark() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getBookmark()
 {
     Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -404,7 +404,7 @@ Any SAL_CALL SbaXFormAdapter::getBookmark() throw( css::sdbc::SQLException, Runt
     return Any();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::moveToBookmark(const Any& bookmark) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::moveToBookmark(const Any& bookmark)
 {
     Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -412,7 +412,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::moveToBookmark(const Any& bookmark) throw( cs
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::moveRelativeToBookmark(const Any& bookmark, sal_Int32 rows)
 {
     Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -420,7 +420,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::moveRelativeToBookmark(const Any& bookmark, s
     return false;
 }
 
-sal_Int32 SAL_CALL SbaXFormAdapter::compareBookmarks(const Any& _first, const Any& _second) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::compareBookmarks(const Any& _first, const Any& _second)
 {
     Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -428,7 +428,7 @@ sal_Int32 SAL_CALL SbaXFormAdapter::compareBookmarks(const Any& _first, const An
     return 0;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::hasOrderedBookmarks() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::hasOrderedBookmarks()
 {
     Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -436,7 +436,7 @@ sal_Bool SAL_CALL SbaXFormAdapter::hasOrderedBookmarks() throw( css::sdbc::SQLEx
     return false;
 }
 
-sal_Int32 SAL_CALL SbaXFormAdapter::hashBookmark(const Any& bookmark) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::hashBookmark(const Any& bookmark)
 {
     Reference< css::sdbcx::XRowLocate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -445,119 +445,119 @@ sal_Int32 SAL_CALL SbaXFormAdapter::hashBookmark(const Any& bookmark) throw( css
 }
 
 // css::sdbc::XRowUpdate
-void SAL_CALL SbaXFormAdapter::updateNull(sal_Int32 columnIndex) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateNull(sal_Int32 columnIndex)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateNull(columnIndex);
 }
 
-void SAL_CALL SbaXFormAdapter::updateBoolean(sal_Int32 columnIndex, sal_Bool x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateBoolean(sal_Int32 columnIndex, sal_Bool x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateBoolean(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateByte(sal_Int32 columnIndex, sal_Int8 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateByte(sal_Int32 columnIndex, sal_Int8 x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateByte(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateShort(sal_Int32 columnIndex, sal_Int16 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateShort(sal_Int32 columnIndex, sal_Int16 x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateShort(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateInt(sal_Int32 columnIndex, sal_Int32 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateInt(sal_Int32 columnIndex, sal_Int32 x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateInt(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateLong(sal_Int32 columnIndex, sal_Int64 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateLong(sal_Int32 columnIndex, sal_Int64 x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateLong(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateFloat(sal_Int32 columnIndex, float x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateFloat(sal_Int32 columnIndex, float x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateFloat(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateDouble(sal_Int32 columnIndex, double x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateDouble(sal_Int32 columnIndex, double x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateDouble(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateString(sal_Int32 columnIndex, const OUString& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateString(sal_Int32 columnIndex, const OUString& x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateString(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateBytes(sal_Int32 columnIndex, const Sequence< sal_Int8 >& x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateBytes(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateDate(sal_Int32 columnIndex, const css::util::Date& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateDate(sal_Int32 columnIndex, const css::util::Date& x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateDate(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateTime(sal_Int32 columnIndex, const css::util::Time& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateTime(sal_Int32 columnIndex, const css::util::Time& x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateTime(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateTimestamp(sal_Int32 columnIndex, const css::util::DateTime& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateTimestamp(sal_Int32 columnIndex, const css::util::DateTime& x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateTimestamp(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateBinaryStream(sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateBinaryStream(sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateBinaryStream(columnIndex, x, length);
 }
 
-void SAL_CALL SbaXFormAdapter::updateCharacterStream(sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateCharacterStream(sal_Int32 columnIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateCharacterStream(columnIndex, x, length);
 }
 
-void SAL_CALL SbaXFormAdapter::updateObject(sal_Int32 columnIndex, const Any& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateObject(sal_Int32 columnIndex, const Any& x)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateObject(columnIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_Int32 scale) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateNumericObject(sal_Int32 columnIndex, const Any& x, sal_Int32 scale)
 {
     Reference< css::sdbc::XRowUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -565,123 +565,123 @@ void SAL_CALL SbaXFormAdapter::updateNumericObject(sal_Int32 columnIndex, const 
 }
 
 // css::sdbc::XResultSet
-sal_Bool SAL_CALL SbaXFormAdapter::next() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::next()
 {
     if (m_xMainForm.is())
         return m_xMainForm->next();
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::isBeforeFirst() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::isBeforeFirst()
 {
     if (m_xMainForm.is())
         return m_xMainForm->isBeforeFirst();
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::isAfterLast() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::isAfterLast()
 {
     if (m_xMainForm.is())
         return m_xMainForm->isAfterLast();
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::isFirst() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::isFirst()
 {
     if (m_xMainForm.is())
         return m_xMainForm->isFirst();
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::isLast() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::isLast()
 {
     if (m_xMainForm.is())
         return m_xMainForm->isLast();
     return false;
 }
 
-void SAL_CALL SbaXFormAdapter::beforeFirst() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::beforeFirst()
 {
     if (m_xMainForm.is())
         m_xMainForm->beforeFirst();
 }
 
-void SAL_CALL SbaXFormAdapter::afterLast() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::afterLast()
 {
     if (m_xMainForm.is())
         m_xMainForm->afterLast();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::first() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::first()
 {
     if (m_xMainForm.is())
         return m_xMainForm->first();
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::last() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::last()
 {
     if (m_xMainForm.is())
         return m_xMainForm->last();
     return false;
 }
 
-sal_Int32 SAL_CALL SbaXFormAdapter::getRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::getRow()
 {
     if (m_xMainForm.is())
         return m_xMainForm->getRow();
     return 0;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::absolute(sal_Int32 row) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::absolute(sal_Int32 row)
 {
     if (m_xMainForm.is())
         return m_xMainForm->absolute(row);
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::relative(sal_Int32 rows) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::relative(sal_Int32 rows)
 {
     if (m_xMainForm.is())
         return m_xMainForm->relative(rows);
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::previous() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::previous()
 {
     if (m_xMainForm.is())
         return m_xMainForm->previous();
     return false;
 }
 
-void SAL_CALL SbaXFormAdapter::refreshRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::refreshRow()
 {
     if (m_xMainForm.is())
         m_xMainForm->refreshRow();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::rowUpdated() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::rowUpdated()
 {
     if (m_xMainForm.is())
         return m_xMainForm->rowUpdated();
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::rowInserted() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::rowInserted()
 {
     if (m_xMainForm.is())
         return m_xMainForm->rowInserted();
     return false;
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::rowDeleted() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::rowDeleted()
 {
     if (m_xMainForm.is())
         return m_xMainForm->rowDeleted();
     return false;
 }
 
-Reference< XInterface > SAL_CALL SbaXFormAdapter::getStatement() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Reference< XInterface > SAL_CALL SbaXFormAdapter::getStatement()
 {
     if (m_xMainForm.is())
         return m_xMainForm->getStatement();
@@ -689,42 +689,42 @@ Reference< XInterface > SAL_CALL SbaXFormAdapter::getStatement() throw( css::sdb
 }
 
 // css::sdbc::XResultSetUpdate
-void SAL_CALL SbaXFormAdapter::insertRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::insertRow()
 {
     Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->insertRow();
 }
 
-void SAL_CALL SbaXFormAdapter::updateRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::updateRow()
 {
     Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->updateRow();
 }
 
-void SAL_CALL SbaXFormAdapter::deleteRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::deleteRow()
 {
     Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->deleteRow();
 }
 
-void SAL_CALL SbaXFormAdapter::cancelRowUpdates() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::cancelRowUpdates()
 {
     Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->cancelRowUpdates();
 }
 
-void SAL_CALL SbaXFormAdapter::moveToInsertRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::moveToInsertRow()
 {
     Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->moveToInsertRow();
 }
 
-void SAL_CALL SbaXFormAdapter::moveToCurrentRow() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::moveToCurrentRow()
 {
     Reference< css::sdbc::XResultSetUpdate >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -732,7 +732,7 @@ void SAL_CALL SbaXFormAdapter::moveToCurrentRow() throw( css::sdbc::SQLException
 }
 
 // css::sdbc::XRowSet
-void SAL_CALL SbaXFormAdapter::execute() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::execute()
 {
     if (m_xMainForm.is())
         m_xMainForm->execute();
@@ -741,7 +741,7 @@ void SAL_CALL SbaXFormAdapter::execute() throw( css::sdbc::SQLException, Runtime
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdbc, RowSetListener, m_aRowSetListeners, css::sdbc::XRowSet, m_xMainForm)
 
 // css::sdbcx::XDeleteRows
-Sequence<sal_Int32> SAL_CALL SbaXFormAdapter::deleteRows(const Sequence< Any >& rows) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Sequence<sal_Int32> SAL_CALL SbaXFormAdapter::deleteRows(const Sequence< Any >& rows)
 {
     Reference< css::sdbcx::XDeleteRows >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -750,7 +750,7 @@ Sequence<sal_Int32> SAL_CALL SbaXFormAdapter::deleteRows(const Sequence< Any >& 
 }
 
 // css::sdbc::XWarningsSupplier
-Any SAL_CALL SbaXFormAdapter::getWarnings() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getWarnings()
 {
     Reference< css::sdbc::XWarningsSupplier >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -758,7 +758,7 @@ Any SAL_CALL SbaXFormAdapter::getWarnings() throw( css::sdbc::SQLException, Runt
     return Any();
 }
 
-void SAL_CALL SbaXFormAdapter::clearWarnings() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::clearWarnings()
 {
     Reference< css::sdbc::XWarningsSupplier >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -772,7 +772,7 @@ IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, RowSetApproveListener, m
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, sdb, SQLErrorListener, m_aErrorListeners, css::sdb::XSQLErrorBroadcaster, m_xMainForm)
 
 // css::sdb::XResultSetAccess
-Reference< css::sdbc::XResultSet > SAL_CALL SbaXFormAdapter::createResultSet() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+Reference< css::sdbc::XResultSet > SAL_CALL SbaXFormAdapter::createResultSet()
 {
     Reference< css::sdb::XResultSetAccess >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -781,28 +781,28 @@ Reference< css::sdbc::XResultSet > SAL_CALL SbaXFormAdapter::createResultSet() t
 }
 
 // css::form::XLoadable
-void SAL_CALL SbaXFormAdapter::load() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::load()
 {
     Reference< css::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->load();
 }
 
-void SAL_CALL SbaXFormAdapter::unload() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::unload()
 {
     Reference< css::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->unload();
 }
 
-void SAL_CALL SbaXFormAdapter::reload() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::reload()
 {
     Reference< css::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->reload();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::isLoaded() throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::isLoaded()
 {
     Reference< css::form::XLoadable >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -813,161 +813,161 @@ sal_Bool SAL_CALL SbaXFormAdapter::isLoaded() throw( RuntimeException, std::exce
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, LoadListener, m_aLoadListeners, css::form::XLoadable, m_xMainForm)
 
 // css::sdbc::XParameters
-void SAL_CALL SbaXFormAdapter::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setNull(sal_Int32 parameterIndex, sal_Int32 sqlType)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setNull(parameterIndex, sqlType);
 }
 
-void SAL_CALL SbaXFormAdapter::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setObjectNull(sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setObjectNull(parameterIndex, sqlType, typeName);
 }
 
-void SAL_CALL SbaXFormAdapter::setBoolean(sal_Int32 parameterIndex, sal_Bool x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setBoolean(sal_Int32 parameterIndex, sal_Bool x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setBoolean(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setByte(sal_Int32 parameterIndex, sal_Int8 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setByte(sal_Int32 parameterIndex, sal_Int8 x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setByte(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setShort(sal_Int32 parameterIndex, sal_Int16 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setShort(sal_Int32 parameterIndex, sal_Int16 x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setShort(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setInt(sal_Int32 parameterIndex, sal_Int32 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setInt(sal_Int32 parameterIndex, sal_Int32 x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setInt(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setLong(sal_Int32 parameterIndex, sal_Int64 x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setLong(sal_Int32 parameterIndex, sal_Int64 x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setLong(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setFloat(sal_Int32 parameterIndex, float x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setFloat(sal_Int32 parameterIndex, float x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setFloat(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setDouble(sal_Int32 parameterIndex, double x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setDouble(sal_Int32 parameterIndex, double x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setDouble(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setString(sal_Int32 parameterIndex, const OUString& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setString(sal_Int32 parameterIndex, const OUString& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setString(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setBytes(sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setBytes(sal_Int32 parameterIndex, const Sequence< sal_Int8 >& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setBytes(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setDate(sal_Int32 parameterIndex, const css::util::Date& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setDate(sal_Int32 parameterIndex, const css::util::Date& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setDate(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setTime(sal_Int32 parameterIndex, const css::util::Time& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setTime(sal_Int32 parameterIndex, const css::util::Time& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setTime(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setTimestamp(sal_Int32 parameterIndex, const css::util::DateTime& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setTimestamp(sal_Int32 parameterIndex, const css::util::DateTime& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setTimestamp(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setBinaryStream(sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setBinaryStream(sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setBinaryStream(parameterIndex, x, length);
 }
 
-void SAL_CALL SbaXFormAdapter::setCharacterStream(sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setCharacterStream(sal_Int32 parameterIndex, const Reference< css::io::XInputStream >& x, sal_Int32 length)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setCharacterStream(parameterIndex, x, length);
 }
 
-void SAL_CALL SbaXFormAdapter::setObject(sal_Int32 parameterIndex, const Any& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setObject(sal_Int32 parameterIndex, const Any& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setObject(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setObjectWithInfo(sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setObjectWithInfo(sal_Int32 parameterIndex, const Any& x, sal_Int32 targetSqlType, sal_Int32 scale)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setObjectWithInfo(parameterIndex, x, targetSqlType, scale);
 }
 
-void SAL_CALL SbaXFormAdapter::setRef(sal_Int32 parameterIndex, const Reference< css::sdbc::XRef >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setRef(sal_Int32 parameterIndex, const Reference< css::sdbc::XRef >& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setRef(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setBlob(sal_Int32 parameterIndex, const Reference< css::sdbc::XBlob >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setBlob(sal_Int32 parameterIndex, const Reference< css::sdbc::XBlob >& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setBlob(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setClob(sal_Int32 parameterIndex, const Reference< css::sdbc::XClob >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setClob(sal_Int32 parameterIndex, const Reference< css::sdbc::XClob >& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setClob(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::setArray(sal_Int32 parameterIndex, const Reference< css::sdbc::XArray >& x) throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setArray(sal_Int32 parameterIndex, const Reference< css::sdbc::XArray >& x)
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
         xIface->setArray(parameterIndex, x);
 }
 
-void SAL_CALL SbaXFormAdapter::clearParameters() throw( css::sdbc::SQLException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::clearParameters()
 {
     Reference< css::sdbc::XParameters >  xIface(m_xMainForm, UNO_QUERY);
     if (xIface.is())
@@ -975,7 +975,7 @@ void SAL_CALL SbaXFormAdapter::clearParameters() throw( css::sdbc::SQLException,
 }
 
 // css::form::XDatabaseParameterBroadcaster
-void SAL_CALL SbaXFormAdapter::addParameterListener(const Reference< css::form::XDatabaseParameterListener >& aListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::addParameterListener(const Reference< css::form::XDatabaseParameterListener >& aListener)
 {
     m_aParameterListeners.addInterface(aListener);
     if (m_aParameterListeners.getLength() == 1)
@@ -986,7 +986,7 @@ void SAL_CALL SbaXFormAdapter::addParameterListener(const Reference< css::form::
     }
 }
 
-void SAL_CALL SbaXFormAdapter::removeParameterListener(const Reference< css::form::XDatabaseParameterListener >& aListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeParameterListener(const Reference< css::form::XDatabaseParameterListener >& aListener)
 {
     if (m_aParameterListeners.getLength() == 1)
     {
@@ -998,18 +998,18 @@ void SAL_CALL SbaXFormAdapter::removeParameterListener(const Reference< css::for
 }
 
 // css::container::XChild
-Reference< XInterface > SAL_CALL SbaXFormAdapter::getParent() throw( RuntimeException, std::exception )
+Reference< XInterface > SAL_CALL SbaXFormAdapter::getParent()
 {
     return m_xParent;
 }
 
-void SAL_CALL SbaXFormAdapter::setParent(const Reference< XInterface >& Parent) throw( css::lang::NoSupportException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setParent(const Reference< XInterface >& Parent)
 {
     m_xParent = Parent;
 }
 
 // css::form::XSubmit
-void SAL_CALL SbaXFormAdapter::submit(const Reference< css::awt::XControl >& aControl, const css::awt::MouseEvent& aMouseEvt) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::submit(const Reference< css::awt::XControl >& aControl, const css::awt::MouseEvent& aMouseEvt)
 {
     Reference< css::form::XSubmit >  xSubmit(m_xMainForm, UNO_QUERY);
     if (xSubmit.is())
@@ -1019,51 +1019,51 @@ void SAL_CALL SbaXFormAdapter::submit(const Reference< css::awt::XControl >& aCo
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, SubmitListener, m_aSubmitListeners, css::form::XSubmit, m_xMainForm)
 
 // css::awt::XTabControllerModel
-sal_Bool SAL_CALL SbaXFormAdapter::getGroupControl() throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::getGroupControl()
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupControl : not supported !");
     return false;
 }
 
-void SAL_CALL SbaXFormAdapter::setGroupControl(sal_Bool /*GroupControl*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setGroupControl(sal_Bool /*GroupControl*/)
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::setGroupControl : not supported !");
 }
 
-void SAL_CALL SbaXFormAdapter::setControlModels(const Sequence< Reference< css::awt::XControlModel >  >& /*Controls*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setControlModels(const Sequence< Reference< css::awt::XControlModel >  >& /*Controls*/)
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::setControlModels : not supported !");
 }
 
-Sequence< Reference< css::awt::XControlModel > > SAL_CALL SbaXFormAdapter::getControlModels() throw( RuntimeException, std::exception )
+Sequence< Reference< css::awt::XControlModel > > SAL_CALL SbaXFormAdapter::getControlModels()
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getControlModels : not supported !");
     return Sequence< Reference< css::awt::XControlModel > >();
 }
 
-void SAL_CALL SbaXFormAdapter::setGroup(const Sequence< Reference< css::awt::XControlModel >  >& /*_rGroup*/, const OUString& /*GroupName*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setGroup(const Sequence< Reference< css::awt::XControlModel >  >& /*_rGroup*/, const OUString& /*GroupName*/)
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::setGroup : not supported !");
 }
 
-sal_Int32 SAL_CALL SbaXFormAdapter::getGroupCount() throw( RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::getGroupCount()
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupCount : not supported !");
     return 0;
 }
 
-void SAL_CALL SbaXFormAdapter::getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< css::awt::XControlModel >  >& /*_rGroup*/, OUString& /*Name*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::getGroup(sal_Int32 /*nGroup*/, Sequence< Reference< css::awt::XControlModel >  >& /*_rGroup*/, OUString& /*Name*/)
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroup : not supported !");
 }
 
-void SAL_CALL SbaXFormAdapter::getGroupByName(const OUString& /*Name*/, Sequence< Reference< css::awt::XControlModel >  >& /*_rGroup*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::getGroupByName(const OUString& /*Name*/, Sequence< Reference< css::awt::XControlModel >  >& /*_rGroup*/)
 {
     OSL_FAIL("SAL_CALL SbaXFormAdapter::getGroupByName : not supported !");
 }
 
 // css::lang::XComponent
-void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::dispose()
 {
     // log off all multiplexers
     if (m_xMainForm.is())
@@ -1106,18 +1106,18 @@ void SAL_CALL SbaXFormAdapter::dispose() throw( RuntimeException, std::exception
     m_aChildren.clear();
 }
 
-void SAL_CALL SbaXFormAdapter::addEventListener(const Reference< css::lang::XEventListener >& xListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::addEventListener(const Reference< css::lang::XEventListener >& xListener)
 {
     m_aDisposeListeners.addInterface(xListener);
 }
 
-void SAL_CALL SbaXFormAdapter::removeEventListener(const Reference< css::lang::XEventListener >& aListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeEventListener(const Reference< css::lang::XEventListener >& aListener)
 {
     m_aDisposeListeners.removeInterface(aListener);
 }
 
 // css::beans::XFastPropertySet
-void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any& aValue) throw( css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any& aValue)
 {
     Reference< css::beans::XFastPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     OSL_ENSURE(xSet.is(), "SAL_CALL SbaXFormAdapter::setFastPropertyValue : have no master form !");
@@ -1149,7 +1149,7 @@ void SAL_CALL SbaXFormAdapter::setFastPropertyValue(sal_Int32 nHandle, const Any
     xSet->setFastPropertyValue(nHandle, aValue);
 }
 
-Any SAL_CALL SbaXFormAdapter::getFastPropertyValue(sal_Int32 nHandle) throw( css::beans::UnknownPropertyException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getFastPropertyValue(sal_Int32 nHandle)
 {
     Reference< css::beans::XFastPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     OSL_ENSURE(xSet.is(), "SAL_CALL SbaXFormAdapter::getFastPropertyValue : have no master form !");
@@ -1161,18 +1161,18 @@ Any SAL_CALL SbaXFormAdapter::getFastPropertyValue(sal_Int32 nHandle) throw( css
 }
 
 // css::container::XNamed
-OUString SAL_CALL SbaXFormAdapter::getName() throw( RuntimeException, std::exception )
+OUString SAL_CALL SbaXFormAdapter::getName()
 {
     return ::comphelper::getString(getPropertyValue(PROPERTY_NAME));
 }
 
-void SAL_CALL SbaXFormAdapter::setName(const OUString& aName) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setName(const OUString& aName)
 {
     setPropertyValue(PROPERTY_NAME, makeAny(aName));
 }
 
 // css::io::XPersistObject
-OUString SAL_CALL SbaXFormAdapter::getServiceName() throw( RuntimeException, std::exception )
+OUString SAL_CALL SbaXFormAdapter::getServiceName()
 {
     Reference< css::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
     if (xPersist.is())
@@ -1180,14 +1180,14 @@ OUString SAL_CALL SbaXFormAdapter::getServiceName() throw( RuntimeException, std
     return OUString();
 }
 
-void SAL_CALL SbaXFormAdapter::write(const Reference< css::io::XObjectOutputStream >& _rxOutStream) throw( css::io::IOException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::write(const Reference< css::io::XObjectOutputStream >& _rxOutStream)
 {
     Reference< css::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
     if (xPersist.is())
         xPersist->write(_rxOutStream);
 }
 
-void SAL_CALL SbaXFormAdapter::read(const Reference< css::io::XObjectInputStream >& _rxInStream) throw( css::io::IOException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::read(const Reference< css::io::XObjectInputStream >& _rxInStream)
 {
     Reference< css::io::XPersistObject >  xPersist(m_xMainForm, UNO_QUERY);
     if (xPersist.is())
@@ -1195,7 +1195,7 @@ void SAL_CALL SbaXFormAdapter::read(const Reference< css::io::XObjectInputStream
 }
 
 // css::beans::XMultiPropertySet
-Reference< css::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter::getPropertySetInfo() throw( RuntimeException, std::exception )
+Reference< css::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter::getPropertySetInfo()
 {
     Reference< css::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (!xSet.is())
@@ -1220,14 +1220,14 @@ Reference< css::beans::XPropertySetInfo > SAL_CALL SbaXFormAdapter::getPropertyS
     return xReturn;
 }
 
-void SAL_CALL SbaXFormAdapter::setPropertyValues(const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values) throw( css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setPropertyValues(const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values)
 {
     Reference< css::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (xSet.is())
         xSet->setPropertyValues(PropertyNames, Values);
 }
 
-Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUString >& aPropertyNames) throw( RuntimeException, std::exception )
+Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUString >& aPropertyNames)
 {
     Reference< css::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (!xSet.is())
@@ -1249,7 +1249,7 @@ Sequence< Any > SAL_CALL SbaXFormAdapter::getPropertyValues(const Sequence< OUSt
     return aReturn;
 }
 
-void SAL_CALL SbaXFormAdapter::addPropertiesChangeListener(const Sequence< OUString>& /*aPropertyNames*/, const Reference< css::beans::XPropertiesChangeListener >& xListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::addPropertiesChangeListener(const Sequence< OUString>& /*aPropertyNames*/, const Reference< css::beans::XPropertiesChangeListener >& xListener)
 {
     // we completely ignore the property names, _all_ changes of _all_ properties will be forwarded to _all_ listeners
     m_aPropertiesChangeListeners.addInterface(xListener);
@@ -1261,7 +1261,7 @@ void SAL_CALL SbaXFormAdapter::addPropertiesChangeListener(const Sequence< OUStr
     }
 }
 
-void SAL_CALL SbaXFormAdapter::removePropertiesChangeListener(const Reference< css::beans::XPropertiesChangeListener >& Listener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removePropertiesChangeListener(const Reference< css::beans::XPropertiesChangeListener >& Listener)
 {
     if (m_aPropertiesChangeListeners.getLength() == 1)
     {
@@ -1272,7 +1272,7 @@ void SAL_CALL SbaXFormAdapter::removePropertiesChangeListener(const Reference< c
     m_aPropertiesChangeListeners.removeInterface(Listener);
 }
 
-void SAL_CALL SbaXFormAdapter::firePropertiesChangeEvent(const Sequence< OUString >& aPropertyNames, const Reference< css::beans::XPropertiesChangeListener >& xListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::firePropertiesChangeEvent(const Sequence< OUString >& aPropertyNames, const Reference< css::beans::XPropertiesChangeListener >& xListener)
 {
     Reference< css::beans::XMultiPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (xSet.is())
@@ -1280,7 +1280,7 @@ void SAL_CALL SbaXFormAdapter::firePropertiesChangeEvent(const Sequence< OUStrin
 }
 
 // css::beans::XPropertySet
-void SAL_CALL SbaXFormAdapter::setPropertyValue(const OUString& aPropertyName, const Any& aValue) throw( css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setPropertyValue(const OUString& aPropertyName, const Any& aValue)
 {
     Reference< css::beans::XPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (!xSet.is())
@@ -1293,7 +1293,7 @@ void SAL_CALL SbaXFormAdapter::setPropertyValue(const OUString& aPropertyName, c
     xSet->setPropertyValue(aPropertyName, aValue);
 }
 
-Any SAL_CALL SbaXFormAdapter::getPropertyValue(const OUString& PropertyName) throw( css::beans::UnknownPropertyException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getPropertyValue(const OUString& PropertyName)
 {
     Reference< css::beans::XPropertySet >  xSet(m_xMainForm, UNO_QUERY);
     if (!xSet.is())
@@ -1310,7 +1310,7 @@ IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, PropertyChangeListen
 IMPLEMENT_PROPERTY_LISTENER_ADMINISTRATION(SbaXFormAdapter, VetoableChangeListener, m_aVetoablePropertyChangeListeners, css::beans::XPropertySet, m_xMainForm);
 
 // css::util::XCancellable
-void SAL_CALL SbaXFormAdapter::cancel() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::cancel()
 {
     Reference< css::util::XCancellable >  xCancel(m_xMainForm, UNO_QUERY);
     if (xCancel.is())
@@ -1319,7 +1319,7 @@ void SAL_CALL SbaXFormAdapter::cancel() throw( RuntimeException, std::exception 
 }
 
 // css::beans::XPropertyState
-css::beans::PropertyState SAL_CALL SbaXFormAdapter::getPropertyState(const OUString& PropertyName) throw( css::beans::UnknownPropertyException, RuntimeException, std::exception )
+css::beans::PropertyState SAL_CALL SbaXFormAdapter::getPropertyState(const OUString& PropertyName)
 {
     Reference< css::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
     if (xState.is())
@@ -1327,7 +1327,7 @@ css::beans::PropertyState SAL_CALL SbaXFormAdapter::getPropertyState(const OUStr
     return css::beans::PropertyState_DEFAULT_VALUE;
 }
 
-Sequence< css::beans::PropertyState> SAL_CALL SbaXFormAdapter::getPropertyStates(const Sequence< OUString >& aPropertyName) throw( css::beans::UnknownPropertyException, RuntimeException, std::exception )
+Sequence< css::beans::PropertyState> SAL_CALL SbaXFormAdapter::getPropertyStates(const Sequence< OUString >& aPropertyName)
 {
     Reference< css::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
     if (xState.is())
@@ -1341,14 +1341,14 @@ Sequence< css::beans::PropertyState> SAL_CALL SbaXFormAdapter::getPropertyStates
     return aReturn;
 }
 
-void SAL_CALL SbaXFormAdapter::setPropertyToDefault(const OUString& PropertyName) throw( css::beans::UnknownPropertyException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::setPropertyToDefault(const OUString& PropertyName)
 {
     Reference< css::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
     if (xState.is())
         xState->setPropertyToDefault(PropertyName);
 }
 
-Any SAL_CALL SbaXFormAdapter::getPropertyDefault(const OUString& aPropertyName) throw( css::beans::UnknownPropertyException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getPropertyDefault(const OUString& aPropertyName)
 {
     Reference< css::beans::XPropertyState >  xState(m_xMainForm, UNO_QUERY);
     if (xState.is())
@@ -1357,7 +1357,7 @@ Any SAL_CALL SbaXFormAdapter::getPropertyDefault(const OUString& aPropertyName) 
 }
 
 // css::form::XReset
-void SAL_CALL SbaXFormAdapter::reset() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::reset()
 {
     Reference< css::form::XReset >  xReset(m_xMainForm, UNO_QUERY);
     if (xReset.is())
@@ -1367,7 +1367,7 @@ void SAL_CALL SbaXFormAdapter::reset() throw( RuntimeException, std::exception )
 IMPLEMENT_LISTENER_ADMINISTRATION(SbaXFormAdapter, form, ResetListener, m_aResetListeners, css::form::XReset, m_xMainForm)
 
 // css::container::XNameContainer
-void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OUString* pNewElName) throw( css::lang::IllegalArgumentException )
+void SbaXFormAdapter::implInsert(const Any& aElement, sal_Int32 nIndex, const OUString* pNewElName)
 {
     // extract the form component
     if (aElement.getValueType().getTypeClass() != TypeClass_INTERFACE)
@@ -1438,12 +1438,12 @@ sal_Int32 SbaXFormAdapter::implGetPos(const OUString& rName)
     return -1;
 }
 
-void SAL_CALL SbaXFormAdapter::insertByName(const OUString& aName, const Any& aElement) throw( css::lang::IllegalArgumentException, css::container::ElementExistException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::insertByName(const OUString& aName, const Any& aElement)
 {
     implInsert(aElement, m_aChildren.size(), &aName);
 }
 
-void SAL_CALL SbaXFormAdapter::removeByName(const OUString& Name) throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeByName(const OUString& Name)
 {
     sal_Int32 nPos = implGetPos(Name);
     if (-1 == nPos)
@@ -1454,7 +1454,7 @@ void SAL_CALL SbaXFormAdapter::removeByName(const OUString& Name) throw( css::co
 }
 
 // css::container::XNameReplace
-void SAL_CALL SbaXFormAdapter::replaceByName(const OUString& aName, const Any& aElement) throw( css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::replaceByName(const OUString& aName, const Any& aElement)
 {
     sal_Int32 nPos = implGetPos(aName);
     if (-1 == nPos)
@@ -1465,7 +1465,7 @@ void SAL_CALL SbaXFormAdapter::replaceByName(const OUString& aName, const Any& a
 }
 
 // css::container::XNameAccess
-Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName) throw( css::container::NoSuchElementException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName)
 {
     sal_Int32 nPos = implGetPos(aName);
     if (-1 == nPos)
@@ -1475,36 +1475,36 @@ Any SAL_CALL SbaXFormAdapter::getByName(const OUString& aName) throw( css::conta
     return makeAny(m_aChildren[nPos]);
 }
 
-Sequence< OUString > SAL_CALL SbaXFormAdapter::getElementNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SbaXFormAdapter::getElementNames()
 {
     return Sequence< OUString >(m_aChildNames.data(), m_aChildNames.size());
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::hasByName(const OUString& aName) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SbaXFormAdapter::hasByName(const OUString& aName)
 {
     return (-1 != implGetPos(aName));
 }
 
 // css::container::XElementAccess
-Type SAL_CALL SbaXFormAdapter::getElementType() throw(RuntimeException, std::exception)
+Type SAL_CALL SbaXFormAdapter::getElementType()
 {
     return cppu::UnoType<css::form::XFormComponent>::get();
 }
 
-sal_Bool SAL_CALL SbaXFormAdapter::hasElements() throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SbaXFormAdapter::hasElements()
 {
     return m_aChildren.size() > 0;
 }
 
 // css::container::XIndexContainer
-void SAL_CALL SbaXFormAdapter::insertByIndex(sal_Int32 _rIndex, const Any& Element) throw( css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::insertByIndex(sal_Int32 _rIndex, const Any& Element)
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
         throw css::lang::IndexOutOfBoundsException();
     implInsert(Element, _rIndex);
 }
 
-void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex)
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
         throw css::lang::IndexOutOfBoundsException();
@@ -1533,7 +1533,7 @@ void SAL_CALL SbaXFormAdapter::removeByIndex(sal_Int32 _rIndex) throw( css::lang
 }
 
 // css::container::XIndexReplace
-void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Element) throw( css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Element)
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
         throw css::lang::IndexOutOfBoundsException();
@@ -1595,12 +1595,12 @@ void SAL_CALL SbaXFormAdapter::replaceByIndex(sal_Int32 _rIndex, const Any& Elem
 }
 
 // css::container::XIndexAccess
-sal_Int32 SAL_CALL SbaXFormAdapter::getCount() throw( RuntimeException, std::exception )
+sal_Int32 SAL_CALL SbaXFormAdapter::getCount()
 {
     return m_aChildren.size();
 }
 
-Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex) throw( css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, RuntimeException, std::exception )
+Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex)
 {
     if ( ( _rIndex < 0 ) || ( (size_t)_rIndex >= m_aChildren.size() ) )
         throw css::lang::IndexOutOfBoundsException();
@@ -1610,24 +1610,24 @@ Any SAL_CALL SbaXFormAdapter::getByIndex(sal_Int32 _rIndex) throw( css::lang::In
 }
 
 // css::container::XContainer
-void SAL_CALL SbaXFormAdapter::addContainerListener(const Reference< css::container::XContainerListener >& xListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::addContainerListener(const Reference< css::container::XContainerListener >& xListener)
 {
     m_aContainerListeners.addInterface(xListener);
 }
 
-void SAL_CALL SbaXFormAdapter::removeContainerListener(const Reference< css::container::XContainerListener >& xListener) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::removeContainerListener(const Reference< css::container::XContainerListener >& xListener)
 {
     m_aContainerListeners.removeInterface(xListener);
 }
 
 // css::container::XEnumerationAccess
-Reference< css::container::XEnumeration > SAL_CALL SbaXFormAdapter::createEnumeration() throw( RuntimeException, std::exception )
+Reference< css::container::XEnumeration > SAL_CALL SbaXFormAdapter::createEnumeration()
 {
     return new ::comphelper::OEnumerationByName(this);
 }
 
 // css::beans::XPropertyChangeListener
-void SAL_CALL SbaXFormAdapter::propertyChange(const css::beans::PropertyChangeEvent& evt) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::propertyChange(const css::beans::PropertyChangeEvent& evt)
 {
     if (evt.PropertyName == PROPERTY_NAME)
     {
@@ -1645,7 +1645,7 @@ void SAL_CALL SbaXFormAdapter::propertyChange(const css::beans::PropertyChangeEv
 }
 
 // css::lang::XEventListener
-void SAL_CALL SbaXFormAdapter::disposing(const css::lang::EventObject& Source) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXFormAdapter::disposing(const css::lang::EventObject& Source)
 {
     // was it our main form ?
     if (Source.Source == m_xMainForm)

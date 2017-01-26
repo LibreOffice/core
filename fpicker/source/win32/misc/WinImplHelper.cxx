@@ -117,7 +117,6 @@ OUString SAL_CALL ListboxGetString( HWND hwnd, sal_Int32 aPosition )
 }
 
 void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
-    throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
@@ -135,7 +134,6 @@ void SAL_CALL ListboxAddItem( HWND hwnd, const Any& aItem, const Reference< XInt
 }
 
 void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
-    throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
@@ -157,7 +155,6 @@ void SAL_CALL ListboxAddItems( HWND hwnd, const Any& aItemList, const Reference<
 }
 
 void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
-    throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
@@ -185,7 +182,6 @@ void SAL_CALL ListboxDeleteItem( HWND hwnd, const Any& aPosition, const Referenc
 }
 
 void SAL_CALL ListboxDeleteItems( HWND hwnd, const Any&, const Reference< XInterface >&, sal_Int16 )
-    throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
@@ -201,7 +197,6 @@ void SAL_CALL ListboxDeleteItems( HWND hwnd, const Any&, const Reference< XInter
 }
 
 void SAL_CALL ListboxSetSelectedItem( HWND hwnd, const Any& aPosition, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
-    throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 
@@ -282,7 +277,6 @@ Any SAL_CALL CheckboxGetState( HWND hwnd )
 
 void SAL_CALL CheckboxSetState(
     HWND hwnd, const css::uno::Any& aState, const Reference< XInterface >& rXInterface, sal_Int16 aArgPos )
-    throw( IllegalArgumentException )
 {
     OSL_ASSERT( IsWindow( hwnd ) );
 

@@ -78,7 +78,7 @@ sdbcx::ObjectType ODbaseIndexes::createObject(const OUString& _rName)
     return xRet;
 }
 
-void ODbaseIndexes::impl_refresh(  ) throw(RuntimeException)
+void ODbaseIndexes::impl_refresh(  )
 {
     if(m_pTable)
         m_pTable->refreshIndexes();

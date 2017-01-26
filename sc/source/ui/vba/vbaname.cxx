@@ -56,37 +56,37 @@ ScVbaName::~ScVbaName()
 }
 
 OUString
-ScVbaName::getName() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::getName()
 {
     return mxNamedRange->getName();
 }
 
 void
-ScVbaName::setName( const OUString & rName ) throw (css::uno::RuntimeException, std::exception)
+ScVbaName::setName( const OUString & rName )
 {
     mxNamedRange->setName( rName );
 }
 
 OUString
-ScVbaName::getNameLocal() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::getNameLocal()
 {
     return getName();
 }
 
 void
-ScVbaName::setNameLocal( const OUString & rName ) throw (css::uno::RuntimeException, std::exception)
+ScVbaName::setNameLocal( const OUString & rName )
 {
     setName( rName );
 }
 
 sal_Bool
-ScVbaName::getVisible() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::getVisible()
 {
     return true;
 }
 
 void
-ScVbaName::setVisible( sal_Bool /*bVisible*/ ) throw (css::uno::RuntimeException, std::exception)
+ScVbaName::setVisible( sal_Bool /*bVisible*/ )
 {
 }
 
@@ -131,7 +131,7 @@ void  ScVbaName::setContent( const OUString& rContent, const formula::FormulaGra
 }
 
 OUString
-ScVbaName::getValue() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::getValue()
 {
     rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 
@@ -139,62 +139,62 @@ ScVbaName::getValue() throw (css::uno::RuntimeException, std::exception)
 }
 
 void
-ScVbaName::setValue( const OUString & rValue ) throw (css::uno::RuntimeException, std::exception)
+ScVbaName::setValue( const OUString & rValue )
 {
     setContent( rValue, formula::FormulaGrammar::GRAM_NATIVE_XL_A1 );
 }
 
 OUString
-ScVbaName::getRefersTo() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::getRefersTo()
 {
     return getValue();
 }
 
 void
-ScVbaName::setRefersTo( const OUString & rRefersTo ) throw (css::uno::RuntimeException, std::exception)
+ScVbaName::setRefersTo( const OUString & rRefersTo )
 {
     setValue( rRefersTo );
 }
 
 OUString
-ScVbaName::getRefersToLocal() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::getRefersToLocal()
 {
     return getRefersTo();
 }
 
 void
-ScVbaName::setRefersToLocal( const OUString & rRefersTo ) throw (css::uno::RuntimeException, std::exception)
+ScVbaName::setRefersToLocal( const OUString & rRefersTo )
 {
     setRefersTo( rRefersTo );
 }
 
 OUString
-ScVbaName::getRefersToR1C1() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::getRefersToR1C1()
 {
     rtl::OUString sResult = getContent( formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
     return  sResult;
 }
 
 void
-ScVbaName::setRefersToR1C1( const OUString & rRefersTo ) throw (css::uno::RuntimeException, std::exception)
+ScVbaName::setRefersToR1C1( const OUString & rRefersTo )
 {
     setContent( rRefersTo, formula::FormulaGrammar::GRAM_NATIVE_XL_R1C1 );
 }
 
 OUString
-ScVbaName::getRefersToR1C1Local() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::getRefersToR1C1Local()
 {
     return getRefersToR1C1();
 }
 
 void
-ScVbaName::setRefersToR1C1Local( const OUString & rRefersTo ) throw (css::uno::RuntimeException, std::exception)
+ScVbaName::setRefersToR1C1Local( const OUString & rRefersTo )
 {
     setRefersTo( rRefersTo );
 }
 
 css::uno::Reference< ov::excel::XRange >
-ScVbaName::getRefersToRange() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::getRefersToRange()
 {
     uno::Reference< ov::excel::XRange > xRange = ScVbaRange::getRangeObjectForName(
         mxContext, mxNamedRange->getName(), excel::getDocShell( mxModel ), formula::FormulaGrammar::CONV_XL_R1C1 );
@@ -202,7 +202,7 @@ ScVbaName::getRefersToRange() throw (css::uno::RuntimeException, std::exception)
 }
 
 void
-ScVbaName::Delete() throw (css::uno::RuntimeException, std::exception)
+ScVbaName::Delete()
 {
     mxNames->removeByName( mxNamedRange->getName() );
 }

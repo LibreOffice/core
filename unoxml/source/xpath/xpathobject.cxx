@@ -73,7 +73,7 @@ namespace XPath
     /**
         get object type
     */
-    XPathObjectType CXPathObject::getObjectType() throw (RuntimeException, std::exception)
+    XPathObjectType CXPathObject::getObjectType()
     {
         return m_XPathObjectType;
     }
@@ -82,7 +82,7 @@ namespace XPath
         get the nodes from a nodelist type object
     */
     Reference< XNodeList > SAL_CALL
-    CXPathObject::getNodeList() throw (RuntimeException, std::exception)
+    CXPathObject::getNodeList()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -94,7 +94,7 @@ namespace XPath
      /**
         get value of a boolean object
      */
-    sal_Bool SAL_CALL CXPathObject::getBoolean() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL CXPathObject::getBoolean()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -104,7 +104,7 @@ namespace XPath
     /**
         get number as byte
     */
-    sal_Int8 SAL_CALL CXPathObject::getByte() throw (RuntimeException, std::exception)
+    sal_Int8 SAL_CALL CXPathObject::getByte()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -114,7 +114,7 @@ namespace XPath
     /**
         get number as short
     */
-    sal_Int16 SAL_CALL CXPathObject::getShort() throw (RuntimeException, std::exception)
+    sal_Int16 SAL_CALL CXPathObject::getShort()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -124,7 +124,7 @@ namespace XPath
     /**
         get number as long
     */
-    sal_Int32 SAL_CALL CXPathObject::getLong() throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL CXPathObject::getLong()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -134,7 +134,7 @@ namespace XPath
     /**
         get number as hyper
     */
-    sal_Int64 SAL_CALL CXPathObject::getHyper() throw (RuntimeException, std::exception)
+    sal_Int64 SAL_CALL CXPathObject::getHyper()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -144,7 +144,7 @@ namespace XPath
     /**
         get number as float
     */
-    float SAL_CALL CXPathObject::getFloat() throw (RuntimeException, std::exception)
+    float SAL_CALL CXPathObject::getFloat()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -154,7 +154,7 @@ namespace XPath
     /**
         get number as double
     */
-    double SAL_CALL CXPathObject::getDouble() throw (RuntimeException, std::exception)
+    double SAL_CALL CXPathObject::getDouble()
     {
         ::osl::MutexGuard const g(m_rMutex);
 
@@ -164,7 +164,7 @@ namespace XPath
     /**
         get string value
     */
-    OUString SAL_CALL CXPathObject::getString() throw (RuntimeException, std::exception)
+    OUString SAL_CALL CXPathObject::getString()
     {
         ::osl::MutexGuard const g(m_rMutex);
 

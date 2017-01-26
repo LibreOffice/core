@@ -64,7 +64,7 @@ Calendar_hijri::Calendar_hijri()
 #define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR) | (1 << CalendarFieldIndex::MONTH) | (1 << CalendarFieldIndex::DAY_OF_MONTH))
 
 // map field value from hijri calendar to gregorian calendar
-void Calendar_hijri::mapToGregorian() throw(RuntimeException)
+void Calendar_hijri::mapToGregorian()
 {
     if (fieldSet & FIELDS) {
         sal_Int32 day = (sal_Int32)fieldSetValue[CalendarFieldIndex::DAY_OF_MONTH];
@@ -84,7 +84,7 @@ void Calendar_hijri::mapToGregorian() throw(RuntimeException)
 }
 
 // map field value from gregorian calendar to hijri calendar
-void Calendar_hijri::mapFromGregorian() throw(RuntimeException)
+void Calendar_hijri::mapFromGregorian()
 {
     sal_Int32 month, day, year;
 

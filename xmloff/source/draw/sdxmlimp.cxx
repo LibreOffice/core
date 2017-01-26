@@ -243,7 +243,7 @@ OUString SAL_CALL classname##_getImplementationName() throw()\
 {\
     return OUString( implementationname );\
 }\
-uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr) throw( uno::Exception )\
+uno::Reference< uno::XInterface > SAL_CALL classname##_createInstance(const uno::Reference< lang::XMultiServiceFactory > & rSMgr)\
 {\
     return static_cast<cppu::OWeakObject*>(new SdXMLImport( comphelper::getComponentContext(rSMgr), implementationname, draw, flags )); \
 }
@@ -295,7 +295,6 @@ SdXMLImport::SdXMLImport(
 
 // XImporter
 void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XComponent >& xDoc )
-    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SvXMLImport::setTargetDocument( xDoc );
 
@@ -354,7 +353,6 @@ void SAL_CALL SdXMLImport::setTargetDocument( const uno::Reference< lang::XCompo
 
 // XInitialization
 void SAL_CALL SdXMLImport::initialize( const uno::Sequence< uno::Any >& aArguments )
-    throw( uno::Exception, uno::RuntimeException, std::exception)
 {
     SvXMLImport::initialize( aArguments );
 

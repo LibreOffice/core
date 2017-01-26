@@ -71,29 +71,24 @@ class ConfigurationAccess_UICommand : // Order is necessary for right initializa
         virtual                   ~ConfigurationAccess_UICommand() override;
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType() override;
 
-        virtual sal_Bool SAL_CALL hasElements()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasElements() override;
 
         // container.XContainerListener
-        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
-        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
-        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) override;
+        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) override;
+        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) override;
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const EventObject& aEvent ) override;
 
     protected:
         css::uno::Any SAL_CALL getByNameImpl( const OUString& aName );
@@ -249,7 +244,6 @@ Any SAL_CALL ConfigurationAccess_UICommand::getByNameImpl( const OUString& rComm
 }
 
 Any SAL_CALL ConfigurationAccess_UICommand::getByName( const OUString& rCommandURL )
-throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     Any aRet( getByNameImpl( rCommandURL ) );
     if( !aRet.hasValue() )
@@ -259,26 +253,22 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::e
 }
 
 Sequence< OUString > SAL_CALL ConfigurationAccess_UICommand::getElementNames()
-throw ( RuntimeException, std::exception )
 {
     return getAllCommands();
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasByName( const OUString& rCommandURL )
-throw (css::uno::RuntimeException, std::exception)
 {
     return getByNameImpl( rCommandURL ).hasValue();
 }
 
 // XElementAccess
 Type SAL_CALL ConfigurationAccess_UICommand::getElementType()
-throw ( RuntimeException, std::exception )
 {
     return( cppu::UnoType<Sequence< PropertyValue >>::get() );
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICommand::hasElements()
-throw ( RuntimeException, std::exception )
 {
     // There must are global commands!
     return true;
@@ -558,21 +548,21 @@ void ConfigurationAccess_UICommand::initializeConfigAccess()
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_UICommand::elementInserted( const ContainerEvent& )
 {
     osl::MutexGuard g(m_aMutex);
     m_bCacheFilled = false;
     fillCache();
 }
 
-void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_UICommand::elementRemoved( const ContainerEvent& )
 {
     osl::MutexGuard g(m_aMutex);
     m_bCacheFilled = false;
     fillCache();
 }
 
-void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEvent& )
 {
     osl::MutexGuard g(m_aMutex);
     m_bCacheFilled = false;
@@ -580,7 +570,7 @@ void SAL_CALL ConfigurationAccess_UICommand::elementReplaced( const ContainerEve
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_UICommand::disposing( const EventObject& aEvent )
 {
     // SAFE
     // remove our reference to the config access
@@ -662,7 +652,6 @@ void UICommandDescription::impl_fillElements(const sal_Char* _pName)
 }
 
 Any SAL_CALL UICommandDescription::getByName( const OUString& aName )
-throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception)
 {
     Any a;
 
@@ -703,7 +692,6 @@ throw (css::container::NoSuchElementException, css::lang::WrappedTargetException
 }
 
 Sequence< OUString > SAL_CALL UICommandDescription::getElementNames()
-throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(rBHelper.rMutex);
 
@@ -711,7 +699,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasByName( const OUString& aName )
-throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(rBHelper.rMutex);
 
@@ -721,13 +708,11 @@ throw (css::uno::RuntimeException, std::exception)
 
 // XElementAccess
 Type SAL_CALL UICommandDescription::getElementType()
-throw (css::uno::RuntimeException, std::exception)
 {
     return( cppu::UnoType<XNameAccess>::get());
 }
 
 sal_Bool SAL_CALL UICommandDescription::hasElements()
-throw (css::uno::RuntimeException, std::exception)
 {
     // generic UI commands are always available!
     return true;

@@ -91,21 +91,21 @@ namespace calc
         DECLARE_XTYPEPROVIDER()
 
         // XValueBinding
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getSupportedValueTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsType( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) throw (css::form::binding::IncompatibleTypesException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& aValue ) throw (css::form::binding::IncompatibleTypesException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getSupportedValueTypes(  ) override;
+        virtual sal_Bool SAL_CALL supportsType( const css::uno::Type& aType ) override;
+        virtual css::uno::Any SAL_CALL getValue( const css::uno::Type& aType ) override;
+        virtual void SAL_CALL setValue( const css::uno::Any& aValue ) override;
 
         // OComponentHelper/XComponent
         virtual void SAL_CALL disposing() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
         // OPropertySetHelper
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
@@ -115,15 +115,15 @@ namespace calc
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
         // XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+        virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
         // XModifyListener
-        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     private:
         void    checkDisposed( ) const;

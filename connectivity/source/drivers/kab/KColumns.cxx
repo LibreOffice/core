@@ -78,7 +78,7 @@ sdbcx::ObjectType KabColumns::createObject(const OUString& _rName)
     return xRet;
 }
 
-void KabColumns::impl_refresh() throw(RuntimeException)
+void KabColumns::impl_refresh()
 {
     m_pTable->refreshColumns();
 }

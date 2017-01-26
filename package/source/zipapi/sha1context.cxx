@@ -45,7 +45,6 @@ SHA1DigestContext::~SHA1DigestContext()
 }
 
 void SAL_CALL SHA1DigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >& aData )
-    throw( lang::DisposedException, uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_pDigest )
@@ -61,7 +60,6 @@ void SAL_CALL SHA1DigestContext::updateDigest( const uno::Sequence< ::sal_Int8 >
 }
 
 uno::Sequence< ::sal_Int8 > SAL_CALL SHA1DigestContext::finalizeDigestAndDispose()
-    throw( lang::DisposedException, uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_pDigest )

@@ -40,26 +40,22 @@ XMLSignatureTemplateImpl::~XMLSignatureTemplateImpl() {
 
 /* XXMLSignatureTemplate */
 void SAL_CALL XMLSignatureTemplateImpl::setTemplate( const Reference< XXMLElementWrapper >& aTemplate )
-    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     m_xTemplate = aTemplate ;
 }
 
 /* XXMLSignatureTemplate */
 Reference< XXMLElementWrapper > SAL_CALL XMLSignatureTemplateImpl::getTemplate()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return m_xTemplate ;
 }
 
 void SAL_CALL XMLSignatureTemplateImpl::setTarget( const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement )
-    throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
 {
     targets.push_back( aXmlElement );
 }
 
 css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL XMLSignatureTemplateImpl::getTargets()
-    throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 length = targets.size();
     css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > aTargets (length);
@@ -76,37 +72,33 @@ css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >
 
 void SAL_CALL XMLSignatureTemplateImpl::setBinding(
     const css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding )
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     m_xUriBinding = aUriBinding;
 }
 
 css::uno::Reference< css::xml::crypto::XUriBinding > SAL_CALL XMLSignatureTemplateImpl::getBinding()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return m_xUriBinding;
 }
 
 void SAL_CALL XMLSignatureTemplateImpl::setStatus(
     css::xml::crypto::SecurityOperationStatus status )
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
 {
     m_nStatus = status;
 }
 
 css::xml::crypto::SecurityOperationStatus SAL_CALL XMLSignatureTemplateImpl::getStatus(  )
-    throw (css::uno::RuntimeException, std::exception)
 {
     return m_nStatus;
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLSignatureTemplateImpl::getImplementationName() throw( RuntimeException, std::exception ) {
+OUString SAL_CALL XMLSignatureTemplateImpl::getImplementationName() {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignatureTemplateImpl::supportsService( const OUString& serviceName) throw( RuntimeException, std::exception ) {
+sal_Bool SAL_CALL XMLSignatureTemplateImpl::supportsService( const OUString& serviceName) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -117,7 +109,7 @@ sal_Bool SAL_CALL XMLSignatureTemplateImpl::supportsService( const OUString& ser
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSignatureTemplateImpl::getSupportedServiceNames() throw( RuntimeException, std::exception ) {
+Sequence< OUString > SAL_CALL XMLSignatureTemplateImpl::getSupportedServiceNames() {
     return impl_getSupportedServiceNames() ;
 }
 
@@ -128,12 +120,12 @@ Sequence< OUString > XMLSignatureTemplateImpl::impl_getSupportedServiceNames() {
     return seqServiceNames ;
 }
 
-OUString XMLSignatureTemplateImpl::impl_getImplementationName() throw( RuntimeException ) {
+OUString XMLSignatureTemplateImpl::impl_getImplementationName() {
     return OUString("com.sun.star.xml.security.framework.XMLSignatureTemplateImpl") ;
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSignatureTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) throw( RuntimeException ) {
+Reference< XInterface > SAL_CALL XMLSignatureTemplateImpl::impl_createInstance( const Reference< XMultiServiceFactory >&  ) {
     return Reference< XInterface >( *new XMLSignatureTemplateImpl ) ;
 }
 

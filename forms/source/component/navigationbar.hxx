@@ -70,26 +70,25 @@ namespace frm
     protected:
         // UNO
         DECLARE_UNO3_AGG_DEFAULTS( ONavigationBarModel, OControlModel )
-        virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName()  throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER()
 
         // XPersistObject
-        virtual OUString SAL_CALL getServiceName() throw ( css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getServiceName() override;
+        virtual void SAL_CALL write(const css::uno::Reference< css::io::XObjectOutputStream>& _rxOutStream) override;
+        virtual void SAL_CALL read(const css::uno::Reference< css::io::XObjectInputStream>& _rxInStream) override;
 
         // XPropertySet
         virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle ) const override;
         virtual sal_Bool SAL_CALL convertFastPropertyValue(css::uno::Any& rConvertedValue, css::uno::Any& rOldValue,
-                                              sal_Int32 nHandle, const css::uno::Any& rValue )
-                                            throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) throw ( css::uno::Exception, std::exception) override;
+                                              sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const css::uno::Any& rValue) override;
 
         // XPropertyState
         virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 nHandle ) const override;
@@ -104,7 +103,7 @@ namespace frm
         using OControlModel::getFastPropertyValue;
 
     protected:
-        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
     private:
         void implInitPropertyContainer();

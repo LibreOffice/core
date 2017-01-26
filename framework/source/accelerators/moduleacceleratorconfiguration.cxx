@@ -68,26 +68,23 @@ public:
             const css::uno::Reference< css::uno::XComponentContext >& xContext,
             const css::uno::Sequence< css::uno::Any >& lArguments);
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.framework.ModuleAcceleratorConfiguration");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.ui.ModuleAcceleratorConfiguration"};
     }
 
     // XComponent
-    virtual  void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+    virtual  void SAL_CALL dispose() override;
 
     /// This has to be called after when the instance is acquire()'d.
     void SAL_CALL fillCache();
@@ -156,7 +153,6 @@ void ModuleAcceleratorConfiguration::fillCache()
 // XComponent.dispose(),  #i120029#, to release the cyclic reference
 
 void SAL_CALL ModuleAcceleratorConfiguration::dispose()
-    throw(css::uno::RuntimeException, std::exception)
 {
     try
     {

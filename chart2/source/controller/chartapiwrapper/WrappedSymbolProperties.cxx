@@ -55,10 +55,8 @@ public:
     virtual sal_Int32 getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const sal_Int32& aNewValue ) const override;
 
-    virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                            throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) override;
-    virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException) override;
+    virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const override;
 
     explicit WrappedSymbolTypeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType);
@@ -79,8 +77,7 @@ class WrappedSymbolSizeProperty : public WrappedSeriesOrDiagramProperty< awt::Si
 public:
     virtual awt::Size getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const awt::Size& aNewSize ) const override;
-    virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException) override;
+    virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const override;
 
     explicit WrappedSymbolSizeProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                        tSeriesOrDiagramPropertyType ePropertyType);
@@ -91,8 +88,7 @@ class WrappedSymbolAndLinesProperty : public WrappedSeriesOrDiagramProperty< boo
 public:
     virtual bool getValueFromSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet ) const override;
     virtual void setValueToSeries( const Reference< beans::XPropertySet >& xSeriesPropertySet, const bool& bDrawLines ) const override;
-    virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException) override;
+    virtual beans::PropertyState getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const override;
 
     explicit WrappedSymbolAndLinesProperty(const std::shared_ptr<Chart2ModelContact>& spChart2ModelContact,
                                            tSeriesOrDiagramPropertyType ePropertyType);
@@ -242,7 +238,6 @@ void WrappedSymbolTypeProperty::setValueToSeries( const Reference< beans::XPrope
 }
 
 Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                            throw ( beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     //the old chart (< OOo 2.3) needs symbol-type="automatic" at the plot-area if any of the series should be able to have symbols
     if( m_ePropertyType == DIAGRAM )
@@ -274,7 +269,6 @@ Any WrappedSymbolTypeProperty::getPropertyValue( const Reference< beans::XProper
 }
 
 beans::PropertyState WrappedSymbolTypeProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     //the special situation for this property here is that the diagram default can be
     //different from the normal default and different from all singles series values
@@ -451,7 +445,6 @@ void WrappedSymbolSizeProperty::setValueToSeries(
 }
 
 beans::PropertyState WrappedSymbolSizeProperty::getPropertyState( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     //only export symbol size if necessary
     if( m_ePropertyType == DIAGRAM )
@@ -511,7 +504,6 @@ void WrappedSymbolAndLinesProperty::setValueToSeries(
 }
 
 beans::PropertyState WrappedSymbolAndLinesProperty::getPropertyState( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     //do not export this property anymore, instead use a linestyle none for no lines
     return beans::PropertyState_DEFAULT_VALUE;

@@ -678,14 +678,12 @@ bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry >& xDic
 }
 
 OUString SAL_CALL DictionaryNeo::getName(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aDicName;
 }
 
 void SAL_CALL DictionaryNeo::setName( const OUString& aName )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -697,7 +695,6 @@ void SAL_CALL DictionaryNeo::setName( const OUString& aName )
 }
 
 DictionaryType SAL_CALL DictionaryNeo::getDictionaryType(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -705,7 +702,6 @@ DictionaryType SAL_CALL DictionaryNeo::getDictionaryType(  )
 }
 
 void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -737,14 +733,12 @@ void SAL_CALL DictionaryNeo::setActive( sal_Bool bActivate )
 }
 
 sal_Bool SAL_CALL DictionaryNeo::isActive(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return bIsActive;
 }
 
 sal_Int32 SAL_CALL DictionaryNeo::getCount(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -754,14 +748,12 @@ sal_Int32 SAL_CALL DictionaryNeo::getCount(  )
 }
 
 Locale SAL_CALL DictionaryNeo::getLocale(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return LanguageTag::convertToLocale( nLanguage );
 }
 
 void SAL_CALL DictionaryNeo::setLocale( const Locale& aLocale )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     sal_Int16 nLanguageP = LinguLocaleToLanguage( aLocale );
@@ -776,7 +768,6 @@ void SAL_CALL DictionaryNeo::setLocale( const Locale& aLocale )
 
 uno::Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
             const OUString& aWord )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -793,7 +784,6 @@ uno::Reference< XDictionaryEntry > SAL_CALL DictionaryNeo::getEntry(
 
 sal_Bool SAL_CALL DictionaryNeo::addEntry(
             const uno::Reference< XDictionaryEntry >& xDicEntry )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -812,7 +802,6 @@ sal_Bool SAL_CALL DictionaryNeo::addEntry(
 sal_Bool SAL_CALL
     DictionaryNeo::add( const OUString& rWord, sal_Bool bIsNegative,
             const OUString& rRplcText )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -829,7 +818,6 @@ sal_Bool SAL_CALL
 }
 
 sal_Bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -864,7 +852,6 @@ sal_Bool SAL_CALL DictionaryNeo::remove( const OUString& aWord )
 }
 
 sal_Bool SAL_CALL DictionaryNeo::isFull(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -875,7 +862,6 @@ sal_Bool SAL_CALL DictionaryNeo::isFull(  )
 
 uno::Sequence< uno::Reference< XDictionaryEntry > >
     SAL_CALL DictionaryNeo::getEntries(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -886,7 +872,6 @@ uno::Sequence< uno::Reference< XDictionaryEntry > >
 
 
 void SAL_CALL DictionaryNeo::clear(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -904,7 +889,6 @@ void SAL_CALL DictionaryNeo::clear(  )
 
 sal_Bool SAL_CALL DictionaryNeo::addDictionaryEventListener(
             const uno::Reference< XDictionaryEventListener >& xListener )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -919,7 +903,6 @@ sal_Bool SAL_CALL DictionaryNeo::addDictionaryEventListener(
 
 sal_Bool SAL_CALL DictionaryNeo::removeDictionaryEventListener(
             const uno::Reference< XDictionaryEventListener >& xListener )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -934,21 +917,18 @@ sal_Bool SAL_CALL DictionaryNeo::removeDictionaryEventListener(
 
 
 sal_Bool SAL_CALL DictionaryNeo::hasLocation()
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return !aMainURL.isEmpty();
 }
 
 OUString SAL_CALL DictionaryNeo::getLocation()
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aMainURL;
 }
 
 sal_Bool SAL_CALL DictionaryNeo::isReadonly()
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -956,7 +936,6 @@ sal_Bool SAL_CALL DictionaryNeo::isReadonly()
 }
 
 void SAL_CALL DictionaryNeo::store()
-        throw(io::IOException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -970,7 +949,6 @@ void SAL_CALL DictionaryNeo::store()
 void SAL_CALL DictionaryNeo::storeAsURL(
             const OUString& aURL,
             const uno::Sequence< beans::PropertyValue >& /*rArgs*/ )
-        throw(io::IOException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -985,7 +963,6 @@ void SAL_CALL DictionaryNeo::storeAsURL(
 void SAL_CALL DictionaryNeo::storeToURL(
             const OUString& aURL,
             const uno::Sequence< beans::PropertyValue >& /*rArgs*/ )
-        throw(io::IOException, RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     saveEntries(aURL);
@@ -1036,21 +1013,18 @@ void DicEntry::splitDicFileWord(const OUString &rDicFileWord,
 }
 
 OUString SAL_CALL DicEntry::getDictionaryWord(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aDicWord;
 }
 
 sal_Bool SAL_CALL DicEntry::isNegative(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return bIsNegativ;
 }
 
 OUString SAL_CALL DicEntry::getReplacementText(  )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
     return aReplacement;

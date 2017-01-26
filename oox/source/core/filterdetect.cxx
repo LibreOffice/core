@@ -64,23 +64,19 @@ FilterDetectDocHandler::~FilterDetectDocHandler()
 }
 
 void SAL_CALL FilterDetectDocHandler::startDocument()
-    throw (SAXException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL FilterDetectDocHandler::endDocument()
-    throw (SAXException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL FilterDetectDocHandler::setDocumentLocator( const Reference<XLocator>& /*xLocator*/ )
-    throw (SAXException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL FilterDetectDocHandler::startFastElement(
         sal_Int32 nElement, const Reference< XFastAttributeList >& rAttribs )
-    throw (SAXException,RuntimeException, std::exception)
 {
     AttributeList aAttribs( rAttribs );
     switch ( nElement )
@@ -110,37 +106,32 @@ void SAL_CALL FilterDetectDocHandler::startFastElement(
 
 void SAL_CALL FilterDetectDocHandler::startUnknownElement(
     const OUString& /*Namespace*/, const OUString& /*Name*/, const Reference<XFastAttributeList>& /*Attribs*/ )
-    throw (SAXException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL FilterDetectDocHandler::endFastElement( sal_Int32 /*nElement*/ )
-    throw (SAXException, RuntimeException, std::exception)
 {
     maContextStack.pop_back();
 }
 
 void SAL_CALL FilterDetectDocHandler::endUnknownElement(
-    const OUString& /*Namespace*/, const OUString& /*Name*/ ) throw (SAXException, RuntimeException, std::exception)
+    const OUString& /*Namespace*/, const OUString& /*Name*/ )
 {
 }
 
 Reference<XFastContextHandler> SAL_CALL FilterDetectDocHandler::createFastChildContext(
     sal_Int32 /*Element*/, const Reference<XFastAttributeList>& /*Attribs*/ )
-    throw (SAXException, RuntimeException, std::exception)
 {
     return this;
 }
 
 Reference<XFastContextHandler> SAL_CALL FilterDetectDocHandler::createUnknownChildContext(
     const OUString& /*Namespace*/, const OUString& /*Name*/, const Reference<XFastAttributeList>& /*Attribs*/)
-    throw (SAXException, RuntimeException, std::exception)
 {
     return this;
 }
 
 void SAL_CALL FilterDetectDocHandler::characters( const OUString& /*aChars*/ )
-    throw (SAXException, RuntimeException, std::exception)
 {
 }
 
@@ -240,12 +231,12 @@ OUString FilterDetect_getImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
+Reference< XInterface > SAL_CALL FilterDetect_createInstance( const Reference< XComponentContext >& rxContext )
 {
     return static_cast< ::cppu::OWeakObject* >( new FilterDetect( rxContext ) );
 }
 
-FilterDetect::FilterDetect( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+FilterDetect::FilterDetect( const Reference< XComponentContext >& rxContext ) :
     mxContext( rxContext, UNO_SET_THROW )
 {
 }
@@ -366,24 +357,24 @@ Reference< XInputStream > FilterDetect::extractUnencryptedPackage( MediaDescript
 
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 
-OUString SAL_CALL FilterDetect::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL FilterDetect::getImplementationName()
 {
     return FilterDetect_getImplementationName();
 }
 
-sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL FilterDetect::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL FilterDetect::getSupportedServiceNames()
 {
     return FilterDetect_getSupportedServiceNames();
 }
 
 // com.sun.star.document.XExtendedFilterDetection interface -------------------
 
-OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq ) throw( RuntimeException, std::exception )
+OUString SAL_CALL FilterDetect::detect( Sequence< PropertyValue >& rMediaDescSeq )
 {
     OUString aFilterName;
     MediaDescriptor aMediaDescriptor( rMediaDescSeq );

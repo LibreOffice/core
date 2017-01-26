@@ -56,7 +56,6 @@ OUString firebird::StatusVectorToString(const ISC_STATUS_ARRAY& rStatusVector,
 void firebird::evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
                                     const OUString& rCause,
                                     const uno::Reference< XInterface >& _rxContext)
-    throw(SQLException)
 {
     if (IndicatesError(rStatusVector))
     {

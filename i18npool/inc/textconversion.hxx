@@ -46,41 +46,26 @@ public:
         virtual css::i18n::TextConversionResult SAL_CALL
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override = 0;
+            sal_Int32 nTextConversionOptions ) override = 0;
         virtual OUString SAL_CALL
         getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override = 0;
+            sal_Int32 nTextConversionOptions ) override = 0;
         virtual OUString SAL_CALL
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override = 0;
+            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override = 0;
         virtual sal_Bool SAL_CALL
         interactiveConversion(const css::lang::Locale& aLocale,
-            sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override = 0;
+            sal_Int16 nTextConversionType, sal_Int32 nTextConversionOptions ) override = 0;
 
     //XServiceInfo
     OUString SAL_CALL
-        getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getImplementationName() override;
     sal_Bool SAL_CALL
-        supportsService(const OUString& ServiceName)
-            throw( css::uno::RuntimeException, std::exception ) override;
+        supportsService(const OUString& ServiceName) override;
     css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getSupportedServiceNames() override;
 private:
     const sal_Char* implementationName;
 protected:
@@ -109,31 +94,19 @@ public:
         css::i18n::TextConversionResult SAL_CALL
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override;
+            sal_Int32 nTextConversionOptions ) override;
         OUString SAL_CALL
         getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override;
+            sal_Int32 nTextConversionOptions ) override;
         OUString SAL_CALL
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override;
+            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override;
         sal_Bool SAL_CALL
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override;
+            sal_Int32 nTextConversionOptions ) override;
 
 private:
         // Hangul/Hanja system dictionary
@@ -164,31 +137,19 @@ public:
         css::i18n::TextConversionResult SAL_CALL
         getConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override;
+            sal_Int32 nTextConversionOptions ) override;
         OUString SAL_CALL
         getConversion( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override;
+            sal_Int32 nTextConversionOptions ) override;
         OUString SAL_CALL
         getConversionWithOffset( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength,
             const css::lang::Locale& aLocale, sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override;
+            sal_Int32 nTextConversionOptions, css::uno::Sequence< sal_Int32 >& offset ) override;
         sal_Bool SAL_CALL
         interactiveConversion(const css::lang::Locale& aLocale,
             sal_Int16 nTextConversionType,
-            sal_Int32 nTextConversionOptions )
-            throw(  css::uno::RuntimeException,
-                    css::lang::IllegalArgumentException,
-                    css::lang::NoSupportException, std::exception ) override;
+            sal_Int32 nTextConversionOptions ) override;
 private:
         // user defined dictionary list
         css::uno::Reference < css::linguistic2::XConversionDictionaryList > xCDL;

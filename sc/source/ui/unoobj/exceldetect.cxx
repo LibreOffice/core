@@ -27,17 +27,17 @@ using utl::MediaDescriptor;
 ScExcelBiffDetect::ScExcelBiffDetect( const uno::Reference<uno::XComponentContext>& /*xContext*/ ) {}
 ScExcelBiffDetect::~ScExcelBiffDetect() {}
 
-OUString ScExcelBiffDetect::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString ScExcelBiffDetect::getImplementationName()
 {
     return OUString("com.sun.star.comp.calc.ExcelBiffFormatDetector");
 }
 
-sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName ) throw (uno::RuntimeException, std::exception)
+sal_Bool ScExcelBiffDetect::supportsService( const OUString& aName )
 {
     return cppu::supportsService(this, aName);
 }
 
-uno::Sequence<OUString> ScExcelBiffDetect::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence<OUString> ScExcelBiffDetect::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aNames { "com.sun.star.frame.ExtendedTypeDetection" };
     return aNames;
@@ -133,7 +133,6 @@ bool isTemplate(const OUString& rType)
 }
 
 OUString ScExcelBiffDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
-    throw (uno::RuntimeException, std::exception)
 {
     MediaDescriptor aMediaDesc(lDescriptor);
     OUString aType;

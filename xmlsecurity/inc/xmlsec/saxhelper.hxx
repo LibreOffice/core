@@ -47,43 +47,36 @@ class SAXHelper final
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void startDocument()
-            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
+        void startDocument() ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void endDocument()
-            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
+        void endDocument() ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
         void startElement(
             const OUString& aName ,
             const css::uno::Sequence<
-                css::xml::csax::XMLAttribute >& aAttributes )
-            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
+                css::xml::csax::XMLAttribute >& aAttributes ) ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void endElement( const OUString& aName )
-            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
+        void endElement( const OUString& aName ) ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void characters( const OUString& aChars )
-            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
+        void characters( const OUString& aChars ) ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
-        void ignorableWhitespace( const OUString& aWhitespaces )
-            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
+        void ignorableWhitespace( const OUString& aWhitespaces ) ;
 
         /// @throws css::xml::sax::SAXException
         /// @throws css::uno::RuntimeException
         void processingInstruction(
             const OUString& aTarget ,
-            const OUString& aData )
-            throw( css::xml::sax::SAXException , css::uno::RuntimeException ) ;
+            const OUString& aData ) ;
 
 } ;
 

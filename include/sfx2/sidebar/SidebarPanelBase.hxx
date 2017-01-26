@@ -59,39 +59,28 @@ public:
                                                            const css::ui::LayoutSize& rLayoutSize);
 
     // XContextChangeEventListener
-    virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyContextChangeEvent (const css::ui::ContextChangeEventObject& rEvent) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
 
     // XUIElement
-    virtual css::uno::Reference<css::frame::XFrame> SAL_CALL getFrame()
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getResourceURL()
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getType()
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getRealInterface()
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<css::frame::XFrame> SAL_CALL getFrame() override;
+    virtual OUString SAL_CALL getResourceURL() override;
+    virtual sal_Int16 SAL_CALL getType() override;
+    virtual css::uno::Reference<css::uno::XInterface> SAL_CALL getRealInterface() override;
 
     // XToolPanel
     virtual css::uno::Reference<css::accessibility::XAccessible> SAL_CALL createAccessible(
-                const css::uno::Reference<css::accessibility::XAccessible>& rxParentAccessible)
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow()
-        throw(css::uno::RuntimeException, std::exception) override;
+                const css::uno::Reference<css::accessibility::XAccessible>& rxParentAccessible) override;
+    virtual css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow() override;
 
     // XSidebarPanel
-    virtual css::ui::LayoutSize SAL_CALL getHeightForWidth(sal_Int32 nWidth)
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getMinimalWidth()
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::ui::LayoutSize SAL_CALL getHeightForWidth(sal_Int32 nWidth) override;
+    virtual sal_Int32 SAL_CALL getMinimalWidth() override;
 
     // XUpdateModel
-    virtual void SAL_CALL updateModel(const css::uno::Reference<css::frame::XModel>& xModel)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL updateModel(const css::uno::Reference<css::frame::XModel>& xModel) override;
 
 protected:
     css::uno::Reference<css::frame::XFrame> mxFrame;
@@ -102,8 +91,7 @@ protected:
     SidebarPanelBase(const SidebarPanelBase&) = delete;
     SidebarPanelBase& operator=( const SidebarPanelBase& ) = delete;
 
-    virtual void SAL_CALL disposing()
-        throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL disposing() override;
 
 private:
     VclPtr<vcl::Window> mpControl;

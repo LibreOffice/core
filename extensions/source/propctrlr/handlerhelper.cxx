@@ -272,7 +272,7 @@ namespace pcr
         return xI;
     }
 
-    Reference< XInterface > PropertyHandlerHelper::getContextDocument_throw( const Reference<XComponentContext> & _rContext ) throw (RuntimeException)
+    Reference< XInterface > PropertyHandlerHelper::getContextDocument_throw( const Reference<XComponentContext> & _rContext )
     {
         Reference< XInterface > xI;
         Any aReturn = _rContext->getValueByName( "ContextDocument" );

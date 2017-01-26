@@ -128,8 +128,8 @@ protected:
 public:
     explicit SwDrawModellListener_Impl( SdrModel *pDrawModel );
 
-    virtual void SAL_CALL addEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addEventListener( const uno::Reference< document::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const uno::Reference< document::XEventListener >& xListener ) override;
 
     virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;
     void Dispose();
@@ -147,12 +147,12 @@ SwDrawModellListener_Impl::~SwDrawModellListener_Impl()
     Dispose();
 }
 
-void SAL_CALL SwDrawModellListener_Impl::addEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwDrawModellListener_Impl::addEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     maEventListeners.addInterface( xListener );
 }
 
-void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const uno::Reference< document::XEventListener >& xListener ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwDrawModellListener_Impl::removeEventListener( const uno::Reference< document::XEventListener >& xListener )
 {
     maEventListeners.removeInterface( xListener );
 }
@@ -3109,7 +3109,7 @@ bool SwAccessibleMap::ReplaceChild (
         const uno::Reference< drawing::XShape >& _rxShape,
         const long /*_nIndex*/,
         const ::accessibility::AccessibleShapeTreeInfo& /*_rShapeTreeInfo*/
-    )   throw (uno::RuntimeException, std::exception)
+    )
 {
     const SdrObject *pObj = nullptr;
     {
@@ -3182,7 +3182,7 @@ bool SwAccessibleMap::ReplaceChild (
 }
 
 //Get the accessible control shape from the model object, here model object is with XPropertySet type
-::accessibility::AccessibleControlShape * SwAccessibleMap::GetAccControlShapeFromModel(css::beans::XPropertySet* pSet) throw (css::uno::RuntimeException)
+::accessibility::AccessibleControlShape * SwAccessibleMap::GetAccControlShapeFromModel(css::beans::XPropertySet* pSet)
 {
     if( mpShapeMap )
     {
@@ -3207,7 +3207,6 @@ bool SwAccessibleMap::ReplaceChild (
 
 css::uno::Reference< XAccessible >
     SwAccessibleMap::GetAccessibleCaption (const css::uno::Reference< css::drawing::XShape >&)
-    throw (css::uno::RuntimeException)
 {
     return nullptr;
 }

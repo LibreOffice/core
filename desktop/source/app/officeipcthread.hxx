@@ -137,22 +137,16 @@ class RequestHandlerController : public ::cppu::WeakImplHelper<
         RequestHandlerController() {}
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName()
-            throw ( css::uno::RuntimeException, std::exception ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw ( css::uno::RuntimeException, std::exception ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XTerminateListener
-        virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent )
-            throw( css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL queryTermination( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL notifyTermination( const css::lang::EventObject& aEvent ) override;
 };
 
 }

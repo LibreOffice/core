@@ -24,11 +24,9 @@ public:
     explicit NotebookBarContextChangeEventListener(NotebookBar *p) : mpParent(p) {}
 
     // XContextChangeEventListener
-    virtual void SAL_CALL notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent) override;
 
-    virtual void SAL_CALL disposing(const ::css::lang::EventObject&)
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+    virtual void SAL_CALL disposing(const ::css::lang::EventObject&) override;
 };
 
 
@@ -121,7 +119,6 @@ void NotebookBar::SetSystemWindow(SystemWindow* pSystemWindow)
 }
 
 void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception)
 {
     if (mpParent && mpParent->m_pContextContainer)
         mpParent->m_pContextContainer->SetContext(vcl::EnumContext::GetContextEnum(rEvent.ContextName));
@@ -129,7 +126,6 @@ void SAL_CALL NotebookBarContextChangeEventListener::notifyContextChangeEvent(co
 
 
 void SAL_CALL NotebookBarContextChangeEventListener::disposing(const ::css::lang::EventObject&)
-    throw (::css::uno::RuntimeException, ::std::exception)
 {
     mpParent.clear();
 }

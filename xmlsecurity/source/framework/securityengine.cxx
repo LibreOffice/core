@@ -34,7 +34,6 @@ SecurityEngine::SecurityEngine()
 
 /* XReferenceResolvedListener */
 void SAL_CALL SecurityEngine::referenceResolved( sal_Int32 /*referenceId*/)
-    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     m_nNumOfResolvedReferences++;
     tryToPerform();
@@ -42,7 +41,6 @@ void SAL_CALL SecurityEngine::referenceResolved( sal_Int32 /*referenceId*/)
 
 /* XKeyCollector */
 void SAL_CALL SecurityEngine::setKeyId( sal_Int32 id )
-    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     m_nIdOfKeyEC = id;
     tryToPerform();
@@ -50,7 +48,6 @@ void SAL_CALL SecurityEngine::setKeyId( sal_Int32 id )
 
 /* XMissionTaker */
 sal_Bool SAL_CALL SecurityEngine::endMission(  )
-    throw (css::uno::RuntimeException, std::exception)
 {
     bool rc = m_bMissionDone;
 

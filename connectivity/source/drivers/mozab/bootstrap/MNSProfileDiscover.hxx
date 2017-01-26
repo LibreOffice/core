@@ -71,17 +71,17 @@ namespace connectivity
             ~ProfileAccess();
             ProfileAccess();
             /// @throws css::uno::RuntimeException
-            OUString getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException);
+            OUString getProfilePath( css::mozilla::MozillaProductType product, const OUString& profileName );
             /// @throws css::uno::RuntimeException
-            ::sal_Int32 getProfileCount( css::mozilla::MozillaProductType product ) throw (css::uno::RuntimeException);
+            ::sal_Int32 getProfileCount( css::mozilla::MozillaProductType product );
             /// @throws css::uno::RuntimeException
-            ::sal_Int32 getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list ) throw (css::uno::RuntimeException);
+            ::sal_Int32 getProfileList( css::mozilla::MozillaProductType product, css::uno::Sequence< OUString >& list );
             /// @throws css::uno::RuntimeException
-            OUString getDefaultProfile( css::mozilla::MozillaProductType product ) throw (css::uno::RuntimeException);
+            OUString getDefaultProfile( css::mozilla::MozillaProductType product );
             /// @throws css::uno::RuntimeException
-            bool SAL_CALL isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException);
+            bool SAL_CALL isProfileLocked( css::mozilla::MozillaProductType product, const OUString& profileName );
             /// @throws css::uno::RuntimeException
-            bool SAL_CALL getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName ) throw (css::uno::RuntimeException);
+            bool SAL_CALL getProfileExists( css::mozilla::MozillaProductType product, const OUString& profileName );
         private:
             ProductStruct m_ProductProfileList[4];
             void      LoadProductsInfo();

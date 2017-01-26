@@ -66,9 +66,9 @@ public:
     const UndoElement& operator=(const UndoElement&) = delete;
 
     // XUndoAction
-    virtual OUString SAL_CALL getTitle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL undo(  ) throw (css::document::UndoFailedException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL redo(  ) throw (css::document::UndoFailedException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getTitle() override;
+    virtual void SAL_CALL undo(  ) override;
+    virtual void SAL_CALL redo(  ) override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
@@ -94,9 +94,9 @@ public:
     explicit ShapeUndoElement( SdrUndoAction& i_sdrUndoAction );
 
     // XUndoAction
-    virtual OUString SAL_CALL getTitle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL undo(  ) throw (css::document::UndoFailedException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL redo(  ) throw (css::document::UndoFailedException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getTitle() override;
+    virtual void SAL_CALL undo(  ) override;
+    virtual void SAL_CALL redo(  ) override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;

@@ -67,22 +67,17 @@ public:
           { return aResult; }
 
     // XResultListener
-    virtual void SAL_CALL modified( const css::sheet::ResultEvent& aEvent )
-                              throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::sheet::ResultEvent& aEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-                              throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-                                         throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                  throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif // INCLUDED_SC_SOURCE_CORE_INC_ADDINLIS_HXX

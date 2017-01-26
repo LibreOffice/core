@@ -44,20 +44,11 @@ namespace io_acceptor
     public:
         explicit PipeConnection( const OUString &sConnectionDescription);
 
-        virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead )
-            throw(css::io::IOException,
-                  css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL write( const Sequence< sal_Int8 >& aData )
-            throw(css::io::IOException,
-                  css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL flush(  ) throw(
-            css::io::IOException,
-            css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL close(  )
-            throw(css::io::IOException,
-                  css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getDescription(  )
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL read( Sequence< sal_Int8 >& aReadBytes, sal_Int32 nBytesToRead ) override;
+        virtual void SAL_CALL write( const Sequence< sal_Int8 >& aData ) override;
+        virtual void SAL_CALL flush(  ) override;
+        virtual void SAL_CALL close(  ) override;
+        virtual OUString SAL_CALL getDescription(  ) override;
     public:
         ::osl::StreamPipe m_pipe;
         oslInterlockedCount m_nStatus;
@@ -77,8 +68,6 @@ namespace io_acceptor
     }
 
     sal_Int32 PipeConnection::read( Sequence < sal_Int8 > & aReadBytes , sal_Int32 nBytesToRead )
-        throw(css::io::IOException,
-              css::uno::RuntimeException, std::exception)
     {
         if( ! m_nStatus )
         {
@@ -100,8 +89,6 @@ namespace io_acceptor
     }
 
     void PipeConnection::write( const Sequence < sal_Int8 > &seq )
-            throw(css::io::IOException,
-                  css::uno::RuntimeException, std::exception)
     {
         if( ! m_nStatus )
         {
@@ -116,14 +103,10 @@ namespace io_acceptor
     }
 
     void PipeConnection::flush( )
-        throw(  css::io::IOException,
-                css::uno::RuntimeException, std::exception)
     {
     }
 
     void PipeConnection::close()
-        throw( css::io::IOException,
-               css::uno::RuntimeException, std::exception)
     {
         if(  1 == osl_atomic_increment( (&m_nStatus) ) )
         {
@@ -132,7 +115,6 @@ namespace io_acceptor
     }
 
     OUString PipeConnection::getDescription()
-            throw(css::uno::RuntimeException, std::exception)
     {
         return m_sDescription;
     }

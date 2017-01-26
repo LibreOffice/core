@@ -40,17 +40,11 @@ namespace x11 {
          * XTransferable
          */
 
-        virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor )
-            throw(css::datatransfer::UnsupportedFlavorException,
-                  css::io::IOException,
-                  css::uno::RuntimeException, std::exception
-                  ) override;
+        virtual css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
 
-        virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  )
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
 
-        virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor )
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
     };
 
 } // namespace

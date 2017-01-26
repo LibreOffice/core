@@ -53,7 +53,7 @@ protected:
     virtual void            FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet ) override;
 
     // OCommonAccessibleComponent
-    virtual css::awt::Rectangle implGetBounds(  ) throw (css::uno::RuntimeException) override;
+    virtual css::awt::Rectangle implGetBounds(  ) override;
 
     // XComponent
     virtual void SAL_CALL   disposing() override;
@@ -63,26 +63,26 @@ public:
     virtual ~OAccessibleMenuItemComponent() override;
 
     // XAccessibleContext
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getAccessibleDescription(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getAccessibleName(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::lang::Locale SAL_CALL getLocale(  ) throw (css::accessibility::IllegalAccessibleComponentStateException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
+    virtual OUString SAL_CALL getAccessibleDescription(  ) override;
+    virtual OUString SAL_CALL getAccessibleName(  ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
     // XAccessibleComponent
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL grabFocus(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getForeground(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getBackground(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual void SAL_CALL grabFocus(  ) override;
+    virtual sal_Int32 SAL_CALL getForeground(  ) override;
+    virtual sal_Int32 SAL_CALL getBackground(  ) override;
 
     // XAccessibleExtendedComponent
-    virtual css::uno::Reference< css::awt::XFont > SAL_CALL getFont(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getTitledBorderText(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getToolTipText(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::XFont > SAL_CALL getFont(  ) override;
+    virtual OUString SAL_CALL getTitledBorderText(  ) override;
+    virtual OUString SAL_CALL getToolTipText(  ) override;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_ACCESSIBLEMENUITEMCOMPONENT_HXX

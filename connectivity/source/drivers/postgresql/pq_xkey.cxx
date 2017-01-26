@@ -78,7 +78,7 @@ Key::Key( const ::rtl::Reference< RefCountedMutex > & refMutex,
       m_tableName( tableName )
 {}
 
-Reference< XPropertySet > Key::createDataDescriptor(  ) throw (RuntimeException, std::exception)
+Reference< XPropertySet > Key::createDataDescriptor(  )
 {
     KeyDescriptor * pKeyDescriptor = new KeyDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -87,7 +87,7 @@ Reference< XPropertySet > Key::createDataDescriptor(  ) throw (RuntimeException,
     return Reference< XPropertySet > ( pKeyDescriptor );
 }
 
-Reference< XNameAccess > Key::getColumns(  ) throw (css::uno::RuntimeException, std::exception)
+Reference< XNameAccess > Key::getColumns(  )
 {
     // TODO: cash columns object !
     if( !m_keyColumns.is() )
@@ -103,7 +103,7 @@ Reference< XNameAccess > Key::getColumns(  ) throw (css::uno::RuntimeException, 
     return m_keyColumns;
 }
 
-Sequence<Type > Key::getTypes() throw( RuntimeException, std::exception )
+Sequence<Type > Key::getTypes()
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -120,12 +120,12 @@ Sequence<Type > Key::getTypes() throw( RuntimeException, std::exception )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> Key::getImplementationId() throw( RuntimeException, std::exception )
+Sequence< sal_Int8> Key::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Any Key::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
+Any Key::queryInterface( const Type & reqType )
 {
     Any ret;
 
@@ -151,7 +151,7 @@ KeyDescriptor::KeyDescriptor( const ::rtl::Reference< RefCountedMutex > & refMut
 {
 }
 
-Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
+Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  )
 {
     KeyDescriptor * pKeyDescriptor = new KeyDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -160,7 +160,7 @@ Reference< XPropertySet > KeyDescriptor::createDataDescriptor(  ) throw (Runtime
     return Reference< XPropertySet > ( pKeyDescriptor );
 }
 
-Reference< XNameAccess > KeyDescriptor::getColumns(  ) throw (css::uno::RuntimeException, std::exception)
+Reference< XNameAccess > KeyDescriptor::getColumns(  )
 {
     // TODO: cash columns object !
     if( !m_keyColumns.is() )
@@ -170,7 +170,7 @@ Reference< XNameAccess > KeyDescriptor::getColumns(  ) throw (css::uno::RuntimeE
     return m_keyColumns;
 }
 
-Sequence<Type > KeyDescriptor::getTypes() throw( RuntimeException, std::exception )
+Sequence<Type > KeyDescriptor::getTypes()
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -187,12 +187,12 @@ Sequence<Type > KeyDescriptor::getTypes() throw( RuntimeException, std::exceptio
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> KeyDescriptor::getImplementationId() throw( RuntimeException, std::exception )
+Sequence< sal_Int8> KeyDescriptor::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Any KeyDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
+Any KeyDescriptor::queryInterface( const Type & reqType )
 {
     Any ret;
 

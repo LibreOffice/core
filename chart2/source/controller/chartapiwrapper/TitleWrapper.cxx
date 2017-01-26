@@ -51,12 +51,9 @@ class WrappedTitleStringProperty : public WrappedProperty
 public:
     explicit WrappedTitleStringProperty( const Reference< uno::XComponentContext >& xContext );
 
-    virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException) override;
-    virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) override;
-    virtual Any getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException) override;
+    virtual void setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual Any getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const override;
+    virtual Any getPropertyDefault( const Reference< beans::XPropertyState >& xInnerPropertyState ) const override;
 
 protected:
     Reference< uno::XComponentContext > m_xContext;
@@ -69,7 +66,6 @@ WrappedTitleStringProperty::WrappedTitleStringProperty( const Reference< uno::XC
 }
 
 void WrappedTitleStringProperty::setPropertyValue( const Any& rOuterValue, const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Reference< chart2::XTitle > xTitle(xInnerPropertySet,uno::UNO_QUERY);
     if(xTitle.is())
@@ -80,7 +76,6 @@ void WrappedTitleStringProperty::setPropertyValue( const Any& rOuterValue, const
     }
 }
 Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPropertySet >& xInnerPropertySet ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     Any aRet( getPropertyDefault( Reference< beans::XPropertyState >( xInnerPropertySet, uno::UNO_QUERY ) ) );
     Reference< chart2::XTitle > xTitle(xInnerPropertySet,uno::UNO_QUERY);
@@ -98,7 +93,6 @@ Any WrappedTitleStringProperty::getPropertyValue( const Reference< beans::XPrope
     return aRet;
 }
 Any WrappedTitleStringProperty::getPropertyDefault( const Reference< beans::XPropertyState >& /*xInnerPropertyState*/ ) const
-                        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException)
 {
     return uno::makeAny( OUString() );//default title is a empty String
 }
@@ -205,13 +199,11 @@ TitleWrapper::~TitleWrapper()
 
 // ____ XShape ____
 awt::Point SAL_CALL TitleWrapper::getPosition()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetTitlePosition( this->getTitleObject() );
 }
 
 void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xPropertySet( this->getInnerPropertySet() );
     if(xPropertySet.is())
@@ -227,28 +219,23 @@ void SAL_CALL TitleWrapper::setPosition( const awt::Point& aPosition )
 }
 
 awt::Size SAL_CALL TitleWrapper::getSize()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_spChart2ModelContact->GetTitleSize( this->getTitleObject() );
 }
 
 void SAL_CALL TitleWrapper::setSize( const awt::Size& /*aSize*/ )
-    throw (beans::PropertyVetoException,
-           uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "trying to set size of title" );
 }
 
 // ____ XShapeDescriptor (base of XShape) ____
 OUString SAL_CALL TitleWrapper::getShapeType()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.chart.ChartTitle" );
 }
 
 // ____ XComponent ____
 void SAL_CALL TitleWrapper::dispose()
-    throw (uno::RuntimeException, std::exception)
 {
     Reference< uno::XInterface > xSource( static_cast< ::cppu::OWeakObject* >( this ) );
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( xSource ) );
@@ -259,14 +246,12 @@ void SAL_CALL TitleWrapper::dispose()
 
 void SAL_CALL TitleWrapper::addEventListener(
     const Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL TitleWrapper::removeEventListener(
     const Reference< lang::XEventListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }
@@ -309,7 +294,7 @@ void TitleWrapper::getFastCharacterPropertyValue( sal_Int32 nHandle, Any& rValue
 }
 
 void TitleWrapper::setFastCharacterPropertyValue(
-    sal_Int32 nHandle, const Any& rValue ) throw (uno::Exception)
+    sal_Int32 nHandle, const Any& rValue )
 {
     OSL_ASSERT( FAST_PROPERTY_ID_START_CHAR_PROP <= nHandle &&
                 nHandle < CharacterProperties::FAST_PROPERTY_ID_END_CHAR_PROP );
@@ -336,7 +321,6 @@ void TitleWrapper::setFastCharacterPropertyValue(
 // WrappedPropertySet
 
 void SAL_CALL TitleWrapper::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
-                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
@@ -348,7 +332,6 @@ void SAL_CALL TitleWrapper::setPropertyValue( const OUString& rPropertyName, con
 }
 
 Any SAL_CALL TitleWrapper::getPropertyValue( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Any aRet;
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
@@ -360,7 +343,6 @@ Any SAL_CALL TitleWrapper::getPropertyValue( const OUString& rPropertyName )
 }
 
 beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
 
@@ -383,7 +365,6 @@ beans::PropertyState SAL_CALL TitleWrapper::getPropertyState( const OUString& rP
     return aState;
 }
 void SAL_CALL TitleWrapper::setPropertyToDefault( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
@@ -395,7 +376,6 @@ void SAL_CALL TitleWrapper::setPropertyToDefault( const OUString& rPropertyName 
         WrappedPropertySet::setPropertyToDefault( rPropertyName );
 }
 Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Any aRet;
 
@@ -419,7 +399,6 @@ Any SAL_CALL TitleWrapper::getPropertyDefault( const OUString& rPropertyName )
 }
 
 void SAL_CALL TitleWrapper::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
@@ -432,7 +411,6 @@ void SAL_CALL TitleWrapper::addPropertyChangeListener( const OUString& rProperty
         WrappedPropertySet::addPropertyChangeListener( rPropertyName, xListener );
 }
 void SAL_CALL TitleWrapper::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nHandle = getInfoHelper().getHandleByName( rPropertyName );
     if( CharacterProperties::IsCharacterPropertyHandle( nHandle ) )
@@ -502,19 +480,16 @@ const std::vector< WrappedProperty* > TitleWrapper::createWrappedProperties()
 }
 
 OUString SAL_CALL TitleWrapper::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.Title");
 }
 
 sal_Bool SAL_CALL TitleWrapper::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL TitleWrapper::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart.ChartTitle",

@@ -56,21 +56,18 @@ BaseCommandEnv::~BaseCommandEnv()
 // XCommandEnvironment
 
 Reference<task::XInteractionHandler> BaseCommandEnv::getInteractionHandler()
-throw (uno::RuntimeException, std::exception)
 {
     return this;
 }
 
 
 Reference<ucb::XProgressHandler> BaseCommandEnv::getProgressHandler()
-throw (uno::RuntimeException, std::exception)
 {
     return this;
 }
 
 void BaseCommandEnv::handle(
     Reference< task::XInteractionRequest> const & /*xRequest*/ )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
@@ -120,16 +117,14 @@ void BaseCommandEnv::handle_(bool approve, bool abort,
 
 // XProgressHandler
 void BaseCommandEnv::push( uno::Any const & /*Status*/ )
-throw (uno::RuntimeException, std::exception)
 {
 }
 
 void BaseCommandEnv::update( uno::Any const & /*Status */)
-throw (uno::RuntimeException, std::exception)
 {
 }
 
-void BaseCommandEnv::pop() throw (uno::RuntimeException, std::exception)
+void BaseCommandEnv::pop()
 {
 }
 
@@ -146,7 +141,6 @@ TmpRepositoryCommandEnv::TmpRepositoryCommandEnv(
 // XInteractionHandler
 void TmpRepositoryCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
@@ -180,7 +174,6 @@ LicenseCommandEnv::LicenseCommandEnv(
 // XInteractionHandler
 void LicenseCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
@@ -216,7 +209,6 @@ NoLicenseCommandEnv::NoLicenseCommandEnv(
 // XInteractionHandler
 void NoLicenseCommandEnv::handle(
     Reference< task::XInteractionRequest> const & xRequest )
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );
@@ -239,7 +231,6 @@ SilentCheckPrerequisitesCommandEnv::SilentCheckPrerequisitesCommandEnv()
 
 void SilentCheckPrerequisitesCommandEnv::handle(
        Reference< task::XInteractionRequest> const & xRequest )
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Any request( xRequest->getRequest() );
     OSL_ASSERT( request.getValueTypeClass() == uno::TypeClass_EXCEPTION );

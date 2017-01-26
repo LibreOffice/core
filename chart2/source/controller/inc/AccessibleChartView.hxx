@@ -73,31 +73,24 @@ public:
     // 4: awt::XWindow representing the view's window (is a vcl Window)
     // all arguments are only valid until next initialization - don't keep them longer
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw (css::uno::Exception,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // ____ view::XSelectionChangeListener ____
-    virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) override;
 
     // ________ XEventListener ________
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     // ________ XAccessibleContext ________
-    virtual OUString SAL_CALL getAccessibleDescription()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getAccessibleName()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getAccessibleDescription() override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent() override;
+    virtual sal_Int32 SAL_CALL getAccessibleIndexInParent() override;
+    virtual OUString SAL_CALL getAccessibleName() override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
 
     // ________ XAccessibleComponent ________
-    virtual css::awt::Rectangle SAL_CALL getBounds() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::awt::Rectangle SAL_CALL getBounds() override;
+    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
 
 protected:
     // ________ AccessibleChartElement ________

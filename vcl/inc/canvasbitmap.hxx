@@ -63,46 +63,46 @@ namespace unotools
 
     public:
         // XBitmap
-        virtual css::geometry::IntegerSize2D SAL_CALL getSize() throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL hasAlpha(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize, sal_Bool beFast ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::geometry::IntegerSize2D SAL_CALL getSize() override;
+        virtual sal_Bool SAL_CALL hasAlpha(  ) override;
+        virtual css::uno::Reference< css::rendering::XBitmap > SAL_CALL getScaledBitmap( const css::geometry::RealSize2D& newSize, sal_Bool beFast ) override;
 
         // XIntegerReadOnlyBitmap
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerRectangle2D& rect ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerPoint2D& pos ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerRectangle2D& rect ) override;
+        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout, const css::geometry::IntegerPoint2D& pos ) override;
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::rendering::XBitmapPalette > SAL_CALL getPalette(  ) throw (css::uno::RuntimeException);
-        virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::Reference< css::rendering::XBitmapPalette > SAL_CALL getPalette(  );
+        virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) override;
 
         // XBitmapPalette
-        virtual sal_Int32 SAL_CALL getNumberOfEntries() throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getIndex( css::uno::Sequence< double >& entry, ::sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL setIndex( const css::uno::Sequence< double >& color, sal_Bool transparency, ::sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getColorSpace(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getNumberOfEntries() override;
+        virtual sal_Bool SAL_CALL getIndex( css::uno::Sequence< double >& entry, ::sal_Int32 nIndex ) override;
+        virtual sal_Bool SAL_CALL setIndex( const css::uno::Sequence< double >& color, sal_Bool transparency, ::sal_Int32 nIndex ) override;
+        virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getColorSpace(  ) override;
 
         // XIntegerBitmapColorSpace
-        virtual ::sal_Int8 SAL_CALL getType(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getComponentTags(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getProperties(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< double > SAL_CALL convertColorSpace( const css::uno::Sequence< double >& deviceColor, const css::uno::Reference< css::rendering::XColorSpace >& targetColorSpace ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::rendering::RGBColor > SAL_CALL convertToRGB( const css::uno::Sequence< double >& deviceColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertToARGB( const css::uno::Sequence< double >& deviceColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertToPARGB( const css::uno::Sequence< double >& deviceColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< double > SAL_CALL convertFromRGB( const css::uno::Sequence< css::rendering::RGBColor >& rgbColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< double > SAL_CALL convertFromARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< double > SAL_CALL convertFromPARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int8 SAL_CALL getEndianness(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const css::uno::Sequence< ::sal_Int8 >& deviceColor, const css::uno::Reference< css::rendering::XColorSpace >& targetColorSpace ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const css::uno::Sequence< ::sal_Int8 >& deviceColor, const css::uno::Reference< css::rendering::XIntegerBitmapColorSpace >& targetColorSpace ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::rendering::RGBColor > SAL_CALL convertIntegerToRGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const css::uno::Sequence< css::rendering::RGBColor >& rgbColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int8 SAL_CALL getType(  ) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getComponentTags(  ) override;
+        virtual ::sal_Int8 SAL_CALL getRenderingIntent(  ) override;
+        virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getProperties(  ) override;
+        virtual css::uno::Sequence< double > SAL_CALL convertColorSpace( const css::uno::Sequence< double >& deviceColor, const css::uno::Reference< css::rendering::XColorSpace >& targetColorSpace ) override;
+        virtual css::uno::Sequence< css::rendering::RGBColor > SAL_CALL convertToRGB( const css::uno::Sequence< double >& deviceColor ) override;
+        virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertToARGB( const css::uno::Sequence< double >& deviceColor ) override;
+        virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertToPARGB( const css::uno::Sequence< double >& deviceColor ) override;
+        virtual css::uno::Sequence< double > SAL_CALL convertFromRGB( const css::uno::Sequence< css::rendering::RGBColor >& rgbColor ) override;
+        virtual css::uno::Sequence< double > SAL_CALL convertFromARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
+        virtual css::uno::Sequence< double > SAL_CALL convertFromPARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
+        virtual ::sal_Int32 SAL_CALL getBitsPerPixel(  ) override;
+        virtual css::uno::Sequence< ::sal_Int32 > SAL_CALL getComponentBitCounts(  ) override;
+        virtual ::sal_Int8 SAL_CALL getEndianness(  ) override;
+        virtual css::uno::Sequence<double> SAL_CALL convertFromIntegerColorSpace( const css::uno::Sequence< ::sal_Int8 >& deviceColor, const css::uno::Reference< css::rendering::XColorSpace >& targetColorSpace ) override;
+        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertToIntegerColorSpace( const css::uno::Sequence< ::sal_Int8 >& deviceColor, const css::uno::Reference< css::rendering::XIntegerBitmapColorSpace >& targetColorSpace ) override;
+        virtual css::uno::Sequence< css::rendering::RGBColor > SAL_CALL convertIntegerToRGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
+        virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertIntegerToARGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
+        virtual css::uno::Sequence< css::rendering::ARGBColor > SAL_CALL convertIntegerToPARGB( const css::uno::Sequence< ::sal_Int8 >& deviceColor ) override;
+        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromRGB( const css::uno::Sequence< css::rendering::RGBColor >& rgbColor ) override;
+        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
+        virtual css::uno::Sequence< ::sal_Int8 > SAL_CALL convertIntegerFromPARGB( const css::uno::Sequence< css::rendering::ARGBColor >& rgbColor ) override;
 
         /** Create API wrapper for given BitmapEx
 

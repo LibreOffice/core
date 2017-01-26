@@ -48,7 +48,7 @@ sd::MainSequencePtr const & SdPage::getMainSequence()
 }
 
 /** returns the main animation node */
-Reference< XAnimationNode > const & SdPage::getAnimationNode() throw (RuntimeException)
+Reference< XAnimationNode > const & SdPage::getAnimationNode()
 {
     if( !mxAnimationNode.is() )
     {
@@ -61,7 +61,7 @@ Reference< XAnimationNode > const & SdPage::getAnimationNode() throw (RuntimeExc
     return mxAnimationNode;
 }
 
-void SdPage::setAnimationNode( Reference< XAnimationNode >& xNode ) throw (RuntimeException)
+void SdPage::setAnimationNode( Reference< XAnimationNode >& xNode )
 {
     mxAnimationNode = xNode;
     if( mpMainSequence.get() )

@@ -59,21 +59,18 @@ public:
 
     // #i73249# - Return the object's current name.
     virtual OUString SAL_CALL
-        getAccessibleName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleName() override;
 
     /// Return this object's description.
     virtual OUString SAL_CALL
-        getAccessibleDescription()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleDescription() override;
 
     // XInterface methods need to be implemented to disambiguate
     // between those inherited through SwAccessibleContext and
     // XAccessibleImage.
 
     virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Type& aType ) override;
 
     virtual void SAL_CALL acquire(  ) throw () override
         { SwAccessibleContext::acquire(); };
@@ -82,59 +79,50 @@ public:
         { SwAccessibleContext::release(); };
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
     // XAccessibleImage
     virtual OUString SAL_CALL
-        getAccessibleImageDescription(  )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+        getAccessibleImageDescription(  ) override;
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleImageHeight(  )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+        getAccessibleImageHeight(  ) override;
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleImageWidth(  )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+        getAccessibleImageWidth(  ) override;
 
     // The object is not visible an longer and should be destroyed
     virtual void Dispose(bool bRecursive, bool bCanSkipInvisible = true) override;
 
-    virtual sal_Int32 SAL_CALL getCaretPosition(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;//Shen Zhen Jie changed sal_Unicode to sal_uInt32
-    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getCharacterCount(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getSelectedText(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getSelectionStart(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getSelectionEnd(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getText(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCaretPosition(  ) override;
+    virtual sal_Bool SAL_CALL setCaretPosition( sal_Int32 nIndex ) override;
+    virtual sal_Unicode SAL_CALL getCharacter( sal_Int32 nIndex ) override;//Shen Zhen Jie changed sal_Unicode to sal_uInt32
+    virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL getCharacterAttributes( sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes ) override;
+    virtual css::awt::Rectangle SAL_CALL getCharacterBounds( sal_Int32 nIndex ) override;
+    virtual sal_Int32 SAL_CALL getCharacterCount(  ) override;
+    virtual sal_Int32 SAL_CALL getIndexAtPoint( const css::awt::Point& aPoint ) override;
+    virtual OUString SAL_CALL getSelectedText(  ) override;
+    virtual sal_Int32 SAL_CALL getSelectionStart(  ) override;
+    virtual sal_Int32 SAL_CALL getSelectionEnd(  ) override;
+    virtual sal_Bool SAL_CALL setSelection( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual OUString SAL_CALL getText(  ) override;
+    virtual OUString SAL_CALL getTextRange( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
+    virtual css::accessibility::TextSegment SAL_CALL getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+    virtual css::accessibility::TextSegment SAL_CALL getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+    virtual css::accessibility::TextSegment SAL_CALL getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) override;
+    virtual sal_Bool SAL_CALL copyText( sal_Int32 nStartIndex, sal_Int32 nEndIndex ) override;
 
     // XAccessibleHypertext
-    virtual sal_Int32 SAL_CALL getHyperLinkCount()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getHyperLinkCount() override;
     virtual css::uno::Reference< css::accessibility::XAccessibleHyperlink >
-    SAL_CALL getHyperLink( sal_Int32 nLinkIndex )
-    throw (css::lang::IndexOutOfBoundsException,
-            css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex )
-    throw (css::lang::IndexOutOfBoundsException,
-            css::uno::RuntimeException, std::exception) override;
+    SAL_CALL getHyperLink( sal_Int32 nLinkIndex ) override;
+    virtual sal_Int32 SAL_CALL getHyperLinkIndex( sal_Int32 nCharIndex ) override;
 
     SwAccessibleMap *GetAccessibleMap(){ return GetMap();}
 
 public:
     virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet> SAL_CALL
-        getAccessibleRelationSet()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleRelationSet() override;
 };
 
 #endif

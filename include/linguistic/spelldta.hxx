@@ -74,15 +74,15 @@ public:
     SpellAlternatives& operator=( const SpellAlternatives& ) = delete;
 
     // XSpellAlternatives
-    virtual OUString SAL_CALL getWord(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::lang::Locale SAL_CALL getLocale(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int16 SAL_CALL getFailureType(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int16 SAL_CALL getAlternativesCount(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAlternatives(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getWord(  ) override;
+    virtual css::lang::Locale SAL_CALL getLocale(  ) override;
+    virtual ::sal_Int16 SAL_CALL getFailureType(  ) override;
+    virtual ::sal_Int16 SAL_CALL getAlternativesCount(  ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getAlternatives(  ) override;
 
     // XSetSpellAlternatives
-    virtual void SAL_CALL setAlternatives( const css::uno::Sequence< OUString >& aAlternatives ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setAlternatives( const css::uno::Sequence< OUString >& aAlternatives ) override;
+    virtual void SAL_CALL setFailureType( ::sal_Int16 nFailureType ) override;
 
     // non-interface specific functions
     void    LNG_DLLPUBLIC SetWordLanguage(const OUString &rWord, sal_Int16 nLang);

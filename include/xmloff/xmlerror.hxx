@@ -132,8 +132,7 @@ public:
      * the given mask
      */
     /// @throws css::xml::sax::SAXParseException
-    void ThrowErrorAsSAXException( sal_Int32 nIdMask )
-        throw( css::xml::sax::SAXParseException );
+    void ThrowErrorAsSAXException( sal_Int32 nIdMask );
 };
 
 #endif

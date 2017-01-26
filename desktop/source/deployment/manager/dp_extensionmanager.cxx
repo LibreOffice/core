@@ -199,14 +199,12 @@ Reference<css::deployment::XPackageManager>  ExtensionManager::getBakRepository(
 }
 
 Reference<task::XAbortChannel> ExtensionManager::createAbortChannel()
-    throw (uno::RuntimeException, std::exception)
 {
     return new dp_misc::AbortChannel;
 }
 
 css::uno::Reference<css::deployment::XPackageManager>
 ExtensionManager::getPackageManager(OUString const & repository)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 {
     Reference<css::deployment::XPackageManager> xPackageManager;
     if (repository == "user")
@@ -311,11 +309,6 @@ ExtensionManager::getExtensionsWithSameIdentifier(
         OUString const & identifier,
         OUString const & fileName,
         Reference< ucb::XCommandEnvironment> const & xCmdEnv )
-        throw (
-            css::deployment::DeploymentException,
-            ucb::CommandFailedException,
-            lang::IllegalArgumentException,
-            uno::RuntimeException, std::exception)
 {
     try
     {
@@ -508,7 +501,6 @@ Reference<css::deployment::XPackage> ExtensionManager::backupExtension(
 //call to one of the repositories.
 uno::Sequence< Reference<css::deployment::XPackageTypeInfo> >
 ExtensionManager::getSupportedPackageTypes()
-    throw (uno::RuntimeException, std::exception)
 {
     return getUserRepository()->getSupportedPackageTypes();
 }
@@ -524,11 +516,6 @@ bool ExtensionManager::doChecksForAddExtension(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv,
     Reference<css::deployment::XPackage> & out_existingExtension )
-    throw (css::deployment::DeploymentException,
-           ucb::CommandFailedException,
-           ucb::CommandAbortedException,
-           lang::IllegalArgumentException,
-           uno::RuntimeException)
 {
     try
     {
@@ -619,11 +606,6 @@ Reference<css::deployment::XPackage> ExtensionManager::addExtension(
     OUString const & repository,
         Reference<task::XAbortChannel> const & xAbortChannel,
         Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-        throw (css::deployment::DeploymentException,
-               ucb::CommandFailedException,
-               ucb::CommandAbortedException,
-               lang::IllegalArgumentException,
-               uno::RuntimeException, std::exception)
 {
     Reference<css::deployment::XPackage> xNewExtension;
     //Determine the repository to use
@@ -829,11 +811,6 @@ void ExtensionManager::removeExtension(
     OUString const & repository,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (css::deployment::DeploymentException,
-           ucb::CommandFailedException,
-           ucb::CommandAbortedException,
-           lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     uno::Any excOccurred1;
     Reference<css::deployment::XPackage> xExtensionBackup;
@@ -929,11 +906,6 @@ void ExtensionManager::enableExtension(
     Reference<css::deployment::XPackage> const & extension,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
-    throw (css::deployment::DeploymentException,
-        ucb::CommandFailedException,
-        ucb::CommandAbortedException,
-        lang::IllegalArgumentException,
-        uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard guard(getMutex());
     bool bUserDisabled = false;
@@ -994,11 +966,6 @@ sal_Int32 ExtensionManager::checkPrerequisitesAndEnable(
     Reference<css::deployment::XPackage> const & extension,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
-    throw (css::deployment::DeploymentException,
-        ucb::CommandFailedException,
-        ucb::CommandAbortedException,
-        lang::IllegalArgumentException,
-        uno::RuntimeException, std::exception)
 {
     try
     {
@@ -1043,11 +1010,6 @@ void ExtensionManager::disableExtension(
     Reference<css::deployment::XPackage> const & extension,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (css::deployment::DeploymentException,
-           ucb::CommandFailedException,
-           ucb::CommandAbortedException,
-           lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard guard(getMutex());
     uno::Any excOccurred;
@@ -1106,11 +1068,6 @@ uno::Sequence< Reference<css::deployment::XPackage> >
     OUString const & repository,
     Reference<task::XAbortChannel> const &xAbort,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (css::deployment::DeploymentException,
-        ucb::CommandFailedException,
-        ucb::CommandAbortedException,
-        lang::IllegalArgumentException,
-        uno::RuntimeException, std::exception)
 {
     return getPackageManager(repository)->getDeployedPackages(
         xAbort, xCmdEnv);
@@ -1122,10 +1079,6 @@ Reference<css::deployment::XPackage>
     OUString const & identifier,
     OUString const & filename,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (css::deployment::DeploymentException,
-        ucb::CommandFailedException,
-        lang::IllegalArgumentException,
-        uno::RuntimeException, std::exception)
 {
     return getPackageManager(repository)->getDeployedPackage(
         identifier, filename, xCmdEnv);
@@ -1135,11 +1088,6 @@ uno::Sequence< uno::Sequence<Reference<css::deployment::XPackage> > >
     ExtensionManager::getAllExtensions(
     Reference<task::XAbortChannel> const & xAbort,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (css::deployment::DeploymentException,
-        ucb::CommandFailedException,
-        ucb::CommandAbortedException,
-        lang::IllegalArgumentException,
-        uno::RuntimeException, std::exception)
 {
     try
     {
@@ -1203,9 +1151,6 @@ void ExtensionManager::reinstallDeployedExtensions(
     sal_Bool force, OUString const & repository,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (css::deployment::DeploymentException,
-        ucb::CommandFailedException, ucb::CommandAbortedException,
-        lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -1282,11 +1227,6 @@ void ExtensionManager::reinstallDeployedExtensions(
 sal_Bool ExtensionManager::synchronize(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (css::deployment::DeploymentException,
-           ucb::CommandFailedException,
-           ucb::CommandAbortedException,
-           lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     try
     {
@@ -1423,8 +1363,6 @@ uno::Sequence<Reference<css::deployment::XPackage> > SAL_CALL
 ExtensionManager::getExtensionsWithUnacceptedLicenses(
         OUString const & repository,
         Reference<ucb::XCommandEnvironment> const & xCmdEnv)
-        throw (css::deployment::DeploymentException,
-               uno::RuntimeException, std::exception)
 {
     Reference<css::deployment::XPackageManager>
         xPackageManager = getPackageManager(repository);
@@ -1433,7 +1371,6 @@ ExtensionManager::getExtensionsWithUnacceptedLicenses(
 }
 
 sal_Bool ExtensionManager::isReadOnlyRepository(OUString const & repository)
-        throw (uno::RuntimeException, std::exception)
 {
     return getPackageManager(repository)->isReadOnly();
 }
@@ -1451,7 +1388,6 @@ sdecl::ServiceDecl const serviceDecl(
 
 void ExtensionManager::addModifyListener(
     Reference<util::XModifyListener> const & xListener )
-    throw (uno::RuntimeException, std::exception)
 {
      check();
      rBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
@@ -1460,7 +1396,6 @@ void ExtensionManager::addModifyListener(
 
 void ExtensionManager::removeModifyListener(
     Reference<util::XModifyListener> const & xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     check();
     rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );

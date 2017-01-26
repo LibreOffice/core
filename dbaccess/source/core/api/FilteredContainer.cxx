@@ -390,7 +390,7 @@ sal_Int32 createWildCardVector(Sequence< OUString >& _rTableFilter, ::std::vecto
         m_bConstructed      = false;
     }
 
-    void OFilteredContainer::impl_refresh() throw(RuntimeException)
+    void OFilteredContainer::impl_refresh()
     {
         if ( m_pRefreshListener )
         {

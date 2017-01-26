@@ -60,12 +60,10 @@ private:
     virtual ~Impl() override {}
 
     virtual void SAL_CALL initialize(
-        css::uno::Sequence< css::uno::Any > const & arguments)
-        throw (css::uno::Exception, std::exception) override;
+        css::uno::Sequence< css::uno::Any > const & arguments) override;
 };
 
 void Impl::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
-    throw (css::uno::Exception, std::exception)
 {
     bool arg0;
     ::sal_Int8 arg1 = sal_Int8();
@@ -193,25 +191,19 @@ private:
     virtual ~Impl2() override {}
 
     virtual void SAL_CALL initialize(
-        css::uno::Sequence< css::uno::Any > const & arguments)
-        throw (css::uno::Exception, std::exception) override;
+        css::uno::Sequence< css::uno::Any > const & arguments) override;
 
     //XMultiBase1
-    virtual double SAL_CALL getatt1()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setatt1( double _att1 )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL fn11( ::sal_Int32 arg )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL fn12( const OUString& arg )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual double SAL_CALL getatt1() override;
+    virtual void SAL_CALL setatt1( double _att1 ) override;
+    virtual ::sal_Int32 SAL_CALL fn11( ::sal_Int32 arg ) override;
+    virtual OUString SAL_CALL fn12( const OUString& arg ) override;
 
 
     double m_attr1;
 };
 
 void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
-    throw (css::uno::Exception, std::exception)
 {
     ttb::TestPolyStruct< css::uno::Type > arg0;
     ttb::TestPolyStruct< css::uno::Any > arg1;
@@ -394,24 +386,21 @@ void Impl2::initialize(css::uno::Sequence< css::uno::Any > const & arguments)
 
 //XMultiBase1
 double Impl2::getatt1()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return m_attr1;
 }
 
-void Impl2::setatt1( double _att1 )throw (css::uno::RuntimeException, std::exception)
+void Impl2::setatt1( double _att1 )
 {
     m_attr1 = _att1;
 }
 
 ::sal_Int32 Impl2::fn11( ::sal_Int32 arg )
-        throw (css::uno::RuntimeException, std::exception)
 {
     return 11 * arg;
 }
 
 OUString Impl2::fn12( const OUString& arg )
-        throw (css::uno::RuntimeException, std::exception)
 {
     return "12" + arg;
 }

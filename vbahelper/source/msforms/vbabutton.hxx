@@ -31,21 +31,21 @@ class VbaButton : public ButtonImpl_BASE
 public:
     VbaButton( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper  );
    // Attributes
-    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getCancel() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setCancel( sal_Bool bCancel ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getDefault() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefault( sal_Bool bDefault ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getBackColor() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getForeColor() throw (css::uno::RuntimeException) override;
-    virtual void SAL_CALL setForeColor( sal_Int32 nForeColor ) throw (css::uno::RuntimeException) override;
-    virtual sal_Bool SAL_CALL getLocked() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getCaption() override;
+    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
+    virtual sal_Bool SAL_CALL getAutoSize() override;
+    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) override;
+    virtual sal_Bool SAL_CALL getCancel() override;
+    virtual void SAL_CALL setCancel( sal_Bool bCancel ) override;
+    virtual sal_Bool SAL_CALL getDefault() override;
+    virtual void SAL_CALL setDefault( sal_Bool bDefault ) override;
+    virtual sal_Int32 SAL_CALL getBackColor() override;
+    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
+    virtual sal_Int32 SAL_CALL getForeColor() override;
+    virtual void SAL_CALL setForeColor( sal_Int32 nForeColor ) override;
+    virtual sal_Bool SAL_CALL getLocked() override;
+    virtual void SAL_CALL setLocked( sal_Bool bAutoSize ) override;
+    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
