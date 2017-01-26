@@ -47,9 +47,6 @@ namespace
         {
             return *m_pSvpGlyphCache;
         }
-        ~GlyphCacheHolder()
-        {
-        }
     };
 
     struct theGlyphCacheHolder :

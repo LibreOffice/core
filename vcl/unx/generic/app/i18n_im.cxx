@@ -54,7 +54,6 @@ class XKeyEventOp : public XKeyEvent
 
     public:
                         XKeyEventOp();
-                        ~XKeyEventOp();
 
         XKeyEventOp&    operator= (const XKeyEvent &rEvent);
         void            erase ();
@@ -77,10 +76,6 @@ XKeyEventOp::init()
 XKeyEventOp::XKeyEventOp()
 {
     init();
-}
-
-XKeyEventOp::~XKeyEventOp()
-{
 }
 
 XKeyEventOp&
