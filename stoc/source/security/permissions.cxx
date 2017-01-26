@@ -87,7 +87,7 @@ static inline OUString makeStrings(
         if (0x80000000 & mask)
         {
             buf.appendAscii( *strings );
-            if (mask << 1) // more items following
+            if ((mask << 1) != 0) // more items following
                 buf.append( ',' );
         }
         mask = (mask << 1);
