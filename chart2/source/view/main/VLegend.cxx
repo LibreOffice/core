@@ -877,7 +877,9 @@ void VLegend::createShapes(
             {
                 if (pLegendEntryProvider)
                 {
-                    std::vector< ViewLegendEntry > aNewEntries = pLegendEntryProvider->createLegendEntries( aMaxSymbolExtent, eExpansion, xLegendProp, xLegendContainer, m_xShapeFactory, m_xContext );
+                    std::vector<ViewLegendEntry> aNewEntries = pLegendEntryProvider->createLegendEntries(
+                                                                    aMaxSymbolExtent, eExpansion, xLegendProp,
+                                                                    xLegendContainer, m_xShapeFactory, m_xContext);
                     aViewEntries.insert( aViewEntries.end(), aNewEntries.begin(), aNewEntries.end() );
                 }
             }
