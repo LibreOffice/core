@@ -30,6 +30,7 @@
 #include "sc.hrc"
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/document/LinkUpdateModes.hpp>
 #include <cppuhelper/supportsservice.hxx>
 #include <formula/grammar.hxx>
 #include <sfx2/printer.hxx>
@@ -154,18 +155,36 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             aViewOpt.SetOption(VOPT_PAGEBREAKS, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
         else if ( aPropertyName == SC_UNONAME_LINKUPD )
         {
+            // XXX NOTE: this is the css::document::Settings property
+            // LinkUpdateMode, not the css::sheet::XGlobalSheetSettings
+            // attribute LinkUpdateMode.
             sal_Int16 n;
-            //TODO: css.sheet.XGlobalSheetSettings LinkUpdateMode property is
-            // documented to take values in the range 0--2 (always, never, on
-            // demand), but appears to be routinely set to 3 here,
-            // corresponding to ScLkUpdMode LM_UNKNOWN:
-            if (!(aValue >>= n) || n < 0 || n > 3) {
+            if (!(aValue >>= n) || n < css::document::LinkUpdateModes::NEVER ||
+                    n > css::document::LinkUpdateModes::GLOBAL_SETTING)
+            {
                 throw css::lang::IllegalArgumentException(
-                    ("LinkUpdateMode property value must be a SHORT in the"
-                     " range 0--3"),
+                    ("LinkUpdateMode property value must be a SHORT with a value in"
+                     " the range of the css::document::LinkUpdateModes constants"),
                     css::uno::Reference<css::uno::XInterface>(), -1);
             }
-            rDoc.SetLinkMode( static_cast<ScLkUpdMode>(n) );
+            ScLkUpdMode eMode;
+            switch (n)
+            {
+                case css::document::LinkUpdateModes::NEVER:
+                    eMode = LM_NEVER;
+                break;
+                case css::document::LinkUpdateModes::MANUAL:
+                    eMode = LM_ON_DEMAND;
+                break;
+                case css::document::LinkUpdateModes::AUTO:
+                    eMode = LM_ALWAYS;
+                break;
+                case css::document::LinkUpdateModes::GLOBAL_SETTING:
+                default:
+                    eMode = SC_MOD()->GetAppOptions().GetLinkMode();
+                break;
+            }
+            rDoc.SetLinkMode( eMode );
         }
         else if ( aPropertyName == SC_UNO_COLROWHDR )
             aViewOpt.SetOption(VOPT_HEADER, ScUnoHelpFunctions::GetBoolFromAny( aValue ) );
@@ -385,7 +404,26 @@ uno::Any SAL_CALL ScDocumentConfiguration::getPropertyValue( const OUString& aPr
         else if ( aPropertyName == SC_UNO_SHOWPAGEBR )
             aRet <<= aViewOpt.GetOption( VOPT_PAGEBREAKS );
         else if ( aPropertyName == SC_UNONAME_LINKUPD )
-            aRet <<= static_cast<sal_Int16> ( rDoc.GetLinkMode() );
+        {
+            sal_Int16 nLUM;
+            switch (rDoc.GetLinkMode())
+            {
+                case LM_ALWAYS:
+                    nLUM = css::document::LinkUpdateModes::AUTO;
+                break;
+                case LM_NEVER:
+                    nLUM = css::document::LinkUpdateModes::NEVER;
+                break;
+                case LM_ON_DEMAND:
+                    nLUM = css::document::LinkUpdateModes::MANUAL;
+                break;
+                case LM_UNKNOWN:
+                default:
+                    nLUM = css::document::LinkUpdateModes::GLOBAL_SETTING;
+                break;
+            }
+            aRet <<= nLUM;
+        }
         else if ( aPropertyName == SC_UNO_COLROWHDR )
             aRet <<= aViewOpt.GetOption( VOPT_HEADER );
         else if ( aPropertyName == SC_UNO_SHEETTABS )
