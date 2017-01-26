@@ -543,7 +543,6 @@ private:
 public:
 
                             UnoCheckBoxControl();
-                            virtual ~UnoCheckBoxControl() override {}
     OUString         GetComponentServiceName() override;
 
     void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException, std::exception) override;

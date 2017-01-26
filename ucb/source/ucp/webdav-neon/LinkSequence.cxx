@@ -45,7 +45,6 @@ struct LinkSequenceParseContext
 
     LinkSequenceParseContext()
     : pLink( nullptr ), hasSource( false ), hasDestination( false ) {}
-    ~LinkSequenceParseContext() {}
 };
 
 #define STATE_TOP (1)

@@ -40,9 +40,6 @@ public:
         : msPassword(sPassword)
     {}
 
-    virtual ~TestInteractionHandler() override
-    {}
-
     bool wasPasswordRequested()
     {
         return mbPasswordRequested;

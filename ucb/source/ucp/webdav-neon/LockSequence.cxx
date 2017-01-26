@@ -48,8 +48,6 @@ struct LockSequenceParseContext
     LockSequenceParseContext()
     : pLock( nullptr ), hasLockScope( false ), hasLockType( false ),
       hasDepth( false ), hasHREF( false ), hasTimeout( false ) {}
-
-    ~LockSequenceParseContext() {}
 };
 
 #define STATE_TOP (1)

@@ -84,8 +84,6 @@ public:
     /** constructs a reference from another reference */
     inline WeakReference( WeakReference< reference_type >&& rWeakRef );
 
-    inline ~WeakReference();
-
     /** returns true if the reference object is not null and still alive */
     inline bool is() const;
 

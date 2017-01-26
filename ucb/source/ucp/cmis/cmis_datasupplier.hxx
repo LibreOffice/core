@@ -29,10 +29,6 @@ namespace cmis
         explicit ResultListEntry( css::uno::Reference< css::ucb::XContent > const & xCnt ) : xContent( xCnt )
         {
         }
-
-        ~ResultListEntry()
-        {
-        }
     };
 
     typedef std::vector< ResultListEntry* > ResultList;
