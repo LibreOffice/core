@@ -189,6 +189,7 @@ certain functionality.
 @section Filter
 
 @li @c filter.config
+@li @c filter.eps
 @li @c filter.ms - escher import/export
 @li @c filter.odfflatxml
 @li @c filter.os2met
