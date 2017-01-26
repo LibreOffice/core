@@ -76,19 +76,31 @@ class GbuildParser:
 
 
     def parse(self):
+        # current json blacklist, this is just for reference:
+        #      bridges
+        #      connectivity compilerplugins cli_ure cppu cppuhelper cpputools
+        #      dictionaries
+        #      extensions external
+        #      helpcompiler helpcontent2
+        #      i18npool icon-themes
+        #      javaunohelper jurt
+        #      lingucomponent
+        #      odk
+        #      sal scaddins shell solenv stoc
+        #      tools translations
+        #      udkapi unoid
+        # Add handling of BLACKLIST
         # Relation between json object and file extension
         jsonSrc = {
-                   'CXXOBJECTS':    '.cxx',
+                   'CXXOBJECTS': '.cxx', 'OBJCOBJECTS': '.m', 'OBJCXXOBJECTS': '.mm', 'COBJECTS': '.c',
+
                    'GENCXXOBJECTS': '.cxx', # remark is in workdir/GenCxxObject
-                   'OBJCOBJECTS':   '.m',
-                   'OBJCXXOBJECTS': '.mm',
-                   'ASMOBJECTS': '.s',
-                   'YACCOBJECTS': '.y',
-                   'GENCOBJECTS': '.c',
-                   'COBJECTS':      '.c',
-                   'FLEXOBJECTS': '.l',
-                   'JAVAOBJECTS': '.java',
-                   'PYTHONOBJECTS': '.py'
+                   'ASMOBJECTS': '.s',      #not in json, due to Blacklist ?
+                   'YACCOBJECTS': '.y',     #not in json, due to Blacklist ?
+                   'GENCOBJECTS': '.c',     #not in json, due to Blacklist ?
+                   'LEXOBJECTS': '.l',      #not in json, due to add_scanners
+                   'JAVAOBJECTS': '.java',  #not in json, due to Blacklist ?
+                   'PYTHONOBJECTS': '.py'   #not in json, due to Blacklist ?
                   }
 
 

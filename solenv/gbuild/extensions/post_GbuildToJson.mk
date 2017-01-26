@@ -14,7 +14,7 @@
 #   --ASMOBJECTS
 #   --GENCOBJECTS
 #   --YACCOBJECTS
-#   --FLEXOBJECTS
+#   --LEXOBJECTS
 #   --JAVAOBJECTS
 #   --PYTHONOBJECTS
 #
@@ -56,10 +56,10 @@ $(call gb_Executable_get_command,gbuildtojson) \
 --objcobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(OBJCOBJECTS)) \
 --objcxxobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(OBJCXXOBJECTS)) \
 --asmobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(ASMOBJECTS)) \
+--lexobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(LEXOBJECTS)) \
 --gencobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(GENCOBJECTS)) \
 --gencxxobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(GENCXXOBJECTS)) \
 --cobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(COBJECTS)) \
---flexobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(FLEXOBJECTS)) \
 --javaobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(JAVAOBJECTS)) \
 --pythonobjects=$(call var2file,$(shell $(gb_MKTEMP)),100,$(PYTHONOBJECTS)) \
 --cflags=$(call var2file,$(shell $(gb_MKTEMP)),100,$(T_CFLAGS)) \
@@ -119,11 +119,14 @@ define gb_LinkTarget_add_objcxxobject
 $(call gb_LinkTarget_get_target,$(1)) : OBJCXXOBJECTS += $(2)
 
 endef
+define gb_LinkTarget_add_scanners
+$(call gb_LinkTarget_get_target,$(1)) : LEXOBJECTS += $(2)
+
+endef
 gb_LinkTarget_use_package =
 gb_LinkTarget_use_generated_package =
 gb_LinkTarget_add_sdi_headers =
 gb_LinkTarget_use_external_project =
-gb_LinkTarget_add_scanners =
 gb_LinkTarget_add_grammars =
 gb_LinkTarget__check_srcdir_paths =
 gb_LinkTarget__command_objectlist = @true
