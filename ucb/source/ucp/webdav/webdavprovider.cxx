@@ -37,17 +37,14 @@ using namespace http_dav_ucp;
 ContentProvider::ContentProvider(
                 const uno::Reference< uno::XComponentContext >& rContext )
 : ::ucbhelper::ContentProviderImplHelper( rContext ),
-  m_xDAVSessionFactory( new DAVSessionFactory() ),
-  m_pProps( nullptr )
+  m_xDAVSessionFactory( new DAVSessionFactory() )
 {
 }
 
 
 // virtual
 ContentProvider::~ContentProvider()
-{
-    delete m_pProps;
-}
+{}
 
 
 // XInterface methods.

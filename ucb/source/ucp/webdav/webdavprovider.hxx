@@ -21,6 +21,10 @@
 #ifndef INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVPROVIDER_HXX
 #define INCLUDED_UCB_SOURCE_UCP_WEBDAV_WEBDAVPROVIDER_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <rtl/ref.hxx>
 #include <com/sun/star/beans/Property.hpp>
 #include "DAVSessionFactory.hxx"
@@ -62,7 +66,7 @@ namespace http_dav_ucp {
 class ContentProvider : public ::ucbhelper::ContentProviderImplHelper
 {
     rtl::Reference< DAVSessionFactory > m_xDAVSessionFactory;
-    PropertyMap * m_pProps;
+    std::unique_ptr<PropertyMap> m_pProps;
 
 public:
     explicit ContentProvider( const css::uno::Reference< css::uno::XComponentContext >& rContext );
