@@ -794,6 +794,12 @@ namespace cairocanvas
 
                             aScaledTextureMatrix.x0 = basegfx::fround( aScaledTextureMatrix.x0 );
                             aScaledTextureMatrix.y0 = basegfx::fround( aScaledTextureMatrix.y0 );
+
+                            double x1, y1, x2, y2;
+                            cairo_path_extents(pCairo, &x1, &y1, &x2, &y2);
+                            aScaledTextureMatrix.x0 -= (x1 * aScaledTextureMatrix.xx);
+                            aScaledTextureMatrix.y0 -= (y1 * aScaledTextureMatrix.yy);
+
                             cairo_pattern_set_matrix( pPattern, &aScaledTextureMatrix );
 
                             cairo_set_source( pCairo, pPattern );
