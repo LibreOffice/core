@@ -69,8 +69,6 @@ ScPivotLayoutDialog::ScPivotLayoutDialog(
                             ScViewData* pViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable) :
     ScAnyRefDlg           (pSfxBindings, pChildWindow, pParent, "PivotTableLayout", "modules/scalc/ui/pivottablelayoutdialog.ui"),
     maPivotTableObject    (*pPivotTableObject),
-    mpPreviouslyFocusedListBox(nullptr),
-    mpCurrentlyFocusedListBox(nullptr),
     mpViewData            (pViewData),
     mpDocument            (pViewData->GetDocument()),
     mbNewPivotTable       (bNewPivotTable),
@@ -188,8 +186,6 @@ ScPivotLayoutDialog::~ScPivotLayoutDialog()
 
 void ScPivotLayoutDialog::dispose()
 {
-    mpPreviouslyFocusedListBox.clear();
-    mpCurrentlyFocusedListBox.clear();
     mpListBoxField.clear();
     mpListBoxPage.clear();
     mpListBoxColumn.clear();
@@ -715,6 +711,19 @@ void ScPivotLayoutDialog::ToggleDestination()
     mpDestinationListBox->Enable(bNamedRange);
     mpDestinationButton->Enable(bSelection);
     mpDestinationEdit->Enable(bSelection);
+}
+
+ScPivotLayoutTreeListBase* ScPivotLayoutDialog::FindListBoxFor(SvTreeListEntry *pEntry)
+{
+    if (mpListBoxPage->HasEntry(pEntry))
+        return mpListBoxPage.get();
+    if (mpListBoxColumn->HasEntry(pEntry))
+        return mpListBoxColumn.get();
+    if (mpListBoxRow->HasEntry(pEntry))
+        return mpListBoxRow.get();
+    if (mpListBoxData->HasEntry(pEntry))
+        return mpListBoxData.get();
+    return nullptr;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -124,27 +124,4 @@ void ScPivotLayoutTreeListBase::RemoveEntryForItem(ScItemValue* pItemValue)
     }
 }
 
-void ScPivotLayoutTreeListBase::GetFocus()
-{
-    SvTreeListBox::GetFocus();
-
-    if( GetGetFocusFlags() & GetFocusFlags::Mnemonic )
-    {
-        SvTreeListEntry* pEntry = mpParent->mpPreviouslyFocusedListBox->GetCurEntry();
-        if (pEntry)
-            InsertEntryForSourceTarget(pEntry, nullptr);
-
-        if (mpParent->mpPreviouslyFocusedListBox != nullptr)
-            mpParent->mpPreviouslyFocusedListBox->GrabFocus();
-    }
-
-    mpParent->mpCurrentlyFocusedListBox = this;
-}
-
-void ScPivotLayoutTreeListBase::LoseFocus()
-{
-    SvTreeListBox::LoseFocus();
-    if (mpParent)
-        mpParent->mpPreviouslyFocusedListBox = this;
-}
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

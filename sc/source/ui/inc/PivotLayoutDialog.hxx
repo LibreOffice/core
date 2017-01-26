@@ -42,9 +42,6 @@ class ScPivotLayoutDialog : public ScAnyRefDlg
 public:
     ScDPObject maPivotTableObject;
 
-    VclPtr<ScPivotLayoutTreeListBase> mpPreviouslyFocusedListBox;
-    VclPtr<ScPivotLayoutTreeListBase> mpCurrentlyFocusedListBox;
-
 private:
     ScViewData* mpViewData;
     ScDocument* mpDocument;
@@ -132,6 +129,8 @@ public:
     ScDPLabelData& GetLabelData(SCCOL nColumn);
     ScDPLabelDataVector& GetLabelDataVector() { return maPivotParameters.maLabelArray;}
     void PushDataFieldNames(std::vector<ScDPName>& rDataFieldNames);
+
+    ScPivotLayoutTreeListBase* FindListBoxFor(SvTreeListEntry *pEntry);
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
