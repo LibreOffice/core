@@ -723,8 +723,21 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             //these numbers can be mixed randomly together with separators pre- and suffixes
             //the Writer supports only a number of upper levels to show, separators is always a dot
             //and each level can have a prefix and a suffix
-            if(pCurrentLvl.get())
-                pCurrentLvl->SetBulletChar( rVal.getString() );
+            if(pCurrentLvl.get(){
+
+                OUString aString = rVal.getString();
+
+                //if the BulletChar is a soft-hyphen (173u)
+                //replace it with a hard-hyphen (45u)
+                //-> this fixes missing hyphen export in PDF etc.
+                if(!aString.isEmpty() && aString.pData->buffer[0] == 173u)
+                {
+                aString.pData->buffer[0] = 45u;
+                }
+
+                pCurrentLvl->SetBulletChar( aString );
+
+            }
         }
         break;
         case NS_ooxml::LN_CT_Lvl_start:
