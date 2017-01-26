@@ -46,7 +46,7 @@ bool BaseCheckNotTestFixtureSubclass(
 #endif
     )
 {
-    if (BaseDefinition->getQualifiedNameAsString().compare("CppUnit::TestFixture") == 0) {
+    if (loplugin::TypeCheck(BaseDefinition).Class("TestFixture").Namespace("CppUnit").GlobalNamespace()) {
         return false;
     }
     return true;
