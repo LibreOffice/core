@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_884960d3",
+        "filename": "vcl/source/gdi/svmconverter.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 922,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-26T12:35:09Z",
+      "side": 1,
+      "message": "apparently this has the effect of creating a meta-action with an array consisting of uninitialized memory - i think it\u0027s better to reset nLen to 0 here to avoid that.\n\nideally we\u0027d throw an exception on such invalid input, but i guess that\u0027s not practically possible in this old code.",
+      "revId": "b737a51632fb1f5cee1e08910cc05d933baa2667",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
