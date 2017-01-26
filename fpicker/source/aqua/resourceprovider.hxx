@@ -21,6 +21,10 @@
 #ifndef INCLUDED_FPICKER_SOURCE_AQUA_RESOURCEPROVIDER_HXX
 #define INCLUDED_FPICKER_SOURCE_AQUA_RESOURCEPROVIDER_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <sal/types.h>
 
 #include <premac.h>
@@ -45,7 +49,7 @@ public:
     NSString* getResString( sal_Int32 aId );
 
 private:
-    CResourceProvider_Impl* m_pImpl;
+    std::unique_ptr<CResourceProvider_Impl> m_pImpl;
 };
 
 #endif

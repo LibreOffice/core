@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <sal/config.h>
+
+#include <o3tl/make_unique.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
 #include <osl/mutex.hxx>
@@ -155,14 +158,12 @@ public:
 };
 
 CResourceProvider::CResourceProvider( ) :
-    m_pImpl( new CResourceProvider_Impl() )
+    m_pImpl( o3tl::make_unique<CResourceProvider_Impl>() )
 {
 }
 
 CResourceProvider::~CResourceProvider( )
-{
-    delete m_pImpl;
-}
+{}
 
 NSString* CResourceProvider::getResString( sal_Int32 aId )
 {
