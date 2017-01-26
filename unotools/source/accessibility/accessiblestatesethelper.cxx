@@ -34,7 +34,6 @@ class AccessibleStateSetHelperImpl
 public:
     AccessibleStateSetHelperImpl();
     AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl);
-    ~AccessibleStateSetHelperImpl();
 
     /// @throws uno::RuntimeException
     bool IsEmpty () const
@@ -65,10 +64,6 @@ AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl()
 
 AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl)
     : maStates(rImpl.maStates)
-{
-}
-
-AccessibleStateSetHelperImpl::~AccessibleStateSetHelperImpl()
 {
 }
 

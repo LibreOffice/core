@@ -186,8 +186,6 @@ public:
     inline VclContainerListenerMultiplexer&     getContainerListeners()     { return maContainerListeners; }
     inline TopWindowListenerMultiplexer&        getTopWindowListeners()     { return maTopWindowListeners; }
 
-    ~VCLXWindowImpl();
-
 private:
     DECL_LINK( OnProcessCallbacks, void*, void );
 };
@@ -222,11 +220,6 @@ VCLXWindowImpl::VCLXWindowImpl( VCLXWindow& _rAntiImpl, bool _bWithDefaultProps 
     ,mpPropHelper( nullptr )
 {
 }
-
-VCLXWindowImpl::~VCLXWindowImpl()
-{
-}
-
 
 void VCLXWindowImpl::disposing()
 {

@@ -44,7 +44,6 @@ struct LockEntrySequenceParseContext
 
     LockEntrySequenceParseContext()
     : pEntry( nullptr ), hasScope( false ), hasType( false ) {}
-    ~LockEntrySequenceParseContext() { }
 };
 
 #define STATE_TOP (1)

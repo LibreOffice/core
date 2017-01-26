@@ -41,9 +41,6 @@ public:
         , mbPasswordRequested(false)
     {}
 
-    virtual ~TestInteractionHandler() override
-    {}
-
     bool wasPasswordRequested()
     {
         return mbPasswordRequested;
