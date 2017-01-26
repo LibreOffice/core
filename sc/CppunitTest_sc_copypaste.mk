@@ -105,7 +105,6 @@ $(eval $(call gb_CppunitTest_use_components,sc_copypaste,\
     uui/util/uui \
     xmloff/util/xo \
     xmlsecurity/util/xmlsecurity \
-    xmlsecurity/util/xsec_fw \
 ))
 
 ifeq ($(OS),WNT)

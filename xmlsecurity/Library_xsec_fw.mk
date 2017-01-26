@@ -9,8 +9,6 @@
 
 $(eval $(call gb_Library_Library,xsec_fw))
 
-$(eval $(call gb_Library_set_componentfile,xsec_fw,xmlsecurity/util/xsec_fw))
-
 $(eval $(call gb_Library_set_include,xsec_fw,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/xmlsecurity/inc \
