@@ -461,9 +461,7 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/crypto,\
 	NSSInitializer \
 	SecurityEnvironment \
 	SEInitializer \
-	XMLEncryptionTemplate \
 	XMLSecurityContext \
-	XMLSignatureTemplate \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,offapi,com/sun/star/xml/dom,\
 	DocumentBuilder \
@@ -1594,13 +1592,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/xml,\
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/xml/crypto,\
 	XMLEncryption \
 	XMLSignature \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/xml/crypto/sax,\
-	Decryptor \
-	Encryptor \
-	SAXEventKeeper \
-	SignatureCreator \
-	SignatureVerifier \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,com/sun/star/xml/input,\
 	SaxDocumentHandler \
