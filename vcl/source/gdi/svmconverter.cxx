@@ -921,7 +921,6 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             sal_Int32 nStrLen( aStr.getLength() );
 
                             nDXAryLen = std::max(nAryLen, nStrLen);
-                            pDXAry.reset(new long[nDXAryLen]);
 
                             if (nDXAryLen < nLen)
                             {
@@ -934,6 +933,8 @@ void SVMConverter::ImplConvertFromSVM1( SvStream& rIStm, GDIMetaFile& rMtf )
                             }
                             else
                             {
+                                pDXAry.reset(new long[nDXAryLen]);
+
                                 for (sal_Int32 j = 0; j < nAryLen; ++j)
                                     rIStm.ReadInt32( nTmp ), pDXAry[ j ] = nTmp;
 
