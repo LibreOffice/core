@@ -223,10 +223,13 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_createJNI
         case CREATED:
             osl_closePipe(npipe);
             osl_releasePipe(npipe);
+            /* fall through */
         case GOTNAME:
             rtl_uString_release(pname);
+            /* fall through */
         case INMONITOR:
             (*env)->MonitorExit(env, obj_this);
+            /* fall through */
         case START:
             osl_freeSecurityHandle(psec);
         default:
@@ -530,6 +533,7 @@ JNICALL Java_com_sun_star_lib_connections_pipe_PipeConnection_writeJNI
     {
         case GOTBUFFER:
             (*env)->ReleaseByteArrayElements(env, buffer, nbuff, JNI_ABORT);
+            /* fall through */
         case INMONITOR:
             (*env)->MonitorExit(env, obj_this);
         case START:
