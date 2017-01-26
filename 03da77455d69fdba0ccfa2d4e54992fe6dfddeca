@@ -16,6 +16,23 @@
       "revId": "03da77455d69fdba0ccfa2d4e54992fe6dfddeca",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_e84e6c95",
+        "filename": "writerfilter/source/dmapper/NumberingManager.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 735,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2017-01-26T14:35:28Z",
+      "side": 1,
+      "message": "Missing indentation.",
+      "revId": "03da77455d69fdba0ccfa2d4e54992fe6dfddeca",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
     }
   ]
 }
