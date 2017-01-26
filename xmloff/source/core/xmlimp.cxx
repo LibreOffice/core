@@ -226,9 +226,6 @@ public:
         }
     }
 
-    ~DocumentInfo()
-    {}
-
     sal_uInt16 getGeneratorVersion() const
     {
         return mnGeneratorVersion;
@@ -287,10 +284,6 @@ public:
     {
         SAL_WARN_IF(!mxComponentContext.is(), "xmloff.core", "SvXMLImport: no ComponentContext");
         if (!mxComponentContext.is()) throw uno::RuntimeException();
-    }
-
-    ~SvXMLImport_Impl()
-    {
     }
 
     sal_uInt16 getGeneratorVersion( const SvXMLImport& rImport )

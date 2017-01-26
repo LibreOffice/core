@@ -235,6 +235,7 @@ public:
         return static_cast<SvXMLShapeContext*>(xContext.get())->getShape();
     }
 };
+
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

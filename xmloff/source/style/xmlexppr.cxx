@@ -184,7 +184,6 @@ class FilterPropertiesInfo_Impl
 
 public:
     FilterPropertiesInfo_Impl();
-    ~FilterPropertiesInfo_Impl();
 
     void AddProperty(const OUString& rApiName, const sal_uInt32 nIndex);
     const uno::Sequence<OUString>& GetApiNames();
@@ -202,10 +201,6 @@ FilterPropertiesInfo_Impl::FilterPropertiesInfo_Impl() :
     pApiNames( nullptr )
 {
     aLastItr = aPropInfos.begin();
-}
-
-FilterPropertiesInfo_Impl::~FilterPropertiesInfo_Impl()
-{
 }
 
 void FilterPropertiesInfo_Impl::AddProperty(

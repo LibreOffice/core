@@ -48,7 +48,6 @@ class CertificateContainer : public ::cppu::WeakImplHelper< css::lang::XServiceI
     public:
 
         explicit CertificateContainer(const css::uno::Reference< css::lang::XMultiServiceFactory >& ) {}
-        virtual ~CertificateContainer() override {}
 
         virtual sal_Bool SAL_CALL addCertificate( const OUString & url, const OUString & certificate_name, sal_Bool trust ) override;
         virtual css::security::CertificateContainerStatus SAL_CALL hasCertificate( const OUString & url, const OUString & certificate_name ) override;

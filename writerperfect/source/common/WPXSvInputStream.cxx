@@ -401,7 +401,6 @@ class WPXSvInputStreamImpl
 public:
     explicit WPXSvInputStreamImpl(css::uno::Reference<
                                   css::io::XInputStream > const &xStream);
-    ~WPXSvInputStreamImpl();
 
     bool isStructured();
     unsigned subStreamCount();
@@ -476,10 +475,6 @@ WPXSvInputStreamImpl::WPXSvInputStreamImpl(Reference< XInputStream > const &xStr
             }
         }
     }
-}
-
-WPXSvInputStreamImpl::~WPXSvInputStreamImpl()
-{
 }
 
 const unsigned char *WPXSvInputStreamImpl::read(unsigned long numBytes, unsigned long &numBytesRead)

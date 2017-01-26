@@ -264,7 +264,6 @@ public:
     typedef std::shared_ptr<TableData> Pointer_t;
 
     explicit TableData(unsigned int nDepth) : mnDepth(nDepth) { newRow(); }
-    ~TableData() {}
 
     /**
        End the current row.
