@@ -40,7 +40,6 @@ public:
     inline SwTextGuess(): pHanging( nullptr ), nCutPos(0), nBreakStart(0),
                         nBreakPos(0), nFieldDiff(0), nBreakWidth(0)
         { }
-    ~SwTextGuess() {}
 
     // true, if current portion still fits to current line
     bool Guess( const SwTextPortion& rPor, SwTextFormatInfo &rInf,

@@ -215,15 +215,9 @@ struct SwHTMLTextCollOutputInfo
         bOutDiv( false )
     {}
 
-    ~SwHTMLTextCollOutputInfo();
-
     bool HasParaToken() const { return aToken.getLength()==1 && aToken[0]=='P'; }
     bool ShouldOutputToken() const { return bOutPara || !HasParaToken(); }
 };
-
-SwHTMLTextCollOutputInfo::~SwHTMLTextCollOutputInfo()
-{
-}
 
 SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTemplate,
                               bool bOutStyles,
@@ -1030,7 +1024,6 @@ class HTMLStartEndPos
 public:
 
     HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt, sal_Int32 nE );
-    ~HTMLStartEndPos();
 
     const SfxPoolItem *GetItem() const { return pItem.get(); }
 
@@ -1047,10 +1040,6 @@ HTMLStartEndPos::HTMLStartEndPos( const SfxPoolItem& rItem, sal_Int32 nStt,
     nEnd( nE ),
     pItem( rItem.Clone() )
 {}
-
-HTMLStartEndPos::~HTMLStartEndPos()
-{
-}
 
 typedef std::vector<HTMLStartEndPos *> HTMLStartEndPositions;
 

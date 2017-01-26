@@ -252,7 +252,6 @@ struct SwCursor_SavePos final
         nContent( rCursor.GetPoint()->nContent.GetIndex() ),
         pNext( nullptr )
     {}
-    ~SwCursor_SavePos() {}
 
     DECL_FIXEDMEMPOOL_NEWDEL( SwCursor_SavePos )
 };

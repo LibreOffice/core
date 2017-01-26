@@ -36,7 +36,6 @@ private:
 public:
     /// @throws css::uno::RuntimeException
     SwVbaTablesOfContents( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextDocument >& xDoc ) throw ( css::uno::RuntimeException );
-    virtual ~SwVbaTablesOfContents() override {}
 
     // Methods
     virtual css::uno::Reference< ::ooo::vba::word::XTableOfContents > SAL_CALL Add( const css::uno::Reference< ::ooo::vba::word::XRange >& Range, const css::uno::Any& UseHeadingStyles, const css::uno::Any& UpperHeadingLevel, const css::uno::Any& LowerHeadingLevel, const css::uno::Any& UseFields, const css::uno::Any& TableID, const css::uno::Any& RightAlignPageNumbers, const css::uno::Any& IncludePageNumbers, const css::uno::Any& AddedStyles, const css::uno::Any& UseHyperlinks, const css::uno::Any& HidePageNumbersInWeb, const css::uno::Any& UseOutlineLevels ) throw (css::uno::RuntimeException, std::exception) override;

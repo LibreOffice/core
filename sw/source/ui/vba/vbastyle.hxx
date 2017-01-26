@@ -39,7 +39,6 @@ public:
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
     SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
-    virtual ~SwVbaStyle() override {}
 
     /// @throws css::uno::RuntimeException
     static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const css::uno::Any& xStyle ) throw (css::uno::RuntimeException);

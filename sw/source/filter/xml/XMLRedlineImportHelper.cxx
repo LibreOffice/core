@@ -83,7 +83,6 @@ class XTextRangeOrNodeIndexPosition
 
 public:
     XTextRangeOrNodeIndexPosition();
-    ~XTextRangeOrNodeIndexPosition();
 
     void Set( Reference<XTextRange> & rRange );
     void Set( SwNodeIndex& rIndex );
@@ -98,10 +97,6 @@ public:
 XTextRangeOrNodeIndexPosition::XTextRangeOrNodeIndexPosition() :
     xRange(nullptr),
     pIndex(nullptr)
-{
-}
-
-XTextRangeOrNodeIndexPosition::~XTextRangeOrNodeIndexPosition()
 {
 }
 

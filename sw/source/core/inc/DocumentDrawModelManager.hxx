@@ -61,8 +61,6 @@ public:
 
     virtual bool Search(const SwPaM& rPaM, const SvxSearchItem& rSearchItem) override;
 
-    virtual ~DocumentDrawModelManager() override {}
-
 private:
 
     DocumentDrawModelManager(DocumentDrawModelManager const&) = delete;

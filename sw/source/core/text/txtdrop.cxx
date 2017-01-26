@@ -648,7 +648,6 @@ class SwDropCapCache
     sal_uInt16 nIndex;
 public:
     SwDropCapCache();
-    ~SwDropCapCache(){}
     void CalcFontSize( SwDropPortion* pDrop, SwTextFormatInfo &rInf );
 };
 

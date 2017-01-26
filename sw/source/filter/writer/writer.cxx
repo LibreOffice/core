@@ -68,7 +68,6 @@ struct Writer_Impl
     SwBookmarkNodeTable aBkmkNodePos;
 
     Writer_Impl();
-    ~Writer_Impl();
 
     void RemoveFontList( SwDoc& rDoc );
     void InsertBkmk( const ::sw::mark::IMark& rBkmk );
@@ -76,10 +75,6 @@ struct Writer_Impl
 
 Writer_Impl::Writer_Impl()
     : m_pStream(nullptr)
-{
-}
-
-Writer_Impl::~Writer_Impl()
 {
 }
 

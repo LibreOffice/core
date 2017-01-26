@@ -303,7 +303,6 @@ public:
     SwXMLTableRow_Impl( const OUString& rStyleName, sal_uInt32 nCells,
                         const OUString *pDfltCellStyleName = nullptr,
                         const OUString& i_rXmlId = OUString() );
-    ~SwXMLTableRow_Impl() {}
 
     inline SwXMLTableCell_Impl *GetCell( sal_uInt32 nCol );
 

@@ -1115,8 +1115,6 @@ public:
     explicit SwStyleProperties_Impl(const SfxItemPropertyMap& rMap)
         : aPropertyEntries(rMap.getPropertyEntries())
     { }
-    ~SwStyleProperties_Impl()
-    { }
 
     bool AllowsKey(const OUString& rName)
     {

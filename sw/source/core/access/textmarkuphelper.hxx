@@ -39,7 +39,6 @@ class SwTextMarkupHelper
                             const SwTextNode& rTextNode );
         SwTextMarkupHelper( const SwAccessiblePortionData& rPortionData,
                             const SwWrongList& rTextMarkupList ); // #i108125#
-        ~SwTextMarkupHelper() {}
 
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
