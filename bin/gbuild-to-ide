@@ -92,15 +92,14 @@ class GbuildParser:
         # Add handling of BLACKLIST
         # Relation between json object and file extension
         jsonSrc = {
-                   'CXXOBJECTS': '.cxx', 'OBJCOBJECTS': '.m', 'OBJCXXOBJECTS': '.mm', 'COBJECTS': '.c',
+                    'CXXOBJECTS': '.cxx', 'OBJCOBJECTS': '.m', 'OBJCXXOBJECTS': '.mm', 'COBJECTS': '.c',
+                    'LEXOBJECTS': '.l',   'YACCOBJECTS': '.y',
 
-                   'GENCXXOBJECTS': '.cxx', # remark is in workdir/GenCxxObject
-                   'ASMOBJECTS': '.s',      #not in json, due to Blacklist ?
-                   'YACCOBJECTS': '.y',     #not in json, due to Blacklist ?
-                   'GENCOBJECTS': '.c',     #not in json, due to Blacklist ?
-                   'LEXOBJECTS': '.l',      #not in json, due to add_scanners
-                   'JAVAOBJECTS': '.java',  #not in json, due to Blacklist ?
-                   'PYTHONOBJECTS': '.py'   #not in json, due to Blacklist ?
+                    'GENCXXOBJECTS': '.cxx', # remark is in workdir/GenCxxObject
+                    'ASMOBJECTS': '.s',      #not in json, due to Blacklist ?
+                    'GENCOBJECTS': '.c',     #not in json, due to Blacklist ?
+                    'JAVAOBJECTS': '.java',  #not in json, due to Blacklist ?
+                    'PYTHONOBJECTS': '.py'   #not in json, due to Blacklist ?
                   }
 
 

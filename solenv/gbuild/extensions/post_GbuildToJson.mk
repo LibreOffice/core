@@ -123,11 +123,14 @@ define gb_LinkTarget_add_scanners
 $(call gb_LinkTarget_get_target,$(1)) : LEXOBJECTS += $(2)
 
 endef
+define gb_LinkTarget_add_grammars
+$(call gb_LinkTarget_get_target,$(1)) : YACCOBJECTS += $(2)
+
+endef
 gb_LinkTarget_use_package =
 gb_LinkTarget_use_generated_package =
 gb_LinkTarget_add_sdi_headers =
 gb_LinkTarget_use_external_project =
-gb_LinkTarget_add_grammars =
 gb_LinkTarget__check_srcdir_paths =
 gb_LinkTarget__command_objectlist = @true
 gb_WinResTarget_WinResTarget_init =
