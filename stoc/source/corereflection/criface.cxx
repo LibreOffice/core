@@ -650,7 +650,10 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
                 if (! bAssign)
                 {
                     IllegalArgumentException aExc(
-                        "cannot coerce argument type during corereflection call!",
+                        "cannot coerce argument type during corereflection call:"
+                        "\narg no.: " + OUString::number(nPos)
+                        + " expected: \"" + OUString(pTD->pTypeName)
+                        + "\" actual: \"" + OUString(pCppArgs[nPos].getValueTypeRef()->pTypeName),
                         *o3tl::doAccess<Reference<XInterface>>(rObj), (sal_Int16)nPos );
 
                     // cleanup
