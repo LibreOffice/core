@@ -84,8 +84,8 @@ class BackgroundsDialog(ImageListDialog):
         while i < self.il.listModel.getSize():
             if self.il.listModel.getElementAt(i) == s:
                 return i
+            i += 1
 
-        i += 1
         self.il.listModel.add1(s)
         try:
             configView = Configuration.getConfigurationRoot(
