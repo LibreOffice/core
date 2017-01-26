@@ -56,8 +56,6 @@ namespace
 
 typedef ::std::pair< ::chart::tNameSequence, ::chart::tAnySequence > tPropertyValues;
 
-typedef ::std::vector< ViewLegendEntry > tViewLegendEntryContainer;
-
 double lcl_CalcViewFontSize(
     const Reference< beans::XPropertySet > & xProp,
     const awt::Size & rReferenceSize )
@@ -146,7 +144,7 @@ void lcl_getProperties(
 }
 
 awt::Size lcl_createTextShapes(
-    const tViewLegendEntryContainer & rEntries,
+    const std::vector<ViewLegendEntry> & rEntries,
     const Reference< lang::XMultiServiceFactory > & xShapeFactory,
     const Reference< drawing::XShapes > & xTarget,
     ::std::vector< Reference< drawing::XShape > > & rOutTextShapes,
@@ -155,7 +153,7 @@ awt::Size lcl_createTextShapes(
     awt::Size aResult;
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
 
-    for( tViewLegendEntryContainer::const_iterator aIt( rEntries.begin());
+    for( std::vector<ViewLegendEntry>::const_iterator aIt( rEntries.begin());
          aIt != rEntries.end(); ++aIt )
     {
         try
@@ -262,7 +260,7 @@ sal_Int32 lcl_getTextLineHeight( const std::vector< sal_Int32 >& aRowHeights, co
 
 //returns resulting legend size
 awt::Size lcl_placeLegendEntries(
-    tViewLegendEntryContainer & rEntries,
+    std::vector<ViewLegendEntry> & rEntries,
     css::chart::ChartLegendExpansion eExpansion,
     bool bSymbolsLeftSide,
     double fViewFontSize,
@@ -279,11 +277,9 @@ awt::Size lcl_placeLegendEntries(
 
     // #i109336# Improve auto positioning in chart
     sal_Int32 nXPadding = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.33 ) );
-    //sal_Int32 nXPadding = static_cast< sal_Int32 >( std::max( 200.0, fViewFontSize * 0.33 ) );
     sal_Int32 nXOffset  = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.66 ) );
     sal_Int32 nYPadding = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.2 ) );
     sal_Int32 nYOffset  = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.2 ) );
-    //sal_Int32 nYOffset  = static_cast< sal_Int32 >( std::max( 230.0, fViewFontSize * 0.45 ) );
 
     const sal_Int32 nSymbolToTextDistance = static_cast< sal_Int32 >( std::max( 100.0, fViewFontSize * 0.22 ) );//minimum 1mm
     const sal_Int32 nSymbolPlusDistanceWidth = rMaxSymbolExtent.Width + nSymbolToTextDistance;
@@ -882,7 +878,7 @@ void VLegend::createShapes(
             }
             awt::Size aMaxSymbolExtent( nSymbolWidth, nSymbolHeight );
 
-            tViewLegendEntryContainer aViewEntries;
+            std::vector<ViewLegendEntry> aViewEntries;
             for(LegendEntryProvider* pLegendEntryProvider : m_aLegendEntryProviderList)
             {
                 if (pLegendEntryProvider)
