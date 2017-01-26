@@ -153,13 +153,12 @@ awt::Size lcl_createTextShapes(
     awt::Size aResult;
     AbstractShapeFactory* pShapeFactory = AbstractShapeFactory::getOrCreateShapeFactory(xShapeFactory);
 
-    for( std::vector<ViewLegendEntry>::const_iterator aIt( rEntries.begin());
-         aIt != rEntries.end(); ++aIt )
+    for (ViewLegendEntry const & rEntry : rEntries)
     {
         try
         {
             OUString aLabelString;
-            Sequence< Reference< XFormattedString2 > > aLabelSeq = (*aIt).aLabel;
+            Sequence< Reference< XFormattedString2 > > aLabelSeq = rEntry.aLabel;
             for( sal_Int32 i = 0; i < aLabelSeq.getLength(); ++i )
             {
                 // todo: support more than one text range
@@ -196,12 +195,10 @@ void lcl_collectColumnWidths( std::vector< sal_Int32 >& rColumnWidths, const sal
                               const ::std::vector< Reference< drawing::XShape > >& rTextShapes, sal_Int32 nSymbolPlusDistanceWidth )
 {
     rColumnWidths.clear();
-    sal_Int32 nRow = 0;
-    sal_Int32 nColumn = 0;
     sal_Int32 nNumberOfEntries = rTextShapes.size();
-    for( ; nRow < nNumberOfRows; ++nRow )
+    for (sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow )
     {
-        for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
+        for (sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
         {
             sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
             if( nEntry < nNumberOfEntries )
@@ -223,13 +220,11 @@ void lcl_collectRowHeighs( std::vector< sal_Int32 >& rRowHeights, const sal_Int3
     // calculate maximum height for each row
     // and collect column widths
     rRowHeights.clear();
-    sal_Int32 nRow = 0;
-    sal_Int32 nColumn = 0;
     sal_Int32 nNumberOfEntries = rTextShapes.size();
-    for( ; nRow < nNumberOfRows; ++nRow )
+    for (sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow)
     {
         sal_Int32 nCurrentRowHeight = 0;
-        for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
+        for (sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; ++nColumn)
         {
             sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
             if( nEntry < nNumberOfEntries )
@@ -246,9 +241,9 @@ sal_Int32 lcl_getTextLineHeight( const std::vector< sal_Int32 >& aRowHeights, co
 {
     const sal_Int32 nFontHeight = static_cast< sal_Int32 >( fViewFontSize );
     sal_Int32 nTextLineHeight = nFontHeight;
-    for( sal_Int32 nR=0; nR<nNumberOfRows; nR++ )
+    for (sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow)
     {
-        sal_Int32 nFullTextHeight = aRowHeights[ nR ];
+        sal_Int32 nFullTextHeight = aRowHeights[nRow];
         if( ( nFullTextHeight / nFontHeight ) <= 1 )
         {
             nTextLineHeight = nFullTextHeight;//found an entry with one line-> have real text height
@@ -347,8 +342,8 @@ awt::Size lcl_placeLegendEntries(
                 //do the columns still fit into the given size?
                 nCurrentColumnCount = aColumnWidths.size();//update count
                 sal_Int32 nSumWidth = 0;
-                for( sal_Int32 nC=0; nC<nCurrentColumnCount; nC++ )
-                    nSumWidth += aColumnWidths[nC];
+                for (sal_Int32 nColumn = 0; nColumn < nCurrentColumnCount; nColumn++)
+                    nSumWidth += aColumnWidths[nColumn];
 
                 if( nSumWidth <= rAvailableSpace.Width || nCurrentColumnCount==1 )
                 {
@@ -381,18 +376,18 @@ awt::Size lcl_placeLegendEntries(
         lcl_collectRowHeighs( aRowHeights, nNumberOfRows, nNumberOfColumns, aTextShapes );
         nTextLineHeight = lcl_getTextLineHeight( aRowHeights, nNumberOfRows, fViewFontSize );
         sal_Int32 nSumHeight = 0;
-        for( sal_Int32 nR=0; nR<nNumberOfRows; nR++ )
-            nSumHeight += aRowHeights[nR];
+        for (sal_Int32 nRow=0; nRow < nNumberOfRows; nRow++)
+            nSumHeight += aRowHeights[nRow];
         sal_Int32 nRemainingSpace = rAvailableSpace.Height - nSumHeight;
 
         if( nRemainingSpace < -100 ) // 1mm tolerance for OOXML interop tdf#90404
         {
             //remove entries that are too big
-            for( sal_Int32 nR=nNumberOfRows; nR--; )
+            for (sal_Int32 nRow = nNumberOfRows; nRow--; )
             {
-                for( sal_Int32 nC=nNumberOfColumns; nC--; )
+                for (sal_Int32 nColumn = nNumberOfColumns; nColumn--; )
                 {
-                    sal_Int32 nEntry = (nC + nR * nNumberOfColumns);
+                    sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
                     if( nEntry < static_cast<sal_Int32>(aTextShapes.size()) )
                     {
                         DrawModelWrapper::removeShape( aTextShapes[nEntry] );
@@ -405,7 +400,7 @@ awt::Size lcl_placeLegendEntries(
                         nNumberOfEntries--;
                     }
                 }
-                nSumHeight -= aRowHeights[nR];
+                nSumHeight -= aRowHeights[nRow];
                 aRowHeights.pop_back();
                 nRemainingSpace = rAvailableSpace.Height - nSumHeight;
                 if( nRemainingSpace>=0 )
@@ -432,8 +427,8 @@ awt::Size lcl_placeLegendEntries(
 
         //check spacing between columns
         sal_Int32 nSumWidth = 0;
-        for( sal_Int32 nC=0; nC<nNumberOfColumns; nC++ )
-            nSumWidth += aColumnWidths[nC];
+        for (sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; nColumn++)
+            nSumWidth += aColumnWidths[nColumn];
         nRemainingSpace = rAvailableSpace.Width - nSumWidth;
         if( nRemainingSpace>=0 )
         {
@@ -515,12 +510,11 @@ awt::Size lcl_placeLegendEntries(
 
     // place entries into column and rows
     sal_Int32 nMaxYPos = 0;
-    sal_Int32 nRow = 0;
-    sal_Int32 nColumn = 0;
-    for( nColumn = 0; nColumn < nNumberOfColumns; ++nColumn )
+
+    for (sal_Int32 nColumn = 0; nColumn < nNumberOfColumns; ++nColumn)
     {
         sal_Int32 nCurrentYPos = nYPadding;
-        for( nRow = 0; nRow < nNumberOfRows; ++nRow )
+        for (sal_Int32 nRow = 0; nRow < nNumberOfRows; ++nRow)
         {
             sal_Int32 nEntry = (nColumn + nRow * nNumberOfColumns);
             if( nEntry >= nNumberOfEntries )
