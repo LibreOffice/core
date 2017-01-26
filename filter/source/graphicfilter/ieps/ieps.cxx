@@ -519,6 +519,14 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     rGraphic = aMtf;
 }
 
+namespace
+{
+    bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
+    {
+        const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
+        return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
+    }
+}
 
 //================== GraphicImport - the exported function ================
 
@@ -549,10 +557,9 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 
         if ( nSizeWMF )
         {
-            if ( nPosWMF != 0 )
+            if (nPosWMF && checkSeek(rStream, nOrigPos + nPosWMF))
             {
-                rStream.Seek( nOrigPos + nPosWMF );
-                if ( GraphicConverter::Import( rStream, aGraphic, ConvertDataFormat::WMF ) == ERRCODE_NONE )
+                if (GraphicConverter::Import(rStream, aGraphic, ConvertDataFormat::WMF) == ERRCODE_NONE)
                     bHasPreview = bRetValue = true;
             }
         }
@@ -562,9 +569,8 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
 
             // else we have to get the tiff grafix
 
-            if ( nPosTIFF && nSizeTIFF )
+            if (nPosTIFF && nSizeTIFF && checkSeek(rStream, nOrigPos + nPosTIFF))
             {
-                rStream.Seek( nOrigPos + nPosTIFF );
                 if ( GraphicConverter::Import( rStream, aGraphic, ConvertDataFormat::TIF ) == ERRCODE_NONE )
                 {
                     MakeAsMeta(aGraphic);
