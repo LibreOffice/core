@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_c8036875",
+        "filename": "wizards/com/sun/star/wizards/web/BackgroundsDialog.py",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000022
+      },
+      "writtenOn": "2017-01-26T12:07:46Z",
+      "side": 1,
+      "message": "this looks implausible, why isn\u0027t this in the while loop? that would be an infinite loop now?",
+      "revId": "0da019be8f17c1b0a9dff535e0488475a25cde29",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
