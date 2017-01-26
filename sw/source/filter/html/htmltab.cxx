@@ -137,8 +137,6 @@ public:
         memset( &aAttrTab, 0, sizeof( HTMLAttrTable ));
     }
 
-    ~HTMLTableContext();
-
     void SetNumInfo( const SwHTMLNumRuleInfo& rInf ) { aNumRuleInfo.Set(rInf); }
     const SwHTMLNumRuleInfo& GetNumInfo() const { return aNumRuleInfo; };
 
@@ -2711,10 +2709,6 @@ void HTMLTable::MakeParentContents()
 
         SetHasParentSection( true );
     }
-}
-
-HTMLTableContext::~HTMLTableContext()
-{
 }
 
 void HTMLTableContext::SavePREListingXMP( SwHTMLParser& rParser )

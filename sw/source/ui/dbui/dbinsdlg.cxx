@@ -175,8 +175,6 @@ struct DB_ColumnConfigData
         bIsTable = bIsHeadlineOn = true;
         bIsField = bIsEmptyHeadln = false;
     }
-
-    ~DB_ColumnConfigData();
 };
 
 bool SwInsDBColumn::operator<( const SwInsDBColumn& rCmp ) const
@@ -1498,8 +1496,6 @@ void SwInsertDBColAutoPilot::SetTabSet()
     rSh.ClearMark();
     rSh.MoveTable( GotoCurrTable, fnTableStart );
 }
-
-DB_ColumnConfigData::~DB_ColumnConfigData() {}
 
 static Sequence<OUString> lcl_createSourceNames(const OUString& rNodeName)
 {

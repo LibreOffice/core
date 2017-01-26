@@ -30,7 +30,6 @@ class SwVbaAddins : public SwVbaAddins_BASE
 public:
     /// @throws css::uno::RuntimeException
     SwVbaAddins( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext ) throw (css::uno::RuntimeException);
-    virtual ~SwVbaAddins() override {}
 
     // XEnumerationAccess
     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;

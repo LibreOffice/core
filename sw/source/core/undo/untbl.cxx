@@ -117,7 +117,6 @@ class SaveTable
 public:
     SaveTable( const SwTable& rTable, sal_uInt16 nLnCnt = USHRT_MAX,
                 bool bSaveFormula = true );
-    ~SaveTable();
 
     sal_uInt16 AddFormat( SwFrameFormat* pFormat, bool bIsLine );
     void NewFrameFormat( const SwTableLine* , const SwTableBox*, sal_uInt16 nFormatPos,
@@ -885,10 +884,6 @@ SaveTable::SaveTable( const SwTable& rTable, sal_uInt16 nLnCnt, bool bSaveFormul
 
     m_aFrameFormats.clear();
     m_pSwTable = nullptr;
-}
-
-SaveTable::~SaveTable()
-{
 }
 
 sal_uInt16 SaveTable::AddFormat( SwFrameFormat* pFormat, bool bIsLine )

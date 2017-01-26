@@ -141,8 +141,6 @@ public:
     SwHTMLTableLayoutColumn( sal_uInt16 nColWidthOpt, bool bRelColWidthOpt,
                              bool bLBorder );
 
-    ~SwHTMLTableLayoutColumn() {}
-
     inline void MergeCellWidthOption( sal_uInt16 nWidth, bool bPrc );
     inline void SetWidthOption( sal_uInt16 nWidth );
 

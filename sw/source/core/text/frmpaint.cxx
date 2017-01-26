@@ -79,7 +79,6 @@ public:
     SwExtraPainter( const SwTextFrame *pFrame, SwViewShell *pVwSh,
         const SwLineNumberInfo &rLnInf, const SwRect &rRct,
         sal_Int16 eHor, bool bLnNm );
-    ~SwExtraPainter() {}
     inline SwFont* GetFont() const { return pFnt.get(); }
     inline void IncLineNr() { ++nLineNr; }
     inline bool HasNumber() { return !( nLineNr % rLineInf.GetCountBy() ); }
