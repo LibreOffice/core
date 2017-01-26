@@ -507,7 +507,6 @@ class AnimationsExporterImpl
 {
 public:
     AnimationsExporterImpl( SvXMLExport& rExport, const Reference< XPropertySet >& xPageProps );
-    ~AnimationsExporterImpl();
 
     void prepareNode( const Reference< XAnimationNode >& xNode );
     void exportNode( const Reference< XAnimationNode >& xNode );
@@ -552,10 +551,6 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
     }
 
     mxSdPropHdlFactory = new XMLSdPropHdlFactory( mrExport.GetModel(), mrExport );
-}
-
-AnimationsExporterImpl::~AnimationsExporterImpl()
-{
 }
 
 

@@ -37,7 +37,6 @@ class SinglePropertySetInfoCache
 public:
 
     inline SinglePropertySetInfoCache( const OUString& rName );
-    ~SinglePropertySetInfoCache() {};
 
     bool hasProperty(
             const css::uno::Reference< css::beans::XPropertySet >& rPropSet,
