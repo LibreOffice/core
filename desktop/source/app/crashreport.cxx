@@ -92,12 +92,20 @@ namespace {
 
 OUString getCrashDirectory()
 {
-    OUString aCrashURL("${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("crashreport") ":CrashDirectory}/");
-    rtl::Bootstrap::expandMacros(aCrashURL);
+    OUString aCrashURL;
+    rtl::Bootstrap::get("CrashDirectory", aCrashURL);
     // Need to convert to URL in case of user-defined path
     osl::FileBase::getFileURLFromSystemPath(aCrashURL, aCrashURL);
-    osl::Directory::create(aCrashURL);
 
+    if (aCrashURL.isEmpty()) { // Fall back to user profile
+        aCrashURL = "${$BRAND_BASE_DIR/" LIBO_ETC_FOLDER "/" SAL_CONFIGFILE("bootstrap") ":UserInstallation}/crash/";
+        rtl::Bootstrap::expandMacros(aCrashURL);
+    }
+
+    if (!aCrashURL.endsWith("/"))
+        aCrashURL += "/";
+
+    osl::Directory::create(aCrashURL);
     OUString aCrashPath;
     osl::FileBase::getSystemPathFromFileURL(aCrashURL, aCrashPath);
     return aCrashPath;
