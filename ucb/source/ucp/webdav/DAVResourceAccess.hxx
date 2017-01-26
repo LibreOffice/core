@@ -61,6 +61,7 @@ public:
 
     DAVResourceAccess & operator=( const DAVResourceAccess & rOther );
 
+    /// @throws DAVException
     void setURL( const OUString & rNewURL )
         throw ( DAVException );
 
@@ -75,6 +76,7 @@ public:
 
 
     // allprop & named
+    /// @throws DAVException
     void
     PROPFIND( const Depth nDepth,
               const std::vector< OUString > & rPropertyNames,
@@ -83,38 +85,45 @@ public:
         throw ( DAVException );
 
     // propnames
+    /// @throws DAVException
     void
     PROPFIND( const Depth nDepth,
               std::vector< DAVResourceInfo > & rResInfo,
               const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     PROPPATCH( const std::vector< ProppatchValue > & rValues,
                const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     HEAD( const std::vector< OUString > & rHeaderNames, // empty == 'all'
           DAVResource & rResource,
           const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     css::uno::Reference< css::io::XInputStream >
     GET( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     GET( css::uno::Reference< css::io::XOutputStream > & rStream,
          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     css::uno::Reference< css::io::XInputStream >
     GET( const std::vector< OUString > & rHeaderNames, // empty == 'all'
          DAVResource & rResource,
          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     css::uno::Reference< css::io::XInputStream >
     GET( DAVRequestHeaders & rRequestHeaders,
          const std::vector< rtl::OUString > & rHeaderNames, // empty == 'all'
@@ -122,6 +131,7 @@ public:
          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     GET( css::uno::Reference< css::io::XOutputStream > & rStream,
          const std::vector< OUString > & rHeaderNames, // empty == 'all'
@@ -129,11 +139,13 @@ public:
          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     PUT( const css::uno::Reference< css::io::XInputStream > & rStream,
          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     css::uno::Reference< css::io::XInputStream >
     POST( const OUString & rContentType,
           const OUString & rReferer,
@@ -141,6 +153,7 @@ public:
           const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     POST( const OUString & rContentType,
           const OUString & rReferer,
@@ -149,10 +162,12 @@ public:
           const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     MKCOL( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     COPY( const OUString & rSourcePath,
           const OUString & rDestinationURI,
@@ -160,6 +175,7 @@ public:
           const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     MOVE( const OUString & rSourcePath,
           const OUString & rDestinationURI,
@@ -167,11 +183,13 @@ public:
           const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     DESTROY( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
     // set new lock.
+    /// @throws DAVException
     void
     LOCK( css::ucb::Lock & inLock,
           const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
@@ -185,10 +203,12 @@ public:
         throw ( DAVException );
 #endif
 
+    /// @throws DAVException
     void
     UNLOCK( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void
     static abort()
         throw ( DAVException );
@@ -203,10 +223,13 @@ public:
 
 private:
     const OUString & getRequestURI() const;
+    /// @throws DAVException
     bool detectRedirectCycle( const OUString& rRedirectURL )
         throw ( DAVException );
+    /// @throws DAVException
     bool handleException( DAVException & e, int errorCount )
         throw ( DAVException );
+    /// @throws DAVException
     void initialize()
         throw ( DAVException );
 };

@@ -74,6 +74,7 @@ public:
     */
 
     // allprop & named
+    /// @throws DAVException
     virtual void PROPFIND( const OUString & inPath,
                            const Depth inDepth,
                            const std::vector< OUString > & inPropertyNames,
@@ -82,33 +83,39 @@ public:
         throw( DAVException ) = 0;
 
     // propnames
+    /// @throws DAVException
     virtual void PROPFIND( const OUString & inPath,
                            const Depth inDepth,
                            std::vector< DAVResourceInfo > & ioResInfo,
                            const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void PROPPATCH( const OUString & inPath,
                             const std::vector< ProppatchValue > & inValues,
                             const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void HEAD( const OUString &  inPath,
                        const std::vector< OUString > & inHeaderNames,
                        DAVResource & ioResource,
                        const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual css::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void GET( const OUString & inPath,
                       css::uno::Reference< css::io::XOutputStream >& o,
                       const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual css::uno::Reference< css::io::XInputStream >
     GET( const OUString & inPath,
          const std::vector< OUString > & inHeaderNames,
@@ -116,6 +123,7 @@ public:
          const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void
     GET( const OUString & inPath,
          css::uno::Reference< css::io::XOutputStream >& o,
@@ -124,11 +132,13 @@ public:
          const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void PUT( const OUString & inPath,
                       const css::uno::Reference< css::io::XInputStream >& s,
                       const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual css::uno::Reference< css::io::XInputStream >
     POST( const OUString & inPath,
           const OUString & rContentType,
@@ -137,6 +147,7 @@ public:
           const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void POST( const OUString & inPath,
                        const OUString & rContentType,
                        const OUString & rReferer,
@@ -145,42 +156,50 @@ public:
                        const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void MKCOL( const OUString & inPath,
                         const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void COPY( const OUString & inSource,
                        const OUString & inDestination,
                        const DAVRequestEnvironment & rEnv,
                        bool inOverwrite = false )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void MOVE( const OUString & inSource,
                        const OUString & inDestination,
                        const DAVRequestEnvironment & rEnv,
                        bool inOverwrite = false )
         throw( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void DESTROY( const OUString & inPath,
                           const DAVRequestEnvironment & rEnv )
         throw( DAVException ) = 0;
 
     // set new lock.
+    /// @throws DAVException
     virtual void LOCK( const OUString & inPath,
                        css::ucb::Lock & inLock,
                        const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) = 0;
 
     // refresh existing lock.
+    /// @throws DAVException
     virtual sal_Int64 LOCK( const OUString & inPath,
                             sal_Int64 nTimeout,
                             const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void UNLOCK( const OUString & inPath,
                          const DAVRequestEnvironment & rEnv )
         throw ( DAVException ) = 0;
 
+    /// @throws DAVException
     virtual void abort()
         throw( DAVException ) = 0;
 

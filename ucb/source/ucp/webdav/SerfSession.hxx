@@ -71,6 +71,7 @@ protected:
     virtual ~SerfSession() override;
 
 public:
+    /// @throws DAVException
     SerfSession( const rtl::Reference< DAVSessionFactory > & rSessionFactory,
                  const OUString& inUri,
                  const ucbhelper::InternetProxyDecider & rProxyDecider )
@@ -246,12 +247,15 @@ public:
 private:
     friend class SerfLockStore;
 
+    /// @throws DAVException
     void Init()
         throw ( DAVException );
 
+    /// @throws DAVException
     void Init( const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
+    /// @throws DAVException
     void HandleError( std::shared_ptr<SerfRequestProcessor> rReqProc )
         throw ( DAVException );
 

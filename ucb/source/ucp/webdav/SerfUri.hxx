@@ -50,7 +50,9 @@ class SerfUri
         void calculateURI ();
 
     public:
+        /// @throws DAVException
         explicit SerfUri( const OUString & inUri ) throw ( DAVException );
+        /// @throws DAVException
         explicit SerfUri( const apr_uri_t * inUri ) throw ( DAVException );
         ~SerfUri( );
 

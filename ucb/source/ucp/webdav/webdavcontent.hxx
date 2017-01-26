@@ -90,14 +90,17 @@ private:
     getCommands( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv ) override;
     virtual OUString getParentURL() override;
 
+    /// @throws css::uno::Exception
     bool isFolder( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw ( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     css::uno::Reference< css::sdbc::XRow >
     getPropertyValues( const css::uno::Sequence< css::beans::Property >& rProperties,
                        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw ( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     css::uno::Sequence< css::uno::Any >
     setPropertyValues( const css::uno::Sequence< css::beans::PropertyValue >& rValues,
                        const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
@@ -113,10 +116,12 @@ private:
     const OUString
     getBaseURI( const std::unique_ptr< DAVResourceAccess > & rResAccess );
 
+    /// @throws css::uno::Exception
     ResourceType
     getResourceType( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv )
         throw ( css::uno::Exception );
 
+    /// @throws css::uno::Exception
     ResourceType
     getResourceType( const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv,
                      const std::unique_ptr< DAVResourceAccess > & rResAccess,
@@ -124,6 +129,7 @@ private:
         throw ( css::uno::Exception );
 
     // Command "open"
+    /// @throws css::uno::Exception
     css::uno::Any open(
                 const css::ucb::OpenCommandArgument2 & rArg,
                 const css::uno::Reference<
@@ -131,35 +137,42 @@ private:
         throw( css::uno::Exception );
 
     // Command "post"
+    /// @throws css::uno::Exception
     void post( const css::ucb::PostCommandArgument2 & rArg,
                const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
         throw( css::uno::Exception );
 
     // Command "insert"
+    /// @throws css::uno::Exception
     void insert( const css::uno::Reference< css::io::XInputStream > & xInputStream,
                  bool bReplaceExisting,
                  const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
         throw( css::uno::Exception );
 
     // Command "transfer"
+    /// @throws css::uno::Exception
     void transfer( const css::ucb::TransferInfo & rArgs,
                    const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
         throw( css::uno::Exception );
 
     // Command "delete"
+    /// @throws css::uno::Exception
     void destroy( bool bDeletePhysical )
         throw( css::uno::Exception );
 
     // Command "lock"
+    /// @throws css::uno::Exception
     void lock( const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
         throw( css::uno::Exception );
 
     // Command "unlock"
+    /// @throws css::uno::Exception
     void unlock( const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
         throw( css::uno::Exception );
 
     css::uno::Any MapDAVException( const DAVException & e,
                                                 bool bWrite );
+    /// @throws css::uno::Exception
     void cancelCommandExecution(
                     const DAVException & e,
                     const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv,
@@ -172,6 +185,10 @@ private:
         const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 
     // XPropertyContainer replacement
+    /// @throws css::beans::PropertyExistException
+    /// @throws css::beans::IllegalTypeException
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
     void addProperty( const css::ucb::PropertyCommandArgument &aCmdArg,
                       const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
     throw( css::beans::PropertyExistException,
@@ -179,17 +196,22 @@ private:
            css::lang::IllegalArgumentException,
            css::uno::RuntimeException );
 
+    /// @throws css::beans::PropertyExistException
+    /// @throws css::beans::NotRemoveableException
+    /// @throws css::uno::RuntimeException
     void removeProperty( const rtl::OUString& Name,
                          const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment )
     throw( css::beans::UnknownPropertyException,
            css::beans::NotRemoveableException,
            css::uno::RuntimeException );
 public:
+    /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
              rtl::Reference< DAVSessionFactory > const & rSessionFactory )
         throw ( css::ucb::ContentCreationException );
+    /// @throws css::ucb::ContentCreationException
     Content( const css::uno::Reference< css::uno::XComponentContext >& rxContext,
              ContentProvider* pProvider,
              const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier,
