@@ -75,9 +75,6 @@ class GbuildParser:
         return [cxxflag.strip() for cxxflag in GbuildParser._warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
 
 
-
-
-
     def parse(self):
         # Relation between json object and file extension
         jsonSrc = {
@@ -154,6 +151,8 @@ class GbuildParser:
             headersof=[]
         return headersof
 
+
+
 class IdeIntegrationGenerator:
 
     def __init__(self, gbuildparser, ide):
@@ -162,7 +161,9 @@ class IdeIntegrationGenerator:
     def emit(self):
         pass
 
-class testide(IdeIntegrationGenerator):
+
+
+class testWinIde(IdeIntegrationGenerator):
 
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
@@ -415,6 +416,7 @@ class testide(IdeIntegrationGenerator):
         self.write_pretty_xml(proj_node, filters_path)
 
 
+
 class XcodeIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
@@ -626,387 +628,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                             'fileEncoding': 4,
                             'sourceTree': '<group>'}
         return objects
-
-# ---- LO supported ide -------
-
-class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
-
-    def __init__(self, gbuildparser, ide):
-        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-
-    def create_include_path(self):
-        for module in self.gbuildparser.modules:
-            if module == 'include':
-                continue
-            modulepath = os.path.join(self.gbuildparser.builddir, module)
-            includedirfile = open(os.path.join(modulepath, '.eclipsesettingfile'), 'w')
-            modulelibs = []
-            for lib in self.target_path.keys():
-                if lib.startswith(module+'/'):
-                    modulelibs.append(lib)
-            include = []
-            for lib in modulelibs:
-                for target in self.target_path[lib]:
-                    include.extend(target[0]['include'])
-            includedirfile.write('\n'.join(include))
-            includedirfile.close()
-
-
-    def create_macros(self):
-        for module in self.gbuildparser.modules:
-            if module == 'include':
-                continue
-            modulepath = os.path.join(self.gbuildparser.builddir, module)
-            macrofile = open(os.path.join(modulepath, '.macros'), 'w')
-            modulelibs = []
-            for lib in self.target_path.keys():
-                if lib.startswith(module+'/'):
-                    modulelibs.append(lib)
-            define = []
-            defineset = set()
-            for lib in modulelibs:
-                for target in self.target_path[lib]:
-                    for i in target[0]['DEFS'].keys():
-                        tmp = str(i) +','+str(target[0]['DEFS'][i])
-                        if tmp not in defineset:
-                            defineset.add(tmp)
-            macrofile.write('\n'.join(defineset))
-            macrofile.close()
-
-
-    def create_settings_file(self):
-
-        settingsfiletemplate = """\
-<?xml version="1.0" encoding="UTF-8"?>
-<cdtprojectproperties>
-<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
-<language name="C++ Source File">
-
-
-</language>
-<language name="C Source File">
-
-</language>
-<language name="Object File">
-
-</language>
-<language name="Assembly Source File">
-
-</language>
-</section>
-<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">
-<language name="C++ Source File">
-
-</language>
-<language name="C Source File">
-
-</language>
-<language name="Object File">
-
-</language>
-<language name="Assembly Source File">
-
-</language>
-</section>
-</cdtprojectproperties>
-"""
-
-        for module in self.gbuildparser.modules:
-            if module == 'include':
-                continue
-            tempxml = []
-            modulepath = os.path.join(self.gbuildparser.builddir, module)
-
-            settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'w')
-            settingsfile.write(settingsfiletemplate)
-            settingsfile.close()
-
-            settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'r')
-            tempxml = settingsfile.readlines()
-            tempinclude = open(os.path.join(modulepath, '.eclipsesettingfile'), 'r')
-            tempmacro = open(os.path.join(modulepath, '.macros'), 'r')
-            for includepath in tempinclude:
-                if includepath[-1:] == "\n":
-                    includepath = includepath[:-1]
-                templine = "<includepath>%s</includepath>\n" % includepath
-                tempxml.insert(5, templine)
-
-            for line in tempmacro:
-                macroskeyvalue = line.split(',')
-                macrokey = macroskeyvalue[0]
-                macrovalue = macroskeyvalue[1]
-                if macrovalue[-1:] == "\n":
-                    macrovalue = macrovalue[:-1]
-                templine = "<macro><name>%s</name><value>%s</value></macro>\n" %(macrokey, macrovalue)
-                tempxml.insert(-13, templine)
-            tempxml="".join(tempxml)
-            settingsfile.close
-
-            settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'w')
-            settingsfile.write(tempxml)
-            settingsfile.close()
-            os.remove(os.path.join(modulepath, '.eclipsesettingfile'))
-            os.remove(os.path.join(modulepath, '.macros'))
-
-    def emit(self):
-        self.target_path = {}
-        for m in self.gbuildparser.modules:
-            if m == 'include':
-                continue
-            for target in self.gbuildparser.modules[m]['targets']:
-                for cxx in target['CXXOBJECTS']:
-                    path = '/'.join(cxx.split('/')[:-1])
-                    if path not in self.target_path:
-                        self.target_path[path] = []
-                    self.target_path[path].append([target])
-        self.create_include_path()
-        self.create_macros()
-        self.create_settings_file()
-
-class DebugIntegrationGenerator(IdeIntegrationGenerator):
-
-    def __init__(self, gbuildparser, ide):
-        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-
-    def emit(self):
-        print(self.gbuildparser.srcdir)
-        print(self.gbuildparser.builddir)
-        for f in self.gbuildparser.modules:
-            for j in self.gbuildparser.modules[f]['targets']:
-                print(j)
-
-        VisualStudioIntegrationGenerator(self.gbuildparser, self.ide).emit()
-        XcodeIntegrationGenerator(self.gbuildparser, self.ide).emit()
-
-        EclipseCDTIntegrationGenerator(self.gbuildparser, self.ide).emit()
-        KdevelopIntegrationGenerator(self.gbuildparser, self.ide).emit()
-        VimIntegrationGenerator(self.gbuildparser, self.ide).emit()
-        QtCreatorIntegrationGenerator(self.gbuildparser, self.ide).emit()
-
-
-class VimIntegrationGenerator(IdeIntegrationGenerator):
-
-    def __init__(self, gbuildparser, ide):
-        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-
-    def emit(self):
-        global_list = []
-        for m in self.gbuildparser.modules:
-            for lib in self.gbuildparser.modules[m]['targets']:
-                entries = []
-                for file in lib['CXXOBJECTS']:
-                    filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
-                    entry = {'directory': lib['location'], 'file': filePath, 'command': self.generateCommand(lib, filePath)}
-                    entries.append(entry)
-                global_list.extend(entries)
-        export_file = open('compile_commands.json', 'w')
-        json.dump(global_list, export_file)
-
-    def generateCommand(self, lib, file):
-        command = 'clang++ -Wall'
-        for key, value in lib['DEFS'].items():
-            command += ' -D'
-            command += key
-            if value is not None:
-                command += '='
-                command += value
-
-        # The directory of the file is missing from lib's include list, as that
-        # one is not the same for all source files in the lib.
-        command += ' -I' + os.path.dirname(file)
-
-        for include in lib['include']:
-            command += ' -I'
-            command += include
-        for isystem in lib['include_sys']:
-            command += ' -isystem '
-            command += isystem
-        for cxxflag in lib['CXXFLAGS']:
-            command += ' '
-            command += cxxflag
-        command += ' -c '
-        command += file
-        # Help clang when the tree is configured for gcc.
-        for gnu in ('-std=gnu++11', '-std=gnu++1y'):
-            command = command.replace(gnu, '-std=c++11')
-        return command
-
-
-class KdevelopIntegrationGenerator(IdeIntegrationGenerator):
-
-    def encode_int(self, i):
-        temp = '%08x' % i
-        return '\\x%s\\x%s\\x%s\\x%s' % (temp[0:2], temp[2:4], temp[4:6], temp[6:8])
-
-    def encode_string(self, string):
-        result = self.encode_int(len(string) * 2)
-        for c in string.encode('utf-16-be'):
-            if c in range(32, 126):
-                result += chr(c)
-            else:
-                result += '\\x%02x' % c
-        return result
-
-    def generate_buildsystemconfigtool(self, configid, tool, args, exe, typenr):
-        return KdevelopIntegrationGenerator.buildsystemconfigtooltemplate % {'configid': configid, 'tool': tool,
-                                                                             'args': args, 'exe': exe, 'typenr': typenr}
-
-    buildsystemconfigtooltemplate = """
-[CustomBuildSystem][BuildConfig%(configid)d][Tool%(tool)s]
-Arguments=%(args)s
-Enabled=true
-Environment=
-Executable=%(exe)s
-Type=%(typenr)d
-
-"""
-
-    def generate_buildsystemconfig(self, configid, moduledir, builddir, title, buildparms=''):
-        result = KdevelopIntegrationGenerator.buildsystemconfigtemplate % {'configid': configid, 'builddir': builddir,
-                                                                           'title': title}
-        result += self.generate_buildsystemconfigtool(configid, 'Clean', 'clean %s' % buildparms,
-                                                      self.gbuildparser.makecmd, 3)
-        result += self.generate_buildsystemconfigtool(configid, 'Build', 'all %s' % buildparms,
-                                                      self.gbuildparser.makecmd, 0)
-        return result
-
-    buildsystemconfigtemplate = """
-[CustomBuildSystem][BuildConfig%(configid)d]
-BuildDir=file://%(builddir)s
-Title=%(title)s
-
-"""
-
-    def generate_buildsystem(self, moduledir):
-        result = KdevelopIntegrationGenerator.buildsystemtemplate % {'defaultconfigid': 0}
-        result += self.generate_buildsystemconfig(0, moduledir, moduledir, 'Module Build -- Release')
-        result += self.generate_buildsystemconfig(1, moduledir, self.gbuildparser.builddir, 'Full Build -- Release')
-        result += self.generate_buildsystemconfig(2, moduledir, moduledir, 'Module Build -- Debug', 'debug=T')
-        result += self.generate_buildsystemconfig(3, moduledir, self.gbuildparser.builddir, 'Full Build -- Debug',
-                                                  'debug=T')
-        return result
-
-    buildsystemtemplate = """
-[CustomBuildSystem]
-CurrentConfiguration=BuildConfig%(defaultconfigid)d
-
-"""
-
-    def generate_launch(self, launchid, launchname, executablepath, args, workdir):
-        return KdevelopIntegrationGenerator.launchtemplate % {'launchid': launchid, 'launchname': launchname,
-                                                              'executablepath': executablepath, 'args': args,
-                                                              'workdir': workdir}
-
-    launchtemplate = """
-[Launch][Launch Configuration %(launchid)d]
-Configured Launch Modes=execute
-Configured Launchers=nativeAppLauncher
-Name=%(launchname)s
-Type=Native Application
-
-[Launch][Launch Configuration %(launchid)d][Data]
-Arguments=%(args)s
-Dependencies=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x00)
-Dependency Action=Nothing
-EnvironmentGroup=default
-Executable=file://%(executablepath)s
-External Terminal=konsole --noclose --workdir %%workdir -e %%exe
-Project Target=
-Use External Terminal=false
-Working Directory=file://%(workdir)s
-isExecutable=true
-
-"""
-
-    def generate_launches(self, moduledir):
-        launches = ','.join(['Launch Configuration %d' % i for i in range(7)])
-        result = KdevelopIntegrationGenerator.launchestemplate % {'launches': launches}
-        result += self.generate_launch(0, 'Local tests -- quick tests (unitcheck)', self.gbuildparser.makecmd,
-                                       'unitcheck', moduledir)
-        result += self.generate_launch(1, 'Local tests -- slow tests (unitcheck, slowcheck, screenshot)', self.gbuildparser.makecmd,
-                                       'unitcheck slowcheck screenshot', moduledir)
-        result += self.generate_launch(2, 'Local tests -- integration tests (unitcheck, slowcheck, screenshot, subsequentcheck)',
-                                       self.gbuildparser.makecmd, 'unitcheck slowcheck screenshot subsequentcheck', moduledir)
-        result += self.generate_launch(3, 'Global tests -- quick tests (unitcheck)', self.gbuildparser.makecmd,
-                                       'unitcheck', self.gbuildparser.builddir)
-        result += self.generate_launch(4, 'Global tests -- slow tests (unitcheck, slowcheck, screenshot)',
-                                       self.gbuildparser.makecmd, 'unitcheck slowcheck screenshot', self.gbuildparser.builddir)
-        result += self.generate_launch(5, 'Global tests -- integration tests (unitcheck, slowcheck, screenshot, subsequentcheck)',
-                                       self.gbuildparser.makecmd, 'unitcheck slowcheck screenshot subsequentcheck',
-                                       self.gbuildparser.builddir)
-        result += self.generate_launch(6, 'Run LibreOffice',
-                                       os.path.join(self.gbuildparser.instdir, 'program/soffice.bin'), '',
-                                       self.gbuildparser.instdir)
-        return result
-
-    launchestemplate = """
-[Launch]
-Launch Configurations=%(launches)s
-
-"""
-
-    def write_modulebeef(self, moduledir, modulename):
-        beefdir = os.path.join(moduledir, '.kdev4')
-        os.mkdir(beefdir)
-        beeffile = open(os.path.join(beefdir, 'Module_%s.kdev4' % modulename), 'w')
-        beeffile.write(self.generate_buildsystem(moduledir))
-        beeffile.write(self.generate_launches(moduledir))
-        beeffile.close()
-
-    def write_modulestub(self, moduledir, modulename):
-        stubfile = open(os.path.join(moduledir, 'Module_%s.kdev4' % modulename), 'w')
-        stubfile.write(KdevelopIntegrationGenerator.modulestubtemplate % {'modulename': modulename,
-                                                                          'builditem': self.encode_string(
-                                                                              'Module_%s' % modulename)})
-        stubfile.close()
-
-    modulestubtemplate = """
-[Buildset]
-BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01%(builditem)s)
-
-[Project]
-Name=Module_%(modulename)s
-Manager=KDevCustomBuildSystem
-VersionControl=kdevgit
-"""
-
-    def write_includepaths(self, path):
-        includedirfile = open(os.path.join(path, '.kdev_include_paths'), 'w')
-        include = set()
-        for target in self.target_path[path]:
-            include |= set(target['include'])
-        includedirfile.write('\n'.join(include))
-        includedirfile.close()
-
-    def __init__(self, gbuildparser, ide):
-        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-
-    def emit(self):
-        self.target_path = {}
-        for m in self.gbuildparser.modules:
-            for target in self.gbuildparser.modules[m]['targets']:
-                for cxx in target['CXXOBJECTS']:
-                    path = '/'.join(cxx.split('/')[:-1])
-                    if path not in self.target_path:
-                        self.target_path[path] = []
-                    self.target_path[path].append(target)
-
-        for path in self.target_path:
-            self.write_includepaths(path)
-        for modulename in self.gbuildparser.modules:
-            if modulename=='include':
-                continue
-            location = self.gbuildparser.srcdir + '/' + modulename
-            self.write_modulestub(location, modulename)
-            self.write_modulebeef(location, modulename)
-            for f in os.listdir(location):
-                if f.endswith('.kdev4'):
-                    try:
-                        os.remove(os.path.join(location, f))
-                    except OSError:
-                        shutil.rmtree(os.path.join(location, f))
-
-
 
 
 
@@ -1256,6 +877,393 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             filter_id_node = ET.SubElement(filter_node, '{%s}UniqueIdentifier' % ns)
             filter_id_node.text = '{%s}' % str(uuid.uuid4())
         self.write_pretty_xml(proj_node, filters_path)
+
+
+class DebugIntegrationGenerator(IdeIntegrationGenerator):
+
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+
+    def emit(self):
+        print(self.gbuildparser.srcdir)
+        print(self.gbuildparser.builddir)
+        for f in self.gbuildparser.modules:
+            for j in self.gbuildparser.modules[f]['targets']:
+                print(j)
+
+        VisualStudioIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        XcodeIntegrationGenerator(self.gbuildparser, self.ide).emit()
+
+        EclipseCDTIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        KdevelopIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        VimIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        QtCreatorIntegrationGenerator(self.gbuildparser, self.ide).emit()
+
+
+
+# ---- Classes below this point are not actively maintained -------
+
+
+
+class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
+
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+
+    def create_include_path(self):
+        for module in self.gbuildparser.modules:
+            if module == 'include':
+                continue
+            modulepath = os.path.join(self.gbuildparser.builddir, module)
+            includedirfile = open(os.path.join(modulepath, '.eclipsesettingfile'), 'w')
+            modulelibs = []
+            for lib in self.target_path.keys():
+                if lib.startswith(module+'/'):
+                    modulelibs.append(lib)
+            include = []
+            for lib in modulelibs:
+                for target in self.target_path[lib]:
+                    include.extend(target[0]['include'])
+            includedirfile.write('\n'.join(include))
+            includedirfile.close()
+
+
+    def create_macros(self):
+        for module in self.gbuildparser.modules:
+            if module == 'include':
+                continue
+            modulepath = os.path.join(self.gbuildparser.builddir, module)
+            macrofile = open(os.path.join(modulepath, '.macros'), 'w')
+            modulelibs = []
+            for lib in self.target_path.keys():
+                if lib.startswith(module+'/'):
+                    modulelibs.append(lib)
+            define = []
+            defineset = set()
+            for lib in modulelibs:
+                for target in self.target_path[lib]:
+                    for i in target[0]['DEFS'].keys():
+                        tmp = str(i) +','+str(target[0]['DEFS'][i])
+                        if tmp not in defineset:
+                            defineset.add(tmp)
+            macrofile.write('\n'.join(defineset))
+            macrofile.close()
+
+
+    def create_settings_file(self):
+
+        settingsfiletemplate = """\
+<?xml version="1.0" encoding="UTF-8"?>
+<cdtprojectproperties>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.IncludePaths">
+<language name="C++ Source File">
+
+
+</language>
+<language name="C Source File">
+
+</language>
+<language name="Object File">
+
+</language>
+<language name="Assembly Source File">
+
+</language>
+</section>
+<section name="org.eclipse.cdt.internal.ui.wizards.settingswizards.Macros">
+<language name="C++ Source File">
+
+</language>
+<language name="C Source File">
+
+</language>
+<language name="Object File">
+
+</language>
+<language name="Assembly Source File">
+
+</language>
+</section>
+</cdtprojectproperties>
+"""
+
+        for module in self.gbuildparser.modules:
+            if module == 'include':
+                continue
+            tempxml = []
+            modulepath = os.path.join(self.gbuildparser.builddir, module)
+
+            settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'w')
+            settingsfile.write(settingsfiletemplate)
+            settingsfile.close()
+
+            settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'r')
+            tempxml = settingsfile.readlines()
+            tempinclude = open(os.path.join(modulepath, '.eclipsesettingfile'), 'r')
+            tempmacro = open(os.path.join(modulepath, '.macros'), 'r')
+            for includepath in tempinclude:
+                if includepath[-1:] == "\n":
+                    includepath = includepath[:-1]
+                templine = "<includepath>%s</includepath>\n" % includepath
+                tempxml.insert(5, templine)
+
+            for line in tempmacro:
+                macroskeyvalue = line.split(',')
+                macrokey = macroskeyvalue[0]
+                macrovalue = macroskeyvalue[1]
+                if macrovalue[-1:] == "\n":
+                    macrovalue = macrovalue[:-1]
+                templine = "<macro><name>%s</name><value>%s</value></macro>\n" %(macrokey, macrovalue)
+                tempxml.insert(-13, templine)
+            tempxml="".join(tempxml)
+            settingsfile.close
+
+            settingsfile = open(os.path.join(modulepath, 'eclipsesettingfile.xml'), 'w')
+            settingsfile.write(tempxml)
+            settingsfile.close()
+            os.remove(os.path.join(modulepath, '.eclipsesettingfile'))
+            os.remove(os.path.join(modulepath, '.macros'))
+
+    def emit(self):
+        self.target_path = {}
+        for m in self.gbuildparser.modules:
+            if m == 'include':
+                continue
+            for target in self.gbuildparser.modules[m]['targets']:
+                for cxx in target['CXXOBJECTS']:
+                    path = '/'.join(cxx.split('/')[:-1])
+                    if path not in self.target_path:
+                        self.target_path[path] = []
+                    self.target_path[path].append([target])
+        self.create_include_path()
+        self.create_macros()
+        self.create_settings_file()
+
+
+
+class VimIntegrationGenerator(IdeIntegrationGenerator):
+
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+
+    def emit(self):
+        global_list = []
+        for m in self.gbuildparser.modules:
+            for lib in self.gbuildparser.modules[m]['targets']:
+                entries = []
+                for file in lib['CXXOBJECTS']:
+                    filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
+                    entry = {'directory': lib['location'], 'file': filePath, 'command': self.generateCommand(lib, filePath)}
+                    entries.append(entry)
+                global_list.extend(entries)
+        export_file = open('compile_commands.json', 'w')
+        json.dump(global_list, export_file)
+
+    def generateCommand(self, lib, file):
+        command = 'clang++ -Wall'
+        for key, value in lib['DEFS'].items():
+            command += ' -D'
+            command += key
+            if value is not None:
+                command += '='
+                command += value
+
+        # The directory of the file is missing from lib's include list, as that
+        # one is not the same for all source files in the lib.
+        command += ' -I' + os.path.dirname(file)
+
+        for include in lib['include']:
+            command += ' -I'
+            command += include
+        for isystem in lib['include_sys']:
+            command += ' -isystem '
+            command += isystem
+        for cxxflag in lib['CXXFLAGS']:
+            command += ' '
+            command += cxxflag
+        command += ' -c '
+        command += file
+        # Help clang when the tree is configured for gcc.
+        for gnu in ('-std=gnu++11', '-std=gnu++1y'):
+            command = command.replace(gnu, '-std=c++11')
+        return command
+
+
+
+class KdevelopIntegrationGenerator(IdeIntegrationGenerator):
+
+    def encode_int(self, i):
+        temp = '%08x' % i
+        return '\\x%s\\x%s\\x%s\\x%s' % (temp[0:2], temp[2:4], temp[4:6], temp[6:8])
+
+    def encode_string(self, string):
+        result = self.encode_int(len(string) * 2)
+        for c in string.encode('utf-16-be'):
+            if c in range(32, 126):
+                result += chr(c)
+            else:
+                result += '\\x%02x' % c
+        return result
+
+    def generate_buildsystemconfigtool(self, configid, tool, args, exe, typenr):
+        return KdevelopIntegrationGenerator.buildsystemconfigtooltemplate % {'configid': configid, 'tool': tool,
+                                                                             'args': args, 'exe': exe, 'typenr': typenr}
+
+    buildsystemconfigtooltemplate = """
+[CustomBuildSystem][BuildConfig%(configid)d][Tool%(tool)s]
+Arguments=%(args)s
+Enabled=true
+Environment=
+Executable=%(exe)s
+Type=%(typenr)d
+
+"""
+
+    def generate_buildsystemconfig(self, configid, moduledir, builddir, title, buildparms=''):
+        result = KdevelopIntegrationGenerator.buildsystemconfigtemplate % {'configid': configid, 'builddir': builddir,
+                                                                           'title': title}
+        result += self.generate_buildsystemconfigtool(configid, 'Clean', 'clean %s' % buildparms,
+                                                      self.gbuildparser.makecmd, 3)
+        result += self.generate_buildsystemconfigtool(configid, 'Build', 'all %s' % buildparms,
+                                                      self.gbuildparser.makecmd, 0)
+        return result
+
+    buildsystemconfigtemplate = """
+[CustomBuildSystem][BuildConfig%(configid)d]
+BuildDir=file://%(builddir)s
+Title=%(title)s
+
+"""
+
+    def generate_buildsystem(self, moduledir):
+        result = KdevelopIntegrationGenerator.buildsystemtemplate % {'defaultconfigid': 0}
+        result += self.generate_buildsystemconfig(0, moduledir, moduledir, 'Module Build -- Release')
+        result += self.generate_buildsystemconfig(1, moduledir, self.gbuildparser.builddir, 'Full Build -- Release')
+        result += self.generate_buildsystemconfig(2, moduledir, moduledir, 'Module Build -- Debug', 'debug=T')
+        result += self.generate_buildsystemconfig(3, moduledir, self.gbuildparser.builddir, 'Full Build -- Debug',
+                                                  'debug=T')
+        return result
+
+    buildsystemtemplate = """
+[CustomBuildSystem]
+CurrentConfiguration=BuildConfig%(defaultconfigid)d
+
+"""
+
+    def generate_launch(self, launchid, launchname, executablepath, args, workdir):
+        return KdevelopIntegrationGenerator.launchtemplate % {'launchid': launchid, 'launchname': launchname,
+                                                              'executablepath': executablepath, 'args': args,
+                                                              'workdir': workdir}
+
+    launchtemplate = """
+[Launch][Launch Configuration %(launchid)d]
+Configured Launch Modes=execute
+Configured Launchers=nativeAppLauncher
+Name=%(launchname)s
+Type=Native Application
+
+[Launch][Launch Configuration %(launchid)d][Data]
+Arguments=%(args)s
+Dependencies=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x00)
+Dependency Action=Nothing
+EnvironmentGroup=default
+Executable=file://%(executablepath)s
+External Terminal=konsole --noclose --workdir %%workdir -e %%exe
+Project Target=
+Use External Terminal=false
+Working Directory=file://%(workdir)s
+isExecutable=true
+
+"""
+
+    def generate_launches(self, moduledir):
+        launches = ','.join(['Launch Configuration %d' % i for i in range(7)])
+        result = KdevelopIntegrationGenerator.launchestemplate % {'launches': launches}
+        result += self.generate_launch(0, 'Local tests -- quick tests (unitcheck)', self.gbuildparser.makecmd,
+                                       'unitcheck', moduledir)
+        result += self.generate_launch(1, 'Local tests -- slow tests (unitcheck, slowcheck, screenshot)', self.gbuildparser.makecmd,
+                                       'unitcheck slowcheck screenshot', moduledir)
+        result += self.generate_launch(2, 'Local tests -- integration tests (unitcheck, slowcheck, screenshot, subsequentcheck)',
+                                       self.gbuildparser.makecmd, 'unitcheck slowcheck screenshot subsequentcheck', moduledir)
+        result += self.generate_launch(3, 'Global tests -- quick tests (unitcheck)', self.gbuildparser.makecmd,
+                                       'unitcheck', self.gbuildparser.builddir)
+        result += self.generate_launch(4, 'Global tests -- slow tests (unitcheck, slowcheck, screenshot)',
+                                       self.gbuildparser.makecmd, 'unitcheck slowcheck screenshot', self.gbuildparser.builddir)
+        result += self.generate_launch(5, 'Global tests -- integration tests (unitcheck, slowcheck, screenshot, subsequentcheck)',
+                                       self.gbuildparser.makecmd, 'unitcheck slowcheck screenshot subsequentcheck',
+                                       self.gbuildparser.builddir)
+        result += self.generate_launch(6, 'Run LibreOffice',
+                                       os.path.join(self.gbuildparser.instdir, 'program/soffice.bin'), '',
+                                       self.gbuildparser.instdir)
+        return result
+
+    launchestemplate = """
+[Launch]
+Launch Configurations=%(launches)s
+
+"""
+
+    def write_modulebeef(self, moduledir, modulename):
+        beefdir = os.path.join(moduledir, '.kdev4')
+        os.mkdir(beefdir)
+        beeffile = open(os.path.join(beefdir, 'Module_%s.kdev4' % modulename), 'w')
+        beeffile.write(self.generate_buildsystem(moduledir))
+        beeffile.write(self.generate_launches(moduledir))
+        beeffile.close()
+
+    def write_modulestub(self, moduledir, modulename):
+        stubfile = open(os.path.join(moduledir, 'Module_%s.kdev4' % modulename), 'w')
+        stubfile.write(KdevelopIntegrationGenerator.modulestubtemplate % {'modulename': modulename,
+                                                                          'builditem': self.encode_string(
+                                                                              'Module_%s' % modulename)})
+        stubfile.close()
+
+    modulestubtemplate = """
+[Buildset]
+BuildItems=@Variant(\\x00\\x00\\x00\\t\\x00\\x00\\x00\\x00\\x01\\x00\\x00\\x00\\x0b\\x00\\x00\\x00\\x00\\x01%(builditem)s)
+
+[Project]
+Name=Module_%(modulename)s
+Manager=KDevCustomBuildSystem
+VersionControl=kdevgit
+"""
+
+    def write_includepaths(self, path):
+        includedirfile = open(os.path.join(path, '.kdev_include_paths'), 'w')
+        include = set()
+        for target in self.target_path[path]:
+            include |= set(target['include'])
+        includedirfile.write('\n'.join(include))
+        includedirfile.close()
+
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+
+    def emit(self):
+        self.target_path = {}
+        for m in self.gbuildparser.modules:
+            for target in self.gbuildparser.modules[m]['targets']:
+                for cxx in target['CXXOBJECTS']:
+                    path = '/'.join(cxx.split('/')[:-1])
+                    if path not in self.target_path:
+                        self.target_path[path] = []
+                    self.target_path[path].append(target)
+
+        for path in self.target_path:
+            self.write_includepaths(path)
+        for modulename in self.gbuildparser.modules:
+            if modulename=='include':
+                continue
+            location = self.gbuildparser.srcdir + '/' + modulename
+            self.write_modulestub(location, modulename)
+            self.write_modulebeef(location, modulename)
+            for f in os.listdir(location):
+                if f.endswith('.kdev4'):
+                    try:
+                        os.remove(os.path.join(location, f))
+                    except OSError:
+                        shutil.rmtree(os.path.join(location, f))
+
 
 
 class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
@@ -1895,6 +1903,8 @@ DEFINES += %(defines)s
 SUBDIRS = %(subdirs)s
 """
 
+
+
 class CodeliteIntegrationGenerator(IdeIntegrationGenerator):
 
     def __init__(self, gbuildparser, ide):
@@ -1974,6 +1984,7 @@ def get_options():
     return parser.parse_args()
 
 
+
 if __name__ == '__main__':
     args = get_options()
     # FIXME: Hack
@@ -1988,6 +1999,7 @@ if __name__ == '__main__':
         'vs2013': VisualStudioIntegrationGenerator,
         'xcode': XcodeIntegrationGenerator,
         'debug': DebugIntegrationGenerator,
+        'testIde': testWinIde,
 
         # Old platforms
         'eclipsecdt': EclipseCDTIntegrationGenerator,
