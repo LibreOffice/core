@@ -59,7 +59,7 @@ void ScPivotLayoutTreeListLabel::FillLabelFields(ScDPLabelDataVector& rLabelVect
 
 void ScPivotLayoutTreeListLabel::InsertEntryForSourceTarget(SvTreeListEntry* /*pSource*/, SvTreeListEntry* /*pTarget*/)
 {
-    if(mpParent->mpPreviouslyFocusedListBox.get() != this)
+    if (mpParent->mpPreviouslyFocusedListBox && mpParent->mpPreviouslyFocusedListBox.get() != this)
         mpParent->mpPreviouslyFocusedListBox->RemoveSelection();
 }
 
