@@ -21,6 +21,10 @@
 #ifndef INCLUDED_FPICKER_SOURCE_WIN32_MISC_RESOURCEPROVIDER_HXX
 #define INCLUDED_FPICKER_SOURCE_WIN32_MISC_RESOURCEPROVIDER_HXX
 
+#include <sal/config.h>
+
+#include <memory>
+
 #include <sal/types.h>
 
 #include <rtl/ustring.hxx>
@@ -36,7 +40,7 @@ public:
     OUString getResString( sal_Int16 aId );
 
 private:
-    CResourceProvider_Impl* m_pImpl;
+    std::unique_ptr<CResourceProvider_Impl> m_pImpl;
 };
 
 #endif
