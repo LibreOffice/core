@@ -34,10 +34,6 @@ namespace vcl
             ,mpReferenceDevice( nullptr )
         {
         }
-
-        ~ImplControlData()
-        {
-        }
     };
 
 } // namespace vcl
