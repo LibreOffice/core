@@ -367,7 +367,7 @@ bool SAL_CALL CMtaFolderPicker::onBrowseForFolder( )
     // pre SHBrowseFroFolder
 
     m_bi.pidlRoot       = nullptr;
-    m_bi.pszDisplayName = reinterpret_cast<LPWSTR>(m_pathBuff.get());
+    m_bi.pszDisplayName = reinterpret_cast<LPWSTR>(m_pathBuff);
 
     if ( m_Description.getLength( ) )
         m_bi.lpszTitle = reinterpret_cast<LPCWSTR>(m_Description.getStr( ));
@@ -428,9 +428,9 @@ OUString SAL_CALL CMtaFolderPicker::getPathFromItemIdList( LPCITEMIDLIST lpItemI
 
     if ( lpItemIdList )
     {
-        bool bRet = SHGetPathFromIDListW( lpItemIdList, reinterpret_cast<LPWSTR>(m_pathBuff.get()) );
+        bool bRet = SHGetPathFromIDListW( lpItemIdList, reinterpret_cast<LPWSTR>(m_pathBuff) );
         if ( bRet )
-            path = m_pathBuff.get( );
+            path = m_pathBuff;
     }
 
     return path;

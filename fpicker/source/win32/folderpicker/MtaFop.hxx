@@ -43,48 +43,6 @@
 #endif
 #include "../misc/WinImplHelper.hxx"
 
-
-// a simple helper class used to provide a buffer for different
-// Win32 file and directory functions
-
-
-class CAutoPathBuff
-{
-public:
-    explicit CAutoPathBuff( size_t size = 0 )
-    {
-        if (0 == size)
-            size = 32000; // max path length under Win2000
-
-        pBuff = new sal_Unicode[size];
-
-        SAL_WARN_IF(!pBuff, "fpicker", "Could not allocate path buffer");
-    }
-
-    ~CAutoPathBuff( )
-    {
-        delete [] pBuff;
-    }
-
-    operator sal_Unicode*( )
-    {
-        OSL_PRECOND( pBuff,
-            "No path buffer allocated" );
-        return pBuff;
-    }
-
-    sal_Unicode* get( )
-    {
-        OSL_PRECOND( pBuff,
-            "No path buffer allocated" );
-        return pBuff;
-    }
-
-private:
-    sal_Unicode* pBuff;
-};
-
-
 // the Mta-Ole clipboard class is for internal use only!
 // only one instance of this class should be created, the
 // user has to ensure this!
@@ -168,7 +126,7 @@ private:
     OUString               m_displayDir;
     OUString               m_SelectedDir;
     BROWSEINFOW                 m_bi;
-    CAutoPathBuff               m_pathBuff;
+    sal_Unicode                 m_pathBuff[32000]; // max path length under Win2000
     HINSTANCE                   m_hInstance;
 
     // the request window class has to be registered only
