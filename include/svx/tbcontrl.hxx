@@ -207,7 +207,7 @@ class SVX_DLLPUBLIC SvxColorToolBoxControl : public cppu::ImplInheritanceHelper<
                                                                                  css::frame::XSubToolbarController >
 {
     std::unique_ptr<svx::ToolboxButtonColorUpdater> m_xBtnUpdater;
-    PaletteManager m_aPaletteManager;
+    std::unique_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
     bool m_bSplitButton;
     ColorSelectFunction m_aColorSelectFunction;
@@ -230,6 +230,7 @@ public:
     virtual void SAL_CALL updateImage() override;
 
     void setColorSelectFunction(const ColorSelectFunction& aColorSelectFunction);
+    void EnsurePaletteManager();
 };
 
 class SVX_DLLPUBLIC SvxSimpleUndoRedoController : public SfxToolBoxControl

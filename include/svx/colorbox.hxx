@@ -37,7 +37,7 @@ private:
     NamedColor m_aSelectedColor;
     sal_uInt16 m_nSlotId;
     bool m_bShowNoneButton;
-    PaletteManager m_aPaletteManager;
+    std::unique_ptr<PaletteManager> m_xPaletteManager;
     BorderColorStatus m_aBorderColorStatus;
 
     DECL_LINK(MenuActivateHdl, MenuButton *, void);
@@ -68,6 +68,7 @@ public:
 
     void SetAutoDisplayColor(const Color &rColor) { m_aAutoDisplayColor = rColor; }
     void ShowPreview(const NamedColor &rColor);
+    void EnsurePaletteManager();
 };
 
 /** A wrapper for SvxColorListBox. */
