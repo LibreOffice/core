@@ -91,6 +91,10 @@
 .INCLUDE : unxlngppc.mk
 .ENDIF
 
+.IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUXPPOWERPC64"
+.INCLUDE : unxlngppc64.mk
+.ENDIF
+
 .IF "$(COM)$(OS)$(CPU)$(CPUNAME)" == "GCCLINUX3S390"
 .INCLUDE : unxlngs390.mk
 .ENDIF
