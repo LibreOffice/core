@@ -391,7 +391,7 @@ void Model::removeBindingIfUseless( const XPropertySet_t& xBinding )
     if( pBinding != nullptr )
     {
         if( ! pBinding->isUseful() )
-            mpBindings->removeItem( pBinding );
+            mxBindings->removeItem( pBinding );
     }
 }
 
@@ -411,7 +411,7 @@ css::uno::Reference<css::xml::dom::XDocument> Model::newInstance( const OUString
     Sequence<PropertyValue> aSequence;
     bool bOnce = bURLOnce; // bool, so we can take address in setInstanceData
     setInstanceData( aSequence, &sName, &xInstance, &sURL, &bOnce );
-    sal_Int32 nInstance = mpInstances->addItem( aSequence );
+    sal_Int32 nInstance = mxInstances->addItem( aSequence );
     loadInstance( nInstance );
 
     return xInstance;
@@ -451,10 +451,10 @@ void Model::renameInstance( const OUString& sFrom,
                             sal_Bool bURLOnce )
     throw( RuntimeException, std::exception )
 {
-    sal_Int32 nPos = lcl_findInstance( mpInstances, sFrom );
+    sal_Int32 nPos = lcl_findInstance( mxInstances.get(), sFrom );
     if( nPos != -1 )
     {
-        Sequence<PropertyValue> aSeq = mpInstances->getItem( nPos );
+        Sequence<PropertyValue> aSeq = mxInstances->getItem( nPos );
         PropertyValue* pSeq = aSeq.getArray();
         sal_Int32 nLength = aSeq.getLength();
 
@@ -482,16 +482,16 @@ void Model::renameInstance( const OUString& sFrom,
             pSeq[ nProp ].Value <<= bURLOnce;
 
         // set instance
-        mpInstances->setItem( nPos, aSeq );
+        mxInstances->setItem( nPos, aSeq );
     }
 }
 
 void Model::removeInstance( const OUString& sName )
     throw( RuntimeException, std::exception )
 {
-    sal_Int32 nPos = lcl_findInstance( mpInstances, sName );
+    sal_Int32 nPos = lcl_findInstance( mxInstances.get(), sName );
     if( nPos != -1 )
-        mpInstances->removeItem( mpInstances->getItem( nPos ) );
+        mxInstances->removeItem( mxInstances->getItem( nPos ) );
 }
 
 static Reference<XNameContainer> lcl_getModels(
@@ -666,10 +666,10 @@ Model::XNode_t Model::renameNode( const XNode_t& xNode,
         // iterate over bindings and replace default expressions
         OUString sNewDefaultBindingExpression =
             getDefaultBindingExpressionForNode( xNew );
-        for( sal_Int32 n = 0; n < mpBindings->countItems(); n++ )
+        for( sal_Int32 n = 0; n < mxBindings->countItems(); n++ )
         {
             Binding* pBinding = Binding::getBinding(
-                mpBindings->Collection<XPropertySet_t>::getItem( n ) );
+                mxBindings->Collection<XPropertySet_t>::getItem( n ) );
 
             if( pBinding->getBindingExpression()
                     == sOldDefaultBindingExpression )
@@ -694,10 +694,10 @@ Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
     Binding* pBestBinding = nullptr;
     sal_Int32 nBestScore = 0;
 
-    for( sal_Int32 n = 0; n < mpBindings->countItems(); n++ )
+    for( sal_Int32 n = 0; n < mxBindings->countItems(); n++ )
     {
         Binding* pBinding = Binding::getBinding(
-            mpBindings->Collection<XPropertySet_t>::getItem( n ) );
+            mxBindings->Collection<XPropertySet_t>::getItem( n ) );
 
         OSL_ENSURE( pBinding != nullptr, "no binding?" );
         Reference<XNodeList> xNodeList = pBinding->getXNodeList();
@@ -732,7 +732,7 @@ Model::XPropertySet_t Model::getBindingForNode( const XNode_t& xNode,
         pBestBinding = new Binding();
         pBestBinding->setBindingExpression(
             getDefaultBindingExpressionForNode( xNode ) );
-        mpBindings->addItem( pBestBinding );
+        mxBindings->addItem( pBestBinding );
     }
 
     return pBestBinding;

@@ -27,8 +27,8 @@
 #include <com/sun/star/util/XUpdatable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-
 #include <com/sun/star/uno/Reference.hxx>
+#include <rtl/ref.hxx>
 #include "mip.hxx"
 #include <map>
 
@@ -86,9 +86,9 @@ class Model : public Model_t
 private:
 
     OUString msID;                     /// the model ID
-    BindingCollection* mpBindings;          /// the bindings
-    SubmissionCollection* mpSubmissions;    /// the submissions
-    InstanceCollection* mpInstances;        /// the instance(s)
+    rtl::Reference<BindingCollection>    mxBindings;     /// the bindings
+    rtl::Reference<SubmissionCollection> mxSubmissions;  /// the submissions
+    rtl::Reference<InstanceCollection>   mxInstances;    /// the instance(s)
 
     css::uno::Reference<css::xforms::XDataTypeRepository> mxDataTypes;      /// the XSD data-types used
     css::uno::Reference<css::xml::dom::XDocument> mxForeignSchema;            /// the XSD-schema part we cannot
@@ -96,12 +96,6 @@ private:
     OUString msSchemaRef;              /// xforms:model/@schema attribute
 
     css::uno::Reference<css::container::XNameContainer> mxNamespaces;          /// namespaces for entire model
-
-
-    // references to mpBindings/mpSubmissions, for UNO reference counting
-    css::uno::Reference<css::container::XSet> mxBindings;
-    css::uno::Reference<css::container::XSet> mxSubmissions;
-    css::uno::Reference<css::container::XSet> mxInstances;
 
     MIPs_t maMIPs;                          /// map nodes to their MIPs
 
