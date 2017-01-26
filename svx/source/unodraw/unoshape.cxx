@@ -598,6 +598,10 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
         const SfxItemPropertyMap& rSrc = rPropSet.getPropertyMap();
         PropertyEntryVector_t aSrcPropVector = rSrc.getPropertyEntries();
         PropertyEntryVector_t::const_iterator aSrcIt = aSrcPropVector.begin();
+
+        if (rPropSet.GetUsrAnyForID(XATTR_FILLGRADIENT))
+            rSet.Put(rSet.GetPool()->GetDefaultItem(XATTR_FILLGRADIENT));
+
         while(aSrcIt != aSrcPropVector.end())
         {
             if(aSrcIt->nWID)
@@ -618,7 +622,7 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
                         }
                         else
                         {
-                            if(SfxItemPool::IsWhich(pEntry->nWID))
+                            if(SfxItemPool::IsWhich(pEntry->nWID) && pEntry->nWID != XATTR_FILLGRADIENT)
                                 rSet.Put(rSet.GetPool()->GetDefaultItem(pEntry->nWID));
                             // set
                             SvxItemPropertySet_setPropertyValue(pEntry, *pUsrAny, rSet);
