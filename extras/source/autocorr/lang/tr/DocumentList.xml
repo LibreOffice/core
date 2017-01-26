@@ -194,6 +194,7 @@
   <block-list:block block-list:abbreviated-name=":atom:" block-list:name="⚛"/>
   <block-list:block block-list:abbreviated-name=":at yarışı:" block-list:name="🏇"/>
   <block-list:block block-list:abbreviated-name=":avro2:" block-list:name="💶"/>
+  <block-list:block block-list:abbreviated-name=":avro:" block-list:name="€"/>
   <block-list:block block-list:abbreviated-name=":ay2:" block-list:name="🌜"/>
   <block-list:block block-list:abbreviated-name=":Ay2:" block-list:name="☾"/>
   <block-list:block block-list:abbreviated-name=":ayak:" block-list:name="🐾"/>
@@ -475,7 +476,6 @@
   <block-list:block block-list:abbreviated-name=":eta:" block-list:name="η"/>
   <block-list:block block-list:abbreviated-name=":Eta:" block-list:name="Η"/>
   <block-list:block block-list:abbreviated-name=":et:" block-list:name="🍖"/>
-  <block-list:block block-list:abbreviated-name=":euro:" block-list:name="€"/>
   <block-list:block block-list:abbreviated-name=":ev2:" block-list:name="🏡"/>
   <block-list:block block-list:abbreviated-name=":ev:" block-list:name="🏠"/>
   <block-list:block block-list:abbreviated-name=":evet:" block-list:name="👍"/>
