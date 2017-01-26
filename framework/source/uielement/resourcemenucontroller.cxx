@@ -30,26 +30,26 @@ public:
                             const css::uno::Sequence< css::uno::Any >& rxArgs, bool bToolbarContainer );
 
     // XPopupMenuController
-    virtual void SAL_CALL updatePopupMenu() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL updatePopupMenu() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
 
     // XUIConfigurationListener
-    virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& rEvent ) override;
+    virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& rEvent ) override;
+    virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& rEvent ) override;
 
     // XMenuListener
-    virtual void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL itemActivated( const css::awt::MenuEvent& rEvent ) override;
+    virtual void SAL_CALL itemSelected( const css::awt::MenuEvent& rEvent ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     OUString m_aMenuURL;
@@ -108,7 +108,6 @@ ResourceMenuController::ResourceMenuController( const css::uno::Reference< css::
 }
 
 void ResourceMenuController::updatePopupMenu()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( ( m_xMenuContainer.is() && !m_bContextMenu ) || m_aMenuURL.isEmpty() )
         return;
@@ -227,7 +226,6 @@ void ResourceMenuController::updatePopupMenu()
 }
 
 void ResourceMenuController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< css::embed::VerbDescriptor > aVerbs;
     if ( rEvent.IsEnabled && ( rEvent.State >>= aVerbs ) )
@@ -313,7 +311,6 @@ void ResourceMenuController::fillToolbarData()
 }
 
 void ResourceMenuController::itemActivated( const css::awt::MenuEvent& /*rEvent*/ )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     // Must initialize MenuBarManager here, because we want to let the app do context menu interception before.
     if ( !m_xMenuBarManager.is() )
@@ -327,32 +324,27 @@ void ResourceMenuController::itemActivated( const css::awt::MenuEvent& /*rEvent*
 }
 
 void ResourceMenuController::itemSelected( const css::awt::MenuEvent& /*rEvent*/ )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     // Must override this, because we are managed by MenuBarManager, so don't want the handler found in the base class.
 }
 
 void ResourceMenuController::elementInserted( const css::ui::ConfigurationEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( rEvent.ResourceURL == m_aMenuURL )
         m_xMenuContainer.clear();
 }
 
 void ResourceMenuController::elementRemoved( const css::ui::ConfigurationEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     elementInserted( rEvent );
 }
 
 void ResourceMenuController::elementReplaced( const css::ui::ConfigurationEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     elementInserted( rEvent );
 }
 
 void ResourceMenuController::disposing( const css::lang::EventObject& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( rEvent.Source == m_xConfigManager )
         m_xConfigManager.clear();
@@ -392,7 +384,6 @@ void ResourceMenuController::disposing()
 }
 
 OUString ResourceMenuController::getImplementationName()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( m_bToolbarContainer )
         return OUString( "com.sun.star.comp.framework.ToolbarAsMenuController" );
@@ -401,7 +392,6 @@ OUString ResourceMenuController::getImplementationName()
 }
 
 css::uno::Sequence< OUString > ResourceMenuController::getSupportedServiceNames()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.frame.PopupMenuController" };
 }
@@ -413,7 +403,7 @@ public:
                           const css::uno::Sequence< css::uno::Any >& rArgs );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
 private:
     virtual void impl_setPopupMenu() override;
@@ -446,7 +436,6 @@ void SaveAsMenuController::impl_setPopupMenu()
 }
 
 OUString SaveAsMenuController::getImplementationName()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.framework.SaveAsMenuController" );
 }

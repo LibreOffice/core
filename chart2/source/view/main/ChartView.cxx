@@ -1213,7 +1213,6 @@ void ChartView::init()
 }
 
 void SAL_CALL ChartView::initialize( const uno::Sequence< uno::Any >& )
-                throw ( uno::Exception, uno::RuntimeException, std::exception)
 {
     init();
 }
@@ -1315,7 +1314,6 @@ void ChartView::getMetaFile( const uno::Reference< io::XOutputStream >& xOutStre
 }
 
 uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aFlavor )
-                throw (datatransfer::UnsupportedFlavorException, io::IOException, uno::RuntimeException, std::exception)
 {
     bool bHighContrastMetaFile( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast));
     uno::Any aRet;
@@ -1349,7 +1347,6 @@ uno::Any SAL_CALL ChartView::getTransferData( const datatransfer::DataFlavor& aF
     return aRet;
 }
 uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFlavors()
-                throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< datatransfer::DataFlavor > aRet(2);
 
@@ -1363,7 +1360,6 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL ChartView::getTransferDataFla
     return aRet;
 }
 sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlavor& aFlavor )
-                throw (uno::RuntimeException, std::exception)
 {
     return ( aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMEType) ||
              aFlavor.MimeType.equals(lcl_aGDIMetaFileMIMETypeHighContrast) );
@@ -1371,7 +1367,6 @@ sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlav
 
 // ____ XUnoTunnel ___
 ::sal_Int64 SAL_CALL ChartView::getSomething( const uno::Sequence< ::sal_Int8 >& aIdentifier )
-        throw( uno::RuntimeException, std::exception)
 {
     if( aIdentifier.getLength() == 16 && 0 == memcmp( ExplicitValueProvider::getUnoTunnelId().getConstArray(),
                                                          aIdentifier.getConstArray(), 16 ) )
@@ -1385,19 +1380,16 @@ sal_Bool SAL_CALL ChartView::isDataFlavorSupported( const datatransfer::DataFlav
 // lang::XServiceInfo
 
 OUString SAL_CALL ChartView::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString(CHART_VIEW_SERVICE_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL ChartView::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ChartView::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { CHART_VIEW_SERVICE_NAME };
 }
@@ -2691,7 +2683,6 @@ void ChartView::render()
 
 // util::XEventListener (base of XCloseListener)
 void SAL_CALL ChartView::disposing( const lang::EventObject& /* rSource */ )
-        throw(uno::RuntimeException, std::exception)
 {
 }
 
@@ -2772,7 +2763,6 @@ void ChartView::impl_updateView( bool bCheckLockedCtrler )
 
 // ____ XModifyListener ____
 void SAL_CALL ChartView::modified( const lang::EventObject& /* aEvent */ )
-    throw (uno::RuntimeException, std::exception)
 {
     m_bViewDirty = true;
     if( m_bInViewUpdate )
@@ -2870,30 +2860,26 @@ void ChartView::impl_notifyModeChangeListener( const OUString& rNewMode )
 // ____ XModeChangeBroadcaster ____
 
 void SAL_CALL ChartView::addModeChangeListener( const uno::Reference< util::XModeChangeListener >& xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.addInterface(
         cppu::UnoType<util::XModeChangeListener>::get(), xListener );
 }
 void SAL_CALL ChartView::removeModeChangeListener( const uno::Reference< util::XModeChangeListener >& xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.removeInterface(
         cppu::UnoType<util::XModeChangeListener>::get(), xListener );
 }
 void SAL_CALL ChartView::addModeChangeApproveListener( const uno::Reference< util::XModeChangeApproveListener >& /* _rxListener */ )
-    throw (lang::NoSupportException, uno::RuntimeException, std::exception)
 {
 
 }
 void SAL_CALL ChartView::removeModeChangeApproveListener( const uno::Reference< util::XModeChangeApproveListener >& /* _rxListener */ )
-    throw (lang::NoSupportException, uno::RuntimeException, std::exception)
 {
 
 }
 
 // ____ XUpdatable ____
-void SAL_CALL ChartView::update() throw (uno::RuntimeException, std::exception)
+void SAL_CALL ChartView::update()
 {
     impl_updateView();
 
@@ -2906,19 +2892,18 @@ void SAL_CALL ChartView::update() throw (uno::RuntimeException, std::exception)
         impl_updateView();
 }
 
-void SAL_CALL ChartView::updateSoft() throw (uno::RuntimeException, std::exception)
+void SAL_CALL ChartView::updateSoft()
 {
     update();
 }
 
-void SAL_CALL ChartView::updateHard() throw (uno::RuntimeException, std::exception)
+void SAL_CALL ChartView::updateHard()
 {
     impl_updateView(false);
 }
 
 // ____ XPropertySet ____
 Reference< beans::XPropertySetInfo > SAL_CALL ChartView::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
     return nullptr;
@@ -2926,8 +2911,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL ChartView::getPropertySetInfo()
 
 void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
                                                      , const Any& rValue )
-    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException
-          , lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if( rPropertyName == "Resolution" )
     {
@@ -2980,7 +2963,6 @@ void SAL_CALL ChartView::setPropertyValue( const OUString& rPropertyName
 }
 
 Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Any aRet;
     if( rPropertyName == "Resolution" )
@@ -2994,25 +2976,21 @@ Any SAL_CALL ChartView::getPropertyValue( const OUString& rPropertyName )
 
 void SAL_CALL ChartView::addPropertyChangeListener(
     const OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* xListener */ )
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 void SAL_CALL ChartView::removePropertyChangeListener(
     const OUString& /* aPropertyName */, const Reference< beans::XPropertyChangeListener >& /* aListener */ )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ChartView::addVetoableChangeListener( const OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
 
 void SAL_CALL ChartView::removeVetoableChangeListener( const OUString& /* PropertyName */, const Reference< beans::XVetoableChangeListener >& /* aListener */ )
-    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented");
 }
@@ -3020,7 +2998,6 @@ void SAL_CALL ChartView::removeVetoableChangeListener( const OUString& /* Proper
 // ____ XMultiServiceFactory ____
 
 Reference< uno::XInterface > ChartView::createInstance( const OUString& aServiceSpecifier )
-    throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
 
@@ -3081,14 +3058,13 @@ Reference< uno::XInterface > ChartView::createInstance( const OUString& aService
 }
 
 Reference< uno::XInterface > ChartView::createInstanceWithArguments( const OUString& ServiceSpecifier, const uno::Sequence< uno::Any >& Arguments )
-    throw (uno::Exception, uno::RuntimeException, std::exception)
 {
     OSL_ENSURE( Arguments.getLength(), "ChartView::createInstanceWithArguments: arguments are ignored" );
     (void) Arguments; // avoid warning
     return createInstance( ServiceSpecifier );
 }
 
-uno::Sequence< OUString > ChartView::getAvailableServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence< OUString > ChartView::getAvailableServiceNames()
 {
     uno::Sequence< OUString > aServiceNames( 6 );
 
@@ -3102,7 +3078,7 @@ uno::Sequence< OUString > ChartView::getAvailableServiceNames() throw (uno::Runt
     return aServiceNames;
 }
 
-OUString ChartView::dump() throw (uno::RuntimeException, std::exception)
+OUString ChartView::dump()
 {
 #if HAVE_FEATURE_DESKTOP
     // Used for unit tests and in chartcontroller only, no need to drag in this when cross-compiling

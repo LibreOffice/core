@@ -262,8 +262,7 @@ OUString pyString2ustring( PyObject *str );
 
 /// @throws css::reflection::InvocationTargetException
 /// @throws css::uno::RuntimeException
-void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime )
-    throw (css::reflection::InvocationTargetException, css::uno::RuntimeException);
+void raiseInvocationTargetExceptionWhenNeeded( const Runtime &runtime );
 
 PyRef PyUNO_callable_new (
     const css::uno::Reference<css::script::XInvocation2> &xInv,
@@ -286,21 +285,17 @@ PyRef getAnyClass( const Runtime &);
 PyObject *PyUNO_invoke( PyObject *object, const char *name , PyObject *args );
 
 /// @throws css::uno::RuntimeException
-css::uno::Any PyEnum2Enum( PyObject *obj )
-    throw ( css::uno::RuntimeException );
+css::uno::Any PyEnum2Enum( PyObject *obj );
 /// @throws css::uno::RuntimeException
-sal_Unicode PyChar2Unicode( PyObject *o )
-    throw ( css::uno::RuntimeException );
+sal_Unicode PyChar2Unicode( PyObject *o );
 /// @throws css::uno::RuntimeException
-css::uno::Type PyType2Type( PyObject * o )
-    throw( css::uno::RuntimeException );
+css::uno::Type PyType2Type( PyObject * o );
 
 void raisePyExceptionWithAny( const css::uno::Any &a );
 const char *typeClassToString( css::uno::TypeClass t );
 
 /// @throws css::uno::RuntimeException
-PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object )
-    throw ( css::uno::RuntimeException );
+PyRef getObjectFromUnoModule( const Runtime &runtime, const char * object );
 
 bool isInterfaceClass( const Runtime &, PyObject *obj );
 bool isInstanceOfStructOrException( PyObject *obj);
@@ -335,8 +330,7 @@ public:
 
     /// @throws css::uno::RuntimeException
     static PyRef create(
-        const css::uno::Reference< css::uno::XComponentContext > & xContext )
-        throw ( css::uno::RuntimeException, std::exception );
+        const css::uno::Reference< css::uno::XComponentContext > & xContext );
 };
 
 
@@ -363,37 +357,24 @@ public:
 
     // XInvocation
     virtual css::uno::Reference< css::beans::XIntrospectionAccess >
-           SAL_CALL getIntrospection(  ) throw (css::uno::RuntimeException, std::exception) override;
+           SAL_CALL getIntrospection(  ) override;
     virtual css::uno::Any SAL_CALL invoke(
         const OUString& aFunctionName,
         const css::uno::Sequence< css::uno::Any >& aParams,
         css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-        css::uno::Sequence< css::uno::Any >& aOutParam )
-        throw (css::lang::IllegalArgumentException,
-               css::script::CannotConvertException,
-               css::reflection::InvocationTargetException,
-               css::uno::RuntimeException, std::exception) override;
+        css::uno::Sequence< css::uno::Any >& aOutParam ) override;
 
     virtual void SAL_CALL setValue(
         const OUString& aPropertyName,
-        const css::uno::Any& aValue )
-        throw (css::beans::UnknownPropertyException,
-               css::script::CannotConvertException,
-               css::reflection::InvocationTargetException,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Any& aValue ) override;
 
-    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName )
-        throw (css::beans::UnknownPropertyException,
-               css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getValue( const OUString& aPropertyName ) override;
+    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
+    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
 
     // XUnoTunnel
     virtual sal_Int64 SAL_CALL getSomething(
-        const css::uno::Sequence< sal_Int8 >& aIdentifier )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 };
 
 

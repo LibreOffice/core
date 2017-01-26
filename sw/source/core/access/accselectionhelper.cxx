@@ -66,7 +66,6 @@ SwFEShell* SwAccessibleSelectionHelper::GetFEShell()
 }
 
 void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
-        throw ( lang::IndexOutOfBoundsException )
 {
     Reference < XAccessibleContext > xThis( &m_rContext );
     Reference < XAccessibleSelection >xSelThis( xThis, UNO_QUERY );
@@ -79,8 +78,6 @@ void SwAccessibleSelectionHelper::throwIndexOutOfBoundsException()
 // XAccessibleSelection
 void SwAccessibleSelectionHelper::selectAccessibleChild(
     sal_Int32 nChildIndex )
-    throw ( lang::IndexOutOfBoundsException,
-            RuntimeException )
 {
     SolarMutexGuard aGuard;
 
@@ -139,8 +136,6 @@ static bool lcl_getSelectedState(const SwAccessibleChild& aChild,
 
 bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
     sal_Int32 nChildIndex )
-    throw ( lang::IndexOutOfBoundsException,
-            RuntimeException )
 {
     SolarMutexGuard aGuard;
 
@@ -175,7 +170,6 @@ bool SwAccessibleSelectionHelper::isAccessibleChildSelected(
 }
 
 void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
-    throw ( RuntimeException )
 {
     SolarMutexGuard aGuard;
 
@@ -207,7 +201,6 @@ void SwAccessibleSelectionHelper::selectAllAccessibleChildren(  )
 }
 
 sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
-    throw ( RuntimeException )
 {
     SolarMutexGuard aGuard;
 
@@ -272,8 +265,6 @@ sal_Int32 SwAccessibleSelectionHelper::getSelectedAccessibleChildCount(  )
 
 Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
     sal_Int32 nSelectedChildIndex )
-    throw ( lang::IndexOutOfBoundsException,
-            RuntimeException)
 {
     SolarMutexGuard aGuard;
 
@@ -367,8 +358,6 @@ Reference<XAccessible> SwAccessibleSelectionHelper::getSelectedAccessibleChild(
 // index has to be treated as global child index.
 void SwAccessibleSelectionHelper::deselectAccessibleChild(
     sal_Int32 nChildIndex )
-    throw ( lang::IndexOutOfBoundsException,
-            RuntimeException )
 {
     SolarMutexGuard g;
 

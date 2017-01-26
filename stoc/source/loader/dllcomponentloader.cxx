@@ -61,16 +61,16 @@ public:
     explicit DllComponentLoader( const Reference<XComponentContext> & xCtx );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XImplementationLoader
-    virtual Reference<XInterface> SAL_CALL activate( const OUString& implementationName, const OUString& implementationLoaderUrl, const OUString& locationUrl, const Reference<XRegistryKey>& xKey ) throw(CannotActivateFactoryException, RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) throw(CannotRegisterImplementationException, RuntimeException, std::exception) override;
+    virtual Reference<XInterface> SAL_CALL activate( const OUString& implementationName, const OUString& implementationLoaderUrl, const OUString& locationUrl, const Reference<XRegistryKey>& xKey ) override;
+    virtual sal_Bool SAL_CALL writeRegistryInfo( const Reference<XRegistryKey>& xKey, const OUString& implementationLoaderUrl, const OUString& locationUrl ) override;
 
 private:
     Reference<XMultiServiceFactory> m_xSMgr;
@@ -83,19 +83,16 @@ DllComponentLoader::DllComponentLoader( const Reference<XComponentContext> & xCt
 }
 
 OUString SAL_CALL DllComponentLoader::getImplementationName(  )
-    throw(css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.stoc.DLLComponentLoader");
 }
 
 sal_Bool SAL_CALL DllComponentLoader::supportsService( const OUString& ServiceName )
-    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
-    throw(css::uno::RuntimeException, std::exception)
 {
     Sequence< OUString > seqNames { "com.sun.star.loader.SharedLibrary" };
     return seqNames;
@@ -103,7 +100,6 @@ Sequence<OUString> SAL_CALL DllComponentLoader::getSupportedServiceNames(  )
 
 
 void DllComponentLoader::initialize( const css::uno::Sequence< css::uno::Any >& )
-    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "dllcomponentloader::initialize should not be called !" );
 //      if( aArgs.getLength() != 1 )
@@ -130,8 +126,6 @@ void DllComponentLoader::initialize( const css::uno::Sequence< css::uno::Any >& 
 Reference<XInterface> SAL_CALL DllComponentLoader::activate(
     const OUString & rImplName, const OUString &, const OUString & rLibName,
     const Reference< XRegistryKey > & )
-
-    throw(CannotActivateFactoryException, RuntimeException, std::exception)
 {
     return loadSharedLibComponentFactory(
         cppu::bootstrap_expandUri(rLibName), OUString(), rImplName, m_xSMgr,
@@ -141,8 +135,6 @@ Reference<XInterface> SAL_CALL DllComponentLoader::activate(
 
 sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
     const Reference< XRegistryKey > & xKey, const OUString &, const OUString & rLibName )
-
-    throw(CannotRegisterImplementationException, RuntimeException, std::exception)
 {
 #ifdef DISABLE_DYNLOADING
     (void) xKey;

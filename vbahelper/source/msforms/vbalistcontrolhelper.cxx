@@ -81,7 +81,7 @@ uno::Any ListPropListener::getValueEvent()
 }
 
 void SAL_CALL
-ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) throw (uno::RuntimeException)
+ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex )
 {
     if ( pvargItem.hasValue()  )
     {
@@ -136,7 +136,7 @@ ListControlHelper::AddItem( const uno::Any& pvargItem, const uno::Any& pvargInde
 }
 
 void SAL_CALL
-ListControlHelper::removeItem( const uno::Any& index ) throw (uno::RuntimeException)
+ListControlHelper::removeItem( const uno::Any& index )
 {
     sal_Int32 nIndex = 0;
     // for int index
@@ -165,7 +165,7 @@ ListControlHelper::removeItem( const uno::Any& index ) throw (uno::RuntimeExcept
 }
 
 void SAL_CALL
-ListControlHelper::Clear(  ) throw (uno::RuntimeException)
+ListControlHelper::Clear(  )
 {
     // urk, setValue doesn't seem to work !!
     //setValue( uno::makeAny( sal_Int16() ) );
@@ -173,14 +173,14 @@ ListControlHelper::Clear(  ) throw (uno::RuntimeException)
 }
 
 void SAL_CALL
-ListControlHelper::setRowSource( const OUString& _rowsource ) throw (uno::RuntimeException)
+ListControlHelper::setRowSource( const OUString& _rowsource )
 {
     if ( _rowsource.isEmpty() )
         Clear();
 }
 
 sal_Int32 SAL_CALL
-ListControlHelper::getListCount() throw (uno::RuntimeException)
+ListControlHelper::getListCount()
 {
     uno::Sequence< OUString > sList;
     m_xProps->getPropertyValue( "StringItemList" ) >>= sList;
@@ -188,7 +188,7 @@ ListControlHelper::getListCount() throw (uno::RuntimeException)
 }
 
 uno::Any SAL_CALL
-ListControlHelper::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn ) throw (uno::RuntimeException)
+ListControlHelper::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn )
 {
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( new ListPropListener( m_xProps, pvargIndex, pvarColumn ) ) ) );
 }

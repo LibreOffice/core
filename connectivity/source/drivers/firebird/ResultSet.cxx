@@ -113,7 +113,7 @@ OResultSet::~OResultSet()
 }
 
 // ---- XResultSet -- Row retrieval methods ------------------------------------
-sal_Int32 SAL_CALL OResultSet::getRow() throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSet::getRow()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -121,7 +121,7 @@ sal_Int32 SAL_CALL OResultSet::getRow() throw(SQLException, RuntimeException, st
     return m_currentRow;
 }
 
-sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::next()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -150,21 +150,21 @@ sal_Bool SAL_CALL OResultSet::next() throw(SQLException, RuntimeException, std::
     }
 }
 
-sal_Bool SAL_CALL OResultSet::previous() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::previous()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("previous not supported in firebird",
                                                   *this);
     return false;
 }
 
-sal_Bool SAL_CALL OResultSet::isLast() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::isLast()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("isLast not supported in firebird",
                                                   *this);
     return false;
 }
 
-sal_Bool SAL_CALL OResultSet::isBeforeFirst() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::isBeforeFirst()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -172,7 +172,7 @@ sal_Bool SAL_CALL OResultSet::isBeforeFirst() throw(SQLException, RuntimeExcepti
     return m_currentRow == 0;
 }
 
-sal_Bool SAL_CALL OResultSet::isAfterLast() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::isAfterLast()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -180,7 +180,7 @@ sal_Bool SAL_CALL OResultSet::isAfterLast() throw(SQLException, RuntimeException
     return m_bIsAfterLastRow;
 }
 
-sal_Bool SAL_CALL OResultSet::isFirst() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::isFirst()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -188,7 +188,7 @@ sal_Bool SAL_CALL OResultSet::isFirst() throw(SQLException, RuntimeException, st
     return m_currentRow == 1 && !m_bIsAfterLastRow;
 }
 
-void SAL_CALL OResultSet::beforeFirst() throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::beforeFirst()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -198,7 +198,7 @@ void SAL_CALL OResultSet::beforeFirst() throw(SQLException, RuntimeException, st
                                                       *this);
 }
 
-void SAL_CALL OResultSet::afterLast() throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::afterLast()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -208,7 +208,7 @@ void SAL_CALL OResultSet::afterLast() throw(SQLException, RuntimeException, std:
                                                       *this);
 }
 
-sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::first()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -229,7 +229,7 @@ sal_Bool SAL_CALL OResultSet::first() throw(SQLException, RuntimeException, std:
     }
 }
 
-sal_Bool SAL_CALL OResultSet::last() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::last()
 {
     // We need to iterate past the last row to know when we've passed the last
     // row, hence we can't actually move to last.
@@ -238,7 +238,7 @@ sal_Bool SAL_CALL OResultSet::last() throw(SQLException, RuntimeException, std::
     return false;
 }
 
-sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -256,7 +256,7 @@ sal_Bool SAL_CALL OResultSet::absolute(sal_Int32 aRow) throw(SQLException, Runti
     }
 }
 
-sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -279,7 +279,6 @@ sal_Bool SAL_CALL OResultSet::relative(sal_Int32 row) throw(SQLException, Runtim
 }
 
 void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 nIndex)
-    throw (SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -294,7 +293,6 @@ void SAL_CALL OResultSet::checkColumnIndex(sal_Int32 nIndex)
 }
 
 void SAL_CALL OResultSet::checkRowIndex()
-    throw (SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -308,19 +306,18 @@ void SAL_CALL OResultSet::checkRowIndex()
     }
 }
 
-Any SAL_CALL OResultSet::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OResultSet::queryInterface( const Type & rType )
 {
     Any aRet = OPropertySetHelper::queryInterface(rType);
     return aRet.hasValue() ? aRet : OResultSet_BASE::queryInterface(rType);
 }
 
- Sequence<  Type > SAL_CALL OResultSet::getTypes() throw( RuntimeException, std::exception)
+ Sequence<  Type > SAL_CALL OResultSet::getTypes()
 {
     return concatSequences(OPropertySetHelper::getTypes(), OResultSet_BASE::getTypes());
 }
 // ---- XColumnLocate ---------------------------------------------------------
 sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& rColumnName)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -342,7 +339,7 @@ sal_Int32 SAL_CALL OResultSet::findColumn(const OUString& rColumnName)
     return 0; // Never reached
 }
 
-uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 columnIndex )
 {
     (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
@@ -351,7 +348,7 @@ uno::Reference< XInputStream > SAL_CALL OResultSet::getBinaryStream( sal_Int32 c
     return nullptr;
 }
 
-uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+uno::Reference< XInputStream > SAL_CALL OResultSet::getCharacterStream( sal_Int32 columnIndex )
 {
     (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
@@ -633,7 +630,7 @@ T OResultSet::safelyRetrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT 
 }
 
 // ---- XRow -----------------------------------------------------------------
-sal_Bool SAL_CALL OResultSet::wasNull() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::wasNull()
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -643,20 +640,17 @@ sal_Bool SAL_CALL OResultSet::wasNull() throw(SQLException, RuntimeException, st
 
 // ---- XRow: Simple Numerical types ------------------------------------------
 sal_Bool SAL_CALL OResultSet::getBoolean(sal_Int32 nColumnIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< bool >(nColumnIndex, SQL_BOOLEAN);
 }
 
 sal_Int8 SAL_CALL OResultSet::getByte(sal_Int32 nColumnIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     // Not a native firebird type hence we always have to convert.
     return safelyRetrieveValue< ORowSetValue >(nColumnIndex);
 }
 
 Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     (void) columnIndex;
     return Sequence< sal_Int8 >(); // TODO: implement
@@ -664,62 +658,53 @@ Sequence< sal_Int8 > SAL_CALL OResultSet::getBytes(sal_Int32 columnIndex)
 }
 
 sal_Int16 SAL_CALL OResultSet::getShort(sal_Int32 columnIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< sal_Int16 >(columnIndex, SQL_SHORT);
 }
 
 sal_Int32 SAL_CALL OResultSet::getInt(sal_Int32 columnIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< sal_Int32 >(columnIndex, SQL_LONG);
 }
 
 sal_Int64 SAL_CALL OResultSet::getLong(sal_Int32 columnIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< sal_Int64 >(columnIndex, SQL_INT64);
 }
 
 float SAL_CALL OResultSet::getFloat(sal_Int32 columnIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< float >(columnIndex, SQL_FLOAT);
 }
 
 double SAL_CALL OResultSet::getDouble(sal_Int32 columnIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< double >(columnIndex, SQL_DOUBLE);
 }
 
 // ---- XRow: More complex types ----------------------------------------------
 OUString SAL_CALL OResultSet::getString(sal_Int32 nIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< OUString >(nIndex);
 }
 
 Date SAL_CALL OResultSet::getDate(sal_Int32 nIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< Date >(nIndex, SQL_TYPE_DATE);
 }
 
 Time SAL_CALL OResultSet::getTime(sal_Int32 nIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< css::util::Time >(nIndex, SQL_TYPE_TIME);
 }
 
 DateTime SAL_CALL OResultSet::getTimestamp(sal_Int32 nIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     return safelyRetrieveValue< DateTime >(nIndex, SQL_TIMESTAMP);
 }
 
 
-uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
+uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  )
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -730,7 +715,7 @@ uno::Reference< XResultSetMetaData > SAL_CALL OResultSet::getMetaData(  ) throw(
     return m_xMetaData;
 }
 
-uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex )
 {
     (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
@@ -740,7 +725,7 @@ uno::Reference< XArray > SAL_CALL OResultSet::getArray( sal_Int32 columnIndex ) 
 }
 
 
-uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex )
 {
     (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
@@ -758,7 +743,6 @@ uno::Reference< XClob > SAL_CALL OResultSet::getClob( sal_Int32 columnIndex ) th
 }
 
 uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -772,7 +756,7 @@ uno::Reference< XBlob > SAL_CALL OResultSet::getBlob(sal_Int32 columnIndex)
 }
 
 
-uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex )
 {
     (void) columnIndex;
     MutexGuard aGuard(m_rMutex);
@@ -782,7 +766,7 @@ uno::Reference< XRef > SAL_CALL OResultSet::getRef( sal_Int32 columnIndex ) thro
 }
 
 
-Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference< css::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference< css::container::XNameAccess >& typeMap )
 {
     (void) columnIndex;
     (void) typeMap;
@@ -793,7 +777,7 @@ Any SAL_CALL OResultSet::getObject( sal_Int32 columnIndex, const uno::Reference<
 }
 
 
-void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::close()
 {
     SAL_INFO("connectivity.firebird", "close().");
 
@@ -806,7 +790,6 @@ void SAL_CALL OResultSet::close() throw(SQLException, RuntimeException, std::exc
 
 
 uno::Reference< XInterface > SAL_CALL OResultSet::getStatement()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -814,34 +797,34 @@ uno::Reference< XInterface > SAL_CALL OResultSet::getStatement()
     return m_xStatement;
 }
 //----- XResultSet: unsupported change detection methods ---------------------
-sal_Bool SAL_CALL OResultSet::rowDeleted() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::rowDeleted()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("rowDeleted not supported in firebird",
                                                   *this);
     return false;
 }
-sal_Bool SAL_CALL OResultSet::rowInserted() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::rowInserted()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("rowInserted not supported in firebird",
                                                   *this);
     return false;
 }
 
-sal_Bool SAL_CALL OResultSet::rowUpdated() throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSet::rowUpdated()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("rowUpdated not supported in firebird",
                                                   *this);
     return false;
 }
 
-void SAL_CALL OResultSet::refreshRow() throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OResultSet::refreshRow()
 {
     ::dbtools::throwFunctionNotSupportedSQLException("refreshRow not supported in firebird",
                                                   *this);
 }
 
 
-void SAL_CALL OResultSet::cancel(  ) throw(RuntimeException, std::exception)
+void SAL_CALL OResultSet::cancel(  )
 {
     MutexGuard aGuard(m_rMutex);
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -887,25 +870,23 @@ void SAL_CALL OResultSet::release() throw()
     OResultSet_BASE::release();
 }
 
-uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
+uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
 // ---- XServiceInfo -----------------------------------------------------------
-OUString SAL_CALL OResultSet::getImplementationName() throw ( RuntimeException, std::exception)
+OUString SAL_CALL OResultSet::getImplementationName()
 {
     return OUString("com.sun.star.sdbcx.firebird.ResultSet");
 }
 
 Sequence< OUString > SAL_CALL OResultSet::getSupportedServiceNames()
-    throw( RuntimeException, std::exception)
 {
     return {"com.sun.star.sdbc.ResultSet","com.sun.star.sdbcx.ResultSet"};
 }
 
 sal_Bool SAL_CALL OResultSet::supportsService(const OUString& _rServiceName)
-    throw( RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }

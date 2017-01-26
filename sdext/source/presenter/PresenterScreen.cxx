@@ -74,11 +74,11 @@ namespace {
 
         // document::XEventListener
 
-        virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) override;
 
         // XEventListener
 
-        virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing ( const css::lang::EventObject& rEvent) override;
 
     private:
         css::uno::Reference<css::frame::XModel2 > mxModel;
@@ -125,7 +125,6 @@ void SAL_CALL PresenterScreenJob::disposing()
 
 Any SAL_CALL PresenterScreenJob::execute(
     const Sequence< beans::NamedValue >& Arguments )
-    throw (lang::IllegalArgumentException, Exception, RuntimeException, std::exception)
 {
     Sequence< beans::NamedValue > lEnv;
 
@@ -206,7 +205,7 @@ void SAL_CALL PresenterScreenListener::disposing()
 
 // document::XEventListener
 
-void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventObject& Event )
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -235,7 +234,6 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
 // XEventListener
 
 void SAL_CALL PresenterScreenListener::disposing (const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 
@@ -306,7 +304,6 @@ void SAL_CALL PresenterScreen::disposing()
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL PresenterScreen::disposing (const lang::EventObject& /*rEvent*/)
-    throw (RuntimeException, std::exception)
 {
     mxSlideShowControllerWeak = WeakReference<presentation::XSlideShowController>();
     RequestShutdownPresenterScreen();

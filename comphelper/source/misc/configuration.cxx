@@ -238,14 +238,12 @@ void comphelper::ConfigurationListener::dispose()
 }
 
 void SAL_CALL comphelper::ConfigurationListener::disposing(css::lang::EventObject const &)
-    throw (css::uno::RuntimeException, std::exception)
 {
     dispose();
 }
 
 void SAL_CALL comphelper::ConfigurationListener::propertyChange(
     css::beans::PropertyChangeEvent const &rEvt )
-    throw (css::uno::RuntimeException, std::exception)
 {
     // Code is commonly used inside the SolarMutexGuard
     // so to avoid concurrent writes to the property,

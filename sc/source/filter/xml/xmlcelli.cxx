@@ -1497,7 +1497,6 @@ bool ScXMLTableRowCellContext::IsPossibleErrorString() const
 }
 
 void SAL_CALL ScXMLTableRowCellContext::endFastElement(sal_Int32 /*nElement*/)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     HasSpecialCaseFormulaText();
     if( bFormulaTextResult && (mbPossibleErrorCell || mbCheckWithCompilerForError) )

@@ -65,7 +65,6 @@ using namespace ::com::sun::star::frame;
 using namespace ::com::sun::star::task;
 
 bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException, std::exception)
 {
     OUString udConvertClass    = msUserData[0];
     const OUString sXMLImportService = msUserData[2];
@@ -183,7 +182,6 @@ bool SAL_CALL XmlFilterAdaptor::importImpl( const Sequence< css::beans::Property
 }
 
 bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException)
 {
 
     OUString udConvertClass = msUserData[0];
@@ -298,17 +296,14 @@ bool SAL_CALL XmlFilterAdaptor::exportImpl( const Sequence< css::beans::Property
 }
 
 sal_Bool SAL_CALL XmlFilterAdaptor::filter( const Sequence< css::beans::PropertyValue >& aDescriptor )
-  throw (RuntimeException, std::exception)
 {
     return meType == FILTER_EXPORT ? exportImpl ( aDescriptor ) : importImpl ( aDescriptor );
 }
 void SAL_CALL XmlFilterAdaptor::cancel(  )
-    throw (RuntimeException, std::exception)
 {
 }
 // XExporter
 void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< css::lang::XComponent >& xDoc )
-    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     meType = FILTER_EXPORT;
     mxDoc = xDoc;
@@ -316,14 +311,12 @@ void SAL_CALL XmlFilterAdaptor::setSourceDocument( const Reference< css::lang::X
 
 // XImporter
 void SAL_CALL XmlFilterAdaptor::setTargetDocument( const Reference< css::lang::XComponent >& xDoc )
-    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     meType = FILTER_IMPORT;
     mxDoc = xDoc;
 }
 // XInitialization
 void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
-    throw (Exception, RuntimeException, std::exception)
 {
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
@@ -339,13 +332,11 @@ void SAL_CALL XmlFilterAdaptor::initialize( const Sequence< Any >& aArguments )
     }
 }
 OUString XmlFilterAdaptor_getImplementationName ()
-    throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.Writer.XmlFilterAdaptor" );
 }
 
 Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -355,26 +346,22 @@ Sequence< OUString > SAL_CALL XmlFilterAdaptor_getSupportedServiceNames(  )
 }
 
 Reference< XInterface > SAL_CALL XmlFilterAdaptor_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new XmlFilterAdaptor( comphelper::getComponentContext(rSMgr) ));
 }
 
 // XServiceInfo
 OUString SAL_CALL XmlFilterAdaptor::getImplementationName(  )
-    throw (RuntimeException, std::exception)
 {
     return XmlFilterAdaptor_getImplementationName();
 }
 
 sal_Bool SAL_CALL XmlFilterAdaptor::supportsService( const OUString& rServiceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 Sequence< OUString > SAL_CALL XmlFilterAdaptor::getSupportedServiceNames(  )
-    throw (RuntimeException, std::exception)
 {
     return XmlFilterAdaptor_getSupportedServiceNames();
 }

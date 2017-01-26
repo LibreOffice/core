@@ -48,7 +48,7 @@ protected:
     css::uno::Any      ImplGetDefaultValue( sal_uInt16 nPropId ) const override;
     ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     // css::beans::XMultiPropertySet
-    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
 public:
     UnoControlTabPageContainerModel( const css::uno::Reference< css::uno::XComponentContext >& i_factory );
@@ -57,38 +57,34 @@ public:
     UnoControlModel*    Clone() const override { return new UnoControlTabPageContainerModel( *this ); }
 
     // css::io::XPersistObject
-    OUString SAL_CALL getServiceName() throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getServiceName() override;
 
     // css::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageContainerModel, UnoControlModel, "com.sun.star.awt.tab.UnoControlTabPageContainerModel" )
 
     // XTabPageContainerModel
-    virtual css::uno::Reference< css::awt::tab::XTabPageModel > SAL_CALL createTabPage( ::sal_Int16 TabPageID ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::awt::tab::XTabPageModel > SAL_CALL loadTabPage( ::sal_Int16 TabPageID, const OUString& ResourceURL ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::tab::XTabPageModel > SAL_CALL createTabPage( ::sal_Int16 TabPageID ) override;
+    virtual css::uno::Reference< css::awt::tab::XTabPageModel > SAL_CALL loadTabPage( ::sal_Int16 TabPageID, const OUString& ResourceURL ) override;
 
     // XIndexContainer
-    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element )
-             throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeByIndex( sal_Int32 Index )
-             throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL insertByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
+    virtual void SAL_CALL removeByIndex( sal_Int32 Index ) override;
 
     // XIndexReplace
-     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element )
-             throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+     virtual void SAL_CALL replaceByIndex( sal_Int32 Index, const css::uno::Any& Element ) override;
 
      // XIndexAccess
-     virtual sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) override;
+     virtual sal_Int32 SAL_CALL getCount() override;
 
-     virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
-             throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+     virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
      // XElementAccess
-     virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) override;
+     virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     // css::container::XContainer
-    void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
+    void SAL_CALL removeContainerListener( const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 };
 
 // = UnoControlTabPageContainer
@@ -103,22 +99,22 @@ public:
     OUString             GetComponentServiceName() override;
 
     // css::lang::XComponent
-    void SAL_CALL dispose(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dispose(  ) override;
 
     // css::awt::XControl
-    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& Toolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent ) override;
 
     // css::awt::tab::XTabPageContainer
-    virtual ::sal_Int16 SAL_CALL getActiveTabPageID() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setActiveTabPageID( ::sal_Int16 _activetabpageid ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int16 SAL_CALL getTabPageCount(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isTabPageActive( ::sal_Int16 tabPageIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPage( ::sal_Int16 tabPageIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPageByID( ::sal_Int16 tabPageID ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int16 SAL_CALL getActiveTabPageID() override;
+    virtual void SAL_CALL setActiveTabPageID( ::sal_Int16 _activetabpageid ) override;
+    virtual ::sal_Int16 SAL_CALL getTabPageCount(  ) override;
+    virtual sal_Bool SAL_CALL isTabPageActive( ::sal_Int16 tabPageIndex ) override;
+    virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPage( ::sal_Int16 tabPageIndex ) override;
+    virtual css::uno::Reference< css::awt::tab::XTabPage > SAL_CALL getTabPageByID( ::sal_Int16 tabPageID ) override;
+    virtual void SAL_CALL addTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
+    virtual void SAL_CALL removeTabPageContainerListener( const css::uno::Reference< css::awt::tab::XTabPageContainerListener >& listener ) override;
 
-    virtual void SAL_CALL addControl( const OUString& Name, const css::uno::Reference< css::awt::XControl >& Control ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addControl( const OUString& Name, const css::uno::Reference< css::awt::XControl >& Control ) override;
     // css::lang::XServiceInfo
     DECLIMPL_SERVICEINFO_DERIVED( UnoControlTabPageContainer, UnoControlBase, "com.sun.star.awt.tab.UnoControlTabPageContainer" )
 

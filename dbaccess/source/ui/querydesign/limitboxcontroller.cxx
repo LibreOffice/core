@@ -101,7 +101,6 @@ LimitBoxController::~LimitBoxController()
 
 /// XInterface
 uno::Any SAL_CALL LimitBoxController::queryInterface( const uno::Type& aType )
-throw (uno::RuntimeException, std::exception)
 {
     uno::Any a = ToolboxController::queryInterface( aType );
     if ( a.hasValue() )
@@ -134,7 +133,6 @@ uno::Reference< uno::XInterface >
 
 /// XComponent
 void SAL_CALL LimitBoxController::dispose()
-throw (uno::RuntimeException, std::exception)
 {
     svt::ToolboxController::dispose();
 
@@ -145,7 +143,6 @@ throw (uno::RuntimeException, std::exception)
 /// XStatusListener
 void SAL_CALL LimitBoxController::statusChanged(
     const frame::FeatureStateEvent& rEvent )
-throw ( uno::RuntimeException, std::exception )
 {
     if ( m_pLimitBox )
     {
@@ -169,29 +166,24 @@ throw ( uno::RuntimeException, std::exception )
 
 /// XToolbarController
 void SAL_CALL LimitBoxController::execute( sal_Int16 /*KeyModifier*/ )
-throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL LimitBoxController::click()
-throw (uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL LimitBoxController::doubleClick()
-throw (uno::RuntimeException, std::exception)
 {
 }
 
 uno::Reference< awt::XWindow > SAL_CALL LimitBoxController::createPopupWindow()
-throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< awt::XWindow >();
 }
 
 uno::Reference< awt::XWindow > SAL_CALL LimitBoxController::createItemWindow(
     const uno::Reference< awt::XWindow >& xParent )
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xItemWindow;
 

@@ -49,28 +49,21 @@ public:
 
     // XOfficeInstallationDirectories
     virtual OUString SAL_CALL
-    getOfficeInstallationDirectoryURL()
-        throw (css::uno::RuntimeException, std::exception) override;
+    getOfficeInstallationDirectoryURL() override;
     virtual OUString SAL_CALL
-    getOfficeUserDataDirectoryURL()
-        throw (css::uno::RuntimeException, std::exception) override;
+    getOfficeUserDataDirectoryURL() override;
     virtual OUString SAL_CALL
-    makeRelocatableURL( const OUString& URL )
-        throw (css::uno::RuntimeException, std::exception) override;
+    makeRelocatableURL( const OUString& URL ) override;
     virtual OUString SAL_CALL
-    makeAbsoluteURL( const OUString& URL )
-        throw (css::uno::RuntimeException, std::exception) override;
+    makeAbsoluteURL( const OUString& URL ) override;
 
     // XServiceInfo
     virtual OUString SAL_CALL
-    getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    getImplementationName() override;
     virtual sal_Bool SAL_CALL
-    supportsService( const OUString& ServiceName )
-        throw (css::uno::RuntimeException, std::exception) override;
+    supportsService( const OUString& ServiceName ) override;
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    getSupportedServiceNames() override;
 
 private:
     void initDirs();

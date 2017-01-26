@@ -47,7 +47,7 @@ jclass java_sql_Clob::getMyClass() const
     return theClass;
 }
 
-sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL java_sql_Clob::length(  )
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -65,7 +65,7 @@ sal_Int64 SAL_CALL java_sql_Clob::length(  ) throw(css::sdbc::SQLException, css:
     return (sal_Int64)out;
 }
 
-OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStringLength ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStringLength )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     OUString aStr;
@@ -84,7 +84,7 @@ OUString SAL_CALL java_sql_Clob::getSubString( sal_Int64 pos, sal_Int32 subStrin
     return  aStr;
 }
 
-css::uno::Reference< css::io::XInputStream > SAL_CALL java_sql_Clob::getCharacterStream(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::io::XInputStream > SAL_CALL java_sql_Clob::getCharacterStream(  )
 {
     SDBThreadAttach t;
     static jmethodID mID(nullptr);
@@ -94,7 +94,7 @@ css::uno::Reference< css::io::XInputStream > SAL_CALL java_sql_Clob::getCharacte
     return out==nullptr ? nullptr : new java_io_Reader( t.pEnv, out );
 }
 
-sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32 start ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32 start )
 {
     jlong out(0);
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
@@ -116,7 +116,7 @@ sal_Int64 SAL_CALL java_sql_Clob::position( const OUString& searchstr, sal_Int32
     return (sal_Int64)out;
 }
 
-sal_Int64 SAL_CALL java_sql_Clob::positionOfClob( const css::uno::Reference< css::sdbc::XClob >& /*pattern*/, sal_Int64 /*start*/ ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int64 SAL_CALL java_sql_Clob::positionOfClob( const css::uno::Reference< css::sdbc::XClob >& /*pattern*/, sal_Int64 /*start*/ )
 {
     ::dbtools::throwFeatureNotImplementedSQLException( "XClob::positionOfClob", *this );
     // this was put here in CWS warnings01. The previous implementation was defective, as it did ignore

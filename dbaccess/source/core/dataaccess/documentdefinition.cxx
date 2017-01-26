@@ -182,9 +182,9 @@ namespace dbaccess
             osl_atomic_decrement( &m_refCount );
         }
 
-        virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (embed::WrongStateException, uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL disposing( const lang::EventObject& Source ) throw (uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL changingState( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
+        virtual void SAL_CALL stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) override;
+        virtual void SAL_CALL disposing( const lang::EventObject& Source ) override;
     };
 
     void SAL_CALL OEmbedObjectHolder::disposing()
@@ -195,11 +195,11 @@ namespace dbaccess
         m_pDefinition = nullptr;
     }
 
-    void SAL_CALL OEmbedObjectHolder::changingState( const lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ ) throw (embed::WrongStateException, uno::RuntimeException, std::exception)
+    void SAL_CALL OEmbedObjectHolder::changingState( const lang::EventObject& /*aEvent*/, ::sal_Int32 /*nOldState*/, ::sal_Int32 /*nNewState*/ )
     {
     }
 
-    void SAL_CALL OEmbedObjectHolder::stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState ) throw (uno::RuntimeException, std::exception)
+    void SAL_CALL OEmbedObjectHolder::stateChanged( const lang::EventObject& aEvent, ::sal_Int32 nOldState, ::sal_Int32 nNewState )
     {
         if ( !m_bInStateChange && nNewState == EmbedStates::RUNNING && nOldState == EmbedStates::ACTIVE && m_pDefinition )
         {
@@ -214,7 +214,7 @@ namespace dbaccess
         }
     }
 
-    void SAL_CALL OEmbedObjectHolder::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException, std::exception)
+    void SAL_CALL OEmbedObjectHolder::disposing( const lang::EventObject& /*Source*/ )
     {
         m_xBroadCaster = nullptr;
     }
@@ -228,17 +228,17 @@ namespace dbaccess
     public:
         explicit OEmbeddedClientHelper(ODocumentDefinition* _pClient) :m_pClient(_pClient) {}
 
-        virtual void SAL_CALL saveObject(  ) throw (ObjectSaveVetoException, Exception, RuntimeException, std::exception) override
+        virtual void SAL_CALL saveObject(  ) override
         {
         }
         // XComponentSupplier
-        virtual Reference< util::XCloseable > SAL_CALL getComponent(  ) throw (RuntimeException, std::exception) override
+        virtual Reference< util::XCloseable > SAL_CALL getComponent(  ) override
         {
             return Reference< css::util::XCloseable >();
         }
 
         // XEmbeddedClient
-        virtual void SAL_CALL visibilityChanged( sal_Bool /*bVisible*/ ) throw (WrongStateException, RuntimeException, std::exception) override
+        virtual void SAL_CALL visibilityChanged( sal_Bool /*bVisible*/ ) override
         {
         }
         inline void resetClient() { m_pClient = nullptr; }
@@ -314,11 +314,11 @@ namespace dbaccess
             OSL_ENSURE( m_refCount, "LifetimeCoupler::LifetimeCoupler: the actor is not holding us by hard ref - this won't work!" );
         }
 
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
     protected:
     };
 
-    void SAL_CALL LifetimeCoupler::disposing( const css::lang::EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL LifetimeCoupler::disposing( const css::lang::EventObject& /*Source*/ )
     {
         m_xClient.clear();
     }
@@ -336,10 +336,10 @@ namespace dbaccess
         const OUString&       getName() const { return m_sName; }
 
         // XInteractionDocumentSave
-        virtual void SAL_CALL setName( const OUString& _sName,const Reference<XContent>& _xParent) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL setName( const OUString& _sName,const Reference<XContent>& _xParent) override;
     };
 
-    void SAL_CALL ODocumentSaveContinuation::setName( const OUString& _sName,const Reference<XContent>& _xParent) throw(RuntimeException, std::exception)
+    void SAL_CALL ODocumentSaveContinuation::setName( const OUString& _sName,const Reference<XContent>& _xParent)
     {
         m_sName = _sName;
         m_xParentContainer = _xParent;
@@ -478,7 +478,6 @@ void SAL_CALL ODocumentDefinition::disposing()
 }
 
 css::uno::Sequence<sal_Int8> ODocumentDefinition::getImplementationId()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -520,7 +519,7 @@ void SAL_CALL ODocumentDefinition::getFastPropertyValue( Any& o_rValue, sal_Int3
     OPropertyStateContainer::getFastPropertyValue( o_rValue, i_nHandle );
 }
 
-Reference< XPropertySetInfo > SAL_CALL ODocumentDefinition::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+Reference< XPropertySetInfo > SAL_CALL ODocumentDefinition::getPropertySetInfo(  )
 {
     Reference<XPropertySetInfo> xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -954,7 +953,7 @@ Any ODocumentDefinition::onCommandOpenSomething( const Any& _rOpenArgument, cons
     return makeAny( xModel );
 }
 
-Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment ) throw (Exception, CommandAbortedException, RuntimeException, std::exception)
+Any SAL_CALL ODocumentDefinition::execute( const Command& aCommand, sal_Int32 CommandId, const Reference< XCommandEnvironment >& Environment )
 {
     Any aRet;
 
@@ -1152,7 +1151,6 @@ namespace
 }
 
 void ODocumentDefinition::onCommandInsert( const OUString& _sURL, const Reference< XCommandEnvironment >& Environment )
-    throw( Exception )
 {
     osl::ClearableGuard< osl::Mutex > aGuard( m_aMutex );
 
@@ -1789,7 +1787,7 @@ Reference< util::XCloseable > ODocumentDefinition::impl_getComponent_throw( cons
     return xComp;
 }
 
-Reference< util::XCloseable > ODocumentDefinition::getComponent() throw (RuntimeException, std::exception)
+Reference< util::XCloseable > ODocumentDefinition::getComponent()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return impl_getComponent_throw();
@@ -1867,17 +1865,17 @@ bool ODocumentDefinition::impl_close_throw()
     return bSuccess;
 }
 
-Reference< XComponent > SAL_CALL ODocumentDefinition::open(  ) throw (WrappedTargetException, RuntimeException, std::exception)
+Reference< XComponent > SAL_CALL ODocumentDefinition::open(  )
 {
     return impl_openUI_nolck_throw( false );
 }
 
-Reference< XComponent > SAL_CALL ODocumentDefinition::openDesign(  ) throw (WrappedTargetException, RuntimeException, std::exception)
+Reference< XComponent > SAL_CALL ODocumentDefinition::openDesign(  )
 {
     return impl_openUI_nolck_throw( true );
 }
 
-void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL ODocumentDefinition::store(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     try
@@ -1892,7 +1890,7 @@ void SAL_CALL ODocumentDefinition::store(  ) throw (WrappedTargetException, Runt
     }
 }
 
-sal_Bool SAL_CALL ODocumentDefinition::close(  ) throw (WrappedTargetException, RuntimeException, std::exception)
+sal_Bool SAL_CALL ODocumentDefinition::close(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -1910,13 +1908,13 @@ sal_Bool SAL_CALL ODocumentDefinition::close(  ) throw (WrappedTargetException, 
     return bSuccess;
 }
 
-OUString SAL_CALL ODocumentDefinition::getHierarchicalName() throw (RuntimeException, std::exception)
+OUString SAL_CALL ODocumentDefinition::getHierarchicalName()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     return impl_getHierarchicalName( false );
 }
 
-OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const OUString& i_rRelativeName ) throw (IllegalArgumentException, NoSupportException, RuntimeException, std::exception)
+OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const OUString& i_rRelativeName )
 {
     OUStringBuffer aBuffer;
     aBuffer.append( getHierarchicalName() );
@@ -1925,7 +1923,7 @@ OUString SAL_CALL ODocumentDefinition::composeHierarchicalName( const OUString& 
     return aBuffer.makeStringAndClear();
 }
 
-void SAL_CALL ODocumentDefinition::rename( const OUString& _rNewName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)
+void SAL_CALL ODocumentDefinition::rename( const OUString& _rNewName )
 {
     try
     {
@@ -2077,7 +2075,7 @@ void ODocumentDefinition::updateDocumentTitle()
         xTitle->setTitle(sName);
 }
 
-void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership ) throw (util::CloseVetoException, uno::RuntimeException, std::exception)
+void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject& Source, sal_Bool GetsOwnership )
 {
     (void) Source;
     (void) GetsOwnership;
@@ -2092,11 +2090,11 @@ void SAL_CALL ODocumentDefinition::queryClosing( const lang::EventObject& Source
     }
 }
 
-void SAL_CALL ODocumentDefinition::notifyClosing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ODocumentDefinition::notifyClosing( const lang::EventObject& /*Source*/ )
 {
 }
 
-void SAL_CALL ODocumentDefinition::disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ODocumentDefinition::disposing( const lang::EventObject& /*Source*/ )
 {
 }
 

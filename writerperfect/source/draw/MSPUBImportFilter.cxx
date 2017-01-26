@@ -38,19 +38,16 @@ bool MSPUBImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUSt
 
 // XServiceInfo
 OUString SAL_CALL MSPUBImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Draw.MSPUBImportFilter");
 }
 
 sal_Bool SAL_CALL MSPUBImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL MSPUBImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

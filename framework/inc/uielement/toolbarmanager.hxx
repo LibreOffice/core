@@ -77,20 +77,20 @@ class ToolBarManager : public ToolbarManager_Base
         ToolBox* GetToolBar() const;
 
         // XFrameActionListener
-        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL frameAction( const css::frame::FrameActionEvent& Action ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
         // XComponent
-        void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
-        void SAL_CALL addEventListener( const css::uno::Reference< XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) override;
-        void SAL_CALL removeEventListener( const css::uno::Reference< XEventListener >& xListener ) throw( css::uno::RuntimeException, std::exception ) override;
+        void SAL_CALL dispose() override;
+        void SAL_CALL addEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
+        void SAL_CALL removeEventListener( const css::uno::Reference< XEventListener >& xListener ) override;
 
         void CheckAndUpdateImages();
         virtual void RefreshImages();

@@ -82,7 +82,7 @@ void SAL_CALL OEvoabPreparedStatement::release() throw()
 }
 
 
-Any SAL_CALL OEvoabPreparedStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OEvoabPreparedStatement::queryInterface( const Type & rType )
 {
     Any aRet = OCommonStatement::queryInterface(rType);
     if(!aRet.hasValue())
@@ -90,13 +90,13 @@ Any SAL_CALL OEvoabPreparedStatement::queryInterface( const Type & rType ) throw
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OEvoabPreparedStatement::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OEvoabPreparedStatement::getTypes(  )
 {
     return ::comphelper::concatSequences(OPreparedStatement_BASE::getTypes(),OCommonStatement::getTypes());
 }
 
 
-Reference< XResultSetMetaData > SAL_CALL OEvoabPreparedStatement::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XResultSetMetaData > SAL_CALL OEvoabPreparedStatement::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -107,7 +107,7 @@ Reference< XResultSetMetaData > SAL_CALL OEvoabPreparedStatement::getMetaData(  
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::close(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::close(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -125,7 +125,7 @@ void SAL_CALL OEvoabPreparedStatement::close(  ) throw(SQLException, RuntimeExce
 }
 
 
-sal_Bool SAL_CALL OEvoabPreparedStatement::execute(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OEvoabPreparedStatement::execute(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -135,7 +135,7 @@ sal_Bool SAL_CALL OEvoabPreparedStatement::execute(  ) throw(SQLException, Runti
 }
 
 
-sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -144,13 +144,13 @@ sal_Int32 SAL_CALL OEvoabPreparedStatement::executeUpdate(  ) throw(SQLException
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, const OUString& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setString( sal_Int32 /*parameterIndex*/, const OUString& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setString", *this );
 }
 
 
-Reference< XConnection > SAL_CALL OEvoabPreparedStatement::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XConnection > SAL_CALL OEvoabPreparedStatement::getConnection(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -159,7 +159,7 @@ Reference< XConnection > SAL_CALL OEvoabPreparedStatement::getConnection(  ) thr
 }
 
 
-Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
@@ -168,103 +168,103 @@ Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::executeQuery(  ) throw
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, sal_Bool /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setBoolean( sal_Int32 /*parameterIndex*/, sal_Bool /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setBoolean", *this );
 
 }
 
-void SAL_CALL OEvoabPreparedStatement::setByte( sal_Int32 /*parameterIndex*/, sal_Int8 /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setByte( sal_Int32 /*parameterIndex*/, sal_Int8 /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setByte", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const Date& /*aData*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setDate( sal_Int32 /*parameterIndex*/, const Date& /*aData*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setDate", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const css::util::Time& /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setTime( sal_Int32 /*parameterIndex*/, const css::util::Time& /*aVal*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setTime", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const DateTime& /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setTimestamp( sal_Int32 /*parameterIndex*/, const DateTime& /*aVal*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setTimestamp", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, double /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setDouble( sal_Int32 /*parameterIndex*/, double /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setDouble", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setFloat( sal_Int32 /*parameterIndex*/, float /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setFloat", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setInt( sal_Int32 /*parameterIndex*/, sal_Int32 /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setInt( sal_Int32 /*parameterIndex*/, sal_Int32 /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setInt", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setLong( sal_Int32 /*parameterIndex*/, sal_Int64 /*aVal*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setLong", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setNull", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setClob( sal_Int32 /*parameterIndex*/, const Reference< XClob >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setClob", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setBlob( sal_Int32 /*parameterIndex*/, const Reference< XBlob >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setBlob", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setArray( sal_Int32 /*parameterIndex*/, const Reference< XArray >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setArray", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setRef( sal_Int32 /*parameterIndex*/, const Reference< XRef >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setRef", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const Any& /*x*/, sal_Int32 /*sqlType*/, sal_Int32 /*scale*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setObjectWithInfo( sal_Int32 /*parameterIndex*/, const Any& /*x*/, sal_Int32 /*sqlType*/, sal_Int32 /*scale*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setObjectWithInfo", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setObjectNull( sal_Int32 /*parameterIndex*/, sal_Int32 /*sqlType*/, const OUString& /*typeName*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setObjectNull", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, const Any& x )
 {
     if(!::dbtools::implSetObject(this,parameterIndex,x))
     {
@@ -277,45 +277,45 @@ void SAL_CALL OEvoabPreparedStatement::setObject( sal_Int32 parameterIndex, cons
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setShort( sal_Int32 /*parameterIndex*/, sal_Int16 /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setShort( sal_Int32 /*parameterIndex*/, sal_Int16 /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setShort", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, const Sequence< sal_Int8 >& /*x*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setBytes( sal_Int32 /*parameterIndex*/, const Sequence< sal_Int8 >& /*x*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setBytes", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setCharacterStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setCharacterStream", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::setBinaryStream( sal_Int32 /*parameterIndex*/, const Reference< XInputStream >& /*x*/, sal_Int32 /*length*/ )
 {
     ::dbtools::throwFunctionNotSupportedSQLException( "XParameters::setBinaryStream", *this );
 }
 
 
-void SAL_CALL OEvoabPreparedStatement::clearParameters(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OEvoabPreparedStatement::clearParameters(  )
 {
 }
 
-Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::getResultSet(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XResultSet > SAL_CALL OEvoabPreparedStatement::getResultSet(  )
 {
     return nullptr;
 }
 
-sal_Int32 SAL_CALL OEvoabPreparedStatement::getUpdateCount(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OEvoabPreparedStatement::getUpdateCount(  )
 {
     return 0;
 }
 
-sal_Bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OEvoabPreparedStatement::getMoreResults(  )
 {
     return false;
 }

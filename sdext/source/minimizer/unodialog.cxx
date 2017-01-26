@@ -84,7 +84,6 @@ void UnoDialog::endExecute( bool bStatus )
 
 
 Reference< XWindowPeer > UnoDialog::createWindowPeer( Reference< XWindowPeer > const & xParentPeer )
-    throw ( Exception )
 {
     mxDialog->setVisible( false );
     Reference< XToolkit > xToolkit( Toolkit::create( mxContext ), UNO_QUERY_THROW  );

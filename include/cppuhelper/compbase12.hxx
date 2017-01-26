@@ -50,21 +50,21 @@ namespace cppu
         inline WeakComponentImplHelper12( ::osl::Mutex & rMutex ) throw ()
             : WeakComponentImplHelperBase( rMutex )
             {}
-        virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakComponentImplHelper_query( rType, cd::get(), this, static_cast<WeakComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
             { WeakComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() throw () SAL_OVERRIDE
             { WeakComponentImplHelperBase::release(); }
-        virtual void SAL_CALL dispose()throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual void SAL_CALL dispose() SAL_OVERRIDE
             { WeakComponentImplHelperBase::dispose(); }
-        virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener > & xListener)throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener > & xListener) SAL_OVERRIDE
             { WeakComponentImplHelperBase::addEventListener(xListener); }
-        virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener > & xListener)throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener > & xListener) SAL_OVERRIDE
             { WeakComponentImplHelperBase::removeEventListener(xListener); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakComponentImplHelper_getTypes( cd::get() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 
@@ -88,15 +88,15 @@ namespace cppu
         inline PartialWeakComponentImplHelper12( ::osl::Mutex & rMutex ) throw ()
             : WeakComponentImplHelperBase( rMutex )
             {}
-        virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakComponentImplHelper_query( rType, cd::get(), this, static_cast<WeakComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
             { WeakComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() throw () SAL_OVERRIDE
             { WeakComponentImplHelperBase::release(); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakComponentImplHelper_getTypes( cd::get() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 
@@ -128,17 +128,17 @@ namespace cppu
         inline WeakAggComponentImplHelper12( ::osl::Mutex & rMutex ) throw ()
             : WeakAggComponentImplHelperBase( rMutex )
             {}
-        virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakAggComponentImplHelperBase::queryInterface( rType ); }
-        virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE
             { return WeakAggComponentImplHelper_queryAgg( rType, cd::get(), this, static_cast<WeakAggComponentImplHelperBase *>(this) ); }
         virtual void SAL_CALL acquire() throw () SAL_OVERRIDE
             { WeakAggComponentImplHelperBase::acquire(); }
         virtual void SAL_CALL release() throw () SAL_OVERRIDE
             { WeakAggComponentImplHelperBase::release(); }
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE
             { return WeakAggComponentImplHelper_getTypes( cd::get() ); }
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE
             { return ImplHelper_getImplementationId( cd::get() ); }
     };
 }

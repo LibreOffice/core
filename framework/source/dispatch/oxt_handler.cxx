@@ -96,7 +96,6 @@ Oxt_Handler::~Oxt_Handler()
 void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
                                                      const css::uno::Sequence< css::beans::PropertyValue >&            /*lArguments*/,
                                                      const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
-    throw( css::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard g(m_mutex);
 
@@ -121,7 +120,6 @@ void SAL_CALL Oxt_Handler::dispatchWithNotification( const css::util::URL& aURL,
 
 void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                                  aURL       ,
                                      const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
-    throw( css::uno::RuntimeException, std::exception )
 {
     dispatchWithNotification( aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >() );
 }
@@ -148,7 +146,6 @@ void SAL_CALL Oxt_Handler::dispatch( const css::util::URL&                      
     @threadsafe yes
 *//*-*************************************************************************************************************/
 OUString SAL_CALL Oxt_Handler::detect( css::uno::Sequence< css::beans::PropertyValue >& lDescriptor )
-    throw( css::uno::RuntimeException, std::exception )
 {
     // Our default is "nothing". So we can return it, if detection failed or file type is really unknown.
     OUString sTypeName;

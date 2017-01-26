@@ -49,31 +49,31 @@ namespace dbp
 
     public:
         // XTypeProvider
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override
         {
             return css::uno::Sequence<sal_Int8>();
         }
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override
+        virtual OUString SAL_CALL getImplementationName() override
         {
             return getImplementationName_Static();
         }
 
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
         {
             return getSupportedServiceNames_Static();
         }
 
         // XServiceInfo - static methods
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException )
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static()
         {
             return SERVICEINFO::getServiceNames();
         }
 
         /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException )
+        static OUString getImplementationName_Static()
         {
             return SERVICEINFO::getImplementationName();
         }
@@ -85,7 +85,7 @@ namespace dbp
         }
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override
+        virtual css::uno::Reference< css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override
         {
             css::uno::Reference< css::beans::XPropertySetInfo >  xInfo( createPropertySetInfo( getInfoHelper() ) );
             return xInfo;

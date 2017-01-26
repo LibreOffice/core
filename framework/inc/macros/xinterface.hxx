@@ -66,7 +66,7 @@ ________________________________________________________________________________
 
 #define PRIVATE_DEFINE_XINTERFACE( CLASS, BASECLASS, INTERFACES )                                                                                           \
     PRIVATE_DEFINE_XINTERFACE_ACQUIRE_RELEASE( CLASS, BASECLASS )                                                                                           \
-    css::uno::Any SAL_CALL CLASS::queryInterface( const css::uno::Type& aType ) throw( css::uno::RuntimeException, std::exception )  \
+    css::uno::Any SAL_CALL CLASS::queryInterface( const css::uno::Type& aType )  \
     {                                                                                                                                                       \
         /* Attention: Don't use mutex or guard in this method!!! Is a method of XInterface. */                                                              \
         /* Ask for my own supported interfaces ...                                          */                                                              \
@@ -128,7 +128,7 @@ ________________________________________________________________________________
 //  declaration of XInterface
 
 #define FWK_DECLARE_XINTERFACE                                                                                                                                      \
-    virtual css::uno::Any  SAL_CALL queryInterface( const css::uno::Type& aType   ) throw( css::uno::RuntimeException, std::exception ) override; \
+    virtual css::uno::Any  SAL_CALL queryInterface( const css::uno::Type& aType   ) override; \
     virtual void                        SAL_CALL acquire       (                                            ) throw() override;  \
     virtual void                        SAL_CALL release       (                                            ) throw() override;
 

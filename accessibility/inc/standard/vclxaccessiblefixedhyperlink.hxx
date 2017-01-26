@@ -35,8 +35,8 @@ public:
     VCLXAccessibleFixedHyperlink( VCLXWindow* pVCLXindow );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif // INCLUDED_ACCESSIBILITY_INC_STANDARD_VCLXACCESSIBLEFIXEDHYPERLINK_HXX

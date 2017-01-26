@@ -74,12 +74,12 @@ PropertySetHelper::~PropertySetHelper() throw()
 }
 
 // XPropertySet
-Reference< XPropertySetInfo > SAL_CALL PropertySetHelper::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+Reference< XPropertySetInfo > SAL_CALL PropertySetHelper::getPropertySetInfo(  )
 {
     return mpImpl->mpInfo;
 }
 
-void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName, const Any& aValue ) throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName, const Any& aValue )
 {
     PropertyMapEntry const * aEntries[2];
     aEntries[0] = mpImpl->find( aPropertyName );
@@ -92,7 +92,7 @@ void SAL_CALL PropertySetHelper::setPropertyValue( const OUString& aPropertyName
     _setPropertyValues( aEntries, &aValue );
 }
 
-Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName )
 {
     PropertyMapEntry const * aEntries[2];
     aEntries[0] = mpImpl->find( PropertyName );
@@ -108,29 +108,28 @@ Any SAL_CALL PropertySetHelper::getPropertyValue( const OUString& PropertyName )
     return aAny;
 }
 
-void SAL_CALL PropertySetHelper::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
 {
     // todo
 }
 
 // XMultiPropertySet
 void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rValues )
-    throw (PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
 
@@ -160,7 +159,6 @@ void SAL_CALL PropertySetHelper::setPropertyValues( const Sequence< OUString >& 
 }
 
 Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OUString >& rPropertyNames)
-    throw (RuntimeException, std::exception)
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
 
@@ -192,23 +190,23 @@ Sequence< Any > SAL_CALL PropertySetHelper::getPropertyValues(const Sequence< OU
     return aValues;
 }
 
-void SAL_CALL PropertySetHelper::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& ) throw(RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& ) throw(RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
-void SAL_CALL PropertySetHelper::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& ) throw(RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
 {
     // todo
 }
 
 // XPropertyState
-PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
+PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& PropertyName )
 {
     PropertyMapEntry const * aEntries[2];
 
@@ -224,7 +222,7 @@ PropertyState SAL_CALL PropertySetHelper::getPropertyState( const OUString& Prop
     return aState;
 }
 
-Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const Sequence< OUString >& aPropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
+Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const Sequence< OUString >& aPropertyName )
 {
     const sal_Int32 nCount = aPropertyName.getLength();
 
@@ -257,7 +255,7 @@ Sequence< PropertyState > SAL_CALL PropertySetHelper::getPropertyStates( const S
     return aStates;
 }
 
-void SAL_CALL PropertySetHelper::setPropertyToDefault( const OUString& PropertyName ) throw(UnknownPropertyException, RuntimeException, std::exception)
+void SAL_CALL PropertySetHelper::setPropertyToDefault( const OUString& PropertyName )
 {
     PropertyMapEntry const *pEntry  = mpImpl->find( PropertyName );
     if( nullptr == pEntry )
@@ -266,7 +264,7 @@ void SAL_CALL PropertySetHelper::setPropertyToDefault( const OUString& PropertyN
     _setPropertyToDefault( pEntry );
 }
 
-Any SAL_CALL PropertySetHelper::getPropertyDefault( const OUString& aPropertyName ) throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL PropertySetHelper::getPropertyDefault( const OUString& aPropertyName )
 {
     PropertyMapEntry const * pEntry = mpImpl->find( aPropertyName );
     if( nullptr == pEntry )
@@ -277,20 +275,17 @@ Any SAL_CALL PropertySetHelper::getPropertyDefault( const OUString& aPropertyNam
 
 void PropertySetHelper::_getPropertyStates(
         const comphelper::PropertyMapEntry**, PropertyState*)
-throw (UnknownPropertyException, RuntimeException)
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
 
 void
 PropertySetHelper::_setPropertyToDefault(const comphelper::PropertyMapEntry*)
-throw (UnknownPropertyException, RuntimeException)
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
 
 Any PropertySetHelper::_getPropertyDefault(const comphelper::PropertyMapEntry*)
-throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     OSL_FAIL( "you have to implement this yourself!");
 

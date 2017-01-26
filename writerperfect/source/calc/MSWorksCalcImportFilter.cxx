@@ -237,7 +237,6 @@ bool MSWorksCalcImportFilter::doImportDocument(librevenge::RVNGInputStream &rInp
 
 //XExtendedFilterDetection
 sal_Bool MSWorksCalcImportFilter::filter(const css::uno::Sequence< css::beans::PropertyValue > &rDescriptor)
-throw (css::uno::RuntimeException, std::exception)
 {
     OUString sUrl;
     css::uno::Reference < css::io::XInputStream > xInputStream;
@@ -379,19 +378,16 @@ void MSWorksCalcImportFilter::doRegisterHandlers(OdsGenerator &)
 
 // XServiceInfo
 OUString SAL_CALL MSWorksCalcImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Calc.MSWorksCalcImportFilter");
 }
 
 sal_Bool SAL_CALL MSWorksCalcImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL MSWorksCalcImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

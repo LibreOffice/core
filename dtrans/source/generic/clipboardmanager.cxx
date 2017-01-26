@@ -44,25 +44,21 @@ ClipboardManager::~ClipboardManager()
 }
 
 OUString SAL_CALL ClipboardManager::getImplementationName(  )
-    throw(RuntimeException)
 {
     return OUString(CLIPBOARDMANAGER_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL ClipboardManager::supportsService( const OUString& ServiceName )
-    throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL ClipboardManager::getSupportedServiceNames(  )
-    throw(RuntimeException)
 {
     return ClipboardManager_getSupportedServiceNames();
 }
 
 Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString& aName )
-    throw(NoSuchElementException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -81,7 +77,6 @@ Reference< XClipboard > SAL_CALL ClipboardManager::getClipboard( const OUString&
 }
 
 void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xClipboard )
-    throw(IllegalArgumentException, ElementExistException, RuntimeException)
 {
     OSL_ASSERT(xClipboard.is());
 
@@ -119,7 +114,6 @@ void SAL_CALL ClipboardManager::addClipboard( const Reference< XClipboard >& xCl
 }
 
 void SAL_CALL ClipboardManager::removeClipboard( const OUString& aName )
-     throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     if (!rBHelper.bDisposed)
@@ -127,7 +121,6 @@ void SAL_CALL ClipboardManager::removeClipboard( const OUString& aName )
 }
 
 Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
-    throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -142,7 +135,6 @@ Sequence< OUString > SAL_CALL ClipboardManager::listClipboardNames()
 }
 
 void SAL_CALL ClipboardManager::dispose()
-    throw(RuntimeException)
 {
     ClearableMutexGuard aGuard( rBHelper.rMutex );
     if (!rBHelper.bDisposed && !rBHelper.bInDispose)
@@ -188,7 +180,6 @@ void SAL_CALL ClipboardManager::dispose()
 }
 
 void SAL_CALL  ClipboardManager::disposing( const EventObject& event )
-    throw(RuntimeException)
 {
     Reference < XClipboard > xClipboard(event.Source, UNO_QUERY);
 

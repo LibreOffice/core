@@ -138,10 +138,10 @@ public:
     const Sequence< PropertyValue >&  getValues() const { return m_aValues; }
 
 // XInteractionSupplyParameters
-    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException, std::exception) override;
+    virtual void SAL_CALL setParameters( const Sequence< PropertyValue >& _rValues ) override;
 };
 
-void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues ) throw(RuntimeException, std::exception)
+void SAL_CALL OParameterContinuation::setParameters( const Sequence< PropertyValue >& _rValues )
 {
     m_aValues = _rValues;
 }
@@ -161,82 +161,82 @@ public:
     explicit FormControllerImpl(SbaXDataBrowserController* pOwner);
 
     // XFormController
-    virtual css::uno::Reference< css::form::runtime::XFormOperations > SAL_CALL getFormOperations() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::awt::XControl >  SAL_CALL getCurrentControl() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removeActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addChildController( const css::uno::Reference< css::form::runtime::XFormController >& ChildController ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception ) override;
-    virtual css::uno::Reference< css::form::runtime::XFormControllerContext > SAL_CALL getContext() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setContext( const css::uno::Reference< css::form::runtime::XFormControllerContext >& _context ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _interactionHandler ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::form::runtime::XFormOperations > SAL_CALL getFormOperations() override;
+    virtual css::uno::Reference< css::awt::XControl >  SAL_CALL getCurrentControl() override;
+    virtual void SAL_CALL addActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) override;
+    virtual void SAL_CALL removeActivateListener(const css::uno::Reference< css::form::XFormControllerListener > & l) override;
+    virtual void SAL_CALL addChildController( const css::uno::Reference< css::form::runtime::XFormController >& ChildController ) override;
+    virtual css::uno::Reference< css::form::runtime::XFormControllerContext > SAL_CALL getContext() override;
+    virtual void SAL_CALL setContext( const css::uno::Reference< css::form::runtime::XFormControllerContext >& _context ) override;
+    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() override;
+    virtual void SAL_CALL setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& _interactionHandler ) override;
 
     // XChild, base of XFormController
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
+    virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
     // XComponent, base of XFormController
-    virtual void SAL_CALL dispose(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose(  ) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XIndexAccess, base of XFormController
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getCount(  ) override;
+    virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
 
     // XElementAccess, base of XIndexAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) override;
 
     // XEnumerationAccess, base of XElementAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration(  ) override;
 
     // XModifyBroadcaster, base of XFormController
-    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
+    virtual void SAL_CALL removeModifyListener( const css::uno::Reference< css::util::XModifyListener >& aListener ) override;
 
     // XConfirmDeleteBroadcaster, base of XFormController
-    virtual void SAL_CALL addConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
+    virtual void SAL_CALL removeConfirmDeleteListener( const css::uno::Reference< css::form::XConfirmDeleteListener >& aListener ) override;
 
     // XSQLErrorBroadcaster, base of XFormController
-    virtual void SAL_CALL addSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
+    virtual void SAL_CALL removeSQLErrorListener( const css::uno::Reference< css::sdb::XSQLErrorListener >& Listener ) override;
 
     // XRowSetApproveBroadcaster, base of XFormController
-    virtual void SAL_CALL addRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
+    virtual void SAL_CALL removeRowSetApproveListener( const css::uno::Reference< css::sdb::XRowSetApproveListener >& listener ) override;
 
     // XDatabaseParameterBroadcaster2, base of XFormController
-    virtual void SAL_CALL addDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void SAL_CALL removeDatabaseParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
 
     // XDatabaseParameterBroadcaster, base of XDatabaseParameterBroadcaster2
-    virtual void SAL_CALL addParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
+    virtual void SAL_CALL removeParameterListener( const css::uno::Reference< css::form::XDatabaseParameterListener >& aListener ) override;
 
     // XModeSelector, base of XFormController
-    virtual void SAL_CALL setMode( const OUString& aMode ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getMode(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setMode( const OUString& aMode ) override;
+    virtual OUString SAL_CALL getMode(  ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) override;
+    virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) override;
 
     // XTabController, base of XFormController
-    virtual void SAL_CALL setModel(const css::uno::Reference< css::awt::XTabControllerModel > & Model) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Reference< css::awt::XTabControllerModel >  SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setContainer(const css::uno::Reference< css::awt::XControlContainer > & Container) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Reference< css::awt::XControlContainer >  SAL_CALL getContainer() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl >  > SAL_CALL getControls() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL autoTabOrder() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL activateTabOrder() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL activateFirst() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL activateLast() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setModel(const css::uno::Reference< css::awt::XTabControllerModel > & Model) override;
+    virtual css::uno::Reference< css::awt::XTabControllerModel >  SAL_CALL getModel() override;
+    virtual void SAL_CALL setContainer(const css::uno::Reference< css::awt::XControlContainer > & Container) override;
+    virtual css::uno::Reference< css::awt::XControlContainer >  SAL_CALL getContainer() override;
+    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl >  > SAL_CALL getControls() override;
+    virtual void SAL_CALL autoTabOrder() override;
+    virtual void SAL_CALL activateTabOrder() override;
+    virtual void SAL_CALL activateFirst() override;
+    virtual void SAL_CALL activateLast() override;
 
     // XFrameActionListener
-    virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 protected:
     virtual ~FormControllerImpl() override;
@@ -255,213 +255,213 @@ SbaXDataBrowserController::FormControllerImpl::~FormControllerImpl()
 
 }
 
-Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getFormOperations() throw (RuntimeException, std::exception)
+Reference< runtime::XFormOperations > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getFormOperations()
 {
     return FormOperations::createWithFormController( m_pOwner->m_xContext, this );
 }
 
-Reference< css::awt::XControl >  SbaXDataBrowserController::FormControllerImpl::getCurrentControl() throw( RuntimeException, std::exception )
+Reference< css::awt::XControl >  SbaXDataBrowserController::FormControllerImpl::getCurrentControl()
 {
     return m_pOwner->getBrowserView() ? m_pOwner->getBrowserView()->getGridControl() : Reference< css::awt::XControl > ();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addActivateListener(const Reference< css::form::XFormControllerListener > & l) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addActivateListener(const Reference< css::form::XFormControllerListener > & l)
 {
     m_aActivateListeners.addInterface(l);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListener(const Reference< css::form::XFormControllerListener > & l) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeActivateListener(const Reference< css::form::XFormControllerListener > & l)
 {
     m_aActivateListeners.removeInterface(l);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& ) throw( RuntimeException, IllegalArgumentException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addChildController( const Reference< runtime::XFormController >& )
 {
     // not supported
     throw IllegalArgumentException( OUString(), *this, 1 );
 }
 
-Reference< runtime::XFormControllerContext > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContext() throw (RuntimeException, std::exception)
+Reference< runtime::XFormControllerContext > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContext()
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::getContext: no support!!" );
     return nullptr;
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& /*_context*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContext( const Reference< runtime::XFormControllerContext >& /*_context*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::setContext: no support!!" );
 }
 
-Reference< XInteractionHandler > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getInteractionHandler() throw (RuntimeException, std::exception)
+Reference< XInteractionHandler > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getInteractionHandler()
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::getInteractionHandler: no support!!" );
     return nullptr;
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& /*_interactionHandler*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setInteractionHandler( const Reference< XInteractionHandler >& /*_interactionHandler*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::setInteractionHandler: no support!!" );
 }
 
-Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getParent(  ) throw (RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getParent(  )
 {
     // don't have any parent form controllers
     return nullptr;
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& /*Parent*/ ) throw (NoSupportException, RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setParent( const Reference< XInterface >& /*Parent*/ )
 {
     throw NoSupportException( OUString(), *this );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::dispose(  ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::dispose(  )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::dispose: no, you do *not* want to do this!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addEventListener( const Reference< XEventListener >& /*xListener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addEventListener( const Reference< XEventListener >& /*xListener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addEventListener: no support!!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener( const Reference< XEventListener >& /*aListener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeEventListener( const Reference< XEventListener >& /*aListener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeEventListener: no support!!" );
 }
 
-::sal_Int32 SAL_CALL SbaXDataBrowserController::FormControllerImpl::getCount(  ) throw (RuntimeException, std::exception)
+::sal_Int32 SAL_CALL SbaXDataBrowserController::FormControllerImpl::getCount(  )
 {
     // no sub controllers, never
     return 0;
 }
 
-Any SAL_CALL SbaXDataBrowserController::FormControllerImpl::getByIndex( ::sal_Int32 /*Index*/ ) throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL SbaXDataBrowserController::FormControllerImpl::getByIndex( ::sal_Int32 /*Index*/ )
 {
     // no sub controllers, never
     throw IndexOutOfBoundsException( OUString(), *this );
 }
 
-Type SAL_CALL SbaXDataBrowserController::FormControllerImpl::getElementType(  ) throw (RuntimeException, std::exception)
+Type SAL_CALL SbaXDataBrowserController::FormControllerImpl::getElementType(  )
 {
     return ::cppu::UnoType< runtime::XFormController >::get();
 }
 
-sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::hasElements(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::hasElements(  )
 {
     // no sub controllers, never
     return false;
 }
 
-Reference< XEnumeration > SAL_CALL SbaXDataBrowserController::FormControllerImpl::createEnumeration(  ) throw (RuntimeException, std::exception)
+Reference< XEnumeration > SAL_CALL SbaXDataBrowserController::FormControllerImpl::createEnumeration(  )
 {
     return new ::comphelper::OEnumerationByIndex( this );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addModifyListener( const Reference< XModifyListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addModifyListener( const Reference< XModifyListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addModifyListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeModifyListener( const Reference< XModifyListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeModifyListener( const Reference< XModifyListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeModifyListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addConfirmDeleteListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener( const Reference< XConfirmDeleteListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeConfirmDeleteListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addSQLErrorListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener( const Reference< XSQLErrorListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeSQLErrorListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addRowSetApproveListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener( const Reference< XRowSetApproveListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeRowSetApproveListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addDatabaseParameterListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeDatabaseParameterListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::addParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::addParameterListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::removeParameterListener( const Reference< XDatabaseParameterListener >& /*_Listener*/ )
 {
     SAL_WARN("dbaccess.ui", "SbaXDataBrowserController::FormControllerImpl::removeParameterListener: no support!" );
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setMode( const OUString& _rMode ) throw (NoSupportException, RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setMode( const OUString& _rMode )
 {
     if ( !supportsMode( _rMode ) )
         throw NoSupportException();
 }
 
-OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  ) throw (RuntimeException, std::exception)
+OUString SAL_CALL SbaXDataBrowserController::FormControllerImpl::getMode(  )
 {
     return OUString( "DataMode" );
 }
 
-Sequence< OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getSupportedModes(  )
 {
     Sequence< OUString > aModes { "DataMode" };
     return aModes;
 }
 
-sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( const OUString& aMode ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SbaXDataBrowserController::FormControllerImpl::supportsMode( const OUString& aMode )
 {
     return aMode == "DataMode";
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< css::awt::XTabControllerModel > & /*Model*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setModel(const Reference< css::awt::XTabControllerModel > & /*Model*/)
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::setModel : invalid call, can't change my model !");
 }
 
-Reference< css::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getModel() throw( RuntimeException, std::exception )
+Reference< css::awt::XTabControllerModel >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getModel()
 {
     return Reference< XTabControllerModel >(m_pOwner->getRowSet(), UNO_QUERY);
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< css::awt::XControlContainer > &) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::setContainer(const Reference< css::awt::XControlContainer > &)
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::setContainer : invalid call, can't change my container !");
 }
 
-Reference< css::awt::XControlContainer >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContainer() throw( RuntimeException, std::exception )
+Reference< css::awt::XControlContainer >  SAL_CALL SbaXDataBrowserController::FormControllerImpl::getContainer()
 {
     if (m_pOwner->getBrowserView())
         return m_pOwner->getBrowserView()->getContainer();
     return Reference< css::awt::XControlContainer > ();
 }
 
-Sequence< Reference< css::awt::XControl > > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getControls() throw( RuntimeException, std::exception )
+Sequence< Reference< css::awt::XControl > > SAL_CALL SbaXDataBrowserController::FormControllerImpl::getControls()
 {
     if (m_pOwner->getBrowserView())
     {
@@ -471,40 +471,40 @@ Sequence< Reference< css::awt::XControl > > SAL_CALL SbaXDataBrowserController::
     return Sequence< Reference< css::awt::XControl > >();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::autoTabOrder() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::autoTabOrder()
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::autoTabOrder : nothing to do (always have only one control) !");
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateTabOrder() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateTabOrder()
 {
     SAL_WARN("dbaccess.ui","SbaXDataBrowserController::FormControllerImpl::activateTabOrder : nothing to do (always have only one control) !");
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateFirst() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateFirst()
 {
     if (m_pOwner->getBrowserView())
         m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateLast() throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::activateLast()
 {
     if (m_pOwner->getBrowserView())
         m_pOwner->getBrowserView()->getVclControl()->ActivateCell();
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const css::frame::FrameActionEvent& /*aEvent*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::frameAction(const css::frame::FrameActionEvent& /*aEvent*/)
 {
 }
 
-void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const css::lang::EventObject& /*Source*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::FormControllerImpl::disposing(const css::lang::EventObject& /*Source*/)
 {
     // nothing to do
     // we don't add ourself as listener to any broadcasters, so we are not resposible for removing us
 }
 
 // SbaXDataBrowserController
-Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  ) throw (RuntimeException, std::exception)
+Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  )
 {
     return ::comphelper::concatSequences(
         SbaXDataBrowserController_Base::getTypes(),
@@ -512,12 +512,12 @@ Sequence< Type > SAL_CALL SbaXDataBrowserController::getTypes(  ) throw (Runtime
     );
 }
 
-Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  ) throw (RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL SbaXDataBrowserController::getImplementationId(  )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL SbaXDataBrowserController::queryInterface(const Type& _rType)
 {
     // check for our additional interfaces
     Any aRet = SbaXDataBrowserController_Base::queryInterface(_rType);
@@ -929,7 +929,7 @@ void SbaXDataBrowserController::removeControlListeners(const Reference< css::awt
         xWindow->removeFocusListener(this);
 }
 
-void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/)
 {
     // notify our activate listeners (registered on the form controller aggregate)
     EventObject aEvt(*this);
@@ -938,7 +938,7 @@ void SAL_CALL SbaXDataBrowserController::focusGained(const FocusEvent& /*e*/) th
         static_cast<XFormControllerListener*>(aIter.next())->formActivated(aEvt);
 }
 
-void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e) throw( RuntimeException, std::exception )
+void SAL_CALL SbaXDataBrowserController::focusLost(const FocusEvent& e)
 {
     // some general checks
     if (!getBrowserView() || !getBrowserView()->getGridControl().is())
@@ -1003,7 +1003,7 @@ void SbaXDataBrowserController::disposingColumnModel(const css::lang::EventObjec
     RemoveColumnListener(Reference< XPropertySet > (Source.Source, UNO_QUERY));
 }
 
-void SbaXDataBrowserController::disposing(const EventObject& Source) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::disposing(const EventObject& Source)
 {
     // if it's a component other than our aggregate, forward it to the aggregate
     if ( m_xFormControllerImpl != Source.Source )
@@ -1042,19 +1042,19 @@ void SbaXDataBrowserController::disposing(const EventObject& Source) throw( Runt
     SbaXDataBrowserController_Base::OGenericUnoController::disposing( Source );
 }
 
-void SAL_CALL SbaXDataBrowserController::setIdentifier( const OUString& Identifier ) throw (RuntimeException, std::exception)
+void SAL_CALL SbaXDataBrowserController::setIdentifier( const OUString& Identifier )
 {
     ::osl::MutexGuard aGuard( getMutex() );
     m_sModuleIdentifier = Identifier;
 }
 
-OUString SAL_CALL SbaXDataBrowserController::getIdentifier(  ) throw (RuntimeException, std::exception)
+OUString SAL_CALL SbaXDataBrowserController::getIdentifier(  )
 {
     ::osl::MutexGuard aGuard( getMutex() );
     return m_sModuleIdentifier;
 }
 
-void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) throw ( RuntimeException, std::exception )
+void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt)
 {
     Reference< XPropertySet >  xSource(evt.Source, UNO_QUERY);
     if (!xSource.is())
@@ -1104,12 +1104,12 @@ void SbaXDataBrowserController::propertyChange(const PropertyChangeEvent& evt) t
     }
 }
 
-void SbaXDataBrowserController::modified(const css::lang::EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::modified(const css::lang::EventObject& /*aEvent*/)
 {
     setCurrentModified( true );
 }
 
-void SbaXDataBrowserController::elementInserted(const css::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::elementInserted(const css::container::ContainerEvent& evt)
 {
     OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementInserted: where did this come from (not from the grid model)?!");
@@ -1118,7 +1118,7 @@ void SbaXDataBrowserController::elementInserted(const css::container::ContainerE
         AddColumnListener(xNewColumn);
 }
 
-void SbaXDataBrowserController::elementRemoved(const css::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::elementRemoved(const css::container::ContainerEvent& evt)
 {
     OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementRemoved: where did this come from (not from the grid model)?!");
@@ -1127,7 +1127,7 @@ void SbaXDataBrowserController::elementRemoved(const css::container::ContainerEv
         RemoveColumnListener(xOldColumn);
 }
 
-void SbaXDataBrowserController::elementReplaced(const css::container::ContainerEvent& evt) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::elementReplaced(const css::container::ContainerEvent& evt)
 {
     OSL_ENSURE(Reference< XInterface >(evt.Source, UNO_QUERY).get() == Reference< XInterface >(getControlModel(), UNO_QUERY).get(),
         "SbaXDataBrowserController::elementReplaced: where did this come from (not from the grid model)?!");
@@ -1140,7 +1140,7 @@ void SbaXDataBrowserController::elementReplaced(const css::container::ContainerE
         AddColumnListener(xNewColumn);
 }
 
-sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/) throw( RuntimeException, std::exception )
+sal_Bool SbaXDataBrowserController::suspend(sal_Bool /*bSuspend*/)
 {
     m_aAsyncGetCellFocus.CancelCall();
     m_aAsyncDisplayError.CancelCall();
@@ -1216,7 +1216,7 @@ void SbaXDataBrowserController::disposing()
         // don't dispose, just reset - it's owned by the RowSet
 }
 
-void SbaXDataBrowserController::frameAction(const css::frame::FrameActionEvent& aEvent) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::frameAction(const css::frame::FrameActionEvent& aEvent)
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -1261,7 +1261,7 @@ IMPL_LINK_NOARG( SbaXDataBrowserController, OnAsyncDisplayError, void*, void )
     }
 }
 
-void SbaXDataBrowserController::errorOccured(const css::sdb::SQLErrorEvent& aEvent) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::errorOccured(const css::sdb::SQLErrorEvent& aEvent)
 {
     ::osl::MutexGuard aGuard( getMutex() );
 
@@ -1281,7 +1281,7 @@ void SbaXDataBrowserController::errorOccured(const css::sdb::SQLErrorEvent& aEve
     }
 }
 
-sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabaseParameterEvent& aEvent) throw( RuntimeException, std::exception )
+sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabaseParameterEvent& aEvent)
 {
     if (aEvent.Source != getRowSet())
     {
@@ -1356,19 +1356,19 @@ sal_Bool SbaXDataBrowserController::approveParameter(const css::form::DatabasePa
     return true;
 }
 
-sal_Bool SbaXDataBrowserController::approveReset(const css::lang::EventObject& /*rEvent*/) throw( RuntimeException, std::exception )
+sal_Bool SbaXDataBrowserController::approveReset(const css::lang::EventObject& /*rEvent*/)
 {
     return true;
 }
 
-void SbaXDataBrowserController::resetted(const css::lang::EventObject& rEvent) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::resetted(const css::lang::EventObject& rEvent)
 {
     OSL_ENSURE(rEvent.Source == getControlModel(), "SbaXDataBrowserController::resetted : where did this come from ?");
     (void)rEvent;
     setCurrentModified( false );
 }
 
-sal_Bool SbaXDataBrowserController::confirmDelete(const css::sdb::RowChangeEvent& /*aEvent*/) throw( RuntimeException, std::exception )
+sal_Bool SbaXDataBrowserController::confirmDelete(const css::sdb::RowChangeEvent& /*aEvent*/)
 {
     if (ScopedVclPtrInstance<MessageDialog>(getBrowserView(), ModuleRes(STR_QUERY_BRW_DELETE_ROWS), VclMessageType::Question, VclButtonsType::YesNo)->Execute() != RET_YES)
         return false;
@@ -2480,18 +2480,18 @@ void SbaXDataBrowserController::initializeParser() const
     }
 }
 
-void SbaXDataBrowserController::loaded(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::loaded(const EventObject& /*aEvent*/)
 {
     // not interested in
     // we're loading within an separate thread and have a handling for its "finished event"
 }
 
-void SbaXDataBrowserController::unloading(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::unloading(const EventObject& /*aEvent*/)
 {
     // not interested in
 }
 
-void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/)
 {
     m_xParser.clear();
     InvalidateAll();
@@ -2502,12 +2502,12 @@ void SbaXDataBrowserController::unloaded(const EventObject& /*aEvent*/) throw( R
         // bound-field-dependent slots ....
 }
 
-void SbaXDataBrowserController::reloading(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::reloading(const EventObject& /*aEvent*/)
 {
     // not interested in
 }
 
-void SbaXDataBrowserController::reloaded(const EventObject& /*aEvent*/) throw( RuntimeException, std::exception )
+void SbaXDataBrowserController::reloaded(const EventObject& /*aEvent*/)
 {
     InvalidateAll();
         // do this asynchronously, there are other listeners reacting on this message ...

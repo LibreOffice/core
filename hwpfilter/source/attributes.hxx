@@ -40,12 +40,12 @@ public:
     AttributeListImpl( const AttributeListImpl & );
 
 public:
-    virtual sal_Int16 SAL_CALL getLength() throw (RuntimeException, std::exception) override;
-    virtual OUString  SAL_CALL getNameByIndex(sal_Int16 i) throw (RuntimeException, std::exception) override;
-    virtual OUString  SAL_CALL getTypeByIndex(sal_Int16 i) throw (RuntimeException, std::exception) override;
-    virtual OUString  SAL_CALL getTypeByName(const OUString& aName) throw (RuntimeException, std::exception) override;
-    virtual OUString  SAL_CALL getValueByIndex(sal_Int16 i) throw (RuntimeException, std::exception) override;
-    virtual OUString  SAL_CALL getValueByName(const OUString& aName) throw (RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getLength() override;
+    virtual OUString  SAL_CALL getNameByIndex(sal_Int16 i) override;
+    virtual OUString  SAL_CALL getTypeByIndex(sal_Int16 i) override;
+    virtual OUString  SAL_CALL getTypeByName(const OUString& aName) override;
+    virtual OUString  SAL_CALL getValueByIndex(sal_Int16 i) override;
+    virtual OUString  SAL_CALL getValueByName(const OUString& aName) override;
 
 public:
     void addAttribute( const OUString &sName , const OUString &sType , const OUString &sValue );

@@ -172,12 +172,11 @@ public:
     ODBExport(const Reference< XComponentContext >& _rxContext, OUString const & implementationName, SvXMLExportFlags nExportFlag = SvXMLExportFlags::CONTENT | SvXMLExportFlags::AUTOSTYLES | SvXMLExportFlags::PRETTY | SvXMLExportFlags::FONTDECLS | SvXMLExportFlags::SCRIPTS );
 
     /// @throws css::uno::RuntimeException
-    static OUString SAL_CALL getImplementationName_Static()
-        throw (css::uno::RuntimeException);
+    static OUString SAL_CALL getImplementationName_Static();
 
     /// @throws css::uno::RuntimeException
     static css::uno::Sequence<OUString> SAL_CALL
-    getSupportedServiceNames_Static() throw (css::uno::RuntimeException);
+    getSupportedServiceNames_Static();
 
     static css::uno::Reference<css::uno::XInterface> SAL_CALL Create(
         css::uno::Reference<css::lang::XMultiServiceFactory> const & _rxORB);
@@ -186,7 +185,7 @@ public:
     rtl::Reference < XMLPropertySetMapper > const & GetCellStylesPropertySetMapper() const;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc ) override;
 
     const Reference<XPropertySet>& getDataSource() const { return m_xDataSource; }
 };

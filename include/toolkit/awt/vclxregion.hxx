@@ -52,32 +52,32 @@ public:
     const vcl::Region&   GetRegion() const                   { return maRegion; }
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::lang::XUnoTunnel
     static const css::uno::Sequence< sal_Int8 >&   GetUnoTunnelId() throw();
     static VCLXRegion*                                          GetImplementation( const css::uno::Reference< css::uno::XInterface >& rxIFace );
-    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int64                                                   SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rIdentifier ) override;
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XRegion
-     css::awt::Rectangle       SAL_CALL getBounds() throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL clear() throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL move( sal_Int32 nHorzMove, sal_Int32 nVertMove ) throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL unionRectangle( const css::awt::Rectangle& rRect ) throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL intersectRectangle( const css::awt::Rectangle& rRect ) throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL excludeRectangle( const css::awt::Rectangle& rRect ) throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL xOrRectangle( const css::awt::Rectangle& rRect ) throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL intersectRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL excludeRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) throw(css::uno::RuntimeException, std::exception) override;
-     void                                   SAL_CALL xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) throw(css::uno::RuntimeException, std::exception) override;
-     css::uno::Sequence< css::awt::Rectangle > SAL_CALL getRectangles() throw(css::uno::RuntimeException, std::exception) override;
+     css::awt::Rectangle       SAL_CALL getBounds() override;
+     void                                   SAL_CALL clear() override;
+     void                                   SAL_CALL move( sal_Int32 nHorzMove, sal_Int32 nVertMove ) override;
+     void                                   SAL_CALL unionRectangle( const css::awt::Rectangle& rRect ) override;
+     void                                   SAL_CALL intersectRectangle( const css::awt::Rectangle& rRect ) override;
+     void                                   SAL_CALL excludeRectangle( const css::awt::Rectangle& rRect ) override;
+     void                                   SAL_CALL xOrRectangle( const css::awt::Rectangle& rRect ) override;
+     void                                   SAL_CALL unionRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   SAL_CALL intersectRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   SAL_CALL excludeRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     void                                   SAL_CALL xOrRegion( const css::uno::Reference< css::awt::XRegion >& rxRegion ) override;
+     css::uno::Sequence< css::awt::Rectangle > SAL_CALL getRectangles() override;
 
 };
 

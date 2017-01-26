@@ -55,22 +55,18 @@ public:
 
     // XAccessibleContext methods that need to be overridden
 
-    virtual OUString SAL_CALL getAccessibleDescription()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getAccessibleDescription() override;
 
     // XServiceInfo
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
     virtual sal_Bool SAL_CALL supportsService (
-        const OUString& sServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+        const OUString& sServiceName) override;
     virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     virtual bool HasCursor() override;   // required by map to remember that object
 };

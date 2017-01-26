@@ -41,14 +41,14 @@ namespace dbaui
         // XServiceInfo
         DECLARE_SERVICE_INFO();
         /// @throws css::uno::RuntimeException
-        static OUString SAL_CALL getImplementationName_Static(  ) throw (css::uno::RuntimeException);
+        static OUString SAL_CALL getImplementationName_Static(  );
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  ) throw(css::uno::RuntimeException);
+        static css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames_Static(  );
         static css::uno::Reference< css::uno::XInterface >
         SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // css::awt::XControl
-        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL createPeer(const css::uno::Reference< css::awt::XToolkit >& _rToolkit, const css::uno::Reference< css::awt::XWindowPeer >& Parent) override;
     };
 }   // namespace dbaui
 

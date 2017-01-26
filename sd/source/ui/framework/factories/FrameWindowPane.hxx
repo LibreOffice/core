@@ -42,8 +42,7 @@ public:
         children, if only to visualize that something (a view) is missing.
         Therefore this method always returns <FALSE/>.
     */
-    virtual sal_Bool SAL_CALL isAnchorOnly()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isAnchorOnly() override;
 };
 
 } } // end of namespace sd::framework

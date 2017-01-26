@@ -99,7 +99,7 @@ public:
         OUString const & implementationName, SvXMLExportFlags nExportFlags);
 
     // XUnoTunnel
-    sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
     static const css::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
 
     void ExportAutoStyles_() override {}

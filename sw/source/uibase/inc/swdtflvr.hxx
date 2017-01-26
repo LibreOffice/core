@@ -207,7 +207,7 @@ public:
     void    Invalidate() {m_pWrtShell = nullptr;}
     static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId();
 
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& rId ) override;
 };
 
 #endif

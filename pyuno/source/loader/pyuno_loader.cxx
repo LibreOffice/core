@@ -64,7 +64,7 @@ namespace pyuno_loader
 {
 
 /// @throws RuntimeException
-static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
+static void raiseRuntimeExceptionWhenNeeded()
 {
     if( PyErr_Occurred() )
     {
@@ -81,7 +81,7 @@ static void raiseRuntimeExceptionWhenNeeded() throw ( RuntimeException )
 }
 
 /// @throws RuntimeException
-static PyRef getLoaderModule() throw( RuntimeException )
+static PyRef getLoaderModule()
 {
     PyRef module(
         PyImport_ImportModule( "pythonloader" ),
@@ -96,7 +96,6 @@ static PyRef getLoaderModule() throw( RuntimeException )
 
 /// @throws RuntimeException
 static PyRef getObjectFromLoaderModule( const char * func )
-    throw ( RuntimeException )
 {
     PyRef object( PyDict_GetItemString(getLoaderModule().get(), func ) );
     if( !object.is() )

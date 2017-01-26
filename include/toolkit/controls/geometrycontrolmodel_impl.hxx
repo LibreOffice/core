@@ -56,7 +56,7 @@ void OGeometryControlModel<CONTROLMODEL>::fillProperties(css::uno::Sequence< css
 
 
 template <class CONTROLMODEL>
-css::uno::Sequence< sal_Int8 > SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId(  ) throw (css::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int8 > SAL_CALL OGeometryControlModel<CONTROLMODEL>::getImplementationId(  )
 {
     return css::uno::Sequence<sal_Int8>();
 }

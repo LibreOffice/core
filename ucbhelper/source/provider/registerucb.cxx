@@ -44,7 +44,6 @@ registerAtUcb(
     OUString const & rName,
     OUString const & rArguments,
     OUString const & rTemplate)
-    throw (uno::RuntimeException)
 {
     OSL_ENSURE(rxContext.is(),
                "ucb::registerAtUcb(): No service factory");

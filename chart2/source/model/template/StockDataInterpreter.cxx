@@ -54,7 +54,6 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
     const Reference< data::XDataSource >& xSource,
     const Sequence< beans::PropertyValue >& rArguments,
     const Sequence< Reference< XDataSeries > >& rSeriesToReUse )
-    throw (uno::RuntimeException, std::exception)
 {
     if( ! xSource.is())
         return InterpretedData();
@@ -262,7 +261,6 @@ InterpretedData SAL_CALL StockDataInterpreter::interpretDataSource(
 // volume to one with volume)
 sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
     const InterpretedData& aInterpretedData )
-    throw (uno::RuntimeException, std::exception)
 {
     // high/low/close
     sal_Int32 nNumberOfNecessarySequences = 3;
@@ -319,7 +317,6 @@ sal_Bool SAL_CALL StockDataInterpreter::isDataCompatible(
 
 InterpretedData SAL_CALL StockDataInterpreter::reinterpretDataSeries(
     const InterpretedData& aInterpretedData )
-    throw (uno::RuntimeException, std::exception)
 {
     // prerequisite: StockDataInterpreter::isDataCompatible() returned true
     return aInterpretedData;

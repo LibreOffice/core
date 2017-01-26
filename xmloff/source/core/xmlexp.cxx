@@ -214,7 +214,7 @@ public:
     explicit SvXMLExportEventListener(SvXMLExport* pExport);
 
                             // XEventListener
-    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const lang::EventObject& rEventObject) override;
 };
 
 SvXMLExportEventListener::SvXMLExportEventListener(SvXMLExport* pTempExport)
@@ -224,7 +224,6 @@ SvXMLExportEventListener::SvXMLExportEventListener(SvXMLExport* pTempExport)
 
 // XEventListener
 void SAL_CALL SvXMLExportEventListener::disposing( const lang::EventObject& )
-    throw(uno::RuntimeException, std::exception)
 {
     if (pExport)
     {
@@ -575,7 +574,6 @@ SvXMLExport::~SvXMLExport()
 
 // XExporter
 void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XComponent >& xDoc )
-    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     mxModel.set( xDoc, UNO_QUERY );
     if( !mxModel.is() )
@@ -665,7 +663,6 @@ void SAL_CALL SvXMLExport::setSourceDocument( const uno::Reference< lang::XCompo
 
 // XInitialize
 void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArguments )
-    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     // #93186# we need to queryInterface every single Any with any expected outcome. This variable hold the queryInterface results.
 
@@ -775,7 +772,7 @@ void SAL_CALL SvXMLExport::initialize( const uno::Sequence< uno::Any >& aArgumen
 }
 
 // XFilter
-sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor ) throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue >& aDescriptor )
 {
     // check for xHandler first... should have been supplied in initialize
     if( !mxHandler.is() )
@@ -851,7 +848,7 @@ sal_Bool SAL_CALL SvXMLExport::filter( const uno::Sequence< beans::PropertyValue
     return (mnErrorFlags & (SvXMLErrorFlags::DO_NOTHING|SvXMLErrorFlags::ERROR_OCCURRED)) == SvXMLErrorFlags::NO;
 }
 
-void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException, std::exception)
+void SAL_CALL SvXMLExport::cancel()
 {
     // stop export
     Sequence<OUString> aEmptySeq;
@@ -859,30 +856,27 @@ void SAL_CALL SvXMLExport::cancel() throw(uno::RuntimeException, std::exception)
 }
 
 OUString SAL_CALL SvXMLExport::getName(  )
-    throw (css::uno::RuntimeException, std::exception)
 {
     return msFilterName;
 }
 
 void SAL_CALL SvXMLExport::setName( const OUString& )
-    throw (css::uno::RuntimeException, std::exception)
 {
     // do nothing, because it is not possible to set the FilterName
 }
 
 // XServiceInfo
-OUString SAL_CALL SvXMLExport::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL SvXMLExport::getImplementationName(  )
 {
     return m_implementationName;
 }
 
-sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName ) throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SvXMLExport::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL SvXMLExport::getSupportedServiceNames(  )
-    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> aSeq(2);
     aSeq[0] = "com.sun.star.document.ExportFilter";
@@ -2074,7 +2068,6 @@ SvXMLExport* SvXMLExport::getImplementation( const uno::Reference< uno::XInterfa
 
 // XUnoTunnel
 sal_Int64 SAL_CALL SvXMLExport::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw( uno::RuntimeException, std::exception )
 {
     if( rId.getLength() == 16 && 0 == memcmp( getUnoTunnelId().getConstArray(),
                                                          rId.getConstArray(), 16 ) )

@@ -413,14 +413,14 @@ void OKeySet::invalidateRow()
     ::comphelper::disposeComponent(m_xSet);
 }
 
-Any SAL_CALL OKeySet::getBookmark() throw(SQLException, RuntimeException)
+Any SAL_CALL OKeySet::getBookmark()
 {
     OSL_ENSURE(m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin(),
         "getBookmark is only possible when we stand on a valid row!");
     return makeAny(m_aKeyIter->first);
 }
 
-bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.find(::comphelper::getINT32(bookmark));
@@ -428,7 +428,7 @@ bool SAL_CALL OKeySet::moveToBookmark( const Any& bookmark ) throw(SQLException,
     return m_aKeyIter != m_aKeyMap.end();
 }
 
-sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _second ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _second )
 {
     sal_Int32 nFirst = 0, nSecond = 0;
     _first >>= nFirst;
@@ -437,18 +437,18 @@ sal_Int32 SAL_CALL OKeySet::compareBookmarks( const Any& _first, const Any& _sec
     return (nFirst != nSecond) ? CompareBookmark::NOT_EQUAL : CompareBookmark::EQUAL;
 }
 
-bool SAL_CALL OKeySet::hasOrderedBookmarks(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::hasOrderedBookmarks(  )
 {
     return true;
 }
 
-sal_Int32 SAL_CALL OKeySet::hashBookmark( const Any& bookmark ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OKeySet::hashBookmark( const Any& bookmark )
 {
     return ::comphelper::getINT32(bookmark);
 }
 
 
-void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OKeySet::updateRow(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rOriginalRow,const connectivity::OSQLTable& _xTable  )
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -617,7 +617,7 @@ void OKeySet::executeUpdate(const ORowSetRow& _rInsertRow ,const ORowSetRow& _rO
     }
 }
 
-void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OKeySet::insertRow( const ORowSetRow& _rInsertRow,const connectivity::OSQLTable& _xTable )
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -861,7 +861,7 @@ void OKeySet::copyRowValue(const ORowSetRow& _rInsertRow,ORowSetRow& _rKeyRow,sa
     }
 }
 
-void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& _xTable   ) throw(SQLException, RuntimeException)
+void SAL_CALL OKeySet::deleteRow(const ORowSetRow& _rDeleteRow,const connectivity::OSQLTable& _xTable   )
 {
     Reference<XPropertySet> xSet(_xTable,UNO_QUERY);
     fillTableName(xSet);
@@ -1003,7 +1003,7 @@ Reference<XNameAccess> OKeySet::getKeyColumns() const
     return xKeyColumns;
 }
 
-bool SAL_CALL OKeySet::next() throw(SQLException, RuntimeException, std::exception)
+bool SAL_CALL OKeySet::next()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
 
@@ -1031,24 +1031,24 @@ bool SAL_CALL OKeySet::next() throw(SQLException, RuntimeException, std::excepti
     return !isAfterLast();
 }
 
-bool SAL_CALL OKeySet::isBeforeFirst(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::isBeforeFirst(  )
 {
     return m_aKeyIter == m_aKeyMap.begin();
 }
 
-bool SAL_CALL OKeySet::isAfterLast(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::isAfterLast(  )
 {
     return  m_bRowCountFinal && m_aKeyIter == m_aKeyMap.end();
 }
 
-void SAL_CALL OKeySet::beforeFirst(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OKeySet::beforeFirst(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.begin();
     invalidateRow();
 }
 
-void SAL_CALL OKeySet::afterLast(  ) throw(SQLException, RuntimeException)
+void SAL_CALL OKeySet::afterLast(  )
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     fillAllRows();
@@ -1056,7 +1056,7 @@ void SAL_CALL OKeySet::afterLast(  ) throw(SQLException, RuntimeException)
     invalidateRow();
 }
 
-bool SAL_CALL OKeySet::first() throw(SQLException, RuntimeException, std::exception)
+bool SAL_CALL OKeySet::first()
 {
     m_bInserted = m_bUpdated = m_bDeleted = false;
     m_aKeyIter = m_aKeyMap.begin();
@@ -1074,7 +1074,7 @@ bool SAL_CALL OKeySet::first() throw(SQLException, RuntimeException, std::except
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 
-bool SAL_CALL OKeySet::last(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::last(  )
 {
     return last_checked(true);
 }
@@ -1093,7 +1093,7 @@ bool OKeySet::last_checked( bool /* i_bFetchRow */ )
     return m_aKeyIter != m_aKeyMap.end() && m_aKeyIter != m_aKeyMap.begin();
 }
 
-sal_Int32 SAL_CALL OKeySet::getRow(  ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OKeySet::getRow(  )
 {
     OSL_ENSURE(!isAfterLast(),"getRow is not allowed when afterlast record!");
     OSL_ENSURE(!isBeforeFirst(),"getRow is not allowed when beforefirst record!");
@@ -1101,7 +1101,7 @@ sal_Int32 SAL_CALL OKeySet::getRow(  ) throw(SQLException, RuntimeException)
     return ::std::distance(m_aKeyMap.begin(),m_aKeyIter);
 }
 
-bool SAL_CALL OKeySet::absolute( sal_Int32 row ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::absolute( sal_Int32 row )
 {
     return absolute_checked(row,true);
 }
@@ -1176,12 +1176,12 @@ bool OKeySet::previous_checked( bool /* i_bFetchRow */ )
     return m_aKeyIter != m_aKeyMap.begin();
 }
 
-bool SAL_CALL OKeySet::previous(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::previous(  )
 {
     return previous_checked(true);
 }
 
-bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException, std::exception)
+bool OKeySet::doTryRefetch_throw()
 {
     ensureStatement( );
     // we just reassign the base members
@@ -1225,7 +1225,7 @@ bool OKeySet::doTryRefetch_throw()  throw(SQLException, RuntimeException, std::e
     return m_xSet->next();
 }
 
-void SAL_CALL OKeySet::refreshRow() throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OKeySet::refreshRow()
 {
     invalidateRow();
 
@@ -1333,7 +1333,7 @@ bool OKeySet::fillAllRows()
 }
 
 // XRow
-sal_Bool SAL_CALL OKeySet::wasNull(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OKeySet::wasNull(  )
 {
     if ( ! m_xRow.is() )
         throwGenericSQLException("Must call getFOO() for some FOO before wasNull()", *this);
@@ -1342,7 +1342,7 @@ sal_Bool SAL_CALL OKeySet::wasNull(  ) throw(SQLException, RuntimeException, std
     return m_xRow->wasNull();
 }
 
-inline void OKeySet::ensureRowForData( ) throw(SQLException, RuntimeException)
+inline void OKeySet::ensureRowForData( )
 {
     if (! m_xRow.is() )
         refreshRow();
@@ -1352,131 +1352,131 @@ inline void OKeySet::ensureRowForData( ) throw(SQLException, RuntimeException)
     OSL_ENSURE(m_xRow.is(),"m_xRow is null! I've called throwSQLException but execution continued?");
 }
 
-OUString SAL_CALL OKeySet::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OKeySet::getString( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getString(columnIndex);
 }
 
-sal_Bool SAL_CALL OKeySet::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OKeySet::getBoolean( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getBoolean(columnIndex);
 }
 
-sal_Int8 SAL_CALL OKeySet::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int8 SAL_CALL OKeySet::getByte( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getByte(columnIndex);
 }
 
-sal_Int16 SAL_CALL OKeySet::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int16 SAL_CALL OKeySet::getShort( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getShort(columnIndex);
 }
 
-sal_Int32 SAL_CALL OKeySet::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OKeySet::getInt( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getInt(columnIndex);
 }
 
-sal_Int64 SAL_CALL OKeySet::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL OKeySet::getLong( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getLong(columnIndex);
 }
 
-float SAL_CALL OKeySet::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+float SAL_CALL OKeySet::getFloat( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getFloat(columnIndex);
 }
 
-double SAL_CALL OKeySet::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+double SAL_CALL OKeySet::getDouble( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getDouble(columnIndex);
 }
 
-Sequence< sal_Int8 > SAL_CALL OKeySet::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL OKeySet::getBytes( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getBytes(columnIndex);
 }
 
-css::util::Date SAL_CALL OKeySet::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Date SAL_CALL OKeySet::getDate( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getDate(columnIndex);
 }
 
-css::util::Time SAL_CALL OKeySet::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Time SAL_CALL OKeySet::getTime( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getTime(columnIndex);
 }
 
-css::util::DateTime SAL_CALL OKeySet::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::DateTime SAL_CALL OKeySet::getTimestamp( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getTimestamp(columnIndex);
 }
 
-Reference< css::io::XInputStream > SAL_CALL OKeySet::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL OKeySet::getBinaryStream( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getBinaryStream(columnIndex);
 }
 
-Reference< css::io::XInputStream > SAL_CALL OKeySet::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL OKeySet::getCharacterStream( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getCharacterStream(columnIndex);
 }
 
-Any SAL_CALL OKeySet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OKeySet::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
 {
     ensureRowForData();
     return m_xRow->getObject(columnIndex,typeMap);
 }
 
-Reference< XRef > SAL_CALL OKeySet::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XRef > SAL_CALL OKeySet::getRef( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getRef(columnIndex);
 }
 
-Reference< XBlob > SAL_CALL OKeySet::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XBlob > SAL_CALL OKeySet::getBlob( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getBlob(columnIndex);
 }
 
-Reference< XClob > SAL_CALL OKeySet::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XClob > SAL_CALL OKeySet::getClob( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getClob(columnIndex);
 }
 
-Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XArray > SAL_CALL OKeySet::getArray( sal_Int32 columnIndex )
 {
     ensureRowForData();
     return m_xRow->getArray(columnIndex);
 }
 
-bool SAL_CALL OKeySet::rowUpdated(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::rowUpdated(  )
 {
     return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 2;
 }
 
-bool SAL_CALL OKeySet::rowInserted(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::rowInserted(  )
 {
     return m_aKeyIter != m_aKeyMap.begin() && m_aKeyIter != m_aKeyMap.end() && m_aKeyIter->second.second.first == 1;
 }
 
-bool SAL_CALL OKeySet::rowDeleted(  ) throw(SQLException, RuntimeException)
+bool SAL_CALL OKeySet::rowDeleted(  )
 {
     bool bDeleted = m_bDeleted;
     m_bDeleted = false;

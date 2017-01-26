@@ -32,16 +32,16 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaAddin( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const OUString& rFileURL ) throw ( css::uno::RuntimeException );
+    SwVbaAddin( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const OUString& rFileURL );
     virtual ~SwVbaAddin() override;
 
     // Attributes
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getPath() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoload() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getInstalled() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setInstalled( sal_Bool _installed ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName() override;
+    virtual void SAL_CALL setName( const OUString& _name ) override;
+    virtual OUString SAL_CALL getPath() override;
+    virtual sal_Bool SAL_CALL getAutoload() override;
+    virtual sal_Bool SAL_CALL getInstalled() override;
+    virtual void SAL_CALL setInstalled( sal_Bool _installed ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

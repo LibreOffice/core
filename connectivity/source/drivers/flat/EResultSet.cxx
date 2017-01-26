@@ -44,12 +44,12 @@ OFlatResultSet::OFlatResultSet( OStatement_Base* pStmt,connectivity::OSQLParseTr
     registerProperty(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_ISBOOKMARKABLE),         PROPERTY_ID_ISBOOKMARKABLE,       PropertyAttribute::READONLY,&m_bBookmarkable,                cppu::UnoType<bool>::get());
 }
 
-OUString SAL_CALL OFlatResultSet::getImplementationName(  ) throw ( RuntimeException, std::exception)
+OUString SAL_CALL OFlatResultSet::getImplementationName(  )
 {
     return OUString("com.sun.star.sdbcx.flat.ResultSet");
 }
 
-Sequence< OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  ) throw( RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  )
 {
      Sequence< OUString > aSupported(2);
     aSupported[0] = "com.sun.star.sdbc.ResultSet";
@@ -57,12 +57,12 @@ Sequence< OUString > SAL_CALL OFlatResultSet::getSupportedServiceNames(  ) throw
     return aSupported;
 }
 
-sal_Bool SAL_CALL OFlatResultSet::supportsService( const OUString& _rServiceName ) throw( RuntimeException, std::exception)
+sal_Bool SAL_CALL OFlatResultSet::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType )
 {
     if(rType == cppu::UnoType<XDeleteRows>::get()|| rType == cppu::UnoType<XResultSetUpdate>::get()
         || rType == cppu::UnoType<XRowUpdate>::get())
@@ -72,7 +72,7 @@ Any SAL_CALL OFlatResultSet::queryInterface( const Type & rType ) throw(RuntimeE
     return aRet.hasValue() ? aRet : OFlatResultSet_BASE::queryInterface(rType);
 }
 
-Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException, std::exception)
+Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  )
 {
     Sequence< Type > aTypes = OResultSet::getTypes();
     ::std::vector<Type> aOwnTypes;
@@ -94,7 +94,7 @@ Sequence<  Type > SAL_CALL OFlatResultSet::getTypes(  ) throw( RuntimeException,
 
 
 // XRowLocate
-Any SAL_CALL OFlatResultSet::getBookmark(  ) throw( SQLException,  RuntimeException, std::exception)
+Any SAL_CALL OFlatResultSet::getBookmark(  )
 {
      ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -102,7 +102,7 @@ Any SAL_CALL OFlatResultSet::getBookmark(  ) throw( SQLException,  RuntimeExcept
     return makeAny((sal_Int32)(m_aRow->get())[0]->getValue());
 }
 
-sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException, std::exception)
+sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -113,7 +113,7 @@ sal_Bool SAL_CALL OFlatResultSet::moveToBookmark( const  Any& bookmark ) throw( 
     return Move(IResultSetHelper::BOOKMARK,comphelper::getINT32(bookmark),true);
 }
 
-sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows ) throw( SQLException,  RuntimeException, std::exception)
+sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, sal_Int32 rows )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
@@ -127,17 +127,17 @@ sal_Bool SAL_CALL OFlatResultSet::moveRelativeToBookmark( const  Any& bookmark, 
 }
 
 
-sal_Int32 SAL_CALL OFlatResultSet::compareBookmarks( const Any& lhs, const  Any& rhs ) throw( SQLException,  RuntimeException, std::exception)
+sal_Int32 SAL_CALL OFlatResultSet::compareBookmarks( const Any& lhs, const  Any& rhs )
 {
     return (lhs == rhs) ? CompareBookmark::EQUAL : CompareBookmark::NOT_EQUAL;
 }
 
-sal_Bool SAL_CALL OFlatResultSet::hasOrderedBookmarks(  ) throw( SQLException,  RuntimeException, std::exception)
+sal_Bool SAL_CALL OFlatResultSet::hasOrderedBookmarks(  )
 {
     return true;
 }
 
-sal_Int32 SAL_CALL OFlatResultSet::hashBookmark( const  Any& bookmark ) throw( SQLException,  RuntimeException, std::exception)
+sal_Int32 SAL_CALL OFlatResultSet::hashBookmark( const  Any& bookmark )
 {
     return comphelper::getINT32(bookmark);
 }
@@ -164,7 +164,7 @@ void SAL_CALL OFlatResultSet::release() throw()
     OFlatResultSet_BASE2::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OFlatResultSet::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL OFlatResultSet::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

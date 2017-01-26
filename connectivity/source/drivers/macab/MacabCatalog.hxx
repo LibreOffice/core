@@ -47,7 +47,7 @@ namespace connectivity
 
             // XTablesSupplier
             virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(
-                    ) throw(css::uno::RuntimeException) override;
+                    ) override;
         };
     }
 }

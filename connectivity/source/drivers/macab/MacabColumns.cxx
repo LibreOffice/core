@@ -78,7 +78,7 @@ sdbcx::ObjectType MacabColumns::createObject(const OUString& _rName)
     return xRet;
 }
 
-void MacabColumns::impl_refresh() throw(RuntimeException)
+void MacabColumns::impl_refresh()
 {
     m_pTable->refreshColumns();
 }

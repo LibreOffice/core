@@ -36,9 +36,9 @@ public:
                                         BitmapTransporter();
     virtual                             ~BitmapTransporter() override;
 
-    virtual css::awt::Size SAL_CALL          getSize() throw(std::exception) override;
-    virtual Sequence< sal_Int8 > SAL_CALL    getDIB() throw(std::exception) override;
-    virtual Sequence< sal_Int8 > SAL_CALL    getMaskDIB() throw(std::exception) override { return Sequence< sal_Int8 >(); }
+    virtual css::awt::Size SAL_CALL          getSize() override;
+    virtual Sequence< sal_Int8 > SAL_CALL    getDIB() override;
+    virtual Sequence< sal_Int8 > SAL_CALL    getMaskDIB() override { return Sequence< sal_Int8 >(); }
 
     // Misc
     void                                lock() { m_aProtector.acquire(); }

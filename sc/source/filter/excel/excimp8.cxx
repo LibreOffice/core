@@ -118,33 +118,33 @@ private:
     ::osl::Mutex m_aMutex;
 public:
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override { return  cppu::UnoType<container::XIndexContainer>::get(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Type SAL_CALL getElementType(  ) override { return  cppu::UnoType<container::XIndexContainer>::get(); }
+    virtual sal_Bool SAL_CALL hasElements(  ) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( !IdToOleNameHash.empty() );
     }
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         return uno::makeAny( IdToOleNameHash[ aName ] );
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return comphelper::mapKeysToSequence( IdToOleNameHash);
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         return ( IdToOleNameHash.find( aName ) != IdToOleNameHash.end() );
     }
 
     // XNameContainer
-    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::ElementExistException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL insertByName( const OUString& aName, const uno::Any& aElement ) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( hasByName( aName ) )
@@ -154,14 +154,14 @@ public:
             throw lang::IllegalArgumentException();
        IdToOleNameHash[ aName ] = xElement;
     }
-    virtual void SAL_CALL removeByName( const OUString& aName ) throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL removeByName( const OUString& aName ) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName( aName ) )
             throw container::NoSuchElementException();
         IdToOleNameHash.erase( IdToOleNameHash.find( aName ) );
     }
-    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) throw(lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL replaceByName( const OUString& aName, const uno::Any& aElement ) override
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         if ( !hasByName( aName ) )

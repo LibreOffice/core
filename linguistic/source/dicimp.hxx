@@ -83,86 +83,60 @@ public:
 
     // XNamed
     virtual OUString SAL_CALL
-        getName()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getName() override;
     virtual void SAL_CALL
-        setName( const OUString& aName )
-            throw(css::uno::RuntimeException, std::exception) override;
+        setName( const OUString& aName ) override;
 
     // XDictionary
     virtual css::linguistic2::DictionaryType SAL_CALL
-        getDictionaryType()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getDictionaryType() override;
     virtual void SAL_CALL
-        setActive( sal_Bool bActivate )
-            throw(css::uno::RuntimeException, std::exception) override;
+        setActive( sal_Bool bActivate ) override;
     virtual sal_Bool SAL_CALL
-        isActive()
-            throw(css::uno::RuntimeException, std::exception) override;
+        isActive() override;
     virtual sal_Int32 SAL_CALL
-        getCount()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getCount() override;
     virtual css::lang::Locale SAL_CALL
-        getLocale()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getLocale() override;
     virtual void SAL_CALL
-        setLocale( const css::lang::Locale& aLocale )
-            throw(css::uno::RuntimeException, std::exception) override;
+        setLocale( const css::lang::Locale& aLocale ) override;
     virtual css::uno::Reference<
             css::linguistic2::XDictionaryEntry > SAL_CALL
-        getEntry( const OUString& aWord )
-            throw(css::uno::RuntimeException, std::exception) override;
+        getEntry( const OUString& aWord ) override;
     virtual sal_Bool SAL_CALL
         addEntry( const css::uno::Reference<
-                css::linguistic2::XDictionaryEntry >& xDicEntry )
-            throw(css::uno::RuntimeException, std::exception) override;
+                css::linguistic2::XDictionaryEntry >& xDicEntry ) override;
     virtual sal_Bool SAL_CALL
         add( const OUString& aWord, sal_Bool bIsNegative,
-                const OUString& aRplcText )
-            throw(css::uno::RuntimeException, std::exception) override;
+                const OUString& aRplcText ) override;
     virtual sal_Bool SAL_CALL
-        remove( const OUString& aWord )
-            throw(css::uno::RuntimeException, std::exception) override;
+        remove( const OUString& aWord ) override;
     virtual sal_Bool SAL_CALL
-        isFull()
-            throw(css::uno::RuntimeException, std::exception) override;
+        isFull() override;
     virtual css::uno::Sequence< css::uno::Reference< css::linguistic2::XDictionaryEntry > > SAL_CALL
-        getEntries()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getEntries() override;
     virtual void SAL_CALL
-        clear()
-            throw(css::uno::RuntimeException, std::exception) override;
+        clear() override;
     virtual sal_Bool SAL_CALL
-        addDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener )
-            throw(css::uno::RuntimeException, std::exception) override;
+        addDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
     virtual sal_Bool SAL_CALL
-        removeDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener )
-            throw(css::uno::RuntimeException, std::exception) override;
+        removeDictionaryEventListener( const css::uno::Reference< css::linguistic2::XDictionaryEventListener >& xListener ) override;
 
     // XStorable
     virtual sal_Bool SAL_CALL
-        hasLocation()
-            throw(css::uno::RuntimeException, std::exception) override;
+        hasLocation() override;
     virtual OUString SAL_CALL
-        getLocation()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getLocation() override;
     virtual sal_Bool SAL_CALL
-        isReadonly()
-            throw(css::uno::RuntimeException, std::exception) override;
+        isReadonly() override;
     virtual void SAL_CALL
-        store()
-            throw(css::io::IOException,
-                  css::uno::RuntimeException, std::exception) override;
+        store() override;
     virtual void SAL_CALL
         storeAsURL( const OUString& aURL,
-                const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
-            throw(css::io::IOException,
-                  css::uno::RuntimeException, std::exception) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual void SAL_CALL
         storeToURL( const OUString& aURL,
-                const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
-            throw(css::io::IOException,
-                  css::uno::RuntimeException, std::exception) override;
+                const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
 };
 
 
@@ -188,11 +162,11 @@ public:
 
     // XDictionaryEntry
     virtual OUString SAL_CALL
-        getDictionaryWord() throw(css::uno::RuntimeException, std::exception) override;
+        getDictionaryWord() override;
     virtual sal_Bool SAL_CALL
-        isNegative() throw(css::uno::RuntimeException, std::exception) override;
+        isNegative() override;
     virtual OUString SAL_CALL
-        getReplacementText() throw(css::uno::RuntimeException, std::exception) override;
+        getReplacementText() override;
 };
 
 

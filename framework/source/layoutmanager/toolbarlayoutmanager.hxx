@@ -137,30 +137,30 @@ class ToolbarLayoutManager : public ::cppu::WeakImplHelper< css::awt::XDockableW
 
         virtual void SAL_CALL acquire() throw() override;
         virtual void SAL_CALL release() throw() override;
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& aEvent ) override;
 
         // XWindowListener
-        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& aEvent ) override;
+        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& aEvent ) override;
+        virtual void SAL_CALL windowShown( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL windowHidden( const css::lang::EventObject& aEvent ) override;
 
         // XDockableWindowListener
-        virtual void SAL_CALL startDocking( const css::awt::DockingEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::awt::DockingData SAL_CALL docking( const css::awt::DockingEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL endDocking( const css::awt::EndDockingEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL prepareToggleFloatingMode( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL toggleFloatingMode( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL closed( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL endPopupMode( const css::awt::EndPopupModeEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL startDocking( const css::awt::DockingEvent& e ) override;
+        virtual css::awt::DockingData SAL_CALL docking( const css::awt::DockingEvent& e ) override;
+        virtual void SAL_CALL endDocking( const css::awt::EndDockingEvent& e ) override;
+        virtual sal_Bool SAL_CALL prepareToggleFloatingMode( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL toggleFloatingMode( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL closed( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL endPopupMode( const css::awt::EndPopupModeEvent& e ) override;
 
         // XUIConfigurationListener
-        virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementInserted( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void SAL_CALL elementRemoved( const css::ui::ConfigurationEvent& Event ) override;
+        virtual void SAL_CALL elementReplaced( const css::ui::ConfigurationEvent& Event ) override;
 
     private:
         enum DockingOperation

@@ -99,13 +99,11 @@ static bool GbMigrationSuppressErrors = false;
 
 // Methods XElementAccess
 Type NameContainer::getElementType()
-    throw(RuntimeException, std::exception)
 {
     return mType;
 }
 
 sal_Bool NameContainer::hasElements()
-    throw(RuntimeException, std::exception)
 {
     bool bRet = (mnElementCount > 0);
     return bRet;
@@ -113,7 +111,6 @@ sal_Bool NameContainer::hasElements()
 
 // Methods XNameAccess
 Any NameContainer::getByName( const OUString& aName )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
@@ -126,13 +123,11 @@ Any NameContainer::getByName( const OUString& aName )
 }
 
 Sequence< OUString > NameContainer::getElementNames()
-    throw(RuntimeException, std::exception)
 {
     return comphelper::containerToSequence(mNames);
 }
 
 sal_Bool NameContainer::hasByName( const OUString& aName )
-    throw(RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     bool bRet = ( aIt != mHashMap.end() );
@@ -142,7 +137,6 @@ sal_Bool NameContainer::hasByName( const OUString& aName )
 
 // Methods XNameReplace
 void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
-    throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
@@ -187,7 +181,6 @@ void NameContainer::replaceByName( const OUString& aName, const Any& aElement )
 }
 
 void NameContainer::insertCheck(const OUString& aName, const Any& aElement)
-    throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find(aName);
     if( aIt != mHashMap.end() )
@@ -198,7 +191,6 @@ void NameContainer::insertCheck(const OUString& aName, const Any& aElement)
 }
 
 void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
-    throw(IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     const Type& aAnyType = aElement.getValueType();
     if( mType != aAnyType )
@@ -240,13 +232,11 @@ void NameContainer::insertNoCheck(const OUString& aName, const Any& aElement)
 
 // Methods XNameContainer
 void NameContainer::insertByName( const OUString& aName, const Any& aElement )
-    throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
     insertCheck(aName, aElement);
 }
 
 void NameContainer::removeByName( const OUString& aName )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
@@ -298,7 +288,6 @@ void NameContainer::removeByName( const OUString& aName )
 
 // Methods XContainer
 void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     if( !xListener.is() )
     {
@@ -309,7 +298,6 @@ void SAL_CALL NameContainer::addContainerListener( const Reference< XContainerLi
 }
 
 void SAL_CALL NameContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     if( !xListener.is() )
     {
@@ -321,7 +309,6 @@ void SAL_CALL NameContainer::removeContainerListener( const Reference< XContaine
 
 // Methods XChangesNotifier
 void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     if( !xListener.is() )
     {
@@ -332,7 +319,6 @@ void SAL_CALL NameContainer::addChangesListener( const Reference< XChangesListen
 }
 
 void SAL_CALL NameContainer::removeChangesListener( const Reference< XChangesListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     if( !xListener.is() )
     {
@@ -368,7 +354,6 @@ VBAScriptListenerContainer::VBAScriptListenerContainer( ::osl::Mutex& rMutex ) :
 }
 
 bool VBAScriptListenerContainer::implTypedNotify( const Reference< vba::XVBAScriptListener >& rxListener, const vba::VBAScriptEvent& rEvent )
-    throw (Exception)
 {
     rxListener->notifyVBAScriptEvent( rEvent );
     return true;    // notify all other listeners too
@@ -444,14 +429,13 @@ BasicManager* SfxLibraryContainer::getBasicManager()
 }
 
 // Methods XStorageBasedLibraryContainer
-Reference< XStorage > SAL_CALL SfxLibraryContainer::getRootStorage() throw (RuntimeException, std::exception)
+Reference< XStorage > SAL_CALL SfxLibraryContainer::getRootStorage()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return mxStorage;
 }
 
 void SAL_CALL SfxLibraryContainer::setRootStorage( const Reference< XStorage >& _rxRootStorage )
-    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     if ( !_rxRootStorage.is() )
@@ -463,7 +447,6 @@ void SAL_CALL SfxLibraryContainer::setRootStorage( const Reference< XStorage >& 
 }
 
 void SAL_CALL SfxLibraryContainer::storeLibrariesToStorage( const Reference< XStorage >& _rxRootStorage )
-    throw (IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     if ( !_rxRootStorage.is() )
@@ -484,7 +467,6 @@ void SAL_CALL SfxLibraryContainer::storeLibrariesToStorage( const Reference< XSt
 
 // Methods XModifiable
 sal_Bool SfxLibraryContainer::isModified()
-    throw (RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     if ( maModifiable.isModified() )
@@ -527,41 +509,37 @@ sal_Bool SfxLibraryContainer::isModified()
 }
 
 void SAL_CALL SfxLibraryContainer::setModified( sal_Bool _bModified )
-    throw (PropertyVetoException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     maModifiable.setModified( _bModified );
 }
 
 void SAL_CALL SfxLibraryContainer::addModifyListener( const Reference< XModifyListener >& _rxListener )
-    throw (RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     maModifiable.addModifyListener( _rxListener );
 }
 
 void SAL_CALL SfxLibraryContainer::removeModifyListener( const Reference< XModifyListener >& _rxListener )
-    throw (RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     maModifiable.removeModifyListener( _rxListener );
 }
 
 // Methods XPersistentLibraryContainer
-Any SAL_CALL SfxLibraryContainer::getRootLocation() throw (RuntimeException, std::exception)
+Any SAL_CALL SfxLibraryContainer::getRootLocation()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return makeAny( getRootStorage() );
 }
 
-OUString SAL_CALL SfxLibraryContainer::getContainerLocationName() throw (RuntimeException, std::exception)
+OUString SAL_CALL SfxLibraryContainer::getContainerLocationName()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return maLibrariesDir;
 }
 
 void SAL_CALL SfxLibraryContainer::storeLibraries(  )
-    throw (WrappedTargetException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     try
@@ -1362,7 +1340,6 @@ bool SfxLibraryContainer::implLoadPasswordLibrary(
     SfxLibrary* /*pLib*/,
     const OUString& /*Name*/,
     bool /*bVerifyPasswordOnly*/ )
-throw(WrappedTargetException, RuntimeException, std::exception)
 {
     return true;
 }
@@ -2180,14 +2157,12 @@ void SfxLibraryContainer::storeLibraries_Impl( const uno::Reference< embed::XSto
 
 // Methods XElementAccess
 Type SAL_CALL SfxLibraryContainer::getElementType()
-    throw(RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     return maNameContainer->getElementType();
 }
 
 sal_Bool SfxLibraryContainer::hasElements()
-    throw(RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     bool bRet = maNameContainer->hasElements();
@@ -2196,7 +2171,6 @@ sal_Bool SfxLibraryContainer::hasElements()
 
 // Methods XNameAccess
 Any SfxLibraryContainer::getByName( const OUString& aName )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     Any aRetAny = maNameContainer->getByName( aName ) ;
@@ -2204,14 +2178,12 @@ Any SfxLibraryContainer::getByName( const OUString& aName )
 }
 
 Sequence< OUString > SfxLibraryContainer::getElementNames()
-    throw(RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     return maNameContainer->getElementNames();
 }
 
 sal_Bool SfxLibraryContainer::hasByName( const OUString& aName )
-    throw(RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     return maNameContainer->hasByName( aName ) ;
@@ -2219,7 +2191,6 @@ sal_Bool SfxLibraryContainer::hasByName( const OUString& aName )
 
 // Methods XLibraryContainer
 Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const OUString& Name )
-    throw(IllegalArgumentException, ElementExistException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pNewLib = implCreateLibrary( Name );
@@ -2238,7 +2209,6 @@ Reference< XNameContainer > SAL_CALL SfxLibraryContainer::createLibrary( const O
 
 Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
     ( const OUString& Name, const OUString& StorageURL, sal_Bool ReadOnly )
-    throw(IllegalArgumentException, ElementExistException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     // TODO: Check other reasons to force ReadOnly status
@@ -2286,7 +2256,6 @@ Reference< XNameAccess > SAL_CALL SfxLibraryContainer::createLibraryLink
 }
 
 void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     // Get and hold library before removing
@@ -2357,7 +2326,6 @@ void SAL_CALL SfxLibraryContainer::removeLibrary( const OUString& Name )
 }
 
 sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
-    throw(NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2367,7 +2335,6 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLoaded( const OUString& Name )
 
 
 void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     Any aLibAny = maNameContainer->getByName( Name ) ;
@@ -2508,7 +2475,6 @@ void SAL_CALL SfxLibraryContainer::loadLibrary( const OUString& Name )
 
 // Methods XLibraryContainer2
 sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLink( const OUString& Name )
-    throw (NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2517,7 +2483,6 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryLink( const OUString& Name )
 }
 
 OUString SAL_CALL SfxLibraryContainer::getLibraryLinkURL( const OUString& Name )
-    throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2531,7 +2496,6 @@ OUString SAL_CALL SfxLibraryContainer::getLibraryLinkURL( const OUString& Name )
 }
 
 sal_Bool SAL_CALL SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
-    throw (NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2540,7 +2504,6 @@ sal_Bool SAL_CALL SfxLibraryContainer::isLibraryReadOnly( const OUString& Name )
 }
 
 void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal_Bool bReadOnly )
-    throw (NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2564,7 +2527,6 @@ void SAL_CALL SfxLibraryContainer::setLibraryReadOnly( const OUString& Name, sal
 }
 
 void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OUString& NewName )
-    throw (NoSuchElementException, ElementExistException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     if( maNameContainer->hasByName( NewName ) )
@@ -2696,7 +2658,6 @@ void SAL_CALL SfxLibraryContainer::renameLibrary( const OUString& Name, const OU
 
 // Methods XInitialization
 void SAL_CALL SfxLibraryContainer::initialize( const Sequence< Any >& _rArguments )
-    throw (Exception, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     sal_Int32 nArgCount = _rArguments.getLength();
@@ -2772,28 +2733,24 @@ void SAL_CALL SfxLibraryContainer::disposing()
 
 // Methods XLibraryContainerPassword
 sal_Bool SAL_CALL SfxLibraryContainer::isLibraryPasswordProtected( const OUString& )
-    throw (NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     return false;
 }
 
 sal_Bool SAL_CALL SfxLibraryContainer::isLibraryPasswordVerified( const OUString& )
-    throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     throw IllegalArgumentException();
 }
 
 sal_Bool SAL_CALL SfxLibraryContainer::verifyLibraryPassword( const OUString&, const OUString& )
-    throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     throw IllegalArgumentException();
 }
 
 void SAL_CALL SfxLibraryContainer::changeLibraryPassword(const OUString&, const OUString&, const OUString& )
-    throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     throw IllegalArgumentException();
@@ -2801,7 +2758,6 @@ void SAL_CALL SfxLibraryContainer::changeLibraryPassword(const OUString&, const 
 
 // Methods XContainer
 void SAL_CALL SfxLibraryContainer::addContainerListener( const Reference< XContainerListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     maNameContainer->setEventSource( static_cast< XInterface* >( static_cast<OWeakObject*>(this) ) );
@@ -2809,7 +2765,6 @@ void SAL_CALL SfxLibraryContainer::addContainerListener( const Reference< XConta
 }
 
 void SAL_CALL SfxLibraryContainer::removeContainerListener( const Reference< XContainerListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     maNameContainer->removeContainerListener( xListener );
@@ -2818,7 +2773,6 @@ void SAL_CALL SfxLibraryContainer::removeContainerListener( const Reference< XCo
 // Methods XLibraryContainerExport
 void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OUString& URL,
     const Reference< XInteractionHandler >& Handler )
-    throw ( uno::Exception, NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2854,7 +2808,6 @@ void SAL_CALL SfxLibraryContainer::exportLibrary( const OUString& Name, const OU
 }
 
 OUString SfxLibraryContainer::expand_url( const OUString& url )
-    throw(css::uno::RuntimeException)
 {
     if (url.startsWithIgnoreAsciiCase( "vnd.sun.star.expand:" ))
     {
@@ -2873,7 +2826,6 @@ OUString SfxLibraryContainer::expand_url( const OUString& url )
 
 //XLibraryContainer3
 OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString& Name )
-    throw (IllegalArgumentException, NoSuchElementException, RuntimeException, std::exception)
 {
     LibraryContainerMethodGuard aGuard( *this );
     SfxLibrary* pImplLib = getImplLib( Name );
@@ -2888,12 +2840,12 @@ OUString SAL_CALL SfxLibraryContainer::getOriginalLibraryLinkURL( const OUString
 
 
 // XVBACompatibility
-sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatibilityMode() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL SfxLibraryContainer::getVBACompatibilityMode()
 {
     return mbVBACompat;
 }
 
-void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( sal_Bool _vbacompatmodeon ) throw (RuntimeException, std::exception)
+void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( sal_Bool _vbacompatmodeon )
 {
     /*  The member variable mbVBACompat must be set first, the following call
         to getBasicManager() may call getVBACompatibilityMode() which returns
@@ -2930,7 +2882,7 @@ void SAL_CALL SfxLibraryContainer::setVBACompatibilityMode( sal_Bool _vbacompatm
     }
 }
 
-void SAL_CALL SfxLibraryContainer::setProjectName( const OUString& _projectname ) throw (RuntimeException, std::exception)
+void SAL_CALL SfxLibraryContainer::setProjectName( const OUString& _projectname )
 {
     msProjectName = _projectname;
     BasicManager* pBasMgr = getBasicManager();
@@ -2944,23 +2896,23 @@ void SAL_CALL SfxLibraryContainer::setProjectName( const OUString& _projectname 
     }
 }
 
-sal_Int32 SAL_CALL SfxLibraryContainer::getRunningVBAScripts() throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL SfxLibraryContainer::getRunningVBAScripts()
 {
     LibraryContainerMethodGuard aGuard( *this );
     return mnRunningVBAScripts;
 }
 
-void SAL_CALL SfxLibraryContainer::addVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SfxLibraryContainer::addVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
 {
     maVBAScriptListeners.addTypedListener( rxListener );
 }
 
-void SAL_CALL SfxLibraryContainer::removeVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener ) throw (RuntimeException, std::exception)
+void SAL_CALL SfxLibraryContainer::removeVBAScriptListener( const Reference< vba::XVBAScriptListener >& rxListener )
 {
     maVBAScriptListeners.removeTypedListener( rxListener );
 }
 
-void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName ) throw (RuntimeException, std::exception)
+void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifier, const OUString& rModuleName )
 {
     // own lock for accessing the number of running scripts
     enterMethod();
@@ -2982,7 +2934,6 @@ void SAL_CALL SfxLibraryContainer::broadcastVBAScriptEvent( sal_Int32 nIdentifie
 
 // Methods XServiceInfo
 sal_Bool SAL_CALL SfxLibraryContainer::supportsService( const OUString& _rServiceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, _rServiceName);
 }
@@ -3055,7 +3006,6 @@ void SfxLibrary::implSetModified( bool _bIsModified )
 
 // Methods XInterface
 Any SAL_CALL SfxLibrary::queryInterface( const Type& rType )
-    throw( RuntimeException, std::exception )
 {
     Any aRet;
 
@@ -3076,13 +3026,11 @@ Any SAL_CALL SfxLibrary::queryInterface( const Type& rType )
 
 // Methods XElementAccess
 Type SfxLibrary::getElementType()
-    throw(RuntimeException, std::exception)
 {
     return maNameContainer->getElementType();
 }
 
 sal_Bool SfxLibrary::hasElements()
-    throw(RuntimeException, std::exception)
 {
     bool bRet = maNameContainer->hasElements();
     return bRet;
@@ -3090,7 +3038,6 @@ sal_Bool SfxLibrary::hasElements()
 
 // Methods XNameAccess
 Any SfxLibrary::getByName( const OUString& aName )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     impl_checkLoaded();
 
@@ -3099,13 +3046,11 @@ Any SfxLibrary::getByName( const OUString& aName )
 }
 
 Sequence< OUString > SfxLibrary::getElementNames()
-    throw(RuntimeException, std::exception)
 {
     return maNameContainer->getElementNames();
 }
 
 sal_Bool SfxLibrary::hasByName( const OUString& aName )
-    throw(RuntimeException, std::exception)
 {
     bool bRet = maNameContainer->hasByName( aName );
     return bRet;
@@ -3140,7 +3085,6 @@ void SfxLibrary::impl_checkLoaded()
 
 // Methods XNameReplace
 void SfxLibrary::replaceByName( const OUString& aName, const Any& aElement )
-    throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     impl_checkReadOnly();
     impl_checkLoaded();
@@ -3156,7 +3100,6 @@ void SfxLibrary::replaceByName( const OUString& aName, const Any& aElement )
 
 // Methods XNameContainer
 void SfxLibrary::insertByName( const OUString& aName, const Any& aElement )
-    throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
 {
     impl_checkReadOnly();
     impl_checkLoaded();
@@ -3199,7 +3142,6 @@ void SfxLibrary::impl_removeWithoutChecks( const OUString& _rElementName )
 }
 
 void SfxLibrary::removeByName( const OUString& Name )
-    throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     impl_checkReadOnly();
     impl_checkLoaded();
@@ -3208,7 +3150,6 @@ void SfxLibrary::removeByName( const OUString& Name )
 
 // XTypeProvider
 Sequence< Type > SfxLibrary::getTypes()
-    throw( RuntimeException, std::exception )
 {
     static OTypeCollection * s_pTypes_NameContainer = nullptr;
     if( !s_pTypes_NameContainer )
@@ -3229,35 +3170,30 @@ Sequence< Type > SfxLibrary::getTypes()
 
 
 Sequence< sal_Int8 > SfxLibrary::getImplementationId()
-    throw( RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 // Methods XContainer
 void SAL_CALL SfxLibrary::addContainerListener( const Reference< XContainerListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     maNameContainer->setEventSource( static_cast< XInterface* >( static_cast<OWeakObject*>(this) ) );
     maNameContainer->addContainerListener( xListener );
 }
 
 void SAL_CALL SfxLibrary::removeContainerListener( const Reference< XContainerListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     maNameContainer->removeContainerListener( xListener );
 }
 
 // Methods XChangesNotifier
 void SAL_CALL SfxLibrary::addChangesListener( const Reference< XChangesListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     maNameContainer->setEventSource( static_cast< XInterface* >( static_cast<OWeakObject*>(this) ) );
     maNameContainer->addChangesListener( xListener );
 }
 
 void SAL_CALL SfxLibrary::removeChangesListener( const Reference< XChangesListener >& xListener )
-    throw (RuntimeException, std::exception)
 {
     maNameContainer->removeChangesListener( xListener );
 }

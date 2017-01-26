@@ -40,8 +40,6 @@ XInteractionApproveImpl::XInteractionApproveImpl()
 }
 
 void SAL_CALL XInteractionApproveImpl::select()
-    throw (RuntimeException,
-           std::exception)
 {
     m_bSelected = true;
 }
@@ -55,8 +53,6 @@ XInteractionDisapproveImpl::XInteractionDisapproveImpl()
 }
 
 void SAL_CALL XInteractionDisapproveImpl::select()
-    throw (RuntimeException,
-           std::exception)
 {
     m_bSelected = true;
 }

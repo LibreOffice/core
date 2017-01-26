@@ -52,62 +52,57 @@ public:
 
     virtual sal_Int32 SAL_CALL nextCharacters( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& rLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
-        sal_Int32& nDone ) throw(css::uno::RuntimeException, std::exception) override;
+        sal_Int32& nDone ) override;
     virtual sal_Int32 SAL_CALL previousCharacters( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int16 nCharacterIteratorMode, sal_Int32 nCount,
-        sal_Int32& nDone ) throw(css::uno::RuntimeException, std::exception) override;
+        sal_Int32& nDone ) override;
 
     virtual Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
-        const css::lang::Locale& nLocale, sal_Int16 WordType) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale, sal_Int16 WordType) override;
     virtual Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
-        const css::lang::Locale& nLocale, sal_Int16 WordType) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale, sal_Int16 WordType) override;
     virtual Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
-        const css::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection )
-        throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection ) override;
 
     virtual sal_Bool SAL_CALL isBeginWord( const OUString& Text, sal_Int32 nPos,
-        const css::lang::Locale& nLocale, sal_Int16 WordType ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale, sal_Int16 WordType ) override;
     virtual sal_Bool SAL_CALL isEndWord( const OUString& Text, sal_Int32 nPos,
-        const css::lang::Locale& nLocale, sal_Int16 WordType ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale, sal_Int16 WordType ) override;
     virtual sal_Int16 SAL_CALL getWordType( const OUString& Text, sal_Int32 nPos,
-        const css::lang::Locale& nLocale ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale ) override;
 
     virtual sal_Int32 SAL_CALL beginOfSentence( const OUString& Text, sal_Int32 nStartPos,
-        const css::lang::Locale& nLocale ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale ) override;
     virtual sal_Int32 SAL_CALL endOfSentence( const OUString& Text, sal_Int32 nStartPos,
-        const css::lang::Locale& nLocale ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale ) override;
 
     virtual LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
-        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
-        throw(css::uno::RuntimeException, std::exception) override;
+        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions ) override;
 
-    virtual sal_Int16 SAL_CALL getScriptType( const OUString& Text, sal_Int32 nPos )
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getScriptType( const OUString& Text, sal_Int32 nPos ) override;
     virtual sal_Int32 SAL_CALL beginOfScript( const OUString& Text, sal_Int32 nStartPos,
-        sal_Int16 ScriptType ) throw(css::uno::RuntimeException, std::exception) override;
+        sal_Int16 ScriptType ) override;
     virtual sal_Int32 SAL_CALL endOfScript( const OUString& Text, sal_Int32 nStartPos,
-        sal_Int16 ScriptType ) throw(css::uno::RuntimeException, std::exception) override;
+        sal_Int16 ScriptType ) override;
     virtual sal_Int32 SAL_CALL previousScript( const OUString& Text, sal_Int32 nStartPos,
-        sal_Int16 ScriptType ) throw(css::uno::RuntimeException, std::exception) override;
+        sal_Int16 ScriptType ) override;
     virtual sal_Int32 SAL_CALL nextScript( const OUString& Text, sal_Int32 nStartPos,
-        sal_Int16 ScriptType ) throw(css::uno::RuntimeException, std::exception) override;
+        sal_Int16 ScriptType ) override;
 
     virtual sal_Int32 SAL_CALL beginOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
-        const css::lang::Locale& nLocale, sal_Int16 CharType ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale, sal_Int16 CharType ) override;
     virtual sal_Int32 SAL_CALL endOfCharBlock( const OUString& Text, sal_Int32 nStartPos,
-        const css::lang::Locale& nLocale, sal_Int16 CharType ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale, sal_Int16 CharType ) override;
     virtual sal_Int32 SAL_CALL previousCharBlock( const OUString& Text, sal_Int32 nStartPos,
-        const css::lang::Locale& nLocale, sal_Int16 CharType ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale, sal_Int16 CharType ) override;
     virtual sal_Int32 SAL_CALL nextCharBlock( const OUString& Text, sal_Int32 nStartPos,
-        const css::lang::Locale& nLocale, sal_Int16 CharType ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& nLocale, sal_Int16 CharType ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     static sal_Int16 SAL_CALL getScriptClass(sal_uInt32 currentChar);
 protected:
@@ -126,11 +121,9 @@ private:
     css::uno::Reference < css::uno::XComponentContext > m_xContext;
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL createLocaleSpecificBreakIterator( const OUString& aLocaleName )
-        throw( css::uno::RuntimeException );
+    bool SAL_CALL createLocaleSpecificBreakIterator( const OUString& aLocaleName );
     /// @throws css::uno::RuntimeException
-    css::uno::Reference < XBreakIterator > SAL_CALL getLocaleSpecificBreakIterator( const css::lang::Locale& rLocale )
-        throw( css::uno::RuntimeException );
+    css::uno::Reference < XBreakIterator > SAL_CALL getLocaleSpecificBreakIterator( const css::lang::Locale& rLocale );
 
 };
 

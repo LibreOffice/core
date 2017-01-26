@@ -185,7 +185,7 @@ namespace dlgprov
 
 
     Reference< script::XScriptListener >
-    DialogEventsAttacherImpl::getScriptListenerForKey( const OUString& sKey ) throw ( RuntimeException )
+    DialogEventsAttacherImpl::getScriptListenerForKey( const OUString& sKey )
     {
         ListenerHash::iterator it = listenersForTypes.find( sKey );
         if ( it == listenersForTypes.end() )
@@ -325,8 +325,6 @@ namespace dlgprov
     void SAL_CALL DialogEventsAttacherImpl::attachEvents( const Sequence< Reference< XInterface > >& Objects,
         const css::uno::Reference<css::script::XScriptListener>&,
         const Any& Helper )
-        throw (IllegalArgumentException, IntrospectionException, CannotCreateAdapterException,
-               ServiceNotRegisteredException, RuntimeException, std::exception)
     {
         // get EventAttacher
         {
@@ -408,7 +406,7 @@ namespace dlgprov
     // XEventListener
 
 
-    void DialogAllListenerImpl::disposing(const EventObject& ) throw ( RuntimeException, std::exception )
+    void DialogAllListenerImpl::disposing(const EventObject& )
     {
     }
 
@@ -416,7 +414,7 @@ namespace dlgprov
     // XAllListener
 
 
-    void DialogAllListenerImpl::firing( const AllEventObject& Event ) throw ( RuntimeException, std::exception )
+    void DialogAllListenerImpl::firing( const AllEventObject& Event )
     {
         //::osl::MutexGuard aGuard( getMutex() );
 
@@ -425,7 +423,6 @@ namespace dlgprov
 
 
     Any DialogAllListenerImpl::approveFiring( const AllEventObject& Event )
-        throw ( reflection::InvocationTargetException, RuntimeException, std::exception )
     {
         //::osl::MutexGuard aGuard( getMutex() );
 
@@ -642,7 +639,7 @@ namespace dlgprov
     // XEventListener
 
 
-    void DialogScriptListenerImpl::disposing(const EventObject& ) throw ( RuntimeException, std::exception )
+    void DialogScriptListenerImpl::disposing(const EventObject& )
     {
     }
 
@@ -650,7 +647,7 @@ namespace dlgprov
     // XScriptListener
 
 
-    void DialogScriptListenerImpl::firing( const ScriptEvent& aScriptEvent ) throw ( RuntimeException, std::exception )
+    void DialogScriptListenerImpl::firing( const ScriptEvent& aScriptEvent )
     {
         //::osl::MutexGuard aGuard( getMutex() );
 
@@ -659,7 +656,6 @@ namespace dlgprov
 
 
     Any DialogScriptListenerImpl::approveFiring( const ScriptEvent& aScriptEvent )
-        throw ( reflection::InvocationTargetException, RuntimeException, std::exception )
     {
         //::osl::MutexGuard aGuard( getMutex() );
 

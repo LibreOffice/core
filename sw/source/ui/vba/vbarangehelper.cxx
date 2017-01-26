@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
  * @return a range for the position; null is returned if no range can be
  * constructed.
  */
-uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const uno::Reference< text::XText >& rText, sal_Int32 _position ) throw ( uno::RuntimeException )
+uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const uno::Reference< text::XText >& rText, sal_Int32 _position )
 {
     uno::Reference< text::XTextRange > xRange;
     if( rText.is() )
@@ -60,7 +60,7 @@ uno::Reference< text::XTextRange > SwVbaRangeHelper::getRangeByPosition( const u
     return xRange;
 }
 
-void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRange, uno::Reference< text::XText >& rText, const OUString& rStr, bool _bAbsorb ) throw ( uno::RuntimeException )
+void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRange, uno::Reference< text::XText >& rText, const OUString& rStr, bool _bAbsorb )
 {
     sal_Int32 nlastIndex = 0;
     sal_Int32 nIndex = 0;
@@ -90,7 +90,6 @@ void SwVbaRangeHelper::insertString( uno::Reference< text::XTextRange >& rTextRa
 
 uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Reference< text::XTextRange >& rTextRange,
                                                                   const uno::Reference< text::XText >& rText )
-    throw ( uno::RuntimeException, script::BasicErrorException )
 {
     uno::Reference< text::XTextCursor > xTextCursor;
     bool bGotTextCursor = false;
@@ -133,7 +132,7 @@ uno::Reference< text::XTextCursor > SwVbaRangeHelper::initCursor( const uno::Ref
     return xTextCursor;
 }
 
-sal_Int32 SwVbaRangeHelper::getPosition( const uno::Reference< text::XText >& rText, const uno::Reference< text::XTextRange >& rTextRange ) throw ( uno::RuntimeException )
+sal_Int32 SwVbaRangeHelper::getPosition( const uno::Reference< text::XText >& rText, const uno::Reference< text::XTextRange >& rTextRange )
 {
     sal_Int32 nPosition = -1;
     if( rText.is() && rTextRange.is() )
@@ -163,7 +162,7 @@ sal_Int32 SwVbaRangeHelper::getPosition( const uno::Reference< text::XText >& rT
     return nPosition;
 }
 
-uno::Reference< text::XTextContent > SwVbaRangeHelper::findBookmarkByPosition( const uno::Reference< text::XTextDocument >& xTextDoc, const uno::Reference< text::XTextRange >& xTextRange ) throw ( css::uno::RuntimeException )
+uno::Reference< text::XTextContent > SwVbaRangeHelper::findBookmarkByPosition( const uno::Reference< text::XTextDocument >& xTextDoc, const uno::Reference< text::XTextRange >& xTextRange )
 {
     uno::Reference< text::XBookmarksSupplier > xBookmarksSupplier( xTextDoc, uno::UNO_QUERY_THROW );
     uno::Reference< container::XIndexAccess > xIndexAccess( xBookmarksSupplier->getBookmarks(), uno::UNO_QUERY_THROW );

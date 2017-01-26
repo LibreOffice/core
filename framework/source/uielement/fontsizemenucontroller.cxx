@@ -235,7 +235,7 @@ void FontSizeMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& r
 }
 
 // XEventListener
-void SAL_CALL FontSizeMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
+void SAL_CALL FontSizeMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
@@ -249,7 +249,7 @@ void SAL_CALL FontSizeMenuController::disposing( const EventObject& ) throw ( Ru
 }
 
 // XStatusListener
-void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
+void SAL_CALL FontSizeMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     css::awt::FontDescriptor                 aFontDescriptor;
     css::frame::status::FontHeight   aFontHeight;
@@ -287,7 +287,7 @@ void FontSizeMenuController::impl_setPopupMenu()
     m_xCurrentFontDispatch = xDispatchProvider->queryDispatch( aTargetURL, OUString(), 0 );
 }
 
-void SAL_CALL FontSizeMenuController::updatePopupMenu() throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL FontSizeMenuController::updatePopupMenu()
 {
     osl::ClearableMutexGuard aLock( m_aMutex );
 

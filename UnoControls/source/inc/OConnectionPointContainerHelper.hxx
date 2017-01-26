@@ -56,8 +56,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -79,22 +78,21 @@ public:
 
     //  XConnectionPointContainer
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getConnectionPointTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getConnectionPointTypes() override;
 
     virtual css::uno::Reference< css::lang::XConnectionPoint > SAL_CALL queryConnectionPoint(
         const css::uno::Type& aType
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     virtual void SAL_CALL advise(
         const   css::uno::Type&                              aType ,
         const   css::uno::Reference< css::uno::XInterface >&  xListener
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     virtual void SAL_CALL unadvise(
         const   css::uno::Type&                              aType       ,
         const   css::uno::Reference< css::uno::XInterface >&  xListener
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     //  public but impl method!
     //  Is necessary to get container member at OConnectionPoint-instance.

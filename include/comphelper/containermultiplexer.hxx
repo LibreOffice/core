@@ -52,21 +52,13 @@ namespace comphelper
         virtual ~OContainerListener();
 
         /// @throws css::uno::RuntimeException
-        virtual void _elementInserted( const css::container::ContainerEvent& _rEvent )
-            throw (css::uno::RuntimeException,
-                   std::exception);
+        virtual void _elementInserted( const css::container::ContainerEvent& _rEvent );
         /// @throws css::uno::RuntimeException
-        virtual void _elementRemoved( const css::container::ContainerEvent& _rEvent )
-            throw (css::uno::RuntimeException,
-                   std::exception);
+        virtual void _elementRemoved( const css::container::ContainerEvent& _rEvent );
         /// @throws css::uno::RuntimeException
-        virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent )
-            throw (css::uno::RuntimeException,
-                   std::exception);
+        virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent );
         /// @throws css::uno::RuntimeException
-        virtual void _disposing(const css::lang::EventObject& _rSource)
-            throw (css::uno::RuntimeException,
-                   std::exception);
+        virtual void _disposing(const css::lang::EventObject& _rSource);
 
     protected:
         void setAdapter(OContainerListenerAdapter* _pAdapter);
@@ -89,12 +81,12 @@ namespace comphelper
             const  css::uno::Reference< css::container::XContainer >& _rxContainer);
 
         // XEventListener
-        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) override;
 
         // XContainerListener
-        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
+        virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
+        virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
 
         /// dispose the object. No multiplexing anymore
         void        dispose();

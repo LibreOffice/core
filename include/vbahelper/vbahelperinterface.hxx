@@ -75,13 +75,13 @@ public:
     virtual css::uno::Sequence<OUString> getServiceNames() = 0;
 
     // XHelperInterface Methods
-    virtual ::sal_Int32 SAL_CALL getCreator() throw (css::script::BasicErrorException, css::uno::RuntimeException) override
+    virtual ::sal_Int32 SAL_CALL getCreator() override
     {
         return 0x53756E4F;
     }
-    virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override { return mxParent; }
+    virtual css::uno::Reference< ov::XHelperInterface > SAL_CALL getParent(  ) override { return mxParent; }
 
-    virtual css::uno::Any SAL_CALL Application(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override {
+    virtual css::uno::Any SAL_CALL Application(  ) override {
             // The application could certainly be passed around in the context - seems
             // to make sense
             css::uno::Reference< css::container::XNameAccess > xNameAccess( mxContext, css::uno::UNO_QUERY_THROW );
@@ -89,8 +89,8 @@ public:
     }
 
     // XServiceInfo Methods
-    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException) override { return getServiceImplName(); }
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException) override
+    virtual OUString SAL_CALL getImplementationName(  ) override { return getServiceImplName(); }
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override
     {
         css::uno::Sequence< OUString > sServices = getSupportedServiceNames();
         const OUString* pStart = sServices.getConstArray();
@@ -100,7 +100,7 @@ public:
                 return true;
         return false;
     }
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException) override
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override
     {
         css::uno::Sequence< OUString > aNames = getServiceNames();
         return aNames;

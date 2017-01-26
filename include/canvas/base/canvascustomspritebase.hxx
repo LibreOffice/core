@@ -102,7 +102,7 @@ namespace canvas
         }
 
         // XCanvas: selectively override base's methods here, for opacity tracking
-        virtual void SAL_CALL clear() throw (css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL clear() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -115,8 +115,7 @@ namespace canvas
         virtual css::uno::Reference< css::rendering::XCachedPrimitive > SAL_CALL
             drawBitmap( const css::uno::Reference< css::rendering::XBitmap >&              xBitmap,
                         const css::rendering::ViewState&                                   viewState,
-                        const css::rendering::RenderState&                                 renderState ) throw (css::lang::IllegalArgumentException,
-                                                                                                                             css::uno::RuntimeException) override
+                        const css::rendering::RenderState&                                 renderState ) override
         {
             tools::verifyArgs(xBitmap, viewState, renderState,
                               OSL_THIS_FUNC,
@@ -140,8 +139,7 @@ namespace canvas
         // functionality provided at the baseclass.
 
         // XSprite
-        virtual void SAL_CALL setAlpha( double alpha ) throw (css::lang::IllegalArgumentException,
-                                                              css::uno::RuntimeException) override
+        virtual void SAL_CALL setAlpha( double alpha ) override
         {
             tools::verifyRange( alpha, 0.0, 1.0 );
 
@@ -152,8 +150,7 @@ namespace canvas
 
         virtual void SAL_CALL move( const css::geometry::RealPoint2D&  aNewPos,
                                     const css::rendering::ViewState&   viewState,
-                                    const css::rendering::RenderState& renderState ) throw (css::lang::IllegalArgumentException,
-                                                                                                         css::uno::RuntimeException) override
+                                    const css::rendering::RenderState& renderState ) override
         {
             tools::verifyArgs(aNewPos, viewState, renderState,
                               OSL_THIS_FUNC,
@@ -164,8 +161,7 @@ namespace canvas
             maSpriteHelper.move( this, aNewPos, viewState, renderState );
         }
 
-        virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) throw (css::lang::IllegalArgumentException,
-                                                                                                                    css::uno::RuntimeException) override
+        virtual void SAL_CALL transform( const css::geometry::AffineMatrix2D& aTransformation ) override
         {
             tools::verifyArgs(aTransformation,
                               OSL_THIS_FUNC,
@@ -176,7 +172,7 @@ namespace canvas
             maSpriteHelper.transform( this, aTransformation );
         }
 
-        virtual void SAL_CALL clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) throw (css::uno::RuntimeException) override
+        virtual void SAL_CALL clip( const css::uno::Reference< css::rendering::XPolyPolygon2D >& aClip ) override
         {
             // NULL xClip explicitly allowed here (to clear clipping)
 
@@ -185,21 +181,21 @@ namespace canvas
             maSpriteHelper.clip( this, aClip );
         }
 
-        virtual void SAL_CALL setPriority( double nPriority ) throw (css::uno::RuntimeException) override
+        virtual void SAL_CALL setPriority( double nPriority ) override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.setPriority( this, nPriority );
         }
 
-        virtual void SAL_CALL show() throw (css::uno::RuntimeException) override
+        virtual void SAL_CALL show() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
             maSpriteHelper.show( this );
         }
 
-        virtual void SAL_CALL hide() throw (css::uno::RuntimeException) override
+        virtual void SAL_CALL hide() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 
@@ -208,7 +204,7 @@ namespace canvas
 
         // XCustomSprite
         virtual css::uno::Reference< css::rendering::XCanvas > SAL_CALL
-            getContentCanvas() throw (css::uno::RuntimeException) override
+            getContentCanvas() override
         {
             typename BaseType::MutexType aGuard( BaseType::m_aMutex );
 

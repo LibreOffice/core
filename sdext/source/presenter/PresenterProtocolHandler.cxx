@@ -195,28 +195,23 @@ public:
     // XDispatch
     virtual void SAL_CALL dispatch(
         const css::util::URL& aURL,
-        const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
-        throw(css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
 
     virtual void SAL_CALL addStatusListener(
         const css::uno::Reference<css::frame::XStatusListener>& rxListener,
-        const css::util::URL& rURL)
-        throw(css::uno::RuntimeException, std::exception) override;
+        const css::util::URL& rURL) override;
 
     virtual void SAL_CALL removeStatusListener (
         const css::uno::Reference<css::frame::XStatusListener>& rxListener,
-        const css::util::URL& rURL)
-        throw(css::uno::RuntimeException, std::exception) override;
+        const css::util::URL& rURL) override;
 
     // document::XEventListener
 
-    virtual void SAL_CALL notifyEvent (const css::document::EventObject& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyEvent (const css::document::EventObject& rEvent) override;
 
     // lang::XEventListener
 
-    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
 
 private:
     OUString msURLPath;
@@ -270,7 +265,6 @@ void SAL_CALL PresenterProtocolHandler::disposing()
 //----- XInitialize -----------------------------------------------------------
 
 void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArguments)
-    throw (Exception, RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     if (aArguments.getLength() > 0)
@@ -291,20 +285,17 @@ void SAL_CALL PresenterProtocolHandler::initialize (const Sequence<Any>& aArgume
 }
 
 OUString PresenterProtocolHandler::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return getImplementationName_static();
 }
 
 sal_Bool PresenterProtocolHandler::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString>
 PresenterProtocolHandler::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_static();
 }
@@ -315,7 +306,6 @@ Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
     const css::util::URL& rURL,
     const OUString& rsTargetFrameName,
     sal_Int32 nSearchFlags)
-    throw(RuntimeException, std::exception)
 {
     (void)rsTargetFrameName;
     (void)nSearchFlags;
@@ -333,7 +323,6 @@ Reference<frame::XDispatch> SAL_CALL PresenterProtocolHandler::queryDispatch (
 
 Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryDispatches(
     const Sequence<frame::DispatchDescriptor>& rDescriptors)
-    throw(RuntimeException, std::exception)
 {
     (void)rDescriptors;
     ThrowIfDisposed();
@@ -342,7 +331,6 @@ Sequence<Reference<frame::XDispatch> > SAL_CALL PresenterProtocolHandler::queryD
 
 
 void PresenterProtocolHandler::ThrowIfDisposed() const
-    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -442,7 +430,6 @@ void PresenterProtocolHandler::Dispatch::disposing()
 void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     const css::util::URL& rURL,
     const css::uno::Sequence<css::beans::PropertyValue>& /*rArguments*/)
-    throw(css::uno::RuntimeException, std::exception)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -468,7 +455,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
 void SAL_CALL PresenterProtocolHandler::Dispatch::addStatusListener(
     const css::uno::Reference<css::frame::XStatusListener>& rxListener,
     const css::util::URL& rURL)
-    throw(css::uno::RuntimeException, std::exception)
 {
     if (rURL.Path == msURLPath)
     {
@@ -488,7 +474,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::addStatusListener(
 void SAL_CALL PresenterProtocolHandler::Dispatch::removeStatusListener (
     const css::uno::Reference<css::frame::XStatusListener>& rxListener,
     const css::util::URL& rURL)
-    throw(css::uno::RuntimeException, std::exception)
 {
     if (rURL.Path == msURLPath)
     {
@@ -508,7 +493,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::removeStatusListener (
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::notifyEvent (
     const css::document::EventObject& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 
@@ -518,7 +502,6 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::notifyEvent (
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterProtocolHandler::Dispatch::disposing (const css::lang::EventObject& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     mbIsListeningToWindowManager = false;

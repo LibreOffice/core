@@ -56,7 +56,7 @@ public:
 
     // XEventListener
     virtual void SAL_CALL disposing(
-                    const css::lang::EventObject& rEventObject ) throw(css::uno::RuntimeException, std::exception) override;
+                    const css::lang::EventObject& rEventObject ) override;
 
     void ViewDestroyed() { pView = nullptr; }
 };
@@ -68,13 +68,10 @@ class SwClipboardChangeListener : public ::cppu::WeakImplHelper<
     SwView* pView;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rEventObject )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rEventObject ) override;
 
     // XClipboardListener
-    virtual void SAL_CALL changedContents( const css::datatransfer::clipboard::ClipboardEvent& rEventObject )
-        throw (css::uno::RuntimeException,
-               std::exception) override;
+    virtual void SAL_CALL changedContents( const css::datatransfer::clipboard::ClipboardEvent& rEventObject ) override;
 
 public:
     SwClipboardChangeListener( SwView& rView ) : pView( &rView ) {}

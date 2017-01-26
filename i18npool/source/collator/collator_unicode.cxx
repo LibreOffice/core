@@ -113,13 +113,13 @@ size_t get_collator_data_zh_zhuyin_length();
 
 sal_Int32 SAL_CALL
 Collator_Unicode::compareSubstring( const OUString& str1, sal_Int32 off1, sal_Int32 len1,
-    const OUString& str2, sal_Int32 off2, sal_Int32 len2) throw(RuntimeException, std::exception)
+    const OUString& str2, sal_Int32 off2, sal_Int32 len2)
 {
     return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()) + off1, len1, reinterpret_cast<const UChar *>(str2.getStr()) + off2, len2); // UChar != sal_Unicode in MinGW
 }
 
 sal_Int32 SAL_CALL
-Collator_Unicode::compareString( const OUString& str1, const OUString& str2) throw(RuntimeException, std::exception)
+Collator_Unicode::compareString( const OUString& str1, const OUString& str2)
 {
     return collator->compare(reinterpret_cast<const UChar *>(str1.getStr()), reinterpret_cast<const UChar *>(str2.getStr()));   // UChar != sal_Unicode in MinGW
 }
@@ -132,7 +132,6 @@ extern "C" { static void SAL_CALL thisModule() {} }
 
 sal_Int32 SAL_CALL
 Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::Locale& rLocale, sal_Int32 options)
-    throw(RuntimeException, std::exception)
 {
     if (!collator) {
         UErrorCode status = U_ZERO_ERROR;
@@ -389,19 +388,19 @@ Collator_Unicode::loadCollatorAlgorithm(const OUString& rAlgorithm, const lang::
 
 
 OUString SAL_CALL
-Collator_Unicode::getImplementationName() throw( RuntimeException, std::exception )
+Collator_Unicode::getImplementationName()
 {
     return OUString::createFromAscii(implementationName);
 }
 
 sal_Bool SAL_CALL
-Collator_Unicode::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+Collator_Unicode::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-Collator_Unicode::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Collator_Unicode::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { OUString::createFromAscii(implementationName) };
     return aRet;

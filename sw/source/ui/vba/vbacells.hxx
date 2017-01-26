@@ -35,23 +35,23 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaCells( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw ( css::uno::RuntimeException );
+    SwVbaCells( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom );
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setWidth( ::sal_Int32 _width ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getHeightRule() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getWidth() override;
+    virtual void SAL_CALL setWidth( ::sal_Int32 _width ) override;
+    virtual css::uno::Any SAL_CALL getHeight() override;
+    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) override;
+    virtual ::sal_Int32 SAL_CALL getHeightRule() override;
+    virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) override;
 
     // Methods
-    virtual void SAL_CALL SetWidth( float width, sal_Int32 rulestyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL SetWidth( float width, sal_Int32 rulestyle ) override;
+    virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) override;
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaCells_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;

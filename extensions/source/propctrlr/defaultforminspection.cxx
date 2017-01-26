@@ -67,25 +67,25 @@ namespace pcr
     }
 
 
-    OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  ) throw(RuntimeException, std::exception)
+    OUString SAL_CALL DefaultFormComponentInspectorModel::getImplementationName(  )
     {
         return getImplementationName_static();
     }
 
 
-    Sequence< OUString > SAL_CALL DefaultFormComponentInspectorModel::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL DefaultFormComponentInspectorModel::getSupportedServiceNames(  )
     {
         return getSupportedServiceNames_static();
     }
 
 
-    OUString DefaultFormComponentInspectorModel::getImplementationName_static(  ) throw(RuntimeException)
+    OUString DefaultFormComponentInspectorModel::getImplementationName_static(  )
     {
         return OUString("org.openoffice.comp.extensions.DefaultFormComponentInspectorModel");
     }
 
 
-    Sequence< OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames_static(  ) throw(RuntimeException)
+    Sequence< OUString > DefaultFormComponentInspectorModel::getSupportedServiceNames_static(  )
     {
         Sequence< OUString > aSupported { "com.sun.star.form.inspection.DefaultFormComponentInspectorModel" };
         return aSupported;
@@ -98,7 +98,7 @@ namespace pcr
     }
 
 
-    Sequence< Any > SAL_CALL DefaultFormComponentInspectorModel::getHandlerFactories() throw (RuntimeException, std::exception)
+    Sequence< Any > SAL_CALL DefaultFormComponentInspectorModel::getHandlerFactories()
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -153,7 +153,7 @@ namespace pcr
     }
 
 
-    Sequence< PropertyCategoryDescriptor > SAL_CALL DefaultFormComponentInspectorModel::describeCategories(  ) throw (RuntimeException, std::exception)
+    Sequence< PropertyCategoryDescriptor > SAL_CALL DefaultFormComponentInspectorModel::describeCategories(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -182,7 +182,7 @@ namespace pcr
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getPropertyOrderIndex( const OUString& _rPropertyName ) throw (RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL DefaultFormComponentInspectorModel::getPropertyOrderIndex( const OUString& _rPropertyName )
     {
         sal_Int32 nPropertyId( m_pInfoService->getPropertyId( _rPropertyName ) );
         if ( nPropertyId == -1 )
@@ -198,7 +198,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL DefaultFormComponentInspectorModel::initialize( const Sequence< Any >& _arguments ) throw (Exception, RuntimeException, std::exception)
+    void SAL_CALL DefaultFormComponentInspectorModel::initialize( const Sequence< Any >& _arguments )
     {
         if ( m_bConstructed )
             throw AlreadyInitializedException();

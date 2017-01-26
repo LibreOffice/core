@@ -55,7 +55,7 @@ ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xP
                                     const uno::Reference< uno::XComponentContext > & xContext,
                                     const uno::Reference< beans::XPropertySet >& _xPropertySet,
                                     const uno::Reference< frame::XModel >& xModel,
-                                    bool bCheckAmbiguoity ) throw ( script::BasicErrorException )
+                                    bool bCheckAmbiguoity )
     : ScVbaFormat_BASE( xParent, xContext ),
       m_aDefaultLocale( OUString("en"), OUString( "US"), OUString() ),
       mxPropertySet( _xPropertySet ),
@@ -78,7 +78,7 @@ ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xP
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setVerticalAlignment( const uno::Any& _oAlignment)   throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setVerticalAlignment( const uno::Any& _oAlignment)
 {
     try
     {
@@ -116,7 +116,7 @@ ScVbaFormat< Ifc... >::setVerticalAlignment( const uno::Any& _oAlignment)   thro
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getVerticalAlignment(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getVerticalAlignment(  )
 {
     uno::Any aResult = aNULL();
     try
@@ -153,7 +153,7 @@ ScVbaFormat< Ifc... >::getVerticalAlignment(  ) throw (script::BasicErrorExcepti
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setHorizontalAlignment( const uno::Any& HorizontalAlignment ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setHorizontalAlignment( const uno::Any& HorizontalAlignment )
 {
     try
     {
@@ -193,7 +193,7 @@ ScVbaFormat< Ifc... >::setHorizontalAlignment( const uno::Any& HorizontalAlignme
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getHorizontalAlignment(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getHorizontalAlignment(  )
 {
     uno::Any NRetAlignment = aNULL();
     try
@@ -234,7 +234,7 @@ ScVbaFormat< Ifc... >::getHorizontalAlignment(  ) throw (script::BasicErrorExcep
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setOrientation( const uno::Any& _aOrientation ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setOrientation( const uno::Any& _aOrientation )
 {
     try
     {
@@ -271,7 +271,7 @@ ScVbaFormat< Ifc... >::setOrientation( const uno::Any& _aOrientation ) throw (sc
 }
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getOrientation(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getOrientation(  )
 {
     uno::Any NRetOrientation = aNULL();
     try
@@ -310,7 +310,7 @@ ScVbaFormat< Ifc... >::getOrientation(  ) throw (script::BasicErrorException, un
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setWrapText( const uno::Any& _aWrapText ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setWrapText( const uno::Any& _aWrapText )
 {
     try
     {
@@ -324,7 +324,7 @@ ScVbaFormat< Ifc... >::setWrapText( const uno::Any& _aWrapText ) throw (script::
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getWrapText(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaFormat< Ifc... >::getWrapText(  )
 {
     uno::Any aWrap = aNULL();
     try
@@ -344,7 +344,7 @@ ScVbaFormat< Ifc... >::getWrapText(  ) throw (script::BasicErrorException, uno::
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::Borders( const uno::Any& Index ) throw (script::BasicErrorException, uno::RuntimeException )
+ScVbaFormat< Ifc... >::Borders( const uno::Any& Index )
 {
     ScVbaPalette aPalette( excel::getDocShell( mxModel ) );
     uno::Reference< XCollection > xColl =  new ScVbaBorders( thisHelperIface(), ScVbaFormat_BASE::mxContext, uno::Reference< table::XCellRange >( mxPropertySet, uno::UNO_QUERY_THROW ), aPalette );
@@ -358,7 +358,7 @@ ScVbaFormat< Ifc... >::Borders( const uno::Any& Index ) throw (script::BasicErro
 
 template< typename... Ifc >
 uno::Reference< excel::XFont > SAL_CALL
-ScVbaFormat< Ifc... >::Font(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::Font(  )
 {
     ScVbaPalette aPalette( excel::getDocShell( mxModel ) );
     return new ScVbaFont( thisHelperIface(), ScVbaFormat_BASE::mxContext, aPalette, mxPropertySet );
@@ -366,14 +366,14 @@ ScVbaFormat< Ifc... >::Font(  ) throw (script::BasicErrorException, uno::Runtime
 
 template< typename... Ifc >
 uno::Reference< excel::XInterior > SAL_CALL
-ScVbaFormat< Ifc... >::Interior(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::Interior(  )
 {
     return new ScVbaInterior( thisHelperIface(), ScVbaFormat_BASE::mxContext, mxPropertySet );
 }
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getNumberFormatLocal(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getNumberFormatLocal(  )
 {
     uno::Any aRet = uno::makeAny( OUString() );
     try
@@ -404,7 +404,7 @@ ScVbaFormat< Ifc... >::getNumberFormatLocal(  ) throw (script::BasicErrorExcepti
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setNumberFormatLocal( const uno::Any& _oLocalFormatString ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setNumberFormatLocal( const uno::Any& _oLocalFormatString )
 {
     try
     {
@@ -433,7 +433,7 @@ ScVbaFormat< Ifc... >::setNumberFormatLocal( const uno::Any& _oLocalFormatString
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setNumberFormat( const uno::Any& _oFormatString ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setNumberFormat( const uno::Any& _oFormatString )
 {
     try
     {
@@ -464,7 +464,7 @@ ScVbaFormat< Ifc... >::setNumberFormat( const uno::Any& _oFormatString ) throw (
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setIndentLevel( const uno::Any& _aLevel ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setIndentLevel( const uno::Any& _aLevel )
 {
     try
     {
@@ -488,7 +488,7 @@ ScVbaFormat< Ifc... >::setIndentLevel( const uno::Any& _aLevel ) throw (script::
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getIndentLevel(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getIndentLevel(  )
 {
     uno::Any NRetIndentLevel = aNULL();
     try
@@ -512,7 +512,7 @@ ScVbaFormat< Ifc... >::getIndentLevel(  ) throw (script::BasicErrorException, un
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setLocked( const uno::Any& _aLocked ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setLocked( const uno::Any& _aLocked )
 {
     try
     {
@@ -533,7 +533,7 @@ ScVbaFormat< Ifc... >::setLocked( const uno::Any& _aLocked ) throw (script::Basi
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setFormulaHidden( const uno::Any& FormulaHidden ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setFormulaHidden( const uno::Any& FormulaHidden )
 {
     try
     {
@@ -553,7 +553,7 @@ ScVbaFormat< Ifc... >::setFormulaHidden( const uno::Any& FormulaHidden ) throw (
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getLocked(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaFormat< Ifc... >::getLocked(  )
 {
     uno::Any aCellProtection = aNULL();
     try
@@ -587,7 +587,7 @@ ScVbaFormat< Ifc... >::getLocked(  ) throw (script::BasicErrorException, uno::Ru
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getFormulaHidden(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaFormat< Ifc... >::getFormulaHidden(  )
 {
     uno::Any aBoolRet = aNULL();
     try
@@ -620,7 +620,7 @@ ScVbaFormat< Ifc... >::getFormulaHidden(  ) throw (script::BasicErrorException, 
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setShrinkToFit( const uno::Any& ShrinkToFit ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setShrinkToFit( const uno::Any& ShrinkToFit )
 {
     try
     {
@@ -635,7 +635,7 @@ ScVbaFormat< Ifc... >::setShrinkToFit( const uno::Any& ShrinkToFit ) throw (scri
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getShrinkToFit(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getShrinkToFit(  )
 {
     uno::Any aRet = aNULL();
     try
@@ -653,7 +653,7 @@ ScVbaFormat< Ifc... >::getShrinkToFit(  ) throw (script::BasicErrorException, un
 
 template< typename... Ifc >
 void SAL_CALL
-ScVbaFormat< Ifc... >::setReadingOrder( const uno::Any& ReadingOrder ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::setReadingOrder( const uno::Any& ReadingOrder )
 {
     try
     {
@@ -686,7 +686,7 @@ ScVbaFormat< Ifc... >::setReadingOrder( const uno::Any& ReadingOrder ) throw (sc
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getReadingOrder(  ) throw (script::BasicErrorException, uno::RuntimeException)
+ScVbaFormat< Ifc... >::getReadingOrder(  )
 {
     uno::Any NRetReadingOrder = aNULL();
     try
@@ -718,7 +718,7 @@ ScVbaFormat< Ifc... >::getReadingOrder(  ) throw (script::BasicErrorException, u
 
 template< typename... Ifc >
 uno::Any SAL_CALL
-ScVbaFormat< Ifc... >::getNumberFormat(  ) throw (script::BasicErrorException, uno::RuntimeException, std::exception)
+ScVbaFormat< Ifc... >::getNumberFormat(  )
 {
     uno::Any aFormat = aNULL();
     try
@@ -745,7 +745,7 @@ ScVbaFormat< Ifc... >::getNumberFormat(  ) throw (script::BasicErrorException, u
 
 template< typename... Ifc >
 bool
-ScVbaFormat< Ifc... >::isAmbiguous(const OUString& _sPropertyName) throw ( script::BasicErrorException )
+ScVbaFormat< Ifc... >::isAmbiguous(const OUString& _sPropertyName)
 {
     bool bResult = false;
     try
@@ -762,7 +762,7 @@ ScVbaFormat< Ifc... >::isAmbiguous(const OUString& _sPropertyName) throw ( scrip
 
 template< typename... Ifc >
 void
-ScVbaFormat< Ifc... >::initializeNumberFormats() throw ( script::BasicErrorException, uno::RuntimeException )
+ScVbaFormat< Ifc... >::initializeNumberFormats()
 {
     if ( !xNumberFormats.is() )
     {
@@ -774,7 +774,7 @@ ScVbaFormat< Ifc... >::initializeNumberFormats() throw ( script::BasicErrorExcep
 
 template< typename... Ifc >
 uno::Reference< beans::XPropertyState > const &
-ScVbaFormat< Ifc... >::getXPropertyState() throw ( uno::RuntimeException )
+ScVbaFormat< Ifc... >::getXPropertyState()
 {
     if ( !xPropertyState.is() )
         xPropertyState.set( mxPropertySet, uno::UNO_QUERY_THROW );
@@ -783,14 +783,14 @@ ScVbaFormat< Ifc... >::getXPropertyState() throw ( uno::RuntimeException )
 
 template< typename... Ifc >
 ScCellRangesBase*
-ScVbaFormat< Ifc... >::getCellRangesBase() throw ( ::uno::RuntimeException )
+ScVbaFormat< Ifc... >::getCellRangesBase()
 {
     return ScCellRangesBase::getImplementation( mxPropertySet );
 }
 
 template< typename... Ifc >
 SfxItemSet*
-ScVbaFormat< Ifc... >::getCurrentDataSet() throw (uno::RuntimeException, std::exception)
+ScVbaFormat< Ifc... >::getCurrentDataSet()
 {
     SfxItemSet* pDataSet = excel::ScVbaCellRangeAccess::GetDataSet( getCellRangesBase() );
     if ( !pDataSet )

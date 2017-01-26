@@ -56,7 +56,7 @@ uno::Sequence< OUString > SAL_CALL PowerPointImport_getSupportedServiceNames()
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
+uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance( const Reference< XComponentContext >& rxContext )
 {
     return static_cast< ::cppu::OWeakObject* >( new PowerPointImport( rxContext ) );
 }
@@ -65,7 +65,7 @@ uno::Reference< uno::XInterface > SAL_CALL PowerPointImport_createInstance( cons
 XmlFilterBase* PowerPointImport::mpDebugFilterBase = nullptr;
 #endif
 
-PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+PowerPointImport::PowerPointImport( const Reference< XComponentContext >& rxContext ) :
     XmlFilterBase( rxContext ),
     mxChartConv( new ::oox::drawingml::chart::ChartConverter )
 
@@ -144,7 +144,7 @@ const ::oox::drawingml::Theme* PowerPointImport::getCurrentTheme() const
     return mpActualSlidePersist ? mpActualSlidePersist->getTheme().get() : nullptr;
 }
 
-sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDescriptor ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL PowerPointImport::filter( const Sequence< PropertyValue >& rDescriptor )
 {
     if( XmlFilterBase::filter( rDescriptor ) )
         return true;
@@ -228,7 +228,7 @@ GraphicHelper* PowerPointImport::implCreateGraphicHelper() const
     return new ::oox::ole::VbaProject( getComponentContext(), getModel(), "Impress" );
 }
 
-OUString PowerPointImport::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+OUString PowerPointImport::getImplementationName()
 {
     return PowerPointImport_getImplementationName();
 }

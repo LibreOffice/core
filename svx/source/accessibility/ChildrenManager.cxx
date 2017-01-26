@@ -55,21 +55,16 @@ long ChildrenManager::GetChildCount() const throw ()
 }
 
 css::uno::Reference<XAccessible> ChildrenManager::GetChild (long nIndex)
-    throw (css::uno::RuntimeException,
-           css::lang::IndexOutOfBoundsException)
 {
     return mpImpl->GetChild (nIndex);
 }
 
 Reference<XAccessible> ChildrenManager::GetChild (const Reference<drawing::XShape>& xShape)
-    throw (css::uno::RuntimeException)
 {
     return mpImpl->GetChild (xShape);
 }
 
 css::uno::Reference<css::drawing::XShape> ChildrenManager::GetChildShape(long nIndex)
-    throw (css::uno::RuntimeException,
-           css::lang::IndexOutOfBoundsException)
 {
     return mpImpl->GetChildShape(nIndex);
 }

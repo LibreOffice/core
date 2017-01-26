@@ -45,11 +45,9 @@ public:
     void    ClearCallbackLink();
 
             // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-                                            throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
             // XClipboardListener
-    virtual void SAL_CALL changedContents( const css::datatransfer::clipboard::ClipboardEvent& event )
-                                            throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL changedContents( const css::datatransfer::clipboard::ClipboardEvent& event ) override;
 };
 
 #endif

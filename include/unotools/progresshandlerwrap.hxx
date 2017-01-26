@@ -36,12 +36,9 @@ public:
     ProgressHandlerWrap( css::uno::Reference< css::task::XStatusIndicator > const & xSI );
 
     // XProgressHandler
-    virtual void SAL_CALL push( const css::uno::Any& Status )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL update( const css::uno::Any& Status )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL pop()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL push( const css::uno::Any& Status ) override;
+    virtual void SAL_CALL update( const css::uno::Any& Status ) override;
+    virtual void SAL_CALL pop() override;
 };
 
 }   // namespace utl

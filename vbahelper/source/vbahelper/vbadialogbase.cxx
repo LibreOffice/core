@@ -23,7 +23,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-void SAL_CALL VbaDialogBase::Show() throw ( uno::RuntimeException, std::exception )
+void SAL_CALL VbaDialogBase::Show()
 {
     OUString aURL;
     if ( m_xModel.is() )

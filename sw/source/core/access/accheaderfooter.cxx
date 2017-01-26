@@ -62,7 +62,6 @@ SwAccessibleHeaderFooter::~SwAccessibleHeaderFooter()
 }
 
 OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription()
-        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -78,7 +77,6 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getAccessibleDescription()
 }
 
 OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
-        throw( RuntimeException, std::exception )
 {
     if( AccessibleRole::HEADER == GetRole() )
         return OUString(sImplementationNameHeader);
@@ -87,13 +85,11 @@ OUString SAL_CALL SwAccessibleHeaderFooter::getImplementationName()
 }
 
 sal_Bool SAL_CALL SwAccessibleHeaderFooter::supportsService(const OUString& sTestServiceName)
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sTestServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames()
-        throw( uno::RuntimeException, std::exception )
 {
     Sequence< OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -106,13 +102,11 @@ Sequence< OUString > SAL_CALL SwAccessibleHeaderFooter::getSupportedServiceNames
 }
 
 Sequence< sal_Int8 > SAL_CALL SwAccessibleHeaderFooter::getImplementationId()
-        throw(RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 sal_Int32 SAL_CALL SwAccessibleHeaderFooter::getBackground()
-        throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XAccessible > xParent =  getAccessibleParent();
     if (xParent.is())

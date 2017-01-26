@@ -53,7 +53,6 @@ CSmplMailSuppl::~CSmplMailSuppl()
 }
 
 Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
-    throw (RuntimeException)
 {
     /* We just try to load the MAPI dll as a test
        if a mail client is available */
@@ -70,19 +69,16 @@ Reference<XSimpleMailClient> SAL_CALL CSmplMailSuppl::querySimpleMailClient()
 // XServiceInfo
 
 OUString SAL_CALL CSmplMailSuppl::getImplementationName()
-    throw(RuntimeException)
 {
     return OUString(COMP_IMPL_NAME);
 }
 
 sal_Bool SAL_CALL CSmplMailSuppl::supportsService(const OUString& ServiceName)
-    throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence<OUString> SAL_CALL CSmplMailSuppl::getSupportedServiceNames()
-    throw(RuntimeException)
 {
     return Component_getSupportedServiceNames();
 }

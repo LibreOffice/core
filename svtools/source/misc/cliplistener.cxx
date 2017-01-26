@@ -40,13 +40,11 @@ TransferableClipboardListener::~TransferableClipboardListener()
 }
 
 void SAL_CALL TransferableClipboardListener::disposing( const lang::EventObject& )
-                                                        throw(uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL TransferableClipboardListener::changedContents(
                             const datatransfer::clipboard::ClipboardEvent& rEventObject )
-                                                        throw(uno::RuntimeException, std::exception)
 {
     if ( aLink.IsSet() )
     {

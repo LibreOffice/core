@@ -133,7 +133,7 @@ namespace connectivity
                                         const ::comphelper::UStringMixEqual& _rCase);
 
     /// @throws css::lang::DisposedException
-    OOO_DLLPUBLIC_DBTOOLS void checkDisposed(bool _bThrow) throw ( css::lang::DisposedException );
+    OOO_DLLPUBLIC_DBTOOLS void checkDisposed(bool _bThrow);
 
 #if HAVE_FEATURE_JAVA
     /** creates a java virtual machine
@@ -155,21 +155,21 @@ namespace connectivity
 }
 
 #define DECLARE_SERVICE_INFO()  \
-    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override; \
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override; \
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override \
+    virtual OUString SAL_CALL getImplementationName(  ) override; \
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override; \
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override \
 
 #define IMPLEMENT_SERVICE_INFO(classname, implasciiname, serviceasciiname)  \
-    OUString SAL_CALL classname::getImplementationName(  ) throw (css::uno::RuntimeException, std::exception)   \
+    OUString SAL_CALL classname::getImplementationName(  )   \
     {   \
         return OUString(implasciiname); \
     }   \
-    css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception)  \
+    css::uno::Sequence< OUString > SAL_CALL classname::getSupportedServiceNames(  )  \
     {   \
         css::uno::Sequence< OUString > aSupported { serviceasciiname }; \
         return aSupported;  \
     }   \
-    sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) throw(css::uno::RuntimeException, std::exception) \
+    sal_Bool SAL_CALL classname::supportsService( const OUString& _rServiceName ) \
     {   \
         return cppu::supportsService(this, _rServiceName); \
     }   \

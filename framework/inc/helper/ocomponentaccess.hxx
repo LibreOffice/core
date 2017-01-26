@@ -91,7 +91,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
                         An NULL-reference, other way.
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
         //  XElementAccess
 
@@ -102,7 +102,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
             @return     The uno-type XComponent.
         *//*-*****************************************************************************************************/
 
-        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Type SAL_CALL getElementType() override;
 
         /*-****************************************************************************************************
             @short      get state of componentlist of enumeration.
@@ -111,7 +111,7 @@ class OComponentAccess  :   public ::cppu::WeakImplHelper< css::container::XEnum
             @return     sal_False ,otherwise.
         *//*-*****************************************************************************************************/
 
-        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL hasElements() override;
 
     //  protected methods
 

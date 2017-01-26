@@ -42,7 +42,7 @@ OGroups::~OGroups()
 {
 }
 
-void SAL_CALL OGroups::dispose() throw(uno::RuntimeException, std::exception)
+void SAL_CALL OGroups::dispose()
 {
     cppu::WeakComponentImplHelperBase::dispose();
 }
@@ -60,18 +60,18 @@ void SAL_CALL OGroups::disposing()
 }
 
 // XGroups
-uno::Reference< report::XReportDefinition > SAL_CALL OGroups::getReportDefinition() throw (uno::RuntimeException, std::exception)
+uno::Reference< report::XReportDefinition > SAL_CALL OGroups::getReportDefinition()
 {
     return m_xParent;
 }
 
-uno::Reference< report::XGroup > SAL_CALL OGroups::createGroup(  ) throw (uno::RuntimeException, std::exception)
+uno::Reference< report::XGroup > SAL_CALL OGroups::createGroup(  )
 {
     return new OGroup(this,m_xContext);
 }
 
 // XIndexContainer
-void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElement ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElement )
 {
     {
         ::osl::MutexGuard aGuard(m_aMutex);
@@ -97,7 +97,7 @@ void SAL_CALL OGroups::insertByIndex( ::sal_Int32 Index, const uno::Any& aElemen
 }
 
 
-void SAL_CALL OGroups::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OGroups::removeByIndex( ::sal_Int32 Index )
 {
     uno::Reference< report::XGroup > xGroup;
     {
@@ -113,7 +113,7 @@ void SAL_CALL OGroups::removeByIndex( ::sal_Int32 Index ) throw (lang::IndexOutO
 }
 
 // XIndexReplace
-void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element ) throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Element )
 {
     uno::Any aOldElement;
     {
@@ -133,13 +133,13 @@ void SAL_CALL OGroups::replaceByIndex( ::sal_Int32 Index, const uno::Any& Elemen
 }
 
 // XIndexAccess
-::sal_Int32 SAL_CALL OGroups::getCount(  ) throw (uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL OGroups::getCount(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_aGroups.size();
 }
 
-uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkIndex(Index);
@@ -149,35 +149,35 @@ uno::Any SAL_CALL OGroups::getByIndex( ::sal_Int32 Index ) throw (lang::IndexOut
 }
 
 // XElementAccess
-uno::Type SAL_CALL OGroups::getElementType(  ) throw (uno::RuntimeException, std::exception)
+uno::Type SAL_CALL OGroups::getElementType(  )
 {
     return cppu::UnoType<report::XGroup>::get();
 }
 
-sal_Bool SAL_CALL OGroups::hasElements(  ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OGroups::hasElements(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return !m_aGroups.empty();
 }
 
 // XChild
-uno::Reference< uno::XInterface > SAL_CALL OGroups::getParent(  ) throw (uno::RuntimeException, std::exception)
+uno::Reference< uno::XInterface > SAL_CALL OGroups::getParent(  )
 {
     return m_xParent;
 }
 
-void SAL_CALL OGroups::setParent( const uno::Reference< uno::XInterface >& /*Parent*/ ) throw (lang::NoSupportException, uno::RuntimeException, std::exception)
+void SAL_CALL OGroups::setParent( const uno::Reference< uno::XInterface >& /*Parent*/ )
 {
     throw lang::NoSupportException();
 }
 
 // XContainer
-void SAL_CALL OGroups::addContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OGroups::addContainerListener( const uno::Reference< container::XContainerListener >& xListener )
 {
     m_aContainerListeners.addInterface(xListener);
 }
 
-void SAL_CALL OGroups::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OGroups::removeContainerListener( const uno::Reference< container::XContainerListener >& xListener )
 {
     m_aContainerListeners.removeInterface(xListener);
 }

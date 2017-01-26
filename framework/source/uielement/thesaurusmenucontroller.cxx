@@ -32,11 +32,11 @@ public:
     explicit ThesaurusMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     void fillPopupMenu();
@@ -55,7 +55,6 @@ ThesaurusMenuController::ThesaurusMenuController( const css::uno::Reference< css
 }
 
 void ThesaurusMenuController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     rEvent.State >>= m_aLastWord;
     m_xPopupMenu->clear();
@@ -146,13 +145,11 @@ OUString ThesaurusMenuController::getThesImplName( const css::lang::Locale& rLoc
 }
 
 OUString ThesaurusMenuController::getImplementationName()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.framework.ThesaurusMenuController" );
 }
 
 css::uno::Sequence< OUString > ThesaurusMenuController::getSupportedServiceNames()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.frame.PopupMenuController" };
 }

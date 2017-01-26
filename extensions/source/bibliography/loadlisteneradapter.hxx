@@ -95,7 +95,7 @@ namespace bib
     protected:
     // XEventListener
         /// @throws css::uno::RuntimeException
-        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception);
+        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source );
     };
 
     class OLoadListener : public OComponentListener
@@ -136,14 +136,14 @@ namespace bib
 
     protected:
     // XEventListener
-        virtual void SAL_CALL disposing( const  css::lang::EventObject& _rSource ) throw( css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const  css::lang::EventObject& _rSource ) override;
 
     // XLoadListener
-        virtual void SAL_CALL loaded( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL unloading( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL unloaded( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL reloading( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL reloaded( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL loaded( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL unloading( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL unloaded( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL reloading( const css::lang::EventObject& aEvent ) override;
+        virtual void SAL_CALL reloaded( const css::lang::EventObject& aEvent ) override;
     };
 
 

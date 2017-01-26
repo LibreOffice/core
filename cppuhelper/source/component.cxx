@@ -47,11 +47,11 @@ OComponentHelper::~OComponentHelper()
 {
 }
 
-Any OComponentHelper::queryInterface( Type const & rType ) throw (RuntimeException, std::exception)
+Any OComponentHelper::queryInterface( Type const & rType )
 {
     return OWeakAggObject::queryInterface( rType );
 }
-Any OComponentHelper::queryAggregation( Type const & rType ) throw (RuntimeException, std::exception)
+Any OComponentHelper::queryAggregation( Type const & rType )
 {
     if (rType == cppu::UnoType<lang::XComponent>::get())
     {
@@ -112,7 +112,7 @@ void OComponentHelper::release() throw()
     OWeakAggObject::release();
 }
 
-Sequence< Type > OComponentHelper::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > OComponentHelper::getTypes()
 {
     static OTypeCollection * s_pTypes = nullptr;
     if (! s_pTypes)
@@ -138,7 +138,6 @@ void OComponentHelper::disposing()
 
 // XComponent
 void OComponentHelper::dispose()
-    throw(css::uno::RuntimeException, std::exception)
 {
     // An frequently programming error is to release the last
     // reference to this object in the disposing message.
@@ -211,7 +210,6 @@ void OComponentHelper::dispose()
 // XComponent
 void OComponentHelper::addEventListener(
     const Reference<XEventListener > & rxListener )
-    throw(css::uno::RuntimeException, std::exception)
 {
     ClearableMutexGuard aGuard( rBHelper.rMutex );
     if (rBHelper.bDisposed || rBHelper.bInDispose)
@@ -229,7 +227,6 @@ void OComponentHelper::addEventListener(
 // XComponent
 void OComponentHelper::removeEventListener(
     const Reference<XEventListener > & rxListener )
-    throw(css::uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<decltype(rxListener)>::get(), rxListener );
 }

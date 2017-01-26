@@ -33,7 +33,7 @@ ListenerMultiplexerBase::~ListenerMultiplexerBase()
 }
 
 // css::uno::XInterface
-css::uno::Any ListenerMultiplexerBase::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any ListenerMultiplexerBase::queryInterface( const css::uno::Type & rType )
 {
     return ::cppu::queryInterface( rType, (static_cast< css::uno::XInterface* >(this)) );
 }
@@ -56,7 +56,7 @@ void SAL_CALL EventListenerMultiplexer::release() throw ()
 }
 
 // css::uno::XInterface
-css::uno::Any EventListenerMultiplexer::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any EventListenerMultiplexer::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::lang::XEventListener* >(this)) );
@@ -64,7 +64,7 @@ css::uno::Any EventListenerMultiplexer::queryInterface( const css::uno::Type & r
 }
 
 // css::lang::XEventListener
-void EventListenerMultiplexer::disposing( const css::lang::EventObject& ) throw(css::uno::RuntimeException, std::exception)
+void EventListenerMultiplexer::disposing( const css::lang::EventObject& )
 {
 }
 
@@ -155,13 +155,13 @@ IMPL_LISTENERMULTIPLEXER_LISTENERMETHOD( ItemListenerMultiplexer, css::awt::XIte
 
 IMPL_LISTENERMULTIPLEXER_BASEMETHODS( TabListenerMultiplexer, css::awt::XTabListener )
 
-void TabListenerMultiplexer::inserted( sal_Int32 evt ) throw(css::uno::RuntimeException, std::exception)
+void TabListenerMultiplexer::inserted( sal_Int32 evt )
 IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, css::awt::XTabListener, inserted, ::sal_Int32 )
 
-void TabListenerMultiplexer::removed( sal_Int32 evt ) throw(css::uno::RuntimeException, std::exception)
+void TabListenerMultiplexer::removed( sal_Int32 evt )
 IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, css::awt::XTabListener, removed, ::sal_Int32 )
 
-void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< css::beans::NamedValue >& evt2 ) throw(css::uno::RuntimeException, std::exception)
+void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< css::beans::NamedValue >& evt2 )
 {
     sal_Int32 aMulti( evt );
     ::comphelper::OInterfaceIteratorHelper2 aIt( *this );
@@ -187,10 +187,10 @@ void TabListenerMultiplexer::changed( sal_Int32 evt, const css::uno::Sequence< c
 }
 
 
-void TabListenerMultiplexer::activated( sal_Int32 evt ) throw(css::uno::RuntimeException, std::exception)
+void TabListenerMultiplexer::activated( sal_Int32 evt )
 IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, css::awt::XTabListener, activated, ::sal_Int32 )
 
-void TabListenerMultiplexer::deactivated( sal_Int32 evt ) throw(css::uno::RuntimeException, std::exception)
+void TabListenerMultiplexer::deactivated( sal_Int32 evt )
 IMPL_TABLISTENERMULTIPLEXER_LISTENERMETHOD_BODY_1PARAM( TabListenerMultiplexer, css::awt::XTabListener, deactivated, ::sal_Int32 )
 
 

@@ -52,15 +52,15 @@ public:
 
 
     // XInsertObjectDialog
-    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceByDialog( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::Exception, css::uno::RuntimeException) override;
+    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceByDialog( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntName, const css::uno::Sequence< css::beans::PropertyValue >& lObjArgs ) override;
 
     // XEmbedObjectClipboardCreator
-    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceInitFromClipboard( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntryName, const css::uno::Sequence< css::beans::PropertyValue >& aObjectArgs ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::Exception, css::uno::RuntimeException) override;
+    virtual css::embed::InsertedObjectInfo SAL_CALL createInstanceInitFromClipboard( const css::uno::Reference< css::embed::XStorage >& xStorage, const OUString& sEntryName, const css::uno::Sequence< css::beans::PropertyValue >& aObjectArgs ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
 

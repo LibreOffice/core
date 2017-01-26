@@ -64,7 +64,6 @@ SEInitializer_NssImpl::~SEInitializer_NssImpl()
 /* XSEInitializer */
 uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
     SEInitializer_NssImpl::createSecurityContext( const OUString& )
-    throw (uno::RuntimeException, std::exception)
 {
     CERTCertDBHandle    *pCertHandle = nullptr ;
 
@@ -99,7 +98,6 @@ uno::Reference< cssxc::XXMLSecurityContext > SAL_CALL
 }
 
 void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< cssxc::XXMLSecurityContext >& )
-    throw (uno::RuntimeException, std::exception)
 {
     /*
      * because the security context will free all its content when it
@@ -111,13 +109,11 @@ void SAL_CALL SEInitializer_NssImpl::freeSecurityContext( const uno::Reference< 
 }
 
 OUString SEInitializer_NssImpl_getImplementationName ()
-    throw (uno::RuntimeException)
 {
     return OUString ("com.sun.star.xml.security.bridge.xmlsec.SEInitializer_NssImpl" );
 }
 
 uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
 {
     uno::Sequence < OUString > aRet(2);
     OUString* pArray = aRet.getArray();
@@ -127,24 +123,20 @@ uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl_getSupportedServiceName
 }
 
 uno::Reference< uno::XInterface > SAL_CALL SEInitializer_NssImpl_createInstance( const uno::Reference< lang::XMultiServiceFactory > & rxMSF)
-    throw( uno::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new SEInitializer_NssImpl(comphelper::getComponentContext(rxMSF)));
 }
 
 /* XServiceInfo */
 OUString SAL_CALL SEInitializer_NssImpl::getImplementationName(  )
-    throw (uno::RuntimeException, std::exception)
 {
     return SEInitializer_NssImpl_getImplementationName();
 }
 sal_Bool SAL_CALL SEInitializer_NssImpl::supportsService( const OUString& rServiceName )
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 uno::Sequence< OUString > SAL_CALL SEInitializer_NssImpl::getSupportedServiceNames(  )
-    throw (uno::RuntimeException, std::exception)
 {
     return SEInitializer_NssImpl_getSupportedServiceNames();
 }

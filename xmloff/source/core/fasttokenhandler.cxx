@@ -79,13 +79,11 @@ FastTokenHandler::~FastTokenHandler()
 
 // XFastTokenHandler
 uno::Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken )
-    throw (uno::RuntimeException, std::exception)
 {
     return mrTokenMap.getUtf8TokenName( nToken );
 }
 
 sal_Int32 FastTokenHandler::getTokenFromUTF8( const uno::Sequence< sal_Int8 >& rIdentifier )
-    throw (uno::RuntimeException, std::exception)
 {
     return TokenMap::getTokenFromUtf8( rIdentifier );
 }

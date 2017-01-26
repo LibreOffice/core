@@ -44,20 +44,20 @@ SanExtensionImpl::~SanExtensionImpl() {
 
 
 //Methods from XCertificateExtension
-sal_Bool SAL_CALL SanExtensionImpl::isCritical() throw( css::uno::RuntimeException ) {
+sal_Bool SAL_CALL SanExtensionImpl::isCritical() {
     return m_critical ;
 }
 
-css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionId() throw( css::uno::RuntimeException ) {
+css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionId() {
     return m_xExtnId ;
 }
 
-css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionValue() throw( css::uno::RuntimeException ) {
+css::uno::Sequence< sal_Int8 > SAL_CALL SanExtensionImpl::getExtensionValue() {
     return m_xExtnValue ;
 }
 
 //Methods from XSanExtension
-css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl::getAlternativeNames() throw( css::uno::RuntimeException ){
+css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL SanExtensionImpl::getAlternativeNames(){
 
     if (!m_Entries.hasElements())
     {

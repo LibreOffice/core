@@ -105,7 +105,6 @@ Reference< XInterface >& ZipPackageHelper::getRootFolder()
 
 Reference< XInterface > ZipPackageHelper::addFolder( Reference< XInterface >& xRootFolder,
                                                      const OUString& rName )
-    throw( css::uno::Exception, std::exception )
 {
     if ( rName == ".." || rName == "." )
         throw lang::IllegalArgumentException();
@@ -165,7 +164,6 @@ void ZipPackageHelper::addFolderWithContent( Reference< XInterface >& xRootFolde
 
 void ZipPackageHelper::addFile( css::uno::Reference< css::uno::XInterface >& xRootFolder,
                                 const OUString& rSourceFile )
-    throw( Exception, std::exception )
 {
     OUString aFileURL( rSourceFile );
 

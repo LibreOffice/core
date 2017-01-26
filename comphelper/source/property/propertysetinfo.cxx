@@ -44,7 +44,7 @@ public:
     const PropertyMap& getPropertyMap() const throw() { return maPropertyMap;}
 
         /// @throws UnknownPropertyException
-    Property getPropertyByName( const OUString& aName ) throw( UnknownPropertyException );
+    Property getPropertyByName( const OUString& aName );
     bool hasPropertyByName( const OUString& aName ) throw();
 
 private:
@@ -106,7 +106,7 @@ std::vector< Property > const & PropertyMapImpl::getProperties() throw()
 }
 
 
-Property PropertyMapImpl::getPropertyByName( const OUString& aName ) throw( UnknownPropertyException )
+Property PropertyMapImpl::getPropertyByName( const OUString& aName )
 {
     PropertyMap::iterator aIter = maPropertyMap.find( aName );
 
@@ -167,17 +167,17 @@ void PropertySetInfo::remove( const OUString& aName ) throw()
     mpImpl->remove( aName );
 }
 
-Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties() throw(css::uno::RuntimeException, std::exception)
+Sequence< css::beans::Property > SAL_CALL PropertySetInfo::getProperties()
 {
     return comphelper::containerToSequence(mpImpl->getProperties());
 }
 
-Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName ) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception)
+Property SAL_CALL PropertySetInfo::getPropertyByName( const OUString& aName )
 {
     return mpImpl->getPropertyByName( aName );
 }
 
-sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL PropertySetInfo::hasPropertyByName( const OUString& Name )
 {
     return mpImpl->hasPropertyByName( Name );
 }

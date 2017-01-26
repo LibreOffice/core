@@ -29,21 +29,21 @@ class HeaderFooterHelper
 {
 public:
     /// @throws css::uno::RuntimeException
-    static bool isHeaderFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static bool isHeaderFooter( const css::uno::Reference< css::frame::XModel >& xModel );
     /// @throws css::uno::RuntimeException
-    static bool isHeaderFooter( const css::uno::Reference< css::text::XText >& xText ) throw (css::uno::RuntimeException);
+    static bool isHeaderFooter( const css::uno::Reference< css::text::XText >& xText );
     /// @throws css::uno::RuntimeException
-    static bool isHeader( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static bool isHeader( const css::uno::Reference< css::frame::XModel >& xModel );
     /// @throws css::uno::RuntimeException
-    static bool isFirstPageHeader( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static bool isFirstPageHeader( const css::uno::Reference< css::frame::XModel >& xModel );
     /// @throws css::uno::RuntimeException
-    static bool isEvenPagesHeader( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static bool isEvenPagesHeader( const css::uno::Reference< css::frame::XModel >& xModel );
     /// @throws css::uno::RuntimeException
-    static bool isFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static bool isFooter( const css::uno::Reference< css::frame::XModel >& xModel );
     /// @throws css::uno::RuntimeException
-    static bool isFirstPageFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static bool isFirstPageFooter( const css::uno::Reference< css::frame::XModel >& xModel );
     /// @throws css::uno::RuntimeException
-    static bool isEvenPagesFooter( const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+    static bool isEvenPagesFooter( const css::uno::Reference< css::frame::XModel >& xModel );
 };
 
 #endif

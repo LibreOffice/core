@@ -32,17 +32,17 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaSection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps ) throw ( css::uno::RuntimeException );
+    SwVbaSection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& xProps );
     virtual ~SwVbaSection() override;
 
     // Attributes
-    virtual sal_Bool SAL_CALL getProtectedForForms() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setProtectedForForms( sal_Bool _protectedforforms ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getProtectedForForms() override;
+    virtual void SAL_CALL setProtectedForForms( sal_Bool _protectedforforms ) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL Headers( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Footers( const css::uno::Any& index ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL PageSetup(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL Headers( const css::uno::Any& index ) override;
+    virtual css::uno::Any SAL_CALL Footers( const css::uno::Any& index ) override;
+    virtual css::uno::Any SAL_CALL PageSetup(  ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

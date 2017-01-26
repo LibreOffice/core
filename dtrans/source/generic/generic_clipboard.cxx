@@ -42,7 +42,6 @@ GenericClipboard::~GenericClipboard()
 }
 
 void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
-    throw(Exception, RuntimeException)
 {
     if (!m_bInitialized)
     {
@@ -56,25 +55,21 @@ void SAL_CALL GenericClipboard::initialize( const Sequence< Any >& aArguments )
 }
 
 OUString SAL_CALL GenericClipboard::getImplementationName(  )
-    throw(RuntimeException)
 {
     return OUString(GENERIC_CLIPBOARD_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL GenericClipboard::supportsService( const OUString& ServiceName )
-    throw(RuntimeException)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL GenericClipboard::getSupportedServiceNames(    )
-    throw(RuntimeException)
 {
     return GenericClipboard_getSupportedServiceNames();
 }
 
 Reference< XTransferable > SAL_CALL GenericClipboard::getContents()
-    throw(RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     return m_aContents;
@@ -82,7 +77,6 @@ Reference< XTransferable > SAL_CALL GenericClipboard::getContents()
 
 void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xTrans,
                                       const Reference< XClipboardOwner >& xClipboardOwner )
-    throw(RuntimeException)
 {
     // remember old values for callbacks before setting the new ones.
     ClearableMutexGuard aGuard(m_aMutex);
@@ -117,19 +111,16 @@ void SAL_CALL GenericClipboard::setContents(const Reference< XTransferable >& xT
 }
 
 OUString SAL_CALL GenericClipboard::getName()
-    throw(RuntimeException)
 {
     return m_aName;
 }
 
 sal_Int8 SAL_CALL GenericClipboard::getRenderingCapabilities()
-    throw(RuntimeException)
 {
     return RenderingCapabilities::Delayed;
 }
 
 void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboardListener >& listener )
-    throw(RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bInDispose, "do not add listeners in the dispose call" );
@@ -139,7 +130,6 @@ void SAL_CALL GenericClipboard::addClipboardListener( const Reference< XClipboar
 }
 
 void SAL_CALL GenericClipboard::removeClipboardListener( const Reference< XClipboardListener >& listener )
-    throw(RuntimeException)
 {
     MutexGuard aGuard( rBHelper.rMutex );
     OSL_ENSURE( !rBHelper.bDisposed, "object is disposed" );

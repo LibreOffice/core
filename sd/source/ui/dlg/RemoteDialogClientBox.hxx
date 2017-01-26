@@ -80,8 +80,7 @@ public:
     virtual ~ClientRemovedListener() override;
 
     // XEventListener
-    virtual void SAL_CALL disposing(css::lang::EventObject const & evt)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(css::lang::EventObject const & evt) override;
 };
 
 class ClientBox : public Control

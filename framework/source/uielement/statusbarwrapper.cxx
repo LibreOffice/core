@@ -61,7 +61,7 @@ StatusBarWrapper::~StatusBarWrapper()
 {
 }
 
-void SAL_CALL StatusBarWrapper::dispose() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL StatusBarWrapper::dispose()
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -85,7 +85,7 @@ void SAL_CALL StatusBarWrapper::dispose() throw (css::uno::RuntimeException, std
 }
 
 // XInitialization
-void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
+void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments )
 {
     SolarMutexGuard g;
 
@@ -133,7 +133,7 @@ void SAL_CALL StatusBarWrapper::initialize( const Sequence< Any >& aArguments ) 
 }
 
 // XUIElementSettings
-void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException, std::exception )
+void SAL_CALL StatusBarWrapper::updateSettings()
 {
     SolarMutexGuard g;
 
@@ -158,7 +158,7 @@ void SAL_CALL StatusBarWrapper::updateSettings() throw ( RuntimeException, std::
     }
 }
 
-Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface() throw ( RuntimeException, std::exception )
+Reference< XInterface > SAL_CALL StatusBarWrapper::getRealInterface()
 {
     SolarMutexGuard g;
 

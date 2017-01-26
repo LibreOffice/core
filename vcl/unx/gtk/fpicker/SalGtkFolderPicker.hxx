@@ -38,30 +38,23 @@ class SalGtkFolderPicker :
 
         // XExecutableDialog functions
 
-        virtual void SAL_CALL setTitle( const OUString& aTitle )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
 
-        virtual sal_Int16 SAL_CALL execute(  )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Int16 SAL_CALL execute(  ) override;
 
         // XFolderPicker functions
 
-        virtual void SAL_CALL setDisplayDirectory( const OUString& rDirectory )
-            throw( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL setDisplayDirectory( const OUString& rDirectory ) override;
 
-        virtual OUString SAL_CALL getDisplayDirectory(  )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getDisplayDirectory(  ) override;
 
-        virtual OUString SAL_CALL getDirectory( )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getDirectory( ) override;
 
-        virtual void SAL_CALL setDescription( const OUString& rDescription )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL setDescription( const OUString& rDescription ) override;
 
         // XCancellable
 
-        virtual void SAL_CALL cancel( )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL cancel( ) override;
 
     private:
         SalGtkFolderPicker( const SalGtkFolderPicker& ) = delete;

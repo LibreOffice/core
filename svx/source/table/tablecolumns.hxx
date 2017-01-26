@@ -36,19 +36,19 @@ public:
 
     void dispose();
     /// @throws css::uno::RuntimeException
-    void throwIfDisposed() const throw (css::uno::RuntimeException);
+    void throwIfDisposed() const;
 
     // XTableColumns
-    virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL insertByIndex( sal_Int32 nIndex, sal_Int32 nCount ) override;
+    virtual void SAL_CALL removeByIndex( sal_Int32 nIndex, sal_Int32 nCount ) override;
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
     // Methods
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
 private:
     TableModelRef   mxTableModel;

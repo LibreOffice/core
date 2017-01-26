@@ -106,16 +106,14 @@ public:
         /// @throws css::lang::WrappedTargetException
         /// @throws css::uno::RuntimeException
         css::uno::Reference< css::container::XIndexAccess > CreateMenuBarConfigurationFromXML(
-            css::uno::Reference< css::io::XInputStream >& rInputStream )
-            throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
+            css::uno::Reference< css::io::XInputStream >& rInputStream );
 
         /// @throws css::lang::WrappedTargetException
         /// @throws css::uno::RuntimeException
         void StoreMenuBarConfigurationToXML(
                       css::uno::Reference< css::container::XIndexAccess >& rMenuBarConfiguration,
                       css::uno::Reference< css::io::XOutputStream >& rOutputStream,
-                      bool bIsMenuBar )
-            throw (css::lang::WrappedTargetException, css::uno::RuntimeException);
+                      bool bIsMenuBar );
 
 private:
         css::uno::Reference< css::uno::XComponentContext> m_xContext;

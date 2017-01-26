@@ -309,26 +309,26 @@ void LayoutToolbarMenu::SelectHdl(void* pControl)
 }
 
 /// @throws css::uno::RuntimeException
-OUString SlideLayoutController_getImplementationName() throw (css::uno::RuntimeException)
+OUString SlideLayoutController_getImplementationName()
 {
     return OUString( "com.sun.star.comp.sd.SlideLayoutController" );
 }
 
 /// @throws RuntimeException
-Sequence< OUString >  SlideLayoutController_getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString >  SlideLayoutController_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
 }
 
 /// @throws css::uno::RuntimeException
-OUString InsertSlideController_getImplementationName() throw (css::uno::RuntimeException)
+OUString InsertSlideController_getImplementationName()
 {
     return OUString( "com.sun.star.comp.sd.InsertSlideController" );
 }
 
 /// @throws RuntimeException
-Sequence< OUString >  InsertSlideController_getSupportedServiceNames() throw( RuntimeException )
+Sequence< OUString >  InsertSlideController_getSupportedServiceNames()
 {
     Sequence<OUString> aSNS { "com.sun.star.frame.ToolbarController" };
     return aSNS;
@@ -343,7 +343,6 @@ SlideLayoutController::SlideLayoutController( const Reference< uno::XComponentCo
 }
 
 void SAL_CALL SlideLayoutController::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::PopupWindowController::initialize( aArguments );
 
@@ -365,7 +364,7 @@ VclPtr<vcl::Window> SlideLayoutController::createPopupWindow( vcl::Window* pPare
 
 // XServiceInfo
 
-OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL SlideLayoutController::getImplementationName()
 {
     if( mbInsertPage )
         return InsertSlideController_getImplementationName();
@@ -373,7 +372,7 @@ OUString SAL_CALL SlideLayoutController::getImplementationName() throw( RuntimeE
         return SlideLayoutController_getImplementationName();
 }
 
-Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  ) throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SlideLayoutController::getSupportedServiceNames(  )
 {
     if( mbInsertPage )
         return InsertSlideController_getSupportedServiceNames();

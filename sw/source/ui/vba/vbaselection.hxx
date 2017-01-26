@@ -42,79 +42,75 @@ private:
 private:
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection ) throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    void Move( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend, ooo::vba::word::E_DIRECTION eDirection );
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    void NextCell( sal_Int32 nCount, ooo::vba::word::E_DIRECTION eDirection )
-        throw (css::script::BasicErrorException, css::uno::RuntimeException);
+    void NextCell( sal_Int32 nCount, ooo::vba::word::E_DIRECTION eDirection );
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::text::XTextRange > GetSelectedRange() throw ( css::uno::RuntimeException );
+    css::uno::Reference< css::text::XTextRange > GetSelectedRange();
     /// @throws css::uno::RuntimeException
-    void GetSelectedCellRange( OUString& sTLName, OUString& sBRName ) throw ( css::uno::RuntimeException );
+    void GetSelectedCellRange( OUString& sTLName, OUString& sBRName );
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::text::XTextTable > GetXTextTable() throw ( css::uno::RuntimeException );
+    css::uno::Reference< css::text::XTextTable > GetXTextTable();
     /// @throws css::uno::RuntimeException
-    bool IsInTable() throw ( css::uno::RuntimeException );
+    bool IsInTable();
     /// @throws css::uno::RuntimeException
-    bool HasSelection() throw ( css::uno::RuntimeException );
+    bool HasSelection();
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel ) throw ( css::uno::RuntimeException );
+    SwVbaSelection( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::frame::XModel >& rModel );
     virtual ~SwVbaSelection() override;
 
     // Attribute
-    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setText( const OUString& rText ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL HomeKey( const css::uno::Any& _unit, const css::uno::Any& _extend ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL EndKey( const css::uno::Any& _unit, const css::uno::Any& _extend ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL TypeText( const OUString& rText ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Delete( const css::uno::Any& _unit, const css::uno::Any& _count ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL MoveRight( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL MoveLeft( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL MoveDown( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL MoveUp( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL TypeParagraph() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL InsertParagraph() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL InsertParagraphBefore() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL InsertParagraphAfter() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setParagraphFormat( const css::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XFind > SAL_CALL getFind() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setStyle( const css::uno::Any& _xStyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL TypeBackspace() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL GoTo( const css::uno::Any& _what, const css::uno::Any& _which, const css::uno::Any& _count, const css::uno::Any& _name )
-        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getLanguageID( ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Information( sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL InsertBreak( const css::uno::Any& _breakType ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Tables( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Fields( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XHeaderFooter > SAL_CALL getHeaderFooter() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL ShapeRange( ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getStart() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setStart( ::sal_Int32 _start ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getEnd() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEnd( ::sal_Int32 _end ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL SelectRow() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL SelectColumn() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Columns( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL Cells( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Copy(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL CopyAsPicture(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Paste(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Collapse( const css::uno::Any& Direction ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL WholeStory(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL SplitTable()
-        throw (css::uno::RuntimeException,
-               std::exception) override;
-    virtual css::uno::Any SAL_CALL Paragraphs( const css::uno::Any& aIndex ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getText() override;
+    virtual void SAL_CALL setText( const OUString& rText ) override;
+    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL getRange() override;
+    virtual void SAL_CALL HomeKey( const css::uno::Any& _unit, const css::uno::Any& _extend ) override;
+    virtual void SAL_CALL EndKey( const css::uno::Any& _unit, const css::uno::Any& _extend ) override;
+    virtual void SAL_CALL TypeText( const OUString& rText ) override;
+    virtual void SAL_CALL Delete( const css::uno::Any& _unit, const css::uno::Any& _count ) override;
+    virtual void SAL_CALL MoveRight( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) override;
+    virtual void SAL_CALL MoveLeft( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) override;
+    virtual void SAL_CALL MoveDown( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) override;
+    virtual void SAL_CALL MoveUp( const css::uno::Any& _unit, const css::uno::Any& _count, const css::uno::Any& _extend ) override;
+    virtual void SAL_CALL TypeParagraph() override;
+    virtual void SAL_CALL InsertParagraph() override;
+    virtual void SAL_CALL InsertParagraphBefore() override;
+    virtual void SAL_CALL InsertParagraphAfter() override;
+    virtual css::uno::Reference< ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
+    virtual void SAL_CALL setParagraphFormat( const css::uno::Reference< ooo::vba::word::XParagraphFormat >& rParagraphFormat ) override;
+    virtual css::uno::Reference< ooo::vba::word::XFind > SAL_CALL getFind() override;
+    virtual css::uno::Any SAL_CALL getStyle() override;
+    virtual void SAL_CALL setStyle( const css::uno::Any& _xStyle ) override;
+    virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
+    virtual void SAL_CALL TypeBackspace() override;
+    virtual css::uno::Reference< ooo::vba::word::XRange > SAL_CALL GoTo( const css::uno::Any& _what, const css::uno::Any& _which, const css::uno::Any& _count, const css::uno::Any& _name ) override;
+    virtual ::sal_Int32 SAL_CALL getLanguageID( ) override;
+    virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) override;
+    virtual css::uno::Any SAL_CALL Information( sal_Int32 _type ) override;
+    virtual void SAL_CALL InsertBreak( const css::uno::Any& _breakType ) override;
+    virtual css::uno::Any SAL_CALL Tables( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL Fields( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Reference< ooo::vba::word::XHeaderFooter > SAL_CALL getHeaderFooter() override;
+    virtual css::uno::Any SAL_CALL ShapeRange( ) override;
+    virtual ::sal_Int32 SAL_CALL getStart() override;
+    virtual void SAL_CALL setStart( ::sal_Int32 _start ) override;
+    virtual ::sal_Int32 SAL_CALL getEnd() override;
+    virtual void SAL_CALL setEnd( ::sal_Int32 _end ) override;
+    virtual void SAL_CALL SelectRow() override;
+    virtual void SAL_CALL SelectColumn() override;
+    virtual css::uno::Any SAL_CALL Rows( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL Columns( const css::uno::Any& aIndex ) override;
+    virtual css::uno::Any SAL_CALL Cells( const css::uno::Any& aIndex ) override;
+    virtual void SAL_CALL Copy(  ) override;
+    virtual void SAL_CALL CopyAsPicture(  ) override;
+    virtual void SAL_CALL Paste(  ) override;
+    virtual void SAL_CALL Collapse( const css::uno::Any& Direction ) override;
+    virtual void SAL_CALL WholeStory(  ) override;
+    virtual sal_Bool SAL_CALL InRange( const css::uno::Reference< ::ooo::vba::word::XRange >& Range ) override;
+    virtual void SAL_CALL SplitTable() override;
+    virtual css::uno::Any SAL_CALL Paragraphs( const css::uno::Any& aIndex ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

@@ -70,55 +70,45 @@ public:
 
     virtual void SAL_CALL
         notifyConfigurationChange (
-            const css::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
 
     //----- XEventListener ----------------------------------------------------
 
     virtual void SAL_CALL disposing(
-        const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& rEvent) override;
 
     //----- XTabBar -----------------------------------------------------------
 
     virtual void
         SAL_CALL addTabBarButtonAfter (
             const css::drawing::framework::TabBarButton& rButton,
-            const css::drawing::framework::TabBarButton& rAnchor)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::TabBarButton& rAnchor) override;
 
     virtual void
         SAL_CALL appendTabBarButton (
-            const css::drawing::framework::TabBarButton& rButton)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::TabBarButton& rButton) override;
 
     virtual void
         SAL_CALL removeTabBarButton (
-            const css::drawing::framework::TabBarButton& rButton)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::TabBarButton& rButton) override;
 
     virtual sal_Bool
         SAL_CALL hasTabBarButton (
-            const css::drawing::framework::TabBarButton& rButton)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::TabBarButton& rButton) override;
 
     virtual css::uno::Sequence<css::drawing::framework::TabBarButton>
-        SAL_CALL getTabBarButtons()
-        throw (css::uno::RuntimeException, std::exception) override;
+        SAL_CALL getTabBarButtons() override;
 
     //----- XResource ---------------------------------------------------------
 
     virtual css::uno::Reference<
-        css::drawing::framework::XResourceId> SAL_CALL getResourceId()
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::drawing::framework::XResourceId> SAL_CALL getResourceId() override;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isAnchorOnly() override;
 
     //----- XUnoTunnel --------------------------------------------------------
 
-    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething (const css::uno::Sequence<sal_Int8>& rId) override;
 
     /** The returned value is calculated as the difference between the
         total height of the control and the heigh of its first tab page.

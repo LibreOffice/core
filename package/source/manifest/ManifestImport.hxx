@@ -117,33 +117,25 @@ protected:
 public:
     ManifestImport( std::vector < css::uno::Sequence < css::beans::PropertyValue > > & rNewVector );
     virtual ~ManifestImport() override;
-    virtual void SAL_CALL startDocument(  )
-        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endDocument(  )
-        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
-        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endElement( const OUString& aName )
-        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL characters( const OUString& aChars )
-        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData )
-        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
-        throw(css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startDocument(  ) override;
+    virtual void SAL_CALL endDocument(  ) override;
+    virtual void SAL_CALL startElement( const OUString& aName, const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
+    virtual void SAL_CALL endElement( const OUString& aName ) override;
+    virtual void SAL_CALL characters( const OUString& aChars ) override;
+    virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
+    virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
+    virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 private:
     /// @throws css::uno::RuntimeException
-    void doFileEntry(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    void doFileEntry(StringHashMap &rConvertedAttribs);
     /// @throws css::uno::RuntimeException
-    void doEncryptionData(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    void doEncryptionData(StringHashMap &rConvertedAttribs);
     /// @throws css::uno::RuntimeException
-    void doAlgorithm(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    void doAlgorithm(StringHashMap &rConvertedAttribs);
     /// @throws css::uno::RuntimeException
-    void doKeyDerivation(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    void doKeyDerivation(StringHashMap &rConvertedAttribs);
     /// @throws css::uno::RuntimeException
-    void doStartKeyAlg(StringHashMap &rConvertedAttribs) throw(css::uno::RuntimeException);
+    void doStartKeyAlg(StringHashMap &rConvertedAttribs);
 };
 #endif
 

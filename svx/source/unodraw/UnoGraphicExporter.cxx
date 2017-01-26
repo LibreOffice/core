@@ -142,20 +142,20 @@ namespace {
         GraphicExporter();
 
         // XFilter
-        virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException, std::exception) override;
-        virtual void SAL_CALL cancel(  ) throw(RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
+        virtual void SAL_CALL cancel(  ) override;
 
         // XExporter
-        virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception) override;
+        virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XMimeTypeInfo
-        virtual sal_Bool SAL_CALL supportsMimeType( const OUString& MimeTypeName ) throw (RuntimeException, std::exception) override;
-        virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) throw (RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsMimeType( const OUString& MimeTypeName ) override;
+        virtual Sequence< OUString > SAL_CALL getSupportedMimeTypeNames(  ) override;
 
         VclPtr<VirtualDevice> CreatePageVDev( SdrPage* pPage, sal_uIntPtr nWidthPixel, sal_uIntPtr nHeightPixel ) const;
 
@@ -990,7 +990,6 @@ bool GraphicExporter::GetGraphic( ExportSettings& rSettings, Graphic& aGraphic, 
 
 // XFilter
 sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDescriptor )
-    throw(RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1071,7 +1070,6 @@ sal_Bool SAL_CALL GraphicExporter::filter( const Sequence< PropertyValue >& aDes
 }
 
 void SAL_CALL GraphicExporter::cancel()
-    throw(RuntimeException, std::exception)
 {
 }
 
@@ -1079,7 +1077,6 @@ void SAL_CALL GraphicExporter::cancel()
 
 /** the source 'document' could be a XDrawPage, a XShape or a generic XShapes */
 void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XComponent >& xComponent )
-    throw(IllegalArgumentException, RuntimeException, std::exception)
 {
     ::SolarMutexGuard aGuard;
 
@@ -1186,26 +1183,23 @@ void SAL_CALL GraphicExporter::setSourceDocument( const Reference< lang::XCompon
 
 // XServiceInfo
 OUString SAL_CALL GraphicExporter::getImplementationName(  )
-    throw(RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.Draw.GraphicExporter" );
 }
 
 sal_Bool SAL_CALL GraphicExporter::supportsService( const OUString& ServiceName )
-    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL GraphicExporter::getSupportedServiceNames(  )
-    throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aSupportedServiceNames { "com.sun.star.drawing.GraphicExportFilter" };
     return aSupportedServiceNames;
 }
 
 // XMimeTypeInfo
-sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& rMimeTypeName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& rMimeTypeName )
 {
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = rFilter.GetExportFormatCount();
@@ -1221,7 +1215,7 @@ sal_Bool SAL_CALL GraphicExporter::supportsMimeType( const OUString& rMimeTypeNa
     return false;
 }
 
-Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL GraphicExporter::getSupportedMimeTypeNames(  )
 {
     GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
     sal_uInt16 nCount = rFilter.GetExportFormatCount();

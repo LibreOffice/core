@@ -56,7 +56,7 @@ namespace dbaccess
 
 
         // css::lang::XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
         // comphelper::OPropertyArrayUsageHelper
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
@@ -66,9 +66,9 @@ namespace dbaccess
         virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any & rConvertedValue,
                                                             css::uno::Any & rOldValue,
                                                             sal_Int32 nHandle,
-                                                            const css::uno::Any& rValue ) throw (css::lang::IllegalArgumentException) override;
+                                                            const css::uno::Any& rValue ) override;
         virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue )throw (css::uno::Exception, std::exception) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue ) override;
 
         virtual void fireValueChange(const ::connectivity::ORowSetValue& _rOldValue) override;
     protected:
@@ -81,7 +81,7 @@ namespace dbaccess
         ::rtl::Reference< ::connectivity::OSQLColumns> m_aColumns;
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
-        virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+        virtual void impl_refresh() override;
     public:
         ORowSetDataColumns(
                         bool _bCase,

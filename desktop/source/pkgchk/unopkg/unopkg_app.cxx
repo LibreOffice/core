@@ -131,18 +131,15 @@ public:
         : m_rDialogClosedCondition( rDialogClosedCondition ) {}
 
     // XEventListener (base of XDialogClosedListener)
-    virtual void SAL_CALL disposing( lang::EventObject const & Source )
-        throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( lang::EventObject const & Source ) override;
 
     // XDialogClosedListener
     virtual void SAL_CALL dialogClosed(
-        ui::dialogs::DialogClosedEvent const & aEvent )
-        throw (RuntimeException, std::exception) override;
+        ui::dialogs::DialogClosedEvent const & aEvent ) override;
 };
 
 // XEventListener (base of XDialogClosedListener)
 void DialogClosedListenerImpl::disposing( lang::EventObject const & )
-    throw (RuntimeException, std::exception)
 {
     // nothing to do
 }
@@ -150,7 +147,6 @@ void DialogClosedListenerImpl::disposing( lang::EventObject const & )
 // XDialogClosedListener
 void DialogClosedListenerImpl::dialogClosed(
     ui::dialogs::DialogClosedEvent const & )
-    throw (RuntimeException, std::exception)
 {
     m_rDialogClosedCondition.set();
 }

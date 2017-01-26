@@ -77,31 +77,31 @@ public:
     void CopyAndSwitchPersistenceTo( const css::uno::Reference< css::io::XStream >& xStream );
 
 // css::io::XStream
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL getInputStream(  ) override;
+    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL getOutputStream(  ) override;
 
 // css::io::XInputStream
-    virtual ::sal_Int32 SAL_CALL readBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL available(  ) throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL closeInput(  ) throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL readBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
+    virtual ::sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
+    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
+    virtual ::sal_Int32 SAL_CALL available(  ) override;
+    virtual void SAL_CALL closeInput(  ) override;
 
 // css::io::XOutputStream
-    virtual void SAL_CALL writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL flush(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL closeOutput(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData ) override;
+    virtual void SAL_CALL flush(  ) override;
+    virtual void SAL_CALL closeOutput(  ) override;
 
 // css::io::XTruncate
-    virtual void SAL_CALL truncate(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL truncate(  ) override;
 
 // css::io::XSeekable
-    virtual void SAL_CALL seek( ::sal_Int64 location ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int64 SAL_CALL getPosition(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int64 SAL_CALL getLength(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL seek( ::sal_Int64 location ) override;
+    virtual ::sal_Int64 SAL_CALL getPosition(  ) override;
+    virtual ::sal_Int64 SAL_CALL getLength(  ) override;
 
 // css::io::XAsyncOutputMonitor
-    virtual void SAL_CALL waitForCompletion(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL waitForCompletion(  ) override;
 
 };
 

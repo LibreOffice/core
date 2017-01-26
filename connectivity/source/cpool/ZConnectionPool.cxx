@@ -152,7 +152,7 @@ m_xDriverNode.clear();
 m_xDriver.clear();
 }
 
-Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo ) throw(SQLException, RuntimeException)
+Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const OUString& _rURL, const Sequence< PropertyValue >& _rInfo )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -173,7 +173,7 @@ Reference< XConnection > SAL_CALL OConnectionPool::getConnectionWithInfo( const 
     return xConnection;
 }
 
-void SAL_CALL OConnectionPool::disposing( const css::lang::EventObject& Source ) throw (RuntimeException, std::exception)
+void SAL_CALL OConnectionPool::disposing( const css::lang::EventObject& Source )
 {
     Reference<XConnection> xConnection(Source.Source,UNO_QUERY);
     if(xConnection.is())
@@ -285,7 +285,7 @@ Reference< XConnection> OConnectionPool::getPooledConnection(TConnectionMap::ite
     return xConnection;
 }
 
-void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL OConnectionPool::propertyChange( const PropertyChangeEvent& evt )
 {
     if(TIMEOUT_NODENAME == evt.PropertyName)
     {

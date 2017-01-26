@@ -75,15 +75,15 @@ namespace pcr
 
         // XPropertyControl
         /// @throws css::uno::RuntimeException
-        ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) { return m_nControlType; }
+        ::sal_Int16 SAL_CALL getControlType() { return m_nControlType; }
         /// @throws css::uno::RuntimeException
-        const css::uno::Reference< css::inspection::XPropertyControlContext >& SAL_CALL getControlContext() throw (css::uno::RuntimeException) { return m_xContext; }
+        const css::uno::Reference< css::inspection::XPropertyControlContext >& SAL_CALL getControlContext() { return m_xContext; }
         /// @throws css::uno::RuntimeException
-        void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) throw (css::uno::RuntimeException);
+        void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext );
         /// @throws css::uno::RuntimeException
-        bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException) { return m_bModified; }
+        bool SAL_CALL isModified(  ) { return m_bModified; }
         /// @throws css::uno::RuntimeException
-        void SAL_CALL notifyModifiedValue(  ) throw (css::uno::RuntimeException);
+        void SAL_CALL notifyModifiedValue(  );
 
         /** (fail-safe) wrapper around calling our context's activateNextControl
         */
@@ -124,17 +124,17 @@ namespace pcr
         inline CommonBehaviourControl( sal_Int16 _nControlType, vcl::Window* _pParentWindow, WinBits _nWindowStyle, bool _bDoSetHandlers = true );
 
         // XPropertyControl - delegated to ->m_aImplControl
-        virtual ::sal_Int16 SAL_CALL getControlType() throw (css::uno::RuntimeException) override
+        virtual ::sal_Int16 SAL_CALL getControlType() override
             { return CommonBehaviourControlHelper::getControlType(); }
-        virtual css::uno::Reference< css::inspection::XPropertyControlContext > SAL_CALL getControlContext() throw (css::uno::RuntimeException) override
+        virtual css::uno::Reference< css::inspection::XPropertyControlContext > SAL_CALL getControlContext() override
             { return CommonBehaviourControlHelper::getControlContext(); }
-        virtual void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) throw (css::uno::RuntimeException) override
+        virtual void SAL_CALL setControlContext( const css::uno::Reference< css::inspection::XPropertyControlContext >& _controlcontext ) override
             { CommonBehaviourControlHelper::setControlContext( _controlcontext ); }
-        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getControlWindow() throw (css::uno::RuntimeException) override
+        virtual css::uno::Reference< css::awt::XWindow > SAL_CALL getControlWindow() override
             { return VCLUnoHelper::GetInterface( m_pControlWindow ); }
-        virtual sal_Bool SAL_CALL isModified(  ) throw (css::uno::RuntimeException) override
+        virtual sal_Bool SAL_CALL isModified(  ) override
             { return CommonBehaviourControlHelper::isModified(); }
-        virtual void SAL_CALL notifyModifiedValue(  ) throw (css::uno::RuntimeException) override
+        virtual void SAL_CALL notifyModifiedValue(  ) override
             { CommonBehaviourControlHelper::notifyModifiedValue(); }
 
         // XComponent

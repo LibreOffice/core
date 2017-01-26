@@ -360,12 +360,12 @@ void KabDriver::disposing()
 }
 // static ServiceInfo
 
-OUString KabDriver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString KabDriver::getImplementationName_Static(  )
 {
     return OUString("com.sun.star.comp.sdbc." KAB_SERVICE_NAME ".Driver");
 }
 
-Sequence< OUString > KabDriver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< OUString > KabDriver::getSupportedServiceNames_Static(  )
 {
     // which service is supported
     // for more information @see com.sun.star.sdbc.Driver
@@ -374,22 +374,22 @@ Sequence< OUString > KabDriver::getSupportedServiceNames_Static(  ) throw (Runti
     return aSNS;
 }
 
-OUString SAL_CALL KabDriver::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL KabDriver::getImplementationName(  )
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL KabDriver::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL KabDriver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > SAL_CALL KabDriver::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL KabDriver::getSupportedServiceNames(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-Reference< XConnection > SAL_CALL KabDriver::connect( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException, std::exception)
+Reference< XConnection > SAL_CALL KabDriver::connect( const OUString&, const Sequence< PropertyValue >& )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -408,7 +408,6 @@ Reference< XConnection > SAL_CALL KabDriver::connect( const OUString&, const Seq
 }
 
 sal_Bool SAL_CALL KabDriver::acceptsURL( const OUString& url )
-        throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard(m_aMutex);
 
@@ -419,33 +418,33 @@ sal_Bool SAL_CALL KabDriver::acceptsURL( const OUString& url )
     return url.startsWith("sdbc:address:" KAB_SERVICE_NAME);
 }
 
-Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& ) throw(SQLException, RuntimeException, std::exception)
+Sequence< DriverPropertyInfo > SAL_CALL KabDriver::getPropertyInfo( const OUString&, const Sequence< PropertyValue >& )
 {
     // if you have something special to say, return it here :-)
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL KabDriver::getMajorVersion(  ) throw(RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabDriver::getMajorVersion(  )
 {
     return KAB_DRIVER_VERSION_MAJOR;
 }
 
-sal_Int32 SAL_CALL KabDriver::getMinorVersion(  ) throw(RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabDriver::getMinorVersion(  )
 {
     return KAB_DRIVER_VERSION_MINOR;
 }
 
-void SAL_CALL KabDriver::queryTermination( const EventObject& ) throw (TerminationVetoException, RuntimeException, std::exception)
+void SAL_CALL KabDriver::queryTermination( const EventObject& )
 {
     // nothing to do, nothing to veto
 }
 
-void SAL_CALL KabDriver::notifyTermination( const EventObject& ) throw (RuntimeException, std::exception)
+void SAL_CALL KabDriver::notifyTermination( const EventObject& )
 {
     m_aImplModule.shutdown();
 }
 
-void SAL_CALL KabDriver::disposing( const EventObject& ) throw (RuntimeException, std::exception)
+void SAL_CALL KabDriver::disposing( const EventObject& )
 {
     // not interested in (this is the disposing of the desktop, if any)
 }
@@ -458,7 +457,7 @@ OUString KabDriver::impl_getConfigurationSettingsPath()
     return aPath.makeStringAndClear();
 }
 
-Reference< XInterface >  SAL_CALL KabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory ) throw( Exception )
+Reference< XInterface >  SAL_CALL KabDriver::Create( const Reference< XMultiServiceFactory >& _rxFactory )
 {
     return *(new KabDriver( comphelper::getComponentContext(_rxFactory)));
 }

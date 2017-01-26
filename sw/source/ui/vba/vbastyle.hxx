@@ -38,35 +38,35 @@ private:
 public:
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
+    SwVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet );
 
     /// @throws css::uno::RuntimeException
-    static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const css::uno::Any& xStyle ) throw (css::uno::RuntimeException);
+    static void setStyle( const css::uno::Reference< css::beans::XPropertySet >& xParaProps, const css::uno::Any& xStyle );
     /// @throws css::uno::RuntimeException
-    static sal_Int32 getLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps ) throw (css::uno::RuntimeException, std::exception);
+    static sal_Int32 getLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps );
     /// @throws css::uno::RuntimeException
-    static void setLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps, sal_Int32 _languageid ) throw (css::uno::RuntimeException);
+    static void setLanguageID( const css::uno::Reference< css::beans::XPropertySet >& xTCProps, sal_Int32 _languageid );
 
     // Attributes
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& Name ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getLanguageID( ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNameLocal() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setNameLocal( const OUString& _namelocal ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ::ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutomaticallyUpdate() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutomaticallyUpdate( sal_Bool _automaticallyupdate ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getBaseStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBaseStyle( const css::uno::Any& _basestyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getNextParagraphStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setNextParagraphStyle( const css::uno::Any& _nextparagraphstyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getListLevelNumber() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName() override;
+    virtual void SAL_CALL setName( const OUString& Name ) override;
+    virtual ::sal_Int32 SAL_CALL getLanguageID( ) override;
+    virtual void SAL_CALL setLanguageID( ::sal_Int32 _languageid ) override;
+    virtual ::sal_Int32 SAL_CALL getType() override;
+    virtual css::uno::Reference< ooo::vba::word::XFont > SAL_CALL getFont() override;
+    virtual OUString SAL_CALL getNameLocal() override;
+    virtual void SAL_CALL setNameLocal( const OUString& _namelocal ) override;
+    virtual css::uno::Reference< ::ooo::vba::word::XParagraphFormat > SAL_CALL getParagraphFormat() override;
+    virtual sal_Bool SAL_CALL getAutomaticallyUpdate() override;
+    virtual void SAL_CALL setAutomaticallyUpdate( sal_Bool _automaticallyupdate ) override;
+    virtual css::uno::Any SAL_CALL getBaseStyle() override;
+    virtual void SAL_CALL setBaseStyle( const css::uno::Any& _basestyle ) override;
+    virtual css::uno::Any SAL_CALL getNextParagraphStyle() override;
+    virtual void SAL_CALL setNextParagraphStyle( const css::uno::Any& _nextparagraphstyle ) override;
+    virtual ::sal_Int32 SAL_CALL getListLevelNumber() override;
 
     //XDefaultProperty
-    virtual OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException, std::exception) override { return OUString("Name"); }
+    virtual OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Name"); }
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

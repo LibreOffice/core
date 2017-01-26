@@ -48,7 +48,7 @@ VCLXContainer::~VCLXContainer()
 }
 
 // css::uno::XInterface
-css::uno::Any VCLXContainer::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXContainer::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XVclContainer* >(this)),
@@ -65,21 +65,21 @@ IMPL_XTYPEPROVIDER_END
 
 
 // css::awt::XVclContainer
-void VCLXContainer::addVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXContainer::addVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
     GetContainerListeners().addInterface( rxListener );
 }
 
-void VCLXContainer::removeVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& rxListener ) throw(css::uno::RuntimeException, std::exception)
+void VCLXContainer::removeVclContainerListener( const css::uno::Reference< css::awt::XVclContainerListener >& rxListener )
 {
     SolarMutexGuard aGuard;
 
     GetContainerListeners().removeInterface( rxListener );
 }
 
-css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::getWindows(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::getWindows(  )
 {
     SolarMutexGuard aGuard;
 
@@ -107,7 +107,7 @@ css::uno::Sequence< css::uno::Reference< css::awt::XWindow > > VCLXContainer::ge
 
 
 // css::awt::XVclContainerPeer
-void VCLXContainer::enableDialogControl( sal_Bool bEnable ) throw(css::uno::RuntimeException, std::exception)
+void VCLXContainer::enableDialogControl( sal_Bool bEnable )
 {
     SolarMutexGuard aGuard;
 
@@ -123,7 +123,7 @@ void VCLXContainer::enableDialogControl( sal_Bool bEnable ) throw(css::uno::Runt
     }
 }
 
-void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components, const css::uno::Sequence< css::uno::Any >& Tabs, sal_Bool bGroupControl ) throw(css::uno::RuntimeException, std::exception)
+void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components, const css::uno::Sequence< css::uno::Any >& Tabs, sal_Bool bGroupControl )
 {
     SolarMutexGuard aGuard;
 
@@ -168,7 +168,7 @@ void VCLXContainer::setTabOrder( const css::uno::Sequence< css::uno::Reference< 
     }
 }
 
-void VCLXContainer::setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components ) throw(css::uno::RuntimeException, std::exception)
+void VCLXContainer::setGroup( const css::uno::Sequence< css::uno::Reference< css::awt::XWindow > >& Components )
 {
     SolarMutexGuard aGuard;
 
@@ -228,7 +228,6 @@ void VCLXContainer::setGroup( const css::uno::Sequence< css::uno::Reference< css
 void SAL_CALL VCLXContainer::setProperty(
     const OUString& PropertyName,
     const css::uno::Any& Value )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

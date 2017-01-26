@@ -60,8 +60,7 @@ public:
 protected:
     // XDispatch
     virtual void SAL_CALL dispatch( const css::util::URL& URL,
-        const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
 
     virtual void fireStatusEvent( const OUString& rURL,
         const css::uno::Reference< css::frame::XStatusListener >& xSingleListener ) override;

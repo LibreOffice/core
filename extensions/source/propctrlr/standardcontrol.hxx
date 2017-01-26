@@ -86,9 +86,9 @@ namespace pcr
         OTimeControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
     };
 
 
@@ -101,9 +101,9 @@ namespace pcr
         ODateControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
     };
 
 
@@ -119,9 +119,9 @@ namespace pcr
         OEditControl( vcl::Window* _pParent, bool _bPassWord, WinBits nWinStyle );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
 
     protected:
         // CommonBehaviourControlHelper::modified
@@ -138,9 +138,9 @@ namespace pcr
         ODateTimeControl( vcl::Window* pParent,WinBits nWinStyle );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
     };
 
 
@@ -184,13 +184,13 @@ namespace pcr
         OHyperlinkControl( vcl::Window* _pParent, WinBits _nWinStyle );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
 
         // XHyperlinkControl
-        virtual void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
+        virtual void SAL_CALL removeActionListener( const css::uno::Reference< css::awt::XActionListener >& listener ) override;
 
     protected:
         // XComponent
@@ -228,21 +228,21 @@ namespace pcr
         ONumericControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
 
         // XNumericControl
-        virtual ::sal_Int16 SAL_CALL getDecimalDigits() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setDecimalDigits( ::sal_Int16 _decimaldigits ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::beans::Optional< double > SAL_CALL getMinValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setMinValue( const css::beans::Optional< double >& _minvalue ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::beans::Optional< double > SAL_CALL getMaxValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setMaxValue( const css::beans::Optional< double >& _maxvalue ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int16 SAL_CALL getDisplayUnit() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setDisplayUnit( ::sal_Int16 _displayunit ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int16 SAL_CALL getValueUnit() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValueUnit( ::sal_Int16 _valueunit ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual ::sal_Int16 SAL_CALL getDecimalDigits() override;
+        virtual void SAL_CALL setDecimalDigits( ::sal_Int16 _decimaldigits ) override;
+        virtual css::beans::Optional< double > SAL_CALL getMinValue() override;
+        virtual void SAL_CALL setMinValue( const css::beans::Optional< double >& _minvalue ) override;
+        virtual css::beans::Optional< double > SAL_CALL getMaxValue() override;
+        virtual void SAL_CALL setMaxValue( const css::beans::Optional< double >& _maxvalue ) override;
+        virtual ::sal_Int16 SAL_CALL getDisplayUnit() override;
+        virtual void SAL_CALL setDisplayUnit( ::sal_Int16 _displayunit ) override;
+        virtual ::sal_Int16 SAL_CALL getValueUnit() override;
+        virtual void SAL_CALL setValueUnit( ::sal_Int16 _valueunit ) override;
 
     private:
         /** converts an API value (<code>double</code>, as passed into <code>set[Max|Min|]Value) into
@@ -270,9 +270,9 @@ namespace pcr
         OColorControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
 
     protected:
         // CommonBehaviourControlHelper::setModified
@@ -291,15 +291,15 @@ namespace pcr
         OListboxControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
 
         // XStringListControl
-        virtual void SAL_CALL clearList(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL clearList(  ) override;
+        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) override;
+        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
 
     protected:
         // CommonBehaviourControlHelper::setModified
@@ -316,15 +316,15 @@ namespace pcr
         OComboboxControl( vcl::Window* pParent, WinBits nWinStyle );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
 
         // XStringListControl
-        virtual void SAL_CALL clearList(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL clearList(  ) override;
+        virtual void SAL_CALL prependListEntry( const OUString& NewEntry ) override;
+        virtual void SAL_CALL appendListEntry( const OUString& NewEntry ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getListEntries(  ) override;
 
     protected:
         DECL_LINK( OnEntrySelected, ComboBox&, void );
@@ -395,9 +395,9 @@ namespace pcr
         OMultilineEditControl( vcl::Window* pParent, MultiLineOperationMode _eMode, WinBits nWinStyle  );
 
         // XPropertyControl
-        virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::beans::IllegalTypeException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Type SAL_CALL getValueType() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getValue() override;
+        virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+        virtual css::uno::Type SAL_CALL getValueType() override;
     };
 
 

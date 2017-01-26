@@ -37,14 +37,14 @@ namespace frm
 
     protected:
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (::css::uno::RuntimeException, std::exception) override;
-        virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (::css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual ::css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XPersistObject
         DECLARE_XPERSISTOBJECT()
 
         // XCloneable
-        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
         // XPropertyState
         virtual css::uno::Any getPropertyDefaultByHandle( sal_Int32 _nHandle ) const override;
@@ -56,10 +56,8 @@ namespace frm
 
         // OPropertySetHelper
         virtual void SAL_CALL getFastPropertyValue( css::uno::Any& _rValue, sal_Int32 _nHandle ) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue )
-            throw ( css::uno::Exception, std::exception ) override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue )
-            throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
 
         // OBoundControlModel
         virtual css::uno::Any   translateDbColumnToControlValue( ) override;

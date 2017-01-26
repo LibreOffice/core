@@ -317,26 +317,26 @@ namespace accessibility
 
     // XServiceInfo
 
-    OUString SAL_CALL AccessibleListBox::getImplementationName() throw(RuntimeException, std::exception)
+    OUString SAL_CALL AccessibleListBox::getImplementationName()
     {
         return OUString( "com.sun.star.comp.svtools.AccessibleTreeListBox" );
     }
 
-    Sequence< OUString > SAL_CALL AccessibleListBox::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL AccessibleListBox::getSupportedServiceNames()
     {
         return {"com.sun.star.accessibility.AccessibleContext",
                 "com.sun.star.accessibility.AccessibleComponent",
                 "com.sun.star.awt.AccessibleTreeListBox"};
     }
 
-    sal_Bool SAL_CALL AccessibleListBox::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL AccessibleListBox::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
     // XAccessible
 
-    Reference< XAccessibleContext > SAL_CALL AccessibleListBox::getAccessibleContext(  ) throw (RuntimeException, std::exception)
+    Reference< XAccessibleContext > SAL_CALL AccessibleListBox::getAccessibleContext(  )
     {
         ensureAlive();
         return this;
@@ -344,7 +344,7 @@ namespace accessibility
 
     // XAccessibleContext
 
-    sal_Int32 SAL_CALL AccessibleListBox::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL AccessibleListBox::getAccessibleChildCount(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -358,7 +358,7 @@ namespace accessibility
         return nCount;
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException,RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleChild( sal_Int32 i )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -372,7 +372,7 @@ namespace accessibility
         return new AccessibleListBoxEntry( *getListBox(), pEntry, nullptr );
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleParent(  ) throw (RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL AccessibleListBox::getAccessibleParent(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -410,7 +410,6 @@ namespace accessibility
     }
 
     sal_Int16 SAL_CALL AccessibleListBox::getAccessibleRole()
-        throw (RuntimeException, std::exception)
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -434,7 +433,7 @@ namespace accessibility
             return AccessibleRole::TREE;
     }
 
-    OUString SAL_CALL AccessibleListBox::getAccessibleDescription(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL AccessibleListBox::getAccessibleDescription(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -442,7 +441,7 @@ namespace accessibility
         return getListBox()->GetAccessibleDescription();
     }
 
-    OUString SAL_CALL AccessibleListBox::getAccessibleName(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL AccessibleListBox::getAccessibleName(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -452,7 +451,7 @@ namespace accessibility
 
     // XAccessibleSelection
 
-    void SAL_CALL AccessibleListBox::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL AccessibleListBox::selectAccessibleChild( sal_Int32 nChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -465,7 +464,7 @@ namespace accessibility
         getListBox()->Select( pEntry );
     }
 
-    sal_Bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL AccessibleListBox::isAccessibleChildSelected( sal_Int32 nChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -478,7 +477,7 @@ namespace accessibility
         return getListBox()->IsSelected( pEntry );
     }
 
-    void SAL_CALL AccessibleListBox::clearAccessibleSelection(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL AccessibleListBox::clearAccessibleSelection(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -493,7 +492,7 @@ namespace accessibility
         }
     }
 
-    void SAL_CALL AccessibleListBox::selectAllAccessibleChildren(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL AccessibleListBox::selectAllAccessibleChildren(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -508,7 +507,7 @@ namespace accessibility
         }
     }
 
-    sal_Int32 SAL_CALL AccessibleListBox::getSelectedAccessibleChildCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL AccessibleListBox::getSelectedAccessibleChildCount(  )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -517,7 +516,7 @@ namespace accessibility
         return getListBox()->GetSelectionCount();
     }
 
-    Reference< XAccessible > SAL_CALL AccessibleListBox::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    Reference< XAccessible > SAL_CALL AccessibleListBox::getSelectedAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 
@@ -547,7 +546,7 @@ namespace accessibility
         return xChild;
     }
 
-    void SAL_CALL AccessibleListBox::deselectAccessibleChild( sal_Int32 nSelectedChildIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL AccessibleListBox::deselectAccessibleChild( sal_Int32 nSelectedChildIndex )
     {
         ::comphelper::OExternalLockGuard aGuard( this );
 

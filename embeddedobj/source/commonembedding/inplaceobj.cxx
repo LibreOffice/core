@@ -36,9 +36,6 @@ bool RectanglesEqual( const awt::Rectangle& aRect1, const awt::Rectangle& aRect2
 
 void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& aPosRect,
                                                            const awt::Rectangle& aClipRect )
-        throw ( embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -62,17 +59,12 @@ void SAL_CALL OCommonEmbeddedObject::setObjectRectangles( const awt::Rectangle& 
 }
 
 void SAL_CALL OCommonEmbeddedObject::enableModeless( sal_Bool /*bEnable*/ )
-        throw ( embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // TODO: notify model that it can not use modal dialogs
 }
 
 void SAL_CALL OCommonEmbeddedObject::translateAccelerators(
                     const uno::Sequence< awt::KeyEvent >& /*aKeys*/ )
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // TODO: UI activation related
 }

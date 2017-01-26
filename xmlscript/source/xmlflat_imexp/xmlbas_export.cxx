@@ -50,14 +50,14 @@ namespace xmlscript
     }
 
     // XServiceInfo
-    sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool XMLBasicExporterBase::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
 
     // XInitialization
 
-    void XMLBasicExporterBase::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
+    void XMLBasicExporterBase::initialize( const Sequence< Any >& aArguments )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -79,7 +79,6 @@ namespace xmlscript
     // XExporter
 
     void XMLBasicExporterBase::setSourceDocument( const Reference< XComponent >& rxDoc )
-        throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -94,7 +93,6 @@ namespace xmlscript
     // XFilter
 
 sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /*aDescriptor*/ )
-        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -329,7 +327,6 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
     }
 
     void XMLBasicExporterBase::cancel()
-        throw (RuntimeException, std::exception)
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -349,12 +346,12 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     // XServiceInfo
 
-    OUString XMLBasicExporter::getImplementationName(  ) throw (RuntimeException, std::exception)
+    OUString XMLBasicExporter::getImplementationName(  )
     {
         return OUString( "com.sun.star.comp.xmlscript.XMLBasicExporter" );
     }
 
-    Sequence< OUString > XMLBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > XMLBasicExporter::getSupportedServiceNames(  )
     {
         Sequence< OUString > aNames { "com.sun.star.document.XMLBasicExporter" };
         return aNames;
@@ -373,12 +370,12 @@ sal_Bool XMLBasicExporterBase::filter( const Sequence< beans::PropertyValue >& /
 
     // XServiceInfo
 
-    OUString XMLOasisBasicExporter::getImplementationName(  ) throw (RuntimeException, std::exception)
+    OUString XMLOasisBasicExporter::getImplementationName(  )
     {
         return OUString( "com.sun.star.comp.xmlscript.XMLOasisBasicExporter" );
     }
 
-    Sequence< OUString > XMLOasisBasicExporter::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > XMLOasisBasicExporter::getSupportedServiceNames(  )
     {
         Sequence< OUString > aNames { "com.sun.star.document.XMLOasisBasicExporter" };
         return aNames;

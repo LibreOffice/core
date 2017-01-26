@@ -71,7 +71,7 @@ namespace frm
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarControl, UnoControl, ONavigationBarControl_Base )
 
 
-    Any SAL_CALL ONavigationBarControl::queryAggregation( const Type& _rType ) throw ( RuntimeException, std::exception )
+    Any SAL_CALL ONavigationBarControl::queryAggregation( const Type& _rType )
     {
         Any aReturn = UnoControl::queryAggregation( _rType );
 
@@ -112,7 +112,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ONavigationBarControl::createPeer( const Reference< XToolkit >& /*_rToolkit*/, const Reference< XWindowPeer >& _rParentPeer ) throw( RuntimeException, std::exception )
+    void SAL_CALL ONavigationBarControl::createPeer( const Reference< XToolkit >& /*_rToolkit*/, const Reference< XWindowPeer >& _rParentPeer )
     {
         SolarMutexGuard aGuard;
 
@@ -163,32 +163,32 @@ namespace frm
     }
 
 
-    OUString SAL_CALL ONavigationBarControl::getImplementationName()  throw( RuntimeException, std::exception )
+    OUString SAL_CALL ONavigationBarControl::getImplementationName()
     {
         return OUString( "com.sun.star.comp.form.ONavigationBarControl" );
     }
 
 
-    Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames()  throw( RuntimeException, std::exception )
+    Sequence< OUString > SAL_CALL ONavigationBarControl::getSupportedServiceNames()
     {
         return { "com.sun.star.awt.UnoControl",
         "com.sun.star.form.control.NavigationToolBar" };
     }
 
 
-    void SAL_CALL ONavigationBarControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException, std::exception)
+    void SAL_CALL ONavigationBarControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         FORWARD_TO_PEER_1( XDispatchProviderInterception, registerDispatchProviderInterceptor, _rxInterceptor );
     }
 
 
-    void SAL_CALL ONavigationBarControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException, std::exception)
+    void SAL_CALL ONavigationBarControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         FORWARD_TO_PEER_1( XDispatchProviderInterception, releaseDispatchProviderInterceptor, _rxInterceptor );
     }
 
 
-    void SAL_CALL ONavigationBarControl::setDesignMode( sal_Bool _bOn ) throw( RuntimeException, std::exception )
+    void SAL_CALL ONavigationBarControl::setDesignMode( sal_Bool _bOn )
     {
         UnoControl::setDesignMode( _bOn );
         FORWARD_TO_PEER_1( XVclWindowPeer, setDesignMode, _bOn );
@@ -253,14 +253,14 @@ namespace frm
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ONavigationBarPeer, VCLXWindow, OFormNavigationHelper )
 
 
-    void SAL_CALL ONavigationBarPeer::dispose(  ) throw( RuntimeException, std::exception )
+    void SAL_CALL ONavigationBarPeer::dispose(  )
     {
         VCLXWindow::dispose();
         OFormNavigationHelper::dispose();
     }
 
 
-    void SAL_CALL ONavigationBarPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue ) throw( RuntimeException, std::exception )
+    void SAL_CALL ONavigationBarPeer::setProperty( const OUString& _rPropertyName, const Any& _rValue )
     {
         SolarMutexGuard aGuard;
 
@@ -340,7 +340,7 @@ namespace frm
     }
 
 
-    Any SAL_CALL ONavigationBarPeer::getProperty( const OUString& _rPropertyName ) throw( RuntimeException, std::exception )
+    Any SAL_CALL ONavigationBarPeer::getProperty( const OUString& _rPropertyName )
     {
         SolarMutexGuard aGuard;
 
@@ -446,7 +446,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ONavigationBarPeer::setDesignMode( sal_Bool _bOn ) throw( RuntimeException, std::exception )
+    void SAL_CALL ONavigationBarPeer::setDesignMode( sal_Bool _bOn )
     {
         VCLXWindow::setDesignMode( _bOn  );
 
@@ -458,7 +458,7 @@ namespace frm
     }
 
 
-    void SAL_CALL ONavigationBarPeer::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
+    void SAL_CALL ONavigationBarPeer::disposing( const EventObject& _rSource )
     {
         VCLXWindow::disposing( _rSource );
         OFormNavigationHelper::disposing( _rSource );

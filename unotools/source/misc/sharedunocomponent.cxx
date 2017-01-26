@@ -87,11 +87,11 @@ namespace utl
         virtual ~CloseableComponentImpl() override;
 
         // XCloseListener overridables
-        virtual void SAL_CALL queryClosing( const EventObject& Source, sal_Bool GetsOwnership ) throw (CloseVetoException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL notifyClosing( const EventObject& Source ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL queryClosing( const EventObject& Source, sal_Bool GetsOwnership ) override;
+        virtual void SAL_CALL notifyClosing( const EventObject& Source ) override;
 
         // XEventListener overridables
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     private:
         /** starts or stops being a CloseListener at the component
@@ -158,7 +158,7 @@ namespace utl
         }
     }
 
-    void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject& Source, sal_Bool /*GetsOwnership*/ ) throw (CloseVetoException, RuntimeException, std::exception)
+    void SAL_CALL CloseableComponentImpl::queryClosing( const EventObject& Source, sal_Bool /*GetsOwnership*/ )
     {
         // as long as we live, somebody wants to keep the object alive. So, veto the
         // closing
@@ -166,7 +166,7 @@ namespace utl
         throw CloseVetoException();
     }
 
-    void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject& Source ) throw (RuntimeException, std::exception)
+    void SAL_CALL CloseableComponentImpl::notifyClosing( const EventObject& Source )
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::notifyClosing: where did this come from?" );
 
@@ -176,7 +176,7 @@ namespace utl
         OSL_FAIL( "CloseableComponentImpl::notifyClosing: unreachable!" );
     }
 
-    void SAL_CALL CloseableComponentImpl::disposing( const EventObject& Source ) throw (RuntimeException, std::exception)
+    void SAL_CALL CloseableComponentImpl::disposing( const EventObject& Source )
     {
         DBG_ASSERT( Source.Source == m_xCloseable, "CloseableComponentImpl::disposing: where did this come from?" );
         OSL_FAIL( "CloseableComponentImpl::disposing: unreachable!" );

@@ -42,19 +42,19 @@ public:
     explicit CURI();
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) override;
 
     // css::rdf::XNode:
-    virtual OUString SAL_CALL getStringValue() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getStringValue() override;
 
     // css::rdf::XURI:
-    virtual OUString SAL_CALL getLocalName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNamespace() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getLocalName() override;
+    virtual OUString SAL_CALL getNamespace() override;
 
 private:
     CURI(CURI const&) = delete;
@@ -72,17 +72,17 @@ CURI::CURI() :
 {}
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL CURI::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL CURI::getImplementationName()
 {
     return comp_CURI::_getImplementationName();
 }
 
-sal_Bool SAL_CALL CURI::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL CURI::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL CURI::getSupportedServiceNames()
 {
     return comp_CURI::_getSupportedServiceNames();
 }
@@ -709,7 +709,7 @@ void SAL_CALL CURI::initFromConstant(const sal_Int16 i_Constant)
 }
 
 // css::lang::XInitialization:
-void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArguments) throw (css::uno::RuntimeException, css::uno::Exception, std::exception)
+void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArguments)
 {
     sal_Int32 len = aArguments.getLength();
     if ((len < 1) || (len > 2)) {
@@ -783,18 +783,18 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
 }
 
 // css::rdf::XNode:
-OUString SAL_CALL CURI::getStringValue() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL CURI::getStringValue()
 {
     return m_Namespace + m_LocalName;
 }
 
 // css::rdf::XURI:
-OUString SAL_CALL CURI::getNamespace() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL CURI::getNamespace()
 {
     return m_Namespace;
 }
 
-OUString SAL_CALL CURI::getLocalName() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL CURI::getLocalName()
 {
     return m_LocalName;
 }

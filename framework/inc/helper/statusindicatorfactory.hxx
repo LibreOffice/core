@@ -194,37 +194,30 @@ class StatusIndicatorFactory : public  ::cppu::WeakImplHelper<
     public:
         StatusIndicatorFactory(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-        virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) override
+        virtual OUString SAL_CALL getImplementationName() override
         {
             return OUString("com.sun.star.comp.framework.StatusIndicatorFactory");
         }
 
-        virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-            throw (css::uno::RuntimeException, std::exception) override
+        virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
         {
             return cppu::supportsService(this, ServiceName);
         }
 
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException, std::exception) override
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
         {
             css::uno::Sequence< OUString > aSeq { "com.sun.star.task.StatusIndicatorFactory" };
             return aSeq;
         }
 
         // XInitialization
-        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
-            throw(css::uno::Exception       ,
-                  css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any >& lArguments) override;
 
         // XStatusIndicatorFactory
-        virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator()
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::task::XStatusIndicator > SAL_CALL createStatusIndicator() override;
 
         // XUpdatable
-        virtual void SAL_CALL update()
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL update() override;
 
         // similar (XStatusIndicator)
         void start(const css::uno::Reference< css::task::XStatusIndicator >& xChild,

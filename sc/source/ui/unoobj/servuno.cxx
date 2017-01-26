@@ -92,7 +92,7 @@ public:
         maWorkbook <<= ooo::vba::createVBAUnoAPIServiceWithArgs( mpDocShell, "ooo.vba.excel.Workbook", aArgs );
     }
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception ) override
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
         SolarMutexGuard aGuard;
         maCachedObject = uno::Any(); // clear cached object
@@ -135,14 +135,14 @@ public:
         return maCachedObject.hasValue();
 
     }
-    css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override
+    css::uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         SolarMutexGuard aGuard;
         if ( !hasByName( aName ) )
             throw css::container::NoSuchElementException();
         return maCachedObject;
     }
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         SolarMutexGuard aGuard;
         ScDocument& rDoc = mpDocShell->GetDocument();
@@ -159,8 +159,8 @@ public:
         return aNames;
     }
     // XElemenAccess
-    virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override { return uno::Type(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception ) override { return true; }
+    virtual css::uno::Type SAL_CALL getElementType(  ) override { return uno::Type(); }
+    virtual sal_Bool SAL_CALL hasElements(  ) override { return true; }
 
 };
 
@@ -170,7 +170,7 @@ class ScVbaCodeNameProvider : public ::cppu::WeakImplHelper< document::XCodeName
 public:
     explicit ScVbaCodeNameProvider( ScDocShell& rDocShell ) : mrDocShell(rDocShell) {}
     // XCodeNameQuery
-    OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) throw( uno::RuntimeException, std::exception ) override
+    OUString SAL_CALL getCodeNameForObject( const uno::Reference< uno::XInterface >& xIf ) override
     {
         SolarMutexGuard aGuard;
         OUString sCodeName;
@@ -209,8 +209,7 @@ public:
         return sCodeName;
     }
 
-    OUString SAL_CALL getCodeNameForContainer( const uno::Reference<uno::XInterface>& xContainer )
-            throw( uno::RuntimeException, std::exception ) override
+    OUString SAL_CALL getCodeNameForContainer( const uno::Reference<uno::XInterface>& xContainer ) override
     {
         SolarMutexGuard aGuard;
         uno::Reference<drawing::XDrawPagesSupplier> xSupplier(mrDocShell.GetModel(), uno::UNO_QUERY_THROW);

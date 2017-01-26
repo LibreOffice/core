@@ -275,7 +275,6 @@ uno::Sequence< uno::Reference< linguistic2::XMeaning > > SvxThesaurusDialog::que
         OUString& rTerm,
         const lang::Locale& rLocale,
         const beans::PropertyValues& rProperties )
-    throw(lang::IllegalArgumentException, uno::RuntimeException)
 {
     uno::Sequence< uno::Reference< linguistic2::XMeaning > > aMeanings(
             xThesaurus->queryMeanings( rTerm, rLocale, rProperties ) );

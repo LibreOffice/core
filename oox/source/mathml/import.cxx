@@ -40,10 +40,10 @@ public:
 
     // com.sun.star.xml.sax.XFastContextHandler interface ---------------------
 
-    virtual void SAL_CALL startFastElement(::sal_Int32 Element, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endFastElement(::sal_Int32 Element) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
-    virtual uno::Reference< xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(::sal_Int32 Element, const uno::Reference<xml::sax::XFastAttributeList >& xAttribs) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL characters(const OUString& rChars) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startFastElement(::sal_Int32 Element, const uno::Reference<xml::sax::XFastAttributeList>& xAttribs) override;
+    virtual void SAL_CALL endFastElement(::sal_Int32 Element) override;
+    virtual uno::Reference< xml::sax::XFastContextHandler> SAL_CALL createFastChildContext(::sal_Int32 Element, const uno::Reference<xml::sax::XFastAttributeList >& xAttribs) override;
+    virtual void SAL_CALL characters(const OUString& rChars) override;
 
 };
 
@@ -58,7 +58,6 @@ LazyMathBufferingContext::LazyMathBufferingContext(
 void SAL_CALL LazyMathBufferingContext::startFastElement(
         sal_Int32 const nElement,
         uno::Reference<xml::sax::XFastAttributeList> const& xAttrs)
-    throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     if (0 < m_Counter) // ignore a14:m
     {   // ignore outer oMathPara
@@ -71,7 +70,6 @@ void SAL_CALL LazyMathBufferingContext::startFastElement(
 }
 
 void SAL_CALL LazyMathBufferingContext::endFastElement(sal_Int32 const nElement)
-    throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     --m_Counter;
     if (0 < m_Counter) // ignore a14:m
@@ -86,13 +84,11 @@ void SAL_CALL LazyMathBufferingContext::endFastElement(sal_Int32 const nElement)
 uno::Reference<xml::sax::XFastContextHandler> SAL_CALL
 LazyMathBufferingContext::createFastChildContext(sal_Int32 const,
         uno::Reference<xml::sax::XFastAttributeList> const&)
-    throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     return this;
 }
 
 void SAL_CALL LazyMathBufferingContext::characters(OUString const& rChars)
-    throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     if (0 < m_Counter) // ignore a14:m
     {

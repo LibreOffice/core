@@ -103,7 +103,7 @@ void OFileTable::refreshIndexes()
 {
 }
 
-Any SAL_CALL OFileTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OFileTable::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XKeysSupplier>::get()||
         rType == cppu::UnoType<XRename>::get()||
@@ -141,7 +141,7 @@ Sequence< sal_Int8 > OFileTable::getUnoTunnelImplementationId()
 
 // css::lang::XUnoTunnel
 
-sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
+sal_Int64 OFileTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )

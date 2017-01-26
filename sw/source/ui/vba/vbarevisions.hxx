@@ -37,12 +37,12 @@ public:
     SwVbaRevisions( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // Methods
-    virtual void SAL_CALL AcceptAll(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL RejectAll(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL AcceptAll(  ) override;
+    virtual void SAL_CALL RejectAll(  ) override;
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaRevisions_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;

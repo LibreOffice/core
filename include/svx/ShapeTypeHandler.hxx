@@ -139,8 +139,7 @@ public:
     ///
     /// @throws css::uno::RuntimeException
     static OUString CreateAccessibleBaseName (
-        const css::uno::Reference< css::drawing::XShape >& rxShape)
-            throw (css::uno::RuntimeException, std::exception);
+        const css::uno::Reference< css::drawing::XShape >& rxShape);
 
 private:
     // Declare default constructor, copy constructor, destructor, and

@@ -44,28 +44,27 @@ CharacterClassificationImpl::~CharacterClassificationImpl() {
 
 OUString SAL_CALL
 CharacterClassificationImpl::toUpper( const OUString& Text, sal_Int32 nPos,
-        sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException, std::exception)
+        sal_Int32 nCount, const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->toUpper(Text, nPos, nCount, rLocale);
 }
 
 OUString SAL_CALL
 CharacterClassificationImpl::toLower( const OUString& Text, sal_Int32 nPos,
-        sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException, std::exception)
+        sal_Int32 nCount, const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->toLower(Text, nPos, nCount, rLocale);
 }
 
 OUString SAL_CALL
 CharacterClassificationImpl::toTitle( const OUString& Text, sal_Int32 nPos,
-        sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException, std::exception)
+        sal_Int32 nCount, const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->toTitle(Text, nPos, nCount, rLocale);
 }
 
 sal_Int16 SAL_CALL
 CharacterClassificationImpl::getType( const OUString& Text, sal_Int32 nPos )
-        throw(RuntimeException, std::exception)
 {
     if (xUCI.is())
         return xUCI->getType(Text, nPos);
@@ -74,7 +73,6 @@ CharacterClassificationImpl::getType( const OUString& Text, sal_Int32 nPos )
 
 sal_Int16 SAL_CALL
 CharacterClassificationImpl::getCharacterDirection( const OUString& Text, sal_Int32 nPos )
-        throw(RuntimeException, std::exception)
 {
     if (xUCI.is())
         return xUCI->getCharacterDirection(Text, nPos);
@@ -83,7 +81,6 @@ CharacterClassificationImpl::getCharacterDirection( const OUString& Text, sal_In
 
 sal_Int16 SAL_CALL
 CharacterClassificationImpl::getScript( const OUString& Text, sal_Int32 nPos )
-        throw(RuntimeException, std::exception)
 {
     if (xUCI.is())
         return xUCI->getScript(Text, nPos);
@@ -92,14 +89,14 @@ CharacterClassificationImpl::getScript( const OUString& Text, sal_Int32 nPos )
 
 sal_Int32 SAL_CALL
 CharacterClassificationImpl::getCharacterType( const OUString& Text, sal_Int32 nPos,
-        const Locale& rLocale ) throw(RuntimeException, std::exception)
+        const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->getCharacterType(Text, nPos, rLocale);
 }
 
 sal_Int32 SAL_CALL
 CharacterClassificationImpl::getStringType( const OUString& Text, sal_Int32 nPos,
-        sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException, std::exception)
+        sal_Int32 nCount, const Locale& rLocale )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->getStringType(Text, nPos, nCount, rLocale);
 }
@@ -108,7 +105,6 @@ ParseResult SAL_CALL CharacterClassificationImpl::parseAnyToken(
         const OUString& Text, sal_Int32 nPos, const Locale& rLocale,
         sal_Int32 startCharTokenType, const OUString& userDefinedCharactersStart,
         sal_Int32 contCharTokenType, const OUString& userDefinedCharactersCont )
-        throw(RuntimeException, std::exception)
 {
     return getLocaleSpecificCharacterClassification(rLocale)->parseAnyToken(Text, nPos, rLocale,
             startCharTokenType,userDefinedCharactersStart,
@@ -120,7 +116,7 @@ ParseResult SAL_CALL CharacterClassificationImpl::parsePredefinedToken(
         sal_Int32 nTokenType, const OUString& Text, sal_Int32 nPos,
         const Locale& rLocale, sal_Int32 startCharTokenType,
         const OUString& userDefinedCharactersStart, sal_Int32 contCharTokenType,
-        const OUString& userDefinedCharactersCont ) throw(RuntimeException, std::exception)
+        const OUString& userDefinedCharactersCont )
 {
     return getLocaleSpecificCharacterClassification(rLocale)->parsePredefinedToken(
             nTokenType, Text, nPos, rLocale, startCharTokenType, userDefinedCharactersStart,
@@ -154,7 +150,6 @@ bool SAL_CALL CharacterClassificationImpl::createLocaleSpecificCharacterClassifi
 
 Reference < XCharacterClassification > const & SAL_CALL
 CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Locale& rLocale)
-        throw(RuntimeException)
 {
     // reuse instance if locale didn't change
     if (cachedItem && cachedItem->equals(rLocale))
@@ -193,20 +188,18 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
 
 OUString SAL_CALL
 CharacterClassificationImpl::getImplementationName()
-                throw( RuntimeException, std::exception )
 {
     return OUString("com.sun.star.i18n.CharacterClassification");
 }
 
 sal_Bool SAL_CALL
 CharacterClassificationImpl::supportsService(const OUString& rServiceName)
-                throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-CharacterClassificationImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
+CharacterClassificationImpl::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { "com.sun.star.i18n.CharacterClassification" };
     return aRet;

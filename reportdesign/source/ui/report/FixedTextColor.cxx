@@ -151,7 +151,7 @@ namespace rptui
 
 
     // XPropertyChangeListener
-    uno::Reference<awt::XControl> FixedTextColor::getXControl(const uno::Reference< report::XFixedText >& _xFixedText) throw(uno::RuntimeException)
+    uno::Reference<awt::XControl> FixedTextColor::getXControl(const uno::Reference< report::XFixedText >& _xFixedText)
     {
 
         uno::Reference<awt::XControl> xControl;
@@ -184,7 +184,7 @@ namespace rptui
     }
 
 
-    uno::Reference<awt::XVclWindowPeer> FixedTextColor::getVclWindowPeer(const uno::Reference< report::XFixedText >& _xComponent) throw(uno::RuntimeException)
+    uno::Reference<awt::XVclWindowPeer> FixedTextColor::getVclWindowPeer(const uno::Reference< report::XFixedText >& _xComponent)
     {
         uno::Reference<awt::XVclWindowPeer> xVclWindowPeer;
         uno::Reference<awt::XControl> xControl = getXControl(_xComponent);

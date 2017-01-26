@@ -38,39 +38,39 @@ private:
 
 private:
     /// @throws css::uno::RuntimeException
-    void setIndentWithAdjustNone( sal_Int32 indent ) throw (css::uno::RuntimeException);
+    void setIndentWithAdjustNone( sal_Int32 indent );
     /// @throws css::uno::RuntimeException
-    void setIndentWithAdjustFirstColumn( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent ) throw (css::uno::RuntimeException);
+    void setIndentWithAdjustFirstColumn( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
     /// @throws css::uno::RuntimeException
-    void setIndentWithAdjustProportional( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent ) throw (css::uno::RuntimeException);
+    void setIndentWithAdjustProportional( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
     /// @throws css::uno::RuntimeException
-    void setIndentWithAdjustSameWidth( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent ) throw (css::uno::RuntimeException);
+    void setIndentWithAdjustSameWidth( const css::uno::Reference< ooo::vba::word::XColumns >& xColumns, sal_Int32 indent );
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows ) throw ( css::uno::RuntimeException );
+    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows );
     /// @throws css::uno::RuntimeException
-    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex ) throw ( css::uno::RuntimeException );
+    SwVbaRows( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, const css::uno::Reference< css::table::XTableRows >& xTableRows, sal_Int32 nStarIndex, sal_Int32 nEndIndex );
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getAlignment() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAlignment( ::sal_Int32 _alignment ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getAllowBreakAcrossPages() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAllowBreakAcrossPages( const css::uno::Any& _allowbreakacrosspages ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual float SAL_CALL getSpaceBetweenColumns() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSpaceBetweenColumns( float _spacebetweencolumns ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getAlignment() override;
+    virtual void SAL_CALL setAlignment( ::sal_Int32 _alignment ) override;
+    virtual css::uno::Any SAL_CALL getAllowBreakAcrossPages() override;
+    virtual void SAL_CALL setAllowBreakAcrossPages( const css::uno::Any& _allowbreakacrosspages ) override;
+    virtual float SAL_CALL getSpaceBetweenColumns() override;
+    virtual void SAL_CALL setSpaceBetweenColumns( float _spacebetweencolumns ) override;
 
     // Methods
-    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL SetLeftIndent( float LeftIndent, ::sal_Int32 RulerStyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Delete(  ) override;
+    virtual void SAL_CALL SetLeftIndent( float LeftIndent, ::sal_Int32 RulerStyle ) override;
+    virtual void SAL_CALL Select(  ) override;
 
     //XCollection
-    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/ ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException) override;
+    virtual ::sal_Int32 SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL Item( const css::uno::Any& Index1, const css::uno::Any& /*not processed in this base class*/ ) override;
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // SwVbaRows_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;

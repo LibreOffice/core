@@ -74,7 +74,7 @@ User::User( const ::rtl::Reference< RefCountedMutex > & refMutex,
         * getStatics().refl.user.pProps )
 {}
 
-Reference< XPropertySet > User::createDataDescriptor(  ) throw (RuntimeException, std::exception)
+Reference< XPropertySet > User::createDataDescriptor(  )
 {
     UserDescriptor * pUser = new UserDescriptor( m_refMutex, m_conn, m_pSettings );
     pUser->copyValuesFrom( this );
@@ -83,7 +83,7 @@ Reference< XPropertySet > User::createDataDescriptor(  ) throw (RuntimeException
 }
 
 
-Sequence<Type > User::getTypes() throw( RuntimeException, std::exception )
+Sequence<Type > User::getTypes()
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -100,12 +100,12 @@ Sequence<Type > User::getTypes() throw( RuntimeException, std::exception )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> User::getImplementationId() throw( RuntimeException, std::exception )
+Sequence< sal_Int8> User::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Any User::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
+Any User::queryInterface( const Type & reqType )
 {
     Any ret;
 
@@ -120,7 +120,6 @@ Any User::queryInterface( const Type & reqType ) throw (RuntimeException, std::e
 
 void User::changePassword(
     const OUString& oldPassword, const OUString& newPassword )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     (void) oldPassword;
     OUStringBuffer buf(128);
@@ -134,7 +133,6 @@ void User::changePassword(
 }
 
 sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     sal_Int32 ret = 0xffffffff;
     if (isLog(m_pSettings, LogLevel::Info))
@@ -152,7 +150,6 @@ sal_Int32 User::getPrivileges( const OUString& objName, sal_Int32 objType )
 }
 
 sal_Int32 User::getGrantablePrivileges( const OUString& objName, sal_Int32 objType )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     (void) objName; (void) objType;
     // all privileges
@@ -160,7 +157,6 @@ sal_Int32 User::getGrantablePrivileges( const OUString& objName, sal_Int32 objTy
 }
 
 void User::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     (void) objName; (void) objType; (void) objPrivileges;
     throw css::sdbc::SQLException("pq_driver: privilege change not implemented yet",
@@ -168,7 +164,6 @@ void User::grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int3
 }
 
 void User::revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     (void) objName; (void) objType; (void) objPrivileges;
     throw css::sdbc::SQLException("pq_driver: privilege change not implemented yet",
@@ -189,7 +184,7 @@ UserDescriptor::UserDescriptor(
         * getStatics().refl.userDescriptor.pProps )
 {}
 
-Reference< XPropertySet > UserDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
+Reference< XPropertySet > UserDescriptor::createDataDescriptor(  )
 {
     UserDescriptor * pUser = new UserDescriptor( m_refMutex, m_conn, m_pSettings );
     pUser->copyValuesFrom( this );

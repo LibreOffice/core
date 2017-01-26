@@ -43,51 +43,39 @@ public:
     IndexEntrySupplier_Common( const css::uno::Reference < css::uno::XComponentContext >& rxContext );
     virtual ~IndexEntrySupplier_Common() override;
 
-    virtual css::uno::Sequence < css::lang::Locale > SAL_CALL getLocaleList()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence < css::lang::Locale > SAL_CALL getLocaleList() override;
 
     virtual css::uno::Sequence < OUString > SAL_CALL getAlgorithmList(
-        const css::lang::Locale& rLocale )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) override;
 
     virtual sal_Bool SAL_CALL usePhoneticEntry(
-        const css::lang::Locale& rLocale )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) override;
 
     virtual OUString SAL_CALL getPhoneticCandidate( const OUString& IndexEntry,
-        const css::lang::Locale& rLocale )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) override;
 
     virtual sal_Bool SAL_CALL loadAlgorithm(
         const css::lang::Locale& rLocale,
-        const OUString& SortAlgorithm, sal_Int32 collatorOptions )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const OUString& SortAlgorithm, sal_Int32 collatorOptions ) override;
 
     virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry,
-        const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const OUString& PhoneticEntry, const css::lang::Locale& rLocale ) override;
 
     virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,
         const OUString& PhoneticEntry1, const css::lang::Locale& rLocale1,
         const OUString& IndexEntry2, const OUString& PhoneticEntry2,
-        const css::lang::Locale& rLocale2 )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale2 ) override;
 
     virtual OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
-        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm ) override;
 
     virtual OUString SAL_CALL getIndexFollowPageWord( sal_Bool MorePages,
-        const css::lang::Locale& rLocale )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
     const sal_Char *   implementationName;
@@ -99,8 +87,7 @@ protected:
 
     /// @throws css::uno::RuntimeException
     const OUString& SAL_CALL getEntry( const OUString& IndexEntry,
-        const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
-        throw (css::uno::RuntimeException);
+        const OUString& PhoneticEntry, const css::lang::Locale& rLocale );
 };
 
 } } } }

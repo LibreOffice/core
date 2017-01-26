@@ -75,7 +75,7 @@ public:
     {}
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     void StopListening(const uno::Reference< lang::XComponent >& xComp);
     void StartListening(const uno::Reference< lang::XComponent >& xComp);
@@ -83,7 +83,6 @@ public:
 
 // XEventListener
 void SAL_CALL SdrControlEventListenerImpl::disposing( const css::lang::EventObject& /*Source*/)
-    throw(css::uno::RuntimeException, std::exception)
 {
     if (pObj)
     {

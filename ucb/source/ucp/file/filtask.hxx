@@ -254,8 +254,7 @@ namespace fileaccess
         /// @throws css::ucb::DuplicateCommandIdentifierException
         void SAL_CALL startTask(
             sal_Int32 CommandId,
-            const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv )
-            throw( css::ucb::DuplicateCommandIdentifierException );
+            const css::uno::Reference< css::ucb::XCommandEnvironment >&  xCommandEnv );
 
         sal_Int32 SAL_CALL getCommandId();
         void SAL_CALL abort( sal_Int32 CommandId );
@@ -322,19 +321,13 @@ namespace fileaccess
         void SAL_CALL associate( const OUString& UnqPath,
                                  const OUString& PropertyName,
                                  const css::uno::Any& DefaultValue,
-                                 const sal_Int16 Attributes )
-            throw( css::beans::PropertyExistException,
-                   css::beans::IllegalTypeException,
-                   css::uno::RuntimeException);
+                                 const sal_Int16 Attributes );
 
         /// @throws css::beans::UnknownPropertyException
         /// @throws css::beans::NotRemoveableException
         /// @throws css::uno::RuntimeException
         void SAL_CALL deassociate( const OUString& UnqPath,
-                                   const OUString& PropertyName )
-            throw( css::beans::UnknownPropertyException,
-                   css::beans::NotRemoveableException,
-                   css::uno::RuntimeException);
+                                   const OUString& PropertyName );
 
 
         //  Every method having a command id is not allowed to throw anything,

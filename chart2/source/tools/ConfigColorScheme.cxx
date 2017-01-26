@@ -139,7 +139,6 @@ void ConfigColorScheme::retrieveConfigColors()
 
 // ____ XColorScheme ____
 ::sal_Int32 SAL_CALL ConfigColorScheme::getColorByIndex( ::sal_Int32 nIndex )
-    throw (uno::RuntimeException, std::exception)
 {
     if( m_bNeedsUpdate )
         retrieveConfigColors();
@@ -166,19 +165,16 @@ void ConfigColorScheme::notify( const OUString & rPropertyName )
 }
 
 OUString SAL_CALL ConfigColorScheme::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart2.ConfigDefaultColorScheme") ;
 }
 
 sal_Bool SAL_CALL ConfigColorScheme::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ConfigColorScheme::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.chart2.ColorScheme" };
 }

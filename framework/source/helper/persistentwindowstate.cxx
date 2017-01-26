@@ -48,8 +48,6 @@ PersistentWindowState::~PersistentWindowState()
 }
 
 void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::uno::Any >& lArguments)
-    throw(css::uno::Exception       ,
-          css::uno::RuntimeException, std::exception)
 {
     // check arguments
     css::uno::Reference< css::frame::XFrame > xFrame;
@@ -76,7 +74,6 @@ void SAL_CALL PersistentWindowState::initialize(const css::uno::Sequence< css::u
 }
 
 void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEvent& aEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     // We don't want to do this stuff when being used through LibreOfficeKit
     if( comphelper::LibreOfficeKit::isActive() )
@@ -139,7 +136,6 @@ void SAL_CALL PersistentWindowState::frameAction(const css::frame::FrameActionEv
 }
 
 void SAL_CALL PersistentWindowState::disposing(const css::lang::EventObject&)
-    throw(css::uno::RuntimeException, std::exception)
 {
     // nothing todo here - because we hold the frame as weak reference only
 }

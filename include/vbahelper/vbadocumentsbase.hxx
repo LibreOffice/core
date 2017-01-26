@@ -60,21 +60,21 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    VbaDocumentsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType ) throw (css::uno::RuntimeException);
+    VbaDocumentsBase( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, DOCUMENT_TYPE eDocType );
     virtual ~VbaDocumentsBase() override {}
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override = 0;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override = 0;
+    virtual css::uno::Type SAL_CALL getElementType() override = 0;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override = 0;
 
     // VbaDocumentsBase_BASE
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override = 0;
 
 protected:
     /// @throws css::uno::RuntimeException
-    css::uno::Any createDocument() throw (css::uno::RuntimeException, std::exception);
+    css::uno::Any createDocument();
     /// @throws css::uno::RuntimeException
-    css::uno::Any openDocument( const OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps ) throw (css::uno::RuntimeException);
+    css::uno::Any openDocument( const OUString& Filename, const css::uno::Any& ReadOnly, const css::uno::Sequence< css::beans::PropertyValue >& rProps );
 };
 
 #endif /* SC_ INCLUDED_VBAHELPER_VBADOCUMENTSBASE_HXX */

@@ -69,7 +69,6 @@ void SAL_CALL FTPContentProvider::release()
 }
 
 css::uno::Any SAL_CALL FTPContentProvider::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< XTypeProvider* >(this)),
@@ -81,15 +80,11 @@ css::uno::Any SAL_CALL FTPContentProvider::queryInterface( const css::uno::Type 
 
 // XTypeProvider methods.
 css::uno::Sequence< sal_Int8 > SAL_CALL FTPContentProvider::getImplementationId()
-    throw( css::uno::RuntimeException,
-           std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 css::uno::Sequence< css::uno::Type > SAL_CALL FTPContentProvider::getTypes()
-    throw( css::uno::RuntimeException,
-           std::exception )
 {
     static cppu::OTypeCollection* pCollection = nullptr;
     if ( !pCollection )
@@ -112,7 +107,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContentProvider::getTypes()
 // XServiceInfo methods.
 
 OUString SAL_CALL FTPContentProvider::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
@@ -123,13 +117,11 @@ OUString FTPContentProvider::getImplementationName_Static()
 }
 
 sal_Bool SAL_CALL FTPContentProvider::supportsService( const OUString& ServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 css::uno::Sequence< OUString > SAL_CALL FTPContentProvider::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return getSupportedServiceNames_Static();
 }
@@ -138,7 +130,6 @@ css::uno::Sequence< OUString > SAL_CALL FTPContentProvider::getSupportedServiceN
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
 FTPContentProvider_CreateInstance( const css::uno::Reference<
                                    css::lang::XMultiServiceFactory> & rSMgr )
-    throw( css::uno::Exception )
 {
     css::lang::XServiceInfo* pX = static_cast<css::lang::XServiceInfo*>(
         new FTPContentProvider( ucbhelper::getComponentContext(rSMgr) ));
@@ -171,9 +162,6 @@ FTPContentProvider::createServiceFactory( const css::uno::Reference<
 // virtual
 Reference<XContent> SAL_CALL FTPContentProvider::queryContent(
         const Reference< XContentIdentifier >& xCanonicId)
-    throw( IllegalIdentifierException,
-           RuntimeException,
-           std::exception)
 {
     // Check, if a content with given id already exists...
     Reference<XContent> xContent = queryExistingContent(xCanonicId).get();

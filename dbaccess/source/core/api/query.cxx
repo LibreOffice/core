@@ -108,7 +108,6 @@ OQuery::~OQuery()
 }
 
 css::uno::Sequence<sal_Int8> OQuery::getImplementationId()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -218,7 +217,7 @@ void OQuery::rebuildColumns()
 IMPLEMENT_SERVICE_INFO3(OQuery, "com.sun.star.sdb.dbaccess.OQuery", SERVICE_SDB_DATASETTINGS, SERVICE_SDB_QUERY, "com.sun.star.sdb.QueryDefinition")
 
 // css::beans::XPropertyChangeListener
-void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) throw(RuntimeException, std::exception)
+void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource )
 {
     sal_Int32 nOwnHandle = -1;
     {
@@ -250,7 +249,7 @@ void SAL_CALL OQuery::propertyChange( const PropertyChangeEvent& _rSource ) thro
     fire(&nOwnHandle, &_rSource.NewValue, &_rSource.OldValue, 1, false);
 }
 
-void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeException, std::exception)
+void SAL_CALL OQuery::disposing( const EventObject& _rSource )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -263,7 +262,7 @@ void SAL_CALL OQuery::disposing( const EventObject& _rSource ) throw (RuntimeExc
 }
 
 // XDataDescriptorFactory
-Reference< XPropertySet > SAL_CALL OQuery::createDataDescriptor(  ) throw(RuntimeException, std::exception)
+Reference< XPropertySet > SAL_CALL OQuery::createDataDescriptor(  )
 {
     return new OQueryDescriptor(*this);
 }
@@ -282,7 +281,7 @@ void SAL_CALL OQuery::disposing()
     m_pWarnings = nullptr;
 }
 
-void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw (Exception, std::exception)
+void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
 {
     ODataSettings::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
     OUString sAggPropName;
@@ -302,7 +301,7 @@ void OQuery::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _r
     }
 }
 
-Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+Reference< XPropertySetInfo > SAL_CALL OQuery::getPropertySetInfo(  )
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
@@ -325,7 +324,7 @@ OColumn* OQuery::createColumn(const OUString& /*_rName*/) const
     return nullptr;
 }
 
-void SAL_CALL OQuery::rename( const OUString& newName ) throw (SQLException, ElementExistException, RuntimeException, std::exception)
+void SAL_CALL OQuery::rename( const OUString& newName )
 {
     MutexGuard aGuard(m_aMutex);
     Reference<XRename> xRename(m_xCommandDefinition,UNO_QUERY);

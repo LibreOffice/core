@@ -494,7 +494,7 @@ void OReportSection::Command( const CommandEvent& _rCEvt )
     }
 }
 
-void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw( uno::RuntimeException)
+void OReportSection::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 {
     if ( m_xSection.is() )
     {

@@ -50,7 +50,7 @@ public:
     QuickDiagrammingImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // from FilterBase
-    virtual bool importDocument() throw (css::uno::RuntimeException, std::exception) override;
+    virtual bool importDocument() override;
     virtual bool exportDocument() throw() override;
 
     virtual const ::oox::drawingml::Theme* getCurrentTheme() const override;
@@ -60,7 +60,7 @@ public:
     virtual oox::drawingml::chart::ChartConverter* getChartConverter() override;
 
 private:
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
 };
 

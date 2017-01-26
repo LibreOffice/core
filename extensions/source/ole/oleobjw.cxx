@@ -130,7 +130,6 @@ IUnknownWrapper_Impl::~IUnknownWrapper_Impl()
 }
 
 Any IUnknownWrapper_Impl::queryInterface(const Type& t)
-    throw (RuntimeException)
 {
     if (t == cppu::UnoType<XDefaultMethod>::get() && !m_bHasDfltMethod )
         return Any();
@@ -149,14 +148,13 @@ Any IUnknownWrapper_Impl::queryInterface(const Type& t)
 }
 
 Reference<XIntrospectionAccess> SAL_CALL IUnknownWrapper_Impl::getIntrospection()
-    throw (RuntimeException )
 {
     Reference<XIntrospectionAccess> ret;
 
     return ret;
 }
 
-Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException)
+Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
 {
     Any aResult;
     try
@@ -184,7 +182,7 @@ Any SAL_CALL IUnknownWrapper_Impl::invokeGetProperty( const OUString& aPropertyN
     return aResult;
 }
 
-Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (css::lang::IllegalArgumentException, css::script::CannotConvertException, css::reflection::InvocationTargetException, css::uno::RuntimeException)
+Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyName, const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
 {
     Any aResult;
     try
@@ -216,8 +214,6 @@ Any SAL_CALL IUnknownWrapper_Impl::invokePutProperty( const OUString& aPropertyN
 Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
              const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex,
              Sequence< Any >& aOutParam )
-    throw(IllegalArgumentException, CannotConvertException, InvocationTargetException,
-          RuntimeException)
 {
     if ( ! m_spDispatch )
     {
@@ -277,8 +273,6 @@ Any SAL_CALL IUnknownWrapper_Impl::invoke( const OUString& aFunctionName,
 
 void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
                  const Any& aValue )
-    throw(UnknownPropertyException, CannotConvertException, InvocationTargetException,
-          RuntimeException)
 {
     if ( ! m_spDispatch )
     {
@@ -448,7 +442,6 @@ void SAL_CALL IUnknownWrapper_Impl::setValue( const OUString& aPropertyName,
 }
 
 Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
-        throw(UnknownPropertyException, RuntimeException)
 {
     if ( ! m_spDispatch )
     {
@@ -591,7 +584,6 @@ Any SAL_CALL IUnknownWrapper_Impl::getValue( const OUString& aPropertyName )
 }
 
 sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
-        throw(RuntimeException)
 {
     if ( ! m_spDispatch )
     {
@@ -640,7 +632,6 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMethod( const OUString& aName )
 }
 
 sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
-        throw(RuntimeException)
 {
     if ( ! m_spDispatch )
     {
@@ -693,7 +684,6 @@ sal_Bool SAL_CALL IUnknownWrapper_Impl::hasProperty( const OUString& aName )
 Any SAL_CALL IUnknownWrapper_Impl::createBridge( const Any& modelDepObject,
                 const Sequence< sal_Int8 >& /*aProcessId*/, sal_Int16 sourceModelType,
                  sal_Int16 destModelType )
-    throw( IllegalArgumentException, RuntimeException)
 {
     Any ret;
     o2u_attachCurrentThread();
@@ -1178,7 +1168,7 @@ Any  IUnknownWrapper_Impl::invokeWithDispIdUnoTlb(const OUString& sFunctionName,
 
 
 // XInitialization
-void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException)
+void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArguments )
 {
     // 1.parameter is IUnknown
     // 2.parameter is a boolean which indicates if the COM pointer was a IUnknown or IDispatch
@@ -1261,7 +1251,6 @@ void SAL_CALL IUnknownWrapper_Impl::initialize( const Sequence< Any >& aArgument
 
 // XDirectInvocation
 uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, const uno::Sequence< uno::Any >& aParams )
-    throw (lang::IllegalArgumentException, script::CannotConvertException, reflection::InvocationTargetException, uno::RuntimeException)
 {
     Any aResult;
 
@@ -1508,7 +1497,6 @@ uno::Any SAL_CALL IUnknownWrapper_Impl::directInvoke( const OUString& aName, con
 }
 
 sal_Bool SAL_CALL IUnknownWrapper_Impl::hasMember( const OUString& aName )
-    throw (uno::RuntimeException)
 {
     if ( ! m_spDispatch )
     {

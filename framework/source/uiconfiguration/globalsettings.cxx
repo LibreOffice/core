@@ -52,12 +52,12 @@ class GlobalSettings_Access : public ::cppu::WeakImplHelper<
         explicit GlobalSettings_Access( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
         // XComponent
-        virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() override;
+        virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // settings access
         bool HasStatesInfo( GlobalSettings::UIElementType eElementType );
@@ -90,7 +90,6 @@ GlobalSettings_Access::GlobalSettings_Access( const css::uno::Reference< css::un
 
 // XComponent
 void SAL_CALL GlobalSettings_Access::dispose()
-throw ( css::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard g(m_mutex);
     m_xConfigAccess.clear();
@@ -98,18 +97,15 @@ throw ( css::uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL GlobalSettings_Access::addEventListener( const css::uno::Reference< css::lang::XEventListener >& )
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL GlobalSettings_Access::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& )
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 // XEventListener
 void SAL_CALL GlobalSettings_Access::disposing( const css::lang::EventObject& )
-throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard g(m_mutex);
     m_xConfigAccess.clear();

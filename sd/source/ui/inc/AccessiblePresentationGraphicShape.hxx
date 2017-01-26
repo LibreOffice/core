@@ -42,22 +42,19 @@ public:
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getImplementationName() override;
 
     //=====  internal  ========================================================
 
     /// Create a name string that contains the accessible name.
     virtual OUString
-        CreateAccessibleBaseName ()
-        throw (css::uno::RuntimeException) override;
+        CreateAccessibleBaseName () override;
 
     /// Create a description string that contains the accessible description.
     virtual OUString
-        CreateAccessibleDescription ()
-        throw (css::uno::RuntimeException, std::exception) override;
+        CreateAccessibleDescription () override;
     /// Return this object's role.
-    virtual sal_Int16 SAL_CALL getAccessibleRole () throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole () override;
 };
 
 } // end of namespace accessibility

@@ -41,11 +41,11 @@ public:
     virtual NameOrIndex* createItem() const throw() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception) override;
+    virtual uno::Type SAL_CALL getElementType(  ) override;
 };
 
 SvxUnoDashTable::SvxUnoDashTable( SdrModel* pModel ) throw()
@@ -53,13 +53,12 @@ SvxUnoDashTable::SvxUnoDashTable( SdrModel* pModel ) throw()
 {
 }
 
-OUString SAL_CALL SvxUnoDashTable::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL SvxUnoDashTable::getImplementationName()
 {
     return OUString("SvxUnoDashTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoDashTable::getSupportedServiceNames(  )
-    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence<OUString> aSNS { "com.sun.star.drawing.DashTable" };
     return aSNS;
@@ -74,7 +73,6 @@ NameOrIndex* SvxUnoDashTable::createItem() const throw()
 
 // XElementAccess
 uno::Type SAL_CALL SvxUnoDashTable::getElementType(  )
-    throw( uno::RuntimeException, std::exception )
 {
     return cppu::UnoType<drawing::LineDash>::get();
 }

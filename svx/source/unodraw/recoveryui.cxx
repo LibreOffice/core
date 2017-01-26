@@ -80,19 +80,15 @@ class RecoveryUI : public ::cppu::WeakImplHelper< css::lang::XServiceInfo       
 
         // css.lang.XServiceInfo
 
-        virtual OUString SAL_CALL getImplementationName()
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
 
-        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 
         virtual css::uno::Any SAL_CALL dispatchWithReturnValue(const css::util::URL& aURL,
-                                            const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
-            throw(css::uno::RuntimeException, std::exception) override;
+                                            const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
 
     // helper
@@ -116,19 +112,16 @@ RecoveryUI::RecoveryUI(const css::uno::Reference< css::uno::XComponentContext >&
 }
 
 OUString SAL_CALL RecoveryUI::getImplementationName()
-    throw(css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.svx.RecoveryUI");
 }
 
 sal_Bool SAL_CALL RecoveryUI::supportsService(const OUString& sServiceName)
-    throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
-    throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > lServiceNames { "com.sun.star.dialog.RecoveryUI" };
     return lServiceNames;
@@ -136,7 +129,6 @@ css::uno::Sequence< OUString > SAL_CALL RecoveryUI::getSupportedServiceNames()
 
 css::uno::Any SAL_CALL RecoveryUI::dispatchWithReturnValue(const css::util::URL& aURL,
                                                    const css::uno::Sequence< css::beans::PropertyValue >& )
-    throw(css::uno::RuntimeException, std::exception)
 {
     // Internally we use VCL ... every call into vcl based code must
     // be guarded by locking the global solar mutex.

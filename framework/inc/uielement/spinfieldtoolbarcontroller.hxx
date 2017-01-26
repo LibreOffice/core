@@ -48,7 +48,7 @@ class SpinfieldToolbarController : public ComplexToolbarController
         virtual ~SpinfieldToolbarController() override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() override;
 
         // called from SpinfieldControl
         void Up();

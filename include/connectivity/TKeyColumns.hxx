@@ -32,7 +32,7 @@ namespace connectivity
     protected:
         virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
         virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
-        virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+        virtual void impl_refresh() override;
     public:
         OKeyColumnsHelper(  OTableKeyHelper* _pKey,
                         ::osl::Mutex& _rMutex,

@@ -39,7 +39,7 @@ VbaFontBase::VbaFontBase(
         const uno::Reference< uno::XComponentContext >& xContext,
         const uno::Reference< css::container::XIndexAccess >& xPalette,
         const uno::Reference< beans::XPropertySet >& xPropertySet,
-        bool bFormControl ) throw ( uno::RuntimeException ) :
+        bool bFormControl ) :
     VbaFontBase_BASE( xParent, xContext ),
     mxFont( xPropertySet, uno::UNO_SET_THROW ),
     mxPalette( xPalette, uno::UNO_SET_THROW ),
@@ -52,7 +52,7 @@ VbaFontBase::~VbaFontBase()
 }
 
 void SAL_CALL
-VbaFontBase::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeException, std::exception )
+VbaFontBase::setSuperscript( const uno::Any& aValue )
 {
     // not supported in form controls
     if( mbFormControl )
@@ -73,7 +73,7 @@ VbaFontBase::setSuperscript( const uno::Any& aValue ) throw ( uno::RuntimeExcept
 }
 
 uno::Any SAL_CALL
-VbaFontBase::getSuperscript() throw ( uno::RuntimeException, std::exception )
+VbaFontBase::getSuperscript()
 {
     short nValue = NORMAL;
     // not supported in form controls
@@ -83,7 +83,7 @@ VbaFontBase::getSuperscript() throw ( uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL
-VbaFontBase::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeException, std::exception )
+VbaFontBase::setSubscript( const uno::Any& aValue )
 {
     // not supported in form controls
     if( mbFormControl )
@@ -106,7 +106,7 @@ VbaFontBase::setSubscript( const uno::Any& aValue ) throw ( uno::RuntimeExceptio
 }
 
 uno::Any SAL_CALL
-VbaFontBase::getSubscript() throw ( uno::RuntimeException, std::exception )
+VbaFontBase::getSubscript()
 {
     short nValue = NORMAL;
     // not supported in form controls
@@ -116,7 +116,7 @@ VbaFontBase::getSubscript() throw ( uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL
-VbaFontBase::setSize( const uno::Any& aValue ) throw( uno::RuntimeException, std::exception )
+VbaFontBase::setSize( const uno::Any& aValue )
 {
     // form controls need a sal_Int16 containing points, other APIs need a float
     uno::Any aVal( aValue );
@@ -130,13 +130,13 @@ VbaFontBase::setSize( const uno::Any& aValue ) throw( uno::RuntimeException, std
 }
 
 uno::Any SAL_CALL
-VbaFontBase::getSize() throw ( uno::RuntimeException, std::exception )
+VbaFontBase::getSize()
 {
     return mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharHeight", "FontHeight" ) );
 }
 
 void SAL_CALL
-VbaFontBase::setColorIndex( const uno::Any& _colorindex ) throw( uno::RuntimeException, std::exception )
+VbaFontBase::setColorIndex( const uno::Any& _colorindex )
 {
     sal_Int32 nIndex = 0;
     _colorindex >>= nIndex;
@@ -151,7 +151,7 @@ VbaFontBase::setColorIndex( const uno::Any& _colorindex ) throw( uno::RuntimeExc
 
 
 uno::Any SAL_CALL
-VbaFontBase::getColorIndex() throw ( uno::RuntimeException, std::exception )
+VbaFontBase::getColorIndex()
 {
     sal_Int32 nColor = 0;
 
@@ -172,7 +172,7 @@ VbaFontBase::getColorIndex() throw ( uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL
-VbaFontBase::setBold( const uno::Any& aValue ) throw( uno::RuntimeException, std::exception )
+VbaFontBase::setBold( const uno::Any& aValue )
 {
     bool bValue = false;
     aValue >>= bValue;
@@ -184,7 +184,7 @@ VbaFontBase::setBold( const uno::Any& aValue ) throw( uno::RuntimeException, std
 }
 
 uno::Any SAL_CALL
-VbaFontBase::getBold() throw ( uno::RuntimeException, std::exception )
+VbaFontBase::getBold()
 {
     double fValue = 0.0;
     mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharWeight", "FontWeight" ) ) >>= fValue;
@@ -192,7 +192,7 @@ VbaFontBase::getBold() throw ( uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL
-VbaFontBase::setStrikethrough( const uno::Any& aValue ) throw ( uno::RuntimeException, std::exception )
+VbaFontBase::setStrikethrough( const uno::Any& aValue )
 {
     bool bValue = false;
     aValue >>= bValue;
@@ -203,7 +203,7 @@ VbaFontBase::setStrikethrough( const uno::Any& aValue ) throw ( uno::RuntimeExce
 }
 
 uno::Any SAL_CALL
-VbaFontBase::getStrikethrough() throw ( uno::RuntimeException, std::exception )
+VbaFontBase::getStrikethrough()
 {
     short nValue = 0;
     mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharStrikeout", "FontStrikeout" ) ) >>= nValue;
@@ -211,20 +211,20 @@ VbaFontBase::getStrikethrough() throw ( uno::RuntimeException, std::exception )
 }
 
 void  SAL_CALL
-VbaFontBase::setShadow( const uno::Any& aValue ) throw ( uno::RuntimeException, std::exception )
+VbaFontBase::setShadow( const uno::Any& aValue )
 {
     if( !mbFormControl )
        mxFont->setPropertyValue( "CharShadowed" , aValue );
 }
 
 uno::Any SAL_CALL
-VbaFontBase::getShadow() throw (uno::RuntimeException, std::exception)
+VbaFontBase::getShadow()
 {
     return mbFormControl ? uno::Any( false ) : mxFont->getPropertyValue( "CharShadowed" );
 }
 
 void  SAL_CALL
-VbaFontBase::setItalic( const uno::Any& aValue ) throw ( uno::RuntimeException, std::exception )
+VbaFontBase::setItalic( const uno::Any& aValue )
 {
     bool bValue = false;
     aValue >>= bValue;
@@ -235,7 +235,7 @@ VbaFontBase::setItalic( const uno::Any& aValue ) throw ( uno::RuntimeException, 
 }
 
 uno::Any SAL_CALL
-VbaFontBase::getItalic() throw ( uno::RuntimeException, std::exception )
+VbaFontBase::getItalic()
 {
     awt::FontSlant aFS;
     mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharPosture", "FontSlant" ) ) >>= aFS;
@@ -243,7 +243,7 @@ VbaFontBase::getItalic() throw ( uno::RuntimeException, std::exception )
 }
 
 void  SAL_CALL
-VbaFontBase::setName( const uno::Any& aValue ) throw ( uno::RuntimeException, std::exception )
+VbaFontBase::setName( const uno::Any& aValue )
 {
     OUString sString;
     aValue >>= sString;
@@ -251,13 +251,13 @@ VbaFontBase::setName( const uno::Any& aValue ) throw ( uno::RuntimeException, st
 }
 
 uno::Any SAL_CALL
-VbaFontBase::getName() throw ( uno::RuntimeException, std::exception )
+VbaFontBase::getName()
 {
     return mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharFontName", "FontName" ) );
 }
 
 uno::Any
-VbaFontBase::getColor() throw (uno::RuntimeException, std::exception)
+VbaFontBase::getColor()
 {
     uno::Any aAny;
     aAny = OORGBToXLRGB( mxFont->getPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ) ) );
@@ -265,7 +265,7 @@ VbaFontBase::getColor() throw (uno::RuntimeException, std::exception)
 }
 
 void
-VbaFontBase::setColor( const uno::Any& _color  ) throw (uno::RuntimeException, std::exception)
+VbaFontBase::setColor( const uno::Any& _color  )
 {
     mxFont->setPropertyValue( VBAFONTBASE_PROPNAME( "CharColor", "TextColor" ), XLRGBToOORGB(_color) );
 }

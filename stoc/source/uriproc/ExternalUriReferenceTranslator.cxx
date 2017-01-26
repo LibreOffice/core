@@ -49,41 +49,34 @@ public:
     Translator(const Translator&) = delete;
     Translator& operator=(const Translator&) = delete;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & serviceName) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    getSupportedServiceNames() override;
 
     virtual OUString SAL_CALL
-    translateToInternal(OUString const & externalUriReference)
-        throw (css::uno::RuntimeException, std::exception) override;
+    translateToInternal(OUString const & externalUriReference) override;
 
     virtual OUString SAL_CALL
-    translateToExternal(OUString const & internalUriReference)
-        throw (css::uno::RuntimeException, std::exception) override;
+    translateToExternal(OUString const & internalUriReference) override;
 
 private:
     virtual ~Translator() override {}
 };
 
 OUString Translator::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.uri.ExternalUriReferenceTranslator");
 }
 
 sal_Bool Translator::supportsService(OUString const & serviceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 css::uno::Sequence< OUString > Translator::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > s { "com.sun.star.uri.ExternalUriReferenceTranslator" };
     return s;
@@ -91,7 +84,6 @@ css::uno::Sequence< OUString > Translator::getSupportedServiceNames()
 
 OUString Translator::translateToInternal(
     OUString const & externalUriReference)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (!externalUriReference.matchIgnoreAsciiCase("file:/"))
     {
@@ -140,7 +132,6 @@ OUString Translator::translateToInternal(
 
 OUString Translator::translateToExternal(
     OUString const & internalUriReference)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (!internalUriReference.matchIgnoreAsciiCase("file://"))
     {

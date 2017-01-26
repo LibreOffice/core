@@ -47,12 +47,11 @@ namespace DOM
         /**
         The number of nodes in the list.
         */
-        virtual sal_Int32 SAL_CALL getLength() throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getLength() override;
         /**
         Returns the indexth item in the collection.
         */
-        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index)
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::xml::dom::XNode > SAL_CALL item(sal_Int32 index) override;
     };
 }
 

@@ -36,22 +36,19 @@ public:
 
     // XMimeContentType
 
-    virtual OUString SAL_CALL getMediaType(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getMediaSubtype(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getFullMediaType(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getMediaType(  ) override;
+    virtual OUString SAL_CALL getMediaSubtype(  ) override;
+    virtual OUString SAL_CALL getFullMediaType(  ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getParameters(  )
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getParameters(  ) override;
 
-    virtual sal_Bool SAL_CALL hasParameter( const OUString& aName )
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasParameter( const OUString& aName ) override;
 
-    virtual OUString SAL_CALL getParameterValue( const OUString& aName )
-        throw(css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getParameterValue( const OUString& aName ) override;
 
 private:
     /// @throws css::lang::IllegalArgumentException
-    void SAL_CALL init( const OUString& aCntType ) throw( css::lang::IllegalArgumentException );
+    void SAL_CALL init( const OUString& aCntType );
     void SAL_CALL getSym();
     void SAL_CALL acceptSym( const OUString& pSymTlb );
     void SAL_CALL skipSpaces();

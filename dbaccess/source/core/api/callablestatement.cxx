@@ -34,7 +34,7 @@ using namespace ::cppu;
 using namespace ::osl;
 
 // css::lang::XTypeProvider
-Sequence< Type > OCallableStatement::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > OCallableStatement::getTypes()
 {
     OTypeCollection aTypes(cppu::UnoType<XRow>::get(),
                            cppu::UnoType<XOutParameters>::get(),
@@ -43,13 +43,13 @@ Sequence< Type > OCallableStatement::getTypes() throw (RuntimeException, std::ex
     return aTypes.getTypes();
 }
 
-Sequence< sal_Int8 > OCallableStatement::getImplementationId() throw (RuntimeException, std::exception)
+Sequence< sal_Int8 > OCallableStatement::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 // css::uno::XInterface
-Any OCallableStatement::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
+Any OCallableStatement::queryInterface( const Type & rType )
 {
     Any aIface = OPreparedStatement::queryInterface( rType );
     if (!aIface.hasValue())
@@ -71,12 +71,12 @@ void OCallableStatement::release() throw ()
 }
 
 // XServiceInfo
-OUString OCallableStatement::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString OCallableStatement::getImplementationName(  )
 {
     return OUString("com.sun.star.sdb.OCallableStatement");
 }
 
-Sequence< OUString > OCallableStatement::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > OCallableStatement::getSupportedServiceNames(  )
 {
     Sequence< OUString > aSNS( 2 );
     aSNS.getArray()[0] = SERVICE_SDBC_CALLABLESTATEMENT;
@@ -85,7 +85,7 @@ Sequence< OUString > OCallableStatement::getSupportedServiceNames(  ) throw (Run
 }
 
 // XOutParameters
-void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, const OUString& typeName )
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -94,7 +94,7 @@ void SAL_CALL OCallableStatement::registerOutParameter( sal_Int32 parameterIndex
     Reference< XOutParameters >(m_xAggregateAsSet, UNO_QUERY)->registerOutParameter( parameterIndex, sqlType, typeName );
 }
 
-void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 parameterIndex, sal_Int32 sqlType, sal_Int32 scale )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -103,7 +103,7 @@ void SAL_CALL OCallableStatement::registerNumericOutParameter( sal_Int32 paramet
 }
 
 // XRow
-sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OCallableStatement::wasNull(  )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -111,7 +111,7 @@ sal_Bool SAL_CALL OCallableStatement::wasNull(  ) throw(SQLException, RuntimeExc
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->wasNull();
 }
 
-OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -119,7 +119,7 @@ OUString SAL_CALL OCallableStatement::getString( sal_Int32 columnIndex ) throw(S
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getString( columnIndex );
 }
 
-sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -127,7 +127,7 @@ sal_Bool SAL_CALL OCallableStatement::getBoolean( sal_Int32 columnIndex ) throw(
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBoolean( columnIndex );
 }
 
-sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -135,63 +135,63 @@ sal_Int8 SAL_CALL OCallableStatement::getByte( sal_Int32 columnIndex ) throw(SQL
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getByte( columnIndex );
 }
 
-sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int16 SAL_CALL OCallableStatement::getShort( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getShort( columnIndex );
 }
 
-sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OCallableStatement::getInt( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getInt( columnIndex );
 }
 
-sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL OCallableStatement::getLong( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getLong( columnIndex );
 }
 
-float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+float SAL_CALL OCallableStatement::getFloat( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getFloat( columnIndex );
 }
 
-double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+double SAL_CALL OCallableStatement::getDouble( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getDouble( columnIndex );
 }
 
-Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL OCallableStatement::getBytes( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBytes( columnIndex );
 }
 
-css::util::Date SAL_CALL OCallableStatement::getDate( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Date SAL_CALL OCallableStatement::getDate( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getDate( columnIndex );
 }
 
-css::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::Time SAL_CALL OCallableStatement::getTime( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getTime( columnIndex );
 }
 
-css::util::DateTime SAL_CALL OCallableStatement::getTimestamp( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+css::util::DateTime SAL_CALL OCallableStatement::getTimestamp( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -199,7 +199,7 @@ css::util::DateTime SAL_CALL OCallableStatement::getTimestamp( sal_Int32 columnI
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getTimestamp( columnIndex );
 }
 
-Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -207,7 +207,7 @@ Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getBinaryStream(
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBinaryStream( columnIndex );
 }
 
-Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStream( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStream( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -215,7 +215,7 @@ Reference< css::io::XInputStream > SAL_CALL OCallableStatement::getCharacterStre
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getCharacterStream( columnIndex );
 }
 
-Any SAL_CALL OCallableStatement::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OCallableStatement::getObject( sal_Int32 columnIndex, const Reference< css::container::XNameAccess >& typeMap )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
@@ -223,28 +223,28 @@ Any SAL_CALL OCallableStatement::getObject( sal_Int32 columnIndex, const Referen
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getObject( columnIndex, typeMap );
 }
 
-Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XRef > SAL_CALL OCallableStatement::getRef( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getRef( columnIndex );
 }
 
-Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XBlob > SAL_CALL OCallableStatement::getBlob( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getBlob( columnIndex );
 }
 
-Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XClob > SAL_CALL OCallableStatement::getClob( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);
     return Reference< XRow >(m_xAggregateAsSet, UNO_QUERY)->getClob( columnIndex );
 }
 
-Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 columnIndex ) throw(SQLException, RuntimeException, std::exception)
+Reference< XArray > SAL_CALL OCallableStatement::getArray( sal_Int32 columnIndex )
 {
     MutexGuard aGuard(m_aMutex);
     ::connectivity::checkDisposed(OComponentHelper::rBHelper.bDisposed);

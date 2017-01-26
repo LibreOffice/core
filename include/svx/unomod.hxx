@@ -36,13 +36,13 @@ class SVX_DLLPUBLIC SvxUnoDrawMSFactory : public css::lang::XMultiServiceFactory
 public:
     SvxUnoDrawMSFactory() throw() {};
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments( const OUString& ServiceSpecifier, const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames(  ) override;
 
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    static css::uno::Reference< css::uno::XInterface > SAL_CALL createTextField( const OUString& aServiceSpecifier ) throw(css::uno::Exception, css::uno::RuntimeException);
+    static css::uno::Reference< css::uno::XInterface > SAL_CALL createTextField( const OUString& aServiceSpecifier );
     // internal
     static css::uno::Sequence< OUString >
         concatServiceNames( css::uno::Sequence< OUString >& rServices1,

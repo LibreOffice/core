@@ -42,7 +42,7 @@ public:
     virtual ~AccContainerEventListener() override;
 
     //AccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
     //for child changed event
     virtual void HandleChildChangedEvent(

@@ -235,8 +235,6 @@ ChartTypeManager::~ChartTypeManager()
 // ____ XMultiServiceFactory ____
 uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
     const OUString& aServiceSpecifier )
-    throw (uno::Exception,
-           uno::RuntimeException, std::exception)
 {
     uno::Reference< uno::XInterface > xResult;
     TemplateId nId = lcl_GetTemplateIdForService( aServiceSpecifier );
@@ -558,15 +556,12 @@ uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstance(
 uno::Reference< uno::XInterface > SAL_CALL ChartTypeManager::createInstanceWithArguments(
     const OUString& ServiceSpecifier,
     const uno::Sequence< uno::Any >& /* Arguments */ )
-    throw (uno::Exception,
-           uno::RuntimeException, std::exception)
 {
     OSL_FAIL( "createInstanceWithArguments: No arguments supported" );
     return createInstance( ServiceSpecifier );
 }
 
 uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
-    throw (uno::RuntimeException, std::exception)
 {
     ::std::vector< OUString > aServices;
     const tTemplateMapType & rMap = lcl_DefaultChartTypeMap();
@@ -604,19 +599,16 @@ uno::Sequence< OUString > SAL_CALL ChartTypeManager::getAvailableServiceNames()
 
 // ____ XServiceInfo ____
 OUString SAL_CALL ChartTypeManager::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.ChartTypeManager");
 }
 
 sal_Bool SAL_CALL ChartTypeManager::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ChartTypeManager::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart2.ChartTypeManager",

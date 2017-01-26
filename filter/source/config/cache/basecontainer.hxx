@@ -174,8 +174,7 @@ class BaseContainer : public BaseLock
 
             @throws css::uno::RuntimeException
          */
-        void impl_initFlushMode()
-            throw (css::uno::RuntimeException);
+        void impl_initFlushMode();
 
 
         /** @short  returns a pointer to the current used cache member.
@@ -206,59 +205,38 @@ class BaseContainer : public BaseLock
 
         // XServiceInfo
 
-        virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
 
-        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName)
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& sServiceName) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 
         // XNameContainer
 
         virtual void SAL_CALL insertByName(const OUString& sItem ,
-                                           const css::uno::Any&   aValue)
-            throw (css::lang::IllegalArgumentException  ,
-                   css::container::ElementExistException,
-                   css::lang::WrappedTargetException    ,
-                   css::uno::RuntimeException, std::exception           ) override;
+                                           const css::uno::Any&   aValue) override;
 
-        virtual void SAL_CALL removeByName(const OUString& sItem)
-            throw (css::container::NoSuchElementException,
-                   css::lang::WrappedTargetException     ,
-                   css::uno::RuntimeException, std::exception            ) override;
+        virtual void SAL_CALL removeByName(const OUString& sItem) override;
 
 
         // XNameReplace
 
         virtual void SAL_CALL replaceByName(const OUString& sItem ,
-                                            const css::uno::Any&   aValue)
-            throw (css::lang::IllegalArgumentException   ,
-                   css::container::NoSuchElementException,
-                   css::lang::WrappedTargetException     ,
-                   css::uno::RuntimeException, std::exception            ) override;
+                                            const css::uno::Any&   aValue) override;
 
 
         // XElementAccess
 
-        virtual css::uno::Any SAL_CALL getByName(const OUString& sItem)
-            throw (css::container::NoSuchElementException,
-                   css::lang::WrappedTargetException     ,
-                   css::uno::RuntimeException, std::exception            ) override;
+        virtual css::uno::Any SAL_CALL getByName(const OUString& sItem) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-        virtual sal_Bool SAL_CALL hasByName(const OUString& sItem)
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasByName(const OUString& sItem) override;
 
-        virtual css::uno::Type SAL_CALL getElementType()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType() override;
 
-        virtual sal_Bool SAL_CALL hasElements()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasElements() override;
 
 
         // XContainerQuery
@@ -266,23 +244,18 @@ class BaseContainer : public BaseLock
         // must be implemented really by derived class ...
         // We implement return of an empty result here only!
         // But we show an assertion :-)
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery)
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByQuery(const OUString& sQuery) override;
 
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties)
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createSubSetEnumerationByProperties(const css::uno::Sequence< css::beans::NamedValue >& lProperties) override;
 
 
         // XFlushable
 
-        virtual void SAL_CALL flush()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL flush() override;
 
-        virtual void SAL_CALL addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener) override;
 
-        virtual void SAL_CALL removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener)
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeFlushListener(const css::uno::Reference< css::util::XFlushListener >& xListener) override;
 };
 
     } // namespace config

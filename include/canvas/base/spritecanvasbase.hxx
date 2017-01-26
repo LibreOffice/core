@@ -88,8 +88,7 @@ namespace canvas
         }
 
         // XSpriteCanvas
-        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) throw (css::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                           css::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromAnimation( const css::uno::Reference< css::rendering::XAnimation >& animation ) override
         {
             tools::verifyArgs(animation,
                               OSL_THIS_FUNC,
@@ -101,9 +100,7 @@ namespace canvas
         }
 
         virtual css::uno::Reference< css::rendering::XAnimatedSprite > SAL_CALL createSpriteFromBitmaps( const css::uno::Sequence< css::uno::Reference< css::rendering::XBitmap > >& animationBitmaps,
-                                                                                                                                   sal_Int8                                                                                                           interpolationMode ) throw (css::lang::IllegalArgumentException,
-                                                                                                                                                                                                                                                                                 css::rendering::VolatileContentDestroyedException,
-                                                                                                                                                                                                                                                                                 css::uno::RuntimeException) override
+                                                                                                                                   sal_Int8                                                                                                           interpolationMode ) override
         {
             tools::verifyArgs(animationBitmaps,
                               OSL_THIS_FUNC,
@@ -117,8 +114,7 @@ namespace canvas
             return BaseType::maCanvasHelper.createSpriteFromBitmaps(animationBitmaps, interpolationMode);
         }
 
-        virtual css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) throw (css::lang::IllegalArgumentException,
-                                                                                                                                                                                              css::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XCustomSprite > SAL_CALL createCustomSprite( const css::geometry::RealSize2D& spriteSize ) override
         {
             tools::verifySpriteSize(spriteSize,
                                     OSL_THIS_FUNC,
@@ -129,8 +125,7 @@ namespace canvas
             return BaseType::maCanvasHelper.createCustomSprite(spriteSize);
         }
 
-        virtual css::uno::Reference< css::rendering::XSprite > SAL_CALL createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) throw (css::lang::IllegalArgumentException,
-                                                                                                                                                                                                                        css::uno::RuntimeException) override
+        virtual css::uno::Reference< css::rendering::XSprite > SAL_CALL createClonedSprite( const css::uno::Reference< css::rendering::XSprite >& original ) override
         {
             tools::verifyArgs(original,
                               OSL_THIS_FUNC,

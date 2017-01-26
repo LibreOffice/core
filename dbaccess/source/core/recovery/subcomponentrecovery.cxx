@@ -252,14 +252,14 @@ namespace dbaccess
 
     public:
         // XDocumentHandler
-        virtual void SAL_CALL startDocument(  ) throw (SAXException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL endDocument(  ) throw (SAXException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) throw (SAXException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL endElement( const OUString& aName ) throw (SAXException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL characters( const OUString& aChars ) throw (SAXException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) throw (SAXException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) throw (SAXException, RuntimeException, std::exception) override;
-        virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) throw (SAXException, RuntimeException, std::exception) override;
+        virtual void SAL_CALL startDocument(  ) override;
+        virtual void SAL_CALL endDocument(  ) override;
+        virtual void SAL_CALL startElement( const OUString& aName, const Reference< XAttributeList >& xAttribs ) override;
+        virtual void SAL_CALL endElement( const OUString& aName ) override;
+        virtual void SAL_CALL characters( const OUString& aChars ) override;
+        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
+        virtual void SAL_CALL processingInstruction( const OUString& aTarget, const OUString& aData ) override;
+        virtual void SAL_CALL setDocumentLocator( const Reference< XLocator >& xLocator ) override;
 
         const ::comphelper::NamedValueCollection&   getSettings() const { return m_aSettings; }
 
@@ -268,15 +268,15 @@ namespace dbaccess
         ::comphelper::NamedValueCollection                  m_aSettings;
     };
 
-    void SAL_CALL SettingsDocumentHandler::startDocument(  ) throw (SAXException, RuntimeException, std::exception)
+    void SAL_CALL SettingsDocumentHandler::startDocument(  )
     {
     }
 
-    void SAL_CALL SettingsDocumentHandler::endDocument(  ) throw (SAXException, RuntimeException, std::exception)
+    void SAL_CALL SettingsDocumentHandler::endDocument(  )
     {
     }
 
-    void SAL_CALL SettingsDocumentHandler::startElement( const OUString& i_Name, const Reference< XAttributeList >& i_Attribs ) throw (SAXException, RuntimeException, std::exception)
+    void SAL_CALL SettingsDocumentHandler::startElement( const OUString& i_Name, const Reference< XAttributeList >& i_Attribs )
     {
         ::rtl::Reference< SettingsImport >  pNewState;
 
@@ -307,7 +307,7 @@ namespace dbaccess
         m_aStates.push( pNewState );
     }
 
-    void SAL_CALL SettingsDocumentHandler::endElement( const OUString& i_Name ) throw (SAXException, RuntimeException, std::exception)
+    void SAL_CALL SettingsDocumentHandler::endElement( const OUString& i_Name )
     {
         ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
         (void)i_Name;
@@ -317,7 +317,7 @@ namespace dbaccess
         m_aStates.pop();
     }
 
-    void SAL_CALL SettingsDocumentHandler::characters( const OUString& i_Chars ) throw (SAXException, RuntimeException, std::exception)
+    void SAL_CALL SettingsDocumentHandler::characters( const OUString& i_Chars )
     {
         ENSURE_OR_THROW( !m_aStates.empty(), "no active element" );
 
@@ -325,20 +325,20 @@ namespace dbaccess
         pCurrentState->characters( i_Chars );
     }
 
-    void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces ) throw (SAXException, RuntimeException, std::exception)
+    void SAL_CALL SettingsDocumentHandler::ignorableWhitespace( const OUString& aWhitespaces )
     {
         // ignore them - that's why they're called "ignorable"
         (void)aWhitespaces;
     }
 
-    void SAL_CALL SettingsDocumentHandler::processingInstruction( const OUString& i_Target, const OUString& i_Data ) throw (SAXException, RuntimeException, std::exception)
+    void SAL_CALL SettingsDocumentHandler::processingInstruction( const OUString& i_Target, const OUString& i_Data )
     {
         OSL_FAIL( "SettingsDocumentHandler::processingInstruction: unexpected ..." );
         (void)i_Target;
         (void)i_Data;
     }
 
-    void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& i_Locator ) throw (SAXException, RuntimeException, std::exception)
+    void SAL_CALL SettingsDocumentHandler::setDocumentLocator( const Reference< XLocator >& i_Locator )
     {
         (void)i_Locator;
     }

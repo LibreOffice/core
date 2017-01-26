@@ -46,29 +46,26 @@ public:
     explicit UnxSplashScreen();
 
     // XStatusIndicator
-    virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL end() throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL reset() throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setText( const OUString& aText ) throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) override;
+    virtual void SAL_CALL end() override;
+    virtual void SAL_CALL reset() override;
+    virtual void SAL_CALL setText( const OUString& aText ) override;
+    virtual void SAL_CALL setValue( sal_Int32 nValue ) override;
 
     // XInitialize
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) override;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 }
 
 /// @throws css::uno::Exception
-css::uno::Reference< css::uno::XInterface > SAL_CALL UnxSplash_createInstance(const css::uno::Reference< css::uno::XComponentContext > & xCtx ) throw( css::uno::Exception );
+css::uno::Reference< css::uno::XInterface > SAL_CALL UnxSplash_createInstance(const css::uno::Reference< css::uno::XComponentContext > & xCtx );
 OUString UnxSplash_getImplementationName();
 css::uno::Sequence< OUString > SAL_CALL UnxSplash_getSupportedServiceNames() throw ();
 

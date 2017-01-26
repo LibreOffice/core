@@ -31,17 +31,14 @@ const ScXMLImport& ScXMLImportContext::GetScImport() const
 }
 
 void SAL_CALL ScXMLImportContext::startFastElement(sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/)
-    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
 }
 
 void SAL_CALL ScXMLImportContext::endFastElement(sal_Int32 /*nElement*/)
-    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
 }
 
 void SAL_CALL ScXMLImportContext::characters(const OUString &)
-    throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception)
 {
 }
 

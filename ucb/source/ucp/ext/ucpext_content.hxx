@@ -89,11 +89,11 @@ namespace ucb { namespace ucp { namespace ext
         virtual ~Content() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XContent
-        virtual OUString SAL_CALL getContentType() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getContentType() override;
 
         // XCommandProcessor
         virtual css::uno::Any SAL_CALL
@@ -101,18 +101,12 @@ namespace ucb { namespace ucp { namespace ext
                     const css::ucb::Command& aCommand,
                     sal_Int32 CommandId,
                     const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment
-                )
-                throw   (   css::uno::Exception
-                        ,   css::ucb::CommandAbortedException
-                        ,   css::uno::RuntimeException, std::exception
-                        ) override;
+                ) override;
 
         virtual void SAL_CALL
                 abort(
                     sal_Int32 CommandId
-                )
-                throw   (   css::uno::RuntimeException, std::exception
-                        ) override;
+                ) override;
 
     private:
         virtual css::uno::Sequence< css::beans::Property > getProperties( const css::uno::Reference< css::ucb::XCommandEnvironment >& i_rEnv ) override;

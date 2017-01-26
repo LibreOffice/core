@@ -68,7 +68,6 @@ FakedUpdateableResultSet::FakedUpdateableResultSet(
 
 css::uno::Any  FakedUpdateableResultSet::queryInterface(
     const css::uno::Type & reqType )
-    throw (css::uno::RuntimeException, std::exception)
 {
     Any ret = ResultSet::queryInterface( reqType );
     if( ! ret.hasValue() )
@@ -81,7 +80,6 @@ css::uno::Any  FakedUpdateableResultSet::queryInterface(
 
 
 css::uno::Sequence< css::uno::Type > FakedUpdateableResultSet::getTypes()
-        throw( css::uno::RuntimeException, std::exception )
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -101,123 +99,122 @@ css::uno::Sequence< css::uno::Type > FakedUpdateableResultSet::getTypes()
 }
 
 css::uno::Sequence< sal_Int8> FakedUpdateableResultSet::getImplementationId()
-        throw( css::uno::RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-void FakedUpdateableResultSet::insertRow(  ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::insertRow(  )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateRow(  ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateRow(  )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::deleteRow(  ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::deleteRow(  )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
  }
 
-void FakedUpdateableResultSet::cancelRowUpdates(  ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::cancelRowUpdates(  )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::moveToInsertRow(  ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::moveToInsertRow(  )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::moveToCurrentRow(  ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::moveToCurrentRow(  )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
 
-void FakedUpdateableResultSet::updateNull( sal_Int32 /* columnIndex */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateNull( sal_Int32 /* columnIndex */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateBoolean( sal_Int32 /* columnIndex */, sal_Bool /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateBoolean( sal_Int32 /* columnIndex */, sal_Bool /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateByte( sal_Int32 /* columnIndex */, sal_Int8 /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateByte( sal_Int32 /* columnIndex */, sal_Int8 /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateShort( sal_Int32 /* columnIndex */, sal_Int16 /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateShort( sal_Int32 /* columnIndex */, sal_Int16 /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateInt( sal_Int32 /* columnIndex */, sal_Int32 /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateInt( sal_Int32 /* columnIndex */, sal_Int32 /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateLong( sal_Int32 /* columnIndex */, sal_Int64 /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateLong( sal_Int32 /* columnIndex */, sal_Int64 /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateFloat( sal_Int32 /* columnIndex */, float /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateFloat( sal_Int32 /* columnIndex */, float /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateDouble( sal_Int32 /* columnIndex */, double /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateDouble( sal_Int32 /* columnIndex */, double /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateString( sal_Int32 /* columnIndex */, const OUString& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateString( sal_Int32 /* columnIndex */, const OUString& /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateBytes( sal_Int32 /* columnIndex */, const css::uno::Sequence< sal_Int8 >& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateBytes( sal_Int32 /* columnIndex */, const css::uno::Sequence< sal_Int8 >& /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateDate( sal_Int32 /* columnIndex */, const css::util::Date& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateDate( sal_Int32 /* columnIndex */, const css::util::Date& /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateTime( sal_Int32 /* columnIndex */, const css::util::Time& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateTime( sal_Int32 /* columnIndex */, const css::util::Time& /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateTimestamp( sal_Int32 /* columnIndex */, const css::util::DateTime& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateTimestamp( sal_Int32 /* columnIndex */, const css::util::DateTime& /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateBinaryStream( sal_Int32 /* columnIndex */, const css::uno::Reference< css::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateBinaryStream( sal_Int32 /* columnIndex */, const css::uno::Reference< css::io::XInputStream >& /* x */, sal_Int32 /* length */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateCharacterStream( sal_Int32 /* columnIndex */, const css::uno::Reference< css::io::XInputStream >& /* x */, sal_Int32 /* length */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateCharacterStream( sal_Int32 /* columnIndex */, const css::uno::Reference< css::io::XInputStream >& /* x */, sal_Int32 /* length */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateObject( sal_Int32 /* columnIndex */, const css::uno::Any& /* x */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateObject( sal_Int32 /* columnIndex */, const css::uno::Any& /* x */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }
 
-void FakedUpdateableResultSet::updateNumericObject( sal_Int32 /* columnIndex */, const css::uno::Any& /* x */, sal_Int32 /* scale */ ) throw (SQLException, RuntimeException, std::exception)
+void FakedUpdateableResultSet::updateNumericObject( sal_Int32 /* columnIndex */, const css::uno::Any& /* x */, sal_Int32 /* scale */ )
 {
     throw SQLException( m_aReason, *this, OUString(),1,Any() );
 }

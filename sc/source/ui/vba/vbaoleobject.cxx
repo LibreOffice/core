@@ -48,90 +48,90 @@ ScVbaOLEObject::ScVbaOLEObject( const uno::Reference< XHelperInterface >& xParen
 }
 
 uno::Reference< uno::XInterface > SAL_CALL
-ScVbaOLEObject::getObject() throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::getObject()
 {
     return uno::Reference< uno::XInterface >( m_xControl, uno::UNO_QUERY_THROW );
 }
 
 sal_Bool SAL_CALL
-ScVbaOLEObject::getEnabled() throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::getEnabled()
 {
     return m_xControl->getEnabled();
 }
 
 void SAL_CALL
-ScVbaOLEObject::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::setEnabled( sal_Bool _enabled )
 {
     m_xControl->setEnabled( _enabled );
 }
 
 sal_Bool SAL_CALL
-ScVbaOLEObject::getVisible() throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::getVisible()
 {
     return m_xControl->getVisible();
 }
 
 void SAL_CALL
-ScVbaOLEObject::setVisible( sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::setVisible( sal_Bool _visible )
 {
     m_xControl->setVisible( _visible );
 }
 
 double SAL_CALL
-ScVbaOLEObject::getLeft() throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::getLeft()
 {
     return m_xControl->getLeft();
 }
 
 void SAL_CALL
-ScVbaOLEObject::setLeft( double _left ) throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::setLeft( double _left )
 {
     m_xControl->setLeft( _left );
 
 }
 
 double SAL_CALL
-ScVbaOLEObject::getTop() throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::getTop()
 {
     return m_xControl->getTop();
 }
 
 void SAL_CALL
-ScVbaOLEObject::setTop( double _top ) throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::setTop( double _top )
 {
     m_xControl->setTop( _top );
 }
 
 double SAL_CALL
-ScVbaOLEObject::getHeight() throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::getHeight()
 {
     return m_xControl->getHeight();
 }
 
 void SAL_CALL
-ScVbaOLEObject::setHeight( double _height ) throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::setHeight( double _height )
 {
     m_xControl->setHeight( _height );
 }
 
 double SAL_CALL
-ScVbaOLEObject::getWidth() throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::getWidth()
 {
     return m_xControl->getWidth();
 }
 
 void SAL_CALL
-ScVbaOLEObject::setWidth( double _width ) throw (uno::RuntimeException, std::exception)
+ScVbaOLEObject::setWidth( double _width )
 {
     m_xControl->setWidth( _width );
 }
 
-OUString SAL_CALL ScVbaOLEObject::getLinkedCell() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL ScVbaOLEObject::getLinkedCell()
 {
     return m_xControl->getControlSource();
 }
 
-void SAL_CALL ScVbaOLEObject::setLinkedCell( const OUString& _linkedcell ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaOLEObject::setLinkedCell( const OUString& _linkedcell )
 {
     m_xControl->setControlSource( _linkedcell );
 }

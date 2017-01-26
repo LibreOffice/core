@@ -404,7 +404,7 @@ void OObjectBase::SetPropsFromRect(const Rectangle& _rRect)
     }
 }
 
-void OObjectBase::_propertyChange( const  beans::PropertyChangeEvent& /*evt*/ ) throw( uno::RuntimeException)
+void OObjectBase::_propertyChange( const  beans::PropertyChangeEvent& /*evt*/ )
 {
 }
 
@@ -789,7 +789,7 @@ OUString OUnoObject::GetDefaultName(const OUnoObject* _pObj)
 }
 
 
-void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt ) throw( uno::RuntimeException)
+void OUnoObject::_propertyChange( const  beans::PropertyChangeEvent& evt )
 {
     OObjectBase::_propertyChange(evt);
     if (isListening())

@@ -68,27 +68,22 @@ public:
                             const css::uno::Reference< css::io::XInputStream >& rxInStrm );
     virtual             ~InputStream() override;
 
-    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead )
-                        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead )
-                        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip )
-                        throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL available()
-                        throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL closeInput()
-                        throw (css::io::NotConnectedException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readBytes( css::uno::Sequence< sal_Int8 >& rData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( css::uno::Sequence< sal_Int8 >& rData, sal_Int32 nMaxBytesToRead ) override;
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
+    virtual sal_Int32 SAL_CALL available() override;
+    virtual void SAL_CALL closeInput() override;
 
 private:
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void                updateBuffer() throw (css::io::IOException, css::uno::RuntimeException);
+    void                updateBuffer();
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    OString      readToElementBegin() throw (css::io::IOException, css::uno::RuntimeException);
+    OString      readToElementBegin();
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    OString      readToElementEnd() throw (css::io::IOException, css::uno::RuntimeException);
+    OString      readToElementEnd();
 
 private:
     css::uno::Reference< css::io::XTextInputStream2 >

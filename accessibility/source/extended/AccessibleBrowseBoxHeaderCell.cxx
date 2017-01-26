@@ -81,7 +81,6 @@ AccessibleBrowseBoxHeaderCell::AccessibleBrowseBoxHeaderCell(sal_Int32 _nColumnR
         The count of visible children.
 */
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
-    throw ( RuntimeException, std::exception )
 {
     return 0;
 }
@@ -91,7 +90,6 @@ sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChildCount()
         The XAccessible interface of the specified child.
 */
 Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChild( sal_Int32 )
-    throw ( IndexOutOfBoundsException,RuntimeException, std::exception )
 {
     throw IndexOutOfBoundsException();
 }
@@ -99,7 +97,6 @@ Reference<XAccessible > SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleChi
 
 /** Grabs the focus to the column header. */
 void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMethodGuard aGuard(getMutex());
     ensureIsAlive();
@@ -114,7 +111,6 @@ void SAL_CALL AccessibleBrowseBoxHeaderCell::grabFocus()
         The name of this class.
 */
 OUString SAL_CALL AccessibleBrowseBoxHeaderCell::getImplementationName()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.svtools.AccessibleBrowseBoxHeaderCell" );
 }
@@ -148,7 +144,6 @@ Rectangle AccessibleBrowseBoxHeaderCell::implGetBoundingBoxOnScreen()
 }
 
 sal_Int32 SAL_CALL AccessibleBrowseBoxHeaderCell::getAccessibleIndexInParent()
-    throw ( RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( getMutex() );
     ensureIsAlive();

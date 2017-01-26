@@ -86,9 +86,7 @@ public:
         @throws ldap::LdapConnectionException
         @throws ldap::LdapGenericException
     */
-    void  connectSimple(const LdapDefinition& aDefinition)
-        throw (ldap::LdapConnectionException,
-                ldap::LdapGenericException);
+    void  connectSimple(const LdapDefinition& aDefinition);
 
     /**
         Gets LdapUserProfile from LDAP repository for specified user
@@ -99,10 +97,7 @@ public:
          @throws css::ldap::LdapGenericException
                   if an LDAP error occurs.
     */
-    void getUserProfile(const OUString& aUser, LdapData * data)
-         throw (lang::IllegalArgumentException,
-                 ldap::LdapConnectionException,
-                 ldap::LdapGenericException);
+    void getUserProfile(const OUString& aUser, LdapData * data);
 
     /** finds DN of user
         @return  DN of User
@@ -110,15 +105,11 @@ public:
         @throws ldap::LdapConnectionException
         @throws ldap::LdapGenericException
     */
-    OUString findUserDn(const OUString& aUser)
-        throw (lang::IllegalArgumentException,
-                ldap::LdapConnectionException,
-                ldap::LdapGenericException);
+    OUString findUserDn(const OUString& aUser);
 
 private:
     /// @throws ldap::LdapConnectionException
-    void initConnection()
-         throw (ldap::LdapConnectionException);
+    void initConnection();
     void disconnect();
     /**
       Indicates whether the connection is in a valid state.
@@ -128,9 +119,7 @@ private:
 
     /// @throws ldap::LdapConnectionException
     /// @throws ldap::LdapGenericException
-    void  connectSimple()
-        throw (ldap::LdapConnectionException,
-                ldap::LdapGenericException);
+    void  connectSimple();
 
     /** LDAP connection object */
     LDAP* mConnection ;

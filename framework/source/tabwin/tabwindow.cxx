@@ -257,7 +257,6 @@ IMPL_LINK( TabWindow, Deactivate, TabControl*, pTabControl, bool )
 // XInitialization
 
 void SAL_CALL TabWindow::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     const OUString aTopWindowArgName( "TopWindow" );
     const OUString aSizeArgName( "Size" );
@@ -411,7 +410,7 @@ throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 
 //  XComponent
 
-void SAL_CALL TabWindow::dispose() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL TabWindow::dispose()
 {
     // Send message to all listener and forget her references.
     css::uno::Reference< css::lang::XComponent > xThis(
@@ -451,7 +450,6 @@ void SAL_CALL TabWindow::dispose() throw (css::uno::RuntimeException, std::excep
 }
 
 void SAL_CALL TabWindow::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
-throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -464,7 +462,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL TabWindow::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
-throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -479,25 +476,21 @@ throw (css::uno::RuntimeException, std::exception)
 // XEventListener
 
 void SAL_CALL TabWindow::disposing( const css::lang::EventObject& )
-throw( css::uno::RuntimeException, std::exception )
 {
 }
 
 // XWindowListener
 
 void SAL_CALL TabWindow::windowResized( const css::awt::WindowEvent& )
-throw( css::uno::RuntimeException, std::exception )
 {
     implts_LayoutWindows();
 }
 
 void SAL_CALL TabWindow::windowMoved( const css::awt::WindowEvent& )
-throw( css::uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL TabWindow::windowShown( const css::lang::EventObject& )
-throw( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -514,7 +507,6 @@ throw( css::uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL TabWindow::windowHidden( const css::lang::EventObject& )
-throw( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
     if ( m_xContainerWindow.is() )
@@ -532,12 +524,10 @@ throw( css::uno::RuntimeException, std::exception )
 // XTopWindowListener
 
 void SAL_CALL TabWindow::windowOpened( const css::lang::EventObject& )
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL TabWindow::windowClosing( const css::lang::EventObject& )
-throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Reference< css::lang::XComponent > xComponent( static_cast<OWeakObject *>(this), css::uno::UNO_QUERY );
     if ( xComponent.is() )
@@ -545,34 +535,28 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL TabWindow::windowClosed( const css::lang::EventObject& )
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL TabWindow::windowMinimized( const css::lang::EventObject& )
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL TabWindow::windowNormalized( const css::lang::EventObject& )
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL TabWindow::windowActivated( const css::lang::EventObject& )
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL TabWindow::windowDeactivated( const css::lang::EventObject& )
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 //  XSimpleTabController
 
 ::sal_Int32 SAL_CALL TabWindow::insertTab()
-throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -595,7 +579,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL TabWindow::removeTab( ::sal_Int32 ID )
-throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -624,7 +607,6 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::ex
 }
 
 void SAL_CALL TabWindow::setTabProps( ::sal_Int32 ID, const css::uno::Sequence< css::beans::NamedValue >& Properties )
-throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -670,7 +652,6 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::ex
 }
 
 css::uno::Sequence< css::beans::NamedValue > SAL_CALL TabWindow::getTabProps( ::sal_Int32 ID )
-throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -703,7 +684,6 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::ex
 }
 
 void SAL_CALL TabWindow::activateTab( ::sal_Int32 ID )
-throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -736,7 +716,6 @@ throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::ex
 }
 
 ::sal_Int32 SAL_CALL TabWindow::getActiveTabID()
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -758,7 +737,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 void SAL_CALL TabWindow::addTabListener(
     const css::uno::Reference< css::awt::XTabListener >& xListener )
-throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -772,7 +750,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL TabWindow::removeTabListener( const css::uno::Reference< css::awt::XTabListener >& xListener )
-throw (css::uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aLock;
@@ -792,7 +769,6 @@ sal_Bool SAL_CALL TabWindow::convertFastPropertyValue( css::uno::Any&       aCon
                                                        css::uno::Any&       aOldValue       ,
                                                        sal_Int32            nHandle         ,
                                                        const css::uno::Any& aValue             )
-throw( css::lang::IllegalArgumentException )
 {
     //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
@@ -823,7 +799,6 @@ throw( css::lang::IllegalArgumentException )
 
 void SAL_CALL TabWindow::setFastPropertyValue_NoBroadcast( sal_Int32,
                                                            const css::uno::Any&)
-throw( css::uno::Exception, std::exception )
 {
 }
 
@@ -868,7 +843,6 @@ void SAL_CALL TabWindow::getFastPropertyValue( css::uno::Any& aValue  ,
 }
 
 css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL TabWindow::getPropertySetInfo()
-throw ( css::uno::RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!

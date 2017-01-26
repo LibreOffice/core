@@ -118,19 +118,16 @@ void MSWorksImportFilter::doRegisterHandlers(OdtGenerator &rGenerator)
 
 // XServiceInfo
 OUString SAL_CALL MSWorksImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Writer.MSWorksImportFilter");
 }
 
 sal_Bool SAL_CALL MSWorksImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL MSWorksImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

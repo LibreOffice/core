@@ -43,14 +43,11 @@ public:
     TargetDropContext &operator= ( const TargetDropContext&) = delete;
 
     // XDropTargetDragContext
-    virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation )
-        throw( RuntimeException) override;
-    virtual void SAL_CALL rejectDrop(  )
-        throw( RuntimeException) override;
+    virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation ) override;
+    virtual void SAL_CALL rejectDrop(  ) override;
 
     // XDropTargetDropContext (inherits XDropTargetDragContext)
-    virtual void SAL_CALL dropComplete( sal_Bool success )
-        throw(  RuntimeException) override;
+    virtual void SAL_CALL dropComplete( sal_Bool success ) override;
 };
 #endif
 

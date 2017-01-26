@@ -39,8 +39,6 @@ WrappedDefaultProperty::~WrappedDefaultProperty()
 
 void WrappedDefaultProperty::setPropertyToDefault(
     const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-    throw (beans::UnknownPropertyException,
-           uno::RuntimeException)
 {
     Reference< beans::XPropertySet > xInnerPropSet( xInnerPropertyState, uno::UNO_QUERY );
     if( xInnerPropSet.is())
@@ -49,17 +47,12 @@ void WrappedDefaultProperty::setPropertyToDefault(
 
 uno::Any WrappedDefaultProperty::getPropertyDefault(
     const Reference< beans::XPropertyState >& /* xInnerPropertyState */ ) const
-    throw (beans::UnknownPropertyException,
-           lang::WrappedTargetException,
-           uno::RuntimeException)
 {
     return m_aOuterDefaultValue;
 }
 
 beans::PropertyState WrappedDefaultProperty::getPropertyState(
     const Reference< beans::XPropertyState >& xInnerPropertyState ) const
-    throw (beans::UnknownPropertyException,
-           uno::RuntimeException)
 {
     beans::PropertyState aState = beans::PropertyState_DIRECT_VALUE;
     try

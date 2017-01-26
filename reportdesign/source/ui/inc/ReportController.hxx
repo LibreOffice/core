@@ -318,7 +318,7 @@ namespace rptui
         virtual void Execute(sal_uInt16 nId, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
         virtual void getPropertyDefaultByHandle( sal_Int32 _nHandle, css::uno::Any& _rDefault ) const override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) throw (css::uno::Exception, std::exception) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
 
     private:
         virtual ~OReportController() override;
@@ -346,43 +346,43 @@ namespace rptui
 
         virtual bool                        Construct(vcl::Window* pParent) override;
         // XEventListener
-        virtual void SAL_CALL               disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL               disposing( const css::lang::EventObject& Source ) override;
 
         // css::frame::XController
-        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) override;
 
         // css::lang::XComponent
         virtual void        SAL_CALL disposing() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
         // need by registration
         /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static OUString getImplementationName_Static();
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
         static css::uno::Reference< css::uno::XInterface > SAL_CALL
             create(css::uno::Reference< css::uno::XComponentContext > const & xContext);
 
         // css::container::XContainerListener
-        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) override;
+        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) override;
+        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
         // XSelectionSupplier
-        virtual sal_Bool SAL_CALL select( const css::uno::Any& xSelection ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Any SAL_CALL getSelection(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL select( const css::uno::Any& xSelection ) override;
+        virtual css::uno::Any SAL_CALL getSelection(  ) override;
+        virtual void SAL_CALL addSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
+        virtual void SAL_CALL removeSelectionChangeListener( const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
         // css::frame::XController
-        virtual sal_Bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual css::uno::Any SAL_CALL getViewData() throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL attachModel(const css::uno::Reference< css::frame::XModel > & xModel) override;
+        virtual css::uno::Any SAL_CALL getViewData() override;
+        virtual void SAL_CALL restoreViewData(const css::uno::Any& Data) override;
 
         /** gives access to the report definition
         * \return the report definition object, may be <NULL/>
@@ -390,22 +390,22 @@ namespace rptui
         const css::uno::Reference< css::report::XReportDefinition>& getReportDefinition() const { return m_xReportDefinition; }
 
         // css::frame::XController
-        virtual css::uno::Reference< css::frame::XModel >  SAL_CALL getModel() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Reference< css::frame::XModel >  SAL_CALL getModel() override;
 
         // XTitle
-        virtual OUString SAL_CALL getTitle(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getTitle(  ) override;
 
         // XModeSelector
-        virtual void SAL_CALL setMode( const OUString& aMode ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override ;
-        virtual OUString SAL_CALL getMode(  ) throw (css::uno::RuntimeException, std::exception) override ;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) throw (css::uno::RuntimeException, std::exception) override ;
-        virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) throw (css::uno::RuntimeException, std::exception) override ;
+        virtual void SAL_CALL setMode( const OUString& aMode ) override ;
+        virtual OUString SAL_CALL getMode(  ) override ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedModes(  ) override ;
+        virtual sal_Bool SAL_CALL supportsMode( const OUString& aMode ) override ;
 
         // XVisualObject
-        virtual void SAL_CALL setVisualAreaSize( ::sal_Int64 nAspect, const css::awt::Size& aSize ) throw (css::lang::IllegalArgumentException, css::embed::WrongStateException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-        virtual css::awt::Size SAL_CALL getVisualAreaSize( ::sal_Int64 nAspect ) throw (css::lang::IllegalArgumentException, css::embed::WrongStateException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-        virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect ) throw (css::lang::IllegalArgumentException, css::embed::WrongStateException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getMapUnit( ::sal_Int64 nAspect ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setVisualAreaSize( ::sal_Int64 nAspect, const css::awt::Size& aSize ) override;
+        virtual css::awt::Size SAL_CALL getVisualAreaSize( ::sal_Int64 nAspect ) override;
+        virtual css::embed::VisualRepresentation SAL_CALL getPreferredVisualRepresentation( ::sal_Int64 nAspect ) override;
+        virtual ::sal_Int32 SAL_CALL getMapUnit( ::sal_Int64 nAspect ) override;
 
 
         /** returns the current position of the splitter
@@ -443,7 +443,7 @@ namespace rptui
         inline void         resetZoomType()         { m_eZoomType = SvxZoomType::PERCENT; }
 
         // css::beans::XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override
         {
             return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
         }

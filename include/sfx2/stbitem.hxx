@@ -75,22 +75,21 @@ protected:
     using svt::StatusbarController::dispose;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
     // XStatusbarController
-    virtual sal_Bool SAL_CALL mouseButtonDown( const css::awt::MouseEvent& aMouseEvent ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL mouseMove( const css::awt::MouseEvent& aMouseEvent ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL mouseButtonUp( const css::awt::MouseEvent& aMouseEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL mouseButtonDown( const css::awt::MouseEvent& aMouseEvent ) override;
+    virtual sal_Bool SAL_CALL mouseMove( const css::awt::MouseEvent& aMouseEvent ) override;
+    virtual sal_Bool SAL_CALL mouseButtonUp( const css::awt::MouseEvent& aMouseEvent ) override;
     virtual void SAL_CALL command( const css::awt::Point& aPos,
                                     ::sal_Int32 nCommand,
                                     sal_Bool bMouseEvent,
-                                    const css::uno::Any& aData ) throw (css::uno::RuntimeException, std::exception) override;
+                                    const css::uno::Any& aData ) override;
     virtual void SAL_CALL paint( const css::uno::Reference< css::awt::XGraphics >& xGraphics,
                                  const css::awt::Rectangle& rOutputRectangle,
-                                 ::sal_Int32 nStyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL click( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL doubleClick( const css::awt::Point& aPos ) throw (css::uno::RuntimeException, std::exception) override;
+                                 ::sal_Int32 nStyle ) override;
+    virtual void SAL_CALL click( const css::awt::Point& aPos ) override;
+    virtual void SAL_CALL doubleClick( const css::awt::Point& aPos ) override;
 
     // Old sfx2 interface
     virtual void    StateChanged( sal_uInt16 nSID, SfxItemState eState,

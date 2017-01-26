@@ -268,22 +268,22 @@ protected:
     SAL_DLLPRIVATE virtual ~FmXFormShell() override;
 
 // EventListener
-    SAL_DLLPRIVATE virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 // css::container::XContainerListener
-    SAL_DLLPRIVATE virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) throw( css::uno::RuntimeException, std::exception ) override;
-    SAL_DLLPRIVATE virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) throw( css::uno::RuntimeException, std::exception ) override;
-    SAL_DLLPRIVATE virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) throw( css::uno::RuntimeException, std::exception ) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) override;
 
 // XSelectionChangeListener
-    SAL_DLLPRIVATE virtual void SAL_CALL selectionChanged(const css::lang::EventObject& rEvent) throw( css::uno::RuntimeException, std::exception ) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL selectionChanged(const css::lang::EventObject& rEvent) override;
 
 // css::beans::XPropertyChangeListener
-    SAL_DLLPRIVATE virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) throw( css::uno::RuntimeException, std::exception ) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL propertyChange(const css::beans::PropertyChangeEvent& evt) override;
 
 // css::form::XFormControllerListener
-    SAL_DLLPRIVATE virtual void SAL_CALL formActivated(const css::lang::EventObject& rEvent) throw( css::uno::RuntimeException, std::exception ) override;
-    SAL_DLLPRIVATE virtual void SAL_CALL formDeactivated(const css::lang::EventObject& rEvent) throw( css::uno::RuntimeException, std::exception ) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL formActivated(const css::lang::EventObject& rEvent) override;
+    SAL_DLLPRIVATE virtual void SAL_CALL formDeactivated(const css::lang::EventObject& rEvent) override;
 
 // OComponentHelper
     SAL_DLLPRIVATE virtual void SAL_CALL disposing() override;

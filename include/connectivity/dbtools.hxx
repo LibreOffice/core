@@ -182,7 +182,7 @@ namespace dbtools
 
         @throws css::uno::RuntimeException
     */
-    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XConnection> getConnection(const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet) throw (css::uno::RuntimeException);
+    OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XConnection> getConnection(const css::uno::Reference< css::sdbc::XRowSet>& _rxRowSet);
     OOO_DLLPUBLIC_DBTOOLS css::uno::Reference< css::sdbc::XConnection> getConnection_withFeedback(
             const OUString& _rDataSourceName,
             const OUString& _rUser,
@@ -580,7 +580,7 @@ namespace dbtools
                             sal_Int32 parameterIndex,
                             const css::uno::Any& x,
                             sal_Int32 sqlType,
-                            sal_Int32 scale=0) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
+                            sal_Int32 scale=0);
 
     /** call the appropriate set method for the specific sql type @see css::sdbc::DataType
         @param  _xParams        the parameters where to set the value
@@ -596,7 +596,7 @@ namespace dbtools
                             sal_Int32 parameterIndex,
                             const ::connectivity::ORowSetValue& x,
                             sal_Int32 sqlType,
-                            sal_Int32 scale) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
+                            sal_Int32 scale);
 
 
     /** implements <method scope="com.sun.star.sdb">XParameters::setObject</method>

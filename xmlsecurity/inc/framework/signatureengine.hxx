@@ -86,8 +86,7 @@ protected:
     explicit SignatureEngine();
     virtual ~SignatureEngine() override {};
 
-    virtual void tryToPerform( )
-        throw (css::uno::Exception, css::uno::RuntimeException) override;
+    virtual void tryToPerform( ) override;
     virtual void clearUp( ) const override;
     virtual bool checkReady() const override;
 
@@ -100,25 +99,20 @@ protected:
     /// @throws css::uno::RuntimeException
     virtual void startEngine( const css::uno::Reference<
                               css::xml::crypto::XXMLSignatureTemplate >&)
-        throw (css::uno::Exception, css::uno::RuntimeException)
         {};
 
 public:
     /* XReferenceCollector */
-    virtual void SAL_CALL setReferenceCount( sal_Int32 count )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setReferenceCount( sal_Int32 count ) override;
 
-    virtual void SAL_CALL setReferenceId( sal_Int32 id )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setReferenceId( sal_Int32 id ) override;
 
     /* XUriBinding */
     virtual void SAL_CALL setUriBinding(
         const OUString& uri,
-        const css::uno::Reference< css::io::XInputStream >& aInputStream )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::io::XInputStream >& aInputStream ) override;
     virtual css::uno::Reference< css::io::XInputStream >
-        SAL_CALL getUriBinding( const OUString& uri )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        SAL_CALL getUriBinding( const OUString& uri ) override;
 };
 
 #endif

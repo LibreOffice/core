@@ -88,33 +88,30 @@ extern "C" { static void SAL_CALL thisModule() {} }
 class SfxNotificationListener_Impl : public cppu::WeakImplHelper< XDispatchResultListener >
 {
 public:
-    virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) throw( RuntimeException, std::exception ) override;
-    virtual void SAL_CALL disposing( const EventObject& aEvent ) throw( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispatchFinished( const DispatchResultEvent& aEvent ) override;
+    virtual void SAL_CALL disposing( const EventObject& aEvent ) override;
 };
 
-void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& ) throw( RuntimeException, std::exception )
+void SAL_CALL SfxNotificationListener_Impl::dispatchFinished( const DispatchResultEvent& )
 {
     ShutdownIcon::LeaveModalMode();
 }
 
-void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& ) throw( RuntimeException, std::exception )
+void SAL_CALL SfxNotificationListener_Impl::disposing( const EventObject& )
 {
 }
 
 OUString SAL_CALL ShutdownIcon::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.desktop.QuickstartWrapper");
 }
 
 sal_Bool SAL_CALL ShutdownIcon::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> SAL_CALL ShutdownIcon::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< OUString > aSeq { "com.sun.star.office.Quickstart" };
     return aSeq;
@@ -559,7 +556,7 @@ ShutdownIcon* ShutdownIcon::createInstance()
     return pShutdownIcon;
 }
 
-void ShutdownIcon::init() throw( css::uno::Exception, std::exception )
+void ShutdownIcon::init()
 {
     // access resource system and sfx only protected by solarmutex
     ::SolarMutexGuard aSolarGuard;
@@ -585,14 +582,12 @@ void SAL_CALL ShutdownIcon::disposing()
 
 // XEventListener
 void SAL_CALL ShutdownIcon::disposing( const css::lang::EventObject& )
-    throw(css::uno::RuntimeException, std::exception)
 {
 }
 
 
 // XTerminateListener
 void SAL_CALL ShutdownIcon::queryTermination( const css::lang::EventObject& )
-throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception)
 {
     SAL_INFO("sfx.appl", "ShutdownIcon::queryTermination: veto is " << m_bVeto);
     ::osl::ClearableMutexGuard  aGuard( m_aMutex );
@@ -603,13 +598,11 @@ throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exc
 
 
 void SAL_CALL ShutdownIcon::notifyTermination( const css::lang::EventObject& )
-throw(css::uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL ShutdownIcon::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
-    throw( css::uno::Exception, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_aMutex );
 
@@ -825,11 +818,6 @@ static const ::sal_Int32 PROPHANDLE_TERMINATEVETOSTATE = 0;
 // XFastPropertySet
 void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32                  nHandle,
                                                   const css::uno::Any& aValue )
-    throw (css::beans::UnknownPropertyException,
-            css::beans::PropertyVetoException,
-            css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException,
-            css::uno::RuntimeException, std::exception)
 {
     switch(nHandle)
     {
@@ -853,9 +841,6 @@ void SAL_CALL ShutdownIcon::setFastPropertyValue(       ::sal_Int32             
 
 // XFastPropertySet
 css::uno::Any SAL_CALL ShutdownIcon::getFastPropertyValue( ::sal_Int32 nHandle )
-    throw (css::beans::UnknownPropertyException,
-            css::lang::WrappedTargetException,
-            css::uno::RuntimeException, std::exception)
 {
     css::uno::Any aValue;
     switch(nHandle)

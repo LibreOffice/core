@@ -173,7 +173,7 @@ namespace pcr
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( ImplInspectorModel, ImplInspectorModel_Base, ImplInspectorModel_PBase )
 
 
-    Reference< XPropertySetInfo > SAL_CALL ImplInspectorModel::getPropertySetInfo(  ) throw (RuntimeException, std::exception)
+    Reference< XPropertySetInfo > SAL_CALL ImplInspectorModel::getPropertySetInfo(  )
     {
         return m_pProperties->getPropertySetInfo();
     }
@@ -185,13 +185,13 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL ImplInspectorModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue ) throw (IllegalArgumentException)
+    sal_Bool SAL_CALL ImplInspectorModel::convertFastPropertyValue( Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
     {
         return m_pProperties->convertFastPropertyValue( rConvertedValue, rOldValue, nHandle, rValue );
     }
 
 
-    void SAL_CALL ImplInspectorModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw (Exception, std::exception)
+    void SAL_CALL ImplInspectorModel::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
     {
         m_pProperties->setFastPropertyValue( nHandle, rValue );
     }
@@ -203,36 +203,36 @@ namespace pcr
     }
 
 
-    sal_Bool SAL_CALL ImplInspectorModel::getHasHelpSection() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL ImplInspectorModel::getHasHelpSection()
     {
         return m_pProperties->hasHelpSection();
     }
 
 
-    ::sal_Int32 SAL_CALL ImplInspectorModel::getMinHelpTextLines() throw (RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL ImplInspectorModel::getMinHelpTextLines()
     {
         return m_pProperties->getMinHelpTextLines();
     }
 
 
-    ::sal_Int32 SAL_CALL ImplInspectorModel::getMaxHelpTextLines() throw (RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL ImplInspectorModel::getMaxHelpTextLines()
     {
         return m_pProperties->getMaxHelpTextLines();
     }
 
 
-    sal_Bool SAL_CALL ImplInspectorModel::getIsReadOnly() throw (css::uno::RuntimeException, std::exception)
+    sal_Bool SAL_CALL ImplInspectorModel::getIsReadOnly()
     {
         return m_pProperties->isReadOnly();
     }
 
 
-    void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool IsReadOnly ) throw (css::uno::RuntimeException, std::exception)
+    void SAL_CALL ImplInspectorModel::setIsReadOnly( sal_Bool IsReadOnly )
     {
         setFastPropertyValue( MODEL_PROPERTY_ID_IS_READ_ONLY, makeAny( IsReadOnly ) );
     }
 
-    sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL ImplInspectorModel::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }

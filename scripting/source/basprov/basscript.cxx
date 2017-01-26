@@ -143,7 +143,7 @@ namespace basprov
     // XPropertySet
 
 
-    Reference< XPropertySetInfo > BasicScriptImpl::getPropertySetInfo(  ) throw (RuntimeException, std::exception)
+    Reference< XPropertySetInfo > BasicScriptImpl::getPropertySetInfo(  )
     {
         Reference< XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
@@ -154,7 +154,6 @@ namespace basprov
 
 
     Any BasicScriptImpl::invoke( const Sequence< Any >& aParams, Sequence< sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
-        throw ( provider::ScriptFrameworkErrorException, reflection::InvocationTargetException, uno::RuntimeException, std::exception)
     {
         // TODO: throw CannotConvertException
         // TODO: check length of aOutParamIndex, aOutParam

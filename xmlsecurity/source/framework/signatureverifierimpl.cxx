@@ -63,7 +63,6 @@ bool SignatureVerifierImpl::checkReady() const
 }
 
 void SignatureVerifierImpl::notifyResultListener() const
-    throw (cssu::Exception, cssu::RuntimeException)
 /****** SignatureVerifierImpl/notifyResultListener ***************************
  *
  *   NAME
@@ -79,7 +78,6 @@ void SignatureVerifierImpl::notifyResultListener() const
 void SignatureVerifierImpl::startEngine( const cssu::Reference<
     cssxc::XXMLSignatureTemplate >&
     xSignatureTemplate)
-    throw (cssu::Exception, cssu::RuntimeException)
 /****** SignatureVerifierImpl/startEngine ************************************
  *
  *   NAME
@@ -108,7 +106,6 @@ void SignatureVerifierImpl::startEngine( const cssu::Reference<
 /* XSignatureVerifyResultBroadcaster */
 void SAL_CALL SignatureVerifierImpl::addSignatureVerifyResultListener(
     const cssu::Reference< cssxc::sax::XSignatureVerifyResultListener >& listener )
-    throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     m_xResultListener = listener;
     tryToPerform();
@@ -116,14 +113,12 @@ void SAL_CALL SignatureVerifierImpl::addSignatureVerifyResultListener(
 
 void SAL_CALL SignatureVerifierImpl::removeSignatureVerifyResultListener(
     const cssu::Reference< cssxc::sax::XSignatureVerifyResultListener >&)
-    throw (cssu::RuntimeException, std::exception)
 {
 }
 
 /* XInitialization */
 void SAL_CALL SignatureVerifierImpl::initialize(
     const cssu::Sequence< cssu::Any >& aArguments )
-    throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
@@ -140,13 +135,11 @@ void SAL_CALL SignatureVerifierImpl::initialize(
 
 
 OUString SignatureVerifierImpl_getImplementationName ()
-    throw (cssu::RuntimeException)
 {
     return OUString( IMPLEMENTATION_NAME );
 }
 
 cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNames(  )
-    throw (cssu::RuntimeException)
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.SignatureVerifier" };
     return aRet;
@@ -154,26 +147,22 @@ cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl_getSupportedServiceNam
 
 cssu::Reference< cssu::XInterface > SAL_CALL SignatureVerifierImpl_createInstance(
     const cssu::Reference< cssl::XMultiServiceFactory >& /*rSMgr*/)
-    throw( cssu::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new SignatureVerifierImpl);
 }
 
 /* XServiceInfo */
 OUString SAL_CALL SignatureVerifierImpl::getImplementationName(  )
-    throw (cssu::RuntimeException, std::exception)
 {
     return SignatureVerifierImpl_getImplementationName();
 }
 
 sal_Bool SAL_CALL SignatureVerifierImpl::supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 cssu::Sequence< OUString > SAL_CALL SignatureVerifierImpl::getSupportedServiceNames(  )
-    throw (cssu::RuntimeException, std::exception)
 {
     return SignatureVerifierImpl_getSupportedServiceNames();
 }

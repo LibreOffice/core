@@ -77,7 +77,6 @@ void RegressionCurveCalculator::setRegressionProperties(
     sal_Bool    aForceIntercept,
     double      aInterceptValue,
     sal_Int32   aPeriod )
-        throw (uno::RuntimeException, std::exception)
 {
     mDegree = aDegree;
     mForceIntercept = aForceIntercept;
@@ -136,7 +135,6 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
     const Reference< chart2::XScaling >& xScalingX,
     const Reference< chart2::XScaling >& /* xScalingY */,
     sal_Bool /* bMaySkipPointsInCalculation */ )
-        throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     if( nPointCount < 2 )
         throw lang::IllegalArgumentException();
@@ -172,13 +170,11 @@ Sequence< geometry::RealPoint2D > SAL_CALL RegressionCurveCalculator::getCurveVa
 }
 
 double SAL_CALL RegressionCurveCalculator::getCorrelationCoefficient()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_fCorrelationCoeffitient;
 }
 
 OUString SAL_CALL RegressionCurveCalculator::getRepresentation()
-    throw (uno::RuntimeException, std::exception)
 {
     return ImplGetRepresentation( Reference< util::XNumberFormatter >(), 0 );
 }
@@ -186,7 +182,6 @@ OUString SAL_CALL RegressionCurveCalculator::getRepresentation()
 OUString SAL_CALL RegressionCurveCalculator::getFormattedRepresentation(
     const Reference< util::XNumberFormatsSupplier > & xNumFmtSupplier,
     sal_Int32 nNumberFormatKey, sal_Int32 nFormulaLength )
-throw (uno::RuntimeException, std::exception)
 {
     // create and prepare a number formatter
     if( !xNumFmtSupplier.is())
@@ -213,7 +208,6 @@ void RegressionCurveCalculator::addStringToEquation(
 }
 
 void SAL_CALL RegressionCurveCalculator::setXYNames( const OUString& aXName, const OUString& aYName )
-    throw (uno::RuntimeException, std::exception)
 {
     if ( aXName.isEmpty() )
         mXName = OUString ("x");

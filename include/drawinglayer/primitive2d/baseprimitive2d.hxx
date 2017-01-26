@@ -211,15 +211,15 @@ namespace drawinglayer
             /** The getDecomposition implementation for UNO API will use getDecomposition from this implementation. It
                 will construct a ViewInformation2D from the ViewParameters for that purpose
              */
-            virtual Primitive2DSequence SAL_CALL getDecomposition( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) throw ( css::uno::RuntimeException, std::exception ) override;
+            virtual Primitive2DSequence SAL_CALL getDecomposition( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) override;
 
             /** The getRange implementation for UNO API will use getRange from this implementation. It
                 will construct a ViewInformation2D from the ViewParameters for that purpose
              */
-            virtual css::geometry::RealRectangle2D SAL_CALL getRange( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) throw ( css::uno::RuntimeException, std::exception ) override;
+            virtual css::geometry::RealRectangle2D SAL_CALL getRange( const css::uno::Sequence< css::beans::PropertyValue >& rViewParameters ) override;
 
             // XAccounting
-            virtual sal_Int64 SAL_CALL estimateUsage() throw (css::uno::RuntimeException) override;
+            virtual sal_Int64 SAL_CALL estimateUsage() override;
 
         };
     } // end of namespace primitive2d

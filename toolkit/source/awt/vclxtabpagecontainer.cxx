@@ -54,7 +54,7 @@ VCLXTabPageContainer::~VCLXTabPageContainer()
     SAL_INFO("toolkit", __FUNCTION__);
 }
 
-void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY ) throw(RuntimeException, std::exception)
+void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY )
 {
     SolarMutexGuard aGuard;
     VclPtr<TabControl> pTabControl = GetAs<TabControl>();
@@ -77,13 +77,13 @@ void SAL_CALL VCLXTabPageContainer::draw( sal_Int32 nX, sal_Int32 nY ) throw(Run
     VCLXWindow::draw( nX, nY );
 }
 
-css::awt::DeviceInfo VCLXTabPageContainer::getInfo() throw(RuntimeException, std::exception)
+css::awt::DeviceInfo VCLXTabPageContainer::getInfo()
 {
     css::awt::DeviceInfo aInfo = VCLXDevice::getInfo();
     return aInfo;
 }
 
-void SAL_CALL VCLXTabPageContainer::setProperty(const OUString& PropertyName,   const Any& Value ) throw(RuntimeException, std::exception)
+void SAL_CALL VCLXTabPageContainer::setProperty(const OUString& PropertyName,   const Any& Value )
 {
     SolarMutexGuard aGuard;
     VclPtr<TabControl> pTabPage = GetAs<TabControl>();
@@ -91,36 +91,36 @@ void SAL_CALL VCLXTabPageContainer::setProperty(const OUString& PropertyName,   
         VCLXWindow::setProperty( PropertyName, Value );
 }
 
-::sal_Int16 SAL_CALL VCLXTabPageContainer::getActiveTabPageID() throw (RuntimeException, std::exception)
+::sal_Int16 SAL_CALL VCLXTabPageContainer::getActiveTabPageID()
 {
     VclPtr<TabControl> pTabCtrl = GetAs<TabControl>();
     return pTabCtrl ? pTabCtrl->GetCurPageId( ) : 0;
 }
 
-void SAL_CALL VCLXTabPageContainer::setActiveTabPageID( ::sal_Int16 _activetabpageid ) throw (RuntimeException, std::exception)
+void SAL_CALL VCLXTabPageContainer::setActiveTabPageID( ::sal_Int16 _activetabpageid )
 {
     VclPtr<TabControl> pTabCtrl = GetAs<TabControl>();
     if ( pTabCtrl )
         pTabCtrl->SelectTabPage(_activetabpageid);
 }
 
-::sal_Int16 SAL_CALL VCLXTabPageContainer::getTabPageCount(  ) throw (RuntimeException, std::exception)
+::sal_Int16 SAL_CALL VCLXTabPageContainer::getTabPageCount(  )
 {
     VclPtr<TabControl> pTabCtrl = GetAs<TabControl>();
     return pTabCtrl ? pTabCtrl->GetPageCount() : 0;
 }
 
-sal_Bool SAL_CALL VCLXTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL VCLXTabPageContainer::isTabPageActive( ::sal_Int16 tabPageIndex )
 {
     return (getActiveTabPageID() == tabPageIndex);
 }
 
-Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPage( ::sal_Int16 tabPageIndex ) throw (RuntimeException, std::exception)
+Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPage( ::sal_Int16 tabPageIndex )
 {
     return (tabPageIndex >= 0 && tabPageIndex < static_cast<sal_Int16>(m_aTabPages.size())) ? m_aTabPages[tabPageIndex] : nullptr;
 }
 
-Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPageByID( ::sal_Int16 tabPageID ) throw (RuntimeException, std::exception)
+Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPageByID( ::sal_Int16 tabPageID )
 {
     SolarMutexGuard aGuard;
     Reference< css::awt::tab::XTabPage > xTabPage;
@@ -139,12 +139,12 @@ Reference< css::awt::tab::XTabPage > SAL_CALL VCLXTabPageContainer::getTabPageBy
     return xTabPage;
 }
 
-void SAL_CALL VCLXTabPageContainer::addTabPageContainerListener( const Reference< css::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException, std::exception)
+void SAL_CALL VCLXTabPageContainer::addTabPageContainerListener( const Reference< css::awt::tab::XTabPageContainerListener >& listener )
 {
     m_aTabPageListeners.addInterface( listener );
 }
 
-void SAL_CALL VCLXTabPageContainer::removeTabPageContainerListener( const Reference< css::awt::tab::XTabPageContainerListener >& listener ) throw (RuntimeException, std::exception)
+void SAL_CALL VCLXTabPageContainer::removeTabPageContainerListener( const Reference< css::awt::tab::XTabPageContainerListener >& listener )
 {
     m_aTabPageListeners.removeInterface( listener );
 }
@@ -171,10 +171,10 @@ void VCLXTabPageContainer::ProcessWindowEvent( const VclWindowEvent& _rVclWindow
         }
     }
 }
-void SAL_CALL VCLXTabPageContainer::disposing( const css::lang::EventObject& /*Source*/ ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXTabPageContainer::disposing( const css::lang::EventObject& /*Source*/ )
 {
 }
-void SAL_CALL VCLXTabPageContainer::elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXTabPageContainer::elementInserted( const css::container::ContainerEvent& Event )
 {
     SolarMutexGuard aGuard;
     VclPtr<TabControl> pTabCtrl = GetAs<TabControl>();
@@ -198,7 +198,7 @@ void SAL_CALL VCLXTabPageContainer::elementInserted( const css::container::Conta
         m_aTabPages.push_back(xTabPage);
     }
 }
-void SAL_CALL VCLXTabPageContainer::elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXTabPageContainer::elementRemoved( const css::container::ContainerEvent& Event )
 {
     SolarMutexGuard aGuard;
     VclPtr<TabControl> pTabCtrl = GetAs<TabControl>();
@@ -211,7 +211,7 @@ void SAL_CALL VCLXTabPageContainer::elementRemoved( const css::container::Contai
         m_aTabPages.erase(::std::remove(m_aTabPages.begin(),m_aTabPages.end(),xTabPage));
     }
 }
-void SAL_CALL VCLXTabPageContainer::elementReplaced( const css::container::ContainerEvent& /*Event*/ ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXTabPageContainer::elementReplaced( const css::container::ContainerEvent& /*Event*/ )
 {
 }
 

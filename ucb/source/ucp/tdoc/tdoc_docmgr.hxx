@@ -71,18 +71,14 @@ namespace tdoc_ucp {
             // util::XCloseListener
             virtual void SAL_CALL queryClosing(
                     const css::lang::EventObject& Source,
-                    sal_Bool GetsOwnership )
-                throw (css::util::CloseVetoException,
-                       css::uno::RuntimeException, std::exception) override;
+                    sal_Bool GetsOwnership ) override;
 
             virtual void SAL_CALL notifyClosing(
-                    const css::lang::EventObject& Source )
-                throw (css::uno::RuntimeException, std::exception) override;
+                    const css::lang::EventObject& Source ) override;
 
             // lang::XEventListener (base of util::XCloseListener)
             virtual void SAL_CALL disposing(
-                    const css::lang::EventObject & Source )
-                throw ( css::uno::RuntimeException, std::exception ) override;
+                    const css::lang::EventObject & Source ) override;
 
             void Dispose() { m_pManager = nullptr; }
 
@@ -100,13 +96,11 @@ namespace tdoc_ucp {
 
         // document::XDocumentEventListener
         virtual void SAL_CALL documentEventOccured(
-                const css::document::DocumentEvent & Event )
-            throw ( css::uno::RuntimeException, std::exception ) override;
+                const css::document::DocumentEvent & Event ) override;
 
         // lang::XEventListener (base of document::XDocumentEventListener)
         virtual void SAL_CALL disposing(
-                const css::lang::EventObject & Source )
-            throw ( css::uno::RuntimeException, std::exception ) override;
+                const css::lang::EventObject & Source ) override;
 
         // Non-interface
         css::uno::Reference< css::embed::XStorage >

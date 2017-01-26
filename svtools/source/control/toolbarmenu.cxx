@@ -147,7 +147,7 @@ const Reference< XAccessibleContext >& ToolbarMenuEntry::GetAccessible()
 }
 
 
-sal_Int32 ToolbarMenuEntry::getAccessibleChildCount() throw (RuntimeException)
+sal_Int32 ToolbarMenuEntry::getAccessibleChildCount()
 {
     if( mpControl )
     {
@@ -161,7 +161,7 @@ sal_Int32 ToolbarMenuEntry::getAccessibleChildCount() throw (RuntimeException)
 }
 
 
-Reference< XAccessible > ToolbarMenuEntry::getAccessibleChild( sal_Int32 index ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessible > ToolbarMenuEntry::getAccessibleChild( sal_Int32 index )
 {
     const Reference< XAccessibleContext >& xContext = GetAccessible();
     if( mpControl )
@@ -219,7 +219,7 @@ void ToolbarMenu_Impl::fireAccessibleEvent( short nEventId, const css::uno::Any&
 }
 
 
-sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount() throw (RuntimeException)
+sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount()
 {
     sal_Int32 nCount = 0;
     for( const auto& pEntry : maEntryVector )
@@ -241,7 +241,7 @@ sal_Int32 ToolbarMenu_Impl::getAccessibleChildCount() throw (RuntimeException)
 }
 
 
-Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index )
 {
     for( const auto& pEntry : maEntryVector )
     {
@@ -260,7 +260,7 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( sal_Int32 index )
 }
 
 
-Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl, sal_Int32 childIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl, sal_Int32 childIndex )
 {
     for( const auto& pEntry : maEntryVector )
     {
@@ -274,7 +274,7 @@ Reference< XAccessible > ToolbarMenu_Impl::getAccessibleChild( Control* pControl
 }
 
 
-void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex )
 {
     const int nEntryCount = maEntryVector.size();
     for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
@@ -304,7 +304,7 @@ void ToolbarMenu_Impl::selectAccessibleChild( sal_Int32 nChildIndex ) throw (Ind
 }
 
 
-bool ToolbarMenu_Impl::isAccessibleChildSelected( sal_Int32 nChildIndex ) throw (IndexOutOfBoundsException, RuntimeException)
+bool ToolbarMenu_Impl::isAccessibleChildSelected( sal_Int32 nChildIndex )
 {
     const int nEntryCount = maEntryVector.size();
     for( int nEntry = 0; nEntry < nEntryCount; nEntry++ )
@@ -1397,8 +1397,8 @@ public:
     ToolbarPopupStatusListener( const css::uno::Reference< css::frame::XFrame >& xFrame,
                                 ToolbarPopup& rToolbarPopup );
 
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
     VclPtr<ToolbarPopup> mpPopup;
 };
@@ -1413,14 +1413,14 @@ ToolbarPopupStatusListener::ToolbarPopupStatusListener(
 }
 
 
-void SAL_CALL ToolbarPopupStatusListener::dispose() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL ToolbarPopupStatusListener::dispose()
 {
     mpPopup.clear();
     svt::FrameStatusListener::dispose();
 }
 
 
-void SAL_CALL ToolbarPopupStatusListener::statusChanged( const css::frame::FeatureStateEvent& Event ) throw ( css::uno::RuntimeException, std::exception )
+void SAL_CALL ToolbarPopupStatusListener::statusChanged( const css::frame::FeatureStateEvent& Event )
 {
     if( mpPopup )
         mpPopup->statusChanged( Event );
@@ -1464,7 +1464,7 @@ void ToolbarPopup::AddStatusListener( const OUString& rCommandURL )
     mxStatusListener->addStatusListener( rCommandURL );
 }
 
-void ToolbarPopup::statusChanged( const css::frame::FeatureStateEvent& /*Event*/ ) throw ( css::uno::RuntimeException, std::exception )
+void ToolbarPopup::statusChanged( const css::frame::FeatureStateEvent& /*Event*/ )
 {
 }
 

@@ -42,23 +42,18 @@ public:
         virtual ~TextToPronounce_zh() override;
 
         OUString SAL_CALL
-        folding(const OUString & inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 > & offset)
-        throw (css::uno::RuntimeException, std::exception) override;
+        folding(const OUString & inStr, sal_Int32 startPos, sal_Int32 nCount, css::uno::Sequence< sal_Int32 > & offset) override;
 
-        sal_Int16 SAL_CALL getType() throw(css::uno::RuntimeException, std::exception) override;
+        sal_Int16 SAL_CALL getType() override;
 
         sal_Bool SAL_CALL
-        equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32 & nMatch1, const OUString & str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32 & nMatch2)
-        throw (css::uno::RuntimeException, std::exception) override;
+        equals( const OUString & str1, sal_Int32 pos1, sal_Int32 nCount1, sal_Int32 & nMatch1, const OUString & str2, sal_Int32 pos2, sal_Int32 nCount2, sal_Int32 & nMatch2) override;
 
         OUString SAL_CALL
-        transliterateChar2String( sal_Unicode inChar)
-        throw(css::uno::RuntimeException, std::exception) override;
+        transliterateChar2String( sal_Unicode inChar) override;
 
         sal_Unicode SAL_CALL
-        transliterateChar2Char( sal_Unicode inChar)
-        throw(css::uno::RuntimeException,
-            css::i18n::MultipleCharsOutputException, std::exception) override;
+        transliterateChar2Char( sal_Unicode inChar) override;
 };
 
 #define TRANSLITERATION_TextToPronounce_zh( name ) \

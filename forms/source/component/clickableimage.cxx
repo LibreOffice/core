@@ -102,7 +102,7 @@ namespace frm
 
     // UNO Binding
 
-    Any SAL_CALL OClickableImageBaseControl::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
+    Any SAL_CALL OClickableImageBaseControl::queryAggregation(const Type& _rType)
     {
         Any aReturn = OControl::queryAggregation(_rType);
         if (!aReturn.hasValue())
@@ -113,26 +113,26 @@ namespace frm
     // XApproveActionBroadcaster
 
     void OClickableImageBaseControl::addApproveActionListener(
-            const Reference<XApproveActionListener>& l) throw( RuntimeException, std::exception )
+            const Reference<XApproveActionListener>& l)
     {
         m_aApproveActionListeners.addInterface(l);
     }
 
 
     void OClickableImageBaseControl::removeApproveActionListener(
-            const Reference<XApproveActionListener>& l) throw( RuntimeException, std::exception )
+            const Reference<XApproveActionListener>& l)
     {
         m_aApproveActionListeners.removeInterface(l);
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseControl::registerDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         m_pFeatureInterception->registerDispatchProviderInterceptor( _rxInterceptor  );
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor ) throw (RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseControl::releaseDispatchProviderInterceptor( const Reference< XDispatchProviderInterceptor >& _rxInterceptor )
     {
         m_pFeatureInterception->releaseDispatchProviderInterceptor( _rxInterceptor  );
     }
@@ -340,31 +340,31 @@ namespace frm
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::addSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseControl::addSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener )
     {
         m_aSubmissionVetoListeners.addInterface( listener );
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::removeSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener ) throw (NoSupportException, RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseControl::removeSubmissionVetoListener( const Reference< submission::XSubmissionVetoListener >& listener )
     {
         m_aSubmissionVetoListeners.removeInterface( listener );
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::submitWithInteraction( const Reference< XInteractionHandler >& _rxHandler ) throw (VetoException, WrappedTargetException, RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseControl::submitWithInteraction( const Reference< XInteractionHandler >& _rxHandler )
     {
         implSubmit( MouseEvent(), _rxHandler );
     }
 
 
-    void SAL_CALL OClickableImageBaseControl::submit(  ) throw (VetoException, WrappedTargetException, RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseControl::submit(  )
     {
         implSubmit( MouseEvent(), nullptr );
     }
 
 
-    Sequence< OUString > SAL_CALL OClickableImageBaseControl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL OClickableImageBaseControl::getSupportedServiceNames(  )
     {
         Sequence< OUString > aSupported = OControl::getSupportedServiceNames();
         aSupported.realloc( aSupported.getLength() + 1 );
@@ -519,40 +519,40 @@ namespace frm
 
     // XImageProducer
 
-    void SAL_CALL OClickableImageBaseModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseModel::addConsumer( const Reference< XImageConsumer >& _rxConsumer )
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->addConsumer( _rxConsumer );
     }
 
 
-    void SAL_CALL OClickableImageBaseModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer ) throw (RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseModel::removeConsumer( const Reference< XImageConsumer >& _rxConsumer )
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->removeConsumer( _rxConsumer );
     }
 
 
-    void SAL_CALL OClickableImageBaseModel::startProduction(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseModel::startProduction(  )
     {
         ImageModelMethodGuard aGuard( *this );
         GetImageProducer()->startProduction();
     }
 
 
-    Reference< submission::XSubmission > SAL_CALL OClickableImageBaseModel::getSubmission() throw (RuntimeException, std::exception)
+    Reference< submission::XSubmission > SAL_CALL OClickableImageBaseModel::getSubmission()
     {
         return m_xSubmissionDelegate;
     }
 
 
-    void SAL_CALL OClickableImageBaseModel::setSubmission( const Reference< submission::XSubmission >& _submission ) throw (RuntimeException, std::exception)
+    void SAL_CALL OClickableImageBaseModel::setSubmission( const Reference< submission::XSubmission >& _submission )
     {
         m_xSubmissionDelegate = _submission;
     }
 
 
-    Sequence< OUString > SAL_CALL OClickableImageBaseModel::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL OClickableImageBaseModel::getSupportedServiceNames(  )
     {
         Sequence< OUString > aSupported = OControlModel::getSupportedServiceNames();
         aSupported.realloc( aSupported.getLength() + 1 );
@@ -578,7 +578,7 @@ namespace frm
     }
 
 
-    Any SAL_CALL OClickableImageBaseModel::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
+    Any SAL_CALL OClickableImageBaseModel::queryAggregation(const Type& _rType)
     {
         // order matters:
         // we definitely want to "override" the XImageProducer interface of our aggregate,
@@ -610,7 +610,7 @@ namespace frm
     }
 
 
-    void OClickableImageBaseModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( Exception, std::exception)
+    void OClickableImageBaseModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
     {
         switch (nHandle)
         {
@@ -641,7 +641,6 @@ namespace frm
 
 
     sal_Bool OClickableImageBaseModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
-                                throw( IllegalArgumentException, RuntimeException, std::exception )
     {
         switch (nHandle)
         {
@@ -822,7 +821,6 @@ namespace frm
 
 
     void OClickableImageBaseModel::_propertyChanged( const PropertyChangeEvent& rEvt )
-        throw( RuntimeException, std::exception )
     {
         // If a URL was set, it needs to be passed onto the ImageProducer.
         ::osl::MutexGuard aGuard(m_aMutex);

@@ -36,12 +36,9 @@ namespace connectivity
             OCatalog*   m_pCatalog;
         protected:
             virtual sdbcx::ObjectType createObject(const OUString& _rName) override;
-            virtual void impl_refresh() throw(css::uno::RuntimeException) override;
+            virtual void impl_refresh() override;
             virtual css::uno::Reference< css::beans::XPropertySet > createDescriptor() override;
             virtual sdbcx::ObjectType appendObject( const OUString& _rForName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            void setComments(const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::uno::RuntimeException);
             virtual void dropObject(sal_Int32 _nPos,const OUString& _sElementName) override;
         public:
             OViews(OCatalog* _pParent, ::osl::Mutex& _rMutex,

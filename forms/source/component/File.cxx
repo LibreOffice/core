@@ -67,7 +67,7 @@ Sequence<Type> OFileControlModel::_getTypes()
 
 // XServiceInfo
 
-css::uno::Sequence<OUString>  OFileControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString>  OFileControlModel::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OControlModel::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -109,7 +109,7 @@ OFileControlModel::~OFileControlModel()
 IMPLEMENT_DEFAULT_CLONING( OFileControlModel )
 
 
-Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL OFileControlModel::queryAggregation(const Type& _rType)
 {
     Any aReturn = OControlModel::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -153,7 +153,7 @@ void OFileControlModel::getFastPropertyValue(Any& rValue, sal_Int32 nHandle) con
 }
 
 
-void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) throw ( css::uno::Exception, std::exception)
+void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
 {
     switch (nHandle)
     {
@@ -168,7 +168,6 @@ void OFileControlModel::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, cons
 
 
 sal_Bool OFileControlModel::convertFastPropertyValue(Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
-                            throw( IllegalArgumentException, RuntimeException, std::exception )
 {
     switch (nHandle)
     {
@@ -189,13 +188,13 @@ void OFileControlModel::describeFixedProperties( Sequence< Property >& _rProps )
 }
 
 
-OUString SAL_CALL OFileControlModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OFileControlModel::getServiceName()
 {
     return OUString(FRM_COMPONENT_FILECONTROL);   // old (non-sun) name for compatibility !
 }
 
 
-void OFileControlModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
+void OFileControlModel::write(const Reference<css::io::XObjectOutputStream>& _rxOutStream)
 {
     OControlModel::write(_rxOutStream);
 
@@ -209,7 +208,7 @@ void OFileControlModel::write(const Reference<css::io::XObjectOutputStream>& _rx
 }
 
 
-void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
+void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxInStream)
 {
     OControlModel::read(_rxInStream);
     ::osl::MutexGuard aGuard(m_aMutex);
@@ -235,7 +234,7 @@ void OFileControlModel::read(const Reference<css::io::XObjectInputStream>& _rxIn
 }
 
 
-void SAL_CALL OFileControlModel::reset() throw ( css::uno::RuntimeException, std::exception)
+void SAL_CALL OFileControlModel::reset()
 {
     ::comphelper::OInterfaceIteratorHelper2 aIter(m_aResetListeners);
     EventObject aEvt(static_cast<XWeak*>(this));
@@ -254,13 +253,13 @@ void SAL_CALL OFileControlModel::reset() throw ( css::uno::RuntimeException, std
 }
 
 
-void OFileControlModel::addResetListener(const Reference<XResetListener>& _rxListener) throw ( css::uno::RuntimeException, std::exception)
+void OFileControlModel::addResetListener(const Reference<XResetListener>& _rxListener)
 {
     m_aResetListeners.addInterface(_rxListener);
 }
 
 
-void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rxListener) throw ( css::uno::RuntimeException, std::exception)
+void OFileControlModel::removeResetListener(const Reference<XResetListener>& _rxListener)
 {
     m_aResetListeners.removeInterface(_rxListener);
 }

@@ -69,19 +69,16 @@ void StarOfficeDrawImportFilter::doRegisterHandlers(OdgGenerator &rGenerator)
 
 // XServiceInfo
 OUString SAL_CALL StarOfficeDrawImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Draw.StarOfficeDrawImportFilter");
 }
 
 sal_Bool SAL_CALL StarOfficeDrawImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL StarOfficeDrawImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     return Sequence< OUString > {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
 }

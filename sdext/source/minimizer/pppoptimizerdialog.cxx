@@ -42,7 +42,6 @@ PPPOptimizerDialog::~PPPOptimizerDialog()
 }
 
 void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments )
-    throw ( Exception, RuntimeException, std::exception )
 {
     if( aArguments.getLength() != 1 )
         throw IllegalArgumentException();
@@ -53,25 +52,22 @@ void SAL_CALL PPPOptimizerDialog::initialize( const Sequence< Any >& aArguments 
 }
 
 OUString SAL_CALL PPPOptimizerDialog::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return PPPOptimizerDialog_getImplementationName();
 }
 
 sal_Bool SAL_CALL PPPOptimizerDialog::supportsService( const OUString& ServiceName )
-    throw ( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL PPPOptimizerDialog::getSupportedServiceNames()
-    throw (RuntimeException, std::exception)
 {
     return PPPOptimizerDialog_getSupportedServiceNames();
 }
 
 Reference< css::frame::XDispatch > SAL_CALL PPPOptimizerDialog::queryDispatch(
-    const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ ) throw( RuntimeException, std::exception )
+    const URL& aURL, const OUString& /* aTargetFrameName */, sal_Int32 /* nSearchFlags */ )
 {
     Reference < XDispatch > xRet;
     if ( aURL.Protocol.equalsIgnoreAsciiCase( "vnd.com.sun.star.comp.PresentationMinimizer:" ) )
@@ -81,7 +77,7 @@ Reference< css::frame::XDispatch > SAL_CALL PPPOptimizerDialog::queryDispatch(
 }
 
 Sequence< Reference< css::frame::XDispatch > > SAL_CALL PPPOptimizerDialog::queryDispatches(
-    const Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw( RuntimeException, std::exception )
+    const Sequence< css::frame::DispatchDescriptor >& aDescripts )
 {
     Sequence< Reference< css::frame::XDispatch> > aReturn( aDescripts.getLength() );
     Reference< css::frame::XDispatch>* pReturn = aReturn.getArray();
@@ -95,7 +91,6 @@ Sequence< Reference< css::frame::XDispatch > > SAL_CALL PPPOptimizerDialog::quer
 
 void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
                                             const Sequence< PropertyValue >& rArguments )
-    throw( RuntimeException, std::exception )
 {
 
     if ( mxController.is() && rURL.Protocol.equalsIgnoreAsciiCase( "vnd.com.sun.star.comp.PresentationMinimizer:" ) )
@@ -143,14 +138,12 @@ void SAL_CALL PPPOptimizerDialog::dispatch( const URL& rURL,
 }
 
 void SAL_CALL PPPOptimizerDialog::addStatusListener( const Reference< XStatusListener >&, const URL& )
-    throw( RuntimeException, std::exception )
 {
     // TODO
     // OSL_FAIL( "PPPOptimizerDialog::addStatusListener()\nNot implemented yet!" );
 }
 
 void SAL_CALL PPPOptimizerDialog::removeStatusListener( const Reference< XStatusListener >&, const URL& )
-    throw( RuntimeException, std::exception )
 {
     // TODO
     // OSL_FAIL( "PPPOptimizerDialog::removeStatusListener()\nNot implemented yet!" );
@@ -168,7 +161,6 @@ Sequence< OUString > PPPOptimizerDialog_getSupportedServiceNames()
 }
 
 Reference< XInterface > PPPOptimizerDialog_createInstance( const Reference< XComponentContext > & rSMgr)
-    throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new PPPOptimizerDialog( rSMgr ));
 }

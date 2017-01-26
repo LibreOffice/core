@@ -880,10 +880,10 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             void doLoadAsync();
 
             // XTerminateListener
-            virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) throw (TerminationVetoException, RuntimeException, std::exception) override;
-            virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) throw (RuntimeException, std::exception) override;
+            virtual void SAL_CALL queryTermination( const css::lang::EventObject& Event ) override;
+            virtual void SAL_CALL notifyTermination( const css::lang::EventObject& Event ) override;
             // XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         private:
             DECL_LINK( OnOpenDocument, void*, void );
@@ -956,15 +956,15 @@ bool ODbTypeWizDialogSetup::SaveDatabaseDocument()
             release();
         }
 
-        void SAL_CALL AsyncLoader::queryTermination( const css::lang::EventObject& /*Event*/ ) throw (TerminationVetoException, RuntimeException, std::exception)
+        void SAL_CALL AsyncLoader::queryTermination( const css::lang::EventObject& /*Event*/ )
         {
             throw TerminationVetoException();
         }
 
-        void SAL_CALL AsyncLoader::notifyTermination( const css::lang::EventObject& /*Event*/ ) throw (RuntimeException, std::exception)
+        void SAL_CALL AsyncLoader::notifyTermination( const css::lang::EventObject& /*Event*/ )
         {
         }
-        void SAL_CALL AsyncLoader::disposing( const css::lang::EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
+        void SAL_CALL AsyncLoader::disposing( const css::lang::EventObject& /*Source*/ )
         {
         }
     }

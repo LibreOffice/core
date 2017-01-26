@@ -1422,7 +1422,6 @@ uno::Reference< io::XInputStream > OWriteStream_Impl::GetRawInStream()
 }
 
 ::comphelper::SequenceAsHashMap OWriteStream_Impl::GetCommonRootEncryptionData()
-    throw ( packages::NoEncryptionException )
 {
     ::osl::MutexGuard aGuard( m_rMutexRef->GetMutex() ) ;
 
@@ -1861,7 +1860,6 @@ void OWriteStream::ModifyParentUnlockMutex_Impl( ::osl::ResettableMutexGuard& aG
 }
 
 uno::Any SAL_CALL OWriteStream::queryInterface( const uno::Type& rType )
-        throw( uno::RuntimeException, std::exception )
 {
     uno::Any aReturn;
 
@@ -1923,7 +1921,6 @@ void SAL_CALL OWriteStream::release() throw()
 }
 
 uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
-        throw( uno::RuntimeException, std::exception )
 {
     if (! m_pData->m_pTypeCollection)
     {
@@ -2036,16 +2033,11 @@ uno::Sequence< uno::Type > SAL_CALL OWriteStream::getTypes()
 namespace { struct lcl_ImplId : public rtl::Static< ::cppu::OImplementationId, lcl_ImplId > {}; }
 
 uno::Sequence< sal_Int8 > SAL_CALL OWriteStream::getImplementationId()
-        throw( uno::RuntimeException, std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
-        throw ( io::NotConnectedException,
-                io::BufferSizeExceededException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2064,10 +2056,6 @@ sal_Int32 SAL_CALL OWriteStream::readBytes( uno::Sequence< sal_Int8 >& aData, sa
 }
 
 sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
-        throw ( io::NotConnectedException,
-                io::BufferSizeExceededException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2086,10 +2074,6 @@ sal_Int32 SAL_CALL OWriteStream::readSomeBytes( uno::Sequence< sal_Int8 >& aData
 }
 
 void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
-        throw ( io::NotConnectedException,
-                io::BufferSizeExceededException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2108,9 +2092,6 @@ void SAL_CALL OWriteStream::skipBytes( sal_Int32 nBytesToSkip )
 }
 
 sal_Int32 SAL_CALL OWriteStream::available(  )
-        throw ( io::NotConnectedException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2130,9 +2111,6 @@ sal_Int32 SAL_CALL OWriteStream::available(  )
 }
 
 void SAL_CALL OWriteStream::closeInput(  )
-        throw ( io::NotConnectedException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2156,7 +2134,6 @@ void SAL_CALL OWriteStream::closeInput(  )
 }
 
 uno::Reference< io::XInputStream > SAL_CALL OWriteStream::getInputStream()
-        throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2173,7 +2150,6 @@ uno::Reference< io::XInputStream > SAL_CALL OWriteStream::getInputStream()
 }
 
 uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
-        throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2200,10 +2176,6 @@ uno::Reference< io::XOutputStream > SAL_CALL OWriteStream::getOutputStream()
 }
 
 void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
-        throw ( io::NotConnectedException,
-                io::BufferSizeExceededException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2267,10 +2239,6 @@ void SAL_CALL OWriteStream::writeBytes( const uno::Sequence< sal_Int8 >& aData )
 }
 
 void SAL_CALL OWriteStream::flush()
-        throw ( io::NotConnectedException,
-                io::BufferSizeExceededException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     // In case stream is flushed its current version becomes visible
     // to the parent storage. Usually parent storage flushes the stream
@@ -2318,10 +2286,6 @@ void OWriteStream::CloseOutput_Impl()
 }
 
 void SAL_CALL OWriteStream::closeOutput()
-        throw ( io::NotConnectedException,
-                io::BufferSizeExceededException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2343,9 +2307,6 @@ void SAL_CALL OWriteStream::closeOutput()
 }
 
 void SAL_CALL OWriteStream::seek( sal_Int64 location )
-        throw ( lang::IllegalArgumentException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2364,8 +2325,6 @@ void SAL_CALL OWriteStream::seek( sal_Int64 location )
 }
 
 sal_Int64 SAL_CALL OWriteStream::getPosition()
-        throw ( io::IOException,
-                uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2384,8 +2343,6 @@ sal_Int64 SAL_CALL OWriteStream::getPosition()
 }
 
 sal_Int64 SAL_CALL OWriteStream::getLength()
-        throw ( io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2404,8 +2361,6 @@ sal_Int64 SAL_CALL OWriteStream::getLength()
 }
 
 void SAL_CALL OWriteStream::truncate()
-        throw ( io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2436,7 +2391,6 @@ void SAL_CALL OWriteStream::truncate()
 }
 
 void SAL_CALL OWriteStream::dispose()
-        throw ( uno::RuntimeException, std::exception )
 {
     // should be an internal method since it can be called only from parent storage
     {
@@ -2500,7 +2454,6 @@ void SAL_CALL OWriteStream::dispose()
 
 void SAL_CALL OWriteStream::addEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
-        throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2516,7 +2469,6 @@ void SAL_CALL OWriteStream::addEventListener(
 
 void SAL_CALL OWriteStream::removeEventListener(
             const uno::Reference< lang::XEventListener >& xListener )
-        throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2531,8 +2483,6 @@ void SAL_CALL OWriteStream::removeEventListener(
 }
 
 void SAL_CALL OWriteStream::setEncryptionPassword( const OUString& aPass )
-    throw ( uno::RuntimeException,
-            io::IOException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2552,8 +2502,6 @@ void SAL_CALL OWriteStream::setEncryptionPassword( const OUString& aPass )
 }
 
 void SAL_CALL OWriteStream::removeEncryption()
-    throw ( uno::RuntimeException,
-            io::IOException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2573,7 +2521,6 @@ void SAL_CALL OWriteStream::removeEncryption()
 }
 
 void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::NamedValue >& aEncryptionData )
-    throw (io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2593,7 +2540,6 @@ void SAL_CALL OWriteStream::setEncryptionData( const uno::Sequence< beans::Named
 }
 
 sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
-    throw (uno::RuntimeException, std::exception)
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2630,8 +2576,6 @@ sal_Bool SAL_CALL OWriteStream::hasEncryptionData()
 }
 
 sal_Bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
-        throw ( io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2659,9 +2603,6 @@ sal_Bool SAL_CALL OWriteStream::hasByID(  const OUString& sID )
 }
 
 OUString SAL_CALL OWriteStream::getTargetByID(  const OUString& sID  )
-        throw ( container::NoSuchElementException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2683,9 +2624,6 @@ OUString SAL_CALL OWriteStream::getTargetByID(  const OUString& sID  )
 }
 
 OUString SAL_CALL OWriteStream::getTypeByID(  const OUString& sID  )
-        throw ( container::NoSuchElementException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2707,9 +2645,6 @@ OUString SAL_CALL OWriteStream::getTypeByID(  const OUString& sID  )
 }
 
 uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  const OUString& sID  )
-        throw ( container::NoSuchElementException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2737,8 +2672,6 @@ uno::Sequence< beans::StringPair > SAL_CALL OWriteStream::getRelationshipByID(  
 }
 
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRelationshipsByType(  const OUString& sType  )
-        throw ( io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2772,7 +2705,6 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getRe
 }
 
 uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAllRelationships()
-        throw (io::IOException, uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2789,9 +2721,6 @@ uno::Sequence< uno::Sequence< beans::StringPair > > SAL_CALL OWriteStream::getAl
 }
 
 void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const uno::Sequence< beans::StringPair >& aEntry, sal_Bool bReplace  )
-        throw ( container::ElementExistException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2852,9 +2781,6 @@ void SAL_CALL OWriteStream::insertRelationshipByID(  const OUString& sID, const 
 }
 
 void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
-        throw ( container::NoSuchElementException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2893,9 +2819,6 @@ void SAL_CALL OWriteStream::removeRelationshipByID(  const OUString& sID  )
 }
 
 void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequence< beans::StringPair > >& aEntries, sal_Bool bReplace  )
-        throw ( container::ElementExistException,
-                io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2975,8 +2898,6 @@ void SAL_CALL OWriteStream::insertRelationships(  const uno::Sequence< uno::Sequ
 }
 
 void SAL_CALL OWriteStream::clearRelationships()
-        throw ( io::IOException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -2995,7 +2916,6 @@ void SAL_CALL OWriteStream::clearRelationships()
 }
 
 uno::Reference< beans::XPropertySetInfo > SAL_CALL OWriteStream::getPropertySetInfo()
-        throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3004,11 +2924,6 @@ uno::Reference< beans::XPropertySetInfo > SAL_CALL OWriteStream::getPropertySetI
 }
 
 void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-        throw ( beans::UnknownPropertyException,
-                beans::PropertyVetoException,
-                lang::IllegalArgumentException,
-                lang::WrappedTargetException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::ResettableMutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3131,9 +3046,6 @@ void SAL_CALL OWriteStream::setPropertyValue( const OUString& aPropertyName, con
 }
 
 uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
-        throw ( beans::UnknownPropertyException,
-                lang::WrappedTargetException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3193,9 +3105,6 @@ uno::Any SAL_CALL OWriteStream::getPropertyValue( const OUString& aProp )
 void SAL_CALL OWriteStream::addPropertyChangeListener(
     const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/ )
-        throw ( beans::UnknownPropertyException,
-                lang::WrappedTargetException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3211,9 +3120,6 @@ void SAL_CALL OWriteStream::addPropertyChangeListener(
 void SAL_CALL OWriteStream::removePropertyChangeListener(
     const OUString& /*aPropertyName*/,
     const uno::Reference< beans::XPropertyChangeListener >& /*aListener*/ )
-        throw ( beans::UnknownPropertyException,
-                lang::WrappedTargetException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3229,9 +3135,6 @@ void SAL_CALL OWriteStream::removePropertyChangeListener(
 void SAL_CALL OWriteStream::addVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
-        throw ( beans::UnknownPropertyException,
-                lang::WrappedTargetException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3247,9 +3150,6 @@ void SAL_CALL OWriteStream::addVetoableChangeListener(
 void SAL_CALL OWriteStream::removeVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener >& /*aListener*/ )
-        throw ( beans::UnknownPropertyException,
-                lang::WrappedTargetException,
-                uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3310,9 +3210,6 @@ void OWriteStream::BroadcastTransaction( sal_Int8 nMessage )
     }
 }
 void SAL_CALL OWriteStream::commit()
-        throw ( io::IOException,
-                embed::StorageWrappedTargetException,
-                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::commit" );
 
@@ -3374,9 +3271,6 @@ void SAL_CALL OWriteStream::commit()
 }
 
 void SAL_CALL OWriteStream::revert()
-        throw ( io::IOException,
-                embed::StorageWrappedTargetException,
-                uno::RuntimeException, std::exception )
 {
     SAL_INFO( "package.xstor", "package (mv76033) OWriteStream::revert" );
 
@@ -3441,7 +3335,6 @@ void SAL_CALL OWriteStream::revert()
 //  XTransactionBroadcaster
 
 void SAL_CALL OWriteStream::addTransactionListener( const uno::Reference< embed::XTransactionListener >& aListener )
-        throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 
@@ -3459,7 +3352,6 @@ void SAL_CALL OWriteStream::addTransactionListener( const uno::Reference< embed:
 }
 
 void SAL_CALL OWriteStream::removeTransactionListener( const uno::Reference< embed::XTransactionListener >& aListener )
-        throw ( uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_pData->m_rSharedMutexRef->GetMutex() );
 

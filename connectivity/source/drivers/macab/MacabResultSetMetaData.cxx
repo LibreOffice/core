@@ -41,7 +41,7 @@ MacabResultSetMetaData::~MacabResultSetMetaData()
 {
 }
 
-void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
+void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns)
 {
     OSQLColumns::Vector::const_iterator aIter;
     static const char aName[] = "Name";
@@ -70,13 +70,13 @@ void MacabResultSetMetaData::setMacabFields(const ::rtl::Reference<connectivity:
 
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnDisplaySize(sal_Int32 /* column */) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnDisplaySize(sal_Int32 /* column */)
 {
     // For now, all columns are the same size.
     return 50;
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column)
 {
     MacabRecords *aRecords;
     MacabHeader *aHeader;
@@ -102,22 +102,22 @@ sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnType(sal_Int32 column) throw
     return ABTypeToDataType(aField->type);
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnCount() throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSetMetaData::getColumnCount()
 {
     return m_aMacabFields.size();
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSetMetaData::isCaseSensitive(sal_Int32)
 {
     return true;
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getSchemaName(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column)
 {
     sal_uInt32 nFieldNumber = m_aMacabFields[column - 1];
     MacabRecords *aRecords;
@@ -137,77 +137,77 @@ OUString SAL_CALL MacabResultSetMetaData::getColumnName(sal_Int32 column) throw(
     return aName;
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getTableName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getTableName(sal_Int32)
 {
     return m_sTableName;
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getCatalogName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getCatalogName(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getColumnTypeName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getColumnTypeName(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getColumnLabel(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getColumnLabel(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL MacabResultSetMetaData::getColumnServiceName(sal_Int32) throw(SQLException, RuntimeException)
+OUString SAL_CALL MacabResultSetMetaData::getColumnServiceName(sal_Int32)
 {
     return OUString();
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isCurrency(sal_Int32) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSetMetaData::isCurrency(sal_Int32)
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isAutoIncrement(sal_Int32) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSetMetaData::isAutoIncrement(sal_Int32)
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isSigned(sal_Int32) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSetMetaData::isSigned(sal_Int32)
 {
     return false;
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getPrecision(sal_Int32) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSetMetaData::getPrecision(sal_Int32)
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::getScale(sal_Int32) throw(css::sdbc::SQLException, css::uno::RuntimeException)
+sal_Int32 SAL_CALL MacabResultSetMetaData::getScale(sal_Int32)
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL MacabResultSetMetaData::isNullable(sal_Int32) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL MacabResultSetMetaData::isNullable(sal_Int32)
 {
     return (sal_Int32) true;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isSearchable(sal_Int32) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSetMetaData::isSearchable(sal_Int32)
 {
     return true;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isReadOnly(sal_Int32) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSetMetaData::isReadOnly(sal_Int32)
 {
     return true;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isDefinitelyWritable(sal_Int32) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSetMetaData::isDefinitelyWritable(sal_Int32)
 {
     return false;
 }
 
-sal_Bool SAL_CALL MacabResultSetMetaData::isWritable(sal_Int32) throw(SQLException, RuntimeException)
+sal_Bool SAL_CALL MacabResultSetMetaData::isWritable(sal_Int32)
 {
     return false;
 }

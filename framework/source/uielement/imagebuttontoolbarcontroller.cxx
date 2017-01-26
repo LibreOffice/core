@@ -82,7 +82,6 @@ ImageButtonToolbarController::~ImageButtonToolbarController()
 }
 
 void SAL_CALL ImageButtonToolbarController::dispose()
-throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
     ComplexToolbarController::dispose();

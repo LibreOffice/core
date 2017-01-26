@@ -51,7 +51,7 @@ public:
     }
 
     // XInterface
-    virtual uno::Any SAL_CALL queryInterface(const uno::Type& aType) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL queryInterface(const uno::Type& aType) override
     {
         uno::Any a(ToolboxController::queryInterface(aType));
         if (a.hasValue())
@@ -71,30 +71,30 @@ public:
     }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("lo.writer.MMCurrentEntryController");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         uno::Sequence<OUString> aServices { "com.sun.star.frame.ToolbarController" };
         return aServices;
     }
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
 
     // XToolbarController
-    virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception) override;
+    virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) override;
 };
 
 /// Controller for .uno:MailMergeExcludeEntry toolbar checkbox: creates the checkbox & handles the value.
@@ -112,7 +112,7 @@ public:
     }
 
     // XInterface
-    virtual uno::Any SAL_CALL queryInterface(const uno::Type& aType) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL queryInterface(const uno::Type& aType) override
     {
         uno::Any a(ToolboxController::queryInterface(aType));
         if (a.hasValue())
@@ -132,33 +132,33 @@ public:
     }
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("lo.writer.MMExcludeEntryController");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override
+    virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         uno::Sequence<OUString> aServices { "com.sun.star.frame.ToolbarController" };
         return aServices;
     }
 
     // XComponent
-    virtual void SAL_CALL dispose() throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
 
     // XToolbarController
-    virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception) override;
+    virtual uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) override;
 };
 
-void MMCurrentEntryController::dispose() throw (uno::RuntimeException, std::exception)
+void MMCurrentEntryController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -166,7 +166,7 @@ void MMCurrentEntryController::dispose() throw (uno::RuntimeException, std::exce
     m_pCurrentEdit.disposeAndClear();
 }
 
-uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)
+uno::Reference<awt::XWindow> MMCurrentEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent)
 {
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
     ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent.get());
@@ -203,7 +203,7 @@ IMPL_LINK(MMCurrentEntryController, CurrentEditUpdatedHdl, Edit&, rEdit, void)
     }
 };
 
-void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception)
+void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEvent)
 {
     if (!m_pCurrentEdit)
         return;
@@ -229,7 +229,7 @@ void MMCurrentEntryController::statusChanged(const frame::FeatureStateEvent& rEv
     }
 }
 
-void MMExcludeEntryController::dispose() throw (uno::RuntimeException, std::exception)
+void MMExcludeEntryController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -237,7 +237,7 @@ void MMExcludeEntryController::dispose() throw (uno::RuntimeException, std::exce
     m_pExcludeCheckbox.disposeAndClear();
 }
 
-uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)
+uno::Reference<awt::XWindow> MMExcludeEntryController::createItemWindow(const uno::Reference<awt::XWindow>& rParent)
 {
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
     ToolBox* pToolbar = dynamic_cast<ToolBox*>(pParent.get());
@@ -265,7 +265,7 @@ IMPL_STATIC_LINK(MMExcludeEntryController, ExcludeHdl, CheckBox&, rCheckbox, voi
         xConfigItem->ExcludeRecord(xConfigItem->GetResultSetPosition(), rCheckbox.IsChecked());
 };
 
-void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception)
+void MMExcludeEntryController::statusChanged(const frame::FeatureStateEvent& rEvent)
 {
     if (!m_pExcludeCheckbox)
         return;

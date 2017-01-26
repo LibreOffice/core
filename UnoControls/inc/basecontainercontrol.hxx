@@ -74,7 +74,7 @@ public:
 
     virtual css::uno::Any SAL_CALL queryInterface(
         const css::uno::Type& aType
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     //  XTypeProvider
 
@@ -86,62 +86,59 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
     //  XAggregation
 
     virtual css::uno::Any SAL_CALL queryAggregation(
         const css::uno::Type& aType
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     //  XControl
 
     virtual void SAL_CALL createPeer(
         const css::uno::Reference< css::awt::XToolkit >&      xToolkit ,
         const css::uno::Reference< css::awt::XWindowPeer >&   xParent
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     virtual sal_Bool SAL_CALL setModel(
         const css::uno::Reference< css::awt::XControlModel >& xModel
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
-    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XControlModel > SAL_CALL getModel() override;
 
     //  XComponent
 
-    virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispose() override;
 
     //  XEventListener
 
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rEvent ) override;
 
     //  XControlContainer
 
     virtual void SAL_CALL addControl(
         const OUString&                                     sName    ,
         const css::uno::Reference< css::awt::XControl >&    xControl
-    ) throw( css::uno::RuntimeException, std::exception  ) override;
+    ) override;
 
     virtual void SAL_CALL removeControl(
         const css::uno::Reference< css::awt::XControl >& xControl
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     virtual void SAL_CALL setStatusText(
         const OUString& sStatusText
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
     virtual css::uno::Reference< css::awt::XControl > SAL_CALL getControl(
         const OUString& sName
-    ) throw( css::uno::RuntimeException, std::exception ) override;
+    ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::awt::XControl > > SAL_CALL getControls() override;
 
     //  XWindow
 
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
 
 protected:
     using OComponentHelper::disposing;

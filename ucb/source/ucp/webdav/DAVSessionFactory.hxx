@@ -52,8 +52,7 @@ public:
     /// @throws DAVException
     rtl::Reference< DAVSession >
         createDAVSession( const OUString & inUri,
-                          const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-            throw( DAVException );
+                          const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
 private:
     typedef std::map< OUString, DAVSession * > Map;

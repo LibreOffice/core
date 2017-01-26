@@ -733,7 +733,7 @@ bool FmXFormShell::IsReadonlyDoc() const
 
 //  EventListener
 
-void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e)
 {
 
     if (m_xActiveController == e.Source)
@@ -771,7 +771,7 @@ void SAL_CALL FmXFormShell::disposing(const lang::EventObject& e) throw( Runtime
 }
 
 
-void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL FmXFormShell::propertyChange(const PropertyChangeEvent& evt)
 {
     if ( impl_checkDisposed() )
         return;
@@ -836,7 +836,7 @@ void FmXFormShell::invalidateFeatures( const ::std::vector< sal_Int32 >& _rFeatu
 }
 
 
-void SAL_CALL FmXFormShell::formActivated(const lang::EventObject& rEvent) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFormShell::formActivated(const lang::EventObject& rEvent)
 {
     if ( impl_checkDisposed() )
         return;
@@ -847,7 +847,7 @@ void SAL_CALL FmXFormShell::formActivated(const lang::EventObject& rEvent) throw
 }
 
 
-void SAL_CALL FmXFormShell::formDeactivated(const lang::EventObject& rEvent) throw( RuntimeException, std::exception )
+void SAL_CALL FmXFormShell::formDeactivated(const lang::EventObject& rEvent)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2486,7 +2486,7 @@ IMPL_LINK(FmXFormShell, OnSearchContextRequest, FmSearchContext&, rfmscContextIn
 
   // XContainerListener
 
-void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
+void FmXFormShell::elementInserted(const ContainerEvent& evt)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2501,7 +2501,7 @@ void FmXFormShell::elementInserted(const ContainerEvent& evt) throw(css::uno::Ru
 }
 
 
-void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
+void FmXFormShell::elementReplaced(const ContainerEvent& evt)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2514,7 +2514,7 @@ void FmXFormShell::elementReplaced(const ContainerEvent& evt) throw(css::uno::Ru
 }
 
 
-void FmXFormShell::elementRemoved(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
+void FmXFormShell::elementRemoved(const ContainerEvent& evt)
 {
     if ( impl_checkDisposed() )
         return;
@@ -2622,7 +2622,7 @@ void FmXFormShell::impl_RemoveElement_nothrow(const Reference< XInterface>& Elem
 }
 
 
-void FmXFormShell::selectionChanged(const lang::EventObject& rEvent) throw(css::uno::RuntimeException, std::exception)
+void FmXFormShell::selectionChanged(const lang::EventObject& rEvent)
 {
     if ( impl_checkDisposed() )
         return;

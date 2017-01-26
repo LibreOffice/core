@@ -96,20 +96,17 @@ public:
         const ::rtl::Reference<PresenterController>& rpPresenterController);
     virtual ~PresenterViewFactory() override;
 
-    virtual void SAL_CALL disposing()
-        throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL disposing() override;
 
     // XResourceFactory
 
     virtual css::uno::Reference<css::drawing::framework::XResource>
         SAL_CALL createResource (
-            const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<css::drawing::framework::XResourceId>& rxViewId) override;
 
     virtual void SAL_CALL
         releaseResource (
-            const css::uno::Reference<css::drawing::framework::XResource>& rxPane)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<css::drawing::framework::XResource>& rxPane) override;
 
 private:
     css::uno::Reference<css::uno::XComponentContext> mxComponentContext;
@@ -157,7 +154,7 @@ private:
         const css::uno::Reference<css::drawing::framework::XPane>& rxAnchorPane);
 
     /// @throws css::lang::DisposedException
-    void ThrowIfDisposed() const throw (css::lang::DisposedException);
+    void ThrowIfDisposed() const;
 };
 
 } }

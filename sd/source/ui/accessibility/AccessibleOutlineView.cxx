@@ -113,7 +113,6 @@ void AccessibleOutlineView::ViewForwarderChanged()
 
 sal_Int32 SAL_CALL
     AccessibleOutlineView::getAccessibleChildCount()
-    throw (uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -123,7 +122,6 @@ sal_Int32 SAL_CALL
 
 uno::Reference<XAccessible> SAL_CALL
     AccessibleOutlineView::getAccessibleChild (sal_Int32 nIndex)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
     // Forward request to children manager.
@@ -132,7 +130,6 @@ uno::Reference<XAccessible> SAL_CALL
 
 OUString SAL_CALL
     AccessibleOutlineView::getAccessibleName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -160,7 +157,7 @@ OUString SAL_CALL
 
 //=====  XAccessibleEventBroadcaster  ========================================
 
-void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
     // delegate listener handling to children manager.
     if ( ! IsDisposed())
@@ -168,7 +165,7 @@ void SAL_CALL AccessibleOutlineView::addAccessibleEventListener( const uno::Refe
     AccessibleContextBase::addEventListener(xListener);
 }
 
-void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::Reference< XAccessibleEventListener >& xListener )
 {
     // forward
     if ( ! IsDisposed())
@@ -180,7 +177,6 @@ void SAL_CALL AccessibleOutlineView::removeAccessibleEventListener( const uno::R
 
 OUString SAL_CALL
     AccessibleOutlineView::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessibleOutlineView");
 }
@@ -217,7 +213,6 @@ void SAL_CALL AccessibleOutlineView::disposing()
 
 void SAL_CALL
     AccessibleOutlineView::propertyChange (const beans::PropertyChangeEvent& rEventObject)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ThrowIfDisposed ();
 
@@ -245,7 +240,6 @@ void SAL_CALL
 /// Create a name for this view.
 OUString
     AccessibleOutlineView::CreateAccessibleName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -257,7 +251,6 @@ OUString
 */
 OUString
     AccessibleOutlineView::CreateAccessibleDescription()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 

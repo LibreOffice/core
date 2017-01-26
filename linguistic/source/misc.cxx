@@ -772,7 +772,6 @@ void AppExitListener::Deactivate()
 
 void SAL_CALL
     AppExitListener::disposing( const EventObject& rEvtSource )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
@@ -784,13 +783,11 @@ void SAL_CALL
 
 void SAL_CALL
     AppExitListener::queryTermination( const EventObject& /*rEvtSource*/ )
-        throw(frame::TerminationVetoException, RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL
     AppExitListener::notifyTermination( const EventObject& rEvtSource )
-        throw(RuntimeException, std::exception)
 {
     MutexGuard  aGuard( GetLinguMutex() );
 

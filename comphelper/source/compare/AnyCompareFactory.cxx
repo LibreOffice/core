@@ -48,7 +48,7 @@ public:
                                           0 ); //???
     }
 
-    virtual sal_Int16 SAL_CALL compare( const Any& any1, const Any& any2 ) throw(RuntimeException, std::exception) override;
+    virtual sal_Int16 SAL_CALL compare( const Any& any1, const Any& any2 ) override;
 };
 
 class AnyCompareFactory : public cppu::WeakImplHelper< XAnyCompareFactory, XInitialization, XServiceInfo >
@@ -62,19 +62,18 @@ public:
     {}
 
     // XAnyCompareFactory
-    virtual Reference< XAnyCompare > SAL_CALL createAnyCompareByName ( const OUString& aPropertyName ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual Reference< XAnyCompare > SAL_CALL createAnyCompareByName ( const OUString& aPropertyName ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments )
-            throw ( Exception, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
-sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw(css::uno::RuntimeException, std::exception)
+sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 )
 {
     sal_Int16 aResult = 0;
 
@@ -89,7 +88,7 @@ sal_Int16 SAL_CALL AnyCompare::compare( const Any& any1, const Any& any2 ) throw
     return aResult;
 }
 
-Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName ) throw(css::uno::RuntimeException, std::exception)
+Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( const OUString& aPropertyName )
 {
     // for now only OUString properties compare is implemented
     // so no check for the property name is done
@@ -100,7 +99,7 @@ Reference< XAnyCompare > SAL_CALL AnyCompareFactory::createAnyCompareByName( con
     return Reference< XAnyCompare >();
 }
 
-void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
+void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
 {
     if( aArguments.getLength() )
     {
@@ -112,17 +111,17 @@ void SAL_CALL AnyCompareFactory::initialize( const Sequence< Any >& aArguments )
     }
 }
 
-OUString SAL_CALL AnyCompareFactory::getImplementationName(  ) throw( RuntimeException, std::exception )
+OUString SAL_CALL AnyCompareFactory::getImplementationName(  )
 {
     return OUString( "AnyCompareFactory" );
 }
 
-sal_Bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL AnyCompareFactory::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL AnyCompareFactory::getSupportedServiceNames(  )
 {
     const OUString aServiceName( "com.sun.star.ucb.AnyCompareFactory" );
     const Sequence< OUString > aSeq( &aServiceName, 1 );

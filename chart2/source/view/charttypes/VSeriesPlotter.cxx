@@ -2023,7 +2023,6 @@ double VSeriesPlotter::getTransformedDepth() const
 }
 
 void VSeriesPlotter::addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
-                throw (uno::RuntimeException)
 {
     if( nAxisIndex<1 )
         return;

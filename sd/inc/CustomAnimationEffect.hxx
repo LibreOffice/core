@@ -159,7 +159,7 @@ public:
 
     // helper
     /// @throws css::uno::Exception
-    SAL_DLLPRIVATE css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNode() const throw (css::uno::Exception);
+    SAL_DLLPRIVATE css::uno::Reference< css::animations::XAnimationNode > createAfterEffectNode() const;
     SAL_DLLPRIVATE css::uno::Reference< css::drawing::XShape > getTargetShape() const;
 
     // static helpers

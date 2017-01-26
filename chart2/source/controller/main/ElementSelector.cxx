@@ -244,19 +244,16 @@ Reference< css::accessibility::XAccessible > SelectorListBox::CreateAccessible()
 }
 
 OUString SAL_CALL ElementSelectorToolbarController::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString(lcl_aServiceName);
 }
 
 sal_Bool SAL_CALL ElementSelectorToolbarController::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ElementSelectorToolbarController::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.frame.ToolbarController" };
 }
@@ -267,7 +264,7 @@ ElementSelectorToolbarController::~ElementSelectorToolbarController()
 {
 }
 // XInterface
-Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
+Any SAL_CALL ElementSelectorToolbarController::queryInterface( const Type& _rType )
 {
     Any aReturn = ToolboxController::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -282,7 +279,7 @@ void SAL_CALL ElementSelectorToolbarController::release() throw ()
 {
     ToolboxController::release();
 }
-void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException, std::exception )
+void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
     if( m_apSelectorListBox.get() )
     {
@@ -297,7 +294,6 @@ void SAL_CALL ElementSelectorToolbarController::statusChanged( const frame::Feat
     }
 }
 uno::Reference< awt::XWindow > SAL_CALL ElementSelectorToolbarController::createItemWindow( const uno::Reference< awt::XWindow >& xParent )
-        throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< awt::XWindow > xItemWindow;
     if( !m_apSelectorListBox.get() )

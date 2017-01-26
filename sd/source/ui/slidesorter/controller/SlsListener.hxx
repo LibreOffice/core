@@ -96,27 +96,23 @@ public:
 
     //=====  lang::XEventListener  ============================================
     virtual void SAL_CALL
-        disposing (const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject) override;
 
     //=====  document::XEventListener  ========================================
     virtual void SAL_CALL
         notifyEvent (
-            const css::document::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::document::EventObject& rEventObject) override;
 
     //=====  beans::XPropertySetListener  =====================================
     virtual void SAL_CALL
         propertyChange (
-            const css::beans::PropertyChangeEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::beans::PropertyChangeEvent& rEvent) override;
 
     //===== accessibility::XAccessibleEventListener  ==========================
     virtual void SAL_CALL
         notifyEvent (
             const css::accessibility::AccessibleEventObject&
-            rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+            rEvent) override;
 
     //===== frame::XFrameActionListener  ======================================
     /** For certain actions the listener connects to a new controller of the
@@ -124,8 +120,7 @@ public:
         in the center pane is replaced by another view shell.
     */
     virtual void SAL_CALL
-        frameAction (const css::frame::FrameActionEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+        frameAction (const css::frame::FrameActionEvent& rEvent) override;
 
     virtual void SAL_CALL disposing() override;
 

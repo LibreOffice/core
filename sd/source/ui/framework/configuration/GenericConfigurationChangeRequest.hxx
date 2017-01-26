@@ -64,8 +64,7 @@ public:
     GenericConfigurationChangeRequest (
         const css::uno::Reference<css::drawing::framework::XResourceId>&
             rxResourceId,
-        const Mode eMode)
-        throw (css::lang::IllegalArgumentException);
+        const Mode eMode);
 
     virtual ~GenericConfigurationChangeRequest() throw() override;
 
@@ -79,22 +78,19 @@ public:
             The configuration to which the requested change is made.
     */
     virtual void SAL_CALL execute (
-        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration)
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference<css::drawing::framework::XConfiguration>& rxConfiguration) override;
 
     // XNamed
 
     /** Return a human readable string representation.  This is used for
         debugging purposes.
     */
-    virtual OUString SAL_CALL getName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getName() override;
 
     /** This call is ignored because the XNamed interface is (mis)used to
         give access to a human readable name for debugging purposes.
     */
-    virtual void SAL_CALL setName (const OUString& rName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setName (const OUString& rName) override;
 
 private:
     const css::uno::Reference<css::drawing::framework::XResourceId> mxResourceId;

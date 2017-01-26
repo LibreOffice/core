@@ -45,28 +45,20 @@ public:
 
     //=====  XAccessibleAction  ===============================================
 
-    sal_Int32 SAL_CALL getAccessibleActionCount()
-        throw (css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL getAccessibleActionCount() override;
 
-    sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex)
-        throw (css::lang::IndexOutOfBoundsException,
-            css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL doAccessibleAction (sal_Int32 nIndex) override;
 
-    OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex)
-        throw (css::lang::IndexOutOfBoundsException,
-            css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getAccessibleActionDescription (sal_Int32 nIndex) override;
 
     css::uno::Reference<
         css::accessibility::XAccessibleKeyBinding> SAL_CALL getAccessibleActionKeyBinding (
-            sal_Int32 nIndex)
-        throw (css::lang::IndexOutOfBoundsException,
-            css::uno::RuntimeException, std::exception) override;
+            sal_Int32 nIndex) override;
 
     //=====  XInterface  ======================================================
 
     virtual css::uno::Any SAL_CALL
-        queryInterface (const css::uno::Type & rType)
-        throw (css::uno::RuntimeException, std::exception) override;
+        queryInterface (const css::uno::Type & rType) override;
 
     virtual void SAL_CALL
         acquire()
@@ -79,30 +71,25 @@ public:
     //=====  XServiceInfo  ====================================================
 
     virtual OUString SAL_CALL
-        getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getImplementationName() override;
 
     virtual css::uno::Sequence< OUString> SAL_CALL
-        getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getSupportedServiceNames() override;
 
     //=====  XTypeProvider  ===================================================
 
     virtual css::uno::Sequence< css::uno::Type> SAL_CALL
-        getTypes()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getTypes() override;
 // ====== XAccessibleExtendedAttributes =====================================
-    virtual css::uno::Any SAL_CALL getExtendedAttributes() throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override ;
+    virtual css::uno::Any SAL_CALL getExtendedAttributes() override ;
 protected:
     /// Create a name string that contains the accessible name.
     virtual OUString
-        CreateAccessibleBaseName ()
-        throw (css::uno::RuntimeException) override;
+        CreateAccessibleBaseName () override;
 
     /// Create a description string that contains the accessible description.
     virtual OUString
-        CreateAccessibleDescription ()
-        throw (css::uno::RuntimeException, std::exception) override;
+        CreateAccessibleDescription () override;
 
 private:
     AccessibleOLEShape (const AccessibleOLEShape&) = delete;

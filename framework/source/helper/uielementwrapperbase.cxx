@@ -57,7 +57,7 @@ UIElementWrapperBase::~UIElementWrapperBase()
 {
 }
 
-Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType )
 {
     Any aRet = UIElementWrapperBase_BASE::queryInterface( _rType );
     if ( !aRet.hasValue() )
@@ -65,7 +65,7 @@ Any SAL_CALL UIElementWrapperBase::queryInterface( const Type& _rType ) throw(Ru
     return aRet;
 }
 
-Sequence< Type > SAL_CALL UIElementWrapperBase::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL UIElementWrapperBase::getTypes(  )
 {
     return comphelper::concatSequences(
         UIElementWrapperBase_BASE::getTypes(),
@@ -73,18 +73,17 @@ Sequence< Type > SAL_CALL UIElementWrapperBase::getTypes(  ) throw(RuntimeExcept
     );
 }
 
-void SAL_CALL UIElementWrapperBase::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL UIElementWrapperBase::addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     m_aListenerContainer.addInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
-void SAL_CALL UIElementWrapperBase::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL UIElementWrapperBase::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
 {
     m_aListenerContainer.removeInterface( cppu::UnoType<css::lang::XEventListener>::get(), xListener );
 }
 
 void SAL_CALL UIElementWrapperBase::initialize( const Sequence< Any >& aArguments )
-throw ( Exception, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -111,24 +110,24 @@ throw ( Exception, RuntimeException, std::exception )
 }
 
 // XUIElement
-css::uno::Reference< css::frame::XFrame > SAL_CALL UIElementWrapperBase::getFrame() throw (css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::frame::XFrame > SAL_CALL UIElementWrapperBase::getFrame()
 {
     css::uno::Reference< css::frame::XFrame > xFrame( m_xWeakFrame );
     return xFrame;
 }
 
-OUString SAL_CALL UIElementWrapperBase::getResourceURL() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL UIElementWrapperBase::getResourceURL()
 {
     return m_aResourceURL;
 }
 
-::sal_Int16 SAL_CALL UIElementWrapperBase::getType() throw (css::uno::RuntimeException, std::exception)
+::sal_Int16 SAL_CALL UIElementWrapperBase::getType()
 {
     return m_nType;
 }
 
 // XUpdatable
-void SAL_CALL UIElementWrapperBase::update() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL UIElementWrapperBase::update()
 {
     // can be implemented by derived class
 }
@@ -137,7 +136,7 @@ void SAL_CALL UIElementWrapperBase::update() throw (css::uno::RuntimeException, 
 sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*aConvertedValue*/ ,
                                                                   Any&       /*aOldValue*/       ,
                                                                   sal_Int32  /*nHandle*/         ,
-                                                                  const Any& /*aValue*/             ) throw( css::lang::IllegalArgumentException )
+                                                                  const Any& /*aValue*/             )
 {
     //  Initialize state with sal_False !!!
     //  (Handle can be invalid)
@@ -145,7 +144,7 @@ sal_Bool SAL_CALL UIElementWrapperBase::convertFastPropertyValue( Any&       /*a
 }
 
 void SAL_CALL UIElementWrapperBase::setFastPropertyValue_NoBroadcast(   sal_Int32               /*nHandle*/ ,
-                                                                        const css::uno::Any&    /*aValue*/  ) throw( css::uno::Exception, std::exception )
+                                                                        const css::uno::Any&    /*aValue*/  )
 {
 }
 
@@ -193,7 +192,7 @@ void SAL_CALL UIElementWrapperBase::getFastPropertyValue( css::uno::Any& aValue 
     return(*pInfoHelper);
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL UIElementWrapperBase::getPropertySetInfo() throw (css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL UIElementWrapperBase::getPropertySetInfo()
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!

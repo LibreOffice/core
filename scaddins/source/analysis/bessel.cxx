@@ -55,7 +55,7 @@ const double f_2_DIV_PI = 2.0 / f_PI;
     alpha_k=1 for k=N and alpha_k=0 otherwise
 */
 
-double BesselJ( double x, sal_Int32 N ) throw (IllegalArgumentException, NoConvergenceException)
+double BesselJ( double x, sal_Int32 N )
 
 {
     if( N < 0 )
@@ -167,7 +167,7 @@ double BesselJ( double x, sal_Int32 N ) throw (IllegalArgumentException, NoConve
     No asymptotic approximation used, see issue 43040.
  */
 
-double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConvergenceException )
+double BesselI( double x, sal_Int32 n )
 {
     const sal_Int32 nMaxIteration = 2000;
     const double fXHalf = x / 2.0;
@@ -224,7 +224,7 @@ double BesselI( double x, sal_Int32 n ) throw( IllegalArgumentException, NoConve
 
 /// @throws IllegalArgumentException
 /// @throws NoConvergenceException
-double Besselk0( double fNum ) throw( IllegalArgumentException, NoConvergenceException )
+double Besselk0( double fNum )
 {
     double  fRet;
 
@@ -251,7 +251,7 @@ double Besselk0( double fNum ) throw( IllegalArgumentException, NoConvergenceExc
 
 /// @throws IllegalArgumentException
 /// @throws NoConvergenceException
-double Besselk1( double fNum ) throw( IllegalArgumentException, NoConvergenceException )
+double Besselk1( double fNum )
 {
     double  fRet;
 
@@ -278,7 +278,7 @@ double Besselk1( double fNum ) throw( IllegalArgumentException, NoConvergenceExc
 }
 
 
-double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException, NoConvergenceException )
+double BesselK( double fNum, sal_Int32 nOrder )
 {
     switch( nOrder )
     {
@@ -323,7 +323,7 @@ double BesselK( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException,
 
 /// @throws IllegalArgumentException
 /// @throws NoConvergenceException
-double Bessely0( double fX ) throw( IllegalArgumentException, NoConvergenceException )
+double Bessely0( double fX )
 {
     if (fX <= 0)
         throw IllegalArgumentException();
@@ -377,7 +377,7 @@ double Bessely0( double fX ) throw( IllegalArgumentException, NoConvergenceExcep
 // http://www.openoffice.org/nonav/issues/showattachment.cgi/63609/Comments%20to%20the%20implementation%20of%20the%20Bessel%20functions.odt
 /// @throws IllegalArgumentException
 /// @throws NoConvergenceException
-double Bessely1( double fX ) throw( IllegalArgumentException, NoConvergenceException )
+double Bessely1( double fX )
 {
     if (fX <= 0)
         throw IllegalArgumentException();
@@ -429,7 +429,7 @@ double Bessely1( double fX ) throw( IllegalArgumentException, NoConvergenceExcep
         throw NoConvergenceException();
 }
 
-double BesselY( double fNum, sal_Int32 nOrder ) throw( IllegalArgumentException, NoConvergenceException )
+double BesselY( double fNum, sal_Int32 nOrder )
 {
     switch( nOrder )
     {

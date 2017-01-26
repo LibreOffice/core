@@ -113,7 +113,7 @@ public:
         }
 
     //---  XGraphicRenderer  -----------------------------------
-    virtual void SAL_CALL render( const uno::Reference< graphic::XGraphic >& rGraphic ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL render( const uno::Reference< graphic::XGraphic >& rGraphic ) override
         {
             ::osl::MutexGuard aGuard( m_aMutex );
             mxGraphic = rGraphic;

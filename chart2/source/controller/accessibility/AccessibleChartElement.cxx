@@ -115,7 +115,6 @@ void AccessibleChartElement::InitTextEdit()
 
 // ________ AccessibleBase::XAccessibleContext ________
 Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal_Int32 i ) const
-    throw (lang::IndexOutOfBoundsException, RuntimeException)
 {
     Reference< XAccessible > xResult;
 
@@ -128,7 +127,6 @@ Reference< XAccessible > AccessibleChartElement::ImplGetAccessibleChildById( sal
 }
 
 sal_Int32 AccessibleChartElement::ImplGetAccessibleChildCount() const
-    throw (RuntimeException)
 {
     if( m_bHasText )
     {
@@ -142,14 +140,12 @@ sal_Int32 AccessibleChartElement::ImplGetAccessibleChildCount() const
 
 // ________ XServiceInfo ________
 OUString SAL_CALL AccessibleChartElement::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return OUString( "AccessibleChartElement" );
 }
 
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
 OUString SAL_CALL AccessibleChartElement::getAccessibleName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return ObjectNameProvider::getNameForCID(
         GetInfo().m_aOID.getObjectCID(), GetInfo().m_xChartDocument );
@@ -157,14 +153,12 @@ OUString SAL_CALL AccessibleChartElement::getAccessibleName()
 
 // ________ AccessibleChartElement::XAccessibleContext (override) ________
 OUString SAL_CALL AccessibleChartElement::getAccessibleDescription()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return getToolTipText();
 }
 
 // ________ AccessibleChartElement::XAccessibleExtendedComponent ________
 Reference< awt::XFont > SAL_CALL AccessibleChartElement::getFont()
-    throw (uno::RuntimeException, std::exception)
 {
     CheckDisposeState();
 
@@ -185,13 +179,11 @@ Reference< awt::XFont > SAL_CALL AccessibleChartElement::getFont()
 }
 
 OUString SAL_CALL AccessibleChartElement::getTitledBorderText()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
 OUString SAL_CALL AccessibleChartElement::getToolTipText()
-    throw (css::uno::RuntimeException, std::exception)
 {
     CheckDisposeState();
 
@@ -201,55 +193,46 @@ OUString SAL_CALL AccessibleChartElement::getToolTipText()
 
 // ________ XAccessibleComponent ________
 sal_Bool SAL_CALL AccessibleChartElement::containsPoint( const awt::Point& aPoint )
-    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleBase::containsPoint( aPoint );
 }
 
 Reference< XAccessible > SAL_CALL AccessibleChartElement::getAccessibleAtPoint( const awt::Point& aPoint )
-    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleBase::getAccessibleAtPoint( aPoint );
 }
 
 awt::Rectangle SAL_CALL AccessibleChartElement::getBounds()
-    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleBase::getBounds();
 }
 
 awt::Point SAL_CALL AccessibleChartElement::getLocation()
-    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleBase::getLocation();
 }
 
 awt::Point SAL_CALL AccessibleChartElement::getLocationOnScreen()
-    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleBase::getLocationOnScreen();
 }
 
 awt::Size SAL_CALL AccessibleChartElement::getSize()
-    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleBase::getSize();
 }
 
 void SAL_CALL AccessibleChartElement::grabFocus()
-    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleBase::grabFocus();
 }
 
 sal_Int32 SAL_CALL AccessibleChartElement::getForeground()
-    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleBase::getForeground();
 }
 
 sal_Int32 SAL_CALL AccessibleChartElement::getBackground()
-    throw (uno::RuntimeException, std::exception)
 {
     return AccessibleBase::getBackground();
 }

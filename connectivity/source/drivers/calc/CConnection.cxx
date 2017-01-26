@@ -60,7 +60,6 @@ OCalcConnection::~OCalcConnection()
 }
 
 void OCalcConnection::construct(const OUString& url,const Sequence< PropertyValue >& info)
-    throw(SQLException, RuntimeException, DeploymentException, std::exception)
 {
     //  open file
 
@@ -202,7 +201,7 @@ void OCalcConnection::disposing()
 IMPLEMENT_SERVICE_INFO(OCalcConnection, "com.sun.star.sdbc.drivers.calc.Connection", "com.sun.star.sdbc.Connection")
 
 
-Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XDatabaseMetaData > SAL_CALL OCalcConnection::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -233,7 +232,7 @@ css::uno::Reference< XTablesSupplier > OCalcConnection::createCatalog()
 }
 
 
-Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -246,7 +245,6 @@ Reference< XStatement > SAL_CALL OCalcConnection::createStatement(  ) throw(SQLE
 
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( const OUString& sql )
-    throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -261,7 +259,6 @@ Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareStatement( cons
 
 
 Reference< XPreparedStatement > SAL_CALL OCalcConnection::prepareCall( const OUString& /*sql*/ )
-    throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);

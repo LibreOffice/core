@@ -143,7 +143,7 @@ namespace dbaccess
         return false;
     }
 
-    void SAL_CALL DocumentEvents::replaceByName( const OUString& Name, const Any& Element ) throw (IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+    void SAL_CALL DocumentEvents::replaceByName( const OUString& Name, const Any& Element )
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
@@ -176,7 +176,7 @@ namespace dbaccess
         elementPos->second = aEventDescriptor;
     }
 
-    Any SAL_CALL DocumentEvents::getByName( const OUString& Name ) throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+    Any SAL_CALL DocumentEvents::getByName( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
@@ -191,26 +191,26 @@ namespace dbaccess
         return aReturn;
     }
 
-    Sequence< OUString > SAL_CALL DocumentEvents::getElementNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL DocumentEvents::getElementNames(  )
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
         return comphelper::mapKeysToSequence( m_pData->rEventsData );
     }
 
-    sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& Name ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DocumentEvents::hasByName( const OUString& Name )
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
 
         return m_pData->rEventsData.find( Name ) != m_pData->rEventsData.end();
     }
 
-    Type SAL_CALL DocumentEvents::getElementType(  ) throw (RuntimeException, std::exception)
+    Type SAL_CALL DocumentEvents::getElementType(  )
     {
         return ::cppu::UnoType< Sequence< PropertyValue > >::get();
     }
 
-    sal_Bool SAL_CALL DocumentEvents::hasElements(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DocumentEvents::hasElements(  )
     {
         ::osl::MutexGuard aGuard( m_pData->rMutex );
         return !m_pData->rEventsData.empty();

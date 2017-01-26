@@ -110,7 +110,7 @@ sdbcx::ObjectType OIndexesHelper::createObject(const OUString& _rName)
     return xRet;
 }
 
-void OIndexesHelper::impl_refresh() throw(RuntimeException)
+void OIndexesHelper::impl_refresh()
 {
     m_pTable->refreshIndexes();
 }

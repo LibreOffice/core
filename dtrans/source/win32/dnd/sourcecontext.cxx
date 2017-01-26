@@ -42,34 +42,28 @@ SourceContext::~SourceContext()
 
 void SAL_CALL SourceContext::addDragSourceListener(
     const Reference<XDragSourceListener >& )
-    throw( RuntimeException)
 {
 }
 
 void SAL_CALL SourceContext::removeDragSourceListener(
      const Reference<XDragSourceListener >& )
-    throw( RuntimeException)
 {
 }
 
 sal_Int32 SAL_CALL SourceContext::getCurrentCursor(  )
-    throw( RuntimeException)
 {
     return 0;
 }
 
 void SAL_CALL SourceContext::setCursor( sal_Int32 /*cursorId*/ )
-    throw( RuntimeException)
 {
 }
 
 void SAL_CALL SourceContext::setImage( sal_Int32 /*imageId*/ )
-    throw( RuntimeException)
 {
 }
 
 void SAL_CALL SourceContext::transferablesFlavorsChanged(  )
-    throw( RuntimeException)
 {
 }
 

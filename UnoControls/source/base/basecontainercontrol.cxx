@@ -48,7 +48,7 @@ BaseContainerControl::~BaseContainerControl()
 
 //  XInterface
 
-Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
+Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -71,7 +71,7 @@ Any SAL_CALL BaseContainerControl::queryInterface( const Type& rType ) throw( Ru
 
 //  XTypeProvider
 
-Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeException, std::exception )
+Sequence< Type > SAL_CALL BaseContainerControl::getTypes()
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -101,7 +101,7 @@ Sequence< Type > SAL_CALL BaseContainerControl::getTypes() throw( RuntimeExcepti
 
 //  XAggregation
 
-Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( RuntimeException, std::exception )
+Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType )
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
@@ -127,7 +127,7 @@ Any SAL_CALL BaseContainerControl::queryAggregation( const Type& aType ) throw( 
 //  XControl
 
 void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&      xToolkit    ,
-                                                const   Reference< XWindowPeer >&   xParent     ) throw( RuntimeException, std::exception )
+                                                const   Reference< XWindowPeer >&   xParent     )
 {
     if ( !getPeer().is() )
     {
@@ -151,7 +151,7 @@ void SAL_CALL BaseContainerControl::createPeer( const   Reference< XToolkit >&  
 
 //  XControl
 
-sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel >& )
 {
     // This object has NO model.
     return false;
@@ -159,7 +159,7 @@ sal_Bool SAL_CALL BaseContainerControl::setModel( const Reference< XControlModel
 
 //  XControl
 
-Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( RuntimeException, std::exception )
+Reference< XControlModel > SAL_CALL BaseContainerControl::getModel()
 {
     // This object has NO model.
     // return (XControlModel*)this;
@@ -168,7 +168,7 @@ Reference< XControlModel > SAL_CALL BaseContainerControl::getModel() throw( Runt
 
 //  XComponent
 
-void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException, std::exception )
+void SAL_CALL BaseContainerControl::dispose()
 {
     // Tell everything that this container is now gone.
     // It's faster if you listen to both the control and the container.
@@ -207,7 +207,7 @@ void SAL_CALL BaseContainerControl::dispose() throw( RuntimeException, std::exce
 
 //  XEventListener
 
-void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw( RuntimeException, std::exception )
+void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent )
 {
     Reference< XControl > xControl( rEvent.Source, UNO_QUERY );
 
@@ -217,7 +217,7 @@ void SAL_CALL BaseContainerControl::disposing( const EventObject& rEvent ) throw
 
 //  XControlContainer
 
-void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl ) throw( RuntimeException, std::exception )
+void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Reference< XControl > & rControl )
 {
     if ( !rControl.is () )
         return;
@@ -271,7 +271,7 @@ void SAL_CALL BaseContainerControl::addControl ( const OUString& rName, const Re
 
 //  XControlContainer
 
-void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > & rControl ) throw( RuntimeException, std::exception )
+void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > & rControl )
 {
     if ( rControl.is() )
     {
@@ -322,7 +322,7 @@ void SAL_CALL BaseContainerControl::removeControl ( const Reference< XControl > 
 
 //  XControlContainer
 
-void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText ) throw( RuntimeException, std::exception )
+void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText )
 {
     // go down to each parent
     Reference< XControlContainer >  xContainer ( getContext(), UNO_QUERY );
@@ -335,7 +335,7 @@ void SAL_CALL BaseContainerControl::setStatusText ( const OUString& rStatusText 
 
 //  XControlContainer
 
-Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString& rName ) throw( RuntimeException, std::exception )
+Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString& rName )
 {
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() );
@@ -361,7 +361,7 @@ Reference< XControl > SAL_CALL BaseContainerControl::getControl ( const OUString
 
 //  XControlContainer
 
-Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () throw( RuntimeException, std::exception )
+Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls ()
 {
     // Ready for multithreading
     MutexGuard  aGuard ( Mutex::getGlobalMutex() );
@@ -384,7 +384,7 @@ Sequence< Reference< XControl > > SAL_CALL BaseContainerControl::getControls () 
 
 //  XWindow
 
-void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible ) throw( RuntimeException, std::exception )
+void SAL_CALL BaseContainerControl::setVisible ( sal_Bool bVisible )
 {
     // override baseclass definition
     BaseControl::setVisible ( bVisible );

@@ -64,18 +64,18 @@ public:
     explicit ClassificationCategoriesController(const uno::Reference<uno::XComponentContext>& rContext);
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XComponent
-    void SAL_CALL dispose() throw (uno::RuntimeException, std::exception) override;
+    void SAL_CALL dispose() override;
 
     // XToolbarController
-    uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception) override;
+    uno::Reference<awt::XWindow> SAL_CALL createItemWindow(const uno::Reference<awt::XWindow>& rParent) override;
 
     // XStatusListener
-    void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) throw (uno::RuntimeException, std::exception) override;
+    void SAL_CALL statusChanged(const frame::FeatureStateEvent& rEvent) override;
 
     void removeEntries();
 };
@@ -119,17 +119,17 @@ ClassificationCategoriesController::ClassificationCategoriesController(const uno
 
 }
 
-OUString ClassificationCategoriesController::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString ClassificationCategoriesController::getImplementationName()
 {
     return OUString("com.sun.star.comp.sfx2.ClassificationCategoriesController");
 }
 
-sal_Bool ClassificationCategoriesController::supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception)
+sal_Bool ClassificationCategoriesController::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence<OUString> ClassificationCategoriesController::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence<OUString> ClassificationCategoriesController::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aServices
     {
@@ -138,7 +138,7 @@ uno::Sequence<OUString> ClassificationCategoriesController::getSupportedServiceN
     return aServices;
 }
 
-void ClassificationCategoriesController::dispose() throw (uno::RuntimeException, std::exception)
+void ClassificationCategoriesController::dispose()
 {
     SolarMutexGuard aSolarMutexGuard;
 
@@ -148,7 +148,7 @@ void ClassificationCategoriesController::dispose() throw (uno::RuntimeException,
     m_xListener->dispose();
 }
 
-uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindow(const uno::Reference<awt::XWindow>& rParent) throw (uno::RuntimeException, std::exception)
+uno::Reference<awt::XWindow> ClassificationCategoriesController::createItemWindow(const uno::Reference<awt::XWindow>& rParent)
 {
     VclPtr<vcl::Window> pParent = VCLUnoHelper::GetWindow(rParent);
     auto pToolbar = dynamic_cast<ToolBox*>(pParent.get());
@@ -178,7 +178,7 @@ IMPL_LINK(ClassificationCategoriesController, SelectHdl, ListBox&, rCategory, vo
     comphelper::dispatchCommand(".uno:ClassificationApply", aPropertyValues);
 }
 
-void ClassificationCategoriesController::statusChanged(const frame::FeatureStateEvent& /*rEvent*/) throw (uno::RuntimeException, std::exception)
+void ClassificationCategoriesController::statusChanged(const frame::FeatureStateEvent& /*rEvent*/)
 {
     if (!m_pClassification)
         return;

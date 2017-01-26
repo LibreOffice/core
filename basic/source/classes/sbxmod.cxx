@@ -94,28 +94,28 @@ class DocObjectWrapper : public DocObjectWrapper_BASE
     Sequence< Type >           m_Types;
     SbModule*                m_pMod;
     /// @throws css::uno::RuntimeException
-    SbMethodRef getMethod( const OUString& aName ) throw (RuntimeException, std::exception);
+    SbMethodRef getMethod( const OUString& aName );
     /// @throws css::uno::RuntimeException
-    SbPropertyRef getProperty( const OUString& aName ) throw (RuntimeException, std::exception);
+    SbPropertyRef getProperty( const OUString& aName );
 
 public:
     explicit DocObjectWrapper( SbModule* pMod );
 
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (RuntimeException, std::exception) override
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override
     {
         return css::uno::Sequence<sal_Int8>();
     }
 
-    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) throw (RuntimeException, std::exception) override;
+    virtual Reference< XIntrospectionAccess > SAL_CALL getIntrospection(  ) override;
 
-    virtual Any SAL_CALL invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL setValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception) override;
-    virtual Any SAL_CALL getValue( const OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) throw (RuntimeException, std::exception) override;
-    virtual  Any SAL_CALL queryInterface( const Type& aType ) throw ( RuntimeException, std::exception ) override;
+    virtual Any SAL_CALL invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) override;
+    virtual void SAL_CALL setValue( const OUString& aPropertyName, const Any& aValue ) override;
+    virtual Any SAL_CALL getValue( const OUString& aPropertyName ) override;
+    virtual sal_Bool SAL_CALL hasMethod( const OUString& aName ) override;
+    virtual sal_Bool SAL_CALL hasProperty( const OUString& aName ) override;
+    virtual  Any SAL_CALL queryInterface( const Type& aType ) override;
 
-    virtual Sequence< Type > SAL_CALL getTypes() throw ( RuntimeException, std::exception ) override;
+    virtual Sequence< Type > SAL_CALL getTypes() override;
 };
 
 DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar )
@@ -170,7 +170,6 @@ DocObjectWrapper::DocObjectWrapper( SbModule* pVar ) : m_pMod( pVar )
 }
 
 Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
-    throw ( RuntimeException, std::exception )
 {
     if ( m_Types.getLength() == 0 )
     {
@@ -197,13 +196,13 @@ Sequence< Type > SAL_CALL DocObjectWrapper::getTypes()
 }
 
 Reference< XIntrospectionAccess > SAL_CALL
-DocObjectWrapper::getIntrospection(  ) throw (RuntimeException, std::exception)
+DocObjectWrapper::getIntrospection(  )
 {
     return nullptr;
 }
 
 Any SAL_CALL
-DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam ) throw (IllegalArgumentException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception)
+DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& aParams, Sequence< ::sal_Int16 >& aOutParamIndex, Sequence< Any >& aOutParam )
 {
     if ( m_xAggInv.is() &&  m_xAggInv->hasMethod( aFunctionName ) )
             return m_xAggInv->invoke( aFunctionName, aParams, aOutParamIndex, aOutParam );
@@ -297,7 +296,7 @@ DocObjectWrapper::invoke( const OUString& aFunctionName, const Sequence< Any >& 
 }
 
 void SAL_CALL
-DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue ) throw (UnknownPropertyException, CannotConvertException, InvocationTargetException, RuntimeException, std::exception)
+DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue )
 {
     if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
             return m_xAggInv->setValue( aPropertyName, aValue );
@@ -309,7 +308,7 @@ DocObjectWrapper::setValue( const OUString& aPropertyName, const Any& aValue ) t
 }
 
 Any SAL_CALL
-DocObjectWrapper::getValue( const OUString& aPropertyName ) throw (UnknownPropertyException, RuntimeException, std::exception)
+DocObjectWrapper::getValue( const OUString& aPropertyName )
 {
     if ( m_xAggInv.is() &&  m_xAggInv->hasProperty( aPropertyName ) )
             return m_xAggInv->getValue( aPropertyName );
@@ -327,7 +326,7 @@ DocObjectWrapper::getValue( const OUString& aPropertyName ) throw (UnknownProper
 }
 
 sal_Bool SAL_CALL
-DocObjectWrapper::hasMethod( const OUString& aName ) throw (RuntimeException, std::exception)
+DocObjectWrapper::hasMethod( const OUString& aName )
 {
     if ( m_xAggInv.is() && m_xAggInv->hasMethod( aName ) )
         return true;
@@ -335,7 +334,7 @@ DocObjectWrapper::hasMethod( const OUString& aName ) throw (RuntimeException, st
 }
 
 sal_Bool SAL_CALL
-DocObjectWrapper::hasProperty( const OUString& aName ) throw (RuntimeException, std::exception)
+DocObjectWrapper::hasProperty( const OUString& aName )
 {
     bool bRes = false;
     if ( m_xAggInv.is() && m_xAggInv->hasProperty( aName ) )
@@ -345,7 +344,6 @@ DocObjectWrapper::hasProperty( const OUString& aName ) throw (RuntimeException, 
 }
 
 Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
-    throw ( RuntimeException, std::exception )
 {
     Any aRet = DocObjectWrapper_BASE::queryInterface( aType );
     if ( aRet.hasValue() )
@@ -355,7 +353,7 @@ Any SAL_CALL DocObjectWrapper::queryInterface( const Type& aType )
     return aRet;
 }
 
-SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeException, std::exception)
+SbMethodRef DocObjectWrapper::getMethod( const OUString& aName )
 {
     SbMethodRef pMethod = nullptr;
     if ( m_pMod )
@@ -370,7 +368,7 @@ SbMethodRef DocObjectWrapper::getMethod( const OUString& aName ) throw (RuntimeE
     return pMethod;
 }
 
-SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName ) throw (RuntimeException, std::exception)
+SbPropertyRef DocObjectWrapper::getProperty( const OUString& aName )
 {
     SbPropertyRef pProperty = nullptr;
     if ( m_pMod )
@@ -2176,7 +2174,7 @@ SbObjModule::~SbObjModule()
 }
 
 void
-SbObjModule::SetUnoObject( const uno::Any& aObj ) throw ( uno::RuntimeException, std::exception )
+SbObjModule::SetUnoObject( const uno::Any& aObj )
 {
     SbUnoObject* pUnoObj = dynamic_cast<SbUnoObject*>( pDocObject.get() );
     if ( pUnoObj && pUnoObj->getUnoAny() == aObj ) // object is equal, nothing to do
@@ -2300,7 +2298,7 @@ public:
         mxModel.clear();
     }
 
-    virtual void SAL_CALL windowOpened( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowOpened( const lang::EventObject& /*e*/ ) override
     {
         if ( mpUserForm )
         {
@@ -2315,7 +2313,7 @@ public:
     }
 
 
-    virtual void SAL_CALL windowClosing( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowClosing( const lang::EventObject& /*e*/ ) override
     {
 #ifdef IN_THE_FUTURE
         uno::Reference< awt::XDialog > xDialog( e.Source, uno::UNO_QUERY );
@@ -2347,21 +2345,21 @@ public:
     }
 
 
-    virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowClosed( const lang::EventObject& /*e*/ ) override
     {
         mbOpened = false;
         mbShowing = false;
     }
 
-    virtual void SAL_CALL windowMinimized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowMinimized( const lang::EventObject& /*e*/ ) override
     {
     }
 
-    virtual void SAL_CALL windowNormalized( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowNormalized( const lang::EventObject& /*e*/ ) override
     {
     }
 
-    virtual void SAL_CALL windowActivated( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowActivated( const lang::EventObject& /*e*/ ) override
     {
         if ( mpUserForm )
         {
@@ -2374,13 +2372,13 @@ public:
         }
     }
 
-    virtual void SAL_CALL windowDeactivated( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowDeactivated( const lang::EventObject& /*e*/ ) override
     {
         if ( mpUserForm )
             mpUserForm->triggerDeactivateEvent();
     }
 
-    virtual void SAL_CALL windowResized( const awt::WindowEvent& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowResized( const awt::WindowEvent& /*e*/ ) override
     {
         if ( mpUserForm )
         {
@@ -2389,21 +2387,21 @@ public:
         }
     }
 
-    virtual void SAL_CALL windowMoved( const awt::WindowEvent& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowMoved( const awt::WindowEvent& /*e*/ ) override
     {
         if ( mpUserForm )
             mpUserForm->triggerLayoutEvent();
     }
 
-    virtual void SAL_CALL windowShown( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowShown( const lang::EventObject& /*e*/ ) override
     {
     }
 
-    virtual void SAL_CALL windowHidden( const lang::EventObject& /*e*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL windowHidden( const lang::EventObject& /*e*/ ) override
     {
     }
 
-    virtual void SAL_CALL documentEventOccured( const document::DocumentEvent& rEvent ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL documentEventOccured( const document::DocumentEvent& rEvent ) override
     {
         // early disposing on document event "OnUnload", to be sure Basic still exists when calling VBA "UserForm_Terminate"
         if( rEvent.EventName == GlobalEventConfig::GetEventName( GlobalEventId::CLOSEDOC ) )
@@ -2415,7 +2413,7 @@ public:
         }
     }
 
-    virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL disposing( const lang::EventObject& /*Source*/ ) override
     {
         SAL_INFO("basic", "** Userform/Dialog disposing");
         removeListener();

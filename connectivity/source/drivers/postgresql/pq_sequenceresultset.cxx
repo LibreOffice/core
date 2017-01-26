@@ -49,8 +49,6 @@ namespace pq_sdbc_driver
 {
 
 void SequenceResultSet::checkClosed()
-    throw ( css::sdbc::SQLException,
-            css::uno::RuntimeException )
 {
     // we never close :o)
 }
@@ -85,13 +83,11 @@ SequenceResultSet::~SequenceResultSet()
 }
 
 void SequenceResultSet::close(  )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     // a noop
 }
 
 Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     if( ! m_meta.is() )
     {
@@ -109,7 +105,6 @@ Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
 
 sal_Int32 SAL_CALL SequenceResultSet::findColumn(
     const OUString& columnName )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     // no need to guard, as all members are readonly !
     for( int i = 0 ;i < m_fieldCount ; i ++ )

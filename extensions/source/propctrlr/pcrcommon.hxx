@@ -102,20 +102,20 @@ namespace pcr
     //= UNO helpers
 
 #define DECLARE_XCOMPONENT() \
-    virtual void SAL_CALL dispose(  ) throw (css::uno::RuntimeException, std::exception) override; \
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override; \
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose(  ) override; \
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override; \
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 #define IMPLEMENT_FORWARD_XCOMPONENT( classname, baseclass ) \
-    void SAL_CALL classname::dispose(  ) throw (css::uno::RuntimeException, std::exception) \
+    void SAL_CALL classname::dispose(  ) \
     { \
     baseclass::WeakComponentImplHelperBase::dispose(); \
     } \
-    void SAL_CALL classname::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) throw (css::uno::RuntimeException, std::exception) \
+    void SAL_CALL classname::addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) \
     { \
         baseclass::WeakComponentImplHelperBase::addEventListener( Listener ); \
     } \
-    void SAL_CALL classname::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) throw (css::uno::RuntimeException, std::exception) \
+    void SAL_CALL classname::removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) \
     { \
         baseclass::WeakComponentImplHelperBase::removeEventListener( Listener ); \
     } \

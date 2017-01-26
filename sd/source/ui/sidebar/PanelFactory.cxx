@@ -68,10 +68,6 @@ void SAL_CALL PanelFactory::disposing()
 Reference<ui::XUIElement> SAL_CALL PanelFactory::createUIElement (
     const ::rtl::OUString& rsUIElementResourceURL,
     const css::uno::Sequence<css::beans::PropertyValue>& rArguments)
-    throw(
-        css::container::NoSuchElementException,
-        css::lang::IllegalArgumentException,
-        css::uno::RuntimeException, std::exception)
 {
     // Process arguments.
     const ::comphelper::NamedValueCollection aArguments (rArguments);

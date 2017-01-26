@@ -67,7 +67,7 @@ namespace
  * than english ones, ICU 4.2+ has to be used.
  */
 uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_Int32 nNumber,
-        const lang::Locale &rLocale ) throw( RuntimeException, std::exception )
+        const lang::Locale &rLocale )
 {
     uno::Sequence< OUString > retValue;
 
@@ -136,17 +136,17 @@ uno::Sequence< OUString > SAL_CALL OrdinalSuffixService::getOrdinalSuffix( sal_I
 
 const sal_Char cOrdinalSuffix[] = "com.sun.star.i18n.OrdinalSuffix";
 
-OUString SAL_CALL OrdinalSuffixService::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL OrdinalSuffixService::getImplementationName()
 {
     return OUString(cOrdinalSuffix);
 }
 
-sal_Bool SAL_CALL OrdinalSuffixService::supportsService( const OUString& rServiceName) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL OrdinalSuffixService::supportsService( const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL OrdinalSuffixService::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL OrdinalSuffixService::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { cOrdinalSuffix };
     return aRet;

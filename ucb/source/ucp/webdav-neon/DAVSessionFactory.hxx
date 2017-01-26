@@ -65,8 +65,7 @@ public:
     rtl::Reference< DAVSession >
         createDAVSession( const OUString & inUri,
                           const ::uno::Sequence< css::beans::NamedValue >& rFlags,
-                          const ::uno::Reference< ::uno::XComponentContext >& rxContext )
-            throw( DAVException );
+                          const ::uno::Reference< ::uno::XComponentContext >& rxContext );
 
     const ::uno::Reference< ::uno::XComponentContext >& getComponentContext() {  return m_xContext; }
 private:

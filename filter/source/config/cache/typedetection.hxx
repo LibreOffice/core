@@ -213,8 +213,7 @@ private:
                     Note: If an interactionHandler is part of the given descriptor too, it was already used.
                     Means: let the exception pass through the top most interface method!
      */
-    void impl_openStream(utl::MediaDescriptor& rDescriptor)
-        throw (css::uno::Exception);
+    void impl_openStream(utl::MediaDescriptor& rDescriptor);
 
 
     /** @short      validate the specified type and its relationships
@@ -315,12 +314,10 @@ public:
 
     // XTypeDetection
 
-    virtual OUString SAL_CALL queryTypeByURL(const OUString& sURL)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL queryTypeByURL(const OUString& sURL) override;
 
     virtual OUString SAL_CALL queryTypeByDescriptor(css::uno::Sequence< css::beans::PropertyValue >& lDescriptor,
-                                                           sal_Bool                                         bAllowDeep )
-        throw (css::uno::RuntimeException, std::exception) override;
+                                                           sal_Bool                                         bAllowDeep ) override;
 
 
 // static uno helper!

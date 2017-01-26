@@ -90,8 +90,7 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -99,19 +98,15 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
 
     // XInteractionRequest
     virtual css::uno::Any SAL_CALL
-    getRequest()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getRequest() override;
     virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL
-    getContinuations()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getContinuations() override;
 
     // Non-interface methods.
 
@@ -184,8 +179,7 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -193,15 +187,12 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL select() override;
 };
 
 
@@ -221,8 +212,7 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -230,15 +220,12 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL select() override;
 };
 
 
@@ -258,8 +245,7 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -267,15 +253,12 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL select() override;
 };
 
 
@@ -295,8 +278,7 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -304,15 +286,12 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL select() override;
 };
 
 
@@ -393,8 +372,7 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -402,67 +380,50 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL select() override;
 
     // XInteractionSupplyAuthentication
     virtual sal_Bool SAL_CALL
-    canSetRealm()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    canSetRealm() override;
     virtual void SAL_CALL
-    setRealm( const OUString& Realm )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    setRealm( const OUString& Realm ) override;
 
     virtual sal_Bool SAL_CALL
-    canSetUserName()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    canSetUserName() override;
     virtual void SAL_CALL
-    setUserName( const OUString& UserName )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    setUserName( const OUString& UserName ) override;
 
     virtual sal_Bool SAL_CALL
-    canSetPassword()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    canSetPassword() override;
     virtual void SAL_CALL
-    setPassword( const OUString& Password )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    setPassword( const OUString& Password ) override;
 
     virtual css::uno::Sequence<
                 css::ucb::RememberAuthentication > SAL_CALL
     getRememberPasswordModes(
-            css::ucb::RememberAuthentication& Default )
-        throw( css::uno::RuntimeException, std::exception ) override;
+            css::ucb::RememberAuthentication& Default ) override;
     virtual void SAL_CALL
-    setRememberPassword( css::ucb::RememberAuthentication Remember )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    setRememberPassword( css::ucb::RememberAuthentication Remember ) override;
 
     virtual sal_Bool SAL_CALL
-    canSetAccount()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    canSetAccount() override;
     virtual void SAL_CALL
-    setAccount( const OUString& Account )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    setAccount( const OUString& Account ) override;
 
     virtual css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL
     getRememberAccountModes(
-            css::ucb::RememberAuthentication& Default )
-        throw( css::uno::RuntimeException, std::exception ) override;
+            css::ucb::RememberAuthentication& Default ) override;
     virtual void SAL_CALL
-    setRememberAccount( css::ucb::RememberAuthentication Remember )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    setRememberAccount( css::ucb::RememberAuthentication Remember ) override;
 
     // XInteractionSupplyAuthentication2
-    virtual sal_Bool SAL_CALL canUseSystemCredentials( sal_Bool& Default )
-        throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setUseSystemCredentials( sal_Bool UseSystemCredentials )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL canUseSystemCredentials( sal_Bool& Default ) override;
+    virtual void SAL_CALL setUseSystemCredentials( sal_Bool UseSystemCredentials ) override;
 
     // Non-interface methods.
 
@@ -549,8 +510,7 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -558,15 +518,12 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL select() override;
 };
 
 class UCBHELPER_DLLPUBLIC InteractionAuthFallback:
@@ -581,23 +538,19 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
         throw() override;
 
     // XInteractionContinuation
-    virtual void SAL_CALL select()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL select() override;
 
     // XAuthFallback
-    virtual void SAL_CALL setCode( const OUString& code )
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+    virtual void SAL_CALL setCode( const OUString& code ) override;
     /// @throws css::uno::RuntimeException
-    const OUString& SAL_CALL getCode()
-        throw (::css::uno::RuntimeException, ::std::exception);
+    const OUString& SAL_CALL getCode();
 
 
 };

@@ -24,31 +24,31 @@ namespace shell { namespace sessioninstall
             virtual ~SyncDbusSessionHelper() override {}
 
             // XModify Methods
-            virtual void SAL_CALL InstallPackageFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL InstallPackageFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallProvideFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL InstallProvideFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallCatalogs( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL InstallCatalogs( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallPackageNames( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& packages, const OUString& interaction ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL InstallPackageNames( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& packages, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallMimeTypes( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& mimeTypes, const OUString& interaction ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL InstallMimeTypes( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& mimeTypes, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallFontconfigResources( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& resources, const OUString& interaction ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL InstallFontconfigResources( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& resources, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallGStreamerResources( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& resources, const OUString& interaction ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL InstallGStreamerResources( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& resources, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallResources( ::sal_uInt32 /* xid */, const css::uno::Sequence< OUString >& /* types */, const css::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) throw (css::uno::RuntimeException, std::exception) override
+            virtual void SAL_CALL InstallResources( ::sal_uInt32 /* xid */, const css::uno::Sequence< OUString >& /* types */, const css::uno::Sequence< OUString >& /* resources */, const OUString& /* interaction */ ) override
                 { throw css::uno::RuntimeException(); } // not implemented
 
-            virtual void SAL_CALL RemovePackageByFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL RemovePackageByFiles( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
-            virtual void SAL_CALL InstallPrinterDrivers( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL InstallPrinterDrivers( ::sal_uInt32 xid, const css::uno::Sequence< OUString >& files, const OUString& interaction ) override;
 
             // XQuery Methods
-            virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, sal_Bool& /* installed */ ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL IsInstalled( const OUString& /* package_name */, const OUString& /* interaction */, sal_Bool& /* installed */ ) override;
 
-            virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, sal_Bool& /* installed */, OUString& /* package_name */ ) throw (css::uno::RuntimeException, std::exception) override
+            virtual void SAL_CALL SearchFile( const OUString& /* file_name */, const OUString& /* interaction */, sal_Bool& /* installed */, OUString& /* package_name */ ) override
                 { throw css::uno::RuntimeException(); } // not implemented
 
         private:

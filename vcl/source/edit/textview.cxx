@@ -74,14 +74,14 @@ public:
     SvMemoryStream& GetHTMLStream() { return maHTMLStream; }
 
     // css::uno::XInterface
-    css::uno::Any                               SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any                               SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                                        SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void                                        SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::datatransfer::XTransferable
-    css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getTransferData( const css::datatransfer::DataFlavor& aFlavor ) override;
+    css::uno::Sequence< css::datatransfer::DataFlavor > SAL_CALL getTransferDataFlavors(  ) override;
+    sal_Bool SAL_CALL isDataFlavorSupported( const css::datatransfer::DataFlavor& aFlavor ) override;
 };
 
 TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
@@ -89,14 +89,14 @@ TETextDataObject::TETextDataObject( const OUString& rText ) : maText( rText )
 }
 
 // css::uno::XInterface
-css::uno::Any TETextDataObject::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any TETextDataObject::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType, (static_cast< css::datatransfer::XTransferable* >(this)) );
     return (aRet.hasValue() ? aRet : OWeakObject::queryInterface( rType ));
 }
 
 // css::datatransfer::XTransferable
-css::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFlavor& rFlavor ) throw(css::datatransfer::UnsupportedFlavorException, css::io::IOException, css::uno::RuntimeException, std::exception)
+css::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFlavor& rFlavor )
 {
     css::uno::Any aAny;
 
@@ -122,7 +122,7 @@ css::uno::Any TETextDataObject::getTransferData( const css::datatransfer::DataFl
     return aAny;
 }
 
-css::uno::Sequence< css::datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::datatransfer::DataFlavor > TETextDataObject::getTransferDataFlavors(  )
 {
     GetHTMLStream().Seek( STREAM_SEEK_TO_END );
     bool bHTML = GetHTMLStream().Tell() > 0;
@@ -133,7 +133,7 @@ css::uno::Sequence< css::datatransfer::DataFlavor > TETextDataObject::getTransfe
     return aDataFlavors;
 }
 
-sal_Bool TETextDataObject::isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor ) throw(css::uno::RuntimeException, std::exception)
+sal_Bool TETextDataObject::isDataFlavorSupported( const css::datatransfer::DataFlavor& rFlavor )
 {
     SotClipboardFormatId nT = SotExchange::GetFormat( rFlavor );
     return ( nT == SotClipboardFormatId::STRING );
@@ -1889,7 +1889,7 @@ bool TextView::ImplCheckTextLen( const OUString& rNewText )
     return bOK;
 }
 
-void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE ) throw (css::uno::RuntimeException, std::exception)
+void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE )
 {
     if ( mpImpl->mbClickedInSelection )
     {
@@ -1935,13 +1935,13 @@ void TextView::dragGestureRecognized( const css::datatransfer::dnd::DragGestureE
     }
 }
 
-void TextView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& ) throw (css::uno::RuntimeException, std::exception)
+void TextView::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& )
 {
     ImpHideDDCursor();
     mpImpl->mpDDInfo.reset();
 }
 
-void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
+void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
 {
     SolarMutexGuard aVclGuard;
 
@@ -2047,17 +2047,17 @@ void TextView::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) 
     rDTDE.Context->dropComplete( bChanges );
 }
 
-void TextView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& ) throw (css::uno::RuntimeException, std::exception)
+void TextView::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& )
 {
 }
 
-void TextView::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw (css::uno::RuntimeException, std::exception)
+void TextView::dragExit( const css::datatransfer::dnd::DropTargetEvent& )
 {
     SolarMutexGuard aVclGuard;
     ImpHideDDCursor();
 }
 
-void TextView::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
+void TextView::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE )
 {
     SolarMutexGuard aVclGuard;
 

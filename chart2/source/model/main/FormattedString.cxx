@@ -113,21 +113,18 @@ FormattedString::~FormattedString()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL FormattedString::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new FormattedString( *this ));
 }
 
 // ____ XFormattedString ____
 OUString SAL_CALL FormattedString::getString()
-    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex());
     return m_aString;
 }
 
 void SAL_CALL FormattedString::setString( const OUString& String )
-    throw (uno::RuntimeException, std::exception)
 {
     {
         MutexGuard aGuard( GetMutex());
@@ -140,7 +137,6 @@ void SAL_CALL FormattedString::setString( const OUString& String )
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL FormattedString::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -154,7 +150,6 @@ void SAL_CALL FormattedString::addModifyListener( const uno::Reference< util::XM
 }
 
 void SAL_CALL FormattedString::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -169,14 +164,12 @@ void SAL_CALL FormattedString::removeModifyListener( const uno::Reference< util:
 
 // ____ XModifyListener ____
 void SAL_CALL FormattedString::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL FormattedString::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
@@ -194,7 +187,6 @@ void FormattedString::fireModifyEvent()
 
 // ____ OPropertySet ____
 uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
-    throw (beans::UnknownPropertyException, uno::RuntimeException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticFormattedStringDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -211,7 +203,6 @@ uno::Any FormattedString::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL FormattedString::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticFormattedStringInfo::get();
 }
@@ -225,19 +216,16 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( FormattedString, FormattedString_Base, ::prope
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL FormattedString::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.FormattedString");
 }
 
 sal_Bool SAL_CALL FormattedString::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL FormattedString::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart2.FormattedString",

@@ -76,7 +76,7 @@ OColumn::~OColumn()
 }
 
 // css::lang::XTypeProvider
-Sequence< Type > OColumn::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > OColumn::getTypes()
 {
     return ::comphelper::concatSequences(
         OColumnBase::getTypes(),
@@ -88,17 +88,17 @@ Sequence< Type > OColumn::getTypes() throw (RuntimeException, std::exception)
 IMPLEMENT_FORWARD_XINTERFACE2( OColumn, OColumnBase, ::comphelper::OPropertyContainer )
 
 // css::lang::XServiceInfo
-OUString OColumn::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString OColumn::getImplementationName(  )
 {
     return OUString("com.sun.star.sdb.OColumn");
 }
 
-sal_Bool OColumn::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool OColumn::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OColumn::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > OColumn::getSupportedServiceNames(  )
 {
     Sequence<OUString> aSNS { SERVICE_SDBCX_COLUMN };
     return aSNS;
@@ -111,17 +111,17 @@ void OColumn::disposing()
 }
 
 // css::beans::XPropertySet
-Reference< XPropertySetInfo > OColumn::getPropertySetInfo() throw (RuntimeException, std::exception)
+Reference< XPropertySetInfo > OColumn::getPropertySetInfo()
 {
     return createPropertySetInfo( getInfoHelper() ) ;
 }
 
-OUString SAL_CALL OColumn::getName(  ) throw(css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OColumn::getName(  )
 {
     return m_sName;
 }
 
-void SAL_CALL OColumn::setName( const OUString& _rName ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL OColumn::setName( const OUString& _rName )
 {
     m_sName = _rName;
 }
@@ -186,17 +186,17 @@ OColumns::~OColumns()
 }
 
 // XServiceInfo
-OUString OColumns::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString OColumns::getImplementationName(  )
 {
     return OUString("com.sun.star.sdb.OColumns");
 }
 
-sal_Bool OColumns::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool OColumns::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OColumns::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > OColumns::getSupportedServiceNames(  )
 {
     Sequence<OUString> aSNS { SERVICE_SDBCX_CONTAINER };
     return aSNS;
@@ -230,7 +230,7 @@ void SAL_CALL OColumns::disposing()
     OColumns_BASE::disposing();
 }
 
-void OColumns::impl_refresh() throw(css::uno::RuntimeException)
+void OColumns::impl_refresh()
 {
     if (m_pRefreshColumns)
         m_pRefreshColumns->refreshColumns();
@@ -270,7 +270,7 @@ Reference< XPropertySet > OColumns::createDescriptor()
         return Reference< XPropertySet >();
 }
 
-Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OColumns::queryInterface( const Type & rType )
 {
     Any aRet;
     if(m_xDrvColumns.is())
@@ -296,7 +296,7 @@ Any SAL_CALL OColumns::queryInterface( const Type & rType ) throw(RuntimeExcepti
     return aRet;
 }
 
-Sequence< Type > SAL_CALL OColumns::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OColumns::getTypes(  )
 {
     bool bAppendFound = false,bDropFound = false;
 
@@ -410,13 +410,13 @@ void OColumns::dropObject(sal_Int32 _nPos, const OUString& _sElementName)
     ::dbaccess::notifyDataSourceModified(m_xParent,true);
 }
 
-Reference< XInterface > SAL_CALL OColumns::getParent(  ) throw (RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL OColumns::getParent(  )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     return m_xParent;
 }
 
-void SAL_CALL OColumns::setParent( const Reference< XInterface >& _xParent ) throw (NoSupportException, RuntimeException, std::exception)
+void SAL_CALL OColumns::setParent( const Reference< XInterface >& _xParent )
 {
     ::osl::MutexGuard aGuard(m_rMutex);
     m_xParent = _xParent;

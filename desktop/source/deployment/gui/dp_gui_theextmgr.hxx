@@ -115,18 +115,14 @@ public:
         OUString const & view = OUString() );
 
     // XEventListener
-    virtual void SAL_CALL disposing( css::lang::EventObject const & evt )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( css::lang::EventObject const & evt ) override;
 
     // XTerminateListener
-    virtual void SAL_CALL queryTermination( css::lang::EventObject const & evt )
-        throw (css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL notifyTermination( css::lang::EventObject const & evt )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL queryTermination( css::lang::EventObject const & evt ) override;
+    virtual void SAL_CALL notifyTermination( css::lang::EventObject const & evt ) override;
 
     // XModifyListener
-    virtual void SAL_CALL modified( css::lang::EventObject const & evt )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( css::lang::EventObject const & evt ) override;
 };
 
 } // namespace dp_gui

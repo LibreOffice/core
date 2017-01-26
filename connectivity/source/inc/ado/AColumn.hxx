@@ -41,15 +41,14 @@ namespace connectivity
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const css::uno::Any& rValue
-                                     )
-                                     throw (css::uno::Exception) override;
+                                     ) override;
         public:
             OAdoColumn(bool _bCase,OConnection* _pConnection,_ADOColumn* _pColumn);
             OAdoColumn(bool _bCase,OConnection* _pConnection);
             // ODescriptor
             virtual void construct() override;
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             WpADOColumn     getColumnImpl() const;

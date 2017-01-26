@@ -164,7 +164,6 @@ KeyMapping & KeyMapping::get() {
 }
 
 sal_uInt16 KeyMapping::mapIdentifierToCode(const OUString& sIdentifier)
-    throw(css::lang::IllegalArgumentException)
 {
     Identifier2CodeHash::const_iterator pIt = m_lIdentifierHash.find(sIdentifier);
     if (pIt != m_lIdentifierHash.end())

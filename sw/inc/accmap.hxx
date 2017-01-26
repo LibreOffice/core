@@ -273,13 +273,11 @@ public:
         const css::uno::Reference< css::drawing::XShape >& _rxShape,
         const long _nIndex,
         const ::accessibility::AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (css::uno::RuntimeException, std::exception) override;
+    ) override;
     virtual ::accessibility::AccessibleControlShape* GetAccControlShapeFromModel
-        (css::beans::XPropertySet* pSet)
-        throw (css::uno::RuntimeException) override;
+        (css::beans::XPropertySet* pSet) override;
     virtual css::uno::Reference< css::accessibility::XAccessible >   GetAccessibleCaption (
-        const css::uno::Reference< css::drawing::XShape > & xShape)
-    throw (css::uno::RuntimeException) override;
+        const css::uno::Reference< css::drawing::XShape > & xShape) override;
 
     // additional Core/Pixel conversions for internal use; also works
     // for preview

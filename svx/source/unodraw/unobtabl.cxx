@@ -44,11 +44,11 @@ public:
     virtual bool isValid( const NameOrIndex* pItem ) const override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw( uno::RuntimeException, std::exception ) override;
-    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) throw( uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual uno::Sequence<  OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw( uno::RuntimeException, std::exception) override;
+    virtual uno::Type SAL_CALL getElementType(  ) override;
 };
 
 SvxUnoBitmapTable::SvxUnoBitmapTable( SdrModel* pModel ) throw()
@@ -72,13 +72,12 @@ bool SvxUnoBitmapTable::isValid( const NameOrIndex* pItem ) const
     return false;
 }
 
-OUString SAL_CALL SvxUnoBitmapTable::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL SvxUnoBitmapTable::getImplementationName()
 {
     return OUString("SvxUnoBitmapTable");
 }
 
 uno::Sequence< OUString > SAL_CALL SvxUnoBitmapTable::getSupportedServiceNames(  )
-    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence<OUString> aSNS { "com.sun.star.drawing.BitmapTable" };
     return aSNS;
@@ -91,7 +90,6 @@ NameOrIndex* SvxUnoBitmapTable::createItem() const throw()
 
 // XElementAccess
 uno::Type SAL_CALL SvxUnoBitmapTable::getElementType(  )
-    throw( uno::RuntimeException, std::exception )
 {
     return ::cppu::UnoType<OUString>::get();
 }

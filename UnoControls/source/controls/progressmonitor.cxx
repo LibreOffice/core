@@ -103,7 +103,7 @@ ProgressMonitor::~ProgressMonitor()
 }
 
 //  XInterface
-Any SAL_CALL ProgressMonitor::queryInterface( const Type& rType ) throw( RuntimeException, std::exception )
+Any SAL_CALL ProgressMonitor::queryInterface( const Type& rType )
 {
     // Attention:
     //  Don't use mutex or guard in this method!!! Is a method of XInterface.
@@ -145,7 +145,7 @@ void SAL_CALL ProgressMonitor::release() throw()
 }
 
 //  XTypeProvider
-Sequence< Type > SAL_CALL ProgressMonitor::getTypes() throw( RuntimeException, std::exception )
+Sequence< Type > SAL_CALL ProgressMonitor::getTypes()
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -175,7 +175,7 @@ Sequence< Type > SAL_CALL ProgressMonitor::getTypes() throw( RuntimeException, s
 }
 
 //  XAggregation
-Any SAL_CALL ProgressMonitor::queryAggregation( const Type& aType ) throw( RuntimeException, std::exception )
+Any SAL_CALL ProgressMonitor::queryAggregation( const Type& aType )
 {
     // Ask for my own supported interfaces ...
     // Attention: XTypeProvider and XInterface are supported by OComponentHelper!
@@ -201,7 +201,7 @@ void SAL_CALL ProgressMonitor::addText(
     const OUString& rTopic,
     const OUString& rText,
     sal_Bool bbeforeProgress
-) throw( RuntimeException, std::exception )
+)
 {
     // Safe impossible cases
     // Check valid call of this method.
@@ -240,7 +240,7 @@ void SAL_CALL ProgressMonitor::addText(
 }
 
 //  XProgressMonitor
-void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbeforeProgress ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::removeText ( const OUString& rTopic, sal_Bool bbeforeProgress )
 {
     // Safe impossible cases
     // Check valid call of this method.
@@ -283,7 +283,7 @@ void SAL_CALL ProgressMonitor::updateText (
     const OUString& rTopic,
     const OUString& rText,
     sal_Bool bbeforeProgress
-) throw( RuntimeException, std::exception )
+)
 {
     // Safe impossible cases
     // Check valid call of this method.
@@ -307,7 +307,7 @@ void SAL_CALL ProgressMonitor::updateText (
 }
 
 //  XProgressBar
-void SAL_CALL ProgressMonitor::setForegroundColor ( sal_Int32 nColor ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::setForegroundColor ( sal_Int32 nColor )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -316,7 +316,7 @@ void SAL_CALL ProgressMonitor::setForegroundColor ( sal_Int32 nColor ) throw( Ru
 }
 
 //  XProgressBar
-void SAL_CALL ProgressMonitor::setBackgroundColor ( sal_Int32 nColor ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::setBackgroundColor ( sal_Int32 nColor )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -325,7 +325,7 @@ void SAL_CALL ProgressMonitor::setBackgroundColor ( sal_Int32 nColor ) throw( Ru
 }
 
 //  XProgressBar
-void SAL_CALL ProgressMonitor::setValue ( sal_Int32 nValue ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::setValue ( sal_Int32 nValue )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -334,7 +334,7 @@ void SAL_CALL ProgressMonitor::setValue ( sal_Int32 nValue ) throw( RuntimeExcep
 }
 
 //  XProgressBar
-void SAL_CALL ProgressMonitor::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::setRange ( sal_Int32 nMin, sal_Int32 nMax )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -343,7 +343,7 @@ void SAL_CALL ProgressMonitor::setRange ( sal_Int32 nMin, sal_Int32 nMax ) throw
 }
 
 //  XProgressBar
-sal_Int32 SAL_CALL ProgressMonitor::getValue () throw( RuntimeException, std::exception )
+sal_Int32 SAL_CALL ProgressMonitor::getValue ()
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -352,7 +352,7 @@ sal_Int32 SAL_CALL ProgressMonitor::getValue () throw( RuntimeException, std::ex
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::addActionListener ( const css::uno::Reference< XActionListener > & rListener ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::addActionListener ( const css::uno::Reference< XActionListener > & rListener )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -364,7 +364,7 @@ void SAL_CALL ProgressMonitor::addActionListener ( const css::uno::Reference< XA
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::removeActionListener ( const css::uno::Reference< XActionListener > & rListener ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::removeActionListener ( const css::uno::Reference< XActionListener > & rListener )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -376,7 +376,7 @@ void SAL_CALL ProgressMonitor::removeActionListener ( const css::uno::Reference<
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::setLabel ( const OUString& rLabel ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::setLabel ( const OUString& rLabel )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -388,7 +388,7 @@ void SAL_CALL ProgressMonitor::setLabel ( const OUString& rLabel ) throw( Runtim
 }
 
 //  XButton
-void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand )
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -400,13 +400,13 @@ void SAL_CALL ProgressMonitor::setActionCommand ( const OUString& rCommand ) thr
 }
 
 //  XLayoutConstrains
-Size SAL_CALL ProgressMonitor::getMinimumSize () throw( RuntimeException, std::exception )
+Size SAL_CALL ProgressMonitor::getMinimumSize ()
 {
     return Size (PROGRESSMONITOR_DEFAULT_WIDTH, PROGRESSMONITOR_DEFAULT_HEIGHT);
 }
 
 //  XLayoutConstrains
-Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException, std::exception )
+Size SAL_CALL ProgressMonitor::getPreferredSize ()
 {
     // Ready for multithreading
     ClearableMutexGuard aGuard ( m_aMutex );
@@ -450,13 +450,13 @@ Size SAL_CALL ProgressMonitor::getPreferredSize () throw( RuntimeException, std:
 }
 
 //  XLayoutConstrains
-Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const Size& /*rNewSize*/ ) throw( RuntimeException, std::exception )
+Size SAL_CALL ProgressMonitor::calcAdjustedSize ( const Size& /*rNewSize*/ )
 {
     return getPreferredSize ();
 }
 
 //  XControl
-void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit > & rToolkit, const css::uno::Reference< XWindowPeer > & rParent    ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit > & rToolkit, const css::uno::Reference< XWindowPeer > & rParent    )
 {
     if (!getPeer().is())
     {
@@ -471,14 +471,14 @@ void SAL_CALL ProgressMonitor::createPeer ( const css::uno::Reference< XToolkit 
 }
 
 //  XControl
-sal_Bool SAL_CALL ProgressMonitor::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL ProgressMonitor::setModel ( const css::uno::Reference< XControlModel > & /*rModel*/ )
 {
     // We have no model.
     return false;
 }
 
 //  XControl
-css::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel () throw( RuntimeException, std::exception )
+css::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel ()
 {
     // We have no model.
     // return (XControlModel*)this;
@@ -486,7 +486,7 @@ css::uno::Reference< XControlModel > SAL_CALL ProgressMonitor::getModel () throw
 }
 
 //  XComponent
-void SAL_CALL ProgressMonitor::dispose () throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::dispose ()
 {
     // Ready for multithreading
     MutexGuard aGuard ( m_aMutex );
@@ -518,7 +518,7 @@ void SAL_CALL ProgressMonitor::dispose () throw( RuntimeException, std::exceptio
 }
 
 //  XWindow
-void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nFlags ) throw( RuntimeException, std::exception )
+void SAL_CALL ProgressMonitor::setPosSize ( sal_Int32 nX, sal_Int32 nY, sal_Int32 nWidth, sal_Int32 nHeight, sal_Int16 nFlags )
 {
     Rectangle   aBasePosSize = getPosSize ();
     BaseContainerControl::setPosSize (nX, nY, nWidth, nHeight, nFlags);

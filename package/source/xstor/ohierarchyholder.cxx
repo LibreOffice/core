@@ -259,7 +259,6 @@ void OHierarchyElement_Impl::TestForClosing()
 }
 
 void SAL_CALL OHierarchyElement_Impl::disposing( const lang::EventObject& Source )
-        throw ( uno::RuntimeException, std::exception )
 {
     try
     {
@@ -303,12 +302,10 @@ void OHierarchyElement_Impl::RemoveElement( const ::rtl::Reference< OHierarchyEl
 
 // XTransactionListener
 void SAL_CALL OHierarchyElement_Impl::preCommit( const css::lang::EventObject& /*aEvent*/ )
-    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OHierarchyElement_Impl::commited( const css::lang::EventObject& /*aEvent*/ )
-    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -324,12 +321,10 @@ void SAL_CALL OHierarchyElement_Impl::commited( const css::lang::EventObject& /*
 }
 
 void SAL_CALL OHierarchyElement_Impl::preRevert( const css::lang::EventObject& /*aEvent*/ )
-    throw (css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL OHierarchyElement_Impl::reverted( const css::lang::EventObject& /*aEvent*/ )
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 

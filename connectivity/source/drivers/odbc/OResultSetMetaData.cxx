@@ -30,7 +30,7 @@ OResultSetMetaData::~OResultSetMetaData()
 {
 }
 
-OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)
+OUString OResultSetMetaData::getCharColAttrib(sal_Int32 _column,sal_Int32 ident)
 {
     sal_Int32 column = _column;
     if(_column <(sal_Int32) m_vMapping.size()) // use mapping
@@ -80,7 +80,7 @@ SQLLEN OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 _column
-                                              ,sal_Int32 _ident) throw(SQLException, RuntimeException)
+                                              ,sal_Int32 _ident)
 {
     SQLLEN nValue=0;
     OTools::ThrowException(_pConnection,(*reinterpret_cast<T3SQLColAttribute>(_pConnection->getOdbcFunction(ODBC3SQLFunctionId::ColAttribute)))(_aStatementHandle,
@@ -93,7 +93,7 @@ SQLLEN OResultSetMetaData::getNumColAttrib(OConnection* _pConnection
     return nValue;
 }
 
-sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident) throw(SQLException, RuntimeException)
+sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident)
 {
     sal_Int32 column = _column;
     if(_column < (sal_Int32)m_vMapping.size()) // use mapping
@@ -102,7 +102,7 @@ sal_Int32 OResultSetMetaData::getNumColAttrib(sal_Int32 _column,sal_Int32 ident)
     return getNumColAttrib(m_pConnection,m_aStatementHandle,*this,column,ident);
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_DISPLAY_SIZE);
 }
@@ -111,7 +111,6 @@ SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
                                               ,SQLHANDLE _aStatementHandle
                                               ,const css::uno::Reference< css::uno::XInterface >& _xInterface
                                               ,sal_Int32 column)
-                                               throw(css::sdbc::SQLException, css::uno::RuntimeException)
 {
     SQLSMALLINT nType = 0;
     try
@@ -128,7 +127,7 @@ SQLSMALLINT OResultSetMetaData::getColumnODBCType(OConnection* _pConnection
     return nType;
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column )
 {
     ::std::map<sal_Int32,sal_Int32>::iterator aFind = m_aColumnTypes.find(column);
     if ( aFind == m_aColumnTypes.end() )
@@ -159,7 +158,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType( sal_Int32 column ) throw(S
 }
 
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  )
 {
     if(m_nColCount != -1)
         return m_nColCount;
@@ -169,67 +168,67 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount(  ) throw(SQLException, Ru
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_CASE_SENSITIVE) == SQL_TRUE;
 }
 
 
-OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getSchemaName( sal_Int32 column )
 {
     return getCharColAttrib(column,SQL_DESC_SCHEMA_NAME);
 }
 
 
-OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getColumnName( sal_Int32 column )
 {
     return getCharColAttrib(column,SQL_DESC_NAME);
 }
 
-OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getTableName( sal_Int32 column )
 {
     return getCharColAttrib(column,SQL_DESC_TABLE_NAME);
 }
 
-OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getCatalogName( sal_Int32 column )
 {
     return getCharColAttrib(column,SQL_DESC_CATALOG_NAME);
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getColumnTypeName( sal_Int32 column )
 {
     return getCharColAttrib(column,SQL_DESC_TYPE_NAME);
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getColumnLabel( sal_Int32 column )
 {
     return getCharColAttrib(column,SQL_DESC_LABEL);
 }
 
-OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OResultSetMetaData::getColumnServiceName( sal_Int32 /*column*/ )
 {
     return OUString();
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isCurrency( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_FIXED_PREC_SCALE) == SQL_TRUE;
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_AUTO_UNIQUE_VALUE) == SQL_TRUE;
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isSigned( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_UNSIGNED) == SQL_FALSE;
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column )
 {
     sal_Int32 nType = 0;
     try
@@ -244,7 +243,7 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision( sal_Int32 column ) throw(SQ
     return nType;
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column )
 {
     sal_Int32 nType = 0;
     try
@@ -260,30 +259,30 @@ sal_Int32 SAL_CALL OResultSetMetaData::getScale( sal_Int32 column ) throw(css::s
 }
 
 
-sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::isNullable( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_NULLABLE);
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isSearchable( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_SEARCHABLE) != SQL_PRED_NONE;
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isReadOnly( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_READONLY;
 }
 
 
-sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_WRITE;
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column )
 {
     return getNumColAttrib(column,SQL_DESC_UPDATABLE) == SQL_ATTR_WRITE;
 }

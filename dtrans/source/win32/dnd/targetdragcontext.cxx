@@ -31,13 +31,11 @@ TargetDragContext::~TargetDragContext()
 }
 
 void SAL_CALL TargetDragContext::acceptDrag( sal_Int8 dragOperation )
-    throw( RuntimeException)
 {
     m_pDropTarget->_acceptDrag( dragOperation, static_cast<XDropTargetDragContext*>( this) );
 
 }
 void SAL_CALL TargetDragContext::rejectDrag( )
-    throw( RuntimeException)
 {
     m_pDropTarget->_rejectDrag( static_cast<XDropTargetDragContext*>( this) );
 }

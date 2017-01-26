@@ -107,13 +107,13 @@ namespace connectivity
             // XInterface
             void SAL_CALL release() throw() override;
             // XTablesSupplier
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) override;
             // XViewsSupplier
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getViews(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getViews(  ) override;
             // XUsersSupplier
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getUsers(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getUsers(  ) override;
             // XGroupsSupplier
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getGroups(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getGroups(  ) override;
 
         };
     }

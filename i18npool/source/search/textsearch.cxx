@@ -130,7 +130,7 @@ TextSearch::~TextSearch()
     delete pJumpTable2;
 }
 
-void TextSearch::setOptions2( const SearchOptions2& rOptions ) throw( RuntimeException, std::exception )
+void TextSearch::setOptions2( const SearchOptions2& rOptions )
 {
     aSrchPara = rOptions;
 
@@ -259,7 +259,7 @@ void TextSearch::setOptions2( const SearchOptions2& rOptions ) throw( RuntimeExc
     }
 }
 
-void TextSearch::setOptions( const SearchOptions& rOptions ) throw( RuntimeException, std::exception )
+void TextSearch::setOptions( const SearchOptions& rOptions )
 {
     sal_Int16 nAlgorithmType2;
     switch (rOptions.algorithmType)
@@ -303,7 +303,6 @@ sal_Int32 FindPosInSeq_Impl( const Sequence <sal_Int32>& rOff, sal_Int32 nPos )
 }
 
 bool TextSearch::isCellStart(const OUString& searchStr, sal_Int32 nPos)
-        throw( RuntimeException )
 {
     sal_Int32 nDone;
     return nPos == xBreak->previousCharacters(searchStr, nPos+1,
@@ -311,7 +310,6 @@ bool TextSearch::isCellStart(const OUString& searchStr, sal_Int32 nPos)
 }
 
 SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
-        throw( RuntimeException, std::exception )
 {
     SearchResult sres;
 
@@ -427,7 +425,6 @@ SearchResult TextSearch::searchForward( const OUString& searchStr, sal_Int32 sta
 }
 
 SearchResult TextSearch::searchBackward( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
-        throw(RuntimeException, std::exception)
 {
     SearchResult sres;
 
@@ -678,7 +675,6 @@ sal_Int32 TextSearch::GetDiff( const sal_Unicode cChr ) const
 
 
 SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
-        throw(RuntimeException)
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;
@@ -749,7 +745,6 @@ SearchResult TextSearch::NSrchFrwrd( const OUString& searchStr, sal_Int32 startP
 }
 
 SearchResult TextSearch::NSrchBkwrd( const OUString& searchStr, sal_Int32 startPos, sal_Int32 endPos )
-        throw(RuntimeException)
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;
@@ -915,7 +910,6 @@ static bool lcl_findRegex( RegexMatcher * pRegexMatcher, sal_Int32 nStartPos, UE
 
 SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
-            throw(RuntimeException)
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;
@@ -967,7 +961,6 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 
 SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
                                       sal_Int32 startPos, sal_Int32 endPos )
-            throw(RuntimeException)
 {
     // NOTE: for backwards search callers provide startPos/endPos inverted!
     SearchResult aRet;
@@ -1040,7 +1033,6 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
 // search for words phonetically
 SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
                                           sal_Int32 startPos, sal_Int32 endPos )
-            throw(RuntimeException)
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;
@@ -1085,7 +1077,6 @@ SearchResult TextSearch::ApproxSrchFrwrd( const OUString& searchStr,
 
 SearchResult TextSearch::ApproxSrchBkwrd( const OUString& searchStr,
                                           sal_Int32 startPos, sal_Int32 endPos )
-            throw(RuntimeException)
 {
     SearchResult aRet;
     aRet.subRegExpressions = 0;
@@ -1138,7 +1129,6 @@ void setWildcardMatch( css::util::SearchResult& rRes, sal_Int32 nStartOffset, sa
 }
 
 SearchResult TextSearch::WildcardSrchFrwrd( const OUString& searchStr, sal_Int32 nStartPos, sal_Int32 nEndPos )
-        throw(RuntimeException)
 {
     SearchResult aRes;
     aRes.subRegExpressions = 0;     // no match
@@ -1310,7 +1300,6 @@ SearchResult TextSearch::WildcardSrchFrwrd( const OUString& searchStr, sal_Int32
 }
 
 SearchResult TextSearch::WildcardSrchBkwrd( const OUString& searchStr, sal_Int32 nStartPos, sal_Int32 nEndPos )
-        throw(RuntimeException)
 {
     SearchResult aRes;
     aRes.subRegExpressions = 0;     // no match
@@ -1557,19 +1546,17 @@ static OUString getImplementationName_Static()
 
 OUString SAL_CALL
 TextSearch::getImplementationName()
-                throw( RuntimeException, std::exception )
 {
     return getImplementationName_Static();
 }
 
 sal_Bool SAL_CALL TextSearch::supportsService(const OUString& rServiceName)
-                throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-TextSearch::getSupportedServiceNames() throw( RuntimeException, std::exception )
+TextSearch::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { getServiceName_Static() };
     return aRet;

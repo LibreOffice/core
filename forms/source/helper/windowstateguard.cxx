@@ -63,17 +63,17 @@ namespace frm
 
     protected:
         // XWindowListener2
-        virtual void SAL_CALL windowEnabled( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowDisabled( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowEnabled( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL windowDisabled( const css::lang::EventObject& e ) override;
 
         // XWindowListener
-        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowShown( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL windowHidden( const css::lang::EventObject& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL windowResized( const css::awt::WindowEvent& e ) override;
+        virtual void SAL_CALL windowMoved( const css::awt::WindowEvent& e ) override;
+        virtual void SAL_CALL windowShown( const css::lang::EventObject& e ) override;
+        virtual void SAL_CALL windowHidden( const css::lang::EventObject& e ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     private:
         /** ensures that the window's Enabled state matches what is described at the model
@@ -140,43 +140,43 @@ namespace frm
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowEnabled( const EventObject& /*e*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStateGuard_Impl::windowEnabled( const EventObject& /*e*/ )
     {
         impl_ensureEnabledState_nothrow_nolck();
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowDisabled( const EventObject& /*e*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStateGuard_Impl::windowDisabled( const EventObject& /*e*/ )
     {
         impl_ensureEnabledState_nothrow_nolck();
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowResized( const WindowEvent& /*e*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStateGuard_Impl::windowResized( const WindowEvent& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowMoved( const WindowEvent& /*e*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStateGuard_Impl::windowMoved( const WindowEvent& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowShown( const EventObject& /*e*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStateGuard_Impl::windowShown( const EventObject& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::windowHidden( const EventObject& /*e*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStateGuard_Impl::windowHidden( const EventObject& /*e*/ )
     {
         // not interested in
     }
 
 
-    void SAL_CALL WindowStateGuard_Impl::disposing( const EventObject& Source ) throw (RuntimeException, std::exception)
+    void SAL_CALL WindowStateGuard_Impl::disposing( const EventObject& Source )
     {
         OSL_ENSURE( Source.Source == m_xWindow, "WindowStateGuard_Impl::disposing: where does this come from?" );
         (void)Source;

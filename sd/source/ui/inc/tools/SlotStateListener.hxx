@@ -92,14 +92,12 @@ public:
     */
     virtual void SAL_CALL
         statusChanged (
-            const css::frame::FeatureStateEvent& rState)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::frame::FeatureStateEvent& rState) override;
 
     //=====  lang::XEventListener  ============================================
 
     virtual void SAL_CALL
-        disposing(const css::lang::EventObject& rEvent)
-        throw(css::uno::RuntimeException, std::exception) override;
+        disposing(const css::lang::EventObject& rEvent) override;
 
 protected:
     /** This method is called by the WeakComponentImplHelper base class in
@@ -126,8 +124,7 @@ private:
     /** @throws css::lang::DisposedException when the object has already been
         disposed.
     */
-    void ThrowIfDisposed()
-        throw (css::lang::DisposedException);
+    void ThrowIfDisposed();
 
     /** Transform the given string into a URL object.
     */

@@ -55,7 +55,7 @@ namespace sdbtools
         );
 
         // XDataSourceMetaData
-        virtual sal_Bool SAL_CALL supportsQueriesInFrom() throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsQueriesInFrom() override;
 
     protected:
         virtual ~DataSourceMetaData() override;

@@ -206,19 +206,16 @@ RegressionCurveModel::~RegressionCurveModel()
 // ____ XRegressionCurve ____
 uno::Reference< chart2::XRegressionCurveCalculator > SAL_CALL
     RegressionCurveModel::getCalculator()
-    throw (uno::RuntimeException, std::exception)
 {
     return RegressionCurveHelper::createRegressionCurveCalculatorByServiceName( getServiceName());
 }
 
 uno::Reference< beans::XPropertySet > SAL_CALL RegressionCurveModel::getEquationProperties()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_xEquationProperties;
 }
 
 void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference< beans::XPropertySet >& xEquationProperties )
-    throw (uno::RuntimeException, std::exception)
 {
     if( xEquationProperties.is())
     {
@@ -233,7 +230,6 @@ void SAL_CALL RegressionCurveModel::setEquationProperties( const uno::Reference<
 
 // ____ XServiceName ____
 OUString SAL_CALL RegressionCurveModel::getServiceName()
-    throw (uno::RuntimeException, std::exception)
 {
     switch( m_eRegressionCurveType )
     {
@@ -258,7 +254,6 @@ OUString SAL_CALL RegressionCurveModel::getServiceName()
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL RegressionCurveModel::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -272,7 +267,6 @@ void SAL_CALL RegressionCurveModel::addModifyListener( const uno::Reference< uti
 }
 
 void SAL_CALL RegressionCurveModel::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -287,14 +281,12 @@ void SAL_CALL RegressionCurveModel::removeModifyListener( const uno::Reference< 
 
 // ____ XModifyListener ____
 void SAL_CALL RegressionCurveModel::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL RegressionCurveModel::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
@@ -312,7 +304,6 @@ void RegressionCurveModel::fireModifyEvent()
 
 // ____ OPropertySet ____
 uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticXXXDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -328,7 +319,6 @@ uno::Any RegressionCurveModel::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL RegressionCurveModel::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticRegressionCurveInfo::get();
 }
@@ -352,25 +342,21 @@ MeanValueRegressionCurve::~MeanValueRegressionCurve()
 {}
 
 OUString SAL_CALL MeanValueRegressionCurve::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return lcl_aImplementationName_MeanValue;
 }
 
 sal_Bool SAL_CALL MeanValueRegressionCurve::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL MeanValueRegressionCurve::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { lcl_aServiceName, "com.sun.star.chart2.MeanValueRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL MeanValueRegressionCurve::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new MeanValueRegressionCurve( *this ));
 }
@@ -386,25 +372,21 @@ LinearRegressionCurve::~LinearRegressionCurve()
 {}
 
 OUString SAL_CALL LinearRegressionCurve::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return lcl_aImplementationName_Linear;
 }
 
 sal_Bool SAL_CALL LinearRegressionCurve::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL LinearRegressionCurve::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { lcl_aServiceName, "com.sun.star.chart2.LinearRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL LinearRegressionCurve::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new LinearRegressionCurve( *this ));
 }
@@ -420,25 +402,21 @@ LogarithmicRegressionCurve::~LogarithmicRegressionCurve()
 {}
 
 OUString SAL_CALL LogarithmicRegressionCurve::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return lcl_aImplementationName_Logarithmic;
 }
 
 sal_Bool SAL_CALL LogarithmicRegressionCurve::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL LogarithmicRegressionCurve::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { lcl_aServiceName, "com.sun.star.chart2.LogarithmicRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL LogarithmicRegressionCurve::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new LogarithmicRegressionCurve( *this ));
 }
@@ -454,25 +432,21 @@ ExponentialRegressionCurve::~ExponentialRegressionCurve()
 {}
 
 OUString SAL_CALL ExponentialRegressionCurve::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return lcl_aImplementationName_Exponential;
 }
 
 sal_Bool SAL_CALL ExponentialRegressionCurve::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ExponentialRegressionCurve::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { lcl_aServiceName, "com.sun.star.chart2.ExponentialRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL ExponentialRegressionCurve::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new ExponentialRegressionCurve( *this ));
 }
@@ -488,25 +462,21 @@ PotentialRegressionCurve::~PotentialRegressionCurve()
 {}
 
 OUString SAL_CALL PotentialRegressionCurve::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return lcl_aImplementationName_Potential;
 }
 
 sal_Bool SAL_CALL PotentialRegressionCurve::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL PotentialRegressionCurve::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { lcl_aServiceName, "com.sun.star.chart2.PotentialRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL PotentialRegressionCurve::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new PotentialRegressionCurve( *this ));
 }
@@ -522,25 +492,21 @@ PolynomialRegressionCurve::~PolynomialRegressionCurve()
 {}
 
 OUString SAL_CALL PolynomialRegressionCurve::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return lcl_aImplementationName_Polynomial;
 }
 
 sal_Bool SAL_CALL PolynomialRegressionCurve::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL PolynomialRegressionCurve::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { lcl_aServiceName, "com.sun.star.chart2.PolynomialRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL PolynomialRegressionCurve::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new PolynomialRegressionCurve( *this ));
 }
@@ -556,25 +522,21 @@ MovingAverageRegressionCurve::~MovingAverageRegressionCurve()
 {}
 
 OUString SAL_CALL MovingAverageRegressionCurve::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return lcl_aImplementationName_MovingAverage;
 }
 
 sal_Bool SAL_CALL MovingAverageRegressionCurve::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL MovingAverageRegressionCurve::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { lcl_aServiceName, "com.sun.star.chart2.MovingAverageRegressionCurve" };
 }
 
 uno::Reference< util::XCloneable > SAL_CALL MovingAverageRegressionCurve::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new MovingAverageRegressionCurve( *this ));
 }

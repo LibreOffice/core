@@ -149,7 +149,7 @@ Sequence<Type> OFormattedControl::_getTypes()
         OBoundControl::_getTypes()
     );
 }
-Any SAL_CALL OFormattedControl::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL OFormattedControl::queryAggregation(const Type& _rType)
 {
     Any aReturn = OBoundControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -182,11 +182,11 @@ OFormattedControl::~OFormattedControl()
 }
 
 // XKeyListener
-void OFormattedControl::disposing(const EventObject& _rSource) throw(RuntimeException, std::exception)
+void OFormattedControl::disposing(const EventObject& _rSource)
 {
     OBoundControl::disposing(_rSource);
 }
-void OFormattedControl::keyPressed(const css::awt::KeyEvent& e) throw ( css::uno::RuntimeException, std::exception)
+void OFormattedControl::keyPressed(const css::awt::KeyEvent& e)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
@@ -230,7 +230,7 @@ void OFormattedControl::keyPressed(const css::awt::KeyEvent& e) throw ( css::uno
                                             OnKeyPressed) );
 }
 
-void OFormattedControl::keyReleased(const css::awt::KeyEvent& /*e*/) throw ( css::uno::RuntimeException, std::exception)
+void OFormattedControl::keyReleased(const css::awt::KeyEvent& /*e*/)
 {
 }
 
@@ -244,7 +244,7 @@ IMPL_LINK_NOARG(OFormattedControl, OnKeyPressed, void*, void)
         xSubmit->submit( Reference<XControl> (), css::awt::MouseEvent() );
 }
 
-css::uno::Sequence<OUString>  OFormattedControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OFormattedControl::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 2);
@@ -300,7 +300,7 @@ void SAL_CALL OFormattedModel::disposing()
 }
 
 // XServiceInfo
-css::uno::Sequence<OUString> OFormattedModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> OFormattedModel::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OEditBaseModel::getSupportedServiceNames();
     sal_Int32 nOldLen = aSupported.getLength();
@@ -319,7 +319,7 @@ css::uno::Sequence<OUString> OFormattedModel::getSupportedServiceNames() throw(s
 }
 
 // XAggregation
-Any SAL_CALL OFormattedModel::queryAggregation(const Type& _rType) throw(RuntimeException, std::exception)
+Any SAL_CALL OFormattedModel::queryAggregation(const Type& _rType)
 {
     Any aReturn = OEditBaseModel::queryAggregation( _rType );
     return aReturn.hasValue() ? aReturn : OErrorBroadcaster::queryInterface( _rType );
@@ -335,7 +335,7 @@ Sequence< Type > OFormattedModel::_getTypes()
 }
 
 // XPersistObject
-OUString SAL_CALL OFormattedModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OFormattedModel::getServiceName()
 {
     return OUString(FRM_COMPONENT_EDIT);
 }
@@ -379,7 +379,7 @@ void OFormattedModel::setPropertyToDefaultByHandle(sal_Int32 nHandle)
         OEditBaseModel::setPropertyToDefaultByHandle(nHandle);
 }
 
-void OFormattedModel::setPropertyToDefault(const OUString& aPropertyName) throw( css::beans::UnknownPropertyException, RuntimeException, std::exception )
+void OFormattedModel::setPropertyToDefault(const OUString& aPropertyName)
 {
     OPropertyArrayAggregationHelper& rPH = m_aPropertyBagHelper.getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
@@ -400,7 +400,7 @@ Any OFormattedModel::getPropertyDefaultByHandle( sal_Int32 nHandle ) const
         return OEditBaseModel::getPropertyDefaultByHandle(nHandle);
 }
 
-Any SAL_CALL OFormattedModel::getPropertyDefault( const OUString& aPropertyName ) throw( css::beans::UnknownPropertyException, RuntimeException, std::exception )
+Any SAL_CALL OFormattedModel::getPropertyDefault( const OUString& aPropertyName )
 {
     OPropertyArrayAggregationHelper& rPH = m_aPropertyBagHelper.getInfoHelper();
     sal_Int32 nHandle = rPH.getHandleByName( aPropertyName );
@@ -410,7 +410,7 @@ Any SAL_CALL OFormattedModel::getPropertyDefault( const OUString& aPropertyName 
         return OEditBaseModel::getPropertyDefault(aPropertyName);
 }
 
-void OFormattedModel::_propertyChanged( const css::beans::PropertyChangeEvent& evt ) throw(RuntimeException, std::exception)
+void OFormattedModel::_propertyChanged( const css::beans::PropertyChangeEvent& evt )
 {
     // TODO: check how this works with external bindings
     OSL_ENSURE( evt.Source == m_xAggregateSet, "OFormattedModel::_propertyChanged: where did this come from?" );
@@ -513,7 +513,7 @@ Reference< XNumberFormatsSupplier > OFormattedModel::calcDefaultFormatsSupplier(
 }
 
 // XBoundComponent
-void OFormattedModel::loaded(const EventObject& rEvent) throw ( css::uno::RuntimeException, std::exception)
+void OFormattedModel::loaded(const EventObject& rEvent)
 {
     // HACK: our onConnectedDbColumn accesses our NumberFormatter which locks the solar mutex (as it doesn't have
     // an own one). To prevent deadlocks with other threads which may request a property from us in an
@@ -626,7 +626,7 @@ void OFormattedModel::onDisconnectedDbColumn()
     m_aNullDate  = DBTypeConversion::getStandardDate();
 }
 
-void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
+void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     OEditBaseModel::write(_rxOutStream);
     _rxOutStream->writeShort(0x0003);
@@ -712,7 +712,7 @@ void OFormattedModel::write(const Reference<XObjectOutputStream>& _rxOutStream) 
     }
 }
 
-void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
+void OFormattedModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OEditBaseModel::read(_rxInStream);
     sal_uInt16 nVersion = _rxInStream->readShort();

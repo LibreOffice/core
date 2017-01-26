@@ -28,12 +28,12 @@ class ListTemplatesEnumWrapper : public EnumerationHelper_BASE
     sal_Int32 nIndex;
 public:
     explicit ListTemplatesEnumWrapper( SwVbaListTemplates* pTemplates ) : pListTemplates( pTemplates ), nIndex( 1 ) {}
-    virtual sal_Bool SAL_CALL hasMoreElements(  ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) override
     {
         return ( nIndex <= pListTemplates->getCount() );
     }
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL nextElement(  ) override
     {
         if ( nIndex <= pListTemplates->getCount() )
             return pListTemplates->Item( uno::makeAny( nIndex++ ), uno::Any() );
@@ -41,17 +41,17 @@ public:
     }
 };
 
-SwVbaListTemplates::SwVbaListTemplates( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xTextDoc, sal_Int32 nType ) throw (uno::RuntimeException) : SwVbaListTemplates_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ),  mxTextDocument( xTextDoc ), mnGalleryType( nType )
+SwVbaListTemplates::SwVbaListTemplates( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext > & xContext, const uno::Reference< text::XTextDocument >& xTextDoc, sal_Int32 nType ) : SwVbaListTemplates_BASE( xParent, xContext, uno::Reference< container::XIndexAccess >() ),  mxTextDocument( xTextDoc ), mnGalleryType( nType )
 {
 }
 
-::sal_Int32 SAL_CALL SwVbaListTemplates::getCount() throw (uno::RuntimeException)
+::sal_Int32 SAL_CALL SwVbaListTemplates::getCount()
 {
     // 3 types of list( bullet, numbered and outline )
     return 7;
 }
 
-uno::Any SAL_CALL SwVbaListTemplates::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ ) throw (uno::RuntimeException)
+uno::Any SAL_CALL SwVbaListTemplates::Item( const uno::Any& Index1, const uno::Any& /*not processed in this base class*/ )
 {
     sal_Int32 nIndex = 0;
     if( !( Index1 >>= nIndex ) )
@@ -64,13 +64,13 @@ uno::Any SAL_CALL SwVbaListTemplates::Item( const uno::Any& Index1, const uno::A
 
 // XEnumerationAccess
 uno::Type
-SwVbaListTemplates::getElementType() throw (uno::RuntimeException)
+SwVbaListTemplates::getElementType()
 {
     return cppu::UnoType<word::XListTemplate>::get();
 }
 
 uno::Reference< container::XEnumeration >
-SwVbaListTemplates::createEnumeration() throw (uno::RuntimeException)
+SwVbaListTemplates::createEnumeration()
 {
     return new ListTemplatesEnumWrapper( this );
 }

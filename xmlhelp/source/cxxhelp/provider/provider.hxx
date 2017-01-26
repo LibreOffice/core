@@ -57,27 +57,20 @@ namespace chelp {
         virtual ~ContentProvider() override;
 
         // XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
         virtual void SAL_CALL acquire()
             throw() override;
         virtual void SAL_CALL release()
             throw() override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-            throw( css::uno::RuntimeException, std::exception ) override;
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException,
-                   std::exception ) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         static OUString getImplementationName_Static();
 
@@ -88,28 +81,23 @@ namespace chelp {
 
         // XContentProvider
         virtual css::uno::Reference< css::ucb::XContent > SAL_CALL queryContent(
-                const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
-            throw( css::ucb::IllegalIdentifierException,
-                   css::uno::RuntimeException, std::exception ) override;
+                const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
 
         // Additional interfaces
 
         // XComponent
 
         virtual void SAL_CALL
-        dispose(  )
-            throw (css::uno::RuntimeException, std::exception) override;
+        dispose(  ) override;
 
         virtual void SAL_CALL
-        addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
-            throw (css::uno::RuntimeException, std::exception) override
+        addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override
         {
             (void)xListener;
         }
 
         virtual void SAL_CALL
-        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
-            throw (css::uno::RuntimeException, std::exception) override
+        removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override
         {
             (void)aListener;
         }
@@ -117,29 +105,25 @@ namespace chelp {
         // XContainerListener ( derive from XEventListener )
 
         virtual void SAL_CALL
-        disposing( const css::lang::EventObject& /*Source*/ )
-            throw (css::uno::RuntimeException, std::exception) override
+        disposing( const css::lang::EventObject& /*Source*/ ) override
         {
             m_xContainer.clear();
         }
 
         virtual void SAL_CALL
-        elementInserted( const css::container::ContainerEvent& Event )
-            throw (css::uno::RuntimeException, std::exception) override
+        elementInserted( const css::container::ContainerEvent& Event ) override
         {
             (void)Event;
         }
 
         virtual void SAL_CALL
-        elementRemoved( const css::container::ContainerEvent& Event )
-            throw (css::uno::RuntimeException, std::exception) override
+        elementRemoved( const css::container::ContainerEvent& Event ) override
         {
             (void)Event;
         }
 
         virtual void SAL_CALL
-        elementReplaced( const css::container::ContainerEvent& Event )
-            throw (css::uno::RuntimeException, std::exception) override;
+        elementReplaced( const css::container::ContainerEvent& Event ) override;
 
         // Non-interface methods.
 

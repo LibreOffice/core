@@ -106,7 +106,7 @@ void Paragraph::notifyEvent(::sal_Int16 nEventId,
 
 // virtual
 css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
-Paragraph::getAccessibleContext() throw (css::uno::RuntimeException, std::exception)
+Paragraph::getAccessibleContext()
 {
     checkDisposed();
     return this;
@@ -114,7 +114,6 @@ Paragraph::getAccessibleContext() throw (css::uno::RuntimeException, std::except
 
 // virtual
 ::sal_Int32 SAL_CALL Paragraph::getAccessibleChildCount()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return 0;
@@ -123,8 +122,6 @@ Paragraph::getAccessibleContext() throw (css::uno::RuntimeException, std::except
 // virtual
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 Paragraph::getAccessibleChild(::sal_Int32)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     throw css::lang::IndexOutOfBoundsException(
@@ -136,7 +133,6 @@ Paragraph::getAccessibleChild(::sal_Int32)
 // virtual
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 Paragraph::getAccessibleParent()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->getAccessible();
@@ -144,7 +140,6 @@ Paragraph::getAccessibleParent()
 
 // virtual
 ::sal_Int32 SAL_CALL Paragraph::getAccessibleIndexInParent()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->retrieveParagraphIndex(this);
@@ -152,7 +147,6 @@ Paragraph::getAccessibleParent()
 
 // virtual
 ::sal_Int16 SAL_CALL Paragraph::getAccessibleRole()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return css::accessibility::AccessibleRole::PARAGRAPH;
@@ -160,7 +154,6 @@ Paragraph::getAccessibleParent()
 
 // virtual
 OUString SAL_CALL Paragraph::getAccessibleDescription()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OUString();
@@ -168,7 +161,6 @@ OUString SAL_CALL Paragraph::getAccessibleDescription()
 
 // virtual
 OUString SAL_CALL Paragraph::getAccessibleName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OUString();
@@ -177,7 +169,6 @@ OUString SAL_CALL Paragraph::getAccessibleName()
 // virtual
 css::uno::Reference< css::accessibility::XAccessibleRelationSet >
 SAL_CALL Paragraph::getAccessibleRelationSet()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->retrieveParagraphRelationSet( this );
@@ -186,7 +177,6 @@ SAL_CALL Paragraph::getAccessibleRelationSet()
 // virtual
 css::uno::Reference< css::accessibility::XAccessibleStateSet >
 SAL_CALL Paragraph::getAccessibleStateSet()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
 
@@ -198,8 +188,6 @@ SAL_CALL Paragraph::getAccessibleStateSet()
 
 // virtual
 css::lang::Locale SAL_CALL Paragraph::getLocale()
-    throw (css::accessibility::IllegalAccessibleComponentStateException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->retrieveLocale();
@@ -207,7 +195,6 @@ css::lang::Locale SAL_CALL Paragraph::getLocale()
 
 // virtual
 sal_Bool SAL_CALL Paragraph::containsPoint(css::awt::Point const & rPoint)
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     css::awt::Rectangle aRect(m_xDocument->retrieveParagraphBounds(this,
@@ -219,7 +206,6 @@ sal_Bool SAL_CALL Paragraph::containsPoint(css::awt::Point const & rPoint)
 // virtual
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 Paragraph::getAccessibleAtPoint(css::awt::Point const &)
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return nullptr;
@@ -227,7 +213,6 @@ Paragraph::getAccessibleAtPoint(css::awt::Point const &)
 
 // virtual
 css::awt::Rectangle SAL_CALL Paragraph::getBounds()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->retrieveParagraphBounds(this, false);
@@ -235,7 +220,6 @@ css::awt::Rectangle SAL_CALL Paragraph::getBounds()
 
 // virtual
 css::awt::Point SAL_CALL Paragraph::getLocation()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     css::awt::Rectangle aRect(m_xDocument->retrieveParagraphBounds(this,
@@ -245,7 +229,6 @@ css::awt::Point SAL_CALL Paragraph::getLocation()
 
 // virtual
 css::awt::Point SAL_CALL Paragraph::getLocationOnScreen()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     css::awt::Rectangle aRect(m_xDocument->retrieveParagraphBounds(this,
@@ -255,7 +238,6 @@ css::awt::Point SAL_CALL Paragraph::getLocationOnScreen()
 
 // virtual
 css::awt::Size SAL_CALL Paragraph::getSize()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     css::awt::Rectangle aRect(m_xDocument->retrieveParagraphBounds(this,
@@ -264,7 +246,7 @@ css::awt::Size SAL_CALL Paragraph::getSize()
 }
 
 // virtual
-void SAL_CALL Paragraph::grabFocus() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL Paragraph::grabFocus()
 {
     checkDisposed();
     VclPtr<vcl::Window> pWindow = m_xDocument->GetWindow();
@@ -286,21 +268,18 @@ void SAL_CALL Paragraph::grabFocus() throw (css::uno::RuntimeException, std::exc
 
 // virtual
 css::util::Color SAL_CALL Paragraph::getForeground()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return 0; // TODO
 }
 
 // virtual
 css::util::Color SAL_CALL Paragraph::getBackground()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return 0; // TODO
 }
 
 // virtual
 ::sal_Int32 SAL_CALL Paragraph::getCaretPosition()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->retrieveParagraphCaretPosition(this);
@@ -308,8 +287,6 @@ css::util::Color SAL_CALL Paragraph::getBackground()
 
 // virtual
 sal_Bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->changeParagraphSelection(this, nIndex, nIndex);
@@ -318,8 +295,6 @@ sal_Bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
 
 // virtual
 ::sal_Unicode SAL_CALL Paragraph::getCharacter(::sal_Int32 nIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OCommonAccessibleText::getCharacter(nIndex);
@@ -328,8 +303,6 @@ sal_Bool SAL_CALL Paragraph::setCaretPosition(::sal_Int32 nIndex)
 // virtual
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
 Paragraph::getCharacterAttributes(::sal_Int32 nIndex, const css::uno::Sequence< OUString >& aRequestedAttributes)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->retrieveCharacterAttributes( this, nIndex, aRequestedAttributes );
@@ -338,8 +311,6 @@ Paragraph::getCharacterAttributes(::sal_Int32 nIndex, const css::uno::Sequence< 
 // virtual
 css::awt::Rectangle SAL_CALL
 Paragraph::getCharacterBounds(::sal_Int32 nIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     css::awt::Rectangle aBounds(m_xDocument->retrieveCharacterBounds(this, nIndex));
@@ -351,7 +322,6 @@ Paragraph::getCharacterBounds(::sal_Int32 nIndex)
 
 // virtual
 ::sal_Int32 SAL_CALL Paragraph::getCharacterCount()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OCommonAccessibleText::getCharacterCount();
@@ -360,7 +330,6 @@ Paragraph::getCharacterBounds(::sal_Int32 nIndex)
 // virtual
 ::sal_Int32 SAL_CALL
 Paragraph::getIndexAtPoint(css::awt::Point const & rPoint)
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     css::awt::Point aPoint(rPoint);
@@ -372,7 +341,6 @@ Paragraph::getIndexAtPoint(css::awt::Point const & rPoint)
 
 // virtual
 OUString SAL_CALL Paragraph::getSelectedText()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
 
@@ -381,7 +349,6 @@ OUString SAL_CALL Paragraph::getSelectedText()
 
 // virtual
 ::sal_Int32 SAL_CALL Paragraph::getSelectionStart()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OCommonAccessibleText::getSelectionStart();
@@ -389,7 +356,6 @@ OUString SAL_CALL Paragraph::getSelectedText()
 
 // virtual
 ::sal_Int32 SAL_CALL Paragraph::getSelectionEnd()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OCommonAccessibleText::getSelectionEnd();
@@ -398,8 +364,6 @@ OUString SAL_CALL Paragraph::getSelectedText()
 // virtual
 sal_Bool SAL_CALL Paragraph::setSelection(::sal_Int32 nStartIndex,
                                                 ::sal_Int32 nEndIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->changeParagraphSelection(this, nStartIndex, nEndIndex);
@@ -408,7 +372,6 @@ sal_Bool SAL_CALL Paragraph::setSelection(::sal_Int32 nStartIndex,
 
 // virtual
 OUString SAL_CALL Paragraph::getText()
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OCommonAccessibleText::getText();
@@ -417,29 +380,27 @@ OUString SAL_CALL Paragraph::getText()
 // virtual
 OUString SAL_CALL Paragraph::getTextRange(::sal_Int32 nStartIndex,
                                                      ::sal_Int32 nEndIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return OCommonAccessibleText::getTextRange(nStartIndex, nEndIndex);
 }
 
 // virtual
-css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     checkDisposed();
     return OCommonAccessibleText::getTextAtIndex(nIndex, aTextType);
 }
 
 // virtual
-css::accessibility::TextSegment SAL_CALL Paragraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL Paragraph::getTextBeforeIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     checkDisposed();
     return OCommonAccessibleText::getTextBeforeIndex(nIndex, aTextType);
 }
 
 // virtual
-css::accessibility::TextSegment SAL_CALL Paragraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception)
+css::accessibility::TextSegment SAL_CALL Paragraph::getTextBehindIndex( sal_Int32 nIndex, sal_Int16 aTextType )
 {
     checkDisposed();
     return OCommonAccessibleText::getTextBehindIndex(nIndex, aTextType);
@@ -448,8 +409,6 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextBehindIndex( sal_Int3
 // virtual
 sal_Bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
                                             ::sal_Int32 nEndIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->copyParagraphText(this, nStartIndex, nEndIndex);
@@ -459,8 +418,6 @@ sal_Bool SAL_CALL Paragraph::copyText(::sal_Int32 nStartIndex,
 // virtual
 sal_Bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
                                            ::sal_Int32 nEndIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->changeParagraphText(this, nStartIndex, nEndIndex, true, false,
@@ -470,8 +427,6 @@ sal_Bool SAL_CALL Paragraph::cutText(::sal_Int32 nStartIndex,
 
 // virtual
 sal_Bool SAL_CALL Paragraph::pasteText(::sal_Int32 nIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->changeParagraphText(this, nIndex, nIndex, false, true,
@@ -482,8 +437,6 @@ sal_Bool SAL_CALL Paragraph::pasteText(::sal_Int32 nIndex)
 // virtual
 sal_Bool SAL_CALL Paragraph::deleteText(::sal_Int32 nStartIndex,
                                           ::sal_Int32 nEndIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->changeParagraphText(this, nStartIndex, nEndIndex, false, false,
@@ -494,8 +447,6 @@ sal_Bool SAL_CALL Paragraph::deleteText(::sal_Int32 nStartIndex,
 // virtual
 sal_Bool SAL_CALL Paragraph::insertText(OUString const & rText,
                                               ::sal_Int32 nIndex)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->changeParagraphText(this, nIndex, nIndex, false, false, rText);
@@ -506,8 +457,6 @@ sal_Bool SAL_CALL Paragraph::insertText(OUString const & rText,
 sal_Bool SAL_CALL
 Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
                            OUString const & rReplacement)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->changeParagraphText(this, nStartIndex, nEndIndex, false, false,
@@ -519,8 +468,6 @@ Paragraph::replaceText(::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
 sal_Bool SAL_CALL Paragraph::setAttributes(
     ::sal_Int32 nStartIndex, ::sal_Int32 nEndIndex,
     css::uno::Sequence< css::beans::PropertyValue > const & rAttributeSet)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->changeParagraphAttributes(this, nStartIndex, nEndIndex,
@@ -530,7 +477,6 @@ sal_Bool SAL_CALL Paragraph::setAttributes(
 
 // virtual
 sal_Bool SAL_CALL Paragraph::setText(OUString const & rText)
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     m_xDocument->changeParagraphText(this, rText);
@@ -540,7 +486,6 @@ sal_Bool SAL_CALL Paragraph::setText(OUString const & rText)
 // virtual
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
 Paragraph::getDefaultAttributes(const css::uno::Sequence< OUString >& RequestedAttributes)
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->retrieveDefaultAttributes( this, RequestedAttributes );
@@ -549,8 +494,6 @@ Paragraph::getDefaultAttributes(const css::uno::Sequence< OUString >& RequestedA
 // virtual
 css::uno::Sequence< css::beans::PropertyValue > SAL_CALL
 Paragraph::getRunAttributes(::sal_Int32 Index, const css::uno::Sequence< OUString >& RequestedAttributes)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->retrieveRunAttributes( this, Index, RequestedAttributes );
@@ -558,8 +501,6 @@ Paragraph::getRunAttributes(::sal_Int32 Index, const css::uno::Sequence< OUStrin
 
 // virtual
 ::sal_Int32 SAL_CALL Paragraph::getLineNumberAtIndex( ::sal_Int32 nIndex )
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
 
@@ -571,8 +512,6 @@ Paragraph::getRunAttributes(::sal_Int32 Index, const css::uno::Sequence< OUStrin
 
 // virtual
 css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineNumber( ::sal_Int32 nLineNo )
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
 
@@ -585,7 +524,6 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineNumber( ::sal_I
 
 // virtual
 css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
 
@@ -605,7 +543,6 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
 
 // virtual
 ::sal_Int32 SAL_CALL Paragraph::getNumberOfLineWithCaret(  )
-    throw (css::uno::RuntimeException, std::exception)
 {
     checkDisposed();
     return m_xDocument->retrieveParagraphLineWithCursor(this);
@@ -616,7 +553,6 @@ css::accessibility::TextSegment SAL_CALL Paragraph::getTextAtLineWithCaret(  )
 void SAL_CALL Paragraph::addAccessibleEventListener(
     css::uno::Reference<
     css::accessibility::XAccessibleEventListener > const & rListener)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (rListener.is())
     {
@@ -640,7 +576,6 @@ void SAL_CALL Paragraph::addAccessibleEventListener(
 void SAL_CALL Paragraph::removeAccessibleEventListener(
     css::uno::Reference<
     css::accessibility::XAccessibleEventListener > const & rListener)
-    throw (css::uno::RuntimeException, std::exception)
 {
     comphelper::AccessibleEventNotifier::TClientId nId = 0;
     {
@@ -1441,7 +1376,6 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 
 // virtual
 ::sal_Int32 SAL_CALL Document::getAccessibleChildCount()
-    throw (css::uno::RuntimeException, std::exception)
 {
     ::comphelper::OExternalLockGuard aGuard(this);
     init();
@@ -1451,8 +1385,6 @@ Document::retrieveParagraphRelationSet( Paragraph const * pParagraph )
 // virtual
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 Document::getAccessibleChild(::sal_Int32 i)
-    throw (css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     ::comphelper::OExternalLockGuard aGuard(this);
     init();
@@ -1467,7 +1399,6 @@ Document::getAccessibleChild(::sal_Int32 i)
 
 // virtual
 ::sal_Int16 SAL_CALL Document::getAccessibleRole()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::accessibility::AccessibleRole::TEXT_FRAME;
 }
@@ -1475,7 +1406,6 @@ Document::getAccessibleChild(::sal_Int32 i)
 // virtual
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 Document::getAccessibleAtPoint(css::awt::Point const & rPoint)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ::comphelper::OExternalLockGuard aGuard(this);
     init();

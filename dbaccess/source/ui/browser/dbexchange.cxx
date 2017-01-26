@@ -209,7 +209,7 @@ namespace dbaui
         ODataAccessObjectTransferable::ObjectReleased( );
     }
 
-    void SAL_CALL ODataClipboard::disposing( const css::lang::EventObject& i_rSource ) throw (css::uno::RuntimeException, std::exception)
+    void SAL_CALL ODataClipboard::disposing( const css::lang::EventObject& i_rSource )
     {
         ODataAccessDescriptor& rDescriptor( getDescriptor() );
 

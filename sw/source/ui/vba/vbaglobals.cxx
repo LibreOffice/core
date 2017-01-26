@@ -54,7 +54,7 @@ SwVbaGlobals::~SwVbaGlobals()
 // XGlobals
 
 uno::Reference<word::XApplication > const &
-SwVbaGlobals::getApplication() throw (uno::RuntimeException)
+SwVbaGlobals::getApplication()
 {
     SAL_INFO("sw", "In SwVbaGlobals::getApplication");
     if ( !mxApplication.is() )
@@ -64,72 +64,72 @@ SwVbaGlobals::getApplication() throw (uno::RuntimeException)
 }
 
 uno::Reference<word::XSystem > SAL_CALL
-SwVbaGlobals::getSystem() throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::getSystem()
 {
     return getApplication()->getSystem();
 }
 
 uno::Reference< word::XDocument > SAL_CALL
-SwVbaGlobals::getActiveDocument() throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::getActiveDocument()
 {
     return getApplication()->getActiveDocument();
 }
 
 uno::Reference< word::XWindow > SAL_CALL
-SwVbaGlobals::getActiveWindow() throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::getActiveWindow()
 {
     return getApplication()->getActiveWindow();
 }
 
 OUString SAL_CALL
-SwVbaGlobals::getName() throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::getName()
 {
     return getApplication()->getName();
 }
 
 uno::Reference<word::XOptions > SAL_CALL
-SwVbaGlobals::getOptions() throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::getOptions()
 {
     return getApplication()->getOptions();
 }
 
 uno::Any SAL_CALL
-SwVbaGlobals::CommandBars( const uno::Any& aIndex ) throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::CommandBars( const uno::Any& aIndex )
 {
     return getApplication()->CommandBars( aIndex );
 }
 
 uno::Any SAL_CALL
-SwVbaGlobals::Documents( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::Documents( const uno::Any& index )
 {
     return getApplication()->Documents( index );
 }
 
 uno::Any SAL_CALL
-SwVbaGlobals::Addins( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::Addins( const uno::Any& index )
 {
     return getApplication()->Addins( index );
 }
 
 uno::Any SAL_CALL
-SwVbaGlobals::Dialogs( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::Dialogs( const uno::Any& index )
 {
     return getApplication()->Dialogs( index );
 }
 
 uno::Any SAL_CALL
-SwVbaGlobals::ListGalleries( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::ListGalleries( const uno::Any& index )
 {
     return getApplication()->ListGalleries( index );
 }
 
 uno::Reference<word::XSelection > SAL_CALL
-SwVbaGlobals::getSelection() throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::getSelection()
 {
     return getApplication()->getSelection();
 }
 
-float SAL_CALL SwVbaGlobals::CentimetersToPoints( float Centimeters ) throw (uno::RuntimeException, std::exception)
+float SAL_CALL SwVbaGlobals::CentimetersToPoints( float Centimeters )
 {
     return getApplication()->CentimetersToPoints( Centimeters );
 }
@@ -153,7 +153,7 @@ SwVbaGlobals::getServiceNames()
 }
 
 uno::Sequence< OUString >
-SwVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException, std::exception)
+SwVbaGlobals::getAvailableServiceNames(  )
 {
     static bool bInit = false;
     static uno::Sequence< OUString > serviceNames( SwVbaGlobals_BASE::getAvailableServiceNames() );

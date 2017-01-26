@@ -104,20 +104,17 @@ protected:
     virtual ~WeakImplHelper() override {}
 
 public:
-    css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType)
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
     { return WeakImplHelper_query(aType, cd::get(), this, this); }
 
     void SAL_CALL acquire() throw () override { OWeakObject::acquire(); }
 
     void SAL_CALL release() throw () override { OWeakObject::release(); }
 
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     { return WeakImplHelper_getTypes(cd::get()); }
 
-    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
     { return css::uno::Sequence<sal_Int8>(); }
 };
 
@@ -155,8 +152,7 @@ protected:
     virtual ~ImplInheritanceHelper() {}
 
 public:
-    css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType)
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Any SAL_CALL queryInterface(css::uno::Type const & aType) override
     {
         css::uno::Any ret(ImplHelper_queryNoXInterface(aType, cd::get(), this));
         return ret.hasValue() ? ret : BaseClass::queryInterface(aType);
@@ -166,12 +162,10 @@ public:
 
     void SAL_CALL release() throw () override { BaseClass::release(); }
 
-    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes()
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Sequence<css::uno::Type> SAL_CALL getTypes() override
     { return ImplInhHelper_getTypes(cd::get(), BaseClass::getTypes()); }
 
-    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId()
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId() override
     { return css::uno::Sequence<sal_Int8>(); }
 };
 

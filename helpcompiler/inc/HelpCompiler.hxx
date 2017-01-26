@@ -220,7 +220,7 @@ public:
                 bool in_bExtensionMode);
     /// @throws HelpProcessingException
     /// @throws BasicCodeTagger::TaggerException
-    bool compile() throw (HelpProcessingException, BasicCodeTagger::TaggerException, std::exception);
+    bool compile();
 private:
     xmlDocPtr getSourceDocument(const fs::path &filePath);
     static void tagBasicCodeExamples(xmlDocPtr doc);

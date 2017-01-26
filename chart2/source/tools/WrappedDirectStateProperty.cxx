@@ -37,8 +37,6 @@ WrappedDirectStateProperty::~WrappedDirectStateProperty()
 
 beans::PropertyState WrappedDirectStateProperty::getPropertyState(
     const Reference< beans::XPropertyState >& /* xInnerPropertyState */ ) const
-    throw (beans::UnknownPropertyException,
-           uno::RuntimeException)
 {
     return beans::PropertyState_DIRECT_VALUE;
 }

@@ -39,7 +39,6 @@ JavaContext::~JavaContext()
 }
 
 Any SAL_CALL JavaContext::queryInterface(const Type& aType )
-    throw (RuntimeException, std::exception)
 {
     if (aType == cppu::UnoType<XInterface>::get())
         return Any(Reference<XInterface>(static_cast<XInterface*>(this)));
@@ -59,7 +58,7 @@ void SAL_CALL JavaContext::release(  ) throw ()
         delete this;
 }
 
-Any SAL_CALL JavaContext::getValueByName( const OUString& Name) throw (RuntimeException, std::exception)
+Any SAL_CALL JavaContext::getValueByName( const OUString& Name)
 {
     Any retVal;
 

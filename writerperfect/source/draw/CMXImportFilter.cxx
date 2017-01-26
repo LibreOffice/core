@@ -42,19 +42,16 @@ bool CMXImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUStri
 
 // XServiceInfo
 OUString SAL_CALL CMXImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Draw.CMXImportFilter");
 }
 
 sal_Bool SAL_CALL CMXImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL CMXImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

@@ -68,10 +68,8 @@ public:
     virtual ~FastTokenHandler() override;
 
     // XFastTokenHandler
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
-    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getUTF8Identifier( sal_Int32 nToken ) SAL_OVERRIDE;
+    virtual sal_Int32 SAL_CALL getTokenFromUTF8( const css::uno::Sequence< sal_Int8 >& Identifier ) SAL_OVERRIDE;
 
     // Much faster direct C++ shortcut to the method that matters
     virtual sal_Int32 getTokenDirect( const char *pToken, sal_Int32 nLength ) const SAL_OVERRIDE;

@@ -150,7 +150,6 @@ namespace /* private */
 } // namespace private
 
 Reference<XSimpleMailMessage> SAL_CALL CSmplMailClient::createSimpleMailMessage()
-    throw (RuntimeException)
 {
     return Reference<XSimpleMailMessage>(new CSmplMailMsg());
 }
@@ -248,7 +247,6 @@ void CSmplMailClient::assembleCommandLine(
 
 void SAL_CALL CSmplMailClient::sendSimpleMailMessage(
     const Reference<XSimpleMailMessage>& xSimpleMailMessage, sal_Int32 aFlag)
-    throw (IllegalArgumentException, Exception, RuntimeException)
 {
     validateParameter(xSimpleMailMessage, aFlag);
 

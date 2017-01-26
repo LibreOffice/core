@@ -30,105 +30,90 @@ using namespace com::sun::star::uno;
 
 
 void SAL_CALL CmdMailMsg::setBody( const OUString& aBody )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     m_aBody = aBody;
 }
 
 OUString SAL_CALL CmdMailMsg::getBody(  )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aBody;
 }
 
 void SAL_CALL CmdMailMsg::setRecipient( const OUString& aRecipient )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     m_aRecipient = aRecipient;
 }
 
 OUString SAL_CALL CmdMailMsg::getRecipient(  )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aRecipient;
 }
 
 void SAL_CALL CmdMailMsg::setCcRecipient( const Sequence< OUString >& aCcRecipient )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     m_CcRecipients = aCcRecipient;
 }
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getCcRecipient(  )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_CcRecipients;
 }
 
 void SAL_CALL CmdMailMsg::setBccRecipient( const Sequence< OUString >& aBccRecipient )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     m_BccRecipients = aBccRecipient;
 }
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getBccRecipient(  )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_BccRecipients;
 }
 
 void SAL_CALL CmdMailMsg::setOriginator( const OUString& aOriginator )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     m_aOriginator = aOriginator;
 }
 
 OUString SAL_CALL CmdMailMsg::getOriginator(  )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aOriginator;
 }
 
 void SAL_CALL CmdMailMsg::setSubject( const OUString& aSubject )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     m_aSubject = aSubject;
 }
 
 OUString SAL_CALL CmdMailMsg::getSubject(  )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_aSubject;
 }
 
 void SAL_CALL CmdMailMsg::setAttachement( const Sequence< OUString >& aAttachment )
-    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     m_Attachments = aAttachment;
 }
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getAttachement(  )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
     return m_Attachments;
 }
 
 Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
-    throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 
@@ -158,7 +143,6 @@ Any SAL_CALL CmdMailMsg::getByName( const OUString& aName )
 }
 
 Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
-    throw (css::uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 
@@ -191,7 +175,6 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 }
 
  sal_Bool SAL_CALL CmdMailMsg::hasByName( const OUString& aName )
-    throw (RuntimeException, std::exception)
 {
     MutexGuard aGuard( m_aMutex );
 
@@ -220,14 +203,12 @@ Sequence< OUString > SAL_CALL CmdMailMsg::getElementNames(  )
 }
 
 Type SAL_CALL CmdMailMsg::getElementType(  )
-    throw (RuntimeException, std::exception)
 {
     // returning void for multi type container
     return Type();
 }
 
 sal_Bool SAL_CALL CmdMailMsg::hasElements(  )
-    throw (RuntimeException, std::exception)
 {
     return 0 != getElementNames().getLength();
 }

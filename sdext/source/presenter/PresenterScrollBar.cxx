@@ -322,25 +322,21 @@ void PresenterScrollBar::Paint (
 //----- XWindowListener -------------------------------------------------------
 
 void SAL_CALL PresenterScrollBar::windowResized (const css::awt::WindowEvent& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 }
 
 void SAL_CALL PresenterScrollBar::windowMoved (const css::awt::WindowEvent& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 }
 
 void SAL_CALL PresenterScrollBar::windowShown (const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 }
 
 void SAL_CALL PresenterScrollBar::windowHidden (const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 }
@@ -348,7 +344,6 @@ void SAL_CALL PresenterScrollBar::windowHidden (const css::lang::EventObject& rE
 //----- XPaintListener --------------------------------------------------------
 
 void SAL_CALL PresenterScrollBar::windowPaint (const css::awt::PaintEvent& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (mxWindow.is())
     {
@@ -367,7 +362,6 @@ void SAL_CALL PresenterScrollBar::windowPaint (const css::awt::PaintEvent& rEven
 //----- XMouseListener --------------------------------------------------------
 
 void SAL_CALL PresenterScrollBar::mousePressed (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     maDragAnchor.X = rEvent.X;
     maDragAnchor.Y = rEvent.Y;
@@ -377,7 +371,6 @@ void SAL_CALL PresenterScrollBar::mousePressed (const css::awt::MouseEvent& rEve
 }
 
 void SAL_CALL PresenterScrollBar::mouseReleased (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 
@@ -388,13 +381,11 @@ void SAL_CALL PresenterScrollBar::mouseReleased (const css::awt::MouseEvent& rEv
 }
 
 void SAL_CALL PresenterScrollBar::mouseEntered (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
 }
 
 void SAL_CALL PresenterScrollBar::mouseExited (const css::awt::MouseEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception)
 {
     (void)rEvent;
     if (meMouseMoveArea != None)
@@ -412,7 +403,6 @@ void SAL_CALL PresenterScrollBar::mouseExited (const css::awt::MouseEvent& rEven
 //----- XMouseMotionListener --------------------------------------------------
 
 void SAL_CALL PresenterScrollBar::mouseMoved (const css::awt::MouseEvent& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     const Area eArea (GetArea(rEvent.X, rEvent.Y));
     if (eArea != meMouseMoveArea)
@@ -428,7 +418,6 @@ void SAL_CALL PresenterScrollBar::mouseMoved (const css::awt::MouseEvent& rEvent
 }
 
 void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (meButtonDownArea != Thumb)
         return;
@@ -449,7 +438,6 @@ void SAL_CALL PresenterScrollBar::mouseDragged (const css::awt::MouseEvent& rEve
 //----- lang::XEventListener --------------------------------------------------
 
 void SAL_CALL PresenterScrollBar::disposing (const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (rEvent.Source == mxWindow)
         mxWindow = nullptr;

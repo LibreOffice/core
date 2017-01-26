@@ -32,28 +32,28 @@ class ScVbaValidation : public ValidationImpl_BASE
 public:
     ScVbaValidation( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::table::XCellRange >& xRange ) : ValidationImpl_BASE( xParent, xContext ), m_xRange( xRange) {}
     // Attributes
-    virtual sal_Bool SAL_CALL getIgnoreBlank() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setIgnoreBlank( sal_Bool _ignoreblank ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getInCellDropdown() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setInCellDropdown( sal_Bool _incelldropdown ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getShowInput() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setShowInput( sal_Bool _showinput ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getShowError() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setShowError( sal_Bool _showerror ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getInputTitle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setInputTitle( const OUString& _inputtitle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getErrorTitle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setErrorTitle( const OUString& _errortitle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getInputMessage() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setInputMessage( const OUString& _inputmessage ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getErrorMessage() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setErrorMessage( const OUString& _errormessage ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getFormula1() throw (css::uno::RuntimeException, std::exception) override ;
-    virtual OUString SAL_CALL getFormula2() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getIgnoreBlank() override;
+    virtual void SAL_CALL setIgnoreBlank( sal_Bool _ignoreblank ) override;
+    virtual sal_Bool SAL_CALL getInCellDropdown() override;
+    virtual void SAL_CALL setInCellDropdown( sal_Bool _incelldropdown ) override;
+    virtual sal_Bool SAL_CALL getShowInput() override;
+    virtual void SAL_CALL setShowInput( sal_Bool _showinput ) override;
+    virtual sal_Bool SAL_CALL getShowError() override;
+    virtual void SAL_CALL setShowError( sal_Bool _showerror ) override;
+    virtual OUString SAL_CALL getInputTitle() override;
+    virtual void SAL_CALL setInputTitle( const OUString& _inputtitle ) override;
+    virtual OUString SAL_CALL getErrorTitle() override;
+    virtual void SAL_CALL setErrorTitle( const OUString& _errortitle ) override;
+    virtual OUString SAL_CALL getInputMessage() override;
+    virtual void SAL_CALL setInputMessage( const OUString& _inputmessage ) override;
+    virtual OUString SAL_CALL getErrorMessage() override;
+    virtual void SAL_CALL setErrorMessage( const OUString& _errormessage ) override;
+    virtual OUString SAL_CALL getFormula1() override ;
+    virtual OUString SAL_CALL getFormula2() override;
+    virtual sal_Int32 SAL_CALL getType() override;
     // Methods
-    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Add( const css::uno::Any& Type, const css::uno::Any& AlertStyle, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Delete(  ) override;
+    virtual void SAL_CALL Add( const css::uno::Any& Type, const css::uno::Any& AlertStyle, const css::uno::Any& Operator, const css::uno::Any& Formula1, const css::uno::Any& Formula2 ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

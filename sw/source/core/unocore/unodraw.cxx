@@ -298,7 +298,6 @@ uno::Reference< uno::XInterface >   SwFmDrawPage::GetInterface( SdrObject* pObj 
 }
 
 uno::Reference< drawing::XShape > SwFmDrawPage::CreateShape( SdrObject *pObj ) const
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< drawing::XShape >  xRet;
     if(dynamic_cast<const SwVirtFlyDrawObj*>( pObj) !=  nullptr || pObj->GetObjInventor() == SdrInventor::Swg)
@@ -381,13 +380,13 @@ namespace
             explicit SwXShapesEnumeration(SwXDrawPage* const pDrawPage);
 
             //XEnumeration
-            virtual sal_Bool SAL_CALL hasMoreElements() throw(uno::RuntimeException, std::exception) override;
-            virtual uno::Any SAL_CALL nextElement() throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL hasMoreElements() override;
+            virtual uno::Any SAL_CALL nextElement() override;
 
             //XServiceInfo
-            virtual OUString SAL_CALL getImplementationName() throw(uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(uno::RuntimeException, std::exception) override;
-            virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(uno::RuntimeException, std::exception) override;
+            virtual OUString SAL_CALL getImplementationName() override;
+            virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+            virtual uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
     };
 }
 
@@ -404,13 +403,13 @@ SwXShapesEnumeration::SwXShapesEnumeration(SwXDrawPage* const pDrawPage)
     }
 }
 
-sal_Bool SwXShapesEnumeration::hasMoreElements() throw(uno::RuntimeException, std::exception)
+sal_Bool SwXShapesEnumeration::hasMoreElements()
 {
     SolarMutexGuard aGuard;
     return !m_aShapes.empty();
 }
 
-uno::Any SwXShapesEnumeration::nextElement() throw(container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+uno::Any SwXShapesEnumeration::nextElement()
 {
     SolarMutexGuard aGuard;
     if(m_aShapes.empty())
@@ -420,39 +419,39 @@ uno::Any SwXShapesEnumeration::nextElement() throw(container::NoSuchElementExcep
     return aResult;
 }
 
-OUString SwXShapesEnumeration::getImplementationName() throw(uno::RuntimeException, std::exception)
+OUString SwXShapesEnumeration::getImplementationName()
 {
     return OUString("SwXShapeEnumeration");
 }
 
-sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName) throw(uno::RuntimeException, std::exception)
+sal_Bool SwXShapesEnumeration::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames() throw(uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SwXShapesEnumeration::getSupportedServiceNames()
 {
     return { OUString("com.sun.star.container.XEnumeration") };
 }
 
-uno::Reference< container::XEnumeration > SwXDrawPage::createEnumeration() throw( uno::RuntimeException, std::exception )
+uno::Reference< container::XEnumeration > SwXDrawPage::createEnumeration()
 {
     SolarMutexGuard aGuard;
     return uno::Reference< container::XEnumeration >(
         new SwXShapesEnumeration(this));
 }
 
-OUString SwXDrawPage::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SwXDrawPage::getImplementationName()
 {
     return OUString("SwXDrawPage");
 }
 
-sal_Bool SwXDrawPage::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXDrawPage::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXDrawPage::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXDrawPage::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet { "com.sun.star.drawing.GenericDrawPage" };
     return aRet;
@@ -474,7 +473,6 @@ SwXDrawPage::~SwXDrawPage()
 }
 
 uno::Any SwXDrawPage::queryInterface( const uno::Type& aType )
-                                                throw( uno::RuntimeException, std::exception )
 {
     uno::Any aRet = SwXDrawPageBaseClass::queryInterface(aType);
     if(!aRet.hasValue())
@@ -493,7 +491,7 @@ uno::Any SwXDrawPage::queryInterface( const uno::Type& aType )
     return aRet;
 }
 
-uno::Sequence< uno::Type > SwXDrawPage::getTypes() throw( uno::RuntimeException, std::exception )
+uno::Sequence< uno::Type > SwXDrawPage::getTypes()
 {
     uno::Sequence< uno::Type > aPageTypes = SwXDrawPageBaseClass::getTypes();
     uno::Sequence< uno::Type > aSvxTypes = GetSvxPage()->getTypes();
@@ -512,7 +510,7 @@ uno::Sequence< uno::Type > SwXDrawPage::getTypes() throw( uno::RuntimeException,
     return aPageTypes;
 }
 
-sal_Int32 SwXDrawPage::getCount() throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXDrawPage::getCount()
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -527,8 +525,6 @@ sal_Int32 SwXDrawPage::getCount() throw( uno::RuntimeException, std::exception )
 }
 
 uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
-        throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-               uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -540,12 +536,12 @@ uno::Any SwXDrawPage::getByIndex(sal_Int32 nIndex)
     return SwTextBoxHelper::getByIndex(pDrawPage->GetSdrPage(), nIndex);
 }
 
-uno::Type  SwXDrawPage::getElementType() throw( uno::RuntimeException, std::exception )
+uno::Type  SwXDrawPage::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SwXDrawPage::hasElements() throw( uno::RuntimeException, std::exception )
+sal_Bool SwXDrawPage::hasElements()
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -557,7 +553,6 @@ sal_Bool SwXDrawPage::hasElements() throw( uno::RuntimeException, std::exception
 }
 
 void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -725,7 +720,7 @@ void SwXDrawPage::add(const uno::Reference< drawing::XShape > & xShape)
     delete pInternalPam;
 }
 
-void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape) throw( uno::RuntimeException, std::exception )
+void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape)
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -735,7 +730,6 @@ void SwXDrawPage::remove(const uno::Reference< drawing::XShape > & xShape) throw
 }
 
 uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference< drawing::XShapes > & xShapes)
-    throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if(!pDoc || !xShapes.is())
@@ -789,7 +783,7 @@ uno::Reference< drawing::XShapeGroup >  SwXDrawPage::group(const uno::Reference<
     return xRet;
 }
 
-void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeGroup) throw( uno::RuntimeException, std::exception )
+void SwXDrawPage::ungroup(const uno::Reference< drawing::XShapeGroup > & rShapeGroup)
 {
     SolarMutexGuard aGuard;
     if(!pDoc)
@@ -855,7 +849,6 @@ const uno::Sequence< sal_Int8 > & SwXShape::getUnoTunnelId()
 }
 
 sal_Int64 SAL_CALL SwXShape::getSomething( const uno::Sequence< sal_Int8 >& rId )
-    throw(uno::RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -979,7 +972,7 @@ SwXShape::~SwXShape()
         GetRegisteredIn()->Remove(this);
 }
 
-uno::Any SwXShape::queryInterface( const uno::Type& aType ) throw( uno::RuntimeException, std::exception )
+uno::Any SwXShape::queryInterface( const uno::Type& aType )
 {
     uno::Any aRet = SwTextBoxHelper::queryInterface(GetFrameFormat(), aType);
     if (aRet.hasValue())
@@ -999,7 +992,7 @@ uno::Any SwXShape::queryInterface( const uno::Type& aType ) throw( uno::RuntimeE
     return aRet;
 }
 
-uno::Sequence< uno::Type > SwXShape::getTypes(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence< uno::Type > SwXShape::getTypes(  )
 {
     uno::Sequence< uno::Type > aRet = SwXShapeBaseClass::getTypes();
     if(xShapeAgg.is())
@@ -1023,12 +1016,12 @@ uno::Sequence< uno::Type > SwXShape::getTypes(  ) throw(uno::RuntimeException, s
     return aRet;
 }
 
-uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence< sal_Int8 > SwXShape::getImplementationId(  )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo() throw( uno::RuntimeException, std::exception )
+uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo()
 {
     SolarMutexGuard aGuard;
     uno::Reference< beans::XPropertySetInfo >  aRet;
@@ -1051,9 +1044,6 @@ uno::Reference< beans::XPropertySetInfo >  SwXShape::getPropertySetInfo() throw(
 }
 
 void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& aValue)
-     throw( beans::UnknownPropertyException, beans::PropertyVetoException,
-            lang::IllegalArgumentException, lang::WrappedTargetException,
-            uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
@@ -1454,8 +1444,6 @@ void SwXShape::setPropertyValue(const OUString& rPropertyName, const uno::Any& a
 }
 
 uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException,
-           uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -1741,8 +1729,6 @@ uno::Any SwXShape::getPropertyValue(const OUString& rPropertyName)
 }
 
 uno::Any SwXShape::_getPropAtAggrObj( const OUString& _rPropertyName )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException,
-           uno::RuntimeException )
 {
     uno::Any aRet;
 
@@ -1760,7 +1746,6 @@ uno::Any SwXShape::_getPropAtAggrObj( const OUString& _rPropertyName )
 }
 
 beans::PropertyState SwXShape::getPropertyState( const OUString& rPropertyName )
-    throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Sequence< OUString > aNames { rPropertyName };
@@ -1770,7 +1755,6 @@ beans::PropertyState SwXShape::getPropertyState( const OUString& rPropertyName )
 
 uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
     const uno::Sequence< OUString >& aPropertyNames )
-        throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
@@ -1885,7 +1869,6 @@ uno::Sequence< beans::PropertyState > SwXShape::getPropertyStates(
 }
 
 void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
-    throw(beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
@@ -1948,8 +1931,6 @@ void SwXShape::setPropertyToDefault( const OUString& rPropertyName )
 }
 
 uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException,
-           uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     SwFrameFormat*   pFormat = GetFrameFormat();
@@ -1987,8 +1968,6 @@ uno::Any SwXShape::getPropertyDefault( const OUString& rPropertyName )
 void SwXShape::addPropertyChangeListener(
     const OUString& _propertyName,
     const uno::Reference< beans::XPropertyChangeListener > & _listener )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException,
-           uno::RuntimeException, std::exception )
 {
     if ( !xShapeAgg.is() )
         throw uno::RuntimeException("no shape aggregate", *this );
@@ -2002,8 +1981,6 @@ void SwXShape::addPropertyChangeListener(
 void SwXShape::removePropertyChangeListener(
     const OUString& _propertyName,
     const uno::Reference< beans::XPropertyChangeListener > & _listener)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException,
-           uno::RuntimeException, std::exception )
 {
     if ( !xShapeAgg.is() )
         throw uno::RuntimeException("no shape aggregate", *this );
@@ -2017,8 +1994,6 @@ void SwXShape::removePropertyChangeListener(
 void SwXShape::addVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/ )
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException,
-           uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
@@ -2026,8 +2001,6 @@ void SwXShape::addVetoableChangeListener(
 void SwXShape::removeVetoableChangeListener(
     const OUString& /*PropertyName*/,
     const uno::Reference< beans::XVetoableChangeListener > & /*aListener*/)
-    throw( beans::UnknownPropertyException, lang::WrappedTargetException,
-           uno::RuntimeException, std::exception )
 {
     OSL_FAIL("not implemented");
 }
@@ -2038,7 +2011,6 @@ void SwXShape::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew)
 }
 
 void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
-    throw( lang::IllegalArgumentException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -2105,7 +2077,7 @@ void SwXShape::attach(const uno::Reference< text::XTextRange > & xTextRange)
     }
 }
 
-uno::Reference< text::XTextRange >  SwXShape::getAnchor() throw( uno::RuntimeException, std::exception )
+uno::Reference< text::XTextRange >  SwXShape::getAnchor()
 {
     SolarMutexGuard aGuard;
     uno::Reference< text::XTextRange >  aRef;
@@ -2127,7 +2099,7 @@ uno::Reference< text::XTextRange >  SwXShape::getAnchor() throw( uno::RuntimeExc
     return aRef;
 }
 
-void SwXShape::dispose() throw( uno::RuntimeException, std::exception )
+void SwXShape::dispose()
 {
     SolarMutexGuard aGuard;
     SwFrameFormat* pFormat = GetFrameFormat();
@@ -2177,7 +2149,6 @@ void SwXShape::dispose() throw( uno::RuntimeException, std::exception )
 
 void SwXShape::addEventListener(
                     const uno::Reference< lang::XEventListener > & aListener)
-                    throw( uno::RuntimeException, std::exception )
 {
     uno::Reference< lang::XUnoTunnel > xShapeTunnel(xShapeAgg, uno::UNO_QUERY);
     SvxShape* pSvxShape = GetSvxShape();
@@ -2187,24 +2158,23 @@ void SwXShape::addEventListener(
 
 void SwXShape::removeEventListener(
                     const uno::Reference< lang::XEventListener > & aListener)
-                    throw( uno::RuntimeException, std::exception )
 {
     SvxShape* pSvxShape = GetSvxShape();
     if(pSvxShape)
         pSvxShape->removeEventListener(aListener);
 }
 
-OUString SwXShape::getImplementationName() throw( uno::RuntimeException, std::exception )
+OUString SwXShape::getImplementationName()
 {
     return OUString("SwXShape");
 }
 
-sal_Bool SwXShape::supportsService(const OUString& rServiceName) throw( uno::RuntimeException, std::exception )
+sal_Bool SwXShape::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-uno::Sequence< OUString > SwXShape::getSupportedServiceNames() throw( uno::RuntimeException, std::exception )
+uno::Sequence< OUString > SwXShape::getSupportedServiceNames()
 {
     uno::Sequence< OUString > aSeq;
     if (SvxShape* pSvxShape = GetSvxShape())
@@ -2229,7 +2199,7 @@ SvxShape*   SwXShape::GetSvxShape()
 
 // #i31698#
 // implementation of virtual methods from drawing::XShape
-awt::Point SAL_CALL SwXShape::getPosition() throw ( uno::RuntimeException, std::exception )
+awt::Point SAL_CALL SwXShape::getPosition()
 {
     awt::Point aPos( GetAttrPosition() );
 
@@ -2270,7 +2240,6 @@ awt::Point SAL_CALL SwXShape::getPosition() throw ( uno::RuntimeException, std::
 }
 
 void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
-                                                throw ( uno::RuntimeException, std::exception )
 {
     SdrObject* pTopGroupObj = GetTopGroupObj();
     if ( !pTopGroupObj )
@@ -2358,7 +2327,7 @@ void SAL_CALL SwXShape::setPosition( const awt::Point& aPosition )
     }
 }
 
-awt::Size SAL_CALL SwXShape::getSize() throw ( uno::RuntimeException, std::exception )
+awt::Size SAL_CALL SwXShape::getSize()
 {
     awt::Size aSize;
     if ( mxShape.is() )
@@ -2369,8 +2338,6 @@ awt::Size SAL_CALL SwXShape::getSize() throw ( uno::RuntimeException, std::excep
 }
 
 void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
-                                        throw ( beans::PropertyVetoException,
-                                                uno::RuntimeException, std::exception )
 {
     if ( mxShape.is() )
     {
@@ -2380,7 +2347,7 @@ void SAL_CALL SwXShape::setSize( const awt::Size& aSize )
 }
 // #i31698#
 // implementation of virtual methods from drawing::XShapeDescriptor
-OUString SAL_CALL SwXShape::getShapeType() throw ( uno::RuntimeException, std::exception )
+OUString SAL_CALL SwXShape::getShapeType()
 {
     if ( mxShape.is() )
     {
@@ -2746,7 +2713,7 @@ SwXGroupShape::~SwXGroupShape()
 {
 }
 
-uno::Any SwXGroupShape::queryInterface( const uno::Type& rType ) throw(uno::RuntimeException, std::exception)
+uno::Any SwXGroupShape::queryInterface( const uno::Type& rType )
 {
     uno::Any aRet;
     if(rType == cppu::UnoType<XShapes>::get())
@@ -2766,7 +2733,7 @@ void SwXGroupShape::release(  ) throw()
     SwXShape::release();
 }
 
-void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::RuntimeException, std::exception)
+void SwXGroupShape::add( const uno::Reference< XShape >& xShape )
 {
     SolarMutexGuard aGuard;
     SvxShape* pSvxShape = GetSvxShape();
@@ -2825,7 +2792,7 @@ void SwXGroupShape::add( const uno::Reference< XShape >& xShape ) throw (uno::Ru
         throw uno::RuntimeException();
 }
 
-void SwXGroupShape::remove( const uno::Reference< XShape >& xShape ) throw (uno::RuntimeException, std::exception)
+void SwXGroupShape::remove( const uno::Reference< XShape >& xShape )
 {
     SolarMutexGuard aGuard;
     uno::Reference<XShapes> xShapes;
@@ -2840,7 +2807,7 @@ void SwXGroupShape::remove( const uno::Reference< XShape >& xShape ) throw (uno:
     xShapes->remove(xShape);
 }
 
-sal_Int32 SwXGroupShape::getCount() throw( uno::RuntimeException, std::exception )
+sal_Int32 SwXGroupShape::getCount()
 {
     SolarMutexGuard aGuard;
     uno::Reference<XIndexAccess> xAcc;
@@ -2856,8 +2823,6 @@ sal_Int32 SwXGroupShape::getCount() throw( uno::RuntimeException, std::exception
 }
 
 uno::Any SwXGroupShape::getByIndex(sal_Int32 nIndex)
-        throw( lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-               uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     uno::Reference<XIndexAccess> xAcc;
@@ -2872,7 +2837,7 @@ uno::Any SwXGroupShape::getByIndex(sal_Int32 nIndex)
     return xAcc->getByIndex(nIndex);
 }
 
-uno::Type SwXGroupShape::getElementType(  ) throw(uno::RuntimeException, std::exception)
+uno::Type SwXGroupShape::getElementType(  )
 {
     SolarMutexGuard aGuard;
     uno::Reference<XIndexAccess> xAcc;
@@ -2887,7 +2852,7 @@ uno::Type SwXGroupShape::getElementType(  ) throw(uno::RuntimeException, std::ex
     return xAcc->getElementType();
 }
 
-sal_Bool SwXGroupShape::hasElements(  ) throw(uno::RuntimeException, std::exception)
+sal_Bool SwXGroupShape::hasElements(  )
 {
     SolarMutexGuard aGuard;
     uno::Reference<XIndexAccess> xAcc;

@@ -94,7 +94,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OFormatSampleControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OFormatSampleControl::setValue( const Any& _rValue )
     {
         sal_Int32 nFormatKey = 0;
         if ( _rValue >>= nFormatKey )
@@ -152,7 +152,7 @@ namespace pcr
         return nValue;
     }
 
-    Any SAL_CALL OFormatSampleControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OFormatSampleControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
@@ -161,7 +161,7 @@ namespace pcr
     }
 
 
-    Type SAL_CALL OFormatSampleControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OFormatSampleControl::getValueType()
     {
         return ::cppu::UnoType<sal_Int32>::get();
     }
@@ -184,7 +184,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OFormattedNumericControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OFormattedNumericControl::setValue( const Any& _rValue )
     {
         double nValue( 0 );
         if ( _rValue >>= nValue )
@@ -194,7 +194,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL OFormattedNumericControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OFormattedNumericControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
@@ -203,7 +203,7 @@ namespace pcr
     }
 
 
-    Type SAL_CALL OFormattedNumericControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OFormattedNumericControl::getValueType()
     {
         return ::cppu::UnoType<double>::get();
     }
@@ -275,7 +275,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OFileUrlControl::setValue( const Any& _rValue ) throw (IllegalTypeException, RuntimeException, std::exception)
+    void SAL_CALL OFileUrlControl::setValue( const Any& _rValue )
     {
         OUString sURL;
         if ( ( _rValue >>= sURL ) )
@@ -290,7 +290,7 @@ namespace pcr
     }
 
 
-    Any SAL_CALL OFileUrlControl::getValue() throw (RuntimeException, std::exception)
+    Any SAL_CALL OFileUrlControl::getValue()
     {
         Any aPropValue;
         if ( !getTypedControlWindow()->GetText().isEmpty() )
@@ -299,7 +299,7 @@ namespace pcr
     }
 
 
-    Type SAL_CALL OFileUrlControl::getValueType() throw (RuntimeException, std::exception)
+    Type SAL_CALL OFileUrlControl::getValueType()
     {
         return ::cppu::UnoType<OUString>::get();
     }
@@ -322,7 +322,7 @@ namespace pcr
     }
 
 
-    ::sal_Int16 SAL_CALL OTimeDurationControl::getControlType() throw (css::uno::RuntimeException)
+    ::sal_Int16 SAL_CALL OTimeDurationControl::getControlType()
     {
         // don't use the base class'es method, it would claim we're a standard control, which
         // we in fact aren't

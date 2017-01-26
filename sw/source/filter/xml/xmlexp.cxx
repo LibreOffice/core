@@ -499,7 +499,6 @@ const Sequence< sal_Int8 > & SwXMLExport::getUnoTunnelId() throw()
 }
 
 sal_Int64 SAL_CALL SwXMLExport::getSomething( const Sequence< sal_Int8 >& rId )
-    throw(RuntimeException, std::exception)
 {
     if( rId.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),

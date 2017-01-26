@@ -91,27 +91,27 @@ namespace svt
     public:
         // UNO
         DECLARE_UNO3_DEFAULTS(OGenericUnoDialog, OGenericUnoDialogBase)
-        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override = 0;
+        virtual css::uno::Sequence<css::uno::Type> SAL_CALL getTypes(  ) override;
+        virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override = 0;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override = 0;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override = 0;
+        virtual OUString SAL_CALL getImplementationName() override = 0;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override = 0;
 
         // OPropertySetHelper
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw(css::uno::Exception, std::exception) override;
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) throw(css::lang::IllegalArgumentException) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) override;
 
         // XExecutableDialog
-        virtual void SAL_CALL setTitle( const OUString& aTitle ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int16 SAL_CALL execute(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setTitle( const OUString& aTitle ) override;
+        virtual sal_Int16 SAL_CALL execute(  ) override;
 
         // XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     protected:
         /** create the concrete dialog instance. note that m_aMutex is not locked when this method get's called,

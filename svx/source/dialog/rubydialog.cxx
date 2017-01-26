@@ -127,10 +127,8 @@ public:
     }
     void AssertOneEntry();
 
-    virtual void SAL_CALL selectionChanged(const css::lang::EventObject& aEvent)
-                            throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source)
-                            throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL selectionChanged(const css::lang::EventObject& aEvent) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source) override;
 
 };
 
@@ -165,12 +163,12 @@ void SvxRubyData_Impl::SetController(const Reference<XController>& xCtrl)
     }
 }
 
-void SvxRubyData_Impl::selectionChanged(const EventObject& ) throw (RuntimeException, std::exception)
+void SvxRubyData_Impl::selectionChanged(const EventObject& )
 {
     bHasSelectionChanged = true;
 }
 
-void SvxRubyData_Impl::disposing(const EventObject&) throw (RuntimeException, std::exception)
+void SvxRubyData_Impl::disposing(const EventObject&)
 {
     try
     {

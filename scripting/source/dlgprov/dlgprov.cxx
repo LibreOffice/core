@@ -128,7 +128,7 @@ namespace dlgprov
         const Reference< io::XInputStream >& xInput,
         const Reference< frame::XModel >& xModel,
         const Reference< resource::XStringResourceManager >& xStringResourceManager,
-        const Any &aDialogSourceURL) throw ( Exception )
+        const Any &aDialogSourceURL)
     {
         Reference< container::XNameContainer > xDialogModel(  lcl_createControlModel(i_xContext) );
 
@@ -231,12 +231,12 @@ namespace dlgprov
     Reference< container::XNameContainer > DialogProviderImpl::createDialogModel(
         const Reference< io::XInputStream >& xInput,
         const Reference< resource::XStringResourceManager >& xStringResourceManager,
-        const Any &aDialogSourceURL) throw ( Exception )
+        const Any &aDialogSourceURL)
     {
         return lcl_createDialogModel(m_xContext,xInput,m_xModel,xStringResourceManager,aDialogSourceURL);
     }
 
-    Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic() throw ( Exception )
+    Reference< XControlModel > DialogProviderImpl::createDialogModelForBasic()
     {
         if ( !m_BasicInfo.get() )
             // shouln't get here
@@ -553,17 +553,17 @@ namespace dlgprov
     // XServiceInfo
 
 
-    OUString DialogProviderImpl::getImplementationName(  ) throw (RuntimeException, std::exception)
+    OUString DialogProviderImpl::getImplementationName(  )
     {
         return getImplementationName_DialogProviderImpl();
     }
 
-    sal_Bool DialogProviderImpl::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool DialogProviderImpl::supportsService( const OUString& rServiceName )
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    Sequence< OUString > DialogProviderImpl::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > DialogProviderImpl::getSupportedServiceNames(  )
     {
         return getSupportedServiceNames_DialogProviderImpl();
     }
@@ -572,7 +572,7 @@ namespace dlgprov
     // XInitialization
 
 
-    void DialogProviderImpl::initialize( const Sequence< Any >& aArguments ) throw (Exception, RuntimeException, std::exception)
+    void DialogProviderImpl::initialize( const Sequence< Any >& aArguments )
     {
         ::osl::MutexGuard aGuard( getMutex() );
 
@@ -615,7 +615,6 @@ namespace dlgprov
     Reference < XControl > DialogProviderImpl::createDialogImpl(
         const OUString& URL, const Reference< XInterface >& xHandler,
         const Reference< XWindowPeer >& xParent, bool bDialogProviderMode )
-            throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         // if the dialog is located in a document, the document must already be open!
 
@@ -680,7 +679,6 @@ namespace dlgprov
     }
 
     Reference < XDialog > DialogProviderImpl::createDialog( const OUString& URL )
-        throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         Reference< XInterface > xDummyHandler;
         Reference< XWindowPeer > xDummyPeer;
@@ -691,7 +689,6 @@ namespace dlgprov
 
     Reference < XDialog > DialogProviderImpl::createDialogWithHandler(
         const OUString& URL, const Reference< XInterface >& xHandler )
-            throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         if( !xHandler.is() )
         {
@@ -707,7 +704,6 @@ namespace dlgprov
 
     Reference < XDialog > DialogProviderImpl::createDialogWithArguments(
         const OUString& URL, const Sequence< NamedValue >& Arguments )
-            throw (IllegalArgumentException, RuntimeException, std::exception)
     {
         ::comphelper::NamedValueCollection aArguments( Arguments );
 
@@ -733,7 +729,6 @@ namespace dlgprov
     Reference< XWindow > DialogProviderImpl::createContainerWindow(
         const OUString& URL, const OUString& WindowType,
         const Reference< XWindowPeer >& xParent, const Reference< XInterface >& xHandler )
-            throw (lang::IllegalArgumentException, RuntimeException, std::exception)
     {
         (void)WindowType;   // for future use
         if( !xParent.is() )

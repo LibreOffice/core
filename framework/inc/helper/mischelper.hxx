@@ -154,8 +154,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XCon
         }
 
         // container.XContainerListener
-        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent)
-            throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) override
         {
             css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -163,8 +162,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XCon
                 xOwner->elementInserted(rEvent);
         }
 
-        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent)
-            throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) override
         {
             css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -172,8 +170,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XCon
                 xOwner->elementRemoved(rEvent);
         }
 
-        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent)
-            throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) override
         {
             css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -182,8 +179,7 @@ class WeakContainerListener : public ::cppu::WeakImplHelper<css::container::XCon
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-            throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
         {
             css::uno::Reference<css::container::XContainerListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -205,8 +201,7 @@ class WeakChangesListener : public ::cppu::WeakImplHelper<css::util::XChangesLis
         }
 
         // util.XChangesListener
-        virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& rEvent)
-            throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL changesOccurred(const css::util::ChangesEvent& rEvent) override
         {
             css::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -215,8 +210,7 @@ class WeakChangesListener : public ::cppu::WeakImplHelper<css::util::XChangesLis
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-            throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
         {
             css::uno::Reference<css::util::XChangesListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -237,8 +231,7 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper<css::document::X
         {
         }
 
-        virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& rEvent)
-            throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL documentEventOccured(const css::document::DocumentEvent& rEvent) override
         {
             css::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);
@@ -248,8 +241,7 @@ class WeakDocumentEventListener : public ::cppu::WeakImplHelper<css::document::X
         }
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-            throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
         {
             css::uno::Reference<css::document::XDocumentEventListener> xOwner(mxOwner.get(),
                 css::uno::UNO_QUERY);

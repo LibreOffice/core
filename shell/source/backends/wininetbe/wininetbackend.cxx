@@ -299,10 +299,6 @@ WinInetBackend* WinInetBackend::createInstance()
 
 void WinInetBackend::setPropertyValue(
     OUString const &, css::uno::Any const &)
-    throw (
-        css::beans::UnknownPropertyException, css::beans::PropertyVetoException,
-        css::lang::IllegalArgumentException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
 {
     throw css::lang::IllegalArgumentException(
         OUString(
@@ -312,9 +308,6 @@ void WinInetBackend::setPropertyValue(
 
 css::uno::Any WinInetBackend::getPropertyValue(
     OUString const & PropertyName)
-    throw (
-        css::beans::UnknownPropertyException, css::lang::WrappedTargetException,
-        css::uno::RuntimeException)
 {
     if ( PropertyName == "ooInetFTPProxyName" )
     {
@@ -351,7 +344,6 @@ OUString SAL_CALL WinInetBackend::getBackendName() {
 }
 
 OUString SAL_CALL WinInetBackend::getImplementationName()
-    throw (uno::RuntimeException)
 {
     return getBackendName() ;
 }
@@ -364,13 +356,11 @@ uno::Sequence<OUString> SAL_CALL WinInetBackend::getBackendServiceNames()
 }
 
 sal_Bool SAL_CALL WinInetBackend::supportsService(const OUString& aServiceName)
-    throw (uno::RuntimeException)
 {
     return cppu::supportsService(this, aServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL WinInetBackend::getSupportedServiceNames()
-    throw (uno::RuntimeException)
 {
     return getBackendServiceNames() ;
 }

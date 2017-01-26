@@ -84,68 +84,66 @@ namespace connectivity
         private:
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            sal_Int32 getQueryTimeOut()         const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            sal_Int32 getQueryTimeOut()         const;
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static sal_Int32 getMaxFieldSize() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            static sal_Int32 getMaxFieldSize();
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            sal_Int32 getMaxRows()              const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            sal_Int32 getMaxRows()              const;
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            sal_Int32 getResultSetConcurrency() const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            sal_Int32 getResultSetConcurrency() const;
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            sal_Int32 getResultSetType()        const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            sal_Int32 getResultSetType()        const;
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            static sal_Int32 getFetchDirection() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            static sal_Int32 getFetchDirection();
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            sal_Int32 getFetchSize()            const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            sal_Int32 getFetchSize()            const;
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            OUString getCursorName()     const throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            OUString getCursorName()     const;
 
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void setQueryTimeOut(sal_Int32 _par0)           throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void setQueryTimeOut(sal_Int32 _par0);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void setMaxFieldSize(sal_Int32 _par0)           throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void setMaxFieldSize(sal_Int32 _par0);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void setMaxRows(sal_Int32 _par0)                throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void setMaxRows(sal_Int32 _par0);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void setResultSetConcurrency(sal_Int32 _par0)   throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void setResultSetConcurrency(sal_Int32 _par0);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void setResultSetType(sal_Int32 _par0)          throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void setResultSetType(sal_Int32 _par0);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void setFetchDirection(sal_Int32 _par0)         throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void setFetchDirection(sal_Int32 _par0);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void setFetchSize(sal_Int32 _par0)              throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void setFetchSize(sal_Int32 _par0);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
-            void setCursorName(const OUString &_par0) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            void setCursorName(const OUString &_par0);
 
         protected:
 
             void assignRecordSet( ADORecordset* _pRS );
 
             /// @throws css::sdbc::SQLException
-            void reset () throw( css::sdbc::SQLException);
+            void reset ();
             /// @throws css::sdbc::SQLException
-            void clearMyResultSet () throw( css::sdbc::SQLException);
+            void clearMyResultSet ();
             /// @throws css::sdbc::SQLException
-            void setWarning (const  css::sdbc::SQLWarning &ex) throw( css::sdbc::SQLException);
+            void setWarning (const  css::sdbc::SQLWarning &ex);
             /// @throws css::sdbc::SQLException
-            sal_Int32 getColumnCount () throw( css::sdbc::SQLException);
-            /// @throws css::sdbc::SQLException
-            sal_Int32 getRowCount () throw( css::sdbc::SQLException);
+            sal_Int32 getRowCount ();
             sal_Int32 getPrecision ( sal_Int32 sqlType);
 
             void disposeResultSet();
@@ -158,13 +156,11 @@ namespace connectivity
                                 css::uno::Any & rConvertedValue,
                                 css::uno::Any & rOldValue,
                                 sal_Int32 nHandle,
-                                const css::uno::Any& rValue )
-                                    throw (css::lang::IllegalArgumentException) override;
+                                const css::uno::Any& rValue ) override;
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                     sal_Int32 nHandle,
                                     const css::uno::Any& rValue
-                                    )
-                                    throw (css::uno::Exception) override;
+                                    ) override;
             virtual void SAL_CALL getFastPropertyValue(
                                     css::uno::Any& rValue,
                                     sal_Int32 nHandle
@@ -178,28 +174,28 @@ namespace connectivity
             // XInterface
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             //XTypeProvider
-            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException) override;
+            virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
 
             // XPropertySet
-            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException) override;
+            virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
             // XStatement
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual sal_Bool SAL_CALL execute( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery( const OUString& sql ) override;
+            virtual sal_Int32 SAL_CALL executeUpdate( const OUString& sql ) override;
+            virtual sal_Bool SAL_CALL execute( const OUString& sql ) override;
+            virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(  ) override;
             // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual void SAL_CALL clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+            virtual void SAL_CALL clearWarnings(  ) override;
             // XCancellable
-            virtual void SAL_CALL cancel(  ) throw(css::uno::RuntimeException) override;
+            virtual void SAL_CALL cancel(  ) override;
             // XCloseable
-            virtual void SAL_CALL close(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual void SAL_CALL close(  ) override;
             // XMultipleResults
-            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual sal_Int32 SAL_CALL getUpdateCount(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual sal_Bool SAL_CALL getMoreResults(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet(  ) override;
+            virtual sal_Int32 SAL_CALL getUpdateCount(  ) override;
+            virtual sal_Bool SAL_CALL getMoreResults(  ) override;
         };
 
         class OStatement :  public OStatement_Base,
@@ -215,11 +211,11 @@ namespace connectivity
 
             virtual void SAL_CALL acquire() throw() override;
             virtual void SAL_CALL release() throw() override;
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             // XBatchExecution
-            virtual void SAL_CALL addBatch( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual void SAL_CALL clearBatch(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
-            virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+            virtual void SAL_CALL addBatch( const OUString& sql ) override;
+            virtual void SAL_CALL clearBatch(  ) override;
+            virtual css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch(  ) override;
         };
     }
 }

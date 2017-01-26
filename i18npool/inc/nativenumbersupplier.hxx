@@ -41,39 +41,30 @@ public:
 
         // Methods
         virtual OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
-                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
-                throw (css::uno::RuntimeException, std::exception) override;
+                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) override;
 
         virtual sal_Bool SAL_CALL isValidNatNum( const css::lang::Locale& aLocale,
-                sal_Int16 nNativeNumberMode )
-                throw (css::uno::RuntimeException, std::exception) override;
+                sal_Int16 nNativeNumberMode ) override;
 
         virtual css::i18n::NativeNumberXmlAttributes SAL_CALL convertToXmlAttributes(
-                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
-                throw (css::uno::RuntimeException, std::exception) override;
+                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) override;
 
         virtual sal_Int16 SAL_CALL convertFromXmlAttributes(
-                const css::i18n::NativeNumberXmlAttributes& aAttr )
-                throw (css::uno::RuntimeException, std::exception) override;
+                const css::i18n::NativeNumberXmlAttributes& aAttr ) override;
 
         //XServiceInfo
-        virtual OUString SAL_CALL getImplementationName()
-                throw( css::uno::RuntimeException, std::exception ) override;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-                throw( css::uno::RuntimeException, std::exception ) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                throw( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
         // following methods are not for XNativeNumberSupplier, they are for calling from transliterations
         /// @throws css::uno::RuntimeException
         OUString SAL_CALL getNativeNumberString( const OUString& aNumberString,
                 const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode,
-                css::uno::Sequence< sal_Int32 >& offset  )
-                throw (css::uno::RuntimeException);
+                css::uno::Sequence< sal_Int32 >& offset  );
         /// @throws css::uno::RuntimeException
         sal_Unicode SAL_CALL getNativeNumberChar( const sal_Unicode inChar,
-                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode )
-                throw(css::uno::RuntimeException) ;
+                const css::lang::Locale& aLocale, sal_Int16 nNativeNumberMode ) ;
 
 private:
         css::lang::Locale aLocale;

@@ -56,8 +56,7 @@ public:
 protected:
     // ____ XEventListener (base of all listeners) ____
     virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException) SAL_OVERRIDE
+        const css::lang::EventObject& Source ) SAL_OVERRIDE
     {
         css::uno::Reference< css::lang::XEventListener > xEventListener(
                   css::uno::Reference< Listener >( m_xListener), css::uno::UNO_QUERY );
@@ -84,8 +83,7 @@ public:
 
 protected:
     // ____ XModifyListener ____
-    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 };
 
 class WeakSelectionChangeListenerAdapter :
@@ -99,8 +97,7 @@ public:
 protected:
     // ____ XSelectionChangeListener ____
     virtual void SAL_CALL selectionChanged(
-        const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent ) override;
 };
 
 } //  namespace chart

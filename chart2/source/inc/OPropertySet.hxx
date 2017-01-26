@@ -68,9 +68,7 @@ protected:
         @throws css::beans::UnknownPropertyException
         @throws css::uno::RuntimeException
      */
-    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const
-        throw (css::beans::UnknownPropertyException,
-               css::uno::RuntimeException) = 0;
+    virtual css::uno::Any GetDefaultValue( sal_Int32 nHandle ) const = 0;
 
     /** The InfoHelper table contains all property names and types of
         this object.
@@ -110,8 +108,7 @@ protected:
         ( css::uno::Any & rConvertedValue,
           css::uno::Any & rOldValue,
           sal_Int32 nHandle,
-          const css::uno::Any& rValue )
-        throw (css::lang::IllegalArgumentException) override;
+          const css::uno::Any& rValue ) override;
 
     /** The same as setFastProperyValue; nHandle is always valid.
         The changes must not be broadcasted in this method.
@@ -132,8 +129,7 @@ protected:
     */
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast
         ( sal_Int32 nHandle,
-          const css::uno::Any& rValue )
-        throw (css::uno::Exception, std::exception) override;
+          const css::uno::Any& rValue ) override;
 
     /**
        The same as getFastProperyValue, but return the value through rValue and
@@ -156,68 +152,45 @@ protected:
     // Interfaces
 
     // ____ XInterface ____
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     // ____ XTypeProvider ____
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-        getTypes()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getTypes() override;
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-        getImplementationId()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getImplementationId() override;
 
     // ____ XPropertyState ____
     virtual css::beans::PropertyState SAL_CALL
-        getPropertyState( const OUString& PropertyName )
-        throw (css::beans::UnknownPropertyException,
-               css::uno::RuntimeException, std::exception) override;
+        getPropertyState( const OUString& PropertyName ) override;
     virtual css::uno::Sequence< css::beans::PropertyState > SAL_CALL
-        getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName )
-        throw (css::beans::UnknownPropertyException,
-               css::uno::RuntimeException, std::exception) override;
+        getPropertyStates( const css::uno::Sequence< OUString >& aPropertyName ) override;
     virtual void SAL_CALL
-        setPropertyToDefault( const OUString& PropertyName )
-        throw (css::beans::UnknownPropertyException,
-               css::uno::RuntimeException, std::exception) override;
+        setPropertyToDefault( const OUString& PropertyName ) override;
     virtual css::uno::Any SAL_CALL
-        getPropertyDefault( const OUString& aPropertyName )
-        throw (css::beans::UnknownPropertyException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override;
+        getPropertyDefault( const OUString& aPropertyName ) override;
 
     // ____ XMultiPropertyStates ____
     // Note: getPropertyStates() is already implemented in XPropertyState with the
     // same signature
     virtual void SAL_CALL
-        setAllPropertiesToDefault()
-        throw (css::uno::RuntimeException, std::exception) override;
+        setAllPropertiesToDefault() override;
     virtual void SAL_CALL
-        setPropertiesToDefault( const css::uno::Sequence< OUString >& aPropertyNames )
-        throw (css::beans::UnknownPropertyException,
-               css::uno::RuntimeException, std::exception) override;
+        setPropertiesToDefault( const css::uno::Sequence< OUString >& aPropertyNames ) override;
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL
-        getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames )
-        throw (css::beans::UnknownPropertyException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override;
+        getPropertyDefaults( const css::uno::Sequence< OUString >& aPropertyNames ) override;
 
     // ____ XStyleSupplier ____
-    virtual css::uno::Reference< css::style::XStyle > SAL_CALL getStyle()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setStyle( const css::uno::Reference< css::style::XStyle >& xStyle )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::style::XStyle > SAL_CALL getStyle() override;
+    virtual void SAL_CALL setStyle( const css::uno::Reference< css::style::XStyle >& xStyle ) override;
 
     // ____ XMultiPropertySet ____
     virtual void SAL_CALL setPropertyValues(
         const css::uno::Sequence< OUString >& PropertyNames,
-        const css::uno::Sequence< css::uno::Any >& Values )
-        throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& Values ) override;
 
     // ____ XFastPropertySet ____
-    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue )
-        throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFastPropertyValue( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
 
     // Note: it is assumed that the base class implements setPropertyValue by
     // using setFastPropertyValue

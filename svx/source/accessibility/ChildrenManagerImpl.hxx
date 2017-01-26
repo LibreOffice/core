@@ -120,9 +120,7 @@ public:
 
     /// @throws css::uno::RuntimeException
     /// @throws css::lang::IndexOutOfBoundsException
-    css::uno::Reference<css::drawing::XShape> GetChildShape(long nIndex)
-        throw (css::uno::RuntimeException,
-               css::lang::IndexOutOfBoundsException);
+    css::uno::Reference<css::drawing::XShape> GetChildShape(long nIndex);
     /** Return the requested accessible child or throw and
         IndexOutOfBoundsException if the given index is invalid.
         @param nIndex
@@ -137,9 +135,7 @@ public:
             Throws an IndexOutOfBoundsException if the index is not valid.
     */
     css::uno::Reference<css::accessibility::XAccessible>
-        GetChild (long nIndex)
-        throw (css::uno::RuntimeException,
-               css::lang::IndexOutOfBoundsException);
+        GetChild (long nIndex);
 
     /** Return the requested accessible child.
         @param aChildDescriptor
@@ -154,8 +150,7 @@ public:
         @throws css::uno::RuntimeException
     */
     css::uno::Reference<css::accessibility::XAccessible>
-        GetChild (ChildDescriptor& aChildDescriptor,sal_Int32 _nIndex)
-        throw (css::uno::RuntimeException);
+        GetChild (ChildDescriptor& aChildDescriptor,sal_Int32 _nIndex);
 
     /** Return the requested accessible child given a shape.  This method
         searches the list of descriptors for the one that holds the
@@ -171,8 +166,7 @@ public:
         @throws css::uno::RuntimeException
     */
     css::uno::Reference<css::accessibility::XAccessible>
-        GetChild (const css::uno::Reference<css::drawing::XShape>& xShape)
-        throw (css::uno::RuntimeException);
+        GetChild (const css::uno::Reference<css::drawing::XShape>& xShape);
 
     /** Update the child manager.  Take care of a modified set of children
         and modified visible area.  This method can optimize the update
@@ -241,18 +235,15 @@ public:
 
     // lang::XEventListener
     virtual void SAL_CALL
-        disposing (const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject) override;
 
     // document::XEventListener
     virtual void SAL_CALL
-        notifyEvent (const css::document::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+        notifyEvent (const css::document::EventObject& rEventObject) override;
 
     // view::XSelectionChangeListener
     virtual void  SAL_CALL
-        selectionChanged (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+        selectionChanged (const css::lang::EventObject& rEvent) override;
 
     // IAccessibleViewForwarderListener
     /** Informs this children manager and its children about a change of one
@@ -283,15 +274,13 @@ public:
         const css::uno::Reference< css::drawing::XShape >& _rxShape,
         const long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (css::uno::RuntimeException) override;
+    ) override;
 
     // Add the impl method for IAccessibleParent interface
     virtual AccessibleControlShape* GetAccControlShapeFromModel
-        (css::beans::XPropertySet* pSet)
-        throw (css::uno::RuntimeException) override;
+        (css::beans::XPropertySet* pSet) override;
     virtual css::uno::Reference<css::accessibility::XAccessible>
-        GetAccessibleCaption (const css::uno::Reference<css::drawing::XShape>& xShape)
-        throw (css::uno::RuntimeException) override;
+        GetAccessibleCaption (const css::uno::Reference<css::drawing::XShape>& xShape) override;
 protected:
     /** This list holds the descriptors of all currently visible shapes and
         associated accessible object.

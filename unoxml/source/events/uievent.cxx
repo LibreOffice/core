@@ -32,13 +32,13 @@ namespace DOM { namespace events
     }
 
     Reference< XAbstractView > SAL_CALL
-    CUIEvent::getView() throw(RuntimeException, std::exception)
+    CUIEvent::getView()
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_view;
     }
 
-    sal_Int32 SAL_CALL CUIEvent::getDetail() throw(RuntimeException, std::exception)
+    sal_Int32 SAL_CALL CUIEvent::getDetail()
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_detail;
@@ -48,7 +48,7 @@ namespace DOM { namespace events
                      sal_Bool canBubbleArg,
                      sal_Bool cancelableArg,
                      const Reference< XAbstractView >& viewArg,
-                     sal_Int32 detailArg) throw(RuntimeException, std::exception)
+                     sal_Int32 detailArg)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -59,53 +59,53 @@ namespace DOM { namespace events
 
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    OUString SAL_CALL CUIEvent::getType() throw (RuntimeException, std::exception)
+    OUString SAL_CALL CUIEvent::getType()
     {
         return CEvent::getType();
     }
 
-    Reference< XEventTarget > SAL_CALL CUIEvent::getTarget() throw (RuntimeException, std::exception)
+    Reference< XEventTarget > SAL_CALL CUIEvent::getTarget()
     {
         return CEvent::getTarget();
     }
 
-    Reference< XEventTarget > SAL_CALL CUIEvent::getCurrentTarget() throw (RuntimeException, std::exception)
+    Reference< XEventTarget > SAL_CALL CUIEvent::getCurrentTarget()
     {
         return CEvent::getCurrentTarget();
     }
 
-    PhaseType SAL_CALL CUIEvent::getEventPhase() throw (RuntimeException, std::exception)
+    PhaseType SAL_CALL CUIEvent::getEventPhase()
     {
         return CEvent::getEventPhase();
     }
 
-    sal_Bool SAL_CALL CUIEvent::getBubbles() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL CUIEvent::getBubbles()
     {
         return CEvent::getBubbles();
     }
 
-    sal_Bool SAL_CALL CUIEvent::getCancelable() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL CUIEvent::getCancelable()
     {
         // mutation events cannot be canceled
         return false;
     }
 
-    css::util::Time SAL_CALL CUIEvent::getTimeStamp() throw (RuntimeException, std::exception)
+    css::util::Time SAL_CALL CUIEvent::getTimeStamp()
     {
         return CEvent::getTimeStamp();
     }
 
-    void SAL_CALL CUIEvent::stopPropagation() throw (RuntimeException, std::exception)
+    void SAL_CALL CUIEvent::stopPropagation()
     {
         CEvent::stopPropagation();
     }
-    void SAL_CALL CUIEvent::preventDefault() throw (RuntimeException, std::exception)
+    void SAL_CALL CUIEvent::preventDefault()
     {
         CEvent::preventDefault();
     }
 
     void SAL_CALL CUIEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
-        sal_Bool cancelableArg) throw (RuntimeException, std::exception)
+        sal_Bool cancelableArg)
     {
         // base initializer
         CEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);

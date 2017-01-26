@@ -62,8 +62,9 @@ public:
 
     sal_Int32 SAL_CALL getAvailableHeight();
 
-    void SAL_CALL setImage(sal_Int16 aImageFormat, const css::uno::Any& aImage)
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    /// @throws css::lang::IllegalArgumentException
+    /// @throws css::uno::RuntimeException
+    void SAL_CALL setImage(sal_Int16 aImageFormat, const css::uno::Any& aImage);
 
     bool SAL_CALL setShowState(bool bShowState);
 

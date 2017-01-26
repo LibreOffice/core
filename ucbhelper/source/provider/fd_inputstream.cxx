@@ -56,10 +56,6 @@ namespace ucbhelper
 
     sal_Int32 SAL_CALL FdInputStream::readBytes(Sequence< sal_Int8 >& aData,
                                                  sal_Int32 nBytesToRead)
-        throw(NotConnectedException,
-              BufferSizeExceededException,
-              IOException,
-              RuntimeException, std::exception)
     {
         osl::MutexGuard aGuard(m_aMutex);
 
@@ -84,20 +80,12 @@ namespace ucbhelper
 
     sal_Int32 SAL_CALL FdInputStream::readSomeBytes( Sequence< sal_Int8 >& aData,
                                                       sal_Int32 nMaxBytesToRead )
-        throw( NotConnectedException,
-               BufferSizeExceededException,
-               IOException,
-               RuntimeException, std::exception)
     {
         return readBytes(aData,nMaxBytesToRead);
     }
 
 
     void SAL_CALL FdInputStream::skipBytes(sal_Int32 nBytesToSkip)
-        throw(NotConnectedException,
-              BufferSizeExceededException,
-              IOException,
-              RuntimeException, std::exception)
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(!m_tmpfl)
@@ -109,18 +97,12 @@ namespace ucbhelper
 
 
     sal_Int32 SAL_CALL FdInputStream::available()
-        throw(NotConnectedException,
-              IOException,
-              RuntimeException, std::exception)
     {
         return sal::static_int_cast<sal_Int32>(m_nLength - getPosition());
     }
 
 
     void SAL_CALL FdInputStream::closeInput()
-        throw(NotConnectedException,
-              IOException,
-              RuntimeException, std::exception)
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(m_tmpfl)
@@ -132,9 +114,6 @@ namespace ucbhelper
 
 
     void SAL_CALL FdInputStream::seek(sal_Int64 location)
-        throw( IllegalArgumentException,
-               IOException,
-               RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(!m_tmpfl)
@@ -147,8 +126,6 @@ namespace ucbhelper
 
     sal_Int64 SAL_CALL
     FdInputStream::getPosition()
-        throw( IOException,
-               RuntimeException, std::exception )
     {
         osl::MutexGuard aGuard(m_aMutex);
         if(!m_tmpfl)
@@ -161,7 +138,6 @@ namespace ucbhelper
 
 
     sal_Int64 SAL_CALL FdInputStream::getLength()
-        throw( IOException,RuntimeException, std::exception )
     {
         return m_nLength;
     }

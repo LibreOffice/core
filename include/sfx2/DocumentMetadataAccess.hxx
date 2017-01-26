@@ -84,68 +84,41 @@ public:
     virtual ~DocumentMetadataAccess() override;
 
     // css::rdf::XNode:
-    virtual OUString SAL_CALL getStringValue()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getStringValue() override;
 
     // css::rdf::XURI:
-    virtual OUString SAL_CALL getNamespace()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getLocalName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getNamespace() override;
+    virtual OUString SAL_CALL getLocalName() override;
 
     // css::rdf::XRepositorySupplier:
     virtual css::uno::Reference<
-        css::rdf::XRepository > SAL_CALL getRDFRepository()
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::rdf::XRepository > SAL_CALL getRDFRepository() override;
 
     // css::rdf::XDocumentMetadataAccess:
     virtual css::uno::Reference<
                 css::rdf::XMetadatable > SAL_CALL
         getElementByMetadataReference(
-            const css::beans::StringPair & i_rReference)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::beans::StringPair & i_rReference) override;
     virtual css::uno::Reference< css::rdf::XMetadatable > SAL_CALL
-        getElementByURI(const css::uno::Reference< css::rdf::XURI > & i_xURI)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException, std::exception) override;
+        getElementByURI(const css::uno::Reference< css::rdf::XURI > & i_xURI) override;
     virtual css::uno::Sequence< css::uno::Reference< css::rdf::XURI > > SAL_CALL getMetadataGraphsWithType(
-            const css::uno::Reference< css::rdf::XURI > & i_xType)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException, std::exception) override;
+            const css::uno::Reference< css::rdf::XURI > & i_xType) override;
     virtual css::uno::Reference< css::rdf::XURI> SAL_CALL
         addMetadataFile(const OUString & i_rFileName,
-            const css::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException,
-            css::container::ElementExistException, std::exception) override;
+            const css::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
     virtual css::uno::Reference< css::rdf::XURI> SAL_CALL
         importMetadataFile(::sal_Int16 i_Format,
             const css::uno::Reference< css::io::XInputStream > & i_xInStream,
             const OUString & i_rFileName,
             const css::uno::Reference< css::rdf::XURI > & i_xBaseURI,
-            const css::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException,
-            css::datatransfer::UnsupportedFlavorException,
-            css::container::ElementExistException,
-            css::rdf::ParseException,
-            css::io::IOException, std::exception) override;
+            const css::uno::Sequence< css::uno::Reference< css::rdf::XURI > > & i_rTypes) override;
     virtual void SAL_CALL removeMetadataFile(
             const css::uno::Reference<
-                css::rdf::XURI > & i_xGraphName)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException,
-            css::container::NoSuchElementException, std::exception) override;
+                css::rdf::XURI > & i_xGraphName) override;
     virtual void SAL_CALL addContentOrStylesFile(
-            const OUString & i_rFileName)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException,
-            css::container::ElementExistException, std::exception) override;
+            const OUString & i_rFileName) override;
     virtual void SAL_CALL removeContentOrStylesFile(
-            const OUString & i_rFileName)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException,
-            css::container::NoSuchElementException, std::exception) override;
+            const OUString & i_rFileName) override;
 
     virtual void SAL_CALL loadMetadataFromStorage(
             const css::uno::Reference<
@@ -153,28 +126,16 @@ public:
             const css::uno::Reference<
                 css::rdf::XURI > & i_xBaseURI,
             const css::uno::Reference<
-                css::task::XInteractionHandler> & i_xHandler)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException, std::exception) override;
+                css::task::XInteractionHandler> & i_xHandler) override;
     virtual void SAL_CALL storeMetadataToStorage(
             const css::uno::Reference<
-                css::embed::XStorage > & i_xStorage)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException, std::exception) override;
+                css::embed::XStorage > & i_xStorage) override;
     virtual void SAL_CALL loadMetadataFromMedium(
             const css::uno::Sequence<
-                css::beans::PropertyValue > & i_rMedium)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException, std::exception) override;
+                css::beans::PropertyValue > & i_rMedium) override;
     virtual void SAL_CALL storeMetadataToMedium(
             const css::uno::Sequence<
-                css::beans::PropertyValue > & i_rMedium)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException,
-            css::lang::WrappedTargetException, std::exception) override;
+                css::beans::PropertyValue > & i_rMedium) override;
 
 private:
     std::unique_ptr<DocumentMetadataAccess_Impl> m_pImpl;

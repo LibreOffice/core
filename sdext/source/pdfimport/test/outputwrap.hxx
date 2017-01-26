@@ -44,18 +44,18 @@ typedef ::cppu::WeakComponentImplHelper<
             maFile.open(osl_File_OpenFlag_Create|osl_File_OpenFlag_Write);
         }
 
-        virtual void SAL_CALL writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData ) throw (css::io::NotConnectedException,css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL writeBytes( const css::uno::Sequence< ::sal_Int8 >& aData ) override
 
         {
             sal_uInt64 nBytesWritten(0);
             maFile.write(aData.getConstArray(),aData.getLength(),nBytesWritten);
         }
 
-        virtual void SAL_CALL flush() throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL flush() override
         {
         }
 
-        virtual void SAL_CALL closeOutput() throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL closeOutput() override
         {
             maFile.close();
         }
@@ -72,16 +72,16 @@ typedef ::cppu::WeakComponentImplHelper<
         {
         }
 
-        virtual void SAL_CALL writeBytes(const css::uno::Sequence< ::sal_Int8 >& aData) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL writeBytes(const css::uno::Sequence< ::sal_Int8 >& aData) override
         {
             maBuffer.append(reinterpret_cast<const sal_Char *>(aData.getConstArray()), aData.getLength());
         }
 
-        virtual void SAL_CALL flush() throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL flush() override
         {
         }
 
-        virtual void SAL_CALL closeOutput() throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL closeOutput() override
         {
             mrString = maBuffer.makeStringAndClear();
         }

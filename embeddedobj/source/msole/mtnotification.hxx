@@ -41,8 +41,7 @@ class MainThreadNotificationRequest :  public cppu::WeakImplHelper< css::awt::XC
     sal_uInt32 m_nAspect;
 
 public:
-    virtual void SAL_CALL notify (const css::uno::Any& rUserData)
-        throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL notify (const css::uno::Any& rUserData) override;
     MainThreadNotificationRequest( const ::rtl::Reference< OleEmbeddedObject >& xObj, sal_uInt16 nNotificationType, sal_uInt32 nAspect = 0 );
     ~MainThreadNotificationRequest() override;
 };

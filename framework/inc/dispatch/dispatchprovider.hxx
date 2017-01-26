@@ -90,8 +90,8 @@ class DispatchProvider: public ::cppu::WeakImplHelper< css::frame::XDispatchProv
 
         virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL                       queryDispatch  ( const css::util::URL&                                       aURL             ,
                                                                                                              const OUString&                                      sTargetFrameName ,
-                                                                                                                   sal_Int32                                             nSearchFlags     ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) throw( css::uno::RuntimeException, std::exception ) override;
+                                                                                                                   sal_Int32                                             nSearchFlags     ) override;
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches( const css::uno::Sequence< css::frame::DispatchDescriptor >& lDescriptions    ) override;
 
     /* helper */
     protected:

@@ -75,13 +75,13 @@ namespace dbtools
                                     const OUString& rString,
                                     sal_Int32 nKey,
                                     sal_Int16 nFieldType,
-                                    sal_Int16 nKeyType) throw(css::lang::IllegalArgumentException);
+                                    sal_Int16 nKeyType);
 
         /// @throws css::lang::IllegalArgumentException
         OOO_DLLPUBLIC_DBTOOLS void setValue(const css::uno::Reference< css::sdb::XColumnUpdate>& xVariant,
                              const css::util::Date& rNullDate,
                              const double& rValue,
-                             sal_Int16 nKeyType) throw(css::lang::IllegalArgumentException);
+                             sal_Int16 nKeyType);
 
         OOO_DLLPUBLIC_DBTOOLS double getValue( const css::uno::Reference< css::sdb::XColumn>& xVariant, const css::util::Date& rNullDate );
 

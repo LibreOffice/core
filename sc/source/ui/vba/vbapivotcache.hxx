@@ -32,7 +32,7 @@ class ScVbaPivotCache : public PivotCacheImpl_BASE
 public:
     ScVbaPivotCache( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::sheet::XDataPilotTable >& xTable );
 
-    virtual void SAL_CALL Refresh() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Refresh() override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

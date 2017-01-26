@@ -43,17 +43,17 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper<
 
     public:
         //Methods from XCertificateExtension
-        virtual sal_Bool SAL_CALL isCritical() throw( css::uno::RuntimeException, std::exception ) override
+        virtual sal_Bool SAL_CALL isCritical() override
         {
             return m_Extn.m_critical;
         }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() throw( css::uno::RuntimeException, std::exception ) override
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionId() override
         {
             return m_Extn.m_xExtnId;
         }
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() throw( css::uno::RuntimeException, std::exception ) override
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getExtensionValue() override
         {
             return m_Extn.m_xExtnValue;
         }
@@ -65,7 +65,7 @@ class SanExtensionImpl : public ::cppu::WeakImplHelper<
 
         //Methods from XSanExtension
 
-        virtual css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL getAlternativeNames() throw( css::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< css::security::CertAltNameEntry > SAL_CALL getAlternativeNames() override ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SANEXTENSION_NSSIMPL_HXX

@@ -33,19 +33,18 @@ ScAccessibleStateSet::~ScAccessibleStateSet()
 
 // XAccessibleStateSet
 
-sal_Bool SAL_CALL ScAccessibleStateSet::isEmpty() throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL ScAccessibleStateSet::isEmpty()
 {
     return maStates.empty();
 }
 
 sal_Bool SAL_CALL ScAccessibleStateSet::contains(sal_Int16 nState)
-    throw (RuntimeException, std::exception)
 {
     return maStates.count(nState) != 0;
 }
 
 sal_Bool SAL_CALL ScAccessibleStateSet::containsAll(
-    const Sequence<sal_Int16>& aStateSet) throw (RuntimeException, std::exception)
+    const Sequence<sal_Int16>& aStateSet)
 {
     sal_Int32 n = aStateSet.getLength();
     for (sal_Int32 i = 0; i < n; ++i)
@@ -59,7 +58,6 @@ sal_Bool SAL_CALL ScAccessibleStateSet::containsAll(
 }
 
 Sequence<sal_Int16> SAL_CALL ScAccessibleStateSet::getStates()
-    throw (RuntimeException, std::exception)
 {
     Sequence<sal_Int16> aSeq(0);
     set<sal_Int16>::const_iterator itr = maStates.begin(), itrEnd = maStates.end();

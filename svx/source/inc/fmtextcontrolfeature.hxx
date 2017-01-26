@@ -80,8 +80,8 @@ namespace svx
 
     protected:
         // XStatusListener
-        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& State ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& State ) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
     };
 
 

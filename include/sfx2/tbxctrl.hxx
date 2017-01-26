@@ -162,24 +162,18 @@ protected:
 
 public:
     // XComponent
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
 
     // new controller API
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& Event ) override;
 
     // XToolbarController
-    virtual void SAL_CALL execute( sal_Int16 KeyModifier )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL click()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL doubleClick()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL execute( sal_Int16 KeyModifier ) override;
+    virtual void SAL_CALL click() override;
+    virtual void SAL_CALL doubleClick() override;
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createPopupWindow() override;
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent ) override;
 
 public:
                                SFX_DECL_TOOLBOX_CONTROL();

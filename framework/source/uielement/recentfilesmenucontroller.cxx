@@ -56,39 +56,36 @@ public:
                                const uno::Sequence< uno::Any >& args );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.framework.RecentFilesMenuController");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.frame.PopupMenuController"};
     }
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) throw ( uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const frame::FeatureStateEvent& Event ) override;
 
     // XMenuListener
-    virtual void SAL_CALL itemSelected( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) throw (uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL itemSelected( const awt::MenuEvent& rEvent ) override;
+    virtual void SAL_CALL itemActivated( const awt::MenuEvent& rEvent ) override;
 
     // XDispatchProvider
-    virtual uno::Reference< frame::XDispatch > SAL_CALL queryDispatch( const util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) throw( uno::RuntimeException, std::exception ) override;
+    virtual uno::Reference< frame::XDispatch > SAL_CALL queryDispatch( const util::URL& aURL, const OUString& sTarget, sal_Int32 nFlags ) override;
 
     // XDispatch
-    virtual void SAL_CALL dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& seqProperties ) throw( uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispatch( const util::URL& aURL, const uno::Sequence< beans::PropertyValue >& seqProperties ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw ( uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 private:
     virtual void impl_setPopupMenu() override;
@@ -262,7 +259,7 @@ void RecentFilesMenuController::executeEntry( sal_Int32 nIndex )
 }
 
 // XEventListener
-void SAL_CALL RecentFilesMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
+void SAL_CALL RecentFilesMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
@@ -276,13 +273,13 @@ void SAL_CALL RecentFilesMenuController::disposing( const EventObject& ) throw (
 }
 
 // XStatusListener
-void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent& Event ) throw ( RuntimeException, std::exception )
+void SAL_CALL RecentFilesMenuController::statusChanged( const FeatureStateEvent& Event )
 {
     osl::MutexGuard aLock( m_aMutex );
     m_bDisabled = !Event.IsEnabled;
 }
 
-void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
     Reference< css::awt::XPopupMenu > xPopupMenu;
 
@@ -316,7 +313,7 @@ void SAL_CALL RecentFilesMenuController::itemSelected( const css::awt::MenuEvent
     }
 }
 
-void SAL_CALL RecentFilesMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
+void SAL_CALL RecentFilesMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     osl::MutexGuard aLock( m_aMutex );
     impl_setPopupMenu();
@@ -334,7 +331,6 @@ Reference< XDispatch > SAL_CALL RecentFilesMenuController::queryDispatch(
     const URL& aURL,
     const OUString& /*sTarget*/,
     sal_Int32 /*nFlags*/ )
-throw( RuntimeException, std::exception )
 {
     osl::MutexGuard aLock( m_aMutex );
 
@@ -350,7 +346,6 @@ throw( RuntimeException, std::exception )
 void SAL_CALL RecentFilesMenuController::dispatch(
     const URL& aURL,
     const Sequence< PropertyValue >& /*seqProperties*/ )
-throw( RuntimeException, std::exception )
 {
     osl::MutexGuard aLock( m_aMutex );
 

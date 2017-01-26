@@ -38,20 +38,15 @@ public:
 
     UITestUnoObj();
 
-    void SAL_CALL executeCommand(const OUString& rCommand)
-        throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL executeCommand(const OUString& rCommand) override;
 
-    css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getTopFocusWindow()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getTopFocusWindow() override;
 
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 UITestUnoObj::UITestUnoObj():
@@ -61,14 +56,12 @@ UITestUnoObj::UITestUnoObj():
 }
 
 void SAL_CALL UITestUnoObj::executeCommand(const OUString& rCommand)
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     UITest::executeCommand(rCommand);
 }
 
 css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocusWindow()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     std::unique_ptr<UIObject> pObj = UITest::getFocusTopWindow();
@@ -76,19 +69,16 @@ css::uno::Reference<css::ui::test::XUIObject> SAL_CALL UITestUnoObj::getTopFocus
 }
 
 OUString SAL_CALL UITestUnoObj::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.uitest.UITest");
 }
 
 sal_Bool UITestUnoObj::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> UITestUnoObj::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<OUString> aServiceNames(1);
     aServiceNames[0] = "com.sun.star.ui.test.UITest";

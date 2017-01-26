@@ -67,20 +67,20 @@ public:
     virtual ~ConvDicList() override;
 
     // XConversionDictionaryList
-    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getDictionaryContainer(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::linguistic2::XConversionDictionary > SAL_CALL addNewDictionary( const OUString& aName, const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType ) throw (css::lang::NoSupportException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL queryConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, css::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) throw (css::lang::IllegalArgumentException, css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL queryMaxCharCount( const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, css::linguistic2::ConversionDirection eDirection ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XNameContainer > SAL_CALL getDictionaryContainer(  ) override;
+    virtual css::uno::Reference< css::linguistic2::XConversionDictionary > SAL_CALL addNewDictionary( const OUString& aName, const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL queryConversions( const OUString& aText, sal_Int32 nStartPos, sal_Int32 nLength, const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, css::linguistic2::ConversionDirection eDirection, sal_Int32 nTextConversionOptions ) override;
+    virtual sal_Int16 SAL_CALL queryMaxCharCount( const css::lang::Locale& aLocale, sal_Int16 nConversionDictionaryType, css::linguistic2::ConversionDirection eDirection ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose(  ) override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 
     static inline OUString

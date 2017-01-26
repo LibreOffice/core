@@ -64,7 +64,7 @@ namespace connectivity
                 );
 
             //XInterface
-            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
             // ::cppu::OComponentHelper
             virtual void SAL_CALL disposing() override;
 
@@ -83,13 +83,13 @@ namespace connectivity
             // refresh the header of file based tables to see changes done by someone
             virtual void refreshHeader();
 
-            OUString SAL_CALL getName() throw(std::exception) override { return m_Name; }
+            OUString SAL_CALL getName() override { return m_Name; }
 
             const OUString& getSchema() { return m_SchemaName; }
             bool isReadOnly() const { return !m_bWriteable; }
                 // m_pFileStream && !m_pFileStream->IsWritable(); }
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
 

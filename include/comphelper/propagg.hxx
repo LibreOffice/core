@@ -131,8 +131,7 @@ public:
     /// inherited from IPropertyArrayHelper
     virtual css::uno::Sequence< css::beans::Property> SAL_CALL getProperties() override;
     /// inherited from IPropertyArrayHelper
-    virtual css::beans::Property SAL_CALL getPropertyByName(const OUString& _rPropertyName)
-                                throw(css::beans::UnknownPropertyException) override;
+    virtual css::beans::Property SAL_CALL getPropertyByName(const OUString& _rPropertyName) override;
 
     /// inherited from IPropertyArrayHelper
     virtual sal_Bool  SAL_CALL hasPropertyByName(const OUString& _rPropertyName) override ;
@@ -211,33 +210,33 @@ protected:
 public:
     OPropertySetAggregationHelper( ::cppu::OBroadcastHelper& rBHelper );
 
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) override;
 
 // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
 // XFastPropertySet
-    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const css::uno::Any& aValue) throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setFastPropertyValue(sal_Int32 nHandle, const css::uno::Any& aValue) override;
+    virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
 
 // XPropertySet
-    virtual void SAL_CALL           addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL           addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL           addPropertyChangeListener(const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener) override;
+    virtual void SAL_CALL           addVetoableChangeListener(const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener) override;
 
 // XPropertiesChangeListener
-    virtual void SAL_CALL propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent >& evt) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL propertiesChange(const css::uno::Sequence< css::beans::PropertyChangeEvent >& evt) override;
 
 // XVetoableChangeListener
-    virtual void SAL_CALL vetoableChange(const css::beans::PropertyChangeEvent& aEvent) throw(css::beans::PropertyVetoException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL vetoableChange(const css::beans::PropertyChangeEvent& aEvent) override;
 
 // XMultiPropertySet
-    virtual void SAL_CALL   setPropertyValues(const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values) throw(css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   addPropertiesChangeListener(const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   setPropertyValues(const css::uno::Sequence< OUString >& PropertyNames, const css::uno::Sequence< css::uno::Any >& Values) override;
+    virtual void SAL_CALL   addPropertiesChangeListener(const css::uno::Sequence< OUString >& aPropertyNames, const css::uno::Reference< css::beans::XPropertiesChangeListener >& xListener) override;
 
 // XPropertyState
-    virtual css::beans::PropertyState SAL_CALL getPropertyState(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL                                   setPropertyToDefault(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL             getPropertyDefault(const OUString& aPropertyName) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::beans::PropertyState SAL_CALL getPropertyState(const OUString& PropertyName) override;
+    virtual void SAL_CALL                                   setPropertyToDefault(const OUString& PropertyName) override;
+    virtual css::uno::Any SAL_CALL             getPropertyDefault(const OUString& aPropertyName) override;
 
 // OPropertySetHelper
     /** still waiting to be overwritten ...
@@ -248,12 +247,12 @@ public:
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein
     */
-    virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
 
     /** only implemented for "forwarded" properties, every other property must be handled
         in the derivee, and will assert if passed herein
     */
-    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw ( css::uno::Exception, std::exception ) override;
+    virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const css::uno::Any& _rValue ) override;
 
 protected:
     virtual ~OPropertySetAggregationHelper() override;
@@ -314,7 +313,7 @@ protected:
     /// must be called before aggregation, if aggregation is used
     ///
     /// @throws css::lang::IllegalArgumentException
-    void setAggregation(const css::uno::Reference< css::uno::XInterface >&) throw( css::lang::IllegalArgumentException );
+    void setAggregation(const css::uno::Reference< css::uno::XInterface >&);
     void startListening();
 };
 

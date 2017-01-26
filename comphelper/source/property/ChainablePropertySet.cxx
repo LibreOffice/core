@@ -45,13 +45,11 @@ ChainablePropertySet::~ChainablePropertySet()
 
 // XPropertySet
 Reference< XPropertySetInfo > SAL_CALL ChainablePropertySet::getPropertySetInfo(  )
-    throw(RuntimeException, std::exception)
 {
     return mxInfo.get();
 }
 
 void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::unique_ptr< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -69,7 +67,6 @@ void SAL_CALL ChainablePropertySet::setPropertyValue( const OUString& rPropertyN
 }
 
 Any SAL_CALL ChainablePropertySet::getPropertyValue( const OUString& rPropertyName )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::unique_ptr< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -90,33 +87,27 @@ Any SAL_CALL ChainablePropertySet::getPropertyValue( const OUString& rPropertyNa
 }
 
 void SAL_CALL ChainablePropertySet::addPropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     // todo
 }
 
 void SAL_CALL ChainablePropertySet::removePropertyChangeListener( const OUString&, const Reference< XPropertyChangeListener >& )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     // todo
 }
 
 void SAL_CALL ChainablePropertySet::addVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     // todo
 }
 
 void SAL_CALL ChainablePropertySet::removeVetoableChangeListener( const OUString&, const Reference< XVetoableChangeListener >& )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     // todo
 }
 
 // XMultiPropertySet
 void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >& rPropertyNames, const Sequence< Any >& rValues)
-    throw (PropertyVetoException, IllegalArgumentException,
-           WrappedTargetException, RuntimeException, std::exception)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::unique_ptr< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -150,7 +141,6 @@ void SAL_CALL ChainablePropertySet::setPropertyValues(const Sequence< OUString >
 }
 
 Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues(const Sequence< OUString >& rPropertyNames)
-    throw (RuntimeException, std::exception)
 {
     // acquire mutex in c-tor and releases it in the d-tor (exception safe!).
     std::unique_ptr< osl::Guard< comphelper::SolarMutex > > xMutexGuard;
@@ -184,26 +174,22 @@ Sequence< Any > SAL_CALL ChainablePropertySet::getPropertyValues(const Sequence<
 }
 
 void SAL_CALL ChainablePropertySet::addPropertiesChangeListener( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
-    throw(RuntimeException, std::exception)
 {
     // todo
 }
 
 void SAL_CALL ChainablePropertySet::removePropertiesChangeListener( const Reference< XPropertiesChangeListener >& )
-    throw(RuntimeException, std::exception)
 {
     // todo
 }
 
 void SAL_CALL ChainablePropertySet::firePropertiesChangeEvent( const Sequence< OUString >&, const Reference< XPropertiesChangeListener >& )
-    throw(RuntimeException, std::exception)
 {
     // todo
 }
 
 // XPropertyState
 PropertyState SAL_CALL ChainablePropertySet::getPropertyState( const OUString& PropertyName )
-    throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     PropertyInfoHash::const_iterator aIter =  mxInfo->maMap.find( PropertyName );
     if( aIter == mxInfo->maMap.end())
@@ -219,7 +205,6 @@ PropertyState SAL_CALL ChainablePropertySet::getPropertyState( const OUString& P
 }
 
 Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( const Sequence< OUString >& rPropertyNames )
-    throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     const sal_Int32 nCount = rPropertyNames.getLength();
 
@@ -245,7 +230,6 @@ Sequence< PropertyState > SAL_CALL ChainablePropertySet::getPropertyStates( cons
 }
 
 void SAL_CALL ChainablePropertySet::setPropertyToDefault( const OUString& rPropertyName )
-    throw(UnknownPropertyException, RuntimeException, std::exception)
 {
     PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
@@ -255,7 +239,6 @@ void SAL_CALL ChainablePropertySet::setPropertyToDefault( const OUString& rPrope
 }
 
 Any SAL_CALL ChainablePropertySet::getPropertyDefault( const OUString& rPropertyName )
-    throw(UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
 {
     PropertyInfoHash::const_iterator aIter = mxInfo->maMap.find ( rPropertyName );
 
@@ -265,31 +248,26 @@ Any SAL_CALL ChainablePropertySet::getPropertyDefault( const OUString& rProperty
 }
 
 void ChainablePropertySet::_preGetPropertyState ()
-    throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException )
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
 
 void ChainablePropertySet::_getPropertyState( const comphelper::PropertyInfo&, PropertyState& )
-    throw(UnknownPropertyException )
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
 
 void ChainablePropertySet::_postGetPropertyState ()
-    throw(css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException )
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
 
 void ChainablePropertySet::_setPropertyToDefault( const comphelper::PropertyInfo& )
-    throw(UnknownPropertyException )
 {
     OSL_FAIL( "you have to implement this yourself!");
 }
 
 Any ChainablePropertySet::_getPropertyDefault( const comphelper::PropertyInfo& )
-    throw(UnknownPropertyException, WrappedTargetException )
 {
     OSL_FAIL( "you have to implement this yourself!");
 

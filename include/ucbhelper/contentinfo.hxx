@@ -65,8 +65,7 @@ public:
     virtual ~PropertySetInfo() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -74,24 +73,18 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
 
     // XPropertySetInfo
     virtual css::uno::Sequence<
                 css::beans::Property > SAL_CALL
-    getProperties()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getProperties() override;
     virtual css::beans::Property SAL_CALL
-    getPropertyByName( const OUString& aName )
-        throw( css::beans::UnknownPropertyException,
-               css::uno::RuntimeException, std::exception ) override;
+    getPropertyByName( const OUString& aName ) override;
     virtual sal_Bool SAL_CALL
-    hasPropertyByName( const OUString& Name )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    hasPropertyByName( const OUString& Name ) override;
 
     // Non-Interface methods.
     void reset();
@@ -130,8 +123,7 @@ public:
     virtual ~CommandProcessorInfo() override;
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -139,31 +131,22 @@ public:
 
     // XTypeProvider
     virtual css::uno::Sequence< sal_Int8 > SAL_CALL
-    getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getImplementationId() override;
     virtual css::uno::Sequence< css::uno::Type > SAL_CALL
-    getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getTypes() override;
 
     // XCommandInfo
     virtual css::uno::Sequence<
                 css::ucb::CommandInfo > SAL_CALL
-    getCommands()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    getCommands() override;
     virtual css::ucb::CommandInfo SAL_CALL
-    getCommandInfoByName( const OUString& Name )
-        throw( css::ucb::UnsupportedCommandException,
-        css::uno::RuntimeException, std::exception ) override;
+    getCommandInfoByName( const OUString& Name ) override;
     virtual css::ucb::CommandInfo SAL_CALL
-    getCommandInfoByHandle( sal_Int32 Handle )
-        throw( css::ucb::UnsupportedCommandException,
-        css::uno::RuntimeException, std::exception ) override;
+    getCommandInfoByHandle( sal_Int32 Handle ) override;
     virtual sal_Bool SAL_CALL
-    hasCommandByName( const OUString& Name )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    hasCommandByName( const OUString& Name ) override;
     virtual sal_Bool SAL_CALL
-    hasCommandByHandle( sal_Int32 Handle )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    hasCommandByHandle( sal_Int32 Handle ) override;
 
     // Non-Interface methods.
     void reset();

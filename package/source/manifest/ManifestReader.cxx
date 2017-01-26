@@ -47,7 +47,6 @@ ManifestReader::~ManifestReader()
 {
 }
 Sequence< Sequence< PropertyValue > > SAL_CALL ManifestReader::readManifestSequence( const Reference< XInputStream >& rStream )
-    throw (css::uno::RuntimeException, std::exception)
 {
     Sequence < Sequence < PropertyValue > > aManifestSequence;
     Reference < XParser > xParser  = Parser::create(m_xContext);
@@ -95,19 +94,16 @@ Sequence < OUString > ManifestReader::static_getSupportedServiceNames()
 }
 
 OUString ManifestReader::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return static_getImplementationName();
 }
 
 sal_Bool SAL_CALL ManifestReader::supportsService(OUString const & rServiceName)
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName );
 }
 
 Sequence < OUString > ManifestReader::getSupportedServiceNames()
-    throw (RuntimeException, std::exception)
 {
     return static_getSupportedServiceNames();
 }

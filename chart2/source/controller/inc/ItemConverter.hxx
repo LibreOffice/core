@@ -148,8 +148,7 @@ protected:
 
         @throws css::uno::Exception
      */
-    virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-        throw (css::uno::Exception, std::exception);
+    virtual void FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const;
 
     /** for items that can not be mapped directly to a property.
 
@@ -162,8 +161,7 @@ protected:
 
         @throws css::uno::Exception
      */
-    virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-        throw( css::uno::Exception );
+    virtual bool ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet );
 
     /// Returns the pool
     SfxItemPool & GetItemPool() const { return m_rItemPool;}

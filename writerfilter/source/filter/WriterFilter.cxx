@@ -100,29 +100,29 @@ public:
     {}
 
     // XFilter
-    sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) throw (uno::RuntimeException, std::exception) override;
-    void SAL_CALL cancel() throw (uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL filter(const uno::Sequence<beans::PropertyValue>& rDescriptor) override;
+    void SAL_CALL cancel() override;
 
     // XImporter
-    void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL setTargetDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XExporter
-    void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL setSourceDocument(const uno::Reference<lang::XComponent>& xDoc) override;
 
     // XInitialization
-    void SAL_CALL initialize(const uno::Sequence<uno::Any>& rArguments) throw (uno::Exception, uno::RuntimeException, std::exception) override;
+    void SAL_CALL initialize(const uno::Sequence<uno::Any>& rArguments) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName() throw (uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception) override;
-    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
+    sal_Bool SAL_CALL supportsService(const OUString& rServiceName) override;
+    uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     void putPropertiesToDocumentGrabBag(const comphelper::SequenceAsHashMap& rProperties);
 
 };
 
-sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor) throw (uno::RuntimeException, std::exception)
+sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDescriptor)
 {
     if (m_xSrcDoc.is())
     {
@@ -263,11 +263,11 @@ sal_Bool WriterFilter::filter(const uno::Sequence< beans::PropertyValue >& aDesc
 }
 
 
-void WriterFilter::cancel() throw (uno::RuntimeException, std::exception)
+void WriterFilter::cancel()
 {
 }
 
-void WriterFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+void WriterFilter::setTargetDocument(const uno::Reference< lang::XComponent >& xDoc)
 {
     m_xDstDoc = xDoc;
 
@@ -301,28 +301,28 @@ void WriterFilter::setTargetDocument(const uno::Reference< lang::XComponent >& x
     xSettings->setPropertyValue("DoNotCaptureDrawObjsOnPage", uno::makeAny(true));
 }
 
-void WriterFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+void WriterFilter::setSourceDocument(const uno::Reference< lang::XComponent >& xDoc)
 {
     m_xSrcDoc = xDoc;
 }
 
-void WriterFilter::initialize(const uno::Sequence< uno::Any >& /*rArguments*/) throw (uno::Exception, uno::RuntimeException, std::exception)
+void WriterFilter::initialize(const uno::Sequence< uno::Any >& /*rArguments*/)
 {
 }
 
-OUString WriterFilter::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString WriterFilter::getImplementationName()
 {
     return OUString("com.sun.star.comp.Writer.WriterFilter");
 }
 
 
-sal_Bool WriterFilter::supportsService(const OUString& rServiceName) throw (uno::RuntimeException, std::exception)
+sal_Bool WriterFilter::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 
-uno::Sequence<OUString> WriterFilter::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence<OUString> WriterFilter::getSupportedServiceNames()
 {
     uno::Sequence<OUString> aRet =
     {

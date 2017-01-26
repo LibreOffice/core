@@ -70,11 +70,10 @@ class DispatchWatcher : public ::cppu::WeakImplHelper< css::frame::XDispatchResu
         virtual ~DispatchWatcher() override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XDispachResultListener
-        virtual void SAL_CALL dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispatchFinished( const css::frame::DispatchResultEvent& aEvent ) override;
 
         // execute new dispatch request
         bool executeDispatchRequests( const std::vector<DispatchRequest>& aDispatches, bool bNoTerminate );

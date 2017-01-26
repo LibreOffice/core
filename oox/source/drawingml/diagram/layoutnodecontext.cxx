@@ -158,8 +158,7 @@ public:
         {
         }
 
-    virtual ContextHandlerRef onCreateContext( ::sal_Int32 aElement, const AttributeList& rAttribs )
-        throw (SAXException, RuntimeException) override
+    virtual ContextHandlerRef onCreateContext( ::sal_Int32 aElement, const AttributeList& rAttribs ) override
         {
             sal_Int32 nIdx =  LayoutNodeContext::tagToVarIdx( getBaseToken( aElement ) );
             if( nIdx != -1 )

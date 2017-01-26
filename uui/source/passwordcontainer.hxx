@@ -134,25 +134,20 @@ public:
     virtual ~PasswordContainerInteractionHandler() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     virtual sal_Bool SAL_CALL
-    supportsService( const OUString& ServiceName )
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    supportsService( const OUString& ServiceName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-    getSupportedServiceNames()
-        throw ( css::uno::RuntimeException, std::exception ) override;
+    getSupportedServiceNames() override;
 
     // XInteractionHandler2
     virtual void SAL_CALL
-    handle( const css::uno::Reference< css::task::XInteractionRequest >& Request )
-        throw (css::uno::RuntimeException, std::exception) override;
+    handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
     virtual sal_Bool SAL_CALL
-    handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request )
-        throw (css::uno::RuntimeException, std::exception) override;
+    handleInteractionRequest( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
     // Non-UNO interfaces
     static OUString

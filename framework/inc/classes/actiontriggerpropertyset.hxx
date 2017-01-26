@@ -50,19 +50,18 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
         FWE_DLLPUBLIC virtual ~ActionTriggerPropertySet() override;
 
         // XInterface
-        virtual FWE_DLLPUBLIC css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual FWE_DLLPUBLIC css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
         virtual FWE_DLLPUBLIC void SAL_CALL acquire() throw () override;
         virtual FWE_DLLPUBLIC void SAL_CALL release() throw () override;
 
         // XServiceInfo
-        virtual FWE_DLLPUBLIC OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual FWE_DLLPUBLIC sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual FWE_DLLPUBLIC css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual FWE_DLLPUBLIC OUString SAL_CALL getImplementationName(  ) override;
+        virtual FWE_DLLPUBLIC sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual FWE_DLLPUBLIC css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // XTypeProvider
-        virtual FWE_DLLPUBLIC css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual FWE_DLLPUBLIC css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual FWE_DLLPUBLIC css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual FWE_DLLPUBLIC css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     private:
 
@@ -71,19 +70,16 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
         virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any&       aConvertedValue,
                                                             css::uno::Any&       aOldValue,
                                                             sal_Int32                       nHandle,
-                                                            const css::uno::Any& aValue          )
-            throw( css::lang::IllegalArgumentException ) override;
+                                                            const css::uno::Any& aValue          ) override;
 
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& aValue )
-            throw( css::uno::Exception, std::exception ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& aValue ) override;
 
         using cppu::OPropertySetHelper::getFastPropertyValue;
         virtual void SAL_CALL getFastPropertyValue( css::uno::Any& aValue, sal_Int32 nHandle ) const override;
 
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
 
         static const css::uno::Sequence< css::beans::Property > impl_getStaticPropertyDescriptor();
 
@@ -93,19 +89,19 @@ class ActionTriggerPropertySet :  private cppu::BaseMutex,
         bool impl_tryToChangeProperty(  const   OUString&            aCurrentValue   ,
                                         const   css::uno::Any&       aNewValue       ,
                                             css::uno::Any&           aOldValue       ,
-                                            css::uno::Any&           aConvertedValue ) throw( css::lang::IllegalArgumentException );
+                                            css::uno::Any&           aConvertedValue );
 
         /// @throws css::lang::IllegalArgumentException
         bool impl_tryToChangeProperty(  const   css::uno::Reference< css::awt::XBitmap >&  xBitmap,
                                         const   css::uno::Any&   aNewValue       ,
                                             css::uno::Any&           aOldValue       ,
-                                            css::uno::Any&           aConvertedValue ) throw( css::lang::IllegalArgumentException );
+                                            css::uno::Any&           aConvertedValue );
 
         /// @throws css::lang::IllegalArgumentException
         bool impl_tryToChangeProperty(  const   css::uno::Reference< css::uno::XInterface >& xInterface,
                                         const   css::uno::Any&   aNewValue       ,
                                             css::uno::Any&           aOldValue       ,
-                                            css::uno::Any&           aConvertedValue ) throw( css::lang::IllegalArgumentException );
+                                            css::uno::Any&           aConvertedValue );
 
         //  members
 

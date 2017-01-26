@@ -119,37 +119,34 @@ public:
 
     SfxClassificationParser();
 
-    void SAL_CALL startDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL startDocument() override;
 
-    void SAL_CALL endDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL endDocument() override;
 
-    void SAL_CALL startElement(const OUString& aName, const uno::Reference<xml::sax::XAttributeList>& xAttribs)
-    throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL startElement(const OUString& aName, const uno::Reference<xml::sax::XAttributeList>& xAttribs) override;
 
-    void SAL_CALL endElement(const OUString& aName) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL endElement(const OUString& aName) override;
 
-    void SAL_CALL characters(const OUString& aChars) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL characters(const OUString& aChars) override;
 
-    void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL ignorableWhitespace(const OUString& aWhitespaces) override;
 
-    void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL processingInstruction(const OUString& aTarget, const OUString& aData) override;
 
-    void SAL_CALL setDocumentLocator(const uno::Reference<xml::sax::XLocator>& xLocator)
-    throw (xml::sax::SAXException, uno::RuntimeException, std::exception) override;
+    void SAL_CALL setDocumentLocator(const uno::Reference<xml::sax::XLocator>& xLocator) override;
 };
 
 SfxClassificationParser::SfxClassificationParser() = default;
 
-void SAL_CALL SfxClassificationParser::startDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL SfxClassificationParser::startDocument()
 {
 }
 
-void SAL_CALL SfxClassificationParser::endDocument() throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL SfxClassificationParser::endDocument()
 {
 }
 
 void SAL_CALL SfxClassificationParser::startElement(const OUString& rName, const uno::Reference<xml::sax::XAttributeList>& xAttribs)
-throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     if (rName == "baf:PolicyAuthorityName")
     {
@@ -235,7 +232,7 @@ throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
     }
 }
 
-void SAL_CALL SfxClassificationParser::endElement(const OUString& rName) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL SfxClassificationParser::endElement(const OUString& rName)
 {
     if (rName == "baf:PolicyAuthorityName")
         m_bInPolicyAuthorityName = false;
@@ -282,7 +279,7 @@ void SAL_CALL SfxClassificationParser::endElement(const OUString& rName) throw (
     }
 }
 
-void SAL_CALL SfxClassificationParser::characters(const OUString& rChars) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL SfxClassificationParser::characters(const OUString& rChars)
 {
     if (m_bInPolicyAuthorityName)
         m_aPolicyAuthorityName += rChars;
@@ -300,15 +297,15 @@ void SAL_CALL SfxClassificationParser::characters(const OUString& rChars) throw 
         m_aValue += rChars;
 }
 
-void SAL_CALL SfxClassificationParser::ignorableWhitespace(const OUString& /*rWhitespace*/) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL SfxClassificationParser::ignorableWhitespace(const OUString& /*rWhitespace*/)
 {
 }
 
-void SAL_CALL SfxClassificationParser::processingInstruction(const OUString& /*rTarget*/, const OUString& /*rData*/) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL SfxClassificationParser::processingInstruction(const OUString& /*rTarget*/, const OUString& /*rData*/)
 {
 }
 
-void SAL_CALL SfxClassificationParser::setDocumentLocator(const uno::Reference<xml::sax::XLocator>& /*xLocator*/) throw (xml::sax::SAXException, uno::RuntimeException, std::exception)
+void SAL_CALL SfxClassificationParser::setDocumentLocator(const uno::Reference<xml::sax::XLocator>& /*xLocator*/)
 {
 }
 

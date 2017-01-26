@@ -58,7 +58,7 @@ BibToolBarListener::~BibToolBarListener()
 {
 }
 
-void BibToolBarListener::statusChanged(const css::frame::FeatureStateEvent& rEvt)throw( css::uno::RuntimeException, std::exception )
+void BibToolBarListener::statusChanged(const css::frame::FeatureStateEvent& rEvt)
 {
     if(rEvt.FeatureURL.Complete == aCommand)
     {
@@ -84,7 +84,7 @@ BibTBListBoxListener::~BibTBListBoxListener()
 {
 }
 
-void BibTBListBoxListener::statusChanged(const css::frame::FeatureStateEvent& rEvt)throw( css::uno::RuntimeException, std::exception )
+void BibTBListBoxListener::statusChanged(const css::frame::FeatureStateEvent& rEvt)
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
@@ -122,7 +122,7 @@ BibTBQueryMenuListener::~BibTBQueryMenuListener()
 {
 }
 
-void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw( uno::RuntimeException, std::exception )
+void BibTBQueryMenuListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
@@ -158,7 +158,7 @@ BibTBEditListener::~BibTBEditListener()
 {
 }
 
-void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)throw( uno::RuntimeException, std::exception )
+void BibTBEditListener::statusChanged(const frame::FeatureStateEvent& rEvt)
 {
     if(rEvt.FeatureURL.Complete == GetCommand())
     {
@@ -518,7 +518,6 @@ IMPL_LINK_NOARG( BibToolBar, MenuHdl, ToolBox*, void)
 }
 
 void    BibToolBar::statusChanged(const frame::FeatureStateEvent& rEvent)
-                                            throw( uno::RuntimeException )
 {
     for(uno::Reference<frame::XStatusListener> & rListener : aListenerArr)
     {

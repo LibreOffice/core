@@ -127,8 +127,6 @@ Reference< XDispatch > SAL_CALL HelpInterceptor_Impl::queryDispatch(
 
     const URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
 
-    throw( RuntimeException, std::exception )
-
 {
     Reference< XDispatch > xResult;
     if ( m_xSlaveDispatcher.is() )
@@ -151,8 +149,6 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatc
 
     const Sequence< DispatchDescriptor >& aDescripts )
 
-    throw( RuntimeException, std::exception )
-
 {
     Sequence< Reference< XDispatch > > aReturn( aDescripts.getLength() );
     Reference< XDispatch >* pReturn = aReturn.getArray();
@@ -169,16 +165,12 @@ Sequence < Reference < XDispatch > > SAL_CALL HelpInterceptor_Impl::queryDispatc
 
 Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getSlaveDispatchProvider()
 
-    throw( RuntimeException, std::exception )
-
 {
     return m_xSlaveDispatcher;
 }
 
 
 void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< XDispatchProvider >& xNewSlave )
-
-    throw( RuntimeException, std::exception )
 
 {
     m_xSlaveDispatcher = xNewSlave;
@@ -187,16 +179,12 @@ void SAL_CALL HelpInterceptor_Impl::setSlaveDispatchProvider( const Reference< X
 
 Reference< XDispatchProvider > SAL_CALL HelpInterceptor_Impl::getMasterDispatchProvider()
 
-    throw( RuntimeException, std::exception )
-
 {
     return m_xMasterDispatcher;
 }
 
 
 void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< XDispatchProvider >& xNewMaster )
-
-    throw( RuntimeException, std::exception )
 
 {
     m_xMasterDispatcher = xNewMaster;
@@ -207,8 +195,6 @@ void SAL_CALL HelpInterceptor_Impl::setMasterDispatchProvider( const Reference< 
 
 Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 
-    throw( RuntimeException, std::exception )
-
 {
     Sequence<OUString> aURLList { "vnd.sun.star.help://*" };
     return aURLList;
@@ -218,7 +204,7 @@ Sequence< OUString > SAL_CALL HelpInterceptor_Impl::getInterceptedURLs()
 // XDispatch
 
 void SAL_CALL HelpInterceptor_Impl::dispatch(
-    const URL& aURL, const Sequence< css::beans::PropertyValue >& ) throw( RuntimeException, std::exception )
+    const URL& aURL, const Sequence< css::beans::PropertyValue >& )
 {
     bool bBack = aURL.Complete == ".uno:Backward";
     if ( bBack || aURL.Complete == ".uno:Forward" )
@@ -256,7 +242,7 @@ void SAL_CALL HelpInterceptor_Impl::dispatch(
 
 
 void SAL_CALL HelpInterceptor_Impl::addStatusListener(
-    const Reference< XStatusListener >& xControl, const URL& ) throw( RuntimeException, std::exception )
+    const Reference< XStatusListener >& xControl, const URL& )
 {
     DBG_ASSERT( !m_xListener.is(), "listener already exists" );
     m_xListener = xControl;
@@ -264,7 +250,7 @@ void SAL_CALL HelpInterceptor_Impl::addStatusListener(
 
 
 void SAL_CALL HelpInterceptor_Impl::removeStatusListener(
-    const Reference< XStatusListener >&, const URL&) throw( RuntimeException, std::exception )
+    const Reference< XStatusListener >&, const URL&)
 {
     m_xListener = nullptr;
 }
@@ -279,7 +265,6 @@ HelpListener_Impl::HelpListener_Impl( HelpInterceptor_Impl* pInter )
 
 
 void SAL_CALL HelpListener_Impl::statusChanged( const css::frame::FeatureStateEvent& Event )
-    throw( css::uno::RuntimeException, std::exception )
 {
     INetURLObject aObj( Event.FeatureURL.Complete );
     aFactory = aObj.GetHost();
@@ -288,7 +273,6 @@ void SAL_CALL HelpListener_Impl::statusChanged( const css::frame::FeatureStateEv
 
 
 void SAL_CALL HelpListener_Impl::disposing( const css::lang::EventObject& )
-    throw( css::uno::RuntimeException, std::exception )
 {
     pInterceptor->removeStatusListener( this, css::util::URL() );
     pInterceptor = nullptr;
@@ -307,12 +291,12 @@ HelpStatusListener_Impl::~HelpStatusListener_Impl()
 }
 
 void HelpStatusListener_Impl::statusChanged(
-    const FeatureStateEvent& rEvent ) throw( RuntimeException, std::exception )
+    const FeatureStateEvent& rEvent )
 {
     aStateEvent = rEvent;
 }
 
-void HelpStatusListener_Impl::disposing( const EventObject& ) throw( RuntimeException, std::exception )
+void HelpStatusListener_Impl::disposing( const EventObject& )
 {
     xDispatch->removeStatusListener(this, css::util::URL());
     xDispatch = nullptr;

@@ -42,17 +42,14 @@ protected:
     // ____ XChartTypeTemplate ____
     virtual sal_Bool SAL_CALL matchesTemplate(
         const css::uno::Reference< css::chart2::XDiagram >& xDiagram,
-        sal_Bool bAdaptProperties )
-        throw (css::uno::RuntimeException, std::exception) override;
+        sal_Bool bAdaptProperties ) override;
     virtual css::uno::Reference< css::chart2::XChartType > SAL_CALL
-        getChartTypeForNewSeries( const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes )
-        throw (css::uno::RuntimeException, std::exception) override;
+        getChartTypeForNewSeries( const css::uno::Sequence< css::uno::Reference< css::chart2::XChartType > >& aFormerlyUsedChartTypes ) override;
     virtual void SAL_CALL applyStyle(
         const css::uno::Reference< css::chart2::XDataSeries >& xSeries,
         ::sal_Int32 nChartTypeGroupIndex,
         ::sal_Int32 nSeriesIndex,
-        ::sal_Int32 nSeriesCount )
-        throw (css::uno::RuntimeException, std::exception) override;
+        ::sal_Int32 nSeriesCount ) override;
 
     // ____ ChartTypeTemplate ____
     virtual css::uno::Reference< css::chart2::XChartType >

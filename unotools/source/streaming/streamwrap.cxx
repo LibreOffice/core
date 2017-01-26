@@ -46,7 +46,6 @@ OInputStreamWrapper::~OInputStreamWrapper()
 }
 
 sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead)
-                throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
 {
     checkConnected();
 
@@ -68,7 +67,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readBytes(css::uno::Sequence< sal_Int8 >
     return nRead;
 }
 
-sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead)
 {
     checkError();
 
@@ -84,7 +83,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::readSomeBytes(css::uno::Sequence< sal_In
         return readBytes(aData, nMaxBytesToRead);
 }
 
-void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkError();
@@ -93,7 +92,7 @@ void SAL_CALL OInputStreamWrapper::skipBytes(sal_Int32 nBytesToSkip) throw( css:
     checkError();
 }
 
-sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( css::io::NotConnectedException, css::uno::RuntimeException, std::exception )
+sal_Int32 SAL_CALL OInputStreamWrapper::available()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
@@ -111,7 +110,7 @@ sal_Int32 SAL_CALL OInputStreamWrapper::available() throw( css::io::NotConnected
     return nAvailable;
 }
 
-void SAL_CALL OInputStreamWrapper::closeInput() throw( css::io::NotConnectedException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OInputStreamWrapper::closeInput()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
@@ -151,7 +150,7 @@ OSeekableInputStreamWrapper::OSeekableInputStreamWrapper(SvStream* _pStream, boo
     SetStream( _pStream, _bOwner );
 }
 
-void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException, std::exception)
+void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
@@ -160,7 +159,7 @@ void SAL_CALL OSeekableInputStreamWrapper::seek( sal_Int64 _nLocation ) throw (I
     checkError();
 }
 
-sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  ) throw (IOException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
@@ -170,7 +169,7 @@ sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getPosition(  ) throw (IOExcepti
     return (sal_Int64)nPos;
 }
 
-sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  ) throw (IOException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL OSeekableInputStreamWrapper::getLength(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkConnected();
@@ -195,7 +194,7 @@ OOutputStreamWrapper::OOutputStreamWrapper(SvStream& _rStream):
 
 OOutputStreamWrapper::~OOutputStreamWrapper() {}
 
-void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData)
 {
     sal_uInt32 nWritten = rStream.WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = rStream.GetError();
@@ -207,13 +206,13 @@ void SAL_CALL OOutputStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int
     }
 }
 
-void SAL_CALL OOutputStreamWrapper::flush() throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OOutputStreamWrapper::flush()
 {
     rStream.Flush();
     checkError();
 }
 
-void SAL_CALL OOutputStreamWrapper::closeOutput() throw( css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception )
+void SAL_CALL OOutputStreamWrapper::closeOutput()
 {
 }
 
@@ -233,7 +232,7 @@ OSeekableOutputStreamWrapper::OSeekableOutputStreamWrapper(SvStream& _rStream)
 
 OSeekableOutputStreamWrapper::~OSeekableOutputStreamWrapper() {}
 
-Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
+Any SAL_CALL OSeekableOutputStreamWrapper::queryInterface( const Type& _rType )
 {
     Any aReturn = OOutputStreamWrapper::queryInterface(_rType);
     if (!aReturn.hasValue())
@@ -251,20 +250,20 @@ void SAL_CALL OSeekableOutputStreamWrapper::release(  ) throw ()
     OOutputStreamWrapper::release();
 }
 
-void SAL_CALL OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation ) throw (IllegalArgumentException, IOException, RuntimeException, std::exception)
+void SAL_CALL OSeekableOutputStreamWrapper::seek( sal_Int64 _nLocation )
 {
     rStream.Seek((sal_uInt32)_nLocation);
     checkError();
 }
 
-sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getPosition(  ) throw (IOException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getPosition(  )
 {
     sal_uInt32 nPos = rStream.Tell();
     checkError();
     return (sal_Int64)nPos;
 }
 
-sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  ) throw (IOException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL OSeekableOutputStreamWrapper::getLength(  )
 {
     sal_uInt32 nCurrentPos = rStream.Tell();
     checkError();
@@ -285,17 +284,17 @@ OStreamWrapper::OStreamWrapper(SvStream& _rStream)
     SetStream( &_rStream, false );
 }
 
-css::uno::Reference< css::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  ) throw (css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::io::XInputStream > SAL_CALL OStreamWrapper::getInputStream(  )
 {
     return this;
 }
 
-css::uno::Reference< css::io::XOutputStream > SAL_CALL OStreamWrapper::getOutputStream(  ) throw (css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::io::XOutputStream > SAL_CALL OStreamWrapper::getOutputStream(  )
 {
     return this;
 }
 
-void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData) throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& aData)
 {
     sal_uInt32 nWritten = m_pSvStream->WriteBytes(aData.getConstArray(), aData.getLength());
     ErrCode err = m_pSvStream->GetError();
@@ -307,18 +306,18 @@ void SAL_CALL OStreamWrapper::writeBytes(const css::uno::Sequence< sal_Int8 >& a
     }
 }
 
-void SAL_CALL OStreamWrapper::flush() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OStreamWrapper::flush()
 {
     m_pSvStream->Flush();
     if (m_pSvStream->GetError() != ERRCODE_NONE)
         throw css::io::NotConnectedException(OUString(),static_cast<css::uno::XWeak*>(this));
 }
 
-void SAL_CALL OStreamWrapper::closeOutput() throw(css::io::NotConnectedException, css::io::BufferSizeExceededException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OStreamWrapper::closeOutput()
 {
 }
 
-void SAL_CALL OStreamWrapper::truncate() throw(css::io::IOException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OStreamWrapper::truncate()
 {
     m_pSvStream->SetStreamSize(0);
 }

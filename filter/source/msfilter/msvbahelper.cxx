@@ -509,7 +509,7 @@ OUString VBAMacroResolver_getImplementationName()
     return OUString( "com.sun.star.comp.vba.VBAMacroResolver" );
 }
 
-uno::Reference< uno::XInterface > SAL_CALL VBAMacroResolver_createInstance( const uno::Reference< uno::XComponentContext >& ) throw (uno::Exception)
+uno::Reference< uno::XInterface > SAL_CALL VBAMacroResolver_createInstance( const uno::Reference< uno::XComponentContext >& )
 {
     return static_cast< ::cppu::OWeakObject* >( new VBAMacroResolver );
 }
@@ -526,24 +526,24 @@ VBAMacroResolver::~VBAMacroResolver()
 
 // com.sun.star.lang.XServiceInfo interface -----------------------------------
 
-OUString SAL_CALL VBAMacroResolver::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL VBAMacroResolver::getImplementationName()
 {
     return VBAMacroResolver_getImplementationName();
 }
 
-sal_Bool SAL_CALL VBAMacroResolver::supportsService( const OUString& rService ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL VBAMacroResolver::supportsService( const OUString& rService )
 {
     return cppu::supportsService(this, rService);
 }
 
-uno::Sequence< OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL VBAMacroResolver::getSupportedServiceNames()
 {
     return VBAMacroResolver_getSupportedServiceNames();
 }
 
 // com.sun.star.lang.XInitialization interface --------------------------------
 
-void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rArgs ) throw (uno::Exception, uno::RuntimeException, std::exception)
+void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rArgs )
 {
     OSL_ENSURE( rArgs.getLength() < 2, "VBAMacroResolver::initialize - missing arguments" );
     if( rArgs.getLength() < 2 )
@@ -563,7 +563,7 @@ void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rAr
 
 // com.sun.star.script.vba.XVBAMacroResolver interface ------------------------
 
-OUString SAL_CALL VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& rVBAMacroName ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+OUString SAL_CALL VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& rVBAMacroName )
 {
     if( !mpObjShell )
         throw uno::RuntimeException();
@@ -594,7 +594,7 @@ OUString SAL_CALL VBAMacroResolver::resolveVBAMacroToScriptURL( const OUString& 
     return makeMacroURL( aInfo.msResolvedMacro );
 }
 
-OUString SAL_CALL VBAMacroResolver::resolveScriptURLtoVBAMacro( const OUString& /*rScriptURL*/ ) throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
+OUString SAL_CALL VBAMacroResolver::resolveScriptURLtoVBAMacro( const OUString& /*rScriptURL*/ )
 {
     OSL_ENSURE( false, "VBAMacroResolver::resolveScriptURLtoVBAMacro - not implemented" );
     throw uno::RuntimeException();
@@ -616,7 +616,7 @@ bool getModifier( char c, sal_uInt16& mod )
 }
 
 /// @throws uno::RuntimeException
-sal_uInt16 parseChar( char c ) throw ( uno::RuntimeException )
+sal_uInt16 parseChar( char c )
 {
     sal_uInt16 nVclKey = 0;
     // do we care about locale here for isupper etc. ? probably not
@@ -680,7 +680,7 @@ KeyCodeEntry const aMSKeyCodesData[] = {
     { "F15", KEY_F15 },
 };
 
-awt::KeyEvent parseKeyEvent( const OUString& Key ) throw ( uno::RuntimeException )
+awt::KeyEvent parseKeyEvent( const OUString& Key )
 {
     static std::map< OUString, sal_uInt16 > s_KeyCodes;
     if ( s_KeyCodes.empty() )
@@ -732,7 +732,7 @@ awt::KeyEvent parseKeyEvent( const OUString& Key ) throw ( uno::RuntimeException
     return aKeyEvent;
 }
 
-void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, const awt::KeyEvent& rKeyEvent, const OUString& rMacroName ) throw (uno::RuntimeException, std::exception)
+void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, const awt::KeyEvent& rKeyEvent, const OUString& rMacroName )
 {
     OUString MacroName( rMacroName );
     if ( !MacroName.isEmpty() )

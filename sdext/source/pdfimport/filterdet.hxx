@@ -49,17 +49,13 @@ public:
 
     // XExtendedFilterDetection
     virtual OUString SAL_CALL detect( css::uno::Sequence<
-                                               css::beans::PropertyValue >& io_rDescriptor )
-        throw (css::uno::RuntimeException, std::exception) override;
+                                               css::beans::PropertyValue >& io_rDescriptor ) override;
 
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 

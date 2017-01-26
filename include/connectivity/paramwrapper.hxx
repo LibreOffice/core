@@ -91,16 +91,16 @@ namespace param
 
         DECLARE_XINTERFACE()
 
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
         // OPropertySetHelper
-        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) throw( css::lang::IllegalArgumentException ) override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) throw( css::uno::Exception, std::exception ) override;
+        virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& rConvertedValue, css::uno::Any& rOldValue, sal_Int32 nHandle, const css::uno::Any& rValue) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const css::uno::Any& rValue ) override;
         virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
         // pseudo-XComponent
@@ -152,15 +152,15 @@ namespace param
         ParameterWrapperContainer( const css::uno::Reference< css::sdb::XSingleSelectQueryAnalyzer >& _rxComposer );
 
         // css::container::XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) override;
-        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Type SAL_CALL getElementType() override;
+        virtual sal_Bool SAL_CALL hasElements() override;
 
         // css::container::XEnumerationAccess
-        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
         // css::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException, std::exception ) override;
-        virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) throw( css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Int32 SAL_CALL getCount() override;
+        virtual css::uno::Any SAL_CALL getByIndex(sal_Int32 _rIndex) override;
 
     public:
         const Parameters& getParameters() { return m_aParameters; }

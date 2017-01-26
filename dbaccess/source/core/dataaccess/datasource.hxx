@@ -109,33 +109,33 @@ public:
         );
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
     // css::sdbcx::XTablesSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) override;
 
 // css::lang::XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 
 // css::uno::XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire() throw( ) override;
     virtual void SAL_CALL release() throw( ) override;
 
 // css::lang::XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 // OComponentHelper
     virtual void SAL_CALL disposing() override;
 
 // css::beans::XPropertySet
-    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
 // comphelper::OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
@@ -147,43 +147,41 @@ public:
                             css::uno::Any & rConvertedValue,
                             css::uno::Any & rOldValue,
                             sal_Int32 nHandle,
-                            const css::uno::Any& rValue )
-                                throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+                            const css::uno::Any& rValue ) override;
     virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const css::uno::Any& rValue
-                                                 )
-                                                 throw (css::uno::Exception, std::exception) override;
+                                                 ) override;
     virtual void SAL_CALL getFastPropertyValue( css::uno::Any& rValue, sal_Int32 nHandle ) const override;
 
 // css::sdb::XCompletedConnection
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
 
 // css::sdbc::XDataSource
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& user, const OUString& password ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getLoginTimeout(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& user, const OUString& password ) override;
+    virtual void SAL_CALL setLoginTimeout( sal_Int32 seconds ) override;
+    virtual sal_Int32 SAL_CALL getLoginTimeout(  ) override;
 
 //::css::sdb::XBookmarksSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getBookmarks(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getBookmarks(  ) override;
 
 //::css::sdb::XQueryDefinitionsSupplier
-    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getQueryDefinitions(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getQueryDefinitions(  ) override;
 
 // css::sdbc::XIsolatedConnection
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getIsolatedConnection( const OUString& user, const OUString& password ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getIsolatedConnectionWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getIsolatedConnection( const OUString& user, const OUString& password ) override;
+    virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getIsolatedConnectionWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler ) override;
 
 // XFlushable
-    virtual void SAL_CALL flush(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL flush(  ) override;
+    virtual void SAL_CALL addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+    virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
 
     // XFlushListener
-    virtual void SAL_CALL flushed( const css::lang::EventObject& rEvent ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL flushed( const css::lang::EventObject& rEvent ) override;
 
     // XDocumentDataSource
-    virtual css::uno::Reference< css::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sdb::XOfficeDatabaseDocument > SAL_CALL getDatabaseDocument() override;
 
 protected:
     // ModelDependentComponent overridables
@@ -204,10 +202,10 @@ private:
 
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& user, const OUString& password , bool _bIsolated) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception);
+    css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection( const OUString& user, const OUString& password , bool _bIsolated);
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::sdbc::XConnection > SAL_CALL connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler , bool _bIsolated) throw(css::sdbc::SQLException, css::uno::RuntimeException);
+    css::uno::Reference< css::sdbc::XConnection > SAL_CALL connectWithCompletion( const css::uno::Reference< css::task::XInteractionHandler >& handler , bool _bIsolated);
 
 protected:
     using ::cppu::OPropertySetHelper::getFastPropertyValue;

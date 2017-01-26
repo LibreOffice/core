@@ -144,18 +144,12 @@ protected:
     using vcl::unohelper::DragAndDropClient::dragEnter;
     using vcl::unohelper::DragAndDropClient::dragExit;
     using vcl::unohelper::DragAndDropClient::dragOver;
-    virtual void dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& dge)
-                    throw (css::uno::RuntimeException, std::exception) override;
-    virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde)
-                    throw (css::uno::RuntimeException, std::exception) override;
-    virtual void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde)
-                    throw (css::uno::RuntimeException, std::exception) override;
-    virtual void dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee)
-                    throw (css::uno::RuntimeException, std::exception) override;
-    virtual void dragExit(const css::datatransfer::dnd::DropTargetEvent& dte)
-                    throw (css::uno::RuntimeException, std::exception) override;
-    virtual void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde)
-                    throw (css::uno::RuntimeException, std::exception) override;
+    virtual void dragGestureRecognized(const css::datatransfer::dnd::DragGestureEvent& dge) override;
+    virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde) override;
+    virtual void drop(const css::datatransfer::dnd::DropTargetDropEvent& dtde) override;
+    virtual void dragEnter(const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee) override;
+    virtual void dragExit(const css::datatransfer::dnd::DropTargetEvent& dte) override;
+    virtual void dragOver(const css::datatransfer::dnd::DropTargetDragEvent& dtde) override;
 
 protected:
     Edit(WindowType nType);

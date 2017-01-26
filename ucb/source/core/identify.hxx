@@ -33,10 +33,8 @@ public:
     virtual ~ContentIdentifier() override;
 
     // XContentIdentifier
-    virtual OUString SAL_CALL getContentIdentifier()
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getContentProviderScheme()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getContentIdentifier() override;
+    virtual OUString SAL_CALL getContentProviderScheme() override;
 
 private:
     OUString m_aContentId;

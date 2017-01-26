@@ -108,23 +108,23 @@ namespace
     }
 }
 
-OUString SAL_CALL OTableController::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL OTableController::getImplementationName()
 {
     return getImplementationName_Static();
 }
 
-OUString OTableController::getImplementationName_Static() throw( RuntimeException )
+OUString OTableController::getImplementationName_Static()
 {
     return OUString("org.openoffice.comp.dbu.OTableDesign");
 }
 
-Sequence< OUString> OTableController::getSupportedServiceNames_Static() throw( RuntimeException )
+Sequence< OUString> OTableController::getSupportedServiceNames_Static()
 {
     Sequence<OUString> aSupported { "com.sun.star.sdb.TableDesign" };
     return aSupported;
 }
 
-Sequence< OUString> SAL_CALL OTableController::getSupportedServiceNames() throw(RuntimeException, std::exception)
+Sequence< OUString> SAL_CALL OTableController::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
@@ -534,7 +534,7 @@ bool OTableController::Construct(vcl::Window* pParent)
     return true;
 }
 
-sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL OTableController::suspend(sal_Bool /*_bSuspend*/)
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return true;
@@ -620,7 +620,7 @@ void OTableController::impl_onModifyChanged()
     InvalidateFeature( SID_INDEXDESIGN );
 }
 
-void SAL_CALL OTableController::disposing( const EventObject& _rSource ) throw(RuntimeException, std::exception)
+void SAL_CALL OTableController::disposing( const EventObject& _rSource )
 {
     if ( _rSource.Source == m_xTable )
     {   // some deleted our table so we have a new one
@@ -900,8 +900,6 @@ Reference<XNameAccess> OTableController::getKeyColumns() const
 }
 
 bool OTableController::checkColumns(bool _bNew)
-    throw(css::sdbc::SQLException,
-          css::uno::RuntimeException, std::exception)
 {
     bool bOk = true;
     bool bFoundPKey = false;

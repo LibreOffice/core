@@ -48,28 +48,28 @@ public:
     // XInterface
     virtual void SAL_CALL acquire() throw() override { SvNumberFormatsSupplierObj::acquire(); }
     virtual void SAL_CALL release() throw() override { SvNumberFormatsSupplierObj::release(); }
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) throw(css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override
         { return SvNumberFormatsSupplierObj::queryInterface(_rType); }
 
     // XAggregation
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& _rType ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw(css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XNumberFormatsSupplier
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
-                getNumberFormatSettings() throw(css::uno::RuntimeException, std::exception) override;
+                getNumberFormatSettings() override;
     virtual css::uno::Reference< css::util::XNumberFormats > SAL_CALL
-                getNumberFormats() throw(css::uno::RuntimeException, std::exception) override;
+                getNumberFormats() override;
 
     // XUnoTunnler
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
 protected:
     void implEnsureFormatter();

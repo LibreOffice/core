@@ -51,21 +51,17 @@ public:
 
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void writeLOC( ZipEntry *pEntry, bool bEncrypt = false )
-        throw(css::io::IOException, css::uno::RuntimeException);
+    void writeLOC( ZipEntry *pEntry, bool bEncrypt = false );
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void rawWrite( const css::uno::Sequence< sal_Int8 >& rBuffer )
-        throw(css::io::IOException, css::uno::RuntimeException);
+    void rawWrite( const css::uno::Sequence< sal_Int8 >& rBuffer );
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void rawCloseEntry( bool bEncrypt = false )
-        throw(css::io::IOException, css::uno::RuntimeException);
+    void rawCloseEntry( bool bEncrypt = false );
 
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void finish()
-        throw(css::io::IOException, css::uno::RuntimeException, std::exception);
+    void finish();
     const css::uno::Reference< css::io::XOutputStream >& getStream();
 
     static sal_uInt32 getCurrentDosTime();
@@ -74,16 +70,13 @@ public:
 private:
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength)
-        throw(css::io::IOException, css::uno::RuntimeException);
+    void writeEND(sal_uInt32 nOffset, sal_uInt32 nLength);
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void writeCEN( const ZipEntry &rEntry )
-        throw(css::io::IOException, css::uno::RuntimeException);
+    void writeCEN( const ZipEntry &rEntry );
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void writeEXT( const ZipEntry &rEntry )
-        throw(css::io::IOException, css::uno::RuntimeException);
+    void writeEXT( const ZipEntry &rEntry );
 
     // ScheduledThread handling helpers
     void consumeScheduledThreadEntry(ZipOutputEntry* pCandidate);

@@ -97,12 +97,10 @@ class SdGRFFilter_ImplInteractionHdl : public ::cppu::WeakImplHelper< css::task:
 
     sal_uInt16 GetErrorCode() const { return nFilterError; };
 
-    virtual void SAL_CALL   handle( const css::uno::Reference< css::task::XInteractionRequest >& )
-                                throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL   handle( const css::uno::Reference< css::task::XInteractionRequest >& ) override;
 };
 
 void SdGRFFilter_ImplInteractionHdl::handle( const css::uno::Reference< css::task::XInteractionRequest >& xRequest )
-        throw( css::uno::RuntimeException, std::exception )
 {
     if( !m_xInter.is() )
         return;

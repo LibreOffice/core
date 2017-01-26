@@ -35,7 +35,6 @@ namespace {
 css::uno::Reference<css::uno::XInterface> SAL_CALL FrameControl_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &
         rServiceManager)
-    throw (css::uno::Exception)
 {
     return static_cast<cppu::OWeakObject *>(
         new unocontrols::FrameControl(
@@ -46,7 +45,6 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL FrameControl_createInstance(
 css::uno::Reference<css::uno::XInterface> SAL_CALL ProgressBar_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &
         rServiceManager)
-    throw (css::uno::Exception)
 {
     return static_cast<cppu::OWeakObject *>(
         new unocontrols::ProgressBar(
@@ -58,7 +56,6 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL
 ProgressMonitor_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &
         rServiceManager)
-    throw (css::uno::Exception)
 {
     return static_cast<cppu::OWeakObject *>(
         new unocontrols::ProgressMonitor(
@@ -70,7 +67,6 @@ css::uno::Reference<css::uno::XInterface> SAL_CALL
 StatusIndicator_createInstance(
     css::uno::Reference<css::lang::XMultiServiceFactory> const &
         rServiceManager)
-    throw (css::uno::Exception)
 {
     return static_cast<cppu::OWeakObject *>(
         new unocontrols::StatusIndicator(

@@ -42,7 +42,7 @@ SwFilterDetect::~SwFilterDetect()
 {
 }
 
-OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor ) throw( RuntimeException, std::exception )
+OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {
     MediaDescriptor aMediaDesc( lDescriptor );
     OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME(), OUString() );
@@ -111,19 +111,19 @@ OUString SAL_CALL SwFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 }
 
 /* XServiceInfo */
-OUString SAL_CALL SwFilterDetect::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL SwFilterDetect::getImplementationName()
 {
     return OUString("com.sun.star.comp.writer.FormatDetector" );
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SwFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SwFilterDetect::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SwFilterDetect::getSupportedServiceNames()
 {
     Sequence< OUString > seqServiceNames( 3 );
     seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection";

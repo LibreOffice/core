@@ -25,7 +25,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFileURL ) throw ( uno::RuntimeException ) :
+SwVbaAddin::SwVbaAddin( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const OUString& rFileURL ) :
     SwVbaAddin_BASE( rParent, rContext ), msFileURL( rFileURL ), mbInstalled( true )
 {
 }
@@ -34,7 +34,7 @@ SwVbaAddin::~SwVbaAddin()
 {
 }
 
-OUString SAL_CALL SwVbaAddin::getName() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL SwVbaAddin::getName()
 {
     OUString sName;
     INetURLObject aURL( msFileURL );
@@ -43,29 +43,29 @@ OUString SAL_CALL SwVbaAddin::getName() throw (uno::RuntimeException, std::excep
 }
 
 void SAL_CALL
-SwVbaAddin::setName( const OUString& ) throw ( css::uno::RuntimeException, std::exception )
+SwVbaAddin::setName( const OUString& )
 {
     throw uno::RuntimeException(" Fail to set name" );
 }
 
-OUString SAL_CALL SwVbaAddin::getPath() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL SwVbaAddin::getPath()
 {
     INetURLObject aURL( msFileURL );
     aURL.CutLastName();
     return aURL.GetURLPath();
 }
 
-sal_Bool SAL_CALL SwVbaAddin::getAutoload() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaAddin::getAutoload()
 {
     return true;
 }
 
-sal_Bool SAL_CALL SwVbaAddin::getInstalled() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwVbaAddin::getInstalled()
 {
     return mbInstalled;
 }
 
-void SAL_CALL SwVbaAddin::setInstalled( sal_Bool _installed ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaAddin::setInstalled( sal_Bool _installed )
 {
     if( bool(_installed) != mbInstalled )
     {

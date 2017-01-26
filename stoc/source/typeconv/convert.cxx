@@ -245,45 +245,39 @@ class TypeConverter_Impl : public WeakImplHelper< XTypeConverter, XServiceInfo >
     // ...misc helpers...
     /// @throws CannotConvertException
     static sal_Int64 toHyper(
-        const Any& rAny, sal_Int64 min, sal_uInt64 max = SAL_UINT64_MAX )
-        throw( CannotConvertException );
+        const Any& rAny, sal_Int64 min, sal_uInt64 max = SAL_UINT64_MAX );
     /// @throws CannotConvertException
-    static double toDouble( const Any& rAny, double min = -DBL_MAX, double max = DBL_MAX )
-        throw( CannotConvertException );
+    static double toDouble( const Any& rAny, double min = -DBL_MAX, double max = DBL_MAX );
 
 public:
     TypeConverter_Impl();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-        throw( RuntimeException, std::exception ) override;
-    virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw( RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual  Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeConverter
-    virtual Any SAL_CALL convertTo( const Any& aFrom, const Type& DestinationType )
-        throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception) override;
-    virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType )
-        throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception) override;
+    virtual Any SAL_CALL convertTo( const Any& aFrom, const Type& DestinationType ) override;
+    virtual Any SAL_CALL convertToSimpleType( const Any& aFrom, TypeClass aDestinationType ) override;
 };
 
 TypeConverter_Impl::TypeConverter_Impl() {}
 
 // XServiceInfo
-OUString TypeConverter_Impl::getImplementationName() throw( RuntimeException, std::exception )
+OUString TypeConverter_Impl::getImplementationName()
 {
     return OUString("com.sun.star.comp.stoc.TypeConverter");
 }
 
 // XServiceInfo
-sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName) throw( RuntimeException, std::exception )
+sal_Bool TypeConverter_Impl::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames()
 {
     Sequence< OUString > seqNames { "com.sun.star.script.Converter" };
     return seqNames;
@@ -291,7 +285,6 @@ Sequence< OUString > TypeConverter_Impl::getSupportedServiceNames() throw( Runti
 
 
 sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt64 max )
-    throw( CannotConvertException )
 {
     sal_Int64 nRet;
     TypeClass aDestinationClass = rAny.getValueTypeClass();
@@ -406,7 +399,6 @@ sal_Int64 TypeConverter_Impl::toHyper( const Any& rAny, sal_Int64 min, sal_uInt6
 
 
 double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
-    throw( CannotConvertException )
 {
     double fRet;
     TypeClass aDestinationClass = rAny.getValueTypeClass();
@@ -487,7 +479,6 @@ double TypeConverter_Impl::toDouble( const Any& rAny, double min, double max )
 
 
 Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestType )
-    throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception)
 {
     const Type& aSourceType = rVal.getValueType();
     if (aSourceType == aDestType)
@@ -681,7 +672,6 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
 
 
 Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestinationClass )
-    throw( IllegalArgumentException, CannotConvertException, RuntimeException, std::exception )
 {
     switch (aDestinationClass)
     {

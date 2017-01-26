@@ -73,7 +73,7 @@ sdbcx::ObjectType HViews::createObject(const OUString& _rName)
 }
 
 
-void HViews::impl_refresh(  ) throw(RuntimeException)
+void HViews::impl_refresh(  )
 {
     static_cast<OHCatalog&>(m_rParent).refreshTables();
 }

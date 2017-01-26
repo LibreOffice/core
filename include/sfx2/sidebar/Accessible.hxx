@@ -49,8 +49,7 @@ public:
 
     virtual void SAL_CALL disposing() override;
     // XAccessible
-    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<css::accessibility::XAccessibleContext> SAL_CALL getAccessibleContext() override;
 
 private:
     css::uno::Reference<css::accessibility::XAccessibleContext> mxContext;

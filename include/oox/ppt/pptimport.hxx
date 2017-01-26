@@ -55,8 +55,7 @@ class PowerPointImport : public oox::core::XmlFilterBase
 {
 public:
     /// @throws css::uno::RuntimeException
-    PowerPointImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-        throw( css::uno::RuntimeException );
+    PowerPointImport( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
     virtual ~PowerPointImport() override;
 
     // from FilterBase
@@ -75,8 +74,7 @@ public:
     std::vector< SlidePersistPtr >&                         getMasterPages(){ return maMasterPages; };
     std::vector< SlidePersistPtr >&                         getNotesPages(){ return maNotesPages; };
 
-    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<   css::beans::PropertyValue >& rDescriptor )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL filter( const css::uno::Sequence<   css::beans::PropertyValue >& rDescriptor ) override;
 
     sal_Int32 getSchemeColor( sal_Int32 nToken ) const;
 
@@ -87,7 +85,7 @@ public:
 private:
     virtual GraphicHelper* implCreateGraphicHelper() const override;
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
 private:
     OUString                                       maTableStyleListPath;

@@ -47,33 +47,33 @@ public:
     UNOMemoryStream();
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XStream
-    virtual Reference< XInputStream > SAL_CALL getInputStream(  ) throw (RuntimeException, std::exception) override;
-    virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) throw (RuntimeException, std::exception) override;
+    virtual Reference< XInputStream > SAL_CALL getInputStream(  ) override;
+    virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) override;
 
     // XInputStream
-    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL available() throw (NotConnectedException, IOException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL closeInput() throw (NotConnectedException, IOException, RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) override;
+    virtual sal_Int32 SAL_CALL readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) override;
+    virtual void SAL_CALL skipBytes( sal_Int32 nBytesToSkip ) override;
+    virtual sal_Int32 SAL_CALL available() override;
+    virtual void SAL_CALL closeInput() override;
 
     // XSeekable
-    virtual void SAL_CALL seek( sal_Int64 location ) throw (IllegalArgumentException, IOException, RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getPosition() throw (IOException, RuntimeException, std::exception) override;
-    virtual sal_Int64 SAL_CALL getLength() throw (IOException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL seek( sal_Int64 location ) override;
+    virtual sal_Int64 SAL_CALL getPosition() override;
+    virtual sal_Int64 SAL_CALL getLength() override;
 
     // XOutputStream
-    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& aData ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL flush() throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
-    virtual void SAL_CALL closeOutput() throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL writeBytes( const Sequence< sal_Int8 >& aData ) override;
+    virtual void SAL_CALL flush() override;
+    virtual void SAL_CALL closeOutput() override;
 
     // XTruncate
-    virtual void SAL_CALL truncate() throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL truncate() override;
 
 private:
     std::vector< sal_Int8 > maData;
@@ -86,34 +86,34 @@ UNOMemoryStream::UNOMemoryStream()
 }
 
 // XServiceInfo
-OUString SAL_CALL UNOMemoryStream::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL UNOMemoryStream::getImplementationName()
 {
     return OUString("com.sun.star.comp.MemoryStream");
 }
 
-sal_Bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL UNOMemoryStream::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-css::uno::Sequence<OUString> SAL_CALL UNOMemoryStream::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL UNOMemoryStream::getSupportedServiceNames()
 {
     return { "com.sun.star.comp.MemoryStream" };
 }
 
 // XStream
-Reference< XInputStream > SAL_CALL UNOMemoryStream::getInputStream(  ) throw (RuntimeException, std::exception)
+Reference< XInputStream > SAL_CALL UNOMemoryStream::getInputStream(  )
 {
     return this;
 }
 
-Reference< XOutputStream > SAL_CALL UNOMemoryStream::getOutputStream(  ) throw (RuntimeException, std::exception)
+Reference< XOutputStream > SAL_CALL UNOMemoryStream::getOutputStream(  )
 {
     return this;
 }
 
 // XInputStream
-sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_Int32 nBytesToRead )
 {
     if( nBytesToRead < 0 )
         throw IOException();
@@ -133,12 +133,12 @@ sal_Int32 SAL_CALL UNOMemoryStream::readBytes( Sequence< sal_Int8 >& aData, sal_
     return nBytesToRead;
 }
 
-sal_Int32 SAL_CALL UNOMemoryStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL UNOMemoryStream::readSomeBytes( Sequence< sal_Int8 >& aData, sal_Int32 nMaxBytesToRead )
 {
     return readBytes( aData, nMaxBytesToRead );
 }
 
-void SAL_CALL UNOMemoryStream::skipBytes( sal_Int32 nBytesToSkip ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
+void SAL_CALL UNOMemoryStream::skipBytes( sal_Int32 nBytesToSkip )
 {
     if( nBytesToSkip < 0 )
         throw IOException();
@@ -146,18 +146,18 @@ void SAL_CALL UNOMemoryStream::skipBytes( sal_Int32 nBytesToSkip ) throw (NotCon
     mnCursor += std::min( nBytesToSkip, available() );
 }
 
-sal_Int32 SAL_CALL UNOMemoryStream::available() throw (NotConnectedException, IOException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL UNOMemoryStream::available()
 {
     return static_cast< sal_Int32 >( maData.size() ) - mnCursor;
 }
 
-void SAL_CALL UNOMemoryStream::closeInput() throw (NotConnectedException, IOException, RuntimeException, std::exception)
+void SAL_CALL UNOMemoryStream::closeInput()
 {
     mnCursor = 0;
 }
 
 // XSeekable
-void SAL_CALL UNOMemoryStream::seek( sal_Int64 location ) throw (IllegalArgumentException, IOException, RuntimeException, std::exception)
+void SAL_CALL UNOMemoryStream::seek( sal_Int64 location )
 {
     if( (location < 0) || (location > SAL_MAX_INT32) )
         throw IllegalArgumentException("this implementation does not support more than 2GB!", static_cast<OWeakObject*>(this), 0 );
@@ -172,18 +172,18 @@ void SAL_CALL UNOMemoryStream::seek( sal_Int64 location ) throw (IllegalArgument
     mnCursor = static_cast< sal_Int32 >( location );
 }
 
-sal_Int64 SAL_CALL UNOMemoryStream::getPosition() throw (IOException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL UNOMemoryStream::getPosition()
 {
     return static_cast< sal_Int64 >( mnCursor );
 }
 
-sal_Int64 SAL_CALL UNOMemoryStream::getLength() throw (IOException, RuntimeException, std::exception)
+sal_Int64 SAL_CALL UNOMemoryStream::getLength()
 {
     return static_cast< sal_Int64 >( maData.size() );
 }
 
 // XOutputStream
-void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData ) throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
+void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData )
 {
     const sal_Int32 nBytesToWrite( aData.getLength() );
     if( nBytesToWrite )
@@ -206,17 +206,17 @@ void SAL_CALL UNOMemoryStream::writeBytes( const Sequence< sal_Int8 >& aData ) t
     }
 }
 
-void SAL_CALL UNOMemoryStream::flush() throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
+void SAL_CALL UNOMemoryStream::flush()
 {
 }
 
-void SAL_CALL UNOMemoryStream::closeOutput() throw (NotConnectedException, BufferSizeExceededException, IOException, RuntimeException, std::exception)
+void SAL_CALL UNOMemoryStream::closeOutput()
 {
     mnCursor = 0;
 }
 
 //XTruncate
-void SAL_CALL UNOMemoryStream::truncate() throw (IOException, RuntimeException, std::exception)
+void SAL_CALL UNOMemoryStream::truncate()
 {
     maData.resize( 0 );
     mnCursor = 0;

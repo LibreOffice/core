@@ -53,17 +53,13 @@ namespace io_acceptor
         virtual ~OAcceptor() override;
     public:
         // Methods
-        virtual Reference< XConnection > SAL_CALL accept( const OUString& sConnectionDescription )
-            throw( AlreadyAcceptingException,
-                   ConnectionSetupException,
-                   IllegalArgumentException,
-                   RuntimeException, std::exception) override;
-        virtual void SAL_CALL stopAccepting(  ) throw( RuntimeException, std::exception) override;
+        virtual Reference< XConnection > SAL_CALL accept( const OUString& sConnectionDescription ) override;
+        virtual void SAL_CALL stopAccepting(  ) override;
 
     public: // XServiceInfo
-                virtual OUString              SAL_CALL getImplementationName() throw(std::exception) override;
-                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() throw(std::exception) override;
-                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception) override;
+                virtual OUString              SAL_CALL getImplementationName() override;
+                virtual Sequence< OUString >  SAL_CALL getSupportedServiceNames() override;
+                virtual sal_Bool              SAL_CALL supportsService(const OUString& ServiceName) override;
 
     private:
         PipeAcceptor *m_pPipe;
@@ -101,7 +97,7 @@ namespace io_acceptor
     struct BeingInAccept
     {
         /// @throws AlreadyAcceptingException
-        BeingInAccept( bool *pFlag,const OUString & sConnectionDescription  ) throw( AlreadyAcceptingException)
+        BeingInAccept( bool *pFlag,const OUString & sConnectionDescription  )
             : m_pFlag( pFlag )
             {
                   if( *m_pFlag )
@@ -120,10 +116,6 @@ namespace io_acceptor
     };
 
     Reference< XConnection > OAcceptor::accept( const OUString &sConnectionDescription )
-        throw( AlreadyAcceptingException,
-               ConnectionSetupException,
-               IllegalArgumentException,
-               RuntimeException, std::exception)
     {
         // if there is a thread alread accepting in this object, throw an exception.
         struct BeingInAccept guard( &m_bInAccept, sConnectionDescription );
@@ -239,7 +231,7 @@ namespace io_acceptor
         return r;
     }
 
-    void SAL_CALL OAcceptor::stopAccepting(  ) throw( RuntimeException, std::exception)
+    void SAL_CALL OAcceptor::stopAccepting(  )
     {
         MutexGuard guard( m_mutex );
 
@@ -274,17 +266,17 @@ namespace io_acceptor
         return seqNames;
     }
 
-        OUString OAcceptor::getImplementationName() throw(std::exception)
+        OUString OAcceptor::getImplementationName()
     {
         return acceptor_getImplementationName();
     }
 
-        sal_Bool OAcceptor::supportsService(const OUString& ServiceName) throw(std::exception)
+        sal_Bool OAcceptor::supportsService(const OUString& ServiceName)
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-        Sequence< OUString > OAcceptor::getSupportedServiceNames() throw(std::exception)
+        Sequence< OUString > OAcceptor::getSupportedServiceNames()
     {
         return acceptor_getSupportedServiceNames();
     }

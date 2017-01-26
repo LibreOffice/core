@@ -40,8 +40,7 @@ protected:
     OUString msFilterName;
 
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL importImpl(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor)
-    throw (css::uno::RuntimeException, std::exception);
+    bool SAL_CALL importImpl(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor);
 
 public:
     explicit WordPerfectImportFilter(const css::uno::Reference< css::uno::XComponentContext > &rxContext)
@@ -49,37 +48,24 @@ public:
     virtual ~WordPerfectImportFilter() override {}
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor)
-    throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel()
-    throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter(const css::uno::Sequence< css::beans::PropertyValue > &aDescriptor) override;
+    virtual void SAL_CALL cancel() override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument(const css::uno::Reference< css::lang::XComponent > &xDoc)
-    throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument(const css::uno::Reference< css::lang::XComponent > &xDoc) override;
 
     //XExtendedFilterDetection
-    virtual OUString SAL_CALL detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor)
-    throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL detect(css::uno::Sequence< css::beans::PropertyValue > &Descriptor) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > &aArguments)
-    throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > &aArguments) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-    throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName)
-    throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString &ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 };
-
-/// @throws css::uno::RuntimeException
-bool SAL_CALL WordPerfectImportFilter_supportsService(const OUString &ServiceName)
-throw (css::uno::RuntimeException);
-
 
 #endif
 

@@ -270,12 +270,10 @@ class RecoveryCore : public ::cppu::WeakImplHelper< css::frame::XStatusListener 
     public:
 
         // css.frame.XStatusListener
-        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& aEvent) override;
 
         // css.lang.XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& aEvent) override;
 
 
     // helper
@@ -338,31 +336,23 @@ class PluginProgress : public ::cppu::WeakImplHelper< css::task::XStatusIndicato
 
         // XStatusIndicator
         virtual void SAL_CALL start(const OUString& sText ,
-                                          sal_Int32        nRange)
-            throw(css::uno::RuntimeException, std::exception) override;
+                                          sal_Int32        nRange) override;
 
-        virtual void SAL_CALL end()
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL end() override;
 
-        virtual void SAL_CALL setText(const OUString& sText)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setText(const OUString& sText) override;
 
-        virtual void SAL_CALL setValue(sal_Int32 nValue)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setValue(sal_Int32 nValue) override;
 
-        virtual void SAL_CALL reset()
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL reset() override;
 
 
         // XComponent
-        virtual void SAL_CALL dispose()
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispose() override;
 
-        virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener >& xListener) override;
 
-        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener) override;
 };
 
 class SaveDialog : public Dialog

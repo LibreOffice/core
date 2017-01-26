@@ -35,27 +35,27 @@ protected:
     css::uno::Reference< css::container::XNameContainer > mxStyleFamilyNameContainer;
     /// @throws css::uno::RuntimeException
     /// @throws css::script::BasicErrorException
-    void initialise() throw ( css::uno::RuntimeException, css::script::BasicErrorException );
+    void initialise();
 public:
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const OUString& sStyleName, const css::uno::Reference< css::frame::XModel >& _xModel ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
+    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const OUString& sStyleName, const css::uno::Reference< css::frame::XModel >& _xModel );
     /// @throws css::script::BasicErrorException
     /// @throws css::uno::RuntimeException
-    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& _xModel ) throw ( css::script::BasicErrorException, css::uno::RuntimeException );
+    ScVbaStyle( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::beans::XPropertySet >& _xPropertySet, const css::uno::Reference< css::frame::XModel >& _xModel );
     /// @throws css::uno::RuntimeException
-    static css::uno::Reference< css::container::XNameAccess > getStylesNameContainer( const css::uno::Reference< css::frame::XModel >& xModel ) throw( css::uno::RuntimeException );
+    static css::uno::Reference< css::container::XNameAccess > getStylesNameContainer( const css::uno::Reference< css::frame::XModel >& xModel );
     virtual css::uno::Reference< ov::XHelperInterface > thisHelperIface() override { return this; };
     // XStyle Methods
-    virtual sal_Bool SAL_CALL BuiltIn() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& Name ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getName() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setNameLocal( const OUString& NameLocal ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNameLocal() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Delete() throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL BuiltIn() override;
+    virtual void SAL_CALL setName( const OUString& Name ) override;
+    virtual OUString SAL_CALL getName() override;
+    virtual void SAL_CALL setNameLocal( const OUString& NameLocal ) override;
+    virtual OUString SAL_CALL getNameLocal() override;
+    virtual void SAL_CALL Delete() override;
     // XFormat
-    virtual void SAL_CALL setMergeCells( const css::uno::Any& MergeCells ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
-    virtual css::uno::Any SAL_CALL getMergeCells(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) override;
+    virtual void SAL_CALL setMergeCells( const css::uno::Any& MergeCells ) override;
+    virtual css::uno::Any SAL_CALL getMergeCells(  ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

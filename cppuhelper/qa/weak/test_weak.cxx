@@ -38,7 +38,7 @@ class Reference: public cppu::WeakImplHelper< css::uno::XReference > {
 public:
     Reference(): m_disposed(false) {}
 
-    void SAL_CALL dispose() throw (css::uno::RuntimeException) override {
+    void SAL_CALL dispose() override {
         m_disposed = true;
         handleDispose();
     }

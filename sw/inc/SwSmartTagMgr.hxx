@@ -35,10 +35,10 @@ public:
     static SwSmartTagMgr& Get();
 
     // css::util::XModifyListener
-    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL modified( const css::lang::EventObject& aEvent ) override;
 
     // css::util::XChangesListener
-      virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
+      virtual void SAL_CALL changesOccurred( const css::util::ChangesEvent& Event ) override;
 };
 
 #endif

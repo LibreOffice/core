@@ -38,7 +38,6 @@ XMLElementWrapper_XmlSecImpl::XMLElementWrapper_XmlSecImpl(const xmlNodePtr pNod
 
 /* XUnoTunnel */
 cssu::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementationId()
-    throw (cssu::RuntimeException)
 {
     static ::cppu::OImplementationId* pId = nullptr;
     if (! pId)
@@ -54,7 +53,6 @@ cssu::Sequence< sal_Int8 > XMLElementWrapper_XmlSecImpl::getUnoTunnelImplementat
 }
 
 sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const cssu::Sequence< sal_Int8 >& aIdentifier )
-    throw (cssu::RuntimeException, std::exception)
 {
     if (aIdentifier.getLength() == 16 &&
         0 == memcmp(
@@ -72,13 +70,11 @@ sal_Int64 SAL_CALL XMLElementWrapper_XmlSecImpl::getSomething( const cssu::Seque
 
 
 OUString XMLElementWrapper_XmlSecImpl_getImplementationName ()
-    throw (cssu::RuntimeException)
 {
     return OUString ( IMPLEMENTATION_NAME );
 }
 
 cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedServiceNames(  )
-    throw (cssu::RuntimeException)
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.wrapper.XMLElementWrapper" };
     return aRet;
@@ -87,24 +83,20 @@ cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl_getSupportedSer
 cssu::Reference< cssu::XInterface > SAL_CALL
     XMLElementWrapper_XmlSecImpl_createInstance(
         const cssu::Reference< cssu::XComponentContext > &)
-    throw( cssu::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new XMLElementWrapper_XmlSecImpl(nullptr));
 }
 
 /* XServiceInfo */
 OUString SAL_CALL XMLElementWrapper_XmlSecImpl::getImplementationName(  )
-    throw (cssu::RuntimeException, std::exception)
 {
     return XMLElementWrapper_XmlSecImpl_getImplementationName();
 }
 sal_Bool SAL_CALL XMLElementWrapper_XmlSecImpl::supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 cssu::Sequence< OUString > SAL_CALL XMLElementWrapper_XmlSecImpl::getSupportedServiceNames(  )
-    throw (cssu::RuntimeException, std::exception)
 {
     return XMLElementWrapper_XmlSecImpl_getSupportedServiceNames();
 }

@@ -108,7 +108,6 @@ void SAL_CALL AccessibleGridControl::disposing()
 // css::accessibility::XAccessibleContext ---------------------------------------------------------
 
 sal_Int32 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
-    throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     ensureIsAlive();
@@ -118,7 +117,6 @@ sal_Int32 SAL_CALL AccessibleGridControl::getAccessibleChildCount()
 
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
-    throw ( lang::IndexOutOfBoundsException, uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -158,7 +156,6 @@ AccessibleGridControl::getAccessibleChild( sal_Int32 nChildIndex )
 
 
 sal_Int16 SAL_CALL AccessibleGridControl::getAccessibleRole()
-    throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -171,7 +168,6 @@ sal_Int16 SAL_CALL AccessibleGridControl::getAccessibleRole()
 
 css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
 AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
-    throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     ensureIsAlive();
@@ -201,7 +197,6 @@ AccessibleGridControl::getAccessibleAtPoint( const awt::Point& rPoint )
 
 
 void SAL_CALL AccessibleGridControl::grabFocus()
-    throw ( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     ensureIsAlive();
@@ -211,7 +206,6 @@ void SAL_CALL AccessibleGridControl::grabFocus()
 // XServiceInfo ---------------------------------------------------------------
 
 OUString SAL_CALL AccessibleGridControl::getImplementationName()
-    throw ( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.accessibility.AccessibleGridControl" );
 }
@@ -405,7 +399,7 @@ void AccessibleGridControlAccess::DisposeAccessImpl()
 }
 
 
-css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleGridControlAccess::getAccessibleContext() throw ( RuntimeException, std::exception )
+css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL AccessibleGridControlAccess::getAccessibleContext()
 {
     SolarMutexGuard g;
 

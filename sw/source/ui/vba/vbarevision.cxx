@@ -28,7 +28,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaRevision::SwVbaRevision( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xRedlineProps ) throw ( uno::RuntimeException ) : SwVbaRevision_BASE( rParent, rContext ), mxModel( xModel ), mxRedlineProps( xRedlineProps )
+SwVbaRevision::SwVbaRevision( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xRedlineProps ) : SwVbaRevision_BASE( rParent, rContext ), mxModel( xModel ), mxRedlineProps( xRedlineProps )
 {
 }
 
@@ -36,7 +36,7 @@ SwVbaRevision::~SwVbaRevision()
 {
 }
 
-sal_Int32 SwVbaRevision::GetPosition() throw (css::uno::RuntimeException)
+sal_Int32 SwVbaRevision::GetPosition()
 {
     sal_Int32 nPos = -1;
     uno::Reference< document::XRedlinesSupplier > xRedlinesSupp( mxModel, uno::UNO_QUERY_THROW );
@@ -59,7 +59,7 @@ sal_Int32 SwVbaRevision::GetPosition() throw (css::uno::RuntimeException)
 }
 
 void SAL_CALL
-SwVbaRevision::Accept() throw ( css::uno::RuntimeException, std::exception )
+SwVbaRevision::Accept()
 {
     SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
     if( pDoc )
@@ -67,7 +67,7 @@ SwVbaRevision::Accept() throw ( css::uno::RuntimeException, std::exception )
 }
 
 void SAL_CALL
-SwVbaRevision::Reject( ) throw ( css::uno::RuntimeException, std::exception )
+SwVbaRevision::Reject( )
 {
     SwDoc* pDoc = word::getDocShell( mxModel )->GetDoc();
     if( pDoc )

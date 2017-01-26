@@ -57,34 +57,28 @@ public:
     //=====  XAccessibleContext  ==============================================
 
     virtual sal_Int32 SAL_CALL
-        getAccessibleChildCount()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleChildCount() override;
 
     virtual css::uno::Reference< css::accessibility::XAccessible> SAL_CALL
-        getAccessibleChild (sal_Int32 nIndex)
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleChild (sal_Int32 nIndex) override;
     virtual OUString SAL_CALL
-        getAccessibleName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleName() override;
     //=====  XAccessibleEventBroadcaster  ========================================
 
     virtual void SAL_CALL
         addAccessibleEventListener (
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener) override;
 
     virtual void SAL_CALL
         removeAccessibleEventListener (
-            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference<css::accessibility::XAccessibleEventListener >& xListener) override;
 
     //=====  XServiceInfo  ====================================================
 
     /** Returns an identifier for the implementation of this object.
     */
     virtual OUString SAL_CALL
-        getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getImplementationName() override;
 
     //=====  lang::XEventListener  ============================================
 
@@ -93,8 +87,7 @@ public:
     //=====  XPropertyChangeListener  =========================================
 
     virtual void SAL_CALL
-        propertyChange (const css::beans::PropertyChangeEvent& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+        propertyChange (const css::beans::PropertyChangeEvent& rEventObject) override;
 
 protected:
 
@@ -113,14 +106,12 @@ protected:
 
     /// Create an accessible name that contains the current view mode.
     virtual OUString
-        CreateAccessibleName ()
-        throw (css::uno::RuntimeException, std::exception) override;
+        CreateAccessibleName () override;
 
     /// Create an accessible description that contains the current
     /// view mode.
     virtual OUString
-        CreateAccessibleDescription ()
-        throw (css::uno::RuntimeException, std::exception) override;
+        CreateAccessibleDescription () override;
 
 private:
 

@@ -148,18 +148,15 @@ public:
         : maBasicRef( pBasic ), m_xModel( xModel ) {}
 
     // Methods of XAllListener
-    virtual void SAL_CALL firing(const ScriptEvent& aScriptEvent)
-        throw( RuntimeException, std::exception ) override;
-    virtual Any SAL_CALL approveFiring(const ScriptEvent& aScriptEvent)
-        throw( InvocationTargetException, RuntimeException, std::exception ) override;
+    virtual void SAL_CALL firing(const ScriptEvent& aScriptEvent) override;
+    virtual Any SAL_CALL approveFiring(const ScriptEvent& aScriptEvent) override;
 
     // Methods of XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source)
-        throw( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const EventObject& Source) override;
 };
 
 // Methods XAllListener
-void BasicScriptListener_Impl::firing( const ScriptEvent& aScriptEvent ) throw ( RuntimeException, std::exception )
+void BasicScriptListener_Impl::firing( const ScriptEvent& aScriptEvent )
 {
     SolarMutexGuard g;
 
@@ -167,7 +164,6 @@ void BasicScriptListener_Impl::firing( const ScriptEvent& aScriptEvent ) throw (
 }
 
 Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
-    throw ( InvocationTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -177,7 +173,7 @@ Any BasicScriptListener_Impl::approveFiring( const ScriptEvent& aScriptEvent )
 }
 
 // Methods XEventListener
-void BasicScriptListener_Impl::disposing(const EventObject& ) throw ( RuntimeException, std::exception )
+void BasicScriptListener_Impl::disposing(const EventObject& )
 {
     // TODO: ???
     //SolarMutexGuard aGuard;

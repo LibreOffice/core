@@ -318,7 +318,6 @@ bool XMLVersionContext::ParseISODateTimeString(
 }
 
 void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XStorage >& xRoot, const uno::Sequence< util::RevisionTag >& rVersions )
-    throw (css::io::IOException, css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     // no storage, no version list!
     if ( xRoot.is() )
@@ -364,7 +363,6 @@ void SAL_CALL XMLVersionListPersistence::store( const uno::Reference< embed::XSt
 }
 
 uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( const uno::Reference< embed::XStorage >& xRoot )
-        throw (css::container::NoSuchElementException, css::io::IOException, css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence < css::util::RevisionTag > aVersions;
 
@@ -427,21 +425,18 @@ uno::Sequence< util::RevisionTag > SAL_CALL XMLVersionListPersistence::load( con
 }
 
 OUString XMLVersionListPersistence::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("XMLVersionListPersistence");
 }
 
 sal_Bool XMLVersionListPersistence::supportsService(
     OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString>
 XMLVersionListPersistence::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{
         "com.sun.star.document.DocumentRevisionListPersistence"};

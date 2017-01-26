@@ -262,7 +262,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(VCLXAccessibleBox, VCLXAccessibleComponent, VCL
 //=====  XAccessible  =========================================================
 
 Reference< XAccessibleContext > SAL_CALL VCLXAccessibleBox::getAccessibleContext(  )
-    throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -272,7 +271,6 @@ Reference< XAccessibleContext > SAL_CALL VCLXAccessibleBox::getAccessibleContext
 //=====  XAccessibleContext  ==================================================
 
 sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleChildCount()
-    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -296,7 +294,6 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleChildCount()
 }
 
 Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32 i)
-    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -345,7 +342,7 @@ Reference<XAccessible> SAL_CALL VCLXAccessibleBox::getAccessibleChild (sal_Int32
     return xChild;
 }
 
-sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole() throw (RuntimeException, std::exception)
+sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole()
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -360,7 +357,6 @@ sal_Int16 SAL_CALL VCLXAccessibleBox::getAccessibleRole() throw (RuntimeExceptio
 }
 
 sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleIndexInParent()
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (m_nIndexInParent != DEFAULT_INDEX_IN_PARENT)
         return m_nIndexInParent;
@@ -371,7 +367,6 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleIndexInParent()
 //=====  XAccessibleAction  ===================================================
 
 sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount()
-    throw (RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex> aGuard (GetMutex());
 
@@ -381,7 +376,6 @@ sal_Int32 SAL_CALL VCLXAccessibleBox::getAccessibleActionCount()
 }
 
 sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
-    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     bool bNotify = false;
 
@@ -423,7 +417,6 @@ sal_Bool SAL_CALL VCLXAccessibleBox::doAccessibleAction (sal_Int32 nIndex)
 }
 
 OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 nIndex)
-    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
     if (nIndex<0 || nIndex>=getAccessibleActionCount())
@@ -436,7 +429,6 @@ OUString SAL_CALL VCLXAccessibleBox::getAccessibleActionDescription (sal_Int32 n
 }
 
 Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBinding( sal_Int32 nIndex )
-    throw (IndexOutOfBoundsException, RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -451,7 +443,6 @@ Reference< XAccessibleKeyBinding > VCLXAccessibleBox::getAccessibleActionKeyBind
 
 // =====  XAccessibleValue  ===============================================
 Any VCLXAccessibleBox::getCurrentValue( )
-    throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -488,7 +479,6 @@ Any VCLXAccessibleBox::getCurrentValue( )
 }
 
 sal_Bool VCLXAccessibleBox::setCurrentValue( const Any& aNumber )
-    throw( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -504,14 +494,12 @@ sal_Bool VCLXAccessibleBox::setCurrentValue( const Any& aNumber )
 }
 
 Any VCLXAccessibleBox::getMaximumValue( )
-    throw( RuntimeException, std::exception )
 {
     Any aAny;
     return aAny;
 }
 
 Any VCLXAccessibleBox::getMinimumValue(  )
-    throw( RuntimeException, std::exception )
 {
     Any aAny;
     return aAny;

@@ -131,8 +131,7 @@ public:
         @return demanded type or empty any
     */
     virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type & rType )
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+        const css::uno::Type & rType ) SAL_OVERRIDE;
     /** increasing m_refCount
     */
     virtual void SAL_CALL acquire()
@@ -146,8 +145,7 @@ public:
 
         @return a com::sun::star::uno::XAdapter reference
     */
-    virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter()
-        throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Reference< css::uno::XAdapter > SAL_CALL queryAdapter() SAL_OVERRIDE;
 
     /** Cast operator to XInterface reference.
 

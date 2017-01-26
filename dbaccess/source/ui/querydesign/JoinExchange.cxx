@@ -96,7 +96,7 @@ namespace dbaui
         return pId->getImplementationId();
     }
 
-    sal_Int64 SAL_CALL OJoinExchObj::getSomething( const Sequence< sal_Int8 >& _rIdentifier ) throw(RuntimeException, std::exception)
+    sal_Int64 SAL_CALL OJoinExchObj::getSomething( const Sequence< sal_Int8 >& _rIdentifier )
     {
         if (_rIdentifier.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  _rIdentifier.getConstArray(), 16 ) )
             return reinterpret_cast<sal_Int64>(this);
@@ -123,7 +123,7 @@ namespace dbaui
         return false;
     }
 
-    Any SAL_CALL OJoinExchObj::queryInterface( const Type& _rType ) throw(RuntimeException, std::exception)
+    Any SAL_CALL OJoinExchObj::queryInterface( const Type& _rType )
     {
         Any aReturn = TransferableHelper::queryInterface(_rType);
         if (!aReturn.hasValue())

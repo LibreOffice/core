@@ -85,7 +85,6 @@ sal_Bool ReflectionBase::convertFastPropertyValue(
     css::uno::Any & rOldValue,
     sal_Int32 nHandle,
     const css::uno::Any& rValue )
-    throw (css::lang::IllegalArgumentException)
 {
 
     rOldValue = m_values[nHandle];
@@ -113,7 +112,6 @@ void ReflectionBase::setPropertyValue_NoBroadcast_public(
 void ReflectionBase::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle,
     const css::uno::Any& rValue )
-    throw (css::uno::Exception, std::exception)
 {
 //     OUString s;
 //     rValue >>= s;
@@ -135,32 +133,27 @@ void ReflectionBase::getFastPropertyValue(
 }
 
 Reference < css::beans::XPropertySetInfo >  ReflectionBase::getPropertySetInfo()
-        throw(css::uno::RuntimeException, std::exception)
 {
     return OPropertySetHelper::createPropertySetInfo( m_propsDesc );
 }
 
 OUString ReflectionBase::getImplementationName()
-        throw(css::uno::RuntimeException, std::exception)
 {
     return m_implName;
 }
 
 sal_Bool ReflectionBase::supportsService(const OUString& ServiceName)
-        throw(css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > ReflectionBase::getSupportedServiceNames()
-        throw(css::uno::RuntimeException, std::exception)
 {
     return m_supportedServices;
 }
 
 
 Sequence< css::uno::Type > ReflectionBase::getTypes()
-        throw( css::uno::RuntimeException, std::exception )
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     static Sequence< css::uno::Type > collection(
@@ -173,14 +166,13 @@ Sequence< css::uno::Type > ReflectionBase::getTypes()
 
 css::uno::Any ReflectionBase::queryInterface(
     const css::uno::Type & reqType )
-    throw (css::uno::RuntimeException, std::exception)
 {
     Any ret = ReflectionBase_BASE::queryInterface( reqType );
     return ret.hasValue() ? ret : OPropertySetHelper::queryInterface( reqType );
 
 }
 
-Sequence< sal_Int8> ReflectionBase::getImplementationId() throw( RuntimeException, std::exception )
+Sequence< sal_Int8> ReflectionBase::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -202,7 +194,7 @@ void ReflectionBase::copyValuesFrom( const Reference< XPropertySet > & set )
     }
 }
 
-OUString ReflectionBase::getName(  ) throw (css::uno::RuntimeException, std::exception)
+OUString ReflectionBase::getName(  )
 {
     Statics & st = getStatics();
     if( getInfoHelper().hasPropertyByName( st.SCHEMA_NAME ) )
@@ -215,7 +207,6 @@ OUString ReflectionBase::getName(  ) throw (css::uno::RuntimeException, std::exc
 
 
 void ReflectionBase::setName( const OUString& /* aName */ )
-    throw (css::uno::RuntimeException, std::exception)
 {
     throw RuntimeException(
         "pq_sdbc::ReflectionBase::setName not implemented",

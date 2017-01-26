@@ -38,12 +38,12 @@ SvxFmDrawPage::~SvxFmDrawPage() throw ()
 {
 }
 
-css::uno::Sequence< sal_Int8 > SAL_CALL SvxFmDrawPage::getImplementationId() throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< sal_Int8 > SAL_CALL SvxFmDrawPage::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Any SAL_CALL SvxFmDrawPage::queryAggregation( const css::uno::Type& _rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL SvxFmDrawPage::queryAggregation( const css::uno::Type& _rType )
 {
     Any aRet = ::cppu::queryInterface   (   _rType
                                         ,   static_cast< XFormsSupplier2* >( this )
@@ -55,7 +55,7 @@ Any SAL_CALL SvxFmDrawPage::queryAggregation( const css::uno::Type& _rType ) thr
     return aRet;
 }
 
-css::uno::Sequence< css::uno::Type > SAL_CALL SvxFmDrawPage::getTypes(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Sequence< css::uno::Type > SAL_CALL SvxFmDrawPage::getTypes(  )
 {
     css::uno::Sequence< css::uno::Type > aTypes(SvxDrawPage::getTypes());
     aTypes.realloc(aTypes.getLength() + 1);
@@ -66,7 +66,6 @@ css::uno::Sequence< css::uno::Type > SAL_CALL SvxFmDrawPage::getTypes(  ) throw(
 }
 
 SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::drawing::XShape > & xDescr )
-    throw (css::uno::RuntimeException, std::exception)
 {
     OUString aShapeType( xDescr->getShapeType() );
 
@@ -80,7 +79,6 @@ SdrObject *SvxFmDrawPage::CreateSdrObject_( const css::uno::Reference< css::draw
 }
 
 css::uno::Reference< css::drawing::XShape >  SvxFmDrawPage::CreateShape( SdrObject *pObj ) const
-    throw (css::uno::RuntimeException, std::exception)
 {
     if( SdrInventor::FmForm == pObj->GetObjInventor() )
     {
@@ -92,7 +90,7 @@ css::uno::Reference< css::drawing::XShape >  SvxFmDrawPage::CreateShape( SdrObje
 }
 
 // XFormsSupplier
-css::uno::Reference< css::container::XNameContainer > SAL_CALL SvxFmDrawPage::getForms() throw( css::uno::RuntimeException, std::exception )
+css::uno::Reference< css::container::XNameContainer > SAL_CALL SvxFmDrawPage::getForms()
 {
     css::uno::Reference< css::container::XNameContainer >  xForms;
 
@@ -104,7 +102,7 @@ css::uno::Reference< css::container::XNameContainer > SAL_CALL SvxFmDrawPage::ge
 }
 
 // XFormsSupplier2
-sal_Bool SAL_CALL SvxFmDrawPage::hasForms() throw( css::uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL SvxFmDrawPage::hasForms()
 {
     bool bHas = false;
     FmFormPage* pFormPage = dynamic_cast<FmFormPage*>( GetSdrPage()  );

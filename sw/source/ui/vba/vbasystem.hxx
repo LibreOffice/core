@@ -51,9 +51,9 @@ public:
     virtual ~SwVbaSystem() override;
 
     // XSystem
-    virtual sal_Int32 SAL_CALL getCursor() throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setCursor( sal_Int32 _cursor ) throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Any SAL_CALL PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Int32 SAL_CALL getCursor() override;
+    virtual void SAL_CALL setCursor( sal_Int32 _cursor ) override;
+    virtual css::uno::Any SAL_CALL PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

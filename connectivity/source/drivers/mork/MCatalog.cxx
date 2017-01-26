@@ -76,7 +76,7 @@ void OCatalog::refreshUsers()
 
 
 // XTablesSupplier
-Reference< XNameAccess > SAL_CALL OCatalog::getTables(  ) throw(RuntimeException, std::exception)
+Reference< XNameAccess > SAL_CALL OCatalog::getTables(  )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(rBHelper.bDisposed);

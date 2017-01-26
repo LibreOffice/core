@@ -125,7 +125,6 @@ void SAL_CALL FTPContent::release()
 }
 
 css::uno::Any SAL_CALL FTPContent::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< XTypeProvider* >(this)),
@@ -141,15 +140,11 @@ css::uno::Any SAL_CALL FTPContent::queryInterface( const css::uno::Type & rType 
 // XTypeProvider methods.
 
 css::uno::Sequence< sal_Int8 > SAL_CALL FTPContent::getImplementationId()
-    throw( css::uno::RuntimeException,
-           std::exception )
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 css::uno::Sequence< css::uno::Type > SAL_CALL FTPContent::getTypes()
-    throw( css::uno::RuntimeException,
-           std::exception )
 {
     static cppu::OTypeCollection* pCollection = nullptr;
     if ( !pCollection )
@@ -175,19 +170,16 @@ css::uno::Sequence< css::uno::Type > SAL_CALL FTPContent::getTypes()
 // XServiceInfo methods.
 
 OUString SAL_CALL FTPContent::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.FTPContent");
 }
 
 sal_Bool SAL_CALL FTPContent::supportsService( const OUString& ServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 css::uno::Sequence< OUString > SAL_CALL FTPContent::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.ucb.FTPContent" };
 }
@@ -197,7 +189,6 @@ css::uno::Sequence< OUString > SAL_CALL FTPContent::getSupportedServiceNames()
 
 // virtual
 OUString SAL_CALL FTPContent::getContentType()
-    throw( RuntimeException, std::exception )
 {
     return OUString(FTP_CONTENT_TYPE);
 }
@@ -206,7 +197,6 @@ OUString SAL_CALL FTPContent::getContentType()
 
 //virtual
 void SAL_CALL FTPContent::abort( sal_Int32 /*CommandId*/ )
-    throw( RuntimeException, std::exception )
 {
 }
 
@@ -248,10 +238,6 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                                   sal_Int32 /*CommandId*/,
                                   const Reference<
                                   XCommandEnvironment >& Environment)
-    throw( Exception,
-           CommandAbortedException,
-           RuntimeException,
-           std::exception)
 {
     ACTION action(NOACTION);
     Any aRet;
@@ -598,7 +584,6 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
 
 Sequence<ContentInfo > SAL_CALL
 FTPContent::queryCreatableContentsInfo(  )
-    throw (RuntimeException, std::exception)
 {
     return queryCreatableContentsInfo_Static();
 }
@@ -606,7 +591,6 @@ FTPContent::queryCreatableContentsInfo(  )
 // static
 Sequence<ContentInfo >
 FTPContent::queryCreatableContentsInfo_Static(  )
-    throw (RuntimeException)
 {
     Sequence< ContentInfo > seq(2);
 
@@ -632,7 +616,6 @@ FTPContent::queryCreatableContentsInfo_Static(  )
 
 Reference<XContent > SAL_CALL
 FTPContent::createNewContent( const ContentInfo& Info )
-    throw (RuntimeException, std::exception)
 {
     if( Info.Type =="application/vnd.sun.staroffice.ftp-file" || Info.Type == "application/vnd.sun.staroffice.ftp-folder" )
         return new FTPContent(m_xContext,
@@ -645,7 +628,6 @@ FTPContent::createNewContent( const ContentInfo& Info )
 
 Reference<XInterface > SAL_CALL
 FTPContent::getParent(  )
-    throw (RuntimeException, std::exception)
 {
     Reference<XContentIdentifier>
         xIdent(new FTPContentIdentifier(m_aFTPURL.parent()));
@@ -655,8 +637,6 @@ FTPContent::getParent(  )
 
 void SAL_CALL
 FTPContent::setParent(const Reference<XInterface >& /*Parent*/ )
-    throw (NoSupportException,
-           RuntimeException, std::exception)
 {
     throw NoSupportException();
 }

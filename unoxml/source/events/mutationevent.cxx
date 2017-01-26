@@ -35,31 +35,31 @@ namespace DOM { namespace events
     {
     }
 
-    Reference< XNode > SAL_CALL CMutationEvent::getRelatedNode() throw (RuntimeException, std::exception)
+    Reference< XNode > SAL_CALL CMutationEvent::getRelatedNode()
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_relatedNode;
     }
 
-    OUString SAL_CALL CMutationEvent::getPrevValue() throw (RuntimeException, std::exception)
+    OUString SAL_CALL CMutationEvent::getPrevValue()
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_prevValue;
     }
 
-    OUString SAL_CALL CMutationEvent::getNewValue() throw (RuntimeException, std::exception)
+    OUString SAL_CALL CMutationEvent::getNewValue()
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_newValue;
     }
 
-    OUString SAL_CALL CMutationEvent::getAttrName() throw (RuntimeException, std::exception)
+    OUString SAL_CALL CMutationEvent::getAttrName()
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_attrName;
     }
 
-    AttrChangeType SAL_CALL CMutationEvent::getAttrChange() throw (RuntimeException, std::exception)
+    AttrChangeType SAL_CALL CMutationEvent::getAttrChange()
     {
         ::osl::MutexGuard const g(m_Mutex);
         return m_attrChangeType;
@@ -69,7 +69,7 @@ namespace DOM { namespace events
         sal_Bool canBubbleArg, sal_Bool cancelableArg,
         const Reference< XNode >& relatedNodeArg, const OUString& prevValueArg,
         const OUString& newValueArg, const OUString& attrNameArg,
-        AttrChangeType attrChangeArg) throw (RuntimeException, std::exception)
+        AttrChangeType attrChangeArg)
     {
         ::osl::MutexGuard const g(m_Mutex);
 
@@ -82,52 +82,52 @@ namespace DOM { namespace events
     }
 
     // delegate to CEvent, since we are inheriting from CEvent and XEvent
-    OUString SAL_CALL CMutationEvent::getType() throw (RuntimeException, std::exception)
+    OUString SAL_CALL CMutationEvent::getType()
     {
         return CEvent::getType();
     }
 
-    Reference< XEventTarget > SAL_CALL CMutationEvent::getTarget() throw (RuntimeException, std::exception)
+    Reference< XEventTarget > SAL_CALL CMutationEvent::getTarget()
     {
         return CEvent::getTarget();
     }
 
-    Reference< XEventTarget > SAL_CALL CMutationEvent::getCurrentTarget() throw (RuntimeException, std::exception)
+    Reference< XEventTarget > SAL_CALL CMutationEvent::getCurrentTarget()
     {
         return CEvent::getCurrentTarget();
     }
 
-    PhaseType SAL_CALL CMutationEvent::getEventPhase() throw (RuntimeException, std::exception)
+    PhaseType SAL_CALL CMutationEvent::getEventPhase()
     {
         return CEvent::getEventPhase();
     }
 
-    sal_Bool SAL_CALL CMutationEvent::getBubbles() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL CMutationEvent::getBubbles()
     {
         return CEvent::getBubbles();
     }
 
-    sal_Bool SAL_CALL CMutationEvent::getCancelable() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL CMutationEvent::getCancelable()
     {
         return CEvent::getCancelable();
     }
 
-    css::util::Time SAL_CALL CMutationEvent::getTimeStamp() throw (RuntimeException, std::exception)
+    css::util::Time SAL_CALL CMutationEvent::getTimeStamp()
     {
         return CEvent::getTimeStamp();
     }
 
-    void SAL_CALL CMutationEvent::stopPropagation() throw (RuntimeException, std::exception)
+    void SAL_CALL CMutationEvent::stopPropagation()
     {
         CEvent::stopPropagation();
     }
-    void SAL_CALL CMutationEvent::preventDefault() throw (RuntimeException, std::exception)
+    void SAL_CALL CMutationEvent::preventDefault()
     {
         CEvent::preventDefault();
     }
 
     void SAL_CALL CMutationEvent::initEvent(const OUString& eventTypeArg, sal_Bool canBubbleArg,
-        sal_Bool cancelableArg) throw (RuntimeException, std::exception)
+        sal_Bool cancelableArg)
     {
         // base initializer
         CEvent::initEvent(eventTypeArg, canBubbleArg, cancelableArg);

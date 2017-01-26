@@ -228,7 +228,7 @@ void AccessibleDialogControlShape::FillAccessibleStateSet( utl::AccessibleStateS
 }
 
 // OCommonAccessibleComponent
-awt::Rectangle AccessibleDialogControlShape::implGetBounds() throw (RuntimeException, std::exception)
+awt::Rectangle AccessibleDialogControlShape::implGetBounds()
 {
     return GetBounds();
 }
@@ -256,7 +256,7 @@ void AccessibleDialogControlShape::disposing()
 // XEventListener
 
 
-void AccessibleDialogControlShape::disposing( const lang::EventObject& ) throw (RuntimeException, std::exception)
+void AccessibleDialogControlShape::disposing( const lang::EventObject& )
 {
     if ( m_xControlModel.is() )
         m_xControlModel->removePropertyChangeListener( OUString(), static_cast< beans::XPropertyChangeListener* >( this ) );
@@ -267,7 +267,7 @@ void AccessibleDialogControlShape::disposing( const lang::EventObject& ) throw (
 // XPropertyChangeListener
 
 
-void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEvent& rEvent ) throw (RuntimeException, std::exception)
+void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEvent& rEvent )
 {
     if ( rEvent.PropertyName == DLGED_PROP_NAME )
     {
@@ -289,23 +289,23 @@ void AccessibleDialogControlShape::propertyChange( const beans::PropertyChangeEv
 }
 
 // XServiceInfo
-OUString AccessibleDialogControlShape::getImplementationName() throw (RuntimeException, std::exception)
+OUString AccessibleDialogControlShape::getImplementationName()
 {
     return OUString( "com.sun.star.comp.basctl.AccessibleShape" );
 }
 
-sal_Bool AccessibleDialogControlShape::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool AccessibleDialogControlShape::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > AccessibleDialogControlShape::getSupportedServiceNames()
 {
     return { "com.sun.star.drawing.AccessibleShape" };
 }
 
 // XAccessible
-Reference< XAccessibleContext > AccessibleDialogControlShape::getAccessibleContext(  ) throw (RuntimeException, std::exception)
+Reference< XAccessibleContext > AccessibleDialogControlShape::getAccessibleContext(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -313,7 +313,7 @@ Reference< XAccessibleContext > AccessibleDialogControlShape::getAccessibleConte
 }
 
 // XAccessibleContext
-sal_Int32 AccessibleDialogControlShape::getAccessibleChildCount() throw (RuntimeException, std::exception)
+sal_Int32 AccessibleDialogControlShape::getAccessibleChildCount()
 {
     OExternalLockGuard aGuard( this );
 
@@ -321,7 +321,7 @@ sal_Int32 AccessibleDialogControlShape::getAccessibleChildCount() throw (Runtime
 }
 
 
-Reference< XAccessible > AccessibleDialogControlShape::getAccessibleChild( sal_Int32 i ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+Reference< XAccessible > AccessibleDialogControlShape::getAccessibleChild( sal_Int32 i )
 {
     OExternalLockGuard aGuard( this );
 
@@ -332,7 +332,7 @@ Reference< XAccessible > AccessibleDialogControlShape::getAccessibleChild( sal_I
 }
 
 
-Reference< XAccessible > AccessibleDialogControlShape::getAccessibleParent(  ) throw (RuntimeException, std::exception)
+Reference< XAccessible > AccessibleDialogControlShape::getAccessibleParent(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -344,7 +344,7 @@ Reference< XAccessible > AccessibleDialogControlShape::getAccessibleParent(  ) t
 }
 
 
-sal_Int32 AccessibleDialogControlShape::getAccessibleIndexInParent(  ) throw (RuntimeException, std::exception)
+sal_Int32 AccessibleDialogControlShape::getAccessibleIndexInParent(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -375,7 +375,7 @@ sal_Int32 AccessibleDialogControlShape::getAccessibleIndexInParent(  ) throw (Ru
 }
 
 
-sal_Int16 AccessibleDialogControlShape::getAccessibleRole(  ) throw (RuntimeException, std::exception)
+sal_Int16 AccessibleDialogControlShape::getAccessibleRole(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -383,7 +383,7 @@ sal_Int16 AccessibleDialogControlShape::getAccessibleRole(  ) throw (RuntimeExce
 }
 
 
-OUString AccessibleDialogControlShape::getAccessibleDescription(  ) throw (RuntimeException, std::exception)
+OUString AccessibleDialogControlShape::getAccessibleDescription(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -391,7 +391,7 @@ OUString AccessibleDialogControlShape::getAccessibleDescription(  ) throw (Runti
 }
 
 
-OUString AccessibleDialogControlShape::getAccessibleName(  ) throw (RuntimeException, std::exception)
+OUString AccessibleDialogControlShape::getAccessibleName(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -399,7 +399,7 @@ OUString AccessibleDialogControlShape::getAccessibleName(  ) throw (RuntimeExcep
 }
 
 
-Reference< XAccessibleRelationSet > AccessibleDialogControlShape::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
+Reference< XAccessibleRelationSet > AccessibleDialogControlShape::getAccessibleRelationSet(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -409,7 +409,7 @@ Reference< XAccessibleRelationSet > AccessibleDialogControlShape::getAccessibleR
 }
 
 
-Reference< XAccessibleStateSet > AccessibleDialogControlShape::getAccessibleStateSet(  ) throw (RuntimeException, std::exception)
+Reference< XAccessibleStateSet > AccessibleDialogControlShape::getAccessibleStateSet(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -429,7 +429,7 @@ Reference< XAccessibleStateSet > AccessibleDialogControlShape::getAccessibleStat
 }
 
 
-Locale AccessibleDialogControlShape::getLocale(  ) throw (IllegalAccessibleComponentStateException, RuntimeException, std::exception)
+Locale AccessibleDialogControlShape::getLocale(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -440,7 +440,7 @@ Locale AccessibleDialogControlShape::getLocale(  ) throw (IllegalAccessibleCompo
 // XAccessibleComponent
 
 
-Reference< XAccessible > AccessibleDialogControlShape::getAccessibleAtPoint( const awt::Point& ) throw (RuntimeException, std::exception)
+Reference< XAccessible > AccessibleDialogControlShape::getAccessibleAtPoint( const awt::Point& )
 {
     OExternalLockGuard aGuard( this );
 
@@ -448,13 +448,13 @@ Reference< XAccessible > AccessibleDialogControlShape::getAccessibleAtPoint( con
 }
 
 
-void AccessibleDialogControlShape::grabFocus(  ) throw (RuntimeException, std::exception)
+void AccessibleDialogControlShape::grabFocus(  )
 {
     // no focus for shapes
 }
 
 
-sal_Int32 AccessibleDialogControlShape::getForeground(  ) throw (RuntimeException, std::exception)
+sal_Int32 AccessibleDialogControlShape::getForeground(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -479,7 +479,7 @@ sal_Int32 AccessibleDialogControlShape::getForeground(  ) throw (RuntimeExceptio
 }
 
 
-sal_Int32 AccessibleDialogControlShape::getBackground(  ) throw (RuntimeException, std::exception)
+sal_Int32 AccessibleDialogControlShape::getBackground(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -500,7 +500,7 @@ sal_Int32 AccessibleDialogControlShape::getBackground(  ) throw (RuntimeExceptio
 // XAccessibleExtendedComponent
 
 
-Reference< awt::XFont > AccessibleDialogControlShape::getFont(  ) throw (RuntimeException, std::exception)
+Reference< awt::XFont > AccessibleDialogControlShape::getFont(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -526,7 +526,7 @@ Reference< awt::XFont > AccessibleDialogControlShape::getFont(  ) throw (Runtime
 }
 
 
-OUString AccessibleDialogControlShape::getTitledBorderText(  ) throw (RuntimeException, std::exception)
+OUString AccessibleDialogControlShape::getTitledBorderText(  )
 {
     OExternalLockGuard aGuard( this );
 
@@ -534,7 +534,7 @@ OUString AccessibleDialogControlShape::getTitledBorderText(  ) throw (RuntimeExc
 }
 
 
-OUString AccessibleDialogControlShape::getToolTipText(  ) throw (RuntimeException, std::exception)
+OUString AccessibleDialogControlShape::getToolTipText(  )
 {
     OExternalLockGuard aGuard( this );
 

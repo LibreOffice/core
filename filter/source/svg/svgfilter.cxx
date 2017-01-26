@@ -92,7 +92,6 @@ SVGFilter::~SVGFilter()
 }
 
 sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     vcl::Window*     pFocusWindow = Application::GetFocusWindow();
@@ -282,18 +281,16 @@ sal_Bool SAL_CALL SVGFilter::filter( const Sequence< PropertyValue >& rDescripto
     return bRet;
 }
 
-void SAL_CALL SVGFilter::cancel( ) throw (RuntimeException, std::exception)
+void SAL_CALL SVGFilter::cancel( )
 {
 }
 
 void SAL_CALL SVGFilter::setSourceDocument( const Reference< XComponent >& xDoc )
-    throw (IllegalArgumentException, RuntimeException, std::exception)
 {
     mxSrcDoc = xDoc;
 }
 
 void SAL_CALL SVGFilter::setTargetDocument( const Reference< XComponent >& xDoc )
-    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDstDoc = xDoc;
 }
@@ -341,7 +338,7 @@ bool SVGFilter::isStreamSvg(const uno::Reference<io::XInputStream>& xInput)
     return false;
 }
 
-OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor) throw (RuntimeException, std::exception)
+OUString SAL_CALL SVGFilter::detect(Sequence<PropertyValue>& rDescriptor)
 {
     utl::MediaDescriptor aMediaDescriptor(rDescriptor);
     uno::Reference<io::XInputStream> xInput(aMediaDescriptor[utl::MediaDescriptor::PROP_INPUTSTREAM()], UNO_QUERY);

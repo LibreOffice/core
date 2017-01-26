@@ -57,13 +57,13 @@ ScVbaComboBox::ScVbaComboBox( const uno::Reference< XHelperInterface >& xParent,
 // Value, [read] e.g. getValue returns the value of ooo Text propery e.g. the value in
 // the drop down
 uno::Any SAL_CALL
-ScVbaComboBox::getValue() throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::getValue()
 {
     return m_xProps->getPropertyValue( sSourceName );
 }
 
 void SAL_CALL
-ScVbaComboBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::setListIndex( const uno::Any& _value )
 {
     sal_Int16 nIndex = 0;
     if( _value >>= nIndex )
@@ -85,7 +85,7 @@ ScVbaComboBox::setListIndex( const uno::Any& _value ) throw (uno::RuntimeExcepti
 }
 
 uno::Any SAL_CALL
-ScVbaComboBox::getListIndex() throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::getListIndex()
 {
     uno::Sequence< OUString > sItems;
     m_xProps->getPropertyValue( "StringItemList" ) >>= sItems;
@@ -112,7 +112,7 @@ ScVbaComboBox::getListIndex() throw (uno::RuntimeException, std::exception)
 // Value, [write]e.g. setValue sets the value in the drop down, and if the value is one
 // of the values in the list then the selection is also set
 void SAL_CALL
-ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::setValue( const uno::Any& _value )
 {
     // booleans are converted to uppercase strings
     OUString oldValue = extractStringFromAny( getValue(), OUString(), true );
@@ -133,7 +133,7 @@ ScVbaComboBox::setValue( const uno::Any& _value ) throw (uno::RuntimeException, 
 // see Value
 
 OUString SAL_CALL
-ScVbaComboBox::getText() throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::getText()
 {
     OUString result;
     getValue() >>= result;
@@ -141,109 +141,109 @@ ScVbaComboBox::getText() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-ScVbaComboBox::setText( const OUString& _text ) throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::setText( const OUString& _text )
 {
     setValue( uno::makeAny( _text ) ); // seems the same
 }
 
 // Methods
 void SAL_CALL
-ScVbaComboBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex ) throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::AddItem( const uno::Any& pvargItem, const uno::Any& pvargIndex )
 {
     mpListHelper->AddItem( pvargItem, pvargIndex );
 }
 
 void SAL_CALL
-ScVbaComboBox::removeItem( const uno::Any& index ) throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::removeItem( const uno::Any& index )
 {
     mpListHelper->removeItem( index );
 }
 
 void SAL_CALL
-ScVbaComboBox::Clear(  ) throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::Clear(  )
 {
     mpListHelper->Clear();
 }
 
 void SAL_CALL
-ScVbaComboBox::setRowSource( const OUString& _rowsource ) throw (css::uno::RuntimeException, std::exception)
+ScVbaComboBox::setRowSource( const OUString& _rowsource )
 {
     ScVbaControl::setRowSource( _rowsource );
     mpListHelper->setRowSource( _rowsource );
 }
 
 sal_Int32 SAL_CALL
-ScVbaComboBox::getListCount() throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::getListCount()
 {
     return mpListHelper->getListCount();
 }
 
 uno::Any SAL_CALL
-ScVbaComboBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn ) throw (uno::RuntimeException, std::exception)
+ScVbaComboBox::List( const ::uno::Any& pvargIndex, const uno::Any& pvarColumn )
 {
     return mpListHelper->List( pvargIndex, pvarColumn );
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getStyle() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScVbaComboBox::getStyle()
 {
     return msforms::fmStyle::fmStyleDropDownCombo;
 }
 
-void SAL_CALL ScVbaComboBox::setStyle( sal_Int32 /*nStyle*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setStyle( sal_Int32 /*nStyle*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getDropButtonStyle() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScVbaComboBox::getDropButtonStyle()
 {
     return msforms::fmDropButtonStyle::fmDropButtonStyleArrow;
 }
 
-void SAL_CALL ScVbaComboBox::setDropButtonStyle( sal_Int32 /*nDropButtonStyle*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setDropButtonStyle( sal_Int32 /*nDropButtonStyle*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getDragBehavior() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScVbaComboBox::getDragBehavior()
 {
     return msforms::fmDragBehavior::fmDragBehaviorDisabled;
 }
 
-void SAL_CALL ScVbaComboBox::setDragBehavior( sal_Int32 /*nDragBehavior*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setDragBehavior( sal_Int32 /*nDragBehavior*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getEnterFieldBehavior() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScVbaComboBox::getEnterFieldBehavior()
 {
     return msforms::fmEnterFieldBehavior::fmEnterFieldBehaviorSelectAll;
 }
 
-void SAL_CALL ScVbaComboBox::setEnterFieldBehavior( sal_Int32 /*nEnterFieldBehavior*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setEnterFieldBehavior( sal_Int32 /*nEnterFieldBehavior*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getListStyle() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScVbaComboBox::getListStyle()
 {
     return msforms::fmListStyle::fmListStylePlain;
 }
 
-void SAL_CALL ScVbaComboBox::setListStyle( sal_Int32 /*nListStyle*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setListStyle( sal_Int32 /*nListStyle*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getTextAlign() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScVbaComboBox::getTextAlign()
 {
     return msforms::fmTextAlign::fmTextAlignLeft;
 }
 
-void SAL_CALL ScVbaComboBox::setTextAlign( sal_Int32 /*nTextAlign*/ ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setTextAlign( sal_Int32 /*nTextAlign*/ )
 {
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getTextLength() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScVbaComboBox::getTextLength()
 {
     return getText().getLength();
 }
 
-uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont() throw (uno::RuntimeException, std::exception)
+uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont()
 {
     return new VbaNewFont( m_xProps );
 }
@@ -254,42 +254,42 @@ ScVbaComboBox::getServiceImplName()
     return OUString("ScVbaComboBox");
 }
 
-sal_Int32 SAL_CALL ScVbaComboBox::getBackColor() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScVbaComboBox::getBackColor()
 {
     return ScVbaControl::getBackColor();
 }
 
-void SAL_CALL ScVbaComboBox::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setBackColor( sal_Int32 nBackColor )
 {
     ScVbaControl::setBackColor( nBackColor );
 }
 
-sal_Bool SAL_CALL ScVbaComboBox::getAutoSize() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScVbaComboBox::getAutoSize()
 {
     return ScVbaControl::getAutoSize();
 }
 
-void SAL_CALL ScVbaComboBox::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setAutoSize( sal_Bool bAutoSize )
 {
     ScVbaControl::setAutoSize( bAutoSize );
 }
 
-sal_Bool SAL_CALL ScVbaComboBox::getLocked() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScVbaComboBox::getLocked()
 {
     return ScVbaControl::getLocked();
 }
 
-void SAL_CALL ScVbaComboBox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setLocked( sal_Bool bLocked )
 {
     ScVbaControl::setLocked( bLocked );
 }
 
-OUString SAL_CALL ScVbaComboBox::getLinkedCell() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL ScVbaComboBox::getLinkedCell()
 {
     return ScVbaControl::getControlSource();
 }
 
-void SAL_CALL ScVbaComboBox::setLinkedCell( const OUString& _linkedcell ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScVbaComboBox::setLinkedCell( const OUString& _linkedcell )
 {
     ScVbaControl::setControlSource( _linkedcell );
 }

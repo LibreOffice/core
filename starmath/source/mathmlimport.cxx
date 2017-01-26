@@ -427,7 +427,6 @@ uno::Sequence< OUString > SAL_CALL SmXMLImport_getSupportedServiceNames()
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new SmXMLImport(comphelper::getComponentContext(rSMgr), SmXMLImport_getImplementationName(), SvXMLImportFlags::ALL));
 }
@@ -446,7 +445,6 @@ throw()
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLImportMeta_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-throw( uno::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportMeta_getImplementationName(), SvXMLImportFlags::META ));
 }
@@ -465,14 +463,12 @@ uno::Sequence< OUString > SAL_CALL SmXMLImportSettings_getSupportedServiceNames(
 
 uno::Reference< uno::XInterface > SAL_CALL SmXMLImportSettings_createInstance(
     const uno::Reference< lang::XMultiServiceFactory > & rSMgr)
-    throw( uno::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new SmXMLImport( comphelper::getComponentContext(rSMgr), SmXMLImportSettings_getImplementationName(), SvXMLImportFlags::SETTINGS ));
 }
 
 sal_Int64 SAL_CALL SmXMLImport::getSomething(
     const uno::Sequence< sal_Int8 >&rId )
-throw(uno::RuntimeException, std::exception)
 {
     if ( rId.getLength() == 16 &&
         0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -483,7 +479,6 @@ throw(uno::RuntimeException, std::exception)
 }
 
 void SmXMLImport::endDocument()
-    throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
     //Set the resulted tree into the SmDocShell where it belongs
     SmNode *pTree = popOrZero(aNodeStack);

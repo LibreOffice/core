@@ -103,20 +103,17 @@ class SfxFrameLoader_Impl : public ::cppu::WeakImplHelper< css::frame::XSynchron
 public:
     explicit SfxFrameLoader_Impl( const css::uno::Reference < css::uno::XComponentContext >& _rxContext );
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 
     // XSynchronousFrameLoader
 
-    virtual sal_Bool SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL cancel() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL load( const css::uno::Sequence< css::beans::PropertyValue >& _rArgs, const css::uno::Reference< css::frame::XFrame >& _rxFrame ) override;
+    virtual void SAL_CALL cancel() override;
 
 protected:
     virtual                 ~SfxFrameLoader_Impl() override;
@@ -609,7 +606,6 @@ Reference< XController2 > SfxFrameLoader_Impl::impl_createDocumentView( const Re
 
 sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rArgs,
                                              const Reference< XFrame >& _rTargetFrame )
-    throw( RuntimeException, std::exception )
 {
     ENSURE_OR_THROW( _rTargetFrame.is(), "illegal NULL frame" );
 
@@ -753,24 +749,24 @@ sal_Bool SAL_CALL SfxFrameLoader_Impl::load( const Sequence< PropertyValue >& rA
     return bLoadSuccess;
 }
 
-void SfxFrameLoader_Impl::cancel() throw( RuntimeException, std::exception )
+void SfxFrameLoader_Impl::cancel()
 {
 }
 
 /* XServiceInfo */
-OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL SfxFrameLoader_Impl::getImplementationName()
 {
     return OUString("com.sun.star.comp.office.FrameLoader");
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SfxFrameLoader_Impl::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SfxFrameLoader_Impl::getSupportedServiceNames()
 {
     Sequence< OUString > seqServiceNames( 2 );
     seqServiceNames.getArray() [0] = "com.sun.star.frame.SynchronousFrameLoader";

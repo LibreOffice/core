@@ -138,7 +138,7 @@ Reference< XResultSet > OCalcDatabaseMetaData::impl_getTypeInfo_throw(  )
 
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
     const Any& /*catalog*/, const OUString& /*schemaPattern*/, const OUString& tableNamePattern,
-        const OUString& columnNamePattern ) throw(SQLException, RuntimeException, std::exception)
+        const OUString& columnNamePattern )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -232,7 +232,7 @@ Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getColumns(
 }
 
 
-OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OCalcDatabaseMetaData::getURL(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -240,28 +240,28 @@ OUString SAL_CALL OCalcDatabaseMetaData::getURL(  ) throw(SQLException, RuntimeE
 }
 
 
-sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxBinaryLiteralLength(  )
 {
     return SAL_MAX_INT32;
 }
 
 
-sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxCharLiteralLength(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxCharLiteralLength(  )
 {
     return SAL_MAX_INT32;
 }
 
-sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnNameLength(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnNameLength(  )
 {
     return SAL_MAX_INT32;
 }
 
-sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInIndex(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInIndex(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OCalcDatabaseMetaData::getMaxColumnsInTable(  )
 {
     return 256;
 }
@@ -341,7 +341,6 @@ static bool lcl_IsUnnamed( const Reference<XDatabaseRanges>& xRanges, const OUSt
 Reference< XResultSet > SAL_CALL OCalcDatabaseMetaData::getTables(
         const Any& /*catalog*/, const OUString& /*schemaPattern*/,
         const OUString& tableNamePattern, const Sequence< OUString >& types )
-        throw(SQLException, RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 

@@ -149,17 +149,17 @@ namespace sfx2
 
     public:
         // XFilePickerListener methods
-        virtual void SAL_CALL               fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL               directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual OUString SAL_CALL           helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL               controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL               dialogSizeChanged() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL               fileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
+        virtual void SAL_CALL               directoryChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
+        virtual OUString SAL_CALL           helpRequested( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
+        virtual void SAL_CALL               controlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
+        virtual void SAL_CALL               dialogSizeChanged() override;
 
         // XDialogClosedListener methods
-        virtual void SAL_CALL               dialogClosed( const css::ui::dialogs::DialogClosedEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL               dialogClosed( const css::ui::dialogs::DialogClosedEvent& _rEvent ) override;
 
         // XEventListener methods
-        virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) override;
 
         // handle XFilePickerListener events
         void                    handleFileSelectionChanged( const css::ui::dialogs::FilePickerEvent& aEvent );

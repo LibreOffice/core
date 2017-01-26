@@ -48,7 +48,7 @@ uno::Sequence< OUString > SAL_CALL QuickDiagrammingImport_getSupportedServiceNam
     return aSeq;
 }
 
-uno::Reference< uno::XInterface > SAL_CALL QuickDiagrammingImport_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
+uno::Reference< uno::XInterface > SAL_CALL QuickDiagrammingImport_createInstance( const Reference< XComponentContext >& rxContext )
 {
     return static_cast<cppu::OWeakObject*>(new QuickDiagrammingImport( rxContext ));
 }
@@ -57,7 +57,7 @@ QuickDiagrammingImport::QuickDiagrammingImport( const css::uno::Reference< css::
     : XmlFilterBase( rxContext )
 {}
 
-bool QuickDiagrammingImport::importDocument() throw (css::uno::RuntimeException, std::exception)
+bool QuickDiagrammingImport::importDocument()
 {
     /*  to activate the PPTX dumper, define the environment variable
         OOO_PPTXDUMPER and insert the full path to the file
@@ -113,7 +113,7 @@ oox::drawingml::chart::ChartConverter* QuickDiagrammingImport::getChartConverter
     return nullptr;
 }
 
-OUString QuickDiagrammingImport::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+OUString QuickDiagrammingImport::getImplementationName()
 {
     return QuickDiagrammingImport_getImplementationName();
 }

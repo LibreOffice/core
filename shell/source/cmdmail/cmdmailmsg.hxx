@@ -54,70 +54,51 @@ public:
     // XSimpleMailMessage
 
 
-    virtual void SAL_CALL setBody( const OUString& aBody )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setBody( const OUString& aBody ) override;
 
-    virtual OUString SAL_CALL getBody(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getBody(  ) override;
 
-    virtual void SAL_CALL setRecipient( const OUString& aRecipient )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setRecipient( const OUString& aRecipient ) override;
 
-    virtual OUString SAL_CALL getRecipient(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getRecipient(  ) override;
 
-    virtual void SAL_CALL setCcRecipient( const css::uno::Sequence< OUString >& aCcRecipient )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setCcRecipient( const css::uno::Sequence< OUString >& aCcRecipient ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getCcRecipient(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getCcRecipient(  ) override;
 
-    virtual void SAL_CALL setBccRecipient( const css::uno::Sequence< OUString >& aBccRecipient )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setBccRecipient( const css::uno::Sequence< OUString >& aBccRecipient ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getBccRecipient(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getBccRecipient(  ) override;
 
-    virtual void SAL_CALL setOriginator( const OUString& aOriginator )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setOriginator( const OUString& aOriginator ) override;
 
-    virtual OUString SAL_CALL getOriginator(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getOriginator(  ) override;
 
-    virtual void SAL_CALL setSubject( const OUString& aSubject )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSubject( const OUString& aSubject ) override;
 
-    virtual OUString SAL_CALL getSubject(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getSubject(  ) override;
 
-    virtual void SAL_CALL setAttachement( const css::uno::Sequence< OUString >& aAttachement )
-        throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setAttachement( const css::uno::Sequence< OUString >& aAttachement ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getAttachement(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getAttachement(  ) override;
 
 
     // XNameAccess
 
 
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw (css::uno::RuntimeException, std::exception) override ;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override ;
 
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 
 
     // XElementAccess
 
 
-    virtual css::uno::Type SAL_CALL getElementType(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType(  ) override;
 
-    virtual sal_Bool SAL_CALL hasElements(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) override;
 
 };
 

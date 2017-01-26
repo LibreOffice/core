@@ -39,15 +39,14 @@ public:
                             const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XOOXMLDocumentPropertiesImporter
     virtual void SAL_CALL importProperties(
                             const css::uno::Reference< css::embed::XStorage >& rxSource,
-                            const css::uno::Reference< css::document::XDocumentProperties >& rxDocumentProperties )
-                        throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, css::xml::sax::SAXException, css::uno::Exception, std::exception) override;
+                            const css::uno::Reference< css::document::XDocumentProperties >& rxDocumentProperties ) override;
 
 private:
     css::uno::Reference< css::uno::XComponentContext > mxContext;

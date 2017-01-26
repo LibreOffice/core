@@ -35,68 +35,51 @@ public:
     virtual                 ~ScCellCursorObj() override;
 
     virtual css::uno::Any SAL_CALL queryInterface(
-                                const css::uno::Type & rType )
-                                    throw(css::uno::RuntimeException, std::exception) override;
+                                const css::uno::Type & rType ) override;
     virtual void SAL_CALL   acquire() throw() override;
     virtual void SAL_CALL   release() throw() override;
 
                             // XSheetCellCursor
-    virtual void SAL_CALL   collapseToCurrentRegion() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   collapseToCurrentArray()
-                                throw(css::uno::RuntimeException,
-                                      std::exception) override;
-    virtual void SAL_CALL   collapseToMergedArea() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   expandToEntireColumns() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   expandToEntireRows() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   collapseToSize( sal_Int32 nColumns, sal_Int32 nRows )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   collapseToCurrentRegion() override;
+    virtual void SAL_CALL   collapseToCurrentArray() override;
+    virtual void SAL_CALL   collapseToMergedArea() override;
+    virtual void SAL_CALL   expandToEntireColumns() override;
+    virtual void SAL_CALL   expandToEntireRows() override;
+    virtual void SAL_CALL   collapseToSize( sal_Int32 nColumns, sal_Int32 nRows ) override;
 
                             // XUsedAreaCursor
-    virtual void SAL_CALL   gotoStartOfUsedArea( sal_Bool bExpand )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   gotoEndOfUsedArea( sal_Bool bExpand )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   gotoStartOfUsedArea( sal_Bool bExpand ) override;
+    virtual void SAL_CALL   gotoEndOfUsedArea( sal_Bool bExpand ) override;
 
                             // XCellCursor
-    virtual void SAL_CALL   gotoStart() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   gotoEnd() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   gotoNext() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   gotoPrevious() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   gotoStart() override;
+    virtual void SAL_CALL   gotoEnd() override;
+    virtual void SAL_CALL   gotoNext() override;
+    virtual void SAL_CALL   gotoPrevious() override;
+    virtual void SAL_CALL   gotoOffset( sal_Int32 nColumnOffset, sal_Int32 nRowOffset ) override;
 
                             // XSheetCellRange
     virtual css::uno::Reference< css::sheet::XSpreadsheet > SAL_CALL
-                            getSpreadsheet() throw(css::uno::RuntimeException, std::exception) override;
+                            getSpreadsheet() override;
 
                             // XCellRange
     virtual css::uno::Reference< css::table::XCell > SAL_CALL
-                            getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow )
-                                throw(css::lang::IndexOutOfBoundsException,
-                                    css::uno::RuntimeException, std::exception) override;
+                            getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
     virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
                             getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop,
-                                sal_Int32 nRight, sal_Int32 nBottom )
-                                    throw(css::lang::IndexOutOfBoundsException,
-                                        css::uno::RuntimeException, std::exception) override;
+                                sal_Int32 nRight, sal_Int32 nBottom ) override;
     using ScCellRangeObj::getCellRangeByName;
     virtual css::uno::Reference< css::table::XCellRange > SAL_CALL
-                            getCellRangeByName( const OUString& aRange )
-                                throw(css::uno::RuntimeException, std::exception) override;
+                            getCellRangeByName( const OUString& aRange ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
                             // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
 };
 
 #endif

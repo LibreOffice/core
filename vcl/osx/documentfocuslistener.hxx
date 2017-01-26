@@ -41,14 +41,14 @@ public:
     /// @throws css::uno::RuntimeException
     void attachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible
-    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    );
 
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
     void attachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext
-    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    );
 
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
@@ -56,20 +56,20 @@ public:
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext,
         const css::uno::Reference< css::accessibility::XAccessibleStateSet >& xStateSet
-    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    );
 
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
     void detachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible
-    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    );
 
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
     void detachRecursive(
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext
-    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    );
 
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
@@ -77,20 +77,17 @@ public:
         const css::uno::Reference< css::accessibility::XAccessible >& xAccessible,
         const css::uno::Reference< css::accessibility::XAccessibleContext >& xContext,
         const css::uno::Reference< css::accessibility::XAccessibleStateSet >& xStateSet
-    ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    );
 
     /// @throws css::lang::IndexOutOfBoundsException
     /// @throws css::uno::RuntimeException
-    static css::uno::Reference< css::accessibility::XAccessible > getAccessible(const css::lang::EventObject& aEvent )
-        throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException);
+    static css::uno::Reference< css::accessibility::XAccessible > getAccessible(const css::lang::EventObject& aEvent );
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     // XAccessibleEventListener
-    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
 private:
     std::set< css::uno::Reference< css::uno::XInterface > > m_aRefList;

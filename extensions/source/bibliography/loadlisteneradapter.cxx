@@ -92,7 +92,7 @@ namespace bib
     // XEventListener
 
 
-    void SAL_CALL OComponentAdapterBase::disposing( const EventObject& ) throw( RuntimeException, std::exception )
+    void SAL_CALL OComponentAdapterBase::disposing( const EventObject& )
     {
         if ( m_pListener )
         {
@@ -134,7 +134,7 @@ namespace bib
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::disposing( const  EventObject& _rSource ) throw( RuntimeException, std::exception)
+    void SAL_CALL OLoadListenerAdapter::disposing( const  EventObject& _rSource )
     {
         OComponentAdapterBase::disposing( _rSource );
     }
@@ -148,35 +148,35 @@ namespace bib
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::loaded( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL OLoadListenerAdapter::loaded( const EventObject& _rEvent )
     {
         if ( getLoadListener( ) )
             getLoadListener( )->_loaded( _rEvent );
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::unloading( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL OLoadListenerAdapter::unloading( const EventObject& _rEvent )
     {
         if ( getLoadListener( ) )
             getLoadListener( )->_unloading( _rEvent );
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::unloaded( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL OLoadListenerAdapter::unloaded( const EventObject& _rEvent )
     {
         if ( getLoadListener( ) )
             getLoadListener( )->_unloaded( _rEvent );
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::reloading( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL OLoadListenerAdapter::reloading( const EventObject& _rEvent )
     {
         if ( getLoadListener( ) )
             getLoadListener( )->_reloading( _rEvent );
     }
 
 
-    void SAL_CALL OLoadListenerAdapter::reloaded( const EventObject& _rEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL OLoadListenerAdapter::reloaded( const EventObject& _rEvent )
     {
         if ( getLoadListener( ) )
             getLoadListener( )->_reloaded( _rEvent );

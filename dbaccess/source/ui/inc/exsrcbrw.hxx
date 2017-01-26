@@ -44,44 +44,44 @@ namespace dbaui
         SbaExternalSourceBrowser(const css::uno::Reference< css::uno::XComponentContext >& _rM);
 
         /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static OUString getImplementationName_Static();
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
         static css::uno::Reference< css::uno::XInterface >
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
         // UNO
         DECLARE_UNO3_DEFAULTS(SbaExternalSourceBrowser, SbaXDataBrowserController)
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
         //  virtual css::uno::Sequence< css::uno::Reference< css::reflection::XIdlClass > >  getIdlClasses();
 
         //  static css::uno::Reference< css::reflection::XIdlClass >  getStaticIdlClass();
 
         // css::frame::XDispatch
-        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL dispatch(const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue>& aArgs) override;
 
         // css::frame::XDispatchProvider
-        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Reference< css::frame::XDispatch >  SAL_CALL queryDispatch(const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) override;
 
         // css::util::XModifyListener
-        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
 
         // css::util::XModifyBroadcaster
-        virtual void SAL_CALL addModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL removeModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL addModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) override;
+        virtual void SAL_CALL removeModifyListener(const css::uno::Reference< css::util::XModifyListener > & aListener) override;
 
         // css::lang::XComponent
         virtual void SAL_CALL disposing() override;
 
         // css::form::XLoadListener
-        virtual void SAL_CALL unloading(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL unloading(const css::lang::EventObject& aEvent) override;
 
         // css::lang::XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     protected:
         virtual ~SbaExternalSourceBrowser() override;

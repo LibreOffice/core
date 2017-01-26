@@ -63,13 +63,13 @@ public:
     void        SetPropSet( css::uno::Reference< css::linguistic2::XLinguProperties > &rPS );
 
     //XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& rSource ) override;
 
     // XDictionaryListEventListener
-    virtual void SAL_CALL processDictionaryListEvent( const css::linguistic2::DictionaryListEvent& rDicListEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL processDictionaryListEvent( const css::linguistic2::DictionaryListEvent& rDicListEvent ) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& rEvt ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& rEvt ) override;
 };
 
 

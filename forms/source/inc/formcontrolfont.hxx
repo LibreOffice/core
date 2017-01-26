@@ -75,13 +75,12 @@ namespace frm
         void     getFastPropertyValue            ( css::uno::Any& _rValue, sal_Int32 _nHandle ) const;
         /// @throws css::lang::IllegalArgumentException
         /// @throws css::uno::RuntimeException
-        bool     convertFastPropertyValue        ( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue ) throw( css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception );
+        bool     convertFastPropertyValue        ( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue );
         /// @throws css::uno::Exception
         void     setFastPropertyValue_NoBroadcast_impl(
                      ::cppu::OPropertySetHelper & rBase,
                      void (::cppu::OPropertySetHelper::*pSet)( sal_Int32, css::uno::Any const&),
-                     sal_Int32 nHandle, const css::uno::Any& rValue)
-            throw ( css::uno::Exception );
+                     sal_Int32 nHandle, const css::uno::Any& rValue);
         css::uno::Any
                  getPropertyDefaultByHandle      ( sal_Int32 _nHandle ) const;
 

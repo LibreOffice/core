@@ -952,8 +952,6 @@ void resetCursorPropertyValue(const SfxItemPropertySimpleEntry& rEntry, SwPaM& r
 
 void InsertFile(SwUnoCursor* pUnoCursor, const OUString& rURL,
     const uno::Sequence< beans::PropertyValue >& rOptions)
-    throw (lang::IllegalArgumentException, io::IOException,
-           uno::RuntimeException, std::exception)
 {
     std::unique_ptr<SfxMedium> pMed;
     SwDoc* pDoc = pUnoCursor->GetDoc();
@@ -1152,7 +1150,6 @@ bool DocInsertStringSplitCR(
 void makeRedline( SwPaM& rPaM,
     const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     IDocumentRedlineAccess* pRedlineAccess = &rPaM.GetDoc()->getIDocumentRedlineAccess();
 
@@ -1268,7 +1265,6 @@ void makeRedline( SwPaM& rPaM,
 void makeTableRowRedline( SwTableLine& rTableLine,
     const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     IDocumentRedlineAccess* pRedlineAccess = &rTableLine.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess();
 
@@ -1318,7 +1314,6 @@ void makeTableRowRedline( SwTableLine& rTableLine,
 void makeTableCellRedline( SwTableBox& rTableBox,
     const OUString& rRedlineType,
     const uno::Sequence< beans::PropertyValue >& rRedlineProperties )
-        throw (lang::IllegalArgumentException, uno::RuntimeException)
 {
     IDocumentRedlineAccess* pRedlineAccess = &rTableBox.GetFrameFormat()->GetDoc()->getIDocumentRedlineAccess();
 

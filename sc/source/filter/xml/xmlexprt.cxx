@@ -5040,7 +5040,6 @@ sal_uInt32 ScXMLExport::exportDoc( enum XMLTokenEnum eClass )
 
 // XExporter
 void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XComponent>& xComponent )
-                            throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SvXMLExport::setSourceDocument( xComponent );
@@ -5070,7 +5069,6 @@ void SAL_CALL ScXMLExport::setSourceDocument( const uno::Reference<lang::XCompon
 
 // XFilter
 sal_Bool SAL_CALL ScXMLExport::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDoc)
@@ -5082,7 +5080,6 @@ sal_Bool SAL_CALL ScXMLExport::filter( const css::uno::Sequence< css::beans::Pro
 }
 
 void SAL_CALL ScXMLExport::cancel()
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (pDoc)
@@ -5092,7 +5089,6 @@ void SAL_CALL ScXMLExport::cancel()
 
 // XInitialization
 void SAL_CALL ScXMLExport::initialize( const css::uno::Sequence< css::uno::Any >& aArguments )
-    throw(css::uno::Exception, css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     SvXMLExport::initialize(aArguments);
@@ -5100,7 +5096,6 @@ void SAL_CALL ScXMLExport::initialize( const css::uno::Sequence< css::uno::Any >
 
 // XUnoTunnel
 sal_Int64 SAL_CALL ScXMLExport::getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     return SvXMLExport::getSomething(aIdentifier);

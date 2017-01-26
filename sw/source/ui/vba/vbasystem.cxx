@@ -176,7 +176,7 @@ SwVbaSystem::~SwVbaSystem()
 }
 
 sal_Int32 SAL_CALL
-SwVbaSystem::getCursor() throw (uno::RuntimeException, std::exception)
+SwVbaSystem::getCursor()
 {
     PointerStyle nPointerStyle = getPointerStyle( getCurrentWordDoc(mxContext) );
 
@@ -196,7 +196,7 @@ SwVbaSystem::getCursor() throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL
-SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, std::exception)
+SwVbaSystem::setCursor( sal_Int32 _cursor )
 {
     try
     {
@@ -240,7 +240,7 @@ SwVbaSystem::setCursor( sal_Int32 _cursor ) throw (uno::RuntimeException, std::e
 }
 
 uno::Any SAL_CALL
-SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey ) throw ( uno::RuntimeException, std::exception )
+SwVbaSystem::PrivateProfileString( const OUString& rFilename, const OUString& rSection, const OUString& rKey )
 {
     // FIXME: need to detect whether it is a relative file path
     // we need to detect if this is a URL, if not then assume it's a file path

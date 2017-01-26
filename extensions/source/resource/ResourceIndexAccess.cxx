@@ -47,13 +47,13 @@ namespace
             }
 
             // XIndexAccess
-            virtual ::sal_Int32 SAL_CALL getCount(  ) throw (css::uno::RuntimeException, std::exception) override
+            virtual ::sal_Int32 SAL_CALL getCount(  ) override
                 { return m_pResMgr.get() ? SAL_MAX_UINT16 : 0; };
-            virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (css::lang::IndexOutOfBoundsException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override;
             // XElementAccess
-            virtual sal_Bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException, std::exception) override
+            virtual sal_Bool SAL_CALL hasElements(  ) override
                 { return static_cast<bool>(m_pResMgr.get()); };
-            virtual css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException, std::exception) override
+            virtual css::uno::Type SAL_CALL getElementType(  ) override
                 { return ::cppu::UnoType<OUString>::get(); };
         private:
             // m_pResMgr should never be NULL
@@ -66,7 +66,6 @@ ResourceIndexAccess::ResourceIndexAccess(Sequence<Any> const& rArgs, Reference<X
 {};
 
 Any SAL_CALL ResourceIndexAccess::getByName(const OUString& aName)
-    throw (NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     const Sequence<OUString> aNames(getElementNames());
     Reference<XIndexAccess> xResult;
@@ -82,7 +81,6 @@ Any SAL_CALL ResourceIndexAccess::getByName(const OUString& aName)
 }
 
 Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
-    throw (RuntimeException, std::exception)
 {
     static Sequence<OUString> aResult;
     if( aResult.getLength() == 0)
@@ -94,14 +92,12 @@ Sequence<OUString> SAL_CALL ResourceIndexAccess::getElementNames(  )
 }
 
 sal_Bool SAL_CALL ResourceIndexAccess::hasByName(const OUString& aName)
-    throw (RuntimeException, std::exception)
 {
     const Sequence<OUString> aNames(getElementNames());
     return (::std::find(aNames.begin(), aNames.end(), aName) != aNames.end());
 }
 
 Any SAL_CALL ResourceStringIndexAccess::getByIndex(sal_Int32 nIdx)
-    throw (IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     if(nIdx > SAL_MAX_UINT16 || nIdx < 0)
         throw IndexOutOfBoundsException();

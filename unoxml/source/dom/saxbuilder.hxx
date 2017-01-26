@@ -77,47 +77,30 @@ namespace DOM
         explicit CSAXDocumentBuilder(const css::uno::Reference< css::lang::XMultiServiceFactory >& mgr);
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName()
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName)
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames ()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames () override;
 
         // XDocumentHandler
-        virtual void SAL_CALL startDocument()
-            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
-        virtual void SAL_CALL endDocument()
-            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+        virtual void SAL_CALL startDocument() override;
+        virtual void SAL_CALL endDocument() override;
         virtual void SAL_CALL startElement( const OUString& aName,
-             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs )
-            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
-        virtual void SAL_CALL endElement( const OUString& aName )
-            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
-        virtual void SAL_CALL characters( const OUString& aChars )
-            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
-        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces )
-            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+             const css::uno::Reference< css::xml::sax::XAttributeList >& xAttribs ) override;
+        virtual void SAL_CALL endElement( const OUString& aName ) override;
+        virtual void SAL_CALL characters( const OUString& aChars ) override;
+        virtual void SAL_CALL ignorableWhitespace( const OUString& aWhitespaces ) override;
         virtual void SAL_CALL processingInstruction( const OUString& aTarget,
-             const OUString& aData )
-            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
-        virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator )
-            throw( css::uno::RuntimeException, css::xml::sax::SAXException, std::exception ) override;
+             const OUString& aData ) override;
+        virtual void SAL_CALL setDocumentLocator( const css::uno::Reference< css::xml::sax::XLocator >& xLocator ) override;
 
 
         // XSAXDocumentBuilder
-        virtual css::xml::dom::SAXDocumentBuilderState SAL_CALL getState()
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL reset()
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL getDocument()
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::xml::dom::XDocumentFragment > SAL_CALL getDocumentFragment()
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL startDocumentFragment(const css::uno::Reference< css::xml::dom::XDocument >& ownerDoc)
-            throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL endDocumentFragment()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::xml::dom::SAXDocumentBuilderState SAL_CALL getState() override;
+        virtual void SAL_CALL reset() override;
+        virtual css::uno::Reference< css::xml::dom::XDocument > SAL_CALL getDocument() override;
+        virtual css::uno::Reference< css::xml::dom::XDocumentFragment > SAL_CALL getDocumentFragment() override;
+        virtual void SAL_CALL startDocumentFragment(const css::uno::Reference< css::xml::dom::XDocument >& ownerDoc) override;
+        virtual void SAL_CALL endDocumentFragment() override;
 
 
     };

@@ -222,7 +222,6 @@ void SAL_CALL ChartController::setPosSize(
     sal_Int32 Width,
     sal_Int32 Height,
     sal_Int16 Flags )
-        throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -270,7 +269,6 @@ void SAL_CALL ChartController::setPosSize(
 }
 
 awt::Rectangle SAL_CALL ChartController::getPosSize()
-    throw (uno::RuntimeException, std::exception)
 {
     //@todo
     awt::Rectangle aRet(0, 0, 0, 0);
@@ -283,7 +281,6 @@ awt::Rectangle SAL_CALL ChartController::getPosSize()
 }
 
 void SAL_CALL ChartController::setVisible( sal_Bool Visible )
-    throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -293,7 +290,6 @@ void SAL_CALL ChartController::setVisible( sal_Bool Visible )
 }
 
 void SAL_CALL ChartController::setEnable( sal_Bool Enable )
-    throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -303,7 +299,6 @@ void SAL_CALL ChartController::setEnable( sal_Bool Enable )
 }
 
 void SAL_CALL ChartController::setFocus()
-    throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -314,7 +309,6 @@ void SAL_CALL ChartController::setFocus()
 
 void SAL_CALL ChartController::addWindowListener(
     const uno::Reference< awt::XWindowListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -325,7 +319,6 @@ void SAL_CALL ChartController::addWindowListener(
 
 void SAL_CALL ChartController::removeWindowListener(
     const uno::Reference< awt::XWindowListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -336,7 +329,6 @@ void SAL_CALL ChartController::removeWindowListener(
 
 void SAL_CALL ChartController::addFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -347,7 +339,6 @@ void SAL_CALL ChartController::addFocusListener(
 
 void SAL_CALL ChartController::removeFocusListener(
     const uno::Reference< awt::XFocusListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -358,7 +349,6 @@ void SAL_CALL ChartController::removeFocusListener(
 
 void SAL_CALL ChartController::addKeyListener(
     const uno::Reference< awt::XKeyListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -369,7 +359,6 @@ void SAL_CALL ChartController::addKeyListener(
 
 void SAL_CALL ChartController::removeKeyListener(
     const uno::Reference< awt::XKeyListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -380,7 +369,6 @@ void SAL_CALL ChartController::removeKeyListener(
 
 void SAL_CALL ChartController::addMouseListener(
     const uno::Reference< awt::XMouseListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -391,7 +379,6 @@ void SAL_CALL ChartController::addMouseListener(
 
 void SAL_CALL ChartController::removeMouseListener(
     const uno::Reference< awt::XMouseListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -402,7 +389,6 @@ void SAL_CALL ChartController::removeMouseListener(
 
 void SAL_CALL ChartController::addMouseMotionListener(
     const uno::Reference< awt::XMouseMotionListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -413,7 +399,6 @@ void SAL_CALL ChartController::addMouseMotionListener(
 
 void SAL_CALL ChartController::removeMouseMotionListener(
     const uno::Reference< awt::XMouseMotionListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -424,7 +409,6 @@ void SAL_CALL ChartController::removeMouseMotionListener(
 
 void SAL_CALL ChartController::addPaintListener(
     const uno::Reference< awt::XPaintListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -435,7 +419,6 @@ void SAL_CALL ChartController::addPaintListener(
 
 void SAL_CALL ChartController::removePaintListener(
     const uno::Reference< awt::XPaintListener >& xListener )
-        throw (uno::RuntimeException, std::exception)
 {
     //@todo
     uno::Reference<awt::XWindow> xWindow = m_xViewWindow;
@@ -1560,7 +1543,6 @@ bool ChartController::requestQuickHelp(
 
 // XSelectionSupplier (optional interface)
 sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
-    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     bool bSuccess = false;
 
@@ -1612,7 +1594,6 @@ sal_Bool SAL_CALL ChartController::select( const uno::Any& rSelection )
 }
 
 uno::Any SAL_CALL ChartController::getSelection()
-    throw(uno::RuntimeException, std::exception)
 {
     uno::Any aReturn;
     if ( m_aSelection.hasSelection() )
@@ -1632,7 +1613,6 @@ uno::Any SAL_CALL ChartController::getSelection()
 }
 
 void SAL_CALL ChartController::addSelectionChangeListener( const uno::Reference<view::XSelectionChangeListener> & xListener )
-    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() )//@todo? allow adding of listeners in suspend mode?
@@ -1643,7 +1623,6 @@ void SAL_CALL ChartController::addSelectionChangeListener( const uno::Reference<
 }
 
 void SAL_CALL ChartController::removeSelectionChangeListener( const uno::Reference<view::XSelectionChangeListener> & xListener )
-    throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     if( impl_isDisposedOrSuspended() ) //@todo? allow removing of listeners in suspend mode?

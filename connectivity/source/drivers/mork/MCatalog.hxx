@@ -38,7 +38,7 @@ namespace connectivity
             virtual void refreshViews() override ;
             virtual void refreshGroups() override;
             virtual void refreshUsers() override ;
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTables(  ) override;
         public:
             explicit OCatalog(OConnection* _pCon);
 

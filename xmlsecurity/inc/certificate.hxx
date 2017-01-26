@@ -23,7 +23,7 @@ public:
     /// Returns the SHA-256 thumbprint.
     ///
     /// @throws css::uno::RuntimeException
-    virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() throw (css::uno::RuntimeException, std::exception) = 0;
+    virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() = 0;
 
 protected:
     ~Certificate() throw () {}

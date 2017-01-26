@@ -64,46 +64,46 @@ public:
                     virtual ~VCLXMultiLineEdit() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                           SAL_CALL acquire() throw() override  { VCLXWindow::acquire(); }
     void                           SAL_CALL release() throw() override  { VCLXWindow::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XTextComponent
-    void SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setText( const OUString& aText ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL insertText( const css::awt::Selection& Sel, const OUString& Text ) throw(css::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getText(  ) throw(css::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getSelectedText(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setSelection( const css::awt::Selection& aSelection ) throw(css::uno::RuntimeException, std::exception) override;
-    css::awt::Selection SAL_CALL getSelection(  ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isEditable(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setEditable( sal_Bool bEditable ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getMaxTextLen(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void SAL_CALL setText( const OUString& aText ) override;
+    void SAL_CALL insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
+    OUString SAL_CALL getText(  ) override;
+    OUString SAL_CALL getSelectedText(  ) override;
+    void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
+    css::awt::Selection SAL_CALL getSelection(  ) override;
+    sal_Bool SAL_CALL isEditable(  ) override;
+    void SAL_CALL setEditable( sal_Bool bEditable ) override;
+    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
+    sal_Int16 SAL_CALL getMaxTextLen(  ) override;
 
     //XTextArea
-    OUString SAL_CALL getTextLines(  ) throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getTextLines(  ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getMinimumSize(  ) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     // css::awt::XTextLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
+    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
     // css::awt::XWindow
-    void SAL_CALL setFocus(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setFocus(  ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -126,38 +126,38 @@ public:
     virtual void SetWindow( const VclPtr< vcl::Window > &pWindow ) override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                           SAL_CALL acquire() throw() override  { VCLXWindow::acquire(); }
     void                           SAL_CALL release() throw() override  { VCLXWindow::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XTextComponent
-    void SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setText( const OUString& aText ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL insertText( const css::awt::Selection& Sel, const OUString& Text ) throw(css::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getText(  ) throw(css::uno::RuntimeException, std::exception) override;
-    OUString SAL_CALL getSelectedText(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setSelection( const css::awt::Selection& aSelection ) throw(css::uno::RuntimeException, std::exception) override;
-    css::awt::Selection SAL_CALL getSelection(  ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isEditable(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setEditable( sal_Bool bEditable ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getMaxTextLen(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener >& l ) override;
+    void SAL_CALL setText( const OUString& aText ) override;
+    void SAL_CALL insertText( const css::awt::Selection& Sel, const OUString& Text ) override;
+    OUString SAL_CALL getText(  ) override;
+    OUString SAL_CALL getSelectedText(  ) override;
+    void SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
+    css::awt::Selection SAL_CALL getSelection(  ) override;
+    sal_Bool SAL_CALL isEditable(  ) override;
+    void SAL_CALL setEditable( sal_Bool bEditable ) override;
+    void SAL_CALL setMaxTextLen( sal_Int16 nLen ) override;
+    sal_Int16 SAL_CALL getMaxTextLen(  ) override;
 
     // css::awt::XLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::awt::Size SAL_CALL getPreferredSize(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getMinimumSize(  ) override;
+    css::awt::Size SAL_CALL getPreferredSize(  ) override;
+    css::awt::Size SAL_CALL calcAdjustedSize( const css::awt::Size& aNewSize ) override;
 
     // css::awt::XTextLayoutConstrains
-    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(css::uno::RuntimeException, std::exception) override;
+    css::awt::Size SAL_CALL getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) override;
+    void SAL_CALL getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) override;
 
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -180,8 +180,8 @@ public:
     virtual ~SVTXFormattedField() override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
 protected:
     void    setFormatsSupplier(const css::uno::Reference< css::util::XNumberFormatsSupplier > & xSupplier);
@@ -250,24 +250,24 @@ protected:
 public:
     SVTXRoadmap();
 
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override { VCLXWindow::disposing( Source ); }
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) override { VCLXWindow::disposing( Source ); }
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
 
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
     // XContainerListener
-    void SAL_CALL elementInserted( const css::container::ContainerEvent& rEvent )throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL elementRemoved( const css::container::ContainerEvent& rEvent )throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL elementReplaced( const css::container::ContainerEvent& rEvent )throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL elementInserted( const css::container::ContainerEvent& rEvent ) override;
+    void SAL_CALL elementRemoved( const css::container::ContainerEvent& rEvent ) override;
+    void SAL_CALL elementReplaced( const css::container::ContainerEvent& rEvent ) override;
 
     // XItemEventBroadcaster
-    virtual void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
+    virtual void SAL_CALL removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) override;
 
     // XPropertyChangeListener
-    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
 protected:
 
@@ -288,31 +288,31 @@ public:
                     virtual ~SVTXNumericField() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                           SAL_CALL acquire() throw() override  { SVTXFormattedField::acquire(); }
     void                           SAL_CALL release() throw() override  { SVTXFormattedField::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XNumericField
-    void SAL_CALL setValue( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getValue(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMin( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getMin(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMax( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getMax(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setFirst( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getFirst(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLast( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getLast(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setSpinSize( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getSpinSize(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getDecimalDigits(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setValue( double Value ) override;
+    double SAL_CALL getValue(  ) override;
+    void SAL_CALL setMin( double Value ) override;
+    double SAL_CALL getMin(  ) override;
+    void SAL_CALL setMax( double Value ) override;
+    double SAL_CALL getMax(  ) override;
+    void SAL_CALL setFirst( double Value ) override;
+    double SAL_CALL getFirst(  ) override;
+    void SAL_CALL setLast( double Value ) override;
+    double SAL_CALL getLast(  ) override;
+    void SAL_CALL setSpinSize( double Value ) override;
+    double SAL_CALL getSpinSize(  ) override;
+    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
+    sal_Int16 SAL_CALL getDecimalDigits(  ) override;
+    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
+    sal_Bool SAL_CALL isStrictFormat(  ) override;
 
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override;
 };
@@ -327,35 +327,35 @@ public:
                     virtual ~SVTXCurrencyField() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                           SAL_CALL acquire() throw() override  { SVTXFormattedField::acquire(); }
     void                           SAL_CALL release() throw() override  { SVTXFormattedField::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XVclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
     // css::awt::XCurrencyField
-    void SAL_CALL setValue( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getValue(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMin( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getMin(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setMax( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getMax(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setFirst( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getFirst(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setLast( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getLast(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setSpinSize( double Value ) throw(css::uno::RuntimeException, std::exception) override;
-    double SAL_CALL getSpinSize(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Int16 SAL_CALL getDecimalDigits(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL isStrictFormat(  ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setValue( double Value ) override;
+    double SAL_CALL getValue(  ) override;
+    void SAL_CALL setMin( double Value ) override;
+    double SAL_CALL getMin(  ) override;
+    void SAL_CALL setMax( double Value ) override;
+    double SAL_CALL getMax(  ) override;
+    void SAL_CALL setFirst( double Value ) override;
+    double SAL_CALL getFirst(  ) override;
+    void SAL_CALL setLast( double Value ) override;
+    double SAL_CALL getLast(  ) override;
+    void SAL_CALL setSpinSize( double Value ) override;
+    double SAL_CALL getSpinSize(  ) override;
+    void SAL_CALL setDecimalDigits( sal_Int16 nDigits ) override;
+    sal_Int16 SAL_CALL getDecimalDigits(  ) override;
+    void SAL_CALL setStrictFormat( sal_Bool bStrict ) override;
+    sal_Bool SAL_CALL isStrictFormat(  ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -380,24 +380,24 @@ public:
                     virtual ~VCLXProgressBar() override;
 
     // css::uno::XInterface
-    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any                  SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void                           SAL_CALL acquire() throw() override  { VCLXWindow::acquire(); }
     void                           SAL_CALL release() throw() override  { VCLXWindow::release(); }
 
     // css::lang::XTypeProvider
-    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence< css::uno::Type >  SAL_CALL getTypes() override;
+    css::uno::Sequence< sal_Int8 >                     SAL_CALL getImplementationId() override;
 
     // css::awt::XProgressBar
-    void SAL_CALL setForegroundColor( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setBackgroundColor( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setValue( sal_Int32 nValue ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(css::uno::RuntimeException, std::exception ) override;
-    sal_Int32 SAL_CALL getValue() throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setForegroundColor( sal_Int32 nColor ) override;
+    void SAL_CALL setBackgroundColor( sal_Int32 nColor ) override;
+    void SAL_CALL setValue( sal_Int32 nValue ) override;
+    void SAL_CALL setRange( sal_Int32 nMin, sal_Int32 nMax ) override;
+    sal_Int32 SAL_CALL getValue() override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+    css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }
@@ -413,7 +413,7 @@ public:
                     virtual ~SVTXDateField() override;
 
     // css::awt::VclWindowPeer
-    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
 
     static void     ImplGetPropertyIds( std::vector< sal_uInt16 > &aIds );
     virtual void    GetPropertyIds( std::vector< sal_uInt16 > &aIds ) override { return ImplGetPropertyIds( aIds ); }

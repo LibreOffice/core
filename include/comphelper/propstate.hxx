@@ -50,17 +50,17 @@ namespace comphelper
         OPropertyStateHelper(::cppu::OBroadcastHelper& rBHlp,
                              ::cppu::IEventNotificationHook *i_pFireEvents);
 
-        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& aType) override;
 
     // XPropertyState
         virtual css::beans::PropertyState SAL_CALL
-            getPropertyState(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+            getPropertyState(const OUString& PropertyName) override;
         virtual css::uno::Sequence< css::beans::PropertyState> SAL_CALL
-            getPropertyStates(const css::uno::Sequence< OUString >& aPropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+            getPropertyStates(const css::uno::Sequence< OUString >& aPropertyName) override;
         virtual void SAL_CALL
-            setPropertyToDefault(const OUString& PropertyName) throw(css::beans::UnknownPropertyException, css::uno::RuntimeException, std::exception) override;
+            setPropertyToDefault(const OUString& PropertyName) override;
         virtual css::uno::Any SAL_CALL
-            getPropertyDefault(const OUString& aPropertyName) throw(css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+            getPropertyDefault(const OUString& aPropertyName) override;
 
     // access via handle
         virtual css::beans::PropertyState  getPropertyStateByHandle(sal_Int32 nHandle);

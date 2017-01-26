@@ -197,75 +197,54 @@ public:
 
     // XEventListener
     virtual void SAL_CALL
-    disposing( const css::lang::EventObject& aSource )
-        throw( css::uno::RuntimeException ) override;
+    disposing( const css::lang::EventObject& aSource ) override;
 
     // XCloseListener
     virtual void SAL_CALL
     queryClosing(
         const css::lang::EventObject& aSource,
         sal_Bool bGetsOwnership
-    )
-        throw(
-            css::util::CloseVetoException
-        ) override;
+    ) override;
 
     virtual void SAL_CALL
     notifyClosing(
         const css::lang::EventObject& aSource
-    )
-        throw( css::uno::RuntimeException ) override;
+    ) override;
 
     // XTerminateListener
     virtual void SAL_CALL
     queryTermination(
         const css::lang::EventObject& aSource
-    )
-        throw(
-            css::frame::TerminationVetoException
-        ) override;
+    ) override;
 
     virtual void SAL_CALL
     notifyTermination(
         const css::lang::EventObject& aSource
-    )
-        throw( css::uno::RuntimeException ) override;
+    ) override;
 
 
     // XModifyListener
     virtual void SAL_CALL
     modified(
         const css::lang::EventObject& aEvent
-    )
-        throw (
-            css::uno::RuntimeException
-        ) override;
+    ) override;
 
     // XDockingAreaAcceptor
 
     virtual css::uno::Reference<
         css::awt::XWindow> SAL_CALL
     getContainerWindow(
-    )
-        throw (
-            css::uno::RuntimeException
-        ) override;
+    ) override;
 
     virtual sal_Bool SAL_CALL
     requestDockingAreaSpace(
         const css::awt::Rectangle& RequestedSpace
-    )
-        throw(
-            css::uno::RuntimeException
-        ) override;
+    ) override;
 
     virtual void SAL_CALL
     setDockingAreaSpace(
         const css::awt::Rectangle& BorderSpace
-    )
-        throw (
-            css::uno::RuntimeException
-        ) override;
+    ) override;
 };
 
 #endif

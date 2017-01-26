@@ -58,69 +58,62 @@ SequenceResultSetMetaData::SequenceResultSetMetaData(
 
 // Methods
 sal_Int32 SequenceResultSetMetaData::getColumnCount(  )
-    throw (SQLException, RuntimeException, std::exception)
 {
     return m_colCount;
 }
 
 sal_Bool SequenceResultSetMetaData::isAutoIncrement( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].isAutoIncrement;
 }
 
 sal_Bool SequenceResultSetMetaData::isCaseSensitive( sal_Int32 /* column */ )
-    throw (SQLException, RuntimeException, std::exception)
 {
 
     return true; // ??? hmm, numeric types or
 }
 
-sal_Bool SequenceResultSetMetaData::isSearchable( sal_Int32 /* column */ ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool SequenceResultSetMetaData::isSearchable( sal_Int32 /* column */ )
 {
     return true; // mmm, what types are not searchable ?
 }
 
-sal_Bool SequenceResultSetMetaData::isCurrency( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
+sal_Bool SequenceResultSetMetaData::isCurrency( sal_Int32 column )
 {
     checkColumnIndex( column );
     return m_columnData[column-1].isCurrency;
 }
 
 sal_Int32 SequenceResultSetMetaData::isNullable( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].isNullable ? 1 : 0;
 }
 
 sal_Bool SequenceResultSetMetaData::isSigned( sal_Int32 /* column */ )
-    throw (SQLException, RuntimeException, std::exception)
 {
     return true;
 }
 
 sal_Int32 SequenceResultSetMetaData::getColumnDisplaySize( sal_Int32 /* column */ )
-    throw (SQLException, RuntimeException, std::exception)
 {
     return 50;
 }
 
 OUString SequenceResultSetMetaData::getColumnLabel( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].columnName;
 }
 
-OUString SequenceResultSetMetaData::getColumnName( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
+OUString SequenceResultSetMetaData::getColumnName( sal_Int32 column )
 {
     checkColumnIndex( column );
     return m_columnData[column-1].columnName;
 }
 
-OUString SequenceResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQLException, RuntimeException, std::exception)
+OUString SequenceResultSetMetaData::getSchemaName( sal_Int32 column )
 {
     checkColumnIndex( column );
     return m_columnData[column-1].schemaTableName;
@@ -128,41 +121,35 @@ OUString SequenceResultSetMetaData::getSchemaName( sal_Int32 column ) throw (SQL
 
 
 sal_Int32 SequenceResultSetMetaData::getPrecision( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].precision;
 }
 
 sal_Int32 SequenceResultSetMetaData::getScale( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].scale;
 }
 
 OUString SequenceResultSetMetaData::getTableName( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].tableName;
 }
 
 OUString SequenceResultSetMetaData::getCatalogName( sal_Int32 /* column */ )
-    throw (SQLException, RuntimeException, std::exception)
 {
     // can do this through XConnection.getCatalog() !
     return OUString();
 }
 sal_Int32 SequenceResultSetMetaData::getColumnType( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].type;
 }
 
 OUString SequenceResultSetMetaData::getColumnTypeName( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex( column );
     return m_columnData[column-1].typeName;
@@ -170,30 +157,25 @@ OUString SequenceResultSetMetaData::getColumnTypeName( sal_Int32 column )
 
 
 sal_Bool SequenceResultSetMetaData::isReadOnly( sal_Int32 /* column */ )
-    throw (SQLException, RuntimeException, std::exception)
 {
     return false;
 }
 
 sal_Bool SequenceResultSetMetaData::isWritable( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     return ! isReadOnly( column ); // what's the sense if this method ?
 }
 
 sal_Bool SequenceResultSetMetaData::isDefinitelyWritable( sal_Int32 column )
-    throw (SQLException, RuntimeException, std::exception)
 {
     return isWritable(column); // uhh, now it becomes really esoteric ....
 }
 OUString SequenceResultSetMetaData::getColumnServiceName( sal_Int32 /* column */ )
-    throw (SQLException, RuntimeException, std::exception)
 {
     return OUString();
 }
 
 void SequenceResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
-    throw (css::sdbc::SQLException, css::uno::RuntimeException)
 {
     if( columnIndex < 1 || columnIndex > m_colCount )
     {

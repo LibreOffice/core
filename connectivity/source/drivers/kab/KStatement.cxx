@@ -75,17 +75,17 @@ KabCommonStatement::~KabCommonStatement()
 {
 }
 
-void KabCommonStatement::resetParameters() const throw(css::sdbc::SQLException)
+void KabCommonStatement::resetParameters() const
 {
     lcl_throwError(STR_PARA_ONLY_PREPARED);
 }
 
-void KabCommonStatement::getNextParameter(OUString &) const throw(css::sdbc::SQLException)
+void KabCommonStatement::getNextParameter(OUString &) const
 {
     lcl_throwError(STR_PARA_ONLY_PREPARED);
 }
 
-KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParseNode) const throw(SQLException)
+KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParseNode) const
 {
     if (pParseNode->count() == 3)
     {
@@ -232,7 +232,7 @@ KabCondition *KabCommonStatement::analyseWhereClause(const OSQLParseNode *pParse
     return nullptr;
 }
 
-KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNode) const throw(SQLException)
+KabOrder *KabCommonStatement::analyseOrderByClause(const OSQLParseNode *pParseNode) const
 {
     if (SQL_ISRULE(pParseNode, ordering_spec_commalist))
     {
@@ -291,7 +291,7 @@ bool KabCommonStatement::isTableKnown(KabResultSet *pResult) const
     return true;
 }
 
-void KabCommonStatement::setKabFields(KabResultSet *pResult) const throw(SQLException)
+void KabCommonStatement::setKabFields(KabResultSet *pResult) const
 {
     ::rtl::Reference<connectivity::OSQLColumns> xColumns;   // selected columns
 
@@ -303,7 +303,7 @@ void KabCommonStatement::setKabFields(KabResultSet *pResult) const throw(SQLExce
     pResult->getKabMetaData()->setKabFields(xColumns);
 }
 
-void KabCommonStatement::selectAddressees(KabResultSet *pResult) const throw(SQLException)
+void KabCommonStatement::selectAddressees(KabResultSet *pResult) const
 {
     const OSQLParseNode *pParseNode;
 
@@ -328,7 +328,7 @@ void KabCommonStatement::selectAddressees(KabResultSet *pResult) const throw(SQL
     pResult->allKabAddressees();
 }
 
-void KabCommonStatement::sortAddressees(KabResultSet *pResult) const throw(SQLException)
+void KabCommonStatement::sortAddressees(KabResultSet *pResult) const
 {
     const OSQLParseNode *pParseNode;
 
@@ -345,7 +345,7 @@ void KabCommonStatement::sortAddressees(KabResultSet *pResult) const throw(SQLEx
     }
 }
 
-Any SAL_CALL KabCommonStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL KabCommonStatement::queryInterface( const Type & rType )
 {
     Any aRet = KabCommonStatement_BASE::queryInterface(rType);
     if (!aRet.hasValue())
@@ -353,7 +353,7 @@ Any SAL_CALL KabCommonStatement::queryInterface( const Type & rType ) throw(Runt
     return aRet;
 }
 
-Sequence< Type > SAL_CALL KabCommonStatement::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL KabCommonStatement::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<XMultiPropertySet>::get(),
                                     cppu::UnoType<XFastPropertySet>::get(),
@@ -362,7 +362,7 @@ Sequence< Type > SAL_CALL KabCommonStatement::getTypes(  ) throw(RuntimeExceptio
     return comphelper::concatSequences(aTypes.getTypes(),KabCommonStatement_BASE::getTypes());
 }
 
-void SAL_CALL KabCommonStatement::cancel(  ) throw(RuntimeException, std::exception)
+void SAL_CALL KabCommonStatement::cancel(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -370,7 +370,7 @@ void SAL_CALL KabCommonStatement::cancel(  ) throw(RuntimeException, std::except
     // cancel the current sql statement
 }
 
-void SAL_CALL KabCommonStatement::close(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabCommonStatement::close(  )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -381,7 +381,7 @@ void SAL_CALL KabCommonStatement::close(  ) throw(SQLException, RuntimeException
 }
 
 sal_Bool SAL_CALL KabCommonStatement::execute(
-        const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+        const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -392,7 +392,7 @@ sal_Bool SAL_CALL KabCommonStatement::execute(
 }
 
 Reference< XResultSet > SAL_CALL KabCommonStatement::executeQuery(
-        const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+        const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -430,7 +430,7 @@ Reference< XResultSet > SAL_CALL KabCommonStatement::executeQuery(
     return xRS;
 }
 
-Reference< XConnection > SAL_CALL KabCommonStatement::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XConnection > SAL_CALL KabCommonStatement::getConnection(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -439,7 +439,7 @@ Reference< XConnection > SAL_CALL KabCommonStatement::getConnection(  ) throw(SQ
     return m_pConnection;
 }
 
-sal_Int32 SAL_CALL KabCommonStatement::executeUpdate( const OUString& ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabCommonStatement::executeUpdate( const OUString& )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -448,7 +448,7 @@ sal_Int32 SAL_CALL KabCommonStatement::executeUpdate( const OUString& ) throw(SQ
     return 0;
 }
 
-Any SAL_CALL KabCommonStatement::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL KabCommonStatement::getWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -456,7 +456,7 @@ Any SAL_CALL KabCommonStatement::getWarnings(  ) throw(SQLException, RuntimeExce
     return makeAny(m_aLastWarning);
 }
 
-void SAL_CALL KabCommonStatement::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL KabCommonStatement::clearWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(KabCommonStatement_BASE::rBHelper.bDisposed);
@@ -504,14 +504,14 @@ sal_Bool KabCommonStatement::convertFastPropertyValue(
         Any &,
         Any &,
         sal_Int32,
-        const Any&) throw (css::lang::IllegalArgumentException)
+        const Any&)
 {
     bool bConverted = false;
     // here we have to try to convert
     return bConverted;
 }
 
-void KabCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any&) throw (Exception, std::exception)
+void KabCommonStatement::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any&)
 {
     // set the value to whatever is necessary
     switch (nHandle)
@@ -560,7 +560,7 @@ void SAL_CALL KabCommonStatement::release() throw()
     KabCommonStatement_BASE::release();
 }
 
-Reference< css::beans::XPropertySetInfo > SAL_CALL KabCommonStatement::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+Reference< css::beans::XPropertySetInfo > SAL_CALL KabCommonStatement::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

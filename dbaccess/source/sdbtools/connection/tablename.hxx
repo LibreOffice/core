@@ -60,17 +60,17 @@ namespace sdbtools
         );
 
         // XTableName
-        virtual OUString SAL_CALL getCatalogName() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setCatalogName( const OUString& _catalogname ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getSchemaName() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setSchemaName( const OUString& _schemaname ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getTableName() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setTableName( const OUString& _tablename ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getNameForSelect() throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getTable() throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setTable( const css::uno::Reference< css::beans::XPropertySet >& _table ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, sal_Bool Quote ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getCatalogName() override;
+        virtual void SAL_CALL setCatalogName( const OUString& _catalogname ) override;
+        virtual OUString SAL_CALL getSchemaName() override;
+        virtual void SAL_CALL setSchemaName( const OUString& _schemaname ) override;
+        virtual OUString SAL_CALL getTableName() override;
+        virtual void SAL_CALL setTableName( const OUString& _tablename ) override;
+        virtual OUString SAL_CALL getNameForSelect() override;
+        virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getTable() override;
+        virtual void SAL_CALL setTable( const css::uno::Reference< css::beans::XPropertySet >& _table ) override;
+        virtual OUString SAL_CALL getComposedName( ::sal_Int32 Type, sal_Bool Quote ) override;
+        virtual void SAL_CALL setComposedName( const OUString& ComposedName, ::sal_Int32 Type ) override;
 
     protected:
         virtual ~TableName() override;

@@ -294,12 +294,7 @@ public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl )
-        throw ( css::beans::UnknownPropertyException,
-                css::beans::PropertyVetoException,
-                css::lang::IllegalArgumentException,
-                css::lang::WrappedTargetException,
-                css::uno::RuntimeException, std::exception);
+    void InheritOrFinalizePageStyles( DomainMapper_Impl& rDM_Impl );
 
     void SetBorder(BorderPosition ePos, sal_Int32 nLineDistance, const css::table::BorderLine2& rBorderLine, bool bShadow);
     void SetBorderParams( sal_Int32 nSet ) { m_nBorderParams = nSet; }

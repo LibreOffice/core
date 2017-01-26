@@ -45,10 +45,10 @@ namespace pcr
         );
 
         // XKeyListener
-        virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& e ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL keyPressed( const css::awt::KeyEvent& e ) override;
+        virtual void SAL_CALL keyReleased( const css::awt::KeyEvent& e ) override;
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     protected:
         virtual ~PropertyControlExtender() override;

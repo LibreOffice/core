@@ -123,7 +123,7 @@ namespace dbaui
             @throws css::uno::RuntimeException
         */
         virtual css::uno::Reference< css::frame::XController >
-                getXController() throw( css::uno::RuntimeException ) = 0;
+                getXController() = 0;
 
         /** allows interception of user input, aka mouse clicks and key events
         */

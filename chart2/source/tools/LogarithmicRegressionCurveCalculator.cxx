@@ -45,7 +45,6 @@ LogarithmicRegressionCurveCalculator::~LogarithmicRegressionCurveCalculator()
 void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
     const uno::Sequence< double >& aXValues,
     const uno::Sequence< double >& aYValues )
-    throw (uno::RuntimeException, std::exception)
 {
     RegressionCalculationHelper::tDoubleVectorPair aValues(
         RegressionCalculationHelper::cleanup(
@@ -90,8 +89,6 @@ void SAL_CALL LogarithmicRegressionCurveCalculator::recalculateRegression(
 }
 
 double SAL_CALL LogarithmicRegressionCurveCalculator::getCurveValue( double x )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     double fResult;
     ::rtl::math::setNan( & fResult );
@@ -110,8 +107,6 @@ uno::Sequence< geometry::RealPoint2D > SAL_CALL LogarithmicRegressionCurveCalcul
     const uno::Reference< chart2::XScaling >& xScalingX,
     const uno::Reference< chart2::XScaling >& xScalingY,
     sal_Bool bMaySkipPointsInCalculation )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     if( bMaySkipPointsInCalculation &&
         isLogarithmicScaling( xScalingX ) &&

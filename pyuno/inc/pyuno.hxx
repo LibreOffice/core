@@ -193,7 +193,7 @@ public:
         @throw RuntimeException in case the runtime has not been
                initialized before
      */
-    Runtime() throw( css::uno::RuntimeException );
+    Runtime();
 
     Runtime( const Runtime & );
     Runtime & operator = ( const Runtime & );
@@ -211,14 +211,13 @@ public:
                                 has not been initialized.
     */
     static void SAL_CALL initialize(
-        const css::uno::Reference< css::uno::XComponentContext > & ctx )
-        throw ( css::uno::RuntimeException, std::exception );
+        const css::uno::Reference< css::uno::XComponentContext > & ctx );
 
     /** Checks, whether the uno runtime is already initialized in the current python interpreter.
 
         @throws css::uno::RuntimeException
      */
-    static bool SAL_CALL isInitialized() throw (css::uno::RuntimeException);
+    static bool SAL_CALL isInitialized();
 
     /** converts something contained in an UNO Any to a Python object
 
@@ -230,10 +229,7 @@ public:
         @throws css::lang::IllegalArgumentException
         @throws css::uno::RuntimeException
     */
-    PyRef any2PyObject (const css::uno::Any &source ) const
-        throw ( css::script::CannotConvertException,
-                css::lang::IllegalArgumentException,
-                css::uno::RuntimeException );
+    PyRef any2PyObject (const css::uno::Any &source ) const;
 
     /** converts a Python object to a UNO any
 
@@ -244,8 +240,7 @@ public:
         @throws css::uno::RuntimeException
     */
     css::uno::Any pyObject2Any (
-        const PyRef & source , enum ConversionMode mode = REJECT_UNO_ANY ) const
-        throw ( css::uno::RuntimeException);
+        const PyRef & source , enum ConversionMode mode = REJECT_UNO_ANY ) const;
 
     /** extracts a proper uno exception from a given python exception
      */
@@ -297,7 +292,7 @@ public:
         @throws css::uno::RuntimeException
              in case no pythread state could be created
      */
-    PyThreadAttach( PyInterpreterState *interp) throw ( css::uno::RuntimeException );
+    PyThreadAttach( PyInterpreterState *interp);
 
 
     /** Releases the global interpreter lock and destroys the thread state.
@@ -324,7 +319,7 @@ public:
 
        @throws css::uno::RuntimeException
     */
-    PyThreadDetach() throw ( css::uno::RuntimeException );
+    PyThreadDetach();
     /** Acquires the global interpreter lock again
     */
     ~PyThreadDetach();

@@ -70,20 +70,18 @@ public:
     LpsolveSolver() {}
 
 private:
-    virtual void SAL_CALL solve() throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getImplementationName()
-        throw(css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL solve() override;
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.Calc.LpsolveSolver");
     }
-    virtual OUString SAL_CALL getComponentDescription()
-        throw (uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getComponentDescription() override
     {
         return SolverComponent::GetResourceString( RID_SOLVER_COMPONENT );
     }
 };
 
-void SAL_CALL LpsolveSolver::solve() throw(uno::RuntimeException, std::exception)
+void SAL_CALL LpsolveSolver::solve()
 {
     uno::Reference<frame::XModel> xModel( mxDoc, uno::UNO_QUERY );
     if ( !xModel.is() )

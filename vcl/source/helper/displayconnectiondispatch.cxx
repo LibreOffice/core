@@ -73,35 +73,35 @@ void DisplayConnectionDispatch::terminate()
         (*it)->handleEvent( aEvent );
 }
 
-void SAL_CALL DisplayConnectionDispatch::addEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ ) throw(std::exception)
+void SAL_CALL DisplayConnectionDispatch::addEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler, sal_Int32 /*eventMask*/ )
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnectionDispatch::removeEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
+void SAL_CALL DisplayConnectionDispatch::removeEventHandler( const Any& /*window*/, const css::uno::Reference< XEventHandler >& handler )
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aHandlers.remove( handler );
 }
 
-void SAL_CALL DisplayConnectionDispatch::addErrorHandler( const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
+void SAL_CALL DisplayConnectionDispatch::addErrorHandler( const css::uno::Reference< XEventHandler >& handler )
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aErrorHandlers.push_back( handler );
 }
 
-void SAL_CALL DisplayConnectionDispatch::removeErrorHandler( const css::uno::Reference< XEventHandler >& handler ) throw(std::exception)
+void SAL_CALL DisplayConnectionDispatch::removeErrorHandler( const css::uno::Reference< XEventHandler >& handler )
 {
     MutexGuard aGuard( m_aMutex );
 
     m_aErrorHandlers.remove( handler );
 }
 
-Any SAL_CALL DisplayConnectionDispatch::getIdentifier() throw(std::exception)
+Any SAL_CALL DisplayConnectionDispatch::getIdentifier()
 {
     return m_aAny;
 }

@@ -36,8 +36,7 @@ public:
     static css::uno::Reference< ooo::vba::XErrObject > const & getUnoErrObject();
 
     /// @throws css::uno::RuntimeException
-    void setNumberAndDescription( ::sal_Int32 _number, const OUString& _description )
-        throw (css::uno::RuntimeException);
+    void setNumberAndDescription( ::sal_Int32 _number, const OUString& _description );
 };
 #endif
 

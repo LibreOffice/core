@@ -58,40 +58,30 @@ private:
 public:
     /// @throws css::uno::RuntimeException
     explicit ScriptingFrameworkURIHelper(
-        const css::uno::Reference< css::uno::XComponentContext >& xContext )
-            throw( css::uno::RuntimeException );
+        const css::uno::Reference< css::uno::XComponentContext >& xContext );
 
     virtual ~ScriptingFrameworkURIHelper() override;
 
     virtual void SAL_CALL
-        initialize( const css::uno::Sequence < css::uno::Any > & args )
-            throw ( css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        initialize( const css::uno::Sequence < css::uno::Any > & args ) override;
 
     virtual OUString SAL_CALL
-        getRootStorageURI()
-            throw ( css::uno::RuntimeException, std::exception ) override;
+        getRootStorageURI() override;
 
     virtual OUString SAL_CALL
-        getScriptURI( const OUString& rStorageURI )
-            throw( css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException, std::exception ) override;
+        getScriptURI( const OUString& rStorageURI ) override;
 
     virtual OUString SAL_CALL
-        getStorageURI( const OUString& rScriptURI )
-            throw( css::lang::IllegalArgumentException,
-                   css::uno::RuntimeException, std::exception ) override;
+        getStorageURI( const OUString& rScriptURI ) override;
 
     virtual OUString SAL_CALL
-        getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getImplementationName() override;
 
     virtual sal_Bool SAL_CALL
-        supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        supportsService( const OUString& ServiceName ) override;
 
     virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getSupportedServiceNames() override;
 };
 
 } // namespace func_provider

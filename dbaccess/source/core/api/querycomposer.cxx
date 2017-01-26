@@ -83,17 +83,17 @@ void SAL_CALL OQueryComposer::disposing()
 }
 
 // css::lang::XTypeProvider
-Sequence< Type > SAL_CALL OQueryComposer::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OQueryComposer::getTypes()
 {
     return ::comphelper::concatSequences(OSubComponent::getTypes(),OQueryComposer_BASE::getTypes());
 }
 
-Sequence< sal_Int8 > SAL_CALL OQueryComposer::getImplementationId() throw (RuntimeException, std::exception)
+Sequence< sal_Int8 > SAL_CALL OQueryComposer::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Any SAL_CALL OQueryComposer::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OQueryComposer::queryInterface( const Type & rType )
 {
     Any aRet = OSubComponent::queryInterface(rType);
     if(!aRet.hasValue())
@@ -102,24 +102,24 @@ Any SAL_CALL OQueryComposer::queryInterface( const Type & rType ) throw(RuntimeE
 }
 
 // XServiceInfo
-OUString OQueryComposer::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString OQueryComposer::getImplementationName(  )
 {
     return OUString("com.sun.star.sdb.dbaccess.OQueryComposer");
 }
 
-sal_Bool OQueryComposer::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool OQueryComposer::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
-Sequence< OUString > OQueryComposer::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > OQueryComposer::getSupportedServiceNames(  )
 {
     Sequence<OUString> aSNS { SERVICE_SDB_SQLQUERYCOMPOSER };
     return aSNS;
 }
 
 // XSQLQueryComposer
-OUString SAL_CALL OQueryComposer::getQuery(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL OQueryComposer::getQuery(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -131,7 +131,7 @@ OUString SAL_CALL OQueryComposer::getQuery(  ) throw(RuntimeException, std::exce
     return sQuery;
 }
 
-void SAL_CALL OQueryComposer::setQuery( const OUString& command ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OQueryComposer::setQuery( const OUString& command )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -142,7 +142,7 @@ void SAL_CALL OQueryComposer::setQuery( const OUString& command ) throw(SQLExcep
     m_sOrgOrder = m_xComposer->getOrder();
 }
 
-OUString SAL_CALL OQueryComposer::getComposedQuery(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL OQueryComposer::getComposedQuery(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -151,7 +151,7 @@ OUString SAL_CALL OQueryComposer::getComposedQuery(  ) throw(RuntimeException, s
     return m_xComposer->getQuery();
 }
 
-OUString SAL_CALL OQueryComposer::getFilter(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL OQueryComposer::getFilter(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     MutexGuard aGuard(m_aMutex);
@@ -160,7 +160,7 @@ OUString SAL_CALL OQueryComposer::getFilter(  ) throw(RuntimeException, std::exc
     return aFilterCreator.getComposedAndClear();
 }
 
-Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilter(  ) throw(RuntimeException, std::exception)
+Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilter(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -168,7 +168,7 @@ Sequence< Sequence< PropertyValue > > SAL_CALL OQueryComposer::getStructuredFilt
     return m_xComposer->getStructuredFilter();
 }
 
-OUString SAL_CALL OQueryComposer::getOrder(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL OQueryComposer::getOrder(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -178,7 +178,7 @@ OUString SAL_CALL OQueryComposer::getOrder(  ) throw(RuntimeException, std::exce
     return aOrderCreator.getComposedAndClear();
 }
 
-void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -194,7 +194,7 @@ void SAL_CALL OQueryComposer::appendFilterByColumn( const Reference< XPropertySe
     setFilter( aFilterCreator.getComposedAndClear() );
 }
 
-void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -210,7 +210,7 @@ void SAL_CALL OQueryComposer::appendOrderByColumn( const Reference< XPropertySet
     setOrder(aOrderCreator.getComposedAndClear());
 }
 
-void SAL_CALL OQueryComposer::setFilter( const OUString& filter ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OQueryComposer::setFilter( const OUString& filter )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -226,7 +226,7 @@ void SAL_CALL OQueryComposer::setFilter( const OUString& filter ) throw(SQLExcep
     m_xComposer->setFilter( aFilterCreator.getComposedAndClear() );
 }
 
-void SAL_CALL OQueryComposer::setOrder( const OUString& order ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OQueryComposer::setOrder( const OUString& order )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -244,7 +244,7 @@ void SAL_CALL OQueryComposer::setOrder( const OUString& order ) throw(SQLExcepti
 }
 
 // XTablesSupplier
-Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeException, std::exception)
+Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -253,7 +253,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getTables(  ) throw(RuntimeExc
 }
 
 // XColumnsSupplier
-Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  ) throw(RuntimeException, std::exception)
+Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -261,7 +261,7 @@ Reference< XNameAccess > SAL_CALL OQueryComposer::getColumns(  ) throw(RuntimeEx
     return Reference<XColumnsSupplier>(m_xComposer,UNO_QUERY)->getColumns();
 }
 
-Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  ) throw(RuntimeException, std::exception)
+Reference< XIndexAccess > SAL_CALL OQueryComposer::getParameters(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 

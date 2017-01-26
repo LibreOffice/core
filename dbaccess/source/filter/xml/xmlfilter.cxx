@@ -224,14 +224,12 @@ ODBFilter::~ODBFilter() throw()
 
 
 OUString ODBFilter::getImplementationName_Static()
-    throw (css::uno::RuntimeException)
 {
     return OUString("com.sun.star.comp.sdb.DBFilter");
 }
 
 
 css::uno::Sequence<OUString> ODBFilter::getSupportedServiceNames_Static()
-    throw (css::uno::RuntimeException)
 {
     css::uno::Sequence<OUString> s { "com.sun.star.document.ImportFilter" };
     return s;
@@ -246,7 +244,6 @@ css::uno::Reference< css::uno::XInterface >
 
 
 sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException, std::exception)
 {
     uno::Reference< css::awt::XWindow > xWindow;
     {
@@ -274,7 +271,6 @@ sal_Bool SAL_CALL ODBFilter::filter( const Sequence< PropertyValue >& rDescripto
 
 
 bool ODBFilter::implImport( const Sequence< PropertyValue >& rDescriptor )
-    throw (RuntimeException, std::exception)
 {
     OUString sFileName;
     ::comphelper::NamedValueCollection aMediaDescriptor( rDescriptor );

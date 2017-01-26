@@ -79,13 +79,11 @@ namespace connectivity
                 }
 
                 // XTerminateListener
-                virtual void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/)
-                    throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception) override
+                virtual void SAL_CALL queryTermination(const css::lang::EventObject& /*rEvent*/) override
                 {
                 }
 
-                virtual void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/)
-                    throw(css::uno::RuntimeException, std::exception) override
+                virtual void SAL_CALL notifyTermination(const css::lang::EventObject& /*rEvent*/) override
                 {
                     stop();
                 }
@@ -96,8 +94,7 @@ namespace connectivity
                     cppu::WeakComponentImplHelperBase::disposing();
                 }
 
-                virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-                    throw(css::uno::RuntimeException, std::exception) override
+                virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override
                 {
                     const bool bShutDown = (rEvent.Source == m_xDesktop);
                     if (bShutDown)
@@ -112,11 +109,7 @@ namespace connectivity
             virtual ~OCalcConnection() override;
 
             virtual void construct(const OUString& _rUrl,
-                                   const css::uno::Sequence< css::beans::PropertyValue >& _rInfo )
-                throw( css::sdbc::SQLException,
-                       css::uno::RuntimeException,
-                       css::uno::DeploymentException,
-                       std::exception) override;
+                                   const css::uno::Sequence< css::beans::PropertyValue >& _rInfo ) override;
 
             // XServiceInfo
             DECLARE_SERVICE_INFO();
@@ -125,11 +118,11 @@ namespace connectivity
             virtual void SAL_CALL disposing() override;
 
             // XConnection
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
             virtual css::uno::Reference< css::sdbcx::XTablesSupplier > createCatalog() override;
-            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
+            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const OUString& sql ) override;
+            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const OUString& sql ) override;
 
             // no interface methods
             css::uno::Reference< css::sheet::XSpreadsheetDocument> const & acquireDoc();

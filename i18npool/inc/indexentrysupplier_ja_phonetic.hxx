@@ -34,16 +34,13 @@ public:
         implementationName = "com.sun.star.i18n.IndexEntrySupplier_ja_phonetic";
     };
     virtual OUString SAL_CALL getIndexCharacter( const OUString& rIndexEntry,
-        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale, const OUString& rSortAlgorithm ) override;
     virtual OUString SAL_CALL getIndexKey( const OUString& IndexEntry,
-        const OUString& PhoneticEntry, const css::lang::Locale& rLocale )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const OUString& PhoneticEntry, const css::lang::Locale& rLocale ) override;
     virtual sal_Int16 SAL_CALL compareIndexEntry( const OUString& IndexEntry1,
         const OUString& PhoneticEntry1, const css::lang::Locale& rLocale1,
         const OUString& IndexEntry2, const OUString& PhoneticEntry2,
-        const css::lang::Locale& rLocale2 )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale2 ) override;
 };
 
 #define INDEXENTRYSUPPLIER_JA_PHONETIC( algorithm ) \
@@ -54,8 +51,7 @@ public:\
     };\
     virtual sal_Bool SAL_CALL loadAlgorithm(\
         const css::lang::Locale& rLocale,\
-        const OUString& SortAlgorithm, sal_Int32 collatorOptions ) \
-        throw (css::uno::RuntimeException, std::exception) override;\
+        const OUString& SortAlgorithm, sal_Int32 collatorOptions ) override;\
 };
 
 INDEXENTRYSUPPLIER_JA_PHONETIC( ja_phonetic_alphanumeric_first_by_syllable )

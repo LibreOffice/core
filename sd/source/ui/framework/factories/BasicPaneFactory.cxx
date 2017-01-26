@@ -126,7 +126,6 @@ void SAL_CALL BasicPaneFactory::disposing()
 }
 
 void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
-    throw (Exception, RuntimeException, std::exception)
 {
     if (aArguments.getLength() > 0)
     {
@@ -208,7 +207,6 @@ void SAL_CALL BasicPaneFactory::initialize (const Sequence<Any>& aArguments)
 
 Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
     const Reference<XResourceId>& rxPaneId)
-    throw (RuntimeException, IllegalArgumentException, WrappedTargetException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -275,7 +273,6 @@ Reference<XResource> SAL_CALL BasicPaneFactory::createResource (
 
 void SAL_CALL BasicPaneFactory::releaseResource (
     const Reference<XResource>& rxPane)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -328,7 +325,6 @@ void SAL_CALL BasicPaneFactory::releaseResource (
 
 void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
     const ConfigurationChangeEvent& /* rEvent */ )
-    throw (RuntimeException, std::exception)
 {
     // FIXME: nothing to do
 }
@@ -337,7 +333,6 @@ void SAL_CALL BasicPaneFactory::notifyConfigurationChange (
 
 void SAL_CALL BasicPaneFactory::disposing (
     const lang::EventObject& rEventObject)
-    throw (RuntimeException, std::exception)
 {
     if (mxConfigurationControllerWeak == rEventObject.Source)
     {
@@ -429,7 +424,6 @@ Reference<XResource> BasicPaneFactory::CreateChildWindowPane (
 }
 
 void BasicPaneFactory::ThrowIfDisposed() const
-    throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

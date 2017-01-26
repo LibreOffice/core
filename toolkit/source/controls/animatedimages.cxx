@@ -57,26 +57,26 @@ public:
     OUString GetComponentServiceName() override;
 
     // XAnimation
-    virtual void SAL_CALL startAnimation(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL stopAnimation(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isAnimationRunning(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL startAnimation(  ) override;
+    virtual void SAL_CALL stopAnimation(  ) override;
+    virtual sal_Bool SAL_CALL isAnimationRunning(  ) override;
 
     // XServiceInfo
-    OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName(  ) override;
+    css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XControl
-    sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& i_rModel ) throw ( css::uno::RuntimeException, std::exception ) override;
-    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& i_toolkit, const css::uno::Reference< css::awt::XWindowPeer >& i_parentPeer ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL setModel( const css::uno::Reference< css::awt::XControlModel >& i_rModel ) override;
+    void SAL_CALL createPeer( const css::uno::Reference< css::awt::XToolkit >& i_toolkit, const css::uno::Reference< css::awt::XWindowPeer >& i_parentPeer ) override;
 
 
     // XContainerListener
-    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted( const css::container::ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementRemoved( const css::container::ContainerEvent& Event ) override;
+    virtual void SAL_CALL elementReplaced( const css::container::ContainerEvent& Event ) override;
 
     // XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& i_event ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& i_event ) override;
 };
 
     AnimatedImagesControl::AnimatedImagesControl()
@@ -91,7 +91,7 @@ public:
     }
 
 
-    void SAL_CALL AnimatedImagesControl::startAnimation(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControl::startAnimation(  )
     {
         Reference< XAnimation > xAnimation( getPeer(), UNO_QUERY );
         if ( xAnimation.is() )
@@ -99,7 +99,7 @@ public:
     }
 
 
-    void SAL_CALL AnimatedImagesControl::stopAnimation(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControl::stopAnimation(  )
     {
         Reference< XAnimation > xAnimation( getPeer(), UNO_QUERY );
         if ( xAnimation.is() )
@@ -107,7 +107,7 @@ public:
     }
 
 
-    sal_Bool SAL_CALL AnimatedImagesControl::isAnimationRunning(  ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL AnimatedImagesControl::isAnimationRunning(  )
     {
         Reference< XAnimation > xAnimation( getPeer(), UNO_QUERY );
         if ( xAnimation.is() )
@@ -116,13 +116,13 @@ public:
     }
 
 
-    OUString SAL_CALL AnimatedImagesControl::getImplementationName(  ) throw(RuntimeException, std::exception)
+    OUString SAL_CALL AnimatedImagesControl::getImplementationName(  )
     {
         return OUString( "org.openoffice.comp.toolkit.AnimatedImagesControl" );
     }
 
 
-    Sequence< OUString > SAL_CALL AnimatedImagesControl::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL AnimatedImagesControl::getSupportedServiceNames()
     {
         Sequence< OUString > aServices( AnimatedImagesControl_Base::getSupportedServiceNames() );
         aServices.realloc( aServices.getLength() + 1 );
@@ -146,7 +146,7 @@ public:
     }
 
 
-    sal_Bool SAL_CALL AnimatedImagesControl::setModel( const Reference< XControlModel >& i_rModel ) throw ( RuntimeException, std::exception )
+    sal_Bool SAL_CALL AnimatedImagesControl::setModel( const Reference< XControlModel >& i_rModel )
     {
         const Reference< XAnimatedImages > xOldContainer( getModel(), UNO_QUERY );
         const Reference< XAnimatedImages > xNewContainer( i_rModel, UNO_QUERY );
@@ -166,7 +166,7 @@ public:
     }
 
 
-    void SAL_CALL AnimatedImagesControl::createPeer( const Reference< XToolkit >& i_toolkit, const Reference< XWindowPeer >& i_parentPeer ) throw(RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControl::createPeer( const Reference< XToolkit >& i_toolkit, const Reference< XWindowPeer >& i_parentPeer )
     {
         AnimatedImagesControl_Base::createPeer( i_toolkit, i_parentPeer );
 
@@ -174,7 +174,7 @@ public:
     }
 
 
-    void SAL_CALL AnimatedImagesControl::elementInserted( const ContainerEvent& i_event ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControl::elementInserted( const ContainerEvent& i_event )
     {
         const Reference< XContainerListener > xPeerListener( getPeer(), UNO_QUERY );
         if ( xPeerListener.is() )
@@ -182,7 +182,7 @@ public:
     }
 
 
-    void SAL_CALL AnimatedImagesControl::elementRemoved( const ContainerEvent& i_event ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControl::elementRemoved( const ContainerEvent& i_event )
     {
         const Reference< XContainerListener > xPeerListener( getPeer(), UNO_QUERY );
         if ( xPeerListener.is() )
@@ -190,7 +190,7 @@ public:
     }
 
 
-    void SAL_CALL AnimatedImagesControl::elementReplaced( const ContainerEvent& i_event ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControl::elementReplaced( const ContainerEvent& i_event )
     {
         const Reference< XContainerListener > xPeerListener( getPeer(), UNO_QUERY );
         if ( xPeerListener.is() )
@@ -198,7 +198,7 @@ public:
     }
 
 
-    void SAL_CALL AnimatedImagesControl::disposing( const EventObject& i_event ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControl::disposing( const EventObject& i_event )
     {
         UnoControlBase::disposing( i_event );
     }
@@ -275,26 +275,26 @@ namespace toolkit {
     }
 
 
-    Reference< css::beans::XPropertySetInfo > SAL_CALL AnimatedImagesControlModel::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+    Reference< css::beans::XPropertySetInfo > SAL_CALL AnimatedImagesControlModel::getPropertySetInfo(  )
     {
         static Reference< css::beans::XPropertySetInfo > xInfo( createPropertySetInfo( getInfoHelper() ) );
         return xInfo;
     }
 
 
-    OUString SAL_CALL AnimatedImagesControlModel::getServiceName() throw(RuntimeException, std::exception)
+    OUString SAL_CALL AnimatedImagesControlModel::getServiceName()
     {
         return OUString("com.sun.star.awt.AnimatedImagesControlModel");
     }
 
 
-    OUString SAL_CALL AnimatedImagesControlModel::getImplementationName(  ) throw(RuntimeException, std::exception)
+    OUString SAL_CALL AnimatedImagesControlModel::getImplementationName(  )
     {
         return OUString("org.openoffice.comp.toolkit.AnimatedImagesControlModel");
     }
 
 
-    Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getSupportedServiceNames() throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getSupportedServiceNames()
     {
         Sequence< OUString > aServiceNames(2);
         aServiceNames[0] = "com.sun.star.awt.AnimatedImagesControlModel";
@@ -303,7 +303,7 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 i_handle, const Any& i_value ) throw (Exception, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 i_handle, const Any& i_value )
     {
         switch ( i_handle )
         {
@@ -361,7 +361,7 @@ namespace toolkit {
     }
 
 
-    ::sal_Int32 SAL_CALL AnimatedImagesControlModel::getStepTime() throw (RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL AnimatedImagesControlModel::getStepTime()
     {
         sal_Int32 nStepTime( 100 );
         OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_STEP_TIME ) ) >>= nStepTime );
@@ -369,13 +369,13 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::setStepTime( ::sal_Int32 i_stepTime ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::setStepTime( ::sal_Int32 i_stepTime )
     {
         setPropertyValue( GetPropertyName( BASEPROPERTY_STEP_TIME ), makeAny( i_stepTime ) );
     }
 
 
-    sal_Bool SAL_CALL AnimatedImagesControlModel::getAutoRepeat() throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL AnimatedImagesControlModel::getAutoRepeat()
     {
         bool bAutoRepeat( true );
         OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ) ) >>= bAutoRepeat );
@@ -383,13 +383,13 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::setAutoRepeat( sal_Bool i_autoRepeat ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::setAutoRepeat( sal_Bool i_autoRepeat )
     {
         setPropertyValue( GetPropertyName( BASEPROPERTY_AUTO_REPEAT ), makeAny( i_autoRepeat ) );
     }
 
 
-    ::sal_Int16 SAL_CALL AnimatedImagesControlModel::getScaleMode() throw (RuntimeException, std::exception)
+    ::sal_Int16 SAL_CALL AnimatedImagesControlModel::getScaleMode()
     {
         sal_Int16 nImageScaleMode( ImageScaleMode::ANISOTROPIC );
         OSL_VERIFY( getPropertyValue( GetPropertyName( BASEPROPERTY_IMAGE_SCALE_MODE ) ) >>= nImageScaleMode );
@@ -397,13 +397,13 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::setScaleMode( ::sal_Int16 i_scaleMode ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::setScaleMode( ::sal_Int16 i_scaleMode )
     {
         setPropertyValue( GetPropertyName( BASEPROPERTY_IMAGE_SCALE_MODE ), makeAny( i_scaleMode ) );
     }
 
 
-    ::sal_Int32 SAL_CALL AnimatedImagesControlModel::getImageSetCount(  ) throw (RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL AnimatedImagesControlModel::getImageSetCount(  )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
@@ -413,7 +413,7 @@ namespace toolkit {
     }
 
 
-    Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getImageSet( ::sal_Int32 i_index ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL AnimatedImagesControlModel::getImageSet( ::sal_Int32 i_index )
     {
         ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
         if ( GetBroadcastHelper().bDisposed || GetBroadcastHelper().bInDispose )
@@ -425,7 +425,7 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::insertImageSet( ::sal_Int32 i_index, const Sequence< OUString >& i_imageURLs ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::insertImageSet( ::sal_Int32 i_index, const Sequence< OUString >& i_imageURLs )
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
         // sanity checks
@@ -442,7 +442,7 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::replaceImageSet( ::sal_Int32 i_index, const Sequence< OUString >& i_imageURLs ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::replaceImageSet( ::sal_Int32 i_index, const Sequence< OUString >& i_imageURLs )
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
         // sanity checks
@@ -459,7 +459,7 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::removeImageSet( ::sal_Int32 i_index ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::removeImageSet( ::sal_Int32 i_index )
     {
         ::osl::ClearableMutexGuard aGuard( GetMutex() );
         // sanity checks
@@ -478,13 +478,13 @@ namespace toolkit {
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::addContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::addContainerListener( const Reference< XContainerListener >& i_listener )
     {
         BrdcstHelper.addListener( cppu::UnoType<XContainerListener>::get(), i_listener );
     }
 
 
-    void SAL_CALL AnimatedImagesControlModel::removeContainerListener( const Reference< XContainerListener >& i_listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL AnimatedImagesControlModel::removeContainerListener( const Reference< XContainerListener >& i_listener )
     {
         BrdcstHelper.removeListener( cppu::UnoType<XContainerListener>::get(), i_listener );
     }

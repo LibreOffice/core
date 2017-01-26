@@ -110,46 +110,37 @@ public:
 
     virtual ~SessionListener() override;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.frame.SessionListener");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.frame.SessionListener"};
     }
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject&) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any  >& args) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any  >& args) override;
 
     // XSessionManagerListener
-    virtual void SAL_CALL doSave( sal_Bool bShutdown, sal_Bool bCancelable )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL approveInteraction( sal_Bool bInteractionGranted )
-        throw (css::uno::RuntimeException, std::exception) override;
-   virtual void SAL_CALL shutdownCanceled()
-        throw (css::uno::RuntimeException, std::exception) override;
-   virtual sal_Bool SAL_CALL doRestore()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL doSave( sal_Bool bShutdown, sal_Bool bCancelable ) override;
+    virtual void SAL_CALL approveInteraction( sal_Bool bInteractionGranted ) override;
+   virtual void SAL_CALL shutdownCanceled() override;
+   virtual sal_Bool SAL_CALL doRestore() override;
 
     // XSessionManagerListener2
-    virtual void SAL_CALL doQuit()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL doQuit() override;
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& event)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL statusChanged(const css::frame::FeatureStateEvent& event) override;
 };
 
 SessionListener::SessionListener(const css::uno::Reference< css::uno::XComponentContext >& rxContext )
@@ -229,7 +220,7 @@ void SessionListener::QuitSessionQuietly()
     }
 }
 
-void SAL_CALL SessionListener::disposing(const css::lang::EventObject& Source) throw (RuntimeException, std::exception)
+void SAL_CALL SessionListener::disposing(const css::lang::EventObject& Source)
 {
     SAL_INFO("fwk.session", "SessionListener::disposing");
     if (Source.Source == m_rSessionManager) {
@@ -238,7 +229,6 @@ void SAL_CALL SessionListener::disposing(const css::lang::EventObject& Source) t
 }
 
 void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
-    throw (RuntimeException, std::exception)
 {
     SAL_INFO("fwk.session", "SessionListener::initialize");
 
@@ -274,7 +264,6 @@ void SAL_CALL SessionListener::initialize(const Sequence< Any  >& args)
 }
 
 void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& event)
-    throw (css::uno::RuntimeException, std::exception)
 {
    SAL_INFO("fwk.session", "SessionListener::statusChanged");
 
@@ -297,7 +286,6 @@ void SAL_CALL SessionListener::statusChanged(const frame::FeatureStateEvent& eve
 }
 
 sal_Bool SAL_CALL SessionListener::doRestore()
-    throw (RuntimeException, std::exception)
 {
     SAL_INFO("fwk.session", "SessionListener::doRestore");
     osl::MutexGuard g(m_aMutex);
@@ -322,7 +310,6 @@ sal_Bool SAL_CALL SessionListener::doRestore()
 }
 
 void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelable*/ )
-    throw (RuntimeException, std::exception)
 {
     SAL_INFO("fwk.session", "SessionListener::doSave");
 
@@ -342,7 +329,6 @@ void SAL_CALL SessionListener::doSave( sal_Bool bShutdown, sal_Bool /*bCancelabl
 }
 
 void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted )
-    throw (RuntimeException, std::exception)
 {
     SAL_INFO("fwk.session", "SessionListener::approveInteraction");
     // do AutoSave as the first step
@@ -396,7 +382,6 @@ void SAL_CALL SessionListener::approveInteraction( sal_Bool bInteractionGranted 
 }
 
 void SessionListener::shutdownCanceled()
-    throw (RuntimeException, std::exception)
 {
     SAL_INFO("fwk.session", "SessionListener::shutdownCanceled");
     // set the state back
@@ -404,7 +389,6 @@ void SessionListener::shutdownCanceled()
 }
 
 void SessionListener::doQuit()
-    throw (RuntimeException, std::exception)
 {
     SAL_INFO("fwk.session", "SessionListener::doQuit");
     if ( m_bSessionStoreRequested && !m_bTerminated )

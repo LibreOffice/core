@@ -45,12 +45,10 @@ UnxSplashScreen::~UnxSplashScreen()
 }
 
 void SAL_CALL UnxSplashScreen::start( const OUString& /*aText*/, sal_Int32 /*nRange*/ )
-    throw ( uno::RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL UnxSplashScreen::end()
-    throw ( uno::RuntimeException, std::exception )
 {
     SAL_INFO("desktop.splash", "UnxSplashScreen::end()");
     if( !m_pOutFd )
@@ -61,7 +59,6 @@ void SAL_CALL UnxSplashScreen::end()
 }
 
 void SAL_CALL UnxSplashScreen::reset()
-    throw ( uno::RuntimeException, std::exception )
 {
     SAL_INFO("desktop.splash", "UNXSplashScreen::reset()");
     if( !m_pOutFd )
@@ -72,13 +69,11 @@ void SAL_CALL UnxSplashScreen::reset()
 }
 
 void SAL_CALL UnxSplashScreen::setText( const OUString& /*aText*/ )
-    throw ( uno::RuntimeException, std::exception )
 {
     // TODO?
 }
 
 void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
-    throw ( uno::RuntimeException, std::exception )
 {
     if ( m_pOutFd )
     {
@@ -90,7 +85,6 @@ void SAL_CALL UnxSplashScreen::setValue( sal_Int32 nValue )
 // XInitialize
 void SAL_CALL
 UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
-    throw ( uno::RuntimeException, std::exception )
 {
     for ( sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++ )
     {
@@ -109,19 +103,16 @@ UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
 }
 
 OUString UnxSplashScreen::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return UnxSplash_getImplementationName();
 }
 
 sal_Bool UnxSplashScreen::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return UnxSplash_getSupportedServiceNames();
 }
@@ -133,7 +124,7 @@ using namespace desktop;
 // get service instance...
 static uno::Reference< uno::XInterface > m_xINSTANCE;
 
-uno::Reference< uno::XInterface > UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > &  ) throw( uno::Exception )
+uno::Reference< uno::XInterface > UnxSplash_createInstance(const uno::Reference< uno::XComponentContext > &  )
 {
     static osl::Mutex s_aMutex;
     if ( !m_xINSTANCE.is() )

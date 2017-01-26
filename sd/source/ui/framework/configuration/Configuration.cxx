@@ -90,7 +90,6 @@ void SAL_CALL Configuration::disposing()
 //----- XConfiguration --------------------------------------------------------
 
 void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -108,7 +107,6 @@ void SAL_CALL Configuration::addResource (const Reference<XResourceId>& rxResour
 }
 
 void SAL_CALL Configuration::removeResource (const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -130,7 +128,6 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
     const Reference<XResourceId>& rxAnchorId,
     const OUString& rsResourceURLPrefix,
     AnchorBindingMode eMode)
-    throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -172,7 +169,6 @@ Sequence<Reference<XResourceId> > SAL_CALL Configuration::getResources (
 }
 
 sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -184,7 +180,6 @@ sal_Bool SAL_CALL Configuration::hasResource (const Reference<XResourceId>& rxRe
 //----- XCloneable ------------------------------------------------------------
 
 Reference<util::XCloneable> SAL_CALL Configuration::createClone()
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     ThrowIfDisposed();
@@ -200,7 +195,6 @@ Reference<util::XCloneable> SAL_CALL Configuration::createClone()
 //----- XNamed ----------------------------------------------------------------
 
 OUString SAL_CALL Configuration::getName()
-    throw (RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard (maMutex);
     OUString aString;
@@ -224,26 +218,22 @@ OUString SAL_CALL Configuration::getName()
 }
 
 void SAL_CALL Configuration::setName (const OUString& rsName)
-    throw (RuntimeException, std::exception)
 {
     (void)rsName; // rsName is ignored.
 }
 
 OUString Configuration::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString(
         "com.sun.star.comp.Draw.framework.configuration.Configuration");
 }
 
 sal_Bool Configuration::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> Configuration::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{
         "com.sun.star.drawing.framework.Configuration"};
@@ -276,7 +266,6 @@ void Configuration::PostEvent (
 }
 
 void Configuration::ThrowIfDisposed() const
-    throw (css::lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {

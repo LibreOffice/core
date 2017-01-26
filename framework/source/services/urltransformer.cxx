@@ -37,35 +37,28 @@ class URLTransformer : public ::cppu::WeakImplHelper< css::util::XURLTransformer
 public:
     URLTransformer() {}
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.framework.URLTransformer");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.util.URLTransformer"};
     }
 
-    virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL parseStrict( css::util::URL& aURL ) override;
 
-    virtual sal_Bool SAL_CALL parseSmart( css::util::URL& aURL, const OUString& sSmartProtocol )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL parseSmart( css::util::URL& aURL, const OUString& sSmartProtocol ) override;
 
-    virtual sal_Bool SAL_CALL assemble( css::util::URL& aURL )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual sal_Bool SAL_CALL assemble( css::util::URL& aURL ) override;
 
-    virtual OUString SAL_CALL getPresentation( const css::util::URL& aURL, sal_Bool bWithPassword )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getPresentation( const css::util::URL& aURL, sal_Bool bWithPassword ) override;
 };
 
 namespace
@@ -121,7 +114,7 @@ namespace
 }
 
 //  XURLTransformer
-sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL )
 {
     // Safe impossible cases.
     if ( aURL.Complete.isEmpty() )
@@ -173,7 +166,7 @@ sal_Bool SAL_CALL URLTransformer::parseStrict( css::util::URL& aURL ) throw( css
 //  XURLTransformer
 
 sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
-                                                const   OUString&    sSmartProtocol  ) throw( css::uno::RuntimeException, std::exception )
+                                                const   OUString&    sSmartProtocol  )
 {
     // Safe impossible cases.
     if ( aURL.Complete.isEmpty() )
@@ -225,7 +218,7 @@ sal_Bool SAL_CALL URLTransformer::parseSmart( css::util::URL& aURL,
 }
 
 //  XURLTransformer
-sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL )
 {
     // Initialize parser.
     INetURLObject aParser;
@@ -284,7 +277,7 @@ sal_Bool SAL_CALL URLTransformer::assemble( css::util::URL& aURL ) throw( css::u
 //  XURLTransformer
 
 OUString SAL_CALL URLTransformer::getPresentation( const css::util::URL& aURL,
-                                                            sal_Bool    bWithPassword   ) throw( css::uno::RuntimeException, std::exception )
+                                                            sal_Bool    bWithPassword   )
 {
     // Safe impossible cases.
     if  ( aURL.Complete.isEmpty() )

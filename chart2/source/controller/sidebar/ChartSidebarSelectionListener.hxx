@@ -40,11 +40,9 @@ public:
     ChartSidebarSelectionListener(ChartSidebarSelectionListenerParent* pParent, ObjectType eType);
     virtual ~ChartSidebarSelectionListener() override;
 
-    virtual void SAL_CALL selectionChanged(const css::lang::EventObject& rEvent)
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+    virtual void SAL_CALL selectionChanged(const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent)
-        throw (::css::uno::RuntimeException, ::std::exception) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& rEvent) override;
 
     void setAcceptedTypes(const std::vector<ObjectType>& aTypes);
 

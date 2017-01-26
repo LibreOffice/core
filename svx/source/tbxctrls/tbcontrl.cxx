@@ -272,7 +272,7 @@ public:
     virtual ~SvxFrameWindow_Impl() override;
     virtual void dispose() override;
 
-    virtual void    statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException ) override;
+    virtual void    statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
     virtual void    DataChanged( const DataChangedEvent& rDCEvt ) override;
 };
 
@@ -1901,7 +1901,6 @@ IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl, ValueSet*, void)
 }
 
 void SvxFrameWindow_Impl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException )
 {
     if ( rEvent.FeatureURL.Complete == ".uno:BorderReducedMode" )
     {
@@ -2319,7 +2318,6 @@ SvxStyleToolBoxControl::~SvxStyleToolBoxControl()
 }
 
 void SAL_CALL SvxStyleToolBoxControl::initialize( const Sequence< Any >& aArguments )
-throw ( Exception, RuntimeException, std::exception)
 {
     SfxToolBoxControl::initialize( aArguments );
 
@@ -2343,7 +2341,6 @@ throw ( Exception, RuntimeException, std::exception)
 
 // XComponent
 void SAL_CALL SvxStyleToolBoxControl::dispose()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SfxToolBoxControl::dispose();
 
@@ -2369,7 +2366,7 @@ void SAL_CALL SvxStyleToolBoxControl::dispose()
     pImpl.reset();
 }
 
-void SAL_CALL SvxStyleToolBoxControl::update() throw (RuntimeException, std::exception)
+void SAL_CALL SvxStyleToolBoxControl::update()
 {
     // Do nothing, we will start binding our listener when we are visible.
     // See link SvxStyleToolBoxControl::VisibilityNotification.
@@ -2678,18 +2675,18 @@ public:
     SvxFontNameToolBoxControl();
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XToolbarController
-    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::awt::XWindow > SAL_CALL createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent ) override;
 
     // XComponent
-    virtual void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL dispose() override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& rServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     VclPtr<SvxFontNameBox_Impl> m_pBox;
@@ -2700,7 +2697,6 @@ SvxFontNameToolBoxControl::SvxFontNameToolBoxControl()
 }
 
 void SvxFontNameToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     ToolBox* pToolBox = nullptr;
@@ -2729,7 +2725,6 @@ void SvxFontNameToolBoxControl::statusChanged( const css::frame::FeatureStateEve
 }
 
 css::uno::Reference< css::awt::XWindow > SvxFontNameToolBoxControl::createItemWindow( const css::uno::Reference< css::awt::XWindow >& rParent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
     m_pBox = VclPtr<SvxFontNameBox_Impl>::Create( VCLUnoHelper::GetWindow( rParent ),
@@ -2739,26 +2734,22 @@ css::uno::Reference< css::awt::XWindow > SvxFontNameToolBoxControl::createItemWi
 }
 
 void SvxFontNameToolBoxControl::dispose()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     m_pBox.disposeAndClear();
     ToolboxController::dispose();
 }
 
 OUString SvxFontNameToolBoxControl::getImplementationName()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.svx.FontNameToolBoxControl" );
 }
 
 sal_Bool SvxFontNameToolBoxControl::supportsService( const OUString& rServiceName )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 css::uno::Sequence< OUString > SvxFontNameToolBoxControl::getSupportedServiceNames()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.frame.ToolbarController" };
 }
@@ -2841,7 +2832,6 @@ IMPL_LINK(SvxColorToolBoxControl, SelectedHdl, const NamedColor&, rColor, void)
 }
 
 void SvxColorToolBoxControl::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( rEvent.FeatureURL.Complete == m_aCommandURL )
         GetToolBox().EnableItem( GetId(), rEvent.IsEnabled );
@@ -2899,7 +2889,6 @@ void SvxColorToolBoxControl::Select(sal_uInt16 /*nSelectModifier*/)
 }
 
 sal_Bool SvxColorToolBoxControl::opensSubToolbar()
-    throw (css::uno::RuntimeException, std::exception)
 {
     // For a split button, we mark this controller as a sub-toolbar controller,
     // so we get notified (through updateImage method) on button image changes,
@@ -2908,7 +2897,6 @@ sal_Bool SvxColorToolBoxControl::opensSubToolbar()
 }
 
 void SvxColorToolBoxControl::updateImage()
-    throw (css::uno::RuntimeException, std::exception)
 {
     Image aImage = GetImage( m_xFrame, m_aCommandURL, hasBigImages() );
     if ( !!aImage )
@@ -2919,13 +2907,11 @@ void SvxColorToolBoxControl::updateImage()
 }
 
 OUString SvxColorToolBoxControl::getSubToolbarName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
 void SvxColorToolBoxControl::functionSelected( const OUString& /*rCommand*/ )
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -2954,11 +2940,11 @@ public:
     explicit SvxFrameToolBoxControl( const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& rArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
@@ -2971,7 +2957,6 @@ SvxFrameToolBoxControl::SvxFrameToolBoxControl( const css::uno::Reference< css::
 }
 
 void SvxFrameToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
-    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::PopupWindowController::initialize( rArguments );
     ToolBox* pToolBox = nullptr;
@@ -2989,13 +2974,11 @@ VclPtr<vcl::Window> SvxFrameToolBoxControl::createPopupWindow( vcl::Window* pPar
 }
 
 OUString SvxFrameToolBoxControl::getImplementationName()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.svx.FrameToolBoxControl" );
 }
 
 css::uno::Sequence< OUString > SvxFrameToolBoxControl::getSupportedServiceNames()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.frame.ToolbarController" };
 }
@@ -3042,7 +3025,6 @@ SvxCurrencyToolBoxControl::SvxCurrencyToolBoxControl( sal_uInt16 nSlotId, sal_uI
 SvxCurrencyToolBoxControl::~SvxCurrencyToolBoxControl() {}
 
 void SvxCurrencyToolBoxControl::initialize( const css::uno::Sequence< css::uno::Any >& rArguments )
-    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     SfxToolBoxControl::initialize(rArguments);
     if (GetToolBox().GetItemCommand(GetId()) == m_aCommandURL)

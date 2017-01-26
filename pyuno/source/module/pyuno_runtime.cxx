@@ -130,7 +130,6 @@ static PyTypeObject RuntimeImpl_Type =
  -----------------------------------------------------------------------*/
 /// @throws css::uno::RuntimeException
 static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
-    throw ( css::uno::RuntimeException )
 {
     PyThreadState * state = PyThreadState_Get();
     if( ! state )
@@ -155,7 +154,7 @@ static void getRuntimeImpl( PyRef & globalDict, PyRef &runtimeImpl )
 }
 
 /// @throws RuntimeException
-static PyRef importUnoModule( ) throw ( RuntimeException )
+static PyRef importUnoModule( )
 {
     // import the uno module
     PyRef module( PyImport_ImportModule( "uno" ), SAL_NO_ACQUIRE, NOT_NULL );
@@ -251,7 +250,6 @@ static void readLoggingConfig( sal_Int32 *pLevel, FILE **ppFile )
  RuntimeImpl implementations
  *-------------------------------------------------------------------*/
 PyRef stRuntimeImpl::create( const Reference< XComponentContext > &ctx )
-    throw( css::uno::RuntimeException, std::exception )
 {
     RuntimeImpl *me = PyObject_New (RuntimeImpl, &RuntimeImpl_Type);
     if( ! me )
@@ -303,7 +301,6 @@ void  stRuntimeImpl::del(PyObject* self)
 
 
 void Runtime::initialize( const Reference< XComponentContext > & ctx )
-    throw ( RuntimeException, std::exception )
 {
     PyRef globalDict, runtime;
     getRuntimeImpl( globalDict , runtime );
@@ -319,7 +316,7 @@ void Runtime::initialize( const Reference< XComponentContext > & ctx )
 }
 
 
-bool Runtime::isInitialized() throw ( RuntimeException )
+bool Runtime::isInitialized()
 {
     PyRef globalDict, runtime;
     getRuntimeImpl( globalDict , runtime );
@@ -327,7 +324,7 @@ bool Runtime::isInitialized() throw ( RuntimeException )
     return runtime.is() && impl->cargo->valid;
 }
 
-Runtime::Runtime() throw(  RuntimeException )
+Runtime::Runtime()
     : impl( nullptr )
 {
     PyRef globalDict, runtime;
@@ -363,9 +360,6 @@ Runtime & Runtime::operator = ( const Runtime & r )
 }
 
 PyRef Runtime::any2PyObject (const Any &a ) const
-    throw ( css::script::CannotConvertException,
-            css::lang::IllegalArgumentException,
-            RuntimeException)
 {
     if( ! impl->cargo->valid )
     {
@@ -640,7 +634,6 @@ bool Runtime::pyIterUnpack( PyObject *const pObj, Any &a ) const
 }
 
 Any Runtime::pyObject2Any ( const PyRef & source, enum ConversionMode mode ) const
-    throw ( css::uno::RuntimeException )
 {
     if( ! impl->cargo->valid )
     {
@@ -998,7 +991,6 @@ Any Runtime::extractUnoException( const PyRef & excType, const PyRef &excValue, 
 
 
 PyThreadAttach::PyThreadAttach( PyInterpreterState *interp)
-    throw ( css::uno::RuntimeException )
 {
     tstate = PyThreadState_New( interp );
     if( !tstate  )
@@ -1013,7 +1005,7 @@ PyThreadAttach::~PyThreadAttach()
     PyThreadState_Delete( tstate );
 }
 
-PyThreadDetach::PyThreadDetach() throw ( css::uno::RuntimeException )
+PyThreadDetach::PyThreadDetach()
 {
     tstate = PyThreadState_Get();
     PyEval_ReleaseThread( tstate );

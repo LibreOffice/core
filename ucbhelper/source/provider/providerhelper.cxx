@@ -83,7 +83,6 @@ void SAL_CALL ContentProviderImplHelper::release()
 }
 
 css::uno::Any SAL_CALL ContentProviderImplHelper::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< lang::XTypeProvider* >(this)),
@@ -101,7 +100,6 @@ XTYPEPROVIDER_IMPL_3( ContentProviderImplHelper,
 // virtual
 sal_Bool SAL_CALL ContentProviderImplHelper::supportsService(
                                             const OUString& ServiceName )
-    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
@@ -110,7 +108,6 @@ sal_Bool SAL_CALL ContentProviderImplHelper::supportsService(
 sal_Int32 SAL_CALL ContentProviderImplHelper::compareContentIds(
         const uno::Reference< css::ucb::XContentIdentifier >& Id1,
         const uno::Reference< css::ucb::XContentIdentifier >& Id2 )
-    throw( uno::RuntimeException, std::exception )
 {
     // Simply do a string compare.
 

@@ -329,7 +329,7 @@ Reference< XConnection> getConnection_withFeedback(const OUString& _rDataSourceN
     return xReturn;
 }
 
-Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet) throw (RuntimeException)
+Reference< XConnection> getConnection(const Reference< XRowSet>& _rxRowSet)
 {
     Reference< XConnection> xReturn;
     Reference< XPropertySet> xRowSetProps(_rxRowSet, UNO_QUERY);
@@ -1635,24 +1635,24 @@ namespace
         OParameterWrapper(const ::std::vector<bool, std::allocator<bool> >& _aSet,const Reference<XIndexAccess>& _xSource) : m_aSet(_aSet),m_xSource(_xSource){}
     private:
         // css::container::XElementAccess
-        virtual Type SAL_CALL getElementType() throw(RuntimeException, std::exception) override
+        virtual Type SAL_CALL getElementType() override
         {
             return m_xSource->getElementType();
         }
-        virtual sal_Bool SAL_CALL hasElements(  ) throw(RuntimeException, std::exception) override
+        virtual sal_Bool SAL_CALL hasElements(  ) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->hasElements();
             return ::std::count(m_aSet.begin(),m_aSet.end(),false) != 0;
         }
         // css::container::XIndexAccess
-        virtual sal_Int32 SAL_CALL getCount(  ) throw(RuntimeException, std::exception) override
+        virtual sal_Int32 SAL_CALL getCount(  ) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->getCount();
             return ::std::count(m_aSet.begin(),m_aSet.end(),false);
         }
-        virtual Any SAL_CALL getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception) override
+        virtual Any SAL_CALL getByIndex( sal_Int32 Index ) override
         {
             if ( m_aSet.empty() )
                 return m_xSource->getByIndex(Index);
@@ -1775,7 +1775,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                        sal_Int32 parameterIndex,
                        const Any& x,
                        sal_Int32 sqlType,
-                       sal_Int32 scale)  throw(SQLException, RuntimeException, std::exception)
+                       sal_Int32 scale)
 {
     ORowSetValue aVal;
     aVal.fill(x);
@@ -1786,7 +1786,7 @@ void setObjectWithInfo(const Reference<XParameters>& _xParams,
                        sal_Int32 parameterIndex,
                        const ::connectivity::ORowSetValue& _rValue,
                        sal_Int32 sqlType,
-                       sal_Int32 scale)  throw(SQLException, RuntimeException, std::exception)
+                       sal_Int32 scale)
 {
     if ( _rValue.isNull() )
         _xParams->setNull(parameterIndex,sqlType);
@@ -2000,7 +2000,7 @@ void release(oslInterlockedCount& _refCount,
         osl_atomic_increment( &_refCount );
 }
 
-void checkDisposed(bool _bThrow) throw ( DisposedException )
+void checkDisposed(bool _bThrow)
 {
     if (_bThrow)
         throw DisposedException();

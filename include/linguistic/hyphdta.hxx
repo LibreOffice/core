@@ -48,23 +48,17 @@ public:
 
     // XHyphenatedWord
     virtual OUString SAL_CALL
-        getWord()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getWord() override;
     virtual css::lang::Locale SAL_CALL
-        getLocale()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getLocale() override;
     virtual sal_Int16 SAL_CALL
-        getHyphenationPos()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getHyphenationPos() override;
     virtual OUString SAL_CALL
-        getHyphenatedWord()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getHyphenatedWord() override;
     virtual sal_Int16 SAL_CALL
-        getHyphenPos()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getHyphenPos() override;
     virtual sal_Bool SAL_CALL
-        isAlternativeSpelling()
-            throw(css::uno::RuntimeException, std::exception) override;
+        isAlternativeSpelling() override;
 
     static css::uno::Reference <css::linguistic2::XHyphenatedWord> LNG_DLLPUBLIC CreateHyphenatedWord(
         const OUString &rWord, sal_Int16 nLang, sal_Int16 nHyphenationPos,
@@ -94,17 +88,13 @@ public:
 
     // XPossibleHyphens
     virtual OUString SAL_CALL
-        getWord()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getWord() override;
     virtual css::lang::Locale SAL_CALL
-        getLocale()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getLocale() override;
     virtual OUString SAL_CALL
-        getPossibleHyphens()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getPossibleHyphens() override;
     virtual css::uno::Sequence< sal_Int16 > SAL_CALL
-        getHyphenationPositions()
-            throw(css::uno::RuntimeException, std::exception) override;
+        getHyphenationPositions() override;
 
     static css::uno::Reference < css::linguistic2::XPossibleHyphens > LNG_DLLPUBLIC CreatePossibleHyphens
         (const OUString &rWord, sal_Int16 nLang,

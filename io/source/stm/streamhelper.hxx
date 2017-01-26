@@ -41,18 +41,16 @@ public:
     * data is written beyond end.
     ***/
     /// @throws css::io::BufferSizeExceededException
-    void    writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &)
-        throw(css::io::BufferSizeExceededException);
+    void    writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &);
     /// @throws css::io::BufferSizeExceededException
-    void    readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const
-        throw(css::io::BufferSizeExceededException);
+    void    readAt( sal_Int32 nPos, Sequence<sal_Int8> & , sal_Int32 nBytesToRead ) const;
     sal_Int32   getSize() const throw();
     /// @throws css::io::BufferSizeExceededException
-    void    forgetFromStart(sal_Int32 nBytesToForget) throw(css::io::BufferSizeExceededException);
+    void    forgetFromStart(sal_Int32 nBytesToForget);
 
 private:
     /// @throws css::io::BufferSizeExceededException
-    void resizeBuffer(sal_Int32 nMinSize) throw(css::io::BufferSizeExceededException);
+    void resizeBuffer(sal_Int32 nMinSize);
     inline void checkInvariants() {
         assert( m_nBufferLen >= 0 );
         assert( m_nOccupiedBuffer >= 0 );
@@ -74,14 +72,11 @@ class MemFIFO :
 {
 public:
     /// @throws css::io::BufferSizeExceededException
-    void          write( const Sequence<sal_Int8> &)
-                  throw( css::io::BufferSizeExceededException );
+    void          write( const Sequence<sal_Int8> &);
     /// @throws css::io::BufferSizeExceededException
-    void          read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead )
-                  throw( css::io::BufferSizeExceededException );
+    void          read( Sequence<sal_Int8> & , sal_Int32 nBytesToRead );
     /// @throws css::io::BufferSizeExceededException
-    void          skip( sal_Int32 nBytesToSkip )
-                  throw( css::io::BufferSizeExceededException );
+    void          skip( sal_Int32 nBytesToSkip );
     sal_Int32     getSize() const throw()
                   { return MemRingBuffer::getSize(); }
 

@@ -1200,9 +1200,6 @@ HRESULT DocumentHolder::SetObjectRects(LPCRECT aRect, LPCRECT aClip)
 
 
 css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWindow()
-    throw (
-        css::uno::RuntimeException
-    )
 {
     if(m_xContainerWindow.is())
         return m_xContainerWindow;
@@ -1253,9 +1250,6 @@ css::uno::Reference< css::awt::XWindow> SAL_CALL DocumentHolder::getContainerWin
 
 
 sal_Bool SAL_CALL DocumentHolder::requestDockingAreaSpace( const css::awt::Rectangle& RequestedSpace )
-    throw(
-        css::uno::RuntimeException
-    )
 {
     if(m_bOnDeactivate)
         return true;
@@ -1272,9 +1266,6 @@ sal_Bool SAL_CALL DocumentHolder::requestDockingAreaSpace( const css::awt::Recta
 
 
 void SAL_CALL DocumentHolder::setDockingAreaSpace( const css::awt::Rectangle& BorderSpace )
-    throw (
-        css::uno::RuntimeException
-    )
 {
     if(m_bOnDeactivate)
         return;
@@ -1307,7 +1298,6 @@ void SAL_CALL DocumentHolder::setDockingAreaSpace( const css::awt::Rectangle& Bo
 
 
 void SAL_CALL DocumentHolder::disposing( const css::lang::EventObject& aSource )
-        throw( uno::RuntimeException )
 {
     if ( m_xDocument.is() && m_xDocument == aSource.Source )
     {
@@ -1325,9 +1315,6 @@ DocumentHolder::queryClosing(
     const lang::EventObject& aSource,
     sal_Bool /*bGetsOwnership*/
 )
-    throw(
-        util::CloseVetoException
-    )
 {
     if (!m_bLink
         && ((m_xDocument.is() && m_xDocument == aSource.Source)
@@ -1339,7 +1326,6 @@ DocumentHolder::queryClosing(
 void SAL_CALL
 DocumentHolder::notifyClosing(
     const lang::EventObject& aSource )
-        throw( uno::RuntimeException )
 {
     try
     {
@@ -1369,9 +1355,6 @@ void SAL_CALL
 DocumentHolder::queryTermination(
     const lang::EventObject& /*aSource*/
 )
-    throw(
-        frame::TerminationVetoException
-    )
 {
     if ( m_xDocument.is() )
         throw frame::TerminationVetoException();
@@ -1381,7 +1364,6 @@ void SAL_CALL
 DocumentHolder::notifyTermination(
     const lang::EventObject& aSource
 )
-        throw( uno::RuntimeException )
 {
     OSL_ENSURE( !m_xDocument.is(), "Just a disaster..." );
     uno::Reference< frame::XDesktop > xDesktop(
@@ -1393,7 +1375,6 @@ DocumentHolder::notifyTermination(
 
 
 void SAL_CALL DocumentHolder::modified( const lang::EventObject& /*aEvent*/ )
-    throw (uno::RuntimeException)
 {
     if ( m_xOleAccess.is() )
     {

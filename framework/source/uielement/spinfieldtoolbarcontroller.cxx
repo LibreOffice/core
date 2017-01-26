@@ -183,7 +183,6 @@ SpinfieldToolbarController::~SpinfieldToolbarController()
 }
 
 void SAL_CALL SpinfieldToolbarController::dispose()
-throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard aSolarMutexGuard;
 

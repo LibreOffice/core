@@ -57,7 +57,6 @@ AccEventListener::~AccEventListener()
  *  @param AccessibleEventObject    the event object which contains information about event
  */
 void  AccEventListener::notifyEvent( const css::accessibility::AccessibleEventObject& aEvent )
-throw (css::uno::RuntimeException)
 {
     SolarMutexGuard g;
 
@@ -259,7 +258,6 @@ void AccEventListener::RemoveMeFromBroadcaster()
  *  this method is invoked before listener is disposed
  */
 void AccEventListener::disposing( const css::lang::EventObject& /*Source*/ )
-throw (css::uno::RuntimeException)
 {
     SolarMutexGuard g;
 

@@ -131,14 +131,12 @@ Wall::~Wall()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL Wall::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new Wall( *this ));
 }
 
 // ____ OPropertySet ____
 uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticWallDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -154,14 +152,12 @@ uno::Any Wall::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL Wall::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticWallInfo::get();
 }
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL Wall::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -175,7 +171,6 @@ void SAL_CALL Wall::addModifyListener( const uno::Reference< util::XModifyListen
 }
 
 void SAL_CALL Wall::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -190,14 +185,12 @@ void SAL_CALL Wall::removeModifyListener( const uno::Reference< util::XModifyLis
 
 // ____ XModifyListener ____
 void SAL_CALL Wall::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL Wall::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }

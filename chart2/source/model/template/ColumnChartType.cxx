@@ -140,20 +140,17 @@ ColumnChartType::~ColumnChartType()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL ColumnChartType::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new ColumnChartType( *this ));
 }
 
 // ____ XChartType ____
 OUString SAL_CALL ColumnChartType::getChartType()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString(CHART2_SERVICE_NAME_CHARTTYPE_COLUMN);
 }
 
 uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aPropRoles(2);
     aPropRoles[0] = "FillColor";
@@ -164,7 +161,6 @@ uno::Sequence< OUString > ColumnChartType::getSupportedPropertyRoles()
 
 // ____ OPropertySet ____
 uno::Any ColumnChartType::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticColumnChartTypeDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -180,25 +176,21 @@ uno::Any ColumnChartType::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL ColumnChartType::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticColumnChartTypeInfo::get();
 }
 
 OUString SAL_CALL ColumnChartType::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.ColumnChartType");
 }
 
 sal_Bool SAL_CALL ColumnChartType::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ColumnChartType::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         CHART2_SERVICE_NAME_CHARTTYPE_COLUMN,

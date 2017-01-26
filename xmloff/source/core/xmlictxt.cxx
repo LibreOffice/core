@@ -68,7 +68,6 @@ void SvXMLImportContext::Characters( const OUString& )
 
 // css::xml::sax::XFastContextHandler:
 void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 nElement, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     mrImport.isFastContext = false;
     startUnknownElement( mrImport.getNamespacePrefixFromToken( nElement ),
@@ -77,7 +76,6 @@ void SAL_CALL SvXMLImportContext::startFastElement(sal_Int32 nElement, const uno
 
 void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, const OUString & rLocalName,
     const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     OUString elementName;
     rtl::Reference < comphelper::AttributeList > rAttrList = new comphelper::AttributeList;
@@ -125,7 +123,6 @@ void SAL_CALL SvXMLImportContext::startUnknownElement(const OUString & rPrefix, 
 }
 
 void SAL_CALL SvXMLImportContext::endFastElement(sal_Int32 nElement)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     mrImport.isFastContext = false;
     endUnknownElement( mrImport.getNamespacePrefixFromToken( nElement ),
@@ -133,7 +130,6 @@ void SAL_CALL SvXMLImportContext::endFastElement(sal_Int32 nElement)
 }
 
 void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & rPrefix, const OUString & rLocalName)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     OUString elementName;
     if ( !rPrefix.isEmpty() )
@@ -145,7 +141,6 @@ void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & rPrefix, c
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createFastChildContext
     (sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     // Call CreateFastContext only if it's the first element of the document
     if ( !mrImport.maFastContexts.size() )
@@ -156,13 +151,11 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::cre
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createUnknownChildContext
     (const OUString &, const OUString &, const uno::Reference< xml::sax::XFastAttributeList > &)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     return this;
 }
 
 void SAL_CALL SvXMLImportContext::characters(const OUString &rChars)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     mrImport.Characters( rChars );
 }

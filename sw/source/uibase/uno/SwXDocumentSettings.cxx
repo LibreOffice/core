@@ -258,7 +258,6 @@ SwXDocumentSettings::~SwXDocumentSettings()
 }
 
 Any SAL_CALL SwXDocumentSettings::queryInterface( const Type& rType )
-    throw(RuntimeException, std::exception)
 {
         return ::cppu::queryInterface ( rType,
                                         // OWeakObject interfaces
@@ -283,7 +282,6 @@ void SwXDocumentSettings::release ()
 }
 
 uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
-    throw (RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -302,13 +300,11 @@ uno::Sequence< uno::Type > SAL_CALL SwXDocumentSettings::getTypes(  )
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL SwXDocumentSettings::getImplementationId(  )
-    throw (RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 void SwXDocumentSettings::_preSetValues ()
-        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = mpModel->GetDocShell();
     if (nullptr == mpDocSh)
@@ -320,7 +316,6 @@ void SwXDocumentSettings::_preSetValues ()
 }
 
 void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
-        throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if (rInfo.mnAttributes & PropertyAttribute::READONLY)
         throw PropertyVetoException ("Property is read-only: " + rInfo.maName, static_cast < cppu::OWeakObject * > ( nullptr ) );
@@ -868,7 +863,6 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
 }
 
 void SwXDocumentSettings::_postSetValues ()
-        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     // set printer only once, namely here!
     if( mpPrinter != nullptr )
@@ -890,7 +884,6 @@ void SwXDocumentSettings::_postSetValues ()
 }
 
 void SwXDocumentSettings::_preGetValues ()
-        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = mpModel->GetDocShell();
     if (nullptr == mpDocSh)
@@ -901,8 +894,6 @@ void SwXDocumentSettings::_preGetValues ()
 }
 
 void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
-        throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-               uno::RuntimeException)
 {
     switch( rInfo.mnHandle )
     {
@@ -1282,7 +1273,6 @@ void SwXDocumentSettings::_getSingleValue( const comphelper::PropertyInfo & rInf
 }
 
 void SwXDocumentSettings::_postGetValues ()
-        throw(beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException )
 {
     mpDocSh = nullptr;
     mpDoc = nullptr;
@@ -1290,19 +1280,16 @@ void SwXDocumentSettings::_postGetValues ()
 
 // XServiceInfo
 OUString SAL_CALL SwXDocumentSettings::getImplementationName(  )
-    throw(RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Writer.DocumentSettings");
 }
 
 sal_Bool SAL_CALL SwXDocumentSettings::supportsService( const OUString& ServiceName )
-    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL SwXDocumentSettings::getSupportedServiceNames(  )
-    throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aSeq( 3 );
     aSeq[0] = "com.sun.star.document.Settings";

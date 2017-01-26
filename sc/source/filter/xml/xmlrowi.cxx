@@ -107,7 +107,6 @@ ScXMLTableRowContext::~ScXMLTableRowContext()
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLTableRowContext::createFastChildContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     SvXMLImportContext *pContext(nullptr);
 
@@ -143,7 +142,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 }
 
 void SAL_CALL ScXMLTableRowContext::endFastElement(sal_Int32 /*nElement*/)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     ScXMLImport& rXMLImport(GetScImport());
     if (!bHasCell && nRepeatedRows > 1)
@@ -253,7 +251,6 @@ ScXMLTableRowsContext::~ScXMLTableRowsContext()
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLTableRowsContext::createFastChildContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     SvXMLImportContext *pContext(nullptr);
 
@@ -287,7 +284,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 }
 
 void SAL_CALL ScXMLTableRowsContext::endFastElement(sal_Int32 /*nElement*/)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     ScXMLImport& rXMLImport(GetScImport());
     if (bHeader)

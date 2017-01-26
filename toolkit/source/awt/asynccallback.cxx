@@ -43,12 +43,12 @@ public:
     AsyncCallback& operator=(const AsyncCallback&) = delete;
 
     // css::lang::XServiceInfo:
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString & ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // css::awt::XRequestCallback:
-    virtual void SAL_CALL addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const css::uno::Any & aData) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const css::uno::Any & aData) override;
 
 private:
 
@@ -67,24 +67,24 @@ private:
 };
 
 // com.sun.star.uno.XServiceInfo:
-OUString SAL_CALL AsyncCallback::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL AsyncCallback::getImplementationName()
 {
     return OUString("com.sun.star.awt.comp.AsyncCallback");
 }
 
-sal_Bool SAL_CALL AsyncCallback::supportsService(OUString const & serviceName) throw (css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL AsyncCallback::supportsService(OUString const & serviceName)
 {
     return cppu::supportsService(this, serviceName);
 }
 
-css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+css::uno::Sequence< OUString > SAL_CALL AsyncCallback::getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > s { "com.sun.star.awt.AsyncCallback" };
     return s;
 }
 
 // css::awt::XRequestCallback:
-void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const css::uno::Any & aData) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL AsyncCallback::addCallback(const css::uno::Reference< css::awt::XCallback > & xCallback, const css::uno::Any & aData)
 {
     if ( Application::IsInMain() )
     {

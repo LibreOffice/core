@@ -216,15 +216,13 @@ OOO_DLLPUBLIC_DBTOOLS OUString getStandardSQLState( StandardSQLState _eState );
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedSQLException(
         const OUString& _rFunctionName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
-    )
-    throw ( css::sdbc::SQLException );
+    );
 
 /// @throws css::uno::RuntimeException
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedRuntimeException(
         const OUString& _rFunctionName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
-    )
-    throw (css::uno::RuntimeException );
+    );
 
 /** throws a function sequence (HY010) exception
 
@@ -233,8 +231,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFunctionNotSupportedRuntimeException(
 OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
         const css::uno::Reference< css::uno::XInterface >& Context,
         const css::uno::Any& Next = css::uno::Any()
-    )
-    throw ( css::sdbc::SQLException );
+    );
 
 
 /** throw a invalid index sqlexception
@@ -244,8 +241,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFunctionSequenceException(
 OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
         const css::uno::Reference< css::uno::XInterface >& Context,
         const css::uno::Any& Next = css::uno::Any()
-    )
-    throw ( css::sdbc::SQLException );
+    );
 
 
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
@@ -255,8 +251,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwInvalidIndexException(
 OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         const OUString& _rMsg,
         const css::uno::Reference< css::uno::XInterface >& _rxSource
-    )
-    throw (css::sdbc::SQLException);
+    );
 
 
 /** throw a generic SQLException, i.e. one with an SQLState of HY000, an ErrorCode of 0 and no NextException
@@ -267,8 +262,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
         const OUString& _rMsg,
         const css::uno::Reference< css::uno::XInterface >& _rxSource,
         const css::uno::Any& _rNextException
-    )
-    throw (css::sdbc::SQLException);
+    );
 
 
 /** throw a SQLException with SQLState HYC00 (Optional feature not implemented)
@@ -282,8 +276,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwGenericSQLException(
 OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
         const OUString& _rFeatureName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
-    )
-    throw (css::sdbc::SQLException);
+    );
 
 /** throw a RuntimeException (Optional feature not implemented)
     @param _rFeatureName
@@ -296,8 +289,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedSQLException(
 OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedRuntimeException(
         const OUString& _rFeatureName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
-    )
-    throw (css::uno::RuntimeException);
+    );
 
 /** throw a SQLException with SQLState 42S22 (Column Not Found)
     @param _rColumnNameName
@@ -309,8 +301,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwFeatureNotImplementedRuntimeException(
 OOO_DLLPUBLIC_DBTOOLS void throwInvalidColumnException(
         const OUString& _rColumnName,
         const css::uno::Reference< css::uno::XInterface >& _rxContext
-    )
-    throw (css::sdbc::SQLException);
+    );
 
 
 /** @throws css::sdbc::SQLException
@@ -321,8 +312,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0,
         const css::uno::Any* _pNextException = nullptr
-    )
-    throw (css::sdbc::SQLException);
+    );
 
 
 /** @throws css::sdbc::SQLException
@@ -332,8 +322,7 @@ OOO_DLLPUBLIC_DBTOOLS void throwSQLException(
         StandardSQLState _eSQLState,
         const css::uno::Reference< css::uno::XInterface >& _rxContext,
         const sal_Int32 _nErrorCode = 0
-    )
-    throw (css::sdbc::SQLException);
+    );
 
 
 }   // namespace dbtools

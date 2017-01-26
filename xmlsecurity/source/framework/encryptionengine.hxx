@@ -69,8 +69,7 @@ protected:
     explicit EncryptionEngine( const css::uno::Reference< css::uno::XComponentContext > & xContext );
     virtual ~EncryptionEngine() override {};
 
-    virtual void tryToPerform( )
-        throw (css::uno::Exception, css::uno::RuntimeException) override;
+    virtual void tryToPerform( ) override;
     virtual void clearUp( ) const override;
     virtual bool checkReady() const override;
 
@@ -82,13 +81,11 @@ protected:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
     virtual void startEngine( const css::uno::Reference< css::xml::crypto::XXMLEncryptionTemplate >&)
-        throw (css::uno::Exception, css::uno::RuntimeException)
         {};
 
 public:
     /* XBlockerMonitor */
-    virtual void SAL_CALL setBlockerId( sal_Int32 id )
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setBlockerId( sal_Int32 id ) override;
 };
 
 #endif

@@ -84,8 +84,7 @@ namespace basctl
     /// @throws css::container::NoSuchElementException
     /// @throws css::uno::RuntimeException
     css::uno::Sequence< OUString > GetMethodNames(
-        const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName )
-        throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
+        const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName );
 
     bool            HasMethod(
         const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rModName, const OUString& rMethName );
@@ -101,8 +100,7 @@ namespace basctl
         @throws css::uno::RuntimeException
     */
     bool            RenameDialog(
-        vcl::Window* pErrorParent, const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rOldName, const OUString& rNewName )
-        throw (css::container::ElementExistException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception);
+        vcl::Window* pErrorParent, const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rOldName, const OUString& rNewName );
 
     bool            RemoveDialog( const ScriptDocument& rDocument, const OUString& rLibName, const OUString& rDlgName );
 

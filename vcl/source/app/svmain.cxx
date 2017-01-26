@@ -237,14 +237,13 @@ public:
         : m_xNextContext( ctx ) {}
 
     // XCurrentContext
-    virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name )
-            throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getValueByName( const OUString& Name ) override;
 
 private:
     css::uno::Reference< css::uno::XCurrentContext > m_xNextContext;
 };
 
-uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Name) throw (uno::RuntimeException, std::exception)
+uno::Any SAL_CALL DesktopEnvironmentContext::getValueByName( const OUString& Name)
 {
     uno::Any retVal;
 
@@ -342,12 +341,11 @@ namespace
  */
 class VCLUnoWrapperDeleter : public cppu::WeakImplHelper<css::lang::XEventListener>
 {
-    virtual void SAL_CALL disposing(lang::EventObject const& rSource) throw(uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(lang::EventObject const& rSource) override;
 };
 
 void
 VCLUnoWrapperDeleter::disposing(lang::EventObject const& /* rSource */)
-    throw(uno::RuntimeException, std::exception)
 {
     ImplSVData* const pSVData = ImplGetSVData();
     if (pSVData && pSVData->mpUnoWrapper)

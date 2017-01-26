@@ -73,7 +73,6 @@ CmdMailSuppl::CmdMailSuppl( const Reference< XComponentContext >& xContext ) :
 // XSimpleMailClientSupplier
 
 Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
-    throw (RuntimeException, std::exception)
 {
     return static_cast < XSimpleMailClient * > (this);
 }
@@ -81,7 +80,6 @@ Reference< XSimpleMailClient > SAL_CALL CmdMailSuppl::querySimpleMailClient(  )
 // XSimpleMailClient
 
 Reference< XSimpleMailMessage > SAL_CALL CmdMailSuppl::createSimpleMailMessage(  )
-        throw (css::uno::RuntimeException, std::exception)
 {
     return Reference< XSimpleMailMessage >( new CmdMailMsg(  ) );
 }
@@ -128,7 +126,6 @@ void appendShellWord(OStringBuffer & buffer, OUString const & word, bool strict)
 }
 
 void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailMessage >& xSimpleMailMessage, sal_Int32 /*aFlag*/ )
-    throw (IllegalArgumentException, Exception, RuntimeException, std::exception)
 {
     if ( ! xSimpleMailMessage.is() )
     {
@@ -288,19 +285,16 @@ void SAL_CALL CmdMailSuppl::sendSimpleMailMessage( const Reference< XSimpleMailM
 // XServiceInfo
 
 OUString SAL_CALL CmdMailSuppl::getImplementationName(  )
-    throw( RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.system.SimpleCommandMail");
 }
 
 sal_Bool SAL_CALL CmdMailSuppl::supportsService( const OUString& ServiceName )
-    throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL CmdMailSuppl::getSupportedServiceNames(    )
-    throw( RuntimeException, std::exception )
 {
     return Component_getSupportedServiceNames();
 }

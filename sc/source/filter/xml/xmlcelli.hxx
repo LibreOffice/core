@@ -150,8 +150,7 @@ public:
     void SetDetectiveObj( const ScAddress& rPosition );
     void SetCellRangeSource( const ScAddress& rPosition );
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement)
-            throw (css::uno::RuntimeException, css::xml::sax::SAXException, std::exception) override;
+    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
 };
 
 #endif

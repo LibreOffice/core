@@ -53,45 +53,34 @@ class SfxMacroLoader : public cppu::WeakImplHelper<
 public:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException);
+    SfxMacroLoader(const css::uno::Sequence< css::uno::Any >& aArguments);
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     /// @throws css::uno::RuntimeException
     /// @throws css::ucb::ContentCreationException
-    static ErrCode loadMacro( const OUString& aURL, css::uno::Any& rRetval, SfxObjectShell* pDoc ) throw( css::uno::RuntimeException, css::ucb::ContentCreationException, std::exception );
+    static ErrCode loadMacro( const OUString& aURL, css::uno::Any& rRetval, SfxObjectShell* pDoc );
 
     virtual css::uno::Reference < css::frame::XDispatch > SAL_CALL queryDispatch(
             const css::util::URL& aURL, const OUString& sTargetFrameName,
-            FrameSearchFlags eSearchFlags )
-        throw( css::uno::RuntimeException, std::exception ) override;
+            FrameSearchFlags eSearchFlags ) override;
 
     virtual css::uno::Sequence< css::uno::Reference < css::frame::XDispatch > > SAL_CALL queryDispatches(
-            const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor )
-        throw( css::uno::RuntimeException, std::exception ) override;
+            const css::uno::Sequence < css::frame::DispatchDescriptor >& seqDescriptor ) override;
 
-    virtual void SAL_CALL dispatchWithNotification( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArgs, const css::uno::Reference< css::frame::XDispatchResultListener >& Listener )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispatchWithNotification( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArgs, const css::uno::Reference< css::frame::XDispatchResultListener >& Listener ) override;
 
-    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
 
-    virtual css::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& lArgs ) override;
 
-    virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 
-    virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xControl, const css::util::URL& aURL ) override;
 };
 
 #endif

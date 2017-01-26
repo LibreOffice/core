@@ -102,7 +102,7 @@ namespace comphelper
 
     protected:
         virtual css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL
-                    getAccessibleContext(  ) throw (css::uno::RuntimeException, std::exception) override;
+                    getAccessibleContext(  ) override;
 
         const css::uno::Reference< css::accessibility::XAccessible >&
                     getParent() const { return m_xParentAccessible; }
@@ -193,28 +193,28 @@ namespace comphelper
 
     protected:
         // XInterface
-        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) throw (css::uno::RuntimeException, std::exception) override;
+        css::uno::Any SAL_CALL queryInterface( const css::uno::Type& _rType ) override;
 
         // XTypeProvider
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleContext
         /// @throws css::uno::RuntimeException
-        sal_Int32 baseGetAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception);
+        sal_Int32 baseGetAccessibleChildCount(  );
         /// @throws css::lang::IndexOutOfBoundsException
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::accessibility::XAccessible > baseGetAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception);
+        css::uno::Reference< css::accessibility::XAccessible > baseGetAccessibleChild( sal_Int32 i );
         /// @throws css::uno::RuntimeException
-        css::uno::Reference< css::accessibility::XAccessibleRelationSet > baseGetAccessibleRelationSet(  ) throw (css::uno::RuntimeException, std::exception);
+        css::uno::Reference< css::accessibility::XAccessibleRelationSet > baseGetAccessibleRelationSet(  );
 
         // XAccessibleEventListener
-        virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL notifyEvent( const css::accessibility::AccessibleEventObject& aEvent ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         // XComponent/OComponentProxyAggregationHelper
-        virtual void SAL_CALL dispose() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL dispose() override;
 
         // own overridables
         /** notify an accessible event which has been translated (if necessary)
@@ -227,7 +227,7 @@ namespace comphelper
 
             @throws css::uno::RuntimeException
         */
-        virtual void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) throw (css::uno::RuntimeException) = 0;
+        virtual void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) = 0;
 
     protected:
         virtual ~OAccessibleContextWrapperHelper( ) override;
@@ -282,27 +282,27 @@ namespace comphelper
         DECLARE_XTYPEPROVIDER( )
 
         // XAccessibleContext
-        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getAccessibleDescription(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getAccessibleName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::lang::Locale SAL_CALL getLocale(  ) throw (css::accessibility::IllegalAccessibleComponentStateException, css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int32 SAL_CALL getAccessibleChildCount(  ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleChild( sal_Int32 i ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleParent(  ) override;
+        virtual sal_Int32 SAL_CALL getAccessibleIndexInParent(  ) override;
+        virtual sal_Int16 SAL_CALL getAccessibleRole(  ) override;
+        virtual OUString SAL_CALL getAccessibleDescription(  ) override;
+        virtual OUString SAL_CALL getAccessibleName(  ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL getAccessibleRelationSet(  ) override;
+        virtual css::uno::Reference< css::accessibility::XAccessibleStateSet > SAL_CALL getAccessibleStateSet(  ) override;
+        virtual css::lang::Locale SAL_CALL getLocale(  ) override;
 
         // XAccessibleEventBroadcaster
-        virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
+        virtual void SAL_CALL removeAccessibleEventListener( const css::uno::Reference< css::accessibility::XAccessibleEventListener >& xListener ) override;
 
         // OAccessibleContextWrapper
-        virtual void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) throw (css::uno::RuntimeException) override;
+        virtual void notifyTranslatedEvent( const css::accessibility::AccessibleEventObject& _rEvent ) override;
 
         // OComponentHelper
         using OAccessibleContextWrapperHelper::disposing;
-        virtual void SAL_CALL disposing()  throw (css::uno::RuntimeException) override;
+        virtual void SAL_CALL disposing() override;
 
     protected:
         virtual ~OAccessibleContextWrapper() override;
@@ -385,7 +385,7 @@ namespace comphelper
 
     protected:
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     protected:
         void    implTranslateChildEventValue( const css::uno::Any& _rInValue, css::uno::Any& _rOutValue );

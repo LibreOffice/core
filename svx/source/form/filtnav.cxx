@@ -242,16 +242,16 @@ public:
     FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexAccess >& xControllers);
 
 // XEventListener
-    virtual void SAL_CALL disposing(const EventObject& Source) throw( RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const EventObject& Source) override;
 
 // XFilterControllerListener
-    virtual void SAL_CALL predicateExpressionChanged( const FilterEvent& Event ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL disjunctiveTermRemoved( const FilterEvent& Event ) throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL disjunctiveTermAdded( const FilterEvent& Event ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL predicateExpressionChanged( const FilterEvent& Event ) override;
+    virtual void SAL_CALL disjunctiveTermRemoved( const FilterEvent& Event ) override;
+    virtual void SAL_CALL disjunctiveTermAdded( const FilterEvent& Event ) override;
 
 // helpers
     /// @throws RuntimeException
-    void dispose() throw( RuntimeException );
+    void dispose();
 
     void AddOrRemoveListener( const Reference< XIndexAccess >& _rxControllers, const bool _bAdd );
 
@@ -269,7 +269,7 @@ FmFilterAdapter::FmFilterAdapter(FmFilterModel* pModel, const Reference< XIndexA
 }
 
 
-void FmFilterAdapter::dispose() throw( RuntimeException )
+void FmFilterAdapter::dispose()
 {
     AddOrRemoveListener( m_xControllers, false );
 }
@@ -318,7 +318,7 @@ void FmFilterAdapter::setText(sal_Int32 nRowPos,
 
 // XEventListener
 
-void SAL_CALL FmFilterAdapter::disposing(const EventObject& /*e*/) throw( RuntimeException, std::exception )
+void SAL_CALL FmFilterAdapter::disposing(const EventObject& /*e*/)
 {
 }
 
@@ -358,7 +358,7 @@ namespace
 
 // XFilterControllerListener
 
-void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& Event ) throw( RuntimeException, std::exception )
+void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& Event )
 {
     SolarMutexGuard aGuard;
 
@@ -409,7 +409,7 @@ void FmFilterAdapter::predicateExpressionChanged( const FilterEvent& Event ) thr
 }
 
 
-void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event ) throw (RuntimeException, std::exception)
+void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event )
 {
     SolarMutexGuard aGuard;
 
@@ -444,7 +444,7 @@ void SAL_CALL FmFilterAdapter::disjunctiveTermRemoved( const FilterEvent& Event 
 }
 
 
-void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event ) throw (RuntimeException, std::exception)
+void SAL_CALL FmFilterAdapter::disjunctiveTermAdded( const FilterEvent& Event )
 {
     SolarMutexGuard aGuard;
 

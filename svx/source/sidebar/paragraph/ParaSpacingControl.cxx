@@ -88,7 +88,7 @@ ParaLRSpacingControl::~ParaLRSpacingControl()
 {
 }
 
-void SAL_CALL ParaLRSpacingControl::dispose() throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL ParaLRSpacingControl::dispose()
 {
     if(m_xMultiplexer.is())
     {
@@ -134,7 +134,6 @@ void ParaLRSpacingControl::StateChanged(sal_uInt16 nSID, SfxItemState eState,
 }
 
 void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::ContextChangeEventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception)
 {
     sal_uInt16 nId = GetId();
     ToolBox& rTbx = GetToolBox();
@@ -150,7 +149,6 @@ void SAL_CALL ParaLRSpacingControl::notifyContextChangeEvent(const css::ui::Cont
 }
 
 ::css::uno::Any SAL_CALL ParaLRSpacingControl::queryInterface(const ::css::uno::Type& aType)
-        throw (::css::uno::RuntimeException, ::std::exception)
 {
     ::css::uno::Any a(SfxToolBoxControl::queryInterface(aType));
     if (a.hasValue())
@@ -165,7 +163,6 @@ void SAL_CALL ParaLRSpacingControl::acquire() throw ()
 }
 
 void SAL_CALL ParaLRSpacingControl::disposing(const ::css::lang::EventObject&)
-    throw (::css::uno::RuntimeException, ::std::exception)
 {
     SfxToolBoxControl::disposing();
 }

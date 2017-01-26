@@ -61,7 +61,6 @@ namespace dbaui
     }
 
     css::uno::Sequence<sal_Int8> ODirectSQLDialog::getImplementationId()
-        throw (css::uno::RuntimeException, std::exception)
     {
         return css::uno::Sequence<sal_Int8>();
     }

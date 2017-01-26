@@ -273,7 +273,7 @@ void AccessibleControlShape::Init()
     }
 }
 
-void SAL_CALL AccessibleControlShape::grabFocus()  throw (RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::grabFocus()
 {
     if ( !m_xUnoControl.is() || !isAliveMode( m_xUnoControl ) )
     {
@@ -289,12 +289,12 @@ void SAL_CALL AccessibleControlShape::grabFocus()  throw (RuntimeException, std:
     }
 }
 
-OUString SAL_CALL AccessibleControlShape::getImplementationName() throw (RuntimeException, std::exception)
+OUString SAL_CALL AccessibleControlShape::getImplementationName()
 {
     return OUString( "com.sun.star.comp.accessibility.AccessibleControlShape" );
 }
 
-OUString AccessibleControlShape::CreateAccessibleBaseName() throw (RuntimeException)
+OUString AccessibleControlShape::CreateAccessibleBaseName()
 {
     OUString sName;
 
@@ -316,7 +316,6 @@ OUString AccessibleControlShape::CreateAccessibleBaseName() throw (RuntimeExcept
 
 OUString
     AccessibleControlShape::CreateAccessibleDescription()
-    throw (RuntimeException, std::exception)
 {
     DescriptionGenerator aDG (mxShape);
     ShapeTypeId nShapeType = ShapeTypeHandler::Instance().GetTypeId (mxShape);
@@ -353,7 +352,7 @@ OUString
 IMPLEMENT_FORWARD_REFCOUNT( AccessibleControlShape, AccessibleShape )
 IMPLEMENT_GET_IMPLEMENTATION_ID( AccessibleControlShape )
 
-void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent& _rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent& _rEvent )
 {
     ::osl::MutexGuard aGuard( maMutex );
 
@@ -379,7 +378,7 @@ void SAL_CALL AccessibleControlShape::propertyChange( const PropertyChangeEvent&
 #endif
 }
 
-Any SAL_CALL AccessibleControlShape::queryInterface( const Type& _rType ) throw (RuntimeException, std::exception)
+Any SAL_CALL AccessibleControlShape::queryInterface( const Type& _rType )
 {
     Any aReturn = AccessibleShape::queryInterface( _rType );
     if ( !aReturn.hasValue() )
@@ -391,7 +390,7 @@ Any SAL_CALL AccessibleControlShape::queryInterface( const Type& _rType ) throw 
     return aReturn;
 }
 
-Sequence< Type > SAL_CALL AccessibleControlShape::getTypes() throw (RuntimeException, std::exception)
+Sequence< Type > SAL_CALL AccessibleControlShape::getTypes()
 {
     Sequence< Type > aShapeTypes = AccessibleShape::getTypes();
     Sequence< Type > aOwnTypes = AccessibleControlShape_Base::getTypes();
@@ -420,7 +419,7 @@ Sequence< Type > SAL_CALL AccessibleControlShape::getTypes() throw (RuntimeExcep
     return aAllTypes;
 }
 
-void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& _rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& _rEvent )
 {
     if ( AccessibleEventId::STATE_CHANGED == _rEvent.EventId )
     {
@@ -455,7 +454,7 @@ void SAL_CALL AccessibleControlShape::notifyEvent( const AccessibleEventObject& 
     }
 }
 
-void SAL_CALL AccessibleControlShape::modeChanged(const ModeChangeEvent& rSource) throw (RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::modeChanged(const ModeChangeEvent& rSource)
 {
     // did it come from our inner context (the real one, not it's proxy!)?
     SAL_INFO("sw.uno", "AccessibleControlShape::modeChanged");
@@ -475,7 +474,7 @@ void SAL_CALL AccessibleControlShape::modeChanged(const ModeChangeEvent& rSource
     SAL_WARN_IF(!bReplaced, "sw.uno", "AccessibleControlShape::modeChanged: replacing ourselves away did fail");
 }
 
-void SAL_CALL AccessibleControlShape::disposing (const EventObject& _rSource) throw (RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::disposing (const EventObject& _rSource)
 {
     AccessibleShape::disposing( _rSource );
 }
@@ -510,7 +509,7 @@ bool AccessibleControlShape::ensureListeningState(
     return _bNeedNewListening;
 }
 
-sal_Int32 SAL_CALL AccessibleControlShape::getAccessibleChildCount( ) throw(RuntimeException, std::exception)
+sal_Int32 SAL_CALL AccessibleControlShape::getAccessibleChildCount( )
 {
     if ( !m_xUnoControl.is() )
         return 0;
@@ -527,7 +526,7 @@ sal_Int32 SAL_CALL AccessibleControlShape::getAccessibleChildCount( ) throw(Runt
     }
 }
 
-Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sal_Int32 i ) throw(IndexOutOfBoundsException, RuntimeException, std::exception)
+Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sal_Int32 i )
 {
     Reference< XAccessible > xChild;
     if ( !m_xUnoControl.is() )
@@ -570,7 +569,7 @@ Reference< XAccessible > SAL_CALL AccessibleControlShape::getAccessibleChild( sa
     return xChild;
 }
 
-Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessibleRelationSet(  ) throw (RuntimeException, std::exception)
+Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessibleRelationSet(  )
 {
     utl::AccessibleRelationSetHelper* pRelationSetHelper = new utl::AccessibleRelationSetHelper;
     ensureControlModelAccess();
@@ -593,7 +592,7 @@ Reference< XAccessibleRelationSet > SAL_CALL AccessibleControlShape::getAccessib
     return xSet;
 }
 
-OUString AccessibleControlShape::CreateAccessibleName() throw (RuntimeException, std::exception)
+OUString AccessibleControlShape::CreateAccessibleName()
 {
     ensureControlModelAccess();
 
@@ -831,7 +830,7 @@ void AccessibleControlShape::initializeComposedState()
     }
 }
 
-void SAL_CALL AccessibleControlShape::elementInserted( const css::container::ContainerEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::elementInserted( const css::container::ContainerEvent& _rEvent )
 {
     Reference< XContainer > xContainer( _rEvent.Source, UNO_QUERY );
     Reference< XControl > xControl( _rEvent.Element, UNO_QUERY );
@@ -864,12 +863,12 @@ void SAL_CALL AccessibleControlShape::elementInserted( const css::container::Con
     }
 }
 
-void SAL_CALL AccessibleControlShape::elementRemoved( const css::container::ContainerEvent& ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::elementRemoved( const css::container::ContainerEvent& )
 {
     // not interested in
 }
 
-void SAL_CALL AccessibleControlShape::elementReplaced( const css::container::ContainerEvent& ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL AccessibleControlShape::elementReplaced( const css::container::ContainerEvent& )
 {
     // not interested in
 }

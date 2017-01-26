@@ -144,7 +144,7 @@ void fillStruct(
     PyObject *initializer,
     PyObject *kwinitializer,
     fillStructState &state,
-    const Runtime &runtime) throw ( RuntimeException )
+    const Runtime &runtime)
 {
     if( pCompType->pBaseTypeDescription )
         fillStruct( inv, pCompType->pBaseTypeDescription, initializer, kwinitializer, state, runtime );

@@ -51,9 +51,9 @@ class SerfUri
 
     public:
         /// @throws DAVException
-        explicit SerfUri( const OUString & inUri ) throw ( DAVException );
+        explicit SerfUri( const OUString & inUri );
         /// @throws DAVException
-        explicit SerfUri( const apr_uri_t * inUri ) throw ( DAVException );
+        explicit SerfUri( const apr_uri_t * inUri );
         ~SerfUri( );
 
         bool operator== ( const SerfUri & rOther ) const;

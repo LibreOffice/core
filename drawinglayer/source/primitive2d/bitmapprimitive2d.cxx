@@ -59,7 +59,6 @@ namespace drawinglayer
         }
 
         sal_Int64 SAL_CALL BitmapPrimitive2D::estimateUsage()
-            throw (css::uno::RuntimeException)
         {
             return getBitmapEx().GetSizeBytes();
         }

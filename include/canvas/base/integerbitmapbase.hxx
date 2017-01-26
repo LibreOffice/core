@@ -42,7 +42,7 @@ namespace canvas
     public:
         // XIntegerBitmap
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getData( css::rendering::IntegerBitmapLayout&     bitmapLayout,
-                                                                              const css::geometry::IntegerRectangle2D& rect ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override
+                                                                              const css::geometry::IntegerRectangle2D& rect ) override
         {
             tools::verifyArgs(rect,
                               OSL_THIS_FUNC,
@@ -57,7 +57,7 @@ namespace canvas
 
         virtual void SAL_CALL setData( const css::uno::Sequence< sal_Int8 >&,
                                        const css::rendering::IntegerBitmapLayout& bitmapLayout,
-                                       const css::geometry::IntegerRectangle2D&   rect ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override
+                                       const css::geometry::IntegerRectangle2D&   rect ) override
         {
             tools::verifyArgs(bitmapLayout, rect,
                               OSL_THIS_FUNC,
@@ -71,7 +71,7 @@ namespace canvas
 
         virtual void SAL_CALL setPixel( const css::uno::Sequence< sal_Int8 >&,
                                         const css::rendering::IntegerBitmapLayout& bitmapLayout,
-                                        const css::geometry::IntegerPoint2D&       pos ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override
+                                        const css::geometry::IntegerPoint2D&       pos ) override
         {
             tools::verifyArgs(bitmapLayout, pos,
                               OSL_THIS_FUNC,
@@ -84,7 +84,7 @@ namespace canvas
         }
 
         virtual css::uno::Sequence< sal_Int8 > SAL_CALL getPixel( css::rendering::IntegerBitmapLayout& bitmapLayout,
-                                                                  const css::geometry::IntegerPoint2D& pos ) throw (css::lang::IndexOutOfBoundsException, css::rendering::VolatileContentDestroyedException, css::uno::RuntimeException, std::exception) override
+                                                                  const css::geometry::IntegerPoint2D& pos ) override
         {
             tools::verifyArgs(pos,
                               OSL_THIS_FUNC,
@@ -97,7 +97,7 @@ namespace canvas
                                                       pos );
         }
 
-        virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) throw (css::uno::RuntimeException) override
+        virtual css::rendering::IntegerBitmapLayout SAL_CALL getMemoryLayout(  ) override
         {
             typename Base::MutexType aGuard( Base::m_aMutex );
 

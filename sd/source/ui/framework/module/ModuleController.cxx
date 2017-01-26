@@ -65,7 +65,6 @@ Reference<XModuleController> ModuleController::CreateInstance (
 }
 
 ModuleController::ModuleController (const Reference<XComponentContext>& rxContext)
-    throw (std::exception)
     : ModuleControllerInterfaceBase(MutexOwner::maMutex),
       mxController(),
       mpResourceToFactoryMap(new ResourceToFactoryMap()),
@@ -202,7 +201,6 @@ void ModuleController::ProcessStartupService (const ::std::vector<Any>& rValues)
 //----- XModuleController -----------------------------------------------------
 
 void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
-    throw (RuntimeException, std::exception)
 {
     ResourceToFactoryMap::const_iterator iFactory (mpResourceToFactoryMap->find(rsResourceURL));
     if (iFactory != mpResourceToFactoryMap->end())
@@ -244,7 +242,6 @@ void SAL_CALL ModuleController::requestResource (const OUString& rsResourceURL)
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL ModuleController::initialize (const Sequence<Any>& aArguments)
-    throw (Exception, RuntimeException, std::exception)
 {
     if (aArguments.getLength() > 0)
     {

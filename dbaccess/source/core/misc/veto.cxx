@@ -36,12 +36,12 @@ namespace dbaccess
     {
     }
 
-    OUString SAL_CALL Veto::getReason() throw (RuntimeException, std::exception)
+    OUString SAL_CALL Veto::getReason()
     {
         return m_sReason;
     }
 
-    Any SAL_CALL Veto::getDetails() throw (RuntimeException, std::exception)
+    Any SAL_CALL Veto::getDetails()
     {
         return m_aDetails;
     }

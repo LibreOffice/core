@@ -28,13 +28,13 @@ namespace comphelper
     using namespace ::com::sun::star::uno;
     using namespace ::com::sun::star::task;
 
-    void SAL_CALL OInteractionPassword::setPassword( const OUString& Password ) throw (RuntimeException, std::exception)
+    void SAL_CALL OInteractionPassword::setPassword( const OUString& Password )
     {
         m_sPassword = Password;
     }
 
 
-    OUString SAL_CALL OInteractionPassword::getPassword(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL OInteractionPassword::getPassword(  )
     {
         return m_sPassword;
     }
@@ -61,13 +61,13 @@ namespace comphelper
     }
 
 
-    Any SAL_CALL OInteractionRequest::getRequest(  ) throw(RuntimeException, std::exception)
+    Any SAL_CALL OInteractionRequest::getRequest(  )
     {
         return m_aRequest;
     }
 
 
-    Sequence< Reference< XInteractionContinuation > > SAL_CALL OInteractionRequest::getContinuations(  ) throw(RuntimeException, std::exception)
+    Sequence< Reference< XInteractionContinuation > > SAL_CALL OInteractionRequest::getContinuations(  )
     {
         return comphelper::containerToSequence(m_aContinuations);
     }

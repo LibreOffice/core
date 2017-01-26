@@ -235,10 +235,10 @@ private:
     Link<EditFieldInfo*,void>           maNewFieldHdl;
 
     /// @throws css::uno::RuntimeException
-    bool                            implImport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
+    bool                            implImport( const Sequence< PropertyValue >& rDescriptor );
 
     /// @throws css::uno::RuntimeException
-    bool                            implExport( const Sequence< PropertyValue >& rDescriptor ) throw (RuntimeException, std::exception);
+    bool                            implExport( const Sequence< PropertyValue >& rDescriptor );
     static Reference< XWriter >     implCreateExportDocumentHandler( const Reference< XOutputStream >& rxOStm );
 
     void                            implGetPagePropSet( const Reference< XDrawPage > & rxPage );
@@ -287,17 +287,17 @@ private:
 protected:
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) throw(RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel( ) throw (RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& rDescriptor ) override;
+    virtual void SAL_CALL cancel( ) override;
 
     // XImporter
-    virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setTargetDocument( const Reference< XComponent >& xDoc ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) override;
 
     // XExtendedFilterDetection
-    virtual OUString SAL_CALL detect( Sequence< PropertyValue >& io_rDescriptor ) throw (RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL detect( Sequence< PropertyValue >& io_rDescriptor ) override;
 
 public:
 

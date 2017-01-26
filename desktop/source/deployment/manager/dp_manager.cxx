@@ -463,7 +463,7 @@ void PackageManagerImpl::disposing()
 
 // XComponent
 
-void PackageManagerImpl::dispose() throw (RuntimeException, std::exception)
+void PackageManagerImpl::dispose()
 {
     //Do not call check here. We must not throw an exception here if the object
     //is being disposed or is already disposed. See com.sun.star.lang.XComponent
@@ -472,7 +472,7 @@ void PackageManagerImpl::dispose() throw (RuntimeException, std::exception)
 
 
 void PackageManagerImpl::addEventListener(
-    Reference<lang::XEventListener> const & xListener ) throw (RuntimeException, std::exception)
+    Reference<lang::XEventListener> const & xListener )
 {
     //Do not call check here. We must not throw an exception here if the object
     //is being disposed or is already disposed. See com.sun.star.lang.XComponent
@@ -481,7 +481,7 @@ void PackageManagerImpl::addEventListener(
 
 
 void PackageManagerImpl::removeEventListener(
-    Reference<lang::XEventListener> const & xListener ) throw (RuntimeException, std::exception)
+    Reference<lang::XEventListener> const & xListener )
 {
     //Do not call check here. We must not throw an exception here if the object
     //is being disposed or is already disposed. See com.sun.star.lang.XComponent
@@ -490,7 +490,7 @@ void PackageManagerImpl::removeEventListener(
 
 // XPackageManager
 
-OUString PackageManagerImpl::getContext() throw (RuntimeException, std::exception)
+OUString PackageManagerImpl::getContext()
 {
     check();
     return m_context;
@@ -498,7 +498,7 @@ OUString PackageManagerImpl::getContext() throw (RuntimeException, std::exceptio
 
 
 Sequence< Reference<deployment::XPackageTypeInfo> >
-PackageManagerImpl::getSupportedPackageTypes() throw (RuntimeException, std::exception)
+PackageManagerImpl::getSupportedPackageTypes()
 {
     OSL_ASSERT( m_xRegistry.is() );
     return m_xRegistry->getSupportedPackageTypes();
@@ -506,7 +506,6 @@ PackageManagerImpl::getSupportedPackageTypes() throw (RuntimeException, std::exc
 
 
 Reference<task::XAbortChannel> PackageManagerImpl::createAbortChannel()
-    throw (RuntimeException, std::exception)
 {
     check();
     return new AbortChannel;
@@ -516,7 +515,6 @@ Reference<task::XAbortChannel> PackageManagerImpl::createAbortChannel()
 
 void PackageManagerImpl::addModifyListener(
     Reference<util::XModifyListener> const & xListener )
-    throw (RuntimeException, std::exception)
 {
     check();
     rBHelper.addListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
@@ -525,7 +523,6 @@ void PackageManagerImpl::addModifyListener(
 
 void PackageManagerImpl::removeModifyListener(
     Reference<util::XModifyListener> const & xListener )
-    throw (RuntimeException, std::exception)
 {
     check();
     rBHelper.removeListener( cppu::UnoType<decltype(xListener)>::get(), xListener );
@@ -671,9 +668,6 @@ Reference<deployment::XPackage> PackageManagerImpl::importExtension(
     Reference<deployment::XPackage> const & extension,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
-    throw (deployment::DeploymentException, CommandFailedException,
-           CommandAbortedException, lang::IllegalArgumentException,
-           RuntimeException, std::exception)
 {
     return addPackage(extension->getURL(), Sequence<beans::NamedValue>(),
                       OUString(), xAbortChannel, xCmdEnv_);
@@ -688,9 +682,6 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
     OUString const & mediaType_,
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
-    throw (deployment::DeploymentException, CommandFailedException,
-           CommandAbortedException, lang::IllegalArgumentException,
-           RuntimeException, std::exception)
 {
     check();
     if (m_readOnly)
@@ -842,9 +833,6 @@ void PackageManagerImpl::removePackage(
     OUString const & id, OUString const & fileName,
     Reference<task::XAbortChannel> const & /*xAbortChannel*/,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
-    throw (deployment::DeploymentException, CommandFailedException,
-           CommandAbortedException, lang::IllegalArgumentException,
-           RuntimeException, std::exception)
 {
     check();
 
@@ -1034,8 +1022,6 @@ PackageManagerImpl::getDeployedPackages_(
 Reference<deployment::XPackage> PackageManagerImpl::getDeployedPackage(
     OUString const & id, OUString const & fileName,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
-    throw (deployment::DeploymentException, CommandFailedException,
-           lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     check();
     Reference<XCommandEnvironment> xCmdEnv;
@@ -1078,9 +1064,6 @@ Sequence< Reference<deployment::XPackage> >
 PackageManagerImpl::getDeployedPackages(
     Reference<task::XAbortChannel> const &,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
-    throw (deployment::DeploymentException, CommandFailedException,
-           CommandAbortedException, lang::IllegalArgumentException,
-           RuntimeException, std::exception)
 {
     check();
     Reference<XCommandEnvironment> xCmdEnv;
@@ -1124,9 +1107,6 @@ PackageManagerImpl::getDeployedPackages(
 void PackageManagerImpl::reinstallDeployedPackages(
     sal_Bool force, Reference<task::XAbortChannel> const &  /*xAbortChannel*/,
     Reference<XCommandEnvironment> const & xCmdEnv_ )
-    throw (deployment::DeploymentException,
-           CommandFailedException, CommandAbortedException,
-           lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     check();
     if (!force && office_is_running())
@@ -1181,7 +1161,6 @@ void PackageManagerImpl::reinstallDeployedPackages(
 
 
 sal_Bool SAL_CALL PackageManagerImpl::isReadOnly(  )
-        throw (css::uno::RuntimeException, std::exception)
 {
     return m_readOnly;
 }
@@ -1415,11 +1394,6 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
 sal_Bool PackageManagerImpl::synchronize(
     Reference<task::XAbortChannel> const & xAbortChannel,
     Reference<css::ucb::XCommandEnvironment> const & xCmdEnv)
-    throw (css::deployment::DeploymentException,
-           css::ucb::ContentCreationException,
-           css::ucb::CommandFailedException,
-           css::ucb::CommandAbortedException,
-           css::uno::RuntimeException, std::exception)
 {
     check();
     bool bModified = false;
@@ -1434,7 +1408,6 @@ sal_Bool PackageManagerImpl::synchronize(
 
 Sequence< Reference<deployment::XPackage> > PackageManagerImpl::getExtensionsWithUnacceptedLicenses(
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
-    throw (deployment::DeploymentException, RuntimeException, std::exception)
 {
     ::std::vector<Reference<deployment::XPackage> > vec;
 
@@ -1496,11 +1469,6 @@ sal_Int32 PackageManagerImpl::checkPrerequisites(
     css::uno::Reference<css::deployment::XPackage> const & extension,
     css::uno::Reference<css::task::XAbortChannel> const & xAbortChannel,
     css::uno::Reference<css::ucb::XCommandEnvironment> const & xCmdEnv )
-    throw (css::deployment::DeploymentException,
-           css::ucb::CommandFailedException,
-           css::ucb::CommandAbortedException,
-           css::lang::IllegalArgumentException,
-           css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -1575,7 +1543,6 @@ PackageManagerImpl::CmdEnvWrapperImpl::CmdEnvWrapperImpl(
 
 Reference<task::XInteractionHandler>
 PackageManagerImpl::CmdEnvWrapperImpl::getInteractionHandler()
-    throw (RuntimeException, std::exception)
 {
     return m_xUserInteractionHandler;
 }
@@ -1583,7 +1550,6 @@ PackageManagerImpl::CmdEnvWrapperImpl::getInteractionHandler()
 
 Reference<XProgressHandler>
 PackageManagerImpl::CmdEnvWrapperImpl::getProgressHandler()
-    throw (RuntimeException, std::exception)
 {
     return this;
 }
@@ -1591,7 +1557,6 @@ PackageManagerImpl::CmdEnvWrapperImpl::getProgressHandler()
 // XProgressHandler
 
 void PackageManagerImpl::CmdEnvWrapperImpl::push( Any const & Status )
-    throw (RuntimeException, std::exception)
 {
     if (m_xLogFile.is())
         m_xLogFile->push( Status );
@@ -1601,7 +1566,6 @@ void PackageManagerImpl::CmdEnvWrapperImpl::push( Any const & Status )
 
 
 void PackageManagerImpl::CmdEnvWrapperImpl::update( Any const & Status )
-    throw (RuntimeException, std::exception)
 {
     if (m_xLogFile.is())
         m_xLogFile->update( Status );
@@ -1610,7 +1574,7 @@ void PackageManagerImpl::CmdEnvWrapperImpl::update( Any const & Status )
 }
 
 
-void PackageManagerImpl::CmdEnvWrapperImpl::pop() throw (RuntimeException, std::exception)
+void PackageManagerImpl::CmdEnvWrapperImpl::pop()
 {
     if (m_xLogFile.is())
         m_xLogFile->pop();

@@ -143,13 +143,13 @@ void SAL_CALL OStatement_BASE2::release() throw()
     release_ChildImpl();
 }
 
-Any SAL_CALL OStatement_Base::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OStatement_Base::queryInterface( const Type & rType )
 {
     const Any aRet = OStatement_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OStatement_Base::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
                                     cppu::UnoType<css::beans::XFastPropertySet>::get(),
@@ -159,11 +159,11 @@ Sequence< Type > SAL_CALL OStatement_Base::getTypes(  ) throw(RuntimeException, 
 }
 
 
-void SAL_CALL OStatement_Base::cancel(  ) throw(RuntimeException, std::exception)
+void SAL_CALL OStatement_Base::cancel(  )
 {
 }
 
-void SAL_CALL OStatement_Base::close() throw (SQLException, RuntimeException, std::exception)
+void SAL_CALL OStatement_Base::close()
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -172,7 +172,7 @@ void SAL_CALL OStatement_Base::close() throw (SQLException, RuntimeException, st
     dispose();
 }
 
-void OStatement_Base::closeResultSet() throw (SQLException, RuntimeException, std::exception)
+void OStatement_Base::closeResultSet()
 {
     SAL_INFO( "connectivity.drivers", "file Ocke.Janssen@sun.com OStatement_Base::clearMyResultSet " );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -192,7 +192,7 @@ void OStatement_Base::closeResultSet() throw (SQLException, RuntimeException, st
     m_xResultSet.clear();
 }
 
-Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL OStatement_Base::getWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -200,7 +200,7 @@ Any SAL_CALL OStatement_Base::getWarnings(  ) throw(SQLException, RuntimeExcepti
     return makeAny(m_aLastWarning);
 }
 
-void SAL_CALL OStatement_Base::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OStatement_Base::clearWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -239,7 +239,7 @@ void SAL_CALL OStatement::release() throw()
 }
 
 
-sal_Bool SAL_CALL OStatement::execute( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OStatement::execute( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -249,7 +249,7 @@ sal_Bool SAL_CALL OStatement::execute( const OUString& sql ) throw(SQLException,
 }
 
 
-Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -266,12 +266,12 @@ Reference< XResultSet > SAL_CALL OStatement::executeQuery( const OUString& sql )
     return xRS;
 }
 
-Reference< XConnection > SAL_CALL OStatement::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XConnection > SAL_CALL OStatement::getConnection(  )
 {
     return Reference< XConnection >(m_pConnection.get());
 }
 
-sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OStatement::executeUpdate( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OStatement_BASE::rBHelper.bDisposed);
@@ -297,12 +297,12 @@ void SAL_CALL OStatement_Base::disposing()
     OStatement_BASE::disposing();
 }
 
-Reference< css::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+Reference< css::beans::XPropertySetInfo > SAL_CALL OStatement_Base::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }
 
-Any SAL_CALL OStatement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OStatement::queryInterface( const Type & rType )
 {
     Any aRet = OStatement_XStatement::queryInterface( rType);
     return aRet.hasValue() ? aRet : OStatement_BASE2::queryInterface( rType);
@@ -369,7 +369,7 @@ void OStatement_Base::setOrderbyColumn( OSQLParseNode* pColumnRef,
     m_aOrderbyAscending.push_back((SQL_ISTOKEN(pAscendingDescending,DESC)) ? TAscendingOrder::DESC : TAscendingOrder::ASC);
 }
 
-void OStatement_Base::construct(const OUString& sql)  throw(SQLException, RuntimeException, std::exception)
+void OStatement_Base::construct(const OUString& sql)
 {
     OUString aErr;
     m_pParseTree = m_aParser.parseTree(aErr,sql);

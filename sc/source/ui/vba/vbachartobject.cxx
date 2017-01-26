@@ -49,7 +49,7 @@ OUString const & ScVbaChartObject::getPersistName()
 }
 
 uno::Reference< drawing::XShape >
-ScVbaChartObject::setShape() throw ( script::BasicErrorException )
+ScVbaChartObject::setShape()
 {
     try
     {
@@ -78,21 +78,19 @@ ScVbaChartObject::setShape() throw ( script::BasicErrorException )
 }
 
 void SAL_CALL
-ScVbaChartObject::setName( const OUString& sName ) throw (css::uno::RuntimeException, std::exception)
+ScVbaChartObject::setName( const OUString& sName )
 {
     xNamedShape->setName(sName);
 }
 
 OUString SAL_CALL
-ScVbaChartObject::getName() throw (css::uno::RuntimeException, std::exception)
+ScVbaChartObject::getName()
 {
     return xNamedShape->getName();
 }
 
 void SAL_CALL
 ScVbaChartObject::Delete()
-    throw (css::script::BasicErrorException,
-           css::uno::RuntimeException, std::exception)
 {
     // parent of this object is sheet
     uno::Reference< excel::XWorksheet > xParent( getParent(), uno::UNO_QUERY_THROW );
@@ -105,7 +103,7 @@ ScVbaChartObject::Delete()
 }
 
 void
-ScVbaChartObject::Activate() throw ( script::BasicErrorException )
+ScVbaChartObject::Activate()
 {
     try
     {
@@ -123,7 +121,7 @@ ScVbaChartObject::Activate() throw ( script::BasicErrorException )
 }
 
 uno::Reference< excel::XChart > SAL_CALL
-ScVbaChartObject::getChart() throw (css::uno::RuntimeException, std::exception)
+ScVbaChartObject::getChart()
 {
     return new ScVbaChart( this, mxContext, xEmbeddedObjectSupplier->getEmbeddedObject(), xTableChart );
 }

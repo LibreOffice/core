@@ -81,11 +81,11 @@ class XInputStreamHelper : public cppu::WeakImplHelper<io::XInputStream>
 public:
     XInputStreamHelper(const sal_uInt8* buf, size_t len);
 
-    virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL readBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nBytesToRead ) override;
+    virtual ::sal_Int32 SAL_CALL readSomeBytes( uno::Sequence< ::sal_Int8 >& aData, ::sal_Int32 nMaxBytesToRead ) override;
+    virtual void SAL_CALL skipBytes( ::sal_Int32 nBytesToSkip ) override;
+    virtual ::sal_Int32 SAL_CALL available(  ) override;
+    virtual void SAL_CALL closeInput(  ) override;
 };
 
 XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len) :
@@ -100,13 +100,11 @@ XInputStreamHelper::XInputStreamHelper(const sal_uInt8* buf, size_t len) :
 }
 
 sal_Int32 XInputStreamHelper::readBytes( uno::Sequence<sal_Int8>& aData, sal_Int32 nBytesToRead )
-    throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     return readSomeBytes( aData, nBytesToRead );
 }
 
 sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence<sal_Int8>& aData, sal_Int32 nMaxBytesToRead )
-        throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
 {
     sal_Int32 nRet = 0;
     if( nMaxBytesToRead > 0 )
@@ -136,7 +134,7 @@ sal_Int32 XInputStreamHelper::readSomeBytes( uno::Sequence<sal_Int8>& aData, sal
 }
 
 
-void XInputStreamHelper::skipBytes( sal_Int32 nBytesToSkip ) throw (io::NotConnectedException, io::BufferSizeExceededException, io::IOException, uno::RuntimeException, std::exception)
+void XInputStreamHelper::skipBytes( sal_Int32 nBytesToSkip )
 {
     if( nBytesToSkip < 0 || m_nPosition + nBytesToSkip > (m_nLength + m_nHeaderLength))
         throw io::BufferSizeExceededException();
@@ -144,13 +142,13 @@ void XInputStreamHelper::skipBytes( sal_Int32 nBytesToSkip ) throw (io::NotConne
 }
 
 
-sal_Int32 XInputStreamHelper::available(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception)
+sal_Int32 XInputStreamHelper::available(  )
 {
     return ( m_nLength + m_nHeaderLength ) - m_nPosition;
 }
 
 
-void XInputStreamHelper::closeInput(  ) throw (io::NotConnectedException, io::IOException, uno::RuntimeException, std::exception)
+void XInputStreamHelper::closeInput(  )
 {
 }
 

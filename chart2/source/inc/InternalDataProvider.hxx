@@ -80,143 +80,99 @@ public:
     virtual ~InternalDataProvider() override;
 
     /// declare XServiceInfo methods
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // ____ XInternalDataProvider ____
-    virtual sal_Bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasDataByRangeRepresentation( const OUString& aRange ) override;
     virtual css::uno::Sequence< css::uno::Any > SAL_CALL
-        getDataByRangeRepresentation( const OUString& aRange )
-        throw (css::uno::RuntimeException, std::exception) override;
+        getDataByRangeRepresentation( const OUString& aRange ) override;
     virtual void SAL_CALL setDataByRangeRepresentation(
         const OUString& aRange,
-        const css::uno::Sequence< css::uno::Any >& aNewData )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL insertSequence( ::sal_Int32 nAfterIndex )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL deleteSequence( ::sal_Int32 nAtIndex )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL appendSequence()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL insertComplexCategoryLevel( ::sal_Int32 nLevel )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL deleteComplexCategoryLevel( ::sal_Int32 nLevel )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL insertDataPointForAllSequences( ::sal_Int32 nAfterIndex )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL deleteDataPointForAllSequences( ::sal_Int32 nAtIndex )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& aNewData ) override;
+    virtual void SAL_CALL insertSequence( ::sal_Int32 nAfterIndex ) override;
+    virtual void SAL_CALL deleteSequence( ::sal_Int32 nAtIndex ) override;
+    virtual void SAL_CALL appendSequence() override;
+    virtual void SAL_CALL insertComplexCategoryLevel( ::sal_Int32 nLevel ) override;
+    virtual void SAL_CALL deleteComplexCategoryLevel( ::sal_Int32 nLevel ) override;
+    virtual void SAL_CALL insertDataPointForAllSequences( ::sal_Int32 nAfterIndex ) override;
+    virtual void SAL_CALL deleteDataPointForAllSequences( ::sal_Int32 nAtIndex ) override;
+    virtual void SAL_CALL swapDataPointWithNextOneForAllSequences( ::sal_Int32 nAtIndex ) override;
     virtual void SAL_CALL registerDataSequenceForChanges(
-        const css::uno::Reference< css::chart2::data::XDataSequence >& xSeq )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::data::XDataSequence >& xSeq ) override;
 
     // ____ XDataProvider (base of XInternalDataProvider) ____
     virtual sal_Bool SAL_CALL createDataSourcePossible(
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
     virtual css::uno::Reference< css::chart2::data::XDataSource > SAL_CALL createDataSource(
-        const css::uno::Sequence< css::beans::PropertyValue >& aArguments )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& aArguments ) override;
     virtual css::uno::Sequence< css::beans::PropertyValue > SAL_CALL detectArguments(
-        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart2::data::XDataSource >& xDataSource ) override;
     virtual sal_Bool SAL_CALL createDataSequenceByRangeRepresentationPossible(
-        const OUString& aRangeRepresentation )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const OUString& aRangeRepresentation ) override;
     virtual css::uno::Reference< css::chart2::data::XDataSequence > SAL_CALL createDataSequenceByRangeRepresentation(
-        const OUString& aRangeRepresentation )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        const OUString& aRangeRepresentation ) override;
 
     virtual css::uno::Reference<css::chart2::data::XDataSequence> SAL_CALL
-        createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation )
-            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+        createDataSequenceByValueArray( const OUString& aRole, const OUString& aRangeRepresentation ) override;
 
-    virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::sheet::XRangeSelection > SAL_CALL getRangeSelection() override;
 
     // ____ XRangeXMLConversion ____
     virtual OUString SAL_CALL convertRangeToXML(
-        const OUString& aRangeRepresentation )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        const OUString& aRangeRepresentation ) override;
     virtual OUString SAL_CALL convertRangeFromXML(
-        const OUString& aXMLRange )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        const OUString& aXMLRange ) override;
 
     // ____ XDateCategories ____
-    virtual css::uno::Sequence< double > SAL_CALL getDateCategories() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDateCategories( const css::uno::Sequence< double >& rDates ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< double > SAL_CALL getDateCategories() override;
+    virtual void SAL_CALL setDateCategories( const css::uno::Sequence< double >& rDates ) override;
 
     // ____ XAnyDescriptionAccess ____
     virtual css::uno::Sequence< css::uno::Sequence< css::uno::Any > > SAL_CALL
-        getAnyRowDescriptions() throw (css::uno::RuntimeException, std::exception) override;
+        getAnyRowDescriptions() override;
     virtual void SAL_CALL setAnyRowDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& aRowDescriptions )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& aRowDescriptions ) override;
     virtual css::uno::Sequence< css::uno::Sequence< css::uno::Any > > SAL_CALL
-        getAnyColumnDescriptions() throw (css::uno::RuntimeException, std::exception) override;
+        getAnyColumnDescriptions() override;
     virtual void SAL_CALL setAnyColumnDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& aColumnDescriptions )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& aColumnDescriptions ) override;
 
     // ____ XComplexDescriptionAccess (base of XAnyDescriptionAccess) ____
     virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL
-        getComplexRowDescriptions() throw (css::uno::RuntimeException, std::exception) override;
+        getComplexRowDescriptions() override;
     virtual void SAL_CALL setComplexRowDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< OUString > >& aRowDescriptions )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Sequence< OUString > >& aRowDescriptions ) override;
     virtual css::uno::Sequence< css::uno::Sequence< OUString > > SAL_CALL
-        getComplexColumnDescriptions() throw (css::uno::RuntimeException, std::exception) override;
+        getComplexColumnDescriptions() override;
     virtual void SAL_CALL setComplexColumnDescriptions(
-        const css::uno::Sequence< css::uno::Sequence< OUString > >& aColumnDescriptions )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Sequence< OUString > >& aColumnDescriptions ) override;
 
     // ____ XChartDataArray (base of XComplexDescriptionAccess) ____
-    virtual css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL getData()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Sequence< double > > SAL_CALL getData() override;
     virtual void SAL_CALL setData(
-        const css::uno::Sequence< css::uno::Sequence< double > >& aData )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getRowDescriptions()
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Sequence< double > >& aData ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getRowDescriptions() override;
     virtual void SAL_CALL setRowDescriptions(
-        const css::uno::Sequence< OUString >& aRowDescriptions )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getColumnDescriptions()
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< OUString >& aRowDescriptions ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getColumnDescriptions() override;
     virtual void SAL_CALL setColumnDescriptions(
-        const css::uno::Sequence< OUString >& aColumnDescriptions )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< OUString >& aColumnDescriptions ) override;
 
     // ____ XChartData (base of XChartDataArray) ____
     virtual void SAL_CALL addChartDataChangeEventListener(
-        const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
     virtual void SAL_CALL removeChartDataChangeEventListener(
-        const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getNotANumber()
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::chart::XChartDataChangeEventListener >& aListener ) override;
+    virtual double SAL_CALL getNotANumber() override;
     virtual sal_Bool SAL_CALL isNotANumber(
-        double nNumber )
-        throw (css::uno::RuntimeException, std::exception) override;
+        double nNumber ) override;
 
     // ____ XCloneable ____
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone() override;
     // css::lang::XInitialization:
-    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments)
-        throw (css::uno::RuntimeException, css::uno::Exception, std::exception) override;
+    virtual void SAL_CALL initialize(const css::uno::Sequence< css::uno::Any > & aArguments) override;
 
 private:
     void addDataSequenceToMap(

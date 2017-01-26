@@ -43,7 +43,7 @@ uno::Sequence< OUString > SAL_CALL ScDocument_getSupportedServiceNames() throw()
 }
 
 uno::Reference< uno::XInterface > SAL_CALL ScDocument_createInstance(
-                const uno::Reference< lang::XMultiServiceFactory > & /* rSMgr */, SfxModelFlags _nCreationFlags ) throw( uno::Exception, std::exception )
+                const uno::Reference< lang::XMultiServiceFactory > & /* rSMgr */, SfxModelFlags _nCreationFlags )
 {
     SolarMutexGuard aGuard;
     ScDLL::Init();

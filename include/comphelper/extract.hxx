@@ -74,7 +74,6 @@ inline bool enum2int( sal_Int32 & rnEnum, const css::uno::Any & rAny )
  */
 template< typename E >
 inline void any2enum( E & eRet, const css::uno::Any & rAny )
-    throw( css::lang::IllegalArgumentException )
 {
     // check for typesafe enum
     if (! (rAny >>= eRet))
@@ -96,7 +95,6 @@ inline void any2enum( E & eRet, const css::uno::Any & rAny )
  * @throws css::lang::IllegalArgumentException
  */
 inline bool any2bool( const css::uno::Any & rAny )
-    throw( css::lang::IllegalArgumentException )
 {
     bool b;
     if (rAny >>= b)

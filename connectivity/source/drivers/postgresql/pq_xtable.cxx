@@ -88,7 +88,7 @@ Table::Table( const ::rtl::Reference< RefCountedMutex > & refMutex,
       m_pColumns( nullptr )
 {}
 
-Reference< XPropertySet > Table::createDataDescriptor(  ) throw (RuntimeException, std::exception)
+Reference< XPropertySet > Table::createDataDescriptor(  )
 {
     TableDescriptor * pTable = new TableDescriptor(
         m_refMutex, m_conn, m_pSettings );
@@ -97,7 +97,7 @@ Reference< XPropertySet > Table::createDataDescriptor(  ) throw (RuntimeExceptio
     return Reference< XPropertySet > ( pTable );
 }
 
-Reference< XNameAccess > Table::getColumns(  ) throw (css::uno::RuntimeException, std::exception)
+Reference< XNameAccess > Table::getColumns(  )
 {
     if( ! m_columns.is() )
     {
@@ -112,7 +112,7 @@ Reference< XNameAccess > Table::getColumns(  ) throw (css::uno::RuntimeException
     return m_columns;
 }
 
-Reference< XNameAccess > Table::getIndexes() throw (css::uno::RuntimeException, std::exception)
+Reference< XNameAccess > Table::getIndexes()
 {
     if( ! m_indexes.is() )
     {
@@ -126,7 +126,7 @@ Reference< XNameAccess > Table::getIndexes() throw (css::uno::RuntimeException, 
     return m_indexes;
 }
 
-Reference< XIndexAccess > Table::getKeys(  ) throw (css::uno::RuntimeException, std::exception)
+Reference< XIndexAccess > Table::getKeys(  )
 {
     if( ! m_keys.is() )
     {
@@ -141,9 +141,6 @@ Reference< XIndexAccess > Table::getKeys(  ) throw (css::uno::RuntimeException, 
 }
 
 void Table::rename( const OUString& newName )
-        throw (css::sdbc::SQLException,
-               css::container::ElementExistException,
-               css::uno::RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     Statics & st = getStatics();
@@ -229,7 +226,6 @@ void Table::rename( const OUString& newName )
 void Table::alterColumnByName(
     const OUString& colName,
     const Reference< XPropertySet >& descriptor )
-    throw (SQLException,NoSuchElementException,RuntimeException, std::exception)
 {
     Reference< css::container::XNameAccess > columns =
         Reference< css::container::XNameAccess > ( getColumns(), UNO_QUERY );
@@ -253,7 +249,6 @@ void Table::alterColumnByName(
 void Table::alterColumnByIndex(
     sal_Int32 index,
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
-    throw (SQLException,IndexOutOfBoundsException,RuntimeException, std::exception)
 {
     Reference< css::container::XIndexAccess > columns =
         Reference< css::container::XIndexAccess>( getColumns(), UNO_QUERY );
@@ -268,7 +263,7 @@ void Table::alterColumnByIndex(
     m_pColumns->refresh();
 }
 
-Sequence<Type > Table::getTypes() throw( RuntimeException, std::exception )
+Sequence<Type > Table::getTypes()
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -289,12 +284,12 @@ Sequence<Type > Table::getTypes() throw( RuntimeException, std::exception )
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> Table::getImplementationId() throw( RuntimeException, std::exception )
+Sequence< sal_Int8> Table::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Any Table::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
+Any Table::queryInterface( const Type & reqType )
 {
     Any ret;
 
@@ -311,7 +306,7 @@ Any Table::queryInterface( const Type & reqType ) throw (RuntimeException, std::
     return ret;
 }
 
-OUString Table::getName(  ) throw (css::uno::RuntimeException, std::exception)
+OUString Table::getName(  )
 {
     Statics & st = getStatics();
     return concatQualified(
@@ -319,7 +314,7 @@ OUString Table::getName(  ) throw (css::uno::RuntimeException, std::exception)
         extractStringProperty( this, st.NAME ) );
 }
 
-void Table::setName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception)
+void Table::setName( const OUString& aName )
 {
     rename( aName );
 }
@@ -339,7 +334,7 @@ TableDescriptor::TableDescriptor(
 {
 }
 
-Reference< XNameAccess > TableDescriptor::getColumns(  ) throw (css::uno::RuntimeException, std::exception)
+Reference< XNameAccess > TableDescriptor::getColumns(  )
 {
     if( ! m_columns.is() )
     {
@@ -348,7 +343,7 @@ Reference< XNameAccess > TableDescriptor::getColumns(  ) throw (css::uno::Runtim
     return m_columns;
 }
 
-Reference< XNameAccess > TableDescriptor::getIndexes() throw (css::uno::RuntimeException, std::exception)
+Reference< XNameAccess > TableDescriptor::getIndexes()
 {
     if( ! m_indexes.is() )
     {
@@ -360,7 +355,7 @@ Reference< XNameAccess > TableDescriptor::getIndexes() throw (css::uno::RuntimeE
     return m_indexes;
 }
 
-Reference< XIndexAccess > TableDescriptor::getKeys(  ) throw (css::uno::RuntimeException, std::exception)
+Reference< XIndexAccess > TableDescriptor::getKeys(  )
 {
     if( ! m_keys.is() )
     {
@@ -373,7 +368,7 @@ Reference< XIndexAccess > TableDescriptor::getKeys(  ) throw (css::uno::RuntimeE
 }
 
 
-Sequence<Type > TableDescriptor::getTypes() throw( RuntimeException, std::exception )
+Sequence<Type > TableDescriptor::getTypes()
 {
     static cppu::OTypeCollection *pCollection;
     if( ! pCollection )
@@ -392,12 +387,12 @@ Sequence<Type > TableDescriptor::getTypes() throw( RuntimeException, std::except
     return pCollection->getTypes();
 }
 
-Sequence< sal_Int8> TableDescriptor::getImplementationId() throw( RuntimeException, std::exception )
+Sequence< sal_Int8> TableDescriptor::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-Any TableDescriptor::queryInterface( const Type & reqType ) throw (RuntimeException, std::exception)
+Any TableDescriptor::queryInterface( const Type & reqType )
 {
     Any ret;
 
@@ -412,7 +407,7 @@ Any TableDescriptor::queryInterface( const Type & reqType ) throw (RuntimeExcept
 }
 
 
-Reference< XPropertySet > TableDescriptor::createDataDescriptor(  ) throw (RuntimeException, std::exception)
+Reference< XPropertySet > TableDescriptor::createDataDescriptor(  )
 {
     TableDescriptor * pTable = new TableDescriptor(
         m_refMutex, m_conn, m_pSettings );

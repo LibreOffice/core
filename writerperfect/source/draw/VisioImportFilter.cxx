@@ -38,19 +38,16 @@ bool VisioImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUSt
 
 // XServiceInfo
 OUString SAL_CALL VisioImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Draw.VisioImportFilter");
 }
 
 sal_Bool SAL_CALL VisioImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL VisioImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

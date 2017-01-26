@@ -37,9 +37,9 @@ namespace sd {
                     css::lang::XServiceInfo >( aMutex ) {}
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override = 0;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override = 0;
+        virtual OUString SAL_CALL getImplementationName(  ) override = 0;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override = 0;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override = 0;
     };
 
 }

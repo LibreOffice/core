@@ -98,7 +98,7 @@ nViewNo && !pView->GetObjectShell()->IsInPlaceActive() )
 }
 
 uno::Reference< beans::XIntrospectionAccess >
-getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
+getIntrospectionAccess( const uno::Any& aObject )
 {
     static uno::Reference< beans::XIntrospection > xIntrospection;
     if( !xIntrospection.is() )
@@ -110,7 +110,7 @@ getIntrospectionAccess( const uno::Any& aObject ) throw (uno::RuntimeException)
 }
 
 uno::Reference< script::XTypeConverter > const &
-getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+getTypeConverter( const uno::Reference< uno::XComponentContext >& xContext )
 {
     static uno::Reference< script::XTypeConverter > xTypeConv( script::Converter::create(xContext) );
     return xTypeConv;
@@ -186,7 +186,7 @@ dispatchRequests( const uno::Reference< frame::XModel>& xModel, const OUString& 
 }
 
 uno::Reference< frame::XModel >
-getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
+getCurrentDoc( const OUString& sKey )
 {
     uno::Reference< frame::XModel > xModel;
     SbxObject* pBasic = dynamic_cast< SbxObject* > ( SfxApplication::GetBasic() );
@@ -236,7 +236,7 @@ getCurrentDoc( const OUString& sKey ) throw (uno::RuntimeException)
 
 /// @throws uno::RuntimeException
  uno::Reference< frame::XModel >
-getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponentContext >& xContext )
 {
     uno::Reference< frame::XModel > xModel;
      // try fallback to calling doc
@@ -246,19 +246,19 @@ getCurrentDocCtx( const OUString& ctxName, const uno::Reference< uno::XComponent
 }
 
 uno::Reference< frame::XModel >
-getThisExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+getThisExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
 {
     return getCurrentDocCtx( "ExcelDocumentContext" , xContext );
 }
 
 uno::Reference< frame::XModel >
-getThisWordDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+getThisWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
 {
     return getCurrentDocCtx( "WordDocumentContext" , xContext );
 }
 
  uno::Reference< frame::XModel >
-getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext )
 {
     uno::Reference< frame::XModel > xModel;
     try
@@ -273,7 +273,7 @@ getCurrentExcelDoc( const uno::Reference< uno::XComponentContext >& xContext ) t
 }
 
  uno::Reference< frame::XModel >
-getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext ) throw (uno::RuntimeException)
+getCurrentWordDoc( const uno::Reference< uno::XComponentContext >& xContext )
 {
     uno::Reference< frame::XModel > xModel;
     try
@@ -442,7 +442,7 @@ void WaitUntilPreviewIsClosed( SfxViewFrame* pViewFrame )
         Application::Yield();
 }
 
-bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
+bool extractBoolFromAny( const uno::Any& rAny )
 {
     switch( rAny.getValueType().getTypeClass() )
     {
@@ -463,7 +463,7 @@ bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
     throw uno::RuntimeException( "Invalid type, cannot convert to boolean." , nullptr );
 }
 
-OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw (uno::RuntimeException)
+OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool )
 {
     switch( rAny.getValueType().getTypeClass() )
     {
@@ -488,12 +488,12 @@ OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw
     throw uno::RuntimeException( "Invalid type, cannot convert to string." , nullptr );
 }
 
-OUString extractStringFromAny( const uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool ) throw (uno::RuntimeException)
+OUString extractStringFromAny( const uno::Any& rAny, const OUString& rDefault, bool bUppercaseBool )
 {
     return rAny.hasValue() ? extractStringFromAny( rAny, bUppercaseBool ) : rDefault;
 }
 
-OUString getAnyAsString( const uno::Any& pvargItem ) throw ( uno::RuntimeException )
+OUString getAnyAsString( const uno::Any& pvargItem )
 {
     return extractStringFromAny( pvargItem );
 }
@@ -733,7 +733,7 @@ void setCursorHelper( const uno::Reference< frame::XModel >& xModel, const Point
     }
 }
 
-void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue  ) throw ( uno::RuntimeException )
+void setDefaultPropByIntrospection( const uno::Any& aObj, const uno::Any& aValue  )
 {
     uno::Reference< beans::XIntrospectionAccess > xUnoAccess( getIntrospectionAccess( aObj ) );
 
@@ -991,7 +991,6 @@ void ConcreteXShapeGeometryAttributes::setWidth( double nWidth)
 
 
 ShapeHelper::ShapeHelper( const css::uno::Reference< css::drawing::XShape >& _xShape)
-    throw (css::script::BasicErrorException, css::uno::RuntimeException)
     : xShape( _xShape )
 {
     if( !xShape.is() )
@@ -1046,23 +1045,23 @@ void ShapeHelper::setTop(double _fTop)
     xShape->setPosition(aPoint);
 }
 
-void DebugHelper::basicexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ ) throw( css::script::BasicErrorException )
+void DebugHelper::basicexception( const OUString&  DetailedMessage, const css::uno::Exception& ex,  int err, const OUString& /*additionalArgument*/ )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
     throw css::script::BasicErrorException( DetailedMessage.concat( " " ).concat( ex.Message ), css::uno::Reference< css::uno::XInterface >(), err, OUString() );
 }
 
-void DebugHelper::basicexception( int err,  const OUString& additionalArgument ) throw( css::script::BasicErrorException )
+void DebugHelper::basicexception( int err,  const OUString& additionalArgument )
 {
     basicexception( OUString(), css::uno::Exception(), err, additionalArgument );
 }
 
-void DebugHelper::basicexception( const css::uno::Exception& ex ) throw( css::script::BasicErrorException )
+void DebugHelper::basicexception( const css::uno::Exception& ex )
 {
     basicexception( OUString(), ex, ERRCODE_BASIC_INTERNAL_ERROR, OUString() );
 }
 
-void DebugHelper::runtimeexception( int err,  const OUString& /*additionalArgument*/ ) throw( css::uno::RuntimeException )
+void DebugHelper::runtimeexception( int err,  const OUString& /*additionalArgument*/ )
 {
     // #TODO #FIXME ( do we want to support additionalArg here )
     throw css::uno::RuntimeException( css::uno::Exception().Message + " " + OUString::number(err),
@@ -1127,7 +1126,7 @@ uno::Reference< XHelperInterface > getUnoDocModule( const OUString& aModName, Sf
     return xIf;
 }
 
-SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+SfxObjectShell* getSfxObjShell( const uno::Reference< frame::XModel >& xModel )
 {
     SfxObjectShell* pFoundShell = nullptr;
     if ( xModel.is() )

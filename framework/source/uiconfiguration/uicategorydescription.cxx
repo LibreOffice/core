@@ -59,29 +59,24 @@ class ConfigurationAccess_UICategory : public ::cppu::WeakImplHelper<XNameAccess
         virtual                   ~ConfigurationAccess_UICategory() override;
 
         // XNameAccess
-        virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
-            throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
 
-        virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 
         // XElementAccess
-        virtual css::uno::Type SAL_CALL getElementType()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Type SAL_CALL getElementType() override;
 
-        virtual sal_Bool SAL_CALL hasElements()
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL hasElements() override;
 
         // container.XContainerListener
-        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
-        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
-        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL     elementInserted( const ContainerEvent& aEvent ) override;
+        virtual void SAL_CALL     elementRemoved ( const ContainerEvent& aEvent ) override;
+        virtual void SAL_CALL     elementReplaced( const ContainerEvent& aEvent ) override;
 
         // lang.XEventListener
-        virtual void SAL_CALL disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const EventObject& aEvent ) override;
 
     protected:
         Any                       getUINameFromID( const OUString& rId );
@@ -133,7 +128,6 @@ ConfigurationAccess_UICategory::~ConfigurationAccess_UICategory()
 
 // XNameAccess
 Any SAL_CALL ConfigurationAccess_UICategory::getByName( const OUString& rId )
-throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
 {
     osl::MutexGuard g(aMutex);
     if ( !m_bConfigAccessInitialized )
@@ -153,26 +147,22 @@ throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::e
 }
 
 Sequence< OUString > SAL_CALL ConfigurationAccess_UICategory::getElementNames()
-throw ( RuntimeException, std::exception )
 {
     return getAllIds();
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasByName( const OUString& rId )
-throw (css::uno::RuntimeException, std::exception)
 {
     return getByName( rId ).hasValue();
 }
 
 // XElementAccess
 Type SAL_CALL ConfigurationAccess_UICategory::getElementType()
-throw ( RuntimeException, std::exception )
 {
     return( cppu::UnoType<OUString>::get());
 }
 
 sal_Bool SAL_CALL ConfigurationAccess_UICategory::hasElements()
-throw ( RuntimeException, std::exception )
 {
     // There must be global categories!
     return true;
@@ -338,20 +328,20 @@ void ConfigurationAccess_UICategory::initializeConfigAccess()
 }
 
 // container.XContainerListener
-void SAL_CALL ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_UICategory::elementInserted( const ContainerEvent& )
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICategory::elementRemoved ( const ContainerEvent& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_UICategory::elementRemoved ( const ContainerEvent& )
 {
 }
 
-void SAL_CALL ConfigurationAccess_UICategory::elementReplaced( const ContainerEvent& ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_UICategory::elementReplaced( const ContainerEvent& )
 {
 }
 
 // lang.XEventListener
-void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEvent ) throw(RuntimeException, std::exception)
+void SAL_CALL ConfigurationAccess_UICategory::disposing( const EventObject& aEvent )
 {
     // SAFE
     // remove our reference to the config access
@@ -368,20 +358,17 @@ class UICategoryDescription :  public UICommandDescription
 public:
     explicit UICategoryDescription( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.framework.UICategoryDescription");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.ui.UICategoryDescription"};
     }

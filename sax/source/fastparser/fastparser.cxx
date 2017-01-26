@@ -210,25 +210,25 @@ public:
     /// @throws css::xml::sax::SAXException
     /// @throws css::io::IOException
     /// @throws css::uno::RuntimeException
-    void parseStream( const css::xml::sax::InputSource& aInputSource ) throw (css::xml::sax::SAXException, css::io::IOException, css::uno::RuntimeException, std::exception);
+    void parseStream( const css::xml::sax::InputSource& aInputSource );
     /// @throws css::uno::RuntimeException
-    void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler ) throw (css::uno::RuntimeException);
+    void setFastDocumentHandler( const css::uno::Reference< css::xml::sax::XFastDocumentHandler >& Handler );
     /// @throws css::uno::RuntimeException
-    void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler ) throw (css::uno::RuntimeException);
+    void setTokenHandler( const css::uno::Reference< css::xml::sax::XFastTokenHandler >& Handler );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    void registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken );
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    OUString getNamespaceURL( const OUString& rPrefix ) throw(css::lang::IllegalArgumentException, css::uno::RuntimeException);
+    OUString getNamespaceURL( const OUString& rPrefix );
     /// @throws css::uno::RuntimeException
-    void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler ) throw (css::uno::RuntimeException);
+    void setErrorHandler( const css::uno::Reference< css::xml::sax::XErrorHandler >& Handler );
     /// @throws css::uno::RuntimeException
-    void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver ) throw (css::uno::RuntimeException);
+    void setEntityResolver( const css::uno::Reference< css::xml::sax::XEntityResolver >& Resolver );
     /// @throws css::uno::RuntimeException
-    void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler) throw (css::uno::RuntimeException);
+    void setNamespaceHandler( const css::uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler);
     /// @throws css::uno::RuntimeException
-    void setLocale( const css::lang::Locale& rLocale ) throw (css::uno::RuntimeException);
+    void setLocale( const css::lang::Locale& rLocale );
 
     // called by the C callbacks of the expat parser
     void callbackStartElement( const xmlChar *localName , const xmlChar* prefix, const xmlChar* URI,
@@ -257,9 +257,9 @@ private:
 
     sal_Int32 GetToken( const xmlChar* pName, sal_Int32 nameLen );
     /// @throws css::xml::sax::SAXException
-    sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int prefixLen, const xmlChar* pName, int nameLen ) throw (css::xml::sax::SAXException);
+    sal_Int32 GetTokenWithPrefix( const xmlChar* pPrefix, int prefixLen, const xmlChar* pName, int nameLen );
     /// @throws css::xml::sax::SAXException
-    OUString GetNamespaceURL( const OString& rPrefix ) throw (css::xml::sax::SAXException);
+    OUString GetNamespaceURL( const OString& rPrefix );
     sal_Int32 GetNamespaceToken( const OUString& rNamespaceURL );
     sal_Int32 GetTokenWithContextNamespace( sal_Int32 nNamespaceToken, const xmlChar* pName, int nNameLen );
     void DefineNamespace( const OString& rPrefix, const OUString& namespaceURL );
@@ -352,37 +352,37 @@ public:
 
     void dispose() { mpParser = nullptr; }
     /// @throws RuntimeException
-    void checkDispose() throw (RuntimeException) { if( !mpParser ) throw DisposedException(); }
+    void checkDispose() { if( !mpParser ) throw DisposedException(); }
 
     //XLocator
-    virtual sal_Int32 SAL_CALL getColumnNumber() throw (RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getLineNumber() throw (RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getPublicId() throw (RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getSystemId() throw (RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getColumnNumber() override;
+    virtual sal_Int32 SAL_CALL getLineNumber() override;
+    virtual OUString SAL_CALL getPublicId() override;
+    virtual OUString SAL_CALL getSystemId() override;
 
 private:
     FastSaxParserImpl *mpParser;
 };
 
-sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber() throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL FastLocatorImpl::getColumnNumber()
 {
     checkDispose();
     return xmlSAX2GetColumnNumber( mpParser->getEntity().mpParser );
 }
 
-sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber() throw (RuntimeException, std::exception)
+sal_Int32 SAL_CALL FastLocatorImpl::getLineNumber()
 {
     checkDispose();
     return xmlSAX2GetLineNumber( mpParser->getEntity().mpParser );
 }
 
-OUString SAL_CALL FastLocatorImpl::getPublicId() throw (RuntimeException, std::exception)
+OUString SAL_CALL FastLocatorImpl::getPublicId()
 {
     checkDispose();
     return mpParser->getEntity().maStructSource.sPublicId;
 }
 
-OUString SAL_CALL FastLocatorImpl::getSystemId() throw (RuntimeException, std::exception)
+OUString SAL_CALL FastLocatorImpl::getSystemId()
 {
     checkDispose();
     return mpParser->getEntity().maStructSource.sSystemId;
@@ -663,7 +663,7 @@ sal_Int32 FastSaxParserImpl::GetToken( const xmlChar* pName, sal_Int32 nameLen /
                                                     XML_CAST( pName ), nameLen ); // uses utf-8
 }
 
-sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const xmlChar* pPrefix, int nPrefixLen, const xmlChar* pName, int nNameLen ) throw (SAXException)
+sal_Int32 FastSaxParserImpl::GetTokenWithPrefix( const xmlChar* pPrefix, int nPrefixLen, const xmlChar* pName, int nNameLen )
 {
     sal_Int32 nNamespaceToken = FastToken::DONTKNOW;
 
@@ -706,7 +706,7 @@ sal_Int32 FastSaxParserImpl::GetNamespaceToken( const OUString& rNamespaceURL )
         return FastToken::DONTKNOW;
 }
 
-OUString FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix ) throw (SAXException)
+OUString FastSaxParserImpl::GetNamespaceURL( const OString& rPrefix )
 {
     Entity& rEntity = getEntity();
     if( !rEntity.maNamespaceCount.empty() )
@@ -740,7 +740,6 @@ sal_Int32 FastSaxParserImpl::GetTokenWithContextNamespace( sal_Int32 nNamespaceT
 *
 ****************/
 void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
-    throw (SAXException, IOException, RuntimeException, std::exception)
 {
     xmlInitParser();
 
@@ -858,18 +857,18 @@ void FastSaxParserImpl::parseStream(const InputSource& maStructSource)
     popEntity();
 }
 
-void FastSaxParserImpl::setFastDocumentHandler( const Reference< XFastDocumentHandler >& Handler ) throw (RuntimeException)
+void FastSaxParserImpl::setFastDocumentHandler( const Reference< XFastDocumentHandler >& Handler )
 {
     maData.mxDocumentHandler = Handler;
 }
 
-void FastSaxParserImpl::setTokenHandler( const Reference< XFastTokenHandler >& xHandler ) throw (RuntimeException)
+void FastSaxParserImpl::setTokenHandler( const Reference< XFastTokenHandler >& xHandler )
 {
     maData.mxTokenHandler = xHandler;
     maData.mpTokenHandler = dynamic_cast< FastTokenHandlerBase *>( xHandler.get() );
 }
 
-void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken ) throw (IllegalArgumentException, RuntimeException)
+void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
 {
     if( NamespaceToken >= FastToken::NAMESPACE )
     {
@@ -882,7 +881,7 @@ void FastSaxParserImpl::registerNamespace( const OUString& NamespaceURL, sal_Int
     throw IllegalArgumentException();
 }
 
-OUString FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix ) throw(IllegalArgumentException, RuntimeException)
+OUString FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix )
 {
     try
     {
@@ -894,22 +893,22 @@ OUString FastSaxParserImpl::getNamespaceURL( const OUString& rPrefix ) throw(Ill
     throw IllegalArgumentException();
 }
 
-void FastSaxParserImpl::setErrorHandler(const Reference< XErrorHandler > & Handler) throw (RuntimeException)
+void FastSaxParserImpl::setErrorHandler(const Reference< XErrorHandler > & Handler)
 {
     maData.mxErrorHandler = Handler;
 }
 
-void FastSaxParserImpl::setEntityResolver(const Reference < XEntityResolver > & Resolver) throw (RuntimeException)
+void FastSaxParserImpl::setEntityResolver(const Reference < XEntityResolver > & Resolver)
 {
     maData.mxEntityResolver = Resolver;
 }
 
-void FastSaxParserImpl::setLocale( const lang::Locale & Locale ) throw (RuntimeException)
+void FastSaxParserImpl::setLocale( const lang::Locale & Locale )
 {
     maData.maLocale = Locale;
 }
 
-void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHandler >& Handler ) throw (RuntimeException)
+void FastSaxParserImpl::setNamespaceHandler( const Reference< XFastNamespaceHandler >& Handler )
 {
     maData.mxNamespaceHandler = Handler;
 }
@@ -1366,7 +1365,6 @@ FastSaxParser::~FastSaxParser()
 
 void SAL_CALL
 FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
-    throw (css::uno::RuntimeException, css::uno::Exception, std::exception)
 {
     if (rArguments.getLength())
     {
@@ -1383,74 +1381,61 @@ FastSaxParser::initialize(css::uno::Sequence< css::uno::Any > const& rArguments)
 }
 
 void FastSaxParser::parseStream( const xml::sax::InputSource& aInputSource )
-    throw (xml::sax::SAXException, io::IOException,
-           uno::RuntimeException, std::exception)
 {
     mpImpl->parseStream(aInputSource);
 }
 
 void FastSaxParser::setFastDocumentHandler( const uno::Reference<xml::sax::XFastDocumentHandler>& Handler )
-    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setFastDocumentHandler(Handler);
 }
 
 void FastSaxParser::setTokenHandler( const uno::Reference<xml::sax::XFastTokenHandler>& Handler )
-    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setTokenHandler(Handler);
 }
 
 void FastSaxParser::registerNamespace( const OUString& NamespaceURL, sal_Int32 NamespaceToken )
-    throw (lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     mpImpl->registerNamespace(NamespaceURL, NamespaceToken);
 }
 
 OUString FastSaxParser::getNamespaceURL( const OUString& rPrefix )
-    throw(lang::IllegalArgumentException, uno::RuntimeException, std::exception)
 {
     return mpImpl->getNamespaceURL(rPrefix);
 }
 
 void FastSaxParser::setErrorHandler( const uno::Reference< xml::sax::XErrorHandler >& Handler )
-    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setErrorHandler(Handler);
 }
 
 void FastSaxParser::setEntityResolver( const uno::Reference< xml::sax::XEntityResolver >& Resolver )
-    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setEntityResolver(Resolver);
 }
 
 void FastSaxParser::setLocale( const lang::Locale& rLocale )
-    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setLocale(rLocale);
 }
 
 void FastSaxParser::setNamespaceHandler( const uno::Reference< css::xml::sax::XFastNamespaceHandler >& Handler)
-    throw (uno::RuntimeException, std::exception)
 {
     mpImpl->setNamespaceHandler(Handler);
 }
 
 OUString FastSaxParser::getImplementationName()
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.extensions.xml.sax.FastParser");
 }
 
 sal_Bool FastSaxParser::supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence<OUString> FastSaxParser::getSupportedServiceNames()
-    throw (uno::RuntimeException, std::exception)
 {
     Sequence<OUString> seq { "com.sun.star.xml.sax.FastParser" };
     return seq;

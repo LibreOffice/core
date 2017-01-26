@@ -151,7 +151,7 @@ sdbcx::ObjectType OColumnsHelper::createObject(const OUString& _rName)
 }
 
 
-void OColumnsHelper::impl_refresh() throw(RuntimeException)
+void OColumnsHelper::impl_refresh()
 {
     if ( m_pTable )
     {

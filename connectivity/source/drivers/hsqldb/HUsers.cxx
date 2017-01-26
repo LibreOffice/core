@@ -54,7 +54,7 @@ sdbcx::ObjectType OUsers::createObject(const OUString& _rName)
     return new OHSQLUser(m_xConnection,_rName);
 }
 
-void OUsers::impl_refresh() throw(RuntimeException)
+void OUsers::impl_refresh()
 {
     m_pParent->refreshUsers();
 }

@@ -58,7 +58,7 @@ OUString OColumnControl::GetComponentServiceName()
     return OUString("com.sun.star.sdb.ColumnDescriptorControl");
 }
 
-void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit*/, const Reference< XWindowPeer >& rParentPeer) throw( RuntimeException, std::exception )
+void SAL_CALL OColumnControl::createPeer(const Reference< XToolkit >& /*rToolkit*/, const Reference< XWindowPeer >& rParentPeer)
 {
     ::osl::ClearableMutexGuard aGuard( GetMutex() );
     if ( !getPeer().is() )

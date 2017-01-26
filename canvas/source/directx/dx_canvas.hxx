@@ -92,7 +92,7 @@ namespace dxcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( Canvas, GraphicDeviceBase1_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException) override;
+        virtual OUString SAL_CALL getServiceName(  ) override;
 
     private:
         css::uno::Sequence< css::uno::Any >                maArguments;
@@ -148,7 +148,7 @@ namespace dxcanvas
         DECLARE_UNO3_XCOMPONENT_AGG_DEFAULTS( BitmapCanvas, GraphicDeviceBase2_Base, ::cppu::WeakComponentImplHelperBase )
 
         // XServiceName
-        virtual OUString SAL_CALL getServiceName(  ) throw (css::uno::RuntimeException) override;
+        virtual OUString SAL_CALL getServiceName(  ) override;
 
         // BitmapProvider
         virtual IBitmapSharedPtr getBitmap() const override;

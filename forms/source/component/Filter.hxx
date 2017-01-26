@@ -82,50 +82,50 @@ namespace frm
         explicit OFilterControl( const css::uno::Reference< css::uno::XComponentContext >& _rxORB );
 
         DECLARE_UNO3_AGG_DEFAULTS(OFilterControl,OWeakAggObject)
-        css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+        css::uno::Any  SAL_CALL queryAggregation( const css::uno::Type & rType ) override;
 
         virtual OUString GetComponentServiceName() override;
-        virtual void SAL_CALL   createPeer( const css::uno::Reference< css::awt::XToolkit > & rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL   createPeer( const css::uno::Reference< css::awt::XToolkit > & rxToolkit, const css::uno::Reference< css::awt::XWindowPeer >  & rParentPeer ) override;
 
     // css::lang::XComponent
-        virtual void SAL_CALL   dispose() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL   dispose() override;
 
     // css::awt::XTextComponent
-        virtual void            SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void            SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void            SAL_CALL setText( const OUString& aText ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void            SAL_CALL insertText( const css::awt::Selection& rSel, const OUString& aText ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual OUString SAL_CALL getText() throw( css::uno::RuntimeException, std::exception ) override;
-        virtual OUString SAL_CALL getSelectedText() throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void            SAL_CALL setSelection( const css::awt::Selection& aSelection ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual css::awt::Selection SAL_CALL getSelection() throw( css::uno::RuntimeException, std::exception ) override;
-        virtual sal_Bool        SAL_CALL isEditable() throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void            SAL_CALL setEditable( sal_Bool bEditable ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void            SAL_CALL setMaxTextLen( sal_Int16 nLength ) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual sal_Int16       SAL_CALL getMaxTextLen() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void            SAL_CALL addTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) override;
+        virtual void            SAL_CALL removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) override;
+        virtual void            SAL_CALL setText( const OUString& aText ) override;
+        virtual void            SAL_CALL insertText( const css::awt::Selection& rSel, const OUString& aText ) override;
+        virtual OUString SAL_CALL getText() override;
+        virtual OUString SAL_CALL getSelectedText() override;
+        virtual void            SAL_CALL setSelection( const css::awt::Selection& aSelection ) override;
+        virtual css::awt::Selection SAL_CALL getSelection() override;
+        virtual sal_Bool        SAL_CALL isEditable() override;
+        virtual void            SAL_CALL setEditable( sal_Bool bEditable ) override;
+        virtual void            SAL_CALL setMaxTextLen( sal_Int16 nLength ) override;
+        virtual sal_Int16       SAL_CALL getMaxTextLen() override;
 
     // css::form::XBoundComponent
-        virtual void            SAL_CALL addUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) throw( css::uno::RuntimeException, std::exception ) override {}
-        virtual void            SAL_CALL removeUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) throw( css::uno::RuntimeException, std::exception ) override {}
-        virtual sal_Bool        SAL_CALL commit() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void            SAL_CALL addUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
+        virtual void            SAL_CALL removeUpdateListener(const css::uno::Reference< css::form::XUpdateListener > & /*l*/) override {}
+        virtual sal_Bool        SAL_CALL commit() override;
 
     // css::lang::XEventListener
-        virtual void            SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void            SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
     // css::awt::XFocusListener
-        virtual void            SAL_CALL focusGained(const css::awt::FocusEvent& e) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void            SAL_CALL focusLost(const css::awt::FocusEvent& e) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void            SAL_CALL focusGained(const css::awt::FocusEvent& e) override;
+        virtual void            SAL_CALL focusLost(const css::awt::FocusEvent& e) override;
 
     // css::awt::XItemListener
-        virtual void            SAL_CALL itemStateChanged(const css::awt::ItemEvent& rEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void            SAL_CALL itemStateChanged(const css::awt::ItemEvent& rEvent) override;
 
     // css::util::XInitialization
-        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     protected:
         virtual void PrepareWindowDescriptor( css::awt::WindowDescriptor& rDesc ) override;

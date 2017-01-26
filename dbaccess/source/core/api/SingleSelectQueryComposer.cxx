@@ -296,7 +296,6 @@ IMPLEMENT_FORWARD_XINTERFACE3(OSingleSelectQueryComposer,OSubComponent,OSingleSe
 IMPLEMENT_SERVICE_INFO1(OSingleSelectQueryComposer,"org.openoffice.comp.dba.OSingleSelectQueryComposer",SERVICE_NAME_SINGLESELECTQUERYCOMPOSER)
 
 css::uno::Sequence<sal_Int8> OSingleSelectQueryComposer::getImplementationId()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -305,7 +304,7 @@ IMPLEMENT_GETTYPES3(OSingleSelectQueryComposer,OSubComponent,OSingleSelectQueryC
 IMPLEMENT_PROPERTYCONTAINER_DEFAULTS(OSingleSelectQueryComposer)
 
 // XSingleSelectQueryAnalyzer
-OUString SAL_CALL OSingleSelectQueryComposer::getQuery(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL OSingleSelectQueryComposer::getQuery(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -314,7 +313,7 @@ OUString SAL_CALL OSingleSelectQueryComposer::getQuery(  ) throw(RuntimeExceptio
     return getStatementPart(F_tmp,m_aSqlIterator);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setQuery( const OUString& command ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setQuery( const OUString& command )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -334,7 +333,7 @@ void SAL_CALL OSingleSelectQueryComposer::setQuery( const OUString& command ) th
         m_aElementaryParts[ eLoopParts ].clear();
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sal_Int32 _nCommandType ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setCommand( const OUString& Command,sal_Int32 _nCommandType )
 {
     OUStringBuffer sSQL;
     switch(_nCommandType)
@@ -414,25 +413,25 @@ void OSingleSelectQueryComposer::setQuery_Impl( const OUString& command )
     getTables();
 }
 
-Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredHavingClause(  ) throw (RuntimeException, std::exception)
+Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredHavingClause(  )
 {
     TGetParseNode F_tmp(&OSQLParseTreeIterator::getSimpleHavingTree);
     return getStructuredCondition(F_tmp);
 }
 
-Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredFilter(  ) throw(RuntimeException, std::exception)
+Sequence< Sequence< PropertyValue > > SAL_CALL OSingleSelectQueryComposer::getStructuredFilter(  )
 {
     TGetParseNode F_tmp(&OSQLParseTreeIterator::getSimpleWhereTree);
     return getStructuredCondition(F_tmp);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw (SQLException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::appendHavingClauseByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator )
 {
     ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString&> F_tmp(&OSingleSelectQueryComposer::implSetHavingClause);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator ) throw(SQLException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference< XPropertySet >& column, sal_Bool andCriteria,sal_Int32 filterOperator )
 {
     ::std::mem_fun1_t<bool,OSingleSelectQueryComposer,const OUString&> F_tmp(&OSingleSelectQueryComposer::implSetFilter);
     setConditionByColumn(column,andCriteria,F_tmp,filterOperator);
@@ -547,7 +546,7 @@ OUString OSingleSelectQueryComposer::impl_getColumnNameOrderBy_throw(const Refer
     return impl_getColumnRealName_throw(column, false);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< XPropertySet >& column, sal_Bool ascending )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OUString sColumnName( impl_getColumnNameOrderBy_throw(column) );
@@ -561,7 +560,7 @@ void SAL_CALL OSingleSelectQueryComposer::appendOrderByColumn( const Reference< 
     setOrder(sOrder);
 }
 
-void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< XPropertySet >& column) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::appendGroupByColumn( const Reference< XPropertySet >& column)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     OUString sColumnName( impl_getColumnRealName_throw(column, true) );
@@ -586,12 +585,12 @@ OUString OSingleSelectQueryComposer::composeStatementFromParts( const ::std::vec
     return aSql.makeStringAndClear();
 }
 
-OUString SAL_CALL OSingleSelectQueryComposer::getElementaryQuery() throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OSingleSelectQueryComposer::getElementaryQuery()
 {
     return composeStatementFromParts( m_aElementaryParts );
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _rElementary ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setElementaryQuery( const OUString& _rElementary )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -702,28 +701,28 @@ void OSingleSelectQueryComposer::setSingleAdditiveClause( SQLPart _ePart, const 
     }
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setFilter( const OUString& filter ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setFilter( const OUString& filter )
 {
     setSingleAdditiveClause( Where, filter );
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setOrder( const OUString& order ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setOrder( const OUString& order )
 {
     setSingleAdditiveClause( Order, order );
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setGroup( const OUString& group ) throw (SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setGroup( const OUString& group )
 {
     setSingleAdditiveClause( Group, group );
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setHavingClause( const OUString& filter ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setHavingClause( const OUString& filter )
 {
     setSingleAdditiveClause( Having, filter );
 }
 
 // XTablesSupplier
-Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  ) throw(RuntimeException, std::exception)
+Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
 
@@ -743,7 +742,7 @@ Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getTables(  ) thro
 }
 
 // XColumnsSupplier
-Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  ) throw(RuntimeException, std::exception)
+Reference< XNameAccess > SAL_CALL OSingleSelectQueryComposer::getColumns(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1228,28 +1227,28 @@ OUString OSingleSelectQueryComposer::getColumnName( ::connectivity::OSQLParseNod
     return aColumnName;
 }
 
-OUString SAL_CALL OSingleSelectQueryComposer::getFilter(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL OSingleSelectQueryComposer::getFilter(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     return getSQLPart(Where,m_aAdditiveIterator,false);
 }
 
-OUString SAL_CALL OSingleSelectQueryComposer::getOrder(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL OSingleSelectQueryComposer::getOrder(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     return getSQLPart(Order,m_aAdditiveIterator,false);
 }
 
-OUString SAL_CALL OSingleSelectQueryComposer::getGroup(  ) throw (RuntimeException, std::exception)
+OUString SAL_CALL OSingleSelectQueryComposer::getGroup(  )
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
     return getSQLPart(Group,m_aAdditiveIterator,false);
 }
 
-OUString OSingleSelectQueryComposer::getHavingClause() throw (RuntimeException, std::exception)
+OUString OSingleSelectQueryComposer::getHavingClause()
 {
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1329,7 +1328,7 @@ OUString OSingleSelectQueryComposer::getTableAlias(const Reference< XPropertySet
     return sReturn;
 }
 
-Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  ) throw(RuntimeException, std::exception)
+Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getParameters(  )
 {
     // now set the Parameters
     if ( !m_aCurrentColumns[ParameterColumns] )
@@ -1397,17 +1396,17 @@ Reference< XIndexAccess > OSingleSelectQueryComposer::setCurrentColumns( EColumn
     return m_aCurrentColumns[_eType];
 }
 
-Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getGroupColumns(  ) throw(RuntimeException, std::exception)
+Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getGroupColumns(  )
 {
     return setCurrentColumns( GroupByColumns, m_aAdditiveIterator.getGroupColumns() );
 }
 
-Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getOrderColumns(  ) throw(RuntimeException, std::exception)
+Reference< XIndexAccess > SAL_CALL OSingleSelectQueryComposer::getOrderColumns(  )
 {
     return setCurrentColumns( OrderColumns, m_aAdditiveIterator.getOrderColumns() );
 }
 
-OUString SAL_CALL OSingleSelectQueryComposer::getQueryWithSubstitution(  ) throw (SQLException, RuntimeException, std::exception)
+OUString SAL_CALL OSingleSelectQueryComposer::getQueryWithSubstitution(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     ::connectivity::checkDisposed(OSubComponent::rBHelper.bDisposed);
@@ -1517,13 +1516,13 @@ namespace
     }
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, css::lang::IllegalArgumentException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setStructuredFilter( const Sequence< Sequence< PropertyValue > >& filter )
 {
     OPredicateInputController aPredicateInput(m_aContext, m_xConnection, &m_aParseContext);
     setFilter(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData->getIdentifierQuoteString()));
 }
 
-void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Sequence< Sequence< PropertyValue > >& filter ) throw (SQLException, RuntimeException, std::exception)
+void SAL_CALL OSingleSelectQueryComposer::setStructuredHavingClause( const Sequence< Sequence< PropertyValue > >& filter )
 {
     OPredicateInputController aPredicateInput(m_aContext, m_xConnection);
     setHavingClause(lcl_getCondition(filter, aPredicateInput, getColumns(), m_xMetaData->getIdentifierQuoteString()));

@@ -88,11 +88,11 @@ public:
     explicit OFieldExpressionControlContainerListener(OFieldExpressionControl* pParent) : mpParent(pParent) {}
 
     // XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
     // XContainerListener
-    virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) override;
+    virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& rEvent) override;
+    virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) override;
 };
 
 class OFieldExpressionControl : public ::svt::EditBrowseBox
@@ -116,9 +116,9 @@ public:
 
     // XContainerListener
     /// @throws css::uno::RuntimeException
-    void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception);
+    void SAL_CALL elementInserted(const css::container::ContainerEvent& rEvent);
     /// @throws css::uno::RuntimeException
-    void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception);
+    void SAL_CALL elementRemoved(const css::container::ContainerEvent& rEvent);
 
     virtual Size GetOptimalSize() const override;
 
@@ -179,16 +179,16 @@ public:
 };
 
 
-void OFieldExpressionControlContainerListener::disposing(const css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception )
+void OFieldExpressionControlContainerListener::disposing(const css::lang::EventObject& )
 {}
 
-void OFieldExpressionControlContainerListener::elementInserted(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception)
+void OFieldExpressionControlContainerListener::elementInserted(const css::container::ContainerEvent& rEvent)
 { mpParent->elementInserted(rEvent); }
 
-void OFieldExpressionControlContainerListener::elementReplaced(const css::container::ContainerEvent& ) throw(css::uno::RuntimeException, std::exception)
+void OFieldExpressionControlContainerListener::elementReplaced(const css::container::ContainerEvent& )
 {}
 
-void OFieldExpressionControlContainerListener::elementRemoved(const css::container::ContainerEvent& rEvent) throw(css::uno::RuntimeException, std::exception)
+void OFieldExpressionControlContainerListener::elementRemoved(const css::container::ContainerEvent& rEvent)
 { mpParent->elementRemoved(rEvent); }
 
 
@@ -612,7 +612,7 @@ EditBrowseBox::RowStatus OFieldExpressionControl::GetRowStatus(long nRow) const
 
 // XContainerListener
 
-void SAL_CALL OFieldExpressionControl::elementInserted(const container::ContainerEvent& evt) throw(uno::RuntimeException, std::exception)
+void SAL_CALL OFieldExpressionControl::elementInserted(const container::ContainerEvent& evt)
 {
     if ( m_bIgnoreEvent )
         return;
@@ -652,7 +652,7 @@ void SAL_CALL OFieldExpressionControl::elementInserted(const container::Containe
     }
 }
 
-void SAL_CALL OFieldExpressionControl::elementRemoved(const container::ContainerEvent& evt) throw(uno::RuntimeException, std::exception)
+void SAL_CALL OFieldExpressionControl::elementRemoved(const container::ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -1200,7 +1200,7 @@ IMPL_LINK( OGroupsSortingDialog, LBChangeHdl, ListBox&, rListBox, void )
     }
 }
 
-void OGroupsSortingDialog::_propertyChanged(const beans::PropertyChangeEvent& _rEvent) throw(uno::RuntimeException, std::exception)
+void OGroupsSortingDialog::_propertyChanged(const beans::PropertyChangeEvent& _rEvent)
 {
     uno::Reference< report::XGroup > xGroup(_rEvent.Source,uno::UNO_QUERY);
     if ( xGroup.is() )

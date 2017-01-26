@@ -133,7 +133,6 @@ Reference< XLayoutManager > ToolboxController::getLayoutManager() const
 
 // XInterface
 Any SAL_CALL ToolboxController::queryInterface( const Type& rType )
-throw ( RuntimeException, std::exception )
 {
     css::uno::Any a(ToolboxController_Base::queryInterface(rType));
     return a.hasValue() ? a : OPropertyContainer::queryInterface(rType);
@@ -150,7 +149,6 @@ void SAL_CALL ToolboxController::release() throw ()
 }
 
 css::uno::Sequence<css::uno::Type> ToolboxController::getTypes()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<css::uno::Type> s1(ToolboxController_Base::getTypes());
     css::uno::Sequence<css::uno::Type> s2(getBaseTypes());
@@ -163,7 +161,6 @@ css::uno::Sequence<css::uno::Type> ToolboxController::getTypes()
 }
 
 void SAL_CALL ToolboxController::initialize( const Sequence< Any >& aArguments )
-throw ( Exception, RuntimeException, std::exception )
 {
     bool bInitialized( true );
 
@@ -220,7 +217,6 @@ throw ( Exception, RuntimeException, std::exception )
 }
 
 void SAL_CALL ToolboxController::update()
-throw ( RuntimeException, std::exception )
 {
     {
         SolarMutexGuard aSolarMutexGuard;
@@ -234,7 +230,6 @@ throw ( RuntimeException, std::exception )
 
 // XComponent
 void SAL_CALL ToolboxController::dispose()
-throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -275,20 +270,17 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL ToolboxController::addEventListener( const Reference< XEventListener >& xListener )
-throw ( RuntimeException, std::exception )
 {
     m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 void SAL_CALL ToolboxController::removeEventListener( const Reference< XEventListener >& aListener )
-throw ( RuntimeException, std::exception )
 {
     m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), aListener );
 }
 
 // XEventListener
 void SAL_CALL ToolboxController::disposing( const EventObject& Source )
-throw ( RuntimeException, std::exception )
 {
     Reference< XInterface > xSource( Source.Source );
 
@@ -314,14 +306,12 @@ throw ( RuntimeException, std::exception )
 
 // XStatusListener
 void SAL_CALL ToolboxController::statusChanged( const FeatureStateEvent& )
-throw ( RuntimeException, std::exception )
 {
     // must be implemented by sub class
 }
 
 // XToolbarController
 void SAL_CALL ToolboxController::execute( sal_Int16 KeyModifier )
-throw (css::uno::RuntimeException, std::exception)
 {
     Reference< XDispatch >       xDispatch;
     OUString                     aCommandURL;
@@ -368,23 +358,19 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL ToolboxController::click()
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL ToolboxController::doubleClick()
-throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 Reference< XWindow > SAL_CALL ToolboxController::createPopupWindow()
-throw (css::uno::RuntimeException, std::exception)
 {
     return Reference< XWindow >();
 }
 
 Reference< XWindow > SAL_CALL ToolboxController::createItemWindow( const Reference< XWindow >& )
-throw (css::uno::RuntimeException, std::exception)
 {
     return Reference< XWindow >();
 }
@@ -697,7 +683,7 @@ void ToolboxController::dispatchCommand( const OUString& sCommandURL, const Sequ
 }
 
 
-css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo() throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ToolboxController::getPropertySetInfo()
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;
@@ -719,7 +705,7 @@ css::uno::Reference< css::beans::XPropertySetInfo >  SAL_CALL ToolboxController:
 sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( css::uno::Any&    aConvertedValue ,
                                              css::uno::Any&        aOldValue       ,
                                              sal_Int32                        nHandle         ,
-                                             const css::uno::Any&  aValue          ) throw( css::lang::IllegalArgumentException )
+                                             const css::uno::Any&  aValue          )
 {
     switch (nHandle)
     {
@@ -742,7 +728,6 @@ sal_Bool SAL_CALL ToolboxController::convertFastPropertyValue( css::uno::Any&   
 void SAL_CALL ToolboxController::setFastPropertyValue_NoBroadcast(
     sal_Int32                       nHandle,
     const css::uno::Any& aValue )
-throw( css::uno::Exception, std::exception)
 {
     OPropertyContainer::setFastPropertyValue_NoBroadcast(nHandle, aValue);
     if (TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE == nHandle)

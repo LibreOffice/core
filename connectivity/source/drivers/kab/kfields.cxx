@@ -47,7 +47,7 @@ QString valueOfKabField(const ::KABC::Addressee &aAddressee, sal_Int32 nFieldNum
 }
 
 // search the KDE address book field number of a given column name
-sal_uInt32 findKabField(const OUString& columnName) throw(SQLException)
+sal_uInt32 findKabField(const OUString& columnName)
 {
     QString aQtName;
     OUString aName;

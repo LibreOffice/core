@@ -370,7 +370,6 @@ void ConvDicXMLExport::ExportContent_()
 }
 
 void SAL_CALL ConvDicXMLImport::startDocument()
-    throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     // register namespace at first possible opportunity
     GetNamespaceMap().Add( "tcd",

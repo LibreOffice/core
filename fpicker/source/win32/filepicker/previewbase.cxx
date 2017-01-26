@@ -38,26 +38,25 @@ PreviewBase::~PreviewBase()
 }
 
 
-sal_Int32 SAL_CALL PreviewBase::getTargetColorDepth() throw (RuntimeException)
+sal_Int32 SAL_CALL PreviewBase::getTargetColorDepth()
 {
     return 0;
 }
 
 
-sal_Int32 SAL_CALL PreviewBase::getAvailableWidth() throw (RuntimeException)
+sal_Int32 SAL_CALL PreviewBase::getAvailableWidth()
 {
     return 0;
 }
 
 
-sal_Int32 SAL_CALL PreviewBase::getAvailableHeight() throw (RuntimeException)
+sal_Int32 SAL_CALL PreviewBase::getAvailableHeight()
 {
     return 0;
 }
 
 
 void SAL_CALL PreviewBase::setImage( sal_Int16 aImageFormat, const css::uno::Any& aImage )
-    throw (IllegalArgumentException, RuntimeException)
 {
     if (aImageFormat != css::ui::dialogs::FilePreviewImageFormats::BITMAP)
         throw IllegalArgumentException(
@@ -80,14 +79,14 @@ void SAL_CALL PreviewBase::getImage(sal_Int16& aImageFormat,css::uno::Any& aImag
 }
 
 
-bool SAL_CALL PreviewBase::setShowState( bool bShowState ) throw (RuntimeException)
+bool SAL_CALL PreviewBase::setShowState( bool bShowState )
 {
     m_bShowState = bShowState;
     return true;
 }
 
 
-bool SAL_CALL PreviewBase::getShowState() throw (RuntimeException)
+bool SAL_CALL PreviewBase::getShowState()
 {
     return false;
 }

@@ -40,7 +40,7 @@ namespace comphelper
     // OPropertyStateHelper
 
 
-    css::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  css::uno::Type& _rType) throw( css::uno::RuntimeException, std::exception)
+    css::uno::Any SAL_CALL OPropertyStateHelper::queryInterface(const  css::uno::Type& _rType)
     {
         css::uno::Any aReturn = OPropertySetHelper2::queryInterface(_rType);
         // our own ifaces
@@ -76,7 +76,7 @@ namespace comphelper
 
     // XPropertyState
 
-    css::beans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const OUString& _rsName) throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
+    css::beans::PropertyState SAL_CALL OPropertyStateHelper::getPropertyState(const OUString& _rsName)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -88,7 +88,7 @@ namespace comphelper
     }
 
 
-    void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const OUString& _rsName) throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
+    void SAL_CALL OPropertyStateHelper::setPropertyToDefault(const OUString& _rsName)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -100,7 +100,7 @@ namespace comphelper
     }
 
 
-    css::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const OUString& _rsName) throw( css::beans::UnknownPropertyException,  css::lang::WrappedTargetException,  css::uno::RuntimeException, std::exception)
+    css::uno::Any SAL_CALL OPropertyStateHelper::getPropertyDefault(const OUString& _rsName)
     {
         cppu::IPropertyArrayHelper& rPH = getInfoHelper();
         sal_Int32 nHandle = rPH.getHandleByName(_rsName);
@@ -112,7 +112,7 @@ namespace comphelper
     }
 
 
-    css::uno::Sequence< css::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  css::uno::Sequence< OUString >& _rPropertyNames) throw( css::beans::UnknownPropertyException,  css::uno::RuntimeException, std::exception)
+    css::uno::Sequence< css::beans::PropertyState> SAL_CALL OPropertyStateHelper::getPropertyStates(const  css::uno::Sequence< OUString >& _rPropertyNames)
     {
         sal_Int32 nLen = _rPropertyNames.getLength();
         css::uno::Sequence< css::beans::PropertyState> aRet(nLen);
@@ -184,7 +184,7 @@ namespace comphelper
     }
 
 
-    Sequence< Type > SAL_CALL OStatefulPropertySet::getTypes() throw(RuntimeException, std::exception)
+    Sequence< Type > SAL_CALL OStatefulPropertySet::getTypes()
     {
         Sequence< Type > aOwnTypes( 2 );
         aOwnTypes[0] = cppu::UnoType<XWeak>::get();
@@ -196,13 +196,13 @@ namespace comphelper
         );
     }
 
-    Sequence< sal_Int8 > SAL_CALL OStatefulPropertySet::getImplementationId() throw(RuntimeException, std::exception)
+    Sequence< sal_Int8 > SAL_CALL OStatefulPropertySet::getImplementationId()
     {
         return css::uno::Sequence<sal_Int8>();
     }
 
 
-    Any SAL_CALL OStatefulPropertySet::queryInterface( const Type& _rType ) throw(RuntimeException, std::exception)
+    Any SAL_CALL OStatefulPropertySet::queryInterface( const Type& _rType )
     {
         Any aReturn = OWeakObject::queryInterface( _rType );
         if ( !aReturn.hasValue() )

@@ -86,7 +86,6 @@ static bool handleEmbeddedWPGImage(const librevenge::RVNGBinaryData &input, libr
 }
 
 bool SAL_CALL WordPerfectImportFilter::importImpl(const Sequence< css::beans::PropertyValue > &aDescriptor)
-throw (RuntimeException, std::exception)
 {
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue *pValue = aDescriptor.getConstArray();
@@ -152,25 +151,21 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::filter(const Sequence< css::beans::PropertyValue > &aDescriptor)
-throw (RuntimeException, std::exception)
 {
     return importImpl(aDescriptor);
 }
 void SAL_CALL WordPerfectImportFilter::cancel()
-throw (RuntimeException, std::exception)
 {
 }
 
 // XImporter
 void SAL_CALL WordPerfectImportFilter::setTargetDocument(const Reference< css::lang::XComponent > &xDoc)
-throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
 
 // XExtendedFilterDetection
 OUString SAL_CALL WordPerfectImportFilter::detect(Sequence< PropertyValue > &Descriptor)
-throw(RuntimeException, std::exception)
 {
     libwpd::WPDConfidence confidence = libwpd::WPD_CONFIDENCE_NONE;
     OUString sTypeName;
@@ -213,7 +208,6 @@ throw(RuntimeException, std::exception)
 
 // XInitialization
 void SAL_CALL WordPerfectImportFilter::initialize(const Sequence< Any > &aArguments)
-throw (Exception, RuntimeException, std::exception)
 {
     Sequence < PropertyValue > aAnySeq;
     sal_Int32 nLength = aArguments.getLength();
@@ -234,19 +228,16 @@ throw (Exception, RuntimeException, std::exception)
 
 // XServiceInfo
 OUString SAL_CALL WordPerfectImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Writer.WordPerfectImportFilter");
 }
 
 sal_Bool SAL_CALL WordPerfectImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL WordPerfectImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

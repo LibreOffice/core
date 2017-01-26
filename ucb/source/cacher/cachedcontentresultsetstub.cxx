@@ -67,7 +67,6 @@ void SAL_CALL CachedContentResultSetStub::release()
 
 Any SAL_CALL CachedContentResultSetStub
     ::queryInterface( const Type&  rType )
-    throw ( RuntimeException, std::exception )
 {
     //list all interfaces inclusive baseclasses of interfaces
 
@@ -92,7 +91,6 @@ Any SAL_CALL CachedContentResultSetStub
 //virtual
 void SAL_CALL CachedContentResultSetStub
     ::impl_propertyChange( const PropertyChangeEvent& rEvt )
-    throw( RuntimeException )
 {
     impl_EnsureNotDisposed();
 
@@ -113,8 +111,6 @@ void SAL_CALL CachedContentResultSetStub
 //virtual
 void SAL_CALL CachedContentResultSetStub
     ::impl_vetoableChange( const PropertyChangeEvent& rEvt )
-    throw( PropertyVetoException,
-           RuntimeException )
 {
     impl_EnsureNotDisposed();
 
@@ -139,7 +135,6 @@ XTYPEPROVIDER_COMMON_IMPL( CachedContentResultSetStub )
 //list all interfaces exclusive baseclasses
 Sequence< Type > SAL_CALL CachedContentResultSetStub
     ::getTypes()
-    throw( RuntimeException, std::exception )
 {
     static Sequence< Type >* pTypes = nullptr;
     if( !pTypes )
@@ -170,19 +165,16 @@ Sequence< Type > SAL_CALL CachedContentResultSetStub
 // XServiceInfo methods.
 
 OUString SAL_CALL CachedContentResultSetStub::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ucb.CachedContentResultSetStub" );
 }
 
 sal_Bool SAL_CALL CachedContentResultSetStub::supportsService( const OUString& ServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 css::uno::Sequence< OUString > SAL_CALL CachedContentResultSetStub::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { CACHED_CRS_STUB_SERVICE_NAME };
 }
@@ -308,7 +300,6 @@ return aRet;
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetch( sal_Int32 nRowStartPosition
     , sal_Int32 nRowCount, sal_Bool bDirection )
-    throw( RuntimeException, std::exception )
 {
     impl_init_xRowOrigin();
     FETCH_XXX( impl_getCurrentRowContent, m_xRowOrigin );
@@ -347,7 +338,6 @@ sal_Int32 SAL_CALL CachedContentResultSetStub
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentRowContent( Any& rRowContent
         , const Reference< XRow >& xRow )
-        throw ( SQLException, RuntimeException )
 {
     sal_Int32 nCount = impl_getColumnCount();
 
@@ -362,7 +352,6 @@ void SAL_CALL CachedContentResultSetStub
 
 void SAL_CALL CachedContentResultSetStub
     ::impl_propagateFetchSizeAndDirection( sal_Int32 nFetchSize, bool bFetchDirection )
-        throw ( RuntimeException )
 {
     //this is done only for the case, that there is another CachedContentResultSet in the chain of underlying ResultSets
 
@@ -452,7 +441,6 @@ void SAL_CALL CachedContentResultSetStub
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentContentIdentifierString( Any& rAny
         , const Reference< XContentAccess >& xContentAccess )
-        throw ( RuntimeException )
 {
      rAny <<= xContentAccess->queryContentIdentifierString();
 }
@@ -460,7 +448,6 @@ void SAL_CALL CachedContentResultSetStub
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentContentIdentifier( Any& rAny
         , const Reference< XContentAccess >& xContentAccess )
-        throw ( RuntimeException )
 {
      rAny <<= xContentAccess->queryContentIdentifier();
 }
@@ -468,7 +455,6 @@ void SAL_CALL CachedContentResultSetStub
 void SAL_CALL CachedContentResultSetStub
     ::impl_getCurrentContent( Any& rAny
         , const Reference< XContentAccess >& xContentAccess )
-        throw ( RuntimeException )
 {
      rAny <<= xContentAccess->queryContent();
 }
@@ -477,7 +463,6 @@ void SAL_CALL CachedContentResultSetStub
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifierStrings( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( css::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifierString, m_xContentAccessOrigin );
@@ -487,7 +472,6 @@ FetchResult SAL_CALL CachedContentResultSetStub
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContentIdentifiers( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( css::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContentIdentifier, m_xContentAccessOrigin );
@@ -497,7 +481,6 @@ FetchResult SAL_CALL CachedContentResultSetStub
 FetchResult SAL_CALL CachedContentResultSetStub
     ::fetchContents( sal_Int32 nRowStartPosition
         , sal_Int32 nRowCount, sal_Bool bDirection )
-        throw( css::uno::RuntimeException, std::exception )
 {
     impl_init_xContentAccessOrigin();
     FETCH_XXX( impl_getCurrentContent, m_xContentAccessOrigin );
@@ -532,7 +515,6 @@ void SAL_CALL CachedContentResultSetStubFactory::release()
 }
 
 css::uno::Any SAL_CALL CachedContentResultSetStubFactory::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< XTypeProvider* >(this)),
@@ -558,7 +540,6 @@ XSERVICEINFO_COMMOM_IMPL( CachedContentResultSetStubFactory,
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
 CachedContentResultSetStubFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
-    throw( css::uno::Exception )
 {
     css::lang::XServiceInfo* pX =
         static_cast<css::lang::XServiceInfo*>(new CachedContentResultSetStubFactory( rSMgr ));
@@ -583,7 +564,6 @@ ONE_INSTANCE_SERVICE_FACTORY_IMPL( CachedContentResultSetStubFactory );
 Reference< XResultSet > SAL_CALL CachedContentResultSetStubFactory
     ::createCachedContentResultSetStub(
             const Reference< XResultSet > & xSource )
-            throw( RuntimeException, std::exception )
 {
     if( xSource.is() )
     {

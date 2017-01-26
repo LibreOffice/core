@@ -66,7 +66,6 @@ ActionTriggerPropertySet::~ActionTriggerPropertySet()
 
 // XInterface
 Any SAL_CALL ActionTriggerPropertySet::queryInterface( const Type& aType )
-throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 aType,
@@ -98,26 +97,23 @@ void SAL_CALL ActionTriggerPropertySet::release() throw ()
 
 // XServiceInfo
 OUString SAL_CALL ActionTriggerPropertySet::getImplementationName()
-throw ( RuntimeException, std::exception )
 {
     return OUString( IMPLEMENTATIONNAME_ACTIONTRIGGER );
 }
 
 sal_Bool SAL_CALL ActionTriggerPropertySet::supportsService( const OUString& ServiceName )
-throw ( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL ActionTriggerPropertySet::getSupportedServiceNames()
-throw ( RuntimeException, std::exception )
 {
     Sequence<OUString> seqServiceNames { SERVICENAME_ACTIONTRIGGER };
     return seqServiceNames;
 }
 
 // XTypeProvider
-Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeException, std::exception )
+Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes()
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -148,7 +144,7 @@ Sequence< Type > SAL_CALL ActionTriggerPropertySet::getTypes() throw ( RuntimeEx
     return pTypeCollection->getTypes();
 }
 
-Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId() throw ( RuntimeException, std::exception )
+Sequence< sal_Int8 > SAL_CALL ActionTriggerPropertySet::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -158,7 +154,6 @@ sal_Bool SAL_CALL ActionTriggerPropertySet::convertFastPropertyValue(
     Any&        aOldValue,
     sal_Int32   nHandle,
     const Any&  aValue  )
-throw( IllegalArgumentException )
 {
     //  Check, if value of property will changed in method "setFastPropertyValue_NoBroadcast()".
     //  Return sal_True, if changed - else return sal_False.
@@ -196,7 +191,6 @@ throw( IllegalArgumentException )
 
 void SAL_CALL ActionTriggerPropertySet::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const Any& aValue )
-throw( Exception, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -280,7 +274,6 @@ void SAL_CALL ActionTriggerPropertySet::getFastPropertyValue(
 }
 
 Reference< XPropertySetInfo > SAL_CALL ActionTriggerPropertySet::getPropertySetInfo()
-throw ( RuntimeException, std::exception )
 {
     // Optimize this method !
     // We initialize a static variable only one time. And we don't must use a mutex at every call!
@@ -326,7 +319,6 @@ bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const   Any&        aNewValue       ,
     Any&        aOldValue       ,
     Any&        aConvertedValue )
-throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
     bool bReturn = false;
@@ -361,7 +353,6 @@ bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const Any&                  aNewValue       ,
     Any&                        aOldValue       ,
     Any&                        aConvertedValue )
-throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
     bool bReturn = false;
@@ -396,7 +387,6 @@ bool ActionTriggerPropertySet::impl_tryToChangeProperty(
     const Any&                      aNewValue       ,
     Any&                            aOldValue       ,
     Any&                            aConvertedValue )
-throw( IllegalArgumentException )
 {
     // Set default return value if method failed.
     bool bReturn = false;

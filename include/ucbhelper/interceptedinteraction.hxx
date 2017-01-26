@@ -233,8 +233,7 @@ class UCBHELPER_DLLPUBLIC InterceptedInteraction : public ::cppu::WeakImplHelper
             @param  xRequest
                     the interaction request, which should be intercepted.
          */
-        virtual void SAL_CALL handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest)
-            throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL handle(const css::uno::Reference< css::task::XInteractionRequest >& xRequest) override;
 
 
     // helper

@@ -1452,12 +1452,12 @@ UpdateRequiredDialogService::UpdateRequiredDialogService( uno::Sequence< uno::An
 
 // XExecutableDialog
 
-void UpdateRequiredDialogService::setTitle( OUString const & ) throw ( uno::RuntimeException, std::exception )
+void UpdateRequiredDialogService::setTitle( OUString const & )
 {
 }
 
 
-sal_Int16 UpdateRequiredDialogService::execute() throw ( uno::RuntimeException, std::exception )
+sal_Int16 UpdateRequiredDialogService::execute()
 {
     ::rtl::Reference< ::dp_gui::TheExtensionManager > xManager( TheExtensionManager::get(
                                                               m_xComponentContext) );

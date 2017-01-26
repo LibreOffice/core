@@ -40,7 +40,6 @@ void SAL_CALL Clob::disposing()
 }
 
 sal_Int64 SAL_CALL Clob::length()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Clob_BASE::rBHelper.bDisposed);
@@ -56,7 +55,6 @@ sal_Int64 SAL_CALL Clob::length()
 
 OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
                                                sal_Int32 nLength)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Clob_BASE::rBHelper.bDisposed);
@@ -76,7 +74,6 @@ OUString SAL_CALL Clob::getSubString(sal_Int64 nPosition,
 }
 
 uno::Reference< XInputStream > SAL_CALL  Clob::getCharacterStream()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(Clob_BASE::rBHelper.bDisposed);
@@ -86,7 +83,6 @@ uno::Reference< XInputStream > SAL_CALL  Clob::getCharacterStream()
 
 sal_Int64 SAL_CALL Clob::position(const OUString& /*rPattern*/,
                                    sal_Int32 /*nStart*/)
-    throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException("Clob::position", *this);
     return 0;
@@ -94,7 +90,6 @@ sal_Int64 SAL_CALL Clob::position(const OUString& /*rPattern*/,
 
 sal_Int64 SAL_CALL Clob::positionOfClob(const Reference <XClob >& /*rPattern*/,
                                          sal_Int64 /*aStart*/)
-    throw(SQLException, RuntimeException, std::exception)
 {
     ::dbtools::throwFeatureNotImplementedSQLException("Blob::positionOfBlob", *this);
     return 0;

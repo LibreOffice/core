@@ -56,13 +56,13 @@ void VCLXAccessibleFixedText::FillAccessibleStateSet( utl::AccessibleStateSetHel
 // XServiceInfo
 
 
-OUString VCLXAccessibleFixedText::getImplementationName() throw (RuntimeException, std::exception)
+OUString VCLXAccessibleFixedText::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleFixedText" );
 }
 
 
-Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > VCLXAccessibleFixedText::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleFixedText" };
 }

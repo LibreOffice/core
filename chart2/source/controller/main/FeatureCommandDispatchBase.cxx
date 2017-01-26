@@ -75,7 +75,6 @@ void FeatureCommandDispatchBase::fireStatusEvent( const OUString& rURL,
 // XDispatch
 void FeatureCommandDispatchBase::dispatch( const util::URL& URL,
     const Sequence< beans::PropertyValue >& Arguments )
-    throw (uno::RuntimeException, std::exception)
 {
     OUString aCommand( URL.Complete );
     if ( getState( aCommand ).bEnabled )

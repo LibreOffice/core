@@ -53,94 +53,94 @@ OFormatCondition::~OFormatCondition()
 
 IMPLEMENT_FORWARD_XINTERFACE2(OFormatCondition,FormatConditionBase,FormatConditionPropertySet)
 
-void SAL_CALL OFormatCondition::dispose() throw(uno::RuntimeException, std::exception)
+void SAL_CALL OFormatCondition::dispose()
 {
     FormatConditionPropertySet::dispose();
     cppu::WeakComponentImplHelperBase::dispose();
 }
 
-OUString OFormatCondition::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString OFormatCondition::getImplementationName_Static(  )
 {
     return OUString("com.sun.star.comp.report.OFormatCondition");
 }
 
 
-OUString SAL_CALL OFormatCondition::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL OFormatCondition::getImplementationName(  )
 {
     return getImplementationName_Static();
 }
 
-uno::Sequence< OUString > OFormatCondition::getSupportedServiceNames_Static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > OFormatCondition::getSupportedServiceNames_Static(  )
 {
     uno::Sequence< OUString > aServices { SERVICE_FORMATCONDITION };
 
     return aServices;
 }
 
-uno::Sequence< OUString > SAL_CALL OFormatCondition::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL OFormatCondition::getSupportedServiceNames(  )
 {
     return getSupportedServiceNames_Static();
 }
 
-sal_Bool SAL_CALL OFormatCondition::supportsService(const OUString& ServiceName) throw( uno::RuntimeException, std::exception )
+sal_Bool SAL_CALL OFormatCondition::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL OFormatCondition::getPropertySetInfo(  ) throw(uno::RuntimeException, std::exception)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL OFormatCondition::getPropertySetInfo(  )
 {
     return FormatConditionPropertySet::getPropertySetInfo();
 }
 
-void SAL_CALL OFormatCondition::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue ) throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormatCondition::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
 {
     FormatConditionPropertySet::setPropertyValue( aPropertyName, aValue );
 }
 
-uno::Any SAL_CALL OFormatCondition::getPropertyValue( const OUString& PropertyName ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+uno::Any SAL_CALL OFormatCondition::getPropertyValue( const OUString& PropertyName )
 {
     return FormatConditionPropertySet::getPropertyValue( PropertyName);
 }
 
-void SAL_CALL OFormatCondition::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormatCondition::addPropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& xListener )
 {
     FormatConditionPropertySet::addPropertyChangeListener( aPropertyName, xListener );
 }
 
-void SAL_CALL OFormatCondition::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormatCondition::removePropertyChangeListener( const OUString& aPropertyName, const uno::Reference< beans::XPropertyChangeListener >& aListener )
 {
     FormatConditionPropertySet::removePropertyChangeListener( aPropertyName, aListener );
 }
 
-void SAL_CALL OFormatCondition::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormatCondition::addVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
 {
     FormatConditionPropertySet::addVetoableChangeListener( PropertyName, aListener );
 }
 
-void SAL_CALL OFormatCondition::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener ) throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
+void SAL_CALL OFormatCondition::removeVetoableChangeListener( const OUString& PropertyName, const uno::Reference< beans::XVetoableChangeListener >& aListener )
 {
     FormatConditionPropertySet::removeVetoableChangeListener( PropertyName, aListener );
 }
 
 // XFormatCondition
-sal_Bool SAL_CALL OFormatCondition::getEnabled() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL OFormatCondition::getEnabled()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_bEnabled;
 }
 
-void SAL_CALL OFormatCondition::setEnabled( sal_Bool _enabled ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFormatCondition::setEnabled( sal_Bool _enabled )
 {
     set(PROPERTY_ENABLED,_enabled,m_bEnabled);
 }
 
-OUString SAL_CALL OFormatCondition::getFormula() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL OFormatCondition::getFormula()
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     return m_sFormula;
 }
 
-void SAL_CALL OFormatCondition::setFormula( const OUString& _formula ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL OFormatCondition::setFormula( const OUString& _formula )
 {
     set(PROPERTY_FORMULA,_formula,m_sFormula);
 }

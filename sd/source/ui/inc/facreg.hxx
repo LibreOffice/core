@@ -30,15 +30,15 @@ namespace com { namespace sun { namespace star {
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL SdDrawingDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );
 /// @throws css::uno::RuntimeException
-OUString SdDrawingDocument_getImplementationName() throw( css::uno::RuntimeException );
+OUString SdDrawingDocument_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames() throw( css::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL SdDrawingDocument_getSupportedServiceNames();
 
 css::uno::Reference< css::uno::XInterface > SAL_CALL SdPresentationDocument_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory > & _rxFactory, SfxModelFlags _nCreationFlags );
 /// @throws css::uno::RuntimeException
-OUString SdPresentationDocument_getImplementationName() throw( css::uno::RuntimeException );
+OUString SdPresentationDocument_getImplementationName();
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames() throw( css::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL SdPresentationDocument_getSupportedServiceNames();
 
 #endif
 

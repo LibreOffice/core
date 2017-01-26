@@ -109,7 +109,7 @@ AccTopWindowListener::~AccTopWindowListener()
 /**
  *  It is invoked when a new window is opened, the source of this EventObject is the window
  */
-void AccTopWindowListener::windowOpened( const css::lang::EventObject& e ) throw (css::uno::RuntimeException)
+void AccTopWindowListener::windowOpened( const css::lang::EventObject& e )
 {
     SAL_INFO( "iacc2", "windowOpened triggered" );
 
@@ -185,7 +185,7 @@ void AccTopWindowListener::AddAllListeners(css::accessibility::XAccessible* pAcc
     }
 }
 
-void AccTopWindowListener::windowClosing( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
+void AccTopWindowListener::windowClosing( const css::lang::EventObject& )
 {
     SAL_INFO( "iacc2", "windowClosing triggered" );
 }
@@ -195,7 +195,7 @@ void AccTopWindowListener::windowClosing( const css::lang::EventObject& ) throw 
  *  from current manager's cache, and remove the COM object and the accessible event listener
  *  assigned to the accessible objects.
  */
-void AccTopWindowListener::windowClosed( const css::lang::EventObject& e ) throw (css::uno::RuntimeException)
+void AccTopWindowListener::windowClosed( const css::lang::EventObject& e )
 {
     SAL_INFO( "iacc2", "windowClosed triggered" );
 
@@ -233,23 +233,23 @@ void AccTopWindowListener::windowClosed( const css::lang::EventObject& e ) throw
 
 }
 
-void AccTopWindowListener::windowMinimized( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
+void AccTopWindowListener::windowMinimized( const css::lang::EventObject& )
 {
 }
 
-void AccTopWindowListener::windowNormalized( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
+void AccTopWindowListener::windowNormalized( const css::lang::EventObject& )
 {
 }
 
-void AccTopWindowListener::windowActivated( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
+void AccTopWindowListener::windowActivated( const css::lang::EventObject& )
 {
 }
 
-void AccTopWindowListener::windowDeactivated( const css::lang::EventObject& ) throw (css::uno::RuntimeException)
+void AccTopWindowListener::windowDeactivated( const css::lang::EventObject& )
 {
 }
 
-void AccTopWindowListener::disposing( const css::lang::EventObject&  ) throw (css::uno::RuntimeException)
+void AccTopWindowListener::disposing( const css::lang::EventObject&  )
 {
 }
 

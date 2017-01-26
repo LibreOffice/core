@@ -131,8 +131,7 @@ private:
     SingletonFactory(const SingletonFactory&) = delete;
     SingletonFactory& operator=(const SingletonFactory&) = delete;
 
-    virtual void SAL_CALL disposing(css::lang::EventObject const &)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(css::lang::EventObject const &) override;
 
     static void dispose();
 
@@ -173,7 +172,6 @@ css::uno::Reference< css::uno::XInterface > SingletonFactory::getSingleton(
 }
 
 void SAL_CALL SingletonFactory::disposing(css::lang::EventObject const &)
-    throw (css::uno::RuntimeException, std::exception)
 {
     dispose();
 }
@@ -268,7 +266,7 @@ bool askForRetry(css::uno::Any const & rException)
 /// @throws css::uno::Exception
 void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
                             const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-                            const css::uno::Reference<css::uno::XComponentContext> &xCtx ) throw (css::uno::Exception)
+                            const css::uno::Reference<css::uno::XComponentContext> &xCtx )
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry = xSMgr->createInstanceWithContext(
             "com.sun.star.configuration.ConfigurationRegistry",
@@ -351,7 +349,7 @@ void getINetPropsFromConfig(stoc_javavm::JVM * pjvm,
 void getDefaultLocaleFromConfig(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-    const css::uno::Reference<css::uno::XComponentContext> &xCtx ) throw(css::uno::Exception, std::exception)
+    const css::uno::Reference<css::uno::XComponentContext> &xCtx )
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext( "com.sun.star.configuration.ConfigurationRegistry", xCtx );
@@ -455,7 +453,7 @@ void getDefaultLocaleFromConfig(
 void getJavaPropsFromSafetySettings(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-    const css::uno::Reference<css::uno::XComponentContext> &xCtx) throw(css::uno::Exception)
+    const css::uno::Reference<css::uno::XComponentContext> &xCtx)
 {
     css::uno::Reference<css::uno::XInterface> xConfRegistry =
         xSMgr->createInstanceWithContext(
@@ -542,7 +540,7 @@ void setTimeZone(stoc_javavm::JVM * pjvm) throw() {
 void initVMConfiguration(
     stoc_javavm::JVM * pjvm,
     const css::uno::Reference<css::lang::XMultiComponentFactory> & xSMgr,
-    const css::uno::Reference<css::uno::XComponentContext > &xCtx) throw(css::uno::Exception, std::exception)
+    const css::uno::Reference<css::uno::XComponentContext > &xCtx)
 {
     stoc_javavm::JVM jvm;
     try {
@@ -619,7 +617,6 @@ JavaVirtualMachine::JavaVirtualMachine(
 void SAL_CALL
 JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
                                    rArguments)
-    throw (css::uno::Exception, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -674,28 +671,24 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
 }
 
 OUString SAL_CALL JavaVirtualMachine::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return serviceGetImplementationName();
 }
 
 sal_Bool SAL_CALL
 JavaVirtualMachine::supportsService(OUString const & rServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL
 JavaVirtualMachine::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return serviceGetSupportedServiceNames();
 }
 
 css::uno::Any SAL_CALL
 JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
-    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -935,7 +928,6 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
 }
 
 sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
-    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -945,7 +937,6 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMStarted()
 }
 
 sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
-    throw (css::uno::RuntimeException, std::exception)
 {
     {
         osl::MutexGuard aGuard(m_aMutex);
@@ -964,7 +955,6 @@ sal_Bool SAL_CALL JavaVirtualMachine::isVMEnabled()
 }
 
 sal_Bool SAL_CALL JavaVirtualMachine::isThreadAttached()
-    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -978,7 +968,6 @@ sal_Bool SAL_CALL JavaVirtualMachine::isThreadAttached()
 }
 
 void SAL_CALL JavaVirtualMachine::registerThread()
-    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -1011,7 +1000,6 @@ void SAL_CALL JavaVirtualMachine::registerThread()
 }
 
 void SAL_CALL JavaVirtualMachine::revokeThread()
-    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
@@ -1033,7 +1021,6 @@ void SAL_CALL JavaVirtualMachine::revokeThread()
 
 void SAL_CALL
 JavaVirtualMachine::disposing(css::lang::EventObject const & rSource)
-    throw (css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(m_aMutex);
     if (rSource.Source == m_xInetConfiguration)
@@ -1044,12 +1031,10 @@ JavaVirtualMachine::disposing(css::lang::EventObject const & rSource)
 
 void SAL_CALL JavaVirtualMachine::elementInserted(
     css::container::ContainerEvent const &)
-    throw (css::uno::RuntimeException, std::exception)
 {}
 
 void SAL_CALL JavaVirtualMachine::elementRemoved(
     css::container::ContainerEvent const &)
-    throw (css::uno::RuntimeException, std::exception)
 {}
 
 // If a user changes the setting, for example for proxy settings, then this
@@ -1059,7 +1044,6 @@ void SAL_CALL JavaVirtualMachine::elementRemoved(
 // values.
 void SAL_CALL JavaVirtualMachine::elementReplaced(
     css::container::ContainerEvent const & rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     // TODO Using the new value stored in rEvent is wrong here.  If two threads
     // receive different elementReplaced calls in quick succession, it is

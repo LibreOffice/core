@@ -69,23 +69,23 @@ private:
         //Methods from XSecurityEnvironment
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override ;
+        virtual OUString SAL_CALL getImplementationName() override ;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( css::uno::RuntimeException, std::exception ) override ;
+        ) override ;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
 
         //Helper for XServiceInfo
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
         /// @throws css::uno::RuntimeException
-        static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
+        static OUString impl_getImplementationName() ;
 
         //Helper for registry
         /// @throws css::uno::RuntimeException
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) throw( css::uno::RuntimeException ) ;
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 
         static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 
@@ -94,61 +94,59 @@ private:
             css::security::XCertificate >& xCert,
             const css::uno::Sequence<
             css::uno::Reference< css::security::XCertificate > > &
-            intermediateCerts)
-            throw (css::uno::SecurityException, css::uno::RuntimeException, std::exception) override ;
+            intermediateCerts) override ;
 
-        virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const css::uno::Reference< css::security::XCertificate >& xCert ) throw (css::uno::SecurityException, css::uno::RuntimeException, std::exception) override ;
+        virtual ::sal_Int32 SAL_CALL getCertificateCharacters( const css::uno::Reference< css::security::XCertificate >& xCert ) override ;
 
-        virtual OUString SAL_CALL getSecurityEnvironmentInformation(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getSecurityEnvironmentInformation(  ) override;
 
         //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException
-        void setCertDb( CERTCertDBHandle* aCertDb ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        void setCertDb( CERTCertDBHandle* aCertDb ) ;
 
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException
-        void adoptSymKey( PK11SymKey* aSymKey ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        void adoptSymKey( PK11SymKey* aSymKey ) ;
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException
-        PK11SymKey* getSymKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
-
-        /// @throws css::uno::Exception
-        /// @throws css::uno::RuntimeException
-        SECKEYPublicKey* getPubKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        PK11SymKey* getSymKey( unsigned int position ) ;
 
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException
-        SECKEYPrivateKey* getPriKey( unsigned int position ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        SECKEYPublicKey* getPubKey( unsigned int position ) ;
 
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() throw(  css::uno::SecurityException , css::uno::RuntimeException, std::exception ) override ;
+        /// @throws css::uno::Exception
+        /// @throws css::uno::RuntimeException
+        SECKEYPrivateKey* getPriKey( unsigned int position ) ;
 
-        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate( const OUString& issuerName, const css::uno::Sequence< sal_Int8 >& serialNumber ) throw( css::uno::SecurityException , css::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL getPersonalCertificates() override ;
 
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath( const css::uno::Reference< css::security::XCertificate >& beginCert ) throw(  css::uno::SecurityException , css::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL getCertificate( const OUString& issuerName, const css::uno::Sequence< sal_Int8 >& serialNumber ) override ;
 
-        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw( const css::uno::Sequence< sal_Int8 >& rawCertificate ) throw( css::uno::SecurityException , css::uno::RuntimeException, std::exception ) override ;
-        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii( const OUString& asciiCertificate ) throw( css::uno::SecurityException , css::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificate > > SAL_CALL buildCertificatePath( const css::uno::Reference< css::security::XCertificate >& beginCert ) override ;
+
+        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromRaw( const css::uno::Sequence< sal_Int8 >& rawCertificate ) override ;
+        virtual css::uno::Reference< css::security::XCertificate > SAL_CALL createCertificateFromAscii( const OUString& asciiCertificate ) override ;
 
 
         //Native methods
         /// @throws css::uno::RuntimeException
-        xmlSecKeysMngrPtr createKeysManager() throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        xmlSecKeysMngrPtr createKeysManager() ;
         /// @throws css::uno::Exception
         /// @throws css::uno::RuntimeException
-        static void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+        static void destroyKeysManager(xmlSecKeysMngrPtr pKeysMngr) ;
 
 private:
         void updateSlots();
 
           /// @throws css::uno::Exception
           /// @throws css::uno::RuntimeException
-          void addCryptoSlot( PK11SlotInfo* aSlot ) throw( css::uno::Exception , css::uno::RuntimeException ) ;
+          void addCryptoSlot( PK11SlotInfo* aSlot ) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_SECURITYENVIRONMENT_NSSIMPL_HXX

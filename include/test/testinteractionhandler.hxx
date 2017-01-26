@@ -46,20 +46,17 @@ public:
         return mbPasswordRequested;
     }
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.uui.TestInteractionHandler");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & rServiceName) override
     {
         return cppu::supportsService(this, rServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         css::uno::Sequence<OUString> aNames(3);
         aNames[0] = "com.sun.star.task.InteractionHandler";
@@ -70,18 +67,15 @@ public:
         return aNames;
     }
 
-    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const & /*rArguments*/)
-        throw (css::uno::Exception, std::exception) override
+    virtual void SAL_CALL initialize(css::uno::Sequence<css::uno::Any> const & /*rArguments*/) override
     {}
 
-    virtual void SAL_CALL handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL handle(css::uno::Reference<css::task::XInteractionRequest> const & rRequest) override
     {
         handleInteractionRequest(rRequest);
     }
 
-    virtual sal_Bool SAL_CALL handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& rRequest)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL handleInteractionRequest(const css::uno::Reference<css::task::XInteractionRequest>& rRequest) override
     {
         mbPasswordRequested = false;
 

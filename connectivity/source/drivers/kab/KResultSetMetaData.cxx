@@ -36,7 +36,7 @@ KabResultSetMetaData::~KabResultSetMetaData()
 {
 }
 
-void KabResultSetMetaData::setKabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns) throw(SQLException)
+void KabResultSetMetaData::setKabFields(const ::rtl::Reference<connectivity::OSQLColumns> &xColumns)
 {
     OSQLColumns::Vector::const_iterator aIter;
     static const char aName[] = "Name";
@@ -52,32 +52,32 @@ void KabResultSetMetaData::setKabFields(const ::rtl::Reference<connectivity::OSQ
     }
 }
 
-sal_Int32 SAL_CALL KabResultSetMetaData::getColumnDisplaySize(sal_Int32 column) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabResultSetMetaData::getColumnDisplaySize(sal_Int32 column)
 {
     return m_aKabFields[column - 1] < KAB_DATA_FIELDS? 20: 50;
 }
 
-sal_Int32 SAL_CALL KabResultSetMetaData::getColumnType(sal_Int32 column) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabResultSetMetaData::getColumnType(sal_Int32 column)
 {
     return m_aKabFields[column - 1] == KAB_FIELD_REVISION? DataType::TIMESTAMP: DataType::CHAR;
 }
 
-sal_Int32 SAL_CALL KabResultSetMetaData::getColumnCount() throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabResultSetMetaData::getColumnCount()
 {
     return m_aKabFields.size();
 }
 
-sal_Bool SAL_CALL KabResultSetMetaData::isCaseSensitive(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabResultSetMetaData::isCaseSensitive(sal_Int32)
 {
     return true;
 }
 
-OUString SAL_CALL KabResultSetMetaData::getSchemaName(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL KabResultSetMetaData::getSchemaName(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL KabResultSetMetaData::getColumnName(sal_Int32 column) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL KabResultSetMetaData::getColumnName(sal_Int32 column)
 {
     sal_uInt32 nFieldNumber = m_aKabFields[column - 1];
     ::KABC::Field::List aFields = ::KABC::Field::allFields();
@@ -96,79 +96,79 @@ OUString SAL_CALL KabResultSetMetaData::getColumnName(sal_Int32 column) throw(SQ
     return aName;
 }
 
-OUString SAL_CALL KabResultSetMetaData::getTableName(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL KabResultSetMetaData::getTableName(sal_Int32)
 {
     return KabDatabaseMetaData::getAddressBookTableName();
 }
 
-OUString SAL_CALL KabResultSetMetaData::getCatalogName(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL KabResultSetMetaData::getCatalogName(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL KabResultSetMetaData::getColumnTypeName(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL KabResultSetMetaData::getColumnTypeName(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL KabResultSetMetaData::getColumnLabel(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL KabResultSetMetaData::getColumnLabel(sal_Int32)
 {
     return OUString();
 }
 
-OUString SAL_CALL KabResultSetMetaData::getColumnServiceName(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL KabResultSetMetaData::getColumnServiceName(sal_Int32)
 {
     return OUString();
 }
 
-sal_Bool SAL_CALL KabResultSetMetaData::isCurrency(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabResultSetMetaData::isCurrency(sal_Int32)
 {
     return false;
 }
 
-sal_Bool SAL_CALL KabResultSetMetaData::isAutoIncrement(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabResultSetMetaData::isAutoIncrement(sal_Int32)
 {
     return false;
 }
 
-sal_Bool SAL_CALL KabResultSetMetaData::isSigned(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabResultSetMetaData::isSigned(sal_Int32)
 {
     return false;
 }
 
-sal_Int32 SAL_CALL KabResultSetMetaData::getPrecision(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabResultSetMetaData::getPrecision(sal_Int32)
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL KabResultSetMetaData::getScale(sal_Int32) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabResultSetMetaData::getScale(sal_Int32)
 {
     return 0;
 }
 
-sal_Int32 SAL_CALL KabResultSetMetaData::isNullable(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL KabResultSetMetaData::isNullable(sal_Int32)
 {
     return (sal_Int32) true;
 // KDE address book currently does not use nullptr values.
 // But it might do it someday
 }
 
-sal_Bool SAL_CALL KabResultSetMetaData::isSearchable(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabResultSetMetaData::isSearchable(sal_Int32)
 {
     return true;
 }
 
-sal_Bool SAL_CALL KabResultSetMetaData::isReadOnly(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabResultSetMetaData::isReadOnly(sal_Int32)
 {
     return true;
 }
 
-sal_Bool SAL_CALL KabResultSetMetaData::isDefinitelyWritable(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabResultSetMetaData::isDefinitelyWritable(sal_Int32)
 {
     return false;
 }
 
-sal_Bool SAL_CALL KabResultSetMetaData::isWritable(sal_Int32) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL KabResultSetMetaData::isWritable(sal_Int32)
 {
     return false;
 }

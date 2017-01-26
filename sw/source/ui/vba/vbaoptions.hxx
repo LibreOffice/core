@@ -36,36 +36,35 @@ public:
     virtual ~SwVbaOptions() override;
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getDefaultBorderLineStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefaultBorderLineStyle( ::sal_Int32 _defaultborderlinestyle ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getDefaultBorderLineWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefaultBorderLineWidth( ::sal_Int32 _defaultborderlinewidth ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getDefaultBorderColorIndex() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefaultBorderColorIndex( ::sal_Int32 _defaultbordercolorindex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getReplaceSelection() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setReplaceSelection( sal_Bool _replaceselection ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getMapPaperSize() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMapPaperSize( sal_Bool _mappapersize ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeApplyHeadings() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoFormatAsYouTypeApplyHeadings( sal_Bool _autoformatasyoutypeapplyheadings ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeApplyBulletedLists() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoFormatAsYouTypeApplyBulletedLists( sal_Bool _autoformatasyoutypeapplybulletedlists ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeApplyNumberedLists() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoFormatAsYouTypeApplyNumberedLists( sal_Bool _autoformatasyoutypeapplynumberedlists ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeFormatListItemBeginning() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoFormatAsYouTypeFormatListItemBeginning( sal_Bool _autoformatasyoutypeformatlistitembeginning ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeDefineStyles() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoFormatAsYouTypeDefineStyles( sal_Bool _autoformatasyoutypedefinestyles ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoFormatApplyHeadings() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoFormatApplyHeadings( sal_Bool _autoformatapplyheadings ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoFormatApplyLists() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoFormatApplyLists( sal_Bool _autoformatapplylists ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoFormatApplyBulletedLists() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoFormatApplyBulletedLists( sal_Bool _autoformatapplybulletedlists ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getDefaultBorderLineStyle() override;
+    virtual void SAL_CALL setDefaultBorderLineStyle( ::sal_Int32 _defaultborderlinestyle ) override;
+    virtual ::sal_Int32 SAL_CALL getDefaultBorderLineWidth() override;
+    virtual void SAL_CALL setDefaultBorderLineWidth( ::sal_Int32 _defaultborderlinewidth ) override;
+    virtual ::sal_Int32 SAL_CALL getDefaultBorderColorIndex() override;
+    virtual void SAL_CALL setDefaultBorderColorIndex( ::sal_Int32 _defaultbordercolorindex ) override;
+    virtual sal_Bool SAL_CALL getReplaceSelection() override;
+    virtual void SAL_CALL setReplaceSelection( sal_Bool _replaceselection ) override;
+    virtual sal_Bool SAL_CALL getMapPaperSize() override;
+    virtual void SAL_CALL setMapPaperSize( sal_Bool _mappapersize ) override;
+    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeApplyHeadings() override;
+    virtual void SAL_CALL setAutoFormatAsYouTypeApplyHeadings( sal_Bool _autoformatasyoutypeapplyheadings ) override;
+    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeApplyBulletedLists() override;
+    virtual void SAL_CALL setAutoFormatAsYouTypeApplyBulletedLists( sal_Bool _autoformatasyoutypeapplybulletedlists ) override;
+    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeApplyNumberedLists() override;
+    virtual void SAL_CALL setAutoFormatAsYouTypeApplyNumberedLists( sal_Bool _autoformatasyoutypeapplynumberedlists ) override;
+    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeFormatListItemBeginning() override;
+    virtual void SAL_CALL setAutoFormatAsYouTypeFormatListItemBeginning( sal_Bool _autoformatasyoutypeformatlistitembeginning ) override;
+    virtual sal_Bool SAL_CALL getAutoFormatAsYouTypeDefineStyles() override;
+    virtual void SAL_CALL setAutoFormatAsYouTypeDefineStyles( sal_Bool _autoformatasyoutypedefinestyles ) override;
+    virtual sal_Bool SAL_CALL getAutoFormatApplyHeadings() override;
+    virtual void SAL_CALL setAutoFormatApplyHeadings( sal_Bool _autoformatapplyheadings ) override;
+    virtual sal_Bool SAL_CALL getAutoFormatApplyLists() override;
+    virtual void SAL_CALL setAutoFormatApplyLists( sal_Bool _autoformatapplylists ) override;
+    virtual sal_Bool SAL_CALL getAutoFormatApplyBulletedLists() override;
+    virtual void SAL_CALL setAutoFormatApplyBulletedLists( sal_Bool _autoformatapplybulletedlists ) override;
 
     // Methods
-    virtual css::uno::Any SAL_CALL DefaultFilePath( sal_Int32 _path )
-        throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL DefaultFilePath( sal_Int32 _path ) override;
 
     //PropListener
     virtual void setValueEvent( const css::uno::Any& value ) override;

@@ -163,10 +163,10 @@ namespace pcr
         virtual ~PropertyControlContext_Impl() override;
 
         // XPropertyControlObserver
-        virtual void SAL_CALL focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception) override;
-        virtual void SAL_CALL valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL focusGained( const Reference< XPropertyControl >& Control ) override;
+        virtual void SAL_CALL valueChanged( const Reference< XPropertyControl >& Control ) override;
         // XPropertyControlContext
-        virtual void SAL_CALL activateNextControl( const Reference< XPropertyControl >& CurrentControl ) throw (RuntimeException, std::exception) override;
+        virtual void SAL_CALL activateNextControl( const Reference< XPropertyControl >& CurrentControl ) override;
 
         // IEventProcessor
         virtual void processEvent( const ::comphelper::AnyEvent& _rEvent ) override;
@@ -246,19 +246,19 @@ namespace pcr
     }
 
 
-    void SAL_CALL PropertyControlContext_Impl::focusGained( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception)
+    void SAL_CALL PropertyControlContext_Impl::focusGained( const Reference< XPropertyControl >& Control )
     {
         impl_notify_throw( Control, FOCUS_GAINED );
     }
 
 
-    void SAL_CALL PropertyControlContext_Impl::valueChanged( const Reference< XPropertyControl >& Control ) throw (RuntimeException, std::exception)
+    void SAL_CALL PropertyControlContext_Impl::valueChanged( const Reference< XPropertyControl >& Control )
     {
         impl_notify_throw( Control, VALUE_CHANGED );
     }
 
 
-    void SAL_CALL PropertyControlContext_Impl::activateNextControl( const Reference< XPropertyControl >& CurrentControl ) throw (RuntimeException, std::exception)
+    void SAL_CALL PropertyControlContext_Impl::activateNextControl( const Reference< XPropertyControl >& CurrentControl )
     {
         impl_notify_throw( CurrentControl, ACTIVATE_NEXT );
     }
@@ -935,7 +935,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OBrowserListBox::focusGained( const Reference< XPropertyControl >& _rxControl ) throw (RuntimeException)
+    void SAL_CALL OBrowserListBox::focusGained( const Reference< XPropertyControl >& _rxControl )
     {
         DBG_TESTSOLARMUTEX();
 
@@ -951,7 +951,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OBrowserListBox::valueChanged( const Reference< XPropertyControl >& _rxControl ) throw (RuntimeException)
+    void SAL_CALL OBrowserListBox::valueChanged( const Reference< XPropertyControl >& _rxControl )
     {
         DBG_TESTSOLARMUTEX();
 
@@ -973,7 +973,7 @@ namespace pcr
     }
 
 
-    void SAL_CALL OBrowserListBox::activateNextControl( const Reference< XPropertyControl >& _rxCurrentControl ) throw (RuntimeException)
+    void SAL_CALL OBrowserListBox::activateNextControl( const Reference< XPropertyControl >& _rxCurrentControl )
     {
         DBG_TESTSOLARMUTEX();
 

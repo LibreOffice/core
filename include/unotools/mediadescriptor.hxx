@@ -282,7 +282,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
          */
         SAL_DLLPRIVATE bool impl_openStreamWithPostData(
             const css::uno::Reference< css::io::XInputStream >& _rxPostData
-            )   throw(css::uno::RuntimeException);
+            );
 
         /** @short  tries to open a stream by using the given URL.
 
@@ -308,7 +308,7 @@ class UNOTOOLS_DLLPUBLIC MediaDescriptor : public comphelper::SequenceAsHashMap
         SAL_DLLPRIVATE bool impl_openStreamWithURL(
             const OUString& sURL,
             bool bLockFile
-            ) throw(css::uno::RuntimeException);
+            );
 
         /** @short  it checks if the descriptor already has a valid
                     InputStream item and creates a new one, if not.

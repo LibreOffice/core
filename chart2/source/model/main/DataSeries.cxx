@@ -219,7 +219,6 @@ DataSeries::~DataSeries()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     DataSeries * pNewSeries( new DataSeries( *this ));
     // hold a reference to the clone
@@ -232,8 +231,6 @@ uno::Reference< util::XCloneable > SAL_CALL DataSeries::createClone()
 
 // ____ OPropertySet ____
 uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
-    throw (beans::UnknownPropertyException,
-           uno::RuntimeException)
 {
     const tPropertyValueMap& rStaticDefaults = StaticDataSeriesDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -250,7 +247,6 @@ uno::Any DataSeries::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL DataSeries::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return StaticDataSeriesInfo::get();
 }
@@ -272,7 +268,6 @@ void SAL_CALL DataSeries::getFastPropertyValue
 
 void SAL_CALL DataSeries::setFastPropertyValue_NoBroadcast(
     sal_Int32 nHandle, const uno::Any& rValue )
-    throw (uno::Exception, std::exception)
 {
     if(    nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_Y
         || nHandle == DataPointProperties::PROP_DATAPOINT_ERROR_BAR_X )
@@ -301,8 +296,6 @@ void SAL_CALL DataSeries::setFastPropertyValue_NoBroadcast(
 
 Reference< beans::XPropertySet >
     SAL_CALL DataSeries::getDataPointByIndex( sal_Int32 nIndex )
-    throw (lang::IndexOutOfBoundsException,
-           uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xResult;
 
@@ -351,7 +344,6 @@ Reference< beans::XPropertySet >
 }
 
 void SAL_CALL DataSeries::resetDataPoint( sal_Int32 nIndex )
-        throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xDataPointProp;
     Reference< util::XModifyListener > xModifyEventForwarder;
@@ -376,7 +368,6 @@ void SAL_CALL DataSeries::resetDataPoint( sal_Int32 nIndex )
 }
 
 void SAL_CALL DataSeries::resetAllDataPoints()
-        throw (uno::RuntimeException, std::exception)
 {
     tDataPointAttributeContainer  aOldAttributedDataPoints;
     Reference< util::XModifyListener > xModifyEventForwarder;
@@ -392,7 +383,6 @@ void SAL_CALL DataSeries::resetAllDataPoints()
 
 // ____ XDataSink ____
 void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data::XLabeledDataSequence > >& aData )
-    throw (uno::RuntimeException, std::exception)
 {
     tDataSequenceContainer aOldDataSequences;
     tDataSequenceContainer aNewDataSequences;
@@ -415,7 +405,6 @@ void SAL_CALL DataSeries::setData( const uno::Sequence< Reference< chart2::data:
 
 // ____ XDataSource ____
 Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries::getDataSequences()
-    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return comphelper::containerToSequence( m_aDataSequences );
@@ -424,8 +413,6 @@ Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSeries:
 // ____ XRegressionCurveContainer ____
 void SAL_CALL DataSeries::addRegressionCurve(
     const uno::Reference< chart2::XRegressionCurve >& xRegressionCurve )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     Reference< util::XModifyListener > xModifyEventForwarder;
     {
@@ -442,8 +429,6 @@ void SAL_CALL DataSeries::addRegressionCurve(
 
 void SAL_CALL DataSeries::removeRegressionCurve(
     const uno::Reference< chart2::XRegressionCurve >& xRegressionCurve )
-    throw (container::NoSuchElementException,
-           uno::RuntimeException, std::exception)
 {
     if( !xRegressionCurve.is() )
         throw container::NoSuchElementException();
@@ -466,7 +451,6 @@ void SAL_CALL DataSeries::removeRegressionCurve(
 }
 
 uno::Sequence< uno::Reference< chart2::XRegressionCurve > > SAL_CALL DataSeries::getRegressionCurves()
-    throw (uno::RuntimeException, std::exception)
 {
     MutexGuard aGuard( GetMutex() );
     return comphelper::containerToSequence( m_aRegressionCurves );
@@ -474,7 +458,6 @@ uno::Sequence< uno::Reference< chart2::XRegressionCurve > > SAL_CALL DataSeries:
 
 void SAL_CALL DataSeries::setRegressionCurves(
     const Sequence< Reference< chart2::XRegressionCurve > >& aRegressionCurves )
-    throw (uno::RuntimeException, std::exception)
 {
     tRegressionCurveContainerType aOldCurves;
     tRegressionCurveContainerType aNewCurves( ContainerHelper::SequenceToVector( aRegressionCurves ) );
@@ -492,7 +475,6 @@ void SAL_CALL DataSeries::setRegressionCurves(
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL DataSeries::addModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -506,7 +488,6 @@ void SAL_CALL DataSeries::addModifyListener( const Reference< util::XModifyListe
 }
 
 void SAL_CALL DataSeries::removeModifyListener( const Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -521,14 +502,12 @@ void SAL_CALL DataSeries::removeModifyListener( const Reference< util::XModifyLi
 
 // ____ XModifyListener ____
 void SAL_CALL DataSeries::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL DataSeries::disposing( const lang::EventObject& rEventObject )
-    throw (uno::RuntimeException, std::exception)
 {
     // forget disposed data sequences
     tDataSequenceContainer::iterator aIt(
@@ -556,19 +535,16 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2( DataSeries, DataSeries_Base, OPropertySet )
 
 // implement XServiceInfo methods basing upon getSupportedServiceNames_Static
 OUString SAL_CALL DataSeries::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.DataSeries");
 }
 
 sal_Bool SAL_CALL DataSeries::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL DataSeries::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart2.DataSeries",

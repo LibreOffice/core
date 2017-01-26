@@ -88,13 +88,13 @@ namespace xmloff
         }
     }
 
-    void SAL_CALL OEventDescriptorMapper::replaceByName( const OUString&, const Any& ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+    void SAL_CALL OEventDescriptorMapper::replaceByName( const OUString&, const Any& )
     {
         throw IllegalArgumentException(
             "replacing is not implemented for this wrapper class.", static_cast< ::cppu::OWeakObject* >(this), 1);
     }
 
-    Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+    Any SAL_CALL OEventDescriptorMapper::getByName( const OUString& _rName )
     {
         MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         if (m_aMappedEvents.end() == aPos)
@@ -105,23 +105,23 @@ namespace xmloff
         return makeAny(aPos->second);
     }
 
-    Sequence< OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  ) throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL OEventDescriptorMapper::getElementNames(  )
     {
         return comphelper::mapKeysToSequence(m_aMappedEvents);
     }
 
-    sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName ) throw(RuntimeException, std::exception)
+    sal_Bool SAL_CALL OEventDescriptorMapper::hasByName( const OUString& _rName )
     {
         MapString2PropertyValueSequence::const_iterator aPos = m_aMappedEvents.find(_rName);
         return m_aMappedEvents.end() != aPos;
     }
 
-    Type SAL_CALL OEventDescriptorMapper::getElementType(  ) throw(RuntimeException, std::exception)
+    Type SAL_CALL OEventDescriptorMapper::getElementType(  )
     {
         return ::cppu::UnoType<PropertyValue>::get();
     }
 
-    sal_Bool SAL_CALL OEventDescriptorMapper::hasElements(  ) throw(RuntimeException, std::exception)
+    sal_Bool SAL_CALL OEventDescriptorMapper::hasElements(  )
     {
         return !m_aMappedEvents.empty();
     }

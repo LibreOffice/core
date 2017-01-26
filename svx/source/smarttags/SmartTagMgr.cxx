@@ -267,7 +267,7 @@ void SmartTagMgr::WriteConfiguration( const bool* pIsLabelTextWithSmartTags,
 }
 
 // css::util::XModifyListener
-void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException, std::exception )
+void SmartTagMgr::modified( const lang::EventObject& )
 {
     SolarMutexGuard aGuard;
 
@@ -279,7 +279,7 @@ void SmartTagMgr::modified( const lang::EventObject& )  throw( RuntimeException,
 }
 
 // css::lang::XEventListener
-void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeException, std::exception )
+void SmartTagMgr::disposing( const lang::EventObject& rEvent )
 {
     SolarMutexGuard aGuard;
 
@@ -306,7 +306,7 @@ void SmartTagMgr::disposing( const lang::EventObject& rEvent ) throw( RuntimeExc
 }
 
 // css::util::XChangesListener
-void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent ) throw( RuntimeException, std::exception)
+void SmartTagMgr::changesOccurred( const util::ChangesEvent& rEvent )
 {
     SolarMutexGuard aGuard;
 

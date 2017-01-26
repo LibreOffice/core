@@ -88,52 +88,37 @@ public:
                                 formula::FormulaGrammar::Grammar eGrammar) const;
 
                             // XSheetConditionalEntries
-    virtual void SAL_CALL   addNew( const css::uno::Sequence< css::beans::PropertyValue >& aConditionalEntry )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   removeByIndex( sal_Int32 nIndex )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   clear() throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL   addNew( const css::uno::Sequence< css::beans::PropertyValue >& aConditionalEntry ) override;
+    virtual void SAL_CALL   removeByIndex( sal_Int32 nIndex ) override;
+    virtual void SAL_CALL   clear() override;
 
                             // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
-                                throw(css::lang::IndexOutOfBoundsException,
-                                    css::lang::WrappedTargetException,
-                                    css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() override;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
                             // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
-                                throw(css::container::NoSuchElementException,
-                                    css::lang::WrappedTargetException,
-                                    css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 
                             // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL
-                            createEnumeration() throw(css::uno::RuntimeException, std::exception) override;
+                            createEnumeration() override;
 
                             // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ScTableConditionalFormat* getImplementation(const css::uno::Reference<css::sheet::XSheetConditionalEntries>& rObj);
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScTableConditionalEntry : public cppu::WeakImplHelper<
@@ -152,37 +137,25 @@ public:
     void                    GetData(ScCondFormatEntryItem& rData) const;
 
                             // XSheetCondition
-    virtual css::sheet::ConditionOperator SAL_CALL getOperator()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getConditionOperator()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setOperator( css::sheet::ConditionOperator nOperator )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getFormula1() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setFormula1( const OUString& aFormula1 )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getFormula2() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setFormula2( const OUString& aFormula2 )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::table::CellAddress SAL_CALL getSourcePosition()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSourcePosition( const css::table::CellAddress& aSourcePosition )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::sheet::ConditionOperator SAL_CALL getOperator() override;
+    virtual sal_Int32 SAL_CALL getConditionOperator() override;
+    virtual void SAL_CALL   setOperator( css::sheet::ConditionOperator nOperator ) override;
+    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator ) override;
+    virtual OUString SAL_CALL getFormula1() override;
+    virtual void SAL_CALL   setFormula1( const OUString& aFormula1 ) override;
+    virtual OUString SAL_CALL getFormula2() override;
+    virtual void SAL_CALL   setFormula2( const OUString& aFormula2 ) override;
+    virtual css::table::CellAddress SAL_CALL getSourcePosition() override;
+    virtual void SAL_CALL setSourcePosition( const css::table::CellAddress& aSourcePosition ) override;
 
                             // XSheetConditionalEntry
-    virtual OUString SAL_CALL getStyleName() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setStyleName( const OUString& aStyleName )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getStyleName() override;
+    virtual void SAL_CALL   setStyleName( const OUString& aStyleName ) override;
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 class ScTableValidationObj : public cppu::WeakImplHelper<
@@ -229,85 +202,50 @@ public:
                                                 formula::FormulaGrammar::Grammar eGrammar ) const;
 
                             // XSheetCondition
-    virtual css::sheet::ConditionOperator SAL_CALL getOperator()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getConditionOperator()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setOperator( css::sheet::ConditionOperator nOperator )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getFormula1() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setFormula1( const OUString& aFormula1 )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getFormula2() throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL   setFormula2( const OUString& aFormula2 )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::table::CellAddress SAL_CALL getSourcePosition()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSourcePosition( const css::table::CellAddress& aSourcePosition )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::sheet::ConditionOperator SAL_CALL getOperator() override;
+    virtual sal_Int32 SAL_CALL getConditionOperator() override;
+    virtual void SAL_CALL   setOperator( css::sheet::ConditionOperator nOperator ) override;
+    virtual void SAL_CALL   setConditionOperator( sal_Int32 nOperator ) override;
+    virtual OUString SAL_CALL getFormula1() override;
+    virtual void SAL_CALL   setFormula1( const OUString& aFormula1 ) override;
+    virtual OUString SAL_CALL getFormula2() override;
+    virtual void SAL_CALL   setFormula2( const OUString& aFormula2 ) override;
+    virtual css::table::CellAddress SAL_CALL getSourcePosition() override;
+    virtual void SAL_CALL setSourcePosition( const css::table::CellAddress& aSourcePosition ) override;
 
                             // XMultiFormulaTokens
     virtual css::uno::Sequence< css::sheet::FormulaToken >
-                            SAL_CALL getTokens( sal_Int32 nIndex )
-                                throw(css::uno::RuntimeException,css::lang::IndexOutOfBoundsException, std::exception) override;
+                            SAL_CALL getTokens( sal_Int32 nIndex ) override;
     virtual void SAL_CALL setTokens( sal_Int32 nIndex,
-                                     const css::uno::Sequence< css::sheet::FormulaToken >& aTokens )
-                                throw(css::uno::RuntimeException,css::lang::IndexOutOfBoundsException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getCount() throw(css::uno::RuntimeException, std::exception) override;
+                                     const css::uno::Sequence< css::sheet::FormulaToken >& aTokens ) override;
+    virtual sal_Int32 SAL_CALL getCount() override;
 
                             // XPropertySet
     virtual css::uno::Reference< css::beans::XPropertySetInfo >
-                            SAL_CALL getPropertySetInfo()
-                                throw(css::uno::RuntimeException, std::exception) override;
+                            SAL_CALL getPropertySetInfo() override;
     virtual void SAL_CALL   setPropertyValue( const OUString& aPropertyName,
-                                    const css::uno::Any& aValue )
-                                throw(css::beans::UnknownPropertyException,
-                                    css::beans::PropertyVetoException,
-                                    css::lang::IllegalArgumentException,
-                                    css::lang::WrappedTargetException,
-                                    css::uno::RuntimeException, std::exception) override;
+                                    const css::uno::Any& aValue ) override;
     virtual css::uno::Any SAL_CALL getPropertyValue(
-                                    const OUString& PropertyName )
-                                throw(css::beans::UnknownPropertyException,
-                                    css::lang::WrappedTargetException,
-                                    css::uno::RuntimeException, std::exception) override;
+                                    const OUString& PropertyName ) override;
     virtual void SAL_CALL   addPropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener )
-                                throw(css::beans::UnknownPropertyException,
-                                    css::lang::WrappedTargetException,
-                                    css::uno::RuntimeException, std::exception) override;
+                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
     virtual void SAL_CALL   removePropertyChangeListener( const OUString& aPropertyName,
-                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener )
-                                throw(css::beans::UnknownPropertyException,
-                                    css::lang::WrappedTargetException,
-                                    css::uno::RuntimeException, std::exception) override;
+                                    const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
     virtual void SAL_CALL   addVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
-                                throw(css::beans::UnknownPropertyException,
-                                    css::lang::WrappedTargetException,
-                                    css::uno::RuntimeException, std::exception) override;
+                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
     virtual void SAL_CALL   removeVetoableChangeListener( const OUString& PropertyName,
-                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
-                                throw(css::beans::UnknownPropertyException,
-                                    css::lang::WrappedTargetException,
-                                    css::uno::RuntimeException, std::exception) override;
+                                    const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
                             // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier )
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     static const css::uno::Sequence<sal_Int8>& getUnoTunnelId();
     static ScTableValidationObj* getImplementation(const css::uno::Reference<css::beans::XPropertySet>& rObj);
 
                             // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-                                throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-                                throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif

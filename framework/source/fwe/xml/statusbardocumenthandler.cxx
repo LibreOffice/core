@@ -179,12 +179,10 @@ OReadStatusBarDocumentHandler::~OReadStatusBarDocumentHandler()
 
 // XDocumentHandler
 void SAL_CALL OReadStatusBarDocumentHandler::startDocument()
-throw ( SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::endDocument()
-throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -198,7 +196,6 @@ throw(  SAXException, RuntimeException, std::exception )
 
 void SAL_CALL OReadStatusBarDocumentHandler::startElement(
     const OUString& aName, const Reference< XAttributeList > &xAttribs )
-throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -397,7 +394,6 @@ throw(  SAXException, RuntimeException, std::exception )
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::endElement(const OUString& aName)
-throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -439,24 +435,20 @@ throw(  SAXException, RuntimeException, std::exception )
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::characters(const OUString&)
-throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::ignorableWhitespace(const OUString&)
-throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::processingInstruction(
     const OUString& /*aTarget*/, const OUString& /*aData*/ )
-throw(  SAXException, RuntimeException, std::exception )
 {
 }
 
 void SAL_CALL OReadStatusBarDocumentHandler::setDocumentLocator(
     const Reference< XLocator > &xLocator)
-throw(  SAXException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -496,8 +488,7 @@ OWriteStatusBarDocumentHandler::~OWriteStatusBarDocumentHandler()
 {
 }
 
-void OWriteStatusBarDocumentHandler::WriteStatusBarDocument() throw
-( SAXException, RuntimeException )
+void OWriteStatusBarDocumentHandler::WriteStatusBarDocument()
 {
     SolarMutexGuard g;
 
@@ -567,7 +558,6 @@ void OWriteStatusBarDocumentHandler::WriteStatusBarItem(
     sal_Int16            nOffset,
     sal_Int16            nStyle,
     sal_Int16            nWidth )
-throw ( SAXException, RuntimeException )
 {
     ::comphelper::AttributeList* pList = new ::comphelper::AttributeList;
     Reference< XAttributeList > xList( static_cast<XAttributeList *>(pList) , UNO_QUERY );

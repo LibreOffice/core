@@ -38,7 +38,6 @@ bool Options::isValid(const OString& option) const
 }
 
 const OString& Options::getOption(const OString& option) const
-    throw( IllegalArgument )
 {
     OptionMap::const_iterator i(m_options.find(option));
     if (i == m_options.end()) {

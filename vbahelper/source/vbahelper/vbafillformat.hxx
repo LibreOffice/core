@@ -37,7 +37,7 @@ private:
     sal_Int16 m_nGradientAngle;
 private:
     /// @throws css::uno::RuntimeException
-    void setFillStyle( css::drawing::FillStyle nFillStyle ) throw (css::uno::RuntimeException);
+    void setFillStyle( css::drawing::FillStyle nFillStyle );
 protected:
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
@@ -46,18 +46,18 @@ public:
     ScVbaFillFormat( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape );
 
     /// @throws css::uno::RuntimeException
-    void setForeColorAndInternalStyle( sal_Int32 nForeColor ) throw (css::uno::RuntimeException);
+    void setForeColorAndInternalStyle( sal_Int32 nForeColor );
     // Attributes
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getTransparency() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTransparency( double _transparency ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual double SAL_CALL getTransparency() override;
+    virtual void SAL_CALL setTransparency( double _transparency ) override;
 
     // Methods
-    virtual void SAL_CALL Solid() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL TwoColorGradient( sal_Int32 style, sal_Int32 variant ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL BackColor() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL ForeColor() throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Solid() override;
+    virtual void SAL_CALL TwoColorGradient( sal_Int32 style, sal_Int32 variant ) override;
+    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL BackColor() override;
+    virtual css::uno::Reference< ov::msforms::XColorFormat > SAL_CALL ForeColor() override;
 
 };
 

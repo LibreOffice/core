@@ -36,7 +36,7 @@ NumberFormatCodeMapper::~NumberFormatCodeMapper()
 
 
 css::i18n::NumberFormatCode SAL_CALL
-NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception)
+NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage, const css::lang::Locale& rLocale )
 {
 
     OUString elementType = mapElementTypeShortToString(formatType);
@@ -64,7 +64,7 @@ NumberFormatCodeMapper::getDefault( sal_Int16 formatType, sal_Int16 formatUsage,
 
 
 css::i18n::NumberFormatCode SAL_CALL
-NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception)
+NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::Locale& rLocale )
 {
     osl::MutexGuard g(maMutex);
     const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
@@ -87,7 +87,7 @@ NumberFormatCodeMapper::getFormatCode( sal_Int16 formatIndex, const css::lang::L
 
 
 css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
-NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception)
+NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang::Locale& rLocale )
 {
     osl::MutexGuard g(maMutex);
     const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
@@ -120,7 +120,7 @@ NumberFormatCodeMapper::getAllFormatCode( sal_Int16 formatUsage, const css::lang
 
 
 css::uno::Sequence< css::i18n::NumberFormatCode > SAL_CALL
-NumberFormatCodeMapper::getAllFormatCodes( const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception)
+NumberFormatCodeMapper::getAllFormatCodes( const css::lang::Locale& rLocale )
 {
     osl::MutexGuard g(maMutex);
     const css::uno::Sequence< css::i18n::FormatElement > &aFormatSeq = getFormats( rLocale );
@@ -246,19 +246,17 @@ NumberFormatCodeMapper::mapElementUsageStringToShort(const OUString& formatUsage
 
 OUString SAL_CALL
 NumberFormatCodeMapper::getImplementationName()
-                throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.i18n.NumberFormatCodeMapper");
 }
 
 sal_Bool SAL_CALL NumberFormatCodeMapper::supportsService(const OUString& rServiceName)
-                throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL
-NumberFormatCodeMapper::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
+NumberFormatCodeMapper::getSupportedServiceNames()
 {
     css::uno::Sequence< OUString > aRet { "com.sun.star.i18n.NumberFormatMapper" };
     return aRet;

@@ -40,25 +40,23 @@ OResultSetMetaData::~OResultSetMetaData()
 }
 
 void OResultSetMetaData::verifyValidColumn(sal_Int32 column)
-    throw(SQLException)
 {
     if (column>getColumnCount() || column < 1)
         throw SQLException("Invalid column specified", *this, OUString(), 0, Any());
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount() throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount()
 {
     return m_pSqlda->sqld;
 }
 
-sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize( sal_Int32 column )
 {
     verifyValidColumn(column);
     return 32; // Hard limit for firebird
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     verifyValidColumn(column);
 
@@ -69,7 +67,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     // Firebird is generally case sensitive when using quoted identifiers.
     // IF THIS CHANGES make ResultSet::findColumn to be case-insensitive as needed.
@@ -81,14 +78,12 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
 }
 
 OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return OUString(); // Schemas supported by firebird
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     verifyValidColumn(column);
     OUString sRet(m_pSqlda->sqlvar[column-1].sqlname,
@@ -99,7 +94,6 @@ OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
 }
 
 OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     verifyValidColumn(column);
     return OUString(m_pSqlda->sqlvar[column-1].relname,
@@ -108,14 +102,12 @@ OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
 }
 
 OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return OUString(); // Catalogs not supported by firebird
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     verifyValidColumn(column);
 
@@ -126,7 +118,6 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     // aliasname
     verifyValidColumn(column);
@@ -138,7 +129,6 @@ OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     // TODO: implement
     (void) column;
@@ -146,14 +136,12 @@ OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return false;
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     OUString sTable = getTableName(column);
     if( !sTable.isEmpty() )
@@ -190,7 +178,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
 
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     // Unsigned values aren't supported in firebird.
     (void) column;
@@ -198,7 +185,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     sal_Int32 nType = getColumnType(column);
     if( nType == DataType::NUMERIC || nType == DataType::DECIMAL )
@@ -234,13 +220,11 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
-    throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return -(m_pSqlda->sqlvar[column-1].sqlscale); // fb stores negative number
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     if (m_pSqlda->sqlvar[column-1].sqltype & 1)
         return ColumnValue::NULLABLE;
@@ -249,7 +233,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     // TODO: Can the column be used as part of a where clause? Assume yes
     (void) column;
@@ -257,20 +240,18 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return m_pConnection->isReadOnly(); // Readonly only available on db level
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     (void) column;
     return !m_pConnection->isReadOnly();
 }
 
-sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OResultSetMetaData::isWritable( sal_Int32 column )
 {
     (void) column;
     return !m_pConnection->isReadOnly();

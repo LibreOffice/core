@@ -40,19 +40,16 @@ bool ZMFImportFilter::doDetectFormat(librevenge::RVNGInputStream &rInput, OUStri
 
 // XServiceInfo
 OUString SAL_CALL ZMFImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Draw.ZMFImportFilter");
 }
 
 sal_Bool SAL_CALL ZMFImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL ZMFImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     return Sequence< OUString > {"com.sun.star.document.ImportFilter", "com.sun.star.document.ExtendedTypeDetection"};
 }

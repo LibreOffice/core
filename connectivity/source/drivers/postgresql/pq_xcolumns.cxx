@@ -276,7 +276,6 @@ OUString columnMetaData2SDBCX(
 // };
 
 void Columns::refresh()
-    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -461,9 +460,6 @@ void alterColumnByDescriptor(
 
 void Columns::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& future )
-    throw (css::sdbc::SQLException,
-           css::container::ElementExistException,
-           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     Statics & st = getStatics();
@@ -498,9 +494,6 @@ void Columns::appendByDescriptor(
 // }
 
 void Columns::dropByIndex( sal_Int32 index )
-    throw (css::sdbc::SQLException,
-           css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >= (sal_Int32)m_values.size() )
@@ -535,7 +528,6 @@ void Columns::dropByIndex( sal_Int32 index )
 
 
 css::uno::Reference< css::beans::XPropertySet > Columns::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new ColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }
@@ -566,7 +558,6 @@ ColumnDescriptors::ColumnDescriptors(
 
 
 Reference< css::beans::XPropertySet > ColumnDescriptors::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new ColumnDescriptor( m_refMutex, m_origin, m_pSettings );
 }

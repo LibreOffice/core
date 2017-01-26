@@ -58,14 +58,14 @@ public:
     virtual ~ODocumentCloser() override;
 
 // XComponent
-    virtual void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
 // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 class MainThreadFrameCloserRequest
@@ -177,7 +177,6 @@ ODocumentCloser::~ODocumentCloser()
 // XComponent
 
 void SAL_CALL ODocumentCloser::dispose()
-    throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -201,7 +200,6 @@ void SAL_CALL ODocumentCloser::dispose()
 
 
 void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bDisposed )
@@ -215,7 +213,6 @@ void SAL_CALL ODocumentCloser::addEventListener( const uno::Reference< lang::XEv
 
 
 void SAL_CALL ODocumentCloser::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_pListenersContainer )
@@ -224,19 +221,16 @@ void SAL_CALL ODocumentCloser::removeEventListener( const uno::Reference< lang::
 
 // XServiceInfo
 OUString SAL_CALL ODocumentCloser::getImplementationName(  )
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.embed.DocumentCloser" );
 }
 
 sal_Bool SAL_CALL ODocumentCloser::supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL ODocumentCloser::getSupportedServiceNames()
-    throw (uno::RuntimeException, std::exception)
 {
     const OUString aServiceName( "com.sun.star.embed.DocumentCloser" );
     return uno::Sequence< OUString >( &aServiceName, 1 );

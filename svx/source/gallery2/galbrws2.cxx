@@ -132,8 +132,8 @@ public:
 
     void ExecutePopup( vcl::Window *pParent, const ::Point &aPos );
 
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent &rEvent) throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject &rSource) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent &rEvent) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject &rSource) override;
 };
 
 
@@ -171,7 +171,6 @@ GalleryThemePopup::GalleryThemePopup(
 
 void SAL_CALL GalleryThemePopup::statusChanged(
     const css::frame::FeatureStateEvent &rEvent )
-throw ( css::uno::RuntimeException, std::exception )
 {
     const OUString &rURL = rEvent.FeatureURL.Complete;
     if ( rURL == CMD_SID_GALLERY_ENABLE_ADDCOPY )
@@ -207,7 +206,6 @@ throw ( css::uno::RuntimeException, std::exception )
 
 void SAL_CALL GalleryThemePopup::disposing(
     const css::lang::EventObject &/*rSource*/)
-throw ( css::uno::RuntimeException, std::exception )
 {
 }
 

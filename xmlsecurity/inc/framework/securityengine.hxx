@@ -106,8 +106,7 @@ protected:
      */
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
-    virtual void tryToPerform( )
-        throw (css::uno::Exception, css::uno::RuntimeException){};
+    virtual void tryToPerform( ){};
 
     /*
      * clear up all resources used by this operation.
@@ -126,7 +125,6 @@ protected:
     /// @throws css::uno::Exception
     /// @throws css::uno::RuntimeException
     virtual void notifyResultListener() const
-        throw (css::uno::Exception, css::uno::RuntimeException)
         {};
 
     /*
@@ -137,16 +135,13 @@ protected:
 
 public:
     /* XReferenceResolvedListener */
-    virtual void SAL_CALL referenceResolved( sal_Int32 referenceId )
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL referenceResolved( sal_Int32 referenceId ) override;
 
     /* XKeyCollector */
-    virtual void SAL_CALL setKeyId( sal_Int32 id )
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setKeyId( sal_Int32 id ) override;
 
         /* XMissionTaker */
-        virtual sal_Bool SAL_CALL endMission(  )
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL endMission(  ) override;
 };
 
 #endif

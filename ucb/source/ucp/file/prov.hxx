@@ -64,16 +64,13 @@ namespace fileaccess {
 
         // XServiceInfo
         virtual OUString SAL_CALL
-        getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getImplementationName() override;
 
         virtual sal_Bool SAL_CALL
-        supportsService( const OUString& ServiceName )
-            throw(css::uno::RuntimeException, std::exception ) override;
+        supportsService( const OUString& ServiceName ) override;
 
         virtual css::uno::Sequence< OUString > SAL_CALL
-        getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getSupportedServiceNames() override;
 
 
         static css::uno::Reference< css::lang::XSingleServiceFactory > SAL_CALL
@@ -87,99 +84,70 @@ namespace fileaccess {
         // XInitialization
         virtual void SAL_CALL
         initialize(
-            const css::uno::Sequence< css::uno::Any >& aArguments )
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+            const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
 
         // XContentProvider
         virtual css::uno::Reference< css::ucb::XContent > SAL_CALL
         queryContent(
-            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier )
-            throw( css::ucb::IllegalIdentifierException,
-                   css::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Identifier ) override;
 
         // XContentIdentifierFactory
 
         virtual css::uno::Reference< css::ucb::XContentIdentifier > SAL_CALL
         createContentIdentifier(
-            const OUString& ContentId )
-            throw( css::uno::RuntimeException, std::exception ) override;
+            const OUString& ContentId ) override;
 
 
         virtual sal_Int32 SAL_CALL
         compareContentIds(
             const css::uno::Reference< css::ucb::XContentIdentifier >& Id1,
-            const css::uno::Reference< css::ucb::XContentIdentifier >& Id2 )
-            throw( css::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::ucb::XContentIdentifier >& Id2 ) override;
 
         // XProperySet
 
         virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL
-        getPropertySetInfo(  )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getPropertySetInfo(  ) override;
 
         virtual void SAL_CALL
         setPropertyValue(
             const OUString& aPropertyName,
-            const css::uno::Any& aValue )
-            throw( css::beans::UnknownPropertyException,
-                   css::beans::PropertyVetoException,
-                   css::lang::IllegalArgumentException,
-                   css::lang::WrappedTargetException,
-                   css::uno::RuntimeException, std::exception ) override;
+            const css::uno::Any& aValue ) override;
 
         virtual css::uno::Any SAL_CALL
         getPropertyValue(
-            const OUString& PropertyName )
-            throw( css::beans::UnknownPropertyException,
-                   css::lang::WrappedTargetException,
-                   css::uno::RuntimeException, std::exception ) override;
+            const OUString& PropertyName ) override;
 
         virtual void SAL_CALL
         addPropertyChangeListener(
             const OUString& aPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener )
-            throw( css::beans::UnknownPropertyException,
-                   css::lang::WrappedTargetException,
-                   css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
 
         virtual void SAL_CALL
         removePropertyChangeListener(
             const OUString& aPropertyName,
-            const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener )
-            throw( css::beans::UnknownPropertyException,
-                   css::lang::WrappedTargetException,
-                   css::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
 
         virtual void SAL_CALL
         addVetoableChangeListener(
             const OUString& PropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
-            throw( css::beans::UnknownPropertyException,
-                   css::lang::WrappedTargetException,
-                   css::uno::RuntimeException, std::exception ) override;
+            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
         virtual void SAL_CALL
         removeVetoableChangeListener(
             const OUString& PropertyName,
-            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener )
-            throw( css::beans::UnknownPropertyException,
-                   css::lang::WrappedTargetException,
-                   css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
 
         // XFileIdentifierConverter
 
         virtual sal_Int32 SAL_CALL
-        getFileProviderLocality( const OUString& BaseURL )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        getFileProviderLocality( const OUString& BaseURL ) override;
 
         virtual OUString SAL_CALL getFileURLFromSystemPath( const OUString& BaseURL,
-                                                            const OUString& SystemPath )
-            throw( css::uno::RuntimeException, std::exception ) override;
+                                                            const OUString& SystemPath ) override;
 
-        virtual OUString SAL_CALL getSystemPathFromFileURL( const OUString& URL )
-            throw( css::uno::RuntimeException, std::exception ) override;
+        virtual OUString SAL_CALL getSystemPathFromFileURL( const OUString& URL ) override;
 
 
     private:

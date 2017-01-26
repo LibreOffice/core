@@ -249,7 +249,7 @@ namespace frm
 
 
     bool FontControlModel::convertFastPropertyValue( Any& _rConvertedValue, Any& _rOldValue,
-                sal_Int32 _nHandle, const Any& _rValue ) throw( IllegalArgumentException, RuntimeException, std::exception )
+                sal_Int32 _nHandle, const Any& _rValue )
     {
         bool bModified = false;
         switch( _nHandle )
@@ -350,7 +350,7 @@ namespace frm
     /// @throws Exception
     static void setFastPropertyValue_NoBroadcast_implimpl(
             FontDescriptor & rFont,
-            sal_Int32 nHandle, const Any& rValue) throw (Exception)
+            sal_Int32 nHandle, const Any& rValue)
     {
         switch (nHandle)
         {
@@ -434,7 +434,7 @@ namespace frm
     void FontControlModel::setFastPropertyValue_NoBroadcast_impl(
             ::cppu::OPropertySetHelper & rBase,
             void (::cppu::OPropertySetHelper::*pSet)(sal_Int32, Any const&),
-            sal_Int32 nHandle, const Any& rValue) throw (Exception)
+            sal_Int32 nHandle, const Any& rValue)
     {
         if (isFontAggregateProperty(nHandle))
         {

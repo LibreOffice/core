@@ -50,29 +50,29 @@ public:
 protected:
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     // XTypeProvider
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     // XGalleryThemeProvider
-    virtual css::uno::Reference< css::gallery::XGalleryTheme > SAL_CALL insertNewByName( const OUString& ThemeName ) throw (css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeByName( const OUString& ThemeName ) throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::gallery::XGalleryTheme > SAL_CALL insertNewByName( const OUString& ThemeName ) override;
+    virtual void SAL_CALL removeByName( const OUString& ThemeName ) override;
 
 private:
 
@@ -87,26 +87,22 @@ GalleryThemeProvider::GalleryThemeProvider() :
 }
 
 OUString SAL_CALL GalleryThemeProvider::getImplementationName()
-    throw( uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.gallery.GalleryThemeProvider" );
 }
 
 sal_Bool SAL_CALL GalleryThemeProvider::supportsService( const OUString& ServiceName )
-    throw( uno::RuntimeException, std::exception )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getSupportedServiceNames()
-    throw( uno::RuntimeException, std::exception )
 {
     uno::Sequence<OUString> aSeq { "com.sun.star.gallery.GalleryThemeProvider" };
     return aSeq;
 }
 
 uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
-    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< uno::Type >  aTypes( 6 );
     uno::Type*                  pTypes = aTypes.getArray();
@@ -122,13 +118,11 @@ uno::Sequence< uno::Type > SAL_CALL GalleryThemeProvider::getTypes()
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL GalleryThemeProvider::getImplementationId()
-    throw(uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >& rArguments )
-    throw ( uno::Exception, uno::RuntimeException, std::exception )
 {
     uno::Sequence< beans::PropertyValue >   aParams;
     sal_Int32                               i;
@@ -150,14 +144,12 @@ void SAL_CALL GalleryThemeProvider::initialize( const uno::Sequence< uno::Any >&
 
 
 uno::Type SAL_CALL GalleryThemeProvider::getElementType()
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::UnoType<gallery::XGalleryTheme>::get();
 }
 
 
 sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
-    throw (uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aGuard;
 
@@ -166,7 +158,6 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasElements()
 
 
 uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
-    throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aGuard;
     uno::Any            aRet;
@@ -185,7 +176,6 @@ uno::Any SAL_CALL GalleryThemeProvider::getByName( const OUString& rName )
 
 
 uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
-    throw (uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aGuard;
     sal_uInt32                          i = 0, nCount = ( mpGallery ? mpGallery->GetThemeCount() : 0 ), nRealCount = 0;
@@ -206,7 +196,6 @@ uno::Sequence< OUString > SAL_CALL GalleryThemeProvider::getElementNames()
 
 
 sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
-    throw (uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aGuard;
 
@@ -220,7 +209,6 @@ sal_Bool SAL_CALL GalleryThemeProvider::hasByName( const OUString& rName )
 
 
 uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNewByName( const OUString& rThemeName )
-    throw (container::ElementExistException, uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aGuard;
     uno::Reference< gallery::XGalleryTheme >    xRet;
@@ -242,7 +230,6 @@ uno::Reference< gallery::XGalleryTheme > SAL_CALL GalleryThemeProvider::insertNe
 
 
 void SAL_CALL GalleryThemeProvider::removeByName( const OUString& rName )
-    throw (container::NoSuchElementException, uno::RuntimeException, std::exception)
 {
     const SolarMutexGuard aGuard;
 

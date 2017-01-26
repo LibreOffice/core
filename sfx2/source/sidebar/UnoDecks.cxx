@@ -32,9 +32,6 @@ SidebarController* SfxUnoDecks::getSidebarController()
 // XNameAccess
 
 uno::Any SAL_CALL SfxUnoDecks::getByName( const OUString& aName )
-                                throw(container::NoSuchElementException,
-                                    lang::WrappedTargetException,
-                                    uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -53,7 +50,6 @@ uno::Any SAL_CALL SfxUnoDecks::getByName( const OUString& aName )
 
 
 uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -88,7 +84,6 @@ uno::Sequence< OUString > SAL_CALL SfxUnoDecks::getElementNames()
 }
 
 sal_Bool SAL_CALL SfxUnoDecks::hasByName( const OUString& aName )
-                                throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -121,7 +116,7 @@ sal_Bool SAL_CALL SfxUnoDecks::hasByName( const OUString& aName )
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL SfxUnoDecks::getCount() throw(uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL SfxUnoDecks::getCount()
 {
     SolarMutexGuard aGuard;
 
@@ -130,9 +125,6 @@ sal_Int32 SAL_CALL SfxUnoDecks::getCount() throw(uno::RuntimeException, std::exc
 }
 
 uno::Any SAL_CALL SfxUnoDecks::getByIndex( sal_Int32 Index )
-                                throw(lang::IndexOutOfBoundsException,
-                                    lang::WrappedTargetException,
-                                    uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
     uno::Any aRet;
@@ -150,14 +142,13 @@ uno::Any SAL_CALL SfxUnoDecks::getByIndex( sal_Int32 Index )
 
 // XElementAccess
 uno::Type SAL_CALL SfxUnoDecks::getElementType()
-                                throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
     return uno::Type();
 }
 
-sal_Bool SAL_CALL SfxUnoDecks::hasElements() throw(css::uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SfxUnoDecks::hasElements()
 {
     SolarMutexGuard aGuard;
 

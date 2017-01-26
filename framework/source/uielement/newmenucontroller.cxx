@@ -367,7 +367,7 @@ void NewMenuController::fillPopupMenu( Reference< css::awt::XPopupMenu >& rPopup
 }
 
 // XEventListener
-void SAL_CALL NewMenuController::disposing( const EventObject& ) throw ( RuntimeException, std::exception )
+void SAL_CALL NewMenuController::disposing( const EventObject& )
 {
     Reference< css::awt::XMenuListener > xHolder(static_cast<OWeakObject *>(this), UNO_QUERY );
 
@@ -382,12 +382,12 @@ void SAL_CALL NewMenuController::disposing( const EventObject& ) throw ( Runtime
 }
 
 // XStatusListener
-void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& ) throw ( RuntimeException, std::exception )
+void SAL_CALL NewMenuController::statusChanged( const FeatureStateEvent& )
 {
 }
 
 // XMenuListener
-void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent ) throw (RuntimeException, std::exception)
+void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent )
 {
     Reference< css::awt::XPopupMenu > xPopupMenu;
     Reference< XComponentContext >    xContext;
@@ -424,7 +424,7 @@ void SAL_CALL NewMenuController::itemSelected( const css::awt::MenuEvent& rEvent
     }
 }
 
-void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& ) throw (RuntimeException, std::exception)
+void SAL_CALL NewMenuController::itemActivated( const css::awt::MenuEvent& )
 {
     SolarMutexGuard aSolarMutexGuard;
     if ( m_xFrame.is() && m_xPopupMenu.is() )
@@ -491,7 +491,7 @@ void NewMenuController::impl_setPopupMenu()
 }
 
 // XInitialization
-void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments ) throw ( Exception, RuntimeException, std::exception )
+void SAL_CALL NewMenuController::initialize( const Sequence< Any >& aArguments )
 {
     osl::MutexGuard aLock( m_aMutex );
 

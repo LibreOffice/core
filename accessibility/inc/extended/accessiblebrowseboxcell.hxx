@@ -49,7 +49,7 @@ namespace accessibility
         virtual Rectangle implGetBoundingBoxOnScreen() override;
 
         // XAccessibleComponent
-        virtual void SAL_CALL grabFocus() throw ( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL grabFocus() override;
 
     protected:
         AccessibleBrowseBoxCell(

@@ -132,7 +132,6 @@ void SAL_CALL BasicViewFactory::disposing()
 
 Reference<XResource> SAL_CALL BasicViewFactory::createResource (
     const Reference<XResourceId>& rxViewId)
-    throw(RuntimeException, IllegalArgumentException, WrappedTargetException, std::exception)
 {
     Reference<XResource> xView;
     const bool bIsCenterPane (
@@ -186,7 +185,6 @@ Reference<XResource> SAL_CALL BasicViewFactory::createResource (
 }
 
 void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxView)
-    throw(RuntimeException, std::exception)
 {
     if ( ! rxView.is())
         throw lang::IllegalArgumentException();
@@ -239,7 +237,6 @@ void SAL_CALL BasicViewFactory::releaseResource (const Reference<XResource>& rxV
 }
 
 void SAL_CALL BasicViewFactory::initialize (const Sequence<Any>& aArguments)
-    throw (Exception, RuntimeException, std::exception)
 {
     if (aArguments.getLength() > 0)
     {

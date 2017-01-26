@@ -36,20 +36,15 @@ public:
     AccessibleStateSetHelperImpl(const AccessibleStateSetHelperImpl& rImpl);
 
     /// @throws uno::RuntimeException
-    bool IsEmpty () const
-        throw (uno::RuntimeException);
+    bool IsEmpty () const;
     /// @throws uno::RuntimeException
-    bool Contains (sal_Int16 aState) const
-        throw (uno::RuntimeException);
+    bool Contains (sal_Int16 aState) const;
     /// @throws uno::RuntimeException
-    uno::Sequence<sal_Int16> GetStates() const
-        throw (uno::RuntimeException);
+    uno::Sequence<sal_Int16> GetStates() const;
     /// @throws uno::RuntimeException
-    void AddState(sal_Int16 aState)
-        throw (uno::RuntimeException);
+    void AddState(sal_Int16 aState);
     /// @throws uno::RuntimeException
-    void RemoveState(sal_Int16 aState)
-        throw (uno::RuntimeException);
+    void RemoveState(sal_Int16 aState);
 
     inline void AddStates( const sal_Int64 _nStates );
 
@@ -68,13 +63,11 @@ AccessibleStateSetHelperImpl::AccessibleStateSetHelperImpl(const AccessibleState
 }
 
 inline bool AccessibleStateSetHelperImpl::IsEmpty () const
-    throw (uno::RuntimeException)
 {
     return maStates == 0;
 }
 
 inline bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState) const
-    throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
     sal_uInt64 aTempBitSet(1);
@@ -83,7 +76,6 @@ inline bool AccessibleStateSetHelperImpl::Contains (sal_Int16 aState) const
 }
 
 inline uno::Sequence<sal_Int16> AccessibleStateSetHelperImpl::GetStates() const
-    throw (uno::RuntimeException)
 {
     uno::Sequence<sal_Int16> aRet(BITFIELDSIZE);
     sal_Int16* pSeq = aRet.getArray();
@@ -105,7 +97,6 @@ inline void AccessibleStateSetHelperImpl::AddStates( const sal_Int64 _nStates )
 }
 
 inline void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
-    throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
     sal_uInt64 aTempBitSet(1);
@@ -114,7 +105,6 @@ inline void AccessibleStateSetHelperImpl::AddState(sal_Int16 aState)
 }
 
 inline void AccessibleStateSetHelperImpl::RemoveState(sal_Int16 aState)
-    throw (uno::RuntimeException)
 {
     DBG_ASSERT(aState < BITFIELDSIZE, "the statesset is too small");
     sal_uInt64 aTempBitSet(1);
@@ -158,7 +148,6 @@ AccessibleStateSetHelper::~AccessibleStateSetHelper()
             <FALSE/> if there is at least one state set in it.
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
-    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->IsEmpty();
@@ -176,7 +165,6 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::isEmpty ()
             state set and <FALSE/> otherwise.
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
-    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     return mpHelperImpl->Contains(aState);
@@ -199,7 +187,6 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::contains (sal_Int16 aState)
     */
 sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
     (const uno::Sequence<sal_Int16>& rStateSet)
-    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard (maMutex);
     sal_Int32 nCount(rStateSet.getLength());
@@ -215,21 +202,18 @@ sal_Bool SAL_CALL AccessibleStateSetHelper::containsAll
 }
 
 uno::Sequence<sal_Int16> SAL_CALL AccessibleStateSetHelper::getStates()
-    throw (uno::RuntimeException, std::exception)
 {
     osl::MutexGuard aGuard(maMutex);
     return mpHelperImpl->GetStates();
 }
 
 void AccessibleStateSetHelper::AddState(sal_Int16 aState)
-    throw (uno::RuntimeException)
 {
     osl::MutexGuard aGuard (maMutex);
     mpHelperImpl->AddState(aState);
 }
 
 void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
-    throw (uno::RuntimeException)
 {
     osl::MutexGuard aGuard (maMutex);
     mpHelperImpl->RemoveState(aState);
@@ -238,7 +222,6 @@ void AccessibleStateSetHelper::RemoveState(sal_Int16 aState)
 //=====  XTypeProvider  =======================================================
 
 uno::Sequence< css::uno::Type> AccessibleStateSetHelper::getTypes()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< css::uno::Type> aTypeSequence {
         cppu::UnoType<XAccessibleStateSet>::get(),
@@ -248,7 +231,6 @@ uno::Sequence< css::uno::Type> AccessibleStateSetHelper::getTypes()
 }
 
 uno::Sequence<sal_Int8> SAL_CALL AccessibleStateSetHelper::getImplementationId()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }

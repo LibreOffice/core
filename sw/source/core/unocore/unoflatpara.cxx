@@ -79,7 +79,6 @@ SwXFlatParagraph::~SwXFlatParagraph()
 // XPropertySet
 uno::Reference< beans::XPropertySetInfo > SAL_CALL
 SwXFlatParagraph::getPropertySetInfo()
-throw (uno::RuntimeException, std::exception)
 {
     static comphelper::PropertyMapEntry s_Entries[] = {
         { OUString("FieldPositions"), -1, ::cppu::UnoType<uno::Sequence<sal_Int32>>::get(), beans::PropertyAttribute::READONLY, 0 },
@@ -91,9 +90,6 @@ throw (uno::RuntimeException, std::exception)
 
 void SAL_CALL
 SwXFlatParagraph::setPropertyValue(const OUString&, const uno::Any&)
-throw (beans::UnknownPropertyException, beans::PropertyVetoException,
-        lang::IllegalArgumentException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     throw lang::IllegalArgumentException("no values can be set",
             static_cast< ::cppu::OWeakObject*>(this), 0);
@@ -101,8 +97,6 @@ throw (beans::UnknownPropertyException, beans::PropertyVetoException,
 
 uno::Any SAL_CALL
 SwXFlatParagraph::getPropertyValue(const OUString& rPropertyName)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -121,8 +115,6 @@ void SAL_CALL
 SwXFlatParagraph::addPropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     SAL_WARN("sw.uno",
         "SwXFlatParagraph::addPropertyChangeListener(): not implemented");
@@ -132,8 +124,6 @@ void SAL_CALL
 SwXFlatParagraph::removePropertyChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XPropertyChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     SAL_WARN("sw.uno",
         "SwXFlatParagraph::removePropertyChangeListener(): not implemented");
@@ -143,8 +133,6 @@ void SAL_CALL
 SwXFlatParagraph::addVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-    uno::RuntimeException, std::exception)
 {
     SAL_WARN("sw.uno",
         "SwXFlatParagraph::addVetoableChangeListener(): not implemented");
@@ -154,40 +142,38 @@ void SAL_CALL
 SwXFlatParagraph::removeVetoableChangeListener(
         const OUString& /*rPropertyName*/,
         const uno::Reference< beans::XVetoableChangeListener >& /*xListener*/)
-throw (beans::UnknownPropertyException, lang::WrappedTargetException,
-        uno::RuntimeException, std::exception)
 {
     SAL_WARN("sw.uno",
         "SwXFlatParagraph::removeVetoableChangeListener(): not implemented");
 }
 
 
-css::uno::Reference< css::container::XStringKeyMap > SAL_CALL SwXFlatParagraph::getMarkupInfoContainer() throw (css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::container::XStringKeyMap > SAL_CALL SwXFlatParagraph::getMarkupInfoContainer()
 {
     return SwXTextMarkup::getMarkupInfoContainer();
 }
 
 void SAL_CALL SwXFlatParagraph::commitTextRangeMarkup(::sal_Int32 nType, const OUString & aIdentifier, const uno::Reference< text::XTextRange> & xRange,
-                                                      const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer) throw (uno::RuntimeException, std::exception)
+                                                      const css::uno::Reference< css::container::XStringKeyMap > & xMarkupInfoContainer)
 {
     SolarMutexGuard aGuard;
     SwXTextMarkup::commitTextRangeMarkup( nType, aIdentifier, xRange,  xMarkupInfoContainer );
 }
 
-void SAL_CALL SwXFlatParagraph::commitStringMarkup(::sal_Int32 nType, const OUString & rIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & rxMarkupInfoContainer) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SwXFlatParagraph::commitStringMarkup(::sal_Int32 nType, const OUString & rIdentifier, ::sal_Int32 nStart, ::sal_Int32 nLength, const css::uno::Reference< css::container::XStringKeyMap > & rxMarkupInfoContainer)
 {
     SolarMutexGuard aGuard;
     SwXTextMarkup::commitStringMarkup( nType, rIdentifier, nStart, nLength,  rxMarkupInfoContainer );
 }
 
 // text::XFlatParagraph:
-OUString SAL_CALL SwXFlatParagraph::getText() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL SwXFlatParagraph::getText()
 {
     return maExpandText;
 }
 
 // text::XFlatParagraph:
-void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal )
 {
     SolarMutexGuard aGuard;
 
@@ -210,7 +196,7 @@ void SAL_CALL SwXFlatParagraph::setChecked( ::sal_Int32 nType, sal_Bool bVal ) t
 }
 
 // text::XFlatParagraph:
-sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType )
 {
     SolarMutexGuard aGuard;
     if (GetTextNode())
@@ -227,7 +213,7 @@ sal_Bool SAL_CALL SwXFlatParagraph::isChecked( ::sal_Int32 nType ) throw (uno::R
 }
 
 // text::XFlatParagraph:
-sal_Bool SAL_CALL SwXFlatParagraph::isModified() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL SwXFlatParagraph::isModified()
 {
     SolarMutexGuard aGuard;
     return nullptr == GetTextNode();
@@ -235,7 +221,6 @@ sal_Bool SAL_CALL SwXFlatParagraph::isModified() throw (uno::RuntimeException, s
 
 // text::XFlatParagraph:
 lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
-    throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
 {
     SolarMutexGuard aGuard;
     if (!GetTextNode())
@@ -247,7 +232,6 @@ lang::Locale SAL_CALL SwXFlatParagraph::getLanguageOfText(::sal_Int32 nPos, ::sa
 
 // text::XFlatParagraph:
 lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPos, ::sal_Int32 nLen)
-    throw (uno::RuntimeException, lang::IllegalArgumentException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -259,7 +243,7 @@ lang::Locale SAL_CALL SwXFlatParagraph::getPrimaryLanguageOfText(::sal_Int32 nPo
 }
 
 // text::XFlatParagraph:
-void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
+void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, const OUString & aNewText, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes)
 {
     SolarMutexGuard aGuard;
 
@@ -289,7 +273,7 @@ void SAL_CALL SwXFlatParagraph::changeText(::sal_Int32 nPos, ::sal_Int32 nLen, c
 }
 
 // text::XFlatParagraph:
-void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes) throw (css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception)
+void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 nLen, const css::uno::Sequence< css::beans::PropertyValue > & aAttributes)
 {
     SolarMutexGuard aGuard;
 
@@ -314,7 +298,7 @@ void SAL_CALL SwXFlatParagraph::changeAttributes(::sal_Int32 nPos, ::sal_Int32 n
 }
 
 // text::XFlatParagraph:
-css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions() throw (css::uno::RuntimeException, std::exception)
+css::uno::Sequence< ::sal_Int32 > SAL_CALL SwXFlatParagraph::getLanguagePortions()
 {
     return css::uno::Sequence< ::sal_Int32>();
 }
@@ -333,7 +317,6 @@ SwXFlatParagraph::getUnoTunnelId()
 sal_Int64 SAL_CALL
 SwXFlatParagraph::getSomething(
         const uno::Sequence< sal_Int8 >& rId)
-    throw (uno::RuntimeException, std::exception)
 {
     return sw::UnoTunnelImpl(rId, this);
 }
@@ -370,13 +353,11 @@ void SwXFlatParagraphIterator::Modify( const SfxPoolItem* pOld, const SfxPoolIte
 }
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getFirstPara()
-    throw( uno::RuntimeException, std::exception )
 {
     return getNextPara();   // TODO
 }
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
-    throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -478,13 +459,11 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getNextPara()
 }
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getLastPara()
-    throw( uno::RuntimeException, std::exception )
 {
     return getNextPara();
 }
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(const uno::Reference< text::XFlatParagraph > & xPara)
-    throw ( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     SolarMutexGuard aGuard;
 
@@ -530,7 +509,6 @@ uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaAfter(co
 }
 
 uno::Reference< text::XFlatParagraph > SwXFlatParagraphIterator::getParaBefore(const uno::Reference< text::XFlatParagraph > & xPara )
-    throw ( uno::RuntimeException, lang::IllegalArgumentException, std::exception )
 {
     SolarMutexGuard aGuard;
 

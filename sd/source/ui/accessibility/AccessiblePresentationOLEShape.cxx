@@ -46,7 +46,6 @@ AccessiblePresentationOLEShape::~AccessiblePresentationOLEShape()
 
 OUString SAL_CALL
     AccessiblePresentationOLEShape::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("AccessiblePresentationOLEShape");
 }
@@ -54,7 +53,6 @@ OUString SAL_CALL
 /// Set this object's name if it is different to the current name.
 OUString
     AccessiblePresentationOLEShape::CreateAccessibleBaseName()
-    throw (css::uno::RuntimeException)
 {
     OUString sName;
 
@@ -82,7 +80,6 @@ OUString
 
 OUString
     AccessiblePresentationOLEShape::CreateAccessibleDescription()
-    throw (css::uno::RuntimeException, std::exception)
 {
     //    return createAccessibleName();
     DescriptionGenerator aDG (mxShape);
@@ -119,7 +116,6 @@ OUString
 
 //  Return this object's role.
 sal_Int16 SAL_CALL AccessiblePresentationOLEShape::getAccessibleRole ()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return  AccessibleRole::EMBEDDED_OBJECT ;
 }

@@ -55,38 +55,38 @@ public:
     DefaultGridDataModel( DefaultGridDataModel const & i_copySource );
 
     // XMutableGridDataModel
-    virtual void SAL_CALL addRow( const Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addRows( const css::uno::Sequence< css::uno::Any>& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL insertRow( ::sal_Int32 i_index, const css::uno::Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) throw (css::uno::RuntimeException, css::lang::IndexOutOfBoundsException, std::exception) override;
-    virtual void SAL_CALL insertRows( ::sal_Int32 i_index, const css::uno::Sequence< css::uno::Any>& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) throw (css::lang::IllegalArgumentException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeRow( ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeAllRows(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL updateRowData( const css::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const css::uno::Sequence< css::uno::Any >& Values ) throw (css::lang::IndexOutOfBoundsException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL updateRowHeading( ::sal_Int32 RowIndex, const css::uno::Any& Heading ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL updateRowToolTip( ::sal_Int32 RowIndex, const css::uno::Any& Value ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addRow( const Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) override;
+    virtual void SAL_CALL addRows( const css::uno::Sequence< css::uno::Any>& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) override;
+    virtual void SAL_CALL insertRow( ::sal_Int32 i_index, const css::uno::Any& i_heading, const css::uno::Sequence< css::uno::Any >& Data ) override;
+    virtual void SAL_CALL insertRows( ::sal_Int32 i_index, const css::uno::Sequence< css::uno::Any>& Headings, const css::uno::Sequence< css::uno::Sequence< css::uno::Any > >& Data ) override;
+    virtual void SAL_CALL removeRow( ::sal_Int32 RowIndex ) override;
+    virtual void SAL_CALL removeAllRows(  ) override;
+    virtual void SAL_CALL updateCellData( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) override;
+    virtual void SAL_CALL updateRowData( const css::uno::Sequence< ::sal_Int32 >& ColumnIndexes, ::sal_Int32 RowIndex, const css::uno::Sequence< css::uno::Any >& Values ) override;
+    virtual void SAL_CALL updateRowHeading( ::sal_Int32 RowIndex, const css::uno::Any& Heading ) override;
+    virtual void SAL_CALL updateCellToolTip( ::sal_Int32 ColumnIndex, ::sal_Int32 RowIndex, const css::uno::Any& Value ) override;
+    virtual void SAL_CALL updateRowToolTip( ::sal_Int32 RowIndex, const css::uno::Any& Value ) override;
+    virtual void SAL_CALL addGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
+    virtual void SAL_CALL removeGridDataListener( const css::uno::Reference< css::awt::grid::XGridDataListener >& Listener ) override;
 
     // XGridDataModel
-    virtual ::sal_Int32 SAL_CALL getRowCount() throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getColumnCount() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 Row ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 Row ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getRowHeading( ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getRowCount() override;
+    virtual ::sal_Int32 SAL_CALL getColumnCount() override;
+    virtual css::uno::Any SAL_CALL getCellData( ::sal_Int32 Column, ::sal_Int32 Row ) override;
+    virtual css::uno::Any SAL_CALL getCellToolTip( ::sal_Int32 Column, ::sal_Int32 Row ) override;
+    virtual css::uno::Any SAL_CALL getRowHeading( ::sal_Int32 RowIndex ) override;
+    virtual css::uno::Sequence< css::uno::Any > SAL_CALL getRowData( ::sal_Int32 RowIndex ) override;
 
     // OComponentHelper
     virtual void SAL_CALL disposing() override;
 
     // XCloneable
-    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::util::XCloneable > SAL_CALL createClone(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
 private:
     typedef ::std::pair< Any, Any >     CellData;
@@ -141,14 +141,14 @@ private:
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowCount() throw (css::uno::RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL DefaultGridDataModel::getRowCount()
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return impl_getRowCount_nolck();
     }
 
 
-    ::sal_Int32 SAL_CALL DefaultGridDataModel::getColumnCount() throw (css::uno::RuntimeException, std::exception)
+    ::sal_Int32 SAL_CALL DefaultGridDataModel::getColumnCount()
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return m_nColumnCount;
@@ -194,21 +194,21 @@ private:
     }
 
 
-    Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException, std::exception)
+    Any SAL_CALL DefaultGridDataModel::getCellData( ::sal_Int32 i_column, ::sal_Int32 i_row )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return impl_getCellData_throw( i_column, i_row ).first;
     }
 
 
-    Any SAL_CALL DefaultGridDataModel::getCellToolTip( ::sal_Int32 i_column, ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException, std::exception)
+    Any SAL_CALL DefaultGridDataModel::getCellToolTip( ::sal_Int32 i_column, ::sal_Int32 i_row )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         return impl_getCellData_throw( i_column, i_row ).second;
     }
 
 
-    Any SAL_CALL DefaultGridDataModel::getRowHeading( ::sal_Int32 i_row ) throw (RuntimeException, IndexOutOfBoundsException, std::exception)
+    Any SAL_CALL DefaultGridDataModel::getRowHeading( ::sal_Int32 i_row )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -219,7 +219,7 @@ private:
     }
 
 
-    Sequence< Any > SAL_CALL DefaultGridDataModel::getRowData( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    Sequence< Any > SAL_CALL DefaultGridDataModel::getRowData( ::sal_Int32 i_rowIndex )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -252,19 +252,19 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::addRow( const Any& i_heading, const Sequence< Any >& i_data )
     {
         insertRow( getRowCount(), i_heading, i_data );
     }
 
 
-    void SAL_CALL DefaultGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::addRows( const Sequence< Any >& i_headings, const Sequence< Sequence< Any > >& i_data )
     {
         insertRows( getRowCount(), i_headings, i_data );
     }
 
 
-    void SAL_CALL DefaultGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data ) throw (RuntimeException, IndexOutOfBoundsException, std::exception)
+    void SAL_CALL DefaultGridDataModel::insertRow( ::sal_Int32 i_index, const Any& i_heading, const Sequence< Any >& i_data )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -287,7 +287,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data ) throw (IllegalArgumentException, IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::insertRows( ::sal_Int32 i_index, const Sequence< Any>& i_headings, const Sequence< Sequence< Any > >& i_data )
     {
         if ( i_headings.getLength() != i_data.getLength() )
             throw IllegalArgumentException( OUString(), *this, -1 );
@@ -326,7 +326,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::removeRow( ::sal_Int32 i_rowIndex ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::removeRow( ::sal_Int32 i_rowIndex )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -344,7 +344,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::removeAllRows(  ) throw (RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::removeAllRows(  )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -359,7 +359,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::updateCellData( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -373,7 +373,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values ) throw (IndexOutOfBoundsException, IllegalArgumentException, RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::updateRowData( const Sequence< ::sal_Int32 >& i_columnIndexes, ::sal_Int32 i_rowIndex, const Sequence< Any >& i_values )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -413,7 +413,7 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::updateRowHeading( ::sal_Int32 i_rowIndex, const Any& i_heading )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -430,14 +430,14 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::updateCellToolTip( ::sal_Int32 i_columnIndex, ::sal_Int32 i_rowIndex, const Any& i_value )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
         impl_getCellDataAccess_throw( i_columnIndex, i_rowIndex ).second = i_value;
     }
 
 
-    void SAL_CALL DefaultGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::updateRowToolTip( ::sal_Int32 i_rowIndex, const Any& i_value )
     {
         ::comphelper::ComponentGuard aGuard( *this, rBHelper );
 
@@ -447,13 +447,13 @@ private:
     }
 
 
-    void SAL_CALL DefaultGridDataModel::addGridDataListener( const Reference< grid::XGridDataListener >& i_listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::addGridDataListener( const Reference< grid::XGridDataListener >& i_listener )
     {
         rBHelper.addListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
 
 
-    void SAL_CALL DefaultGridDataModel::removeGridDataListener( const Reference< grid::XGridDataListener >& i_listener ) throw (RuntimeException, std::exception)
+    void SAL_CALL DefaultGridDataModel::removeGridDataListener( const Reference< grid::XGridDataListener >& i_listener )
     {
         rBHelper.removeListener( cppu::UnoType<XGridDataListener>::get(), i_listener );
     }
@@ -476,24 +476,24 @@ private:
     }
 
 
-    OUString SAL_CALL DefaultGridDataModel::getImplementationName(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL DefaultGridDataModel::getImplementationName(  )
     {
         return OUString("stardiv.Toolkit.DefaultGridDataModel");
     }
 
-    sal_Bool SAL_CALL DefaultGridDataModel::supportsService( const OUString& ServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL DefaultGridDataModel::supportsService( const OUString& ServiceName )
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    Sequence< OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL DefaultGridDataModel::getSupportedServiceNames(  )
     {
         Sequence<OUString> aSeq { "com.sun.star.awt.grid.DefaultGridDataModel" };
         return aSeq;
     }
 
 
-    Reference< css::util::XCloneable > SAL_CALL DefaultGridDataModel::createClone(  ) throw (RuntimeException, std::exception)
+    Reference< css::util::XCloneable > SAL_CALL DefaultGridDataModel::createClone(  )
     {
         return new DefaultGridDataModel( *this );
     }

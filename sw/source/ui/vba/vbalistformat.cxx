@@ -29,7 +29,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaListFormat::SwVbaListFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextRange >& xTextRange ) throw ( uno::RuntimeException ) : SwVbaListFormat_BASE( rParent, rContext ), mxTextRange( xTextRange )
+SwVbaListFormat::SwVbaListFormat( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext, const uno::Reference< text::XTextRange >& xTextRange ) : SwVbaListFormat_BASE( rParent, rContext ), mxTextRange( xTextRange )
 {
 }
 
@@ -37,7 +37,7 @@ SwVbaListFormat::~SwVbaListFormat()
 {
 }
 
-void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< word::XListTemplate >& ListTemplate, const css::uno::Any& ContinuePreviousList, const css::uno::Any& ApplyTo, const css::uno::Any& DefaultListBehavior ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< word::XListTemplate >& ListTemplate, const css::uno::Any& ContinuePreviousList, const css::uno::Any& ApplyTo, const css::uno::Any& DefaultListBehavior )
 {
     bool bContinuePreviousList = true;
     if( ContinuePreviousList.hasValue() )
@@ -88,7 +88,7 @@ void SAL_CALL SwVbaListFormat::ApplyListTemplate( const css::uno::Reference< wor
     while( xEnum->hasMoreElements() );
 }
 
-void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  )
 {
     throw uno::RuntimeException("Not implemented" );
 }

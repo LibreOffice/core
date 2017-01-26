@@ -33,8 +33,7 @@ class SwFormatINetFormat;
 class SwHyperlinkEventDescriptor : public SvDetachedEventDescriptor
 {
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 protected:
     virtual ~SwHyperlinkEventDescriptor() override;
 public:
@@ -66,8 +65,7 @@ public:
 
     virtual ~SwFrameEventDescriptor() override;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
 protected:
     virtual void setMacroItem(const SvxMacroItem& rItem) override;
@@ -86,8 +84,7 @@ public:
 
     virtual ~SwFrameStyleEventDescriptor() override;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
 protected:
     virtual void setMacroItem(const SvxMacroItem& rItem) override;

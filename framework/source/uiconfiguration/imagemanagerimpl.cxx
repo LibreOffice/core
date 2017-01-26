@@ -556,7 +556,7 @@ void ImageManagerImpl::dispose()
     }
 
 }
-void ImageManagerImpl::addEventListener( const uno::Reference< XEventListener >& xListener ) throw (css::uno::RuntimeException)
+void ImageManagerImpl::addEventListener( const uno::Reference< XEventListener >& xListener )
 {
     {
         SolarMutexGuard g;
@@ -569,7 +569,7 @@ void ImageManagerImpl::addEventListener( const uno::Reference< XEventListener >&
     m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
-void ImageManagerImpl::removeEventListener( const uno::Reference< XEventListener >& xListener ) throw (css::uno::RuntimeException)
+void ImageManagerImpl::removeEventListener( const uno::Reference< XEventListener >& xListener )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
@@ -621,7 +621,6 @@ void ImageManagerImpl::initialize( const Sequence< Any >& aArguments )
 
 // XImageManagerImpl
 void ImageManagerImpl::reset()
-throw (css::uno::RuntimeException, lang::IllegalAccessException)
 {
     SolarMutexGuard g;
 
@@ -648,7 +647,6 @@ throw (css::uno::RuntimeException, lang::IllegalAccessException)
 }
 
 Sequence< OUString > ImageManagerImpl::getAllImageNames( ::sal_Int16 nImageType )
-throw (css::uno::RuntimeException)
 {
     SolarMutexGuard g;
 
@@ -687,7 +685,6 @@ throw (css::uno::RuntimeException)
 }
 
 bool ImageManagerImpl::hasImage( ::sal_Int16 nImageType, const OUString& aCommandURL )
-throw (css::lang::IllegalArgumentException, css::uno::RuntimeException)
 {
     SolarMutexGuard g;
 
@@ -728,7 +725,6 @@ namespace
 Sequence< uno::Reference< XGraphic > > ImageManagerImpl::getImages(
     ::sal_Int16 nImageType,
     const Sequence< OUString >& aCommandURLSequence )
-throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException )
 {
     SolarMutexGuard g;
 
@@ -777,10 +773,6 @@ void ImageManagerImpl::replaceImages(
     ::sal_Int16 nImageType,
     const Sequence< OUString >& aCommandURLSequence,
     const Sequence< uno::Reference< XGraphic > >& aGraphicsSequence )
-throw (css::lang::IllegalArgumentException,
-       css::lang::IllegalAccessException,
-       css::uno::RuntimeException,
-       std::exception)
 {
     CmdToXGraphicNameAccess* pInsertedImages( nullptr );
     CmdToXGraphicNameAccess* pReplacedImages( nullptr );
@@ -861,9 +853,6 @@ throw (css::lang::IllegalArgumentException,
 }
 
 void ImageManagerImpl::removeImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence )
-throw ( css::lang::IllegalArgumentException,
-        css::lang::IllegalAccessException,
-        css::uno::RuntimeException)
 {
     CmdToXGraphicNameAccess* pRemovedImages( nullptr );
     CmdToXGraphicNameAccess* pReplacedImages( nullptr );
@@ -964,19 +953,12 @@ throw ( css::lang::IllegalArgumentException,
 }
 
 void ImageManagerImpl::insertImages( ::sal_Int16 nImageType, const Sequence< OUString >& aCommandURLSequence, const Sequence< uno::Reference< XGraphic > >& aGraphicSequence )
-throw ( css::container::ElementExistException,
-        css::lang::IllegalArgumentException,
-        css::lang::IllegalAccessException,
-        css::uno::RuntimeException)
 {
     replaceImages(nImageType,aCommandURLSequence,aGraphicSequence);
 }
 
 // XUIConfigurationPersistence
 void ImageManagerImpl::reload()
-    throw (css::uno::Exception,
-           css::uno::RuntimeException,
-           std::exception)
 {
     SolarMutexClearableGuard aGuard;
 
@@ -1126,9 +1108,6 @@ void ImageManagerImpl::reload()
 }
 
 void ImageManagerImpl::store()
-    throw (css::uno::Exception,
-           css::uno::RuntimeException,
-           std::exception)
 {
     SolarMutexGuard g;
 
@@ -1161,9 +1140,6 @@ void ImageManagerImpl::store()
 }
 
 void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage )
-    throw (css::uno::Exception,
-           css::uno::RuntimeException,
-           std::exception)
 {
     SolarMutexGuard g;
 
@@ -1194,20 +1170,18 @@ void ImageManagerImpl::storeToStorage( const uno::Reference< XStorage >& Storage
 }
 
 bool ImageManagerImpl::isModified()
-throw (css::uno::RuntimeException)
 {
     SolarMutexGuard g;
     return m_bModified;
 }
 
-bool ImageManagerImpl::isReadOnly() throw (css::uno::RuntimeException)
+bool ImageManagerImpl::isReadOnly()
 {
     SolarMutexGuard g;
     return m_bReadOnly;
 }
 // XUIConfiguration
 void ImageManagerImpl::addConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
-throw (css::uno::RuntimeException)
 {
     {
         SolarMutexGuard g;
@@ -1221,7 +1195,6 @@ throw (css::uno::RuntimeException)
 }
 
 void ImageManagerImpl::removeConfigurationListener( const uno::Reference< css::ui::XUIConfigurationListener >& xListener )
-throw (css::uno::RuntimeException)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     m_aListenerContainer.removeInterface( cppu::UnoType<XUIConfigurationListener>::get(), xListener );

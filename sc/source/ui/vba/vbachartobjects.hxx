@@ -42,16 +42,16 @@ public:
     ScVbaChartObjects( const css::uno::Reference< ov::XHelperInterface >& _xParent, const css::uno::Reference< css::uno::XComponentContext >& _xContext, const css::uno::Reference< css::table::XTableCharts >& _xTableCharts, const css::uno::Reference< css::drawing::XDrawPageSupplier >&  _xDrawPageSupplier );
 
     /// @throws css::script::BasicErrorException
-    css::uno::Sequence< OUString > getChartObjectNames() throw( css::script::BasicErrorException );
+    css::uno::Sequence< OUString > getChartObjectNames();
     void removeByName(const OUString& _sChartName);
 
     // XChartObjects
-    virtual css::uno::Any SAL_CALL Add( double Left, double Top, double Width, double Height ) throw (css::script::BasicErrorException, std::exception) override;
-    virtual void SAL_CALL Delete(  ) throw (css::script::BasicErrorException, std::exception) override;
+    virtual css::uno::Any SAL_CALL Add( double Left, double Top, double Width, double Height ) override;
+    virtual void SAL_CALL Delete(  ) override;
     // XEnumerationAccess
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
     // ChartObjects_BASE

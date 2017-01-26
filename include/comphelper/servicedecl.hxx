@@ -162,16 +162,14 @@ public:
         : BaseT(xContext), m_rServiceDecl(rServiceDecl) {}
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException) override {
+    virtual OUString SAL_CALL getImplementationName() override {
         return m_rServiceDecl.getImplementationName();
     }
-    virtual sal_Bool SAL_CALL supportsService( OUString const& name )
-        throw (css::uno::RuntimeException) override {
+    virtual sal_Bool SAL_CALL supportsService( OUString const& name ) override {
         return m_rServiceDecl.supportsService(name);
     }
     virtual css::uno::Sequence< OUString>
-    SAL_CALL getSupportedServiceNames() throw (css::uno::RuntimeException) override {
+    SAL_CALL getSupportedServiceNames() override {
         return m_rServiceDecl.getSupportedServiceNames();
     }
 

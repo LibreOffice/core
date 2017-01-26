@@ -52,42 +52,42 @@ java_sql_Driver::~java_sql_Driver()
 
 // static ServiceInfo
 
-OUString java_sql_Driver::getImplementationName_Static(  ) throw(RuntimeException)
+OUString java_sql_Driver::getImplementationName_Static(  )
 {
     return OUString("com.sun.star.comp.sdbc.JDBCDriver");
         // this name is referenced in the configuration and in the jdbc.xml
         // Please take care when changing it.
 }
 
-Sequence< OUString > java_sql_Driver::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+Sequence< OUString > java_sql_Driver::getSupportedServiceNames_Static(  )
 {
     Sequence<OUString> aSNS { "com.sun.star.sdbc.Driver" };
     return aSNS;
 }
 
-css::uno::Reference< css::uno::XInterface > SAL_CALL connectivity::java_sql_Driver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw( css::uno::Exception )
+css::uno::Reference< css::uno::XInterface > SAL_CALL connectivity::java_sql_Driver_CreateInstance(const css::uno::Reference< css::lang::XMultiServiceFactory >& _rxFactory)
 {
     return *(new java_sql_Driver( comphelper::getComponentContext(_rxFactory)));
 }
 
-OUString SAL_CALL java_sql_Driver::getImplementationName(  ) throw(RuntimeException, std::exception)
+OUString SAL_CALL java_sql_Driver::getImplementationName(  )
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL java_sql_Driver::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_Driver::supportsService( const OUString& _rServiceName )
 {
     return cppu::supportsService(this, _rServiceName);
 }
 
 
-Sequence< OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL java_sql_Driver::getSupportedServiceNames(  )
 {
     return getSupportedServiceNames_Static();
 }
 
 Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url, const
-                                                         Sequence< PropertyValue >& info ) throw(SQLException, RuntimeException, std::exception)
+                                                         Sequence< PropertyValue >& info )
 {
     m_aLogger.log( LogLevel::INFO, STR_LOG_DRIVER_CONNECTING_URL, url );
 
@@ -104,7 +104,7 @@ Reference< XConnection > SAL_CALL java_sql_Driver::connect( const OUString& url,
     return xOut;
 }
 
-sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url )
 {
     // don't ask the real driver for the url
     // I feel responsible for all jdbc url's
@@ -127,7 +127,7 @@ sal_Bool SAL_CALL java_sql_Driver::acceptsURL( const OUString& url ) throw(SQLEx
 }
 
 Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const OUString& url,
-                                                                         const Sequence< PropertyValue >& /*info*/ ) throw(SQLException, RuntimeException, std::exception)
+                                                                         const Sequence< PropertyValue >& /*info*/ )
 {
     if ( acceptsURL(url) )
     {
@@ -236,12 +236,12 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
     return Sequence< DriverPropertyInfo >();
 }
 
-sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  ) throw(RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_Driver::getMajorVersion(  )
 {
     return 1;
 }
 
-sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  ) throw(RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_Driver::getMinorVersion(  )
 {
     return 0;
 }

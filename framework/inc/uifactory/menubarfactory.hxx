@@ -42,27 +42,24 @@ typedef ::cppu::WeakImplHelper<
             MenuBarFactory( const css::uno::Reference< css::uno::XComponentContext >& xContext );
             virtual ~MenuBarFactory() override;
 
-            virtual OUString SAL_CALL getImplementationName()
-                throw (css::uno::RuntimeException, std::exception) override
+            virtual OUString SAL_CALL getImplementationName() override
             {
                 return OUString("com.sun.star.comp.framework.MenuBarFactory");
             }
 
-            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-                throw (css::uno::RuntimeException, std::exception) override
+            virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
             {
                 return cppu::supportsService(this, ServiceName);
             }
 
-            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-                throw (css::uno::RuntimeException, std::exception) override
+            virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
             {
                 css::uno::Sequence< OUString > aSeq { "com.sun.star.ui.UIElementFactory" };
                 return aSeq;
             }
 
             // XUIElementFactory
-            virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) throw ( css::container::NoSuchElementException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception ) override;
+            virtual css::uno::Reference< css::ui::XUIElement > SAL_CALL createUIElement( const OUString& ResourceURL, const css::uno::Sequence< css::beans::PropertyValue >& Args ) override;
 
             static void CreateUIElement(const OUString& ResourceURL
                         ,const css::uno::Sequence< css::beans::PropertyValue >& Args

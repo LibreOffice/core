@@ -182,10 +182,10 @@ struct XmlFilterBaseImpl
     const NamespaceMap&             mrNamespaceMap;
 
     /// @throws RuntimeException
-    explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException );
+    explicit            XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext );
 };
 
-XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxContext ) :
     mxContext(rxContext),
     maBinSuffix( ".bin" ),
     mrNamespaceMap(StaticNamespaceMap::get())
@@ -194,7 +194,7 @@ XmlFilterBaseImpl::XmlFilterBaseImpl( const Reference< XComponentContext >& rxCo
     registerNamespaces(maFastParser);
 }
 
-XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
+XmlFilterBase::XmlFilterBase( const Reference< XComponentContext >& rxContext ) :
     FilterBase( rxContext ),
     mxImpl( new XmlFilterBaseImpl( rxContext ) ),
     mnRelId( 1 ),

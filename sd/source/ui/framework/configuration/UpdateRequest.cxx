@@ -38,7 +38,6 @@ UpdateRequest::~UpdateRequest() throw()
 }
 
 void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfiguration)
-    throw (RuntimeException, std::exception)
 {
     (void)rxConfiguration;
     // Do nothing here.  The configuration is updated when the request queue
@@ -46,13 +45,11 @@ void SAL_CALL UpdateRequest::execute (const Reference<XConfiguration>& rxConfigu
 }
 
 OUString SAL_CALL UpdateRequest::getName()
-    throw (RuntimeException, std::exception)
 {
     return OUString("UpdateRequest");
 }
 
 void SAL_CALL UpdateRequest::setName (const OUString& rsName)
-    throw (RuntimeException, std::exception)
 {
     (void)rsName;
     // Ignored.

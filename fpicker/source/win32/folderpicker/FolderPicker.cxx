@@ -51,7 +51,7 @@ CFolderPicker::CFolderPicker( const Reference< XMultiServiceFactory >& xServiceM
     m_pFolderPickerImpl = std::unique_ptr< CWinFolderPickerImpl > ( new CWinFolderPickerImpl( this ) );
 }
 
-void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeException )
+void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle )
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
     MutexGuard aGuard( m_aMutex );
@@ -59,7 +59,6 @@ void SAL_CALL CFolderPicker::setTitle( const OUString& aTitle ) throw( RuntimeEx
 }
 
 void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
-    throw( IllegalArgumentException, RuntimeException )
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
     MutexGuard aGuard( m_aMutex );
@@ -67,21 +66,20 @@ void SAL_CALL CFolderPicker::setDisplayDirectory( const OUString& aDirectory )
 }
 
 OUString SAL_CALL CFolderPicker::getDisplayDirectory( )
-    throw( RuntimeException )
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
     MutexGuard aGuard( m_aMutex );
     return m_pFolderPickerImpl->getDisplayDirectory( );
 }
 
-OUString SAL_CALL CFolderPicker::getDirectory( ) throw( RuntimeException )
+OUString SAL_CALL CFolderPicker::getDirectory( )
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
     MutexGuard aGuard( m_aMutex );
     return m_pFolderPickerImpl->getDirectory( );
 }
 
-void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) throw( RuntimeException )
+void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription )
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
     MutexGuard aGuard( m_aMutex );
@@ -89,7 +87,6 @@ void SAL_CALL CFolderPicker::setDescription( const OUString& aDescription ) thro
 }
 
 sal_Int16 SAL_CALL CFolderPicker::execute( )
-    throw( RuntimeException )
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
 
@@ -103,19 +100,16 @@ sal_Int16 SAL_CALL CFolderPicker::execute( )
 // XServiceInfo
 
 OUString SAL_CALL CFolderPicker::getImplementationName(  )
-    throw( RuntimeException )
 {
     return OUString( FOLDERPICKER_IMPL_NAME );
 }
 
 sal_Bool SAL_CALL CFolderPicker::supportsService( const OUString& ServiceName )
-    throw( RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL CFolderPicker::getSupportedServiceNames(   )
-    throw( RuntimeException )
 {
     return FolderPicker_getSupportedServiceNames();
 }
@@ -123,7 +117,6 @@ Sequence< OUString > SAL_CALL CFolderPicker::getSupportedServiceNames(   )
 //  XCancellable
 
 void SAL_CALL CFolderPicker::cancel( )
-    throw(RuntimeException)
 {
     OSL_ASSERT( m_pFolderPickerImpl.get( ) );
     MutexGuard aGuard( m_aMutex );

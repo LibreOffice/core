@@ -47,7 +47,7 @@ namespace dbaccess
         ::rtl::Reference< ::connectivity::OSQLColumns>  m_aColumns;
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
-        virtual void impl_refresh() throw(RuntimeException) override {}
+        virtual void impl_refresh() override {}
         virtual Reference< XPropertySet > createDescriptor() override
         {
             return nullptr;
@@ -80,7 +80,7 @@ namespace dbaccess
         OSQLTables  m_aTables;
     protected:
         virtual connectivity::sdbcx::ObjectType createObject(const OUString& _rName) override;
-        virtual void impl_refresh() throw(RuntimeException) override {}
+        virtual void impl_refresh() override {}
         virtual Reference< XPropertySet > createDescriptor() override
         {
             return nullptr;

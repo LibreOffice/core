@@ -121,7 +121,7 @@ namespace dbaui
         // css::lang::XComponent
         virtual void    SAL_CALL disposing() override;
         // css::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) override;
 
         // misc
         /** only defines a method to save a SQLException in d&d methods to show the error at a later state

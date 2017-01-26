@@ -41,8 +41,8 @@ class ChartObjectEnumerationImpl : public EnumerationHelperImpl
 
 public:
     /// @throws uno::RuntimeException
-    ChartObjectEnumerationImpl( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier, const uno::Reference< XHelperInterface >& _xParent ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( _xParent, xContext, xEnumeration ), xDrawPageSupplier( _xDrawPageSupplier ) {}
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    ChartObjectEnumerationImpl( const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration, const uno::Reference< drawing::XDrawPageSupplier >& _xDrawPageSupplier, const uno::Reference< XHelperInterface >& _xParent ) : EnumerationHelperImpl( _xParent, xContext, xEnumeration ), xDrawPageSupplier( _xDrawPageSupplier ) {}
+    virtual uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Any ret;
 
@@ -87,7 +87,7 @@ ScVbaChartObjects::removeByName(const OUString& _sChartName)
 }
 
 uno::Sequence< OUString >
-ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException )
+ScVbaChartObjects::getChartObjectNames()
 {
     uno::Sequence< OUString > sChartNames;
     try
@@ -127,7 +127,7 @@ ScVbaChartObjects::getChartObjectNames() throw( css::script::BasicErrorException
 
 // XChartObjects
 uno::Any SAL_CALL
-ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight ) throw (script::BasicErrorException, std::exception)
+ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight )
 {
     try
     {
@@ -150,7 +150,7 @@ ScVbaChartObjects::Add( double _nX, double _nY, double _nWidth, double _nHeight 
     }
     return aNULL();
 }
-void SAL_CALL ScVbaChartObjects::Delete(  ) throw (script::BasicErrorException, std::exception)
+void SAL_CALL ScVbaChartObjects::Delete(  )
 {
     uno::Sequence< OUString > sChartNames = xTableCharts->getElementNames();
     sal_Int32 ncount = sChartNames.getLength();
@@ -161,7 +161,7 @@ void SAL_CALL ScVbaChartObjects::Delete(  ) throw (script::BasicErrorException, 
 // XEnumerationAccess
 
 uno::Reference< container::XEnumeration >
-ScVbaChartObjects::createEnumeration() throw (uno::RuntimeException)
+ScVbaChartObjects::createEnumeration()
 {
     css::uno::Reference< container::XEnumerationAccess > xEnumAccess( xTableCharts, uno::UNO_QUERY_THROW );
     return new ChartObjectEnumerationImpl( mxContext, xEnumAccess->createEnumeration(), xDrawPageSupplier, getParent() /* sheet */);
@@ -170,7 +170,7 @@ ScVbaChartObjects::createEnumeration() throw (uno::RuntimeException)
 // XElementAccess
 
 uno::Type
-ScVbaChartObjects::getElementType() throw (uno::RuntimeException)
+ScVbaChartObjects::getElementType()
 {
     return cppu::UnoType<excel::XChartObject>::get();
 }

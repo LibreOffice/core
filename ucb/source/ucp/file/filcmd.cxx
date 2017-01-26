@@ -59,7 +59,6 @@ XCommandInfo_impl::release()
 
 uno::Any SAL_CALL
 XCommandInfo_impl::queryInterface( const uno::Type& rType )
-  throw( uno::RuntimeException, std::exception )
 {
     uno::Any aRet = cppu::queryInterface( rType,
                                           (static_cast< XCommandInfo* >(this)) );
@@ -69,7 +68,6 @@ XCommandInfo_impl::queryInterface( const uno::Type& rType )
 
 uno::Sequence< CommandInfo > SAL_CALL
 XCommandInfo_impl::getCommands()
-    throw( uno::RuntimeException, std::exception )
 {
     return m_pMyShell->m_sCommandInfo;
 }
@@ -78,8 +76,6 @@ XCommandInfo_impl::getCommands()
 CommandInfo SAL_CALL
 XCommandInfo_impl::getCommandInfoByName(
     const OUString& aName )
-    throw( UnsupportedCommandException,
-           uno::RuntimeException, std::exception)
 {
     for( sal_Int32 i = 0; i < m_pMyShell->m_sCommandInfo.getLength(); i++ )
         if( m_pMyShell->m_sCommandInfo[i].Name == aName )
@@ -92,8 +88,6 @@ XCommandInfo_impl::getCommandInfoByName(
 CommandInfo SAL_CALL
 XCommandInfo_impl::getCommandInfoByHandle(
     sal_Int32 Handle )
-    throw( UnsupportedCommandException,
-           uno::RuntimeException, std::exception )
 {
     for( sal_Int32 i = 0; i < m_pMyShell->m_sCommandInfo.getLength(); ++i )
         if( m_pMyShell->m_sCommandInfo[i].Handle == Handle )
@@ -106,7 +100,6 @@ XCommandInfo_impl::getCommandInfoByHandle(
 sal_Bool SAL_CALL
 XCommandInfo_impl::hasCommandByName(
     const OUString& aName )
-    throw( uno::RuntimeException, std::exception )
 {
     for( sal_Int32 i = 0; i < m_pMyShell->m_sCommandInfo.getLength(); ++i )
         if( m_pMyShell->m_sCommandInfo[i].Name == aName )
@@ -119,7 +112,6 @@ XCommandInfo_impl::hasCommandByName(
 sal_Bool SAL_CALL
 XCommandInfo_impl::hasCommandByHandle(
     sal_Int32 Handle )
-    throw( uno::RuntimeException, std::exception )
 {
     for( sal_Int32 i = 0; i < m_pMyShell->m_sCommandInfo.getLength(); ++i )
         if( m_pMyShell->m_sCommandInfo[i].Handle == Handle )

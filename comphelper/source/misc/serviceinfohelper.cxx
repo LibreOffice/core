@@ -26,13 +26,13 @@ namespace comphelper
 {
 
 /** returns an empty UString(). most times sufficient */
-OUString SAL_CALL ServiceInfoHelper::getImplementationName() throw( css::uno::RuntimeException, std::exception )
+OUString SAL_CALL ServiceInfoHelper::getImplementationName()
 {
     return OUString();
 }
 
 /** the base implementation has no supported services */
-css::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception )
+css::uno::Sequence< OUString > ServiceInfoHelper::getSupportedServiceNames()
 {
     css::uno::Sequence< OUString> aSeq(0);
     return aSeq;

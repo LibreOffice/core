@@ -320,7 +320,6 @@ void DataSupplier::close()
 
 // virtual
 void DataSupplier::validate()
-    throw( ucb::ResultSetException )
 {
     if ( m_pImpl->m_bThrowException )
         throw ucb::ResultSetException();

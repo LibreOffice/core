@@ -50,9 +50,9 @@ private:
     VclPtr<BibGeneralPage> mpBibGeneralPage;
 public:
     explicit BibGeneralPageFocusListener(BibGeneralPage *pBibGeneralPage);
-    virtual void SAL_CALL       focusGained( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL       focusLost( const css::awt::FocusEvent& e ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL       focusGained( const css::awt::FocusEvent& e ) override;
+    virtual void SAL_CALL       focusLost( const css::awt::FocusEvent& e ) override;
+    virtual void SAL_CALL       disposing( const css::lang::EventObject& Source ) override;
 
 };
 
@@ -163,9 +163,9 @@ public:
     const rtl::Reference<BibGeneralPageFocusListener>& GetFocusListener() { return mxBibGeneralPageFocusListener; }
 
     /// @throws css::uno::RuntimeException
-    void focusGained(const css::awt::FocusEvent& rEvent) throw( css::uno::RuntimeException, std::exception );
+    void focusGained(const css::awt::FocusEvent& rEvent);
     /// @throws css::uno::RuntimeException
-    void focusLost(const css::awt::FocusEvent& rEvent) throw( css::uno::RuntimeException, std::exception );
+    void focusLost(const css::awt::FocusEvent& rEvent);
 
 };
 

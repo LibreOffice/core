@@ -42,7 +42,7 @@ namespace dbaccess
 
         virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
         virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
-        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,const css::uno::Any& rValue )throw (css::uno::Exception, std::exception ) override;
+        virtual void SAL_CALL setFastPropertyValue_NoBroadcast( sal_Int32 nHandle,const css::uno::Any& rValue ) override;
     };
 
 }

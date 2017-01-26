@@ -118,7 +118,6 @@ void SAL_CALL FullScreenPane::disposing()
 //----- XPane -----------------------------------------------------------------
 
 sal_Bool SAL_CALL FullScreenPane::isVisible()
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -129,7 +128,6 @@ sal_Bool SAL_CALL FullScreenPane::isVisible()
 }
 
 void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -140,7 +138,6 @@ void SAL_CALL FullScreenPane::setVisible (const sal_Bool bIsVisible)
 }
 
 Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessible()
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -152,7 +149,6 @@ Reference<css::accessibility::XAccessible> SAL_CALL FullScreenPane::getAccessibl
 
 void SAL_CALL FullScreenPane::setAccessible (
     const Reference<css::accessibility::XAccessible>& rxAccessible)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -193,7 +189,6 @@ IMPL_LINK(FullScreenPane, WindowEventHandler, VclWindowEvent&, rEvent, void)
 }
 
 Reference<rendering::XCanvas> FullScreenPane::CreateCanvas()
-    throw (RuntimeException)
 {
     VclPtr<vcl::Window> pWindow = VCLUnoHelper::GetWindow(mxWindow);
     if (pWindow)

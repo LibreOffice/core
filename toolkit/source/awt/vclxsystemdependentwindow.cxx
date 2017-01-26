@@ -50,7 +50,7 @@ VCLXSystemDependentWindow::~VCLXSystemDependentWindow()
 }
 
 // css::uno::XInterface
-css::uno::Any VCLXSystemDependentWindow::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXSystemDependentWindow::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XSystemDependentWindowPeer* >(this)) );
@@ -63,7 +63,7 @@ IMPL_XTYPEPROVIDER_START( VCLXSystemDependentWindow )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-css::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXSystemDependentWindow::getWindowHandle( const css::uno::Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
 {
     SolarMutexGuard aGuard;
 

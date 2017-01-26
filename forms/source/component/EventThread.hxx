@@ -84,7 +84,7 @@ public:
 
     // UNO Anbindung
     DECLARE_UNO3_DEFAULTS(OComponentEventThread, OWeakObject)
-    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
     explicit OComponentEventThread(::cppu::OComponentHelper* pCompImpl);
     virtual ~OComponentEventThread() override;
@@ -94,7 +94,7 @@ public:
                    bool bFlag = false );
 
     // css::lang::XEventListener
-    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing(const css::lang::EventObject& _rSource ) override;
 
     // Resolve ambiguity: both OWeakObject and OObject have these memory operators
     void * SAL_CALL operator new( size_t size ) throw() { return osl::Thread::operator new(size); }

@@ -39,21 +39,21 @@ public:
     virtual ~CellCursor() override;
 
     // XCellRange
-    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) throw (css::lang::IndexOutOfBoundsException, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::table::XCell > SAL_CALL getCellByPosition( sal_Int32 nColumn, sal_Int32 nRow ) override;
+    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByPosition( sal_Int32 nLeft, sal_Int32 nTop, sal_Int32 nRight, sal_Int32 nBottom ) override;
+    virtual css::uno::Reference< css::table::XCellRange > SAL_CALL getCellRangeByName( const OUString& aRange ) override;
 
     // XCellCursor
-    virtual void SAL_CALL gotoStart(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL gotoEnd(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL gotoNext(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL gotoPrevious(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL gotoOffset( ::sal_Int32 nColumnOffset, ::sal_Int32 nRowOffset ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL gotoStart(  ) override;
+    virtual void SAL_CALL gotoEnd(  ) override;
+    virtual void SAL_CALL gotoNext(  ) override;
+    virtual void SAL_CALL gotoPrevious(  ) override;
+    virtual void SAL_CALL gotoOffset( ::sal_Int32 nColumnOffset, ::sal_Int32 nRowOffset ) override;
 
     // XMergeableCellRange
-    virtual void SAL_CALL merge(  ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL split( ::sal_Int32 Columns, ::sal_Int32 Rows ) throw (css::lang::NoSupportException, css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isMergeable(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL merge(  ) override;
+    virtual void SAL_CALL split( ::sal_Int32 Columns, ::sal_Int32 Rows ) override;
+    virtual sal_Bool SAL_CALL isMergeable(  ) override;
 
 protected:
     bool GetMergedSelection( CellPos& rStart, CellPos& rEnd );

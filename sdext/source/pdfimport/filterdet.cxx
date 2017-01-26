@@ -187,7 +187,7 @@ PDFDetector::PDFDetector( const uno::Reference< uno::XComponentContext >& xConte
 {}
 
 // XExtendedFilterDetection
-OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rFilterData ) throw( uno::RuntimeException, std::exception )
+OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rFilterData )
 {
     osl::MutexGuard const guard( m_aMutex );
     bool bSuccess = false;
@@ -382,19 +382,16 @@ OUString SAL_CALL PDFDetector::detect( uno::Sequence< beans::PropertyValue >& rF
 }
 
 OUString PDFDetector::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.documents.PDFDetector");
 }
 
 sal_Bool PDFDetector::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> PDFDetector::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{"com.sun.star.document.ImportFilter"};
 }

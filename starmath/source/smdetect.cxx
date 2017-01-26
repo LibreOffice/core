@@ -43,7 +43,7 @@ SmFilterDetect::~SmFilterDetect()
 {
 }
 
-OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor ) throw( RuntimeException, std::exception )
+OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor )
 {
     MediaDescriptor aMediaDesc( lDescriptor );
     uno::Reference< io::XInputStream > xInStream ( aMediaDesc[MediaDescriptor::PROP_INPUTSTREAM()], uno::UNO_QUERY );
@@ -119,19 +119,19 @@ OUString SAL_CALL SmFilterDetect::detect( Sequence< PropertyValue >& lDescriptor
 }
 
 /* XServiceInfo */
-OUString SAL_CALL SmFilterDetect::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL SmFilterDetect::getImplementationName()
 {
     return impl_getStaticImplementationName();
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL SmFilterDetect::supportsService( const OUString& sServiceName ) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL SmFilterDetect::supportsService( const OUString& sServiceName )
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
 {
     return impl_getStaticSupportedServiceNames();
 }
@@ -149,7 +149,7 @@ OUString SmFilterDetect::impl_getStaticImplementationName()
 }
 
 /* Helper for registry */
-Reference< XInterface > SAL_CALL SmFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager ) throw( Exception )
+Reference< XInterface > SAL_CALL SmFilterDetect::impl_createInstance( const Reference< XMultiServiceFactory >& xServiceManager )
 {
     return Reference< XInterface >( *new SmFilterDetect( xServiceManager ) );
 }

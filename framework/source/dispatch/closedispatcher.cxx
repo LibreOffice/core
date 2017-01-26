@@ -86,13 +86,11 @@ CloseDispatcher::~CloseDispatcher()
 
 void SAL_CALL CloseDispatcher::dispatch(const css::util::URL&                                  aURL      ,
                                         const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
-    throw(css::uno::RuntimeException, std::exception)
 {
     dispatchWithNotification(aURL, lArguments, css::uno::Reference< css::frame::XDispatchResultListener >());
 }
 
 css::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGroups()
-    throw(css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence< sal_Int16 > lGroups(2);
     lGroups[0] = css::frame::CommandGroup::VIEW;
@@ -101,7 +99,6 @@ css::uno::Sequence< sal_Int16 > SAL_CALL CloseDispatcher::getSupportedCommandGro
 }
 
 css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::getConfigurableDispatchInformation(sal_Int16 nCommandGroup)
-    throw(css::uno::RuntimeException, std::exception)
 {
     if (nCommandGroup == css::frame::CommandGroup::VIEW)
     {
@@ -126,20 +123,17 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
 
 void SAL_CALL CloseDispatcher::addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                  const css::util::URL&                                     /*aURL*/     )
-    throw(css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL CloseDispatcher::removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& /*xListener*/,
                                                     const css::util::URL&                                     /*aURL*/     )
-    throw(css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                         const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
                                                         const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
-    throw(css::uno::RuntimeException, std::exception)
 {
     // SAFE -> ----------------------------------
     SolarMutexClearableGuard aWriteLock;

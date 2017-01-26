@@ -25,7 +25,7 @@ using namespace ::com::sun::star;
 
 /// @throws uno::RuntimeException
 static css::uno::Reference<css::accessibility::XAccessibleSelection>
-    getSelection( AtkSelection *pSelection ) throw (uno::RuntimeException)
+    getSelection( AtkSelection *pSelection )
 {
     AtkObjectWrapper *pWrap = ATK_OBJECT_WRAPPER( pSelection );
     if (pWrap)

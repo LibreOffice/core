@@ -44,7 +44,7 @@ namespace connectivity
 
     namespace mysql
     {
-        Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFac) throw( Exception )
+        Reference< XInterface >  SAL_CALL ODriverDelegator_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFac)
         {
             return *(new ODriverDelegator( comphelper::getComponentContext(_rxFac) ));
         }
@@ -248,7 +248,7 @@ namespace connectivity
     }
 
 
-    Reference< XConnection > SAL_CALL ODriverDelegator::connect( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException, std::exception)
+    Reference< XConnection > SAL_CALL ODriverDelegator::connect( const OUString& url, const Sequence< PropertyValue >& info )
     {
         Reference< XConnection > xConnection;
         if ( acceptsURL(url) )
@@ -310,7 +310,7 @@ namespace connectivity
     }
 
 
-    sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url ) throw (SQLException, RuntimeException, std::exception)
+    sal_Bool SAL_CALL ODriverDelegator::acceptsURL( const OUString& url )
     {
         Sequence< PropertyValue > info;
 
@@ -323,7 +323,7 @@ namespace connectivity
     }
 
 
-    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException, std::exception)
+    Sequence< DriverPropertyInfo > SAL_CALL ODriverDelegator::getPropertyInfo( const OUString& url, const Sequence< PropertyValue >& info )
     {
         ::std::vector< DriverPropertyInfo > aDriverInfo;
         if ( !acceptsURL(url) )
@@ -381,19 +381,19 @@ namespace connectivity
     }
 
 
-    sal_Int32 SAL_CALL ODriverDelegator::getMajorVersion(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL ODriverDelegator::getMajorVersion(  )
     {
         return 1;
     }
 
 
-    sal_Int32 SAL_CALL ODriverDelegator::getMinorVersion(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL ODriverDelegator::getMinorVersion(  )
     {
         return 0;
     }
 
 
-    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByConnection( const Reference< XConnection >& connection ) throw (SQLException, RuntimeException, std::exception)
+    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByConnection( const Reference< XConnection >& connection )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed(ODriverDelegator_BASE::rBHelper.bDisposed);
@@ -443,7 +443,7 @@ namespace connectivity
     }
 
 
-    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info ) throw (SQLException, RuntimeException, std::exception)
+    Reference< XTablesSupplier > SAL_CALL ODriverDelegator::getDataDefinitionByURL( const OUString& url, const Sequence< PropertyValue >& info )
     {
         if ( ! acceptsURL(url) )
         {
@@ -458,12 +458,12 @@ namespace connectivity
     // XServiceInfo
 
 
-    OUString ODriverDelegator::getImplementationName_Static(  ) throw(RuntimeException)
+    OUString ODriverDelegator::getImplementationName_Static(  )
     {
         return OUString("org.openoffice.comp.drivers.MySQL.Driver");
     }
 
-    Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  ) throw (RuntimeException)
+    Sequence< OUString > ODriverDelegator::getSupportedServiceNames_Static(  )
     {
         Sequence< OUString > aSNS( 2 );
         aSNS[0] = "com.sun.star.sdbc.Driver";
@@ -471,17 +471,17 @@ namespace connectivity
         return aSNS;
     }
 
-    OUString SAL_CALL ODriverDelegator::getImplementationName(  ) throw(RuntimeException, std::exception)
+    OUString SAL_CALL ODriverDelegator::getImplementationName(  )
     {
         return getImplementationName_Static();
     }
 
-    sal_Bool SAL_CALL ODriverDelegator::supportsService( const OUString& _rServiceName ) throw(RuntimeException, std::exception)
+    sal_Bool SAL_CALL ODriverDelegator::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL ODriverDelegator::getSupportedServiceNames(  ) throw(RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL ODriverDelegator::getSupportedServiceNames(  )
     {
         return getSupportedServiceNames_Static();
     }

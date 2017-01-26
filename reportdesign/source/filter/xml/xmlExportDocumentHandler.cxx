@@ -89,17 +89,17 @@ ExportDocumentHandler::~ExportDocumentHandler()
 }
 IMPLEMENT_GET_IMPLEMENTATION_ID(ExportDocumentHandler)
 
-OUString SAL_CALL ExportDocumentHandler::getImplementationName(  ) throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL ExportDocumentHandler::getImplementationName(  )
 {
     return getImplementationName_Static();
 }
 
-sal_Bool SAL_CALL ExportDocumentHandler::supportsService( const OUString& ServiceName ) throw(uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ExportDocumentHandler::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-uno::Sequence< OUString > SAL_CALL ExportDocumentHandler::getSupportedServiceNames(  ) throw(uno::RuntimeException, std::exception)
+uno::Sequence< OUString > SAL_CALL ExportDocumentHandler::getSupportedServiceNames(  )
 {
     uno::Sequence< OUString > aSupported;
     if ( m_xServiceInfo.is() )
@@ -107,13 +107,13 @@ uno::Sequence< OUString > SAL_CALL ExportDocumentHandler::getSupportedServiceNam
     return ::comphelper::concatSequences(getSupportedServiceNames_static(),aSupported);
 }
 
-OUString ExportDocumentHandler::getImplementationName_Static(  ) throw(uno::RuntimeException)
+OUString ExportDocumentHandler::getImplementationName_Static(  )
 {
     return OUString("com.sun.star.comp.report.ExportDocumentHandler");
 }
 
 
-uno::Sequence< OUString > ExportDocumentHandler::getSupportedServiceNames_static(  ) throw(uno::RuntimeException)
+uno::Sequence< OUString > ExportDocumentHandler::getSupportedServiceNames_static(  )
 {
     uno::Sequence< OUString > aSupported { "com.sun.star.report.ExportDocumentHandler" };
     return aSupported;
@@ -125,17 +125,17 @@ uno::Reference< uno::XInterface > SAL_CALL ExportDocumentHandler::create( const 
     return *(new ExportDocumentHandler( _rxContext ));
 }
 // xml::sax::XDocumentHandler:
-void SAL_CALL ExportDocumentHandler::startDocument() throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+void SAL_CALL ExportDocumentHandler::startDocument()
 {
     m_xDelegatee->startDocument();
 }
 
-void SAL_CALL ExportDocumentHandler::endDocument() throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+void SAL_CALL ExportDocumentHandler::endDocument()
 {
     m_xDelegatee->endDocument();
 }
 
-void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs) throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const uno::Reference< xml::sax::XAttributeList > & xAttribs)
 {
     bool bExport = true;
     if ( _sName == "office:chart" )
@@ -233,7 +233,7 @@ void SAL_CALL ExportDocumentHandler::startElement(const OUString & _sName, const
         m_xDelegatee->startElement(_sName,xAttribs);
 }
 
-void SAL_CALL ExportDocumentHandler::endElement(const OUString & _sName) throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+void SAL_CALL ExportDocumentHandler::endElement(const OUString & _sName)
 {
     bool bExport = true;
     OUString sNewName = _sName;
@@ -266,7 +266,7 @@ void SAL_CALL ExportDocumentHandler::endElement(const OUString & _sName) throw (
         m_xDelegatee->endElement(sNewName);
 }
 
-void SAL_CALL ExportDocumentHandler::characters(const OUString & aChars) throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+void SAL_CALL ExportDocumentHandler::characters(const OUString & aChars)
 {
     if ( !(m_bTableRowsStarted || m_bFirstRowExported) )
     {
@@ -274,21 +274,21 @@ void SAL_CALL ExportDocumentHandler::characters(const OUString & aChars) throw (
     }
 }
 
-void SAL_CALL ExportDocumentHandler::ignorableWhitespace(const OUString & aWhitespaces) throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+void SAL_CALL ExportDocumentHandler::ignorableWhitespace(const OUString & aWhitespaces)
 {
     m_xDelegatee->ignorableWhitespace(aWhitespaces);
 }
 
-void SAL_CALL ExportDocumentHandler::processingInstruction(const OUString & aTarget, const OUString & aData) throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+void SAL_CALL ExportDocumentHandler::processingInstruction(const OUString & aTarget, const OUString & aData)
 {
     m_xDelegatee->processingInstruction(aTarget,aData);
 }
 
-void SAL_CALL ExportDocumentHandler::setDocumentLocator(const uno::Reference< xml::sax::XLocator > & xLocator) throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
+void SAL_CALL ExportDocumentHandler::setDocumentLocator(const uno::Reference< xml::sax::XLocator > & xLocator)
 {
     m_xDelegatee->setDocumentLocator(xLocator);
 }
-void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >& _aArguments ) throw (uno::Exception, uno::RuntimeException, std::exception)
+void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >& _aArguments )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     comphelper::SequenceAsHashMap aArgs(_aArguments);
@@ -334,13 +334,13 @@ void SAL_CALL ExportDocumentHandler::initialize( const uno::Sequence< uno::Any >
     }
 }
 
-uno::Any SAL_CALL ExportDocumentHandler::queryInterface( const uno::Type& _rType ) throw (uno::RuntimeException, std::exception)
+uno::Any SAL_CALL ExportDocumentHandler::queryInterface( const uno::Type& _rType )
 {
     uno::Any aReturn = ExportDocumentHandler_BASE::queryInterface(_rType);
     return aReturn.hasValue() ? aReturn : (m_xProxy.is() ? m_xProxy->queryAggregation(_rType) : aReturn);
 }
 
-uno::Sequence< uno::Type > SAL_CALL ExportDocumentHandler::getTypes(  ) throw (uno::RuntimeException, std::exception)
+uno::Sequence< uno::Type > SAL_CALL ExportDocumentHandler::getTypes(  )
 {
     if ( m_xTypeProvider.is() )
         return ::comphelper::concatSequences(

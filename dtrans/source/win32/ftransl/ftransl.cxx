@@ -469,7 +469,6 @@ CDataFormatTranslatorUNO::CDataFormatTranslatorUNO( const Reference< XComponentC
 }
 
 Any SAL_CALL CDataFormatTranslatorUNO::getSystemDataTypeFromDataFlavor( const DataFlavor& aDataFlavor )
-    throw( RuntimeException )
 {
     Any aAny;
 
@@ -524,7 +523,6 @@ Any SAL_CALL CDataFormatTranslatorUNO::getSystemDataTypeFromDataFlavor( const Da
 }
 
 DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( const Any& aSysDataType )
-    throw( RuntimeException )
 {
     OSL_PRECOND( aSysDataType.hasValue( ), "Empty system data type delivered" );
 
@@ -553,19 +551,16 @@ DataFlavor SAL_CALL CDataFormatTranslatorUNO::getDataFlavorFromSystemDataType( c
 // XServiceInfo
 
 OUString SAL_CALL CDataFormatTranslatorUNO::getImplementationName(  )
-    throw( RuntimeException )
 {
     return OUString( IMPL_NAME );
 }
 
 sal_Bool SAL_CALL CDataFormatTranslatorUNO::supportsService( const OUString& ServiceName )
-    throw( RuntimeException )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL CDataFormatTranslatorUNO::getSupportedServiceNames( )
-    throw( RuntimeException )
 {
     return DataFormatTranslator_getSupportedServiceNames( );
 }

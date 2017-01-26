@@ -54,26 +54,26 @@ namespace toolkit
         DECLARE_XTYPEPROVIDER()
 
         // XComponent
-        void SAL_CALL dispose( ) throw(css::uno::RuntimeException, std::exception) override;
+        void SAL_CALL dispose( ) override;
 
         // XSpinValue
-        virtual void SAL_CALL addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValue( sal_Int32 n ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getValue(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setMinimum( sal_Int32 minValue ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setMaximum( sal_Int32 maxValue ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getMinimum(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getMaximum(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setSpinIncrement( sal_Int32 spinIncrement ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getSpinIncrement(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setOrientation( sal_Int32 orientation ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
-        virtual sal_Int32 SAL_CALL getOrientation(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL addAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
+        virtual void SAL_CALL removeAdjustmentListener( const css::uno::Reference< css::awt::XAdjustmentListener >& listener ) override;
+        virtual void SAL_CALL setValue( sal_Int32 n ) override;
+        virtual void SAL_CALL setValues( sal_Int32 minValue, sal_Int32 maxValue, sal_Int32 currentValue ) override;
+        virtual sal_Int32 SAL_CALL getValue(  ) override;
+        virtual void SAL_CALL setMinimum( sal_Int32 minValue ) override;
+        virtual void SAL_CALL setMaximum( sal_Int32 maxValue ) override;
+        virtual sal_Int32 SAL_CALL getMinimum(  ) override;
+        virtual sal_Int32 SAL_CALL getMaximum(  ) override;
+        virtual void SAL_CALL setSpinIncrement( sal_Int32 spinIncrement ) override;
+        virtual sal_Int32 SAL_CALL getSpinIncrement(  ) override;
+        virtual void SAL_CALL setOrientation( sal_Int32 orientation ) override;
+        virtual sal_Int32 SAL_CALL getOrientation(  ) override;
 
         // VclWindowPeer
-        virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setProperty( const OUString& PropertyName, const css::uno::Any& Value ) override;
+        virtual css::uno::Any SAL_CALL getProperty( const OUString& PropertyName ) override;
 
         // VCLXWindow
         void ProcessWindowEvent( const VclWindowEvent& _rVclWindowEvent ) override;

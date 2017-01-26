@@ -39,14 +39,14 @@ OObjectListener::~OObjectListener()
 // XEventListener
 
 
-void SAL_CALL OObjectListener::disposing( const  css::lang::EventObject& ) throw( css::uno::RuntimeException, std::exception)
+void SAL_CALL OObjectListener::disposing( const  css::lang::EventObject& )
 {
 }
 
 // XPropertyChangeListener
 
 
-void SAL_CALL OObjectListener::propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw( css::uno::RuntimeException, std::exception)
+void SAL_CALL OObjectListener::propertyChange( const  css::beans::PropertyChangeEvent& evt )
 {
     m_pObject->_propertyChange( evt );
 }

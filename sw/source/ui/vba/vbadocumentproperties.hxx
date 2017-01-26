@@ -31,10 +31,10 @@ public:
     SwVbaBuiltinDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xDocument );
 
     // XDocumentProperties
-    virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, sal_Bool LinkToContent, ::sal_Int8 Type, const css::uno::Any& Value, const css::uno::Any& LinkSource ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, sal_Bool LinkToContent, ::sal_Int8 Type, const css::uno::Any& Value, const css::uno::Any& LinkSource ) override;
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;
 
@@ -48,7 +48,7 @@ class SwVbaCustomDocumentProperties : public SwVbaBuiltinDocumentProperties
 public:
     SwVbaCustomDocumentProperties( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext > & xContext, const css::uno::Reference< css::frame::XModel >& xDocument );
 // XDocumentProperties
-    virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, sal_Bool LinkToContent, ::sal_Int8 Type, const css::uno::Any& Value, const css::uno::Any& LinkSource ) throw (css::script::BasicErrorException, css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< ::ooo::vba::XDocumentProperty > SAL_CALL Add( const OUString& Name, sal_Bool LinkToContent, ::sal_Int8 Type, const css::uno::Any& Value, const css::uno::Any& LinkSource ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
 };

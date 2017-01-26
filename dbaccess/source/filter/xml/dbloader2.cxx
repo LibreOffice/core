@@ -100,9 +100,9 @@ public:
     explicit DBTypeDetection(const Reference< XComponentContext >&);
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw(std::exception  ) override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) override;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames() throw(std::exception  ) override;
+    OUString                        SAL_CALL getImplementationName() override;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
 
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
@@ -113,7 +113,7 @@ public:
     static css::uno::Reference< css::uno::XInterface >
             SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
-    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) override;
 };
 
 DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContext)
@@ -121,7 +121,7 @@ DBTypeDetection::DBTypeDetection(const Reference< XComponentContext >& _rxContex
 {
 }
 
-OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor ) throw (css::uno::RuntimeException, std::exception)
+OUString SAL_CALL DBTypeDetection::detect( css::uno::Sequence< css::beans::PropertyValue >& Descriptor )
 {
     try
     {
@@ -188,19 +188,19 @@ Reference< XInterface > SAL_CALL DBTypeDetection::Create( const Reference< XMult
 }
 
 // XServiceInfo
-OUString SAL_CALL DBTypeDetection::getImplementationName() throw(std::exception  )
+OUString SAL_CALL DBTypeDetection::getImplementationName()
 {
     return getImplementationName_Static();
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName) throw(std::exception  )
+sal_Bool SAL_CALL DBTypeDetection::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames() throw(std::exception  )
+Sequence< OUString > SAL_CALL DBTypeDetection::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
@@ -235,9 +235,9 @@ public:
     explicit DBContentLoader(const Reference< XComponentContext >&);
 
     // XServiceInfo
-    OUString                        SAL_CALL getImplementationName() throw(std::exception  ) override;
-    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) override;
-    Sequence< OUString >            SAL_CALL getSupportedServiceNames() throw(std::exception  ) override;
+    OUString                        SAL_CALL getImplementationName() override;
+    sal_Bool                        SAL_CALL supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >            SAL_CALL getSupportedServiceNames() override;
 
     // static methods
     static OUString                 getImplementationName_Static() throw(  )
@@ -251,8 +251,8 @@ public:
     // XLoader
     virtual void SAL_CALL load( const Reference< XFrame > & _rFrame, const OUString& _rURL,
                                 const Sequence< PropertyValue >& _rArgs,
-                                const Reference< XLoadEventListener > & _rListener) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel() throw(std::exception) override;
+                                const Reference< XLoadEventListener > & _rListener) override;
+    virtual void SAL_CALL cancel() override;
 
 private:
     bool impl_executeNewDatabaseWizard( Reference< XModel >& _rxModel, bool& _bShouldStartTableWizard );
@@ -272,19 +272,19 @@ Reference< XInterface > SAL_CALL DBContentLoader::Create( const Reference< XMult
 }
 
 // XServiceInfo
-OUString SAL_CALL DBContentLoader::getImplementationName() throw(std::exception  )
+OUString SAL_CALL DBContentLoader::getImplementationName()
 {
     return getImplementationName_Static();
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName) throw(std::exception  )
+sal_Bool SAL_CALL DBContentLoader::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames() throw(std::exception  )
+Sequence< OUString > SAL_CALL DBContentLoader::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
@@ -367,7 +367,7 @@ bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _rxMod
 
 void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OUString& _rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< XLoadEventListener > & rListener) throw(css::uno::RuntimeException, std::exception)
+        const Reference< XLoadEventListener > & rListener)
 {
     // first check if preview is true, if so return with out creating a controller. Preview is not supported
     ::comphelper::NamedValueCollection aMediaDesc( rArgs );
@@ -550,7 +550,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         ::comphelper::disposeComponent(xModel);
 }
 
-void DBContentLoader::cancel() throw(std::exception)
+void DBContentLoader::cancel()
 {
 }
 

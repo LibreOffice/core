@@ -52,7 +52,6 @@ DEFINE_INIT_SERVICE                 (   MediaTypeDetectionHelper,
 //   XStringMapping
 
 sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(uno::Sequence< OUString >& rSeq)
-    throw (uno::RuntimeException, std::exception)
 {
     bool bModified = false;
     for( sal_Int32 i = rSeq.getLength(); i--; )

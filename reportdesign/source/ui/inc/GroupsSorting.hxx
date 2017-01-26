@@ -135,7 +135,7 @@ private:
     void operator =(OGroupsSortingDialog&) = delete;
 protected:
     // OPropertyChangeListener
-    virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) throw( css::uno::RuntimeException, std::exception) override;
+    virtual void    _propertyChanged(const css::beans::PropertyChangeEvent& _rEvent) override;
 public:
     OGroupsSortingDialog( vcl::Window* pParent
                         ,bool _bReadOnly

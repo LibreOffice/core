@@ -52,50 +52,46 @@ class XMLSignatureTemplateImpl : public ::cppu::WeakImplHelper<
         //Methods from XXMLSignatureTemplate
         virtual void SAL_CALL setTemplate(
             const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement
-            ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception) override;
+            ) override;
 
         virtual css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > SAL_CALL getTemplate(
-        ) throw (css::uno::RuntimeException, std::exception) override;
+        ) override;
 
         virtual void SAL_CALL setTarget(
             const css::uno::Reference< css::xml::wrapper::XXMLElementWrapper >& aXmlElement
-        ) throw( css::uno::RuntimeException, css::lang::IllegalArgumentException, std::exception) override;
+        ) override;
 
         virtual css::uno::Sequence< css::uno::Reference< css::xml::wrapper::XXMLElementWrapper > > SAL_CALL getTargets(
-        ) throw (css::uno::RuntimeException, std::exception) override;
+        ) override;
 
         virtual void SAL_CALL setBinding(
-            const css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding )
-            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+            const css::uno::Reference< css::xml::crypto::XUriBinding >& aUriBinding ) override;
         virtual css::uno::Reference< css::xml::crypto::XUriBinding >
-            SAL_CALL getBinding(  )
-            throw (css::uno::RuntimeException, std::exception) override;
+            SAL_CALL getBinding(  ) override;
 
         virtual void SAL_CALL setStatus(
-            css::xml::crypto::SecurityOperationStatus status )
-            throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
+            css::xml::crypto::SecurityOperationStatus status ) override;
         virtual css::xml::crypto::SecurityOperationStatus
-            SAL_CALL getStatus(  )
-            throw (css::uno::RuntimeException, std::exception) override;
+            SAL_CALL getStatus(  ) override;
 
         //Methods from XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override ;
+        virtual OUString SAL_CALL getImplementationName() override ;
 
         virtual sal_Bool SAL_CALL supportsService(
             const OUString& ServiceName
-        ) throw( css::uno::RuntimeException, std::exception ) override ;
+        ) override ;
 
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override ;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override ;
 
         //Helper for XServiceInfo
         static css::uno::Sequence< OUString > impl_getSupportedServiceNames() ;
 
         /// @throws css::uno::RuntimeException
-        static OUString impl_getImplementationName() throw( css::uno::RuntimeException ) ;
+        static OUString impl_getImplementationName() ;
 
         //Helper for registry
         /// @throws css::uno::RuntimeException
-        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) throw( css::uno::RuntimeException ) ;
+        static css::uno::Reference< css::uno::XInterface > SAL_CALL impl_createInstance( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 
         static css::uno::Reference< css::lang::XSingleServiceFactory > impl_createFactory( const css::uno::Reference< css::lang::XMultiServiceFactory >& aServiceManager ) ;
 } ;

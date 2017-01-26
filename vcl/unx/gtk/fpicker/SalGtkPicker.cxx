@@ -134,7 +134,6 @@ RunDialog::~RunDialog()
 }
 
 void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -154,12 +153,10 @@ void SAL_CALL RunDialog::windowOpened(const css::lang::EventObject& e)
 }
 
 void SAL_CALL RunDialog::queryTermination( const css::lang::EventObject& )
-        throw(css::frame::TerminationVetoException, css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL RunDialog::notifyTermination( const css::lang::EventObject& )
-        throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -201,7 +198,6 @@ SalGtkPicker::~SalGtkPicker()
 }
 
 void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory )
-    throw( lang::IllegalArgumentException, uno::RuntimeException )
 {
     OSL_ASSERT( m_pDialog != nullptr );
 
@@ -219,7 +215,7 @@ void SAL_CALL SalGtkPicker::implsetDisplayDirectory( const OUString& aDirectory 
         aTxt.getStr() );
 }
 
-OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeException )
+OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory()
 {
     OSL_ASSERT( m_pDialog != nullptr );
 
@@ -231,7 +227,7 @@ OUString SAL_CALL SalGtkPicker::implgetDisplayDirectory() throw( uno::RuntimeExc
     return aCurrentFolderName;
 }
 
-void SAL_CALL SalGtkPicker::implsetTitle( const OUString& aTitle ) throw( uno::RuntimeException )
+void SAL_CALL SalGtkPicker::implsetTitle( const OUString& aTitle )
 {
     OSL_ASSERT( m_pDialog != nullptr );
 

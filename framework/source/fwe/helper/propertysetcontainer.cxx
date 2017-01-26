@@ -55,7 +55,6 @@ void SAL_CALL PropertySetContainer::release() throw ()
 }
 
 Any SAL_CALL PropertySetContainer::queryInterface( const Type& rType )
-throw ( RuntimeException, std::exception )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -74,7 +73,6 @@ throw ( RuntimeException, std::exception )
 
 // XIndexContainer
 void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const css::uno::Any& Element )
-    throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -107,7 +105,6 @@ void SAL_CALL PropertySetContainer::insertByIndex( sal_Int32 Index, const css::u
 }
 
 void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
-    throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -121,7 +118,6 @@ void SAL_CALL PropertySetContainer::removeByIndex( sal_Int32 nIndex )
 
 // XIndexReplace
 void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const css::uno::Any& Element )
-    throw ( IllegalArgumentException, IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
 {
     if ( (sal_Int32)m_aPropertySetVector.size() > Index )
     {
@@ -144,7 +140,6 @@ void SAL_CALL PropertySetContainer::replaceByIndex( sal_Int32 Index, const css::
 
 // XIndexAccess
 sal_Int32 SAL_CALL PropertySetContainer::getCount()
-    throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -152,7 +147,6 @@ sal_Int32 SAL_CALL PropertySetContainer::getCount()
 }
 
 Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
-    throw ( IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -169,7 +163,6 @@ Any SAL_CALL PropertySetContainer::getByIndex( sal_Int32 Index )
 
 // XElementAccess
 sal_Bool SAL_CALL PropertySetContainer::hasElements()
-    throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 

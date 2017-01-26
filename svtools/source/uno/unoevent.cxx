@@ -138,7 +138,6 @@ void getAnyFromMacro(Any& rAny, const SvxMacro& rMacro)
 void getMacroFromAny(
     SvxMacro& rMacro,
     const Any& rAny)
-        throw ( IllegalArgumentException )
 {
     // get sequence
     Sequence<PropertyValue> aSequence;
@@ -250,11 +249,6 @@ SvBaseEventDescriptor::~SvBaseEventDescriptor()
 void SvBaseEventDescriptor::replaceByName(
     const OUString& rName,
     const Any& rElement )
-    throw(
-        IllegalArgumentException,
-        NoSuchElementException,
-        WrappedTargetException,
-        RuntimeException, std::exception)
 {
     sal_uInt16 nMacroID = getMacroID(rName);
 
@@ -276,10 +270,6 @@ void SvBaseEventDescriptor::replaceByName(
 
 Any SvBaseEventDescriptor::getByName(
     const OUString& rName )
-    throw(
-        NoSuchElementException,
-        WrappedTargetException,
-        RuntimeException, std::exception)
 {
     sal_uInt16 nMacroID = getMacroID(rName);
 
@@ -296,7 +286,6 @@ Any SvBaseEventDescriptor::getByName(
 }
 
 Sequence<OUString> SvBaseEventDescriptor::getElementNames()
-    throw(RuntimeException, std::exception)
 {
     // create and fill sequence
     Sequence<OUString> aSequence(mnMacroItems);
@@ -310,32 +299,27 @@ Sequence<OUString> SvBaseEventDescriptor::getElementNames()
 
 sal_Bool SvBaseEventDescriptor::hasByName(
     const OUString& rName )
-    throw(RuntimeException, std::exception)
 {
     sal_uInt16 nMacroID = getMacroID(rName);
     return (nMacroID != 0);
 }
 
 Type SvBaseEventDescriptor::getElementType()
-    throw(RuntimeException, std::exception)
 {
     return cppu::UnoType<Sequence<PropertyValue>>::get();
 }
 
 sal_Bool SvBaseEventDescriptor::hasElements()
-    throw(RuntimeException, std::exception)
 {
     return mnMacroItems != 0;
 }
 
 sal_Bool SvBaseEventDescriptor::supportsService(const OUString& rServiceName)
-    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence<OUString> SvBaseEventDescriptor::getSupportedServiceNames()
-    throw(RuntimeException, std::exception)
 {
     Sequence<OUString> aSequence { sAPI_ServiceName };
 
@@ -379,11 +363,6 @@ SvEventDescriptor::~SvEventDescriptor()
 void SvEventDescriptor::replaceByName(
     const sal_uInt16 nEvent,
     const SvxMacro& rMacro)
-        throw(
-            IllegalArgumentException,
-            NoSuchElementException,
-            WrappedTargetException,
-            RuntimeException)
 {
     SvxMacroItem aItem(getMacroItemWhich());
     aItem.SetMacroTable(getMacroItem().GetMacroTable());
@@ -394,10 +373,6 @@ void SvEventDescriptor::replaceByName(
 void SvEventDescriptor::getByName(
     SvxMacro& rMacro,
     const sal_uInt16 nEvent )
-        throw(
-            NoSuchElementException,
-            WrappedTargetException,
-            RuntimeException)
 {
     const SvxMacroItem& rItem = getMacroItem();
     if( rItem.HasMacro( nEvent ) )
@@ -450,7 +425,6 @@ sal_Int16 SvDetachedEventDescriptor::getIndex(const sal_uInt16 nID) const
 }
 
 OUString SvDetachedEventDescriptor::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return sImplName;
 }
@@ -459,11 +433,6 @@ OUString SvDetachedEventDescriptor::getImplementationName()
 void SvDetachedEventDescriptor::replaceByName(
     const sal_uInt16 nEvent,
     const SvxMacro& rMacro)
-    throw(
-        IllegalArgumentException,
-        NoSuchElementException,
-        WrappedTargetException,
-        RuntimeException)
 {
     sal_Int16 nIndex = getIndex(nEvent);
     if (-1 == nIndex)
@@ -477,10 +446,6 @@ void SvDetachedEventDescriptor::replaceByName(
 void SvDetachedEventDescriptor::getByName(
     SvxMacro& rMacro,
     const sal_uInt16 nEvent )
-    throw(
-        NoSuchElementException,
-        WrappedTargetException,
-        RuntimeException)
 {
     sal_Int16 nIndex = getIndex(nEvent);
     if (-1 == nIndex )
@@ -492,7 +457,6 @@ void SvDetachedEventDescriptor::getByName(
 
 bool SvDetachedEventDescriptor::hasById(
     const sal_uInt16 nEvent ) const     /// item ID of event
-        throw(IllegalArgumentException)
 {
     sal_Int16 nIndex = getIndex(nEvent);
     if (-1 == nIndex)

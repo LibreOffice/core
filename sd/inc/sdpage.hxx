@@ -295,13 +295,13 @@ public:
 
         @throws css::uno::RuntimeException
     */
-    css::uno::Reference< css::animations::XAnimationNode > const & getAnimationNode() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::animations::XAnimationNode > const & getAnimationNode();
 
     /** sets the main animation node
 
         @throws css::uno::RuntimeException
     */
-    void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode >& xNode ) throw (css::uno::RuntimeException);
+    void setAnimationNode( css::uno::Reference< css::animations::XAnimationNode >& xNode );
 
     /// @return a helper class to manipulate effects inside the main sequence
     std::shared_ptr< sd::MainSequence > const & getMainSequence();

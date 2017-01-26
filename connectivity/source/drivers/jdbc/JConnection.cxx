@@ -322,7 +322,7 @@ jclass java_sql_Connection::getMyClass() const
 }
 
 
-OUString SAL_CALL java_sql_Connection::getCatalog(  ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_Connection::getCatalog(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -331,7 +331,7 @@ OUString SAL_CALL java_sql_Connection::getCatalog(  ) throw(SQLException, Runtim
     return callStringMethod("getCatalog",mID);
 }
 
-Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -353,18 +353,18 @@ Reference< XDatabaseMetaData > SAL_CALL java_sql_Connection::getMetaData(  ) thr
     return xMetaData;
 }
 
-void SAL_CALL java_sql_Connection::close(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::close(  )
 {
     dispose();
 }
 
-void SAL_CALL java_sql_Connection::commit(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::commit(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("commit", mID);
 }
 
-sal_Bool SAL_CALL java_sql_Connection::isClosed(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_Connection::isClosed(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
@@ -372,7 +372,7 @@ sal_Bool SAL_CALL java_sql_Connection::isClosed(  ) throw(SQLException, RuntimeE
     return callBooleanMethod( "isClosed", mID ) && java_sql_Connection_BASE::rBHelper.bDisposed;
 }
 
-sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -380,37 +380,37 @@ sal_Bool SAL_CALL java_sql_Connection::isReadOnly(  ) throw(SQLException, Runtim
     return callBooleanMethod( "isReadOnly", mID );
 }
 
-void SAL_CALL java_sql_Connection::setCatalog( const OUString& catalog ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::setCatalog( const OUString& catalog )
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithStringArg("setCatalog",mID,catalog);
 }
 
-void SAL_CALL java_sql_Connection::rollback(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::rollback(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("rollback", mID);
 }
 
-sal_Bool SAL_CALL java_sql_Connection::getAutoCommit(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_Connection::getAutoCommit(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "getAutoCommit", mID );
 }
 
-void SAL_CALL java_sql_Connection::setReadOnly( sal_Bool readOnly ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::setReadOnly( sal_Bool readOnly )
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithBoolArg_ThrowSQL("setReadOnly", mID, readOnly);
 }
 
-void SAL_CALL java_sql_Connection::setAutoCommit( sal_Bool autoCommit ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::setAutoCommit( sal_Bool autoCommit )
 {
     static jmethodID mID(nullptr);
     callVoidMethodWithBoolArg_ThrowSQL("setAutoCommit", mID, autoCommit);
 }
 
-Reference< css::container::XNameAccess > SAL_CALL java_sql_Connection::getTypeMap(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< css::container::XNameAccess > SAL_CALL java_sql_Connection::getTypeMap(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -422,7 +422,7 @@ Reference< css::container::XNameAccess > SAL_CALL java_sql_Connection::getTypeMa
     return nullptr;
 }
 
-void SAL_CALL java_sql_Connection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::setTypeMap( const Reference< css::container::XNameAccess >& /*typeMap*/ )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -431,7 +431,7 @@ void SAL_CALL java_sql_Connection::setTypeMap( const Reference< css::container::
 }
 
 
-sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -440,7 +440,7 @@ sal_Int32 SAL_CALL java_sql_Connection::getTransactionIsolation(  ) throw(SQLExc
     return callIntMethod_ThrowSQL("getTransactionIsolation", mID);
 }
 
-void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -449,7 +449,7 @@ void SAL_CALL java_sql_Connection::setTransactionIsolation( sal_Int32 level ) th
     callVoidMethodWithIntArg_ThrowSQL("setTransactionIsolation", mID, level);
 }
 
-Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XStatement > SAL_CALL java_sql_Connection::createStatement(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -490,7 +490,7 @@ OUString java_sql_Connection::transFormPreparedStatement(const OUString& _sSQL)
     return sSqlStatement;
 }
 
-Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -508,7 +508,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareStatement( 
     return xReturn;
 }
 
-Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -526,7 +526,7 @@ Reference< XPreparedStatement > SAL_CALL java_sql_Connection::prepareCall( const
     return xStmt;
 }
 
-OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);
@@ -554,13 +554,13 @@ OUString SAL_CALL java_sql_Connection::nativeSQL( const OUString& sql ) throw(SQ
     return aStr;
 }
 
-void SAL_CALL java_sql_Connection::clearWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Connection::clearWarnings(  )
 {
     static jmethodID mID(nullptr);
     callVoidMethod_ThrowSQL("clearWarnings", mID);
 }
 
-Any SAL_CALL java_sql_Connection::getWarnings(  ) throw(SQLException, RuntimeException, std::exception)
+Any SAL_CALL java_sql_Connection::getWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Connection_BASE::rBHelper.bDisposed);

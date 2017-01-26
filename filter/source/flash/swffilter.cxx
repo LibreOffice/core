@@ -71,12 +71,12 @@ public:
     }
 
     // css::io::XOutputStream
-    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL flush(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL closeOutput(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
+    virtual void SAL_CALL flush(  ) override;
+    virtual void SAL_CALL closeOutput(  ) override;
 };
 
-void SAL_CALL OslOutputStreamWrapper::writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OslOutputStreamWrapper::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
 {
     sal_uInt64 uBytesToWrite = aData.getLength();
     sal_uInt64 uBytesWritten = 0;
@@ -110,11 +110,11 @@ void SAL_CALL OslOutputStreamWrapper::writeBytes( const css::uno::Sequence< sal_
     }
 }
 
-void SAL_CALL OslOutputStreamWrapper::flush(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OslOutputStreamWrapper::flush(  )
 {
 }
 
-void SAL_CALL OslOutputStreamWrapper::closeOutput(  ) throw (css::io::NotConnectedException, css::io::BufferSizeExceededException, css::io::IOException, css::uno::RuntimeException, std::exception)
+void SAL_CALL OslOutputStreamWrapper::closeOutput(  )
 {
     osl::File::RC eRC = mrFile.close();
 
@@ -154,23 +154,23 @@ public:
     explicit FlashExportFilter( const Reference< XComponentContext > &rxContext);
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
 
     bool ExportAsMultipleFiles( const Sequence< PropertyValue >& aDescriptor );
     bool ExportAsSingleFile( const Sequence< PropertyValue >& aDescriptor );
 
-    virtual void SAL_CALL cancel( ) throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL cancel( ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 FlashExportFilter::FlashExportFilter(const Reference< XComponentContext > &rxContext)
@@ -227,7 +227,6 @@ TYPE findPropertyValue(const Sequence< PropertyValue >& aPropertySequence, const
 }
 
 sal_Bool SAL_CALL FlashExportFilter::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException, std::exception)
 {
     mxStatusIndicator = findPropertyValue<Reference<XStatusIndicator> >(aDescriptor, "StatusIndicator", mxStatusIndicator);
 
@@ -466,14 +465,12 @@ bool FlashExportFilter::ExportAsSingleFile(const Sequence< PropertyValue >& aDes
 
 
 void SAL_CALL FlashExportFilter::cancel(  )
-    throw (RuntimeException, std::exception)
 {
 }
 
 
 // XExporter
 void SAL_CALL FlashExportFilter::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
-    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
@@ -481,44 +478,37 @@ void SAL_CALL FlashExportFilter::setSourceDocument( const css::uno::Reference< c
 
 // XInitialization
 void SAL_CALL FlashExportFilter::initialize( const css::uno::Sequence< css::uno::Any >& /* aArguments */ )
-    throw (Exception, RuntimeException, std::exception)
 {
 }
 
 OUString FlashExportFilter_getImplementationName ()
-    throw (RuntimeException)
 {
     return OUString ( "com.sun.star.comp.Impress.FlashExportFilter" );
 }
 
 Sequence< OUString > SAL_CALL FlashExportFilter_getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     Sequence<OUString> aRet { "com.sun.star.document.ExportFilter" };
     return aRet;
 }
 
 Reference< XInterface > SAL_CALL FlashExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new FlashExportFilter( comphelper::getComponentContext(rSMgr) ));
 }
 
 // XServiceInfo
 OUString SAL_CALL FlashExportFilter::getImplementationName(  )
-    throw (RuntimeException, std::exception)
 {
     return FlashExportFilter_getImplementationName();
 }
 
 sal_Bool SAL_CALL FlashExportFilter::supportsService( const OUString& rServiceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 css::uno::Sequence< OUString > SAL_CALL FlashExportFilter::getSupportedServiceNames(  )
-    throw (RuntimeException, std::exception)
 {
     return FlashExportFilter_getSupportedServiceNames();
 }

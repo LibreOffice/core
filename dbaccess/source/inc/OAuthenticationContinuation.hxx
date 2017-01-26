@@ -44,18 +44,18 @@ class OOO_DLLPUBLIC_DBA OAuthenticationContinuation :
 public:
     OAuthenticationContinuation();
 
-    sal_Bool SAL_CALL canSetRealm(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setRealm( const OUString& Realm ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL canSetUserName(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setUserName( const OUString& UserName ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL canSetPassword(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setPassword( const OUString& Password ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberPasswordModes( css::ucb::RememberAuthentication& Default ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setRememberPassword( css::ucb::RememberAuthentication Remember ) throw(css::uno::RuntimeException, std::exception) override;
-    sal_Bool SAL_CALL canSetAccount(  ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setAccount( const OUString& Account ) throw(css::uno::RuntimeException, std::exception) override;
-    css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberAccountModes( css::ucb::RememberAuthentication& Default ) throw(css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL setRememberAccount( css::ucb::RememberAuthentication Remember ) throw(css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL canSetRealm(  ) override;
+    void SAL_CALL setRealm( const OUString& Realm ) override;
+    sal_Bool SAL_CALL canSetUserName(  ) override;
+    void SAL_CALL setUserName( const OUString& UserName ) override;
+    sal_Bool SAL_CALL canSetPassword(  ) override;
+    void SAL_CALL setPassword( const OUString& Password ) override;
+    css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberPasswordModes( css::ucb::RememberAuthentication& Default ) override;
+    void SAL_CALL setRememberPassword( css::ucb::RememberAuthentication Remember ) override;
+    sal_Bool SAL_CALL canSetAccount(  ) override;
+    void SAL_CALL setAccount( const OUString& Account ) override;
+    css::uno::Sequence< css::ucb::RememberAuthentication > SAL_CALL getRememberAccountModes( css::ucb::RememberAuthentication& Default ) override;
+    void SAL_CALL setRememberAccount( css::ucb::RememberAuthentication Remember ) override;
 
     void            setCanChangeUserName( bool bVal )  { m_bCanSetUserName = bVal; }
     const OUString& getUser() const             { return m_sUser; }

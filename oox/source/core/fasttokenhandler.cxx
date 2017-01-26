@@ -42,7 +42,7 @@ Sequence< OUString > SAL_CALL FastTokenHandler_getSupportedServiceNames()
     return aServiceNames;
 }
 
-Reference< XInterface > SAL_CALL FastTokenHandler_createInstance( const Reference< XComponentContext >& /*rxContext*/ ) throw (Exception)
+Reference< XInterface > SAL_CALL FastTokenHandler_createInstance( const Reference< XComponentContext >& /*rxContext*/ )
 {
     return static_cast< ::cppu::OWeakObject* >( new FastTokenHandler );
 }
@@ -57,27 +57,27 @@ FastTokenHandler::~FastTokenHandler()
 }
 
 // XServiceInfo
-OUString SAL_CALL FastTokenHandler::getImplementationName() throw (RuntimeException, std::exception)
+OUString SAL_CALL FastTokenHandler::getImplementationName()
 {
     return FastTokenHandler_getImplementationName();
 }
 
-sal_Bool SAL_CALL FastTokenHandler::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL FastTokenHandler::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL FastTokenHandler::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL FastTokenHandler::getSupportedServiceNames()
 {
     return FastTokenHandler_getSupportedServiceNames();
 }
 
-Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken ) throw( RuntimeException, std::exception )
+Sequence< sal_Int8 > FastTokenHandler::getUTF8Identifier( sal_Int32 nToken )
 {
     return mrTokenMap.getUtf8TokenName( nToken );
 }
 
-sal_Int32 FastTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& rIdentifier ) throw( RuntimeException, std::exception )
+sal_Int32 FastTokenHandler::getTokenFromUTF8( const Sequence< sal_Int8 >& rIdentifier )
 {
     return mrTokenMap.getTokenFromUtf8( rIdentifier );
 }

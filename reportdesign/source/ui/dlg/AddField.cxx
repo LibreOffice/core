@@ -266,7 +266,7 @@ bool OAddFieldWindow::PreNotify( NotifyEvent& _rNEvt )
     return FloatingWindow::PreNotify( _rNEvt );
 }
 
-void OAddFieldWindow::_propertyChanged( const beans::PropertyChangeEvent& _evt ) throw( uno::RuntimeException, std::exception )
+void OAddFieldWindow::_propertyChanged( const beans::PropertyChangeEvent& _evt )
 {
     OSL_ENSURE( _evt.Source == m_xRowSet, "OAddFieldWindow::_propertyChanged: where did this come from?" );
     (void)_evt;
@@ -410,7 +410,7 @@ void OAddFieldWindow::fillDescriptor(SvTreeListEntry* _pSelected,svx::ODataAcces
     }
 }
 
-void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent )  throw(css::uno::RuntimeException, std::exception)
+void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent )
 {
     if ( m_pListBox.get() )
     {
@@ -429,7 +429,7 @@ void OAddFieldWindow::_elementInserted( const container::ContainerEvent& _rEvent
     }
 }
 
-void OAddFieldWindow::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
+void OAddFieldWindow::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ )
 {
     if ( m_pListBox.get() )
     {
@@ -439,7 +439,7 @@ void OAddFieldWindow::_elementRemoved( const container::ContainerEvent& /*_rEven
     }
 }
 
-void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
+void OAddFieldWindow::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ )
 {
 }
 

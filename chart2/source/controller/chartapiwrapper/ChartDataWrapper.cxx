@@ -413,7 +413,6 @@ ChartDataWrapper::~ChartDataWrapper()
 
 // ____ XChartDataArray (read)____
 Sequence< Sequence< double > > SAL_CALL ChartDataWrapper::getData()
-    throw (uno::RuntimeException, std::exception)
 {
     initDataAccess();
     if( m_xDataAccess.is() )
@@ -421,7 +420,6 @@ Sequence< Sequence< double > > SAL_CALL ChartDataWrapper::getData()
     return Sequence< Sequence< double > >();
 }
 Sequence< OUString > SAL_CALL ChartDataWrapper::getRowDescriptions()
-    throw (uno::RuntimeException, std::exception)
 {
     initDataAccess();
     if( m_xDataAccess.is() )
@@ -429,7 +427,6 @@ Sequence< OUString > SAL_CALL ChartDataWrapper::getRowDescriptions()
     return Sequence< OUString >();
 }
 Sequence< OUString > SAL_CALL ChartDataWrapper::getColumnDescriptions()
-    throw (uno::RuntimeException, std::exception)
 {
     initDataAccess();
     if( m_xDataAccess.is() )
@@ -438,14 +435,14 @@ Sequence< OUString > SAL_CALL ChartDataWrapper::getColumnDescriptions()
 }
 
 // ____ XComplexDescriptionAccess (read) ____
-Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexRowDescriptions() throw (uno::RuntimeException, std::exception)
+Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexRowDescriptions()
 {
     initDataAccess();
     if( m_xDataAccess.is() )
         return m_xDataAccess->getComplexRowDescriptions();
     return Sequence< Sequence< OUString > >();
 }
-Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexColumnDescriptions() throw (uno::RuntimeException, std::exception)
+Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexColumnDescriptions()
 {
     initDataAccess();
     if( m_xDataAccess.is() )
@@ -454,14 +451,14 @@ Sequence< Sequence< OUString > > SAL_CALL ChartDataWrapper::getComplexColumnDesc
 }
 
 // ____ XAnyDescriptionAccess (read) ____
-Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyRowDescriptions() throw (uno::RuntimeException, std::exception)
+Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyRowDescriptions()
 {
     initDataAccess();
     if( m_xDataAccess.is() )
         return m_xDataAccess->getAnyRowDescriptions();
     return Sequence< Sequence< uno::Any > >();
 }
-Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyColumnDescriptions() throw (uno::RuntimeException, std::exception)
+Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyColumnDescriptions()
 {
     initDataAccess();
     if( m_xDataAccess.is() )
@@ -470,7 +467,7 @@ Sequence< Sequence< uno::Any > > SAL_CALL ChartDataWrapper::getAnyColumnDescript
 }
 
 // ____ XDateCategories (read) ____
-Sequence< double > SAL_CALL ChartDataWrapper::getDateCategories() throw (uno::RuntimeException, std::exception)
+Sequence< double > SAL_CALL ChartDataWrapper::getDateCategories()
 {
     initDataAccess();
     Reference< XDateCategories > xDateCategories( m_xDataAccess, uno::UNO_QUERY );
@@ -481,50 +478,47 @@ Sequence< double > SAL_CALL ChartDataWrapper::getDateCategories() throw (uno::Ru
 
 // ____ XChartDataArray (write)____
 void SAL_CALL ChartDataWrapper::setData( const Sequence< Sequence< double > >& rData )
-    throw (uno::RuntimeException, std::exception)
 {
     lcl_DataOperator aOperator( rData );
     applyData( aOperator );
 }
 void SAL_CALL ChartDataWrapper::setRowDescriptions( const Sequence< OUString >& rRowDescriptions )
-    throw (uno::RuntimeException, std::exception)
 {
     lcl_RowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
 }
 void SAL_CALL ChartDataWrapper::setColumnDescriptions( const Sequence< OUString >& rColumnDescriptions )
-    throw (uno::RuntimeException, std::exception)
 {
     lcl_ColumnDescriptionsOperator aOperator( rColumnDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
 }
 
 // ____ XComplexDescriptionAccess (write) ____
-void SAL_CALL ChartDataWrapper::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& rRowDescriptions ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ChartDataWrapper::setComplexRowDescriptions( const Sequence< Sequence< OUString > >& rRowDescriptions )
 {
     lcl_ComplexRowDescriptionsOperator aOperator( rRowDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
 }
-void SAL_CALL ChartDataWrapper::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& rColumnDescriptions ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ChartDataWrapper::setComplexColumnDescriptions( const Sequence< Sequence< OUString > >& rColumnDescriptions )
 {
     lcl_ComplexColumnDescriptionsOperator aOperator( rColumnDescriptions, m_spChart2ModelContact->getChart2Document() );
     applyData( aOperator );
 }
 
 // ____ XAnyDescriptionAccess (write) ____
-void SAL_CALL ChartDataWrapper::setAnyRowDescriptions( const Sequence< Sequence< uno::Any > >& rRowDescriptions ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ChartDataWrapper::setAnyRowDescriptions( const Sequence< Sequence< uno::Any > >& rRowDescriptions )
 {
     lcl_AnyRowDescriptionsOperator aOperator( rRowDescriptions );
     applyData( aOperator );
 }
-void SAL_CALL ChartDataWrapper::setAnyColumnDescriptions( const Sequence< Sequence< uno::Any > >& rColumnDescriptions ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ChartDataWrapper::setAnyColumnDescriptions( const Sequence< Sequence< uno::Any > >& rColumnDescriptions )
 {
     lcl_AnyColumnDescriptionsOperator aOperator( rColumnDescriptions );
     applyData( aOperator );
 }
 
 // ____ XDateCategories (write) ____
-void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDates ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDates )
 {
     Reference< chart2::XChartDocument > xChartDoc( m_spChart2ModelContact->getChart2Document() );
     ControllerLockGuardUNO aCtrlLockGuard( uno::Reference< frame::XModel >( xChartDoc, uno::UNO_QUERY ));
@@ -536,26 +530,22 @@ void SAL_CALL ChartDataWrapper::setDateCategories( const Sequence< double >& rDa
 // ____ XChartData (base of XChartDataArray) ____
 void SAL_CALL ChartDataWrapper::addChartDataChangeEventListener(
     const uno::Reference< css::chart::XChartDataChangeEventListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.addInterface( aListener );
 }
 
 void SAL_CALL ChartDataWrapper::removeChartDataChangeEventListener(
     const uno::Reference< css::chart::XChartDataChangeEventListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
 double SAL_CALL ChartDataWrapper::getNotANumber()
-    throw (uno::RuntimeException, std::exception)
 {
     return DBL_MIN;
 }
 
 sal_Bool SAL_CALL ChartDataWrapper::isNotANumber( double nNumber )
-    throw (uno::RuntimeException, std::exception)
 {
     return DBL_MIN == nNumber
         || ::rtl::math::isNan( nNumber )
@@ -564,7 +554,6 @@ sal_Bool SAL_CALL ChartDataWrapper::isNotANumber( double nNumber )
 
 // ____ XComponent ____
 void SAL_CALL ChartDataWrapper::dispose()
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.disposeAndClear( lang::EventObject( static_cast< ::cppu::OWeakObject* >( this )));
     m_xDataAccess=nullptr;
@@ -572,21 +561,18 @@ void SAL_CALL ChartDataWrapper::dispose()
 
 void SAL_CALL ChartDataWrapper::addEventListener(
     const uno::Reference< lang::XEventListener > & xListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.addInterface( xListener );
 }
 
 void SAL_CALL ChartDataWrapper::removeEventListener(
     const uno::Reference< lang::XEventListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aEventListenerContainer.removeInterface( aListener );
 }
 
 // ____ XEventListener ____
 void SAL_CALL ChartDataWrapper::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException, std::exception)
 {
 }
 
@@ -702,19 +688,16 @@ void ChartDataWrapper::applyData( lcl_Operator& rDataOperator )
 }
 
 OUString SAL_CALL ChartDataWrapper::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.ChartData");
 }
 
 sal_Bool SAL_CALL ChartDataWrapper::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ChartDataWrapper::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart.ChartDataArray",

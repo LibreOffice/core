@@ -95,7 +95,6 @@ void ScAccessiblePreviewCell::Notify( SfxBroadcaster& rBC, const SfxHint& rHint 
 //=====  XAccessibleComponent  ============================================
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtPoint( const awt::Point& rPoint )
-                                throw (uno::RuntimeException, std::exception)
 {
     uno::Reference<XAccessible> xRet;
     if (containsPoint(rPoint))
@@ -112,7 +111,7 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleAtP
     return xRet;
 }
 
-void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException, std::exception)
+void SAL_CALL ScAccessiblePreviewCell::grabFocus()
 {
      SolarMutexGuard aGuard;
     IsObjectValid();
@@ -126,7 +125,7 @@ void SAL_CALL ScAccessiblePreviewCell::grabFocus() throw (uno::RuntimeException,
 
 //=====  XAccessibleContext  ==============================================
 
-sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount() throw(uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount()
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -136,7 +135,6 @@ sal_Int32 SAL_CALL ScAccessiblePreviewCell::getAccessibleChildCount() throw(uno:
 }
 
 uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChild(sal_Int32 nIndex)
-                            throw (uno::RuntimeException, lang::IndexOutOfBoundsException, std::exception)
 {
     SolarMutexGuard aGuard;
     IsObjectValid();
@@ -146,7 +144,6 @@ uno::Reference< XAccessible > SAL_CALL ScAccessiblePreviewCell::getAccessibleChi
 }
 
 uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessibleStateSet()
-                            throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -178,13 +175,12 @@ uno::Reference<XAccessibleStateSet> SAL_CALL ScAccessiblePreviewCell::getAccessi
 
 //=====  XServiceInfo  ====================================================
 
-OUString SAL_CALL ScAccessiblePreviewCell::getImplementationName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL ScAccessiblePreviewCell::getImplementationName()
 {
     return OUString("ScAccessiblePreviewCell");
 }
 
 uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException, std::exception)
 {
     uno::Sequence< OUString > aSequence = ScAccessibleContextBase::getSupportedServiceNames();
     sal_Int32 nOldSize(aSequence.getLength());
@@ -199,14 +195,13 @@ uno::Sequence<OUString> SAL_CALL ScAccessiblePreviewCell::getSupportedServiceNam
 
 uno::Sequence<sal_Int8> SAL_CALL
     ScAccessiblePreviewCell::getImplementationId()
-    throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 //====  internal  =========================================================
 
-Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const throw (uno::RuntimeException, std::exception)
+Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const
 {
     Rectangle aCellRect;
     if (mpViewShell)
@@ -223,7 +218,7 @@ Rectangle ScAccessiblePreviewCell::GetBoundingBoxOnScreen() const throw (uno::Ru
     return aCellRect;
 }
 
-Rectangle ScAccessiblePreviewCell::GetBoundingBox() const throw (uno::RuntimeException, std::exception)
+Rectangle ScAccessiblePreviewCell::GetBoundingBox() const
 {
     Rectangle aCellRect;
     if (mpViewShell)

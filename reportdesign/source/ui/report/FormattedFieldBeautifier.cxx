@@ -154,7 +154,7 @@ namespace rptui
     }
 
 
-    uno::Reference<awt::XVclWindowPeer> FormattedFieldBeautifier::getVclWindowPeer(const uno::Reference< report::XReportComponent >& _xComponent) throw(uno::RuntimeException)
+    uno::Reference<awt::XVclWindowPeer> FormattedFieldBeautifier::getVclWindowPeer(const uno::Reference< report::XReportComponent >& _xComponent)
     {
         uno::Reference<awt::XVclWindowPeer> xVclWindowPeer;
 

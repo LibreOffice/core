@@ -82,9 +82,9 @@ namespace vclcanvas
                       const OutDevProviderSharedPtr&               rOutDevProvider );
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         // RepaintTarget interface
         virtual bool repaint( const GraphicObjectSharedPtr&                   rGrf,
@@ -107,8 +107,8 @@ namespace vclcanvas
         //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
         //     2nd the pixmap handle
         //     3rd the pixmap depth
-        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle)  throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&)  throw (css::uno::RuntimeException, std::exception) override {}
+        virtual css::uno::Any SAL_CALL getFastPropertyValue(sal_Int32 nHandle) override;
+        virtual void SAL_CALL setFastPropertyValue(sal_Int32, const css::uno::Any&) override {}
 
     private:
         /** MUST hold here, too, since CanvasHelper only contains a

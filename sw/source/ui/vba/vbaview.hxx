@@ -37,23 +37,23 @@ private:
 
     /// @throws css::uno::RuntimeException
     /// @throws css::script::BasicErrorException
-    css::uno::Reference< css::text::XTextRange > getHFTextRange( sal_Int32 nType ) throw (css::uno::RuntimeException, css::script::BasicErrorException, std::exception);
+    css::uno::Reference< css::text::XTextRange > getHFTextRange( sal_Int32 nType );
 
 public:
     /// @throws css::uno::RuntimeException
     SwVbaView( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext,
-        const css::uno::Reference< css::frame::XModel >& rModel ) throw ( css::uno::RuntimeException );
+        const css::uno::Reference< css::frame::XModel >& rModel );
     virtual ~SwVbaView() override;
 
    // XView
-    virtual ::sal_Int32 SAL_CALL getSeekView() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSeekView( ::sal_Int32 _seekview ) throw (css::uno::RuntimeException, css::script::BasicErrorException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getSplitSpecial() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setSplitSpecial( ::sal_Int32 _splitspecial ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getTableGridLines() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTableGridLines( sal_Bool _tablegridlines ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getType() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setType( ::sal_Int32 _type ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getSeekView() override;
+    virtual void SAL_CALL setSeekView( ::sal_Int32 _seekview ) override;
+    virtual ::sal_Int32 SAL_CALL getSplitSpecial() override;
+    virtual void SAL_CALL setSplitSpecial( ::sal_Int32 _splitspecial ) override;
+    virtual sal_Bool SAL_CALL getTableGridLines() override;
+    virtual void SAL_CALL setTableGridLines( sal_Bool _tablegridlines ) override;
+    virtual ::sal_Int32 SAL_CALL getType() override;
+    virtual void SAL_CALL setType( ::sal_Int32 _type ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

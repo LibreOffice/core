@@ -38,29 +38,29 @@ IndexEntrySupplier_Common::~IndexEntrySupplier_Common()
 {
 }
 
-Sequence < lang::Locale > SAL_CALL IndexEntrySupplier_Common::getLocaleList() throw (RuntimeException, std::exception)
+Sequence < lang::Locale > SAL_CALL IndexEntrySupplier_Common::getLocaleList()
 {
     throw RuntimeException();
 }
 
-Sequence < OUString > SAL_CALL IndexEntrySupplier_Common::getAlgorithmList( const lang::Locale& ) throw (RuntimeException, std::exception)
+Sequence < OUString > SAL_CALL IndexEntrySupplier_Common::getAlgorithmList( const lang::Locale& )
 {
     throw RuntimeException();
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getPhoneticCandidate( const OUString&,
-    const lang::Locale& ) throw (RuntimeException, std::exception)
+    const lang::Locale& )
 {
     return OUString();
 }
 
-sal_Bool SAL_CALL IndexEntrySupplier_Common::usePhoneticEntry( const lang::Locale& ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL IndexEntrySupplier_Common::usePhoneticEntry( const lang::Locale& )
 {
     throw RuntimeException();
 }
 
 sal_Bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& rLocale,
-    const OUString& rAlgorithm, sal_Int32 collatorOptions ) throw (RuntimeException, std::exception)
+    const OUString& rAlgorithm, sal_Int32 collatorOptions )
 {
     usePhonetic = LocaleDataImpl::get()->isPhonetic(rLocale, rAlgorithm);
     collator->loadCollatorAlgorithm(rAlgorithm, rLocale, collatorOptions);
@@ -70,7 +70,7 @@ sal_Bool SAL_CALL IndexEntrySupplier_Common::loadAlgorithm( const lang::Locale& 
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexKey( const OUString& rIndexEntry,
-    const OUString&, const lang::Locale& ) throw (RuntimeException, std::exception)
+    const OUString&, const lang::Locale& )
 {
     sal_Int32 nPos=0;
     sal_uInt32 indexChar=rIndexEntry.iterateCodePoints(&nPos, 0);
@@ -80,7 +80,6 @@ OUString SAL_CALL IndexEntrySupplier_Common::getIndexKey( const OUString& rIndex
 sal_Int16 SAL_CALL IndexEntrySupplier_Common::compareIndexEntry(
     const OUString& rIndexEntry1, const OUString&, const lang::Locale&,
     const OUString& rIndexEntry2, const OUString&, const lang::Locale& )
-    throw (RuntimeException, std::exception)
 {
     return sal::static_int_cast< sal_Int16 >(
         collator->compareString(rIndexEntry1, rIndexEntry2));
@@ -88,20 +87,20 @@ sal_Int16 SAL_CALL IndexEntrySupplier_Common::compareIndexEntry(
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexCharacter( const OUString& rIndexEntry,
-    const lang::Locale& rLocale, const OUString& ) throw (RuntimeException, std::exception)
+    const lang::Locale& rLocale, const OUString& )
 {
     return getIndexKey(rIndexEntry, rIndexEntry, rLocale);
 }
 
 OUString SAL_CALL IndexEntrySupplier_Common::getIndexFollowPageWord( sal_Bool,
-    const lang::Locale& ) throw (RuntimeException, std::exception)
+    const lang::Locale& )
 {
     throw RuntimeException();
 }
 
 const OUString& SAL_CALL
 IndexEntrySupplier_Common::getEntry( const OUString& IndexEntry,
-    const OUString& PhoneticEntry, const lang::Locale& rLocale ) throw (RuntimeException)
+    const OUString& PhoneticEntry, const lang::Locale& rLocale )
 {
     // The condition for using phonetic entry is:
     // usePhonetic is set for the algorithm;
@@ -116,19 +115,19 @@ IndexEntrySupplier_Common::getEntry( const OUString& IndexEntry,
 }
 
 OUString SAL_CALL
-IndexEntrySupplier_Common::getImplementationName() throw( RuntimeException, std::exception )
+IndexEntrySupplier_Common::getImplementationName()
 {
     return OUString::createFromAscii( implementationName );
 }
 
 sal_Bool SAL_CALL
-IndexEntrySupplier_Common::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+IndexEntrySupplier_Common::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-IndexEntrySupplier_Common::getSupportedServiceNames() throw( RuntimeException, std::exception )
+IndexEntrySupplier_Common::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { OUString::createFromAscii( implementationName ) };
     return aRet;

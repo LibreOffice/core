@@ -36,32 +36,27 @@ CRC32::~CRC32()
 {
 }
 void SAL_CALL CRC32::reset()
-    throw(RuntimeException)
 {
     nCRC=0;
 }
 sal_Int32 SAL_CALL CRC32::getValue()
-    throw(RuntimeException)
 {
     return nCRC & 0xFFFFFFFFL;
 }
 /** Update CRC32 with specified sequence of bytes
  */
 void SAL_CALL CRC32::updateSegment(const Sequence< sal_Int8 > &b, sal_Int32 len)
-        throw(RuntimeException)
 {
     nCRC = rtl_crc32(nCRC, b.getConstArray(), len );
 }
 /** Update CRC32 with specified sequence of bytes
  */
 void SAL_CALL CRC32::update(const Sequence< sal_Int8 > &b)
-        throw(RuntimeException)
 {
     nCRC = rtl_crc32(nCRC, b.getConstArray(),b.getLength());
 }
 
 sal_Int64 SAL_CALL CRC32::updateStream( Reference < XInputStream > & xStream )
-    throw ( RuntimeException )
 {
     sal_Int32 nLength;
     sal_Int64 nTotal = 0;

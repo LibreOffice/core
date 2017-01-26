@@ -160,7 +160,6 @@ bool lcl_hasTimeIntervalValue( const uno::Any& rAny )
 }
 
 void AxisItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-    throw( uno::Exception )
 {
     if( !m_xAxis.is() )
         return;
@@ -462,7 +461,6 @@ bool lcl_isAutoMinor( const SfxItemSet & rItemSet )
 }
 
 bool AxisItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-    throw( uno::Exception )
 {
     if( !m_xAxis.is() )
         return false;

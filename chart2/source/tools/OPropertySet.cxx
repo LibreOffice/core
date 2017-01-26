@@ -70,7 +70,6 @@ OPropertySet::~OPropertySet()
 {}
 
 Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
-    throw (uno::RuntimeException, std::exception)
 {
     return ::cppu::queryInterface(
         aType,
@@ -86,7 +85,6 @@ Any SAL_CALL OPropertySet::queryInterface( const uno::Type& aType )
 //  ____ XTypeProvider ____
 Sequence< uno::Type > SAL_CALL
     OPropertySet::getTypes()
-    throw (uno::RuntimeException, std::exception)
 {
     static const Sequence< uno::Type > aTypeList{
         cppu::UnoType<lang::XTypeProvider>::get(),
@@ -102,7 +100,6 @@ Sequence< uno::Type > SAL_CALL
 
 Sequence< sal_Int8 > SAL_CALL
     OPropertySet::getImplementationId()
-    throw (uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -110,8 +107,6 @@ Sequence< sal_Int8 > SAL_CALL
 // ____ XPropertyState ____
 beans::PropertyState SAL_CALL
     OPropertySet::getPropertyState( const OUString& PropertyName )
-    throw (beans::UnknownPropertyException,
-           uno::RuntimeException, std::exception)
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
@@ -121,8 +116,6 @@ beans::PropertyState SAL_CALL
 
 Sequence< beans::PropertyState > SAL_CALL
     OPropertySet::getPropertyStates( const Sequence< OUString >& aPropertyName )
-    throw (beans::UnknownPropertyException,
-           uno::RuntimeException, std::exception)
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
@@ -137,8 +130,6 @@ Sequence< beans::PropertyState > SAL_CALL
 
 void SAL_CALL
     OPropertySet::setPropertyToDefault( const OUString& PropertyName )
-    throw (beans::UnknownPropertyException,
-           uno::RuntimeException, std::exception)
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
@@ -148,9 +139,6 @@ void SAL_CALL
 
 Any SAL_CALL
     OPropertySet::getPropertyDefault( const OUString& aPropertyName )
-    throw (beans::UnknownPropertyException,
-           lang::WrappedTargetException,
-           uno::RuntimeException, std::exception)
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
@@ -164,7 +152,6 @@ Any SAL_CALL
 
 void SAL_CALL
     OPropertySet::setAllPropertiesToDefault()
-    throw (uno::RuntimeException, std::exception)
 {
     m_pImplProperties->SetAllPropertiesToDefault();
     firePropertyChangeEvent();
@@ -172,8 +159,6 @@ void SAL_CALL
 
 void SAL_CALL
     OPropertySet::setPropertiesToDefault( const Sequence< OUString >& aPropertyNames )
-    throw (beans::UnknownPropertyException,
-           uno::RuntimeException, std::exception)
 {
     cppu::IPropertyArrayHelper & rPH = getInfoHelper();
 
@@ -188,9 +173,6 @@ void SAL_CALL
 
 Sequence< Any > SAL_CALL
     OPropertySet::getPropertyDefaults( const Sequence< OUString >& aPropertyNames )
-    throw (beans::UnknownPropertyException,
-           lang::WrappedTargetException,
-           uno::RuntimeException, std::exception)
 {
     ::cppu::IPropertyArrayHelper & rPH = getInfoHelper();
     const sal_Int32 nElements = aPropertyNames.getLength();
@@ -213,7 +195,6 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
       Any & rOldValue,
       sal_Int32 nHandle,
       const Any& rValue )
-    throw (lang::IllegalArgumentException)
 {
     getFastPropertyValue( rOldValue, nHandle );
     //accept longs also for short values
@@ -245,7 +226,6 @@ sal_Bool SAL_CALL OPropertySet::convertFastPropertyValue
 void SAL_CALL OPropertySet::setFastPropertyValue_NoBroadcast
     ( sal_Int32 nHandle,
       const Any& rValue )
-    throw (uno::Exception, std::exception)
 {
 #if OSL_DEBUG_LEVEL > 0
     if( rValue.hasValue())
@@ -359,14 +339,11 @@ void OPropertySet::firePropertyChangeEvent()
 
 // ____ XStyleSupplier ____
 Reference< style::XStyle > SAL_CALL OPropertySet::getStyle()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_pImplProperties->GetStyle();
 }
 
 void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
-    throw (lang::IllegalArgumentException,
-           uno::RuntimeException, std::exception)
 {
     if( ! m_pImplProperties->SetStyle( xStyle ))
         throw lang::IllegalArgumentException(
@@ -378,10 +355,6 @@ void SAL_CALL OPropertySet::setStyle( const Reference< style::XStyle >& xStyle )
 // ____ XMultiPropertySet ____
 void SAL_CALL OPropertySet::setPropertyValues(
     const Sequence< OUString >& PropertyNames, const Sequence< Any >& Values )
-    throw(beans::PropertyVetoException,
-          lang::IllegalArgumentException,
-          lang::WrappedTargetException,
-          uno::RuntimeException, std::exception)
 {
     ::cppu::OPropertySetHelper::setPropertyValues( PropertyNames, Values );
 
@@ -390,10 +363,6 @@ void SAL_CALL OPropertySet::setPropertyValues(
 
 // ____ XFastPropertySet ____
 void SAL_CALL OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
-    throw(beans::UnknownPropertyException,
-          beans::PropertyVetoException,
-          lang::IllegalArgumentException,
-          lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     ::cppu::OPropertySetHelper::setFastPropertyValue( nHandle, rValue );
 

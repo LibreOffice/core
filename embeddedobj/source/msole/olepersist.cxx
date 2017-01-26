@@ -106,8 +106,6 @@ OUString GetNewTempFileURL_Impl( const uno::Reference< lang::XMultiServiceFactor
 
 OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xInStream,
                                       const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-        throw ( io::IOException,
-                uno::RuntimeException )
 {
     OSL_ENSURE( xInStream.is() && xFactory.is(), "Wrong parameters are provided!\n" );
 
@@ -158,7 +156,6 @@ OUString GetNewFilledTempFile_Impl( const uno::Reference< io::XInputStream >& xI
 /// @throws io::IOException
 /// @throws uno::RuntimeException
 OUString GetNewFilledTempFile_Impl( const uno::Reference< embed::XOptimizedStorage >& xParentStorage, const OUString& aEntryName, const uno::Reference< lang::XMultiServiceFactory >& xFactory )
-    throw( io::IOException, uno::RuntimeException )
 {
     OUString aResult;
 
@@ -266,7 +263,6 @@ void VerbExecutionController::UnlockNotification()
 
 
 uno::Reference< io::XStream > OleEmbeddedObject::GetNewFilledTempStream_Impl( const uno::Reference< io::XInputStream >& xInStream )
-        throw( io::IOException, uno::RuntimeException )
 {
     SAL_WARN_IF( !xInStream.is(), "embeddedobj.ole", "Wrong parameter is provided!" );
 
@@ -288,7 +284,6 @@ uno::Reference< io::XStream > OleEmbeddedObject::GetNewFilledTempStream_Impl( co
 
 
 uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( const uno::Reference< io::XStream >& xStream )
-        throw ( uno::Exception )
 {
     // TODO/LATER: Actually this should be done by a centralized component ( may be a graphical filter )
     if ( !m_xFactory.is() )
@@ -371,7 +366,6 @@ uno::Reference< io::XStream > OleEmbeddedObject::TryToGetAcceptableFormat_Impl( 
 
 void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream,
                                                 const uno::Reference< io::XStream >& xCachedVisualRepresentation )
-        throw ( uno::Exception )
 {
     OSL_ENSURE( xTargetStream.is() && xCachedVisualRepresentation.is(), "Invalid arguments!\n" );
 
@@ -522,7 +516,6 @@ void OleEmbeddedObject::InsertVisualCache_Impl( const uno::Reference< io::XStrea
 
 
 void OleEmbeddedObject::RemoveVisualCache_Impl( const uno::Reference< io::XStream >& xTargetStream )
-        throw ( uno::Exception )
 {
     OSL_ENSURE( xTargetStream.is(), "Invalid argument!\n" );
     if ( !xTargetStream.is() )
@@ -1030,7 +1023,6 @@ uno::Reference< io::XOutputStream > OleEmbeddedObject::GetStreamForSaving()
 
 
 void OleEmbeddedObject::StoreObjectToStream( uno::Reference< io::XOutputStream > const & xOutStream )
-    throw ( uno::Exception )
 {
     // this method should be used only on windows
     if ( m_pOleComponent )
@@ -1073,7 +1065,6 @@ void OleEmbeddedObject::StoreToLocation_Impl(
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs,
                             bool bSaveAs )
-        throw ( uno::Exception )
 {
     // TODO: use lObjArgs
     // TODO: exchange StoreVisualReplacement by SO file format version?
@@ -1286,11 +1277,6 @@ void SAL_CALL OleEmbeddedObject::setPersistentEntry(
                     sal_Int32 nEntryConnectionMode,
                     const uno::Sequence< beans::PropertyValue >& lArguments,
                     const uno::Sequence< beans::PropertyValue >& lObjArgs )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1492,11 +1478,6 @@ void SAL_CALL OleEmbeddedObject::storeToEntry( const uno::Reference< embed::XSto
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lArguments,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1524,11 +1505,6 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
                             const OUString& sEntName,
                             const uno::Sequence< beans::PropertyValue >& lArguments,
                             const uno::Sequence< beans::PropertyValue >& lObjArgs )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1553,9 +1529,6 @@ void SAL_CALL OleEmbeddedObject::storeAsEntry( const uno::Reference< embed::XSto
 
 
 void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
-        throw ( embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1652,8 +1625,6 @@ void SAL_CALL OleEmbeddedObject::saveCompleted( sal_Bool bUseNew )
 
 
 sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1681,8 +1652,6 @@ sal_Bool SAL_CALL OleEmbeddedObject::hasEntry()
 
 
 OUString SAL_CALL OleEmbeddedObject::getEntryName()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1714,10 +1683,6 @@ OUString SAL_CALL OleEmbeddedObject::getEntryName()
 
 
 void SAL_CALL OleEmbeddedObject::storeOwn()
-        throw ( embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1832,8 +1797,6 @@ void SAL_CALL OleEmbeddedObject::storeOwn()
 
 
 sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1867,11 +1830,6 @@ sal_Bool SAL_CALL OleEmbeddedObject::isReadonly()
 void SAL_CALL OleEmbeddedObject::reload(
                 const uno::Sequence< beans::PropertyValue >& lArguments,
                 const uno::Sequence< beans::PropertyValue >& lObjArgs )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XEmbedPersist > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -1910,11 +1868,6 @@ void SAL_CALL OleEmbeddedObject::reload(
 
 void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorage >& xStorage,
                                                 const OUString& sEntName )
-        throw ( lang::IllegalArgumentException,
-                embed::WrongStateException,
-                io::IOException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -2029,8 +1982,6 @@ void SAL_CALL OleEmbeddedObject::breakLink( const uno::Reference< embed::XStorag
 
 
 sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
-        throw ( embed::WrongStateException,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );
@@ -2050,9 +2001,6 @@ sal_Bool SAL_CALL  OleEmbeddedObject::isLink()
 
 
 OUString SAL_CALL OleEmbeddedObject::getLinkURL()
-        throw ( embed::WrongStateException,
-                uno::Exception,
-                uno::RuntimeException, std::exception )
 {
     // begin wrapping related part ====================
     uno::Reference< embed::XLinkageSupport > xWrappedObject( m_xWrappedObject, uno::UNO_QUERY );

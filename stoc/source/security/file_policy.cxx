@@ -75,20 +75,14 @@ public:
 
     // XPolicy impl
     virtual Sequence< Any > SAL_CALL getPermissions(
-        OUString const & userId )
-        throw (RuntimeException, std::exception) override;
-    virtual Sequence< Any > SAL_CALL getDefaultPermissions()
-        throw (RuntimeException, std::exception) override;
-    virtual void SAL_CALL refresh()
-        throw (RuntimeException, std::exception) override;
+        OUString const & userId ) override;
+    virtual Sequence< Any > SAL_CALL getDefaultPermissions() override;
+    virtual void SAL_CALL refresh() override;
 
     // XServiceInfo impl
-    virtual OUString SAL_CALL getImplementationName()
-        throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName )
-        throw (RuntimeException, std::exception) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw (RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( OUString const & serviceName ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 FilePolicy::FilePolicy( Reference< XComponentContext > const & xComponentContext )
@@ -108,7 +102,6 @@ void FilePolicy::disposing()
 
 Sequence< Any > FilePolicy::getPermissions(
     OUString const & userId )
-    throw (RuntimeException, std::exception)
 {
     if (! m_init)
     {
@@ -129,7 +122,6 @@ Sequence< Any > FilePolicy::getPermissions(
 }
 
 Sequence< Any > FilePolicy::getDefaultPermissions()
-    throw (RuntimeException, std::exception)
 {
     if (! m_init)
     {
@@ -385,7 +377,6 @@ PolicyReader::~PolicyReader()
 
 
 void FilePolicy::refresh()
-    throw (RuntimeException, std::exception)
 {
     // read out file (the .../file-name value had originally been set in
     // cppu::add_access_control_entries (cppuhelper/source/servicefactory.cxx)
@@ -491,19 +482,16 @@ void FilePolicy::refresh()
 
 
 OUString FilePolicy::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return OUString(IMPL_NAME);
 }
 
 sal_Bool FilePolicy::supportsService( OUString const & serviceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }
 
 Sequence< OUString > FilePolicy::getSupportedServiceNames()
-    throw (RuntimeException, std::exception)
 {
     Sequence<OUString> aSNS { "com.sun.star.security.Policy" };
     return aSNS;

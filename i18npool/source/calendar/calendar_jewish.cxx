@@ -245,7 +245,7 @@ public:
 };
 
 // map field value from gregorian calendar to other calendar, it can be overwritten by derived class.
-void Calendar_jewish::mapFromGregorian() throw(RuntimeException)
+void Calendar_jewish::mapFromGregorian()
 {
     int y = fieldValue[CalendarFieldIndex::YEAR];
     if (fieldValue[CalendarFieldIndex::ERA] == 0)
@@ -261,7 +261,7 @@ void Calendar_jewish::mapFromGregorian() throw(RuntimeException)
 
 #define FIELDS  ((1 << CalendarFieldIndex::ERA) | (1 << CalendarFieldIndex::YEAR) | (1 << CalendarFieldIndex::MONTH) | (1 << CalendarFieldIndex::DAY_OF_MONTH))
 // map field value from other calendar to gregorian calendar, it should be implemented.
-void Calendar_jewish::mapToGregorian() throw(RuntimeException)
+void Calendar_jewish::mapToGregorian()
 {
     if (fieldSet & FIELDS) {
         sal_Int16 y = fieldSetValue[CalendarFieldIndex::YEAR];
@@ -281,7 +281,6 @@ void Calendar_jewish::mapToGregorian() throw(RuntimeException)
 // Methods in XExtendedCalendar
 OUString SAL_CALL
 Calendar_jewish::getDisplayString( sal_Int32 nCalendarDisplayCode, sal_Int16 nNativeNumberMode )
-    throw (RuntimeException, std::exception)
 {
     nNativeNumberMode = NativeNumberMode::NATNUM2;  // make Hebrew number for Jewish calendar
 

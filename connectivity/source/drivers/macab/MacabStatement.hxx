@@ -66,17 +66,17 @@ namespace connectivity
         protected:
             /// @throws css::sdbc::SQLException
             class MacabCondition *analyseWhereClause(
-                const OSQLParseNode *pParseNode) const throw(css::sdbc::SQLException);
+                const OSQLParseNode *pParseNode) const;
             /// @throws css::sdbc::SQLException
             class MacabOrder *analyseOrderByClause(
-                const OSQLParseNode *pParseNode) const throw(css::sdbc::SQLException);
+                const OSQLParseNode *pParseNode) const;
             OUString getTableName( ) const;
             /// @throws css::sdbc::SQLException
-            void setMacabFields(class MacabResultSet *pResult) const throw(css::sdbc::SQLException);
+            void setMacabFields(class MacabResultSet *pResult) const;
             /// @throws css::sdbc::SQLException
-            void selectRecords(MacabResultSet *pResult) const throw(css::sdbc::SQLException);
+            void selectRecords(MacabResultSet *pResult) const;
             /// @throws css::sdbc::SQLException
-            void sortRecords(MacabResultSet *pResult) const throw(css::sdbc::SQLException);
+            void sortRecords(MacabResultSet *pResult) const;
 
             // OPropertyArrayUsageHelper
             virtual ::cppu::IPropertyArrayHelper* createArrayHelper() const override;
@@ -87,18 +87,18 @@ namespace connectivity
                     css::uno::Any & rConvertedValue,
                     css::uno::Any & rOldValue,
                     sal_Int32 nHandle,
-                    const css::uno::Any& rValue) throw (css::lang::IllegalArgumentException) override;
+                    const css::uno::Any& rValue) override;
             virtual void SAL_CALL setFastPropertyValue_NoBroadcast(
                     sal_Int32 nHandle,
-                    const css::uno::Any& rValue) throw (css::uno::Exception) override;
+                    const css::uno::Any& rValue) override;
             virtual void SAL_CALL getFastPropertyValue(
                     css::uno::Any& rValue,
                     sal_Int32 nHandle) const override;
 
             /// @throws css::sdbc::SQLException
-            virtual void resetParameters() const throw(css::sdbc::SQLException);
+            virtual void resetParameters() const;
             /// @throws css::sdbc::SQLException
-            virtual void getNextParameter(OUString &rParameter) const throw(css::sdbc::SQLException);
+            virtual void getNextParameter(OUString &rParameter) const;
             virtual ~MacabCommonStatement() override;
 
         public:
@@ -115,39 +115,39 @@ namespace connectivity
             virtual void SAL_CALL acquire() throw() override;
             virtual css::uno::Any SAL_CALL queryInterface(
                     const css::uno::Type & rType
-                    ) throw(css::uno::RuntimeException, std::exception) override;
+                    ) override;
 
             // XTypeProvider
             virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(
-                    ) throw(css::uno::RuntimeException, std::exception) override;
+                    ) override;
 
             // XPropertySet
             virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(
-                    ) throw(css::uno::RuntimeException) override;
+                    ) override;
 
             // XStatement
             virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery(
-                    const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+                    const OUString& sql ) override;
             virtual sal_Int32 SAL_CALL executeUpdate(
-                     const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+                     const OUString& sql ) override;
             virtual sal_Bool SAL_CALL execute(
-                    const OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+                    const OUString& sql ) override;
             virtual css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection(
-                    ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+                    ) override;
 
             // XWarningsSupplier
             virtual css::uno::Any SAL_CALL getWarnings(
-                    ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+                    ) override;
             virtual void SAL_CALL clearWarnings(
-                    ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+                    ) override;
 
             // XCancellable
             virtual void SAL_CALL cancel(
-                    ) throw(css::uno::RuntimeException) override;
+                    ) override;
 
             // XCloseable
             virtual void SAL_CALL close(
-                    ) throw(css::sdbc::SQLException, css::uno::RuntimeException) override;
+                    ) override;
 
             // other methods
             inline MacabConnection* getOwnConnection() const { return m_pConnection; }

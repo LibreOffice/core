@@ -341,7 +341,7 @@ bool PowerPointExport::importDocument() throw()
     return false;
 }
 
-bool PowerPointExport::exportDocument() throw (css::uno::RuntimeException, std::exception)
+bool PowerPointExport::exportDocument()
 {
     DrawingML::ResetCounters();
     maShapeMap.clear ();
@@ -2292,12 +2292,12 @@ uno::Sequence< OUString > SAL_CALL PowerPointExport_getSupportedServiceNames() t
 }
 
 /// @throws uno::Exception
-uno::Reference< uno::XInterface > SAL_CALL PowerPointExport_createInstance(const uno::Reference< XComponentContext > & rxCtxt ) throw( uno::Exception )
+uno::Reference< uno::XInterface > SAL_CALL PowerPointExport_createInstance(const uno::Reference< XComponentContext > & rxCtxt )
 {
     return static_cast<cppu::OWeakObject*>(new PowerPointExport( rxCtxt ));
 }
 
-OUString PowerPointExport::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+OUString PowerPointExport::getImplementationName()
 {
     return PowerPointExport_getImplementationName();
 }

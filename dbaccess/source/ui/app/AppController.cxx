@@ -155,23 +155,23 @@ using ::com::sun::star::sdb::application::NamedDatabaseObject;
 namespace DatabaseObject = ::com::sun::star::sdb::application::DatabaseObject;
 namespace DatabaseObjectContainer = ::com::sun::star::sdb::application::DatabaseObjectContainer;
 
-OUString SAL_CALL OApplicationController::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL OApplicationController::getImplementationName()
 {
     return getImplementationName_Static();
 }
 
-OUString OApplicationController::getImplementationName_Static() throw( RuntimeException )
+OUString OApplicationController::getImplementationName_Static()
 {
     return OUString(SERVICE_SDB_APPLICATIONCONTROLLER);
 }
 
-Sequence< OUString> OApplicationController::getSupportedServiceNames_Static() throw( RuntimeException )
+Sequence< OUString> OApplicationController::getSupportedServiceNames_Static()
 {
     Sequence<OUString> aSupported { "com.sun.star.sdb.application.DefaultViewController" };
     return aSupported;
 }
 
-Sequence< OUString> SAL_CALL OApplicationController::getSupportedServiceNames() throw(RuntimeException, std::exception)
+Sequence< OUString> SAL_CALL OApplicationController::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
@@ -450,7 +450,7 @@ bool OApplicationController::Construct(vcl::Window* _pParent)
     return true;
 }
 
-void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) throw( RuntimeException, std::exception )
+void SAL_CALL OApplicationController::disposing(const EventObject& _rSource)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     Reference<XConnection> xCon(_rSource.Source, UNO_QUERY);
@@ -488,7 +488,7 @@ void SAL_CALL OApplicationController::disposing(const EventObject& _rSource) thr
     }
 }
 
-sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL OApplicationController::suspend(sal_Bool bSuspend)
 {
     // notify the OnPrepareViewClosing event (before locking any mutex)
     Reference< XDocumentEventBroadcaster > xBroadcaster( m_xModel, UNO_QUERY );
@@ -1501,7 +1501,7 @@ OApplicationView*   OApplicationController::getContainer() const
 }
 
 // css::container::XContainerListener
-void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
+void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rEvent )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1537,7 +1537,7 @@ void SAL_CALL OApplicationController::elementInserted( const ContainerEvent& _rE
     }
 }
 
-void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
+void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEvent )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -1571,7 +1571,7 @@ void SAL_CALL OApplicationController::elementRemoved( const ContainerEvent& _rEv
     }
 }
 
-void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rEvent ) throw(RuntimeException, std::exception)
+void SAL_CALL OApplicationController::elementReplaced( const ContainerEvent& _rEvent )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2478,7 +2478,7 @@ sal_Int8 OApplicationController::executeDrop( const ExecuteDropEvent& _rEvt )
     return DND_ACTION_NONE;
 }
 
-Reference< XModel >  SAL_CALL OApplicationController::getModel() throw( RuntimeException, std::exception )
+Reference< XModel >  SAL_CALL OApplicationController::getModel()
 {
     return m_xModel;
 }
@@ -2557,7 +2557,7 @@ void OApplicationController::OnFirstControllerConnected()
     return;
 }
 
-void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame ) throw( RuntimeException, std::exception )
+void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i_rxFrame )
 {
     SolarMutexGuard aSolarGuard; // avoid deadlock in XModel calls
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2567,7 +2567,7 @@ void SAL_CALL OApplicationController::attachFrame( const Reference< XFrame > & i
         onAttachedFrame();
 }
 
-sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL OApplicationController::attachModel(const Reference< XModel > & _rxModel)
 {
     ::osl::MutexGuard aGuard( getMutex() );
     const Reference< XOfficeDatabaseDocument > xOfficeDoc( _rxModel, UNO_QUERY );
@@ -2694,17 +2694,17 @@ OUString OApplicationController::getCurrentlySelectedName(sal_Int32& _rnCommandT
     return sName;
 }
 
-void SAL_CALL OApplicationController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL OApplicationController::addSelectionChangeListener( const Reference< view::XSelectionChangeListener >& Listener )
 {
     m_pSelectionNotifier->addListener( Listener );
 }
 
-void SAL_CALL OApplicationController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& Listener ) throw (RuntimeException, std::exception)
+void SAL_CALL OApplicationController::removeSelectionChangeListener( const Reference< view::XSelectionChangeListener >& Listener )
 {
     m_pSelectionNotifier->removeListener( Listener );
 }
 
-sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw (IllegalArgumentException, RuntimeException, std::exception)
+sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );
@@ -2823,7 +2823,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection ) throw
     return true;
 }
 
-Any SAL_CALL OApplicationController::getSelection(  ) throw (RuntimeException, std::exception)
+Any SAL_CALL OApplicationController::getSelection(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( getMutex() );

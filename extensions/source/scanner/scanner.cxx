@@ -22,7 +22,7 @@
 #include <cppuhelper/supportsservice.hxx>
 
 
-Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ ) throw ( Exception )
+Reference< XInterface > SAL_CALL ScannerManager_CreateInstance( const Reference< css::lang::XMultiServiceFactory >& /*rxFactory*/ )
 {
     return *( new ScannerManager() );
 }
@@ -41,28 +41,25 @@ ScannerManager::~ScannerManager()
 }
 
 
-Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB() throw(std::exception)
+Sequence< sal_Int8 > SAL_CALL ScannerManager::getMaskDIB()
 {
     return Sequence< sal_Int8 >();
 }
 
 
 OUString ScannerManager::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return getImplementationName_Static();
 }
 
 
 sal_Bool ScannerManager::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
 css::uno::Sequence<OUString> ScannerManager::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return getSupportedServiceNames_Static();
 }
@@ -82,7 +79,6 @@ Sequence< OUString > ScannerManager::getSupportedServiceNames_Static() throw ()
 
 
 sal_Bool SAL_CALL ScannerManager::configureScanner( ScannerContext& rContext )
-    throw( ScannerException, std::exception )
 {
     return configureScannerAndScan( rContext, nullptr );
 }

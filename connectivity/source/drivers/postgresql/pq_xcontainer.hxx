@@ -123,81 +123,55 @@ public:
         );
 
 public: // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index )
-        throw (css::lang::IndexOutOfBoundsException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount(  ) override;
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 Index ) override;
 
 public: // XEnumerationAccess
     virtual css::uno::Reference< css::container::XEnumeration >
-    SAL_CALL createEnumeration(  ) throw (css::uno::RuntimeException, std::exception) override;
+    SAL_CALL createEnumeration(  ) override;
 
 public: // XNameAccess
-    virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
-        throw (css::container::NoSuchElementException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) override;
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
     // Methods
-    virtual css::uno::Type SAL_CALL getElementType(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Type SAL_CALL getElementType(  ) override;
+    virtual sal_Bool SAL_CALL hasElements(  ) override;
 
 
 public: // XAppend
     // Must be overridden in Non-Descriptors. May be overridden in descriptors, when
     // PropertySet.NAME != container name
     virtual void SAL_CALL appendByDescriptor(
-        const css::uno::Reference< css::beans::XPropertySet >& descriptor )
-        throw (css::sdbc::SQLException,
-               css::container::ElementExistException,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
     // helper method !
     /// @throws css::container::ElementExistException
     void append(
         const OUString & str,
-        const css::uno::Reference< css::beans::XPropertySet >& descriptor )
-        throw ( css::container::ElementExistException );
+        const css::uno::Reference< css::beans::XPropertySet >& descriptor );
 
 
 public: // XDrop
-    virtual void SAL_CALL dropByName( const OUString& elementName )
-        throw (css::sdbc::SQLException,
-               css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL dropByIndex( sal_Int32 index )
-        throw (css::sdbc::SQLException,
-               css::lang::IndexOutOfBoundsException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dropByName( const OUString& elementName ) override;
+    virtual void SAL_CALL dropByIndex( sal_Int32 index ) override;
 
 public: // XDataDescriptorFactory
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  )
-        throw (css::uno::RuntimeException, std::exception) override = 0;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override = 0;
 
 public: // XRefreshable
-    virtual void SAL_CALL refresh(  ) throw (css::uno::RuntimeException, std::exception) override {}
+    virtual void SAL_CALL refresh(  ) override {}
     virtual void SAL_CALL addRefreshListener(
-        const css::uno::Reference< css::util::XRefreshListener >& l )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XRefreshListener >& l ) override;
     virtual void SAL_CALL removeRefreshListener(
-        const css::uno::Reference< css::util::XRefreshListener >& l )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::util::XRefreshListener >& l ) override;
 
 public:
     // Methods
     virtual void SAL_CALL addContainerListener(
-        const css::uno::Reference< css::container::XContainerListener >& xListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
     virtual void SAL_CALL removeContainerListener(
-        const css::uno::Reference< css::container::XContainerListener >& xListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::container::XContainerListener >& xListener ) override;
 
 public:
     virtual void SAL_CALL disposing() override;

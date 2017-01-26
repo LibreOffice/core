@@ -88,7 +88,7 @@ namespace drawinglayer
             DeclPrimitive2DIDBlock()
 
             // XAccounting
-            virtual sal_Int64 SAL_CALL estimateUsage() throw (css::uno::RuntimeException) override;
+            virtual sal_Int64 SAL_CALL estimateUsage() override;
         };
     } // end of namespace primitive2d
 } // end of namespace drawinglayer

@@ -89,14 +89,9 @@ namespace basprov
         virtual css::uno::Any SAL_CALL invoke(
             const css::uno::Sequence< css::uno::Any >& aParams,
             css::uno::Sequence< sal_Int16 >& aOutParamIndex,
-            css::uno::Sequence< css::uno::Any >& aOutParam )
-            throw (
-                    css::script::provider::ScriptFrameworkErrorException,
-                    css::reflection::InvocationTargetException,
-                    css::uno::RuntimeException, std::exception ) override;
+            css::uno::Sequence< css::uno::Any >& aOutParam ) override;
         // XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  )
-            throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
 
         // SfxListener
         virtual void        Notify( SfxBroadcaster& rBC, const SfxHint& rHint ) override;

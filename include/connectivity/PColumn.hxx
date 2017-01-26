@@ -139,7 +139,7 @@ namespace connectivity
 
             virtual void construct() override;
 
-            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
         private:
             using OOrderColumn_BASE::createArrayHelper;
         };

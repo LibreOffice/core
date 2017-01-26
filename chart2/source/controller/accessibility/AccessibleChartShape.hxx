@@ -48,41 +48,31 @@ public:
     virtual ~AccessibleChartShape() override;
 
     // ________ XServiceInfo ________
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
     // ________ XAccessibleContext ________
-    virtual sal_Int32 SAL_CALL getAccessibleChildCount()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getAccessibleChildCount() override;
     virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL
-        getAccessibleChild( sal_Int32 i )
-        throw (css::lang::IndexOutOfBoundsException,
-               css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getAccessibleRole()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getAccessibleDescription()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getAccessibleName()
-        throw (css::uno::RuntimeException, std::exception) override;
+        getAccessibleChild( sal_Int32 i ) override;
+    virtual sal_Int16 SAL_CALL getAccessibleRole() override;
+    virtual OUString SAL_CALL getAccessibleDescription() override;
+    virtual OUString SAL_CALL getAccessibleName() override;
 
     // ________ XAccessibleComponent ________
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Point SAL_CALL getLocation() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Size SAL_CALL getSize() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL grabFocus() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getForeground() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getBackground() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual css::awt::Rectangle SAL_CALL getBounds() override;
+    virtual css::awt::Point SAL_CALL getLocation() override;
+    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
+    virtual css::awt::Size SAL_CALL getSize() override;
+    virtual void SAL_CALL grabFocus() override;
+    virtual sal_Int32 SAL_CALL getForeground() override;
+    virtual sal_Int32 SAL_CALL getBackground() override;
 
     // ________ XAccessibleExtendedComponent ________
-    virtual css::uno::Reference< css::awt::XFont > SAL_CALL getFont()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getTitledBorderText()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getToolTipText()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::XFont > SAL_CALL getFont() override;
+    virtual OUString SAL_CALL getTitledBorderText() override;
+    virtual OUString SAL_CALL getToolTipText() override;
 
 private:
     rtl::Reference<accessibility::AccessibleShape> m_pAccShape;

@@ -203,7 +203,7 @@ SwXModule::~SwXModule()
 {
 }
 
-Reference< XPropertySet >  SwXModule::getViewSettings() throw( uno::RuntimeException, std::exception )
+Reference< XPropertySet >  SwXModule::getViewSettings()
 {
     SolarMutexGuard aGuard;
     if(!mxViewSettings.is())
@@ -214,7 +214,7 @@ Reference< XPropertySet >  SwXModule::getViewSettings() throw( uno::RuntimeExcep
     return mxViewSettings;
 }
 
-Reference< XPropertySet >  SwXModule::getPrintSettings() throw( uno::RuntimeException, std::exception )
+Reference< XPropertySet >  SwXModule::getPrintSettings()
 {
     SolarMutexGuard aGuard;
     if(!mxPrintSettings.is())
@@ -225,17 +225,17 @@ Reference< XPropertySet >  SwXModule::getPrintSettings() throw( uno::RuntimeExce
     return mxPrintSettings;
 }
 
-OUString SwXModule::getImplementationName() throw( RuntimeException, std::exception )
+OUString SwXModule::getImplementationName()
 {
     return OUString( "SwXModule"  );
 }
 
-sal_Bool SwXModule::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+sal_Bool SwXModule::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXModule::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SwXModule::getSupportedServiceNames()
 {
     OUString sService( "com.sun.star.text.GlobalSettings");
     const Sequence< OUString > aSeq( &sService, 1 );
@@ -256,9 +256,6 @@ SwXPrintSettings::~SwXPrintSettings()
 }
 
 void SwXPrintSettings::_preSetValues ()
-    throw (UnknownPropertyException, PropertyVetoException,
-           IllegalArgumentException, WrappedTargetException,
-           RuntimeException)
 {
     switch (meType)
     {
@@ -279,8 +276,6 @@ void SwXPrintSettings::_preSetValues ()
 }
 
 void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
-    throw (UnknownPropertyException, PropertyVetoException,
-           IllegalArgumentException, WrappedTargetException)
 {
     bool bVal;
 
@@ -408,17 +403,11 @@ void SwXPrintSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, 
 }
 
 void SwXPrintSettings::_postSetValues()
-    throw (UnknownPropertyException, PropertyVetoException,
-           IllegalArgumentException, WrappedTargetException,
-           RuntimeException)
 {
     mpPrtOpt = nullptr;
 }
 
 void SwXPrintSettings::_preGetValues()
-    throw (UnknownPropertyException, PropertyVetoException,
-           IllegalArgumentException, WrappedTargetException,
-           RuntimeException)
 {
     switch (meType)
     {
@@ -439,7 +428,6 @@ void SwXPrintSettings::_preGetValues()
 }
 
 void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
-    throw(UnknownPropertyException, WrappedTargetException )
 {
     switch( rInfo.mnHandle )
     {
@@ -513,22 +501,21 @@ void SwXPrintSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, 
 }
 
 void SwXPrintSettings::_postGetValues ()
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
     mpPrtOpt = nullptr;
 }
 
-OUString SwXPrintSettings::getImplementationName() throw( RuntimeException, std::exception )
+OUString SwXPrintSettings::getImplementationName()
 {
     return OUString("SwXPrintSettings");
 }
 
-sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+sal_Bool SwXPrintSettings::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXPrintSettings::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SwXPrintSettings::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { "com.sun.star.text.PrintSettings" };
     return aRet;
@@ -559,9 +546,6 @@ SwXViewSettings::~SwXViewSettings()
 }
 
 void SwXViewSettings::_preSetValues ()
-    throw (UnknownPropertyException, PropertyVetoException,
-           IllegalArgumentException, WrappedTargetException,
-           RuntimeException)
 {
     const SwViewOption* pVOpt = nullptr;
     if(pView)
@@ -580,9 +564,6 @@ void SwXViewSettings::_preSetValues ()
 }
 
 void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, const uno::Any &rValue )
-    throw (UnknownPropertyException, PropertyVetoException,
-           IllegalArgumentException, WrappedTargetException,
-           RuntimeException, std::exception)
 {
     // the API flag should not be set to the application's view settings
     switch( rInfo.mnHandle )
@@ -784,9 +765,6 @@ void SwXViewSettings::_setSingleValue( const comphelper::PropertyInfo & rInfo, c
 }
 
 void SwXViewSettings::_postSetValues()
-    throw (UnknownPropertyException, PropertyVetoException,
-           IllegalArgumentException, WrappedTargetException,
-           RuntimeException )
 {
     if( pView )
     {
@@ -815,9 +793,6 @@ void SwXViewSettings::_postSetValues()
 }
 
 void SwXViewSettings::_preGetValues ()
-    throw (UnknownPropertyException, PropertyVetoException,
-           IllegalArgumentException, WrappedTargetException,
-           RuntimeException)
 {
     if(pView)
     {
@@ -830,7 +805,6 @@ void SwXViewSettings::_preGetValues ()
 }
 
 void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, uno::Any & rValue )
-    throw (UnknownPropertyException, WrappedTargetException, RuntimeException)
 {
     bool bBool = true;
     bool bBoolVal = false;
@@ -974,22 +948,21 @@ void SwXViewSettings::_getSingleValue( const comphelper::PropertyInfo & rInfo, u
 }
 
 void SwXViewSettings::_postGetValues ()
-    throw(UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException )
 {
     mpConstViewOption = nullptr;
 }
 
-OUString SwXViewSettings::getImplementationName() throw( RuntimeException, std::exception )
+OUString SwXViewSettings::getImplementationName()
 {
     return OUString("SwXViewSettings");
 }
 
-sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+sal_Bool SwXViewSettings::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SwXViewSettings::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SwXViewSettings::getSupportedServiceNames()
 {
     Sequence<OUString> aRet { "com.sun.star.text.ViewSettings" };
     return aRet;

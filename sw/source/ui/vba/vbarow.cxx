@@ -31,7 +31,7 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-SwVbaRow::SwVbaRow( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nIndex ) throw ( uno::RuntimeException ) :
+SwVbaRow::SwVbaRow( const uno::Reference< ooo::vba::XHelperInterface >& rParent, const uno::Reference< uno::XComponentContext >& rContext,const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nIndex ) :
     SwVbaRow_BASE( rParent, rContext ), mxTextTable( xTextTable ), mnIndex( nIndex )
 {
     mxTableRows = mxTextTable->getRows();
@@ -42,7 +42,7 @@ SwVbaRow::~SwVbaRow()
 {
 }
 
-uno::Any SAL_CALL SwVbaRow::getHeight() throw (css::uno::RuntimeException, std::exception)
+uno::Any SAL_CALL SwVbaRow::getHeight()
 {
     if( getHeightRule() == word::WdRowHeightRule::wdRowHeightAuto )
         return uno::makeAny( sal_Int32( word::WdConstants::wdUndefined ) );
@@ -52,7 +52,7 @@ uno::Any SAL_CALL SwVbaRow::getHeight() throw (css::uno::RuntimeException, std::
     return uno::makeAny( (float)Millimeter::getInPoints( nHeight ) );
 }
 
-void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height )
 {
     float height = 0;
     _height >>= height;
@@ -61,26 +61,26 @@ void SAL_CALL SwVbaRow::setHeight( const uno::Any& _height ) throw (css::uno::Ru
     mxRowProps->setPropertyValue("Height", uno::makeAny( nHeight ) );
 }
 
-::sal_Int32 SAL_CALL SwVbaRow::getHeightRule() throw (css::uno::RuntimeException, std::exception)
+::sal_Int32 SAL_CALL SwVbaRow::getHeightRule()
 {
     bool isAutoHeight = false;
     mxRowProps->getPropertyValue("IsAutoHeight") >>= isAutoHeight;
     return isAutoHeight ? word::WdRowHeightRule::wdRowHeightAuto : word::WdRowHeightRule::wdRowHeightExactly;
 }
 
-void SAL_CALL SwVbaRow::setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaRow::setHeightRule( ::sal_Int32 _heightrule )
 {
     bool isAutoHeight = ( _heightrule == word::WdRowHeightRule::wdRowHeightAuto );
     mxRowProps->setPropertyValue("IsAutoHeight", uno::makeAny( isAutoHeight ) );
 }
 
 void SAL_CALL
-SwVbaRow::Select( ) throw ( uno::RuntimeException, std::exception )
+SwVbaRow::Select( )
 {
     SelectRow( getCurrentWordDoc(mxContext), mxTextTable, mnIndex, mnIndex );
 }
 
-void SwVbaRow::SelectRow( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow ) throw ( uno::RuntimeException )
+void SwVbaRow::SelectRow( const uno::Reference< frame::XModel >& xModel, const uno::Reference< text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow )
 {
     OUStringBuffer aRangeName;
     aRangeName.append('A').append(sal_Int32( nStartRow + 1 ) );
@@ -99,7 +99,7 @@ void SwVbaRow::SelectRow( const uno::Reference< frame::XModel >& xModel, const u
     xSelection->select( uno::makeAny( xSelRange ) );
 }
 
-void SAL_CALL SwVbaRow::SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL SwVbaRow::SetHeight( float height, sal_Int32 heightrule )
 {
     setHeightRule( heightrule );
     setHeight( uno::makeAny( height ) );

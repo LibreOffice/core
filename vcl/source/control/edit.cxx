@@ -2816,7 +2816,7 @@ VclPtr<PopupMenu> Edit::CreatePopupMenu()
 }
 
 // css::datatransfer::dnd::XDragGestureListener
-void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE ) throw (css::uno::RuntimeException, std::exception)
+void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& rDGE )
 {
     SolarMutexGuard aVclGuard;
 
@@ -2853,7 +2853,7 @@ void Edit::dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent
 }
 
 // css::datatransfer::dnd::XDragSourceListener
-void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE ) throw (css::uno::RuntimeException, std::exception)
+void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE )
 {
     SolarMutexGuard aVclGuard;
 
@@ -2879,7 +2879,7 @@ void Edit::dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& rDSDE
 }
 
 // css::datatransfer::dnd::XDropTargetListener
-void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
+void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE )
 {
     SolarMutexGuard aVclGuard;
 
@@ -2926,7 +2926,7 @@ void Edit::drop( const css::datatransfer::dnd::DropTargetDropEvent& rDTDE ) thro
     rDTDE.Context->dropComplete( bChanges );
 }
 
-void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
+void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rDTDE )
 {
     if ( !mpDDInfo )
     {
@@ -2948,14 +2948,14 @@ void Edit::dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& rD
     }
 }
 
-void Edit::dragExit( const css::datatransfer::dnd::DropTargetEvent& ) throw (css::uno::RuntimeException, std::exception)
+void Edit::dragExit( const css::datatransfer::dnd::DropTargetEvent& )
 {
     SolarMutexGuard aVclGuard;
 
     ImplHideDDCursor();
 }
 
-void Edit::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE ) throw (css::uno::RuntimeException, std::exception)
+void Edit::dragOver( const css::datatransfer::dnd::DropTargetDragEvent& rDTDE )
 {
     SolarMutexGuard aVclGuard;
 

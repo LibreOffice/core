@@ -105,7 +105,7 @@ public:
     {
     }
 
-    virtual void SAL_CALL dispose() throw (std::exception) override
+    virtual void SAL_CALL dispose() override
     {
         if( m_conn.is() )
         {
@@ -199,7 +199,7 @@ typedef ::std::list< css::uno::Reference< css::sdbc::XCloseable > > CloseableLis
 
 typedef ::std::list< css::uno::Reference< css::lang::XComponent > > DisposeableList;
 
-void Connection::close() throw ( SQLException, RuntimeException, std::exception )
+void Connection::close()
 {
     CloseableList lst;
     DisposeableList lstDispose;
@@ -253,7 +253,7 @@ void Connection::removeFromWeakMap( const ::rtl::ByteSequence & id )
         m_myStatements.erase( ii );
 }
 
-Reference< XStatement > Connection::createStatement() throw (SQLException, RuntimeException, std::exception)
+Reference< XStatement > Connection::createStatement()
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -268,7 +268,6 @@ Reference< XStatement > Connection::createStatement() throw (SQLException, Runti
 }
 
 Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sql )
-        throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -285,7 +284,6 @@ Reference< XPreparedStatement > Connection::prepareStatement( const OUString& sq
 }
 
 Reference< XPreparedStatement > Connection::prepareCall( const OUString& )
-        throw (SQLException, RuntimeException, std::exception)
 {
     throw SQLException(
         "pq_driver: Callable statements not supported",
@@ -294,39 +292,37 @@ Reference< XPreparedStatement > Connection::prepareCall( const OUString& )
 
 
 OUString Connection::nativeSQL( const OUString& sql )
-        throw (SQLException, RuntimeException, std::exception)
 {
     return sql;
 }
 
-void Connection::setAutoCommit( sal_Bool ) throw (SQLException, RuntimeException, std::exception)
+void Connection::setAutoCommit( sal_Bool )
 {
     // UNSUPPORTED
 }
 
-sal_Bool Connection::getAutoCommit() throw (SQLException, RuntimeException, std::exception)
+sal_Bool Connection::getAutoCommit()
 {
     // UNSUPPORTED
     return true;
 }
 
-void Connection::commit() throw (SQLException, RuntimeException, std::exception)
+void Connection::commit()
 {
     // UNSUPPORTED
 }
 
-void Connection::rollback() throw (SQLException, RuntimeException, std::exception)
+void Connection::rollback()
 {
     // UNSUPPORTED
 }
 
-sal_Bool Connection::isClosed() throw (SQLException, RuntimeException, std::exception)
+sal_Bool Connection::isClosed()
 {
     return m_settings.pConnection == nullptr;
 }
 
 Reference< XDatabaseMetaData > Connection::getMetaData()
-        throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -335,25 +331,24 @@ Reference< XDatabaseMetaData > Connection::getMetaData()
     return m_meta;
 }
 
-void  Connection::setReadOnly( sal_Bool ) throw (SQLException, RuntimeException, std::exception)
+void  Connection::setReadOnly( sal_Bool )
 {
     // UNSUPPORTED
 
 }
 
-sal_Bool Connection::isReadOnly() throw (SQLException, RuntimeException, std::exception)
+sal_Bool Connection::isReadOnly()
 {
     // UNSUPPORTED
     return false;
 }
 
 void Connection::setCatalog( const OUString& )
-        throw (SQLException, RuntimeException, std::exception)
 {
     // UNSUPPORTED
 }
 
-OUString Connection::getCatalog() throw (SQLException, RuntimeException, std::exception)
+OUString Connection::getCatalog()
 {
     MutexGuard guard( m_refMutex->mutex );
     if( m_settings.pConnection == nullptr )
@@ -366,18 +361,17 @@ OUString Connection::getCatalog() throw (SQLException, RuntimeException, std::ex
 }
 
 void Connection::setTransactionIsolation( sal_Int32 )
-        throw (SQLException, RuntimeException, std::exception)
 {
     // UNSUPPORTED
 }
 
-sal_Int32 Connection::getTransactionIsolation() throw (SQLException, RuntimeException, std::exception)
+sal_Int32 Connection::getTransactionIsolation()
 {
     // UNSUPPORTED
     return 0;
 }
 
-Reference< XNameAccess > Connection::getTypeMap() throw (SQLException, RuntimeException, std::exception)
+Reference< XNameAccess > Connection::getTypeMap()
 {
     Reference< XNameAccess > t;
     {
@@ -388,17 +382,16 @@ Reference< XNameAccess > Connection::getTypeMap() throw (SQLException, RuntimeEx
 }
 
 void Connection::setTypeMap( const Reference< XNameAccess >& typeMap )
-        throw (SQLException, RuntimeException, std::exception)
 {
     MutexGuard guard( m_refMutex->mutex );
     m_typeMap = typeMap;
 }
-Any Connection::getWarnings() throw (SQLException, RuntimeException, std::exception)
+Any Connection::getWarnings()
 {
     return Any();
 }
 
-void Connection::clearWarnings() throw (SQLException, RuntimeException, std::exception)
+void Connection::clearWarnings()
 {
 }
 
@@ -484,7 +477,6 @@ static void properties2arrays( const Sequence< PropertyValue > & args,
 }
 
 void Connection::initialize( const Sequence< Any >& aArguments )
-        throw (Exception, RuntimeException, std::exception)
 {
     OUString url;
     Sequence< PropertyValue > args;
@@ -604,7 +596,7 @@ void Connection::disposing()
     close();
 }
 
-void Connection::checkClosed() throw ( SQLException, RuntimeException )
+void Connection::checkClosed()
 {
     if( !m_settings.pConnection )
         throw SQLException( "pq_connection: Connection already closed",
@@ -612,7 +604,6 @@ void Connection::checkClosed() throw ( SQLException, RuntimeException )
 }
 
 Reference< XNameAccess > Connection::getTables()
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (isLog(&m_settings, LogLevel::Info))
     {
@@ -628,7 +619,6 @@ Reference< XNameAccess > Connection::getTables()
 }
 
 Reference< XNameAccess > Connection::getViews()
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (isLog(&m_settings, LogLevel::Info))
     {
@@ -645,7 +635,6 @@ Reference< XNameAccess > Connection::getViews()
 
 
 Reference< XNameAccess > Connection::getUsers()
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (isLog(&m_settings, LogLevel::Info))
     {
@@ -660,7 +649,7 @@ Reference< XNameAccess > Connection::getUsers()
 
 /// @throws Exception
 Reference< XInterface >  ConnectionCreateInstance(
-    const Reference< XComponentContext > & ctx ) throw (Exception, std::exception)
+    const Reference< XComponentContext > & ctx )
 {
     ::rtl::Reference< RefCountedMutex > ref = new RefCountedMutex();
     return * new Connection( ref, ctx );

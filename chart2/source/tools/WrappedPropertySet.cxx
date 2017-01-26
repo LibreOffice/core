@@ -70,7 +70,6 @@ void WrappedPropertySet::clearWrappedPropertySet()
 
 //XPropertySet
 Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySetInfo(  )
-                                    throw (uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySetInfo > xInfo = m_xInfo;
     if( !xInfo.is() )
@@ -92,7 +91,6 @@ Reference< beans::XPropertySetInfo > SAL_CALL WrappedPropertySet::getPropertySet
 }
 
 void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyName, const Any& rValue )
-                                    throw (beans::UnknownPropertyException, beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     try
     {
@@ -137,7 +135,6 @@ void SAL_CALL WrappedPropertySet::setPropertyValue( const OUString& rPropertyNam
     }
 }
 Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Any aRet;
 
@@ -179,7 +176,6 @@ Any SAL_CALL WrappedPropertySet::getPropertyValue( const OUString& rPropertyName
 }
 
 void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& xListener )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
     if( xInnerPropertySet.is() )
@@ -192,7 +188,6 @@ void SAL_CALL WrappedPropertySet::addPropertyChangeListener( const OUString& rPr
     }
 }
 void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& rPropertyName, const Reference< beans::XPropertyChangeListener >& aListener )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
     if( xInnerPropertySet.is() )
@@ -205,7 +200,6 @@ void SAL_CALL WrappedPropertySet::removePropertyChangeListener( const OUString& 
     }
 }
 void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
     if( xInnerPropertySet.is() )
@@ -218,7 +212,6 @@ void SAL_CALL WrappedPropertySet::addVetoableChangeListener( const OUString& rPr
     }
 }
 void SAL_CALL WrappedPropertySet::removeVetoableChangeListener( const OUString& rPropertyName, const Reference< beans::XVetoableChangeListener >& aListener )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertySet > xInnerPropertySet( this->getInnerPropertySet() );
     if( xInnerPropertySet.is() )
@@ -233,7 +226,6 @@ void SAL_CALL WrappedPropertySet::removeVetoableChangeListener( const OUString& 
 
 //XMultiPropertySet
 void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >& rNameSeq, const Sequence< Any >& rValueSeq )
-                                    throw (beans::PropertyVetoException, lang::IllegalArgumentException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     bool bUnknownProperty = false;
     sal_Int32 nMinCount = std::min( rValueSeq.getLength(), rNameSeq.getLength() );
@@ -257,7 +249,6 @@ void SAL_CALL WrappedPropertySet::setPropertyValues( const Sequence< OUString >&
 //        throw beans::UnknownPropertyException();
 }
 Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< OUString >& rNameSeq )
-                                    throw (uno::RuntimeException, std::exception)
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.getLength() )
@@ -283,19 +274,16 @@ Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyValues( const Sequence< 
     return aRetSeq;
 }
 void SAL_CALL WrappedPropertySet::addPropertiesChangeListener( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
-                                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     //todo
 }
 void SAL_CALL WrappedPropertySet::removePropertiesChangeListener( const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
-                                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     //todo
 }
 void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUString >& /* rNameSeq */, const Reference< beans::XPropertiesChangeListener >& /* xListener */ )
-                                    throw (uno::RuntimeException, std::exception)
 {
     OSL_FAIL("not implemented yet");
     //todo
@@ -303,7 +291,6 @@ void SAL_CALL WrappedPropertySet::firePropertiesChangeEvent( const Sequence< OUS
 
 //XPropertyState
 beans::PropertyState SAL_CALL WrappedPropertySet::getPropertyState( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     beans::PropertyState aState( beans::PropertyState_DIRECT_VALUE );
 
@@ -334,7 +321,6 @@ const WrappedProperty* WrappedPropertySet::getWrappedProperty( sal_Int32 nHandle
 }
 
 Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates( const Sequence< OUString >& rNameSeq )
-                                    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     Sequence< beans::PropertyState > aRetSeq;
     if( rNameSeq.getLength() )
@@ -350,7 +336,6 @@ Sequence< beans::PropertyState > SAL_CALL WrappedPropertySet::getPropertyStates(
 }
 
 void SAL_CALL WrappedPropertySet::setPropertyToDefault( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     Reference< beans::XPropertyState > xInnerPropertyState( this->getInnerPropertyState() );
     if( xInnerPropertyState.is() )
@@ -363,7 +348,6 @@ void SAL_CALL WrappedPropertySet::setPropertyToDefault( const OUString& rPropert
     }
 }
 Any SAL_CALL WrappedPropertySet::getPropertyDefault( const OUString& rPropertyName )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Any aRet;
     Reference< beans::XPropertyState > xInnerPropertyState( this->getInnerPropertyState() );
@@ -380,7 +364,6 @@ Any SAL_CALL WrappedPropertySet::getPropertyDefault( const OUString& rPropertyNa
 
 //XMultiPropertyStates
 void SAL_CALL WrappedPropertySet::setAllPropertiesToDefault(  )
-                                    throw (uno::RuntimeException, std::exception)
 {
     const Sequence< beans::Property >&  rPropSeq = getPropertySequence();
     for(sal_Int32 nN=0; nN<rPropSeq.getLength(); nN++)
@@ -390,7 +373,6 @@ void SAL_CALL WrappedPropertySet::setAllPropertiesToDefault(  )
     }
 }
 void SAL_CALL WrappedPropertySet::setPropertiesToDefault( const Sequence< OUString >& rNameSeq )
-                                    throw (beans::UnknownPropertyException, uno::RuntimeException, std::exception)
 {
     for(sal_Int32 nN=0; nN<rNameSeq.getLength(); nN++)
     {
@@ -399,7 +381,6 @@ void SAL_CALL WrappedPropertySet::setPropertiesToDefault( const Sequence< OUStri
     }
 }
 Sequence< Any > SAL_CALL WrappedPropertySet::getPropertyDefaults( const Sequence< OUString >& rNameSeq )
-                                    throw (beans::UnknownPropertyException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     Sequence< Any > aRetSeq;
     if( rNameSeq.getLength() )

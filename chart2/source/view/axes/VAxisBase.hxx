@@ -55,8 +55,7 @@ public:
 
     virtual void setExplicitScaleAndIncrement(
             const ExplicitScaleData& rScale
-          , const ExplicitIncrementData& rIncrement )
-                throw (css::uno::RuntimeException) override;
+          , const ExplicitIncrementData& rIncrement ) override;
 
     virtual sal_Int32 estimateMaximumAutoMainIncrementCount();
     virtual void createAllTickInfos( TickInfoArraysType& rAllTickInfos );

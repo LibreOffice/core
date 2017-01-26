@@ -100,15 +100,15 @@ namespace canvas
         virtual void SAL_CALL disposing() override;
 
         // XParametricPolyPolygon2D
-        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL getOutline( double t ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< double > SAL_CALL getColor( double t ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< double > SAL_CALL getPointColor( const css::geometry::RealPoint2D& point ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getColorSpace() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::rendering::XPolyPolygon2D > SAL_CALL getOutline( double t ) override;
+        virtual css::uno::Sequence< double > SAL_CALL getColor( double t ) override;
+        virtual css::uno::Sequence< double > SAL_CALL getPointColor( const css::geometry::RealPoint2D& point ) override;
+        virtual css::uno::Reference< css::rendering::XColorSpace > SAL_CALL getColorSpace() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         /// Query all defining values of this object atomically
         Values getValues() const;

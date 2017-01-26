@@ -57,7 +57,7 @@ inline bool lclGetProperty( Type& orValue, const uno::Reference< beans::XPropert
 
     @throws uno::RuntimeException
 */
-inline double lclPointsToHmm( const uno::Any& rPoints ) throw (uno::RuntimeException)
+inline double lclPointsToHmm( const uno::Any& rPoints )
 {
     return PointsToHmm( ::rtl::math::approxFloor( rPoints.get< double >() / 0.75 ) * 0.75 );
 }
@@ -80,7 +80,7 @@ public:
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
-        const uno::Type& rVbaType ) throw (uno::RuntimeException);
+        const uno::Type& rVbaType );
 
     /** Returns the VBA helper interface of the VBA collection object. */
     inline const uno::Reference< XHelperInterface >& getParent() const { return mxParent; }
@@ -94,40 +94,40 @@ public:
 
         @throws uno::RuntimeException
     */
-    void collectShapes() throw (uno::RuntimeException);
+    void collectShapes();
     /** Creates and returns a new UNO shape.
 
         @throws uno::RuntimeException
     */
-    uno::Reference< drawing::XShape > createShape( const awt::Point& rPos, const awt::Size& rSize ) throw (uno::RuntimeException);
+    uno::Reference< drawing::XShape > createShape( const awt::Point& rPos, const awt::Size& rSize );
     /** Inserts the passed shape into the draw page and into this container, and returns its index in the draw page.
 
         @throws uno::RuntimeException
     */
-    sal_Int32 insertShape( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException);
+    sal_Int32 insertShape( const uno::Reference< drawing::XShape >& rxShape );
     /** Creates and returns a new VBA implementation object for the passed shape.
 
         @throws uno::RuntimeException
     */
-    ::rtl::Reference< ScVbaSheetObjectBase > createVbaObject( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException);
+    ::rtl::Reference< ScVbaSheetObjectBase > createVbaObject( const uno::Reference< drawing::XShape >& rxShape );
     /** Creates and returns a new VBA implementation object for the passed shape in an Any.
 
         @throws uno::RuntimeException
     */
-    uno::Any createCollectionObject( const uno::Any& rSource ) throw (uno::RuntimeException);
+    uno::Any createCollectionObject( const uno::Any& rSource );
     /** Returns the VBA implementation object with the specified name.
 
         @throws uno::RuntimeException
     */
-    uno::Any getItemByStringIndex( const OUString& rIndex ) throw (uno::RuntimeException);
+    uno::Any getItemByStringIndex( const OUString& rIndex );
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount() throw (uno::RuntimeException, std::exception) override;
-    virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getCount() override;
+    virtual uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType() throw (uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasElements() throw (uno::RuntimeException, std::exception) override;
+    virtual uno::Type SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
 protected:
     /** Derived classes return true, if the passed shape is supported by the instance. */
@@ -136,7 +136,7 @@ protected:
 
         @throws uno::RuntimeException
     */
-    virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException) = 0;
+    virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) = 0;
     /** Derived classes return the service name of the UNO shape. */
     virtual OUString implGetShapeServiceName() const = 0;
 
@@ -144,12 +144,12 @@ protected:
 
         @throws uno::RuntimeException
     */
-    virtual OUString implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException);
+    virtual OUString implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const;
     /** Is called when a new UNO shape has been created but not yet inserted into the drawing page.
 
         @throws uno::RuntimeException
     */
-    virtual void implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException);
+    virtual void implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape );
 
 protected:
     uno::Reference< XHelperInterface > mxParent;
@@ -169,7 +169,7 @@ ScVbaObjectContainer::ScVbaObjectContainer(
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
-        const uno::Type& rVbaType ) throw (uno::RuntimeException) :
+        const uno::Type& rVbaType ) :
     mxParent( rxParent ),
     mxContext( rxContext ),
     mxModel( rxModel, uno::UNO_SET_THROW ),
@@ -180,7 +180,7 @@ ScVbaObjectContainer::ScVbaObjectContainer(
     mxShapes.set( xDrawPageSupp->getDrawPage(), uno::UNO_QUERY_THROW );
 }
 
-void ScVbaObjectContainer::collectShapes() throw (uno::RuntimeException)
+void ScVbaObjectContainer::collectShapes()
 {
     maShapes.clear();
     for( sal_Int32 nIndex = 0, nCount = mxShapes->getCount(); nIndex < nCount; ++nIndex )
@@ -191,7 +191,7 @@ void ScVbaObjectContainer::collectShapes() throw (uno::RuntimeException)
     }
 }
 
-uno::Reference< drawing::XShape > ScVbaObjectContainer::createShape( const awt::Point& rPos, const awt::Size& rSize ) throw (uno::RuntimeException)
+uno::Reference< drawing::XShape > ScVbaObjectContainer::createShape( const awt::Point& rPos, const awt::Size& rSize )
 {
     uno::Reference< drawing::XShape > xShape( mxFactory->createInstance( implGetShapeServiceName() ), uno::UNO_QUERY_THROW );
     xShape->setPosition( rPos );
@@ -200,7 +200,7 @@ uno::Reference< drawing::XShape > ScVbaObjectContainer::createShape( const awt::
     return xShape;
 }
 
-sal_Int32 ScVbaObjectContainer::insertShape( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException)
+sal_Int32 ScVbaObjectContainer::insertShape( const uno::Reference< drawing::XShape >& rxShape )
 {
     mxShapes->add( rxShape );
     maShapes.push_back( rxShape );
@@ -208,19 +208,19 @@ sal_Int32 ScVbaObjectContainer::insertShape( const uno::Reference< drawing::XSha
 }
 
 ::rtl::Reference< ScVbaSheetObjectBase > ScVbaObjectContainer::createVbaObject(
-    const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException)
+    const uno::Reference< drawing::XShape >& rxShape )
 {
     return implCreateVbaObject( rxShape );
 }
 
-uno::Any ScVbaObjectContainer::createCollectionObject( const uno::Any& rSource ) throw (uno::RuntimeException)
+uno::Any ScVbaObjectContainer::createCollectionObject( const uno::Any& rSource )
 {
     uno::Reference< drawing::XShape > xShape( rSource, uno::UNO_QUERY_THROW );
     uno::Reference< excel::XSheetObject > xSheetObject( implCreateVbaObject( xShape ) );
     return uno::Any( xSheetObject );
 }
 
-uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex ) throw (uno::RuntimeException)
+uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex )
 {
     for( ShapeVector::iterator aIt = maShapes.begin(), aEnd = maShapes.end(); aIt != aEnd; ++aIt )
         if( rIndex == implGetShapeName( *aIt ) )
@@ -230,13 +230,12 @@ uno::Any ScVbaObjectContainer::getItemByStringIndex( const OUString& rIndex ) th
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL ScVbaObjectContainer::getCount() throw (uno::RuntimeException, std::exception)
+sal_Int32 SAL_CALL ScVbaObjectContainer::getCount()
 {
     return static_cast< sal_Int32 >( maShapes.size() );
 }
 
 uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
-        throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception)
 {
     if( (0 <= nIndex) && (nIndex < getCount()) )
         return uno::Any( maShapes[ static_cast< size_t >( nIndex ) ] );
@@ -245,25 +244,25 @@ uno::Any SAL_CALL ScVbaObjectContainer::getByIndex( sal_Int32 nIndex )
 
 // XElementAccess
 
-uno::Type SAL_CALL ScVbaObjectContainer::getElementType() throw (uno::RuntimeException, std::exception)
+uno::Type SAL_CALL ScVbaObjectContainer::getElementType()
 {
     return cppu::UnoType<drawing::XShape>::get();
 }
 
-sal_Bool SAL_CALL ScVbaObjectContainer::hasElements() throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL ScVbaObjectContainer::hasElements()
 {
     return !maShapes.empty();
 }
 
 // private
 
-OUString ScVbaObjectContainer::implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException)
+OUString ScVbaObjectContainer::implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const
 {
     uno::Reference< beans::XPropertySet > xPropSet( rxShape, uno::UNO_QUERY_THROW );
     return xPropSet->getPropertyValue( "Name" ).get< OUString >();
 }
 
-void ScVbaObjectContainer::implOnShapeCreated( const uno::Reference< drawing::XShape >& /*rxShape*/ ) throw (uno::RuntimeException)
+void ScVbaObjectContainer::implOnShapeCreated( const uno::Reference< drawing::XShape >& /*rxShape*/ )
 {
 }
 
@@ -288,7 +287,7 @@ uno::Any ScVbaObjectEnumeration::createCollectionObject( const uno::Any& rSource
     return mxContainer->createCollectionObject( rSource );
 }
 
-ScVbaSheetObjectsBase::ScVbaSheetObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (css::uno::RuntimeException) :
+ScVbaSheetObjectsBase::ScVbaSheetObjectsBase( const ScVbaObjectContainerRef& rxContainer ) :
     ScVbaSheetObjects_BASE( rxContainer->getParent(), rxContainer->getContext(), rxContainer.get() ),
     mxContainer( rxContainer )
 {
@@ -299,21 +298,21 @@ ScVbaSheetObjectsBase::~ScVbaSheetObjectsBase()
 {
 }
 
-void ScVbaSheetObjectsBase::collectShapes() throw (uno::RuntimeException)
+void ScVbaSheetObjectsBase::collectShapes()
 {
     mxContainer->collectShapes();
 }
 
 // XEnumerationAccess
 
-uno::Reference< container::XEnumeration > SAL_CALL ScVbaSheetObjectsBase::createEnumeration() throw (uno::RuntimeException)
+uno::Reference< container::XEnumeration > SAL_CALL ScVbaSheetObjectsBase::createEnumeration()
 {
     return new ScVbaObjectEnumeration( mxContainer );
 }
 
 // XElementAccess
 
-uno::Type SAL_CALL ScVbaSheetObjectsBase::getElementType() throw (uno::RuntimeException)
+uno::Type SAL_CALL ScVbaSheetObjectsBase::getElementType()
 {
     return mxContainer->getVbaType();
 }
@@ -325,21 +324,21 @@ uno::Any ScVbaSheetObjectsBase::createCollectionObject( const uno::Any& rSource 
     return mxContainer->createCollectionObject( rSource );
 }
 
-uno::Any ScVbaSheetObjectsBase::getItemByStringIndex( const OUString& rIndex ) throw (uno::RuntimeException)
+uno::Any ScVbaSheetObjectsBase::getItemByStringIndex( const OUString& rIndex )
 {
     return mxContainer->getItemByStringIndex( rIndex );
 }
 
 // Graphic object containers supporting ooo.vba.excel.XGraphicObject
 
-ScVbaGraphicObjectsBase::ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef& rxContainer ) throw (uno::RuntimeException) :
+ScVbaGraphicObjectsBase::ScVbaGraphicObjectsBase( const ScVbaObjectContainerRef& rxContainer ) :
     ScVbaGraphicObjects_BASE( rxContainer )
 {
 }
 
 // XGraphicObjects
 
-uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno::Any& rTop, const uno::Any& rWidth, const uno::Any& rHeight ) throw (uno::RuntimeException, std::exception)
+uno::Any SAL_CALL ScVbaGraphicObjectsBase::Add( const uno::Any& rLeft, const uno::Any& rTop, const uno::Any& rWidth, const uno::Any& rHeight )
 {
     /*  Extract double values from passed Anys (the lclPointsToHmm() helper
         function will throw a RuntimeException on any error), and convert from
@@ -372,17 +371,17 @@ public:
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const uno::Type& rVbaType,
-        const OUString& rModelServiceName ) throw (uno::RuntimeException);
+        const OUString& rModelServiceName );
 
 protected:
     /// @throws uno::RuntimeException
-    uno::Reference< container::XIndexContainer > const & createForm() throw (uno::RuntimeException);
+    uno::Reference< container::XIndexContainer > const & createForm();
 
     virtual bool implPickShape( const uno::Reference< drawing::XShape >& rxShape ) const override;
     virtual OUString implGetShapeServiceName() const override;
     virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const;
-    virtual OUString implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException) override;
-    virtual void implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException) override;
+    virtual OUString implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const override;
+    virtual void implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape ) override;
 
 protected:
     uno::Reference< container::XIndexContainer > mxFormIC;
@@ -395,13 +394,13 @@ ScVbaControlContainer::ScVbaControlContainer(
         const uno::Reference< frame::XModel >& rxModel,
         const uno::Reference< sheet::XSpreadsheet >& rxSheet,
         const uno::Type& rVbaType,
-        const OUString& rModelServiceName ) throw (uno::RuntimeException) :
+        const OUString& rModelServiceName ) :
     ScVbaObjectContainer( rxParent, rxContext, rxModel, rxSheet, rVbaType ),
     maModelServiceName( rModelServiceName )
 {
 }
 
-uno::Reference< container::XIndexContainer > const & ScVbaControlContainer::createForm() throw (uno::RuntimeException)
+uno::Reference< container::XIndexContainer > const & ScVbaControlContainer::createForm()
 {
     if( !mxFormIC.is() )
     {
@@ -448,13 +447,13 @@ bool ScVbaControlContainer::implCheckProperties( const uno::Reference< beans::XP
     return true;
 }
 
-OUString ScVbaControlContainer::implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const throw (uno::RuntimeException)
+OUString ScVbaControlContainer::implGetShapeName( const uno::Reference< drawing::XShape >& rxShape ) const
 {
     uno::Reference< drawing::XControlShape > xControlShape( rxShape, uno::UNO_QUERY_THROW );
     return uno::Reference< container::XNamed >( xControlShape->getControl(), uno::UNO_QUERY_THROW )->getName();
 }
 
-void ScVbaControlContainer::implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException)
+void ScVbaControlContainer::implOnShapeCreated( const uno::Reference< drawing::XShape >& rxShape )
 {
     // passed shape must be a control shape
     uno::Reference< drawing::XControlShape > xControlShape( rxShape, uno::UNO_QUERY_THROW );
@@ -479,10 +478,10 @@ public:
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
-        const uno::Reference< sheet::XSpreadsheet >& rxSheet ) throw (uno::RuntimeException);
+        const uno::Reference< sheet::XSpreadsheet >& rxSheet );
 
 protected:
-    virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException) override;
+    virtual ScVbaSheetObjectBase* implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) override;
     virtual bool implCheckProperties( const uno::Reference< beans::XPropertySet >& rxModelProps ) const override;
 };
 
@@ -490,7 +489,7 @@ ScVbaButtonContainer::ScVbaButtonContainer(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
-        const uno::Reference< sheet::XSpreadsheet >& rxSheet ) throw (uno::RuntimeException) :
+        const uno::Reference< sheet::XSpreadsheet >& rxSheet ) :
     ScVbaControlContainer(
         rxParent, rxContext, rxModel, rxSheet,
         cppu::UnoType<excel::XButton>::get(),
@@ -498,7 +497,7 @@ ScVbaButtonContainer::ScVbaButtonContainer(
 {
 }
 
-ScVbaSheetObjectBase* ScVbaButtonContainer::implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape ) throw (uno::RuntimeException)
+ScVbaSheetObjectBase* ScVbaButtonContainer::implCreateVbaObject( const uno::Reference< drawing::XShape >& rxShape )
 {
     uno::Reference< drawing::XControlShape > xControlShape( rxShape, uno::UNO_QUERY_THROW );
     return new ScVbaButton( mxParent, mxContext, mxModel, createForm(), xControlShape );
@@ -515,7 +514,7 @@ ScVbaButtons::ScVbaButtons(
         const uno::Reference< XHelperInterface >& rxParent,
         const uno::Reference< uno::XComponentContext >& rxContext,
         const uno::Reference< frame::XModel >& rxModel,
-        const uno::Reference< sheet::XSpreadsheet >& rxSheet ) throw (uno::RuntimeException) :
+        const uno::Reference< sheet::XSpreadsheet >& rxSheet ) :
     ScVbaGraphicObjectsBase( new ScVbaButtonContainer( rxParent, rxContext, rxModel, rxSheet ) )
 {
 }

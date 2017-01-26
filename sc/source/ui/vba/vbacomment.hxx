@@ -38,13 +38,13 @@ class ScVbaComment : public ScVbaComment_BASE
 
 private:
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::sheet::XSheetAnnotation > SAL_CALL getAnnotation() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::sheet::XSheetAnnotation > SAL_CALL getAnnotation();
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL getAnnotations() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::sheet::XSheetAnnotations > SAL_CALL getAnnotations();
     /// @throws css::uno::RuntimeException
-    sal_Int32 SAL_CALL getAnnotationIndex() throw (css::uno::RuntimeException);
+    sal_Int32 SAL_CALL getAnnotationIndex();
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< ov::excel::XComment > SAL_CALL getCommentByIndex( sal_Int32 Index ) throw (css::uno::RuntimeException);
+    css::uno::Reference< ov::excel::XComment > SAL_CALL getCommentByIndex( sal_Int32 Index );
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
@@ -52,20 +52,20 @@ public:
         const css::uno::Reference< ov::XHelperInterface >& xParent,
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::frame::XModel >& xModel,
-        const css::uno::Reference< css::table::XCellRange >& xRange ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+        const css::uno::Reference< css::table::XCellRange >& xRange );
 
     // Attributes
-    virtual OUString SAL_CALL getAuthor() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAuthor( const OUString& _author ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getAuthor() override;
+    virtual void SAL_CALL setAuthor( const OUString& _author ) override;
+    virtual css::uno::Reference< ov::msforms::XShape > SAL_CALL getShape() override;
+    virtual sal_Bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
 
     // Methods
-    virtual void SAL_CALL Delete() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Next() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Previous() throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL Text( const css::uno::Any& Text, const css::uno::Any& Start, const css::uno::Any& Overwrite ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Delete() override;
+    virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Next() override;
+    virtual css::uno::Reference< ov::excel::XComment > SAL_CALL Previous() override;
+    virtual OUString SAL_CALL Text( const css::uno::Any& Text, const css::uno::Any& Start, const css::uno::Any& Overwrite ) override;
     // XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;

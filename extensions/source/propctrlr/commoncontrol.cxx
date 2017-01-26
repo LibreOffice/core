@@ -47,12 +47,12 @@ namespace pcr
     {
     }
 
-    void SAL_CALL CommonBehaviourControlHelper::setControlContext( const Reference< XPropertyControlContext >& _controlcontext ) throw (RuntimeException)
+    void SAL_CALL CommonBehaviourControlHelper::setControlContext( const Reference< XPropertyControlContext >& _controlcontext )
     {
         m_xContext = _controlcontext;
     }
 
-    void SAL_CALL CommonBehaviourControlHelper::notifyModifiedValue(  ) throw (RuntimeException)
+    void SAL_CALL CommonBehaviourControlHelper::notifyModifiedValue(  )
     {
         if ( isModified() && m_xContext.is() )
         {

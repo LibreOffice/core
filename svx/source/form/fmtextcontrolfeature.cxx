@@ -81,7 +81,7 @@ namespace svx
     }
 
 
-    void SAL_CALL FmTextControlFeature::statusChanged( const FeatureStateEvent& _rState ) throw (RuntimeException, std::exception)
+    void SAL_CALL FmTextControlFeature::statusChanged( const FeatureStateEvent& _rState )
     {
         m_aFeatureState   = _rState.State;
         m_bFeatureEnabled = _rState.IsEnabled;
@@ -91,7 +91,7 @@ namespace svx
     }
 
 
-    void SAL_CALL FmTextControlFeature::disposing( const EventObject& /*Source*/ ) throw (RuntimeException, std::exception)
+    void SAL_CALL FmTextControlFeature::disposing( const EventObject& /*Source*/ )
     {
         // nothing to do
     }

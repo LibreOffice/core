@@ -3779,7 +3779,7 @@ SVGWriter::~SVGWriter()
 
 
 void SAL_CALL SVGWriter::write( const Reference<XDocumentHandler>& rxDocHandler,
-                                const Sequence<sal_Int8>& rMtfSeq ) throw( RuntimeException, std::exception )
+                                const Sequence<sal_Int8>& rMtfSeq )
 {
     SvMemoryStream  aMemStm( const_cast<sal_Int8 *>(rMtfSeq.getConstArray()), rMtfSeq.getLength(), StreamMode::READ );
     GDIMetaFile     aMtf;

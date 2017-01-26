@@ -323,7 +323,6 @@ SvXMLImportContext *ScXMLTableContext::CreateChildContext( sal_uInt16 nPrefix,
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
         ScXMLTableContext::createFastChildContext( sal_Int32 nElement,
         const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-        throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     const SvXMLTokenMap& rTokenMap(GetScImport().GetTableElemTokenMap());
     sal_uInt16 nToken = rTokenMap.Get( nElement );
@@ -365,7 +364,6 @@ uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
 }
 
 void SAL_CALL ScXMLTableContext::endFastElement(sal_Int32 /*nElement*/)
-    throw (uno::RuntimeException, xml::sax::SAXException, std::exception)
 {
     ScXMLImport::MutexGuard aMutexGuard(GetScImport());
     ScXMLImport& rImport = GetScImport();

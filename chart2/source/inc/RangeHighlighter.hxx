@@ -55,24 +55,19 @@ public:
 
 protected:
     // ____ XRangeHighlighter ____
-    virtual css::uno::Sequence< css::chart2::data::HighlightedRange > SAL_CALL getSelectedRanges()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence< css::chart2::data::HighlightedRange > SAL_CALL getSelectedRanges() override;
     virtual void SAL_CALL addSelectionChangeListener(
-        const css::uno::Reference< css::view::XSelectionChangeListener >& xListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
     virtual void SAL_CALL removeSelectionChangeListener(
-        const css::uno::Reference< css::view::XSelectionChangeListener >& xListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::view::XSelectionChangeListener >& xListener ) override;
 
     // ____ XSelectionChangeListener ____
     virtual void SAL_CALL selectionChanged(
-        const css::lang::EventObject& aEvent )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& aEvent ) override;
 
     // ____ XEventListener (base of XSelectionChangeListener) ____
     virtual void SAL_CALL disposing(
-        const css::lang::EventObject& Source )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& Source ) override;
 
     // ____ WeakComponentImplHelperBase ____
     // is called when dispose() is called at this component

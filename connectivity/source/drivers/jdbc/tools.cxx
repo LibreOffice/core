@@ -103,7 +103,7 @@ jstring connectivity::convertwchar_tToJavaString(JNIEnv *pEnv,const OUString& _r
 }
 
 
-java_util_Properties* connectivity::createStringPropertyArray(const Sequence< PropertyValue >& info )  throw(SQLException, RuntimeException)
+java_util_Properties* connectivity::createStringPropertyArray(const Sequence< PropertyValue >& info )
 {
     java_util_Properties* pProps = new java_util_Properties();
     const PropertyValue* pBegin = info.getConstArray();

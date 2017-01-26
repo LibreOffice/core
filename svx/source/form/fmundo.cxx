@@ -79,17 +79,17 @@ class ScriptEventListenerWrapper : public cppu::WeakImplHelper< XScriptListener 
 {
 public:
     /// @throws css::uno::RuntimeException
-    explicit ScriptEventListenerWrapper( FmFormModel& _rModel) throw ( RuntimeException )
+    explicit ScriptEventListenerWrapper( FmFormModel& _rModel)
         :m_rModel( _rModel )
         ,m_attemptedListenerCreation( false )
     {
 
     }
     // XEventListener
-    virtual void SAL_CALL disposing(const EventObject& ) throw( RuntimeException, std::exception ) override {}
+    virtual void SAL_CALL disposing(const EventObject& ) override {}
 
     // XScriptListener
-    virtual void SAL_CALL firing(const  ScriptEvent& evt) throw(RuntimeException, std::exception) override
+    virtual void SAL_CALL firing(const  ScriptEvent& evt) override
     {
         attemptListenerCreation();
         if ( m_vbaListener.is() )
@@ -98,7 +98,7 @@ public:
         }
     }
 
-    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) throw( css::reflection::InvocationTargetException, RuntimeException, std::exception) override
+    virtual Any SAL_CALL approveFiring(const ScriptEvent& evt) override
     {
         attemptListenerCreation();
         if ( m_vbaListener.is() )
@@ -509,7 +509,7 @@ void FmXUndoEnvironment::Removed(FmFormObj* pObj)
 
 //  XEventListener
 
-void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( RuntimeException, std::exception )
+void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e)
 {
     // check if it's an object we have cached information about
     if (m_pPropertySetCache)
@@ -527,7 +527,7 @@ void SAL_CALL FmXUndoEnvironment::disposing(const EventObject& e) throw( Runtime
 
 // XPropertyChangeListener
 
-void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -722,7 +722,7 @@ void SAL_CALL FmXUndoEnvironment::propertyChange(const PropertyChangeEvent& evt)
 
 // XContainerListener
 
-void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL FmXUndoEnvironment::elementInserted(const ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -746,7 +746,7 @@ void FmXUndoEnvironment::implSetModified()
 }
 
 
-void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -763,7 +763,7 @@ void SAL_CALL FmXUndoEnvironment::elementReplaced(const ContainerEvent& evt) thr
 }
 
 
-void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -776,7 +776,7 @@ void SAL_CALL FmXUndoEnvironment::elementRemoved(const ContainerEvent& evt) thro
 }
 
 
-void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ ) throw (RuntimeException, std::exception)
+void SAL_CALL FmXUndoEnvironment::modified( const EventObject& /*aEvent*/ )
 {
     implSetModified();
 }

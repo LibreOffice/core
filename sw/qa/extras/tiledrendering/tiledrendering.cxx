@@ -770,8 +770,7 @@ public:
     {
     }
 
-    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent)
-    throw(css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL dispatchFinished(const css::frame::DispatchResultEvent& rEvent) override
     {
         if (rEvent.State == frame::DispatchResultState::SUCCESS)
         {
@@ -779,8 +778,7 @@ public:
         }
     }
 
-    virtual void SAL_CALL disposing(const css::lang::EventObject&)
-    throw (css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL disposing(const css::lang::EventObject&) override
     {
     }
 };

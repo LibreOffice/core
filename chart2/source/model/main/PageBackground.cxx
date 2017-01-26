@@ -127,14 +127,12 @@ PageBackground::~PageBackground()
 
 // ____ XCloneable ____
 uno::Reference< util::XCloneable > SAL_CALL PageBackground::createClone()
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference< util::XCloneable >( new PageBackground( *this ));
 }
 
 // ____ OPropertySet ____
 uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
-    throw(beans::UnknownPropertyException)
 {
     const tPropertyValueMap& rStaticDefaults = *StaticPageBackgroundDefaults::get();
     tPropertyValueMap::const_iterator aFound( rStaticDefaults.find( nHandle ) );
@@ -150,14 +148,12 @@ uno::Any PageBackground::GetDefaultValue( sal_Int32 nHandle ) const
 
 // ____ XPropertySet ____
 uno::Reference< beans::XPropertySetInfo > SAL_CALL PageBackground::getPropertySetInfo()
-    throw (uno::RuntimeException, std::exception)
 {
     return *StaticPageBackgroundInfo::get();
 }
 
 // ____ XModifyBroadcaster ____
 void SAL_CALL PageBackground::addModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -171,7 +167,6 @@ void SAL_CALL PageBackground::addModifyListener( const uno::Reference< util::XMo
 }
 
 void SAL_CALL PageBackground::removeModifyListener( const uno::Reference< util::XModifyListener >& aListener )
-    throw (uno::RuntimeException, std::exception)
 {
     try
     {
@@ -186,14 +181,12 @@ void SAL_CALL PageBackground::removeModifyListener( const uno::Reference< util::
 
 // ____ XModifyListener ____
 void SAL_CALL PageBackground::modified( const lang::EventObject& aEvent )
-    throw (uno::RuntimeException, std::exception)
 {
     m_xModifyEventForwarder->modified( aEvent );
 }
 
 // ____ XEventListener (base of XModifyListener) ____
 void SAL_CALL PageBackground::disposing( const lang::EventObject& /* Source */ )
-    throw (uno::RuntimeException, std::exception)
 {
     // nothing
 }
@@ -205,19 +198,16 @@ void PageBackground::firePropertyChangeEvent()
 }
 
 OUString SAL_CALL PageBackground::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart2.PageBackground");
 }
 
 sal_Bool SAL_CALL PageBackground::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL PageBackground::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return {
         "com.sun.star.chart2.PageBackground",

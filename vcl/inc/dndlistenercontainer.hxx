@@ -76,35 +76,35 @@ public:
      * XDragGestureRecognizer
      */
 
-    virtual void SAL_CALL addDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL resetRecognizer(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
+    virtual void SAL_CALL removeDragGestureListener( const css::uno::Reference< css::datatransfer::dnd::XDragGestureListener >& dgl ) override;
+    virtual void SAL_CALL resetRecognizer(  ) override;
 
        /*
      * XDropTargetDragContext
      */
 
-    virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL rejectDrag(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL acceptDrag( sal_Int8 dragOperation ) override;
+    virtual void SAL_CALL rejectDrag(  ) override;
 
        /*
      * XDropTargetDropContext
      */
 
-    virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL rejectDrop(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL dropComplete( sal_Bool success ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL acceptDrop( sal_Int8 dropOperation ) override;
+    virtual void SAL_CALL rejectDrop(  ) override;
+    virtual void SAL_CALL dropComplete( sal_Bool success ) override;
 
     /*
      * XDropTarget
      */
 
-    virtual void SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isActive(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setActive( sal_Bool active ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int8 SAL_CALL getDefaultActions(  ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL addDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
+    virtual void SAL_CALL removeDropTargetListener( const css::uno::Reference< css::datatransfer::dnd::XDropTargetListener >& dtl ) override;
+    virtual sal_Bool SAL_CALL isActive(  ) override;
+    virtual void SAL_CALL setActive( sal_Bool active ) override;
+    virtual sal_Int8 SAL_CALL getDefaultActions(  ) override;
+    virtual void SAL_CALL setDefaultActions( sal_Int8 actions ) override;
 };
 
 #endif

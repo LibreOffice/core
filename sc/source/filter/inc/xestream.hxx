@@ -318,10 +318,7 @@ public:
                                         OUString* pRelationshipId = nullptr );
 
     // ignore
-    virtual bool exportDocument()
-        throw (css::uno::RuntimeException,
-               css::ucb::ContentCreationException,
-               std::exception) override;
+    virtual bool exportDocument() override;
 
     // only needed for import; ignore
     virtual bool importDocument() throw() override;
@@ -361,7 +358,7 @@ public:
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
     ScDocShell *getDocShell();
     sax_fastparser::FSHelperPtr&    WriteAttributesInternal( sal_Int32 nAttribute, ... );
 

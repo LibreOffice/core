@@ -31,8 +31,6 @@ ignoreDiacritics_CTL::ignoreDiacritics_CTL()
 
 sal_Unicode SAL_CALL
 ignoreDiacritics_CTL::transliterateChar2Char(sal_Unicode nInChar)
-    throw(css::uno::RuntimeException,
-        css::i18n::MultipleCharsOutputException, std::exception)
 {
     if (!m_transliterator)
         throw css::uno::RuntimeException();
@@ -52,7 +50,6 @@ ignoreDiacritics_CTL::transliterateChar2Char(sal_Unicode nInChar)
 OUString SAL_CALL
 ignoreDiacritics_CTL::folding(const OUString& rInStr, sal_Int32 nStartPos,
     sal_Int32 nCount, css::uno::Sequence<sal_Int32>& rOffset)
-    throw(css::uno::RuntimeException, std::exception)
 {
     if (!m_transliterator)
         throw css::uno::RuntimeException();

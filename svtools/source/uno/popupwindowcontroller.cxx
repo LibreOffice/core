@@ -163,26 +163,26 @@ PopupWindowController::~PopupWindowController()
 }
 
 // XServiceInfo
-sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL PopupWindowController::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XComponent
-void SAL_CALL PopupWindowController::dispose() throw (RuntimeException, std::exception)
+void SAL_CALL PopupWindowController::dispose()
 {
     mxImpl.reset();
     svt::ToolboxController::dispose();
 }
 
 // XStatusListener
-void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent ) throw ( RuntimeException, std::exception )
+void SAL_CALL PopupWindowController::statusChanged( const frame::FeatureStateEvent& rEvent )
 {
     svt::ToolboxController::statusChanged(rEvent);
     enable( rEvent.IsEnabled );
 }
 
-Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow() throw (RuntimeException, std::exception)
+Reference< awt::XWindow > SAL_CALL PopupWindowController::createPopupWindow()
 {
     VclPtr< ToolBox > pToolBox = dynamic_cast< ToolBox* >( VCLUnoHelper::GetWindow( getParent() ).get() );
     if( pToolBox )

@@ -72,7 +72,7 @@ Sequence<Type> OEditControl::_getTypes()
 }
 
 
-Any SAL_CALL OEditControl::queryAggregation(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL OEditControl::queryAggregation(const Type& _rType)
 {
     Any aReturn = OBoundControl::queryAggregation(_rType);
     if (!aReturn.hasValue())
@@ -116,13 +116,13 @@ OEditControl::~OEditControl()
 
 // XChangeBroadcaster
 
-void OEditControl::addChangeListener(const Reference<XChangeListener>& l) throw ( css::uno::RuntimeException, std::exception)
+void OEditControl::addChangeListener(const Reference<XChangeListener>& l)
 {
     m_aChangeListeners.addInterface( l );
 }
 
 
-void OEditControl::removeChangeListener(const Reference<XChangeListener>& l) throw ( css::uno::RuntimeException, std::exception)
+void OEditControl::removeChangeListener(const Reference<XChangeListener>& l)
 {
     m_aChangeListeners.removeInterface( l );
 }
@@ -139,7 +139,7 @@ void OEditControl::disposing()
 
 // XServiceInfo
 
-css::uno::Sequence<OUString>  OEditControl::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString>  OEditControl::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControl::getSupportedServiceNames();
     aSupported.realloc(aSupported.getLength() + 3);
@@ -153,14 +153,14 @@ css::uno::Sequence<OUString>  OEditControl::getSupportedServiceNames() throw(std
 
 // XEventListener
 
-void OEditControl::disposing(const EventObject& Source) throw( RuntimeException, std::exception )
+void OEditControl::disposing(const EventObject& Source)
 {
     OBoundControl::disposing(Source);
 }
 
 // XFocusListener
 
-void OEditControl::focusGained( const FocusEvent& /*e*/ ) throw ( css::uno::RuntimeException, std::exception)
+void OEditControl::focusGained( const FocusEvent& /*e*/ )
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if (xSet.is())
@@ -168,7 +168,7 @@ void OEditControl::focusGained( const FocusEvent& /*e*/ ) throw ( css::uno::Runt
 }
 
 
-void OEditControl::focusLost( const FocusEvent& /*e*/ ) throw ( css::uno::RuntimeException, std::exception)
+void OEditControl::focusLost( const FocusEvent& /*e*/ )
 {
     Reference<XPropertySet>  xSet(getModel(), UNO_QUERY);
     if (xSet.is())
@@ -185,7 +185,7 @@ void OEditControl::focusLost( const FocusEvent& /*e*/ ) throw ( css::uno::Runtim
 
 // XKeyListener
 
-void OEditControl::keyPressed(const css::awt::KeyEvent& e) throw ( css::uno::RuntimeException, std::exception)
+void OEditControl::keyPressed(const css::awt::KeyEvent& e)
 {
     if( e.KeyCode != KEY_RETURN || e.Modifiers != 0 )
         return;
@@ -242,7 +242,7 @@ void OEditControl::keyPressed(const css::awt::KeyEvent& e) throw ( css::uno::Run
 }
 
 
-void OEditControl::keyReleased(const css::awt::KeyEvent& /*e*/) throw ( css::uno::RuntimeException, std::exception)
+void OEditControl::keyReleased(const css::awt::KeyEvent& /*e*/)
 {
 }
 
@@ -307,14 +307,14 @@ void OEditModel::disposing()
 
 // XPersistObject
 
-OUString SAL_CALL OEditModel::getServiceName() throw ( css::uno::RuntimeException, std::exception)
+OUString SAL_CALL OEditModel::getServiceName()
 {
     return OUString(FRM_COMPONENT_EDIT);  // old (non-sun) name for compatibility !
 }
 
 // XServiceInfo
 
-css::uno::Sequence<OUString> SAL_CALL OEditModel::getSupportedServiceNames() throw(std::exception)
+css::uno::Sequence<OUString> SAL_CALL OEditModel::getSupportedServiceNames()
 {
     css::uno::Sequence<OUString> aSupported = OBoundControlModel::getSupportedServiceNames();
 
@@ -393,7 +393,7 @@ bool OEditModel::implActsAsRichText( ) const
 }
 
 
-void SAL_CALL OEditModel::reset(  ) throw(RuntimeException, std::exception)
+void SAL_CALL OEditModel::reset(  )
 {
     // no reset if we currently act as rich text control
     if ( implActsAsRichText() )
@@ -514,7 +514,7 @@ void OEditModel::readAggregate( const Reference< XObjectInputStream >& _rxInStre
 }
 
 
-void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
+void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
     Any aCurrentText;
     sal_Int16 nOldTextLen = 0;
@@ -544,7 +544,7 @@ void OEditModel::write(const Reference<XObjectOutputStream>& _rxOutStream) throw
 }
 
 
-void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream) throw ( css::io::IOException, css::uno::RuntimeException, std::exception)
+void OEditModel::read(const Reference<XObjectInputStream>& _rxInStream)
 {
     OEditBaseModel::read(_rxInStream);
 

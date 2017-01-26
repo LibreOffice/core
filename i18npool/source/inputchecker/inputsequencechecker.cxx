@@ -51,7 +51,7 @@ InputSequenceCheckerImpl::~InputSequenceCheckerImpl()
 
 sal_Bool SAL_CALL
 InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nStartPos,
-        sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(RuntimeException, std::exception)
+        sal_Unicode inputChar, sal_Int16 inputCheckMode)
 {
     if (inputCheckMode == InputSequenceCheckMode::PASSTHROUGH)
         return true;
@@ -66,7 +66,7 @@ InputSequenceCheckerImpl::checkInputSequence(const OUString& Text, sal_Int32 nSt
 
 sal_Int32 SAL_CALL
 InputSequenceCheckerImpl::correctInputSequence(OUString& Text, sal_Int32 nStartPos,
-        sal_Unicode inputChar, sal_Int16 inputCheckMode) throw(RuntimeException, std::exception)
+        sal_Unicode inputChar, sal_Int16 inputCheckMode)
 {
     if (inputCheckMode != InputSequenceCheckMode::PASSTHROUGH) {
         sal_Char* language = getLanguageByScripType(Text[nStartPos], inputChar);
@@ -105,7 +105,7 @@ InputSequenceCheckerImpl::getLanguageByScripType(sal_Unicode cChar, sal_Unicode 
 }
 
 Reference< XExtendedInputSequenceChecker >& SAL_CALL
-InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (RuntimeException)
+InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage)
 {
     if (cachedItem && cachedItem->aLanguage == rLanguage) {
         return cachedItem->xISC;
@@ -134,19 +134,19 @@ InputSequenceCheckerImpl::getInputSequenceChecker(sal_Char* rLanguage) throw (Ru
 }
 
 OUString SAL_CALL
-InputSequenceCheckerImpl::getImplementationName() throw( RuntimeException, std::exception )
+InputSequenceCheckerImpl::getImplementationName()
 {
     return OUString::createFromAscii(serviceName);
 }
 
 sal_Bool SAL_CALL
-InputSequenceCheckerImpl::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+InputSequenceCheckerImpl::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-InputSequenceCheckerImpl::getSupportedServiceNames() throw( RuntimeException, std::exception )
+InputSequenceCheckerImpl::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { OUString::createFromAscii(serviceName) };
     return aRet;

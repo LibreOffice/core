@@ -57,7 +57,7 @@ SwView* getView( const uno::Reference< frame::XModel>& xModel )
     return pDocShell? pDocShell->GetView() : nullptr;
 }
 
-uno::Reference< text::XTextViewCursor > getXTextViewCursor( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+uno::Reference< text::XTextViewCursor > getXTextViewCursor( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< frame::XController > xController = xModel->getCurrentController();
     uno::Reference< text::XTextViewCursorSupplier > xTextViewCursorSupp( xController, uno::UNO_QUERY_THROW );
@@ -65,13 +65,13 @@ uno::Reference< text::XTextViewCursor > getXTextViewCursor( const uno::Reference
     return xTextViewCursor;
 }
 
-uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< beans::XPropertySet > xCursorProps( getXTextViewCursor( xModel ), uno::UNO_QUERY_THROW );
     return getCurrentPageStyle( xModel, xCursorProps );
 }
 
-uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xProps ) throw (uno::RuntimeException)
+uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame::XModel >& xModel, const uno::Reference< beans::XPropertySet >& xProps )
 {
     OUString aPageStyleName;
     xProps->getPropertyValue("PageStyleName") >>= aPageStyleName;
@@ -83,14 +83,14 @@ uno::Reference< style::XStyle > getCurrentPageStyle( const uno::Reference< frame
     return xStyle;
 }
 
-sal_Int32 getPageCount( const uno::Reference< frame::XModel>& xModel ) throw (uno::RuntimeException)
+sal_Int32 getPageCount( const uno::Reference< frame::XModel>& xModel )
 {
     SwDocShell* pDocShell = getDocShell( xModel );
     SwViewShell* pViewSh = pDocShell ? pDocShell->GetDoc()->getIDocumentLayoutAccess().GetCurrentViewShell() : nullptr;
     return pViewSh ? pViewSh->GetPageCount() : 0;
 }
 
-uno::Reference< style::XStyle > getDefaultParagraphStyle( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+uno::Reference< style::XStyle > getDefaultParagraphStyle( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< style::XStyleFamiliesSupplier > xSytleFamSupp( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< container::XNameAccess > xSytleFamNames( xSytleFamSupp->getStyleFamilies(), uno::UNO_QUERY_THROW );
@@ -100,7 +100,7 @@ uno::Reference< style::XStyle > getDefaultParagraphStyle( const uno::Reference< 
     return xStyle;
 }
 
-uno::Reference< text::XTextRange > getFirstObjectPosition( const uno::Reference< text::XText >& xText ) throw (uno::RuntimeException)
+uno::Reference< text::XTextRange > getFirstObjectPosition( const uno::Reference< text::XText >& xText )
 {
     // if the first object is table, get the position of first cell
     uno::Reference< text::XTextRange > xTextRange;
@@ -121,7 +121,7 @@ uno::Reference< text::XTextRange > getFirstObjectPosition( const uno::Reference<
     return xTextRange;
 }
 
-uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XModel >& xModel ) throw (uno::RuntimeException)
+uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XModel >& xModel )
 {
     uno::Reference< text::XTextRange > xTextRange;
     uno::Reference< text::XTextContent > xTextContent( xModel->getCurrentSelection(), uno::UNO_QUERY );
@@ -162,7 +162,7 @@ uno::Reference< text::XText > getCurrentXText( const uno::Reference< frame::XMod
     return xText;
 }
 
-bool gotoSelectedObjectAnchor( const uno::Reference< frame::XModel>& xModel ) throw (uno::RuntimeException)
+bool gotoSelectedObjectAnchor( const uno::Reference< frame::XModel>& xModel )
 {
     bool isObjectSelected = false;
     uno::Reference< text::XTextContent > xTextContent( xModel->getCurrentSelection(), uno::UNO_QUERY );

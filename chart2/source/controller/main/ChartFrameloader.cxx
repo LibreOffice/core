@@ -57,19 +57,16 @@ bool ChartFrameLoader::impl_checkCancel()
 // lang::XServiceInfo
 
 OUString SAL_CALL ChartFrameLoader::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString(CHART_FRAMELOADER_SERVICE_IMPLEMENTATION_NAME);
 }
 
 sal_Bool SAL_CALL ChartFrameLoader::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL ChartFrameLoader::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { CHART_FRAMELOADER_SERVICE_NAME };
 }
@@ -77,7 +74,6 @@ css::uno::Sequence< OUString > SAL_CALL ChartFrameLoader::getSupportedServiceNam
 // frame::XFrameLoader
 
 sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyValue >& rMediaDescriptor, const uno::Reference<frame::XFrame >& xFrame )
-    throw (uno::RuntimeException, std::exception)
 {
     //@todo ? need to add as terminate listener to desktop?
 
@@ -188,7 +184,6 @@ sal_Bool SAL_CALL ChartFrameLoader::load( const uno::Sequence< beans::PropertyVa
 }
 
 void SAL_CALL ChartFrameLoader::cancel()
-    throw (uno::RuntimeException, std::exception)
 {
     m_oCancelFinished.reset();
     m_bCancelRequired = true;

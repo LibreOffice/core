@@ -439,7 +439,7 @@ void DlgEdObj::PositionAndSizeChange( const beans::PropertyChangeEvent& evt )
     SetRectFromProps();
 }
 
-void SAL_CALL DlgEdObj::NameChange( const  css::beans::PropertyChangeEvent& evt ) throw (css::container::NoSuchElementException, css::uno::RuntimeException)
+void SAL_CALL DlgEdObj::NameChange( const  css::beans::PropertyChangeEvent& evt )
 {
     // get old name
     OUString aOldName;
@@ -521,7 +521,7 @@ void DlgEdObj::UpdateStep()
     }
 }
 
-void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt ) throw (RuntimeException)
+void DlgEdObj::TabIndexChange( const beans::PropertyChangeEvent& evt )
 {
     DlgEdForm* pForm = GetDlgEdForm();
     if ( pForm )
@@ -1095,7 +1095,7 @@ void DlgEdObj::EndListening(bool bRemoveListener)
     }
 }
 
-void SAL_CALL DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent& evt )
 {
     if (isListening())
     {
@@ -1151,7 +1151,7 @@ void SAL_CALL DlgEdObj::_propertyChange( const  css::beans::PropertyChangeEvent&
     }
 }
 
-void SAL_CALL DlgEdObj::_elementInserted(const css::container::ContainerEvent& ) throw(css::uno::RuntimeException)
+void SAL_CALL DlgEdObj::_elementInserted(const css::container::ContainerEvent& )
 {
     if (isListening())
     {
@@ -1160,7 +1160,7 @@ void SAL_CALL DlgEdObj::_elementInserted(const css::container::ContainerEvent& )
     }
 }
 
-void SAL_CALL DlgEdObj::_elementReplaced(const css::container::ContainerEvent& ) throw(css::uno::RuntimeException)
+void SAL_CALL DlgEdObj::_elementReplaced(const css::container::ContainerEvent& )
 {
     if (isListening())
     {
@@ -1169,7 +1169,7 @@ void SAL_CALL DlgEdObj::_elementReplaced(const css::container::ContainerEvent& )
     }
 }
 
-void SAL_CALL DlgEdObj::_elementRemoved(const css::container::ContainerEvent& ) throw(css::uno::RuntimeException)
+void SAL_CALL DlgEdObj::_elementRemoved(const css::container::ContainerEvent& )
 {
     if (isListening())
     {

@@ -36,7 +36,6 @@ namespace unotools
 {
 
     B2DPolyPolygon polyPolygonBezierToB2DPolyPolygon(const drawing::PolyPolygonBezierCoords& rSourcePolyPolygon)
-        throw( lang::IllegalArgumentException )
     {
         const sal_Int32 nOuterSequenceCount(rSourcePolyPolygon.Coordinates.getLength());
         B2DPolyPolygon aNewPolyPolygon;

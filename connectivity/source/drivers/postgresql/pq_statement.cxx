@@ -176,7 +176,7 @@ Statement::~Statement()
     POSTGRE_TRACE( "dtor Statement" );
 }
 
-void Statement::checkClosed() throw (SQLException, RuntimeException )
+void Statement::checkClosed()
 {
     if( ! m_pSettings || ! m_pSettings->pConnection )
         throw SQLException(
@@ -184,14 +184,14 @@ void Statement::checkClosed() throw (SQLException, RuntimeException )
             *this, OUString(),1,Any());
 }
 
-Any Statement::queryInterface( const Type & rType ) throw (RuntimeException, std::exception)
+Any Statement::queryInterface( const Type & rType )
 {
     Any aRet = Statement_BASE::queryInterface(rType);
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 
 
-Sequence< Type > Statement::getTypes() throw ( RuntimeException, std::exception )
+Sequence< Type > Statement::getTypes()
 {
     static Sequence< Type > *pCollection;
     if( ! pCollection )
@@ -209,12 +209,12 @@ Sequence< Type > Statement::getTypes() throw ( RuntimeException, std::exception 
     return *pCollection;
 }
 
-Sequence< sal_Int8> Statement::getImplementationId() throw ( RuntimeException, std::exception )
+Sequence< sal_Int8> Statement::getImplementationId()
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
-void Statement::close(  ) throw (SQLException, RuntimeException, std::exception)
+void Statement::close(  )
 {
     // let the connection die without acquired mutex !
     Reference< XConnection > r;
@@ -238,7 +238,6 @@ void Statement::close(  ) throw (SQLException, RuntimeException, std::exception)
 
 void Statement::raiseSQLException(
     const OUString & sql, const char * errorMsg )
-    throw( SQLException )
 {
     OUStringBuffer buf(128);
     buf.append( "pq_driver: ");
@@ -253,7 +252,6 @@ void Statement::raiseSQLException(
 }
 
 Reference< XResultSet > Statement::executeQuery(const OUString& sql )
-        throw (SQLException, RuntimeException, std::exception)
 {
     Reference< XCloseable > lastResultSetHolder = m_lastResultset;
     if( lastResultSetHolder.is() )
@@ -267,7 +265,6 @@ Reference< XResultSet > Statement::executeQuery(const OUString& sql )
 }
 
 sal_Int32 Statement::executeUpdate( const OUString& sql )
-        throw (SQLException, RuntimeException, std::exception)
 {
     if( execute( sql ) )
     {
@@ -283,7 +280,6 @@ static void raiseSQLException(
     const OString & sql,
     const char * errorMsg,
     const char *errorType = nullptr )
-    throw( SQLException )
 {
     OUStringBuffer buf(128);
     buf.append( "pq_driver: ");
@@ -824,7 +820,6 @@ Reference< XResultSet > getGeneratedValuesFromLastInsert(
 }
 
 sal_Bool Statement::execute( const OUString& sql )
-        throw (SQLException, RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     checkClosed();
@@ -850,7 +845,6 @@ sal_Bool Statement::execute( const OUString& sql )
 }
 
 Reference< XConnection > Statement::getConnection(  )
-        throw (SQLException, RuntimeException, std::exception)
 {
     Reference< XConnection > ret;
     {
@@ -863,18 +857,15 @@ Reference< XConnection > Statement::getConnection(  )
 
 
 Any Statement::getWarnings(  )
-        throw (SQLException,RuntimeException, std::exception)
 {
     return Any();
 }
 
 void Statement::clearWarnings(  )
-        throw (SQLException, RuntimeException, std::exception)
 {
 }
 
 Reference< css::sdbc::XResultSetMetaData > Statement::getMetaData()
-            throw (SQLException,RuntimeException, std::exception)
 {
     Reference< css::sdbc::XResultSetMetaData > ret;
     Reference< css::sdbc::XResultSetMetaDataSupplier > supplier( m_lastResultset, UNO_QUERY );
@@ -892,7 +883,6 @@ Reference< css::sdbc::XResultSetMetaData > Statement::getMetaData()
 
 sal_Bool Statement::convertFastPropertyValue(
         Any & rConvertedValue, Any & rOldValue, sal_Int32 nHandle, const Any& rValue )
-        throw (IllegalArgumentException)
 {
     rOldValue = m_props[nHandle];
     bool bRet;
@@ -939,7 +929,7 @@ sal_Bool Statement::convertFastPropertyValue(
 
 
 void Statement::setFastPropertyValue_NoBroadcast(
-    sal_Int32 nHandle,const Any& rValue ) throw (Exception, std::exception)
+    sal_Int32 nHandle,const Any& rValue )
 {
     m_props[nHandle] = rValue;
 }
@@ -950,26 +940,22 @@ void Statement::getFastPropertyValue( Any& rValue, sal_Int32 nHandle ) const
 }
 
 Reference < XPropertySetInfo >  Statement::getPropertySetInfo()
-        throw(RuntimeException, std::exception)
 {
     return OPropertySetHelper::createPropertySetInfo( getStatementPropertyArrayHelper() );
 }
 
 
 Reference< XResultSet > Statement::getResultSet(  )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return Reference< XResultSet > ( m_lastResultset, css::uno::UNO_QUERY );
 }
 
 sal_Int32 Statement::getUpdateCount(  )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return m_multipleResultUpdateCount;
 }
 
 sal_Bool Statement::getMoreResults(  )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return false;
 }
@@ -981,7 +967,6 @@ void Statement::disposing()
 }
 
 Reference< XResultSet > Statement::getGeneratedValues(  )
-        throw (SQLException, RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     return getGeneratedValuesFromLastInsert(

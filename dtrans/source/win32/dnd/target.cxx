@@ -102,7 +102,6 @@ void SAL_CALL DropTarget::disposing()
 }
 
 void SAL_CALL DropTarget::initialize( const Sequence< Any >& aArguments )
-        throw(Exception, RuntimeException)
 {
     // The window must be registered for Dnd by RegisterDragDrop. We must ensure
     // that RegisterDragDrop is called from an STA ( OleInitialize) thread.
@@ -247,17 +246,17 @@ DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams)
 }
 
 // XServiceInfo
-OUString SAL_CALL DropTarget::getImplementationName(  ) throw (RuntimeException)
+OUString SAL_CALL DropTarget::getImplementationName(  )
 {
     return OUString(DNDTARGET_IMPL_NAME);
 }
 // XServiceInfo
-sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName ) throw (RuntimeException)
+sal_Bool SAL_CALL DropTarget::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  )
 {
     OUString names[1]= {OUString(DNDTARGET_SERVICE_NAME)};
     return Sequence<OUString>(names, 1);
@@ -265,34 +264,32 @@ Sequence< OUString > SAL_CALL DropTarget::getSupportedServiceNames(  ) throw (Ru
 
 // XDropTarget
 void SAL_CALL DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& dtl )
-        throw(RuntimeException)
 {
     rBHelper.addListener( cppu::UnoType<decltype(dtl)>::get(), dtl );
 }
 
 void SAL_CALL DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& dtl )
-        throw(RuntimeException)
 {
     rBHelper.removeListener( cppu::UnoType<decltype(dtl)>::get(), dtl );
 }
 
-sal_Bool SAL_CALL DropTarget::isActive(  ) throw(RuntimeException)
+sal_Bool SAL_CALL DropTarget::isActive(  )
 {
     return m_bActive; //m_bDropTargetRegistered;
 }
 
-void SAL_CALL DropTarget::setActive( sal_Bool _b ) throw(RuntimeException)
+void SAL_CALL DropTarget::setActive( sal_Bool _b )
 {
     MutexGuard g(m_mutex);
     m_bActive= _b;
 }
 
-sal_Int8 SAL_CALL DropTarget::getDefaultActions(  ) throw(RuntimeException)
+sal_Int8 SAL_CALL DropTarget::getDefaultActions(  )
 {
     return m_nDefaultActions;
 }
 
-void SAL_CALL DropTarget::setDefaultActions( sal_Int8 actions ) throw(RuntimeException)
+void SAL_CALL DropTarget::setDefaultActions( sal_Int8 actions )
 {
     OSL_ENSURE( actions < 8, "No valid default actions");
     m_nDefaultActions= actions;

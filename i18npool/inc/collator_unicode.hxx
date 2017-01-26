@@ -41,29 +41,25 @@ public:
     virtual ~Collator_Unicode() override;
 
     sal_Int32 SAL_CALL compareSubstring( const OUString& s1, sal_Int32 off1, sal_Int32 len1,
-        const OUString& s2, sal_Int32 off2, sal_Int32 len2) throw(css::uno::RuntimeException, std::exception) override;
+        const OUString& s2, sal_Int32 off2, sal_Int32 len2) override;
 
-    sal_Int32 SAL_CALL compareString( const OUString& s1, const OUString& s2)
-        throw(css::uno::RuntimeException, std::exception) override;
+    sal_Int32 SAL_CALL compareString( const OUString& s1, const OUString& s2) override;
 
     sal_Int32 SAL_CALL loadCollatorAlgorithm( const OUString& impl, const lang::Locale& rLocale,
-        sal_Int32 collatorOptions) throw(css::uno::RuntimeException, std::exception) override;
+        sal_Int32 collatorOptions) override;
 
 
     // following 4 methods are implemented in collatorImpl.
-    sal_Int32 SAL_CALL loadDefaultCollator( const lang::Locale&,  sal_Int32)
-        throw(css::uno::RuntimeException, std::exception) override {throw css::uno::RuntimeException();}
+    sal_Int32 SAL_CALL loadDefaultCollator( const lang::Locale&,  sal_Int32) override {throw css::uno::RuntimeException();}
     void SAL_CALL loadCollatorAlgorithmWithEndUserOption( const OUString&, const lang::Locale&,
-        const css::uno::Sequence< sal_Int32 >&) throw(css::uno::RuntimeException, std::exception) override {throw css::uno::RuntimeException();}
-    css::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const lang::Locale&)
-        throw(css::uno::RuntimeException, std::exception) override {throw css::uno::RuntimeException();}
-    css::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& )
-        throw(css::uno::RuntimeException, std::exception) override {throw css::uno::RuntimeException();}
+        const css::uno::Sequence< sal_Int32 >&) override {throw css::uno::RuntimeException();}
+    css::uno::Sequence< OUString > SAL_CALL listCollatorAlgorithms( const lang::Locale&) override {throw css::uno::RuntimeException();}
+    css::uno::Sequence< sal_Int32 > SAL_CALL listCollatorOptions( const OUString& ) override {throw css::uno::RuntimeException();}
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
     const sal_Char *implementationName;

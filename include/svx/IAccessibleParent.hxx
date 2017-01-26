@@ -79,18 +79,16 @@ public:
         const css::uno::Reference< css::drawing::XShape >& _rxShape,
         const long _nIndex,
         const AccessibleShapeTreeInfo& _rShapeTreeInfo
-    )   throw (css::uno::RuntimeException, std::exception) = 0;
+    ) = 0;
     //Add this method to support Form Controls
     /// @throws css::uno::RuntimeException
     virtual AccessibleControlShape* GetAccControlShapeFromModel
-        (css::beans::XPropertySet*)
-        throw (css::uno::RuntimeException){return nullptr;};
+        (css::beans::XPropertySet*){return nullptr;};
     /// @throws css::uno::RuntimeException
     virtual  css::uno::Reference<
             css::accessibility::XAccessible>
         GetAccessibleCaption (const css::uno::Reference<
-            css::drawing::XShape>&)
-            throw (css::uno::RuntimeException){return nullptr;};
+            css::drawing::XShape>&){return nullptr;};
     virtual bool IsDocumentSelAll(){ return false; }
 };
 

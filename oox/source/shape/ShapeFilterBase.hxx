@@ -37,8 +37,7 @@ public:
 
     /// @throws css::uno::RuntimeException
     explicit            ShapeFilterBase(
-                            const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-                            throw( css::uno::RuntimeException );
+                            const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     virtual             ~ShapeFilterBase() override;
 
@@ -62,7 +61,7 @@ public:
 
 private:
     virtual ::oox::ole::VbaProject* implCreateVbaProject() const override;
-    virtual OUString SAL_CALL getImplementationName() throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
     virtual GraphicHelper* implCreateGraphicHelper() const override;
 
     std::shared_ptr< ::oox::drawingml::chart::ChartConverter > mxChartConv;

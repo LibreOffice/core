@@ -47,8 +47,7 @@ public:
     static bool save( const OUString& rURL,
                       const css::uno::Reference< css::container::XNameContainer >& xTable,
                       const css::uno::Reference< css::embed::XStorage > &xStorage,
-                      OUString *pOptName )
-        throw (css::uno::RuntimeException, std::exception);
+                      OUString *pOptName );
 
     // methods without content:
     virtual void ExportAutoStyles_() override;

@@ -36,13 +36,11 @@ XMLEmbeddedObjectExportFilter::~XMLEmbeddedObjectExportFilter () throw()
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::startDocument()
-    throw( SAXException, RuntimeException, std::exception )
 {
     // do nothing, filter this
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::endDocument()
-    throw( SAXException, RuntimeException, std::exception)
 {
     // do nothing, filter this
 }
@@ -50,26 +48,22 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::endDocument()
 void SAL_CALL XMLEmbeddedObjectExportFilter::startElement(
         const OUString& rName,
         const Reference< XAttributeList >& xAttrList )
-    throw(SAXException, RuntimeException, std::exception)
 {
     xHandler->startElement( rName, xAttrList );
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::endElement( const OUString& rName )
-    throw(SAXException, RuntimeException, std::exception)
 {
     xHandler->endElement( rName );
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::characters( const OUString& rChars )
-    throw(SAXException, RuntimeException, std::exception)
 {
     xHandler->characters( rChars );
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::ignorableWhitespace(
         const OUString& rWhitespaces )
-    throw(SAXException, RuntimeException, std::exception)
 {
     xHandler->ignorableWhitespace( rWhitespaces );
 }
@@ -77,49 +71,42 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::ignorableWhitespace(
 void SAL_CALL XMLEmbeddedObjectExportFilter::processingInstruction(
         const OUString& rTarget,
         const OUString& rData )
-    throw(SAXException, RuntimeException, std::exception)
 {
     xHandler->processingInstruction( rTarget, rData );
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::setDocumentLocator(
         const Reference< XLocator >& rLocator )
-    throw(SAXException, RuntimeException, std::exception)
 {
     xHandler->setDocumentLocator( rLocator );
 }
 
 // XExtendedDocumentHandler
 void SAL_CALL XMLEmbeddedObjectExportFilter::startCDATA()
-    throw(SAXException, RuntimeException, std::exception)
 {
     if( xExtHandler.is() )
         xExtHandler->startCDATA();
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::endCDATA()
-    throw(RuntimeException, std::exception)
 {
     if( xExtHandler.is() )
         xExtHandler->endCDATA();
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::comment( const OUString& rComment )
-    throw(SAXException, RuntimeException, std::exception)
 {
     if( xExtHandler.is() )
         xExtHandler->comment( rComment );
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::allowLineBreak()
-    throw(SAXException, RuntimeException, std::exception)
 {
     if( xExtHandler.is() )
         xExtHandler->allowLineBreak();
 }
 
 void SAL_CALL XMLEmbeddedObjectExportFilter::unknown( const OUString& rString )
-    throw(SAXException, RuntimeException, std::exception)
 {
     if( xExtHandler.is() )
         xExtHandler->unknown( rString );
@@ -128,7 +115,6 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::unknown( const OUString& rString )
 // XInitialize
 void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
         const Sequence< Any >& aArguments )
-    throw(Exception, RuntimeException, std::exception)
 {
     const sal_Int32 nAnyCount = aArguments.getLength();
     const Any* pAny = aArguments.getConstArray();
@@ -146,20 +132,17 @@ void SAL_CALL XMLEmbeddedObjectExportFilter::initialize(
 
 // XServiceInfo
 OUString SAL_CALL XMLEmbeddedObjectExportFilter::getImplementationName()
-    throw(RuntimeException, std::exception)
 {
     OUString aStr;
     return aStr;
 }
 
 sal_Bool SAL_CALL XMLEmbeddedObjectExportFilter::supportsService( const OUString& ServiceName )
-    throw(RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Sequence< OUString > SAL_CALL XMLEmbeddedObjectExportFilter::getSupportedServiceNames(  )
-    throw(RuntimeException, std::exception)
 {
     Sequence< OUString > aSeq;
     return aSeq;

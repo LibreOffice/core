@@ -58,7 +58,6 @@ BlowfishCFB8CipherContext::~BlowfishCFB8CipherContext()
 }
 
 uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherContext( const uno::Sequence< ::sal_Int8 >& aData )
-    throw( lang::IllegalArgumentException, lang::DisposedException, uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_pCipher )
@@ -93,7 +92,6 @@ uno::Sequence< sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::convertWithCipherC
 }
 
 uno::Sequence< ::sal_Int8 > SAL_CALL BlowfishCFB8CipherContext::finalizeCipherContextAndDispose()
-    throw( lang::DisposedException, uno::RuntimeException, std::exception )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( !m_pCipher )

@@ -45,7 +45,7 @@ DropTarget::~DropTarget()
         m_xSelectionManager->deregisterDropTarget( m_aTargetWindow );
 }
 
-void DropTarget::initialize( const Sequence< Any >& arguments ) throw( css::uno::Exception, std::exception )
+void DropTarget::initialize( const Sequence< Any >& arguments )
 {
     if( arguments.getLength() > 1 )
     {
@@ -72,38 +72,38 @@ void DropTarget::initialize( const Sequence< Any >& arguments ) throw( css::uno:
     }
 }
 
-void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw(std::exception)
+void DropTarget::addDropTargetListener( const Reference< XDropTargetListener >& xListener )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
     m_aListeners.push_back( xListener );
 }
 
-void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& xListener ) throw(std::exception)
+void DropTarget::removeDropTargetListener( const Reference< XDropTargetListener >& xListener )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
     m_aListeners.remove( xListener );
 }
 
-sal_Bool DropTarget::isActive() throw(std::exception)
+sal_Bool DropTarget::isActive()
 {
     return m_bActive;
 }
 
-void DropTarget::setActive( sal_Bool active ) throw(std::exception)
+void DropTarget::setActive( sal_Bool active )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
     m_bActive = active;
 }
 
-sal_Int8 DropTarget::getDefaultActions() throw(std::exception)
+sal_Int8 DropTarget::getDefaultActions()
 {
     return m_nDefaultActions;
 }
 
-void DropTarget::setDefaultActions( sal_Int8 actions ) throw(std::exception)
+void DropTarget::setDefaultActions( sal_Int8 actions )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( m_aMutex );
 
@@ -159,17 +159,17 @@ void DropTarget::dragOver( const DropTargetDragEvent& dtde ) throw()
 }
 
 // XServiceInfo
-OUString DropTarget::getImplementationName() throw(std::exception)
+OUString DropTarget::getImplementationName()
 {
     return OUString(XDND_DROPTARGET_IMPLEMENTATION_NAME);
 }
 
-sal_Bool DropTarget::supportsService( const OUString& ServiceName ) throw(std::exception)
+sal_Bool DropTarget::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService(this, ServiceName);
 }
 
-Sequence< OUString > DropTarget::getSupportedServiceNames() throw(std::exception)
+Sequence< OUString > DropTarget::getSupportedServiceNames()
 {
     return Xdnd_dropTarget_getSupportedServiceNames();
 }

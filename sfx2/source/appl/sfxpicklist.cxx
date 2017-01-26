@@ -68,8 +68,7 @@ class StringLength : public ::cppu::WeakImplHelper< XStringWidth >
         StringLength() {}
 
         // XStringWidth
-        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString )
-            throw (css::uno::RuntimeException, std::exception) override
+        sal_Int32 SAL_CALL queryStringWidth( const OUString& aString ) override
         {
             return aString.getLength();
         }

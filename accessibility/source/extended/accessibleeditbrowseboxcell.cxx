@@ -58,7 +58,7 @@ namespace accessibility
         }
     }
 
-    OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName() throw ( css::uno::RuntimeException, std::exception )
+    OUString SAL_CALL EditBrowseBoxTableCell::getImplementationName()
     {
         return OUString( "com.sun.star.comp.svtools.TableCellProxy" );
     }
@@ -67,13 +67,13 @@ namespace accessibility
 
     IMPLEMENT_FORWARD_XTYPEPROVIDER2( EditBrowseBoxTableCell, AccessibleBrowseBoxCell, OAccessibleContextWrapperHelper )
 
-    void EditBrowseBoxTableCell::notifyTranslatedEvent( const AccessibleEventObject& _rEvent ) throw (RuntimeException)
+    void EditBrowseBoxTableCell::notifyTranslatedEvent( const AccessibleEventObject& _rEvent )
     {
         commitEvent( _rEvent.EventId, _rEvent.NewValue, _rEvent.OldValue );
     }
 
     // css::accessibility::XAccessibleComponent
-    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getForeground(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getForeground(  )
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -84,7 +84,7 @@ namespace accessibility
         return 0;
     }
 
-    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getBackground(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getBackground(  )
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -95,12 +95,12 @@ namespace accessibility
         return 0;
     }
 
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleParent(  ) throw (RuntimeException, std::exception)
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleParent(  )
     {
         return m_xParentAccessible;
     }
 
-    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleDescription() throw ( RuntimeException, std::exception )
+    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleDescription()
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -108,7 +108,7 @@ namespace accessibility
         return m_xInnerContext->getAccessibleDescription();
     }
 
-    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleName() throw ( RuntimeException, std::exception )
+    OUString SAL_CALL EditBrowseBoxTableCell::getAccessibleName()
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -117,7 +117,7 @@ namespace accessibility
                + TK_RES_STRING(RID_STR_ACC_ROW_NUM).replaceAll("%ROWNUMBER", OUString::number(getRowPos()));
     }
 
-    css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet() throw ( RuntimeException, std::exception )
+    css::uno::Reference< css::accessibility::XAccessibleRelationSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleRelationSet()
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -125,7 +125,7 @@ namespace accessibility
         return baseGetAccessibleRelationSet( );
     }
 
-    css::uno::Reference<css::accessibility::XAccessibleStateSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet() throw ( RuntimeException, std::exception )
+    css::uno::Reference<css::accessibility::XAccessibleStateSet > SAL_CALL EditBrowseBoxTableCell::getAccessibleStateSet()
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -134,7 +134,7 @@ namespace accessibility
             // TODO: shouldn't we add an ACTIVE here? Isn't the EditBrowseBoxTableCell always ACTIVE?
     }
 
-    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getAccessibleChildCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL EditBrowseBoxTableCell::getAccessibleChildCount(  )
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -142,7 +142,7 @@ namespace accessibility
         return baseGetAccessibleChildCount();
     }
 
-    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i ) throw (css::lang::IndexOutOfBoundsException, RuntimeException, std::exception)
+    css::uno::Reference< css::accessibility::XAccessible > SAL_CALL EditBrowseBoxTableCell::getAccessibleChild( sal_Int32 i )
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -150,7 +150,7 @@ namespace accessibility
         return baseGetAccessibleChild( i );
     }
 
-    sal_Int16 SAL_CALL EditBrowseBoxTableCell::getAccessibleRole() throw ( RuntimeException, std::exception )
+    sal_Int16 SAL_CALL EditBrowseBoxTableCell::getAccessibleRole()
     {
         SolarMethodGuard aGuard(getMutex());
         ensureIsAlive();
@@ -158,7 +158,7 @@ namespace accessibility
         return m_xInnerContext->getAccessibleRole( );
     }
 
-    void SAL_CALL EditBrowseBoxTableCell::dispose() throw( RuntimeException, std::exception )
+    void SAL_CALL EditBrowseBoxTableCell::dispose()
     {
         // simply disambiguate. Note that the OComponentHelper base in AccessibleBrowseBoxCell
         // will call our "disposing()", which will call "dispose()" on the OAccessibleContextWrapperHelper
@@ -166,7 +166,7 @@ namespace accessibility
         AccessibleBrowseBoxCell::dispose();
     }
 
-    void SAL_CALL EditBrowseBoxTableCell::disposing( const css::lang::EventObject& _rSource ) throw (RuntimeException, std::exception)
+    void SAL_CALL EditBrowseBoxTableCell::disposing( const css::lang::EventObject& _rSource )
     {
         AccessibleBrowseBoxCell::disposing( _rSource );
         OAccessibleContextWrapperHelper::disposing( _rSource );
@@ -200,7 +200,7 @@ namespace accessibility
     {
     }
 
-    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL EditBrowseBoxTableCellAccess::getAccessibleContext(  ) throw (RuntimeException, std::exception)
+    css::uno::Reference< css::accessibility::XAccessibleContext > SAL_CALL EditBrowseBoxTableCellAccess::getAccessibleContext(  )
     {
         if ( !m_pBrowseBox || !m_xControlAccessible.is() )
             throw DisposedException();

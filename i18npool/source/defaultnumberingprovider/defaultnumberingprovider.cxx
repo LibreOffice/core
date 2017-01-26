@@ -276,13 +276,13 @@ DefaultNumberingProvider::~DefaultNumberingProvider()
 }
 
 Sequence< Reference<container::XIndexAccess> >
-DefaultNumberingProvider::getDefaultOutlineNumberings(const Locale& rLocale ) throw(RuntimeException, std::exception)
+DefaultNumberingProvider::getDefaultOutlineNumberings(const Locale& rLocale )
 {
      return LocaleDataImpl::get()->getOutlineNumberingLevels( rLocale );
 }
 
 Sequence< Sequence<beans::PropertyValue> >
-DefaultNumberingProvider::getDefaultContinuousNumberingLevels( const Locale& rLocale ) throw(RuntimeException, std::exception)
+DefaultNumberingProvider::getDefaultContinuousNumberingLevels( const Locale& rLocale )
 {
      return LocaleDataImpl::get()->getContinuousNumberingLevels( rLocale );
 }
@@ -394,7 +394,6 @@ void lcl_formatChars3( const sal_Unicode table_capital[], const sal_Unicode tabl
  */
 static
 void lcl_formatPersianWord( sal_Int32 nNumber, OUString& rsResult )
-    throw( IllegalArgumentException, RuntimeException )
 {
     OUStringBuffer aTemp(64);
     static const sal_Unicode asPersianWord_conjunction_data[] = {0x20,0x0648,0x20,0};
@@ -546,7 +545,6 @@ Any getPropertyByName( const Sequence<beans::PropertyValue>& aProperties,
 OUString
 DefaultNumberingProvider::makeNumberingString( const Sequence<beans::PropertyValue>& aProperties,
                                                const Locale& aLocale )
-     throw( IllegalArgumentException, RuntimeException, std::exception )
 {
      // the Sequence of PropertyValues is expected to have at least 4 elements:
      // elt Name              Type             purpose
@@ -952,7 +950,6 @@ static const Supported_NumberingType aSupportedTypes[] =
 static const sal_Int32 nSupported_NumberingTypes = sizeof(aSupportedTypes) / sizeof(Supported_NumberingType);
 
 OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
-                                throw(RuntimeException, std::exception)
 {
     if (index < 0 || index >= nSupported_NumberingTypes)
         throw RuntimeException();
@@ -977,7 +974,7 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
 }
 
 bool SAL_CALL
-DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(RuntimeException)
+DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName)
 {
     if (! xHierarchicalNameAccess.is()) {
         Reference< XMultiServiceFactory > xConfigProvider =
@@ -1011,7 +1008,6 @@ DefaultNumberingProvider::isScriptFlagEnabled(const OUString& aName) throw(Runti
 }
 
 Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
-                                throw(RuntimeException, std::exception)
 {
     Sequence< sal_Int16 > aRet(nSupported_NumberingTypes );
     sal_Int16* pArray = aRet.getArray();
@@ -1029,7 +1025,6 @@ Sequence< sal_Int16 > DefaultNumberingProvider::getSupportedNumberingTypes(  )
 }
 
 sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumberingIdentifier )
-                                throw(RuntimeException, std::exception)
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
         if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
@@ -1038,7 +1033,6 @@ sal_Int16 DefaultNumberingProvider::getNumberingType( const OUString& rNumbering
 }
 
 sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingIdentifier )
-                                throw(RuntimeException, std::exception)
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
         if(rNumberingIdentifier.equals(makeNumberingIdentifier(i)))
@@ -1047,7 +1041,6 @@ sal_Bool DefaultNumberingProvider::hasNumberingType( const OUString& rNumberingI
 }
 
 OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingType )
-                                throw(RuntimeException, std::exception)
 {
     for(sal_Int16 i = 0; i < nSupported_NumberingTypes; i++)
         if(nNumberingType == aSupportedTypes[i].nType)
@@ -1056,19 +1049,16 @@ OUString DefaultNumberingProvider::getNumberingIdentifier( sal_Int16 nNumberingT
 }
 
 OUString DefaultNumberingProvider::getImplementationName()
-                throw( RuntimeException, std::exception )
 {
     return OUString("com.sun.star.text.DefaultNumberingProvider");
 }
 
 sal_Bool DefaultNumberingProvider::supportsService(const OUString& rServiceName)
-                throw( RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > DefaultNumberingProvider::getSupportedServiceNames()
-                throw( RuntimeException, std::exception )
 {
     Sequence< OUString > aRet { "com.sun.star.text.DefaultNumberingProvider" };
     return aRet;

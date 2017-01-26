@@ -45,27 +45,17 @@ namespace connectivity
 
             // ---- XClob ----------------------------------------------------
             virtual sal_Int64 SAL_CALL
-                length()
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                length() override;
             virtual ::rtl::OUString SAL_CALL
-                getSubString(sal_Int64 aPosition, sal_Int32 aLength)
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                getSubString(sal_Int64 aPosition, sal_Int32 aLength) override;
             virtual css::uno::Reference< css::io::XInputStream > SAL_CALL
-                getCharacterStream()
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                getCharacterStream() override;
             virtual sal_Int64 SAL_CALL
                 position(const ::rtl::OUString& rPattern,
-                         sal_Int32 aStart)
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                         sal_Int32 aStart) override;
             virtual sal_Int64 SAL_CALL
                 positionOfClob(const ::css::uno::Reference< ::css::sdbc::XClob >& rPattern,
-                               sal_Int64 aStart)
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException, std::exception) override;
+                               sal_Int64 aStart) override;
             // ---- OComponentHelper ------------------------------------------
             virtual void SAL_CALL disposing() override;
         };

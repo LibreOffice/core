@@ -116,11 +116,7 @@ public:
     /// @throws css::uno::RuntimeException
     static OUString GetTypeFromStorage(
         const css::uno::Reference<css::embed::XStorage>& xStorage,
-        bool bTemplate = false )
-            throw ( css::beans::UnknownPropertyException,
-                    css::lang::WrappedTargetException,
-                    css::uno::RuntimeException,
-                    std::exception );
+        bool bTemplate = false );
 };
 
 #endif

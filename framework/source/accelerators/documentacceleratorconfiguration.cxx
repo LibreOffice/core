@@ -72,30 +72,25 @@ public:
 
     virtual ~DocumentAcceleratorConfiguration() override;
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.framework.DocumentAcceleratorConfiguration");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.ui.DocumentAcceleratorConfiguration"};
     }
 
     // XUIConfigurationStorage
-    virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage) override;
 
-    virtual sal_Bool SAL_CALL hasStorage()
-        throw(css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasStorage() override;
 
     /** read all data into the cache. */
     void fillCache();
@@ -129,7 +124,6 @@ DocumentAcceleratorConfiguration::~DocumentAcceleratorConfiguration()
 }
 
 void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Reference< css::embed::XStorage >& xStorage)
-    throw(css::uno::RuntimeException, std::exception)
 {
     // Attention! xStorage must be accepted too, if it's NULL !
 
@@ -149,7 +143,6 @@ void SAL_CALL DocumentAcceleratorConfiguration::setStorage(const css::uno::Refer
 }
 
 sal_Bool SAL_CALL DocumentAcceleratorConfiguration::hasStorage()
-    throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     return m_xDocumentRoot.is();

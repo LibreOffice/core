@@ -88,51 +88,39 @@ public:
     // lang::XEventListener
 
     virtual void SAL_CALL
-        disposing (const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject) override;
 
     // XWindowListener
 
-    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent) override;
 
     // XPaintListener
 
-    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent) override;
 
     // XResourceId
 
-    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<css::drawing::framework::XResourceId> SAL_CALL getResourceId() override;
 
-    virtual sal_Bool SAL_CALL isAnchorOnly()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL isAnchorOnly() override;
 
     // XDrawView
 
     virtual void SAL_CALL setCurrentPage (
-        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide)
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference<css::drawing::XDrawPage>& rxSlide) override;
 
-    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<css::drawing::XDrawPage> SAL_CALL getCurrentPage() override;
 
     // XKeyListener
 
-    virtual void SAL_CALL keyPressed (const css::awt::KeyEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL keyReleased (const css::awt::KeyEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL keyPressed (const css::awt::KeyEvent& rEvent) override;
+    virtual void SAL_CALL keyReleased (const css::awt::KeyEvent& rEvent) override;
 
 private:
     css::uno::Reference<css::drawing::framework::XResourceId> mxViewId;

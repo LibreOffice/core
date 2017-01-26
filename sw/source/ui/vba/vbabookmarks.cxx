@@ -36,9 +36,9 @@ class BookmarksEnumeration : public EnumerationHelperImpl
     uno::Reference< frame::XModel > mxModel;
 public:
     /// @throws uno::RuntimeException
-    BookmarksEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) throw ( uno::RuntimeException ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mxModel( xModel ) {}
+    BookmarksEnumeration( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext, const uno::Reference< container::XEnumeration >& xEnumeration,  const uno::Reference< frame::XModel >& xModel  ) : EnumerationHelperImpl( xParent, xContext, xEnumeration ), mxModel( xModel ) {}
 
-    virtual uno::Any SAL_CALL nextElement(  ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL nextElement(  ) override
     {
         uno::Reference< container::XNamed > xNamed( m_xEnumeration->nextElement(), uno::UNO_QUERY_THROW );
         OUString aName = xNamed->getName();
@@ -57,25 +57,25 @@ private:
     uno::Any cachePos;
 public:
     /// @throws uno::RuntimeException
-    explicit BookmarkCollectionHelper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) throw (uno::RuntimeException) : mxIndexAccess( xIndexAccess )
+    explicit BookmarkCollectionHelper( const uno::Reference< container::XIndexAccess >& xIndexAccess ) : mxIndexAccess( xIndexAccess )
     {
         mxNameAccess.set( mxIndexAccess, uno::UNO_QUERY_THROW );
     }
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType(  ) throw (uno::RuntimeException, std::exception) override { return  mxIndexAccess->getElementType(); }
-    virtual sal_Bool SAL_CALL hasElements(  ) throw (uno::RuntimeException, std::exception) override { return mxIndexAccess->hasElements(); }
+    virtual uno::Type SAL_CALL getElementType(  ) override { return  mxIndexAccess->getElementType(); }
+    virtual sal_Bool SAL_CALL hasElements(  ) override { return mxIndexAccess->hasElements(); }
     // XNameAccess
-    virtual uno::Any SAL_CALL getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL getByName( const OUString& aName ) override
     {
         if ( !hasByName(aName) )
             throw container::NoSuchElementException();
         return cachePos;
     }
-    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (uno::RuntimeException, std::exception) override
+    virtual uno::Sequence< OUString > SAL_CALL getElementNames(  ) override
     {
         return mxNameAccess->getElementNames();
     }
-    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) throw (uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override
     {
         if( mxNameAccess->hasByName( aName ) )
         {
@@ -98,11 +98,11 @@ public:
         return false;
     }
     // XIndexAccess
-    virtual ::sal_Int32 SAL_CALL getCount(  ) throw (uno::RuntimeException, std::exception) override
+    virtual ::sal_Int32 SAL_CALL getCount(  ) override
     {
         return mxIndexAccess->getCount();
     }
-    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException, uno::RuntimeException, std::exception ) override
+    virtual uno::Any SAL_CALL getByIndex( ::sal_Int32 Index ) override
     {
         return mxIndexAccess->getByIndex( Index );
     }
@@ -115,12 +115,12 @@ SwVbaBookmarks::SwVbaBookmarks( const uno::Reference< XHelperInterface >& xParen
 }
 // XEnumerationAccess
 uno::Type
-SwVbaBookmarks::getElementType() throw (uno::RuntimeException)
+SwVbaBookmarks::getElementType()
 {
     return cppu::UnoType<word::XBookmark>::get();
 }
 uno::Reference< container::XEnumeration >
-SwVbaBookmarks::createEnumeration() throw (uno::RuntimeException)
+SwVbaBookmarks::createEnumeration()
 {
     uno::Reference< container::XEnumerationAccess > xEnumAccess( m_xIndexAccess, uno::UNO_QUERY_THROW );
     return new BookmarksEnumeration( getParent(), mxContext,xEnumAccess->createEnumeration(), mxModel );
@@ -134,13 +134,13 @@ SwVbaBookmarks::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< word::XBookmark > ( new SwVbaBookmark( getParent(), mxContext, mxModel, aName ) ) );
 }
 
-void SwVbaBookmarks::removeBookmarkByName( const OUString& rName ) throw (uno::RuntimeException)
+void SwVbaBookmarks::removeBookmarkByName( const OUString& rName )
 {
     uno::Reference< text::XTextContent > xBookmark( m_xNameAccess->getByName( rName ), uno::UNO_QUERY_THROW );
     word::getXTextViewCursor( mxModel )->getText()->removeTextContent( xBookmark );
 }
 
-void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& xModel, const OUString& rName, const uno::Reference< text::XTextRange >& rTextRange ) throw (uno::RuntimeException)
+void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& xModel, const OUString& rName, const uno::Reference< text::XTextRange >& rTextRange )
 {
     uno::Reference< lang::XMultiServiceFactory > xDocMSF( xModel, uno::UNO_QUERY_THROW );
     uno::Reference< text::XTextContent > xBookmark( xDocMSF->createInstance("com.sun.star.text.Bookmark"), uno::UNO_QUERY_THROW );
@@ -150,7 +150,7 @@ void SwVbaBookmarks::addBookmarkByName( const uno::Reference< frame::XModel >& x
 }
 
 uno::Any SAL_CALL
-SwVbaBookmarks::Add( const OUString& rName, const uno::Any& rRange ) throw (uno::RuntimeException, std::exception)
+SwVbaBookmarks::Add( const OUString& rName, const uno::Any& rRange )
 {
     uno::Reference< text::XTextRange > xTextRange;
     uno::Reference< word::XRange > xRange;
@@ -176,31 +176,31 @@ SwVbaBookmarks::Add( const OUString& rName, const uno::Any& rRange ) throw (uno:
 }
 
 sal_Int32 SAL_CALL
-SwVbaBookmarks::getDefaultSorting() throw (css::uno::RuntimeException, std::exception)
+SwVbaBookmarks::getDefaultSorting()
 {
     return word::WdBookmarkSortBy::wdSortByName;
 }
 
 void SAL_CALL
-SwVbaBookmarks::setDefaultSorting( sal_Int32/* _type*/ ) throw (css::uno::RuntimeException, std::exception)
+SwVbaBookmarks::setDefaultSorting( sal_Int32/* _type*/ )
 {
     // not support in Writer
 }
 
 sal_Bool SAL_CALL
-SwVbaBookmarks::getShowHidden() throw (css::uno::RuntimeException, std::exception)
+SwVbaBookmarks::getShowHidden()
 {
     return true;
 }
 
 void SAL_CALL
-SwVbaBookmarks::setShowHidden( sal_Bool /*_hidden*/ ) throw (css::uno::RuntimeException, std::exception)
+SwVbaBookmarks::setShowHidden( sal_Bool /*_hidden*/ )
 {
     // not support in Writer
 }
 
 sal_Bool SAL_CALL
-SwVbaBookmarks::Exists( const OUString& rName ) throw (css::uno::RuntimeException, std::exception)
+SwVbaBookmarks::Exists( const OUString& rName )
 {
     bool bExist = m_xNameAccess->hasByName( rName );
     return bExist;

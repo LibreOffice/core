@@ -47,25 +47,25 @@ public:
     void SAL_CALL disposing() override;
 
     // css::ui::XStatusbarItem Attributes
-    virtual ::rtl::OUString SAL_CALL getCommand() throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_uInt16 SAL_CALL getItemId() throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_uInt32 SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_uInt16 SAL_CALL getStyle() throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getOffset() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Rectangle SAL_CALL getItemRect() throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::rtl::OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setText( const rtl::OUString& rText ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::rtl::OUString SAL_CALL getHelpText() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHelpText( const rtl::OUString& rHelpText ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::rtl::OUString SAL_CALL getQuickHelpText() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setQuickHelpText( const rtl::OUString& rQuickHelpText ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::rtl::OUString SAL_CALL getAccessibleName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAccessibleName( const rtl::OUString& rAccessibleName ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setVisible( sal_Bool bVisible ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::rtl::OUString SAL_CALL getCommand() override;
+    virtual ::sal_uInt16 SAL_CALL getItemId() override;
+    virtual ::sal_uInt32 SAL_CALL getWidth() override;
+    virtual ::sal_uInt16 SAL_CALL getStyle() override;
+    virtual ::sal_Int32 SAL_CALL getOffset() override;
+    virtual css::awt::Rectangle SAL_CALL getItemRect() override;
+    virtual ::rtl::OUString SAL_CALL getText() override;
+    virtual void SAL_CALL setText( const rtl::OUString& rText ) override;
+    virtual ::rtl::OUString SAL_CALL getHelpText() override;
+    virtual void SAL_CALL setHelpText( const rtl::OUString& rHelpText ) override;
+    virtual ::rtl::OUString SAL_CALL getQuickHelpText() override;
+    virtual void SAL_CALL setQuickHelpText( const rtl::OUString& rQuickHelpText ) override;
+    virtual ::rtl::OUString SAL_CALL getAccessibleName() override;
+    virtual void SAL_CALL setAccessibleName( const rtl::OUString& rAccessibleName ) override;
+    virtual sal_Bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( sal_Bool bVisible ) override;
 
     // css::ui::XStatusbarItem Methods
-    virtual void SAL_CALL repaint(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL repaint(  ) override;
 
 private:
     VclPtr<StatusBar>       m_pStatusBar;

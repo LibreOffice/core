@@ -62,25 +62,22 @@ public:
     virtual void SAL_CALL acquire() throw() override { ReflectionBase::acquire(); }
     virtual void SAL_CALL release() throw() override { ReflectionBase::release(); }
     virtual css::uno::Any  SAL_CALL queryInterface(
-        const css::uno::Type & reqType )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Type & reqType ) override;
 
     // XTypeProvider, first implemented by OPropertySetHelper
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-        throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< sal_Int8> SAL_CALL getImplementationId()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() override;
+    virtual css::uno::Sequence< sal_Int8> SAL_CALL getImplementationId() override;
 
     // XDataDescriptorFactory
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override;
+    createDataDescriptor(  ) override;
 
     // XUser : XAuthorizable
-    virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL changePassword( const OUString& oldPassword, const OUString& newPassword ) throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+    virtual sal_Int32 SAL_CALL getPrivileges( const OUString& objName, sal_Int32 objType ) override;
+    virtual sal_Int32 SAL_CALL getGrantablePrivileges( const OUString& objName, sal_Int32 objType ) override;
+    virtual void SAL_CALL grantPrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+    virtual void SAL_CALL revokePrivileges( const OUString& objName, sal_Int32 objType, sal_Int32 objPrivileges ) override;
+    virtual void SAL_CALL changePassword( const OUString& oldPassword, const OUString& newPassword ) override;
 };
 
 class UserDescriptor : public ReflectionBase
@@ -93,7 +90,7 @@ public:
 
 public: // XDataDescriptorFactory
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override;
+    createDataDescriptor(  ) override;
 };
 
 }

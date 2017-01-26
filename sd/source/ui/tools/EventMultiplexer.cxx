@@ -77,20 +77,17 @@ public:
 
     //===== lang::XEventListener ==============================================
     virtual void SAL_CALL
-        disposing (const css::lang::EventObject& rEventObject)
-        throw (css::uno::RuntimeException, std::exception) override;
+        disposing (const css::lang::EventObject& rEventObject) override;
 
     //===== beans::XPropertySetListener =======================================
     virtual void SAL_CALL
         propertyChange (
-            const css::beans::PropertyChangeEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::beans::PropertyChangeEvent& rEvent) override;
 
     //===== view::XSelectionChangeListener ====================================
     virtual void SAL_CALL
         selectionChanged (
-            const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::lang::EventObject& rEvent) override;
 
     //===== frame::XFrameActionListener  ======================================
     /** For certain actions the listener connects to a new controller of the
@@ -98,14 +95,12 @@ public:
         in the center pane is replaced by another view shell.
     */
     virtual void SAL_CALL
-        frameAction (const css::frame::FrameActionEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+        frameAction (const css::frame::FrameActionEvent& rEvent) override;
 
     //===== drawing::framework::XConfigurationChangeListener ==================
     virtual void SAL_CALL
         notifyConfigurationChange (
-            const css::drawing::framework::ConfigurationChangeEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+            const css::drawing::framework::ConfigurationChangeEvent& rEvent) override;
 
     virtual void SAL_CALL disposing() override;
 
@@ -430,7 +425,6 @@ void EventMultiplexer::Implementation::DisconnectFromController()
 
 void SAL_CALL EventMultiplexer::Implementation::disposing (
     const lang::EventObject& rEventObject)
-    throw (RuntimeException, std::exception)
 {
     if (mbListeningToController)
     {
@@ -454,7 +448,6 @@ void SAL_CALL EventMultiplexer::Implementation::disposing (
 
 void SAL_CALL EventMultiplexer::Implementation::propertyChange (
     const beans::PropertyChangeEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -482,7 +475,6 @@ void SAL_CALL EventMultiplexer::Implementation::propertyChange (
 
 void SAL_CALL EventMultiplexer::Implementation::frameAction (
     const frame::FrameActionEvent& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     Reference<frame::XFrame> xFrame (mxFrameWeak);
     if (rEvent.Frame == xFrame)
@@ -514,7 +506,6 @@ void SAL_CALL EventMultiplexer::Implementation::frameAction (
 
 void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
     const lang::EventObject& )
-    throw (css::uno::RuntimeException, std::exception)
 {
     CallListeners (EventMultiplexerEventId::EditViewSelection);
 }
@@ -523,7 +514,6 @@ void SAL_CALL EventMultiplexer::Implementation::selectionChanged (
 
 void SAL_CALL EventMultiplexer::Implementation::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     sal_Int32 nEventType = 0;
     rEvent.UserData >>= nEventType;

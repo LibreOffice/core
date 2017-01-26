@@ -85,13 +85,13 @@ namespace connectivity
             virtual void            checkDisposed() const override;
 
             // XFlushable
-            virtual void SAL_CALL flush(  ) throw (css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) throw (css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL flush(  ) override;
+            virtual void SAL_CALL addFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
+            virtual void SAL_CALL removeFlushListener( const css::uno::Reference< css::util::XFlushListener >& l ) override;
 
             // XTableUIProvider
-            virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) throw (css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getTableEditor( const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) throw (css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::graphic::XGraphic > SAL_CALL getTableIcon( const OUString& TableName, ::sal_Int32 ColorMode ) override;
+            virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getTableEditor( const css::uno::Reference< css::sdb::application::XDatabaseDocumentUI >& DocumentUI, const OUString& TableName ) override;
 
         private:
 

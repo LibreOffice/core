@@ -162,7 +162,7 @@ MenuBarManager::MenuBarManager(
     Init(rFrame,pAddonMenu, popup);
 }
 
-Any SAL_CALL MenuBarManager::queryInterface( const Type & rType ) throw ( RuntimeException, std::exception )
+Any SAL_CALL MenuBarManager::queryInterface( const Type & rType )
 {
     Any a = ::cppu::queryInterface(
                 rType ,
@@ -189,7 +189,7 @@ void SAL_CALL MenuBarManager::release() throw()
     OWeakObject::release();
 }
 
-Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType ) throw (RuntimeException, std::exception)
+Any SAL_CALL MenuBarManager::getMenuHandle( const Sequence< sal_Int8 >& /*ProcessId*/, sal_Int16 SystemType )
 {
     SolarMutexGuard aSolarGuard;
 
@@ -257,7 +257,7 @@ void MenuBarManager::Destroy()
 }
 
 // XComponent
-void SAL_CALL MenuBarManager::dispose() throw( RuntimeException, std::exception )
+void SAL_CALL MenuBarManager::dispose()
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -307,7 +307,7 @@ void SAL_CALL MenuBarManager::dispose() throw( RuntimeException, std::exception 
     }
 }
 
-void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
+void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener >& xListener )
 {
     SolarMutexGuard g;
 
@@ -318,7 +318,7 @@ void SAL_CALL MenuBarManager::addEventListener( const Reference< XEventListener 
     m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
-void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
+void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListener >& xListener )
 {
     SolarMutexGuard g;
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
@@ -326,7 +326,6 @@ void SAL_CALL MenuBarManager::removeEventListener( const Reference< XEventListen
 }
 
 void SAL_CALL MenuBarManager::elementInserted( const css::ui::ConfigurationEvent& Event )
-throw (RuntimeException, std::exception)
 {
     SolarMutexGuard g;
 
@@ -342,20 +341,17 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL MenuBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event )
-throw (RuntimeException, std::exception)
 {
     elementInserted(Event);
 }
 
 void SAL_CALL MenuBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event )
-throw (RuntimeException, std::exception)
 {
     elementInserted(Event);
 }
 
 // XFrameActionListener
 void SAL_CALL MenuBarManager::frameAction( const FrameActionEvent& Action )
-throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard g;
 
@@ -376,7 +372,6 @@ throw ( RuntimeException, std::exception )
 
 // XStatusListener
 void SAL_CALL MenuBarManager::statusChanged( const FeatureStateEvent& Event )
-throw ( RuntimeException, std::exception )
 {
     OUString aFeatureURL = Event.FeatureURL.Complete;
 
@@ -603,7 +598,7 @@ void MenuBarManager::RemoveListener()
     m_xFrame = nullptr;
 }
 
-void SAL_CALL MenuBarManager::disposing( const EventObject& Source ) throw ( RuntimeException, std::exception )
+void SAL_CALL MenuBarManager::disposing( const EventObject& Source )
 {
     MenuItemHandler* pMenuItemDisposing = nullptr;
 
@@ -721,8 +716,7 @@ private:
     virtual ~QuietInteractionContext() override {}
 
     virtual css::uno::Any SAL_CALL getValueByName(
-        OUString const & Name)
-        throw (css::uno::RuntimeException, std::exception) override
+        OUString const & Name) override
     {
         return Name != JAVA_INTERACTION_HANDLER_NAME && context_.is()
             ? context_->getValueByName(Name)

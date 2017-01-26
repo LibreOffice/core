@@ -39,45 +39,38 @@ public:
     PathService()
         {}
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw(css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
         {
             return OUString("com.sun.star.comp.svl.PathService");
         }
 
     virtual sal_Bool SAL_CALL supportsService (
-        const OUString & rName)
-        throw(css::uno::RuntimeException, std::exception) override
+        const OUString & rName) override
         {
             return cppu::supportsService(this, rName);
         }
 
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-        throw(css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override
         {
             css::uno::Sequence< OUString > aRet { "com.sun.star.config.SpecialConfigManager" };
             return aRet;
         }
 
     virtual OUString SAL_CALL substituteVariables (
-        const OUString& sText)
-        throw(css::uno::RuntimeException, std::exception) override
+        const OUString& sText) override
         {
             return m_aOptions.SubstituteVariable( sText );
         }
 
     virtual void SAL_CALL addPropertyChangeListener (
-        const OUString &, const css::uno::Reference< css::beans::XPropertyChangeListener > &)
-        throw(css::uno::RuntimeException, std::exception) override
+        const OUString &, const css::uno::Reference< css::beans::XPropertyChangeListener > &) override
         {}
 
     virtual void SAL_CALL removePropertyChangeListener (
-        const OUString &, const css::uno::Reference< css::beans::XPropertyChangeListener > &)
-        throw(css::uno::RuntimeException, std::exception) override
+        const OUString &, const css::uno::Reference< css::beans::XPropertyChangeListener > &) override
         {}
 
-    virtual void SAL_CALL flush()
-        throw(css::uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL flush() override
         {}
 };
 

@@ -37,19 +37,13 @@ namespace framework
             void addElement( const OUString& rName, const css::uno::Reference< css::graphic::XGraphic >& rElement );
 
             // XNameAccess
-            virtual css::uno::Any SAL_CALL getByName( const OUString& aName )
-                throw(css::container::NoSuchElementException, css::lang::WrappedTargetException,
-                    css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Sequence< OUString > SAL_CALL getElementNames()
-                throw(css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL hasByName( const OUString& aName )
-                throw(css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL getByName( const OUString& aName ) override;
+            virtual css::uno::Sequence< OUString > SAL_CALL getElementNames() override;
+            virtual sal_Bool SAL_CALL hasByName( const OUString& aName ) override;
 
             // XElementAccess
-            virtual sal_Bool SAL_CALL hasElements()
-                throw(css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Type SAL_CALL getElementType(  )
-                throw(css::uno::RuntimeException, std::exception) override;
+            virtual sal_Bool SAL_CALL hasElements() override;
+            virtual css::uno::Type SAL_CALL getElementType(  ) override;
 
         private:
             typedef std::unordered_map<OUString, css::uno::Reference< css::graphic::XGraphic >, OUStringHash> NameGraphicHashMap;

@@ -261,7 +261,6 @@ static bool lcl_MayBeDBase( SvStream& rStream )
 }
 
 OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& lDescriptor )
-    throw( uno::RuntimeException, std::exception )
 {
     MediaDescriptor aMediaDesc( lDescriptor );
     OUString aTypeName = aMediaDesc.getUnpackedValueOrDefault( MediaDescriptor::PROP_TYPENAME(), OUString() );
@@ -328,19 +327,17 @@ OUString SAL_CALL ScFilterDetect::detect( uno::Sequence<beans::PropertyValue>& l
     return aTypeName;
 }
 
-OUString SAL_CALL ScFilterDetect::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString SAL_CALL ScFilterDetect::getImplementationName()
 {
     return OUString("com.sun.star.comp.calc.FormatDetector");
 }
 
 sal_Bool ScFilterDetect::supportsService( const OUString& sServiceName )
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, sServiceName);
 }
 
 css::uno::Sequence<OUString> ScFilterDetect::getSupportedServiceNames()
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Sequence<OUString> seqServiceNames { "com.sun.star.frame.ExtendedTypeDetection" };
     return seqServiceNames;

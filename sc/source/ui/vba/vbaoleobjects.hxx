@@ -29,7 +29,7 @@ typedef CollTestImplHelper< ov::excel::XOLEObjects > OLEObjectsImpl_BASE;
 class ScVbaOLEObjects : public OLEObjectsImpl_BASE
 {
 protected:
-    virtual css::uno::Any getItemByStringIndex( const OUString& sIndex ) throw (css::uno::RuntimeException) override;
+    virtual css::uno::Any getItemByStringIndex( const OUString& sIndex ) override;
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
 public:
@@ -37,8 +37,8 @@ public:
                     const css::uno::Reference< css::container::XIndexAccess >& xIndexAccess );
 
     // XEnumerationAccess
-    virtual css::uno::Type SAL_CALL getElementType() throw (css::uno::RuntimeException) override;
-    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() throw (css::uno::RuntimeException) override;
+    virtual css::uno::Type SAL_CALL getElementType() override;
+    virtual css::uno::Reference< css::container::XEnumeration > SAL_CALL createEnumeration() override;
 
     // ScVbaCollectionBaseImpl
     virtual css::uno::Any createCollectionObject( const css::uno::Any& aSource ) override;

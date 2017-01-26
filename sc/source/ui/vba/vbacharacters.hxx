@@ -40,20 +40,20 @@ private:
 public:
     /// @throws css::lang::IllegalArgumentException
     /// @throws css::uno::RuntimeException
-    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, bool bReplace = false  ) throw ( css::lang::IllegalArgumentException, css::uno::RuntimeException );
+    ScVbaCharacters( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext,  const ScVbaPalette& dPalette, const css::uno::Reference< css::text::XSimpleText >& xRange, const css::uno::Any& Start, const css::uno::Any& Length, bool bReplace = false  );
 
     // Attributes
-    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getCount() throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getText() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setText( const OUString& _text ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& _font ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getCaption() override;
+    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
+    virtual ::sal_Int32 SAL_CALL getCount() override;
+    virtual OUString SAL_CALL getText() override;
+    virtual void SAL_CALL setText( const OUString& _text ) override;
+    virtual css::uno::Reference< ov::excel::XFont > SAL_CALL getFont() override;
+    virtual void SAL_CALL setFont( const css::uno::Reference< ov::excel::XFont >& _font ) override;
 
     // Methods
-    virtual void SAL_CALL Insert( const OUString& String ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Insert( const OUString& String ) override;
+    virtual void SAL_CALL Delete(  ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

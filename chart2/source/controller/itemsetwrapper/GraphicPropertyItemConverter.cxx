@@ -222,7 +222,6 @@ bool GraphicPropertyItemConverter::GetItemProperty( tWhichIdType nWhichId, tProp
 
 void GraphicPropertyItemConverter::FillSpecialItem(
     sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-    throw (uno::Exception, std::exception)
 {
     switch( nWhichId )
     {
@@ -432,7 +431,6 @@ void GraphicPropertyItemConverter::FillSpecialItem(
 
 bool GraphicPropertyItemConverter::ApplySpecialItem(
     sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-    throw( uno::Exception )
 {
     bool bChanged = false;
     uno::Any aValue;

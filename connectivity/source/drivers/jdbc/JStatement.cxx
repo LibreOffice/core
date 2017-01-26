@@ -115,7 +115,7 @@ void SAL_CALL OStatement_BASE2::release() throw()
 }
 
 
-Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType )
 {
     if ( m_pConnection.is() && !m_pConnection->isAutoRetrievingEnabled() && rType == cppu::UnoType<XGeneratedResultSet>::get())
         return Any();
@@ -123,7 +123,7 @@ Any SAL_CALL java_sql_Statement_Base::queryInterface( const Type & rType ) throw
     return aRet.hasValue() ? aRet : OPropertySetHelper::queryInterface(rType);
 }
 
-Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  )
 {
     ::cppu::OTypeCollection aTypes( cppu::UnoType<css::beans::XMultiPropertySet>::get(),
                                     cppu::UnoType<css::beans::XFastPropertySet>::get(),
@@ -140,7 +140,7 @@ Sequence< Type > SAL_CALL java_sql_Statement_Base::getTypes(  ) throw(RuntimeExc
     return ::comphelper::concatSequences(aTypes.getTypes(),aOldTypes);
 }
 
-Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  ) throw (SQLException, RuntimeException, std::exception)
+Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_GENERATED_VALUES );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -182,7 +182,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::getGeneratedValues(  )
 }
 
 
-void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException, std::exception)
+void SAL_CALL java_sql_Statement_Base::cancel(  )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
@@ -191,7 +191,7 @@ void SAL_CALL java_sql_Statement_Base::cancel(  ) throw(RuntimeException, std::e
 }
 
 
-void SAL_CALL java_sql_Statement_Base::close(  ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Statement_Base::close(  )
 {
     {
         ::osl::MutexGuard aGuard( m_aMutex );
@@ -202,7 +202,7 @@ void SAL_CALL java_sql_Statement_Base::close(  ) throw(css::sdbc::SQLException, 
 }
 
 
-void SAL_CALL java_sql_Statement::clearBatch(  ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Statement::clearBatch(  )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     {
@@ -214,7 +214,7 @@ void SAL_CALL java_sql_Statement::clearBatch(  ) throw(css::sdbc::SQLException, 
 }
 
 
-sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql )
 {
     m_aLogger.log( LogLevel::FINE, STR_LOG_EXECUTE_STATEMENT, sql );
     ::osl::MutexGuard aGuard( m_aMutex );
@@ -248,7 +248,7 @@ sal_Bool SAL_CALL java_sql_Statement_Base::execute( const OUString& sql ) throw(
 }
 
 
-Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -283,7 +283,7 @@ Reference< XResultSet > SAL_CALL java_sql_Statement_Base::executeQuery( const OU
     return out==nullptr ? nullptr : new java_sql_ResultSet( t.pEnv, out, m_aLogger, *m_pConnection,this );
 }
 
-Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) throw(SQLException, RuntimeException, std::exception)
+Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -291,14 +291,14 @@ Reference< XConnection > SAL_CALL java_sql_Statement_Base::getConnection(  ) thr
 }
 
 
-Any SAL_CALL java_sql_Statement::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL java_sql_Statement::queryInterface( const Type & rType )
 {
     Any aRet = ::cppu::queryInterface(rType,static_cast< XBatchExecution*> (this));
     return aRet.hasValue() ? aRet : java_sql_Statement_Base::queryInterface(rType);
 }
 
 
-void SAL_CALL java_sql_Statement::addBatch( const OUString& sql ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Statement::addBatch( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -311,7 +311,7 @@ void SAL_CALL java_sql_Statement::addBatch( const OUString& sql ) throw(css::sdb
 }
 
 
-Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
+Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -331,7 +331,7 @@ Sequence< sal_Int32 > SAL_CALL java_sql_Statement::executeBatch(  ) throw(css::s
 }
 
 
-sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql ) throw(SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -345,7 +345,7 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::executeUpdate( const OUString& sql )
 }
 
 
-Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base::getResultSet(  ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
+Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base::getResultSet(  )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
@@ -357,7 +357,7 @@ Reference< css::sdbc::XResultSet > SAL_CALL java_sql_Statement_Base::getResultSe
 }
 
 
-sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
+sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  )
 {
     SDBThreadAttach t; OSL_ENSURE(t.pEnv,"Java Enviroment geloescht worden!");
     createStatement(t.pEnv);
@@ -368,14 +368,14 @@ sal_Int32 SAL_CALL java_sql_Statement_Base::getUpdateCount(  ) throw(css::sdbc::
 }
 
 
-sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
+sal_Bool SAL_CALL java_sql_Statement_Base::getMoreResults(  )
 {
     static jmethodID mID(nullptr);
     return callBooleanMethod( "getMoreResults", mID );
 }
 
 
-Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
+Any SAL_CALL java_sql_Statement_Base::getWarnings(  )
 {
     SDBThreadAttach t;
     createStatement(t.pEnv);
@@ -393,7 +393,7 @@ Any SAL_CALL java_sql_Statement_Base::getWarnings(  ) throw(css::sdbc::SQLExcept
     return Any();
 }
 
-void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(css::sdbc::SQLException, RuntimeException, std::exception)
+void SAL_CALL java_sql_Statement_Base::clearWarnings(  )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -406,26 +406,26 @@ void SAL_CALL java_sql_Statement_Base::clearWarnings(  ) throw(css::sdbc::SQLExc
     }
 }
 
-sal_Int32 java_sql_Statement_Base::getQueryTimeOut()  throw(SQLException, RuntimeException)
+sal_Int32 java_sql_Statement_Base::getQueryTimeOut()
 {
     static jmethodID mID(nullptr);
     return impl_getProperty("getQueryTimeOut",mID);
 }
 
-sal_Int32 java_sql_Statement_Base::getMaxRows() throw(SQLException, RuntimeException)
+sal_Int32 java_sql_Statement_Base::getMaxRows()
 {
     static jmethodID mID(nullptr);
     return impl_getProperty("getMaxRows",mID);
 }
 
-sal_Int32 java_sql_Statement_Base::getResultSetConcurrency() throw(SQLException, RuntimeException)
+sal_Int32 java_sql_Statement_Base::getResultSetConcurrency()
 {
     static jmethodID mID(nullptr);
     return impl_getProperty("getResultSetConcurrency",mID,m_nResultSetConcurrency);
 }
 
 
-sal_Int32 java_sql_Statement_Base::getResultSetType() throw(SQLException, RuntimeException)
+sal_Int32 java_sql_Statement_Base::getResultSetType()
 {
     static jmethodID mID(nullptr);
     return impl_getProperty("getResultSetType",mID,m_nResultSetType);
@@ -446,25 +446,25 @@ sal_Int32 java_sql_Statement_Base::impl_getProperty(const char* _pMethodName, jm
     return callIntMethod_ThrowRuntime(_pMethodName, _inout_MethodID);
 }
 
-sal_Int32 java_sql_Statement_Base::getFetchDirection() throw(SQLException, RuntimeException)
+sal_Int32 java_sql_Statement_Base::getFetchDirection()
 {
     static jmethodID mID(nullptr);
     return impl_getProperty("getFetchDirection",mID);
 }
 
-sal_Int32 java_sql_Statement_Base::getFetchSize() throw(SQLException, RuntimeException)
+sal_Int32 java_sql_Statement_Base::getFetchSize()
 {
     static jmethodID mID(nullptr);
     return impl_getProperty("getFetchSize",mID);
 }
 
-sal_Int32 java_sql_Statement_Base::getMaxFieldSize() throw(SQLException, RuntimeException)
+sal_Int32 java_sql_Statement_Base::getMaxFieldSize()
 {
     static jmethodID mID(nullptr);
     return impl_getProperty("getMaxFieldSize",mID);
 }
 
-OUString java_sql_Statement_Base::getCursorName() throw(SQLException, RuntimeException)
+OUString java_sql_Statement_Base::getCursorName()
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -481,7 +481,7 @@ OUString java_sql_Statement_Base::getCursorName() throw(SQLException, RuntimeExc
     return OUString();
 }
 
-void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -492,7 +492,7 @@ void java_sql_Statement_Base::setQueryTimeOut(sal_Int32 _par0) throw(SQLExceptio
 }
 
 
-void java_sql_Statement_Base::setEscapeProcessing(bool _par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setEscapeProcessing(bool _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -505,7 +505,7 @@ void java_sql_Statement_Base::setEscapeProcessing(bool _par0) throw(SQLException
     callVoidMethodWithBoolArg_ThrowRuntime("setEscapeProcessing", mID, _par0);
 }
 
-void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -515,7 +515,7 @@ void java_sql_Statement_Base::setMaxRows(sal_Int32 _par0) throw(SQLException, Ru
     callVoidMethodWithIntArg_ThrowRuntime("setMaxRows", mID, _par0);
 }
 
-void java_sql_Statement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setResultSetConcurrency(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -525,7 +525,7 @@ void java_sql_Statement_Base::setResultSetConcurrency(sal_Int32 _par0) throw(SQL
     clearObject();
 }
 
-void java_sql_Statement_Base::setResultSetType(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setResultSetType(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -535,7 +535,7 @@ void java_sql_Statement_Base::setResultSetType(sal_Int32 _par0) throw(SQLExcepti
     clearObject();
 }
 
-void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -546,7 +546,7 @@ void java_sql_Statement_Base::setFetchDirection(sal_Int32 _par0) throw(SQLExcept
     callVoidMethodWithIntArg_ThrowRuntime("setFetchDirection", mID, _par0);
 }
 
-void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -558,7 +558,7 @@ void java_sql_Statement_Base::setFetchSize(sal_Int32 _par0) throw(SQLException, 
     callVoidMethodWithIntArg_ThrowRuntime("setFetchSize", mID, _par0);
 }
 
-void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -568,7 +568,7 @@ void java_sql_Statement_Base::setMaxFieldSize(sal_Int32 _par0) throw(SQLExceptio
     callVoidMethodWithIntArg_ThrowRuntime("setMaxFieldSize", mID, _par0);
 }
 
-void java_sql_Statement_Base::setCursorName(const OUString &_par0) throw(SQLException, RuntimeException)
+void java_sql_Statement_Base::setCursorName(const OUString &_par0)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(java_sql_Statement_BASE::rBHelper.bDisposed);
@@ -622,7 +622,6 @@ sal_Bool java_sql_Statement_Base::convertFastPropertyValue(
                             Any & rOldValue,
                             sal_Int32 nHandle,
                             const Any& rValue )
-                                throw (css::lang::IllegalArgumentException)
 {
     try
     {
@@ -667,7 +666,6 @@ void java_sql_Statement_Base::setFastPropertyValue_NoBroadcast(
                                 sal_Int32 nHandle,
                                 const Any& rValue
                                                  )
-                                                 throw (Exception, std::exception)
 {
     switch(nHandle)
     {
@@ -823,7 +821,7 @@ void SAL_CALL java_sql_Statement::release() throw()
     OStatement_BASE2::release();
 }
 
-css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL java_sql_Statement_Base::getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL java_sql_Statement_Base::getPropertySetInfo(  )
 {
     return ::cppu::OPropertySetHelper::createPropertySetInfo(getInfoHelper());
 }

@@ -184,7 +184,7 @@ VCLXMultiLineEdit::~VCLXMultiLineEdit()
 {
 }
 
-css::uno::Any VCLXMultiLineEdit::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXMultiLineEdit::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XTextComponent* >(this)),
@@ -202,17 +202,17 @@ IMPL_XTYPEPROVIDER_START( VCLXMultiLineEdit )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void VCLXMultiLineEdit::addTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) throw(css::uno::RuntimeException, std::exception)
+void VCLXMultiLineEdit::addTextListener( const css::uno::Reference< css::awt::XTextListener > & l )
 {
     maTextListeners.addInterface( l );
 }
 
-void VCLXMultiLineEdit::removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) throw(css::uno::RuntimeException, std::exception)
+void VCLXMultiLineEdit::removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l )
 {
     maTextListeners.removeInterface( l );
 }
 
-void VCLXMultiLineEdit::setText( const OUString& aText ) throw(css::uno::RuntimeException, std::exception)
+void VCLXMultiLineEdit::setText( const OUString& aText )
 {
     SolarMutexGuard aGuard;
 
@@ -229,7 +229,7 @@ void VCLXMultiLineEdit::setText( const OUString& aText ) throw(css::uno::Runtime
     }
 }
 
-void VCLXMultiLineEdit::insertText( const css::awt::Selection& rSel, const OUString& aText ) throw(css::uno::RuntimeException, std::exception)
+void VCLXMultiLineEdit::insertText( const css::awt::Selection& rSel, const OUString& aText )
 {
     SolarMutexGuard aGuard;
 
@@ -241,7 +241,7 @@ void VCLXMultiLineEdit::insertText( const css::awt::Selection& rSel, const OUStr
     }
 }
 
-OUString VCLXMultiLineEdit::getText() throw(css::uno::RuntimeException, std::exception)
+OUString VCLXMultiLineEdit::getText()
 {
     SolarMutexGuard aGuard;
 
@@ -252,7 +252,7 @@ OUString VCLXMultiLineEdit::getText() throw(css::uno::RuntimeException, std::exc
     return aText;
 }
 
-OUString VCLXMultiLineEdit::getSelectedText() throw(css::uno::RuntimeException, std::exception)
+OUString VCLXMultiLineEdit::getSelectedText()
 {
     SolarMutexGuard aGuard;
 
@@ -264,7 +264,7 @@ OUString VCLXMultiLineEdit::getSelectedText() throw(css::uno::RuntimeException, 
 
 }
 
-void VCLXMultiLineEdit::setSelection( const css::awt::Selection& aSelection ) throw(css::uno::RuntimeException, std::exception)
+void VCLXMultiLineEdit::setSelection( const css::awt::Selection& aSelection )
 {
     SolarMutexGuard aGuard;
 
@@ -275,7 +275,7 @@ void VCLXMultiLineEdit::setSelection( const css::awt::Selection& aSelection ) th
     }
 }
 
-css::awt::Selection VCLXMultiLineEdit::getSelection() throw(css::uno::RuntimeException, std::exception)
+css::awt::Selection VCLXMultiLineEdit::getSelection()
 {
     SolarMutexGuard aGuard;
 
@@ -289,7 +289,7 @@ css::awt::Selection VCLXMultiLineEdit::getSelection() throw(css::uno::RuntimeExc
     return aSel;
 }
 
-sal_Bool VCLXMultiLineEdit::isEditable() throw(css::uno::RuntimeException, std::exception)
+sal_Bool VCLXMultiLineEdit::isEditable()
 {
     SolarMutexGuard aGuard;
 
@@ -297,7 +297,7 @@ sal_Bool VCLXMultiLineEdit::isEditable() throw(css::uno::RuntimeException, std::
     return pMultiLineEdit && !pMultiLineEdit->IsReadOnly() && pMultiLineEdit->IsEnabled();
 }
 
-void VCLXMultiLineEdit::setEditable( sal_Bool bEditable ) throw(css::uno::RuntimeException, std::exception)
+void VCLXMultiLineEdit::setEditable( sal_Bool bEditable )
 {
     SolarMutexGuard aGuard;
 
@@ -306,7 +306,7 @@ void VCLXMultiLineEdit::setEditable( sal_Bool bEditable ) throw(css::uno::Runtim
         pMultiLineEdit->SetReadOnly( !bEditable );
 }
 
-void VCLXMultiLineEdit::setMaxTextLen( sal_Int16 nLen ) throw(css::uno::RuntimeException, std::exception)
+void VCLXMultiLineEdit::setMaxTextLen( sal_Int16 nLen )
 {
     SolarMutexGuard aGuard;
 
@@ -315,7 +315,7 @@ void VCLXMultiLineEdit::setMaxTextLen( sal_Int16 nLen ) throw(css::uno::RuntimeE
         pMultiLineEdit->SetMaxTextLen( nLen );
 }
 
-sal_Int16 VCLXMultiLineEdit::getMaxTextLen() throw(css::uno::RuntimeException, std::exception)
+sal_Int16 VCLXMultiLineEdit::getMaxTextLen()
 {
     SolarMutexGuard aGuard;
 
@@ -323,7 +323,7 @@ sal_Int16 VCLXMultiLineEdit::getMaxTextLen() throw(css::uno::RuntimeException, s
     return pMultiLineEdit ? (sal_Int16)pMultiLineEdit->GetMaxTextLen() : (sal_Int16)0;
 }
 
-OUString VCLXMultiLineEdit::getTextLines() throw(css::uno::RuntimeException, std::exception)
+OUString VCLXMultiLineEdit::getTextLines()
 {
     SolarMutexGuard aGuard;
 
@@ -334,7 +334,7 @@ OUString VCLXMultiLineEdit::getTextLines() throw(css::uno::RuntimeException, std
     return aText;
 }
 
-css::awt::Size VCLXMultiLineEdit::getMinimumSize() throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXMultiLineEdit::getMinimumSize()
 {
     SolarMutexGuard aGuard;
 
@@ -345,12 +345,12 @@ css::awt::Size VCLXMultiLineEdit::getMinimumSize() throw(css::uno::RuntimeExcept
     return aSz;
 }
 
-css::awt::Size VCLXMultiLineEdit::getPreferredSize() throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXMultiLineEdit::getPreferredSize()
 {
     return getMinimumSize();
 }
 
-css::awt::Size VCLXMultiLineEdit::calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXMultiLineEdit::calcAdjustedSize( const css::awt::Size& rNewSize )
 {
     SolarMutexGuard aGuard;
 
@@ -361,7 +361,7 @@ css::awt::Size VCLXMultiLineEdit::calcAdjustedSize( const css::awt::Size& rNewSi
     return aSz;
 }
 
-css::awt::Size VCLXMultiLineEdit::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXMultiLineEdit::getMinimumSize( sal_Int16 nCols, sal_Int16 nLines )
 {
     SolarMutexGuard aGuard;
 
@@ -372,7 +372,7 @@ css::awt::Size VCLXMultiLineEdit::getMinimumSize( sal_Int16 nCols, sal_Int16 nLi
     return aSz;
 }
 
-void VCLXMultiLineEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(css::uno::RuntimeException, std::exception)
+void VCLXMultiLineEdit::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
 {
     SolarMutexGuard aGuard;
 
@@ -409,7 +409,7 @@ void VCLXMultiLineEdit::ProcessWindowEvent( const VclWindowEvent& rVclWindowEven
     }
 }
 
-void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const css::uno::Any& Value) throw(css::uno::RuntimeException, std::exception)
+void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -465,7 +465,7 @@ void VCLXMultiLineEdit::setProperty( const OUString& PropertyName, const css::un
     }
 }
 
-css::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -509,7 +509,7 @@ css::uno::Any VCLXMultiLineEdit::getProperty( const OUString& PropertyName ) thr
     return aProp;
 }
 
-void SAL_CALL VCLXMultiLineEdit::setFocus(  ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXMultiLineEdit::setFocus(  )
 {
     SolarMutexGuard aGuard;
 
@@ -547,7 +547,7 @@ VCLXFileControl::~VCLXFileControl()
         pControl->GetEdit().SetModifyHdl( Link<Edit&,void>() );
 }
 
-css::uno::Any VCLXFileControl::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXFileControl::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XTextComponent* >(this)),
@@ -563,7 +563,7 @@ IMPL_XTYPEPROVIDER_START( VCLXFileControl )
     VCLXWindow::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const css::uno::Any& Value) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL VCLXFileControl::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -603,17 +603,17 @@ void VCLXFileControl::SetWindow( const VclPtr< vcl::Window > &pWindow )
     VCLXWindow::SetWindow( pWindow );
 }
 
-void VCLXFileControl::addTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) throw(css::uno::RuntimeException, std::exception)
+void VCLXFileControl::addTextListener( const css::uno::Reference< css::awt::XTextListener > & l )
 {
     maTextListeners.addInterface( l );
 }
 
-void VCLXFileControl::removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l ) throw(css::uno::RuntimeException, std::exception)
+void VCLXFileControl::removeTextListener( const css::uno::Reference< css::awt::XTextListener > & l )
 {
     maTextListeners.removeInterface( l );
 }
 
-void VCLXFileControl::setText( const OUString& aText ) throw(css::uno::RuntimeException, std::exception)
+void VCLXFileControl::setText( const OUString& aText )
 {
     SolarMutexGuard aGuard;
 
@@ -628,7 +628,7 @@ void VCLXFileControl::setText( const OUString& aText ) throw(css::uno::RuntimeEx
     }
 }
 
-void VCLXFileControl::insertText( const css::awt::Selection& rSel, const OUString& aText ) throw(css::uno::RuntimeException, std::exception)
+void VCLXFileControl::insertText( const css::awt::Selection& rSel, const OUString& aText )
 {
     SolarMutexGuard aGuard;
 
@@ -640,7 +640,7 @@ void VCLXFileControl::insertText( const css::awt::Selection& rSel, const OUStrin
     }
 }
 
-OUString VCLXFileControl::getText() throw(css::uno::RuntimeException, std::exception)
+OUString VCLXFileControl::getText()
 {
     SolarMutexGuard aGuard;
 
@@ -651,7 +651,7 @@ OUString VCLXFileControl::getText() throw(css::uno::RuntimeException, std::excep
     return aText;
 }
 
-OUString VCLXFileControl::getSelectedText() throw(css::uno::RuntimeException, std::exception)
+OUString VCLXFileControl::getSelectedText()
 {
     SolarMutexGuard aGuard;
 
@@ -663,7 +663,7 @@ OUString VCLXFileControl::getSelectedText() throw(css::uno::RuntimeException, st
 
 }
 
-void VCLXFileControl::setSelection( const css::awt::Selection& aSelection ) throw(css::uno::RuntimeException, std::exception)
+void VCLXFileControl::setSelection( const css::awt::Selection& aSelection )
 {
     SolarMutexGuard aGuard;
 
@@ -672,7 +672,7 @@ void VCLXFileControl::setSelection( const css::awt::Selection& aSelection ) thro
         pFileControl->GetEdit().SetSelection( Selection( aSelection.Min, aSelection.Max ) );
 }
 
-css::awt::Selection VCLXFileControl::getSelection() throw(css::uno::RuntimeException, std::exception)
+css::awt::Selection VCLXFileControl::getSelection()
 {
     SolarMutexGuard aGuard;
 
@@ -686,7 +686,7 @@ css::awt::Selection VCLXFileControl::getSelection() throw(css::uno::RuntimeExcep
     return aSel;
 }
 
-sal_Bool VCLXFileControl::isEditable() throw(css::uno::RuntimeException, std::exception)
+sal_Bool VCLXFileControl::isEditable()
 {
     SolarMutexGuard aGuard;
 
@@ -694,7 +694,7 @@ sal_Bool VCLXFileControl::isEditable() throw(css::uno::RuntimeException, std::ex
     return pFileControl && !pFileControl->GetEdit().IsReadOnly() && pFileControl->GetEdit().IsEnabled();
 }
 
-void VCLXFileControl::setEditable( sal_Bool bEditable ) throw(css::uno::RuntimeException, std::exception)
+void VCLXFileControl::setEditable( sal_Bool bEditable )
 {
     SolarMutexGuard aGuard;
 
@@ -703,7 +703,7 @@ void VCLXFileControl::setEditable( sal_Bool bEditable ) throw(css::uno::RuntimeE
         pFileControl->GetEdit().SetReadOnly( !bEditable );
 }
 
-void VCLXFileControl::setMaxTextLen( sal_Int16 nLen ) throw(css::uno::RuntimeException, std::exception)
+void VCLXFileControl::setMaxTextLen( sal_Int16 nLen )
 {
     SolarMutexGuard aGuard;
 
@@ -712,7 +712,7 @@ void VCLXFileControl::setMaxTextLen( sal_Int16 nLen ) throw(css::uno::RuntimeExc
         pFileControl->GetEdit().SetMaxTextLen( nLen );
 }
 
-sal_Int16 VCLXFileControl::getMaxTextLen() throw(css::uno::RuntimeException, std::exception)
+sal_Int16 VCLXFileControl::getMaxTextLen()
 {
     SolarMutexGuard aGuard;
 
@@ -733,7 +733,7 @@ void VCLXFileControl::ModifyHdl()
     maTextListeners.textChanged( aEvent );
 }
 
-css::awt::Size VCLXFileControl::getMinimumSize() throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXFileControl::getMinimumSize()
 {
     SolarMutexGuard aGuard;
 
@@ -748,14 +748,14 @@ css::awt::Size VCLXFileControl::getMinimumSize() throw(css::uno::RuntimeExceptio
     return aSz;
 }
 
-css::awt::Size VCLXFileControl::getPreferredSize() throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXFileControl::getPreferredSize()
 {
     css::awt::Size aSz = getMinimumSize();
     aSz.Height += 4;
     return aSz;
 }
 
-css::awt::Size VCLXFileControl::calcAdjustedSize( const css::awt::Size& rNewSize ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXFileControl::calcAdjustedSize( const css::awt::Size& rNewSize )
 {
     SolarMutexGuard aGuard;
 
@@ -770,7 +770,7 @@ css::awt::Size VCLXFileControl::calcAdjustedSize( const css::awt::Size& rNewSize
     return aSz;
 }
 
-css::awt::Size VCLXFileControl::getMinimumSize( sal_Int16 nCols, sal_Int16 ) throw(css::uno::RuntimeException, std::exception)
+css::awt::Size VCLXFileControl::getMinimumSize( sal_Int16 nCols, sal_Int16 )
 {
     SolarMutexGuard aGuard;
 
@@ -784,7 +784,7 @@ css::awt::Size VCLXFileControl::getMinimumSize( sal_Int16 nCols, sal_Int16 ) thr
     return aSz;
 }
 
-void VCLXFileControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines ) throw(css::uno::RuntimeException, std::exception)
+void VCLXFileControl::getColumnsAndLines( sal_Int16& nCols, sal_Int16& nLines )
 {
     SolarMutexGuard aGuard;
 
@@ -828,7 +828,7 @@ void SVTXFormattedField::SetWindow( const VclPtr< vcl::Window > &_pWindow )
 }
 
 
-void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::uno::Any& Value) throw(css::uno::RuntimeException, std::exception)
+void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -953,7 +953,7 @@ void SVTXFormattedField::setProperty( const OUString& PropertyName, const css::u
 }
 
 
-css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any SVTXFormattedField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -1421,7 +1421,7 @@ void SVTXRoadmap::ProcessWindowEvent( const VclWindowEvent& rVclWindowEvent )
 }
 
 
-void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception)
+void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt )
 {
     SolarMutexGuard aGuard;
     VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
@@ -1460,12 +1460,12 @@ void SVTXRoadmap::propertyChange( const css::beans::PropertyChangeEvent& evt ) t
 }
 
 
-void SVTXRoadmap::addItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw (css::uno::RuntimeException, std::exception)
+void SVTXRoadmap::addItemListener( const css::uno::Reference< css::awt::XItemListener >& l )
 {
     maItemListeners.addInterface( l );
 }
 
-void SVTXRoadmap::removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l ) throw (css::uno::RuntimeException, std::exception)
+void SVTXRoadmap::removeItemListener( const css::uno::Reference< css::awt::XItemListener >& l )
 {
     maItemListeners.removeInterface( l );
 }
@@ -1493,7 +1493,7 @@ RMItemData SVTXRoadmap::GetRMItemData( const css::container::ContainerEvent& _rE
     return aCurRMItemData;
 }
 
-void SVTXRoadmap::elementInserted( const css::container::ContainerEvent& _rEvent )throw(css::uno::RuntimeException, std::exception)
+void SVTXRoadmap::elementInserted( const css::container::ContainerEvent& _rEvent )
 {
     SolarMutexGuard aGuard;
     VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
@@ -1506,7 +1506,7 @@ void SVTXRoadmap::elementInserted( const css::container::ContainerEvent& _rEvent
     }
 }
 
-void SVTXRoadmap::elementRemoved( const css::container::ContainerEvent& _rEvent )throw(css::uno::RuntimeException, std::exception)
+void SVTXRoadmap::elementRemoved( const css::container::ContainerEvent& _rEvent )
 {
     SolarMutexGuard aGuard;
     VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
@@ -1518,7 +1518,7 @@ void SVTXRoadmap::elementRemoved( const css::container::ContainerEvent& _rEvent 
     }
 }
 
-void SVTXRoadmap::elementReplaced( const css::container::ContainerEvent& _rEvent )throw(css::uno::RuntimeException, std::exception)
+void SVTXRoadmap::elementReplaced( const css::container::ContainerEvent& _rEvent )
 {
     SolarMutexGuard aGuard;
     VclPtr<::svt::ORoadmap> pField = GetAs< svt::ORoadmap >();
@@ -1532,7 +1532,7 @@ void SVTXRoadmap::elementReplaced( const css::container::ContainerEvent& _rEvent
 }
 
 
-void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any& Value) throw(css::uno::RuntimeException, std::exception)
+void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -1586,7 +1586,7 @@ void SVTXRoadmap::setProperty( const OUString& PropertyName, const css::uno::Any
 }
 
 
-css::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any SVTXRoadmap::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -1645,7 +1645,7 @@ SVTXNumericField::~SVTXNumericField()
 {
 }
 
-css::uno::Any SVTXNumericField::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any SVTXNumericField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XNumericField* >(this)),
@@ -1660,7 +1660,7 @@ IMPL_XTYPEPROVIDER_START( SVTXNumericField )
 IMPL_XTYPEPROVIDER_END
 
 
-void SVTXNumericField::setValue( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXNumericField::setValue( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1669,7 +1669,7 @@ void SVTXNumericField::setValue( double Value ) throw(css::uno::RuntimeException
         pField->SetValue( Value );
 }
 
-double SVTXNumericField::getValue() throw(css::uno::RuntimeException, std::exception)
+double SVTXNumericField::getValue()
 {
     SolarMutexGuard aGuard;
 
@@ -1677,7 +1677,7 @@ double SVTXNumericField::getValue() throw(css::uno::RuntimeException, std::excep
     return pField ? pField->GetValue() : 0;
 }
 
-void SVTXNumericField::setMin( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXNumericField::setMin( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1686,7 +1686,7 @@ void SVTXNumericField::setMin( double Value ) throw(css::uno::RuntimeException, 
         pField->SetMinValue( Value );
 }
 
-double SVTXNumericField::getMin() throw(css::uno::RuntimeException, std::exception)
+double SVTXNumericField::getMin()
 {
     SolarMutexGuard aGuard;
 
@@ -1694,7 +1694,7 @@ double SVTXNumericField::getMin() throw(css::uno::RuntimeException, std::excepti
     return pField ? pField->GetMinValue() : 0;
 }
 
-void SVTXNumericField::setMax( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXNumericField::setMax( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1703,7 +1703,7 @@ void SVTXNumericField::setMax( double Value ) throw(css::uno::RuntimeException, 
         pField->SetMaxValue( Value );
 }
 
-double SVTXNumericField::getMax() throw(css::uno::RuntimeException, std::exception)
+double SVTXNumericField::getMax()
 {
     SolarMutexGuard aGuard;
 
@@ -1711,7 +1711,7 @@ double SVTXNumericField::getMax() throw(css::uno::RuntimeException, std::excepti
     return pField ? pField->GetMaxValue() : 0;
 }
 
-void SVTXNumericField::setFirst( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXNumericField::setFirst( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1720,7 +1720,7 @@ void SVTXNumericField::setFirst( double Value ) throw(css::uno::RuntimeException
         pField->SetSpinFirst( Value );
 }
 
-double SVTXNumericField::getFirst() throw(css::uno::RuntimeException, std::exception)
+double SVTXNumericField::getFirst()
 {
     SolarMutexGuard aGuard;
 
@@ -1728,7 +1728,7 @@ double SVTXNumericField::getFirst() throw(css::uno::RuntimeException, std::excep
     return pField ? pField->GetSpinFirst() : 0;
 }
 
-void SVTXNumericField::setLast( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXNumericField::setLast( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1737,7 +1737,7 @@ void SVTXNumericField::setLast( double Value ) throw(css::uno::RuntimeException,
         pField->SetSpinLast( Value );
 }
 
-double SVTXNumericField::getLast() throw(css::uno::RuntimeException, std::exception)
+double SVTXNumericField::getLast()
 {
     SolarMutexGuard aGuard;
 
@@ -1745,7 +1745,7 @@ double SVTXNumericField::getLast() throw(css::uno::RuntimeException, std::except
     return pField ? pField->GetSpinLast() : 0;
 }
 
-void SVTXNumericField::setSpinSize( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXNumericField::setSpinSize( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1754,7 +1754,7 @@ void SVTXNumericField::setSpinSize( double Value ) throw(css::uno::RuntimeExcept
         pField->SetSpinSize( Value );
 }
 
-double SVTXNumericField::getSpinSize() throw(css::uno::RuntimeException, std::exception)
+double SVTXNumericField::getSpinSize()
 {
     SolarMutexGuard aGuard;
 
@@ -1762,7 +1762,7 @@ double SVTXNumericField::getSpinSize() throw(css::uno::RuntimeException, std::ex
     return pField ? pField->GetSpinSize() : 0;
 }
 
-void SVTXNumericField::setDecimalDigits( sal_Int16 Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXNumericField::setDecimalDigits( sal_Int16 Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1771,7 +1771,7 @@ void SVTXNumericField::setDecimalDigits( sal_Int16 Value ) throw(css::uno::Runti
         pField->SetDecimalDigits( Value );
 }
 
-sal_Int16 SVTXNumericField::getDecimalDigits() throw(css::uno::RuntimeException, std::exception)
+sal_Int16 SVTXNumericField::getDecimalDigits()
 {
     SolarMutexGuard aGuard;
 
@@ -1779,7 +1779,7 @@ sal_Int16 SVTXNumericField::getDecimalDigits() throw(css::uno::RuntimeException,
     return pField ? pField->GetDecimalDigits() : 0;
 }
 
-void SVTXNumericField::setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception)
+void SVTXNumericField::setStrictFormat( sal_Bool bStrict )
 {
     SolarMutexGuard aGuard;
 
@@ -1788,7 +1788,7 @@ void SVTXNumericField::setStrictFormat( sal_Bool bStrict ) throw(css::uno::Runti
         pField->SetStrictFormat( bStrict );
 }
 
-sal_Bool SVTXNumericField::isStrictFormat() throw(css::uno::RuntimeException, std::exception)
+sal_Bool SVTXNumericField::isStrictFormat()
 {
     SolarMutexGuard aGuard;
 
@@ -1812,7 +1812,7 @@ SVTXCurrencyField::~SVTXCurrencyField()
 {
 }
 
-css::uno::Any SVTXCurrencyField::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any SVTXCurrencyField::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XCurrencyField* >(this)),
@@ -1826,7 +1826,7 @@ IMPL_XTYPEPROVIDER_START( SVTXCurrencyField )
     SVTXFormattedField::getTypes()
 IMPL_XTYPEPROVIDER_END
 
-void SVTXCurrencyField::setValue( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXCurrencyField::setValue( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1835,7 +1835,7 @@ void SVTXCurrencyField::setValue( double Value ) throw(css::uno::RuntimeExceptio
         pField->SetValue( Value );
 }
 
-double SVTXCurrencyField::getValue() throw(css::uno::RuntimeException, std::exception)
+double SVTXCurrencyField::getValue()
 {
     SolarMutexGuard aGuard;
 
@@ -1843,7 +1843,7 @@ double SVTXCurrencyField::getValue() throw(css::uno::RuntimeException, std::exce
     return pField ? pField->GetValue() : 0;
 }
 
-void SVTXCurrencyField::setMin( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXCurrencyField::setMin( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1852,7 +1852,7 @@ void SVTXCurrencyField::setMin( double Value ) throw(css::uno::RuntimeException,
         pField->SetMinValue( Value );
 }
 
-double SVTXCurrencyField::getMin() throw(css::uno::RuntimeException, std::exception)
+double SVTXCurrencyField::getMin()
 {
     SolarMutexGuard aGuard;
 
@@ -1860,7 +1860,7 @@ double SVTXCurrencyField::getMin() throw(css::uno::RuntimeException, std::except
     return pField ? pField->GetMinValue() : 0;
 }
 
-void SVTXCurrencyField::setMax( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXCurrencyField::setMax( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1869,7 +1869,7 @@ void SVTXCurrencyField::setMax( double Value ) throw(css::uno::RuntimeException,
         pField->SetMaxValue( Value );
 }
 
-double SVTXCurrencyField::getMax() throw(css::uno::RuntimeException, std::exception)
+double SVTXCurrencyField::getMax()
 {
     SolarMutexGuard aGuard;
 
@@ -1877,7 +1877,7 @@ double SVTXCurrencyField::getMax() throw(css::uno::RuntimeException, std::except
     return pField ? pField->GetMaxValue() : 0;
 }
 
-void SVTXCurrencyField::setFirst( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXCurrencyField::setFirst( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1886,7 +1886,7 @@ void SVTXCurrencyField::setFirst( double Value ) throw(css::uno::RuntimeExceptio
         pField->SetSpinFirst( Value );
 }
 
-double SVTXCurrencyField::getFirst() throw(css::uno::RuntimeException, std::exception)
+double SVTXCurrencyField::getFirst()
 {
     SolarMutexGuard aGuard;
 
@@ -1894,7 +1894,7 @@ double SVTXCurrencyField::getFirst() throw(css::uno::RuntimeException, std::exce
     return pField ? pField->GetSpinFirst() : 0;
 }
 
-void SVTXCurrencyField::setLast( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXCurrencyField::setLast( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1903,7 +1903,7 @@ void SVTXCurrencyField::setLast( double Value ) throw(css::uno::RuntimeException
         pField->SetSpinLast( Value );
 }
 
-double SVTXCurrencyField::getLast() throw(css::uno::RuntimeException, std::exception)
+double SVTXCurrencyField::getLast()
 {
     SolarMutexGuard aGuard;
 
@@ -1911,7 +1911,7 @@ double SVTXCurrencyField::getLast() throw(css::uno::RuntimeException, std::excep
     return pField ? pField->GetSpinLast() : 0;
 }
 
-void SVTXCurrencyField::setSpinSize( double Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXCurrencyField::setSpinSize( double Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1920,7 +1920,7 @@ void SVTXCurrencyField::setSpinSize( double Value ) throw(css::uno::RuntimeExcep
         pField->SetSpinSize( Value );
 }
 
-double SVTXCurrencyField::getSpinSize() throw(css::uno::RuntimeException, std::exception)
+double SVTXCurrencyField::getSpinSize()
 {
     SolarMutexGuard aGuard;
 
@@ -1928,7 +1928,7 @@ double SVTXCurrencyField::getSpinSize() throw(css::uno::RuntimeException, std::e
     return pField ? pField->GetSpinSize() : 0;
 }
 
-void SVTXCurrencyField::setDecimalDigits( sal_Int16 Value ) throw(css::uno::RuntimeException, std::exception)
+void SVTXCurrencyField::setDecimalDigits( sal_Int16 Value )
 {
     SolarMutexGuard aGuard;
 
@@ -1937,7 +1937,7 @@ void SVTXCurrencyField::setDecimalDigits( sal_Int16 Value ) throw(css::uno::Runt
         pField->SetDecimalDigits( Value );
 }
 
-sal_Int16 SVTXCurrencyField::getDecimalDigits() throw(css::uno::RuntimeException, std::exception)
+sal_Int16 SVTXCurrencyField::getDecimalDigits()
 {
     SolarMutexGuard aGuard;
 
@@ -1945,7 +1945,7 @@ sal_Int16 SVTXCurrencyField::getDecimalDigits() throw(css::uno::RuntimeException
     return pField ? pField->GetDecimalDigits() : 0;
 }
 
-void SVTXCurrencyField::setStrictFormat( sal_Bool bStrict ) throw(css::uno::RuntimeException, std::exception)
+void SVTXCurrencyField::setStrictFormat( sal_Bool bStrict )
 {
     SolarMutexGuard aGuard;
 
@@ -1954,7 +1954,7 @@ void SVTXCurrencyField::setStrictFormat( sal_Bool bStrict ) throw(css::uno::Runt
         pField->SetStrictFormat( bStrict );
 }
 
-sal_Bool SVTXCurrencyField::isStrictFormat() throw(css::uno::RuntimeException, std::exception)
+sal_Bool SVTXCurrencyField::isStrictFormat()
 {
     SolarMutexGuard aGuard;
 
@@ -1962,7 +1962,7 @@ sal_Bool SVTXCurrencyField::isStrictFormat() throw(css::uno::RuntimeException, s
     return pField && pField->IsStrictFormat();
 }
 
-void SVTXCurrencyField::setProperty( const OUString& PropertyName, const css::uno::Any& Value) throw(css::uno::RuntimeException, std::exception)
+void SVTXCurrencyField::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -1995,7 +1995,7 @@ void SVTXCurrencyField::setProperty( const OUString& PropertyName, const css::un
         SVTXFormattedField::setProperty(PropertyName, Value);
 }
 
-css::uno::Any SVTXCurrencyField::getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any SVTXCurrencyField::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -2100,7 +2100,7 @@ void VCLXProgressBar::ImplUpdateValue()
 }
 
 // css::uno::XInterface
-css::uno::Any VCLXProgressBar::queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXProgressBar::queryInterface( const css::uno::Type & rType )
 {
     css::uno::Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< css::awt::XProgressBar* >(this)),
@@ -2115,7 +2115,7 @@ IMPL_XTYPEPROVIDER_START( VCLXProgressBar )
 IMPL_XTYPEPROVIDER_END
 
 // css::awt::XProgressBar
-void VCLXProgressBar::setForegroundColor( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
+void VCLXProgressBar::setForegroundColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
@@ -2127,7 +2127,7 @@ void VCLXProgressBar::setForegroundColor( sal_Int32 nColor ) throw(css::uno::Run
     }
 }
 
-void VCLXProgressBar::setBackgroundColor( sal_Int32 nColor ) throw(css::uno::RuntimeException, std::exception)
+void VCLXProgressBar::setBackgroundColor( sal_Int32 nColor )
 {
     SolarMutexGuard aGuard;
 
@@ -2141,7 +2141,7 @@ void VCLXProgressBar::setBackgroundColor( sal_Int32 nColor ) throw(css::uno::Run
     }
 }
 
-void VCLXProgressBar::setValue( sal_Int32 nValue ) throw(css::uno::RuntimeException, std::exception)
+void VCLXProgressBar::setValue( sal_Int32 nValue )
 {
     SolarMutexGuard aGuard;
 
@@ -2149,7 +2149,7 @@ void VCLXProgressBar::setValue( sal_Int32 nValue ) throw(css::uno::RuntimeExcept
     ImplUpdateValue();
 }
 
-void VCLXProgressBar::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(css::uno::RuntimeException, std::exception )
+void VCLXProgressBar::setRange( sal_Int32 nMin, sal_Int32 nMax )
 {
     SolarMutexGuard aGuard;
 
@@ -2169,7 +2169,7 @@ void VCLXProgressBar::setRange( sal_Int32 nMin, sal_Int32 nMax ) throw(css::uno:
     ImplUpdateValue();
 }
 
-sal_Int32 VCLXProgressBar::getValue() throw(css::uno::RuntimeException, std::exception)
+sal_Int32 VCLXProgressBar::getValue()
 {
     SolarMutexGuard aGuard;
 
@@ -2177,7 +2177,7 @@ sal_Int32 VCLXProgressBar::getValue() throw(css::uno::RuntimeException, std::exc
 }
 
 // css::awt::VclWindowPeer
-void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno::Any& Value) throw(css::uno::RuntimeException, std::exception)
+void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno::Any& Value)
 {
     SolarMutexGuard aGuard;
 
@@ -2235,7 +2235,7 @@ void VCLXProgressBar::setProperty( const OUString& PropertyName, const css::uno:
     }
 }
 
-css::uno::Any VCLXProgressBar::getProperty( const OUString& PropertyName ) throw(css::uno::RuntimeException, std::exception)
+css::uno::Any VCLXProgressBar::getProperty( const OUString& PropertyName )
 {
     SolarMutexGuard aGuard;
 
@@ -2292,7 +2292,7 @@ SVTXDateField::~SVTXDateField()
 {
 }
 
-void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL SVTXDateField::setProperty( const OUString& PropertyName, const css::uno::Any& Value )
 {
     VCLXDateField::setProperty( PropertyName, Value );
 

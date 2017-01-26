@@ -146,62 +146,62 @@ namespace dbaui
         virtual bool Construct(vcl::Window* pParent) override;
 
         // UNO
-        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any  SAL_CALL queryInterface(const css::uno::Type& _rType) override;
 
         // XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId(  ) override;
 
         // css::lang::XEventListener
-        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL disposing(const css::lang::EventObject& Source) override;
 
         // css::util::XModifyListener
-        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL modified(const css::lang::EventObject& aEvent) override;
 
         // css::container::XContainerListener
-        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL elementInserted(const css::container::ContainerEvent& Event) override;
+        virtual void SAL_CALL elementRemoved(const css::container::ContainerEvent& Event) override;
+        virtual void SAL_CALL elementReplaced(const css::container::ContainerEvent& Event) override;
 
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& evt ) override;
 
         // XModule
-        virtual void SAL_CALL setIdentifier( const OUString& Identifier ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getIdentifier(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setIdentifier( const OUString& Identifier ) override;
+        virtual OUString SAL_CALL getIdentifier(  ) override;
 
         // css::awt::XFocusListener
-        virtual void SAL_CALL focusGained(const css::awt::FocusEvent& e) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL focusLost(const css::awt::FocusEvent& e) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL focusGained(const css::awt::FocusEvent& e) override;
+        virtual void SAL_CALL focusLost(const css::awt::FocusEvent& e) override;
 
         // css::frame::XController
-        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL suspend(sal_Bool bSuspend) override;
 
         // css::lang::XComponent
         virtual void        SAL_CALL disposing() override;
 
         // css::frame::XFrameActionListener
-        virtual void        SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void        SAL_CALL frameAction(const css::frame::FrameActionEvent& aEvent) override;
 
         // css::sdb::XSQLErrorListener
-        virtual void        SAL_CALL errorOccured(const css::sdb::SQLErrorEvent& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void        SAL_CALL errorOccured(const css::sdb::SQLErrorEvent& aEvent) override;
 
         // css::form::XDatabaseParameterListener
-        virtual sal_Bool    SAL_CALL approveParameter(const css::form::DatabaseParameterEvent& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool    SAL_CALL approveParameter(const css::form::DatabaseParameterEvent& aEvent) override;
 
         // css::form::XConfirmDeleteListener
-        virtual sal_Bool    SAL_CALL confirmDelete(const css::sdb::RowChangeEvent& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool    SAL_CALL confirmDelete(const css::sdb::RowChangeEvent& aEvent) override;
 
         // css::form::XLoadListener
-        virtual void SAL_CALL loaded(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL unloading(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL unloaded(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL reloading(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL reloaded(const css::lang::EventObject& aEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL loaded(const css::lang::EventObject& aEvent) override;
+        virtual void SAL_CALL unloading(const css::lang::EventObject& aEvent) override;
+        virtual void SAL_CALL unloaded(const css::lang::EventObject& aEvent) override;
+        virtual void SAL_CALL reloading(const css::lang::EventObject& aEvent) override;
+        virtual void SAL_CALL reloaded(const css::lang::EventObject& aEvent) override;
 
         // css::form::XResetListener
-        virtual sal_Bool SAL_CALL approveReset(const css::lang::EventObject& rEvent) throw( css::uno::RuntimeException, std::exception ) override;
-        virtual void SAL_CALL resetted(const css::lang::EventObject& rEvent) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL approveReset(const css::lang::EventObject& rEvent) override;
+        virtual void SAL_CALL resetted(const css::lang::EventObject& rEvent) override;
 
         // SbaGridListener
         virtual void RowChanged() override;

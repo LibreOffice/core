@@ -49,7 +49,6 @@ AccessibleComponentBase::~AccessibleComponentBase()
 
 sal_Bool SAL_CALL AccessibleComponentBase::containsPoint (
         const css::awt::Point& aPoint)
-        throw (css::uno::RuntimeException, std::exception)
 {
     awt::Size aSize (getSize());
     return (aPoint.X >= 0)
@@ -62,21 +61,18 @@ sal_Bool SAL_CALL AccessibleComponentBase::containsPoint (
 uno::Reference<XAccessible > SAL_CALL
     AccessibleComponentBase::getAccessibleAtPoint (
         const awt::Point& /*aPoint*/)
-    throw (uno::RuntimeException, std::exception)
 {
     return uno::Reference<XAccessible>();
 }
 
 
 awt::Rectangle SAL_CALL AccessibleComponentBase::getBounds()
-    throw (uno::RuntimeException, std::exception)
 {
     return awt::Rectangle();
 }
 
 
 awt::Point SAL_CALL AccessibleComponentBase::getLocation()
-    throw (css::uno::RuntimeException, std::exception)
 {
     awt::Rectangle aBBox (getBounds());
     return awt::Point (aBBox.X, aBBox.Y);
@@ -84,14 +80,12 @@ awt::Point SAL_CALL AccessibleComponentBase::getLocation()
 
 
 awt::Point SAL_CALL AccessibleComponentBase::getLocationOnScreen()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return awt::Point();
 }
 
 
 css::awt::Size SAL_CALL AccessibleComponentBase::getSize()
-    throw (css::uno::RuntimeException, std::exception)
 {
     awt::Rectangle aBBox (getBounds());
     return awt::Size (aBBox.Width, aBBox.Height);
@@ -99,7 +93,6 @@ css::awt::Size SAL_CALL AccessibleComponentBase::getSize()
 
 
 void SAL_CALL AccessibleComponentBase::grabFocus()
-    throw (css::uno::RuntimeException, std::exception)
 {
     uno::Reference<XAccessibleContext> xContext (this, uno::UNO_QUERY);
     uno::Reference<XAccessibleSelection> xSelection (
@@ -114,14 +107,12 @@ void SAL_CALL AccessibleComponentBase::grabFocus()
 
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getForeground()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return Color(COL_BLACK).GetColor();
 }
 
 
 sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return Color(COL_WHITE).GetColor();
 }
@@ -131,21 +122,18 @@ sal_Int32 SAL_CALL AccessibleComponentBase::getBackground()
 
 css::uno::Reference< css::awt::XFont > SAL_CALL
         AccessibleComponentBase::getFont()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return uno::Reference<awt::XFont>();
 }
 
 
 OUString SAL_CALL AccessibleComponentBase::getTitledBorderText()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return OUString();
 }
 
 
 OUString SAL_CALL AccessibleComponentBase::getToolTipText()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString();
 }
@@ -154,7 +142,6 @@ OUString SAL_CALL AccessibleComponentBase::getToolTipText()
 
 uno::Sequence<uno::Type> SAL_CALL
     AccessibleComponentBase::getTypes()
-    throw (uno::RuntimeException, std::exception)
 {
     // Get list of types from the context base implementation...
     uno::Sequence<uno::Type> aTypeList (2);

@@ -104,59 +104,59 @@ namespace reportdesign
 
         DECLARE_XINTERFACE( )
         // css::lang::XServiceInfo
-        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getImplementationName(  ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+        virtual OUString SAL_CALL getImplementationName(  ) override;
+        virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
 
         // css::beans::XPropertySet
-        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) throw (css::beans::UnknownPropertyException, css::beans::PropertyVetoException, css::lang::IllegalArgumentException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) throw (css::beans::UnknownPropertyException, css::lang::WrappedTargetException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo(  ) override;
+        virtual void SAL_CALL setPropertyValue( const OUString& aPropertyName, const css::uno::Any& aValue ) override;
+        virtual css::uno::Any SAL_CALL getPropertyValue( const OUString& PropertyName ) override;
+        virtual void SAL_CALL addPropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& xListener ) override;
+        virtual void SAL_CALL removePropertyChangeListener( const OUString& aPropertyName, const css::uno::Reference< css::beans::XPropertyChangeListener >& aListener ) override;
+        virtual void SAL_CALL addVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
+        virtual void SAL_CALL removeVetoableChangeListener( const OUString& PropertyName, const css::uno::Reference< css::beans::XVetoableChangeListener >& aListener ) override;
 
         // XGroup
-        virtual sal_Bool SAL_CALL getSortAscending() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setSortAscending( sal_Bool _sortascending ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getHeaderOn() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setHeaderOn( sal_Bool _headeron ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getFooterOn() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setFooterOn( sal_Bool _footeron ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::report::XSection > SAL_CALL getHeader() throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::report::XSection > SAL_CALL getFooter() throw (css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int16 SAL_CALL getGroupOn() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setGroupOn( ::sal_Int16 _groupon ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int32 SAL_CALL getGroupInterval() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setGroupInterval( ::sal_Int32 _groupinterval ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int16 SAL_CALL getKeepTogether() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setKeepTogether( ::sal_Int16 _keeptogether ) throw (css::lang::IllegalArgumentException, css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Reference< css::report::XGroups > SAL_CALL getGroups() throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getExpression() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setExpression( const OUString& _expression ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getStartNewColumn() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setStartNewColumn( sal_Bool _startnewcolumn ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual sal_Bool SAL_CALL getResetPageNumber() throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setResetPageNumber( sal_Bool _resetpagenumber ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Bool SAL_CALL getSortAscending() override;
+        virtual void SAL_CALL setSortAscending( sal_Bool _sortascending ) override;
+        virtual sal_Bool SAL_CALL getHeaderOn() override;
+        virtual void SAL_CALL setHeaderOn( sal_Bool _headeron ) override;
+        virtual sal_Bool SAL_CALL getFooterOn() override;
+        virtual void SAL_CALL setFooterOn( sal_Bool _footeron ) override;
+        virtual css::uno::Reference< css::report::XSection > SAL_CALL getHeader() override;
+        virtual css::uno::Reference< css::report::XSection > SAL_CALL getFooter() override;
+        virtual ::sal_Int16 SAL_CALL getGroupOn() override;
+        virtual void SAL_CALL setGroupOn( ::sal_Int16 _groupon ) override;
+        virtual ::sal_Int32 SAL_CALL getGroupInterval() override;
+        virtual void SAL_CALL setGroupInterval( ::sal_Int32 _groupinterval ) override;
+        virtual ::sal_Int16 SAL_CALL getKeepTogether() override;
+        virtual void SAL_CALL setKeepTogether( ::sal_Int16 _keeptogether ) override;
+        virtual css::uno::Reference< css::report::XGroups > SAL_CALL getGroups() override;
+        virtual OUString SAL_CALL getExpression() override;
+        virtual void SAL_CALL setExpression( const OUString& _expression ) override;
+        virtual sal_Bool SAL_CALL getStartNewColumn() override;
+        virtual void SAL_CALL setStartNewColumn( sal_Bool _startnewcolumn ) override;
+        virtual sal_Bool SAL_CALL getResetPageNumber() override;
+        virtual void SAL_CALL setResetPageNumber( sal_Bool _resetpagenumber ) override;
 
         //XFunctionsSupplier
-        virtual css::uno::Reference< css::report::XFunctions > SAL_CALL getFunctions() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::report::XFunctions > SAL_CALL getFunctions() override;
 
         // XChild
-        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) throw (css::lang::NoSupportException, css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getParent(  ) override;
+        virtual void SAL_CALL setParent( const css::uno::Reference< css::uno::XInterface >& Parent ) override;
 
         // XComponent
-        virtual void SAL_CALL dispose() throw(css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL dispose() override;
+        virtual void SAL_CALL addEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) override
         {
             cppu::WeakComponentImplHelperBase::addEventListener(aListener);
         }
-        virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) throw(css::uno::RuntimeException, std::exception) override
+        virtual void SAL_CALL removeEventListener(const css::uno::Reference< css::lang::XEventListener > & aListener) override
         {
             cppu::WeakComponentImplHelperBase::removeEventListener(aListener);
         }

@@ -62,13 +62,13 @@ namespace svt
 
     protected:
         // XStream
-        virtual Reference< XInputStream > SAL_CALL getInputStream(  ) throw (RuntimeException, std::exception) override;
-        virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) throw (RuntimeException, std::exception) override;
+        virtual Reference< XInputStream > SAL_CALL getInputStream(  ) override;
+        virtual Reference< XOutputStream > SAL_CALL getOutputStream(  ) override;
 
         // XSeekable
-        virtual void SAL_CALL seek( ::sal_Int64 location ) throw (css::lang::IllegalArgumentException, css::io::IOException, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int64 SAL_CALL getPosition(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
-        virtual ::sal_Int64 SAL_CALL getLength(  ) throw (css::io::IOException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL seek( ::sal_Int64 location ) override;
+        virtual ::sal_Int64 SAL_CALL getPosition(  ) override;
+        virtual ::sal_Int64 SAL_CALL getLength(  ) override;
     };
 
 
@@ -83,19 +83,19 @@ namespace svt
     }
 
 
-    Reference< XInputStream > SAL_CALL StreamSupplier::getInputStream(  ) throw (RuntimeException, std::exception)
+    Reference< XInputStream > SAL_CALL StreamSupplier::getInputStream(  )
     {
         return m_xInput;
     }
 
 
-    Reference< XOutputStream > SAL_CALL StreamSupplier::getOutputStream(  ) throw (RuntimeException, std::exception)
+    Reference< XOutputStream > SAL_CALL StreamSupplier::getOutputStream(  )
     {
         return m_xOutput;
     }
 
 
-    void SAL_CALL StreamSupplier::seek( ::sal_Int64 location ) throw (IllegalArgumentException, IOException, RuntimeException, std::exception)
+    void SAL_CALL StreamSupplier::seek( ::sal_Int64 location )
     {
         if ( !m_xSeekable.is() )
             throw NotConnectedException();
@@ -104,7 +104,7 @@ namespace svt
     }
 
 
-    ::sal_Int64 SAL_CALL StreamSupplier::getPosition(  ) throw (IOException, RuntimeException, std::exception)
+    ::sal_Int64 SAL_CALL StreamSupplier::getPosition(  )
     {
         if ( !m_xSeekable.is() )
             throw NotConnectedException();
@@ -113,7 +113,7 @@ namespace svt
     }
 
 
-    ::sal_Int64 SAL_CALL StreamSupplier::getLength(  ) throw (IOException, RuntimeException, std::exception)
+    ::sal_Int64 SAL_CALL StreamSupplier::getLength(  )
     {
         if ( !m_xSeekable.is() )
             throw NotConnectedException();

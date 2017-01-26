@@ -53,10 +53,9 @@ namespace comphelper
         virtual ~OSelectionChangeListener();
 
         /// @throws css::uno::RuntimeException
-        virtual void _selectionChanged( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException) = 0;
+        virtual void _selectionChanged( const css::lang::EventObject& aEvent ) = 0;
         /// @throws css::uno::RuntimeException
-        virtual void _disposing(const css::lang::EventObject& _rSource)
-            throw (css::uno::RuntimeException, std::exception);
+        virtual void _disposing(const css::lang::EventObject& _rSource);
 
     protected:
         // pseudo-private. Making it private now could break compatibility
@@ -82,10 +81,10 @@ namespace comphelper
         OSelectionChangeMultiplexer(OSelectionChangeListener* _pListener, const  css::uno::Reference< css::view::XSelectionSupplier>& _rxSet);
 
     // XEventListener
-        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) throw( css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const  css::lang::EventObject& Source ) override;
 
     // XSelectionChangeListener
-        virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL selectionChanged( const css::lang::EventObject& aEvent ) override;
 
         /// incremental lock
         void        lock();

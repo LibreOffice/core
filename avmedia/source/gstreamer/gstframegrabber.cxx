@@ -105,7 +105,6 @@ FrameGrabber* FrameGrabber::create( const OUString &rURL )
 }
 
 uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMediaTime )
-    throw (uno::RuntimeException, std::exception)
 {
     uno::Reference< graphic::XGraphic > xRet;
 
@@ -204,19 +203,16 @@ uno::Reference< graphic::XGraphic > SAL_CALL FrameGrabber::grabFrame( double fMe
 }
 
 OUString SAL_CALL FrameGrabber::getImplementationName(  )
-    throw (uno::RuntimeException, std::exception)
 {
     return OUString( AVMEDIA_GST_FRAMEGRABBER_IMPLEMENTATIONNAME );
 }
 
 sal_Bool SAL_CALL FrameGrabber::supportsService( const OUString& ServiceName )
-    throw (uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 uno::Sequence< OUString > SAL_CALL FrameGrabber::getSupportedServiceNames()
-    throw (uno::RuntimeException, std::exception)
 {
     return { AVMEDIA_GST_FRAMEGRABBER_SERVICENAME };
 }

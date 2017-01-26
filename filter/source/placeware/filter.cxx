@@ -55,19 +55,19 @@ public:
     explicit PlaceWareExportFilter( const Reference< XComponentContext > &rxContext);
 
     // XFilter
-    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) throw(RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel( ) throw (RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL filter( const Sequence< PropertyValue >& aDescriptor ) override;
+    virtual void SAL_CALL cancel( ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw(IllegalArgumentException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const Sequence< Any >& aArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames()  throw(RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 };
 
 
@@ -78,7 +78,6 @@ PlaceWareExportFilter::PlaceWareExportFilter(const Reference< XComponentContext 
 
 
 sal_Bool SAL_CALL PlaceWareExportFilter::filter( const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-    throw (RuntimeException, std::exception)
 {
     sal_Int32 nLength = aDescriptor.getLength();
     const PropertyValue * pValue = aDescriptor.getConstArray();
@@ -117,14 +116,12 @@ sal_Bool SAL_CALL PlaceWareExportFilter::filter( const css::uno::Sequence< css::
 
 
 void SAL_CALL PlaceWareExportFilter::cancel(  )
-    throw (RuntimeException, std::exception)
 {
 }
 
 
 // XExporter
 void SAL_CALL PlaceWareExportFilter::setSourceDocument( const css::uno::Reference< css::lang::XComponent >& xDoc )
-    throw (css::lang::IllegalArgumentException, RuntimeException, std::exception)
 {
     mxDoc = xDoc;
 }
@@ -132,44 +129,37 @@ void SAL_CALL PlaceWareExportFilter::setSourceDocument( const css::uno::Referenc
 
 // XInitialization
 void SAL_CALL PlaceWareExportFilter::initialize( const css::uno::Sequence< css::uno::Any >& /* aArguments */ )
-    throw (Exception, RuntimeException, std::exception)
 {
 }
 
 OUString PlaceWareExportFilter_getImplementationName ()
-    throw (RuntimeException)
 {
     return OUString( "com.sun.star.comp.Impress.PlaceWareExportFilter" );
 }
 
 Sequence< OUString > SAL_CALL PlaceWareExportFilter_getSupportedServiceNames(  )
-    throw (RuntimeException)
 {
     Sequence<OUString> aRet { "com.sun.star.document.ExportFilter" };
     return aRet;
 }
 
 Reference< XInterface > SAL_CALL PlaceWareExportFilter_createInstance( const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new PlaceWareExportFilter( comphelper::getComponentContext(rSMgr) ));
 }
 
 // XServiceInfo
 OUString SAL_CALL PlaceWareExportFilter::getImplementationName(  )
-    throw (RuntimeException, std::exception)
 {
     return PlaceWareExportFilter_getImplementationName();
 }
 
 sal_Bool SAL_CALL PlaceWareExportFilter::supportsService( const OUString& rServiceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService( this, rServiceName );
 }
 
 css::uno::Sequence< OUString > SAL_CALL PlaceWareExportFilter::getSupportedServiceNames(  )
-    throw (RuntimeException, std::exception)
 {
     return PlaceWareExportFilter_getSupportedServiceNames();
 }

@@ -93,7 +93,6 @@ bool ScAddressConversionObj::ParseUIString( const OUString& rUIString, ::formula
 // XPropertySet
 
 uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getPropertySetInfo()
-                                                        throw(uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aGuard;
 
@@ -130,9 +129,6 @@ uno::Reference<beans::XPropertySetInfo> SAL_CALL ScAddressConversionObj::getProp
 }
 
 void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropertyName, const uno::Any& aValue )
-                throw(beans::UnknownPropertyException, beans::PropertyVetoException,
-                        lang::IllegalArgumentException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     if ( !pDocShell )
         throw uno::RuntimeException();
@@ -215,8 +211,6 @@ void SAL_CALL ScAddressConversionObj::setPropertyValue( const OUString& aPropert
 }
 
 uno::Any SAL_CALL ScAddressConversionObj::getPropertyValue( const OUString& aPropertyName )
-                throw(beans::UnknownPropertyException, lang::WrappedTargetException,
-                        uno::RuntimeException, std::exception)
 {
     if ( !pDocShell )
         throw uno::RuntimeException();
@@ -285,19 +279,17 @@ SC_IMPL_DUMMY_PROPERTY_LISTENER( ScAddressConversionObj )
 
 // lang::XServiceInfo
 
-OUString SAL_CALL ScAddressConversionObj::getImplementationName() throw(uno::RuntimeException, std::exception)
+OUString SAL_CALL ScAddressConversionObj::getImplementationName()
 {
     return OUString("ScAddressConversionObj" );
 }
 
 sal_Bool SAL_CALL ScAddressConversionObj::supportsService( const OUString& rServiceName )
-                                                    throw(uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 uno::Sequence<OUString> SAL_CALL ScAddressConversionObj::getSupportedServiceNames()
-                                                    throw(uno::RuntimeException, std::exception)
 {
     if (bIsRange)
         return {SC_SERVICENAME_RANGEADDRESS};

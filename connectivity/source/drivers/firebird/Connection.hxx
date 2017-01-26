@@ -157,8 +157,7 @@ namespace connectivity
             OWeakRefArray       m_aStatements;
 
             /// @throws css::sdbc::SQLException
-            void buildTypeInfo()
-                throw (css::sdbc::SQLException);
+            void buildTypeInfo();
 
             /**
              * Creates a new transaction with the desired parameters, if
@@ -167,8 +166,7 @@ namespace connectivity
              *
              * @throws css::sdbc::SQLException
              */
-            void setupTransaction()
-                throw(css::sdbc::SQLException);
+            void setupTransaction();
             void disposeStatements();
 
         /** transform named parameters into unnamed parameters
@@ -186,17 +184,13 @@ namespace connectivity
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             void construct( const ::rtl::OUString& url,
-                                    const css::uno::Sequence< css::beans::PropertyValue >& info)
-            throw(css::sdbc::SQLException,
-                  css::uno::RuntimeException,
-                  std::exception);
+                                    const css::uno::Sequence< css::beans::PropertyValue >& info);
 
             const OUString& getConnectionURL()  const   {return m_sConnectionURL;}
             bool            isEmbedded()        const   {return m_bIsEmbedded;}
             isc_db_handle&  getDBHandle()               {return m_aDBHandle;}
             /// @throws css::sdbc::SQLException
-            isc_tr_handle&  getTransaction()
-                throw(css::sdbc::SQLException);
+            isc_tr_handle&  getTransaction();
 
             /**
               * Must be called anytime the underlying database is likely to have
@@ -217,15 +211,11 @@ namespace connectivity
              * @throws css::uno::RuntimeException
              */
             css::uno::Reference< css::sdbc::XBlob>
-                createBlob(ISC_QUAD* pBlobID)
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException);
+                createBlob(ISC_QUAD* pBlobID);
             /// @throws css::sdbc::SQLException
             /// @throws css::uno::RuntimeException
             css::uno::Reference< css::sdbc::XClob>
-                createClob(ISC_QUAD* pBlobID)
-                throw(css::sdbc::SQLException,
-                      css::uno::RuntimeException);
+                createClob(ISC_QUAD* pBlobID);
 
             /**
              * Create and/or connect to the sdbcx Catalog. This is completely
@@ -242,33 +232,33 @@ namespace connectivity
             // XServiceInfo
             DECLARE_SERVICE_INFO();
             // XConnection
-            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const ::rtl::OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual ::rtl::OUString SAL_CALL nativeSQL( const ::rtl::OUString& sql ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL getAutoCommit(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL commit(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL rollback(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isClosed(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Bool SAL_CALL isReadOnly(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setCatalog( const ::rtl::OUString& catalog ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual ::rtl::OUString SAL_CALL getCatalog(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement(  ) override;
+            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement( const ::rtl::OUString& sql ) override;
+            virtual css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall( const ::rtl::OUString& sql ) override;
+            virtual ::rtl::OUString SAL_CALL nativeSQL( const ::rtl::OUString& sql ) override;
+            virtual void SAL_CALL setAutoCommit( sal_Bool autoCommit ) override;
+            virtual sal_Bool SAL_CALL getAutoCommit(  ) override;
+            virtual void SAL_CALL commit(  ) override;
+            virtual void SAL_CALL rollback(  ) override;
+            virtual sal_Bool SAL_CALL isClosed(  ) override;
+            virtual css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData(  ) override;
+            virtual void SAL_CALL setReadOnly( sal_Bool readOnly ) override;
+            virtual sal_Bool SAL_CALL isReadOnly(  ) override;
+            virtual void SAL_CALL setCatalog( const ::rtl::OUString& catalog ) override;
+            virtual ::rtl::OUString SAL_CALL getCatalog(  ) override;
+            virtual void SAL_CALL setTransactionIsolation( sal_Int32 level ) override;
+            virtual sal_Int32 SAL_CALL getTransactionIsolation(  ) override;
+            virtual css::uno::Reference< css::container::XNameAccess > SAL_CALL getTypeMap(  ) override;
+            virtual void SAL_CALL setTypeMap( const css::uno::Reference< css::container::XNameAccess >& typeMap ) override;
             // XCloseable
-            virtual void SAL_CALL close(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL close(  ) override;
             // XWarningsSupplier
-            virtual css::uno::Any SAL_CALL getWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
-            virtual void SAL_CALL clearWarnings(  ) throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception) override;
+            virtual css::uno::Any SAL_CALL getWarnings(  ) override;
+            virtual void SAL_CALL clearWarnings(  ) override;
             // XDocumentEventListener
-            virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) throw(css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL documentEventOccured( const css::document::DocumentEvent& Event ) override;
             // css.lang.XEventListener
-            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+            virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
         };
     }

@@ -112,7 +112,7 @@ public:
                                      , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
                                      , const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const;
     /// @throws css::uno::RuntimeException
-    virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const throw (css::uno::RuntimeException);
+    virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const;
 
     bool                isSubType( const OUString& rServiceName );
     ChartTypeParameter  getChartTypeParameterForService( const OUString& rServiceName, const css::uno::Reference<
@@ -278,7 +278,7 @@ public:
                                      , const css::uno::Reference< css::chart2::XChartDocument >& xChartModel
                                      , const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const override;
 
-    virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const throw (css::uno::RuntimeException) override;
+    virtual void    setTemplateProperties( const css::uno::Reference< css::beans::XPropertySet >& xTemplateProps ) const override;
 
 private:
     DECL_LINK( ChangeLineCountHdl, Edit&, void );

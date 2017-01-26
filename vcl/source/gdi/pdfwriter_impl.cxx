@@ -8058,13 +8058,13 @@ class PDFStreamIf :
     public:
     explicit PDFStreamIf( PDFWriterImpl* pWriter ) : m_pWriter( pWriter ), m_bWrite( true ) {}
 
-    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw(std::exception) override;
-    virtual void SAL_CALL flush() throw(std::exception) override;
-    virtual void SAL_CALL closeOutput() throw(std::exception) override;
+    virtual void SAL_CALL writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) override;
+    virtual void SAL_CALL flush() override;
+    virtual void SAL_CALL closeOutput() override;
 };
 }
 
-void SAL_CALL  PDFStreamIf::writeBytes( const css::uno::Sequence< sal_Int8 >& aData ) throw(std::exception)
+void SAL_CALL  PDFStreamIf::writeBytes( const css::uno::Sequence< sal_Int8 >& aData )
 {
     if( m_bWrite && aData.getLength() )
     {
@@ -8073,11 +8073,11 @@ void SAL_CALL  PDFStreamIf::writeBytes( const css::uno::Sequence< sal_Int8 >& aD
     }
 }
 
-void SAL_CALL PDFStreamIf::flush() throw(std::exception)
+void SAL_CALL PDFStreamIf::flush()
 {
 }
 
-void SAL_CALL PDFStreamIf::closeOutput() throw(std::exception)
+void SAL_CALL PDFStreamIf::closeOutput()
 {
     m_bWrite = false;
 }

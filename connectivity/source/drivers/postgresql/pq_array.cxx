@@ -55,20 +55,17 @@ namespace pq_sdbc_driver
 
 
 OUString Array::getBaseTypeName(  )
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return OUString( "varchar" );
 }
 
 sal_Int32 Array::getBaseType(  )
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return  css::sdbc::DataType::VARCHAR;
 }
 
 css::uno::Sequence< css::uno::Any > Array::getArray(
     const css::uno::Reference< css::container::XNameAccess >& /* typeMap */ )
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return comphelper::containerToSequence(m_data);
 }
@@ -77,7 +74,6 @@ css::uno::Sequence< css::uno::Any > Array::getArrayAtIndex(
     sal_Int32 index,
     sal_Int32 count,
     const css::uno::Reference< css::container::XNameAccess >& /* typeMap */ )
-    throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     checkRange( index, count );
     return Sequence< Any > ( &m_data[index-1], count );
@@ -85,7 +81,6 @@ css::uno::Sequence< css::uno::Any > Array::getArrayAtIndex(
 
 css::uno::Reference< css::sdbc::XResultSet > Array::getResultSet(
     const css::uno::Reference< css::container::XNameAccess >& typeMap )
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     return getResultSetAtIndex( 0 , m_data.size() , typeMap );
 }
@@ -94,7 +89,6 @@ css::uno::Reference< css::sdbc::XResultSet > Array::getResultSetAtIndex(
     sal_Int32 index,
     sal_Int32 count,
     const css::uno::Reference< css::container::XNameAccess >& /* typeMap */ )
-        throw (css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     checkRange( index, count );
     std::vector< std::vector< Any > > ret( count );

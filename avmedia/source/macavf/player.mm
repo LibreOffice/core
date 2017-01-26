@@ -154,7 +154,6 @@ bool Player::create( const ::rtl::OUString& rURL )
 
 
 void SAL_CALL Player::start()
-    throw (uno::RuntimeException)
 {
     if( !mpPlayer )
         return;
@@ -165,7 +164,6 @@ void SAL_CALL Player::start()
 
 
 void SAL_CALL Player::stop()
-    throw (uno::RuntimeException)
 {
     if( !mpPlayer )
         return;
@@ -176,7 +174,6 @@ void SAL_CALL Player::stop()
 
 
 sal_Bool SAL_CALL Player::isPlaying()
-    throw (uno::RuntimeException)
 {
     if( !mpPlayer )
         return false;
@@ -186,7 +183,6 @@ sal_Bool SAL_CALL Player::isPlaying()
 
 
 double SAL_CALL Player::getDuration()
-    throw (uno::RuntimeException)
 {
     // slideshow checks for non-zero duration, so cheat here
     double duration = 0.01;
@@ -205,7 +201,6 @@ double SAL_CALL Player::getDuration()
 
 
 void SAL_CALL Player::setMediaTime( double fTime )
-    throw (uno::RuntimeException)
 {
     if( mpPlayer )
         [mpPlayer seekToTime: CMTimeMakeWithSeconds(fTime,1000) ];
@@ -213,7 +208,6 @@ void SAL_CALL Player::setMediaTime( double fTime )
 
 
 double SAL_CALL Player::getMediaTime()
-    throw (uno::RuntimeException)
 {
     if( !mpPlayer )
         return 0.0;
@@ -228,35 +222,30 @@ double SAL_CALL Player::getMediaTime()
 
 
 void SAL_CALL Player::setStopTime( double fTime )
-    throw (uno::RuntimeException)
 {
     mfStopTime = fTime;
 }
 
 
 double SAL_CALL Player::getStopTime()
-    throw (uno::RuntimeException)
 {
     return mfStopTime;
 }
 
 
 void SAL_CALL Player::setPlaybackLoop( sal_Bool bSet )
-    throw (uno::RuntimeException)
 {
     mbLooping = bSet;
 }
 
 
 sal_Bool SAL_CALL Player::isPlaybackLoop()
-    throw (uno::RuntimeException)
 {
     return mbLooping;
 }
 
 
 void SAL_CALL Player::setMute( sal_Bool bSet )
-    throw (uno::RuntimeException)
 {
     if( !mpPlayer )
         return;
@@ -267,14 +256,12 @@ void SAL_CALL Player::setMute( sal_Bool bSet )
 
 
 sal_Bool SAL_CALL Player::isMute()
-    throw (uno::RuntimeException)
 {
     return mbMuted;
 }
 
 
 void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
-    throw (uno::RuntimeException)
 {
     // -40dB <-> AVPlayer volume 0.0
     //   0dB <-> AVPlayer volume 1.0
@@ -287,7 +274,6 @@ void SAL_CALL Player::setVolumeDB( sal_Int16 nVolumeDB )
 
 
 sal_Int16 SAL_CALL Player::getVolumeDB()
-    throw (uno::RuntimeException)
 {
     if( !mpPlayer )
         return 0;
@@ -305,7 +291,6 @@ sal_Int16 SAL_CALL Player::getVolumeDB()
 
 
 awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
-    throw (uno::RuntimeException)
 {
     awt::Size aSize( 0, 0 ); // default size
 
@@ -323,7 +308,6 @@ awt::Size SAL_CALL Player::getPreferredPlayerWindowSize()
 
 
 uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( const uno::Sequence< uno::Any >& aArguments )
-    throw (uno::RuntimeException)
 {
     // get the preferred window size
     const awt::Size aSize( getPreferredPlayerWindowSize() );
@@ -346,7 +330,6 @@ uno::Reference< ::media::XPlayerWindow > SAL_CALL Player::createPlayerWindow( co
 
 
 uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
-    throw (uno::RuntimeException)
 {
     uno::Reference< media::XFrameGrabber > xRet;
 
@@ -360,21 +343,18 @@ uno::Reference< media::XFrameGrabber > SAL_CALL Player::createFrameGrabber()
 
 
 ::rtl::OUString SAL_CALL Player::getImplementationName(  )
-    throw (uno::RuntimeException)
 {
     return ::rtl::OUString( AVMEDIA_MACAVF_PLAYER_IMPLEMENTATIONNAME );
 }
 
 
 sal_Bool SAL_CALL Player::supportsService( const ::rtl::OUString& ServiceName )
-    throw (uno::RuntimeException)
 {
     return ServiceName == AVMEDIA_MACAVF_PLAYER_SERVICENAME;
 }
 
 
 uno::Sequence< ::rtl::OUString > SAL_CALL Player::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
 {
     return { AVMEDIA_MACAVF_PLAYER_SERVICENAME };
 }

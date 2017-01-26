@@ -138,7 +138,6 @@ bool ErrorBarItemConverter::GetItemProperty(
 
 bool ErrorBarItemConverter::ApplySpecialItem(
     sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-    throw( uno::Exception )
 {
     bool bChanged = false;
 
@@ -331,7 +330,6 @@ bool ErrorBarItemConverter::ApplySpecialItem(
 
 void ErrorBarItemConverter::FillSpecialItem(
     sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-    throw( uno::Exception )
 {
     switch( nWhichId )
     {

@@ -55,23 +55,22 @@ public:
     virtual void SAL_CALL disposing() override;
 
     // XSlideShowListener
-    virtual void SAL_CALL paused(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL resumed(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL slideTransitionStarted(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL slideTransitionEnded(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL slideAnimationsEnded(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL slideEnded(sal_Bool bReverse) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL hyperLinkClicked( const OUString& hyperLink ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL paused(  ) override;
+    virtual void SAL_CALL resumed(  ) override;
+    virtual void SAL_CALL slideTransitionStarted(  ) override;
+    virtual void SAL_CALL slideTransitionEnded(  ) override;
+    virtual void SAL_CALL slideAnimationsEnded(  ) override;
+    virtual void SAL_CALL slideEnded(sal_Bool bReverse) override;
+    virtual void SAL_CALL hyperLinkClicked( const OUString& hyperLink ) override;
 
     // XAnimationListener
-    virtual void SAL_CALL beginEvent( const css::uno::Reference< css::animations::XAnimationNode >& Node ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL endEvent( const css::uno::Reference< css::animations::XAnimationNode >& Node ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL repeat( const css::uno::Reference< css::animations::XAnimationNode >& Node, ::sal_Int32 Repeat ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL beginEvent( const css::uno::Reference< css::animations::XAnimationNode >& Node ) override;
+    virtual void SAL_CALL endEvent( const css::uno::Reference< css::animations::XAnimationNode >& Node ) override;
+    virtual void SAL_CALL repeat( const css::uno::Reference< css::animations::XAnimationNode >& Node, ::sal_Int32 Repeat ) override;
 
     // XEventListener
     virtual void SAL_CALL disposing (
-        const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::lang::EventObject& rEvent) override;
 
 private:
     ::rtl::Reference<PresenterController> mpPresenterController;

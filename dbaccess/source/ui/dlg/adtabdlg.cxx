@@ -79,9 +79,9 @@ private:
     virtual OUString  getSelectedName( OUString& _out_rAliasName ) const override;
     virtual bool    isLeafSelected() const override;
     // OContainerListener
-    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) override;
+    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) override;
+    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) override;
 };
 
 TableListFacade::~TableListFacade()
@@ -132,17 +132,17 @@ OUString TableListFacade::getSelectedName( OUString& _out_rAliasName ) const
     return aComposedName;
 }
 
-void TableListFacade::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )  throw(css::uno::RuntimeException, std::exception)
+void TableListFacade::_elementInserted( const container::ContainerEvent& /*_rEvent*/ )
 {
     updateTableObjectList(m_bAllowViews);
 }
 
-void TableListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
+void TableListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ )
 {
     updateTableObjectList(m_bAllowViews);
 }
 
-void TableListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
+void TableListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ )
 {
 }
 
@@ -239,9 +239,9 @@ private:
     virtual OUString  getSelectedName( OUString& _out_rAliasName ) const override;
     virtual bool    isLeafSelected() const override;
     // OContainerListener
-    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void _elementInserted( const css::container::ContainerEvent& _rEvent ) override;
+    virtual void _elementRemoved( const  css::container::ContainerEvent& _rEvent ) override;
+    virtual void _elementReplaced( const css::container::ContainerEvent& _rEvent ) override;
 };
 
 QueryListFacade::~QueryListFacade()
@@ -250,19 +250,19 @@ QueryListFacade::~QueryListFacade()
         m_pContainerListener->dispose();
 }
 
-void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent )  throw(css::uno::RuntimeException, std::exception)
+void QueryListFacade::_elementInserted( const container::ContainerEvent& _rEvent )
 {
     OUString sName;
     if ( _rEvent.Accessor >>= sName )
         m_rQueryList.InsertEntry( sName );
 }
 
-void QueryListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
+void QueryListFacade::_elementRemoved( const container::ContainerEvent& /*_rEvent*/ )
 {
     updateTableObjectList(true);
 }
 
-void QueryListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ ) throw(css::uno::RuntimeException, std::exception)
+void QueryListFacade::_elementReplaced( const container::ContainerEvent& /*_rEvent*/ )
 {
 }
 

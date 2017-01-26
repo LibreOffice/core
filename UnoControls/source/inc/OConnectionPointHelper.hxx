@@ -61,8 +61,7 @@ public:
         @onerror    A RuntimeException is thrown.
     */
 
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     /**_______________________________________________________________________________________________________
         @short      increment refcount
@@ -84,25 +83,17 @@ public:
 
     //  XConnectionPoint
 
-    virtual css::uno::Type SAL_CALL getConnectionType()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Type SAL_CALL getConnectionType() override;
 
-    virtual css::uno::Reference< css::lang::XConnectionPointContainer > SAL_CALL getConnectionPointContainer()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Reference< css::lang::XConnectionPointContainer > SAL_CALL getConnectionPointContainer() override;
 
     virtual void SAL_CALL advise(
         const css::uno::Reference< css::uno::XInterface >& xListener
-    ) throw (
-        css::lang::ListenerExistException,
-        css::lang::InvalidListenerException ,
-        css::uno::RuntimeException, std::exception
     ) override;
 
-    virtual void SAL_CALL unadvise( const css::uno::Reference< css::uno::XInterface >& xListener )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL unadvise( const css::uno::Reference< css::uno::XInterface >& xListener ) override;
 
-    virtual css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > SAL_CALL getConnections()
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Sequence< css::uno::Reference< css::uno::XInterface > > SAL_CALL getConnections() override;
 
 private:
 

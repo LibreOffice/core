@@ -86,9 +86,7 @@ protected:
     /// @throws css::lang::DisposedException
     /// @throws css::uno::RuntimeException
     void SAL_CALL
-    impl_EnsureNotDisposed()
-        throw( css::lang::DisposedException,
-               css::uno::RuntimeException );
+    impl_EnsureNotDisposed();
 
     virtual void SAL_CALL
     impl_InitResultSetOne( const css::uno::Reference<
@@ -108,63 +106,48 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL
-    queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    queryInterface( const css::uno::Type & rType ) override;
 
 
     // XDynamicResultSet
     virtual css::uno::Reference< css::sdbc::XResultSet > SAL_CALL
-    getStaticResultSet()
-        throw( css::ucb::ListenerAlreadySetException
-        , css::uno::RuntimeException, std::exception ) override;
+    getStaticResultSet() override;
 
     virtual void SAL_CALL
-    setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener > & Listener )
-        throw( css::ucb::ListenerAlreadySetException
-            , css::uno::RuntimeException, std::exception ) override;
+    setListener( const css::uno::Reference< css::ucb::XDynamicResultSetListener > & Listener ) override;
 
     virtual void SAL_CALL
-    connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache )
-        throw( css::ucb::ListenerAlreadySetException
-            , css::ucb::AlreadyInitializedException
-            , css::ucb::ServiceNotFoundException
-            , css::uno::RuntimeException, std::exception ) override;
+    connectToCache( const css::uno::Reference< css::ucb::XDynamicResultSet > & xCache ) override;
 
     virtual sal_Int16 SAL_CALL
-    getCapabilities() throw( css::uno::RuntimeException, std::exception ) override;
+    getCapabilities() override;
 
 
     // XComponent ( base of XDynamicResultSet )
     virtual void SAL_CALL
-    dispose() throw( css::uno::RuntimeException, std::exception ) override;
+    dispose() override;
 
     virtual void SAL_CALL
-    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
-            throw( css::uno::RuntimeException, std::exception ) override;
+    addEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
     virtual void SAL_CALL
-    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener )
-            throw( css::uno::RuntimeException, std::exception ) override;
+    removeEventListener( const css::uno::Reference< css::lang::XEventListener >& Listener ) override;
 
 
     // XSourceInitialization
 
     virtual void SAL_CALL
-    setSource(  const css::uno::Reference< css::uno::XInterface > & Source )
-         throw( css::ucb::AlreadyInitializedException
-                , css::uno::RuntimeException, std::exception ) override;
+    setSource(  const css::uno::Reference< css::uno::XInterface > & Source ) override;
 
 
     // own methods:
     /// @throws css::uno::RuntimeException
     virtual void SAL_CALL
-    impl_disposing( const css::lang::EventObject& Source )
-        throw( css::uno::RuntimeException );
+    impl_disposing( const css::lang::EventObject& Source );
 
     /// @throws css::uno::RuntimeException
     void SAL_CALL
-    impl_notify( const css::ucb::ListEvent& Changes )
-        throw( css::uno::RuntimeException );
+    impl_notify( const css::ucb::ListEvent& Changes );
 };
 
 
@@ -183,8 +166,7 @@ public:
 
 
     // XInterface
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     virtual void SAL_CALL acquire()
         throw() override;
     virtual void SAL_CALL release()
@@ -193,13 +175,11 @@ public:
     // XEventListener ( base of XDynamicResultSetListener )
 
     virtual void SAL_CALL
-    disposing( const css::lang::EventObject& Source )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    disposing( const css::lang::EventObject& Source ) override;
 
     // XDynamicResultSetListener
     virtual void SAL_CALL
-    notify( const css::ucb::ListEvent& Changes )
-        throw( css::uno::RuntimeException, std::exception ) override;
+    notify( const css::ucb::ListEvent& Changes ) override;
 
 
     // own methods:

@@ -64,20 +64,19 @@ void Listener::init( const css::uno::Reference< css::presentation::XSlideShowCon
 //----- XAnimationListener ----------------------------------------------------
 
 void SAL_CALL Listener::beginEvent(const css::uno::Reference<
-    css::animations::XAnimationNode >&  rNode ) throw (css::uno::RuntimeException, std::exception)
+    css::animations::XAnimationNode >&  rNode )
 {
     (void) rNode;
 }
 
 void SAL_CALL Listener::endEvent( const css::uno::Reference<
-    css::animations::XAnimationNode >& rNode ) throw (css::uno::RuntimeException, std::exception)
+    css::animations::XAnimationNode >& rNode )
 {
     (void) rNode;
 }
 
 void SAL_CALL Listener::repeat( const css::uno::Reference<
     css::animations::XAnimationNode >& rNode, ::sal_Int32 aRepeat )
-     throw (css::uno::RuntimeException, std::exception)
 {
     (void) rNode;
     (void) aRepeat;
@@ -86,28 +85,23 @@ void SAL_CALL Listener::repeat( const css::uno::Reference<
 //----- XSlideShowListener ----------------------------------------------------
 
 void SAL_CALL Listener::paused()
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Listener::resumed()
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Listener::slideEnded (sal_Bool bReverse)
-    throw (css::uno::RuntimeException, std::exception)
 {
     (void) bReverse;
 }
 
 void SAL_CALL Listener::hyperLinkClicked (const OUString &)
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Listener::slideTransitionStarted()
-    throw (css::uno::RuntimeException, std::exception)
 {
     sal_Int32 aSlide = mController->getCurrentSlideIndex();
 
@@ -123,12 +117,10 @@ void SAL_CALL Listener::slideTransitionStarted()
 }
 
 void SAL_CALL Listener::slideTransitionEnded()
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
 void SAL_CALL Listener::slideAnimationsEnded()
-    throw (css::uno::RuntimeException, std::exception)
 {
 }
 
@@ -145,7 +137,6 @@ void SAL_CALL Listener::disposing()
 
 void SAL_CALL Listener::disposing (
     const css::lang::EventObject& rEvent)
-    throw (css::uno::RuntimeException, std::exception)
 {
     (void) rEvent;
     dispose();

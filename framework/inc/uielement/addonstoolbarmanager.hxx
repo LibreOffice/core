@@ -50,7 +50,7 @@ class AddonsToolBarManager : public ToolBarManager
         virtual ~AddonsToolBarManager() override;
 
         // XComponent
-        void SAL_CALL dispose() throw ( css::uno::RuntimeException, std::exception ) override;
+        void SAL_CALL dispose() override;
 
         virtual void RefreshImages() override;
         using ToolBarManager::FillToolbar;

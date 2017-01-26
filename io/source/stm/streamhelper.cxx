@@ -33,18 +33,17 @@ using namespace ::com::sun::star::uno;
 namespace io_stm {
 
 void MemFIFO::write( const Sequence< sal_Int8 > &seq )
-    throw ( css::io::BufferSizeExceededException )
 {
     writeAt(getSize(), seq);
 }
 
-void MemFIFO::read( Sequence<sal_Int8> &seq , sal_Int32 nBufferLen ) throw (css::io::BufferSizeExceededException)
+void MemFIFO::read( Sequence<sal_Int8> &seq , sal_Int32 nBufferLen )
 {
     readAt(0, seq , nBufferLen);
     forgetFromStart( nBufferLen );
 }
 
-void MemFIFO::skip( sal_Int32 nBytesToSkip ) throw ( css::io::BufferSizeExceededException )
+void MemFIFO::skip( sal_Int32 nBytesToSkip )
 {
     forgetFromStart( nBytesToSkip );
 }
@@ -64,7 +63,7 @@ MemRingBuffer::~MemRingBuffer()
     }
 }
 
-void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize ) throw(css::io::BufferSizeExceededException)
+void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize )
 {
     sal_Int32 nNewLen = 1;
 
@@ -94,7 +93,6 @@ void MemRingBuffer::resizeBuffer( sal_Int32 nMinSize ) throw(css::io::BufferSize
 
 
 void MemRingBuffer::readAt( sal_Int32 nPos, Sequence<sal_Int8> &seq , sal_Int32 nBytesToRead ) const
-                                                        throw(css::io::BufferSizeExceededException)
 {
     if( nPos + nBytesToRead > m_nOccupiedBuffer ) {
         throw css::io::BufferSizeExceededException(
@@ -120,7 +118,6 @@ void MemRingBuffer::readAt( sal_Int32 nPos, Sequence<sal_Int8> &seq , sal_Int32 
 
 
 void MemRingBuffer::writeAt( sal_Int32 nPos, const Sequence<sal_Int8> &seq )
-                                                        throw (css::io::BufferSizeExceededException)
 {
     checkInvariants();
     sal_Int32 nLen = seq.getLength();
@@ -161,7 +158,7 @@ sal_Int32 MemRingBuffer::getSize()  const throw()
     return m_nOccupiedBuffer;
 }
 
-void MemRingBuffer::forgetFromStart( sal_Int32 nBytesToForget ) throw (css::io::BufferSizeExceededException)
+void MemRingBuffer::forgetFromStart( sal_Int32 nBytesToForget )
 {
     checkInvariants();
     if( nBytesToForget > m_nOccupiedBuffer ) {

@@ -37,8 +37,6 @@ namespace {
     /// @throws css::uno::RuntimeException
     const SwWrongList* getTextMarkupList( const SwTextNode& rTextNode,
                                           const sal_Int32 nTextMarkupType )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException)
     {
         const SwWrongList* pTextMarkupList( nullptr );
         switch ( nTextMarkupType )
@@ -90,8 +88,6 @@ SwTextMarkupHelper::SwTextMarkupHelper( const SwAccessiblePortionData& rPortionD
 }
 
 sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupType )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException)
 {
     sal_Int32 nTextMarkupCount( 0 );
 
@@ -111,9 +107,6 @@ sal_Int32 SwTextMarkupHelper::getTextMarkupCount( const sal_Int32 nTextMarkupTyp
 css::accessibility::TextSegment
         SwTextMarkupHelper::getTextMarkup( const sal_Int32 nTextMarkupIndex,
                                            const sal_Int32 nTextMarkupType )
-        throw (css::lang::IndexOutOfBoundsException,
-               css::lang::IllegalArgumentException,
-               css::uno::RuntimeException)
 {
     if ( nTextMarkupIndex >= getTextMarkupCount( nTextMarkupType ) ||
          nTextMarkupIndex < 0 )
@@ -157,9 +150,6 @@ css::accessibility::TextSegment
 css::uno::Sequence< css::accessibility::TextSegment >
         SwTextMarkupHelper::getTextMarkupAtIndex( const sal_Int32 nCharIndex,
                                                   const sal_Int32 nTextMarkupType )
-        throw (css::lang::IndexOutOfBoundsException,
-               css::lang::IllegalArgumentException,
-               css::uno::RuntimeException)
 {
     // assumption:
     // value of <nCharIndex> is in range [0..length of accessible text)

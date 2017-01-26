@@ -59,57 +59,45 @@ private:
 
     css::uno::Reference< css::xml::crypto::XSecurityEnvironment > m_xSecurityEnvironment;
 
-    virtual void notifyResultListener() const
-        throw (css::uno::Exception, css::uno::RuntimeException) override;
+    virtual void notifyResultListener() const override;
     virtual void clearUp( ) const override;
     virtual bool checkReady() const override;
-    virtual void startEngine( const css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& xSignatureTemplate)
-        throw (css::uno::Exception, css::uno::RuntimeException) override;
+    virtual void startEngine( const css::uno::Reference< css::xml::crypto::XXMLSignatureTemplate >& xSignatureTemplate) override;
 
 public:
     explicit SignatureCreatorImpl();
     virtual ~SignatureCreatorImpl() override;
 
     /* XBlockerMonitor */
-    virtual void SAL_CALL setBlockerId( sal_Int32 id )
-            throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL setBlockerId( sal_Int32 id ) override;
 
     /* XSignatureCreationResultBroadcaster */
     void SAL_CALL addSignatureCreationResultListener(
-        const css::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >& listener )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >& listener ) override;
 
     void SAL_CALL removeSignatureCreationResultListener(
-        const css::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >& listener )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::xml::crypto::sax::XSignatureCreationResultListener >& listener ) override;
 
     /* XInitialization */
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence< css::uno::Any >& aArguments )
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::uno::Any >& aArguments ) override;
 
     /* XServiceInfo */
-    virtual OUString SAL_CALL getImplementationName(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 };
 
 /// @throws css::uno::RuntimeException
-OUString SignatureCreatorImpl_getImplementationName()
-    throw ( css::uno::RuntimeException );
+OUString SignatureCreatorImpl_getImplementationName();
 
 /// @throws css::uno::RuntimeException
-css::uno::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceNames(  )
-    throw ( css::uno::RuntimeException );
+css::uno::Sequence< OUString > SAL_CALL SignatureCreatorImpl_getSupportedServiceNames(  );
 
 /// @throws css::uno::Exception
 css::uno::Reference< css::uno::XInterface >
 SAL_CALL SignatureCreatorImpl_createInstance(
-    const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr)
-    throw ( css::uno::Exception );
+    const css::uno::Reference< css::lang::XMultiServiceFactory > & rSMgr);
 
 #endif
 

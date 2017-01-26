@@ -52,14 +52,14 @@ namespace comphelper
         bool    wasSelected() const { return m_bSelected; }
 
         // XInteractionContinuation
-        virtual void SAL_CALL select() throw(css::uno::RuntimeException) override;
+        virtual void SAL_CALL select() override;
     private:
         bool    m_bSelected : 1;    /// indicates if the select event occurred
     };
 
 
     template <class INTERACTION>
-    void SAL_CALL OInteraction< INTERACTION >::select(  ) throw(css::uno::RuntimeException)
+    void SAL_CALL OInteraction< INTERACTION >::select(  )
     {
         m_bSelected = true;
     }
@@ -96,8 +96,8 @@ namespace comphelper
         }
 
         // XInteractionPassword
-        virtual void SAL_CALL setPassword( const OUString& Password ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual OUString SAL_CALL getPassword(  ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL setPassword( const OUString& Password ) override;
+        virtual OUString SAL_CALL getPassword(  ) override;
 
     private:
         OUString m_sPassword;
@@ -127,8 +127,8 @@ namespace comphelper
         void addContinuation(const css::uno::Reference< css::task::XInteractionContinuation >& _rxContinuation);
 
     // XInteractionRequest
-        virtual css::uno::Any SAL_CALL getRequest(  ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations(  ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL getRequest(  ) override;
+        virtual css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > SAL_CALL getContinuations(  ) override;
     };
 
 }   // namespace comphelper

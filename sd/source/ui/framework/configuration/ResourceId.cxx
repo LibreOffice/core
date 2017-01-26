@@ -109,7 +109,6 @@ ResourceId::~ResourceId()
 
 OUString SAL_CALL
     ResourceId::getResourceURL()
-    throw(css::uno::RuntimeException, std::exception)
 {
     if (!maResourceURLs.empty())
         return maResourceURLs[0];
@@ -119,7 +118,6 @@ OUString SAL_CALL
 
 util::URL SAL_CALL
     ResourceId::getFullResourceURL()
- throw(css::uno::RuntimeException, std::exception)
 {
     if (mpURL.get() != nullptr)
         return *mpURL;
@@ -141,14 +139,12 @@ util::URL SAL_CALL
 
 sal_Bool SAL_CALL
     ResourceId::hasAnchor()
-    throw (RuntimeException, std::exception)
 {
     return maResourceURLs.size()>1;
 }
 
 Reference<XResourceId> SAL_CALL
     ResourceId::getAnchor()
-    throw (RuntimeException, std::exception)
 {
     ::rtl::Reference<ResourceId> rResourceId (new ResourceId());
     const sal_Int32 nAnchorCount (maResourceURLs.size()-1);
@@ -163,7 +159,6 @@ Reference<XResourceId> SAL_CALL
 
 Sequence<OUString> SAL_CALL
     ResourceId::getAnchorURLs()
-    throw (RuntimeException, std::exception)
 {
     const sal_Int32 nAnchorCount (maResourceURLs.size() - 1);
     if (nAnchorCount > 0)
@@ -179,7 +174,6 @@ Sequence<OUString> SAL_CALL
 
 OUString SAL_CALL
     ResourceId::getResourceTypePrefix()
-    throw (RuntimeException, std::exception)
 {
     if (!maResourceURLs.empty() )
     {
@@ -201,7 +195,6 @@ OUString SAL_CALL
 
 sal_Int16 SAL_CALL
     ResourceId::compareTo (const Reference<XResourceId>& rxResourceId)
-    throw (RuntimeException, std::exception)
 {
     sal_Int16 nResult (0);
 
@@ -327,7 +320,6 @@ sal_Bool SAL_CALL
     ResourceId::isBoundTo (
         const Reference<XResourceId>& rxResourceId,
         AnchorBindingMode eMode)
-    throw (RuntimeException, std::exception)
 {
     if ( ! rxResourceId.is())
     {
@@ -355,14 +347,12 @@ sal_Bool SAL_CALL
     ResourceId::isBoundToURL (
         const OUString& rsAnchorURL,
         AnchorBindingMode eMode)
-    throw (RuntimeException, std::exception)
 {
     return IsBoundToAnchor(&rsAnchorURL, nullptr, eMode);
 }
 
 Reference<XResourceId> SAL_CALL
     ResourceId::clone()
-    throw(RuntimeException, std::exception)
 {
     return new ResourceId(maResourceURLs);
 }
@@ -370,7 +360,6 @@ Reference<XResourceId> SAL_CALL
 //----- XInitialization -------------------------------------------------------
 
 void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
-    throw (RuntimeException, std::exception)
 {
     sal_uInt32 nCount (aArguments.getLength());
     for (sal_uInt32 nIndex=0; nIndex<nCount; ++nIndex)
@@ -399,19 +388,16 @@ void SAL_CALL ResourceId::initialize (const Sequence<Any>& aArguments)
 }
 
 OUString ResourceId::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("com.sun.star.comp.Draw.framework.ResourceId");
 }
 
 sal_Bool ResourceId::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> ResourceId::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{
         "com.sun.star.drawing.framework.ResourceId"};

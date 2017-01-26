@@ -30,11 +30,11 @@ public:
     explicit SmartTagMenuController( const css::uno::Reference< css::uno::XComponentContext >& rxContext );
 
     // XStatusListener
-    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     void FillMenu();
@@ -58,7 +58,6 @@ SmartTagMenuController::SmartTagMenuController( const css::uno::Reference< css::
 }
 
 void SmartTagMenuController::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     resetPopupMenu( m_xPopupMenu );
 
@@ -216,13 +215,11 @@ IMPL_LINK( SmartTagMenuController, MenuSelect, Menu*, pMenu, bool )
 }
 
 OUString SmartTagMenuController::getImplementationName()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.svx.SmartTagMenuController" );
 }
 
 css::uno::Sequence< OUString > SmartTagMenuController::getSupportedServiceNames()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     css::uno::Sequence< OUString > aRet { "com.sun.star.frame.PopupMenuController" };
     return aRet;

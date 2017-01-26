@@ -251,7 +251,6 @@ bool TextLabelItemConverter::GetItemProperty( tWhichIdType nWhichId, tPropertyNa
 }
 
 bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxItemSet& rItemSet )
-    throw (uno::Exception)
 {
     bool bChanged = false;
 
@@ -500,7 +499,6 @@ bool TextLabelItemConverter::ApplySpecialItem( sal_uInt16 nWhichId, const SfxIte
 }
 
 void TextLabelItemConverter::FillSpecialItem( sal_uInt16 nWhichId, SfxItemSet& rOutItemSet ) const
-    throw (uno::Exception)
 {
     switch (nWhichId)
     {

@@ -134,7 +134,7 @@
     }
 
 
-    Sequence< Type > SAL_CALL OGeometryControlModel_Base::getTypes(  ) throw (RuntimeException, std::exception)
+    Sequence< Type > SAL_CALL OGeometryControlModel_Base::getTypes(  )
     {
         // our own types
         Sequence< Type > aTypes = ::comphelper::concatSequences(
@@ -244,7 +244,7 @@
     }
 
 
-    Any SAL_CALL OGeometryControlModel_Base::queryAggregation( const Type& _rType ) throw(RuntimeException, std::exception)
+    Any SAL_CALL OGeometryControlModel_Base::queryAggregation( const Type& _rType )
     {
         Any aReturn;
         if (_rType.equals(cppu::UnoType<XCloneable>::get()) && !m_bCloneable)
@@ -269,7 +269,7 @@
     }
 
 
-    Any SAL_CALL OGeometryControlModel_Base::queryInterface( const Type& _rType ) throw(RuntimeException, std::exception)
+    Any SAL_CALL OGeometryControlModel_Base::queryInterface( const Type& _rType )
     {
         return OGCM_Base::queryInterface(_rType);
     }
@@ -303,13 +303,13 @@
 
 
     sal_Bool SAL_CALL OGeometryControlModel_Base::convertFastPropertyValue(Any& _rConvertedValue, Any& _rOldValue,
-            sal_Int32 _nHandle, const Any& _rValue) throw (IllegalArgumentException)
+            sal_Int32 _nHandle, const Any& _rValue)
     {
         return OPropertyContainer::convertFastPropertyValue(_rConvertedValue, _rOldValue, _nHandle, _rValue);
     }
 
 
-    void SAL_CALL OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue) throw (Exception, std::exception)
+    void SAL_CALL OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const Any& _rValue)
     {
         OPropertyContainer::setFastPropertyValue_NoBroadcast(_nHandle, _rValue);
     }
@@ -349,13 +349,13 @@
     }
 
 
-    Reference< XPropertySetInfo> SAL_CALL OGeometryControlModel_Base::getPropertySetInfo() throw(RuntimeException, std::exception)
+    Reference< XPropertySetInfo> SAL_CALL OGeometryControlModel_Base::getPropertySetInfo()
     {
         return OPropertySetAggregationHelper::createPropertySetInfo(getInfoHelper());
     }
 
 
-    Reference< XCloneable > SAL_CALL OGeometryControlModel_Base::createClone(  ) throw(RuntimeException, std::exception)
+    Reference< XCloneable > SAL_CALL OGeometryControlModel_Base::createClone(  )
     {
         OSL_ENSURE(m_bCloneable, "OGeometryControlModel_Base::createClone: invalid call!");
         if (!m_bCloneable)
@@ -417,7 +417,7 @@
     }
 
 
-    Reference< XNameContainer > SAL_CALL OGeometryControlModel_Base::getEvents() throw(RuntimeException, std::exception)
+    Reference< XNameContainer > SAL_CALL OGeometryControlModel_Base::getEvents()
     {
         if( !mxEventContainer.is() )
             mxEventContainer = static_cast<XNameContainer*>(new toolkit::ScriptEventContainer());
@@ -578,7 +578,7 @@
         return new OCommonGeometryControlModel( _rxAggregateInstance, m_sServiceSpecifier );
     }
 
-    Sequence< sal_Int8 > SAL_CALL OCommonGeometryControlModel::getImplementationId(  ) throw (RuntimeException, std::exception)
+    Sequence< sal_Int8 > SAL_CALL OCommonGeometryControlModel::getImplementationId(  )
     {
         return css::uno::Sequence<sal_Int8>();
     }
@@ -596,7 +596,7 @@
     };
 
 
-    void SAL_CALL OCommonGeometryControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue ) throw ( Exception, std::exception )
+    void SAL_CALL OCommonGeometryControlModel::setFastPropertyValue_NoBroadcast( sal_Int32 _nHandle, const Any& _rValue )
     {
         OGeometryControlModel_Base::setFastPropertyValue_NoBroadcast( _nHandle, _rValue );
 

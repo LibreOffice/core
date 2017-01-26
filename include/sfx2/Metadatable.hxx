@@ -142,24 +142,17 @@ public:
     MetadatableMixin() {};
 
     // css::rdf::XNode:
-    virtual OUString SAL_CALL getStringValue()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getStringValue() override;
 
     // css::rdf::XURI:
-    virtual OUString SAL_CALL getLocalName()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getNamespace()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getLocalName() override;
+    virtual OUString SAL_CALL getNamespace() override;
 
     // css::rdf::XMetadatable:
-    virtual css::beans::StringPair SAL_CALL getMetadataReference()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::beans::StringPair SAL_CALL getMetadataReference() override;
     virtual void SAL_CALL setMetadataReference(
-        const css::beans::StringPair & i_rReference)
-        throw (css::uno::RuntimeException,
-            css::lang::IllegalArgumentException, std::exception) override;
-    virtual void SAL_CALL ensureMetadataReference()
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::beans::StringPair & i_rReference) override;
+    virtual void SAL_CALL ensureMetadataReference() override;
 
 protected:
     /// get the core object corresponding to this UNO object.

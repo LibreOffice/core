@@ -52,7 +52,7 @@ protected:
     css::uno::Reference< css::frame::XModel > m_xModel;
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::awt::XWindowPeer > getWindowPeer() throw (css::uno::RuntimeException);
+    css::uno::Reference< css::awt::XWindowPeer > getWindowPeer();
     void fireChangeEvent();
     void fireClickEvent();
 public:
@@ -66,59 +66,59 @@ public:
     void setLibraryAndCodeName( const OUString& sLibCodeName ) { m_sLibraryAndCodeName = sLibCodeName; }
 
     // XControl
-    virtual sal_Bool SAL_CALL getEnabled() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getVisible() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setVisible( sal_Bool _visible ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHeight( double _height ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getWidth() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setWidth( double _width ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getLeft() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLeft( double _left ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual double SAL_CALL getTop() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTop( double _top ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL SetFocus(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Move( double Left, double Top, const css::uno::Any& Width, const css::uno::Any& Height ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL getEnabled() override;
+    virtual void SAL_CALL setEnabled( sal_Bool _enabled ) override;
+    virtual sal_Bool SAL_CALL getVisible() override;
+    virtual void SAL_CALL setVisible( sal_Bool _visible ) override;
+    virtual double SAL_CALL getHeight() override;
+    virtual void SAL_CALL setHeight( double _height ) override;
+    virtual double SAL_CALL getWidth() override;
+    virtual void SAL_CALL setWidth( double _width ) override;
+    virtual double SAL_CALL getLeft() override;
+    virtual void SAL_CALL setLeft( double _left ) override;
+    virtual double SAL_CALL getTop() override;
+    virtual void SAL_CALL setTop( double _top ) override;
+    virtual void SAL_CALL SetFocus(  ) override;
+    virtual void SAL_CALL Move( double Left, double Top, const css::uno::Any& Width, const css::uno::Any& Height ) override;
+    virtual void SAL_CALL fireEvent( const css::script::ScriptEvent& evt ) override;
 
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getControlSource() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setControlSource( const OUString& _controlsource ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getRowSource() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getName() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setName( const OUString& _name ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getControlTipText() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setControlTipText( const OUString& ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getTag() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTag( const OUString& aTag ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getTabIndex() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getMousePointer() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL getObject() override;
+    virtual OUString SAL_CALL getControlSource() override;
+    virtual void SAL_CALL setControlSource( const OUString& _controlsource ) override;
+    virtual OUString SAL_CALL getRowSource() override;
+    virtual void SAL_CALL setRowSource( const OUString& _rowsource ) override;
+    virtual OUString SAL_CALL getName() override;
+    virtual void SAL_CALL setName( const OUString& _name ) override;
+    virtual OUString SAL_CALL getControlTipText() override;
+    virtual void SAL_CALL setControlTipText( const OUString& ) override;
+    virtual OUString SAL_CALL getTag() override;
+    virtual void SAL_CALL setTag( const OUString& aTag ) override;
+    virtual sal_Int32 SAL_CALL getTabIndex() override;
+    virtual void SAL_CALL setTabIndex( sal_Int32 nTabIndex ) override;
+    virtual ::sal_Int32 SAL_CALL getMousePointer() override;
+    virtual void SAL_CALL setMousePointer( ::sal_Int32 _mousepointer ) override;
     //remove resource because ooo.vba.excel.XControl is a wrapper of com.sun.star.drawing.XControlShape
     /// @throws css::uno::RuntimeException
-    void removeResource() throw( css::uno::RuntimeException );
+    void removeResource();
     /// @throws css::uno::RuntimeException
-    virtual ::sal_Int32 SAL_CALL getForeColor() throw (css::uno::RuntimeException);
+    virtual ::sal_Int32 SAL_CALL getForeColor();
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     //General helper methods for properties (may or may not be relevant for all
     //controls)
     /// @throws css::uno::RuntimeException
-    sal_Int32 getBackColor() throw (css::uno::RuntimeException);
+    sal_Int32 getBackColor();
     /// @throws css::uno::RuntimeException
-    void setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);
+    void setBackColor( sal_Int32 nBackColor );
     /// @throws css::uno::RuntimeException
-    bool getAutoSize() throw (css::uno::RuntimeException);
+    bool getAutoSize();
     /// @throws css::uno::RuntimeException
-    void setAutoSize( bool bAutoSize ) throw (css::uno::RuntimeException);
+    void setAutoSize( bool bAutoSize );
     /// @throws css::uno::RuntimeException
-    bool getLocked() throw (css::uno::RuntimeException);
+    bool getLocked();
     /// @throws css::uno::RuntimeException
-    void setLocked( bool bAutoSize ) throw (css::uno::RuntimeException);
+    void setLocked( bool bAutoSize );
 };
 
 
@@ -128,7 +128,7 @@ namespace ScVbaControlFactory
     css::uno::Reference< ov::msforms::XControl > createShapeControl(
         const css::uno::Reference< css::uno::XComponentContext >& xContext,
         const css::uno::Reference< css::drawing::XControlShape >& xControlShape,
-        const css::uno::Reference< css::frame::XModel >& xModel ) throw (css::uno::RuntimeException);
+        const css::uno::Reference< css::frame::XModel >& xModel );
 
     /// @throws css::uno::RuntimeException
     css::uno::Reference< ov::msforms::XControl > createUserformControl(
@@ -136,7 +136,7 @@ namespace ScVbaControlFactory
         const css::uno::Reference< css::awt::XControl >& xControl,
         const css::uno::Reference< css::awt::XControl >& xDialog,
         const css::uno::Reference< css::frame::XModel >& xModel,
-        double fOffsetX, double fOffsetY ) throw (css::uno::RuntimeException);
+        double fOffsetX, double fOffsetY );
 }
 
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBACONTROL_HXX

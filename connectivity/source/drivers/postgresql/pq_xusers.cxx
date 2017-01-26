@@ -72,7 +72,6 @@ Users::~Users()
 {}
 
 void Users::refresh()
-    throw (css::uno::RuntimeException, std::exception)
 {
     try
     {
@@ -118,9 +117,6 @@ void Users::refresh()
 
 void Users::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
-    throw (css::sdbc::SQLException,
-           css::container::ElementExistException,
-           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
 
@@ -136,9 +132,6 @@ void Users::appendByDescriptor(
 }
 
 void Users::dropByName( const OUString& elementName )
-    throw (css::sdbc::SQLException,
-           css::container::NoSuchElementException,
-           css::uno::RuntimeException, std::exception)
 {
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
     if( ii == m_name2index.end() )
@@ -154,9 +147,6 @@ void Users::dropByName( const OUString& elementName )
 }
 
 void Users::dropByIndex( sal_Int32 index )
-    throw (css::sdbc::SQLException,
-           css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
 
     osl::MutexGuard guard( m_refMutex->mutex );
@@ -188,7 +178,6 @@ void Users::dropByIndex( sal_Int32 index )
 
 
 css::uno::Reference< css::beans::XPropertySet > Users::createDataDescriptor()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return new UserDescriptor( m_refMutex, m_origin, m_pSettings  );
 }

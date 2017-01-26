@@ -62,32 +62,23 @@ public:
     virtual ~XMLFilter() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 protected:
     // ____ XFilter ____
     virtual sal_Bool SAL_CALL filter(
-        const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL cancel()
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence< css::beans::PropertyValue >& aDescriptor ) override;
+    virtual void SAL_CALL cancel() override;
 
     // ____ XImporter ____
     virtual void SAL_CALL setTargetDocument(
-        const css::uno::Reference< css::lang::XComponent >& Document )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::lang::XComponent >& Document ) override;
 
     // ____ XExporter ____
     virtual void SAL_CALL setSourceDocument(
-        const css::uno::Reference< css::lang::XComponent >& Document )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::lang::XComponent >& Document ) override;
 
     inline void setDocumentHandler(const OUString& _sDocumentHandler) { m_sDocumentHandler = _sDocumentHandler; }
 
@@ -151,16 +142,13 @@ public:
     {}
 protected:
     virtual OUString SAL_CALL
-        getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override
+        getImplementationName() override
     {
         return OUString( "com.sun.star.comp.chart2.report.XMLFilter" );
     }
     // ____ XImporter ____
     virtual void SAL_CALL setTargetDocument(
-        const css::uno::Reference< css::lang::XComponent >& Document )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override
+        const css::uno::Reference< css::lang::XComponent >& Document ) override
     {
         setDocumentHandler( "com.sun.star.comp.report.ImportDocumentHandler" );
         XMLFilter::setTargetDocument(Document);
@@ -168,9 +156,7 @@ protected:
 
     // ____ XExporter ____
     virtual void SAL_CALL setSourceDocument(
-        const css::uno::Reference< css::lang::XComponent >& Document )
-        throw (css::lang::IllegalArgumentException,
-               css::uno::RuntimeException, std::exception) override
+        const css::uno::Reference< css::lang::XComponent >& Document ) override
     {
         setDocumentHandler( "com.sun.star.comp.report.ExportDocumentHandler" );
         XMLFilter::setSourceDocument(Document);

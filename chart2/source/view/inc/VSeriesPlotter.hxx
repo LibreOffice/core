@@ -156,8 +156,7 @@ public:
     @throws css::uno::RuntimeException
     */
 
-    void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex )
-                throw (css::uno::RuntimeException);
+    void addSecondaryValueScale( const ExplicitScaleData& rScale, sal_Int32 nAxisIndex );
 
     // MinimumAndMaximumSupplier
 

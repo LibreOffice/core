@@ -35,22 +35,22 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaTableOfContents( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& xDoc, const css::uno::Reference< css::text::XDocumentIndex >& xDocumentIndex ) throw ( css::uno::RuntimeException );
+    SwVbaTableOfContents( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextDocument >& xDoc, const css::uno::Reference< css::text::XDocumentIndex >& xDocumentIndex );
     virtual ~SwVbaTableOfContents() override;
 
     // Attributes
-    virtual ::sal_Int32 SAL_CALL getLowerHeadingLevel() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getTabLeader() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setTabLeader( ::sal_Int32 _tableader ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getUseFields() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setUseFields( sal_Bool _useFields ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getUseOutlineLevels() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setUseOutlineLevels( sal_Bool _useOutlineLevels ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual ::sal_Int32 SAL_CALL getLowerHeadingLevel() override;
+    virtual void SAL_CALL setLowerHeadingLevel( ::sal_Int32 _lowerheadinglevel ) override;
+    virtual ::sal_Int32 SAL_CALL getTabLeader() override;
+    virtual void SAL_CALL setTabLeader( ::sal_Int32 _tableader ) override;
+    virtual sal_Bool SAL_CALL getUseFields() override;
+    virtual void SAL_CALL setUseFields( sal_Bool _useFields ) override;
+    virtual sal_Bool SAL_CALL getUseOutlineLevels() override;
+    virtual void SAL_CALL setUseOutlineLevels( sal_Bool _useOutlineLevels ) override;
 
     // Methods
-    virtual void SAL_CALL Delete(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL Update(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Delete(  ) override;
+    virtual void SAL_CALL Update(  ) override;
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

@@ -39,13 +39,13 @@ VCLXAccessibleFixedHyperlink::~VCLXAccessibleFixedHyperlink()
 // XServiceInfo
 
 
-OUString VCLXAccessibleFixedHyperlink::getImplementationName() throw (uno::RuntimeException, std::exception)
+OUString VCLXAccessibleFixedHyperlink::getImplementationName()
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleFixedHyperlink" );
 }
 
 
-uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames() throw (uno::RuntimeException, std::exception)
+uno::Sequence< OUString > VCLXAccessibleFixedHyperlink::getSupportedServiceNames()
 {
     return { "com.sun.star.awt.AccessibleFixedHyperlink" };
 }

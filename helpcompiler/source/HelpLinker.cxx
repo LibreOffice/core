@@ -273,7 +273,7 @@ void HelpLinker::initIndexerPreProcessor()
 /**
 *
 */
-void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerException, std::exception)
+void HelpLinker::link()
 {
 
     if( bExtensionMode )
@@ -535,7 +535,6 @@ void HelpLinker::link() throw(HelpProcessingException, BasicCodeTagger::TaggerEx
 void HelpLinker::main( std::vector<std::string> &args,
                        std::string* pExtensionPath, std::string* pDestination,
                        const OUString* pOfficeHelpPath )
-    throw( HelpProcessingException, std::exception )
 {
     bExtensionMode = false;
     helpFiles.clear();

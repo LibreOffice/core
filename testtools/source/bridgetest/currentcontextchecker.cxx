@@ -51,14 +51,12 @@ public:
     CurrentContext(const CurrentContext&) = delete;
     CurrentContext& operator=(const CurrentContext&) = delete;
 
-    virtual css::uno::Any SAL_CALL getValueByName(OUString const & Name)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getValueByName(OUString const & Name) override;
 };
 
 CurrentContext::CurrentContext() {}
 
 css::uno::Any CurrentContext::getValueByName(OUString const & Name)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return Name == KEY ? css::uno::makeAny(OUString(VALUE)) : css::uno::Any();
 }
@@ -73,7 +71,6 @@ sal_Bool testtools::bridgetest::CurrentContextChecker::perform(
     css::uno::Reference<
         ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
     ::sal_Int32 setSteps, ::sal_Int32 checkSteps)
-    throw (css::uno::RuntimeException, std::exception)
 {
     if (setSteps == 0) {
         css::uno::ContextLayer layer(new CurrentContext);

@@ -28,8 +28,7 @@ public:
     CppuOptions()
         : Options() {}
 
-    bool initOptions(int ac, char* av[], bool bCmdFile=false)
-            throw( IllegalArgument ) override;
+    bool initOptions(int ac, char* av[], bool bCmdFile=false) override;
 
     OString  prepareHelp() override;
 

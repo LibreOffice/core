@@ -44,8 +44,7 @@ public:
 
     virtual sal_Bool SAL_CALL perform(
         css::uno::Reference< ::test::testtools::bridgetest::XCurrentContextChecker > const & other,
-        ::sal_Int32 setSteps, ::sal_Int32 checkSteps)
-        throw (css::uno::RuntimeException, std::exception) override;
+        ::sal_Int32 setSteps, ::sal_Int32 checkSteps) override;
 
 private:
     CurrentContextChecker(CurrentContextChecker &) = delete;

@@ -58,15 +58,15 @@ namespace dbtools
 
     protected:
         // XPropertyChangeListener
-        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL propertyChange( const css::beans::PropertyChangeEvent& _rEvent ) override;
 
         // XEventListener
-        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL disposing( const css::lang::EventObject& _rSource ) override;
 
         // XRowSetListener
-        virtual void SAL_CALL cursorMoved( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL rowChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) override;
-        virtual void SAL_CALL rowSetChanged( const css::lang::EventObject& event ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL cursorMoved( const css::lang::EventObject& event ) override;
+        virtual void SAL_CALL rowChanged( const css::lang::EventObject& event ) override;
+        virtual void SAL_CALL rowSetChanged( const css::lang::EventObject& event ) override;
 
     private:
         void clearConnection();

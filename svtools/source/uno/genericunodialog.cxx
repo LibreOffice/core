@@ -73,7 +73,7 @@ OGenericUnoDialog::~OGenericUnoDialog()
 }
 
 
-Any SAL_CALL OGenericUnoDialog::queryInterface(const Type& _rType) throw (RuntimeException, std::exception)
+Any SAL_CALL OGenericUnoDialog::queryInterface(const Type& _rType)
 {
     Any aReturn = OGenericUnoDialogBase::queryInterface(_rType);
 
@@ -88,7 +88,7 @@ Any SAL_CALL OGenericUnoDialog::queryInterface(const Type& _rType) throw (Runtim
 }
 
 
-Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  )
 {
     return ::comphelper::concatSequences(
         OGenericUnoDialogBase::getTypes(),
@@ -96,13 +96,13 @@ Sequence<Type> SAL_CALL OGenericUnoDialog::getTypes(  ) throw(RuntimeException, 
     );
 }
 
-sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const OUString& ServiceName) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL OGenericUnoDialog::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 
-void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue ) throw(Exception, std::exception)
+void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, const Any& rValue )
 {
     // TODO : need some handling if we're currently executing ...
 
@@ -119,7 +119,7 @@ void OGenericUnoDialog::setFastPropertyValue_NoBroadcast( sal_Int32 nHandle, con
 }
 
 
-sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue) throw(IllegalArgumentException)
+sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any& rOldValue, sal_Int32 nHandle, const Any& rValue)
 {
     switch (nHandle)
     {
@@ -139,7 +139,7 @@ sal_Bool OGenericUnoDialog::convertFastPropertyValue( Any& rConvertedValue, Any&
 }
 
 
-void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle ) throw(RuntimeException, std::exception)
+void SAL_CALL OGenericUnoDialog::setTitle( const OUString& _rTitle )
 {
     UnoDialogEntryGuard aGuard( *this );
 
@@ -195,7 +195,7 @@ bool OGenericUnoDialog::impl_ensureDialog_lck()
 }
 
 
-sal_Int16 SAL_CALL OGenericUnoDialog::execute(  ) throw(RuntimeException, std::exception)
+sal_Int16 SAL_CALL OGenericUnoDialog::execute(  )
 {
     // both creation and execution of the dialog must be guarded with the SolarMutex, so be generous here
     SolarMutexGuard aSolarGuard;
@@ -288,7 +288,7 @@ void OGenericUnoDialog::implInitialize(const Any& _rValue)
 }
 
 
-void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments ) throw(Exception, RuntimeException, std::exception)
+void SAL_CALL OGenericUnoDialog::initialize( const Sequence< Any >& aArguments )
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     if ( m_bInitialized )

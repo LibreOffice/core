@@ -43,16 +43,14 @@ public:
 
     // XInterface
     virtual css::uno::Any SAL_CALL queryInterface(
-        const css::uno::Type& aType )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Type& aType ) override;
 
     virtual void SAL_CALL acquire() throw() override;
 
     virtual void SAL_CALL release() throw() override;
 
     // XCurrentContext
-    virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& Request )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest >& Request ) override;
 
 private:
     oslInterlockedCount m_aRefCount;

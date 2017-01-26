@@ -42,31 +42,30 @@ public:
     virtual ~cclass_Unicode() override;
 
     virtual OUString SAL_CALL toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
-        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) override;
     virtual OUString SAL_CALL toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
-        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) override;
     virtual OUString SAL_CALL toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
-        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getType( const OUString& Text, sal_Int32 nPos )  throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getCharacterDirection( const OUString& Text, sal_Int32 nPos )
-        throw(css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int16 SAL_CALL getScript( const OUString& Text, sal_Int32 nPos ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) override;
+    virtual sal_Int16 SAL_CALL getType( const OUString& Text, sal_Int32 nPos ) override;
+    virtual sal_Int16 SAL_CALL getCharacterDirection( const OUString& Text, sal_Int32 nPos ) override;
+    virtual sal_Int16 SAL_CALL getScript( const OUString& Text, sal_Int32 nPos ) override;
     virtual sal_Int32 SAL_CALL getCharacterType( const OUString& text, sal_Int32 nPos,
-        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) override;
     virtual sal_Int32 SAL_CALL getStringType( const OUString& text, sal_Int32 nPos, sal_Int32 nCount,
-        const css::lang::Locale& rLocale ) throw(css::uno::RuntimeException, std::exception) override;
+        const css::lang::Locale& rLocale ) override;
     virtual ParseResult SAL_CALL parseAnyToken( const OUString& Text, sal_Int32 nPos,
         const css::lang::Locale& rLocale, sal_Int32 nStartCharFlags, const OUString& userDefinedCharactersStart,
-        sal_Int32 nContCharFlags, const OUString& userDefinedCharactersCont ) throw(css::uno::RuntimeException, std::exception) override;
+        sal_Int32 nContCharFlags, const OUString& userDefinedCharactersCont ) override;
     virtual ParseResult SAL_CALL parsePredefinedToken( sal_Int32 nTokenType, const OUString& Text,
         sal_Int32 nPos, const css::lang::Locale& rLocale, sal_Int32 nStartCharFlags,
         const OUString& userDefinedCharactersStart, sal_Int32 nContCharFlags,
-        const OUString& userDefinedCharactersCont ) throw(css::uno::RuntimeException, std::exception) override;
+        const OUString& userDefinedCharactersCont ) override;
 
     //XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService(const OUString& ServiceName) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
 private:
     Transliteration_casemapping *trans;

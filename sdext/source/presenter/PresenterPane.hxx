@@ -51,30 +51,23 @@ public:
 
     // XPane
 
-    css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference<css::awt::XWindow> SAL_CALL getWindow() override;
 
-    css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference<css::rendering::XCanvas> SAL_CALL getCanvas() override;
 
     // XWindowListener
 
-    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowResized (const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowMoved (const css::awt::WindowEvent& rEvent) override;
 
-    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowShown (const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowHidden (const css::lang::EventObject& rEvent) override;
 
     // XPaintListener
 
-    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL windowPaint (const css::awt::PaintEvent& rEvent) override;
 
 private:
     /** Store the bounding box so that when the window is resized or moved

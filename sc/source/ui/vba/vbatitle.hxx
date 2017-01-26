@@ -47,7 +47,7 @@ public:
         xShapePropertySet.set( xTitleShape, css::uno::UNO_QUERY_THROW );
         oShapeHelper.reset( new ov::ShapeHelper(xTitleShape) );
     }
-    css::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    css::uno::Reference< ov::excel::XInterior > SAL_CALL Interior(  ) SAL_OVERRIDE
     {
         // #TODO find out what the proper parent should be
         // leaving as set by the helperapi for the moment
@@ -55,14 +55,14 @@ public:
         // otherwise attempts to access the palette will fail
         return new ScVbaInterior( BaseClass::mxParent, BaseClass::mxContext, xShapePropertySet );
     }
-    css::uno::Reference< ov::excel::XFont > SAL_CALL Font(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    css::uno::Reference< ov::excel::XFont > SAL_CALL Font(  ) SAL_OVERRIDE
     {
         // #TODO find out what the proper parent should be
         // leaving as set by the helperapi for the moment
         return new ScVbaFont( BaseClass::mxParent, BaseClass::mxContext, m_Palette, xShapePropertySet );
 
     }
-    void SAL_CALL setText( const OUString& Text ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    void SAL_CALL setText( const OUString& Text ) SAL_OVERRIDE
     {
         try
         {
@@ -73,7 +73,7 @@ public:
             throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
         }
     }
-    OUString SAL_CALL getText(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    OUString SAL_CALL getText(  ) SAL_OVERRIDE
     {
         OUString sText;
         try
@@ -87,23 +87,23 @@ public:
         return sText;
     }
 
-    void SAL_CALL setTop( double Top ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    void SAL_CALL setTop( double Top ) SAL_OVERRIDE
     {
         oShapeHelper->setTop( Top );
     }
-    double SAL_CALL getTop(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    double SAL_CALL getTop(  ) SAL_OVERRIDE
     {
         return oShapeHelper->getTop();
     }
-    void SAL_CALL setLeft( double Left ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    void SAL_CALL setLeft( double Left ) SAL_OVERRIDE
     {
         oShapeHelper->setLeft( Left );
     }
-    double SAL_CALL getLeft(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    double SAL_CALL getLeft(  ) SAL_OVERRIDE
     {
         return oShapeHelper->getLeft();
     }
-    void SAL_CALL setOrientation( ::sal_Int32 _nOrientation ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    void SAL_CALL setOrientation( ::sal_Int32 _nOrientation ) SAL_OVERRIDE
     {
         try
         {
@@ -114,7 +114,7 @@ public:
             throw css::script::BasicErrorException( OUString(), css::uno::Reference< css::uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString() );
         }
     }
-    ::sal_Int32 SAL_CALL getOrientation(  ) throw (css::script::BasicErrorException, css::uno::RuntimeException) SAL_OVERRIDE
+    ::sal_Int32 SAL_CALL getOrientation(  ) SAL_OVERRIDE
     {
         sal_Int32 nSOOrientation = 0;
         try

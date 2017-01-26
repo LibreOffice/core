@@ -251,7 +251,6 @@ bool StatisticsItemConverter::GetItemProperty(
 
 bool StatisticsItemConverter::ApplySpecialItem(
     sal_uInt16 nWhichId, const SfxItemSet & rItemSet )
-    throw( uno::Exception )
 {
     bool bChanged = false;
 
@@ -615,7 +614,6 @@ bool StatisticsItemConverter::ApplySpecialItem(
 
 void StatisticsItemConverter::FillSpecialItem(
     sal_uInt16 nWhichId, SfxItemSet & rOutItemSet ) const
-    throw( uno::Exception )
 {
     switch( nWhichId )
     {

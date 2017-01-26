@@ -516,7 +516,7 @@ void SAL_CALL OFlatTable::disposing()
     m_aColumns = nullptr;
 }
 
-Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OFlatTable::getTypes(  )
 {
     Sequence< Type > aTypes = OTable_TYPEDEF::getTypes();
     vector<Type> aOwnTypes;
@@ -538,7 +538,7 @@ Sequence< Type > SAL_CALL OFlatTable::getTypes(  ) throw(RuntimeException, std::
 }
 
 
-Any SAL_CALL OFlatTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OFlatTable::queryInterface( const Type & rType )
 {
     if( rType == cppu::UnoType<XKeysSupplier>::get()||
         rType == cppu::UnoType<XIndexesSupplier>::get()||
@@ -569,7 +569,7 @@ Sequence< sal_Int8 > OFlatTable::getUnoTunnelImplementationId()
 
 // css::lang::XUnoTunnel
 
-sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
+sal_Int64 OFlatTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )

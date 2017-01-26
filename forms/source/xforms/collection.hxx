@@ -144,29 +144,23 @@ protected:
 public:
 
     // XElementAccess
-    virtual css::uno::Type SAL_CALL getElementType()
-        throw( css::uno::RuntimeException, std::exception ) override
+    virtual css::uno::Type SAL_CALL getElementType() override
     {
         return cppu::UnoType<T>::get();
     }
 
-    virtual sal_Bool SAL_CALL hasElements()
-        throw( css::uno::RuntimeException, std::exception ) override
+    virtual sal_Bool SAL_CALL hasElements() override
     {
         return hasItems();
     }
 
     // XIndexAccess : XElementAccess
-    virtual sal_Int32 SAL_CALL getCount()
-        throw( css::uno::RuntimeException, std::exception ) override
+    virtual sal_Int32 SAL_CALL getCount() override
     {
         return countItems();
     }
 
-    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex )
-        throw( css::lang::IndexOutOfBoundsException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override
     {
         if( isValidIndex( nIndex ) )
             return css::uno::makeAny( getItem( nIndex ) );
@@ -176,11 +170,7 @@ public:
 
     // XIndexReplace : XIndexAccess
     virtual void SAL_CALL replaceByIndex( sal_Int32 nIndex,
-                                          const css::uno::Any& aElement )
-        throw( css::lang::IllegalArgumentException,
-               css::lang::IndexOutOfBoundsException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override
+                                          const css::uno::Any& aElement ) override
     {
         T t;
         if( isValidIndex( nIndex) )
@@ -193,25 +183,20 @@ public:
     }
 
     // XEnumerationAccess : XElementAccess
-    virtual css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration()
-        throw( css::uno::RuntimeException, std::exception ) override
+    virtual css::uno::Reference<css::container::XEnumeration> SAL_CALL createEnumeration() override
     {
         return new Enumeration( this );
     }
 
 
     // XSet : XEnumerationAccess
-    virtual sal_Bool SAL_CALL has( const css::uno::Any& aElement )
-        throw( css::uno::RuntimeException, std::exception ) override
+    virtual sal_Bool SAL_CALL has( const css::uno::Any& aElement ) override
     {
         T t;
         return ( aElement >>= t ) && hasItem( t );
     }
 
-    virtual void SAL_CALL insert( const css::uno::Any& aElement )
-        throw( css::lang::IllegalArgumentException,
-               css::container::ElementExistException,
-               css::uno::RuntimeException, std::exception ) override
+    virtual void SAL_CALL insert( const css::uno::Any& aElement ) override
     {
         T t;
         if( ( aElement >>= t )  &&  isValid( t ) )
@@ -223,10 +208,7 @@ public:
             throw css::lang::IllegalArgumentException();
     }
 
-    virtual void SAL_CALL remove( const css::uno::Any& aElement )
-        throw( css::lang::IllegalArgumentException,
-               css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception ) override
+    virtual void SAL_CALL remove( const css::uno::Any& aElement ) override
     {
         T t;
         if( aElement >>= t )
@@ -241,8 +223,7 @@ public:
 
     // XContainer
     virtual void SAL_CALL addContainerListener(
-        const css::uno::Reference<css::container::XContainerListener>& xListener )
-        throw( css::uno::RuntimeException, std::exception ) override
+        const css::uno::Reference<css::container::XContainerListener>& xListener ) override
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
         if( std::find( maListeners.begin(), maListeners.end(), xListener)
@@ -251,8 +232,7 @@ public:
     }
 
     virtual void SAL_CALL removeContainerListener(
-        const css::uno::Reference<css::container::XContainerListener>& xListener )
-        throw( css::uno::RuntimeException, std::exception ) override
+        const css::uno::Reference<css::container::XContainerListener>& xListener ) override
     {
         OSL_ENSURE( xListener.is(), "need listener!" );
         Listeners_t::iterator aIter =

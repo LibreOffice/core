@@ -314,7 +314,7 @@ void OJoinController::describeSupportedFeatures()
     implDescribeSupportedFeature( ".uno:EditDoc",   ID_BROWSER_EDITDOC, CommandGroup::EDIT );
 }
 
-sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL OJoinController::suspend(sal_Bool _bSuspend)
 {
     if ( getBroadcastHelper().bInDispose || getBroadcastHelper().bDisposed )
         return true;

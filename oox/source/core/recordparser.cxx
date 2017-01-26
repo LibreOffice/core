@@ -43,14 +43,14 @@ public:
 
     void                    dispose();
     /// @throws css::uno::RuntimeException
-    void                    checkDispose() throw( RuntimeException );
+    void                    checkDispose();
 
     // com.sun.star.sax.XLocator interface
 
-    virtual sal_Int32 SAL_CALL getColumnNumber() throw( RuntimeException, std::exception ) override;
-    virtual sal_Int32 SAL_CALL getLineNumber() throw( RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getPublicId() throw( RuntimeException, std::exception ) override;
-    virtual OUString SAL_CALL getSystemId() throw( RuntimeException, std::exception ) override;
+    virtual sal_Int32 SAL_CALL getColumnNumber() override;
+    virtual sal_Int32 SAL_CALL getLineNumber() override;
+    virtual OUString SAL_CALL getPublicId() override;
+    virtual OUString SAL_CALL getSystemId() override;
 
 private:
     RecordParser*           mpParser;
@@ -61,29 +61,29 @@ void Locator::dispose()
     mpParser = nullptr;
 }
 
-void Locator::checkDispose() throw( RuntimeException )
+void Locator::checkDispose()
 {
     if( !mpParser )
         throw DisposedException();
 }
 
-sal_Int32 SAL_CALL Locator::getColumnNumber() throw( RuntimeException, std::exception )
+sal_Int32 SAL_CALL Locator::getColumnNumber()
 {
     return -1;
 }
 
-sal_Int32 SAL_CALL Locator::getLineNumber() throw( RuntimeException, std::exception )
+sal_Int32 SAL_CALL Locator::getLineNumber()
 {
     return -1;
 }
 
-OUString SAL_CALL Locator::getPublicId() throw( RuntimeException, std::exception )
+OUString SAL_CALL Locator::getPublicId()
 {
     checkDispose();
     return mpParser->getInputSource().maPublicId;
 }
 
-OUString SAL_CALL Locator::getSystemId() throw( RuntimeException, std::exception )
+OUString SAL_CALL Locator::getSystemId()
 {
     checkDispose();
     return mpParser->getInputSource().maSystemId;
@@ -230,7 +230,7 @@ void RecordParser::setFragmentHandler( const ::rtl::Reference< FragmentHandler >
     }
 }
 
-void RecordParser::parseStream( const RecordInputSource& rInputSource ) throw( SAXException, IOException, RuntimeException )
+void RecordParser::parseStream( const RecordInputSource& rInputSource )
 {
     maSource = rInputSource;
 

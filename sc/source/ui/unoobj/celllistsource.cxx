@@ -92,7 +92,7 @@ namespace calc
         // TODO: clean up here whatever you need to clean up (e.g. revoking listeners etc.)
     }
 
-    Reference< XPropertySetInfo > SAL_CALL OCellListSource::getPropertySetInfo(  ) throw(RuntimeException, std::exception)
+    Reference< XPropertySetInfo > SAL_CALL OCellListSource::getPropertySetInfo(  )
     {
         return createPropertySetInfo( getInfoHelper() ) ;
     }
@@ -132,17 +132,17 @@ namespace calc
             // TODO: error message
     }
 
-    OUString SAL_CALL OCellListSource::getImplementationName(  ) throw (RuntimeException, std::exception)
+    OUString SAL_CALL OCellListSource::getImplementationName(  )
     {
         return OUString( "com.sun.star.comp.sheet.OCellListSource" );
     }
 
-    sal_Bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName ) throw (RuntimeException, std::exception)
+    sal_Bool SAL_CALL OCellListSource::supportsService( const OUString& _rServiceName )
     {
         return cppu::supportsService(this, _rServiceName);
     }
 
-    Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL OCellListSource::getSupportedServiceNames(  )
     {
         return {"com.sun.star.table.CellRangeListSource",
                 "com.sun.star.form.binding.ListEntrySource"};
@@ -172,7 +172,7 @@ namespace calc
         return sText;
     }
 
-    sal_Int32 SAL_CALL OCellListSource::getListEntryCount(  ) throw (RuntimeException, std::exception)
+    sal_Int32 SAL_CALL OCellListSource::getListEntryCount(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed();
@@ -182,7 +182,7 @@ namespace calc
         return aAddress.EndRow - aAddress.StartRow + 1;
     }
 
-    OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition ) throw (IndexOutOfBoundsException, RuntimeException, std::exception)
+    OUString SAL_CALL OCellListSource::getListEntry( sal_Int32 _nPosition )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed();
@@ -194,7 +194,7 @@ namespace calc
         return getCellTextContent_noCheck( _nPosition );
     }
 
-    Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  ) throw (RuntimeException, std::exception)
+    Sequence< OUString > SAL_CALL OCellListSource::getAllListEntries(  )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed();
@@ -210,7 +210,7 @@ namespace calc
         return aAllEntries;
     }
 
-    void SAL_CALL OCellListSource::addListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException, std::exception)
+    void SAL_CALL OCellListSource::addListEntryListener( const Reference< XListEntryListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed();
@@ -222,7 +222,7 @@ namespace calc
         m_aListEntryListeners.addInterface( _rxListener );
     }
 
-    void SAL_CALL OCellListSource::removeListEntryListener( const Reference< XListEntryListener >& _rxListener ) throw (NullPointerException, RuntimeException, std::exception)
+    void SAL_CALL OCellListSource::removeListEntryListener( const Reference< XListEntryListener >& _rxListener )
     {
         ::osl::MutexGuard aGuard( m_aMutex );
         checkDisposed();
@@ -234,7 +234,7 @@ namespace calc
         m_aListEntryListeners.removeInterface( _rxListener );
     }
 
-    void SAL_CALL OCellListSource::modified( const EventObject& /* aEvent */ ) throw (RuntimeException, std::exception)
+    void SAL_CALL OCellListSource::modified( const EventObject& /* aEvent */ )
     {
         notifyModified();
     }
@@ -263,7 +263,7 @@ namespace calc
 
     }
 
-    void SAL_CALL OCellListSource::disposing( const EventObject& aEvent ) throw (RuntimeException, std::exception)
+    void SAL_CALL OCellListSource::disposing( const EventObject& aEvent )
     {
         Reference<XInterface> xRangeInt( m_xRange, UNO_QUERY );
         if ( xRangeInt == aEvent.Source )
@@ -273,7 +273,7 @@ namespace calc
         }
     }
 
-    void SAL_CALL OCellListSource::initialize( const Sequence< Any >& _rArguments ) throw (Exception, RuntimeException, std::exception)
+    void SAL_CALL OCellListSource::initialize( const Sequence< Any >& _rArguments )
     {
         if ( m_bInitialized )
             throw Exception();

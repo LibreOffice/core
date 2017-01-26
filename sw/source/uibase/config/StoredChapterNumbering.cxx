@@ -71,8 +71,7 @@ public:
     }
 
     // XNamed
-    virtual OUString SAL_CALL getName()
-        throw (uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getName() override
     {
         SolarMutexGuard g;
         SwNumRulesWithName const* pRules(m_rNumRules.GetRules(m_nIndex));
@@ -83,8 +82,7 @@ public:
         return pRules->GetName();
     }
 
-    virtual void SAL_CALL setName(OUString const& rName)
-        throw (uno::RuntimeException, std::exception) override
+    virtual void SAL_CALL setName(OUString const& rName) override
     {
         SolarMutexGuard g;
         SwNumRulesWithName *const pRules(GetOrCreateRules());
@@ -92,28 +90,23 @@ public:
     }
 
     // XElementAccess
-    virtual uno::Type SAL_CALL getElementType()
-        throw (uno::RuntimeException, std::exception) override
+    virtual uno::Type SAL_CALL getElementType() override
     {
         return ::cppu::UnoType<uno::Sequence<beans::PropertyValue>>::get();
     }
 
-    virtual ::sal_Bool SAL_CALL hasElements()
-        throw (uno::RuntimeException, std::exception) override
+    virtual ::sal_Bool SAL_CALL hasElements() override
     {
         return true;
     }
 
     // XIndexAccess
-    virtual sal_Int32 SAL_CALL getCount()
-        throw (uno::RuntimeException, std::exception) override
+    virtual sal_Int32 SAL_CALL getCount() override
     {
         return MAXLEVEL;
     }
 
-    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex)
-        throw (lang::IndexOutOfBoundsException, lang::WrappedTargetException,
-               uno::RuntimeException, std::exception) override
+    virtual uno::Any SAL_CALL getByIndex(sal_Int32 nIndex) override
     {
         if (nIndex < 0 || MAXLEVEL <= nIndex)
             throw lang::IndexOutOfBoundsException();
@@ -141,10 +134,7 @@ public:
 
     // XIndexReplace
     virtual void SAL_CALL replaceByIndex(
-            sal_Int32 nIndex, uno::Any const& rElement)
-        throw (lang::IllegalArgumentException, lang::IndexOutOfBoundsException,
-               lang::WrappedTargetException, uno::RuntimeException,
-               std::exception) override
+            sal_Int32 nIndex, uno::Any const& rElement) override
     {
         if (nIndex < 0 || MAXLEVEL <= nIndex)
             throw lang::IndexOutOfBoundsException();

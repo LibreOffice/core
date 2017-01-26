@@ -128,11 +128,10 @@ public:
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
     css::uno::Any getBookmark()
-        throw( css::sdbc::SQLException, css::uno::RuntimeException )
     { return m_xBookmarkOperations->getBookmark(); }
     /// @throws css::sdbc::SQLException
     /// @throws css::uno::RuntimeException
-    bool moveToBookmark(const css::uno::Any& bookmark) throw( css::sdbc::SQLException, css::uno::RuntimeException ) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
+    bool moveToBookmark(const css::uno::Any& bookmark) { return m_xBookmarkOperations->moveToBookmark(bookmark); }
 
     // css::sdbc::XResultSet
     bool isBeforeFirst() const              { return m_xMoveOperations->isBeforeFirst(); }
@@ -151,7 +150,7 @@ public:
     bool rowDeleted()                       { return m_xMoveOperations->rowDeleted(); }
     // css::sdbcx::XColumnsSupplier
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::container::XNameAccess> getColumns() const throw( css::uno::RuntimeException ) { return m_xColumnsSupplier->getColumns(); }
+    css::uno::Reference< css::container::XNameAccess> getColumns() const { return m_xColumnsSupplier->getColumns(); }
 private:
     void ImplConstruct(const css::uno::Reference< css::sdbc::XResultSet>& _rxCursor, bool bUseCloned);
 };
@@ -169,7 +168,7 @@ public:
     virtual ~FmXDisposeListener();
 
     /// @throws css::uno::RuntimeException
-    virtual void disposing(const css::lang::EventObject& _rEvent, sal_Int16 _nId) throw( css::uno::RuntimeException ) = 0;
+    virtual void disposing(const css::lang::EventObject& _rEvent, sal_Int16 _nId) = 0;
 
 protected:
     void setAdapter(FmXDisposeMultiplexer* pAdapter);
@@ -185,7 +184,7 @@ public:
     FmXDisposeMultiplexer(FmXDisposeListener* _pListener, const css::uno::Reference< css::lang::XComponent>& _rxObject);
 
 // css::lang::XEventListener
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     void dispose();
 };

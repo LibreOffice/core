@@ -44,23 +44,19 @@ public:
 
     // XDispatchProvider
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
-        const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
-            throw(css::uno::RuntimeException, std::exception) override;
+        const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags ) override;
 
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > SAL_CALL queryDispatches(
-        const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) throw( css::uno::RuntimeException, std::exception ) override;
+        const css::uno::Sequence< css::frame::DispatchDescriptor >& aDescripts ) override;
 
     // XDispatch
     virtual void SAL_CALL dispatch( const css::util::URL& aURL,
-                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
-        throw( css::uno::RuntimeException, std::exception ) override;
+                                        const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
     virtual void SAL_CALL addStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                const css::util::URL& aURL )
-        throw( css::uno::RuntimeException, std::exception ) override;
+                                                const css::util::URL& aURL ) override;
     virtual void SAL_CALL removeStatusListener( const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                const css::util::URL& aURL )
-        throw( css::uno::RuntimeException, std::exception ) override;
+                                                const css::util::URL& aURL ) override;
 
     static sal_Int64 GetFileSize( const OUString& rURL );
 };

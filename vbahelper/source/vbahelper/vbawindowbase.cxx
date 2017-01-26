@@ -32,7 +32,7 @@ VbaWindowBase::VbaWindowBase(
         const uno::Reference< XHelperInterface >& xParent,
         const uno::Reference< uno::XComponentContext >& xContext,
         const css::uno::Reference< css::frame::XModel >& xModel,
-        const uno::Reference< frame::XController >& xController ) throw (uno::RuntimeException) :
+        const uno::Reference< frame::XController >& xController ) :
     WindowBaseImpl_BASE( xParent, xContext ),
     m_xModel( xModel, uno::UNO_SET_THROW )
 {
@@ -40,7 +40,7 @@ VbaWindowBase::VbaWindowBase(
 }
 
 VbaWindowBase::VbaWindowBase( uno::Sequence< uno::Any > const & args,
-        uno::Reference< uno::XComponentContext > const & xContext ) throw (uno::RuntimeException) :
+        uno::Reference< uno::XComponentContext > const & xContext ) :
     WindowBaseImpl_BASE( getXSomethingFromArgs< XHelperInterface >( args, 0, false ), xContext ),
     m_xModel( getXSomethingFromArgs< frame::XModel >( args, 1, false ) )
 {
@@ -48,13 +48,13 @@ VbaWindowBase::VbaWindowBase( uno::Sequence< uno::Any > const & args,
 }
 
 sal_Bool SAL_CALL
-VbaWindowBase::getVisible() throw (uno::RuntimeException, std::exception)
+VbaWindowBase::getVisible()
 {
     return getWindow2()->isVisible();
 }
 
 void SAL_CALL
-VbaWindowBase::setVisible( sal_Bool _visible ) throw (uno::RuntimeException, std::exception)
+VbaWindowBase::setVisible( sal_Bool _visible )
 {
     getWindow2()->setVisible( _visible );
 }
@@ -82,49 +82,49 @@ void setPosSize( const uno::Reference< awt::XWindow >& xWindow, sal_Int32 nValue
 }
 
 sal_Int32 SAL_CALL
-VbaWindowBase::getHeight() throw (uno::RuntimeException, std::exception)
+VbaWindowBase::getHeight()
 {
     return getWindow()->getPosSize().Height;
 }
 
 void SAL_CALL
-VbaWindowBase::setHeight( sal_Int32 _height ) throw (uno::RuntimeException, std::exception)
+VbaWindowBase::setHeight( sal_Int32 _height )
 {
     setPosSize( getWindow(), _height, css::awt::PosSize::HEIGHT );
 }
 
 sal_Int32 SAL_CALL
-VbaWindowBase::getLeft() throw (uno::RuntimeException, std::exception)
+VbaWindowBase::getLeft()
 {
     return getWindow()->getPosSize().X;
 }
 
 void SAL_CALL
-VbaWindowBase::setLeft( sal_Int32 _left ) throw (uno::RuntimeException, std::exception)
+VbaWindowBase::setLeft( sal_Int32 _left )
 {
     setPosSize( getWindow(), _left, css::awt::PosSize::X );
 }
 
 sal_Int32 SAL_CALL
-VbaWindowBase::getTop() throw (uno::RuntimeException, std::exception)
+VbaWindowBase::getTop()
 {
     return getWindow()->getPosSize().Y;
 }
 
 void SAL_CALL
-VbaWindowBase::setTop( sal_Int32 _top ) throw (uno::RuntimeException, std::exception)
+VbaWindowBase::setTop( sal_Int32 _top )
 {
     setPosSize( getWindow(), _top, css::awt::PosSize::Y );
 }
 
 sal_Int32 SAL_CALL
-VbaWindowBase::getWidth() throw (uno::RuntimeException, std::exception)
+VbaWindowBase::getWidth()
 {
     return getWindow()->getPosSize().Width;
 }
 
 void SAL_CALL
-VbaWindowBase::setWidth( sal_Int32 _width ) throw (uno::RuntimeException, std::exception)
+VbaWindowBase::setWidth( sal_Int32 _width )
 {
     setPosSize( getWindow(), _width, css::awt::PosSize::WIDTH );
 }
@@ -147,22 +147,22 @@ VbaWindowBase::getServiceNames()
     return aServiceNames;
 }
 
-uno::Reference< frame::XController > VbaWindowBase::getController() throw (css::uno::RuntimeException)
+uno::Reference< frame::XController > VbaWindowBase::getController()
 {
     return uno::Reference< frame::XController >( m_xController, uno::UNO_SET_THROW );
 }
 
-uno::Reference< awt::XWindow > VbaWindowBase::getWindow() throw (uno::RuntimeException)
+uno::Reference< awt::XWindow > VbaWindowBase::getWindow()
 {
     return uno::Reference< awt::XWindow >( m_xWindow, uno::UNO_SET_THROW );
 }
 
-uno::Reference< awt::XWindow2 > VbaWindowBase::getWindow2() throw (uno::RuntimeException)
+uno::Reference< awt::XWindow2 > VbaWindowBase::getWindow2()
 {
     return uno::Reference< awt::XWindow2 >( getWindow(), uno::UNO_QUERY_THROW );
 }
 
-void VbaWindowBase::construct( const uno::Reference< frame::XController >& xController ) throw (uno::RuntimeException)
+void VbaWindowBase::construct( const uno::Reference< frame::XController >& xController )
 {
     if( !xController.is() ) throw uno::RuntimeException();
     uno::Reference< frame::XFrame > xFrame( xController->getFrame(), uno::UNO_SET_THROW );

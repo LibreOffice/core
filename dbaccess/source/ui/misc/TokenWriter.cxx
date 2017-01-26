@@ -164,7 +164,7 @@ void ODatabaseImportExport::dispose()
     m_xFormatter.clear();
 }
 
-void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source ) throw(css::uno::RuntimeException, std::exception)
+void SAL_CALL ODatabaseImportExport::disposing( const EventObject& Source )
 {
     Reference<XConnection> xCon(Source.Source,UNO_QUERY);
     if(m_xConnection.is() && m_xConnection == xCon)

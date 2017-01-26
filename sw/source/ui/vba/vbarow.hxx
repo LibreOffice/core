@@ -36,21 +36,21 @@ private:
 
 public:
     /// @throws css::uno::RuntimeException
-    SwVbaRow( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nIndex ) throw ( css::uno::RuntimeException );
+    SwVbaRow( const css::uno::Reference< ooo::vba::XHelperInterface >& rParent, const css::uno::Reference< css::uno::XComponentContext >& rContext, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nIndex );
     virtual ~SwVbaRow() override;
 
     // Attributes
-    virtual css::uno::Any SAL_CALL getHeight() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getHeightRule() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getHeight() override;
+    virtual void SAL_CALL setHeight( const css::uno::Any& _height ) override;
+    virtual ::sal_Int32 SAL_CALL getHeightRule() override;
+    virtual void SAL_CALL setHeightRule( ::sal_Int32 _heightrule ) override;
 
     // Methods
-    virtual void SAL_CALL Select(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL Select(  ) override;
+    virtual void SAL_CALL SetHeight( float height, sal_Int32 heightrule ) override;
 
     /// @throws css::uno::RuntimeException
-    static void SelectRow( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow ) throw (css::uno::RuntimeException);
+    static void SelectRow( const css::uno::Reference< css::frame::XModel >& xModel, const css::uno::Reference< css::text::XTextTable >& xTextTable, sal_Int32 nStartRow, sal_Int32 nEndRow );
 
     // XHelperInterface
     virtual OUString getServiceImplName() override;

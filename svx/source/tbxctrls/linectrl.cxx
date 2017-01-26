@@ -266,7 +266,7 @@ public:
     SvxLineEndWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow );
     virtual ~SvxLineEndWindow() override;
     virtual void dispose() override;
-    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual void statusChanged( const css::frame::FeatureStateEvent& rEvent ) override;
 };
 
 SvxLineEndWindow::SvxLineEndWindow( svt::ToolboxController& rController, vcl::Window* pParentWindow )
@@ -412,7 +412,6 @@ void SvxLineEndWindow::FillValueSet()
 }
 
 void SvxLineEndWindow::statusChanged( const css::frame::FeatureStateEvent& rEvent )
-    throw ( css::uno::RuntimeException, std::exception )
 {
     if ( rEvent.FeatureURL.Complete == ".uno:LineEndListState" )
     {
@@ -466,11 +465,11 @@ public:
     explicit SvxLineEndToolBoxControl( const css::uno::Reference<css::uno::XComponentContext>& rContext );
 
     // XInitialization
-    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) throw ( css::uno::Exception, css::uno::RuntimeException, std::exception ) override;
+    virtual void SAL_CALL initialize( const css::uno::Sequence<css::uno::Any>& rArguments ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw ( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw ( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
 private:
     virtual VclPtr<vcl::Window> createPopupWindow( vcl::Window* pParent ) override;
@@ -483,7 +482,6 @@ SvxLineEndToolBoxControl::SvxLineEndToolBoxControl( const css::uno::Reference<cs
 }
 
 void SvxLineEndToolBoxControl::initialize( const css::uno::Sequence<css::uno::Any>& rArguments )
-    throw ( css::uno::Exception, css::uno::RuntimeException, std::exception )
 {
     svt::PopupWindowController::initialize( rArguments );
     ToolBox* pToolBox = nullptr;
@@ -498,13 +496,11 @@ VclPtr<vcl::Window> SvxLineEndToolBoxControl::createPopupWindow( vcl::Window* pP
 }
 
 OUString SvxLineEndToolBoxControl::getImplementationName()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.svx.LineEndToolBoxControl" );
 }
 
 css::uno::Sequence<OUString> SvxLineEndToolBoxControl::getSupportedServiceNames()
-    throw ( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.frame.ToolbarController" };
 }

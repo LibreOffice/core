@@ -98,26 +98,21 @@ class LoadDispatcher : public  ::cppu::WeakImplHelper< css::frame::XNotifyingDis
         // XNotifyingDispatch
         virtual void SAL_CALL dispatchWithNotification(const css::util::URL&                                             aURL      ,
                                                        const css::uno::Sequence< css::beans::PropertyValue >&            lArguments,
-                                                       const css::uno::Reference< css::frame::XDispatchResultListener >& xListener )
-            throw(css::uno::RuntimeException, std::exception) override;
+                                                       const css::uno::Reference< css::frame::XDispatchResultListener >& xListener ) override;
 
         // XDispatch
         virtual void SAL_CALL dispatch(const css::util::URL&                                  aURL      ,
-                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments)
-            throw(css::uno::RuntimeException, std::exception) override;
+                                       const css::uno::Sequence< css::beans::PropertyValue >& lArguments) override;
 
         virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                const css::util::URL&                                     aURL     )
-            throw(css::uno::RuntimeException, std::exception) override;
+                                                const css::util::URL&                                     aURL     ) override;
 
         virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener >& xListener,
-                                                   const css::util::URL&                                     aURL     )
-            throw(css::uno::RuntimeException, std::exception) override;
+                                                   const css::util::URL&                                     aURL     ) override;
 
         // XSynchronousDispatch
         virtual css::uno::Any SAL_CALL dispatchWithReturnValue( const css::util::URL&                                  aURL      ,
-                                                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments )
-            throw( css::uno::RuntimeException, std::exception ) override;
+                                                                const css::uno::Sequence< css::beans::PropertyValue >& lArguments ) override;
 
     private:
         css::uno::Any impl_dispatch( const css::util::URL& rURL,

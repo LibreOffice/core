@@ -34,7 +34,6 @@ using namespace ::com::sun::star;
 
 
 std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequence( const uno::Reference< io::XInputStream >& xInStream, const uno::Reference< uno::XComponentContext >& xContext )
-    throw( uno::Exception )
 {
     OUString aStringID = "groupuinames.xml";
     return ReadLocalizationSequence_Impl( xInStream, aStringID, xContext );
@@ -42,7 +41,6 @@ std::vector< beans::StringPair > DocTemplLocaleHelper::ReadGroupLocalizationSequ
 
 
 void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::Reference< io::XOutputStream >& xOutStream, const std::vector< beans::StringPair >& aSequence, const uno::Reference< uno::XComponentContext >& xContext )
-    throw( uno::Exception )
 {
     if ( !xOutStream.is() )
         throw uno::RuntimeException();
@@ -89,7 +87,6 @@ void SAL_CALL DocTemplLocaleHelper::WriteGroupLocalizationSequence( const uno::R
 
 
 std::vector< beans::StringPair > SAL_CALL DocTemplLocaleHelper::ReadLocalizationSequence_Impl( const uno::Reference< io::XInputStream >& xInStream, const OUString& aStringID, const uno::Reference< uno::XComponentContext >& xContext )
-    throw( uno::Exception )
 {
     if ( !xContext.is() || !xInStream.is() )
         throw uno::RuntimeException();
@@ -133,19 +130,16 @@ std::vector< beans::StringPair > const & DocTemplLocaleHelper::GetParsingResult(
 
 
 void SAL_CALL DocTemplLocaleHelper::startDocument()
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL DocTemplLocaleHelper::endDocument()
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const uno::Reference< xml::sax::XAttributeList >& xAttribs )
-        throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     if ( aName == m_aGroupListElement )
     {
@@ -189,7 +183,6 @@ void SAL_CALL DocTemplLocaleHelper::startElement( const OUString& aName, const u
 
 
 void SAL_CALL DocTemplLocaleHelper::endElement( const OUString& aName )
-    throw( xml::sax::SAXException, uno::RuntimeException, std::exception )
 {
     if ( m_aElementsSeq.empty() )
         throw xml::sax::SAXException(); // TODO: no other end elements expected!
@@ -202,25 +195,21 @@ void SAL_CALL DocTemplLocaleHelper::endElement( const OUString& aName )
 
 
 void SAL_CALL DocTemplLocaleHelper::characters( const OUString& /*aChars*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL DocTemplLocaleHelper::ignorableWhitespace( const OUString& /*aWhitespaces*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL DocTemplLocaleHelper::processingInstruction( const OUString& /*aTarget*/, const OUString& /*aData*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 
 
 void SAL_CALL DocTemplLocaleHelper::setDocumentLocator( const uno::Reference< xml::sax::XLocator >& /*xLocator*/ )
-        throw(xml::sax::SAXException, uno::RuntimeException, std::exception)
 {
 }
 

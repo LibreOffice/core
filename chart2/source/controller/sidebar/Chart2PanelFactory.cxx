@@ -54,10 +54,6 @@ ChartPanelFactory::~ChartPanelFactory()
 Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
     const ::rtl::OUString& rsResourceURL,
     const ::css::uno::Sequence<css::beans::PropertyValue>& rArguments)
-    throw(
-        css::container::NoSuchElementException,
-        css::lang::IllegalArgumentException,
-        RuntimeException, std::exception)
 {
     Reference<css::ui::XUIElement> xElement;
 
@@ -125,19 +121,16 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
 }
 
 OUString ChartPanelFactory::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.chart2.sidebar.ChartPanelFactory");
 }
 
 sal_Bool ChartPanelFactory::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> ChartPanelFactory::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return { "com.sun.star.ui.UIElementFactory" };
 }

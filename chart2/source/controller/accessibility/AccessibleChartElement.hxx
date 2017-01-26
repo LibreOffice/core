@@ -75,44 +75,35 @@ public:
     // ________ AccessibleBase ________
     virtual bool ImplUpdateChildren() override;
     virtual css::uno::Reference< css::accessibility::XAccessible >
-        ImplGetAccessibleChildById( sal_Int32 i ) const
-        throw (css::lang::IndexOutOfBoundsException,
-               css::uno::RuntimeException) override;
-    virtual sal_Int32 ImplGetAccessibleChildCount() const
-        throw (css::uno::RuntimeException) override;
+        ImplGetAccessibleChildById( sal_Int32 i ) const override;
+    virtual sal_Int32 ImplGetAccessibleChildCount() const override;
 
     // ________ XAccessibleContext ________
-    virtual OUString SAL_CALL getAccessibleName()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getAccessibleDescription()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getAccessibleName() override;
+    virtual OUString SAL_CALL getAccessibleDescription() override;
 
     // ________ XAccessibleExtendedComponent ________
-    virtual css::uno::Reference< css::awt::XFont > SAL_CALL getFont()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getTitledBorderText()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getToolTipText()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::awt::XFont > SAL_CALL getFont() override;
+    virtual OUString SAL_CALL getTitledBorderText() override;
+    virtual OUString SAL_CALL getToolTipText() override;
 
     // the following interface is implemented in AccessibleBase, however it is
     // also a (non-virtual) base class of XAccessibleExtendedComponent Thus
     // these methods have to be overridden and forward to AccessibleBase
 
     // ________ XAccessibleComponent ________
-    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Rectangle SAL_CALL getBounds() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Point SAL_CALL getLocation() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Point SAL_CALL getLocationOnScreen() throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::awt::Size SAL_CALL getSize() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL grabFocus() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getForeground() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getBackground() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL containsPoint( const css::awt::Point& aPoint ) override;
+    virtual css::uno::Reference< css::accessibility::XAccessible > SAL_CALL getAccessibleAtPoint( const css::awt::Point& aPoint ) override;
+    virtual css::awt::Rectangle SAL_CALL getBounds() override;
+    virtual css::awt::Point SAL_CALL getLocation() override;
+    virtual css::awt::Point SAL_CALL getLocationOnScreen() override;
+    virtual css::awt::Size SAL_CALL getSize() override;
+    virtual void SAL_CALL grabFocus() override;
+    virtual sal_Int32 SAL_CALL getForeground() override;
+    virtual sal_Int32 SAL_CALL getBackground() override;
 
     // ________ XServiceInfo ________
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
 
 private:
     bool                m_bHasText;

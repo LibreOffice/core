@@ -37,29 +37,21 @@ public:
     explicit UIObjectUnoObj(std::unique_ptr<UIObject> pObj);
     virtual ~UIObjectUnoObj() override;
 
-    css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getChild(const OUString& rID)
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Reference<css::ui::test::XUIObject> SAL_CALL getChild(const OUString& rID) override;
 
-    void SAL_CALL executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& xPropValues)
-        throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL executeAction(const OUString& rAction, const css::uno::Sequence<css::beans::PropertyValue>& xPropValues) override;
 
-    css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getState()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<css::beans::PropertyValue> SAL_CALL getState() override;
 
-    css::uno::Sequence<OUString> SAL_CALL getChildren()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<OUString> SAL_CALL getChildren() override;
 
-    OUString SAL_CALL getType()
-        throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getType() override;
 
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override;
+    OUString SAL_CALL getImplementationName() override;
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override;
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 #endif

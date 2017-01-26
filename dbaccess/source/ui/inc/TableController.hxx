@@ -59,9 +59,7 @@ namespace dbaui
         void loadData();
         /// @throws css::sdbc::SQLException
         /// @throws css::uno::RuntimeException
-        bool checkColumns(bool _bNew)
-            throw (css::sdbc::SQLException,
-                   css::uno::RuntimeException, std::exception);      // check if we have double column names
+        bool checkColumns(bool _bNew);      // check if we have double column names
         void appendColumns(css::uno::Reference< css::sdbcx::XColumnsSupplier>& _rxColSup, bool _bNew, bool _bKeyColumns = false);
         void appendPrimaryKey(css::uno::Reference< css::sdbcx::XKeysSupplier>& _rxSup, bool _bNew);
         void alterColumns();
@@ -115,22 +113,22 @@ namespace dbaui
 
         virtual bool                        Construct(vcl::Window* pParent) override;
         // XEventListener
-        virtual void SAL_CALL               disposing( const css::lang::EventObject& Source ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL               disposing( const css::lang::EventObject& Source ) override;
 
         // css::frame::XController
-        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL           suspend(sal_Bool bSuspend) override;
 
         // css::lang::XComponent
         virtual void        SAL_CALL disposing() override;
 
         // XServiceInfo
-        virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+        virtual OUString SAL_CALL getImplementationName() override;
+        virtual css::uno::Sequence< OUString> SAL_CALL getSupportedServiceNames() override;
         // need by registration
         /// @throws css::uno::RuntimeException
-        static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+        static OUString getImplementationName_Static();
         /// @throws css::uno::RuntimeException
-        static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+        static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
         static css::uno::Reference< css::uno::XInterface >
                 SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 

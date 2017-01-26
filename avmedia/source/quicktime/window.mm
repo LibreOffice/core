@@ -90,25 +90,21 @@ Window::~Window()
 // XPlayerWindow
 
 void SAL_CALL Window::update(  )
-    throw (uno::RuntimeException)
 {
     ;
 }
 
 sal_Bool SAL_CALL Window::setZoomLevel( media::ZoomLevel )
-    throw (uno::RuntimeException)
 {
         return false;
 }
 
 media::ZoomLevel SAL_CALL Window::getZoomLevel(  )
-    throw (uno::RuntimeException)
 {
     return meZoomLevel;
 }
 
 void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
-    throw (uno::RuntimeException)
 {
     mnPointerType = nPointerType;
 }
@@ -116,7 +112,6 @@ void SAL_CALL Window::setPointerType( sal_Int32 nPointerType )
 // XWindow
 
 void SAL_CALL Window::setPosSize( sal_Int32 , sal_Int32 , sal_Int32 Width, sal_Int32 Height, sal_Int16 Flags )
-    throw (uno::RuntimeException)
 {
     if( mpParentView && mpMovieView )
     {
@@ -129,7 +124,6 @@ void SAL_CALL Window::setPosSize( sal_Int32 , sal_Int32 , sal_Int32 Width, sal_I
 }
 
 awt::Rectangle SAL_CALL Window::getPosSize()
-    throw (uno::RuntimeException)
 {
     awt::Rectangle aRet;
 
@@ -142,92 +136,77 @@ awt::Rectangle SAL_CALL Window::getPosSize()
 }
 
 void SAL_CALL Window::setVisible( sal_Bool )
-    throw (uno::RuntimeException)
 {
     SAL_INFO ( "avmedia.quicktime", "Window::setVisible" );
 
 }
 
 void SAL_CALL Window::setEnable( sal_Bool )
-    throw (uno::RuntimeException)
 {
     ;
 }
 
 void SAL_CALL Window::setFocus(  )
-    throw (uno::RuntimeException)
 {
     SAL_INFO ( "avmedia.quicktime", "Window::setFocus" );
 }
 
 void SAL_CALL Window::addWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeWindowListener( const uno::Reference< awt::XWindowListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeFocusListener( const uno::Reference< awt::XFocusListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeKeyListener( const uno::Reference< awt::XKeyListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeMouseListener( const uno::Reference< awt::XMouseListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeMouseMotionListener( const uno::Reference< awt::XMouseMotionListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::addPaintListener( const uno::Reference< awt::XPaintListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
@@ -235,18 +214,15 @@ void SAL_CALL Window::removePaintListener( const uno::Reference< awt::XPaintList
 // XComponent
 
 void SAL_CALL Window::dispose(  )
-    throw (uno::RuntimeException)
 {
 }
 
 void SAL_CALL Window::addEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.addInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
 
 void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventListener >& xListener )
-    throw (uno::RuntimeException)
 {
     maListeners.removeInterface( cppu::UnoType<decltype(xListener)>::get(), xListener );
 }
@@ -254,19 +230,16 @@ void SAL_CALL Window::removeEventListener( const uno::Reference< lang::XEventLis
 // XServiceInfo
 
 ::rtl::OUString SAL_CALL Window::getImplementationName(  )
-    throw (uno::RuntimeException)
 {
     return ::rtl::OUString( AVMEDIA_QUICKTIME_WINDOW_IMPLEMENTATIONNAME );
 }
 
 sal_Bool SAL_CALL Window::supportsService( const ::rtl::OUString& ServiceName )
-    throw (uno::RuntimeException)
 {
     return ( ServiceName == AVMEDIA_QUICKTIME_WINDOW_SERVICENAME );
 }
 
 uno::Sequence< ::rtl::OUString > SAL_CALL Window::getSupportedServiceNames(  )
-    throw (uno::RuntimeException)
 {
     return { AVMEDIA_QUICKTIME_WINDOW_SERVICENAME };
 }

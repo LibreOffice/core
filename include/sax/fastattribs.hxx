@@ -94,13 +94,13 @@ public:
     bool getAsChar( sal_Int32 nToken, const char*& rPos ) const;
 
     // XFastAttributeList
-    virtual sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getValueToken( ::sal_Int32 Token ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual ::sal_Int32 SAL_CALL getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getValue( ::sal_Int32 Token ) throw (css::xml::sax::SAXException, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::xml::Attribute > SAL_CALL getUnknownAttributes(  ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< css::xml::FastAttribute > SAL_CALL getFastAttributes() throw (css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasAttribute( ::sal_Int32 Token ) override;
+    virtual ::sal_Int32 SAL_CALL getValueToken( ::sal_Int32 Token ) override;
+    virtual ::sal_Int32 SAL_CALL getOptionalValueToken( ::sal_Int32 Token, ::sal_Int32 Default ) override;
+    virtual OUString SAL_CALL getValue( ::sal_Int32 Token ) override;
+    virtual OUString SAL_CALL getOptionalValue( ::sal_Int32 Token ) override;
+    virtual css::uno::Sequence< css::xml::Attribute > SAL_CALL getUnknownAttributes(  ) override;
+    virtual css::uno::Sequence< css::xml::FastAttribute > SAL_CALL getFastAttributes() override;
 
 private:
     sal_Char *mpChunk; ///< buffer to store all attribute values - null terminated strings

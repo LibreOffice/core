@@ -42,7 +42,7 @@ sdbcx::ObjectType OUsers::createObject(const OUString& _rName)
     return new OAdoUser(m_pCatalog,isCaseSensitive(),_rName);
 }
 
-void OUsers::impl_refresh() throw(RuntimeException)
+void OUsers::impl_refresh()
 {
     m_aCollection.Refresh();
 }

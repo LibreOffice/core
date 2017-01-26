@@ -1135,7 +1135,6 @@ void LayoutManager::implts_setOffset( const sal_Int32 nBottomOffset )
 }
 
 void LayoutManager::implts_setInplaceMenuBar( const Reference< XIndexAccess >& xMergedMenuBar )
-throw (uno::RuntimeException, std::exception)
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aWriteLock;
@@ -1180,7 +1179,6 @@ throw (uno::RuntimeException, std::exception)
 }
 
 void LayoutManager::implts_resetInplaceMenuBar()
-throw (uno::RuntimeException)
 {
     SolarMutexGuard g;
     m_bInplaceMenuSet = false;
@@ -1211,14 +1209,12 @@ throw (uno::RuntimeException)
 }
 
 void SAL_CALL LayoutManager::attachFrame( const Reference< XFrame >& xFrame )
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     m_xFrame = xFrame;
 }
 
 void SAL_CALL LayoutManager::reset()
-throw (RuntimeException, std::exception)
 {
     implts_reset( true );
 }
@@ -1227,7 +1223,6 @@ throw (RuntimeException, std::exception)
 
 sal_Bool SAL_CALL LayoutManager::setMergedMenuBar(
     const Reference< XIndexAccess >& xMergedMenuBar )
-throw (uno::RuntimeException, std::exception)
 {
     implts_setInplaceMenuBar( xMergedMenuBar );
 
@@ -1237,27 +1232,23 @@ throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL LayoutManager::removeMergedMenuBar()
-throw (uno::RuntimeException, std::exception)
 {
     implts_resetInplaceMenuBar();
 }
 
 awt::Rectangle SAL_CALL LayoutManager::getCurrentDockingArea()
-throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard g;
     return m_aDockingArea;
 }
 
 Reference< XDockingAreaAcceptor > SAL_CALL LayoutManager::getDockingAreaAcceptor()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     return m_xDockingAreaAcceptor;
 }
 
 void SAL_CALL LayoutManager::setDockingAreaAcceptor( const Reference< ui::XDockingAreaAcceptor >& xDockingAreaAcceptor )
-throw ( RuntimeException, std::exception )
 {
     /* SAFE AREA ----------------------------------------------------------------------------------------------- */
     SolarMutexClearableGuard aWriteLock;
@@ -1417,7 +1408,6 @@ IMPL_LINK( LayoutManager, WindowEventListener, VclWindowEvent&, rEvent, void )
 }
 
 void SAL_CALL LayoutManager::createElement( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::createElement" );
 
@@ -1551,7 +1541,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL LayoutManager::destroyElement( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::destroyElement" );
 
@@ -1620,7 +1609,6 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::requestElement( const OUString& rResourceURL )
-throw (uno::RuntimeException, std::exception)
 {
     bool            bResult( false );
     bool            bNotify( false );
@@ -1697,7 +1685,6 @@ throw (uno::RuntimeException, std::exception)
 }
 
 Reference< XUIElement > SAL_CALL LayoutManager::getElement( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     Reference< XUIElement > xUIElement = implts_findElement( aName );
     if ( !xUIElement.is() )
@@ -1714,7 +1701,6 @@ throw (RuntimeException, std::exception)
 }
 
 Sequence< Reference< ui::XUIElement > > SAL_CALL LayoutManager::getElements()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexClearableGuard aReadLock;
     uno::Reference< ui::XUIElement >  xMenuBar( m_xMenuBar );
@@ -1750,7 +1736,6 @@ throw (uno::RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::showElement( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::showElement" );
 
@@ -1828,7 +1813,6 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::hideElement( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     SAL_INFO( "fwk", "framework (cd100003) ::LayoutManager::hideElement" );
 
@@ -1913,7 +1897,6 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::dockWindow( const OUString& aName, DockingArea DockingArea, const awt::Point& Pos )
-throw (RuntimeException, std::exception)
 {
     OUString aElementType;
     OUString aElementName;
@@ -1935,7 +1918,7 @@ throw (RuntimeException, std::exception)
     return false;
 }
 
-sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ ) throw (uno::RuntimeException, std::exception)
+sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ )
 {
     SolarMutexClearableGuard aReadLock;
     bool bResult( false );
@@ -1952,7 +1935,6 @@ sal_Bool SAL_CALL LayoutManager::dockAllWindows( ::sal_Int16 /*nElementType*/ ) 
 }
 
 sal_Bool SAL_CALL LayoutManager::floatWindow( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     bool bResult( false );
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
@@ -1972,7 +1954,6 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::lockWindow( const OUString& aName )
-throw (uno::RuntimeException, std::exception)
 {
     bool bResult( false );
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
@@ -1992,7 +1973,6 @@ throw (uno::RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::unlockWindow( const OUString& aName )
-throw (uno::RuntimeException, std::exception)
 {
     bool bResult( false );
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
@@ -2012,7 +1992,6 @@ throw (uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL LayoutManager::setElementSize( const OUString& aName, const awt::Size& aSize )
-throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2030,7 +2009,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL LayoutManager::setElementPos( const OUString& aName, const awt::Point& aPos )
-throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2048,7 +2026,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL LayoutManager::setElementPosSize( const OUString& aName, const awt::Point& aPos, const awt::Size& aSize )
-throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2066,7 +2043,6 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::isElementVisible( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     OUString aElementType;
     OUString aElementName;
@@ -2141,7 +2117,6 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::isElementFloating( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2157,7 +2132,6 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::isElementDocked( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2173,7 +2147,6 @@ throw (RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::isElementLocked( const OUString& aName )
-throw (uno::RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2189,7 +2162,6 @@ throw (uno::RuntimeException, std::exception)
 }
 
 awt::Size SAL_CALL LayoutManager::getElementSize( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2205,7 +2177,6 @@ throw (RuntimeException, std::exception)
 }
 
 awt::Point SAL_CALL LayoutManager::getElementPos( const OUString& aName )
-throw (RuntimeException, std::exception)
 {
     if ( getElementTypeFromResourceURL( aName ).equalsIgnoreAsciiCase( UIRESOURCETYPE_TOOLBAR ))
     {
@@ -2221,7 +2192,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL LayoutManager::lock()
-throw (RuntimeException, std::exception)
 {
     implts_lock();
 
@@ -2243,7 +2213,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL LayoutManager::unlock()
-throw (RuntimeException, std::exception)
 {
     bool bDoLayout( implts_unlock() );
 
@@ -2274,7 +2243,6 @@ throw (RuntimeException, std::exception)
 }
 
 void SAL_CALL LayoutManager::doLayout()
-throw (RuntimeException, std::exception)
 {
     implts_doLayout_notify( true );
 }
@@ -2457,7 +2425,6 @@ bool LayoutManager::implts_resizeContainerWindow( const awt::Size& rContainerSiz
 }
 
 void SAL_CALL LayoutManager::setVisible( sal_Bool bVisible )
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexClearableGuard aWriteLock;
     bool bWasVisible( m_bVisible );
@@ -2469,7 +2436,6 @@ throw (uno::RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL LayoutManager::isVisible()
-throw (uno::RuntimeException, std::exception)
 {
     SolarMutexGuard g;
     return m_bVisible;
@@ -2619,13 +2585,11 @@ IMPL_LINK_NOARG(LayoutManager, MenuBarClose, void*, void)
 //  XLayoutManagerEventBroadcaster
 
 void SAL_CALL LayoutManager::addLayoutManagerEventListener( const uno::Reference< frame::XLayoutManagerListener >& xListener )
-throw (uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.addInterface( cppu::UnoType<frame::XLayoutManagerListener>::get(), xListener );
 }
 
 void SAL_CALL LayoutManager::removeLayoutManagerEventListener( const uno::Reference< frame::XLayoutManagerListener >& xListener )
-throw (uno::RuntimeException, std::exception)
 {
     m_aListenerContainer.removeInterface( cppu::UnoType<frame::XLayoutManagerListener>::get(), xListener );
 }
@@ -2654,7 +2618,6 @@ void LayoutManager::implts_notifyListeners(short nEvent, const uno::Any& rInfoPa
 //      XWindowListener
 
 void SAL_CALL LayoutManager::windowResized( const awt::WindowEvent& aEvent )
-throw( uno::RuntimeException, std::exception )
 {
     SolarMutexGuard g;
     Reference< awt::XWindow >         xContainerWindow( m_xContainerWindow );
@@ -2694,11 +2657,11 @@ throw( uno::RuntimeException, std::exception )
     }
 }
 
-void SAL_CALL LayoutManager::windowMoved( const awt::WindowEvent& ) throw( uno::RuntimeException, std::exception )
+void SAL_CALL LayoutManager::windowMoved( const awt::WindowEvent& )
 {
 }
 
-void SAL_CALL LayoutManager::windowShown( const lang::EventObject& aEvent ) throw( uno::RuntimeException, std::exception )
+void SAL_CALL LayoutManager::windowShown( const lang::EventObject& aEvent )
 {
     SolarMutexClearableGuard aReadLock;
     Reference< awt::XWindow >  xContainerWindow( m_xContainerWindow );
@@ -2718,7 +2681,7 @@ void SAL_CALL LayoutManager::windowShown( const lang::EventObject& aEvent ) thro
     }
 }
 
-void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) throw( uno::RuntimeException, std::exception )
+void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent )
 {
     SolarMutexClearableGuard aReadLock;
     Reference< awt::XWindow > xContainerWindow( m_xContainerWindow );
@@ -2760,7 +2723,6 @@ IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl, Timer *, void)
 //      XFrameActionListener
 
 void SAL_CALL LayoutManager::frameAction( const FrameActionEvent& aEvent )
-throw ( RuntimeException, std::exception )
 {
     if (( aEvent.Action == FrameAction_COMPONENT_ATTACHED ) || ( aEvent.Action == FrameAction_COMPONENT_REATTACHED ))
     {
@@ -2798,7 +2760,6 @@ throw ( RuntimeException, std::exception )
 }
 
 void SAL_CALL LayoutManager::disposing( const lang::EventObject& rEvent )
-throw( RuntimeException, std::exception )
 {
     bool bDisposeAndClear( false );
 
@@ -2904,7 +2865,7 @@ throw( RuntimeException, std::exception )
     }
 }
 
-void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Event ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Event )
 {
     SolarMutexClearableGuard aReadLock;
     Reference< XFrame > xFrame( m_xFrame );
@@ -2948,7 +2909,7 @@ void SAL_CALL LayoutManager::elementInserted( const ui::ConfigurationEvent& Even
     }
 }
 
-void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event )
 {
     SolarMutexClearableGuard aReadLock;
     Reference< frame::XFrame >                xFrame( m_xFrame );
@@ -3035,7 +2996,7 @@ void SAL_CALL LayoutManager::elementRemoved( const ui::ConfigurationEvent& Event
     }
 }
 
-void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Event ) throw (uno::RuntimeException, std::exception)
+void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Event )
 {
     SolarMutexClearableGuard aReadLock;
     Reference< XFrame >                       xFrame( m_xFrame );
@@ -3085,7 +3046,7 @@ void SAL_CALL LayoutManager::elementReplaced( const ui::ConfigurationEvent& Even
 }
 
 void SAL_CALL LayoutManager::setFastPropertyValue_NoBroadcast( sal_Int32       nHandle,
-                                                               const uno::Any& aValue  ) throw( uno::Exception, std::exception )
+                                                               const uno::Any& aValue  )
 {
     if ( nHandle != LAYOUTMANAGER_PROPHANDLE_REFRESHVISIBILITY )
         LayoutManager_PBase::setFastPropertyValue_NoBroadcast( nHandle, aValue );
@@ -3152,7 +3113,7 @@ namespace
     return theInfoHelper::get(*this).getHelper();
 }
 
-uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySetInfo() throw (uno::RuntimeException, std::exception)
+uno::Reference< beans::XPropertySetInfo > SAL_CALL LayoutManager::getPropertySetInfo()
 {
     static uno::Reference< beans::XPropertySetInfo >* pInfo = nullptr;
 

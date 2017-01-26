@@ -161,7 +161,7 @@ void StdTabController::ImplActivateControl( bool bFirst ) const
 }
 
 // XInterface
-Any StdTabController::queryAggregation( const Type & rType ) throw(RuntimeException, std::exception)
+Any StdTabController::queryAggregation( const Type & rType )
 {
     Any aRet = ::cppu::queryInterface( rType,
                                         (static_cast< XTabController* >(this)),
@@ -176,35 +176,35 @@ IMPL_XTYPEPROVIDER_START( StdTabController )
     cppu::UnoType<XServiceInfo>::get()
 IMPL_XTYPEPROVIDER_END
 
-void StdTabController::setModel( const Reference< XTabControllerModel >& Model ) throw(RuntimeException, std::exception)
+void StdTabController::setModel( const Reference< XTabControllerModel >& Model )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     mxModel = Model;
 }
 
-Reference< XTabControllerModel > StdTabController::getModel(  ) throw(RuntimeException, std::exception)
+Reference< XTabControllerModel > StdTabController::getModel(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     return mxModel;
 }
 
-void StdTabController::setContainer( const Reference< XControlContainer >& Container ) throw(RuntimeException, std::exception)
+void StdTabController::setContainer( const Reference< XControlContainer >& Container )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     mxControlContainer = Container;
 }
 
-Reference< XControlContainer > StdTabController::getContainer(  ) throw(RuntimeException, std::exception)
+Reference< XControlContainer > StdTabController::getContainer(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
     return mxControlContainer;
 }
 
-Sequence< Reference< XControl > > StdTabController::getControls(  ) throw(RuntimeException, std::exception)
+Sequence< Reference< XControl > > StdTabController::getControls(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -230,7 +230,7 @@ Sequence< Reference< XControl > > StdTabController::getControls(  ) throw(Runtim
     return aSeq;
 }
 
-void StdTabController::autoTabOrder(  ) throw(RuntimeException, std::exception)
+void StdTabController::autoTabOrder(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -295,7 +295,7 @@ void StdTabController::autoTabOrder(  ) throw(RuntimeException, std::exception)
     mxModel->setControlModels( aNewSeq );
 }
 
-void StdTabController::activateTabOrder(  ) throw(RuntimeException, std::exception)
+void StdTabController::activateTabOrder(  )
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -350,7 +350,7 @@ void StdTabController::activateTabOrder(  ) throw(RuntimeException, std::excepti
     }
 }
 
-void StdTabController::activateFirst(  ) throw(RuntimeException, std::exception)
+void StdTabController::activateFirst(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); //TODO: necessary?
@@ -358,7 +358,7 @@ void StdTabController::activateFirst(  ) throw(RuntimeException, std::exception)
     ImplActivateControl( true );
 }
 
-void StdTabController::activateLast(  ) throw(RuntimeException, std::exception)
+void StdTabController::activateLast(  )
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() ); //TODO: necessary?
@@ -367,19 +367,16 @@ void StdTabController::activateLast(  ) throw(RuntimeException, std::exception)
 }
 
 OUString StdTabController::getImplementationName()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return OUString("stardiv.Toolkit.StdTabController");
 }
 
 sal_Bool StdTabController::supportsService(OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 css::uno::Sequence<OUString> StdTabController::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<OUString>{
         OUString::createFromAscii(szServiceName2_TabController),

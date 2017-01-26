@@ -64,7 +64,6 @@ bool DecryptorImpl::checkReady() const
 }
 
 void DecryptorImpl::notifyResultListener() const
-    throw (cssu::Exception, cssu::RuntimeException)
 /****** DecryptorImpl/notifyResultListener ***********************************
  *
  *   NAME
@@ -81,7 +80,6 @@ void DecryptorImpl::notifyResultListener() const
 void DecryptorImpl::startEngine( const cssu::Reference<
     cssxc::XXMLEncryptionTemplate >&
     xEncryptionTemplate)
-    throw (cssu::Exception, cssu::RuntimeException)
 /****** DecryptorImpl/startEngine ********************************************
  *
  *   NAME
@@ -117,20 +115,17 @@ void DecryptorImpl::startEngine( const cssu::Reference<
 
 /* XDecryptionResultBroadcaster */
 void SAL_CALL DecryptorImpl::addDecryptionResultListener( const cssu::Reference< cssxc::sax::XDecryptionResultListener >& listener )
-        throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     m_xResultListener = listener;
     tryToPerform();
 }
 
 void SAL_CALL DecryptorImpl::removeDecryptionResultListener( const cssu::Reference< cssxc::sax::XDecryptionResultListener >&)
-        throw (cssu::RuntimeException, std::exception)
 {
 }
 
 /* XInitialization */
 void SAL_CALL DecryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArguments )
-    throw (cssu::Exception, cssu::RuntimeException, std::exception)
 {
     OSL_ASSERT(aArguments.getLength() == 5);
 
@@ -146,39 +141,33 @@ void SAL_CALL DecryptorImpl::initialize( const cssu::Sequence< cssu::Any >& aArg
 }
 
 OUString DecryptorImpl_getImplementationName ()
-    throw (cssu::RuntimeException)
 {
     return OUString ( IMPLEMENTATION_NAME );
 }
 
 cssu::Sequence< OUString > SAL_CALL DecryptorImpl_getSupportedServiceNames(  )
-    throw (cssu::RuntimeException)
 {
     cssu::Sequence<OUString> aRet { "com.sun.star.xml.crypto.sax.Decryptor" };
     return aRet;
 }
 
 cssu::Reference< cssu::XInterface > SAL_CALL DecryptorImpl_createInstance( const cssu::Reference< cssl::XMultiServiceFactory >& xMSF)
-    throw( cssu::Exception )
 {
     return static_cast<cppu::OWeakObject*>(new DecryptorImpl( comphelper::getComponentContext( xMSF ) ));
 }
 
 /* XServiceInfo */
 OUString SAL_CALL DecryptorImpl::getImplementationName(  )
-    throw (cssu::RuntimeException, std::exception)
 {
     return DecryptorImpl_getImplementationName();
 }
 
 sal_Bool SAL_CALL DecryptorImpl::supportsService( const OUString& rServiceName )
-    throw (cssu::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 cssu::Sequence< OUString > SAL_CALL DecryptorImpl::getSupportedServiceNames(  )
-    throw (cssu::RuntimeException, std::exception)
 {
     return DecryptorImpl_getSupportedServiceNames();
 }

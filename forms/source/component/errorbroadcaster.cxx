@@ -82,13 +82,13 @@ namespace frm
     }
 
 
-    void SAL_CALL OErrorBroadcaster::addSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener ) throw( RuntimeException, std::exception )
+    void SAL_CALL OErrorBroadcaster::addSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener )
     {
         m_aErrorListeners.addInterface( _rxListener );
     }
 
 
-    void SAL_CALL OErrorBroadcaster::removeSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener ) throw( RuntimeException, std::exception )
+    void SAL_CALL OErrorBroadcaster::removeSQLErrorListener( const Reference< XSQLErrorListener >& _rxListener )
     {
         m_aErrorListeners.removeInterface( _rxListener );
     }

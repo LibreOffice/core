@@ -38,60 +38,55 @@ public:
     ~UriReference();
 
     /// @throws css::uno::RuntimeException
-    OUString getUriReference()
-        throw (css::uno::RuntimeException);
+    OUString getUriReference();
 
     /// @throws css::uno::RuntimeException
-    bool isAbsolute() throw (css::uno::RuntimeException);
+    bool isAbsolute();
 
     /// @throws css::uno::RuntimeException
-    const OUString& getScheme() throw (css::uno::RuntimeException) { return m_scheme;}
+    const OUString& getScheme() { return m_scheme;}
 
     /// @throws css::uno::RuntimeException
-    OUString getSchemeSpecificPart()
-        throw (css::uno::RuntimeException);
+    OUString getSchemeSpecificPart();
 
     /// @throws css::uno::RuntimeException
-    bool isHierarchical() throw (css::uno::RuntimeException);
+    bool isHierarchical();
 
     /// @throws css::uno::RuntimeException
-    bool hasAuthority() throw (css::uno::RuntimeException);
+    bool hasAuthority();
 
     /// @throws css::uno::RuntimeException
-    OUString getAuthority() throw (css::uno::RuntimeException);
+    OUString getAuthority();
 
     /// @throws css::uno::RuntimeException
-    OUString getPath() throw (css::uno::RuntimeException);
+    OUString getPath();
 
     /// @throws css::uno::RuntimeException
-    bool hasRelativePath() throw (css::uno::RuntimeException);
+    bool hasRelativePath();
 
     /// @throws css::uno::RuntimeException
-    sal_Int32 getPathSegmentCount()
-        throw (css::uno::RuntimeException);
+    sal_Int32 getPathSegmentCount();
 
     /// @throws css::uno::RuntimeException
-    OUString getPathSegment(sal_Int32 index)
-        throw (css::uno::RuntimeException);
+    OUString getPathSegment(sal_Int32 index);
 
     /// @throws css::uno::RuntimeException
-    bool hasQuery() throw (css::uno::RuntimeException);
+    bool hasQuery();
 
     /// @throws css::uno::RuntimeException
-    OUString getQuery() throw (css::uno::RuntimeException);
+    OUString getQuery();
 
     /// @throws css::uno::RuntimeException
-    bool hasFragment() throw (css::uno::RuntimeException);
+    bool hasFragment();
 
     /// @throws css::uno::RuntimeException
-    OUString getFragment() throw (css::uno::RuntimeException);
+    OUString getFragment();
 
     /// @throws css::uno::RuntimeException
-    void setFragment(OUString const & fragment)
-        throw (css::uno::RuntimeException);
+    void setFragment(OUString const & fragment);
 
     /// @throws css::uno::RuntimeException
-    void clearFragment() throw (css::uno::RuntimeException);
+    void clearFragment();
 
     osl::Mutex m_mutex;
     OUString m_scheme;

@@ -31,22 +31,22 @@ class ScVbaLabel : public LabelImpl_BASE
 public:
     ScVbaLabel( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::uno::XInterface >& xControl, const css::uno::Reference< css::frame::XModel >& xModel, ov::AbstractGeometryAttributes* pGeomHelper  );
    // Attributes
-    virtual css::uno::Any SAL_CALL getValue() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setValue( const css::uno::Any& _value ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getCaption() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setCaption( const OUString& _caption ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getAccelerator() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAccelerator( const OUString& _accelerator ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getBackColor() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL getValue() override;
+    virtual void SAL_CALL setValue( const css::uno::Any& _value ) override;
+    virtual OUString SAL_CALL getCaption() override;
+    virtual void SAL_CALL setCaption( const OUString& _caption ) override;
+    virtual OUString SAL_CALL getAccelerator() override;
+    virtual void SAL_CALL setAccelerator( const OUString& _accelerator ) override;
+    virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() override;
+    virtual sal_Int32 SAL_CALL getBackColor() override;
+    virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) override;
+    virtual sal_Bool SAL_CALL getAutoSize() override;
+    virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) override;
     //XHelperInterface
     virtual OUString getServiceImplName() override;
     virtual css::uno::Sequence<OUString> getServiceNames() override;
     // XDefaultProperty
-    OUString SAL_CALL getDefaultPropertyName(  ) throw (css::uno::RuntimeException, std::exception) override { return OUString("Value"); }
+    OUString SAL_CALL getDefaultPropertyName(  ) override { return OUString("Value"); }
 };
 #endif // INCLUDED_VBAHELPER_SOURCE_MSFORMS_VBALABEL_HXX
 

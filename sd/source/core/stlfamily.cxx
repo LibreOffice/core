@@ -113,13 +113,13 @@ SdStyleFamily::~SdStyleFamily()
     delete mpImpl;
 }
 
-void SdStyleFamily::throwIfDisposed() const throw(RuntimeException)
+void SdStyleFamily::throwIfDisposed() const
 {
     if( !mxPool.is() )
         throw DisposedException();
 }
 
-SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement ) throw(IllegalArgumentException)
+SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement )
 {
     Reference< XStyle > xStyle( rElement, UNO_QUERY );
     SdStyleSheet* pStyle = static_cast< SdStyleSheet* >( xStyle.get() );
@@ -130,7 +130,7 @@ SdStyleSheet* SdStyleFamily::GetValidNewSheet( const Any& rElement ) throw(Illeg
     return pStyle;
 }
 
-SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException )
+SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName )
 {
     SdStyleSheet* pRet = nullptr;
     if( !rName.isEmpty() )
@@ -165,17 +165,17 @@ SdStyleSheet* SdStyleFamily::GetSheetByName( const OUString& rName ) throw(NoSuc
 }
 
 // XServiceInfo
-OUString SAL_CALL SdStyleFamily::getImplementationName() throw(RuntimeException, std::exception)
+OUString SAL_CALL SdStyleFamily::getImplementationName()
 {
     return OUString( "SdStyleFamily" );
 }
 
-sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SdStyleFamily::supportsService( const OUString& ServiceName )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
-Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames() throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames()
 {
     OUString aServiceName( "com.sun.star.style.StyleFamily" );
     Sequence< OUString > aSeq( &aServiceName, 1 );
@@ -183,7 +183,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getSupportedServiceNames() throw(Ru
 }
 
 // XNamed
-OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException, std::exception)
+OUString SAL_CALL SdStyleFamily::getName()
 {
     if( mnFamily == SD_STYLE_FAMILY_MASTERPAGE )
     {
@@ -205,20 +205,20 @@ OUString SAL_CALL SdStyleFamily::getName() throw (RuntimeException, std::excepti
     }
 }
 
-void SAL_CALL SdStyleFamily::setName( const OUString& ) throw (RuntimeException, std::exception)
+void SAL_CALL SdStyleFamily::setName( const OUString& )
 {
 }
 
 // XNameAccess
 
-Any SAL_CALL SdStyleFamily::getByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL SdStyleFamily::getByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
     return Any( Reference< XStyle >( static_cast<SfxUnoStyleSheet*>(GetSheetByName( rName )) ) );
 }
 
-Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames()
 {
     SolarMutexGuard aGuard;
 
@@ -260,7 +260,7 @@ Sequence< OUString > SAL_CALL SdStyleFamily::getElementNames() throw(RuntimeExce
     }
 }
 
-sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -297,12 +297,12 @@ sal_Bool SAL_CALL SdStyleFamily::hasByName( const OUString& aName ) throw(Runtim
 
 // XElementAccess
 
-Type SAL_CALL SdStyleFamily::getElementType() throw(RuntimeException, std::exception)
+Type SAL_CALL SdStyleFamily::getElementType()
 {
     return cppu::UnoType<XStyle>::get();
 }
 
-sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException, std::exception)
+sal_Bool SAL_CALL SdStyleFamily::hasElements()
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -325,7 +325,7 @@ sal_Bool SAL_CALL SdStyleFamily::hasElements() throw(RuntimeException, std::exce
 
 // XIndexAccess
 
-sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException, std::exception)
+sal_Int32 SAL_CALL SdStyleFamily::getCount()
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -348,7 +348,7 @@ sal_Int32 SAL_CALL SdStyleFamily::getCount() throw(RuntimeException, std::except
     return nCount;
 }
 
-Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBoundsException, WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -389,7 +389,7 @@ Any SAL_CALL SdStyleFamily::getByIndex( sal_Int32 Index ) throw(IndexOutOfBounds
 
 // XNameContainer
 
-void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rElement ) throw(IllegalArgumentException, ElementExistException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rElement )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -405,7 +405,7 @@ void SAL_CALL SdStyleFamily::insertByName( const OUString& rName, const Any& rEl
     mxPool->Insert( pStyle );
 }
 
-void SAL_CALL SdStyleFamily::removeByName( const OUString& rName ) throw(NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL SdStyleFamily::removeByName( const OUString& rName )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -420,7 +420,7 @@ void SAL_CALL SdStyleFamily::removeByName( const OUString& rName ) throw(NoSuchE
 
 // XNameReplace
 
-void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aElement ) throw(IllegalArgumentException, NoSuchElementException, WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aElement )
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -434,7 +434,7 @@ void SAL_CALL SdStyleFamily::replaceByName( const OUString& rName, const Any& aE
 
 // XSingleServiceFactory
 
-Reference< XInterface > SAL_CALL SdStyleFamily::createInstance() throw(Exception, RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL SdStyleFamily::createInstance()
 {
     SolarMutexGuard aGuard;
     throwIfDisposed();
@@ -449,14 +449,14 @@ Reference< XInterface > SAL_CALL SdStyleFamily::createInstance() throw(Exception
     }
 }
 
-Reference< XInterface > SAL_CALL SdStyleFamily::createInstanceWithArguments( const Sequence< Any >&  ) throw(Exception, RuntimeException, std::exception)
+Reference< XInterface > SAL_CALL SdStyleFamily::createInstanceWithArguments( const Sequence< Any >&  )
 {
     return createInstance();
 }
 
 // XComponent
 
-void SAL_CALL SdStyleFamily::dispose(  ) throw (RuntimeException, std::exception)
+void SAL_CALL SdStyleFamily::dispose(  )
 {
     if( mxPool.is() )
         mxPool.clear();
@@ -468,28 +468,28 @@ void SAL_CALL SdStyleFamily::dispose(  ) throw (RuntimeException, std::exception
     }
 }
 
-void SAL_CALL SdStyleFamily::addEventListener( const Reference< XEventListener >&  ) throw (RuntimeException, std::exception)
+void SAL_CALL SdStyleFamily::addEventListener( const Reference< XEventListener >&  )
 {
 }
 
-void SAL_CALL SdStyleFamily::removeEventListener( const Reference< XEventListener >&  ) throw (RuntimeException, std::exception)
+void SAL_CALL SdStyleFamily::removeEventListener( const Reference< XEventListener >&  )
 {
 }
 
 // XPropertySet
 
-Reference<XPropertySetInfo> SdStyleFamily::getPropertySetInfo() throw (RuntimeException, std::exception)
+Reference<XPropertySetInfo> SdStyleFamily::getPropertySetInfo()
 {
     OSL_FAIL( "###unexpected!" );
     return Reference<XPropertySetInfo>();
 }
 
-void SdStyleFamily::setPropertyValue( const OUString& , const Any&  ) throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
+void SdStyleFamily::setPropertyValue( const OUString& , const Any&  )
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+Any SdStyleFamily::getPropertyValue( const OUString& PropertyName )
 {
     if ( PropertyName == "DisplayName" )
     {
@@ -509,22 +509,22 @@ Any SdStyleFamily::getPropertyValue( const OUString& PropertyName ) throw (Unkno
     }
 }
 
-void SdStyleFamily::addPropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SdStyleFamily::addPropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  )
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SdStyleFamily::removePropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SdStyleFamily::removePropertyChangeListener( const OUString& , const Reference<XPropertyChangeListener>&  )
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SdStyleFamily::addVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>& ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SdStyleFamily::addVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>& )
 {
     OSL_FAIL( "###unexpected!" );
 }
 
-void SdStyleFamily::removeVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>&  ) throw (UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception)
+void SdStyleFamily::removeVetoableChangeListener( const OUString& , const Reference<XVetoableChangeListener>&  )
 {
     OSL_FAIL( "###unexpected!" );
 }

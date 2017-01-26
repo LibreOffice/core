@@ -71,19 +71,19 @@ TextConversionService::getFunctionBySymbol(const sal_Char* func)
 #endif
 
 OUString SAL_CALL
-TextConversionService::getImplementationName() throw( RuntimeException, std::exception )
+TextConversionService::getImplementationName()
 {
     return OUString::createFromAscii(implementationName);
 }
 
 sal_Bool SAL_CALL
-TextConversionService::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+TextConversionService::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL
-TextConversionService::getSupportedServiceNames() throw( RuntimeException, std::exception )
+TextConversionService::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { OUString::createFromAscii(implementationName) };
     return aRet;

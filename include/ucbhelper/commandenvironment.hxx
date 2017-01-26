@@ -60,13 +60,9 @@ public:
     virtual ~CommandEnvironment() override;
 
      // XCommandEnvironemnt
-    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler()
-        throw ( css::uno::RuntimeException,
-                std::exception ) override;
+    virtual css::uno::Reference< css::task::XInteractionHandler > SAL_CALL getInteractionHandler() override;
 
-    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler()
-        throw ( css::uno::RuntimeException,
-                std::exception ) override;
+    virtual css::uno::Reference< css::ucb::XProgressHandler > SAL_CALL getProgressHandler() override;
 };
 
 } /* namespace ucbhelper */

@@ -54,26 +54,23 @@ public:
      */
     explicit GlobalAcceleratorConfiguration(const css::uno::Reference< css::uno::XComponentContext >& xContext);
 
-    virtual OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual OUString SAL_CALL getImplementationName() override
     {
         return OUString("com.sun.star.comp.framework.GlobalAcceleratorConfiguration");
     }
 
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     {
         return cppu::supportsService(this, ServiceName);
     }
 
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     {
         return {"com.sun.star.ui.GlobalAcceleratorConfiguration"};
     }
 
     // XComponent
-    virtual  void SAL_CALL dispose() throw (css::uno::RuntimeException, std::exception) override;
+    virtual  void SAL_CALL dispose() override;
 
     /// This has to be called after when the instance is acquire()'d.
     void fillCache();
@@ -120,7 +117,6 @@ void GlobalAcceleratorConfiguration::fillCache()
 // XComponent.dispose(),  #i120029#, to release the cyclic reference
 
 void SAL_CALL GlobalAcceleratorConfiguration::dispose()
-    throw(css::uno::RuntimeException, std::exception)
 {
     try
     {

@@ -89,7 +89,6 @@ void SAL_CALL CachedDynamicResultSet::release()
 
 Any SAL_CALL CachedDynamicResultSet
     ::queryInterface( const Type&  rType )
-    throw ( RuntimeException, std::exception )
 {
     //list all interfaces inclusive baseclasses of interfaces
 
@@ -119,19 +118,16 @@ XTYPEPROVIDER_IMPL_4( CachedDynamicResultSet
 // XServiceInfo methods.
 
 OUString SAL_CALL CachedDynamicResultSet::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString( "com.sun.star.comp.ucb.CachedDynamicResultSet" );
 }
 
 sal_Bool SAL_CALL CachedDynamicResultSet::supportsService( const OUString& ServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService( this, ServiceName );
 }
 
 css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSet::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { CACHED_DRS_SERVICE_NAME };
 }
@@ -142,7 +138,6 @@ css::uno::Sequence< OUString > SAL_CALL CachedDynamicResultSet::getSupportedServ
 //virtual
 void SAL_CALL CachedDynamicResultSet
     ::impl_disposing( const EventObject& Source )
-    throw( RuntimeException )
 {
     DynamicResultSetWrapper::impl_disposing( Source );
     m_xContentIdentifierMapping.clear();
@@ -177,7 +172,6 @@ void SAL_CALL CachedDynamicResultSetFactory::release()
 }
 
 css::uno::Any SAL_CALL CachedDynamicResultSetFactory::queryInterface( const css::uno::Type & rType )
-    throw( css::uno::RuntimeException, std::exception )
 {
     css::uno::Any aRet = cppu::queryInterface( rType,
                                                (static_cast< XTypeProvider* >(this)),
@@ -203,7 +197,6 @@ XSERVICEINFO_COMMOM_IMPL( CachedDynamicResultSetFactory,
 /// @throws css::uno::Exception
 static css::uno::Reference< css::uno::XInterface > SAL_CALL
 CachedDynamicResultSetFactory_CreateInstance( const css::uno::Reference< css::lang::XMultiServiceFactory> & rSMgr )
-    throw( css::uno::Exception )
 {
     css::lang::XServiceInfo* pX =
         static_cast<css::lang::XServiceInfo*>(new CachedDynamicResultSetFactory( ucbhelper::getComponentContext(rSMgr) ));
@@ -231,7 +224,6 @@ Reference< XDynamicResultSet > SAL_CALL CachedDynamicResultSetFactory
     ::createCachedDynamicResultSet(
           const Reference< XDynamicResultSet > & SourceStub
         , const Reference< XContentIdentifierMapping > & ContentIdentifierMapping )
-        throw( RuntimeException, std::exception )
 {
     Reference< XDynamicResultSet > xRet;
     xRet = new CachedDynamicResultSet( SourceStub, ContentIdentifierMapping, m_xContext );

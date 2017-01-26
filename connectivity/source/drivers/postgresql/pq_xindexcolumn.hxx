@@ -59,7 +59,7 @@ public:
 
 public: // XDataDescriptorFactory
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override;
+    createDataDescriptor(  ) override;
 
 };
 
@@ -73,7 +73,7 @@ public:
 
 public: // XDataDescriptorFactory
     virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL
-    createDataDescriptor(  ) throw (css::uno::RuntimeException, std::exception) override;
+    createDataDescriptor(  ) override;
 
 };
 

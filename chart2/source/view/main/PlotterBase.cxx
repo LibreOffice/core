@@ -44,7 +44,6 @@ void PlotterBase::initPlotter(  const uno::Reference< drawing::XShapes >& xLogic
        , const uno::Reference< drawing::XShapes >& xFinalTarget
        , const uno::Reference< lang::XMultiServiceFactory >& xShapeFactory
        , const OUString& rCID )
-            throw (uno::RuntimeException, std::exception)
 {
     OSL_PRECOND(xLogicTarget.is()&&xFinalTarget.is()&&xShapeFactory.is(),"no proper initialization parameters");
     //is only allowed to be called once

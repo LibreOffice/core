@@ -40,24 +40,23 @@ private:
     Reference< XComponent >     mxSrcDoc;
 
     // OGenericUnoDialog
-    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() throw(RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getImplementationName() throw (RuntimeException, std::exception) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() throw (RuntimeException, std::exception) override;
+    virtual Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
     virtual VclPtr<Dialog> createDialog( vcl::Window* pParent ) override;
     virtual void executedDialog( sal_Int16 nExecutionResult ) override;
-    virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(RuntimeException, std::exception) override;
+    virtual Reference< XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
     // XPropertyAccess
     using OPropertySetHelper::getPropertyValues;
-    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) throw (RuntimeException, std::exception) override;
+    virtual Sequence< PropertyValue > SAL_CALL getPropertyValues(  ) override;
     using OPropertySetHelper::setPropertyValues;
-    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps )
-        throw (UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setPropertyValues( const Sequence< PropertyValue >& aProps ) override;
 
     // XExporter
-    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) throw (IllegalArgumentException, RuntimeException, std::exception) override;
+    virtual void SAL_CALL setSourceDocument( const Reference< XComponent >& xDoc ) override;
 
 public:
 
@@ -66,11 +65,11 @@ public:
 };
 
 /// @throws RuntimeException
-OUString PDFDialog_getImplementationName () throw (RuntimeException);
+OUString PDFDialog_getImplementationName ();
 /// @throws RuntimeException
-Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames() throw (RuntimeException);
+Sequence< OUString > SAL_CALL PDFDialog_getSupportedServiceNames();
 /// @throws Exception
-Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr) throw( Exception );
+Reference< XInterface > SAL_CALL PDFDialog_createInstance( const Reference< XMultiServiceFactory > & rSMgr);
 
 #endif // INCLUDED_FILTER_SOURCE_PDF_PDFDIALOG_HXX
 

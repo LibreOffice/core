@@ -55,8 +55,7 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_MSCryptImpl::generate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XSecurityEnvironment >& aEnvironment
-) throw( css::xml::crypto::XMLSignatureException,
-         css::uno::SecurityException )
+)
 {
     xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
@@ -151,9 +150,7 @@ Reference< XXMLSignatureTemplate >
 SAL_CALL XMLSignature_MSCryptImpl::validate(
     const Reference< XXMLSignatureTemplate >& aTemplate ,
     const Reference< XXMLSecurityContext >& aSecurityCtx
-) throw( css::uno::RuntimeException,
-         css::uno::SecurityException,
-         css::xml::crypto::XMLSignatureException ) {
+) {
     xmlSecKeysMngrPtr pMngr = nullptr ;
     xmlSecDSigCtxPtr pDsigCtx = nullptr ;
     xmlNodePtr pNode = nullptr ;
@@ -265,12 +262,12 @@ SAL_CALL XMLSignature_MSCryptImpl::validate(
 }
 
 /* XServiceInfo */
-OUString SAL_CALL XMLSignature_MSCryptImpl::getImplementationName() throw( RuntimeException ) {
+OUString SAL_CALL XMLSignature_MSCryptImpl::getImplementationName() {
     return impl_getImplementationName() ;
 }
 
 /* XServiceInfo */
-sal_Bool SAL_CALL XMLSignature_MSCryptImpl::supportsService( const OUString& serviceName) throw( RuntimeException ) {
+sal_Bool SAL_CALL XMLSignature_MSCryptImpl::supportsService( const OUString& serviceName) {
     Sequence< OUString > seqServiceNames = getSupportedServiceNames() ;
     const OUString* pArray = seqServiceNames.getConstArray() ;
     for( sal_Int32 i = 0 ; i < seqServiceNames.getLength() ; i ++ ) {
@@ -281,7 +278,7 @@ sal_Bool SAL_CALL XMLSignature_MSCryptImpl::supportsService( const OUString& ser
 }
 
 /* XServiceInfo */
-Sequence< OUString > SAL_CALL XMLSignature_MSCryptImpl::getSupportedServiceNames() throw( RuntimeException ) {
+Sequence< OUString > SAL_CALL XMLSignature_MSCryptImpl::getSupportedServiceNames() {
     return impl_getSupportedServiceNames() ;
 }
 
@@ -292,12 +289,12 @@ Sequence< OUString > XMLSignature_MSCryptImpl::impl_getSupportedServiceNames() {
     return seqServiceNames ;
 }
 
-OUString XMLSignature_MSCryptImpl::impl_getImplementationName() throw( RuntimeException ) {
+OUString XMLSignature_MSCryptImpl::impl_getImplementationName() {
     return OUString("com.sun.star.xml.security.bridge.xmlsec.XMLSignature_MSCryptImpl") ;
 }
 
 //Helper for registry
-Reference< XInterface > SAL_CALL XMLSignature_MSCryptImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) throw( RuntimeException ) {
+Reference< XInterface > SAL_CALL XMLSignature_MSCryptImpl::impl_createInstance( const Reference< XMultiServiceFactory >& aServiceManager ) {
     return Reference< XInterface >( *new XMLSignature_MSCryptImpl( aServiceManager ) ) ;
 }
 

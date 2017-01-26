@@ -22,20 +22,17 @@
 #include <osl/diagnose.h>
 
 void SAL_CALL OClosePreventer::queryClosing( const css::lang::EventObject&, sal_Bool  )
-        throw (css::util::CloseVetoException, css::uno::RuntimeException, std::exception)
 {
     throw css::util::CloseVetoException();
 }
 
 void SAL_CALL OClosePreventer::notifyClosing( const css::lang::EventObject& )
-        throw (css::uno::RuntimeException, std::exception)
 {
     // just a disaster
     OSL_FAIL( "The object can not be prevented from closing!\n" );
 }
 
 void SAL_CALL OClosePreventer::disposing( const css::lang::EventObject& )
-        throw (css::uno::RuntimeException, std::exception)
 {
     // just a disaster
     OSL_FAIL( "The object can not be prevented from closing!\n" );

@@ -47,11 +47,11 @@ namespace DOM
         }
     }
 
-    OUString SAL_CALL CDocumentFragment::getNodeName()throw (RuntimeException, std::exception)
+    OUString SAL_CALL CDocumentFragment::getNodeName()
     {
         return OUString("#document-fragment");
     }
-    OUString SAL_CALL CDocumentFragment::getNodeValue() throw (RuntimeException, std::exception)
+    OUString SAL_CALL CDocumentFragment::getNodeValue()
     {
         return OUString();
     }

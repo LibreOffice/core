@@ -149,7 +149,7 @@ namespace xmloff
 
         /** writes everything which needs to be represented as sub tag
         */
-        void exportSubTags() throw (css::uno::Exception, std::exception) override;
+        void exportSubTags() override;
 
         /** adds the attributes which are handled via generic IPropertyHandlers
 

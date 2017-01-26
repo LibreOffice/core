@@ -52,8 +52,7 @@ public:
     // XInitialization
 
     virtual void SAL_CALL initialize(
-        const css::uno::Sequence<css::uno::Any>& aArguments)
-        throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+        const css::uno::Sequence<css::uno::Any>& aArguments) override;
 };
 
 typedef ::cppu::WeakComponentImplHelper <XView> PresentationViewInterfaceBase;
@@ -72,10 +71,10 @@ public:
 
     // XView
 
-    virtual Reference<XResourceId> SAL_CALL getResourceId() throw (RuntimeException, std::exception) override
+    virtual Reference<XResourceId> SAL_CALL getResourceId() override
     { return mxResourceId; };
 
-    virtual sal_Bool SAL_CALL isAnchorOnly() throw (RuntimeException, std::exception) override
+    virtual sal_Bool SAL_CALL isAnchorOnly() override
     { return false; }
 
 private:
@@ -118,7 +117,6 @@ void SAL_CALL PresentationFactory::disposing()
 
 Reference<XResource> SAL_CALL PresentationFactory::createResource (
     const Reference<XResourceId>& rxViewId)
-    throw (RuntimeException, IllegalArgumentException, WrappedTargetException, std::exception)
 {
     ThrowIfDisposed();
 
@@ -131,7 +129,6 @@ Reference<XResource> SAL_CALL PresentationFactory::createResource (
 
 void SAL_CALL PresentationFactory::releaseResource (
     const Reference<XResource>& rxView)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
     (void)rxView;
@@ -154,7 +151,6 @@ void SAL_CALL PresentationFactory::releaseResource (
 
 void SAL_CALL PresentationFactory::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     (void)rEvent;
 }
@@ -163,13 +159,11 @@ void SAL_CALL PresentationFactory::notifyConfigurationChange (
 
 void SAL_CALL PresentationFactory::disposing (
     const lang::EventObject& rEventObject)
-    throw (RuntimeException, std::exception)
 {
     (void)rEventObject;
 }
 
 void PresentationFactory::ThrowIfDisposed() const
-    throw (lang::DisposedException)
 {
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
@@ -197,7 +191,6 @@ void PresentationFactoryProvider::disposing()
 
 void SAL_CALL PresentationFactoryProvider::initialize(
     const Sequence<Any>& aArguments)
-    throw (Exception, RuntimeException, std::exception)
 {
     if (aArguments.getLength() > 0)
     {

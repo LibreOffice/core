@@ -1252,12 +1252,12 @@ public:
     SvXMLImportContext* CreateContext(sal_uInt16 nPrefix, const OUString& rLocalName,   const Reference<XAttributeList>& xAttrList) override;
 
     // XInterface
-    virtual Any SAL_CALL queryInterface( const Type& aType ) throw (RuntimeException, std::exception) override;
+    virtual Any SAL_CALL queryInterface( const Type& aType ) override;
     virtual void SAL_CALL acquire() throw () override;
     virtual void SAL_CALL release() throw () override;
 
     // XAnimationNodeSupplier
-    Reference< XAnimationNode > SAL_CALL getAnimationNode() throw (RuntimeException, std::exception) override;
+    Reference< XAnimationNode > SAL_CALL getAnimationNode() override;
 
 private:
     Reference< XAnimationNode > mxRootNode;
@@ -1289,7 +1289,7 @@ AnimationsImport::AnimationsImport( const Reference< XComponentContext > & rxCon
 }
 
 // XInterface
-Any SAL_CALL AnimationsImport::queryInterface( const Type& aType ) throw (RuntimeException, std::exception)
+Any SAL_CALL AnimationsImport::queryInterface( const Type& aType )
 {
     if ( aType == cppu::UnoType<XAnimationNodeSupplier>::get())
     {
@@ -1328,7 +1328,7 @@ SvXMLImportContext *AnimationsImport::CreateContext(sal_uInt16 nPrefix, const OU
 }
 
 // XAnimationNodeSupplier
-Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode() throw (RuntimeException, std::exception)
+Reference< XAnimationNode > SAL_CALL AnimationsImport::getAnimationNode()
 {
     return mxRootNode;
 }
@@ -1413,7 +1413,7 @@ void AnimationNodeContext::postProcessRootNode( SvXMLImport& /*rImport*/, const 
 
 } // namespace xmloff
 
-Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr) throw( Exception )
+Reference< XInterface > SAL_CALL AnimationsImport_createInstance(const Reference< XMultiServiceFactory > & rSMgr)
 {
     return static_cast<cppu::OWeakObject*>(new xmloff::AnimationsImport( comphelper::getComponentContext(rSMgr) ));
 }

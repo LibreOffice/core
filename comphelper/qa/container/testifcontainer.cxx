@@ -48,13 +48,12 @@ class TestListener : public cppu::WeakImplHelper< XVetoableChangeListener >
 {
 public:
     // Methods
-    virtual void SAL_CALL disposing( const css::lang::EventObject& /*Source*/ ) throw(css::uno::RuntimeException) override
+    virtual void SAL_CALL disposing( const css::lang::EventObject& /*Source*/ ) override
         {
 
         }
 
-    virtual void SAL_CALL vetoableChange( const css::beans::PropertyChangeEvent& /*aEvent*/ )
-       throw(css::beans::PropertyVetoException, css::uno::RuntimeException) override
+    virtual void SAL_CALL vetoableChange( const css::beans::PropertyChangeEvent& /*aEvent*/ ) override
         {
 
         }

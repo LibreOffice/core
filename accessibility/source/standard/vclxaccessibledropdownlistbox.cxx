@@ -63,14 +63,12 @@ bool VCLXAccessibleDropDownListBox::IsValid() const
 // XServiceInfo
 
 OUString VCLXAccessibleDropDownListBox::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return OUString( "com.sun.star.comp.toolkit.AccessibleDropDownListBox" );
 }
 
 
 Sequence< OUString > VCLXAccessibleDropDownListBox::getSupportedServiceNames()
-    throw (RuntimeException, std::exception)
 {
     Sequence< OUString > aNames = VCLXAccessibleBox::getSupportedServiceNames();
     sal_Int32 nLength = aNames.getLength();

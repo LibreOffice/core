@@ -110,23 +110,21 @@ namespace dbaccess
                 , const OUString& _rName
                 ,const OUString& _rType
                 , const OUString& _rDesc
-                ,const css::uno::Reference< css::container::XNameAccess >& _rxColumnDefinitions)
-            throw(css::sdbc::SQLException);
+                ,const css::uno::Reference< css::container::XNameAccess >& _rxColumnDefinitions);
 
         /// @throws css::sdbc::SQLException
         ODBTable(connectivity::sdbcx::OCollection* _pTables
-                ,const css::uno::Reference< css::sdbc::XConnection >& _rxConn)
-                throw(css::sdbc::SQLException);
+                ,const css::uno::Reference< css::sdbc::XConnection >& _rxConn);
         virtual ~ODBTable() override;
 
         // ODescriptor
         virtual void construct() override;
 
         //XInterface
-        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
         //XTypeProvider
-        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) throw(css::uno::RuntimeException, std::exception) override;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes(  ) override;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() override;
         static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
     // css::lang::XServiceInfo
@@ -136,13 +134,13 @@ namespace dbaccess
         virtual void SAL_CALL getFastPropertyValue(css::uno::Any& rValue, sal_Int32 nHandle) const override;
 
     // css::sdbcx::XRename,
-        virtual void SAL_CALL rename( const OUString& _rNewName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL rename( const OUString& _rNewName ) override;
 
     // css::sdbcx::XAlterTable,
-        virtual void SAL_CALL alterColumnByName( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException, std::exception) override;
+        virtual void SAL_CALL alterColumnByName( const OUString& _rName, const css::uno::Reference< css::beans::XPropertySet >& _rxDescriptor ) override;
 
         // css::lang::XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
     private:
         using OTable_Base::createArrayHelper;

@@ -740,7 +740,7 @@ void SdTransferable::SetPageBookmarks( const std::vector<OUString> &rPageBookmar
     }
 }
 
-sal_Int64 SAL_CALL SdTransferable::getSomething( const css::uno::Sequence< sal_Int8 >& rId ) throw( css::uno::RuntimeException, std::exception )
+sal_Int64 SAL_CALL SdTransferable::getSomething( const css::uno::Sequence< sal_Int8 >& rId )
 {
     sal_Int64 nRet;
 

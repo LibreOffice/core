@@ -57,10 +57,10 @@ public:
     // XDispatch
     virtual void SAL_CALL dispatchWithNotification( const css::util::URL& aURL,
                 const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
-                const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException, std::exception ) override;
+                const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) override;
+    virtual void SAL_CALL dispatch( const css::util::URL& aURL, const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
+    virtual void SAL_CALL addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
+    virtual void SAL_CALL removeStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) override;
 
     // Something else
     void                ReleaseAll();
@@ -86,17 +86,14 @@ public:
 
     virtual void SAL_CALL       dispatchWithNotification( const css::util::URL& aURL,
                                                           const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
-                                                          const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
-                                throw( css::uno::RuntimeException, std::exception ) override;
+                                                          const css::uno::Reference< css::frame::XDispatchResultListener >& rListener ) override;
     virtual void   SAL_CALL     dispatch( const css::util::URL& aURL,
-                                          const css::uno::Sequence< css::beans::PropertyValue >& aArgs )
-                                throw( css::uno::RuntimeException, std::exception ) override;
+                                          const css::uno::Sequence< css::beans::PropertyValue >& aArgs ) override;
     virtual void   SAL_CALL     addStatusListener( const css::uno::Reference< css::frame::XStatusListener > & xControl,
-                                                   const css::util::URL& aURL)
-                                throw( css::uno::RuntimeException, std::exception ) override;
+                                                   const css::util::URL& aURL) override;
 
     // XUnoTunnel
-    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException, std::exception) override ;
+    virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override ;
     static const css::uno::Sequence< sal_Int8 >& impl_getStaticIdentifier();
 
     static bool             IsMasterUnoCommand( const css::util::URL& aURL );
@@ -144,10 +141,9 @@ public:
     /// @throws css::uno::RuntimeException
     void SAL_CALL       dispatch( const css::util::URL& aURL,
                                   const css::uno::Sequence< css::beans::PropertyValue >& aArgs,
-                                  const css::uno::Reference< css::frame::XDispatchResultListener >& rListener )
-        throw (css::uno::RuntimeException, std::exception);
+                                  const css::uno::Reference< css::frame::XDispatchResultListener >& rListener );
     /// @throws css::uno::RuntimeException
-    void SAL_CALL       addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL) throw( css::uno::RuntimeException );
+    void SAL_CALL       addStatusListener(const css::uno::Reference< css::frame::XStatusListener > & xControl, const css::util::URL& aURL);
     void                UnBindController();
     SfxDispatcher*      GetDispatcher();
     void                SetFrame(const css::uno::Reference< css::frame::XFrame >& xFrame);

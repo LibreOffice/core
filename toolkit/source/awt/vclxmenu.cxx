@@ -160,7 +160,6 @@ IMPL_LINK( VCLXMenu, MenuEventListener, VclMenuEvent&, rMenuEvent, void )
 
 
 OUString SAL_CALL VCLXMenu::getImplementationName(  )
-throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const bool bIsPopupMenu = IsPopupMenu();
@@ -176,7 +175,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 css::uno::Sequence< OUString > SAL_CALL VCLXMenu::getSupportedServiceNames(  )
-throw (css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const bool bIsPopupMenu = IsPopupMenu();
@@ -193,14 +191,12 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 sal_Bool SAL_CALL VCLXMenu::supportsService(const OUString& rServiceName )
-throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Any VCLXMenu::queryInterface(
     const css::uno::Type & rType )
-throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const bool bIsPopupMenu = IsPopupMenu();
@@ -230,7 +226,6 @@ throw(css::uno::RuntimeException, std::exception)
 IMPL_XUNOTUNNEL( VCLXMenu )
 
 css::uno::Sequence< css::uno::Type > VCLXMenu::getTypes()
-throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::ResettableGuard < ::osl::Mutex > aGuard( GetMutex() );
     const bool bIsPopupMenu = IsPopupMenu();
@@ -278,14 +273,12 @@ throw(css::uno::RuntimeException, std::exception)
 
 
 css::uno::Sequence< sal_Int8 > VCLXMenu::getImplementationId()
-throw(css::uno::RuntimeException, std::exception)
 {
     return css::uno::Sequence<sal_Int8>();
 }
 
 void VCLXMenu::addMenuListener(
     const css::uno::Reference< css::awt::XMenuListener >& rxListener )
-throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -294,7 +287,6 @@ throw(css::uno::RuntimeException, std::exception)
 
 void VCLXMenu::removeMenuListener(
     const css::uno::Reference< css::awt::XMenuListener >& rxListener )
-throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -306,7 +298,6 @@ void VCLXMenu::insertItem(
     const OUString& aText,
     sal_Int16 nItemStyle,
     sal_Int16 nPos )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -318,7 +309,6 @@ throw(css::uno::RuntimeException, std::exception)
 void VCLXMenu::removeItem(
     sal_Int16 nPos,
     sal_Int16 nCount )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -337,7 +327,6 @@ throw(css::uno::RuntimeException, std::exception)
 }
 
 sal_Int16 VCLXMenu::getItemCount(  )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -347,7 +336,6 @@ throw(css::uno::RuntimeException, std::exception)
 
 sal_Int16 VCLXMenu::getItemId(
     sal_Int16 nPos )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -357,7 +345,6 @@ throw(css::uno::RuntimeException, std::exception)
 
 sal_Int16 VCLXMenu::getItemPos(
     sal_Int16 nId )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -368,7 +355,6 @@ throw(css::uno::RuntimeException, std::exception)
 void VCLXMenu::enableItem(
     sal_Int16 nItemId,
     sal_Bool bEnable )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -379,7 +365,6 @@ throw(css::uno::RuntimeException, std::exception)
 
 sal_Bool VCLXMenu::isItemEnabled(
     sal_Int16 nItemId )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -390,7 +375,6 @@ throw(css::uno::RuntimeException, std::exception)
 void VCLXMenu::setItemText(
     sal_Int16 nItemId,
     const OUString& aText )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -401,7 +385,6 @@ throw(css::uno::RuntimeException, std::exception)
 
 OUString VCLXMenu::getItemText(
     sal_Int16 nItemId )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -415,7 +398,6 @@ throw(css::uno::RuntimeException, std::exception)
 void VCLXMenu::setPopupMenu(
     sal_Int16 nItemId,
     const css::uno::Reference< css::awt::XPopupMenu >& rxPopupMenu )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -433,7 +415,6 @@ throw(css::uno::RuntimeException, std::exception)
 
 css::uno::Reference< css::awt::XPopupMenu > VCLXMenu::getPopupMenu(
     sal_Int16 nItemId )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -465,7 +446,6 @@ throw(css::uno::RuntimeException, std::exception)
 // css::awt::XPopupMenu
 void VCLXMenu::insertSeparator(
     sal_Int16 nPos )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -476,7 +456,6 @@ throw(css::uno::RuntimeException, std::exception)
 
 void VCLXMenu::setDefaultItem(
     sal_Int16 nItemId )
-throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -484,7 +463,6 @@ throw(css::uno::RuntimeException, std::exception)
 }
 
 sal_Int16 VCLXMenu::getDefaultItem(  )
-throw(css::uno::RuntimeException, std::exception)
 {
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
 
@@ -494,7 +472,6 @@ throw(css::uno::RuntimeException, std::exception)
 void VCLXMenu::checkItem(
     sal_Int16 nItemId,
     sal_Bool bCheck )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -505,7 +482,6 @@ throw(css::uno::RuntimeException, std::exception)
 
 sal_Bool VCLXMenu::isItemChecked(
     sal_Int16 nItemId )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -517,7 +493,6 @@ sal_Int16 VCLXMenu::execute(
     const css::uno::Reference< css::awt::XWindowPeer >& rxWindowPeer,
     const css::awt::Rectangle& rPos,
     sal_Int16 nFlags )
-throw(css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -536,7 +511,6 @@ throw(css::uno::RuntimeException, std::exception)
 void SAL_CALL VCLXMenu::setCommand(
     sal_Int16 nItemId,
     const OUString& aCommand )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -547,7 +521,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 OUString SAL_CALL VCLXMenu::getCommand(
     sal_Int16 nItemId )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -561,7 +534,6 @@ throw (css::uno::RuntimeException, std::exception)
 void SAL_CALL VCLXMenu::setHelpCommand(
     sal_Int16 nItemId,
     const OUString& aHelp )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -572,7 +544,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 OUString SAL_CALL VCLXMenu::getHelpCommand(
     sal_Int16 nItemId )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -655,7 +626,6 @@ namespace
 
 
 sal_Bool SAL_CALL VCLXMenu::isPopupMenu(  )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -663,7 +633,6 @@ throw (css::uno::RuntimeException, std::exception)
 }
 
 void SAL_CALL VCLXMenu::clear(  )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -674,7 +643,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 css::awt::MenuItemType SAL_CALL VCLXMenu::getItemType(
     ::sal_Int16 nItemPos )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -691,7 +659,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 void SAL_CALL VCLXMenu::hideDisabledEntries(
     sal_Bool bHide )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -706,7 +673,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 
 sal_Bool SAL_CALL VCLXMenu::isInExecute(  )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -719,7 +685,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 
 void SAL_CALL VCLXMenu::endExecute()
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -731,7 +696,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 void SAL_CALL VCLXMenu::enableAutoMnemonics(
     sal_Bool bEnable )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -748,7 +712,6 @@ throw (css::uno::RuntimeException, std::exception)
 void SAL_CALL VCLXMenu::setAcceleratorKeyEvent(
     ::sal_Int16 nItemId,
     const css::awt::KeyEvent& aKeyEvent )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -763,7 +726,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 css::awt::KeyEvent SAL_CALL VCLXMenu::getAcceleratorKeyEvent(
     ::sal_Int16 nItemId )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -782,7 +744,6 @@ throw (css::uno::RuntimeException, std::exception)
 void SAL_CALL VCLXMenu::setHelpText(
     ::sal_Int16 nItemId,
     const OUString& sHelpText )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -796,7 +757,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 OUString SAL_CALL VCLXMenu::getHelpText(
     ::sal_Int16 nItemId )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -814,7 +774,6 @@ throw (css::uno::RuntimeException, std::exception)
 void SAL_CALL VCLXMenu::setTipHelpText(
     ::sal_Int16 nItemId,
     const OUString& sTipHelpText )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -828,7 +787,6 @@ throw (css::uno::RuntimeException, std::exception)
 
 OUString SAL_CALL VCLXMenu::getTipHelpText(
     ::sal_Int16 nItemId )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -846,7 +804,6 @@ void SAL_CALL VCLXMenu::setItemImage(
     ::sal_Int16 nItemId,
     const css::uno::Reference< css::graphic::XGraphic >& xGraphic,
     sal_Bool bScale )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );
@@ -862,7 +819,6 @@ throw (css::uno::RuntimeException, std::exception)
 css::uno::Reference< css::graphic::XGraphic > SAL_CALL
 VCLXMenu::getItemImage(
     ::sal_Int16 nItemId )
-throw (css::uno::RuntimeException, std::exception)
 {
     SolarMutexGuard aSolarGuard;
     ::osl::Guard< ::osl::Mutex > aGuard( GetMutex() );

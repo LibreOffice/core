@@ -38,7 +38,7 @@ namespace connectivity
 
         protected:
             void fillPropertyValues();
-            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue)throw (css::uno::Exception) override;
+            virtual void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const css::uno::Any& rValue) override;
 
         public:
             virtual void refreshColumns() override;
@@ -53,23 +53,19 @@ namespace connectivity
             OAdoTable(sdbcx::OCollection* _pTables,bool _bCase,OCatalog* _pCatalog);
 
 
-            virtual OUString SAL_CALL getName() throw(css::uno::RuntimeException) override;
+            virtual OUString SAL_CALL getName() override;
             OUString getSchema() const { return m_SchemaName; }
             virtual css::uno::Reference< css::sdbc::XDatabaseMetaData> getMetaData() const override;
             // css::lang::XUnoTunnel
-            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw(css::uno::RuntimeException) override;
+            virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
             static css::uno::Sequence< sal_Int8 > getUnoTunnelImplementationId();
 
             // XRename
-            virtual void SAL_CALL rename( const OUString& newName ) throw(css::sdbc::SQLException, css::container::ElementExistException, css::uno::RuntimeException) override;
+            virtual void SAL_CALL rename( const OUString& newName ) override;
 
             // XAlterTable
-            virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::container::NoSuchElementException, css::uno::RuntimeException) override;
-            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) throw(css::sdbc::SQLException, css::lang::IndexOutOfBoundsException, css::uno::RuntimeException) override;
-
-            /// @throws css::sdbc::SQLException
-            /// @throws css::uno::RuntimeException
-            bool create() throw(css::sdbc::SQLException, css::uno::RuntimeException);
+            virtual void SAL_CALL alterColumnByName( const OUString& colName, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
+            virtual void SAL_CALL alterColumnByIndex( sal_Int32 index, const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
             WpADOTable getImpl() const { return m_aTable;}
             OCatalog* getCatalog() const { return m_pCatalog; }

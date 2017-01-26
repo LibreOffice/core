@@ -183,7 +183,6 @@ vcl::Window* ChildWindowPane::GetWindow()
 }
 
 Reference<awt::XWindow> SAL_CALL ChildWindowPane::getWindow()
-    throw (RuntimeException, std::exception)
 {
     if (mpWindow == nullptr || ! mxWindow.is())
         GetWindow();
@@ -202,7 +201,6 @@ IMPLEMENT_FORWARD_XTYPEPROVIDER2(
 //----- XEventListener --------------------------------------------------------
 
 void SAL_CALL ChildWindowPane::disposing (const lang::EventObject& rEvent)
-    throw (RuntimeException, std::exception)
 {
     ThrowIfDisposed();
 

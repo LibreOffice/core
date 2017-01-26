@@ -83,27 +83,20 @@ protected:
 
 public: // XAppend
     virtual void SAL_CALL appendByDescriptor(
-        const css::uno::Reference< css::beans::XPropertySet >& descriptor )
-        throw (css::sdbc::SQLException,
-               css::container::ElementExistException,
-               css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::beans::XPropertySet >& descriptor ) override;
 
 // public: // XDrop
 //     virtual void SAL_CALL dropByName( const OUString& elementName )
 //         throw (css::sdbc::SQLException,
 //                css::container::NoSuchElementException,
 //                css::uno::RuntimeException);
-    virtual void SAL_CALL dropByIndex( sal_Int32 index )
-        throw (css::sdbc::SQLException,
-               css::lang::IndexOutOfBoundsException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dropByIndex( sal_Int32 index ) override;
 
 public: // XRefreshable
-    virtual void SAL_CALL refresh(  ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL refresh(  ) override;
 
 public: // XDataDescriptorFactory
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
 };
 
 
@@ -116,8 +109,7 @@ public:
         ConnectionSettings *pSettings );
 
 public: // XDataDescriptorFactory
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL createDataDescriptor(  ) override;
 };
 
 }

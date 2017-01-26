@@ -63,7 +63,6 @@ SwXDispatchProviderInterceptor::~SwXDispatchProviderInterceptor()
 
 uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch(
     const util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags )
-        throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     uno::Reference< frame::XDispatch> xResult;
@@ -88,7 +87,7 @@ uno::Reference< frame::XDispatch > SwXDispatchProviderInterceptor::queryDispatch
     return xResult;
 }
 
-uno::Sequence<OUString> SAL_CALL SwXDispatchProviderInterceptor::getInterceptedURLs() throw (uno::RuntimeException, std::exception)
+uno::Sequence<OUString> SAL_CALL SwXDispatchProviderInterceptor::getInterceptedURLs()
 {
     uno::Sequence<OUString> aRet =
     {
@@ -99,7 +98,7 @@ uno::Sequence<OUString> SAL_CALL SwXDispatchProviderInterceptor::getInterceptedU
 }
 
 uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderInterceptor::queryDispatches(
-    const uno::Sequence< frame::DispatchDescriptor >& aDescripts ) throw(uno::RuntimeException, std::exception)
+    const uno::Sequence< frame::DispatchDescriptor >& aDescripts )
 {
     DispatchMutexLock_Impl aLock(*this);
     uno::Sequence< uno::Reference< frame::XDispatch> > aReturn(aDescripts.getLength());
@@ -114,35 +113,32 @@ uno::Sequence< uno::Reference< frame::XDispatch > > SwXDispatchProviderIntercept
 }
 
 uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getSlaveDispatchProvider(  )
-        throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     return m_xSlaveDispatcher;
 }
 
 void SwXDispatchProviderInterceptor::setSlaveDispatchProvider(
-    const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider ) throw(uno::RuntimeException, std::exception)
+    const uno::Reference< frame::XDispatchProvider >& xNewDispatchProvider )
 {
     DispatchMutexLock_Impl aLock(*this);
     m_xSlaveDispatcher = xNewDispatchProvider;
 }
 
 uno::Reference< frame::XDispatchProvider > SwXDispatchProviderInterceptor::getMasterDispatchProvider(  )
-        throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     return m_xMasterDispatcher;
 }
 
 void SwXDispatchProviderInterceptor::setMasterDispatchProvider(
-    const uno::Reference< frame::XDispatchProvider >& xNewSupplier ) throw(uno::RuntimeException, std::exception)
+    const uno::Reference< frame::XDispatchProvider >& xNewSupplier )
 {
     DispatchMutexLock_Impl aLock(*this);
     m_xMasterDispatcher = xNewSupplier;
 }
 
 void SwXDispatchProviderInterceptor::disposing( const lang::EventObject& )
-    throw(uno::RuntimeException, std::exception)
 {
     DispatchMutexLock_Impl aLock(*this);
     if (m_xIntercepted.is())
@@ -168,7 +164,6 @@ const uno::Sequence< sal_Int8 > & SwXDispatchProviderInterceptor::getUnoTunnelId
 
 sal_Int64 SwXDispatchProviderInterceptor::getSomething(
     const uno::Sequence< sal_Int8 >& aIdentifier )
-        throw(uno::RuntimeException, std::exception)
 {
     if( aIdentifier.getLength() == 16
         && 0 == memcmp( getUnoTunnelId().getConstArray(),
@@ -213,7 +208,6 @@ SwXDispatch::~SwXDispatch()
 
 void SwXDispatch::dispatch(const util::URL& aURL,
     const uno::Sequence< beans::PropertyValue >& aArgs)
-        throw (uno::RuntimeException, std::exception)
 {
     if(!m_pView)
         throw uno::RuntimeException();
@@ -280,7 +274,7 @@ void SwXDispatch::dispatch(const util::URL& aURL,
 }
 
 void SwXDispatch::addStatusListener(
-    const uno::Reference< frame::XStatusListener >& xControl, const util::URL& aURL ) throw(uno::RuntimeException, std::exception)
+    const uno::Reference< frame::XStatusListener >& xControl, const util::URL& aURL )
 {
     if(!m_pView)
         throw uno::RuntimeException();
@@ -328,7 +322,7 @@ void SwXDispatch::addStatusListener(
 }
 
 void SwXDispatch::removeStatusListener(
-    const uno::Reference< frame::XStatusListener >& xControl, const util::URL&  ) throw(uno::RuntimeException, std::exception)
+    const uno::Reference< frame::XStatusListener >& xControl, const util::URL&  )
 {
     StatusListenerList::iterator aListIter = m_aListenerList.begin();
     for(aListIter = m_aListenerList.begin(); aListIter != m_aListenerList.end(); ++aListIter)
@@ -349,7 +343,7 @@ void SwXDispatch::removeStatusListener(
     }
 }
 
-void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::RuntimeException, std::exception)
+void SwXDispatch::selectionChanged( const lang::EventObject&  )
 {
     ShellModes eMode = m_pView->GetShellMode();
     bool bEnable = SHELL_MODE_TEXT == eMode  ||
@@ -375,7 +369,7 @@ void SwXDispatch::selectionChanged( const lang::EventObject&  ) throw(uno::Runti
     }
 }
 
-void SwXDispatch::disposing( const lang::EventObject& rSource ) throw(uno::RuntimeException, std::exception)
+void SwXDispatch::disposing( const lang::EventObject& rSource )
 {
     uno::Reference<view::XSelectionSupplier> xSupplier(rSource.Source, uno::UNO_QUERY);
     uno::Reference<view::XSelectionChangeListener> xThis = this;

@@ -88,48 +88,43 @@ class OFileAccess : public FileAccessHelper
     /// @throws CommandAbortedException
     /// @throws Exception
     /// @throws RuntimeException
-    void transferImpl( const OUString& rSource, const OUString& rDest, bool bMoveData )
-        throw(CommandAbortedException, Exception, RuntimeException);
+    void transferImpl( const OUString& rSource, const OUString& rDest, bool bMoveData );
     /// @throws Exception
     bool createNewFile( const OUString & rParentURL,
                         const OUString & rTitle,
-                        const Reference< XInputStream >& data )
-        throw ( Exception );
+                        const Reference< XInputStream >& data );
 
 public:
     explicit OFileAccess( const Reference< XComponentContext > & xContext )
         : m_xContext( xContext) {}
     // Methods
-    virtual void SAL_CALL copy( const OUString& SourceURL, const OUString& DestURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL move( const OUString& SourceURL, const OUString& DestURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL kill( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isFolder( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isReadOnly( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setReadOnly( const OUString& FileURL, sal_Bool bReadOnly ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL createFolder( const OUString& NewFolderURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Int32 SAL_CALL getSize( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getContentType( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual css::util::DateTime SAL_CALL getDateTimeModified( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getFolderContents( const OUString& FolderURL, sal_Bool bIncludeFolders ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL exists( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL openFileRead( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL openFileWrite( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::io::XStream > SAL_CALL openFileReadWrite( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& Handler ) throw(css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL writeFile( const OUString& FileURL, const css::uno::Reference< css::io::XInputStream >& data ) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL isHidden( const OUString& FileURL ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setHidden( const OUString& FileURL, sal_Bool bHidden ) throw(css::ucb::CommandAbortedException, css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL copy( const OUString& SourceURL, const OUString& DestURL ) override;
+    virtual void SAL_CALL move( const OUString& SourceURL, const OUString& DestURL ) override;
+    virtual void SAL_CALL kill( const OUString& FileURL ) override;
+    virtual sal_Bool SAL_CALL isFolder( const OUString& FileURL ) override;
+    virtual sal_Bool SAL_CALL isReadOnly( const OUString& FileURL ) override;
+    virtual void SAL_CALL setReadOnly( const OUString& FileURL, sal_Bool bReadOnly ) override;
+    virtual void SAL_CALL createFolder( const OUString& NewFolderURL ) override;
+    virtual sal_Int32 SAL_CALL getSize( const OUString& FileURL ) override;
+    virtual OUString SAL_CALL getContentType( const OUString& FileURL ) override;
+    virtual css::util::DateTime SAL_CALL getDateTimeModified( const OUString& FileURL ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getFolderContents( const OUString& FolderURL, sal_Bool bIncludeFolders ) override;
+    virtual sal_Bool SAL_CALL exists( const OUString& FileURL ) override;
+    virtual css::uno::Reference< css::io::XInputStream > SAL_CALL openFileRead( const OUString& FileURL ) override;
+    virtual css::uno::Reference< css::io::XOutputStream > SAL_CALL openFileWrite( const OUString& FileURL ) override;
+    virtual css::uno::Reference< css::io::XStream > SAL_CALL openFileReadWrite( const OUString& FileURL ) override;
+    virtual void SAL_CALL setInteractionHandler( const css::uno::Reference< css::task::XInteractionHandler >& Handler ) override;
+    virtual void SAL_CALL writeFile( const OUString& FileURL, const css::uno::Reference< css::io::XInputStream >& data ) override;
+    virtual sal_Bool SAL_CALL isHidden( const OUString& FileURL ) override;
+    virtual void SAL_CALL setHidden( const OUString& FileURL, sal_Bool bHidden ) override;
 
-    OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException, std::exception) override
+    OUString SAL_CALL getImplementationName() override
     { return OUString(IMPLEMENTATION_NAME); }
 
-    sal_Bool SAL_CALL supportsService(OUString const & ServiceName)
-        throw (css::uno::RuntimeException, std::exception) override
+    sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
     { return cppu::supportsService(this, ServiceName); }
 
-    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override
+    css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
     { return FileAccess_getSupportedServiceNames(); }
 };
 
@@ -142,10 +137,8 @@ class OActiveDataSink : public cppu::WeakImplHelper< XActiveDataSink >
 public:
 
     // Methods
-    virtual void SAL_CALL setInputStream( const Reference< XInputStream >& aStream )
-        throw(RuntimeException, std::exception) override;
-    virtual Reference< XInputStream > SAL_CALL getInputStream(  )
-        throw(RuntimeException, std::exception) override;
+    virtual void SAL_CALL setInputStream( const Reference< XInputStream >& aStream ) override;
+    virtual Reference< XInputStream > SAL_CALL getInputStream(  ) override;
 };
 
 // Implementation XActiveDataStreamer
@@ -157,10 +150,8 @@ class OActiveDataStreamer : public cppu::WeakImplHelper< XActiveDataStreamer >
 public:
 
     // Methods
-    virtual void SAL_CALL setStream( const Reference< XStream >& aStream )
-        throw(RuntimeException, std::exception) override;
-    virtual Reference< XStream > SAL_CALL getStream()
-        throw(RuntimeException, std::exception) override;
+    virtual void SAL_CALL setStream( const Reference< XStream >& aStream ) override;
+    virtual Reference< XStream > SAL_CALL getStream() override;
 };
 
 // Implementation XCommandEnvironment
@@ -176,44 +167,36 @@ public:
     }
 
     // Methods
-    virtual Reference< XInteractionHandler > SAL_CALL getInteractionHandler()
-        throw(RuntimeException, std::exception) override;
-    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler()
-        throw(RuntimeException, std::exception) override;
+    virtual Reference< XInteractionHandler > SAL_CALL getInteractionHandler() override;
+    virtual Reference< XProgressHandler > SAL_CALL getProgressHandler() override;
 };
 
 void OActiveDataSink::setInputStream( const Reference< XInputStream >& aStream )
-    throw(RuntimeException, std::exception)
 {
     mxStream = aStream;
 }
 
 Reference< XInputStream > OActiveDataSink::getInputStream()
-    throw(RuntimeException, std::exception)
 {
     return mxStream;
 }
 
 void OActiveDataStreamer::setStream( const Reference< XStream >& aStream )
-    throw(RuntimeException, std::exception)
 {
     mxStream = aStream;
 }
 
 Reference< XStream > OActiveDataStreamer::getStream()
-    throw(RuntimeException, std::exception)
 {
     return mxStream;
 }
 
 Reference< XInteractionHandler > OCommandEnvironment::getInteractionHandler()
-    throw(RuntimeException, std::exception)
 {
     return mxInteraction;
 }
 
 Reference< XProgressHandler > OCommandEnvironment::getProgressHandler()
-    throw(RuntimeException, std::exception)
 {
     Reference< XProgressHandler > xRet;
     return xRet;
@@ -222,7 +205,6 @@ Reference< XProgressHandler > OCommandEnvironment::getProgressHandler()
 void OFileAccess::transferImpl( const OUString& rSource,
                                 const OUString& rDest,
                                 bool bMoveData )
-    throw(CommandAbortedException, Exception, RuntimeException)
 {
     // SfxContentHelper::Transfer_Impl
     INetURLObject aSourceObj( rSource, INetProtocol::File );
@@ -293,19 +275,16 @@ void OFileAccess::transferImpl( const OUString& rSource,
 }
 
 void OFileAccess::copy( const OUString& SourceURL, const OUString& DestURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     transferImpl( SourceURL, DestURL, false );
 }
 
 void OFileAccess::move( const OUString& SourceURL, const OUString& DestURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     transferImpl( SourceURL, DestURL, true );
 }
 
 void OFileAccess::kill( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     // SfxContentHelper::Kill
     INetURLObject aDeleteObj( FileURL, INetProtocol::File );
@@ -321,7 +300,6 @@ void OFileAccess::kill( const OUString& FileURL )
 }
 
 sal_Bool OFileAccess::isFolder( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     bool bRet = false;
     try
@@ -335,7 +313,6 @@ sal_Bool OFileAccess::isFolder( const OUString& FileURL )
 }
 
 sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
@@ -346,7 +323,6 @@ sal_Bool OFileAccess::isReadOnly( const OUString& FileURL )
 }
 
 void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
@@ -354,7 +330,6 @@ void OFileAccess::setReadOnly( const OUString& FileURL, sal_Bool bReadOnly )
 }
 
 void OFileAccess::createFolder( const OUString& NewFolderURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     // Does the folder already exist?
     if( NewFolderURL.isEmpty() || isFolder( NewFolderURL ) )
@@ -420,7 +395,6 @@ void OFileAccess::createFolder( const OUString& NewFolderURL )
 }
 
 sal_Int32 OFileAccess::getSize( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     // SfxContentHelper::GetSize
     sal_Int32 nSize = 0;
@@ -433,7 +407,6 @@ sal_Int32 OFileAccess::getSize( const OUString& FileURL )
 }
 
 OUString OFileAccess::getContentType( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
@@ -444,7 +417,6 @@ OUString OFileAccess::getContentType( const OUString& FileURL )
 }
 
 css::util::DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aFileObj( FileURL, INetProtocol::File );
     css::util::DateTime aDateTime;
@@ -458,7 +430,6 @@ css::util::DateTime OFileAccess::getDateTimeModified( const OUString& FileURL )
 typedef vector< OUString* > StringList_Impl;
 
 Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, sal_Bool bIncludeFolders )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     // SfxContentHelper::GetFolderContents
 
@@ -514,7 +485,6 @@ Sequence< OUString > OFileAccess::getFolderContents( const OUString& FolderURL, 
 }
 
 sal_Bool OFileAccess::exists( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     bool bRet = false;
     try
@@ -533,7 +503,6 @@ sal_Bool OFileAccess::exists( const OUString& FileURL )
 }
 
 Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     Reference< XInputStream > xRet;
     INetURLObject aObj( FileURL, INetProtocol::File );
@@ -556,7 +525,6 @@ Reference< XInputStream > OFileAccess::openFileRead( const OUString& FileURL )
 }
 
 Reference< XOutputStream > OFileAccess::openFileWrite( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     Reference< XOutputStream > xRet;
     Reference< XStream > xStream = OFileAccess::openFileReadWrite( FileURL );
@@ -566,7 +534,6 @@ Reference< XOutputStream > OFileAccess::openFileWrite( const OUString& FileURL )
 }
 
 Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     Reference< XActiveDataStreamer > xSink = static_cast<XActiveDataStreamer*>(new OActiveDataStreamer());
     Reference< XInterface > xSinkIface( xSink, UNO_QUERY );
@@ -628,7 +595,6 @@ Reference< XStream > OFileAccess::openFileReadWrite( const OUString& FileURL )
 }
 
 void OFileAccess::setInteractionHandler( const Reference< XInteractionHandler >& Handler )
-    throw(RuntimeException, std::exception)
 {
     if( !mxEnvironment.is() )
     {
@@ -640,7 +606,6 @@ void OFileAccess::setInteractionHandler( const Reference< XInteractionHandler >&
 bool OFileAccess::createNewFile( const OUString & rParentURL,
                                  const OUString & rTitle,
                                  const Reference< XInputStream >& data )
-    throw ( Exception )
 {
     ucbhelper::Content aParentCnt( rParentURL, mxEnvironment.get(), comphelper::getProcessComponentContext() );
 
@@ -694,7 +659,6 @@ bool OFileAccess::createNewFile( const OUString & rParentURL,
 
 void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
                                       const Reference< XInputStream >& data )
-    throw ( Exception, RuntimeException, std::exception )
 {
     INetURLObject aURL( FileURL, INetProtocol::File );
     try
@@ -744,7 +708,6 @@ void SAL_CALL OFileAccess::writeFile( const OUString& FileURL,
 }
 
 sal_Bool OFileAccess::isHidden( const OUString& FileURL )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );
@@ -755,7 +718,6 @@ sal_Bool OFileAccess::isHidden( const OUString& FileURL )
 }
 
 void OFileAccess::setHidden( const OUString& FileURL, sal_Bool bHidden )
-    throw(CommandAbortedException, Exception, RuntimeException, std::exception)
 {
     INetURLObject aURLObj( FileURL, INetProtocol::File );
     ucbhelper::Content aCnt( aURLObj.GetMainURL( INetURLObject::DecodeMechanism::NONE ), mxEnvironment.get(), comphelper::getProcessComponentContext() );

@@ -50,14 +50,11 @@ public:
         const vcl::EnumContext::Context eDefaultContext);
     virtual ~SelectionChangeHandler() override;
 
-    virtual void SAL_CALL selectionChanged (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL selectionChanged (const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent)
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing (const css::lang::EventObject& rEvent) override;
 
-    virtual void SAL_CALL disposing()
-        throw (css::uno::RuntimeException) override;
+    virtual void SAL_CALL disposing() override;
 
     void Connect();
     void Disconnect();

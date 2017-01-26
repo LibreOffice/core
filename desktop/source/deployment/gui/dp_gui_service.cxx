@@ -151,15 +151,12 @@ public:
                  Reference<XComponentContext> const & xComponentContext );
 
     // XAsynchronousExecutableDialog
-    virtual void SAL_CALL setDialogTitle( OUString const & aTitle )
-        throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL setDialogTitle( OUString const & aTitle ) override;
     virtual void SAL_CALL startExecuteModal(
-        Reference< ui::dialogs::XDialogClosedListener > const & xListener )
-        throw (RuntimeException, std::exception) override;
+        Reference< ui::dialogs::XDialogClosedListener > const & xListener ) override;
 
     // XJobExecutor
-    virtual void SAL_CALL trigger( OUString const & event )
-        throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL trigger( OUString const & event ) override;
 };
 
 
@@ -186,7 +183,6 @@ ServiceImpl::ServiceImpl( Sequence<Any> const& args,
 // XAsynchronousExecutableDialog
 
 void ServiceImpl::setDialogTitle( OUString const & title )
-    throw (RuntimeException, std::exception)
 {
     if ( dp_gui::TheExtensionManager::s_ExtMgr.is() )
     {
@@ -204,7 +200,6 @@ void ServiceImpl::setDialogTitle( OUString const & title )
 
 void ServiceImpl::startExecuteModal(
     Reference< ui::dialogs::XDialogClosedListener > const & xListener )
-    throw (RuntimeException, std::exception)
 {
     bool bCloseDialog = true;  // only used if m_bShowUpdateOnly is true
     ::std::unique_ptr<Application> app;
@@ -289,7 +284,7 @@ void ServiceImpl::startExecuteModal(
 
 // XJobExecutor
 
-void ServiceImpl::trigger( OUString const &rEvent ) throw (RuntimeException, std::exception)
+void ServiceImpl::trigger( OUString const &rEvent )
 {
     if ( rEvent == "SHOW_UPDATE_DIALOG" )
         m_bShowUpdateOnly = true;

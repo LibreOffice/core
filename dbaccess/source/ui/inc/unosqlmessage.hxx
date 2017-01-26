@@ -44,33 +44,33 @@ protected:
 
 public:
     // XTypeProvider
-    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Sequence<sal_Int8> SAL_CALL getImplementationId(  ) override;
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName() throw(css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() throw(css::uno::RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 
     // XServiceInfo - static methods
     /// @throws css::uno::RuntimeException
-    static css::uno::Sequence< OUString > getSupportedServiceNames_Static() throw( css::uno::RuntimeException );
+    static css::uno::Sequence< OUString > getSupportedServiceNames_Static();
     /// @throws css::uno::RuntimeException
-    static OUString getImplementationName_Static() throw( css::uno::RuntimeException );
+    static OUString getImplementationName_Static();
     static css::uno::Reference< css::uno::XInterface >
             SAL_CALL Create(const css::uno::Reference< css::lang::XMultiServiceFactory >&);
 
     // XPropertySet
-    virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() throw(css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference<css::beans::XPropertySetInfo>  SAL_CALL getPropertySetInfo() override;
     virtual ::cppu::IPropertyArrayHelper& SAL_CALL getInfoHelper() override;
 
     // OPropertyArrayUsageHelper
     virtual ::cppu::IPropertyArrayHelper* createArrayHelper( ) const override;
 
 protected:
-    virtual void SAL_CALL initialize(css::uno::Sequence< css::uno::Any > const & args) throw (css::uno::Exception, css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize(css::uno::Sequence< css::uno::Any > const & args) override;
 
 // OPropertySetHelper overridables
     // (overwriting these three, because we have some special handling for our property)
-    virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue) throw(css::lang::IllegalArgumentException) override;
+    virtual sal_Bool SAL_CALL convertFastPropertyValue( css::uno::Any& _rConvertedValue, css::uno::Any& _rOldValue, sal_Int32 _nHandle, const css::uno::Any& _rValue) override;
 
 // OGenericUnoDialog overridables
     virtual VclPtr<Dialog> createDialog(vcl::Window* _pParent) override;

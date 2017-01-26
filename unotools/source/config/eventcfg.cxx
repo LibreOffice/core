@@ -99,19 +99,19 @@ public:
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement ) throw (css::lang::IllegalArgumentException, css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    void SAL_CALL replaceByName( const OUString& aName, const css::uno::Any& aElement );
     /// @throws css::container::NoSuchElementException
     /// @throws css::lang::WrappedTargetException
     /// @throws css::uno::RuntimeException
-    css::uno::Any SAL_CALL getByName( const OUString& aName ) throw (css::container::NoSuchElementException, css::lang::WrappedTargetException, css::uno::RuntimeException);
+    css::uno::Any SAL_CALL getByName( const OUString& aName );
     /// @throws css::uno::RuntimeException
-    css::uno::Sequence< OUString > SAL_CALL getElementNames(  ) throw (css::uno::RuntimeException);
+    css::uno::Sequence< OUString > SAL_CALL getElementNames(  );
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL hasByName( const OUString& aName ) throw (css::uno::RuntimeException);
+    bool SAL_CALL hasByName( const OUString& aName );
     /// @throws css::uno::RuntimeException
-    static css::uno::Type SAL_CALL getElementType(  ) throw (css::uno::RuntimeException);
+    static css::uno::Type SAL_CALL getElementType(  );
     /// @throws css::uno::RuntimeException
-    bool SAL_CALL hasElements(  ) throw (css::uno::RuntimeException);
+    bool SAL_CALL hasElements(  );
     OUString GetEventName( GlobalEventId nID );
 };
 
@@ -236,7 +236,7 @@ void GlobalEventConfig_Impl::initBindingInfo()
     }
 }
 
-void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, const Any& aElement )
 {
     Sequence< beans::PropertyValue > props;
     //DF should we prepopulate the hash with a list of valid event Names?
@@ -256,7 +256,7 @@ void SAL_CALL GlobalEventConfig_Impl::replaceByName( const OUString& aName, cons
     SetModified();
 }
 
-Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException)
+Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName )
 {
     Any aRet;
     Sequence< beans::PropertyValue > props(2);
@@ -282,12 +282,12 @@ Any SAL_CALL GlobalEventConfig_Impl::getByName( const OUString& aName ) throw (c
     return aRet;
 }
 
-Sequence< OUString > SAL_CALL GlobalEventConfig_Impl::getElementNames(  ) throw (RuntimeException)
+Sequence< OUString > SAL_CALL GlobalEventConfig_Impl::getElementNames(  )
 {
     return uno::Sequence< OUString >(m_supportedEvents.data(), SupportedEventsVector::size());
 }
 
-bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (RuntimeException)
+bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName )
 {
     if ( m_eventBindingHash.find( aName ) != m_eventBindingHash.end() )
         return true;
@@ -301,13 +301,13 @@ bool SAL_CALL GlobalEventConfig_Impl::hasByName( const OUString& aName ) throw (
     return false;
 }
 
-Type SAL_CALL GlobalEventConfig_Impl::getElementType(  ) throw (RuntimeException)
+Type SAL_CALL GlobalEventConfig_Impl::getElementType(  )
 {
     //DF definitely not sure about this??
     return cppu::UnoType<Sequence<beans::PropertyValue>>::get();
 }
 
-bool SAL_CALL GlobalEventConfig_Impl::hasElements(  ) throw (RuntimeException)
+bool SAL_CALL GlobalEventConfig_Impl::hasElements(  )
 {
     return ( m_eventBindingHash.empty() );
 }
@@ -347,39 +347,39 @@ GlobalEventConfig::~GlobalEventConfig()
     }
 }
 
-Reference< container::XNameReplace > SAL_CALL GlobalEventConfig::getEvents() throw (css::uno::RuntimeException, std::exception)
+Reference< container::XNameReplace > SAL_CALL GlobalEventConfig::getEvents()
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     Reference< container::XNameReplace > ret(this);
     return ret;
 }
 
-void SAL_CALL GlobalEventConfig::replaceByName( const OUString& aName, const Any& aElement ) throw (lang::IllegalArgumentException, container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
+void SAL_CALL GlobalEventConfig::replaceByName( const OUString& aName, const Any& aElement )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     m_pImpl->replaceByName( aName, aElement );
 }
-Any SAL_CALL GlobalEventConfig::getByName( const OUString& aName ) throw (container::NoSuchElementException, lang::WrappedTargetException, RuntimeException, std::exception)
+Any SAL_CALL GlobalEventConfig::getByName( const OUString& aName )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->getByName( aName );
 }
-Sequence< OUString > SAL_CALL GlobalEventConfig::getElementNames(  ) throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL GlobalEventConfig::getElementNames(  )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->getElementNames( );
 }
-sal_Bool SAL_CALL GlobalEventConfig::hasByName( const OUString& aName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL GlobalEventConfig::hasByName( const OUString& aName )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->hasByName( aName );
 }
-Type SAL_CALL GlobalEventConfig::getElementType(  ) throw (RuntimeException, std::exception)
+Type SAL_CALL GlobalEventConfig::getElementType(  )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return GlobalEventConfig_Impl::getElementType( );
 }
-sal_Bool SAL_CALL GlobalEventConfig::hasElements(  ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL GlobalEventConfig::hasElements(  )
 {
     MutexGuard aGuard( GetOwnStaticMutex() );
     return m_pImpl->hasElements( );

@@ -181,7 +181,7 @@ sal_Int32 SwTextBoxHelper::getCount(const SwDoc* pDoc)
     return nRet;
 }
 
-uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex) throw(lang::IndexOutOfBoundsException)
+uno::Any SwTextBoxHelper::getByIndex(SdrPage* pPage, sal_Int32 nIndex)
 {
     if (nIndex < 0)
         throw lang::IndexOutOfBoundsException();

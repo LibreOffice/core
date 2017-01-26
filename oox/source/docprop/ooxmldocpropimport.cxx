@@ -55,7 +55,7 @@ Sequence< OUString > SAL_CALL DocumentPropertiesImport_getSupportedServiceNames(
     return aServices;
 }
 
-Reference< XInterface > SAL_CALL DocumentPropertiesImport_createInstance( const Reference< XComponentContext >& rxContext ) throw(Exception)
+Reference< XInterface > SAL_CALL DocumentPropertiesImport_createInstance( const Reference< XComponentContext >& rxContext )
 {
     return static_cast< ::cppu::OWeakObject* >( new DocumentPropertiesImport( rxContext ) );
 }
@@ -64,7 +64,7 @@ namespace {
 
 /// @throws RuntimeException
 /// @throws css::io::IOException
-Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxStorage, const OUString& rStreamType ) throw (RuntimeException, css::io::IOException)
+Sequence< InputSource > lclGetRelatedStreams( const Reference< XStorage >& rxStorage, const OUString& rStreamType )
 {
     Reference< XRelationshipAccess > xRelation( rxStorage, UNO_QUERY_THROW );
     Reference< XHierarchicalStorageAccess > xHierarchy( rxStorage, UNO_QUERY_THROW );
@@ -111,17 +111,17 @@ DocumentPropertiesImport::DocumentPropertiesImport( const Reference< XComponentC
 }
 
 // XServiceInfo
-OUString SAL_CALL DocumentPropertiesImport::getImplementationName() throw (RuntimeException, std::exception)
+OUString SAL_CALL DocumentPropertiesImport::getImplementationName()
 {
     return DocumentPropertiesImport_getImplementationName();
 }
 
-sal_Bool SAL_CALL DocumentPropertiesImport::supportsService( const OUString& rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL DocumentPropertiesImport::supportsService( const OUString& rServiceName )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames()
 {
     return DocumentPropertiesImport_getSupportedServiceNames();
 }
@@ -129,7 +129,6 @@ Sequence< OUString > SAL_CALL DocumentPropertiesImport::getSupportedServiceNames
 // XOOXMLDocumentPropertiesImporter
 void SAL_CALL DocumentPropertiesImport::importProperties(
         const Reference< XStorage >& rxSource, const Reference< XDocumentProperties >& rxDocumentProperties )
-        throw (RuntimeException, IllegalArgumentException, SAXException, Exception, std::exception)
 {
     if( !mxContext.is() )
         throw RuntimeException();

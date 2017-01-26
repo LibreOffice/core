@@ -97,9 +97,9 @@ public:
                             virtual ~BibliographyLoader() override;
 
     // XServiceInfo
-    OUString               SAL_CALL getImplementationName() throw(std::exception  ) override;
-    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) throw(std::exception  ) override;
-    Sequence< OUString >   SAL_CALL getSupportedServiceNames() throw(std::exception  ) override;
+    OUString               SAL_CALL getImplementationName() override;
+    sal_Bool                    SAL_CALL supportsService(const OUString& ServiceName) override;
+    Sequence< OUString >   SAL_CALL getSupportedServiceNames() override;
     static OUString                getImplementationName_Static() throw(  )
 
                             {
@@ -109,33 +109,33 @@ public:
                             }
 
     //XNameAccess
-    virtual Any SAL_CALL getByName(const OUString& aName) throw ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception ) override;
-    virtual Sequence< OUString > SAL_CALL getElementNames() throw ( RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL hasByName(const OUString& aName) throw ( RuntimeException, std::exception ) override;
+    virtual Any SAL_CALL getByName(const OUString& aName) override;
+    virtual Sequence< OUString > SAL_CALL getElementNames() override;
+    virtual sal_Bool SAL_CALL hasByName(const OUString& aName) override;
 
     //XElementAccess
-    virtual Type  SAL_CALL getElementType() throw ( RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL hasElements() throw ( RuntimeException, std::exception ) override;
+    virtual Type  SAL_CALL getElementType() override;
+    virtual sal_Bool SAL_CALL hasElements() override;
 
     //XPropertySet
-    virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() throw ( RuntimeException, std::exception ) override;
-    virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) throw( UnknownPropertyException, PropertyVetoException, IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception ) override;
-    virtual Any SAL_CALL getPropertyValue(const OUString& PropertyName) throw ( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) override;
-    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception ) override;
+    virtual Reference< XPropertySetInfo >  SAL_CALL getPropertySetInfo() override;
+    virtual void SAL_CALL setPropertyValue(const OUString& PropertyName, const Any& aValue) override;
+    virtual Any SAL_CALL getPropertyValue(const OUString& PropertyName) override;
+    virtual void SAL_CALL addPropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) override;
+    virtual void SAL_CALL removePropertyChangeListener(const OUString& PropertyName, const Reference< XPropertyChangeListener > & aListener) override;
+    virtual void SAL_CALL addVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
+    virtual void SAL_CALL removeVetoableChangeListener(const OUString& PropertyName, const Reference< XVetoableChangeListener > & aListener) override;
 
     static Sequence<OUString>  SAL_CALL getSupportedServiceNames_Static() throw(  );
 
     /// @throws Exception
-    friend  Reference< XInterface >     SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr ) throw( Exception );
+    friend  Reference< XInterface >     SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory > & rSMgr );
 
     // XLoader
     virtual void            SAL_CALL load(const Reference< XFrame > & aFrame, const OUString& aURL,
                                 const Sequence< PropertyValue >& aArgs,
-                                const Reference< XLoadEventListener > & aListener) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void            SAL_CALL cancel() throw (css::uno::RuntimeException, std::exception) override;
+                                const Reference< XLoadEventListener > & aListener) override;
+    virtual void            SAL_CALL cancel() override;
 };
 
 BibliographyLoader::BibliographyLoader() :
@@ -153,27 +153,27 @@ BibliographyLoader::~BibliographyLoader()
 }
 
 
-Reference< XInterface >  SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory >  & /*rSMgr*/ ) throw( Exception )
+Reference< XInterface >  SAL_CALL BibliographyLoader_CreateInstance( const Reference< XMultiServiceFactory >  & /*rSMgr*/ )
 {
     return *(new BibliographyLoader);
 }
 
 
 // XServiceInfo
-OUString BibliographyLoader::getImplementationName() throw(std::exception  )
+OUString BibliographyLoader::getImplementationName()
 
 {
     return getImplementationName_Static();
 }
 
 // XServiceInfo
-sal_Bool BibliographyLoader::supportsService(const OUString& ServiceName) throw(std::exception  )
+sal_Bool BibliographyLoader::supportsService(const OUString& ServiceName)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 // XServiceInfo
-Sequence< OUString > BibliographyLoader::getSupportedServiceNames() throw(std::exception  )
+Sequence< OUString > BibliographyLoader::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
@@ -213,7 +213,7 @@ extern "C"
 
 }
 
-void BibliographyLoader::cancel() throw (css::uno::RuntimeException, std::exception)
+void BibliographyLoader::cancel()
 {
     //!
     //!
@@ -221,7 +221,7 @@ void BibliographyLoader::cancel() throw (css::uno::RuntimeException, std::except
 
 void BibliographyLoader::load(const Reference< XFrame > & rFrame, const OUString& rURL,
         const Sequence< PropertyValue >& rArgs,
-        const Reference< XLoadEventListener > & rListener) throw (css::uno::RuntimeException, std::exception)
+        const Reference< XLoadEventListener > & rListener)
 {
 
     SolarMutexGuard aGuard;
@@ -438,8 +438,7 @@ static OUString lcl_AddProperty(const Reference< XNameAccess >&  xColumns,
     return uRet;
 }
 
-Any BibliographyLoader::getByName(const OUString& rName) throw
-                        ( NoSuchElementException, WrappedTargetException, RuntimeException, std::exception )
+Any BibliographyLoader::getByName(const OUString& rName)
 {
     Any aRet;
     try
@@ -492,7 +491,7 @@ Any BibliographyLoader::getByName(const OUString& rName) throw
     return aRet;
 }
 
-Sequence< OUString > BibliographyLoader::getElementNames() throw ( RuntimeException, std::exception )
+Sequence< OUString > BibliographyLoader::getElementNames()
 {
     Sequence< OUString > aRet(10);
     int nRealNameCount = 0;
@@ -527,7 +526,7 @@ Sequence< OUString > BibliographyLoader::getElementNames() throw ( RuntimeExcept
     return aRet;
 }
 
-sal_Bool BibliographyLoader::hasByName(const OUString& rName) throw ( RuntimeException, std::exception )
+sal_Bool BibliographyLoader::hasByName(const OUString& rName)
 {
     bool bRet = false;
     try
@@ -556,20 +555,19 @@ sal_Bool BibliographyLoader::hasByName(const OUString& rName) throw ( RuntimeExc
     return bRet;
 }
 
-Type  BibliographyLoader::getElementType() throw ( RuntimeException, std::exception )
+Type  BibliographyLoader::getElementType()
 {
     return cppu::UnoType<Sequence<PropertyValue>>::get();
 }
 
-sal_Bool BibliographyLoader::hasElements() throw ( RuntimeException, std::exception )
+sal_Bool BibliographyLoader::hasElements()
 {
     Reference< XResultSet >  xCursor = GetDataCursor();
     Reference< XNameAccess >  xColumns = GetDataColumns();
     return xColumns.is() && (xColumns->getElementNames().getLength() != 0);
 }
 
-Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo() throw
-                                            ( RuntimeException, std::exception )
+Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo()
 {
     static const SfxItemPropertyMapEntry aBibProps_Impl[] =
     {
@@ -583,15 +581,12 @@ Reference< XPropertySetInfo >  BibliographyLoader::getPropertySetInfo() throw
 
 void BibliographyLoader::setPropertyValue(const OUString& /*PropertyName*/,
                                         const Any& /*aValue*/)
-    throw( UnknownPropertyException, PropertyVetoException,
-        IllegalArgumentException, WrappedTargetException, RuntimeException, std::exception)
 {
     throw UnknownPropertyException();
     //no changeable properties
 }
 
 Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     Any aRet;
     static const sal_uInt16 aInternalMapping[] =
@@ -647,28 +642,24 @@ Any BibliographyLoader::getPropertyValue(const OUString& rPropertyName)
 
 void BibliographyLoader::addPropertyChangeListener(
         const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     //no bound properties
 }
 
 void BibliographyLoader::removePropertyChangeListener(
         const OUString& /*PropertyName*/, const Reference< XPropertyChangeListener > & /*aListener*/)
-        throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     //no bound properties
 }
 
 void BibliographyLoader::addVetoableChangeListener(
     const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     //no vetoable properties
 }
 
 void BibliographyLoader::removeVetoableChangeListener(
     const OUString& /*PropertyName*/, const Reference< XVetoableChangeListener > & /*aListener*/)
-    throw( UnknownPropertyException, WrappedTargetException, RuntimeException, std::exception )
 {
     //no vetoable properties
 }

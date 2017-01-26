@@ -44,7 +44,7 @@ MasterScriptProviderFactory::~MasterScriptProviderFactory()
 }
 
 Reference< provider::XScriptProvider > SAL_CALL
-MasterScriptProviderFactory::createScriptProvider( const Any& context ) throw ( lang::IllegalArgumentException, RuntimeException, std::exception)
+MasterScriptProviderFactory::createScriptProvider( const Any& context )
 {
     Reference< provider::XScriptProvider > xMsp( getActiveMSPList() ->getMSPFromAnyContext( context ), UNO_QUERY_THROW );
     return xMsp;
@@ -84,20 +84,17 @@ mspf_create( Reference< XComponentContext > const & xComponentContext )
 }
 
 OUString SAL_CALL MasterScriptProviderFactory::getImplementationName()
-    throw (RuntimeException, std::exception)
 {
     return mspf_getImplementationName();
 }
 
 Sequence< OUString > SAL_CALL MasterScriptProviderFactory::getSupportedServiceNames()
-    throw (RuntimeException, std::exception)
 {
     return mspf_getSupportedServiceNames();
 }
 
 sal_Bool MasterScriptProviderFactory::supportsService(
     OUString const & serviceName )
-    throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, serviceName);
 }

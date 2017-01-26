@@ -46,19 +46,16 @@ void NumbersImportFilter::doRegisterHandlers(OdsGenerator &)
 
 // XServiceInfo
 OUString SAL_CALL NumbersImportFilter::getImplementationName()
-throw (RuntimeException, std::exception)
 {
     return OUString("org.libreoffice.comp.Calc.NumbersImportFilter");
 }
 
 sal_Bool SAL_CALL NumbersImportFilter::supportsService(const OUString &rServiceName)
-throw (RuntimeException, std::exception)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 Sequence< OUString > SAL_CALL NumbersImportFilter::getSupportedServiceNames()
-throw (RuntimeException, std::exception)
 {
     Sequence < OUString > aRet(2);
     OUString *pArray = aRet.getArray();

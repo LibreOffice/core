@@ -52,19 +52,19 @@ public:
 FontIdentificator() {}
 
     // XServiceInfo
-    virtual OUString SAL_CALL getImplementationName(  ) throw (RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ) throw (RuntimeException, std::exception) override;
-    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) throw (RuntimeException, std::exception) override;
+    virtual OUString SAL_CALL getImplementationName(  ) override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ) override;
+    virtual Sequence< OUString > SAL_CALL getSupportedServiceNames(  ) override;
 
     // XInitialization
-    virtual void SAL_CALL initialize( const Sequence< Any >& ) throw (Exception, RuntimeException, std::exception) override;
+    virtual void SAL_CALL initialize( const Sequence< Any >& ) override;
 
     // XMaterialHolder
-    virtual Any SAL_CALL getMaterial() throw(RuntimeException, std::exception) override;
+    virtual Any SAL_CALL getMaterial() override;
 
 };
 
-void SAL_CALL FontIdentificator::initialize( const Sequence<Any>& i_rArgs ) throw(Exception,RuntimeException, std::exception)
+void SAL_CALL FontIdentificator::initialize( const Sequence<Any>& i_rArgs )
 {
     if( !ImplGetSVData() )
         return; // VCL not initialized
@@ -82,7 +82,7 @@ void SAL_CALL FontIdentificator::initialize( const Sequence<Any>& i_rArgs ) thro
     }
 }
 
-Any SAL_CALL FontIdentificator::getMaterial() throw(RuntimeException, std::exception)
+Any SAL_CALL FontIdentificator::getMaterial()
 {
     if( !ImplGetSVData() )
         return Any(); // VCL not initialized
@@ -163,17 +163,17 @@ Reference< XInterface > SAL_CALL FontIdentificator_createInstance( const Referen
 }
 
 // XServiceInfo
-OUString SAL_CALL FontIdentificator::getImplementationName() throw (RuntimeException, std::exception)
+OUString SAL_CALL FontIdentificator::getImplementationName()
 {
     return FontIdentificator_getImplementationName();
 }
 
-sal_Bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rServiceName ) throw (RuntimeException, std::exception)
+sal_Bool SAL_CALL FontIdentificator::supportsService( const OUString& i_rServiceName )
 {
     return cppu::supportsService(this, i_rServiceName);
 }
 
-Sequence< OUString > SAL_CALL FontIdentificator::getSupportedServiceNames() throw (RuntimeException, std::exception)
+Sequence< OUString > SAL_CALL FontIdentificator::getSupportedServiceNames()
 {
     return FontIdentificator_getSupportedServiceNames();
 }

@@ -146,7 +146,6 @@ Container::Container(
 }
 
 Any Container::getByName( const OUString& aName )
-    throw (NoSuchElementException,WrappedTargetException,RuntimeException, std::exception)
 {
     String2IntMap::const_iterator ii = m_name2index.find( aName );
     if( ii == m_name2index.end() )
@@ -164,7 +163,6 @@ Any Container::getByName( const OUString& aName )
 }
 
 Sequence< OUString > Container::getElementNames(  )
-        throw (css::uno::RuntimeException, std::exception)
 {
     Sequence< OUString > ret( m_values.size() );
     for( String2IntMap::const_iterator ii = m_name2index.begin();
@@ -179,27 +177,21 @@ Sequence< OUString > Container::getElementNames(  )
 }
 
 sal_Bool Container::hasByName( const OUString& aName )
-        throw (css::uno::RuntimeException, std::exception)
 {
     return m_name2index.find( aName ) != m_name2index.end();
 }
     // Methods
 Type Container::getElementType(  )
-        throw (css::uno::RuntimeException, std::exception)
 {
     return Type();
 }
 
 sal_Bool Container::hasElements(  )
-        throw (css::uno::RuntimeException, std::exception)
 {
     return ! m_name2index.empty();
 }
 
 Any Container::getByIndex( sal_Int32 Index )
-    throw (css::lang::IndexOutOfBoundsException,
-           css::lang::WrappedTargetException,
-           css::uno::RuntimeException, std::exception)
 {
     if( Index < 0 || Index >= (sal_Int32)m_values.size() )
     {
@@ -216,7 +208,6 @@ Any Container::getByIndex( sal_Int32 Index )
 }
 
 sal_Int32 Container::getCount()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return m_values.size();
 }
@@ -234,25 +225,17 @@ public:
 
 public:
     // XEnumeration
-    virtual sal_Bool SAL_CALL hasMoreElements(  )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL nextElement(  )
-        throw (css::container::NoSuchElementException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception) override;
+    virtual sal_Bool SAL_CALL hasMoreElements(  ) override;
+    virtual css::uno::Any SAL_CALL nextElement(  ) override;
 
 };
 
 sal_Bool ContainerEnumeration::hasMoreElements()
-        throw (css::uno::RuntimeException, std::exception)
 {
     return (int)m_vec.size() > m_index +1;
 }
 
 css::uno::Any ContainerEnumeration::nextElement()
-        throw (css::container::NoSuchElementException,
-               css::lang::WrappedTargetException,
-               css::uno::RuntimeException, std::exception)
 {
     if( ! hasMoreElements() )
     {
@@ -264,21 +247,18 @@ css::uno::Any ContainerEnumeration::nextElement()
 }
 
 Reference< XEnumeration > Container::createEnumeration(  )
-    throw (css::uno::RuntimeException, std::exception)
 {
     return new ContainerEnumeration( m_values );
 }
 
 void Container::addRefreshListener(
     const css::uno::Reference< css::util::XRefreshListener >& l )
-    throw (css::uno::RuntimeException, std::exception)
 {
     rBHelper.addListener( cppu::UnoType<decltype(l)>::get() , l );
 }
 
 void Container::removeRefreshListener(
     const css::uno::Reference< css::util::XRefreshListener >& l )
-    throw (css::uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<decltype(l)>::get() , l );
 }
@@ -307,9 +287,6 @@ void Container::rename( const OUString &oldName, const OUString &newName )
 }
 
 void Container::dropByName( const OUString& elementName )
-    throw (css::sdbc::SQLException,
-           css::container::NoSuchElementException,
-           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     String2IntMap::const_iterator ii = m_name2index.find( elementName );
@@ -332,9 +309,6 @@ void Container::dropByName( const OUString& elementName )
 }
 
 void Container::dropByIndex( sal_Int32 index )
-    throw (css::sdbc::SQLException,
-           css::lang::IndexOutOfBoundsException,
-           css::uno::RuntimeException, std::exception)
 {
     osl::MutexGuard guard( m_refMutex->mutex );
     if( index < 0 ||  index >=(sal_Int32)m_values.size() )
@@ -387,7 +361,6 @@ void Container::dropByIndex( sal_Int32 index )
 void Container::append(
     const OUString & name,
     const css::uno::Reference< css::beans::XPropertySet >& descriptor )
-    throw ( css::container::ElementExistException )
 
 {
     osl::MutexGuard guard( m_refMutex->mutex );
@@ -413,9 +386,6 @@ void Container::append(
 
 void Container::appendByDescriptor(
     const css::uno::Reference< css::beans::XPropertySet >& descriptor)
-    throw (css::sdbc::SQLException,
-           css::container::ElementExistException,
-           css::uno::RuntimeException, std::exception)
 {
     append( extractStringProperty( descriptor, getStatics().NAME ), descriptor );
 }
@@ -423,14 +393,12 @@ void Container::appendByDescriptor(
 
 void Container::addContainerListener(
         const css::uno::Reference< css::container::XContainerListener >& l )
-        throw (css::uno::RuntimeException, std::exception)
 {
     rBHelper.addListener( cppu::UnoType<decltype(l)>::get() , l );
 }
 
 void Container::removeContainerListener(
         const css::uno::Reference< css::container::XContainerListener >& l )
-        throw (css::uno::RuntimeException, std::exception)
 {
     rBHelper.removeListener( cppu::UnoType<decltype(l)>::get() , l );
 }

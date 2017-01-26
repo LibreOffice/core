@@ -395,7 +395,6 @@ void ToolBarManager::UpdateController( const css::uno::Reference< css::frame::XT
 }
 
 void ToolBarManager::frameAction( const FrameActionEvent& Action )
-throw ( RuntimeException, std::exception )
 {
     SolarMutexGuard g;
     if ( Action.Action == FrameAction_CONTEXT_CHANGED && !m_bDisposed )
@@ -404,7 +403,7 @@ throw ( RuntimeException, std::exception )
     }
 }
 
-void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( RuntimeException, std::exception )
+void SAL_CALL ToolBarManager::disposing( const EventObject& Source )
 {
     SolarMutexGuard g;
 
@@ -449,7 +448,7 @@ void SAL_CALL ToolBarManager::disposing( const EventObject& Source ) throw ( Run
 }
 
 // XComponent
-void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception )
+void SAL_CALL ToolBarManager::dispose()
 {
     Reference< XComponent > xThis( static_cast< OWeakObject* >(this), UNO_QUERY );
 
@@ -522,7 +521,7 @@ void SAL_CALL ToolBarManager::dispose() throw( RuntimeException, std::exception 
     }
 }
 
-void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
+void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener >& xListener )
 {
     SolarMutexGuard g;
 
@@ -533,18 +532,18 @@ void SAL_CALL ToolBarManager::addEventListener( const Reference< XEventListener 
     m_aListenerContainer.addInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
-void SAL_CALL ToolBarManager::removeEventListener( const Reference< XEventListener >& xListener ) throw( RuntimeException, std::exception )
+void SAL_CALL ToolBarManager::removeEventListener( const Reference< XEventListener >& xListener )
 {
     m_aListenerContainer.removeInterface( cppu::UnoType<XEventListener>::get(), xListener );
 }
 
 // XUIConfigurationListener
-void SAL_CALL ToolBarManager::elementInserted( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL ToolBarManager::elementInserted( const css::ui::ConfigurationEvent& Event )
 {
     impl_elementChanged(false,Event);
 }
 
-void SAL_CALL ToolBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL ToolBarManager::elementRemoved( const css::ui::ConfigurationEvent& Event )
 {
     impl_elementChanged(true,Event);
 }
@@ -618,7 +617,7 @@ void ToolBarManager::setToolBarImage(const Image& rImage,
     }
 }
 
-void SAL_CALL ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event ) throw (css::uno::RuntimeException, std::exception)
+void SAL_CALL ToolBarManager::elementReplaced( const css::ui::ConfigurationEvent& Event )
 {
     impl_elementChanged(false,Event);
 }

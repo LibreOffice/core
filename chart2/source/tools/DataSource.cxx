@@ -45,32 +45,27 @@ DataSource::~DataSource()
 
 // ____ XDataSource ____
 Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL DataSource::getDataSequences()
-    throw (uno::RuntimeException, std::exception)
 {
     return m_aDataSeq;
 }
 
 // ____ XDataSink ____
 void SAL_CALL DataSource::setData( const Sequence< Reference< chart2::data::XLabeledDataSequence > >& aData )
-    throw (uno::RuntimeException, std::exception)
 {
     m_aDataSeq = aData;
 }
 
 OUString SAL_CALL DataSource::getImplementationName()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return OUString("com.sun.star.comp.chart.DataSource");
 }
 
 sal_Bool SAL_CALL DataSource::supportsService( const OUString& rServiceName )
-    throw( css::uno::RuntimeException, std::exception )
 {
     return cppu::supportsService(this, rServiceName);
 }
 
 css::uno::Sequence< OUString > SAL_CALL DataSource::getSupportedServiceNames()
-    throw( css::uno::RuntimeException, std::exception )
 {
     return { "com.sun.star.chart2.data.DataSource" };
 }

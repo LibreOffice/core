@@ -64,22 +64,19 @@ public:
         @return demanded type or empty any
         @see queryAggregation.
     */
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) SAL_OVERRIDE;
 
     /** Set the delegator.  The delegator member reference is a weak reference.
 
         @param Delegator the object that delegate its queryInterface to this aggregate.
     */
-    virtual void SAL_CALL setDelegator( const css::uno::Reference< css::uno::XInterface > & Delegator )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual void SAL_CALL setDelegator( const css::uno::Reference< css::uno::XInterface > & Delegator ) SAL_OVERRIDE;
     /** Called by the delegator or queryInterface. Re-implement this method instead of
         queryInterface.
 
         @see queryInterface
     */
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType )
-        throw(css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type & rType ) SAL_OVERRIDE;
 
 protected:
     /** Virtual dtor. Called when reference count is 0.

@@ -42,7 +42,7 @@ ODBTypeWizDialog::ODBTypeWizDialog(const Reference< XComponentContext >& _rxORB)
 {
 }
 
-Sequence<sal_Int8> SAL_CALL ODBTypeWizDialog::getImplementationId(  ) throw(RuntimeException, std::exception)
+Sequence<sal_Int8> SAL_CALL ODBTypeWizDialog::getImplementationId(  )
 {
     return css::uno::Sequence<sal_Int8>();
 }
@@ -52,28 +52,28 @@ Reference< XInterface > SAL_CALL ODBTypeWizDialog::Create(const Reference< XMult
     return *(new ODBTypeWizDialog( comphelper::getComponentContext(_rxFactory) ));
 }
 
-OUString SAL_CALL ODBTypeWizDialog::getImplementationName() throw(RuntimeException, std::exception)
+OUString SAL_CALL ODBTypeWizDialog::getImplementationName()
 {
     return getImplementationName_Static();
 }
 
-OUString ODBTypeWizDialog::getImplementationName_Static() throw(RuntimeException)
+OUString ODBTypeWizDialog::getImplementationName_Static()
 {
     return OUString("org.openoffice.comp.dbu.ODBTypeWizDialog");
 }
 
-css::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialog::getSupportedServiceNames() throw(RuntimeException, std::exception)
+css::uno::Sequence<OUString> SAL_CALL ODBTypeWizDialog::getSupportedServiceNames()
 {
     return getSupportedServiceNames_Static();
 }
 
-css::uno::Sequence<OUString> ODBTypeWizDialog::getSupportedServiceNames_Static() throw(RuntimeException)
+css::uno::Sequence<OUString> ODBTypeWizDialog::getSupportedServiceNames_Static()
 {
     css::uno::Sequence<OUString> aSupported { "com.sun.star.sdb.DataSourceTypeChangeDialog" };
     return aSupported;
 }
 
-Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialog::getPropertySetInfo() throw(RuntimeException, std::exception)
+Reference<XPropertySetInfo>  SAL_CALL ODBTypeWizDialog::getPropertySetInfo()
 {
     Reference<XPropertySetInfo>  xInfo( createPropertySetInfo( getInfoHelper() ) );
     return xInfo;

@@ -126,7 +126,7 @@ namespace dxcanvas
         CanvasBaseT::disposeThis();
     }
 
-    OUString SAL_CALL Canvas::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL Canvas::getServiceName(  )
     {
         return OUString( CANVAS_SERVICE_NAME );
     }
@@ -202,7 +202,7 @@ namespace dxcanvas
         BitmapCanvasBaseT::disposeThis();
     }
 
-    OUString SAL_CALL BitmapCanvas::getServiceName(  ) throw (uno::RuntimeException)
+    OUString SAL_CALL BitmapCanvas::getServiceName(  )
     {
         return OUString( BITMAPCANVAS_SERVICE_NAME );
     }

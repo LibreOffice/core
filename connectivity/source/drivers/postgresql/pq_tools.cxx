@@ -598,7 +598,7 @@ OUString array2String( const css::uno::Sequence< Any > &seq )
 }
 
 
-std::vector< Any > parseArray( const OUString & str ) throw( SQLException )
+std::vector< Any > parseArray( const OUString & str )
 {
     int len = str.getLength();
     bool doubleQuote = false;

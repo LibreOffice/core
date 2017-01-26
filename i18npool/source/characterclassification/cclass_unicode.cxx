@@ -57,7 +57,7 @@ cclass_Unicode::~cclass_Unicode() {
 
 
 OUString SAL_CALL
-cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException, std::exception) {
+cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) {
     sal_Int32 len = Text.getLength();
     if (nPos >= len)
         return OUString();
@@ -69,7 +69,7 @@ cclass_Unicode::toUpper( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
 }
 
 OUString SAL_CALL
-cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException, std::exception) {
+cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) {
     sal_Int32 len = Text.getLength();
     if (nPos >= len)
         return OUString();
@@ -81,7 +81,7 @@ cclass_Unicode::toLower( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
 }
 
 OUString SAL_CALL
-cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) throw(RuntimeException, std::exception) {
+cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& rLocale ) {
     try
     {
         sal_Int32 len = Text.getLength();
@@ -120,20 +120,20 @@ cclass_Unicode::toTitle( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount,
 }
 
 sal_Int16 SAL_CALL
-cclass_Unicode::getType( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException, std::exception) {
+cclass_Unicode::getType( const OUString& Text, sal_Int32 nPos ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
     return (sal_Int16) u_charType(Text.iterateCodePoints(&nPos, 0));
 }
 
 sal_Int16 SAL_CALL
-cclass_Unicode::getCharacterDirection( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException, std::exception) {
+cclass_Unicode::getCharacterDirection( const OUString& Text, sal_Int32 nPos ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
     return (sal_Int16) u_charDirection(Text.iterateCodePoints(&nPos, 0));
 }
 
 
 sal_Int16 SAL_CALL
-cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) throw(RuntimeException, std::exception) {
+cclass_Unicode::getScript( const OUString& Text, sal_Int32 nPos ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
     // ICU Unicode script type UBlockCode starts from 1 for Basic Latin,
     // while OO.o enum UnicideScript starts from 0.
@@ -208,14 +208,14 @@ cclass_Unicode::getCharType( const OUString& Text, sal_Int32* nPos, sal_Int32 in
 }
 
 sal_Int32 SAL_CALL
-cclass_Unicode::getCharacterType( const OUString& Text, sal_Int32 nPos, const Locale& /*rLocale*/ ) throw(RuntimeException, std::exception) {
+cclass_Unicode::getCharacterType( const OUString& Text, sal_Int32 nPos, const Locale& /*rLocale*/ ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
     return getCharType(Text, &nPos, 0);
 
 }
 
 sal_Int32 SAL_CALL
-cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& /*rLocale*/ ) throw(RuntimeException, std::exception) {
+cclass_Unicode::getStringType( const OUString& Text, sal_Int32 nPos, sal_Int32 nCount, const Locale& /*rLocale*/ ) {
     if ( nPos < 0 || Text.getLength() <= nPos ) return 0;
 
     sal_Int32 result = 0;
@@ -239,7 +239,6 @@ ParseResult SAL_CALL cclass_Unicode::parseAnyToken(
             const OUString& userDefinedCharactersStart,
             sal_Int32 contCharTokenType,
             const OUString& userDefinedCharactersCont )
-                throw(RuntimeException, std::exception)
 {
     ParseResult r;
     if ( Text.getLength() <= nPos )
@@ -263,7 +262,6 @@ ParseResult SAL_CALL cclass_Unicode::parsePredefinedToken(
             const OUString& userDefinedCharactersStart,
             sal_Int32 contCharTokenType,
             const OUString& userDefinedCharactersCont )
-                throw(RuntimeException, std::exception)
 {
     ParseResult r;
     if ( Text.getLength() <= nPos )
@@ -277,17 +275,17 @@ ParseResult SAL_CALL cclass_Unicode::parsePredefinedToken(
     return r;
 }
 
-OUString SAL_CALL cclass_Unicode::getImplementationName() throw( RuntimeException, std::exception )
+OUString SAL_CALL cclass_Unicode::getImplementationName()
 {
     return OUString("com.sun.star.i18n.CharacterClassification_Unicode");
 }
 
-sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName) throw( RuntimeException, std::exception )
+sal_Bool SAL_CALL cclass_Unicode::supportsService(const OUString& rServiceName)
 {
     return cppu::supportsService(this, rServiceName);
 }
 
-Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames() throw( RuntimeException, std::exception )
+Sequence< OUString > SAL_CALL cclass_Unicode::getSupportedServiceNames()
 {
     Sequence< OUString > aRet { "com.sun.star.i18n.CharacterClassification_Unicode" };
     return aRet;

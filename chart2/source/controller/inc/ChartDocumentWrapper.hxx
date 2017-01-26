@@ -62,12 +62,9 @@ public:
     virtual ~ChartDocumentWrapper() override;
 
     /// XServiceInfo declarations
-    virtual OUString SAL_CALL getImplementationName()
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName )
-            throw( css::uno::RuntimeException, std::exception ) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames()
-            throw( css::uno::RuntimeException, std::exception ) override;
+    virtual OUString SAL_CALL getImplementationName() override;
+    virtual sal_Bool SAL_CALL supportsService( const OUString& ServiceName ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getSupportedServiceNames() override;
 
     void setAddIn( const css::uno::Reference< css::util::XRefreshable >& xAddIn );
     const css::uno::Reference< css::util::XRefreshable >& getAddIn() const { return m_xAddIn;}
@@ -81,98 +78,65 @@ public:
     css::uno::Reference< css::drawing::XShapes > getAdditionalShapes() const;
 
     /// @throws css::uno::RuntimeException
-    css::uno::Reference< css::drawing::XDrawPage > impl_getDrawPage() const
-        throw (css::uno::RuntimeException);
+    css::uno::Reference< css::drawing::XDrawPage > impl_getDrawPage() const;
 
 protected:
 
     // ____ chart::XChartDocument ____
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getTitle()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getSubTitle()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getLegend()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getArea()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::chart::XDiagram > SAL_CALL getDiagram()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getTitle() override;
+    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getSubTitle() override;
+    virtual css::uno::Reference< css::drawing::XShape > SAL_CALL getLegend() override;
+    virtual css::uno::Reference< css::beans::XPropertySet > SAL_CALL getArea() override;
+    virtual css::uno::Reference< css::chart::XDiagram > SAL_CALL getDiagram() override;
     virtual void SAL_CALL setDiagram( const css::uno::Reference<
-                                      css::chart::XDiagram >& xDiagram )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference< css::chart::XChartData > SAL_CALL getData()
-        throw (css::uno::RuntimeException, std::exception) override;
+                                      css::chart::XDiagram >& xDiagram ) override;
+    virtual css::uno::Reference< css::chart::XChartData > SAL_CALL getData() override;
     virtual void SAL_CALL attachData( const css::uno::Reference<
-                                      css::chart::XChartData >& xData )
-        throw (css::uno::RuntimeException, std::exception) override;
+                                      css::chart::XChartData >& xData ) override;
 
     // ____ XModel ____
     virtual sal_Bool SAL_CALL attachResource( const OUString& URL,
-                                              const css::uno::Sequence< css::beans::PropertyValue >& Arguments )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual OUString SAL_CALL getURL()
-        throw (css::uno::RuntimeException, std::exception) override;
+                                              const css::uno::Sequence< css::beans::PropertyValue >& Arguments ) override;
+    virtual OUString SAL_CALL getURL() override;
     virtual css::uno::Sequence<
-        css::beans::PropertyValue > SAL_CALL getArgs()
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::beans::PropertyValue > SAL_CALL getArgs() override;
     virtual void SAL_CALL connectController( const css::uno::Reference<
-                                             css::frame::XController >& Controller )
-        throw (css::uno::RuntimeException, std::exception) override;
+                                             css::frame::XController >& Controller ) override;
     virtual void SAL_CALL disconnectController( const css::uno::Reference<
-                                                css::frame::XController >& Controller )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL lockControllers()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL unlockControllers()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual sal_Bool SAL_CALL hasControllersLocked()
-        throw (css::uno::RuntimeException, std::exception) override;
+                                                css::frame::XController >& Controller ) override;
+    virtual void SAL_CALL lockControllers() override;
+    virtual void SAL_CALL unlockControllers() override;
+    virtual sal_Bool SAL_CALL hasControllersLocked() override;
     virtual css::uno::Reference<
-        css::frame::XController > SAL_CALL getCurrentController()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& Controller )
-        throw (css::container::NoSuchElementException,
-               css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Reference<css::uno::XInterface > SAL_CALL getCurrentSelection()
-        throw (css::uno::RuntimeException, std::exception) override;
+        css::frame::XController > SAL_CALL getCurrentController() override;
+    virtual void SAL_CALL setCurrentController( const css::uno::Reference< css::frame::XController >& Controller ) override;
+    virtual css::uno::Reference<css::uno::XInterface > SAL_CALL getCurrentSelection() override;
 
     // ____ XComponent ____
-    virtual void SAL_CALL dispose()
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL dispose() override;
+    virtual void SAL_CALL addEventListener( const css::uno::Reference< css::lang::XEventListener >& xListener ) override;
+    virtual void SAL_CALL removeEventListener( const css::uno::Reference< css::lang::XEventListener >& aListener ) override;
 
     // ____ XInterface (for new interfaces) ____
-    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType )
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Any SAL_CALL queryInterface( const css::uno::Type& aType ) override;
 
     // ____ ::utl::OEventListenerAdapter ____
     virtual void _disposing( const css::lang::EventObject& rSource ) override;
 
     // ____ XDrawPageSupplier ____
-    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getDrawPage()
-        throw (css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::drawing::XDrawPage > SAL_CALL getDrawPage() override;
 
     // ____ XMultiServiceFactory ____
-    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier )
-        throw (css::uno::Exception,
-               css::uno::RuntimeException, std::exception) override;
+    virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstance( const OUString& aServiceSpecifier ) override;
     virtual css::uno::Reference< css::uno::XInterface > SAL_CALL createInstanceWithArguments(
                 const OUString& ServiceSpecifier,
-                const css::uno::Sequence< css::uno::Any >& Arguments )
-        throw (css::uno::Exception,
-               css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames()
-        throw (css::uno::RuntimeException, std::exception) override;
+                const css::uno::Sequence< css::uno::Any >& Arguments ) override;
+    virtual css::uno::Sequence< OUString > SAL_CALL getAvailableServiceNames() override;
 
     // ____ XAggregation ____
     virtual void SAL_CALL setDelegator(
-        const css::uno::Reference< css::uno::XInterface >& rDelegator )
-        throw (css::uno::RuntimeException, std::exception) override;
-    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType )
-        throw (css::uno::RuntimeException, std::exception) override;
+        const css::uno::Reference< css::uno::XInterface >& rDelegator ) override;
+    virtual css::uno::Any SAL_CALL queryAggregation( const css::uno::Type& aType ) override;
 
     // ____ WrappedPropertySet ____
     virtual const css::uno::Sequence< css::beans::Property >& getPropertySequence() override;

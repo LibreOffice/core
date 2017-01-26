@@ -44,47 +44,42 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
         virtual ~X509Certificate_NssImpl() override ;
 
         //Methods from XCertificate
-        virtual sal_Int16 SAL_CALL getVersion(  ) throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual sal_Int16 SAL_CALL getVersion(  ) override ;
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSerialNumber(  ) throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSerialNumber(  ) override ;
 
-        virtual OUString SAL_CALL getIssuerName(  ) throw ( css::uno::RuntimeException, std::exception) override ;
-        virtual OUString SAL_CALL getSubjectName(  ) throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual OUString SAL_CALL getIssuerName(  ) override ;
+        virtual OUString SAL_CALL getSubjectName(  ) override ;
 
-        virtual css::util::DateTime SAL_CALL getNotValidBefore(  ) throw ( css::uno::RuntimeException, std::exception) override ;
-        virtual css::util::DateTime SAL_CALL getNotValidAfter(  ) throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual css::util::DateTime SAL_CALL getNotValidBefore(  ) override ;
+        virtual css::util::DateTime SAL_CALL getNotValidAfter(  ) override ;
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getIssuerUniqueID(  ) throw ( css::uno::RuntimeException, std::exception) override ;
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSubjectUniqueID(  ) throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getIssuerUniqueID(  ) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSubjectUniqueID(  ) override ;
 
-        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL getExtensions(  ) throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Sequence< css::uno::Reference< css::security::XCertificateExtension > > SAL_CALL getExtensions(  ) override ;
 
-        virtual css::uno::Reference< css::security::XCertificateExtension > SAL_CALL findCertificateExtension( const css::uno::Sequence< sal_Int8 >& oid ) throw (css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Reference< css::security::XCertificateExtension > SAL_CALL findCertificateExtension( const css::uno::Sequence< sal_Int8 >& oid ) override ;
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getEncoded(  ) throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getEncoded(  ) override ;
 
-        virtual OUString SAL_CALL getSubjectPublicKeyAlgorithm()
-            throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual OUString SAL_CALL getSubjectPublicKeyAlgorithm() override ;
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSubjectPublicKeyValue()
-            throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSubjectPublicKeyValue() override ;
 
-        virtual OUString SAL_CALL getSignatureAlgorithm()
-            throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual OUString SAL_CALL getSignatureAlgorithm() override ;
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint()
-            throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getSHA1Thumbprint() override ;
 
-        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint()
-            throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual css::uno::Sequence< sal_Int8 > SAL_CALL getMD5Thumbprint() override ;
 
-        virtual sal_Int32 SAL_CALL getCertificateUsage( ) throw ( css::uno::RuntimeException, std::exception) override ;
+        virtual sal_Int32 SAL_CALL getCertificateUsage( ) override ;
 
         //Methods from XUnoTunnel
-        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) throw (css::uno::RuntimeException, std::exception) override;
+        virtual sal_Int64 SAL_CALL getSomething( const css::uno::Sequence< sal_Int8 >& aIdentifier ) override;
 
         /// @see xmlsecurity::Certificate::getSHA256Thumbprint().
-        virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() throw (css::uno::RuntimeException, std::exception) override;
+        virtual css::uno::Sequence<sal_Int8> getSHA256Thumbprint() override;
 
         static const css::uno::Sequence< sal_Int8 >& getUnoTunnelId() ;
 
@@ -92,7 +87,7 @@ class X509Certificate_NssImpl : public ::cppu::WeakImplHelper<
         void setCert( CERTCertificate* cert ) ;
         const CERTCertificate* getNssCert() const ;
         /// @throws css::uno::RuntimeException
-        void setRawCert( const css::uno::Sequence< sal_Int8 >& rawCert ) throw ( css::uno::RuntimeException) ;
+        void setRawCert( const css::uno::Sequence< sal_Int8 >& rawCert ) ;
 } ;
 
 #endif // INCLUDED_XMLSECURITY_SOURCE_XMLSEC_NSS_X509CERTIFICATE_NSSIMPL_HXX

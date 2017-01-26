@@ -23,6 +23,7 @@
 #include <com/sun/star/document/XEventsSupplier.hpp>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <facreg.hxx>
 #include "XMLAutoTextContainerEventImport.hxx"
 #include <xmloff/xmlnmspe.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -57,7 +58,6 @@ XMLAutoTextEventImport::~XMLAutoTextEventImport() throw()
 
 void XMLAutoTextEventImport::initialize(
     const Sequence<Any> & rArguments )
-        throw(Exception, RuntimeException, std::exception)
 {
     // The events may come as either an XNameReplace or XEventsSupplier.
 
@@ -118,7 +118,6 @@ OUString SAL_CALL XMLAutoTextEventImport_getImplementationName() throw()
 
 Reference< XInterface > SAL_CALL XMLAutoTextEventImport_createInstance(
         const Reference< XMultiServiceFactory > & rSMgr)
-    throw( Exception )
 {
     return static_cast<cppu::OWeakObject*>(new XMLAutoTextEventImport( comphelper::getComponentContext(rSMgr) ));
 }

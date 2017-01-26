@@ -42,8 +42,7 @@ namespace OFOPXMLHelper {
     ReadRelationsInfoSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
         const OUString & aStreamName,
-        const css::uno::Reference< css::uno::XComponentContext >& rContext )
-            throw( css::uno::Exception );
+        const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
     // returns sequence containing two entries of type sequence<StringPair>
     // the first sequence describes "Default" elements, where each element is described
@@ -55,8 +54,7 @@ namespace OFOPXMLHelper {
     css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >
     ReadContentTypeSequence(
         const css::uno::Reference< css::io::XInputStream >& xInStream,
-        const css::uno::Reference< css::uno::XComponentContext >& rContext )
-            throw( css::uno::Exception );
+        const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
     // writes sequence of elements, where each element is described by sequence of tags,
     // where each tag is described by StringPair ( First - name, Second - value )
@@ -66,8 +64,7 @@ namespace OFOPXMLHelper {
     void WriteRelationsInfoSequence(
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
         const css::uno::Sequence< css::uno::Sequence< css::beans::StringPair > >& aSequence,
-        const css::uno::Reference< css::uno::XComponentContext >& rContext )
-            throw( css::uno::Exception );
+        const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
     // writes two entries of type sequence<StringPair>
     // the first sequence describes "Default" elements, where each element is described
@@ -80,8 +77,7 @@ namespace OFOPXMLHelper {
         const css::uno::Reference< css::io::XOutputStream >& xOutStream,
         const css::uno::Sequence< css::beans::StringPair >& aDefaultsSequence,
         const css::uno::Sequence< css::beans::StringPair >& aOverridesSequence,
-        const css::uno::Reference< css::uno::XComponentContext >& rContext )
-            throw( css::uno::Exception );
+        const css::uno::Reference< css::uno::XComponentContext >& rContext );
 
 } // namespace OFOPXMLHelper
 

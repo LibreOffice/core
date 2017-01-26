@@ -143,7 +143,7 @@ Sequence< sal_Int8 > OHSQLTable::getUnoTunnelImplementationId()
 
 // css::lang::XUnoTunnel
 
-sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (RuntimeException, std::exception)
+sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId )
 {
     return (rId.getLength() == 16 && 0 == memcmp(getUnoTunnelImplementationId().getConstArray(),  rId.getConstArray(), 16 ) )
                 ? reinterpret_cast< sal_Int64 >( this )
@@ -151,7 +151,7 @@ sal_Int64 OHSQLTable::getSomething( const Sequence< sal_Int8 > & rId ) throw (Ru
 }
 
 // XAlterTable
-void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor ) throw(SQLException, NoSuchElementException, RuntimeException, std::exception)
+void SAL_CALL OHSQLTable::alterColumnByName( const OUString& colName, const Reference< XPropertySet >& descriptor )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -338,7 +338,7 @@ void OHSQLTable::executeStatement(const OUString& _rStatement )
     }
 }
 
-Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException, std::exception)
+Sequence< Type > SAL_CALL OHSQLTable::getTypes(  )
 {
     if ( m_Type == "VIEW" )
     {
@@ -360,7 +360,7 @@ Sequence< Type > SAL_CALL OHSQLTable::getTypes(  ) throw(RuntimeException, std::
 }
 
 // XRename
-void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, ElementExistException, RuntimeException, std::exception)
+void SAL_CALL OHSQLTable::rename( const OUString& newName )
 {
     ::osl::MutexGuard aGuard(m_aMutex);
     checkDisposed(
@@ -396,7 +396,7 @@ void SAL_CALL OHSQLTable::rename( const OUString& newName ) throw(SQLException, 
 }
 
 
-Any SAL_CALL OHSQLTable::queryInterface( const Type & rType ) throw(RuntimeException, std::exception)
+Any SAL_CALL OHSQLTable::queryInterface( const Type & rType )
 {
     if( m_Type == "VIEW" && rType == cppu::UnoType<XRename>::get())
         return Any();

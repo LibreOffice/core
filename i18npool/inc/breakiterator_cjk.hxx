@@ -34,18 +34,14 @@ public:
     BreakIterator_CJK();
 
     Boundary SAL_CALL nextWord( const OUString& Text, sal_Int32 nStartPos,
-            const css::lang::Locale& nLocale, sal_Int16 WordType)
-            throw(css::uno::RuntimeException, std::exception) override;
+            const css::lang::Locale& nLocale, sal_Int16 WordType) override;
     Boundary SAL_CALL previousWord( const OUString& Text, sal_Int32 nStartPos,
-            const css::lang::Locale& nLocale, sal_Int16 WordType)
-            throw(css::uno::RuntimeException, std::exception) override;
+            const css::lang::Locale& nLocale, sal_Int16 WordType) override;
     Boundary SAL_CALL getWordBoundary( const OUString& Text, sal_Int32 nPos,
-            const css::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection )
-            throw(css::uno::RuntimeException, std::exception) override;
+            const css::lang::Locale& nLocale, sal_Int16 WordType, sal_Bool bDirection ) override;
     LineBreakResults SAL_CALL getLineBreak( const OUString& Text, sal_Int32 nStartPos,
         const css::lang::Locale& nLocale, sal_Int32 nMinBreakPos,
-        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions )
-        throw(css::uno::RuntimeException, std::exception) override;
+        const LineBreakHyphenationOptions& hOptions, const LineBreakUserOptions& bOptions ) override;
 
 protected:
     std::unique_ptr<xdictionary> m_xDict;

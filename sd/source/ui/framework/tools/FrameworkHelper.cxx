@@ -95,11 +95,9 @@ public:
 
     virtual void SAL_CALL disposing() override;
     // XEventListener
-    virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
-        throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing (const lang::EventObject& rEvent) override;
     // XConfigurationChangeListener
-    virtual void SAL_CALL notifyConfigurationChange (const ConfigurationChangeEvent& rEvent)
-        throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyConfigurationChange (const ConfigurationChangeEvent& rEvent) override;
 
 private:
     OUString msEventType;
@@ -133,8 +131,7 @@ public:
     /** XEventListener.  This method is called when the frame::XController
         is being destroyed.
     */
-    virtual void SAL_CALL disposing (const lang::EventObject& rEvent)
-        throw (RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing (const lang::EventObject& rEvent) override;
 
     /** This method is called when the ViewShellBase is being destroyed.
     */
@@ -299,8 +296,7 @@ public:
 
     virtual void SAL_CALL disposing() override;
 
-    virtual void SAL_CALL disposing (const lang::EventObject& rEventObject)
-        throw(RuntimeException, std::exception) override;
+    virtual void SAL_CALL disposing (const lang::EventObject& rEventObject) override;
 
 private:
     ::std::shared_ptr<FrameworkHelper> mpHelper;
@@ -819,7 +815,6 @@ void SAL_CALL FrameworkHelper::DisposeListener::disposing()
 }
 
 void SAL_CALL FrameworkHelper::DisposeListener::disposing (const lang::EventObject& rEventObject)
-    throw(RuntimeException, std::exception)
 {
     if (mpHelper.get() != nullptr)
         mpHelper->disposing(rEventObject);
@@ -895,7 +890,6 @@ void CallbackCaller::disposing()
 }
 
 void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
-    throw (RuntimeException, std::exception)
 {
     if (rEvent.Source == mxConfigurationController)
     {
@@ -906,7 +900,6 @@ void SAL_CALL CallbackCaller::disposing (const lang::EventObject& rEvent)
 
 void SAL_CALL CallbackCaller::notifyConfigurationChange (
     const ConfigurationChangeEvent& rEvent)
-    throw (RuntimeException, std::exception)
 {
     if (rEvent.Type.equals(msEventType) && maFilter(rEvent))
     {
@@ -960,7 +953,6 @@ void LifetimeController::disposing()
 }
 
 void SAL_CALL LifetimeController::disposing (const lang::EventObject& rEvent)
-    throw(RuntimeException, std::exception)
 {
     (void)rEvent;
     mbListeningToController = false;

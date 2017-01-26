@@ -57,33 +57,21 @@ public:
 
     // css::datatransfer::dnd::XDragGestureListener
     /// @throws css::uno::RuntimeException
-    virtual void dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge )
-        throw (css::uno::RuntimeException,
-               std::exception);
+    virtual void dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge );
 
     // css::datatransfer::dnd::XDragSourceListener
     /// @throws css::uno::RuntimeException
-    virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde )
-        throw (css::uno::RuntimeException,
-               std::exception);
+    virtual void dragDropEnd(const css::datatransfer::dnd::DragSourceDropEvent& dsde );
 
     // css::datatransfer::dnd::XDropTargetListener
     /// @throws css::uno::RuntimeException
-    virtual void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde )
-        throw (css::uno::RuntimeException,
-               std::exception);
+    virtual void drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde );
     /// @throws css::uno::RuntimeException
-    virtual void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee )
-        throw (css::uno::RuntimeException,
-               std::exception);
+    virtual void dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee );
     /// @throws css::uno::RuntimeException
-    virtual void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte )
-        throw (css::uno::RuntimeException,
-               std::exception);
+    virtual void dragExit( const css::datatransfer::dnd::DropTargetEvent& dte );
     /// @throws css::uno::RuntimeException
-    virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde )
-        throw (css::uno::RuntimeException,
-               std::exception);
+    virtual void dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde );
 };
 
 class VCL_DLLPUBLIC DragAndDropWrapper :
@@ -100,29 +88,29 @@ public:
                     virtual ~DragAndDropWrapper() override;
 
     // css::uno::XInterface
-    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) throw(css::uno::RuntimeException, std::exception) override;
+    css::uno::Any SAL_CALL queryInterface( const css::uno::Type & rType ) override;
     void          SAL_CALL acquire() throw() override  { OWeakObject::acquire(); }
     void          SAL_CALL release() throw() override  { OWeakObject::release(); }
 
     // css::lang::XEventListener
-    void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     // css::datatransfer::dnd::XDragGestureListener
-    void SAL_CALL dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dragGestureRecognized( const css::datatransfer::dnd::DragGestureEvent& dge ) override;
 
     // css::datatransfer::dnd::XDragSourceListener
-    void SAL_CALL dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragEnter( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragExit( const css::datatransfer::dnd::DragSourceEvent& dse ) throw (css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragOver( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL dragDropEnd( const css::datatransfer::dnd::DragSourceDropEvent& dsde ) override;
+    void SAL_CALL dragEnter( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
+    void SAL_CALL dragExit( const css::datatransfer::dnd::DragSourceEvent& dse ) override;
+    void SAL_CALL dragOver( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
+    void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DragSourceDragEvent& dsde ) override;
 
     // css::datatransfer::dnd::XDropTargetListener
-    void SAL_CALL drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) throw (css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) throw (css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) throw (css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (css::uno::RuntimeException, std::exception) override;
-    void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) throw (css::uno::RuntimeException, std::exception) override;
+    void SAL_CALL drop( const css::datatransfer::dnd::DropTargetDropEvent& dtde ) override;
+    void SAL_CALL dragEnter( const css::datatransfer::dnd::DropTargetDragEnterEvent& dtdee ) override;
+    void SAL_CALL dragExit( const css::datatransfer::dnd::DropTargetEvent& dte ) override;
+    void SAL_CALL dragOver( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
+    void SAL_CALL dropActionChanged( const css::datatransfer::dnd::DropTargetDragEvent& dtde ) override;
 };
 
 }}  // namespace vcl::unohelper

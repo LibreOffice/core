@@ -72,7 +72,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
             @param      "xFrame", reference to an existing frame to append.
             @onerror    We do nothing in release or throw an assert in debug version.
         */
-        virtual void SAL_CALL append( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL append( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
 
         /**
             @short      remove frame from container
@@ -84,7 +84,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
             @param      "xFrame", reference to an existing frame to remove.
             @onerror    We do nothing in release or throw an assert in debug version.
         */
-        virtual void SAL_CALL remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual void SAL_CALL remove( const css::uno::Reference< css::frame::XFrame >& xFrame ) override;
 
         /**
             @short      return list of all applicable frames for given flags
@@ -94,7 +94,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 
             @onerror    An empty list is returned.
         */
-        virtual css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Sequence< css::uno::Reference< css::frame::XFrame > > SAL_CALL queryFrames( sal_Int32 nSearchFlags ) override;
 
         //  XIndexAccess
 
@@ -109,7 +109,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 
             @onerror    If a lock is set, we return 0 for prevent further access!
         */
-        virtual sal_Int32 SAL_CALL getCount() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Int32 SAL_CALL getCount() override;
 
         /**
             @short      get specified container item by index
@@ -125,9 +125,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
             @onerror    If a lock is set, we return an empty Any!
             @onerror    If index out of range, an IndexOutOfBoundsException is thrown.
         */
-        virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) throw(    css::lang::IndexOutOfBoundsException    ,
-                                                                                css::lang::WrappedTargetException       ,
-                                                                                css::uno::RuntimeException, std::exception              ) override;
+        virtual css::uno::Any SAL_CALL getByIndex( sal_Int32 nIndex ) override;
 
         //  XElementAccess
 
@@ -137,7 +135,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
                         (container-lock is ignored)
             @return     A uno-type descriptor.
         */
-        virtual css::uno::Type SAL_CALL getElementType() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual css::uno::Type SAL_CALL getElementType() override;
 
         /**
             @short      get fill state of current container
@@ -148,7 +146,7 @@ class OFrames   :   public ::cppu::WeakImplHelper< css::frame::XFrames >
 
             @onerror    We return sal_False.
         */
-        virtual sal_Bool SAL_CALL hasElements() throw( css::uno::RuntimeException, std::exception ) override;
+        virtual sal_Bool SAL_CALL hasElements() override;
 
     protected:
 

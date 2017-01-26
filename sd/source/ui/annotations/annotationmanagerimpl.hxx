@@ -58,8 +58,8 @@ public:
     virtual void SAL_CALL disposing () override;
 
     // XEventListener
-    virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) throw (css::uno::RuntimeException, std::exception) override;
-    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) throw (css::uno::RuntimeException, std::exception) override;
+    virtual void SAL_CALL notifyEvent( const css::document::EventObject& Event ) override;
+    virtual void SAL_CALL disposing( const css::lang::EventObject& Source ) override;
 
     void ExecuteAnnotation (SfxRequest& rRequest);
     void GetAnnotationState (SfxItemSet& rItemSet);
