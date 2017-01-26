@@ -127,6 +127,7 @@ $(call gb_CustomTarget_get_workdir,instsetoo_native/setup)/$(call gb_Helper_get_
 		&& echo 'ProgressTextBaseline=145' \
 		&& echo 'ProgressTextColor=255,255,255' \
 		&& echo 'URE_BOOTSTRAP=$${ORIGIN}/$(call gb_Helper_get_rcfile,fundamental)' \
+		&& echo '[UserConfigBackup]'
 		&& echo 'SecureUserConfig=true' \
 		&& echo 'SecureUserConfigCompress=true' \
 		&& echo 'SecureUserConfigNumCopies=2' \
