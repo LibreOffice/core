@@ -95,6 +95,15 @@ else
         amd64-*-freebsd*|x86_64-*-freebsd*)
             . ./FreeBSDAMDEnv.Set.sh
         ;;
+        arm*-*-freebsd*)
+            . ./FreeBSDARMEnv.Set.sh
+        ;;
+        powerpc-*-freebsd*)
+            . ./FreeBSDPPCEnv.Set.sh
+        ;;
+        powerpc64-*-freebsd*)
+            . ./FreeBSDPPC64Env.Set.sh
+        ;;
         # the result here (whether you get x86_64) seems to depend on $CC...
         i[3456]86-*-darwin*|x86_64-*-darwin*)
             . ./MacOSXX86Env.Set.sh
