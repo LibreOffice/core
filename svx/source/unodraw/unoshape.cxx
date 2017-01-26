@@ -618,7 +618,8 @@ void SvxItemPropertySet_ObtainSettingsFromPropertySet(const SvxItemPropertySet& 
                         }
                         else
                         {
-                            if(SfxItemPool::IsWhich(pEntry->nWID))
+                            if(SfxItemPool::IsWhich(pEntry->nWID) &&
+                                    (pEntry->nWID != XATTR_FILLGRADIENT || aSrcIt->sName != "FillGradientName"))
                                 rSet.Put(rSet.GetPool()->GetDefaultItem(pEntry->nWID));
                             // set
                             SvxItemPropertySet_setPropertyValue(pEntry, *pUsrAny, rSet);
