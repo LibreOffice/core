@@ -1723,10 +1723,6 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     // been generated
     ImplTileInfo aTileInfo;
 
-    // current output position while drawing
-    Point aCurrPos;
-    int nX, nY;
-
     // check for recursion's end condition: LSB place reached?
     if( nMSBFactor == 1 )
     {
@@ -1768,9 +1764,9 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
         {
             // now fill one row from aTileInfo.aNextTileTopLeft.X() all
             // the way to the right
-            aCurrPos.X() = aTileInfo.aNextTileTopLeft.X();
-            aCurrPos.Y() = aTileInfo.aTileTopLeft.Y();
-            for( nX=0; nX < aTileInfo.nTilesEmptyX; nX += nMSBFactor )
+            // current output position while drawing
+            Point aCurrPos(aTileInfo.aNextTileTopLeft.X(), aTileInfo.aTileTopLeft.Y());
+            for (int nX=0; nX < aTileInfo.nTilesEmptyX; nX += nMSBFactor)
             {
                 if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
                     return false;
@@ -1791,7 +1787,7 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
             // the way to the bottom
             aCurrPos.X() = aTileInfo.aTileTopLeft.X();
             aCurrPos.Y() = aTileInfo.aNextTileTopLeft.Y();
-            for( nY=0; nY < aTileInfo.nTilesEmptyY; nY += nMSBFactor )
+            for (int nY=0; nY < aTileInfo.nTilesEmptyY; nY += nMSBFactor)
             {
                 if( !aTmpGraphic.Draw( &rVDev, aCurrPos, aTileInfo.aTileSizePixel, pAttr, nFlags ) )
                     return false;
@@ -1838,18 +1834,18 @@ bool GraphicObject::ImplRenderTileRecursive( VirtualDevice& rVDev, int nExponent
     rTileInfo.nTilesEmptyY     = aTileInfo.nTilesEmptyY - nRemainderTilesY;
 
     // init output position
-    aCurrPos = aTileInfo.aNextTileTopLeft;
+    Point aCurrPos = aTileInfo.aNextTileTopLeft;
 
     // fill our drawing area. Fill possibly more, to create the next
     // bigger tile size -> see bitmap extraction above. This does no
     // harm, since everything right or below our actual area is
     // overdrawn by our caller. Just in case we're in the last level,
     // we don't draw beyond the right or bottom border.
-    for( nY=0; nY < aTileInfo.nTilesEmptyY && nY < nExponent*nMSBFactor; nY += nMSBFactor )
+    for (int nY=0; nY < aTileInfo.nTilesEmptyY && nY < nExponent*nMSBFactor; nY += nMSBFactor)
     {
         aCurrPos.X() = aTileInfo.aNextTileTopLeft.X();
 
-        for( nX=0; nX < aTileInfo.nTilesEmptyX && nX < nExponent*nMSBFactor; nX += nMSBFactor )
+        for (int nX=0; nX < aTileInfo.nTilesEmptyX && nX < nExponent*nMSBFactor; nX += nMSBFactor)
         {
             if( bNoFirstTileDraw )
                 bNoFirstTileDraw = false; // don't draw first tile position
