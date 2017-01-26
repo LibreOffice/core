@@ -40,7 +40,6 @@ class DockingWindow::ImplData
 {
 public:
     ImplData();
-    ~ImplData();
 
     VclPtr<vcl::Window> mpParent;
     Size                maMaxOutSize;
@@ -50,10 +49,6 @@ DockingWindow::ImplData::ImplData()
 {
     mpParent = nullptr;
     maMaxOutSize = Size( SHRT_MAX, SHRT_MAX );
-}
-
-DockingWindow::ImplData::~ImplData()
-{
 }
 
 class ImplDockFloatWin : public FloatingWindow

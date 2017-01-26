@@ -87,7 +87,6 @@ private:
 
 public:
                         SVMConverter( SvStream& rIStm, GDIMetaFile& rMtf, sal_uLong nConvertMode  );
-                        ~SVMConverter() {}
 
 private:
                         SVMConverter( const SVMConverter& ) = delete;

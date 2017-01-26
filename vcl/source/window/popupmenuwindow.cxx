@@ -26,15 +26,10 @@ struct PopupMenuFloatingWindow::ImplData
     sal_uInt16      mnMenuStackLevel;  // Store the stack level of a popup menu.  0 = top-level menu.
 
     ImplData();
-    ~ImplData();
 };
 
 PopupMenuFloatingWindow::ImplData::ImplData() :
     mnMenuStackLevel( ::std::numeric_limits<sal_uInt16>::max() )
-{
-}
-
-PopupMenuFloatingWindow::ImplData::~ImplData()
 {
 }
 

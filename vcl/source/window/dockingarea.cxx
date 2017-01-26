@@ -30,7 +30,6 @@ class DockingAreaWindow::ImplData
 {
 public:
     ImplData();
-    ~ImplData();
 
     WindowAlign meAlign;
 };
@@ -38,10 +37,6 @@ public:
 DockingAreaWindow::ImplData::ImplData()
 {
     meAlign = WindowAlign::Top;
-}
-
-DockingAreaWindow::ImplData::~ImplData()
-{
 }
 
 DockingAreaWindow::DockingAreaWindow( vcl::Window* pParent ) :

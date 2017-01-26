@@ -311,9 +311,6 @@ public:
         GlyphEmit() : m_nSubsetGlyphID(0)
         {
         }
-        ~GlyphEmit()
-        {
-        }
 
         void setGlyphId( sal_uInt8 i_nId ) { m_nSubsetGlyphID = i_nId; }
         sal_uInt8 getGlyphId() const { return m_nSubsetGlyphID; }

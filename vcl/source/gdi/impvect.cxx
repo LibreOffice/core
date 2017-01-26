@@ -281,7 +281,6 @@ private:
 public:
 
                     ImplChain();
-                    ~ImplChain();
 
     void            ImplBeginAdd( const Point& rStartPt );
     inline void     ImplAdd( sal_uInt8 nCode );
@@ -295,10 +294,6 @@ ImplChain::ImplChain() :
     mnCount     ( 0UL )
 {
     mpCodes.reset( new sal_uInt8[ mnArraySize ] );
-}
-
-ImplChain::~ImplChain()
-{
 }
 
 void ImplChain::ImplGetSpace()
