@@ -460,7 +460,7 @@ bool UCBDeadPropertyValue::toXML( const uno::Any & rInData,
     else if ( rType == cppu::UnoType<bool>::get() )
     {
         // boolean
-        sal_Bool bValue = false;
+        bool bValue = false;
         rInData >>= bValue;
         aStringValue = OUString::boolean( bValue );
         aStringType = aTypeBoolean;
