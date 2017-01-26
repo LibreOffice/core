@@ -170,7 +170,7 @@ class ExampleMember implements com.sun.star.container.XNamed,
 
 //  implementation of com.sun.star.sheet.DataPilotSourceMembers
 
-class ExampleMembers implements com.sun.star.container.XNameAccess
+class ExampleMembers implements com.sun.star.sheet.XMembersAccess
 {
     private final ExampleSettings aSettings;
     private ExampleMember[] aMembers;
@@ -224,6 +224,13 @@ class ExampleMembers implements com.sun.star.container.XNameAccess
                 return true;
         return false;
     }
+
+    // XMembersAccess
+
+    public String[] getLocaleIndependentElementNames()
+    {
+        return getElementNames();
+    }
 }
 
 //  implementation of com.sun.star.sheet.DataPilotSourceLevel
@@ -258,7 +265,7 @@ class ExampleLevel implements
 
     // XMembersSupplier
 
-    public com.sun.star.container.XNameAccess getMembers()
+    public com.sun.star.sheet.XMembersAccess getMembers()
     {
         if ( aMembers == null )
             aMembers = new ExampleMembers( aSettings );
