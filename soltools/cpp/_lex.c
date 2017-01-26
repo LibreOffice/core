@@ -492,6 +492,7 @@ continue2:
 
                 case S_STNL:
                     error(ERROR, "Unterminated string or char const");
+                    /* fall through */
                 case S_NL:
                     tp->t = ip;
                     tp->type = NL;
@@ -516,6 +517,7 @@ continue2:
                 case S_EOFCOM:
                     error(WARNING, "EOF inside comment");
                     --ip;
+                    /* fall through */
                 case S_COMMENT:
                     if (!Cflag)
                     {

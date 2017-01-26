@@ -319,7 +319,7 @@ long
                     }
                     continue;
                 }
-                /* flow through */
+                /* fall through */
 
                 /* plain binary */
             case EQ:
