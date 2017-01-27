@@ -1213,12 +1213,12 @@ void XMLDocumentTransformerContext_Impl::StartElement(
                         XML_NAMESPACE_SVG ) );
     }
 
-    GetTransformer().startFastElement( m_aElemQName, xAttrList );
+    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
 }
 
 void XMLDocumentTransformerContext_Impl::EndElement()
 {
-    GetTransformer().endFastElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 
     GetTransformer().SetClass( m_aOldClass );
 }
@@ -1267,13 +1267,13 @@ void XMLBodyTransformerContext_Impl::StartElement(
 
     m_aClassQName = GetTransformer().GetNamespaceMap().GetQNameByKey(
                         XML_NAMESPACE_OFFICE, aClass );
-    GetTransformer().startFastElement( m_aClassQName,
+    GetTransformer().GetDocHandler()->startElement( m_aClassQName,
                                                     xAttrList );
 }
 
 void XMLBodyTransformerContext_Impl::EndElement()
 {
-    GetTransformer().endFastElement( m_aClassQName );
+    GetTransformer().GetDocHandler()->endElement( m_aClassQName );
     XMLTransformerContext::EndElement();
 }
 
@@ -1483,12 +1483,12 @@ void XMLTableOOoTransformerContext_Impl::StartElement(
         }
     }
 
-    GetTransformer().startFastElement( m_aElemQName, xAttrList );
+    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
 }
 
 void XMLTableOOoTransformerContext_Impl::EndElement()
 {
-    GetTransformer().endFastElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
 XMLTransformerContext *OOo2OasisTransformer::CreateUserDefinedContext(

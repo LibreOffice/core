@@ -609,9 +609,10 @@ void XMLPropertiesTContext_Impl::StartElement(
 
 void XMLPropertiesTContext_Impl::Export()
 {
-    GetTransformer().startFastElement( GetExportQName(), m_xAttrList );
+    GetTransformer().GetDocHandler()->startElement( GetExportQName(),
+                                                    m_xAttrList );
     ExportContent();
-    GetTransformer().endFastElement( GetExportQName() );
+    GetTransformer().GetDocHandler()->endElement( GetExportQName() );
 }
 
 XMLPropType XMLPropertiesTContext_Impl::GetPropType( const OUString& rLocalName )
@@ -895,7 +896,8 @@ void XMLStyleOASISTContext::StartElement(
     if( m_bPersistent )
         XMLPersElemContentTContext::StartElement( xAttrList );
     else
-        GetTransformer().startFastElement( GetExportQName(), xAttrList );
+        GetTransformer().GetDocHandler()->startElement( GetExportQName(),
+                                                        xAttrList );
 }
 
 void XMLStyleOASISTContext::EndElement()
@@ -912,7 +914,7 @@ void XMLStyleOASISTContext::EndElement()
             m_xPropContext->Export();
             m_xPropContext = nullptr;
         }
-        GetTransformer().endFastElement( GetExportQName() );
+        GetTransformer().GetDocHandler()->endElement( GetExportQName() );
     }
 }
 

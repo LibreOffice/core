@@ -21,8 +21,9 @@
 #include "xmlimprt.hxx"
 
 ScXMLEmptyContext::ScXMLEmptyContext( ScXMLImport& rImport,
-                                      sal_Int32 /*nElement*/ ) :
-    ScXMLImportContext( rImport )
+                                      sal_uInt16 nPrfx,
+                                      const OUString& rLName) :
+    ScXMLImportContext( rImport, nPrfx, rLName )
 {
 }
 
@@ -30,13 +31,17 @@ ScXMLEmptyContext::~ScXMLEmptyContext()
 {
 }
 
-css::uno::Reference< css::xml::sax::XFastContextHandler > SAL_CALL
-    ScXMLEmptyContext::createFastChildContext( sal_Int32 nElement,
-    const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/ )
+SvXMLImportContext *ScXMLEmptyContext::CreateChildContext( sal_uInt16 nPrefix,
+                                            const OUString& rLName,
+                                            const css::uno::Reference<css::xml::sax::XAttributeList>& /* xAttrList */ )
 {
-    SvXMLImportContext *pContext = new ScXMLEmptyContext( GetScImport(), nElement );
+    SvXMLImportContext *pContext = new ScXMLEmptyContext(GetScImport(), nPrefix, rLName);
 
     return pContext;
+}
+
+void ScXMLEmptyContext::EndElement()
+{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

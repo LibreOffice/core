@@ -69,12 +69,12 @@ void XMLRenameElemTransformerContext::StartElement(
         xAttrList = pMutableAttrList;
         pMutableAttrList->AddAttribute( m_aAttrQName, m_aAttrValue );
     }
-    GetTransformer().startFastElement( m_aElemQName, xAttrList );
+    GetTransformer().GetDocHandler()->startElement( m_aElemQName, xAttrList );
 }
 
 void XMLRenameElemTransformerContext::EndElement()
 {
-    GetTransformer().endFastElement( m_aElemQName );
+    GetTransformer().GetDocHandler()->endElement( m_aElemQName );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
