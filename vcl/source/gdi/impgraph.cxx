@@ -101,7 +101,6 @@ ImpGraphic::ImpGraphic() :
         meType          ( GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
 {
 }
@@ -113,7 +112,6 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , meType(rImpGraphic.meType)
     , mnSizeBytes(rImpGraphic.mnSizeBytes)
     , mbSwapOut(rImpGraphic.mbSwapOut)
-    , mbSwapUnderway(false)
     , mbDummyContext(rImpGraphic.mbDummyContext)
     , maSvgData(rImpGraphic.maSvgData)
     , maPdfData(rImpGraphic.maPdfData)
@@ -133,7 +131,6 @@ ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
 {
 }
@@ -143,7 +140,6 @@ ImpGraphic::ImpGraphic( const BitmapEx& rBitmapEx ) :
         meType          ( !rBitmapEx.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
 {
 }
@@ -152,7 +148,6 @@ ImpGraphic::ImpGraphic(const SvgDataPtr& rSvgDataPtr)
 :   meType( rSvgDataPtr.get() ? GraphicType::Bitmap : GraphicType::NONE ),
     mnSizeBytes( 0UL ),
     mbSwapOut( false ),
-    mbSwapUnderway( false ),
     mbDummyContext  ( false ),
     maSvgData(rSvgDataPtr)
 {
@@ -164,7 +159,6 @@ ImpGraphic::ImpGraphic( const Animation& rAnimation ) :
         meType          ( GraphicType::Bitmap ),
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
 {
 }
@@ -174,7 +168,6 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
         meType          ( GraphicType::GdiMetafile ),
         mnSizeBytes     ( 0UL ),
         mbSwapOut       ( false ),
-        mbSwapUnderway  ( false ),
         mbDummyContext  ( false )
 {
 }
@@ -188,8 +181,7 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 {
     if( &rImpGraphic != this )
     {
-        if( !mbSwapUnderway )
-            ImplClear();
+        ImplClear();
 
         maMetaFile = rImpGraphic.maMetaFile;
         meType = rImpGraphic.meType;
@@ -207,11 +199,8 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
             maEx = rImpGraphic.maEx;
         }
 
-        if( !mbSwapUnderway )
-        {
-            mbSwapOut = rImpGraphic.mbSwapOut;
-            mpSwapFile = rImpGraphic.mpSwapFile;
-        }
+        mbSwapOut = rImpGraphic.mbSwapOut;
+        mpSwapFile = rImpGraphic.mpSwapFile;
 
         mpGfxLink.reset();
 
@@ -1262,22 +1251,28 @@ bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
 
         if( !xIStm->GetError() )
         {
-            mbSwapUnderway = true;
+            //keep the swap file alive, because its quite possibly the backing storage
+            //for xIStm
+            std::shared_ptr<ImpSwapFile> xSwapFile(std::move(mpSwapFile));
+            assert(!mpSwapFile);
+
             bRet = ImplReadEmbedded( *xIStm );
-            mbSwapUnderway = false;
+
+            //restore ownership of the swap file
+            mpSwapFile = std::move(xSwapFile);
 
             if (!bRet)
             {
                 //throw away swapfile, etc.
                 ImplClear();
             }
+
             mbSwapOut = false;
         }
     }
 
     return bRet;
 }
-
 
 void ImpGraphic::ImplSetLink( const GfxLink& rGfxLink )
 {
@@ -1372,8 +1367,7 @@ void ReadImpGraphic( SvStream& rIStm, ImpGraphic& rImpGraphic )
     const sal_uLong nStmPos1 = rIStm.Tell();
     sal_uInt32 nTmp;
 
-    if ( !rImpGraphic.mbSwapUnderway )
-        rImpGraphic.ImplClear();
+    rImpGraphic.ImplClear();
 
     // read Id
     rIStm.ReadUInt32( nTmp );
