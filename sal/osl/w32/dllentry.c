@@ -23,6 +23,9 @@
 #include <windows.h>
 #ifdef _MSC_VER
 #pragma warning(pop)
+#ifdef _DEBUG
+#include <crtdbg.h>
+#endif
 #endif
 #include <tlhelp32.h>
 #include <systools/win32/uwinapi.h>
@@ -148,6 +151,21 @@ static BOOL WINAPI RawDllMain( HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvRe
     {
         case DLL_PROCESS_ATTACH:
             {
+#ifdef _DEBUG
+                WCHAR buf[64];
+                DWORD const res = GetEnvironmentVariableW(L"SAL_NO_ASSERT_DIALOGS", buf, sizeof(buf));
+                if (res && res < sizeof(buf))
+                {
+                    // disable the dialog on abort()
+                    _CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+                    _CrtSetReportMode(_CRT_ERROR, (_CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE));
+                    // not sure which assertions this affects
+                    _CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
+                    _CrtSetReportMode(_CRT_ASSERT, (_CRTDBG_MODE_DEBUG|_CRTDBG_MODE_FILE));
+                    // disable the dialog on assert(false)
+                    _set_error_mode(_OUT_TO_STDERR);
+                }
+#endif
 #endif
 
 #if OSL_DEBUG_LEVEL < 2
