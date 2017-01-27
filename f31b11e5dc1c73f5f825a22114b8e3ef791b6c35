@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_de9fa2b2",
+        "filename": ".resource.log",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-27T14:51:53Z",
+      "side": 1,
+      "message": "Could you please add .resource.log as an excluded/ignored file to your local (!) git configuration so it doesn\u0027t reappear every second patch set?",
+      "revId": "f31b11e5dc1c73f5f825a22114b8e3ef791b6c35",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
