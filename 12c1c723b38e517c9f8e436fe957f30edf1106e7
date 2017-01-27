@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_430cb942",
+        "filename": "include/svl/poolitem.hxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000083
+      },
+      "writtenOn": "2017-01-27T12:22:58Z",
+      "side": 1,
+      "message": "this is going to declare a global variable in every file that includes this header.\n\nBetter to use a #define, something like\n\n  #define INVALID_POOL_ITEM reinterpret_cast\u003cSfxPoolItem*\u003e(-1)",
+      "revId": "12c1c723b38e517c9f8e436fe957f30edf1106e7",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
