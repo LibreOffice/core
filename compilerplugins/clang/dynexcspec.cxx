@@ -76,7 +76,10 @@ public:
             }
         }
         bool dtor = isa<CXXDestructorDecl>(decl);
-        auto source = decl->getExceptionSpecSourceRange();
+        SourceRange source;
+#if CLANG_VERSION >= 50000
+        source = decl->getExceptionSpecSourceRange();
+#endif
         if (rewriter != nullptr && source.isValid()) {
             if (dtor) {
                 if (replaceText(source, "noexcept(false)")) {
