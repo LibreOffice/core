@@ -106,15 +106,15 @@ ImpGraphic::ImpGraphic() :
 {
 }
 
-ImpGraphic::ImpGraphic( const ImpGraphic& rImpGraphic ) :
-        maMetaFile      ( rImpGraphic.maMetaFile ),
-        maEx            ( rImpGraphic.maEx ),
-        mpSwapFile      ( rImpGraphic.mpSwapFile ),
-        meType          ( rImpGraphic.meType ),
-        mnSizeBytes     ( rImpGraphic.mnSizeBytes ),
-        mbSwapOut       ( rImpGraphic.mbSwapOut ),
-        mbSwapUnderway  ( false ),
-        mbDummyContext  ( rImpGraphic.mbDummyContext )
+ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
+    : maMetaFile(rImpGraphic.maMetaFile)
+    , maEx(rImpGraphic.maEx)
+    , mpSwapFile(rImpGraphic.mpSwapFile)
+    , meType(rImpGraphic.meType)
+    , mnSizeBytes(rImpGraphic.mnSizeBytes)
+    , mbSwapOut(rImpGraphic.mbSwapOut)
+    , mbSwapUnderway(false)
+    , mbDummyContext(rImpGraphic.mbDummyContext)
 {
     if( rImpGraphic.mpGfxLink )
         mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
