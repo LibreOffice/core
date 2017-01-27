@@ -176,6 +176,7 @@ ImpEditEngine::~ImpEditEngine()
     bDowning = true;
     SetUpdateMode( false );
 
+    mpOwnDev.disposeAndClear();
     pVirtDev.disposeAndClear();
     delete pEmptyItemSet;
     delete pUndoManager;
@@ -207,7 +208,8 @@ void ImpEditEngine::SetRefMapMode( const MapMode& rMapMode )
     if ( GetRefDevice()->GetMapMode() == rMapMode )
         return;
 
-    pRefDev = VclPtr<VirtualDevice>::Create();
+    mpOwnDev = VclPtr<VirtualDevice>::Create();
+    pRefDev = mpOwnDev;
     pRefDev->SetMapMode( MapUnit::MapTwip );
     SetRefDevice( pRefDev );
 

@@ -420,6 +420,7 @@ private:
 
     VclPtr< VirtualDevice> pVirtDev;
     VclPtr< OutputDevice > pRefDev;
+    VclPtr<VirtualDevice> mpOwnDev;
 
     svtools::ColorConfig*   pColorConfig;
     mutable SvtCTLOptions*  pCTLOptions;
