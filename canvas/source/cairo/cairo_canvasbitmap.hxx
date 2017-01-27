@@ -108,7 +108,7 @@ namespace cairocanvas
         // handle values have these meanings:
         // 0 ... get pointer to BitmapEx
         // 1 ... get X pixmap handle to rgb content
-        // 2 ... get X pitmap handle to alpha mask
+        // 2 ... FIXME: leftover? ever called with this? always returns nothing (empty Any)
         // returned any contains either BitmapEx pointer or array of three Any value
         //     1st a bool value: true - free the pixmap after used by XFreePixmap, false do nothing, the pixmap is used internally in the canvas
         //     2nd the pixmap handle

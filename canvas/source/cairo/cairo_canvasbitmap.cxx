@@ -109,7 +109,7 @@ namespace cairocanvas
         uno::Any aRV( sal_Int32(0) );
         // 0 ... get BitmapEx
         // 1 ... get Pixbuf with bitmap RGB content
-        // 2 ... get Pixbuf with bitmap alpha mask
+        // 2 ... return nothing (empty Any)
         switch( nHandle )
         {
             case 0:
