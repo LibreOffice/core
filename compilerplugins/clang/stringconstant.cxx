@@ -511,7 +511,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         if (non) {
             report(
                 DiagnosticsEngine::Warning,
-                ("call of '%0' with string constant argument containging"
+                ("call of '%0' with string constant argument containing"
                  " non-ASCII characters"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
@@ -519,7 +519,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         if (emb) {
             report(
                 DiagnosticsEngine::Warning,
-                ("call of '%0' with string constant argument containging"
+                ("call of '%0' with string constant argument containing"
                  " embedded NULs"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
@@ -552,7 +552,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (non) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("call of '%0' with string constant argument containging"
+                    ("call of '%0' with string constant argument containing"
                      " non-ASCII characters"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
@@ -561,7 +561,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (emb) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("call of '%0' with string constant argument containging"
+                    ("call of '%0' with string constant argument containing"
                      " embedded NULs"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
@@ -597,7 +597,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (non) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("call of '%0' with string constant argument containging"
+                    ("call of '%0' with string constant argument containing"
                      " non-ASCII characters"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
@@ -606,7 +606,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
             if (emb) {
                 report(
                     DiagnosticsEngine::Warning,
-                    ("call of '%0' with string constant argument containging"
+                    ("call of '%0' with string constant argument containing"
                      " embedded NULs"),
                     expr->getExprLoc())
                     << fdecl->getQualifiedNameAsString()
@@ -641,7 +641,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         if (non) {
             report(
                 DiagnosticsEngine::Warning,
-                ("call of '%0' with string constant argument containging"
+                ("call of '%0' with string constant argument containing"
                  " non-ASCII characters"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
@@ -649,7 +649,7 @@ bool StringConstant::VisitCallExpr(CallExpr const * expr) {
         if (emb) {
             report(
                 DiagnosticsEngine::Warning,
-                ("call of '%0' with string constant argument containging"
+                ("call of '%0' with string constant argument containing"
                  " embedded NULs"),
                 expr->getExprLoc())
                 << fdecl->getQualifiedNameAsString() << expr->getSourceRange();
@@ -797,7 +797,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                         report(
                             DiagnosticsEngine::Warning,
                             ("construction of %0 with string constant argument"
-                             " containging non-ASCII characters"),
+                             " containing non-ASCII characters"),
                             expr->getExprLoc())
                             << classdecl << expr->getSourceRange();
                     }
@@ -805,7 +805,7 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
                         report(
                             DiagnosticsEngine::Warning,
                             ("construction of %0 with string constant argument"
-                             " containging embedded NULs"),
+                             " containing embedded NULs"),
                             expr->getExprLoc())
                             << classdecl << expr->getSourceRange();
                     }
@@ -1448,7 +1448,7 @@ void StringConstant::handleChar(
     if (non) {
         report(
             DiagnosticsEngine::Warning,
-            ("call of '%0' with string constant argument containging non-ASCII"
+            ("call of '%0' with string constant argument containing non-ASCII"
              " characters"),
             getMemberLocation(expr))
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
@@ -1457,7 +1457,7 @@ void StringConstant::handleChar(
     if (emb) {
         report(
             DiagnosticsEngine::Warning,
-            ("call of '%0' with string constant argument containging embedded"
+            ("call of '%0' with string constant argument containing embedded"
              " NULs"),
             getMemberLocation(expr))
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
@@ -1541,7 +1541,7 @@ void StringConstant::handleCharLen(
     if (non) {
         report(
             DiagnosticsEngine::Warning,
-            ("call of '%0' with string constant argument containging non-ASCII"
+            ("call of '%0' with string constant argument containing non-ASCII"
              " characters"),
             getMemberLocation(expr))
             << callee->getQualifiedNameAsString() << expr->getSourceRange();
