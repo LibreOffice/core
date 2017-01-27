@@ -225,9 +225,11 @@ inline bool IsPooledItem( const SfxPoolItem *pItem )
     return pItem && pItem->GetRefCount() > 0 && pItem->GetRefCount() <= SFX_ITEMS_MAXREF;
 }
 
+SfxPoolItem* const pInValidSfxPoolItem = reinterpret_cast<SfxPoolItem*>(-1);
+
 inline bool IsInvalidItem(const SfxPoolItem *pItem)
 {
-    return pItem == reinterpret_cast<SfxPoolItem *>(-1);
+    return pItem == pInValidSfxPoolItem;
 }
 
 class SVL_DLLPUBLIC SfxVoidItem final: public SfxPoolItem
