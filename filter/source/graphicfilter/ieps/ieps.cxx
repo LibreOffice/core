@@ -399,6 +399,15 @@ static bool RenderAsBMP(const sal_uInt8* pBuf, sal_uInt32 nBytesRead, Graphic &r
         return RenderAsBMPThroughConvert(pBuf, nBytesRead, rGraphic);
 }
 
+namespace
+{
+    bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
+    {
+        const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
+        return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
+    }
+}
+
 // this method adds a replacement action containing the original wmf or tiff replacement,
 // so the original eps can be written when storing to ODF.
 void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 nOrigPos, sal_uInt32 nPSSize,
@@ -416,17 +425,15 @@ void CreateMtfReplacementAction( GDIMetaFile& rMtf, SvStream& rStrm, sal_uInt32 
         aReplacement.WriteUInt32( nMagic ).WriteUInt32( nPPos ).WriteUInt32( nPSSize )
                     .WriteUInt32( nWPos ).WriteUInt32( nSizeWMF )
                     .WriteUInt32( nTPos ).WriteUInt32( nSizeTIFF );
-        if ( nSizeWMF )
+        if (nSizeWMF && checkSeek(rStrm, nOrigPos + nPosWMF) && rStrm.remainingSize() >= nSizeWMF)
         {
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSizeWMF ]);
-            rStrm.Seek( nOrigPos + nPosWMF );
             rStrm.ReadBytes(pBuf.get(), nSizeWMF);
             aReplacement.WriteBytes(pBuf.get(), nSizeWMF);
         }
-        if ( nSizeTIFF )
+        if (nSizeTIFF && checkSeek(rStrm, nOrigPos + nPosTIFF) && rStrm.remainingSize() >= nSizeTIFF)
         {
             std::unique_ptr<sal_uInt8[]> pBuf(new sal_uInt8[ nSizeTIFF ]);
-            rStrm.Seek( nOrigPos + nPosTIFF );
             rStrm.ReadBytes(pBuf.get(), nSizeTIFF);
             aReplacement.WriteBytes(pBuf.get(), nSizeTIFF);
         }
@@ -517,15 +524,6 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     aMtf.SetPrefMapMode( MapUnit::MapPoint );
     aMtf.SetPrefSize( Size( nWidth, nHeight ) );
     rGraphic = aMtf;
-}
-
-namespace
-{
-    bool checkSeek(SvStream &rSt, sal_uInt32 nOffset)
-    {
-        const sal_uInt64 nMaxSeek(rSt.Tell() + rSt.remainingSize());
-        return (nOffset <= nMaxSeek && rSt.Seek(nOffset) == nOffset);
-    }
 }
 
 //================== GraphicImport - the exported function ================
