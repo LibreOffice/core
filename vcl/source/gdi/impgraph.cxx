@@ -1267,10 +1267,12 @@ bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
             bRet = ImplReadEmbedded( *xIStm );
             mbSwapUnderway = false;
 
-            if( !bRet )
+            if (!bRet)
+            {
+                //throw away swapfile, etc.
                 ImplClear();
-            else
-                mbSwapOut = false;
+            }
+            mbSwapOut = false;
         }
     }
 
