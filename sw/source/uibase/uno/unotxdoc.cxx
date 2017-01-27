@@ -3247,7 +3247,7 @@ OUString SwXTextDocument::getPostIts()
         sw::annotation::SwAnnotationWin* pWin = static_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt.get());
 
         const SwPostItField* pField = pWin->GetPostItField();
-        const std::string aAnchorPos = std::to_string(pWin->GetAnchorPos().X()) + ", " + std::to_string(pWin->GetAnchorPos().Y());
+        const OString aAnchorPos = OString::number(pWin->GetAnchorPos().X()) + ", " + OString::number(pWin->GetAnchorPos().Y());
         std::vector<OString> aRects;
         for (const basegfx::B2DRange& aRange : pWin->GetAnnotationTextRanges())
         {
@@ -3262,7 +3262,7 @@ OUString SwXTextDocument::getPostIts()
         aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
         aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
         aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
-        aAnnotation.put("anchorPos", aAnchorPos.c_str());
+        aAnnotation.put("anchorPos", aAnchorPos.getStr());
         aAnnotation.put("textRange", sRects.getStr());
 
         aAnnotations.push_back(std::make_pair("", aAnnotation));
