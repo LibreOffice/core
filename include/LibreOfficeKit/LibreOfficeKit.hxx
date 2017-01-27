@@ -452,16 +452,6 @@ public:
         return mpDoc->pClass->getViewIds(mpDoc, pArray, nSize);
     }
 
-    inline void beginBatch()
-    {
-        mpDoc->pClass->beginBatch(mpDoc);
-    }
-
-    inline void endBatch()
-    {
-        mpDoc->pClass->endBatch(mpDoc);
-    }
-
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 
