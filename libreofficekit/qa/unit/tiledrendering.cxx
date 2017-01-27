@@ -144,7 +144,7 @@ void TiledRenderingTest::testDocumentTypes( Office* pOffice )
     // FIXME: same comment as below wrt lockfile removal.
     remove( sPresentationLockFile.c_str() );
 
-    CPPUNIT_ASSERT( getDocumentType( pOffice, sPresentationDocPath ) == LOK_DOCTYPE_PRESENTATION );
+    CPPUNIT_ASSERT_EQUAL(LOK_DOCTYPE_PRESENTATION, static_cast<LibreOfficeKitDocumentType>(getDocumentType(pOffice, sPresentationDocPath)));
 
     // TODO: do this for all supported document types
 }
@@ -162,9 +162,9 @@ void TiledRenderingTest::testImpressSlideNames( Office* pOffice )
 
     std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
 
-    CPPUNIT_ASSERT( pDocument->getParts() == 3 );
-    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 0 ), "TestText1" ) == 0 );
-    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 1 ), "TestText2" ) == 0 );
+    CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
+    CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
+    CPPUNIT_ASSERT_EQUAL(std::string("TestText2"), std::string(pDocument->getPartName(1)));
     // The third slide hasn't had a name given to it (i.e. using the rename
     // context menu in Impress), thus it should (as far as I can determine)
     // have a localised version of "Slide 3".
@@ -180,10 +180,10 @@ void TiledRenderingTest::testCalcSheetNames( Office* pOffice )
 
     std::unique_ptr< Document> pDocument( pOffice->documentLoad( sDocPath.c_str() ) );
 
-    CPPUNIT_ASSERT( pDocument->getParts() == 3 );
-    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 0 ), "TestText1" ) == 0 );
-    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 1 ), "TestText2" ) == 0 );
-    CPPUNIT_ASSERT( strcmp( pDocument->getPartName( 2 ), "Sheet3" ) == 0 );
+    CPPUNIT_ASSERT_EQUAL(3, pDocument->getParts());
+    CPPUNIT_ASSERT_EQUAL(std::string("TestText1"), std::string(pDocument->getPartName(0)));
+    CPPUNIT_ASSERT_EQUAL(std::string("TestText2"), std::string(pDocument->getPartName(1)));
+    CPPUNIT_ASSERT_EQUAL(std::string("Sheet3"), std::string(pDocument->getPartName(2)));
 }
 
 #if 0
