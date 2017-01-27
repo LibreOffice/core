@@ -183,7 +183,7 @@ vcl::Window* AccessibleDialogControlShape::GetWindow() const
 }
 
 
-OUString AccessibleDialogControlShape::GetModelStringProperty( const sal_Char* pPropertyName )
+OUString AccessibleDialogControlShape::GetModelStringProperty( OUString const & pPropertyName )
 {
     OUString sReturn;
 
@@ -191,10 +191,9 @@ OUString AccessibleDialogControlShape::GetModelStringProperty( const sal_Char* p
     {
         if ( m_xControlModel.is() )
         {
-            OUString sPropertyName( OUString::createFromAscii( pPropertyName ) );
             Reference< XPropertySetInfo > xInfo = m_xControlModel->getPropertySetInfo();
-            if ( xInfo.is() && xInfo->hasPropertyByName( sPropertyName ) )
-                m_xControlModel->getPropertyValue( sPropertyName ) >>= sReturn;
+            if ( xInfo.is() && xInfo->hasPropertyByName( pPropertyName ) )
+                m_xControlModel->getPropertyValue( pPropertyName ) >>= sReturn;
         }
     }
     catch ( const Exception& )

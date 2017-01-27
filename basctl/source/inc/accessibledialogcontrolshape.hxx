@@ -74,7 +74,7 @@ protected:
 
     vcl::Window*            GetWindow() const;
 
-    OUString                GetModelStringProperty( const sal_Char* pPropertyName );
+    OUString                GetModelStringProperty( OUString const & pPropertyName );
 
     void                    FillAccessibleStateSet( utl::AccessibleStateSetHelper& rStateSet );
 
