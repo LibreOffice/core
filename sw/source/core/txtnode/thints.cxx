@@ -1908,7 +1908,7 @@ bool SwTextNode::SetAttr(
 
     do
     {
-        if ( pItem && (reinterpret_cast<SfxPoolItem*>(-1) != pItem))
+        if ( pItem && !IsInvalidItem(pItem) )
         {
             const sal_uInt16 nWhich = pItem->Which();
             OSL_ENSURE( isCHRATR(nWhich) || isTXTATR(nWhich),
@@ -2201,7 +2201,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                                     if( nAttrStart > nStt )
                                     {
                                         rSet.InvalidateItem( nHintWhich );
-                                        pPrev->mpItem = reinterpret_cast<SfxPoolItem*>(-1);
+                                        pPrev->mpItem = INVALID_POOL_ITEM;
                                     }
                                     else
                                     {
@@ -2210,7 +2210,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                                     }
                                 }
                             }
-                            else if( reinterpret_cast<SfxPoolItem*>(-1) != pPrev->mpItem )
+                            else if( !IsInvalidItem(pPrev->mpItem) )
                             {
                                 if( pPrev->mnEndPos == nAttrStart &&
                                     *pPrev->mpItem == *pItem )
@@ -2221,7 +2221,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                                 else
                                 {
                                     rSet.InvalidateItem( nHintWhich );
-                                    pPrev->mpItem = reinterpret_cast<SfxPoolItem*>(-1);
+                                    pPrev->mpItem = INVALID_POOL_ITEM;
                                 }
                             }
                         }
@@ -2237,7 +2237,7 @@ bool SwTextNode::GetAttr( SfxItemSet& rSet, sal_Int32 nStt, sal_Int32 nEnd,
                 for (size_t n = 0; n < coArrSz; ++n)
                 {
                     const SwPoolItemEndPair& rItemPair = (*pAttrArr)[ n ];
-                    if( (nullptr != rItemPair.mpItem) && (reinterpret_cast<SfxPoolItem*>(-1) != rItemPair.mpItem) )
+                    if( rItemPair.mpItem && !IsInvalidItem(rItemPair.mpItem) )
                     {
                         const sal_uInt16 nWh =
                             static_cast<sal_uInt16>(n + RES_CHRATR_BEGIN);

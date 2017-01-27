@@ -436,7 +436,7 @@ SfxItemState SfxItemSet::GetItemState( sal_uInt16 nWhich,
                         break; // Keep searching in the parents!
                     }
 
-                    if ( reinterpret_cast<SfxPoolItem*>(-1) == *ppFnd )
+                    if ( IsInvalidItem(*ppFnd) )
                         // Different ones are present
                         return SfxItemState::DONTCARE;
 
@@ -779,7 +779,7 @@ void SfxItemSet::SetRanges( const sal_uInt16 *pNewRanges )
                 else if ( SfxItemState::DONTCARE == eState )
                 {
                     ++nNewCount;
-                    aNewItems[n] = reinterpret_cast<SfxPoolItem*>(-1);
+                    aNewItems[n] = INVALID_POOL_ITEM;
                 }
                 else
                 {
@@ -908,7 +908,7 @@ const SfxPoolItem& SfxItemSet::Get( sal_uInt16 nWhich, bool bSrchInParent) const
                     ppFnd += nWhich - *pPtr;
                     if( *ppFnd )
                     {
-                        if( reinterpret_cast<SfxPoolItem*>(-1) == *ppFnd ) {
+                        if( IsInvalidItem(*ppFnd) ) {
                             //FIXME: The following code is duplicated further down
                             SAL_WARN_IF(!m_pPool, "svl.items", "no Pool, but status is ambiguous, with ID/pos " << nWhich);
                             //!((SfxAllItemSet *)this)->aDefault.SetWhich(nWhich);
@@ -1192,12 +1192,12 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
     {
         if ( IsInvalidItem(pFnd2) )
             // Decision table: default, dontcare, doesn't matter, doesn't matter
-            *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
+            *ppFnd1 = INVALID_POOL_ITEM;
 
         else if ( pFnd2 && !bIgnoreDefaults &&
                   _pPool->GetDefaultItem(pFnd2->Which()) != *pFnd2 )
             // Decision table: default, set, !=, sal_False
-            *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
+            *ppFnd1 = INVALID_POOL_ITEM;
 
         else if ( pFnd2 && bIgnoreDefaults )
             // Decision table: default, set, doesn't matter, sal_True
@@ -1218,7 +1218,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
             {
                 // Decision table: set, default, !=, sal_False
                 _pPool->Remove( **ppFnd1 );
-                *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
+                *ppFnd1 = INVALID_POOL_ITEM;
             }
         }
         else if ( IsInvalidItem(pFnd2) )
@@ -1230,7 +1230,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
                 // Decision table: set, dontcare, doesn't matter, sal_False
                 // or:             set, dontcare, !=, sal_True
                 _pPool->Remove( **ppFnd1 );
-                *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
+                *ppFnd1 = INVALID_POOL_ITEM;
             }
         }
         else
@@ -1240,7 +1240,7 @@ static void MergeItem_Impl( SfxItemPool *_pPool, sal_uInt16 &rCount,
             {
                 // Decision table: set, set, !=, doesn't matter
                 _pPool->Remove( **ppFnd1 );
-                *ppFnd1 = reinterpret_cast<SfxPoolItem*>(-1);
+                *ppFnd1 = INVALID_POOL_ITEM;
             }
         }
     }
@@ -1330,15 +1330,15 @@ void SfxItemSet::InvalidateItem( sal_uInt16 nWhich )
 
             if( *ppFnd ) // Set for me
             {
-                if( reinterpret_cast<SfxPoolItem*>(-1) != *ppFnd ) // Not yet dontcare!
+                if( !IsInvalidItem(*ppFnd) )
                 {
                     m_pPool->Remove( **ppFnd );
-                    *ppFnd = reinterpret_cast<SfxPoolItem*>(-1);
+                    *ppFnd = INVALID_POOL_ITEM;
                 }
             }
             else
             {
-                *ppFnd = reinterpret_cast<SfxPoolItem*>(-1);
+                *ppFnd = INVALID_POOL_ITEM;
                 ++m_nCount;
             }
             break;
@@ -1825,7 +1825,7 @@ const SfxPoolItem* SfxAllItemSet::Put( const SfxPoolItem& rItem, sal_uInt16 nWhi
     // Remember old Item
     bool bIncrementCount = false;
     const SfxPoolItem* pOld = *( m_pItems + nPos );
-    if ( reinterpret_cast< SfxPoolItem* >( -1 ) == pOld ) // state "dontcare"
+    if ( IsInvalidItem(pOld) ) // state "dontcare"
         pOld = nullptr;
     if ( !pOld )
     {
