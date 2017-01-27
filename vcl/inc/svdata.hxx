@@ -327,7 +327,6 @@ struct ImplSchedulerContext
     SalTimer*               mpSalTimer = nullptr;           ///< interface to sal event loop / system timer
     sal_uInt64              mnTimerStart = 0;               ///< start time of the timer
     sal_uInt64              mnTimerPeriod = SAL_MAX_UINT64; ///< current timer period
-    bool                    mbNeedsReschedule = false;      ///< we need to reschedule
 };
 
 struct ImplSVData
