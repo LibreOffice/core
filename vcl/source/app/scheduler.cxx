@@ -77,8 +77,7 @@ template< typename charT, typename traits >
 inline std::basic_ostream<charT, traits> & operator <<(
     std::basic_ostream<charT, traits> & stream, const ImplSchedulerData& data )
 {
-    stream << " i: " << data.mbInScheduler
-           << " d: " << data.mbDelete;
+    stream << " i: " << data.mbInScheduler;
     return stream;
 }
 
@@ -274,7 +273,8 @@ bool Scheduler::ProcessTaskScheduling()
                 << pSchedulerData << " " << *pSchedulerData << " (to be deleted)" );
 
         // Should the Task be released from scheduling or stacked?
-        if ( pSchedulerData->mbDelete || !pSchedulerData->mpTask || pSchedulerData->mbInScheduler )
+        if ( !pSchedulerData->mpTask || !pSchedulerData->mpTask->IsActive()
+            || pSchedulerData->mbInScheduler )
         {
             ImplSchedulerData * const pSchedulerDataNext =
                 DropSchedulerData( rSchedCtx, pPrevSchedulerData, pSchedulerData );
@@ -357,7 +357,7 @@ next_entry:
                 AppendSchedulerData( rSchedCtx, pMostUrgent );
             }
 
-            if ( pMostUrgent->mpTask && !pMostUrgent->mbDelete )
+            if ( pMostUrgent->mpTask && pMostUrgent->mpTask->IsActive() )
             {
                 pMostUrgent->mnUpdateTime = nTime;
                 UpdateMinPeriod( pMostUrgent, nTime, nMinPeriod );
@@ -376,7 +376,6 @@ void Task::StartTimer( sal_uInt64 nMS )
 
 void Task::SetDeletionFlags()
 {
-    mpSchedulerData->mbDelete = true;
     mbActive = false;
 }
 
@@ -410,7 +409,6 @@ void Task::Start()
         SAL_INFO( "vcl.schedule", tools::Time::GetSystemTicks()
                   << " " << mpSchedulerData << "  restarted  " << *this );
 
-    mpSchedulerData->mbDelete      = false;
     mpSchedulerData->mnUpdateTime  = tools::Time::GetSystemTicks();
 }
 
@@ -419,8 +417,6 @@ void Task::Stop()
     SAL_INFO_IF( mbActive, "vcl.schedule", tools::Time::GetSystemTicks()
                   << " " << mpSchedulerData << "  stopped    " << *this );
     mbActive = false;
-    if ( mpSchedulerData )
-        mpSchedulerData->mbDelete = true;
 }
 
 Task& Task::operator=( const Task& rTask )
@@ -458,10 +454,7 @@ Task::Task( const Task& rTask )
 Task::~Task() COVERITY_NOEXCEPT_FALSE
 {
     if ( mpSchedulerData )
-    {
-        mpSchedulerData->mbDelete = true;
         mpSchedulerData->mpTask = nullptr;
-    }
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
