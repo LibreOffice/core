@@ -183,8 +183,6 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
 {
     if( &rImpGraphic != this )
     {
-        ImplClear();
-
         maMetaFile = rImpGraphic.maMetaFile;
         meType = rImpGraphic.meType;
         mnSizeBytes = rImpGraphic.mnSizeBytes;
