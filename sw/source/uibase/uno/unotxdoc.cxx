@@ -3258,7 +3258,7 @@ OUString SwXTextDocument::getPostIts()
 
         boost::property_tree::ptree aAnnotation;
         aAnnotation.put("id", pField->GetPostItId());
-        aAnnotation.put("reply", pWin->IsFollow());
+        aAnnotation.put("parent", pWin->CalcParent());
         aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
         aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
         aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));

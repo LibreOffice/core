@@ -146,7 +146,7 @@ class SwSidebarWin : public vcl::Window
 
         bool            IsFollow() { return mbIsFollow; }
         void            SetFollow( bool bIsFollow) { mbIsFollow = bIsFollow; };
-        virtual bool    CalcFollow() = 0;
+        virtual sal_uInt32    CalcParent() = 0;
 
         sal_Int32   GetMetaHeight();
         sal_Int32   GetMinimumSizeWithMeta();

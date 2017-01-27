@@ -161,7 +161,7 @@ namespace {
             const OString sRects = comphelper::string::join("; ", aRects);
 
             aAnnotation.put("id", pField->GetPostItId());
-            aAnnotation.put("reply", pWin->IsFollow());
+            aAnnotation.put("parent", pWin->CalcParent());
             aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
             aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
             aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
@@ -744,7 +744,7 @@ void SwPostItMgr::LayoutPostIts()
                             pItem->pPostIt = pPostIt;
                             if (mpAnswer)
                             {
-                                if (pPostIt->CalcFollow()) //do we really have another note in front of this one
+                                if (static_cast<bool>(pPostIt->CalcParent())) //do we really have another note in front of this one
                                     static_cast<sw::annotation::SwAnnotationWin*>(pPostIt.get())->InitAnswer(mpAnswer);
                                 delete mpAnswer;
                                 mpAnswer = nullptr;
@@ -755,7 +755,7 @@ void SwPostItMgr::LayoutPostIts()
                             pItem->mLayoutStatus,
                             GetColorAnchor(pItem->maLayoutInfo.mRedlineAuthor));
                         pPostIt->SetSidebarPosition(pPage->eSidebarPosition);
-                        pPostIt->SetFollow(pPostIt->CalcFollow());
+                        pPostIt->SetFollow(static_cast<bool>(pPostIt->CalcParent()));
                         aPostItHeight = ( pPostIt->GetPostItTextHeight() < pPostIt->GetMinimumSizeWithoutMeta()
                                           ? pPostIt->GetMinimumSizeWithoutMeta()
                                           : pPostIt->GetPostItTextHeight() )
