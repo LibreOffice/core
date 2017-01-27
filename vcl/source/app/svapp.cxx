@@ -470,10 +470,6 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
     SAL_INFO("vcl.schedule", "Enter ImplYield: " << (i_bWait ? "wait" : "no wait") <<
              ": " << (i_bAllEvents ? "all events" : "one event") << ": " << nReleased);
 
-    // we handle pending task outside the system event loop, so don't wait
-    if (i_bWait && Scheduler::HasPendingTasks())
-        i_bWait = false;
-
     // TODO: there's a data race here on WNT only because ImplYield may be
     // called without SolarMutex; if we can get rid of LazyDelete (with VclPtr)
     // then the only remaining use of mnDispatchLevel is in OSX specific code
@@ -487,24 +483,16 @@ inline bool ImplYield(bool i_bWait, bool i_bAllEvents, sal_uLong const nReleased
             i_bWait && !pSVData->maAppData.mbAppQuit,
             i_bAllEvents, nReleased);
 
-    SAL_INFO("vcl.schedule", "DoYield returns: " << bProcessedEvent );
-
     pSVData->maAppData.mnDispatchLevel--;
 
     DBG_TESTSOLARMUTEX(); // must be locked on return from Yield
-
-    if (nReleased == 0) // tdf#99383 don't run stuff from ReAcquireSolarMutex
-    {
-        // Process all Tasks
-        bProcessedEvent = Scheduler::ProcessTaskScheduling() || bProcessedEvent;
-    }
 
     // flush lazy deleted objects
     if( pSVData->maAppData.mnDispatchLevel == 0 )
         vcl::LazyDelete::flush();
 
     SAL_INFO("vcl.schedule", "Leave ImplYield with return " << bProcessedEvent );
-    return bProcessedEvent || Scheduler::HasPendingTasks();
+    return bProcessedEvent;
 }
 
 bool Application::Reschedule( bool i_bAllEvents )
