@@ -73,7 +73,7 @@ void SfxPreviewWin_Impl::ImpPaint(vcl::RenderContext& rRenderContext, const Rect
     rRenderContext.DrawRect(Rectangle(Point(0,0), rRenderContext.GetOutputSize()));
 
     Size aTmpSize = pFile ? pFile->GetPrefSize() : Size(1, 1);
-    DBG_ASSERT(aTmpSize.Height() * aTmpSize.Width(), "size of first page is 0, override GetFirstPageSize or set vis-area!");
+    DBG_ASSERT(aTmpSize.Height() != 0 && aTmpSize.Width() != 0, "size of first page is 0, override GetFirstPageSize or set vis-area!");
 
 #define FRAME 4
 
