@@ -30,7 +30,8 @@ published service FormulaProperties
 {
 
     /** contains the alignment of the formula.
-        @see HorizontalAlignment
+
+        @see com::sun::star::style::HorizontalAlignment
      */
     [property] short    Alignment;
 
@@ -140,6 +141,9 @@ published service FormulaProperties
     [property] boolean  IsScaleAllBrackets;
 
     /** switches into text mode.
+
+        This is a mode where formulas are displayed the same height as
+        a line of text.
      */
     [property] boolean  IsTextMode;
 
