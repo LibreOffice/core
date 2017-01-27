@@ -924,6 +924,11 @@ interface BaseText
         ExecMethod = ExecField;
         StateMethod = StateField;
     ]
+    SID_EDIT_POSTIT
+    [
+        ExecMethod = ExecField;
+        StateMethod = StateField;
+    ]
     FN_DELETE_COMMENT
     [
         ExecMethod = ExecField ;
