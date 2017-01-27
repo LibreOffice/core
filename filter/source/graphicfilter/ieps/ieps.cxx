@@ -69,14 +69,14 @@ static sal_uInt8* ImplSearchEntry( sal_uInt8* pSource, sal_uInt8 const * pDest, 
 
 
 // SecurityCount is the buffersize of the buffer in which we will parse for a number
-static long ImplGetNumber( sal_uInt8 **pBuf, sal_uInt32& nSecurityCount )
+static long ImplGetNumber(sal_uInt8* &rBuf, sal_uInt32& nSecurityCount)
 {
     bool    bValid = true;
     bool    bNegative = false;
     long    nRetValue = 0;
-    while ( ( --nSecurityCount ) && ( ( **pBuf == ' ' ) || ( **pBuf == 0x9 ) ) )
-        (*pBuf)++;
-    sal_uInt8 nByte = **pBuf;
+    while ( ( --nSecurityCount ) && ( ( *rBuf == ' ' ) || ( *rBuf == 0x9 ) ) )
+        rBuf++;
+    sal_uInt8 nByte = *rBuf;
     while ( nSecurityCount && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
     {
         switch ( nByte )
@@ -99,7 +99,7 @@ static long ImplGetNumber( sal_uInt8 **pBuf, sal_uInt32& nSecurityCount )
                 break;
         }
         nSecurityCount--;
-        nByte = *(++(*pBuf));
+        nByte = *(++rBuf);
     }
     if ( bNegative )
         nRetValue = -nRetValue;
@@ -511,7 +511,7 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     {
         pDest += 16;
         sal_uInt32 nCount = 4;
-        long nNumber = ImplGetNumber( &pDest, nCount );
+        long nNumber = ImplGetNumber(pDest, nCount);
         if ( nCount && ( (sal_uInt32)nNumber < 10 ) )
         {
             aString += " LanguageLevel:" + OUString::number( nNumber );
@@ -612,10 +612,10 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 if ( pDest  )
                 {
                     pDest += 15;
-                    long nWidth = ImplGetNumber( &pDest, nSecurityCount );
-                    long nHeight = ImplGetNumber( &pDest, nSecurityCount );
-                    long nBitDepth = ImplGetNumber( &pDest, nSecurityCount );
-                    long nScanLines = ImplGetNumber( &pDest, nSecurityCount );
+                    long nWidth = ImplGetNumber(pDest, nSecurityCount);
+                    long nHeight = ImplGetNumber(pDest, nSecurityCount);
+                    long nBitDepth = ImplGetNumber(pDest, nSecurityCount);
+                    long nScanLines = ImplGetNumber(pDest, nSecurityCount);
                     pDest = ImplSearchEntry( pDest, reinterpret_cast<sal_uInt8 const *>("%"), 16, 1 );       // go to the first Scanline
                     if ( nSecurityCount && pDest && nWidth && nHeight && ( ( nBitDepth == 1 ) || ( nBitDepth == 8 ) ) && nScanLines )
                     {
@@ -717,7 +717,7 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
                 pDest += 14;
                 for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
                 {
-                    nNumb[ i ] = ImplGetNumber( &pDest, nSecurityCount );
+                    nNumb[ i ] = ImplGetNumber(pDest, nSecurityCount);
                 }
                 if ( nSecurityCount)
                 {
