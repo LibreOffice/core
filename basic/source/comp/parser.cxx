@@ -835,17 +835,12 @@ void SbiParser::Option()
     }
 }
 
-void addStringConst( SbiSymPool& rPool, const char* pSym, const OUString& rStr )
+void addStringConst( SbiSymPool& rPool, const OUString& pSym, const OUString& rStr )
 {
-    SbiConstDef* pConst = new SbiConstDef( OUString::createFromAscii( pSym ) );
+    SbiConstDef* pConst = new SbiConstDef( pSym );
     pConst->SetType( SbxSTRING );
     pConst->Set( rStr );
     rPool.Add( pConst );
-}
-
-inline void addStringConst( SbiSymPool& rPool, const char* pSym, const char* pStr )
-{
-    addStringConst( rPool, pSym, OUString::createFromAscii( pStr ) );
 }
 
 void SbiParser::AddConstants()
