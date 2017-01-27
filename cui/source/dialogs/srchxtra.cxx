@@ -196,7 +196,7 @@ void SvxSearchAttributeDialog::dispose()
 IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, Button*, void)
 {
     SearchAttrItem aInvalidItem;
-    aInvalidItem.pItem = reinterpret_cast<SfxPoolItem*>(-1);
+    aInvalidItem.pItem = INVALID_POOL_ITEM;
 
     for ( sal_uLong i = 0; i < m_pAttrLB->GetEntryCount(); ++i )
     {
@@ -213,7 +213,7 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, Button*, void)
                 {
                     if( !IsInvalidItem( rItem.pItem ) )
                         delete rItem.pItem;
-                    rItem.pItem = reinterpret_cast<SfxPoolItem*>(-1);
+                    rItem.pItem = INVALID_POOL_ITEM;
                 }
                 else if( IsInvalidItem( rItem.pItem ) )
                     rItem.pItem = nullptr;

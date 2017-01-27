@@ -1357,7 +1357,7 @@ void SfxBindings::UpdateControllers_Impl
         if ( SfxItemState::DONTCARE == eState )
         {
             // ambiguous
-            pCache->SetState( SfxItemState::DONTCARE, reinterpret_cast<SfxPoolItem *>(-1) );
+            pCache->SetState( SfxItemState::DONTCARE, INVALID_POOL_ITEM );
         }
         else if ( SfxItemState::DEFAULT == eState &&
                   SfxItemPool::IsSlot(rFound.nWhichId) )
@@ -1427,7 +1427,7 @@ void SfxBindings::UpdateControllers_Impl
                 else
                 {
                     // ambiguous
-                    pEnumCache->SetState( SfxItemState::DONTCARE, reinterpret_cast<SfxPoolItem *>(-1) );
+                    pEnumCache->SetState( SfxItemState::DONTCARE, INVALID_POOL_ITEM );
                 }
             }
 

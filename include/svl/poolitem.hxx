@@ -108,6 +108,8 @@ enum class SfxItemState {
     SET      = 0x0030
 };
 
+#define INVALID_POOL_ITEM reinterpret_cast<SfxPoolItem*>(-1)
+
 class SvXMLUnitConverter;
 class SfxItemPool;
 class SfxItemSet;
@@ -227,7 +229,7 @@ inline bool IsPooledItem( const SfxPoolItem *pItem )
 
 inline bool IsInvalidItem(const SfxPoolItem *pItem)
 {
-    return pItem == reinterpret_cast<SfxPoolItem *>(-1);
+    return pItem == INVALID_POOL_ITEM;
 }
 
 class SVL_DLLPUBLIC SfxVoidItem final: public SfxPoolItem
