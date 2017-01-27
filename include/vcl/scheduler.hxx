@@ -52,8 +52,6 @@ public:
 
     /// Process one pending Timer with highhest priority
     static void       CallbackTaskScheduling();
-    /// Are there any pending tasks to process?
-    static bool       HasPendingTasks();
     /// Process one pending task ahead of time with highest priority.
     static bool       ProcessTaskScheduling();
     /// Process all events until we are idle
