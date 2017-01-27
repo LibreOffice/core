@@ -3122,6 +3122,34 @@ static bool lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPa
     return bOk;
 }
 
+static bool lcl_isNumericResult( double& fVal, const SbxVariable* pVar )
+{
+    switch (pVar->GetType())
+    {
+        case SbxINTEGER:
+        case SbxLONG:
+        case SbxSINGLE:
+        case SbxDOUBLE:
+        case SbxCURRENCY:
+        case SbxDATE:
+        case SbxUSHORT:
+        case SbxULONG:
+        case SbxINT:
+        case SbxUINT:
+        case SbxSALINT64:
+        case SbxSALUINT64:
+        case SbxDECIMAL:
+            fVal = pVar->GetDouble();
+            return true;
+        case SbxBOOL:
+            fVal = (pVar->GetBool() ? 1.0 : 0.0);
+            return true;
+        default:
+            ;   // nothing
+    }
+    return false;
+}
+
 #endif
 
 void ScInterpreter::ScMacro()
@@ -3341,6 +3369,7 @@ void ScInterpreter::ScMacro()
             pMacroMgr->AddDependentCell(pModule->GetName(), pMyFormulaCell);
         }
 
+        double fVal;
         SbxDataType eResType = refRes->GetType();
         if( SbxBase::GetError() )
         {
@@ -3350,9 +3379,21 @@ void ScInterpreter::ScMacro()
         {
             PushNoValue();
         }
-        else if( eResType >= SbxINTEGER && eResType <= SbxDOUBLE )
+        else if (lcl_isNumericResult( fVal, refRes.get()))
         {
-            PushDouble( refRes->GetDouble() );
+            switch (eResType)
+            {
+                case SbxDATE:
+                    nFuncFmtType = css::util::NumberFormat::DATE;
+                break;
+                case SbxBOOL:
+                    nFuncFmtType = css::util::NumberFormat::LOGICAL;
+                break;
+                // Do not add SbxCURRENCY, we don't know which currency.
+                default:
+                    ;   // nothing
+            }
+            PushDouble( fVal );
         }
         else if ( eResType & SbxARRAY )
         {
@@ -3387,7 +3428,6 @@ void ScInterpreter::ScMacro()
                 if ( pMat )
                 {
                     SbxVariable* pV;
-                    SbxDataType eType;
                     for ( SCSIZE j=0; j < nR; j++ )
                     {
                         sal_Int32 nIdx[ 2 ];
@@ -3398,10 +3438,9 @@ void ScInterpreter::ScMacro()
                         {
                             nIdx[ nColIdx ] = nCs + static_cast<sal_Int32>(i);
                             pV = pDimArray->Get32( nIdx );
-                            eType = pV->GetType();
-                            if ( eType >= SbxINTEGER && eType <= SbxDOUBLE )
+                            if ( lcl_isNumericResult( fVal, pV) )
                             {
-                                pMat->PutDouble( pV->GetDouble(), i, j );
+                                pMat->PutDouble( fVal, i, j );
                             }
                             else
                             {
