@@ -278,6 +278,7 @@ int MAIN(int argc, char** argv)
                 }
             }                           /* Continue by opening output    */
         }
+        /* fall through */
 #endif
     case 3:
         /*
@@ -293,6 +294,7 @@ int MAIN(int argc, char** argv)
                 exit(IO_ERROR);
             }
         }                           /* Continue by opening input    */
+        /* fall through */
     case 2:                         /* One file -> stdin            */
         /*
          * Open input file, "-" means use stdin.
@@ -309,6 +311,7 @@ int MAIN(int argc, char** argv)
             strncpy(work, useargv[1], NWORK);  /* Remember input filename      */
             break;
         }                           /* Else, just get stdin         */
+        /* fall through */
     case 0:                         /* No args?                     */
     case 1:                         /* No files, stdin -> stdout    */
         work[0] = EOS;              /* Unix can't find stdin name   */

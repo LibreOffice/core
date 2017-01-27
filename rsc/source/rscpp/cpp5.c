@@ -352,6 +352,7 @@ again:
                        opname[(int)opp->op]);
                 return 1;
             }
+            /* fall through */
         /*
          * Evaluate op1.
          */
