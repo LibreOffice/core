@@ -115,6 +115,8 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     , mbSwapOut(rImpGraphic.mbSwapOut)
     , mbSwapUnderway(false)
     , mbDummyContext(rImpGraphic.mbDummyContext)
+    , maSvgData(rImpGraphic.maSvgData)
+    , maPdfData(rImpGraphic.maPdfData)
 {
     if( rImpGraphic.mpGfxLink )
         mpGfxLink = o3tl::make_unique<GfxLink>( *rImpGraphic.mpGfxLink );
@@ -124,9 +126,6 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
         mpAnimation = o3tl::make_unique<Animation>( *rImpGraphic.mpAnimation );
         maEx = mpAnimation->GetBitmapEx();
     }
-
-    maSvgData = rImpGraphic.maSvgData;
-    maPdfData = rImpGraphic.maPdfData;
 }
 
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
