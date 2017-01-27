@@ -242,12 +242,6 @@ void SbiTokenizer::Push( SbiToken t )
     else ePush = t;
 }
 
-void SbiTokenizer::Error( SbError code, const char* pMsg )
-{
-    aError = OUString::createFromAscii( pMsg );
-    Error( code );
-}
-
 void SbiTokenizer::Error( SbError code, const OUString &aMsg )
 {
     aError = aMsg;

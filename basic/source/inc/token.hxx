@@ -158,7 +158,6 @@ public:
 
     void Error( SbError c ) { GenError( c ); }
     void Error( SbError, SbiToken );
-    void Error( SbError, const char* );
     void Error( SbError, const OUString &);
 
     static bool IsEoln( SbiToken t )
