@@ -47,7 +47,6 @@ private:
     GraphicType                  meType;
     mutable sal_uLong            mnSizeBytes;
     bool                         mbSwapOut;
-    bool                         mbSwapUnderway;
     bool                         mbDummyContext;
     SvgDataPtr                   maSvgData;
     css::uno::Sequence<sal_Int8> maPdfData;
