@@ -6,13 +6,17 @@ add_pdb()
     type=$2
     list=$3
     for file in $(find "${INSTDIR}/" -name "*.${extension}"); do
+        # store dll/exe itself (needed for minidumps)
+        if [ -f "$file" ]; then
+            cygpath -w "$file" >> "$list"
+        fi
+        # store pdb file
         filename=$(basename "$file" ".${extension}")
         pdb="${WORKDIR}/LinkTarget/${type}/${filename}.pdb"
         if [ -f "$pdb" ]; then
             cygpath -w "$pdb" >> "$list"
         fi
     done
-
 }
 
 # check preconditions
