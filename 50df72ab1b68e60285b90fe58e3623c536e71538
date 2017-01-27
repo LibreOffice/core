@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_7e55d6c4",
+        "filename": "sc/source/ui/namedlg/namedefdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-27T16:29:53Z",
+      "side": 1,
+      "message": "This relies on NAME_VALID having an enum value of 0, I\u0027d rather make that an explicit condition, also for clarity.\n\nI\u0027ll change that on the fly in an amended commit.",
+      "range": {
+        "startLine": 161,
+        "startChar": 13,
+        "endLine": 161,
+        "endChar": 92
+      },
+      "revId": "50df72ab1b68e60285b90fe58e3623c536e71538",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_9e699a8e",
+        "filename": "sc/source/ui/namedlg/namedefdlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-27T16:29:53Z",
+      "side": 1,
+      "message": "Nitpick: we prefer a space between keyword and parenthesis, so \"if (\".\nYes, this isn\u0027t consistent everywhere, but should be done on new code.",
+      "revId": "50df72ab1b68e60285b90fe58e3623c536e71538",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_fe0e26e4",
+        "filename": "sc/source/ui/namedlg/namedlg.cxx",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000023
+      },
+      "writtenOn": "2017-01-27T16:29:53Z",
+      "side": 1,
+      "message": "Hint: this also uses the same error text for all conditions. In a follow-up change (not this one because I want to push the next commit) you could address this similar to what was done for ScNameDefDlg::IsNameValid().",
+      "revId": "50df72ab1b68e60285b90fe58e3623c536e71538",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
