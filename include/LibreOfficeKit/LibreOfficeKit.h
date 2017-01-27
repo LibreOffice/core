@@ -252,16 +252,6 @@ struct _LibreOfficeKitDocumentClass
                        int* pArray,
                        size_t nSize);
 
-    /// Starts a batch of operations.
-    /// Events are emmitted only after ending the batch.
-    /// @see lok::Document::endBatch();
-    void (*beginBatch) (LibreOfficeKitDocument* pThis);
-
-    /// Ends a batch of operations.
-    /// @see lok::Document::beginBatch();
-    void (*endBatch) (LibreOfficeKitDocument* pThis);
-
-
 #endif // defined LOK_USE_UNSTABLE_API || defined LIBO_INTERNAL_ONLY
 };
 

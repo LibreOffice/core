@@ -101,7 +101,6 @@ public:
     void testContextMenuImpress();
     void testNotificationCompression();
     void testTileInvalidationCompression();
-    void testBatching();
     void testPartInInvalidation();
     void testRedlineWriter();
     void testTrackChanges();
@@ -142,7 +141,6 @@ public:
     CPPUNIT_TEST(testContextMenuImpress);
     CPPUNIT_TEST(testNotificationCompression);
     CPPUNIT_TEST(testTileInvalidationCompression);
-    CPPUNIT_TEST(testBatching);
     CPPUNIT_TEST(testPartInInvalidation);
     CPPUNIT_TEST(testRedlineWriter);
     CPPUNIT_TEST(testTrackChanges);
@@ -1637,49 +1635,6 @@ void DesktopLOKTest::testPartInInvalidation()
         // payload, so this was merged -> it was 1.
         CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), notifs.size());
     }
-}
-
-void DesktopLOKTest::testBatching()
-{
-    LibLODocument_Impl* pDocument = loadDoc("blank_text.odt");
-
-    comphelper::LibreOfficeKit::setPartInInvalidation(true);
-    comphelper::ScopeGuard aGuard([]()
-    {
-        comphelper::LibreOfficeKit::setPartInInvalidation(false);
-    });
-
-    std::vector<std::tuple<int, std::string>> notifs;
-    std::unique_ptr<CallbackFlushHandler> handler(new CallbackFlushHandler(pDocument, callbackCompressionTest, &notifs));
-
-    // Enable Batch mode.
-    handler->setEventLatch(true);
-
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 239, 0");
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "EMPTY, 0");
-
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), notifs.size());
-
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, 239, 240, 0");
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "-121, -121, 300, 300, 0");
-    handler->queue(LOK_CALLBACK_INVALIDATE_TILES, "0, 0, -32767, -32767, 0");
-
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(0), notifs.size());
-
-    // Disable Batch mode.
-    handler->setEventLatch(false);
-
-    Scheduler::ProcessEventsToIdle();
-
-    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), notifs.size());
-
-    size_t i = 0;
-    CPPUNIT_ASSERT_EQUAL((int)LOK_CALLBACK_INVALIDATE_TILES, (int)std::get<0>(notifs[i]));
-    CPPUNIT_ASSERT_EQUAL(std::string("0, 0, 1000000000, 1000000000, 0"), std::get<1>(notifs[i++]));
 }
 
 void DesktopLOKTest::testRedlineWriter()

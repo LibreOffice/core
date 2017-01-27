@@ -608,8 +608,6 @@ static unsigned char* doc_renderFont(LibreOfficeKitDocument* pThis,
                           int* pFontWidth,
                           int* pFontHeight);
 static char* doc_getPartHash(LibreOfficeKitDocument* pThis, int nPart);
-static void doc_beginBatch(LibreOfficeKitDocument* pThis);
-static void doc_endBatch(LibreOfficeKitDocument* pThis);
 
 LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XComponent> &xComponent)
     : mxComponent(xComponent)
@@ -656,8 +654,6 @@ LibLODocument_Impl::LibLODocument_Impl(const uno::Reference <css::lang::XCompone
 
         m_pDocumentClass->renderFont = doc_renderFont;
         m_pDocumentClass->getPartHash = doc_getPartHash;
-        m_pDocumentClass->beginBatch = doc_beginBatch;
-        m_pDocumentClass->endBatch = doc_endBatch;
 
         gDocumentClass = m_pDocumentClass;
     }
@@ -3031,28 +3027,6 @@ unsigned char* doc_renderFont(LibreOfficeKitDocument* /*pThis*/,
         }
     }
     return nullptr;
-}
-
-static void doc_beginBatch(LibreOfficeKitDocument* pThis)
-{
-    SolarMutexGuard aGuard;
-
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    for (const auto& pair : pDocument->mpCallbackFlushHandlers)
-    {
-        pair.second->setEventLatch(true);
-    }
-}
-
-static void doc_endBatch(LibreOfficeKitDocument* pThis)
-{
-    SolarMutexGuard aGuard;
-
-    LibLODocument_Impl* pDocument = static_cast<LibLODocument_Impl*>(pThis);
-    for (const auto& pair : pDocument->mpCallbackFlushHandlers)
-    {
-        pair.second->setEventLatch(false);
-    }
 }
 
 static char* lo_getError (LibreOfficeKit *pThis)
