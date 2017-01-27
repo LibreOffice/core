@@ -36,7 +36,7 @@ namespace cppu
     };
 
     template< typename Ifc1, typename Ifc2, typename Ifc3, typename Ifc4, typename Ifc5, typename Ifc6, typename Ifc7, typename Ifc8, typename Ifc9, typename Ifc10, typename Ifc11, typename Ifc12, typename Impl >
-    struct ImplClassData12
+    struct SAL_WARN_UNUSED ImplClassData12
     {
         class_data* operator ()()
         {

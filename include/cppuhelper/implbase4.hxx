@@ -36,7 +36,7 @@ namespace cppu
     };
 
     template< typename Ifc1, typename Ifc2, typename Ifc3, typename Ifc4, typename Impl >
-        struct ImplClassData4
+        struct SAL_WARN_UNUSED ImplClassData4
     {
         class_data* operator ()()
         {

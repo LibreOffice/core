@@ -49,7 +49,7 @@ public:
 };
 
 template<typename T>
-class UniqueIndex : private UniqueIndexImpl
+class SAL_WARN_UNUSED UniqueIndex : private UniqueIndexImpl
 {
 public:
     using UniqueIndexImpl::Index;

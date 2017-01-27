@@ -80,7 +80,7 @@ struct ImpRCStack
     void            Init( ResMgr * pMgr, const Resource * pObj, sal_uInt32 nId );
 };
 
-class TOOLS_DLLPUBLIC ResMgr
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ResMgr
 {
 private:
     InternalResMgr* pImpRes;

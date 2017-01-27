@@ -30,7 +30,7 @@ typedef ::std::vector< Range* > ImpSelList;
 
 #define SFX_ENDOFSELECTION      ULONG_MAX
 
-class TOOLS_DLLPUBLIC MultiSelection
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC MultiSelection
 {
 private:
     ImpSelList      aSels;      // array of SV-selections
@@ -77,7 +77,7 @@ public:
     const Range&    GetRange( size_t nRange ) const { return *aSels[nRange]; }
 };
 
-class TOOLS_DLLPUBLIC StringRangeEnumerator
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC StringRangeEnumerator
 {
     struct Range
     {

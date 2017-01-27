@@ -32,7 +32,7 @@ typedef sal_uInt32 RESOURCE_TYPE;
 
 class ResMgr;
 
-class ResId
+class SAL_WARN_UNUSED ResId
 {
     /*
     Consider two cases:

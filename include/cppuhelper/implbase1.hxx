@@ -35,7 +35,7 @@ namespace cppu
         type_entry m_typeEntries[ 1 + 1 ];
     };
 
-    template< typename Ifc1, typename Impl > struct ImplClassData1
+    template< typename Ifc1, typename Impl > struct SAL_WARN_UNUSED ImplClassData1
     {
         class_data* operator ()()
         {

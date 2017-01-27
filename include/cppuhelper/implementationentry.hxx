@@ -37,7 +37,7 @@ namespace cppu
 /** One struct instance represents all data necessary for registering one service implementation.
 
  */
-struct ImplementationEntry
+struct SAL_WARN_UNUSED ImplementationEntry
 {
     /** Function that creates an instance of the implementation
      */

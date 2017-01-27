@@ -59,7 +59,7 @@ typedef std::unordered_map<OString, INetContentTypeParameter, OStringHash>
     INetContentTypeParameterList;
 
 
-class TOOLS_DLLPUBLIC INetMIME
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetMIME
 {
 public:
     /** Check for US-ASCII visible character.

@@ -205,7 +205,7 @@ bool SvxOle2Shape::getPropertyValueImpl( const OUString& rName, const SfxItemPro
     case OWN_ATTR_CLSID:
     {
         OUString aCLSID;
-        SvGlobalName aClassName = GetClassName_Impl(aCLSID);
+        GetClassName_Impl(aCLSID);
         rValue <<= aCLSID;
         break;
     }

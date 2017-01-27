@@ -25,7 +25,7 @@
 struct ImplConfigData;
 struct ImplGroupData;
 
-class TOOLS_DLLPUBLIC Config
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Config
 {
 private:
     OUString            maFileName;

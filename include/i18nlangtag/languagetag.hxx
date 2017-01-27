@@ -49,7 +49,7 @@ class LanguageTagImpl;
     For standalone conversions if no LanguageTag instance is at hand, static
     convertTo...() methods exist.
  */
-class I18NLANGTAG_DLLPUBLIC LanguageTag
+class SAL_WARN_UNUSED I18NLANGTAG_DLLPUBLIC LanguageTag
 {
     friend class LanguageTagImpl;
 

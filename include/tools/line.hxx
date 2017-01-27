@@ -25,7 +25,7 @@
 namespace tools
 {
 
-class TOOLS_DLLPUBLIC Line
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Line
 {
 private:
     Point           maStart;

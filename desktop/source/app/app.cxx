@@ -1474,7 +1474,6 @@ int Desktop::Main()
         SetSplashScreenProgress(30);
 
         // create title string
-        LanguageTag aLocale( LANGUAGE_SYSTEM);
         ResMgr* pLabelResMgr = GetDesktopResManager();
         OUString aTitle = pLabelResMgr ? ResId(RID_APPTITLE, *pLabelResMgr).toString() : OUString();
 

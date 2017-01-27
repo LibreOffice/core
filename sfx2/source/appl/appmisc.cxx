@@ -143,10 +143,6 @@ bool SfxApplication::loadBrandSvg(const char *pName, BitmapEx &rBitmap, int nWid
 
     OUString aBaseName = "/" + OUString::createFromAscii( pName );
 
-    rtl_Locale *pLoc = nullptr;
-    osl_getProcessLocale (&pLoc);
-    LanguageTag aLanguageTag( *pLoc);
-
     OUString uri = "$BRAND_BASE_DIR/" LIBO_ETC_FOLDER + aBaseName + ".svg";
     rtl::Bootstrap::expandMacros( uri );
     INetURLObject aObj( uri );
