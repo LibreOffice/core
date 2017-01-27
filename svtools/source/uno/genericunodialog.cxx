@@ -237,35 +237,6 @@ sal_Int16 SAL_CALL OGenericUnoDialog::execute(  )
     return nReturn;
 }
 
-#ifdef AWT_DIALOG
-
-void SAL_CALL OGenericUnoDialog::endExecute(  ) throw(RuntimeException)
-{
-    UnoDialogEntryGuard aGuard( *this );
-    if (!m_bExecuting)
-        throw RuntimeException();
-
-    {
-        ::osl::MutexGuard aExecutionGuard(m_aExecutionMutex);
-        OSL_ENSURE(m_pDialog, "OGenericUnoDialog::endExecute : executing which dialog ?");
-            // m_bExecuting is true but we have no dialog ?
-        if (!m_pDialog)
-            throw RuntimeException();
-
-        if (!m_pDialog->IsInExecute())
-            // we tightly missed it... another thread finished the execution of the dialog,
-            // but did not manage it to reset m_bExecuting, it currently tries to acquire
-            // m_aMutex or m_aExecutionMutex
-            // => nothing to do
-            return;
-
-        m_pDialog->EndDialog(RET_CANCEL);
-        m_bCanceled = sal_True;
-    }
-}
-#endif
-
-
 void OGenericUnoDialog::implInitialize(const Any& _rValue)
 {
     try
