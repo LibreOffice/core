@@ -76,10 +76,9 @@ static long ImplGetNumber(sal_uInt8* &rBuf, sal_uInt32& nSecurityCount)
     long    nRetValue = 0;
     while ( ( --nSecurityCount ) && ( ( *rBuf == ' ' ) || ( *rBuf == 0x9 ) ) )
         rBuf++;
-    sal_uInt8 nByte = *rBuf;
-    while ( nSecurityCount && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
+    while ( nSecurityCount && ( *rBuf != ' ' ) && ( *rBuf != 0x9 ) && ( *rBuf != 0xd ) && ( *rBuf != 0xa ) )
     {
-        switch ( nByte )
+        switch ( *rBuf )
         {
             case '.' :
                 // we'll only use the integer format
@@ -89,17 +88,17 @@ static long ImplGetNumber(sal_uInt8* &rBuf, sal_uInt32& nSecurityCount)
                 bNegative = true;
                 break;
             default :
-                if ( ( nByte < '0' ) || ( nByte > '9' ) )
+                if ( ( *rBuf < '0' ) || ( *rBuf > '9' ) )
                     nSecurityCount = 1;         // error parsing the bounding box values
                 else if ( bValid )
                 {
                     nRetValue *= 10;
-                    nRetValue += nByte - '0';
+                    nRetValue += *rBuf - '0';
                 }
                 break;
         }
         nSecurityCount--;
-        nByte = *(++rBuf);
+        ++rBuf;
     }
     if ( bNegative )
         nRetValue = -nRetValue;
