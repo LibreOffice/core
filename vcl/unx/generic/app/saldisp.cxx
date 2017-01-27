@@ -2263,7 +2263,7 @@ void SalDisplay::PrintInfo() const
         SAL_INFO( "vcl", "\tshift ctrl alt    \t" << KeyStr( nShiftKeySym_ ) << " (0x" << std::hex << sal::static_int_cast< unsigned int >(nShiftKeySym_) << ") "
                 << KeyStr( nCtrlKeySym_ ) << " (0x" << sal::static_int_cast< unsigned int >(nCtrlKeySym_) << ") "
                 << KeyStr( nMod1KeySym_ ) << " (0x" << sal::static_int_cast< unsigned int >(nMod1KeySym_) << ")");
-        if( XExtendedMaxRequestSize(pDisp_) * 4 )
+        if( XExtendedMaxRequestSize(pDisp_) != 0 )
             SAL_INFO( "vcl", "\tXMaxRequestSize   \t" << XMaxRequestSize(pDisp_) * 4 << " " << XExtendedMaxRequestSize(pDisp_) * 4 << " [bytes]");
         SAL_INFO( "vcl", "\tWMName            \t" << getWMAdaptor()->getWindowManagerName() );
     }
