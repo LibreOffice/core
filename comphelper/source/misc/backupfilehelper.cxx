@@ -2693,9 +2693,6 @@ namespace comphelper
             // Initial and User-defined Databases
             maDirs.insert("database");
 
-            // User-Defined Galleries
-            maDirs.insert("gallery");
-
             // most part of registry files
             maDirs.insert("registry");
 
