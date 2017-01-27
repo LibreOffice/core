@@ -128,6 +128,25 @@ ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     }
 }
 
+ImpGraphic::ImpGraphic(ImpGraphic&& rImpGraphic)
+    : maMetaFile(std::move(rImpGraphic.maMetaFile))
+    , maEx(std::move(rImpGraphic.maEx))
+    , maSwapInfo(std::move(rImpGraphic.maSwapInfo))
+    , mpAnimation(std::move(rImpGraphic.mpAnimation))
+    , mpContext(std::move(rImpGraphic.mpContext))
+    , mpSwapFile(std::move(rImpGraphic.mpSwapFile))
+    , mpGfxLink(std::move(rImpGraphic.mpGfxLink))
+    , meType(rImpGraphic.meType)
+    , mnSizeBytes(rImpGraphic.mnSizeBytes)
+    , mbSwapOut(rImpGraphic.mbSwapOut)
+    , mbDummyContext(rImpGraphic.mbDummyContext)
+    , maSvgData(std::move(rImpGraphic.maSvgData))
+    , maPdfData(std::move(rImpGraphic.maPdfData))
+{
+    rImpGraphic.ImplClear();
+    rImpGraphic.mbDummyContext = false;
+}
+
 ImpGraphic::ImpGraphic( const Bitmap& rBitmap ) :
         maEx            ( rBitmap ),
         meType          ( !rBitmap.IsEmpty() ? GraphicType::Bitmap : GraphicType::NONE ),
@@ -213,6 +232,28 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         maSvgData = rImpGraphic.maSvgData;
         maPdfData = rImpGraphic.maPdfData;
     }
+
+    return *this;
+}
+
+ImpGraphic& ImpGraphic::operator=(ImpGraphic&& rImpGraphic)
+{
+    maMetaFile = std::move(rImpGraphic.maMetaFile);
+    meType = rImpGraphic.meType;
+    mnSizeBytes = rImpGraphic.mnSizeBytes;
+    maSwapInfo = std::move(rImpGraphic.maSwapInfo);
+    mpContext = std::move(rImpGraphic.mpContext);
+    mbDummyContext = rImpGraphic.mbDummyContext;
+    mpAnimation = std::move(rImpGraphic.mpAnimation);
+    maEx = std::move(rImpGraphic.maEx);
+    mbSwapOut = rImpGraphic.mbSwapOut;
+    mpSwapFile = std::move(rImpGraphic.mpSwapFile);
+    mpGfxLink = std::move(rImpGraphic.mpGfxLink);
+    maSvgData = std::move(rImpGraphic.maSvgData);
+    maPdfData = std::move(rImpGraphic.maPdfData);
+
+    rImpGraphic.ImplClear();
+    rImpGraphic.mbDummyContext = false;
 
     return *this;
 }

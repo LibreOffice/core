@@ -55,6 +55,7 @@ private:
 
                         ImpGraphic();
                         ImpGraphic( const ImpGraphic& rImpGraphic );
+                        ImpGraphic( ImpGraphic&& rImpGraphic );
                         ImpGraphic( const Bitmap& rBmp );
                         ImpGraphic( const BitmapEx& rBmpEx );
                         ImpGraphic(const SvgDataPtr& rSvgDataPtr);
@@ -65,6 +66,7 @@ public:
 private:
 
     ImpGraphic&         operator=( const ImpGraphic& rImpGraphic );
+    ImpGraphic&         operator=( ImpGraphic&& rImpGraphic );
     bool                operator==( const ImpGraphic& rImpGraphic ) const;
     bool                operator!=( const ImpGraphic& rImpGraphic ) const { return !( *this == rImpGraphic ); }
 
