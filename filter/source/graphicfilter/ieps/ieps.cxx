@@ -74,8 +74,11 @@ static long ImplGetNumber(sal_uInt8* &rBuf, sal_uInt32& nSecurityCount)
     bool    bValid = true;
     bool    bNegative = false;
     long    nRetValue = 0;
-    while ( ( --nSecurityCount ) && ( ( *rBuf == ' ' ) || ( *rBuf == 0x9 ) ) )
-        rBuf++;
+    while (nSecurityCount && (*rBuf == ' ' || *rBuf == 0x9))
+    {
+        ++rBuf;
+        --nSecurityCount;
+    }
     while ( nSecurityCount && ( *rBuf != ' ' ) && ( *rBuf != 0x9 ) && ( *rBuf != 0xd ) && ( *rBuf != 0xa ) )
     {
         switch ( *rBuf )
@@ -708,12 +711,13 @@ ipsGraphicImport( SvStream & rStream, Graphic & rGraphic, FilterConfigItem* )
             }
 
             sal_uInt8* pDest = ImplSearchEntry( pBuf.get(), reinterpret_cast<sal_uInt8 const *>("%%BoundingBox:"), nBytesRead, 14 );
-            if ( pDest )
+            sal_uInt32 nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf.get())) : 0;
+            if (nRemainingBytes >= 14)
             {
-                nSecurityCount = 100;
+                pDest += 14;
+                nSecurityCount = std::min<sal_uInt32>(nRemainingBytes - 14, 100);
                 long nNumb[4];
                 nNumb[0] = nNumb[1] = nNumb[2] = nNumb[3] = 0;
-                pDest += 14;
                 for ( int i = 0; ( i < 4 ) && nSecurityCount; i++ )
                 {
                     nNumb[ i ] = ImplGetNumber(pDest, nSecurityCount);
