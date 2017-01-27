@@ -108,6 +108,8 @@ ImpGraphic::ImpGraphic() :
 ImpGraphic::ImpGraphic(const ImpGraphic& rImpGraphic)
     : maMetaFile(rImpGraphic.maMetaFile)
     , maEx(rImpGraphic.maEx)
+    , maSwapInfo(rImpGraphic.maSwapInfo)
+    , mpContext(rImpGraphic.mpContext)
     , mpSwapFile(rImpGraphic.mpSwapFile)
     , meType(rImpGraphic.meType)
     , mnSizeBytes(rImpGraphic.mnSizeBytes)
@@ -186,6 +188,10 @@ ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
         maMetaFile = rImpGraphic.maMetaFile;
         meType = rImpGraphic.meType;
         mnSizeBytes = rImpGraphic.mnSizeBytes;
+
+        maSwapInfo = rImpGraphic.maSwapInfo;
+        mpContext = rImpGraphic.mpContext;
+        mbDummyContext = rImpGraphic.mbDummyContext;
 
         mpAnimation.reset();
 
@@ -1256,10 +1262,18 @@ bool ImpGraphic::ImplSwapIn( SvStream* xIStm )
             std::shared_ptr<ImpSwapFile> xSwapFile(std::move(mpSwapFile));
             assert(!mpSwapFile);
 
+            std::shared_ptr<GraphicReader> xContext(std::move(mpContext));
+            assert(!mpContext);
+
+            bool bDummyContext = mbDummyContext;
+            mbDummyContext = false;
+
             bRet = ImplReadEmbedded( *xIStm );
 
-            //restore ownership of the swap file
+            //restore ownership of the swap file and context
             mpSwapFile = std::move(xSwapFile);
+            mpContext = std::move(xContext);
+            mbDummyContext = bDummyContext;
 
             if (!bRet)
             {
