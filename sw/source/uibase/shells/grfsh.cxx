@@ -867,20 +867,11 @@ void SwGrfShell::ExecuteRotation(SfxRequest &rReq)
     rShell.ReRead(OUString(), OUString(), const_cast<const Graphic*>(&aGraphic));
 
     SwFlyFrameAttrMgr aManager(false, &rShell, rShell.IsFrameSelected() ? Frmmgr_Type::NONE : Frmmgr_Type::GRF);
-    long nRotatedWidth = 0;
-    long nRotatedHeight = 0;
-    if(rReq.GetSlot() == SID_ROTATE_GRAPHIC_180)
-    {
-       nRotatedWidth = aManager.GetSize().Width();
-       nRotatedHeight = aManager.GetSize().Height();
 
-    }
-    else
-    {
-       nRotatedWidth = aManager.GetSize().Height();
-       nRotatedHeight = aManager.GetSize().Width();
-
-    }
+    long nRotatedWidth = aManager.GetSize().Height();
+    long nRotatedHeight = aManager.GetSize().Width();
+    if (rReq.GetSlot() == SID_ROTATE_GRAPHIC_180)
+      std::swap(nRotatedWidth, nRotatedHeight);
     Size aSize(nRotatedWidth, nRotatedHeight);
     aManager.SetSize(aSize);
     aManager.UpdateFlyFrame();
