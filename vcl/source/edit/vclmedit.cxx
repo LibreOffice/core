@@ -34,6 +34,7 @@
 class TextWindow : public vcl::Window
 {
 private:
+    VclPtr<Edit>    mxParent;
     ExtTextEngine*  mpExtTextEngine;
     TextView*       mpExtTextView;
 
@@ -44,7 +45,7 @@ private:
     bool            mbSelectOnTab;
 
 public:
-    explicit        TextWindow( vcl::Window* pParent );
+    explicit        TextWindow(Edit* pParent);
     virtual         ~TextWindow() override;
     virtual void    dispose() override;
 
@@ -702,7 +703,9 @@ bool ImpVclMEdit::HandleCommand( const CommandEvent& rCEvt )
     return bDone;
 }
 
-TextWindow::TextWindow( vcl::Window* pParent ) : Window( pParent )
+TextWindow::TextWindow(Edit* pParent)
+    : Window(pParent)
+    , mxParent(pParent)
 {
     mbInMBDown = false;
     mbFocusSelectionHide = false;
@@ -734,6 +737,7 @@ TextWindow::~TextWindow()
 
 void TextWindow::dispose()
 {
+    mxParent.clear();
     delete mpExtTextView;
     mpExtTextView = nullptr;
     delete mpExtTextEngine;
@@ -814,34 +818,39 @@ void TextWindow::Command( const CommandEvent& rCEvt )
 {
     if ( rCEvt.GetCommand() == CommandEventId::ContextMenu )
     {
-        VclPtr<PopupMenu> pPopup = Edit::CreatePopupMenu();
+        VclPtr<PopupMenu> pPopup = mxParent->CreatePopupMenu();
+        bool bEnableCut = true;
+        bool bEnableCopy = true;
+        bool bEnableDelete = true;
+        bool bEnablePaste = true;
+        bool bEnableSpecialChar = true;
+        bool bEnableUndo = true;
+
         if ( !mpExtTextView->HasSelection() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, false );
-            pPopup->EnableItem( SV_MENU_EDIT_COPY, false );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, false );
+            bEnableCut = false;
+            bEnableCopy = false;
+            bEnableDelete = false;
         }
         if ( mpExtTextView->IsReadOnly() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, false );
-            pPopup->EnableItem( SV_MENU_EDIT_PASTE, false );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, false );
-            pPopup->EnableItem( SV_MENU_EDIT_INSERTSYMBOL, false );
+            bEnableCut = false;
+            bEnablePaste = false;
+            bEnableDelete = false;
+            bEnableSpecialChar = false;
         }
         if ( !mpExtTextView->GetTextEngine()->HasUndoManager() || !mpExtTextView->GetTextEngine()->GetUndoManager().GetUndoActionCount() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_UNDO, false );
+            bEnableUndo = false;
         }
-//      if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.Len() ) )
-//      {
-//          pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, false );
-//      }
-        if ( !Edit::GetGetSpecialCharsFunction() )
-        {
-            sal_uInt16 nPos = pPopup->GetItemPos( SV_MENU_EDIT_INSERTSYMBOL );
-            pPopup->RemoveItem( nPos );
-            pPopup->RemoveItem( nPos-1 );
-        }
+        pPopup->EnableItem(pPopup->GetItemId("cut"), bEnableCut);
+        pPopup->EnableItem(pPopup->GetItemId("copy"), bEnableCopy);
+        pPopup->EnableItem(pPopup->GetItemId("delete"), bEnableDelete);
+        pPopup->EnableItem(pPopup->GetItemId("paste"), bEnablePaste);
+        pPopup->EnableItem(pPopup->GetItemId("specialchar"), bEnableSpecialChar);
+        pPopup->EnableItem(pPopup->GetItemId("undo"), bEnableUndo);
+        pPopup->ShowItem(pPopup->GetItemId("specialchar"), !Edit::GetGetSpecialCharsFunction());
+        pPopup->ShowItem(pPopup->GetItemId("selectall"), !Edit::GetGetSpecialCharsFunction());
 
         mbActivePopup = true;
         Point aPos = rCEvt.GetMousePosPixel();
@@ -851,43 +860,51 @@ void TextWindow::Command( const CommandEvent& rCEvt )
             Size aSize = GetOutputSizePixel();
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
-//      pPopup->RemoveDisabledEntries();
         sal_uInt16 n = pPopup->Execute( this, aPos );
-        pPopup.disposeAndClear();
-        switch ( n )
+        OString sCommand = pPopup->GetItemIdent(n);
+        if (sCommand == "undo")
         {
-            case SV_MENU_EDIT_UNDO:     mpExtTextView->Undo();
-                                        mpExtTextEngine->SetModified( true );
-                                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
-                                        break;
-            case SV_MENU_EDIT_CUT:      mpExtTextView->Cut();
-                                        mpExtTextEngine->SetModified( true );
-                                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
-                                        break;
-            case SV_MENU_EDIT_COPY:     mpExtTextView->Copy();
-                                        break;
-            case SV_MENU_EDIT_PASTE:    mpExtTextView->Paste();
-                                        mpExtTextEngine->SetModified( true );
-                                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
-                                        break;
-            case SV_MENU_EDIT_DELETE:   mpExtTextView->DeleteSelected();
-                                        mpExtTextEngine->SetModified( true );
-                                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
-                                        break;
-            case SV_MENU_EDIT_SELECTALL:    mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
-                                            break;
-            case SV_MENU_EDIT_INSERTSYMBOL:
-                {
-                    OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
-                    if (!aChars.isEmpty())
-                    {
-                        mpExtTextView->InsertText( aChars );
-                        mpExtTextEngine->SetModified( true );
-                        mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
-                    }
-                }
-                break;
+            mpExtTextView->Undo();
+            mpExtTextEngine->SetModified( true );
+            mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
         }
+        else if (sCommand == "cut")
+        {
+            mpExtTextView->Cut();
+            mpExtTextEngine->SetModified( true );
+            mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
+        }
+        else if (sCommand == "copy")
+        {
+            mpExtTextView->Copy();
+        }
+        else if (sCommand == "paste")
+        {
+            mpExtTextView->Paste();
+            mpExtTextEngine->SetModified( true );
+            mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
+        }
+        else if (sCommand == "delete")
+        {
+            mpExtTextView->DeleteSelected();
+            mpExtTextEngine->SetModified( true );
+            mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
+        }
+        else if (sCommand == "selectall")
+        {
+            mpExtTextView->SetSelection( TextSelection( TextPaM( 0, 0 ), TextPaM( TEXT_PARA_ALL, TEXT_INDEX_ALL ) ) );
+        }
+        else if (sCommand == "specialchar")
+        {
+            OUString aChars = Edit::GetGetSpecialCharsFunction()( this, GetFont() );
+            if (!aChars.isEmpty())
+            {
+                mpExtTextView->InsertText( aChars );
+                mpExtTextEngine->SetModified( true );
+                mpExtTextEngine->Broadcast( TextHint( SfxHintId::TextModified ) );
+            }
+        }
+        pPopup.clear();
         mbActivePopup = false;
     }
     else

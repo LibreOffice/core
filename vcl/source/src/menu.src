@@ -24,52 +24,6 @@ String SV_RESID_STRING_NOSELECTIONPOSSIBLE
     Text [ en-US ] = "<No selection possible>";
 };
 
-Menu SV_RESID_MENU_EDIT
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SV_MENU_EDIT_UNDO ;
-            Text [ en-US ] = "~Undo" ;
-        };
-        MenuItem { Separator = TRUE ; };
-        MenuItem
-        {
-            Identifier = SV_MENU_EDIT_CUT ;
-            Text [ en-US ] = "Cu~t" ;
-        };
-        MenuItem
-        {
-            Identifier = SV_MENU_EDIT_COPY ;
-            Text [ en-US ] = "~Copy" ;
-        };
-        MenuItem
-        {
-            Identifier = SV_MENU_EDIT_PASTE ;
-            Text [ en-US ] = "~Paste" ;
-        };
-        MenuItem
-        {
-            Identifier = SV_MENU_EDIT_DELETE ;
-            Text [ en-US ] = "~Delete" ;
-        };
-        MenuItem { Separator = TRUE ; };
-        MenuItem
-        {
-            Identifier = SV_MENU_EDIT_SELECTALL ;
-            Text [ en-US ] = "Select ~All" ;
-        };
-        MenuItem { Separator = TRUE ; };
-        MenuItem
-        {
-            Identifier = SV_MENU_EDIT_INSERTSYMBOL;
-            Text [ en-US ] = "~Special Character...";
-
-        };
-    };
-};
-
 String SV_MENU_MAC_SERVICES
 {
     Text [ en-US ] = "Services";

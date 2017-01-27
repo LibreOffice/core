@@ -73,14 +73,6 @@
 
 #define RID_STR_PAPERNAMES                           1080
 
-#define SV_RESID_MENU_EDIT                           2000
-#define SV_MENU_EDIT_UNDO                               1
-#define SV_MENU_EDIT_CUT                                2
-#define SV_MENU_EDIT_COPY                               3
-#define SV_MENU_EDIT_PASTE                              4
-#define SV_MENU_EDIT_DELETE                             5
-#define SV_MENU_EDIT_SELECTALL                          6
-#define SV_MENU_EDIT_INSERTSYMBOL                       7
 #define SV_RESID_STRING_NOSELECTIONPOSSIBLE          2001
 
 #define SV_MENU_MAC_SERVICES                         2002

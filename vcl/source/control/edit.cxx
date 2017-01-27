@@ -226,6 +226,8 @@ Edit::~Edit()
 
 void Edit::dispose()
 {
+    mpUIBuilder.reset();
+
     delete mpDDInfo;
     mpDDInfo = nullptr;
 
@@ -1931,19 +1933,25 @@ void Edit::Command( const CommandEvent& rCEvt )
     {
         VclPtr<PopupMenu> pPopup = Edit::CreatePopupMenu();
 
+        bool bEnableCut = true;
+        bool bEnableCopy = true;
+        bool bEnableDelete = true;
+        bool bEnablePaste = true;
+        bool bEnableSpecialChar = true;
+
         if ( !maSelection.Len() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, false );
-            pPopup->EnableItem( SV_MENU_EDIT_COPY, false );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, false );
+            bEnableCut = false;
+            bEnableCopy = false;
+            bEnableDelete = false;
         }
 
         if ( IsReadOnly() )
         {
-            pPopup->EnableItem( SV_MENU_EDIT_CUT, false );
-            pPopup->EnableItem( SV_MENU_EDIT_PASTE, false );
-            pPopup->EnableItem( SV_MENU_EDIT_DELETE, false );
-            pPopup->EnableItem( SV_MENU_EDIT_INSERTSYMBOL, false );
+            bEnableCut = false;
+            bEnablePaste = false;
+            bEnableDelete = false;
+            bEnableSpecialChar = false;
         }
         else
         {
@@ -1965,19 +1973,19 @@ void Edit::Command( const CommandEvent& rCEvt )
                     bData = xDataObj->isDataFlavorSupported( aFlavor );
                 }
             }
-            pPopup->EnableItem( SV_MENU_EDIT_PASTE, bData );
+            bEnablePaste = bData;
         }
 
-        if ( maUndoText == maText.getStr() )
-            pPopup->EnableItem( SV_MENU_EDIT_UNDO, false );
-        if ( ( maSelection.Min() == 0 ) && ( maSelection.Max() == maText.getLength() ) )
-            pPopup->EnableItem( SV_MENU_EDIT_SELECTALL, false );
-        if ( !pImplFncGetSpecialChars )
-        {
-            sal_uInt16 nPos = pPopup->GetItemPos( SV_MENU_EDIT_INSERTSYMBOL );
-            pPopup->RemoveItem( nPos );
-            pPopup->RemoveItem( nPos-1 );
-        }
+        pPopup->EnableItem(pPopup->GetItemId("cut"), bEnableCut);
+        pPopup->EnableItem(pPopup->GetItemId("copy"), bEnableCopy);
+        pPopup->EnableItem(pPopup->GetItemId("delete"), bEnableDelete);
+        pPopup->EnableItem(pPopup->GetItemId("paste"), bEnablePaste);
+        pPopup->EnableItem(pPopup->GetItemId("specialchar"), bEnableSpecialChar);
+        pPopup->EnableItem(pPopup->GetItemId("undo"), maUndoText != maText.getStr());
+        bool bAllSelected = maSelection.Min() == 0 && maSelection.Max() == maText.getLength();
+        pPopup->EnableItem(pPopup->GetItemId("selectall"), !bAllSelected);
+        pPopup->ShowItem(pPopup->GetItemId("specialchar"), pImplFncGetSpecialChars);
+        pPopup->ShowItem(pPopup->GetItemId("selectall"), pImplFncGetSpecialChars);
 
         mbActivePopup = true;
         Selection aSaveSel = GetSelection(); // if someone changes selection in Get/LoseFocus, e.g. URL bar
@@ -1989,44 +1997,47 @@ void Edit::Command( const CommandEvent& rCEvt )
             aPos = Point( aSize.Width()/2, aSize.Height()/2 );
         }
         sal_uInt16 n = pPopup->Execute( this, aPos );
-        pPopup.disposeAndClear();
         SetSelection( aSaveSel );
-        switch ( n )
+        OString sCommand = pPopup->GetItemIdent(n);
+        if (sCommand == "undo")
         {
-            case SV_MENU_EDIT_UNDO:
-                Undo();
-                ImplModified();
-                break;
-            case SV_MENU_EDIT_CUT:
-                Cut();
-                ImplModified();
-                break;
-            case SV_MENU_EDIT_COPY:
-                Copy();
-                break;
-            case SV_MENU_EDIT_PASTE:
-                Paste();
-                ImplModified();
-                break;
-            case SV_MENU_EDIT_DELETE:
-                DeleteSelected();
-                ImplModified();
-                break;
-            case SV_MENU_EDIT_SELECTALL:
-                ImplSetSelection( Selection( 0, maText.getLength() ) );
-                break;
-            case SV_MENU_EDIT_INSERTSYMBOL:
-                {
-                    OUString aChars = pImplFncGetSpecialChars( this, GetFont() );
-                    SetSelection( aSaveSel );
-                    if ( !aChars.isEmpty() )
-                    {
-                        ImplInsertText( aChars );
-                        ImplModified();
-                    }
-                }
-                break;
+            Undo();
+            ImplModified();
         }
+        else if (sCommand == "cut")
+        {
+            Cut();
+            ImplModified();
+        }
+        else if (sCommand == "copy")
+        {
+            Copy();
+        }
+        else if (sCommand == "paste")
+        {
+            Paste();
+            ImplModified();
+        }
+        else if (sCommand == "delete")
+        {
+            DeleteSelected();
+            ImplModified();
+        }
+        else if (sCommand == "selectall")
+        {
+            ImplSetSelection( Selection( 0, maText.getLength() ) );
+        }
+        else if (sCommand == "specialchar")
+        {
+            OUString aChars = pImplFncGetSpecialChars( this, GetFont() );
+            SetSelection( aSaveSel );
+            if (!aChars.isEmpty())
+            {
+                ImplInsertText( aChars );
+                ImplModified();
+            }
+        }
+        pPopup.clear();
         mbActivePopup = false;
     }
     else if ( rCEvt.GetCommand() == CommandEventId::StartExtTextInput )
@@ -2787,25 +2798,21 @@ FncGetSpecialChars Edit::GetGetSpecialCharsFunction()
 
 VclPtr<PopupMenu> Edit::CreatePopupMenu()
 {
-    ResMgr* pResMgr = ImplGetResMgr();
-    if( ! pResMgr )
-        return VclPtr<PopupMenu>::Create();
-
-    VclPtrInstance<PopupMenu> pPopup( ResId( SV_RESID_MENU_EDIT, *pResMgr ) );
+    if (!mpUIBuilder)
+        mpUIBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "vcl/ui/editmenu.ui", ""));
+    VclPtr<PopupMenu> pPopup = mpUIBuilder->get_menu("menu");
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    if ( rStyleSettings.GetHideDisabledMenuItems() )
+    if (rStyleSettings.GetHideDisabledMenuItems())
         pPopup->SetMenuFlags( MenuFlags::HideDisabledEntries );
     else
         pPopup->SetMenuFlags ( MenuFlags::AlwaysShowDisabledEntries );
-    if ( rStyleSettings.GetContextMenuShortcuts() )
+    if (rStyleSettings.GetContextMenuShortcuts())
     {
-        pPopup->SetAccelKey( SV_MENU_EDIT_UNDO, vcl::KeyCode( KeyFuncType::UNDO ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_CUT, vcl::KeyCode( KeyFuncType::CUT ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_COPY, vcl::KeyCode( KeyFuncType::COPY ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_PASTE, vcl::KeyCode( KeyFuncType::PASTE ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_DELETE, vcl::KeyCode( KeyFuncType::DELETE ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_SELECTALL, vcl::KeyCode( KEY_A, false, true, false, false ) );
-        pPopup->SetAccelKey( SV_MENU_EDIT_INSERTSYMBOL, vcl::KeyCode( KEY_S, true, true, false, false ) );
+        pPopup->SetAccelKey(pPopup->GetItemId("undo"), vcl::KeyCode( KeyFuncType::UNDO));
+        pPopup->SetAccelKey(pPopup->GetItemId("cut"), vcl::KeyCode( KeyFuncType::CUT));
+        pPopup->SetAccelKey(pPopup->GetItemId("copy"), vcl::KeyCode( KeyFuncType::COPY));
+        pPopup->SetAccelKey(pPopup->GetItemId("paste"), vcl::KeyCode( KeyFuncType::PASTE));
+        pPopup->SetAccelKey(pPopup->GetItemId("delete"), vcl::KeyCode( KeyFuncType::DELETE));
     }
     return pPopup;
 }

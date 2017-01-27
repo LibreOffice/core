@@ -11,6 +11,7 @@ $(eval $(call gb_UIConfig_UIConfig,vcl))
 
 $(eval $(call gb_UIConfig_add_uifiles,vcl,\
 	vcl/uiconfig/ui/cupspassworddialog \
+	vcl/uiconfig/ui/editmenu \
 	vcl/uiconfig/ui/errornocontentdialog \
 	vcl/uiconfig/ui/errornoprinterdialog \
 	vcl/uiconfig/ui/printdialog \
