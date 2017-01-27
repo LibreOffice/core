@@ -58,9 +58,23 @@ public:
                  " no corresponding documentation comment"),
                 decl->getLocation())
                 << decl->getSourceRange();
-            return true;
         }
-#if 0 // will be enabled later
+        if (rewriter != nullptr) {
+            if (!(decl->isDefined() || decl->isPure())) {
+                return true;
+            }
+            if (auto m = dyn_cast<CXXMethodDecl>(decl)) {
+                for (auto i = m->begin_overridden_methods();
+                     i != m->end_overridden_methods(); ++i)
+                {
+                    auto proto2 = (*i)->getType()->getAs<FunctionProtoType>();
+                    assert(proto2 != nullptr);
+                    if (proto2->getExceptionSpecType() == EST_Dynamic) {
+                        return true;
+                    }
+                }
+            }
+        }
         bool dtor = isa<CXXDestructorDecl>(decl);
         auto source = decl->getExceptionSpecSourceRange();
         if (rewriter != nullptr && source.isValid()) {
@@ -93,6 +107,9 @@ public:
                             }
                         }
                         if (!s.empty() && s != "\\") {
+                            if (s.startswith("//")) {
+                                beg = source.getBegin();
+                            }
                             break;
                         }
                         beg = prev;
@@ -110,7 +127,6 @@ public:
              : "remove dynamic exception specification"),
             source.isValid() ? source.getBegin() : decl->getLocation())
             << (source.isValid() ? source : decl->getSourceRange());
-#endif
         return true;
     }
 
