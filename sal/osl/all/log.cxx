@@ -346,7 +346,8 @@ void log(
               + (std::strncmp(where, SRCDIR "/", nStrLen) == 0
                  ? nStrLen : 0));
     }
-    s << message << '\n';
+    s << message;
+
 #if defined ANDROID
     int android_log_level;
     switch (level) {
@@ -389,7 +390,7 @@ void log(
     } else {
         static std::ofstream * logFile = getLogFile();
         if (logFile) {
-            *logFile << s.str();
+            *logFile << s.str() << std::endl;
         }
 #if defined WNT
         else {
@@ -397,6 +398,7 @@ void log(
         }
 #else
         else {
+            s << '\n';
             std::fputs(s.str().c_str(), stderr);
             std::fflush(stderr);
         }
