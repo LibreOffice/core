@@ -106,7 +106,6 @@ class SmRect
     bool    bHasBaseline,
             bHasAlignInfo;
 
-protected:
     inline  void CopyMBL(const SmRect& rRect);
             void CopyAlignInfo(const SmRect& rRect);
 
