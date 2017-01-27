@@ -29,7 +29,6 @@ struct ImplSchedulerData final
 {
     ImplSchedulerData* mpNext;        ///< Pointer to the next element in list
     Task*              mpTask;        ///< Pointer to VCL Task instance
-    bool               mbDelete;      ///< Destroy this task?
     bool               mbInScheduler; ///< Task currently processed?
     sal_uInt64         mnUpdateTime;  ///< Last Update Time
 
