@@ -186,7 +186,7 @@ void dodefine()
                 break;                      /* spaces               */
             else if (c == '\t')
                 c = ' ';                    /* Normalize tabs       */
-            /* Fall through to store character                      */
+            /* fall through *//* to store character                 */
         default:                            /* Other character      */
             save(c);
             break;
@@ -457,6 +457,7 @@ void expand(DEFBUF* tokenp)
                 dumpparm("expand");
 #endif
         }                           /* Collect arguments            */
+        /* fall through */
     case DEF_NOARGS:                /* No parameters just stuffs    */
         expstuff(tokenp);           /* Do actual parameters         */
     }                               /* nargs switch                 */

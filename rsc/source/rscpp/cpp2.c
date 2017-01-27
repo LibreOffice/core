@@ -115,6 +115,7 @@ int control(int counter)
             if (++ifptr >= &ifstack[BLK_NEST])
                 goto if_nest_err;
             *ifptr = 0;                     /* !WAS_COMPILING       */
+            /* fall through */
         case L_line:                        /* Many                 */
             /*
              * Are pragma's always processed?

@@ -902,7 +902,7 @@ int get()
 #ifdef STRICT_COMMENTS
                     cwarn("Nested comments", NULLST);
 #endif
-                    /* Fall into * stuff    */
+                    /* fall through *//* into * stuff */
                 case '*':
                     if ((c = get()) != '/')     /* If comment doesn't   */
                         goto test;              /* end, look at next    */
