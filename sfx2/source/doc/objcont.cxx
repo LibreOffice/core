@@ -151,7 +151,7 @@ SfxObjectShell::CreatePreviewMetaFile_Impl( bool bFullContent ) const
     }
 
     xFile->SetPrefSize( aTmpSize );
-    DBG_ASSERT( aTmpSize.Height()*aTmpSize.Width(),
+    DBG_ASSERT( aTmpSize.Height() != 0 && aTmpSize.Width() != 0,
         "size of first page is 0, override GetFirstPageSize or set vis-area!" );
 
     xFile->Record( pDevice );
