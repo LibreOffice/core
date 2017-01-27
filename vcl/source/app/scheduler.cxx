@@ -294,14 +294,16 @@ bool Scheduler::ProcessTaskScheduling()
         if ( !pSchedulerData->mpTask->IsActive() )
             goto next_entry;
 
-        UpdateMinPeriod( pSchedulerData, nTime, nMinPeriod );
-
         // skip ready tasks with lower priority than the most urgent (numerical lower is higher)
         if ( pSchedulerData->mpTask->ReadyForSchedule( nTime ) &&
              (!pMostUrgent || (pSchedulerData->mpTask->GetPriority() < pMostUrgent->mpTask->GetPriority())) )
         {
+            if ( pMostUrgent )
+                UpdateMinPeriod( pMostUrgent, nTime, nMinPeriod );
             pMostUrgent = pSchedulerData;
         }
+        else
+            UpdateMinPeriod( pSchedulerData, nTime, nMinPeriod );
 
 next_entry:
         pPrevSchedulerData = pSchedulerData;
@@ -343,7 +345,11 @@ next_entry:
                                tools::Time::GetSystemTicks() );
         }
         else if ( pMostUrgent->mpTask && !pMostUrgent->mbDelete )
+        {
             pMostUrgent->mnUpdateTime = tools::Time::GetSystemTicks();
+            UpdateMinPeriod( pMostUrgent, nTime, nMinPeriod );
+            UpdateSystemTimer( rSchedCtx, nMinPeriod, false, nTime );
+        }
     }
 
     return !!pMostUrgent;
