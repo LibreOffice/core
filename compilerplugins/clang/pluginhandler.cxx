@@ -191,6 +191,11 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
         if( plugins[ i ].object != NULL )
             plugins[ i ].object->run();
         }
+#if defined _WIN32
+    //TODO: make the call to 'rename' work on Windows (where the renamed-to
+    // original file is probably still held open somehow):
+    rewriter.overwriteChangedFiles();
+#else
     for( Rewriter::buffer_iterator it = rewriter.buffer_begin();
          it != rewriter.buffer_end();
          ++it )
@@ -256,6 +261,7 @@ void PluginHandler::HandleTranslationUnit( ASTContext& context )
             report( DiagnosticsEngine::Error, "cannot write modified source to %0 (%1)" ) << modifyFile << error;
         delete[] filename;
         }
+#endif
     }
 
 #if CLANG_VERSION >= 30600

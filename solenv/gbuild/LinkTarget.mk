@@ -73,6 +73,85 @@ gb_LinkTarget_LAYER_LINKPATHS := \
 	NONE:URELIB+OOO+NONE. \
 
 
+# Used to run a compiler plugin tool.
+#
+# At least for now, these definitions are generic enough so that they can be
+# shared across all current use cases (COMPILER_EXTERNAL_TOOL,
+# COMPILER_PLUGIN_TOOL) on all relevant toolchains (GCC?, Clang, clang-cl).  If
+# it ever becomes necessary, they can be moved to e.g.
+# platform/com_{GCC,MSC}_class.mk and made different there.
+#
+# $(call gb_CObject__tool_command,relative-source,source)
+define gb_CObject__tool_command
+$(call gb_Output_announce,$(1).c,$(true),C  ,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no CCACHE_DISABLE=1 \
+	$(gb_CC) \
+		$(DEFS) \
+		$(gb_LTOFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
+		$(gb_COMPILER_PLUGINS) \
+		$(T_CFLAGS) $(T_CFLAGS_APPEND) \
+		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE) \
+		)
+endef
+define gb_ObjCObject__tool_command
+$(call gb_Output_announce,$(1).m,$(true),OCC,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no CCACHE_DISABLE=1 \
+	$(gb_CC) \
+		$(DEFS) \
+		$(gb_LTOFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
+		$(gb_COMPILER_PLUGINS) \
+		$(T_OBJCFLAGS) $(T_OBJCFLAGS_APPEND) \
+		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE) \
+		)
+endef
+define gb_CxxObject__tool_command
+$(call gb_Output_announce,$(1).cxx,$(true),CXX,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no CCACHE_DISABLE=1 \
+	$(gb_CXX) \
+		$(DEFS) \
+		$(gb_LTOFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
+		$(gb_COMPILER_PLUGINS) \
+		$(T_CXXFLAGS) $(T_CXXFLAGS_APPEND) \
+		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE) \
+		)
+endef
+define gb_ObjCxxObject__tool_command
+$(call gb_Output_announce,$(1).mm,$(true),OCX,3)
+$(call gb_Helper_abbreviate_dirs,\
+        ICECC=no CCACHE_DISABLE=1 \
+	$(gb_CXX) \
+		$(DEFS) \
+		$(gb_LTOFLAGS) \
+		$(if $(VISIBILITY),,$(gb_VISIBILITY_FLAGS)) \
+		$(if $(WARNINGS_NOT_ERRORS),$(if $(ENABLE_WERROR),$(if $(PLUGIN_WARNINGS_AS_ERRORS),$(gb_COMPILER_PLUGINS_WARNINGS_AS_ERRORS))),$(gb_CFLAGS_WERROR)) \
+		$(gb_COMPILER_PLUGINS) \
+		$(T_OBJCXXFLAGS) $(T_OBJCXXFLAGS_APPEND) \
+		$(if $(EXTERNAL_CODE),$(gb_CXXFLAGS_Wundef),$(gb_DEFS_INTERNAL)) \
+		-c $(2) \
+		-I$(dir $(2)) \
+		$(INCLUDE) \
+		)
+endef
+
+
 # Overview of dependencies and tasks of LinkTarget
 #
 # target                      task                         depends on
