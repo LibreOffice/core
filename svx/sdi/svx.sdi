@@ -4539,7 +4539,7 @@ SfxVoidItem InsertAnnotation SID_INSERT_POSTIT
 ]
 
 SfxVoidItem EditAnnotation SID_EDIT_POSTIT
-(SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
+(SvxPostItIdItem Id SID_ATTR_POSTIT_ID,SvxPostItAuthorItem Author SID_ATTR_POSTIT_AUTHOR,SvxPostItDateItem Date SID_ATTR_POSTIT_DATE,SvxPostItTextItem Text SID_ATTR_POSTIT_TEXT)
 [
     AutoUpdate = FALSE,
     FastCall = FALSE,

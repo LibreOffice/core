@@ -478,6 +478,22 @@ void SwTextShell::ExecField(SfxRequest &rReq)
                 }
             }
             break;
+            case SID_EDIT_POSTIT:
+            {
+                const SvxPostItIdItem* pIdItem = rReq.GetArg<SvxPostItIdItem>(SID_ATTR_POSTIT_ID);
+                if (pIdItem && pIdItem->GetValue())
+                {
+                    const SvxPostItTextItem* pTextItem = rReq.GetArg<SvxPostItTextItem>(SID_ATTR_POSTIT_TEXT);
+                    OUString sText;
+                    if ( pTextItem )
+                        sText = pTextItem->GetValue();
+
+                    sw::annotation::SwAnnotationWin* pAnnotationWin = GetView().GetPostItMgr()->GetAnnotationWin(pIdItem->GetValue());
+                    if (pAnnotationWin)
+                        pAnnotationWin->UpdateText(sText);
+                }
+            }
+            break;
             case FN_REDLINE_COMMENT:
             {
                 /*  this code can be used once we want redline comments in the margin, all other stuff can
