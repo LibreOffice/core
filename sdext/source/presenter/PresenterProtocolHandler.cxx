@@ -335,8 +335,7 @@ void PresenterProtocolHandler::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(
-                "PresenterProtocolHandler object has already been disposed"),
+            "PresenterProtocolHandler object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }
@@ -434,8 +433,7 @@ void SAL_CALL PresenterProtocolHandler::Dispatch::dispatch(
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(
-                "PresenterProtocolHandler::Dispatch object has already been disposed"),
+            "PresenterProtocolHandler::Dispatch object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 

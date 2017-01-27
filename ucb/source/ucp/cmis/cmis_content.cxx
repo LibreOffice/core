@@ -595,7 +595,7 @@ namespace cmis
     uno::Any Content::getBadArgExcept()
     {
         return uno::makeAny( lang::IllegalArgumentException(
-            OUString("Wrong argument type!"),
+            "Wrong argument type!",
             static_cast< cppu::OWeakObject * >( this ), -1) );
     }
 
@@ -1272,7 +1272,7 @@ namespace cmis
                 ucbhelper::cancelCommandExecution(
                     uno::makeAny(
                         ucb::InteractiveBadTransferURLException(
-                            OUString("Unsupported URL scheme!"),
+                            "Unsupported URL scheme!",
                             static_cast< cppu::OWeakObject * >( this ) ) ),
                     xEnv );
             }
@@ -1479,7 +1479,7 @@ namespace cmis
                  rValue.Name == "Size" ||
                  rValue.Name == "CreatableContentsInfo" )
             {
-                lang::IllegalAccessException e ( OUString("Property is read-only!"),
+                lang::IllegalAccessException e ( "Property is read-only!",
                        static_cast< cppu::OWeakObject* >( this ) );
                 aRet[ n ] <<= e;
             }
@@ -1489,7 +1489,7 @@ namespace cmis
                 if (!( rValue.Value >>= aNewTitle ))
                 {
                     aRet[ n ] <<= beans::IllegalTypeException
-                        ( OUString("Property value has wrong type!"),
+                        ( "Property value has wrong type!",
                           static_cast< cppu::OWeakObject * >( this ) );
                     continue;
                 }
@@ -1497,7 +1497,7 @@ namespace cmis
                 if ( aNewTitle.getLength() <= 0 )
                 {
                     aRet[ n ] <<= lang::IllegalArgumentException
-                        ( OUString("Empty title not allowed!"),
+                        ( "Empty title not allowed!",
                           static_cast< cppu::OWeakObject * >( this ), -1 );
                     continue;
 
@@ -1509,7 +1509,7 @@ namespace cmis
             else
             {
                 SAL_INFO( "ucb.ucp.cmis", "Couldn't set property: " << rValue.Name );
-                lang::IllegalAccessException e ( OUString("Property is read-only!"),
+                lang::IllegalAccessException e ( "Property is read-only!",
                        static_cast< cppu::OWeakObject* >( this ) );
                 aRet[ n ] <<= e;
             }

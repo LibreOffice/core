@@ -265,7 +265,7 @@ void XStream_impl::waitForCompletion()
     // afterwards, there appears to be no cheaper way than to call fsync:
     if (m_nIsOpen && m_aFile.sync() != osl::FileBase::E_None) {
         throw io::IOException(
-            OUString( "could not synchronize file to disc"),
+            "could not synchronize file to disc",
             static_cast< OWeakObject * >(this));
     }
 }

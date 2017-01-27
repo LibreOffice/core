@@ -700,8 +700,7 @@ void SAL_CALL CURI::initFromConstant(const sal_Int16 i_Constant)
 
         default:
             throw css::lang::IllegalArgumentException(
-                OUString("CURI::initialize: "
-                    "invalid URIs constant argument"), *this, 0);
+                "CURI::initialize: invalid URIs constant argument", *this, 0);
     }
     m_Namespace = OUString::createFromAscii(ns).intern();
     m_LocalName = OUString::createFromAscii(ln).intern();
@@ -714,8 +713,7 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
     sal_Int32 len = aArguments.getLength();
     if ((len < 1) || (len > 2)) {
         throw css::lang::IllegalArgumentException(
-            OUString("CURI::initialize: "
-                "must give 1 or 2 argument(s)"), *this, 2);
+            "CURI::initialize: must give 1 or 2 argument(s)", *this, 2);
     }
 
     sal_Int16 arg(0);
@@ -725,22 +723,19 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
         // integer argument: constant from rdf::URIs
         if (len != 1) {
             throw css::lang::IllegalArgumentException(
-                OUString("CURI::initialize: "
-                    "must give 1 int argument"), *this, 1);
+                "CURI::initialize: must give 1 int argument", *this, 1);
         }
         initFromConstant(arg);
         return;
     }
     if (!(aArguments[0] >>= arg0)) {
         throw css::lang::IllegalArgumentException(
-            OUString("CURI::initialize: "
-                "argument must be string or short"), *this, 0);
+            "CURI::initialize: argument must be string or short", *this, 0);
     }
     if (len > 1) {
         if (!(aArguments[1] >>= arg1)) {
             throw css::lang::IllegalArgumentException(
-                OUString("CURI::initialize: "
-                    "argument must be string"), *this, 1);
+                "CURI::initialize: argument must be string", *this, 1);
         }
         // just append the parameters and then split them again; seems simplest
         arg0 = arg0 + arg1;
@@ -760,8 +755,7 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
         }
     } else {
         throw css::lang::IllegalArgumentException(
-            OUString("CURI::initialize: "
-                "argument not splittable: no separator [#/:]"), *this, 0);
+            "CURI::initialize: argument not splittable: no separator [#/:]", *this, 0);
     }
 
     //FIXME: what is legal?
@@ -769,16 +763,14 @@ void SAL_CALL CURI::initialize(const css::uno::Sequence< css::uno::Any > & aArgu
         m_Namespace = arg0;
     } else {
         throw css::lang::IllegalArgumentException(
-            OUString("CURI::initialize: "
-                "argument is not valid namespace"), *this, 0);
+            "CURI::initialize: argument is not valid namespace", *this, 0);
     }
     //FIXME: what is legal?
     if (true) {
         m_LocalName = arg1;
     } else {
         throw css::lang::IllegalArgumentException(
-            OUString("CURI::initialize: "
-                "argument is not valid local name"), *this, 1);
+            "CURI::initialize: argument is not valid local name", *this, 1);
     }
 }
 

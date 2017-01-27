@@ -1037,7 +1037,7 @@ void PresenterToolBar::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString( "PresenterToolBar has already been disposed"),
+            "PresenterToolBar has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

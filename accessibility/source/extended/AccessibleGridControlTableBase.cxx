@@ -214,15 +214,13 @@ void AccessibleGridControlTableBase::implGetSelectedRows( Sequence< sal_Int32 >&
 void AccessibleGridControlTableBase::ensureIsValidRow( sal_Int32 nRow )
 {
     if( nRow >= m_aTable.GetRowCount() )
-        throw lang::IndexOutOfBoundsException(
-            OUString( "row index is invalid" ), *this );
+        throw lang::IndexOutOfBoundsException( "row index is invalid", *this );
 }
 
 void AccessibleGridControlTableBase::ensureIsValidColumn( sal_Int32 nColumn )
 {
     if( nColumn >= m_aTable.GetColumnCount() )
-        throw lang::IndexOutOfBoundsException(
-            OUString( "column index is invalid" ), *this );
+        throw lang::IndexOutOfBoundsException( "column index is invalid", *this );
 }
 
 void AccessibleGridControlTableBase::ensureIsValidAddress(
@@ -235,8 +233,7 @@ void AccessibleGridControlTableBase::ensureIsValidAddress(
 void AccessibleGridControlTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
 {
     if( nChildIndex >= m_aTable.GetRowCount()*m_aTable.GetColumnCount() )
-        throw lang::IndexOutOfBoundsException(
-            OUString( "child index is invalid" ), *this );
+        throw lang::IndexOutOfBoundsException( "child index is invalid", *this );
 }
 
 

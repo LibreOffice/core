@@ -2782,7 +2782,7 @@ sal_Bool SAL_CALL OApplicationController::select( const Any& _aSelection )
             case DatabaseObjectContainer::REPORTS:
                 if ( eSelectedCategory != E_NONE )
                     throw IllegalArgumentException(
-                        OUString(ModuleRes(RID_STR_NO_DIFF_CAT)),
+                        ModuleRes(RID_STR_NO_DIFF_CAT),
                         *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ) );
                 eSelectedCategory =
                         ( pObject->Type == DatabaseObjectContainer::TABLES )  ? E_TABLE

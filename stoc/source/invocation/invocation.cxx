@@ -887,7 +887,7 @@ InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, 
     if( !bFound )
     {
         throw IllegalArgumentException(
-            OUString( "Unknown name, getExactName() failed!" ),
+            "Unknown name, getExactName() failed!",
             static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
     }
     return aRetInfo;

@@ -1616,7 +1616,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         aStorageSource <<= sURL;
     else
         throw lang::IllegalArgumentException(
-            OUString( "No input source (URL or InputStream) found." ),
+            "No input source (URL or InputStream) found.",
                 // TODO: resource
             *this,
             1
@@ -1652,7 +1652,7 @@ void SAL_CALL OReportDefinition::load( const uno::Sequence< beans::PropertyValue
         {
             if ( i == nLastOpenMode )
                 throw lang::WrappedTargetException(
-                    OUString( "An error occurred while creating the document storage." ),
+                    "An error occurred while creating the document storage.",
                         // TODO: resource
                     *this,
                     ::cppu::getCaughtException()

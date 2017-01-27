@@ -188,7 +188,7 @@ void SAL_CALL ItemContainer::insertByIndex( sal_Int32 Index, const Any& aItem )
             throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
     }
     else
-        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION,
                                         static_cast<OWeakObject *>(this), 2 );
 }
 
@@ -215,7 +215,7 @@ void SAL_CALL ItemContainer::replaceByIndex( sal_Int32 Index, const Any& aItem )
             throw IndexOutOfBoundsException( OUString(), static_cast<OWeakObject *>(this) );
     }
     else
-        throw IllegalArgumentException( OUString( WRONG_TYPE_EXCEPTION ),
+        throw IllegalArgumentException( WRONG_TYPE_EXCEPTION,
                                         static_cast<OWeakObject *>(this), 2 );
 }
 

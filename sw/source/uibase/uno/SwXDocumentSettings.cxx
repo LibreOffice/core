@@ -731,13 +731,13 @@ void SwXDocumentSettings::_setSingleValue( const comphelper::PropertyInfo & rInf
             uno::Sequence< beans::PropertyValue > aInfo;
             if ( !( rValue >>= aInfo ) )
                 throw lang::IllegalArgumentException(
-                    OUString( "Value of type Sequence<PropertyValue> expected!" ),
+                    "Value of type Sequence<PropertyValue> expected!",
                     uno::Reference< uno::XInterface >(),
                     2 );
 
             if ( !mpDocSh->SetModifyPasswordInfo( aInfo ) )
                 throw beans::PropertyVetoException(
-                    OUString( "The hash is not allowed to be changed now!" ),
+                    "The hash is not allowed to be changed now!",
                     uno::Reference< uno::XInterface >() );
         }
         break;

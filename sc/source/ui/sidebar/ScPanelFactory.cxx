@@ -112,7 +112,7 @@ Reference<ui::XUIElement> SAL_CALL ScPanelFactory::createUIElement (
     catch (const uno::Exception& e)
     {
         throw lang::WrappedTargetRuntimeException(
-            OUString("ScPanelFactory::createUIElement exception"),
+            "ScPanelFactory::createUIElement exception",
             nullptr, uno::makeAny(e));
     }
 

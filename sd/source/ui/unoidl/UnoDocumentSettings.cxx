@@ -902,7 +902,7 @@ DocumentSettings::_setPropertyValues(const PropertyMapEntry** ppEntries,
                 uno::Sequence< beans::PropertyValue > aInfo;
                 if ( !( *pValues >>= aInfo ) )
                     throw lang::IllegalArgumentException(
-                        OUString( "Value of type Sequence<PropertyValue> expected!" ),
+                        "Value of type Sequence<PropertyValue> expected!",
                         uno::Reference< uno::XInterface >(),
                         2 );
 

@@ -369,7 +369,7 @@ namespace XSLT
                                 if (xInterActionHandler.is()) {
                                         Sequence<Any> excArgs(0);
                                         css::ucb::InteractiveAugmentedIOException exc(
-                                                OUString("Timeout!"),
+                                                "Timeout!",
                                                 static_cast< OWeakObject * >( this ),
                                                 InteractionClassification_ERROR,
                                                 css::ucb::IOErrorCode_GENERAL,

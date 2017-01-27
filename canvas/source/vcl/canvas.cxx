@@ -98,9 +98,7 @@ namespace vclcanvas
 
         OutputDevice* pOutDev = reinterpret_cast<OutputDevice*>(nPtr);
         if( !pOutDev )
-            throw lang::NoSupportException(
-                OUString( "Passed OutDev invalid!" ),
-                nullptr);
+            throw lang::NoSupportException("Passed OutDev invalid!", nullptr);
 
         OutDevProviderSharedPtr pOutdevProvider( new OutDevHolder(*pOutDev) );
 

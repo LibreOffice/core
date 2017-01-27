@@ -539,7 +539,7 @@ void SwAccessibleTableData_Impl::CheckRowAndCol(
     {
         uno::Reference < XAccessibleTable > xThis( pThis );
         lang::IndexOutOfBoundsException aExcept(
-               OUString( "row or column index out of range" ),
+               "row or column index out of range",
                xThis );
         throw aExcept;
     }

@@ -498,7 +498,7 @@ void PresenterHelpView::ThrowIfDisposed()
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString( "PresenterHelpView has been already disposed"),
+            "PresenterHelpView has been already disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

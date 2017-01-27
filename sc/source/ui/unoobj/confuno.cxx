@@ -297,7 +297,7 @@ void SAL_CALL ScDocumentConfiguration::setPropertyValue(
             uno::Sequence< beans::PropertyValue > aInfo;
             if ( !( aValue >>= aInfo ) )
                 throw lang::IllegalArgumentException(
-                    OUString( "Value of type Sequence<PropertyValue> expected!" ),
+                    "Value of type Sequence<PropertyValue> expected!",
                     uno::Reference< uno::XInterface >(),
                     2 );
 

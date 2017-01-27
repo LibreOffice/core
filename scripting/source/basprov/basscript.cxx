@@ -187,12 +187,11 @@ namespace basprov
                 if ( nParamsCount < nSbxCount - nSbxOptional )
                 {
                     throw provider::ScriptFrameworkErrorException(
-                        OUString(
-                                "wrong number of parameters!" ),
+                         "wrong number of parameters!",
                          Reference< XInterface >(),
                          m_funcName,
                          OUString( "Basic" ),
-                        provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT  );
+                         provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT  );
                 }
             }
 

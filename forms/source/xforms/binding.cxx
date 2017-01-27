@@ -93,7 +93,7 @@ using com::sun::star::xml::dom::events::XEventTarget;
 using com::sun::star::xsd::XDataType;
 
 
-#define EXCEPT(msg) OUString(msg),static_cast<XValueBinding*>(this)
+#define EXCEPT(msg) msg,static_cast<XValueBinding*>(this)
 
 #define HANDLE_BindingID 0
 #define HANDLE_BindingExpression 1

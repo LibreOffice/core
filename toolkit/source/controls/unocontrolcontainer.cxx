@@ -476,7 +476,7 @@ void UnoControlContainer::removeContainerListener( const uno::Reference< contain
     uno::Reference< awt::XControl > xControl;
     if ( !( _rElement >>= xControl ) || !xControl.is() )
         throw lang::IllegalArgumentException(
-            OUString( "Elements must support the XControl interface." ),
+            "Elements must support the XControl interface.",
             *this,
             1
         );
@@ -491,7 +491,7 @@ void SAL_CALL UnoControlContainer::removeByIdentifier( ::sal_Int32 _nIdentifier 
     uno::Reference< awt::XControl > xControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xControl ) )
         throw container::NoSuchElementException(
-            OUString( "There is no element with the given identifier." ),
+            "There is no element with the given identifier.",
             *this
         );
 
@@ -505,14 +505,14 @@ void SAL_CALL UnoControlContainer::replaceByIdentifer( ::sal_Int32 _nIdentifier,
     uno::Reference< awt::XControl > xExistentControl;
     if ( !mpControls->getControlForIdentifier( _nIdentifier, xExistentControl ) )
         throw container::NoSuchElementException(
-            OUString( "There is no element with the given identifier." ),
+            "There is no element with the given identifier.",
             *this
         );
 
     uno::Reference< awt::XControl > xNewControl;
     if ( !( _rElement >>= xNewControl ) )
         throw lang::IllegalArgumentException(
-            OUString( "Elements must support the XControl interface." ),
+            "Elements must support the XControl interface.",
             *this,
             1
         );

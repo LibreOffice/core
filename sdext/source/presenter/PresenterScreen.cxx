@@ -210,8 +210,7 @@ void SAL_CALL PresenterScreenListener::notifyEvent( const css::document::EventOb
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString(
-                "PresenterScreenListener object has already been disposed"),
+            "PresenterScreenListener object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 

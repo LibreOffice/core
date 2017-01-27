@@ -343,7 +343,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    OUString( "Wrong argument type!" ),
+                                    "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -363,7 +363,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    OUString( "Wrong argument type!" ),
+                                    "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -374,7 +374,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    OUString( "No properties!" ),
+                                    "No properties!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -410,7 +410,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    OUString( "Wrong argument type!" ),
+                                    "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -433,7 +433,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    OUString( "Wrong argument type!" ),
+                                    "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -492,7 +492,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    OUString( "Wrong argument type!" ),
+                                    "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -514,7 +514,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                    OUString( "Wrong argument type!" ),
+                                    "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 ) ),
                 Environment );
@@ -1080,28 +1080,28 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            OUString( "Property is read-only!" ),
+                            "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "IsDocument" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            OUString( "Property is read-only!" ),
+                            "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "IsFolder" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            OUString( "Property is read-only!" ),
+                            "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "CreatableContentsInfo" )
         {
             // Read-only property!
             aRet[ n ] <<= lang::IllegalAccessException(
-                            OUString( "Property is read-only!" ),
+                            "Property is read-only!",
                             static_cast< cppu::OWeakObject * >( this ) );
         }
         else if ( rValue.Name == "Title" )
@@ -1109,7 +1109,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             if ( isReadOnly() )
             {
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                OUString( "Property is read-only!" ),
+                                "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else
@@ -1144,7 +1144,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     else
                     {
                         aRet[ n ] <<= lang::IllegalArgumentException(
-                                    OUString( "Empty title not allowed!" ),
+                                    "Empty title not allowed!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 );
                     }
@@ -1152,7 +1152,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                 else
                 {
                     aRet[ n ] <<= beans::IllegalTypeException(
-                                OUString( "Property value has wrong type!" ),
+                                "Property value has wrong type!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
@@ -1162,7 +1162,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             if ( isReadOnly() )
             {
                 aRet[ n ] <<= lang::IllegalAccessException(
-                                OUString( "Property is read-only!" ),
+                                "Property is read-only!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
             else
@@ -1194,7 +1194,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                         else
                         {
                             aRet[ n ] <<= lang::IllegalArgumentException(
-                                    OUString( "Empty target URL not allowed!" ),
+                                    "Empty target URL not allowed!",
                                     static_cast< cppu::OWeakObject * >( this ),
                                     -1 );
                         }
@@ -1202,14 +1202,14 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                     else
                     {
                         aRet[ n ] <<= beans::IllegalTypeException(
-                                OUString( "Property value has wrong type!" ),
+                                "Property value has wrong type!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                     }
                 }
                 else
                 {
                     aRet[ n ] <<= beans::UnknownPropertyException(
-                                OUString( "TargetURL only supported by links!" ),
+                                "TargetURL only supported by links!",
                                 static_cast< cppu::OWeakObject * >( this ) );
                 }
             }
@@ -1263,7 +1263,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
             else
             {
                 aRet[ n ] <<= uno::Exception(
-                                OUString( "No property set for storing the value!" ),
+                                "No property set for storing the value!",
                                 static_cast< cppu::OWeakObject * >( this ) );
             }
         }
@@ -1297,7 +1297,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
 
             // Set error .
             aRet[ nTitlePos ] <<= uno::Exception(
-                    OUString("Exchange failed!"),
+                    "Exchange failed!",
                     static_cast< cppu::OWeakObject * >( this ) );
         }
     }
@@ -1358,7 +1358,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
-                                OUString( "Not supported by root folder!" ),
+                                "Not supported by root folder!",
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
@@ -1426,7 +1426,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
                             ucb::UnsupportedNameClashException(
-                                OUString( "Unable to resolve name clash!" ),
+                                "Unable to resolve name clash!",
                                 static_cast< cppu::OWeakObject * >( this ),
                                 nNameClashResolve ) ),
                     xEnv );
@@ -1507,7 +1507,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
-                                OUString( "Not persistent!" ),
+                                "Not persistent!",
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
@@ -1518,7 +1518,7 @@ void HierarchyContent::destroy( bool bDeletePhysical,
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
-                                OUString( "Not supported by root folder!" ),
+                                "Not supported by root folder!",
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable
@@ -1559,7 +1559,7 @@ void HierarchyContent::transfer(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( ucb::UnsupportedCommandException(
-                                OUString( "Not persistent!" ),
+                                "Not persistent!",
                                 static_cast< cppu::OWeakObject * >( this ) ) ),
             xEnv );
         // Unreachable

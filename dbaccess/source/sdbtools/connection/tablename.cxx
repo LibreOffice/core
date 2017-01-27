@@ -152,7 +152,7 @@ namespace sdbtools
             ||  !xPSI->hasPropertyByName( PROPERTY_NAME )
             )
             throw IllegalArgumentException(
-                OUString( SdbtRes( STR_NO_TABLE_OBJECT ) ),
+                SdbtRes( STR_NO_TABLE_OBJECT ),
                 *this,
                 0
             );
@@ -199,7 +199,7 @@ namespace sdbtools
                     found = true;
             if ( !found )
                 throw IllegalArgumentException(
-                    OUString( SdbtRes( STR_INVALID_COMPOSITION_TYPE ) ),
+                    SdbtRes( STR_INVALID_COMPOSITION_TYPE ),
                     nullptr,
                     0
                 );

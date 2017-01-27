@@ -1645,7 +1645,7 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
 
     ::Point aPos(VCLPoint(_aNewPos));
     if ( aPos.X() < 0 || aPos.Y() < 0 ) // TODO: have to check size with pos aka || (aPos.X() + aAwtSize.Width) > m_xSection->getReportDefinition()->
-        throw beans::PropertyVetoException(OUString(ModuleRes(RID_STR_ILLEGAL_POSITION)),xSourceReportComponent);
+        throw beans::PropertyVetoException(ModuleRes(RID_STR_ILLEGAL_POSITION),xSourceReportComponent);
 
     ::Rectangle aSourceRect(aPos,VCLSize(_aSize));
 
@@ -1658,7 +1658,7 @@ void GeometryHandler::checkPosAndSize(  const awt::Point& _aNewPos,
             const ::Rectangle aBoundRect(VCLPoint(xReportComponent->getPosition()),VCLSize(xReportComponent->getSize()));
             const ::Rectangle aRect = aSourceRect.GetIntersection(aBoundRect);
             if ( !aRect.IsEmpty() && (aRect.Left() != aRect.Right() && aRect.Top() != aRect.Bottom() ) )
-                throw beans::PropertyVetoException(OUString(ModuleRes( RID_STR_OVERLAP_OTHER_CONTROL)),xSourceReportComponent);
+                throw beans::PropertyVetoException(ModuleRes( RID_STR_OVERLAP_OTHER_CONTROL),xSourceReportComponent);
         }
     }
 }

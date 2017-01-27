@@ -506,7 +506,7 @@ namespace fileaccess {
                 OUString("ContentType");
 
             aAny <<= MissingPropertiesException(
-                OUString( "a property is missing, necessary to create a content"),
+                "a property is missing, necessary to create a content",
                 xComProc,
                 aSeq);
             cancelCommandExecution(aAny,xEnv);
@@ -537,7 +537,7 @@ namespace fileaccess {
         {
             aAny <<=
                 MissingInputStreamException(
-                    OUString( "the inputstream is missing, necessary to create a content"),
+                    "the inputstream is missing, necessary to create a content",
                     xComProc);
             cancelCommandExecution(aAny,xEnv);
         }
@@ -779,10 +779,9 @@ namespace fileaccess {
         }
         else if( errorCode == TASKHANDLING_TRANSFER_INVALIDSCHEME )
         {
-            aAny <<=
-                InteractiveBadTransferURLException(
-                    OUString( "bad transfer url"),
-                    xComProc);
+            aAny <<= InteractiveBadTransferURLException(
+                        "bad transfer url",
+                        xComProc);
             cancelCommandExecution( aAny,xEnv );
         }
         else if( errorCode == TASKHANDLING_OVERWRITE_FOR_MOVE      ||

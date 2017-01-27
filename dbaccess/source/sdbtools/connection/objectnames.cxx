@@ -288,7 +288,7 @@ namespace sdbtools
             &&  ( _nCommandType != CommandType::QUERY )
             )
             throw IllegalArgumentException(
-                OUString( SdbtRes( STR_INVALID_COMMAND_TYPE ) ),
+                SdbtRes( STR_INVALID_COMMAND_TYPE ),
                 nullptr,
                 0
             );
@@ -311,7 +311,7 @@ namespace sdbtools
         catch( const Exception& )
         {
             throw IllegalArgumentException(
-                OUString( SdbtRes( STR_CONN_WITHOUT_QUERIES_OR_TABLES ) ),
+                SdbtRes( STR_CONN_WITHOUT_QUERIES_OR_TABLES ),
                 nullptr,
                 0
             );

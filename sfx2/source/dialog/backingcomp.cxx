@@ -365,12 +365,12 @@ void SAL_CALL BackingComp::attachFrame( /*IN*/ const css::uno::Reference< css::f
     // check some required states
     if (m_xFrame.is())
         throw css::uno::RuntimeException(
-                OUString("already attached"),
+                "already attached",
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!xFrame.is())
         throw css::uno::RuntimeException(
-                OUString("invalid frame reference"),
+                "invalid frame reference",
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (!m_xWindow.is())
@@ -550,7 +550,7 @@ void SAL_CALL BackingComp::disposing( /*IN*/ const css::lang::EventObject& aEven
 
     if (!aEvent.Source.is() || aEvent.Source!=m_xWindow || !m_xWindow.is())
         throw css::uno::RuntimeException(
-                OUString("unexpected source or called twice"),
+                "unexpected source or called twice",
                 static_cast< ::cppu::OWeakObject* >(this));
 
     m_xWindow.clear();
@@ -616,7 +616,7 @@ void SAL_CALL BackingComp::dispose()
 void SAL_CALL BackingComp::addEventListener( /*IN*/ const css::uno::Reference< css::lang::XEventListener >& )
 {
     throw css::uno::RuntimeException(
-            OUString("not supported"),
+            "not supported",
             static_cast< ::cppu::OWeakObject* >(this));
 }
 
@@ -659,7 +659,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (m_xWindow.is())
         throw css::uno::Exception(
-                OUString("already initialized"),
+                "already initialized",
                 static_cast< ::cppu::OWeakObject* >(this));
 
     css::uno::Reference< css::awt::XWindow > xParentWindow;
@@ -670,7 +670,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
        )
     {
         throw css::uno::Exception(
-                OUString("wrong or corrupt argument list"),
+                "wrong or corrupt argument list",
                 static_cast< ::cppu::OWeakObject* >(this));
     }
 
@@ -681,7 +681,7 @@ void SAL_CALL BackingComp::initialize( /*IN*/ const css::uno::Sequence< css::uno
 
     if (!m_xWindow.is())
         throw css::uno::RuntimeException(
-                OUString("couldn't create component window"),
+                "couldn't create component window",
                 static_cast< ::cppu::OWeakObject* >(this));
 
     // start listening for window disposing

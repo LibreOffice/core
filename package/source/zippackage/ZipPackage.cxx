@@ -941,9 +941,7 @@ sal_Bool SAL_CALL ZipPackage::hasByHierarchicalName( const OUString& aName )
     catch (const uno::Exception&)
     {
         uno::Any e(::cppu::getCaughtException());
-        throw lang::WrappedTargetRuntimeException(
-            OUString("ZipPackage::hasByHierarchicalName"),
-            nullptr, e);
+        throw lang::WrappedTargetRuntimeException("ZipPackage::hasByHierarchicalName", nullptr, e);
     }
     return false;
 }

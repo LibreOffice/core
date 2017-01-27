@@ -1371,8 +1371,7 @@ bool ImportContext::importImageScaleModeProperty(
         }
         else
         {
-            throw xml::sax::SAXException(
-                OUString( "invalid scale image mode value!" ),
+            throw xml::sax::SAXException( "invalid scale image mode value!",
                 Reference< XInterface >(), Any() );
         }
 

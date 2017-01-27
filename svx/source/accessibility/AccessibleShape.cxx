@@ -574,8 +574,8 @@ awt::Rectangle SAL_CALL AccessibleShape::getBounds()
 
         // Transform coordinates from internal to pixel.
         if (maShapeTreeInfo.GetViewForwarder() == nullptr)
-            throw uno::RuntimeException (OUString (
-                "AccessibleShape has no valid view forwarder"),
+            throw uno::RuntimeException (
+                "AccessibleShape has no valid view forwarder",
                 static_cast<uno::XWeak*>(this));
         ::Size aPixelSize = maShapeTreeInfo.GetViewForwarder()->LogicToPixel (
             ::Size (aBoundingBox.Width, aBoundingBox.Height));

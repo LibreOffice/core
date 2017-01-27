@@ -224,9 +224,7 @@ Reference< xml::input::XElement > ProgressBarElement::startChildElement(
     }
     else
     {
-        throw xml::sax::SAXException(
-            OUString( "expected event element!" ),
-            Reference< XInterface >(), Any() );
+        throw xml::sax::SAXException( "expected event element!", Reference< XInterface >(), Any() );
     }
 }
 void ProgressBarElement::endElement()

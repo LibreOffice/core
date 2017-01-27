@@ -134,7 +134,7 @@ ContentProvider::queryContent(
     Uri aUri( Identifier->getContentIdentifier() );
     if ( !aUri.isValid() )
         throw ucb::IllegalIdentifierException(
-            OUString( "Invalid URL!" ),
+            "Invalid URL!",
             Identifier );
 
     // Normalize URI.
@@ -196,16 +196,14 @@ ContentProvider::createDocumentContent(
 
             // no content.
             throw lang::IllegalArgumentException(
-                OUString(
-                    "Illegal Content Identifier!" ),
+                "Illegal Content Identifier!",
                 static_cast< cppu::OWeakObject * >( this ),
                 1 );
         }
         else
         {
             throw lang::IllegalArgumentException(
-                OUString(
-                    "Unable to obtain document id from model!" ),
+                "Unable to obtain document id from model!",
                 static_cast< cppu::OWeakObject * >( this ),
                 1 );
         }
@@ -213,8 +211,7 @@ ContentProvider::createDocumentContent(
      else
      {
         throw lang::IllegalArgumentException(
-            OUString(
-                "No Document Manager!" ),
+            "No Document Manager!",
             static_cast< cppu::OWeakObject * >( this ),
             1 );
      }

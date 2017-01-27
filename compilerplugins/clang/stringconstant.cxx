@@ -1053,6 +1053,38 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         }
         return true;
     }
+
+
+    // Now check for calls to one of our exception classes where an unnecessary OUString
+    // constructor is used for the first parameter.
+    if (isInUnoIncludeFile(expr->getConstructor()->getCanonicalDecl())) {
+        return true;
+    }
+    if (!expr->getConstructor()->getParent()->getName().endswith("Exception")) {
+        return true;
+    }
+    if (expr->getNumArgs() == 0) {
+        return true;
+    }
+    MaterializeTemporaryExpr const * subExpr1 = dyn_cast<MaterializeTemporaryExpr>(expr->getArg(0));
+    if (!subExpr1) {
+        return true;
+    }
+    if (!loplugin::TypeCheck(subExpr1->getType()).Class("OUString").Namespace("rtl").GlobalNamespace()) {
+        return true;
+    }
+    ImplicitCastExpr const * subExpr2 = dyn_cast<ImplicitCastExpr>(subExpr1->GetTemporaryExpr());
+    if (!subExpr2) {
+        return true;
+    }
+    CXXFunctionalCastExpr const * subExpr3 = dyn_cast<CXXFunctionalCastExpr>(subExpr2->getSubExpr());
+    if (!subExpr3) {
+        return true;
+    }
+    report(DiagnosticsEngine::Warning,
+            "no need to use an explicit OUString constructor here",
+            subExpr3->getLocStart())
+        << subExpr3->getSourceRange();
     return true;
 }
 

@@ -153,13 +153,13 @@ ODocumentCloser::ODocumentCloser(const css::uno::Sequence< css::uno::Any >& aArg
     sal_Int32 nLen = aArguments.getLength();
     if ( nLen != 1 )
         throw lang::IllegalArgumentException(
-                        OUString("Wrong count of parameters!" ),
+                        "Wrong count of parameters!",
                         uno::Reference< uno::XInterface >(),
                         0 );
 
     if ( !( aArguments[0] >>= m_xFrame ) || !m_xFrame.is() )
         throw lang::IllegalArgumentException(
-                OUString("Nonempty reference is expected as the first argument!" ),
+                "Nonempty reference is expected as the first argument!",
                 uno::Reference< uno::XInterface >(),
                 0 );
 }

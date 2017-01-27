@@ -506,9 +506,8 @@ Sequence< Any > Content::setPropertyValues(
     {
         ucbhelper::cancelCommandExecution(
             makeAny( IllegalArgumentException(
-                        OUString(
-                            "Length of property names sequence and value "
-                            "sequence are unequal!" ),
+                        "Length of property names sequence and value "
+                        "sequence are unequal!",
                         get(),
                         -1 ) ),
             m_xImpl->getEnvironment() );
@@ -1013,8 +1012,7 @@ bool Content::isFolder()
 
      ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
-                    OUString(
-                        "Unable to retrieve value of property 'IsFolder'!" ),
+                    "Unable to retrieve value of property 'IsFolder'!",
                     get() ) ),
          m_xImpl->getEnvironment() );
 
@@ -1037,8 +1035,7 @@ bool Content::isDocument()
 
      ucbhelper::cancelCommandExecution(
          makeAny( UnknownPropertyException(
-                    OUString(
-                        "Unable to retrieve value of property 'IsDocument'!" ),
+                    "Unable to retrieve value of property 'IsDocument'!",
                     get() ) ),
          m_xImpl->getEnvironment() );
 

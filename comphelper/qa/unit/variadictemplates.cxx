@@ -40,7 +40,7 @@ inline void extract(
 {
     if (nArg >= seq.getLength()) {
         throw ::com::sun::star::lang::IllegalArgumentException(
-            OUString( "No such argument available!"),
+            "No such argument available!",
             xErrorContext, static_cast<sal_Int16>(nArg) );
     }
     if (! fromAny(seq[nArg], &v)) {

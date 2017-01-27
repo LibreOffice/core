@@ -114,7 +114,7 @@ ModuleAcceleratorConfiguration::ModuleAcceleratorConfiguration(
 
     if (m_sModule.isEmpty())
         throw css::uno::RuntimeException(
-                OUString("The module dependent accelerator configuration service was initialized with an empty module identifier!"),
+                "The module dependent accelerator configuration service was initialized with an empty module identifier!",
                 static_cast< ::cppu::OWeakObject* >(this));
 }
 

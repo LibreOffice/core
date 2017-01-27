@@ -218,8 +218,8 @@ ScriptingFrameworkURIHelper::getStorageURI(const OUString& rScriptURI)
     catch ( uno::Exception& )
     {
         throw lang::IllegalArgumentException(
-            OUString("Script URI not valid"),
-                uno::Reference< uno::XInterface >(), 1 );
+            "Script URI not valid",
+            uno::Reference< uno::XInterface >(), 1 );
     }
 
     OUStringBuffer buf(120);

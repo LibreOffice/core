@@ -459,7 +459,7 @@ void SAL_CALL CopyTableWizard::setOperation( ::sal_Int16 _operation )
         &&  !OCopyTableWizard::supportsViews( m_xDestConnection )
         )
         throw IllegalArgumentException(
-            OUString( ModuleRes( STR_CTW_NO_VIEWS_SUPPORT ) ),
+            ModuleRes( STR_CTW_NO_VIEWS_SUPPORT ),
             *this,
             1
         );
@@ -491,7 +491,7 @@ void SAL_CALL CopyTableWizard::setCreatePrimaryKey( const Optional< OUString >& 
 
     if ( _newPrimaryKey.IsPresent && !OCopyTableWizard::supportsPrimaryKey( m_xDestConnection ) )
         throw IllegalArgumentException(
-                OUString( ModuleRes( STR_CTW_NO_PRIMARY_KEY_SUPPORT ) ),
+            ModuleRes( STR_CTW_NO_PRIMARY_KEY_SUPPORT ),
             *this,
             1
         );
@@ -656,7 +656,7 @@ Reference< XPropertySet > CopyTableWizard::impl_ensureDataAccessDescriptor_throw
     if ( !bIsValid )
     {
         throw IllegalArgumentException(
-            OUString( ModuleRes( STR_CTW_INVALID_DATA_ACCESS_DESCRIPTOR ) ),
+            ModuleRes( STR_CTW_INVALID_DATA_ACCESS_DESCRIPTOR ),
             *const_cast< CopyTableWizard* >( this ),
             _nArgPos + 1
         );
@@ -748,7 +748,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
     break;
     default:
         throw IllegalArgumentException(
-            OUString( ModuleRes( STR_CTW_ONLY_TABLES_AND_QUERIES_SUPPORT ) ),
+            ModuleRes( STR_CTW_ONLY_TABLES_AND_QUERIES_SUPPORT ),
             *const_cast< CopyTableWizard* >( this ),
             1
         );
@@ -767,7 +767,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
         if ( _out_rCommandType == CommandType::QUERY )
             // we cannot copy a query if the connection cannot provide it ...
             throw IllegalArgumentException(
-                OUString(ModuleRes( STR_CTW_ERROR_NO_QUERY )),
+                ModuleRes( STR_CTW_ERROR_NO_QUERY ),
                 *const_cast< CopyTableWizard* >( this ),
                 1
             );
@@ -1457,7 +1457,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
     sal_Int32 nArgCount( _rArguments.getLength() );
     if ( ( nArgCount != 2 ) && ( nArgCount != 3 ) )
         throw IllegalArgumentException(
-            OUString( ModuleRes( STR_CTW_ILLEGAL_PARAMETER_COUNT ) ),
+            ModuleRes( STR_CTW_ILLEGAL_PARAMETER_COUNT ),
             *this,
             1
         );
@@ -1468,7 +1468,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
         {   // ->createWithInteractionHandler
             if ( !( _rArguments[2] >>= m_xInteractionHandler ) )
                 throw IllegalArgumentException(
-                    OUString(ModuleRes( STR_CTW_ERROR_INVALID_INTERACTIONHANDLER )),
+                    ModuleRes( STR_CTW_ERROR_INVALID_INTERACTIONHANDLER ),
                     *this,
                     3
                 );
@@ -1493,7 +1493,7 @@ void SAL_CALL CopyTableWizard::initialize( const Sequence< Any >& _rArguments )
     catch( const Exception& )
     {
         throw WrappedTargetException(
-            OUString( ModuleRes( STR_CTW_ERROR_DURING_INITIALIZATION ) ),
+            ModuleRes( STR_CTW_ERROR_DURING_INITIALIZATION ),
             *this,
             ::cppu::getCaughtException()
         );

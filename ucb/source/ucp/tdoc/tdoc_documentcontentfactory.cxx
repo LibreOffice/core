@@ -113,8 +113,7 @@ DocumentContentFactory::createDocumentContent(
         return xDocFac->createDocumentContent( Model );
 
     throw uno::RuntimeException(
-        OUString(
-            "Unable to obtain document content factory!" ),
+        "Unable to obtain document content factory!",
         static_cast< cppu::OWeakObject * >( this ) );
 }
 
