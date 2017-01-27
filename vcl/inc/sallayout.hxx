@@ -187,7 +187,6 @@ public:
     virtual void    MoveGlyph( int nStart, long nNewXPos ) = 0;
     virtual void    DropGlyph( int nStart ) = 0;
     virtual void    Simplify( bool bIsBase ) = 0;
-    virtual void    DisableGlyphInjection( bool /*bDisable*/ ) {}
 
     virtual std::shared_ptr<vcl::TextLayoutCache>
         CreateTextLayoutCache(OUString const&) const;
