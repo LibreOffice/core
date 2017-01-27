@@ -438,7 +438,6 @@ void log(
         s << " at:\n";
         s << OUString(osl_backtraceAsString(), SAL_NO_ACQUIRE);
     }
-    s << '\n';
 
 #if defined ANDROID
     int android_log_level;
@@ -484,7 +483,7 @@ void log(
     } else {
         static std::ofstream * logFile = getLogFile();
         if (logFile) {
-            *logFile << s.str();
+            *logFile << s.str() << std::endl;
         }
 #if defined WNT
         else {
@@ -492,6 +491,7 @@ void log(
         }
 #else
         else {
+            s << '\n';
             std::fputs(s.str().c_str(), stderr);
             std::fflush(stderr);
         }
