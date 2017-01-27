@@ -923,53 +923,6 @@ void DAVResourceAccess::LOCK(
     while ( bRetry );
 }
 
-#if 0 // currently not used, but please don't remove code
-
-// refresh existing lock.
-sal_Int64 DAVResourceAccess::LOCK(
-    sal_Int64 nTimeout,
-    const uno::Reference< ucb::XCommandEnvironment > & xEnv )
-  throw ( DAVException )
-{
-    initialize();
-
-    sal_Int64 nNewTimeout = 0;
-    int errorCount = 0;
-    bool bRetry;
-    do
-    {
-        bRetry = false;
-        try
-        {
-            DAVRequestHeaders aHeaders;
-            getUserRequestHeaders( xEnv,
-                                   getRequestURI(),
-                                   ucb::WebDAVHTTPMethod_LOCK,
-                                   aHeaders );
-
-            nNewTimeout = m_xSession->LOCK( getRequestURI(),
-                                            nTimeout,
-                                            DAVRequestEnvironment(
-                                                getRequestURI(),
-                                                new DAVAuthListener_Impl(
-                                                    xEnv, m_aURL ),
-                                            aHeaders, xEnv ) );
-        }
-        catch ( DAVException & e )
-        {
-            errorCount++;
-            bRetry = handleException( e, errorCount );
-            if ( !bRetry )
-                throw;
-        }
-    }
-    while ( bRetry );
-
-    return nNewTimeout;
-}
-#endif
-
-
 void DAVResourceAccess::UNLOCK(
     const uno::Reference< ucb::XCommandEnvironment > & xEnv )
 {

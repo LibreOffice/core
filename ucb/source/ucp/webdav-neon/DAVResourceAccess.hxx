@@ -201,14 +201,6 @@ public:
     LOCK( css::ucb::Lock & inLock,
           const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
 
-#if 0 // currently not used, but please don't remove code
-    // refresh existing lock.
-    sal_Int64
-    LOCK( sal_Int64 nTimeout,
-          const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv )
-        throw ( DAVException );
-#endif
-
     /// @throws DAVException
     void
     UNLOCK( const css::uno::Reference< css::ucb::XCommandEnvironment > & xEnv );
