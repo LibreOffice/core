@@ -41,7 +41,6 @@
 #include "scerrors.hxx"
 #include "tabprotection.hxx"
 #include "datastreamimport.hxx"
-#include <sax/fastattribs.hxx>
 
 #include <xmloff/xmltkmap.hxx>
 #include <xmloff/xmltoken.hxx>
@@ -57,9 +56,10 @@ using namespace com::sun::star;
 using namespace xmloff::token;
 
 ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
-                                    sal_Int32 /*nElement*/,
-                                    const uno::Reference<xml::sax::XFastAttributeList>& xAttrList ) :
-    ScXMLImportContext( rImport ),
+                                              sal_uInt16 nPrfx,
+                                                   const OUString& rLName,
+                                              const uno::Reference<xml::sax::XAttributeList>& xAttrList ) :
+    ScXMLImportContext( rImport, nPrfx, rLName ),
     sPassword(),
     meHash1(PASSHASH_SHA1),
     meHash2(PASSHASH_UNSPECIFIED),
@@ -90,35 +90,30 @@ ScXMLBodyContext::ScXMLBodyContext( ScXMLImport& rImport,
         pDoc->SetStorageGrammar( eGrammar);
     }
 
-    if( !xAttrList.is() )
-        return;
-
-    sax_fastparser::FastAttributeList *pAttribList;
-    assert( dynamic_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() ) != nullptr );
-    pAttribList = static_cast< sax_fastparser::FastAttributeList *>( xAttrList.get() );
-
-    const std::vector< sal_Int32 >& rAttrList = pAttribList->getFastAttributeTokens();
-    for ( size_t i = 0; i < rAttrList.size(); i++ )
+    sal_Int16 nAttrCount = xAttrList.is() ? xAttrList->getLength() : 0;
+    for( sal_Int16 i=0; i < nAttrCount; ++i )
     {
-        sal_Int32 nToken = rAttrList[ i ];
-        const OUString sValue = OUString(pAttribList->getFastAttributeValue(i),
-                                    pAttribList->AttributeValueLength(i), RTL_TEXTENCODING_UTF8);
-        if( NAMESPACE_TOKEN( XML_NAMESPACE_TABLE ) == ( nToken & NMSP_MASK ) )
+        const OUString& sAttrName(xAttrList->getNameByIndex( i ));
+        OUString aLocalName;
+        sal_uInt16 nPrefix = GetScImport().GetNamespaceMap().GetKeyByAttrName(
+                                            sAttrName, &aLocalName );
+        const OUString& sValue(xAttrList->getValueByIndex( i ));
+
+        if (nPrefix == XML_NAMESPACE_TABLE)
         {
-            const sal_Int32 nLocalToken = nToken & TOKEN_MASK;
-            if( nLocalToken == XML_STRUCTURE_PROTECTED )
+            if (IsXMLToken(aLocalName, XML_STRUCTURE_PROTECTED))
                 bProtected = IsXMLToken(sValue, XML_TRUE);
-            else if ( nLocalToken == XML_PROTECTION_KEY )
+            else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY))
                 sPassword = sValue;
-            else if (  nLocalToken == XML_PROTECTION_KEY_DIGEST_ALGORITHM )
-                meHash1 = ScPassHashHelper::getHashTypeFromURI( sValue );
-            else if (  nLocalToken == XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 )
-                meHash2 = ScPassHashHelper::getHashTypeFromURI( sValue );
+            else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY_DIGEST_ALGORITHM))
+                meHash1 = ScPassHashHelper::getHashTypeFromURI(sValue);
+            else if (IsXMLToken(aLocalName, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2))
+                meHash2 = ScPassHashHelper::getHashTypeFromURI(sValue);
         }
-        else if ( nToken == ( NAMESPACE_TOKEN( XML_NAMESPACE_LO_EXT ) |
-                                        XML_PROTECTION_KEY_DIGEST_ALGORITHM_2 ) )
+        else if(nPrefix == XML_NAMESPACE_LO_EXT)
         {
-            meHash2 = ScPassHashHelper::getHashTypeFromURI( sValue );
+            if (IsXMLToken(aLocalName, XML_PROTECTION_KEY_DIGEST_ALGORITHM_2))
+                meHash2 = ScPassHashHelper::getHashTypeFromURI(sValue);
         }
     }
 }
@@ -159,6 +154,18 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
     case XML_TOK_BODY_LABEL_RANGES:
         pContext = new ScXMLLabelRangesContext( GetScImport(), nPrefix, rLocalName, xAttrList );
         break;
+    case XML_TOK_BODY_TABLE:
+        if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
+        {
+            GetScImport().SetRangeOverflowType(SCWARN_IMPORT_SHEET_OVERFLOW);
+            pContext = new ScXMLEmptyContext(GetScImport(), nPrefix, rLocalName);
+        }
+        else
+        {
+            pContext = new ScXMLTableContext( GetScImport(),nPrefix, rLocalName,
+                                              xAttrList );
+        }
+        break;
     case XML_TOK_BODY_NAMED_EXPRESSIONS:
         pContext = new ScXMLNamedExpressionsContext (
             GetScImport(), nPrefix, rLocalName, xAttrList,
@@ -195,47 +202,7 @@ SvXMLImportContext *ScXMLBodyContext::CreateChildContext( sal_uInt16 nPrefix,
     return pContext;
 }
 
-uno::Reference< xml::sax::XFastContextHandler > SAL_CALL
-        ScXMLBodyContext::createFastChildContext( sal_Int32 nElement,
-        const uno::Reference< xml::sax::XFastAttributeList > & xAttrList )
-{
-    ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
-    if ( pSheetData && pSheetData->HasStartPos() )
-    {
-        // stream part to copy ends before the next child element
-        sal_Int32 nEndOffset = GetScImport().GetByteOffset();
-        pSheetData->EndStreamPos( nEndOffset );
-    }
-
-    SvXMLImportContext *pContext = nullptr;
-
-    const SvXMLTokenMap& rTokenMap = GetScImport().GetBodyElemTokenMap();
-    switch( rTokenMap.Get( nElement ) )
-    {
-    case XML_TOK_BODY_TABLE:
-        if (GetScImport().GetTables().GetCurrentSheet() >= MAXTAB)
-        {
-            GetScImport().SetRangeOverflowType(SCWARN_IMPORT_SHEET_OVERFLOW);
-            pContext = new ScXMLEmptyContext(GetScImport(), nElement );
-        }
-        else
-        {
-            pContext = new ScXMLTableContext( GetScImport(),nElement, xAttrList );
-        }
-        break;
-
-    // TODO: handle all other cases
-    default:
-        pContext = new SvXMLImportContext( GetImport() );
-    }
-
-    if( !pContext )
-        pContext = new SvXMLImportContext( GetImport() );
-
-    return pContext;
-}
-
-void SAL_CALL ScXMLBodyContext::characters(const OUString &)
+void ScXMLBodyContext::Characters( const OUString& )
 {
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
     if ( pSheetData && pSheetData->HasStartPos() )
@@ -247,7 +214,7 @@ void SAL_CALL ScXMLBodyContext::characters(const OUString &)
     // otherwise ignore
 }
 
-void SAL_CALL ScXMLBodyContext::endFastElement(sal_Int32 /*nElement*/)
+void ScXMLBodyContext::EndElement()
 {
     ScSheetSaveData* pSheetData = ScModelObj::getImplementation(GetScImport().GetModel())->GetSheetSaveData();
     if ( pSheetData && pSheetData->HasStartPos() )

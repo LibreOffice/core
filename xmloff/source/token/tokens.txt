@@ -499,8 +499,6 @@ date-is
 date-adjust
 date-style
 date-time
-date-time-update
-date-time-visible
 date-value
 datetime
 day
@@ -772,7 +770,6 @@ footer
 footer-first
 footer-left
 footer-style
-footer-visible
 footnote
 footnote-body
 footnote-citation
@@ -1301,7 +1298,6 @@ page-master
 page-master-name
 page-name
 page-number
-page-number-visible
 page-start-margin
 page-style-name
 page-thumbnail

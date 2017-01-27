@@ -196,10 +196,10 @@ void XMLFormPropOASISTransformerContext::StartElement(
         OUString aValueElemQName(
             GetTransformer().GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_FORM, GetXMLToken( XML_PROPERTY_VALUE ) ) );
-        GetTransformer().startFastElement( aValueElemQName,
+        GetTransformer().GetDocHandler()->startElement( aValueElemQName,
                                                         xAttrList );
         GetTransformer().GetDocHandler()->characters( aValue );
-        GetTransformer().endFastElement( aValueElemQName );
+        GetTransformer().GetDocHandler()->endElement( aValueElemQName );
     }
 }
 

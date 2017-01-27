@@ -167,11 +167,11 @@ void XMLAxisOASISContext::EndElement()
                                     XML_CATEGORY ), "Axis Dimension: invalid new value" );
         }
 
-        GetTransformer().startFastElement(
+        GetTransformer().GetDocHandler()->startElement(
             GetExportQName(),
             Reference< xml::sax::XAttributeList >( pMutableAttrList ));
         ExportContent();
-        GetTransformer().endFastElement( GetExportQName());
+        GetTransformer().GetDocHandler()->endElement( GetExportQName());
     }
     else
         Export();

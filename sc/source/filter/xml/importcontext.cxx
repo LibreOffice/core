@@ -15,11 +15,6 @@ ScXMLImportContext::ScXMLImportContext(ScXMLImport& rImport, sal_uInt16 nPrefix,
 {
 }
 
-ScXMLImportContext::ScXMLImportContext(SvXMLImport& rImport ) :
-    SvXMLImportContext( rImport )
-{
-}
-
 ScXMLImport& ScXMLImportContext::GetScImport()
 {
     return static_cast<ScXMLImport&>(GetImport());
@@ -28,18 +23,6 @@ ScXMLImport& ScXMLImportContext::GetScImport()
 const ScXMLImport& ScXMLImportContext::GetScImport() const
 {
     return static_cast<const ScXMLImport&>(GetImport());
-}
-
-void SAL_CALL ScXMLImportContext::startFastElement(sal_Int32 /*nElement*/, const css::uno::Reference< css::xml::sax::XFastAttributeList > & /*xAttrList*/)
-{
-}
-
-void SAL_CALL ScXMLImportContext::endFastElement(sal_Int32 /*nElement*/)
-{
-}
-
-void SAL_CALL ScXMLImportContext::characters(const OUString &)
-{
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

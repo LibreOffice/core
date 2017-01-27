@@ -142,11 +142,7 @@ void SAL_CALL SvXMLImportContext::endUnknownElement (const OUString & rPrefix, c
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createFastChildContext
     (sal_Int32 Element, const uno::Reference< xml::sax::XFastAttributeList > & Attribs)
 {
-    // Call CreateFastContext only if it's the first element of the document
-    if ( !mrImport.maFastContexts.size() )
-        return mrImport.CreateFastContext( Element, Attribs );
-    else
-        return new SvXMLImportContext( GetImport() );
+    return mrImport.CreateFastContext( Element, Attribs );
 }
 
 uno::Reference< xml::sax::XFastContextHandler > SAL_CALL SvXMLImportContext::createUnknownChildContext

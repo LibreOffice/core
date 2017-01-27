@@ -42,7 +42,6 @@
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XDocumentHandler.hpp>
 #include <com/sun/star/xml/sax/XExtendedDocumentHandler.hpp>
-#include <com/sun/star/xml/sax/XFastParser.hpp>
 #include <com/sun/star/xml/sax/SAXException.hpp>
 #include <com/sun/star/xml/sax/Writer.hpp>
 #include <com/sun/star/xml/XImportFilter.hpp>
@@ -358,8 +357,6 @@ namespace XSLT
 
                         // set doc handler
                         xSaxParser->setDocumentHandler(xHandler);
-                        css::uno::Reference< css::xml::sax::XFastParser > xFastParser = dynamic_cast<
-                            css::xml::sax::XFastParser* >( xHandler.get() );
 
                         // transform
                         m_tcontrol->start();
@@ -391,10 +388,7 @@ namespace XSLT
                                 result = m_cTransformed.wait(&timeout);
                         };
                         if (!m_bError) {
-                                if( xFastParser.is() )
-                                    xFastParser->parseStream( aInput );
-                                else
-                                    xSaxParser->parseStream( aInput );
+                                xSaxParser->parseStream(aInput);
                         }
                         m_tcontrol->terminate();
                         return !m_bError;

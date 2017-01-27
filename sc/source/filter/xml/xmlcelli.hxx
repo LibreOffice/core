@@ -129,8 +129,9 @@ class ScXMLTableRowCellContext : public ScXMLImportContext
 
 public:
 
-    ScXMLTableRowCellContext( ScXMLImport& rImport, sal_Int32 nElement,
-                       const css::uno::Reference<css::xml::sax::XFastAttributeList>& xAttrList,
+    ScXMLTableRowCellContext( ScXMLImport& rImport, sal_uInt16 nPrfx,
+                       const OUString& rLName,
+                       const css::uno::Reference<css::xml::sax::XAttributeList>& xAttrList,
                        const bool bIsCovered, const sal_Int32 nRepeatedRows );
 
     virtual ~ScXMLTableRowCellContext() override;
@@ -150,7 +151,7 @@ public:
     void SetDetectiveObj( const ScAddress& rPosition );
     void SetCellRangeSource( const ScAddress& rPosition );
 
-    virtual void SAL_CALL endFastElement(sal_Int32 nElement) override;
+    virtual void EndElement() override;
 };
 
 #endif
