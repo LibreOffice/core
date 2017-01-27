@@ -3218,7 +3218,6 @@ void SvxColorListBox::EnsurePaletteManager()
         m_xPaletteManager.reset(new PaletteManager);
         m_xPaletteManager->SetColorSelectFunction(m_aColorWrapper);
         m_xPaletteManager->SetLastColor(m_aSelectedColor.first);
-        SetNoSelection();
     }
 }
 
@@ -3300,6 +3299,7 @@ void SvxColorListBox::createColorWindow()
                             xFrame,
                             this,
                             m_aColorWrapper);
+    SetNoSelection();
     if (m_bShowNoneButton)
         m_xColorWindow->ShowNoneButton();
     m_xColorWindow->SelectEntry(m_aSelectedColor);
