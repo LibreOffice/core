@@ -959,7 +959,7 @@ void PresenterSlideShowView::ThrowIfDisposed()
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString("PresenterSlideShowView object has already been disposed"),
+            "PresenterSlideShowView object has already been disposed",
             static_cast<uno::XWeak*>(this));
     }
 }

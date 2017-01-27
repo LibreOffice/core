@@ -573,7 +573,7 @@ uno::Reference< XAccessible> SAL_CALL
     {
         uno::Reference < XAccessibleContext > xThis( this );
         lang::IndexOutOfBoundsException aExcept(
-                OUString( "index out of bounds" ),
+                "index out of bounds",
                 xThis );
         throw aExcept;
     }

@@ -724,7 +724,7 @@ void SAL_CALL PresenterController::notifyConfigurationChange (
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString( "PresenterController object has already been disposed"),
+            "PresenterController object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 

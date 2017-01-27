@@ -596,8 +596,8 @@ SfxDocumentMetaData::getURLProperties(
 OUString SAL_CALL
 getNodeText(const css::uno::Reference<css::xml::dom::XNode>& i_xNode)
 {
-    if (!i_xNode.is()) throw css::uno::RuntimeException(
-        OUString("SfxDocumentMetaData::getNodeText: argument is null"), i_xNode);
+    if (!i_xNode.is())
+        throw css::uno::RuntimeException("SfxDocumentMetaData::getNodeText: argument is null", i_xNode);
     for (css::uno::Reference<css::xml::dom::XNode> c = i_xNode->getFirstChild();
             c.is();
             c = c->getNextSibling()) {
@@ -674,7 +674,7 @@ SfxDocumentMetaData::setMetaText(const char* i_name,
     } catch (const css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
-                OUString("SfxDocumentMetaData::setMetaText: DOM exception"),
+                "SfxDocumentMetaData::setMetaText: DOM exception",
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
 }
@@ -806,7 +806,7 @@ SfxDocumentMetaData::setMetaList(const char* i_name,
     } catch (const css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
-                OUString("SfxDocumentMetaData::setMetaList: DOM exception"),
+                "SfxDocumentMetaData::setMetaList: DOM exception",
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
 }
@@ -956,7 +956,7 @@ SfxDocumentMetaData::updateElement(const char *i_name,
     } catch (const css::xml::dom::DOMException & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
-                OUString("SfxDocumentMetaData::updateElement: DOM exception"),
+                "SfxDocumentMetaData::updateElement: DOM exception",
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
 }
@@ -1032,9 +1032,9 @@ SfxDocumentMetaData::createDOM() const // throw (css::uno::RuntimeException)
     css::uno::Reference<css::lang::XMultiComponentFactory> xMsf ( m_xContext->getServiceManager());
     css::uno::Reference<css::xml::dom::XDocumentBuilder> xBuilder( css::xml::dom::DocumentBuilder::create(m_xContext) );
     css::uno::Reference<css::xml::dom::XDocument> xDoc = xBuilder->newDocument();
-    if (!xDoc.is()) throw css::uno::RuntimeException(
-        OUString("SfxDocumentMetaData::createDOM: "
-                "cannot create new document"),
+    if (!xDoc.is())
+        throw css::uno::RuntimeException(
+                "SfxDocumentMetaData::createDOM: cannot create new document",
                 *const_cast<SfxDocumentMetaData*>(this));
     return xDoc;
 }
@@ -1043,8 +1043,8 @@ void SAL_CALL
 SfxDocumentMetaData::checkInit() const // throw (css::uno::RuntimeException)
 {
     if (!m_isInitialized) {
-        throw css::uno::RuntimeException(OUString(
-                "SfxDocumentMetaData::checkInit: not initialized"),
+        throw css::uno::RuntimeException(
+                "SfxDocumentMetaData::checkInit: not initialized",
                 *const_cast<SfxDocumentMetaData*>(this));
     }
     assert(m_xDoc.is() && m_xParent.is());
@@ -1054,8 +1054,8 @@ SfxDocumentMetaData::checkInit() const // throw (css::uno::RuntimeException)
 void SAL_CALL SfxDocumentMetaData::init(
         const css::uno::Reference<css::xml::dom::XDocument>& i_xDoc)
 {
-    if (!i_xDoc.is()) throw css::uno::RuntimeException(
-        OUString("SfxDocumentMetaData::init: no DOM tree given"), *this);
+    if (!i_xDoc.is())
+        throw css::uno::RuntimeException("SfxDocumentMetaData::init: no DOM tree given", *this);
 
     css::uno::Reference<css::xml::xpath::XXPathAPI> xPath = css::xml::xpath::XPathAPI::create(m_xContext);
 
@@ -1123,7 +1123,7 @@ void SAL_CALL SfxDocumentMetaData::init(
         } catch (const css::xml::dom::DOMException & e) {
             css::uno::Any a(e);
             throw css::lang::WrappedTargetRuntimeException(
-                    OUString("SfxDocumentMetaData::init: DOM exception"),
+                    "SfxDocumentMetaData::init: DOM exception",
                     css::uno::Reference<css::uno::XInterface>(*this), a);
         }
     }
@@ -1564,9 +1564,10 @@ SfxDocumentMetaData::getAutoloadSecs()
 void SAL_CALL
 SfxDocumentMetaData::setAutoloadSecs(::sal_Int32 the_value)
 {
-    if (the_value < 0) throw css::lang::IllegalArgumentException(
-        OUString("SfxDocumentMetaData::setAutoloadSecs: argument is negative"),
-        *this, 0);
+    if (the_value < 0)
+        throw css::lang::IllegalArgumentException(
+            "SfxDocumentMetaData::setAutoloadSecs: argument is negative",
+            *this, 0);
     ::osl::ClearableMutexGuard g(m_aMutex);
     checkInit();
     if (m_AutoloadSecs != the_value) {
@@ -1670,9 +1671,10 @@ SfxDocumentMetaData::getEditingCycles()
 void SAL_CALL
 SfxDocumentMetaData::setEditingCycles(::sal_Int16 the_value)
 {
-    if (the_value < 0) throw css::lang::IllegalArgumentException(
-        OUString("SfxDocumentMetaData::setEditingCycles: argument is negative"),
-        *this, 0);
+    if (the_value < 0)
+        throw css::lang::IllegalArgumentException(
+            "SfxDocumentMetaData::setEditingCycles: argument is negative",
+            *this, 0);
     OUStringBuffer buf;
     ::sax::Converter::convertNumber(buf, the_value);
     setMetaTextAndNotify("meta:editing-cycles", buf.makeStringAndClear());
@@ -1688,9 +1690,10 @@ SfxDocumentMetaData::getEditingDuration()
 void SAL_CALL
 SfxDocumentMetaData::setEditingDuration(::sal_Int32 the_value)
 {
-    if (the_value < 0) throw css::lang::IllegalArgumentException(
-        OUString("SfxDocumentMetaData::setEditingDuration: argument is negative"),
-        *this, 0);
+    if (the_value < 0)
+        throw css::lang::IllegalArgumentException(
+            "SfxDocumentMetaData::setEditingDuration: argument is negative",
+            *this, 0);
     setMetaTextAndNotify("meta:editing-duration", durationToText(the_value));
 }
 
@@ -1735,8 +1738,8 @@ SfxDocumentMetaData::loadFromStorage(
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
-    if (!xStorage.is()) throw css::lang::IllegalArgumentException(
-        OUString("SfxDocumentMetaData::loadFromStorage: argument is null"), *this, 0);
+    if (!xStorage.is())
+        throw css::lang::IllegalArgumentException("SfxDocumentMetaData::loadFromStorage: argument is null", *this, 0);
     ::osl::MutexGuard g(m_aMutex);
 
     // open meta data file
@@ -1780,9 +1783,10 @@ SfxDocumentMetaData::loadFromStorage(
         xMsf->createInstanceWithArgumentsAndContext(
             OUString::createFromAscii(pServiceName), args, m_xContext),
         css::uno::UNO_QUERY_THROW);
-    if (!xDocHandler.is()) throw css::uno::RuntimeException(
-        OUString("SfxDocumentMetaData::loadFromStorage:"
-                " cannot create XMLOasisMetaImporter service"), *this);
+    if (!xDocHandler.is())
+        throw css::uno::RuntimeException(
+                "SfxDocumentMetaData::loadFromStorage:"
+                " cannot create XMLOasisMetaImporter service", *this);
     css::uno::Reference<css::document::XImporter> xImp (xDocHandler,
         css::uno::UNO_QUERY_THROW);
     xImp->setTargetDocument(css::uno::Reference<css::lang::XComponent>(this));
@@ -1790,9 +1794,9 @@ SfxDocumentMetaData::loadFromStorage(
     try {
         xParser->parseStream(input);
     } catch (const css::xml::sax::SAXException &) {
-        throw css::io::WrongFormatException(OUString(
+        throw css::io::WrongFormatException(
                 "SfxDocumentMetaData::loadFromStorage:"
-                " XML parsing exception"), *this);
+                " XML parsing exception", *this);
     }
     // NB: the implementation of XMLOasisMetaImporter calls initialize
     checkInit();
@@ -1803,9 +1807,9 @@ SfxDocumentMetaData::storeToStorage(
         const css::uno::Reference< css::embed::XStorage > & xStorage,
         const css::uno::Sequence< css::beans::PropertyValue > & Medium)
 {
-    if (!xStorage.is()) throw css::lang::IllegalArgumentException(
-        OUString("SfxDocumentMetaData::storeToStorage:"
-                " argument is null"), *this, 0);
+    if (!xStorage.is())
+        throw css::lang::IllegalArgumentException(
+            "SfxDocumentMetaData::storeToStorage: argument is null", *this, 0);
     ::osl::MutexGuard g(m_aMutex);
     checkInit();
 
@@ -1866,8 +1870,8 @@ SfxDocumentMetaData::storeToStorage(
             xTransaction->commit();
         }
     } else {
-        throw css::io::IOException(OUString(
-                "SfxDocumentMetaData::storeToStorage: cannot filter"), *this);
+        throw css::io::IOException(
+                "SfxDocumentMetaData::storeToStorage: cannot filter", *this);
     }
 }
 
@@ -1900,13 +1904,13 @@ SfxDocumentMetaData::loadFromMedium(const OUString & URL,
         throw;
     } catch (const css::uno::Exception & e) {
         throw css::lang::WrappedTargetException(
-                OUString("SfxDocumentMetaData::loadFromMedium: exception"),
+                "SfxDocumentMetaData::loadFromMedium: exception",
                 css::uno::Reference<css::uno::XInterface>(*this),
                 css::uno::makeAny(e));
     }
     if (!xStorage.is()) {
-        throw css::uno::RuntimeException(OUString(
-                "SfxDocumentMetaData::loadFromMedium: cannot get Storage"),
+        throw css::uno::RuntimeException(
+                "SfxDocumentMetaData::loadFromMedium: cannot get Storage",
                 *this);
     }
     loadFromStorage(xStorage, md.getAsConstPropertyValueList());
@@ -1926,8 +1930,8 @@ SfxDocumentMetaData::storeToMedium(const OUString & URL,
 
 
     if (!xStorage.is()) {
-        throw css::uno::RuntimeException(OUString(
-                "SfxDocumentMetaData::storeToMedium: cannot get Storage"),
+        throw css::uno::RuntimeException(
+                "SfxDocumentMetaData::storeToMedium: cannot get Storage",
                 *this);
     }
     // set MIME type of the storage
@@ -1975,14 +1979,12 @@ void SAL_CALL SfxDocumentMetaData::initialize( const css::uno::Sequence< css::un
         if (any >>= xDoc) {
             if (!xDoc.is()) {
                 throw css::lang::IllegalArgumentException(
-                    OUString("SfxDocumentMetaData::"
-                        "initialize: argument is null"),
+                    "SfxDocumentMetaData::initialize: argument is null",
                     *this, static_cast<sal_Int16>(i));
             }
         } else {
             throw css::lang::IllegalArgumentException(
-                OUString("SfxDocumentMetaData::"
-                    "initialize: argument must be XDocument"),
+                "SfxDocumentMetaData::initialize: argument must be XDocument",
                 *this, static_cast<sal_Int16>(i));
         }
     }
@@ -2020,7 +2022,7 @@ SfxDocumentMetaData::createClone()
     } catch (const css::uno::Exception & e) {
         css::uno::Any a(e);
         throw css::lang::WrappedTargetRuntimeException(
-                OUString("SfxDocumentMetaData::createClone: exception"),
+                "SfxDocumentMetaData::createClone: exception",
                 css::uno::Reference<css::uno::XInterface>(*this), a);
     }
     return css::uno::Reference<css::util::XCloneable> (pNew);

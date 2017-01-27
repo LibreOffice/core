@@ -267,15 +267,13 @@ void AccessibleBrowseBoxTableBase::implGetSelectedColumns( Sequence< sal_Int32 >
 void AccessibleBrowseBoxTableBase::ensureIsValidRow( sal_Int32 nRow )
 {
     if( nRow >= implGetRowCount() )
-        throw lang::IndexOutOfBoundsException(
-            OUString( "row index is invalid" ), *this );
+        throw lang::IndexOutOfBoundsException( "row index is invalid", *this );
 }
 
 void AccessibleBrowseBoxTableBase::ensureIsValidColumn( sal_Int32 nColumn )
 {
     if( nColumn >= implGetColumnCount() )
-        throw lang::IndexOutOfBoundsException(
-            OUString( "column index is invalid" ), *this );
+        throw lang::IndexOutOfBoundsException( "column index is invalid", *this );
 }
 
 void AccessibleBrowseBoxTableBase::ensureIsValidAddress(
@@ -288,8 +286,7 @@ void AccessibleBrowseBoxTableBase::ensureIsValidAddress(
 void AccessibleBrowseBoxTableBase::ensureIsValidIndex( sal_Int32 nChildIndex )
 {
     if( nChildIndex >= implGetChildCount() )
-        throw lang::IndexOutOfBoundsException(
-            OUString( "child index is invalid" ), *this );
+        throw lang::IndexOutOfBoundsException( "child index is invalid", *this );
 }
 
 

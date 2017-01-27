@@ -356,7 +356,7 @@ public:
 #define THROW_RUNTIME_EXCEPTION( ifc, msg )         \
     css::uno::Reference < ifc > xThis( this );      \
     css::uno::RuntimeException aExcept(             \
-        OUString( msg ), xThis );       \
+        msg, xThis );       \
     throw aExcept;
 
 #define CHECK_FOR_DEFUNC_THIS( ifc, ths )                \
@@ -364,7 +364,7 @@ public:
     {                                                    \
         css::uno::Reference < ifc > xThis( ths );        \
         css::lang::DisposedException aExcept(            \
-            OUString( "object is defunctional" ),        \
+            "object is defunctional",        \
             xThis );                                     \
         throw aExcept;                                   \
     }

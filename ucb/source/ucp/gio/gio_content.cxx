@@ -311,7 +311,7 @@ uno::Any Content::mapGIOError( GError *pError )
 uno::Any Content::getBadArgExcept()
 {
     return uno::makeAny( lang::IllegalArgumentException(
-        OUString("Wrong argument type!"),
+        "Wrong argument type!",
         static_cast< cppu::OWeakObject * >( this ), -1) );
 }
 
@@ -697,7 +697,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if (!( rValue.Value >>= aNewTitle ))
             {
                 aRet[ n ] <<= beans::IllegalTypeException
-                    ( OUString("Property value has wrong type!"),
+                    ( "Property value has wrong type!",
                       static_cast< cppu::OWeakObject * >( this ) );
                 continue;
             }
@@ -705,7 +705,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ( aNewTitle.getLength() <= 0 )
             {
                 aRet[ n ] <<= lang::IllegalArgumentException
-                    ( OUString("Empty title not allowed!"),
+                    ( "Empty title not allowed!",
                       static_cast< cppu::OWeakObject * >( this ), -1 );
                 continue;
 
@@ -761,7 +761,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 if (!exchangeIdentity( xNewId ) )
                 {
                     aRet[ nTitlePos ] <<= uno::Exception
-                        ( OUString("Exchange failed!"),
+                        ( "Exchange failed!",
                           static_cast< cppu::OWeakObject * >( this ) );
                 }
             }

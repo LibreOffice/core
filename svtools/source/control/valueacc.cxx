@@ -665,7 +665,7 @@ void ValueSetAcc::ThrowIfDisposed()
     {
         SAL_WARN("svx", "Calling disposed object. Throwing exception:");
         throw lang::DisposedException (
-            OUString("object has been already disposed"),
+            "object has been already disposed",
             static_cast<uno::XWeak*>(this));
     }
     else

@@ -665,7 +665,7 @@ void SAL_CALL OOXMLDocPropHandler::characters( const OUString& aChars )
     catch( uno::Exception& e )
     {
         throw xml::sax::SAXException(
-            OUString("Error while setting document property!"),
+            "Error while setting document property!",
             uno::Reference< uno::XInterface >(),
             uno::makeAny( e ) );
     }

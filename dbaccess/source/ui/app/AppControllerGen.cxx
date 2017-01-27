@@ -119,7 +119,7 @@ void OApplicationController::convertToView(const OUString& _sName)
                 ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, false, ::dbtools::EComposeRule::InTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
             if ( !xView.is() )
-                throw SQLException(OUString(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE)),*this,OUString( "S1000" ) ,0,Any());
+                throw SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE),*this,OUString( "S1000" ) ,0,Any());
             getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView));
         }
     }

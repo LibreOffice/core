@@ -318,7 +318,7 @@ void PresenterPaneFactory::ThrowIfDisposed() const
     if (rBHelper.bDisposed || rBHelper.bInDispose)
     {
         throw lang::DisposedException (
-            OUString( "PresenterPaneFactory object has already been disposed"),
+            "PresenterPaneFactory object has already been disposed",
             const_cast<uno::XWeak*>(static_cast<const uno::XWeak*>(this)));
     }
 }

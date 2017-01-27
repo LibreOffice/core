@@ -618,7 +618,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                             if ( m_pSqlIterator->getStatementType() != OSQLStatementType::Select || rTabs.begin() == rTabs.end() )
                             {
                                 aError = SQLException(
-                                    OUString( ModuleRes( STR_QRY_NOSELECT ) ),
+                                    ModuleRes( STR_QRY_NOSELECT ),
                                     nullptr,
                                     "S1000",
                                     1000,
@@ -641,7 +641,7 @@ void OQueryController::Execute(sal_uInt16 _nId, const Sequence< PropertyValue >&
                     else
                     {
                         aError = SQLException(
-                            OUString( ModuleRes( STR_QRY_SYNTAX ) ),
+                            ModuleRes( STR_QRY_SYNTAX ),
                             nullptr,
                             "S1000",
                             1000,
@@ -981,7 +981,7 @@ void OQueryController::impl_initialize()
             if ( !( aView >>= m_xAlterView ) )
             {
                 throw IllegalArgumentException(
-                    OUString( ModuleRes( STR_NO_ALTER_VIEW_SUPPORT ) ),
+                    ModuleRes( STR_NO_ALTER_VIEW_SUPPORT ),
                     *this,
                     1
                 );

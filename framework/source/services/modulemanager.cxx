@@ -162,7 +162,7 @@ OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::X
        )
     {
         throw css::lang::IllegalArgumentException(
-                OUString("Given module is not a frame nor a window, controller or model."),
+                "Given module is not a frame nor a window, controller or model.",
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
     }
@@ -190,7 +190,7 @@ OUString SAL_CALL ModuleManager::identify(const css::uno::Reference< css::uno::X
 
     if (sModule.isEmpty())
         throw css::frame::UnknownModuleException(
-                OUString("Can not find suitable module for the given component."),
+                "Can not find suitable module for the given component.",
                 static_cast< ::cppu::OWeakObject* >(this));
 
     return sModule;
@@ -203,7 +203,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     if (lProps.empty() )
     {
         throw css::lang::IllegalArgumentException(
-                OUString("No properties given to replace part of module."),
+                "No properties given to replace part of module.",
                 static_cast< cppu::OWeakObject * >(this),
                 2);
     }
@@ -224,7 +224,7 @@ void SAL_CALL ModuleManager::replaceByName(const OUString& sName ,
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                OUString("Was not able to get write access to the requested module entry inside configuration."),
+                "Was not able to get write access to the requested module entry inside configuration.",
                 static_cast< cppu::OWeakObject * >(this));
     }
 
@@ -252,7 +252,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const OUString& sName)
     if (!xModule.is())
     {
         throw css::uno::RuntimeException(
-                OUString("Was not able to get write access to the requested module entry inside configuration."),
+                "Was not able to get write access to the requested module entry inside configuration.",
                 static_cast< cppu::OWeakObject * >(this));
     }
 

@@ -509,8 +509,7 @@ XmlIdRegistryDocument::XmlIdRegistry_Impl::LookupElement(
 {
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
-        throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), nullptr, 0);
+        throw lang::IllegalArgumentException("illegal XmlId", nullptr, 0);
     }
 
     const XmlIdList_t * pList( LookupElementList(i_rStreamName, i_rIdref) );
@@ -663,15 +662,13 @@ XmlIdRegistryDocument::TryRegisterMetadatable(Metadatable & i_rObject,
 
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
-        throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), nullptr, 0);
+        throw lang::IllegalArgumentException("illegal XmlId", nullptr, 0);
     }
     if (i_rObject.IsInContent()
         ?   !isContentFile(i_rStreamName)
         :   !isStylesFile(i_rStreamName))
     {
-        throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId: wrong stream"), nullptr, 0);
+        throw lang::IllegalArgumentException("illegal XmlId: wrong stream", nullptr, 0);
     }
 
     OUString old_path;
@@ -953,8 +950,7 @@ XmlIdRegistryClipboard::XmlIdRegistry_Impl::LookupEntry(
 {
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
-        throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), nullptr, 0);
+        throw lang::IllegalArgumentException("illegal XmlId", nullptr, 0);
     }
 
     const ClipboardXmlIdMap_t::const_iterator iter( m_XmlIdMap.find(i_rIdref) );
@@ -1076,15 +1072,13 @@ XmlIdRegistryClipboard::TryRegisterMetadatable(Metadatable & i_rObject,
 
     if (!isValidXmlId(i_rStreamName, i_rIdref))
     {
-        throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), nullptr, 0);
+        throw lang::IllegalArgumentException("illegal XmlId", nullptr, 0);
     }
     if (i_rObject.IsInContent()
         ?   !isContentFile(i_rStreamName)
         :   !isStylesFile(i_rStreamName))
     {
-        throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId: wrong stream"), nullptr, 0);
+        throw lang::IllegalArgumentException("illegal XmlId: wrong stream", nullptr, 0);
     }
 
     OUString old_path;
@@ -1207,8 +1201,7 @@ XmlIdRegistryClipboard::RegisterCopyClipboard(Metadatable & i_rCopy,
 
     if (!isValidXmlId(i_rReference.First, i_rReference.Second))
     {
-        throw lang::IllegalArgumentException(OUString(
-            "illegal XmlId"), nullptr, 0);
+        throw lang::IllegalArgumentException("illegal XmlId", nullptr, 0);
     }
 
     if (!i_isLatent)
@@ -1297,8 +1290,7 @@ void Metadatable::SetMetadataReference( const css::beans::StringPair & i_rRefere
         else
         {
             throw lang::IllegalArgumentException(
-                OUString("Metadatable::"
-                    "SetMetadataReference: argument is invalid"), /*this*/nullptr, 0);
+                "Metadatable::SetMetadataReference: argument is invalid", /*this*/nullptr, 0);
         }
     }
 }
@@ -1559,8 +1551,7 @@ MetadatableMixin::getMetadataReference()
     if (!pObject)
     {
         throw uno::RuntimeException(
-            OUString(
-                "MetadatableMixin: cannot get core object; not inserted?"),
+            "MetadatableMixin: cannot get core object; not inserted?",
             *this);
     }
     return pObject->GetMetadataReference();
@@ -1576,8 +1567,7 @@ MetadatableMixin::setMetadataReference(
     if (!pObject)
     {
         throw uno::RuntimeException(
-            OUString(
-                "MetadatableMixin: cannot get core object; not inserted?"),
+            "MetadatableMixin: cannot get core object; not inserted?",
             *this);
     }
     return pObject->SetMetadataReference(i_rReference);
@@ -1591,8 +1581,7 @@ void SAL_CALL MetadatableMixin::ensureMetadataReference()
     if (!pObject)
     {
         throw uno::RuntimeException(
-            OUString(
-                "MetadatableMixin: cannot get core object; not inserted?"),
+            "MetadatableMixin: cannot get core object; not inserted?",
             *this);
     }
     return pObject->EnsureMetadataReference();

@@ -116,9 +116,8 @@ lcl_initDocumentProperties(SvXMLImport & rImport,
         throw;
     } catch (const uno::Exception& e) {
         throw lang::WrappedTargetRuntimeException(
-            OUString(
-                "SvXMLMetaDocumentContext::initDocumentProperties: "
-                "properties init exception"),
+            "SvXMLMetaDocumentContext::initDocumentProperties: "
+            "properties init exception",
             rImport, makeAny(e));
     }
 }

@@ -641,7 +641,7 @@ uno::Reference< ucb::XContent > createNew(
         {
             ucbhelper::cancelCommandExecution(
                 uno::makeAny( lang::IllegalArgumentException(
-                                        OUString( "Unknown transfer operation!" ),
+                                        "Unknown transfer operation!",
                                         rContext.xProcessor,
                                         -1 ) ),
                               rContext.xOrigEnv );
@@ -1028,7 +1028,7 @@ void handleNameClashRename(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
-                            OUString( "Unable to get property 'Title' from new object!" ),
+                            "Unable to get property 'Title' from new object!",
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1143,7 +1143,7 @@ void handleNameClashRename(
         ucbhelper::cancelCommandExecution(
             uno::makeAny(
                 ucb::UnsupportedNameClashException(
-                    OUString( "Unable to resolve name clash!" ),
+                    "Unable to resolve name clash!",
                     rContext.xProcessor,
                     ucb::NameClash::RENAME ) ),
             rContext.xOrigEnv );
@@ -1164,8 +1164,7 @@ void globalTransfer_(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
-                            OUString( "Unable to get property 'IsFolder' "
-                                "from source object!" ),
+                            "Unable to get property 'IsFolder' from source object!",
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1177,8 +1176,7 @@ void globalTransfer_(
     {
         ucbhelper::cancelCommandExecution(
             uno::makeAny( beans::UnknownPropertyException(
-                            OUString( "Unable to get property 'IsDocument' "
-                                "from source object!" ),
+                            "Unable to get property 'IsDocument' from source object!",
                             rContext.xProcessor ) ),
             rContext.xOrigEnv );
         // Unreachable
@@ -1338,9 +1336,8 @@ void globalTransfer_(
             // No chance to solve name clashes, because I'm not able to detect
             // whether there is one.
             throw ucb::UnsupportedNameClashException(
-                    OUString(
-                        "Unable to resolve name clashes, no chance to detect "
-                        "that there is one!" ),
+                    "Unable to resolve name clashes, no chance to detect "
+                    "that there is one!",
                     rContext.xProcessor,
                     rContext.aArg.NameClash );
         }
@@ -1366,9 +1363,8 @@ void globalTransfer_(
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
                             ucb::UnsupportedNameClashException(
-                                OUString(
-                                    "BUG: insert + replace == true MUST NOT "
-                                    "throw NameClashException." ),
+                                "BUG: insert + replace == true MUST NOT "
+                                "throw NameClashException.",
                                 rContext.xProcessor,
                                 rContext.aArg.NameClash ) ),
                         rContext.xOrigEnv );
@@ -1414,9 +1410,8 @@ void globalTransfer_(
 
                             case ABORT:
                                 throw ucb::CommandFailedException(
-                                    OUString(
-                                            "abort requested via interaction "
-                                            "handler"  ),
+                                    "abort requested via interaction "
+                                    "handler",
                                     uno::Reference< uno::XInterface >(),
                                     aExc );
     //                            break;
@@ -1446,7 +1441,7 @@ void globalTransfer_(
                                 {
                                     // error setting title. Abort.
                                     throw ucb::CommandFailedException(
-                                        OUString( "error setting Title property!" ),
+                                        "error setting Title property!",
                                         uno::Reference< uno::XInterface >(),
                                         aExc );
                                 }
@@ -1464,9 +1459,8 @@ void globalTransfer_(
                     ucbhelper::cancelCommandExecution(
                         uno::makeAny(
                             ucb::UnsupportedNameClashException(
-                                OUString(
-                                        "default action, don't know how to "
-                                        "handle name clash"  ),
+                                "default action, don't know how to "
+                                "handle name clash",
                                 rContext.xProcessor,
                                 rContext.aArg.NameClash ) ),
                         rContext.xOrigEnv );
@@ -1786,9 +1780,8 @@ void UniversalContentBroker::globalTransfer(
 
                             case ABORT:
                                 throw ucb::CommandFailedException(
-                                    OUString(
-                                            "abort requested via interaction "
-                                            "handler"  ),
+                                    "abort requested via interaction "
+                                    "handler",
                                     uno::Reference< uno::XInterface >(),
                                     aExc );
 //                                break;

@@ -80,8 +80,7 @@ public:
     SwFormatFootnote const& GetFootnoteFormatOrThrow() {
         SwFormatFootnote const*const pFootnote( GetFootnoteFormat() );
         if (!pFootnote) {
-            throw uno::RuntimeException(OUString(
-                        "SwXFootnote: disposed or invalid"), nullptr);
+            throw uno::RuntimeException("SwXFootnote: disposed or invalid", nullptr);
         }
         return *pFootnote;
     }

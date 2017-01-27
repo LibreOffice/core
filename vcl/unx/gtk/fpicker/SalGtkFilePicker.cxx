@@ -1545,7 +1545,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     uno::Any aAny;
     if( 0 == aArguments.getLength() )
         throw lang::IllegalArgumentException(
-            OUString( "no arguments" ),
+            "no arguments",
             static_cast<XFilePicker2*>( this ), 1 );
 
     aAny = aArguments[0];
@@ -1553,7 +1553,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
     if( ( aAny.getValueType() != cppu::UnoType<sal_Int16>::get()) &&
          (aAny.getValueType() != cppu::UnoType<sal_Int8>::get()) )
          throw lang::IllegalArgumentException(
-            OUString( "invalid argument type" ),
+            "invalid argument type",
             static_cast<XFilePicker2*>( this ), 1 );
 
     sal_Int16 templateId = -1;
@@ -1648,7 +1648,7 @@ void SAL_CALL SalGtkFilePicker::initialize( const uno::Sequence<uno::Any>& aArgu
                 break;
         default:
                 throw lang::IllegalArgumentException(
-                OUString( "Unknown template" ),
+                "Unknown template",
                 static_cast< XFilePicker2* >( this ),
                 1 );
     }

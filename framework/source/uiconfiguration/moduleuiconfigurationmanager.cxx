@@ -1054,7 +1054,7 @@ void SAL_CALL ModuleUIConfigurationManager::reset()
                 {
                     css::uno::Any a(e);
                     throw css::lang::WrappedTargetRuntimeException(
-                            OUString("ModuleUIConfigurationManager::reset exception"),
+                            "ModuleUIConfigurationManager::reset exception",
                             css::uno::Reference<css::uno::XInterface>(*this), a);
                 }
             }

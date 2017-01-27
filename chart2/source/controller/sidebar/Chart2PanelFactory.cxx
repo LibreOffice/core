@@ -113,7 +113,7 @@ Reference<css::ui::XUIElement> SAL_CALL ChartPanelFactory::createUIElement (
     catch (const css::uno::Exception& e)
     {
         throw css::lang::WrappedTargetRuntimeException(
-            OUString("ChartPanelFactory::createUIElement exception"),
+            "ChartPanelFactory::createUIElement exception",
             nullptr, css::uno::makeAny(e));
     }
 

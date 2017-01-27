@@ -115,15 +115,15 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
         (aKeyEvent.Modifiers == 0)
         )
         throw css::lang::IllegalArgumentException(
-        OUString("Such key event seems not to be supported by any operating system."),
-        static_cast< ::cppu::OWeakObject* >(this),
-        0);
+            "Such key event seems not to be supported by any operating system.",
+            static_cast< ::cppu::OWeakObject* >(this),
+            0);
 
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
-        OUString("Empty command strings are not allowed here."),
-        static_cast< ::cppu::OWeakObject* >(this),
-        1);
+            "Empty command strings are not allowed here.",
+            static_cast< ::cppu::OWeakObject* >(this),
+            1);
 
     SolarMutexGuard g;
     AcceleratorCache& rCache = impl_getCFG(true); // sal_True => force getting of a writeable cache!
@@ -145,7 +145,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XMLBasedAcceleratorConfigurati
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
-                OUString("Empty command strings are not allowed here."),
+                "Empty command strings are not allowed here.",
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
@@ -174,7 +174,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XMLBasedAcceleratorConfiguration::g
         const OUString& rCommand = lCommandList[i];
         if (rCommand.isEmpty())
             throw css::lang::IllegalArgumentException(
-                    OUString("Empty command strings are not allowed here."),
+                    "Empty command strings are not allowed here.",
                     static_cast< ::cppu::OWeakObject* >(this),
                     (sal_Int16)i);
 
@@ -196,7 +196,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
-                OUString("Empty command strings are not allowed here."),
+                "Empty command strings are not allowed here.",
                 static_cast< ::cppu::OWeakObject* >(this),
                 0);
 
@@ -204,7 +204,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
     AcceleratorCache& rCache = impl_getCFG(true); // sal_True => force getting of a writeable cache!
     if (!rCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
-                OUString("Command does not exists inside this container."),
+                "Command does not exists inside this container.",
                 static_cast< ::cppu::OWeakObject* >(this));
     rCache.removeCommand(sCommand);
 }
@@ -229,8 +229,8 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::reload()
         xIn = xStream->getInputStream();
     if (!xIn.is())
         throw css::io::IOException(
-        OUString("Could not open accelerator configuration for reading."),
-        static_cast< ::cppu::OWeakObject* >(this));
+            "Could not open accelerator configuration for reading.",
+            static_cast< ::cppu::OWeakObject* >(this));
 
     // impl_ts_load() does not clear the cache
     {
@@ -265,8 +265,8 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::store()
 
     if (!xOut.is())
         throw css::io::IOException(
-        OUString("Could not open accelerator configuration for saving."),
-        static_cast< ::cppu::OWeakObject* >(this));
+            "Could not open accelerator configuration for saving.",
+            static_cast< ::cppu::OWeakObject* >(this));
 
     impl_ts_save(xOut);
 
@@ -289,7 +289,7 @@ void SAL_CALL XMLBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
 
     if (!xOut.is())
         throw css::io::IOException(
-                OUString("Could not open accelerator configuration for saving."),
+                "Could not open accelerator configuration for saving.",
                 static_cast< ::cppu::OWeakObject* >(this));
 
     impl_ts_save(xOut);
@@ -549,15 +549,15 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::setKeyEvent(const css::awt::KeyE
         (aKeyEvent.Modifiers == 0)
         )
         throw css::lang::IllegalArgumentException(
-                OUString("Such key event seems not to be supported by any operating system."),
+                "Such key event seems not to be supported by any operating system.",
                 static_cast< ::cppu::OWeakObject* >(this),
                 0);
 
     if (sCommand.isEmpty())
                 throw css::lang::IllegalArgumentException(
-                OUString("Empty command strings are not allowed here."),
-                static_cast< ::cppu::OWeakObject* >(this),
-                1);
+                    "Empty command strings are not allowed here.",
+                    static_cast< ::cppu::OWeakObject* >(this),
+                    1);
 
     SolarMutexGuard g;
 
@@ -658,7 +658,7 @@ css::uno::Sequence< css::awt::KeyEvent > SAL_CALL XCUBasedAcceleratorConfigurati
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
-                OUString("Empty command strings are not allowed here."),
+                "Empty command strings are not allowed here.",
                 static_cast< ::cppu::OWeakObject* >(this),
                 1);
 
@@ -714,7 +714,7 @@ css::uno::Sequence< css::uno::Any > SAL_CALL XCUBasedAcceleratorConfiguration::g
         const OUString& rCommand = lCommandList[i];
         if (rCommand.isEmpty())
             throw css::lang::IllegalArgumentException(
-                    OUString("Empty command strings are not allowed here."),
+                    "Empty command strings are not allowed here.",
                     static_cast< ::cppu::OWeakObject* >(this),
                     (sal_Int16)i);
 
@@ -740,7 +740,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
 {
     if (sCommand.isEmpty())
         throw css::lang::IllegalArgumentException(
-                OUString("Empty command strings are not allowed here."),
+                "Empty command strings are not allowed here.",
                 static_cast< ::cppu::OWeakObject* >(this),
                 0);
 
@@ -751,7 +751,7 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::removeCommandFromAllKeyEvents(co
 
     if (!rPrimaryCache.hasCommand(sCommand) && !rSecondaryCache.hasCommand(sCommand))
         throw css::container::NoSuchElementException(
-                OUString("Command does not exists inside this container."),
+                "Command does not exists inside this container.",
                 static_cast< ::cppu::OWeakObject* >(this));
 
     if (rPrimaryCache.hasCommand(sCommand))
@@ -833,8 +833,8 @@ void SAL_CALL XCUBasedAcceleratorConfiguration::storeToStorage(const css::uno::R
         xOut = xStream->getOutputStream();
     if (!xOut.is())
         throw css::io::IOException(
-        OUString("Could not open accelerator configuration for saving."),
-        static_cast< ::cppu::OWeakObject* >(this));
+            "Could not open accelerator configuration for saving.",
+            static_cast< ::cppu::OWeakObject* >(this));
 
     // the original m_aCache has been split into primary cache and secondary cache...
     // we should merge them before storing to storage

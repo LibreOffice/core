@@ -77,9 +77,9 @@ SvXMLImportContext* XMLMetaImportComponent::CreateContext(
          IsXMLToken(rLocalName, XML_DOCUMENT_META) )
     {
         if (!mxDocProps.is()) {
-            throw uno::RuntimeException(OUString(
+            throw uno::RuntimeException(
                 "XMLMetaImportComponent::CreateContext: setTargetDocument "
-                "has not been called"), *this);
+                "has not been called", *this);
         }
         return new SvXMLMetaDocumentContext(
                         *this, nPrefix, rLocalName, mxDocProps);
@@ -95,9 +95,9 @@ void SAL_CALL XMLMetaImportComponent::setTargetDocument(
 {
     mxDocProps.set( xDoc, uno::UNO_QUERY );
     if( !mxDocProps.is() )
-        throw lang::IllegalArgumentException(OUString(
+        throw lang::IllegalArgumentException(
             "XMLMetaImportComponent::setTargetDocument: argument is no "
-            "XDocumentProperties"), uno::Reference<uno::XInterface>(*this), 0);
+            "XDocumentProperties", uno::Reference<uno::XInterface>(*this), 0);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

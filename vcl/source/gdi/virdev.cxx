@@ -148,7 +148,7 @@ void VirtualDevice::ImplInitVirDev( const OutputDevice* pOutDev,
     {
         // do not abort but throw an exception, may be the current thread terminates anyway (plugin-scenario)
         throw css::uno::RuntimeException(
-            OUString( "Could not create system bitmap!" ),
+            "Could not create system bitmap!",
             css::uno::Reference< css::uno::XInterface >() );
     }
 

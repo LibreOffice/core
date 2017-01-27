@@ -259,8 +259,7 @@ void LocaleBackend::setPropertyValue(
     OUString const &, css::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
-        OUString(
-            "setPropertyValue not supported"),
+        "setPropertyValue not supported",
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 

@@ -130,13 +130,13 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
         sal_Int32 nLen = aArguments.getLength();
         if ( nLen < 2 || nLen > 3 )
             throw lang::IllegalArgumentException(
-                            OUString( "Wrong count of parameters!" ),
+                            "Wrong count of parameters!",
                             uno::Reference< uno::XInterface >(),
                             0 );
 
         if ( !( aArguments[0] >>= xInstance ) || !xInstance.is() )
             throw lang::IllegalArgumentException(
-                    OUString( "Nonempty reference is expected as the first argument!" ),
+                    "Nonempty reference is expected as the first argument!",
                     uno::Reference< uno::XInterface >(),
                     0 );
 
@@ -149,14 +149,14 @@ void SAL_CALL OInstanceLocker::initialize( const uno::Sequence< uno::Any >& aArg
            )
         {
             throw lang::IllegalArgumentException(
-                    OUString("The correct modes set is expected as the second argument!"),
+                    "The correct modes set is expected as the second argument!",
                     uno::Reference< uno::XInterface >(),
                     0 );
         }
 
         if ( nLen == 3 && !( aArguments[2] >>= xApproval ) )
             throw lang::IllegalArgumentException(
-                    OUString( "If the third argument is provided, it must be XActionsApproval implementation!" ),
+                    "If the third argument is provided, it must be XActionsApproval implementation!",
                     uno::Reference< uno::XInterface >(),
                     0 );
 

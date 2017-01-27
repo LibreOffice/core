@@ -62,7 +62,7 @@ LdapUserProfileBe::LdapUserProfileBe( const uno::Reference<uno::XComponentContex
                         xContext, &aDefinition, &loggedOnUser))
                 {
                     throw css::uno::RuntimeException(
-                        OUString("LdapUserProfileBe- LDAP not configured"),
+                        "LdapUserProfileBe- LDAP not configured",
                         nullptr);
                 }
 
@@ -170,7 +170,7 @@ void LdapUserProfileBe::setPropertyValue(
     OUString const &, css::uno::Any const &)
 {
     throw css::lang::IllegalArgumentException(
-        OUString("setPropertyValue not supported"),
+        "setPropertyValue not supported",
         static_cast< cppu::OWeakObject * >(this), -1);
 }
 

@@ -202,7 +202,7 @@ Reference< XInterface > OSingleFactoryHelper::createInstanceWithArgumentsAndCont
                 xComp->dispose();
 
             throw lang::IllegalArgumentException(
-                OUString("cannot pass arguments to component => no XInitialization implemented!"),
+                "cannot pass arguments to component => no XInitialization implemented!",
                 Reference< XInterface >(), 0 );
         }
     }

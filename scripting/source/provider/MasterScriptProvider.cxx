@@ -141,8 +141,7 @@ void SAL_CALL MasterScriptProvider::initialize( const Sequence < Any >& args )
             if ( !xScripts.is() )
             {
                 throw lang::IllegalArgumentException(
-                    OUString( "The given document does not support embedding scripts into it, and cannot be associated with such a document."
-                     ),
+                    "The given document does not support embedding scripts into it, and cannot be associated with such a document.",
                     *this,
                     1
                 );

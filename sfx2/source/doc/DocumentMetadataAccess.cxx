@@ -723,9 +723,8 @@ retry:
 
     if (rterr.hasValue()) {
         throw lang::WrappedTargetRuntimeException(
-            OUString(
-                "DocumentMetadataAccess::loadMetadataFromStorage: "
-                "exception"), nullptr, rterr);
+            "DocumentMetadataAccess::loadMetadataFromStorage: "
+            "exception", nullptr, rterr);
     }
 
     if (err) {

@@ -91,13 +91,13 @@ namespace
                 m_nODF = nTmp;
             else
                 throw uno::RuntimeException(
-                    OUString("[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!"),
+                    "[xmlsecurity]SaveODFItem::SaveODFItem(): Wrong Type!",
                     nullptr );
 
         }
         else
             throw uno::RuntimeException(
-                OUString("[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion"),
+                "[xmlsecurity] Could not open property Office.Common/Save/ODF/DefaultVersion",
                 nullptr);
     }
 }
