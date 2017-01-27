@@ -1345,25 +1345,10 @@ sub set_global_code_variables
         $onelanguage = ${$languagesref}[0];
     }
 
-    # ProductCode must not change, if Windows patches shall be applied
-    if ( $installer::globals::updatedatabase )
-    {
-        $installer::globals::productcode = $alloldproperties->{'ProductCode'};
-    }
-    elsif ( $installer::globals::prepare_winpatch )
-    {
-        # ProductCode has to be specified in each language
-        my $searchstring = "PRODUCTCODE";
-        my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
-        $installer::globals::productcode = installer::windows::idtglobal::get_code_from_code_block($codeblock, $onelanguage);
-    } else {
-        my $guidref = get_guid_list(1, 1);  # only one GUID shall be generated
-        ${$guidref}[0] =~ s/\s*$//;     # removing ending spaces
-        $installer::globals::productcode = "\{" . ${$guidref}[0] . "\}";
-    }
-
-    # HACK: Fixed ProductCode
-    $installer::globals::productcode = "{795CAACE-4CCA-479F-8BF7-176B6E12C681}";
+    # ProductCode has to be specified in each language
+    my $searchstring = "PRODUCTCODE";
+    my $codeblock = installer::windows::idtglobal::get_language_block_from_language_file($searchstring, $codefile);
+    $installer::globals::productcode = installer::windows::idtglobal::get_code_from_code_block($codeblock, $onelanguage);
 
     # UpgradeCode can take english as default, if not defined in specified language
 
