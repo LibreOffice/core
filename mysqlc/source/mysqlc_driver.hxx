@@ -48,7 +48,8 @@ namespace connectivity
         using ::com::sun::star::uno::Exception;
         using ::com::sun::star::uno::Reference;
         using ::com::sun::star::uno::Sequence;
-        Reference< css::uno::XInterface > SAL_CALL MysqlCDriver_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFactory) throw(Exception);
+        /// @throws Exception
+        Reference< css::uno::XInterface > SAL_CALL MysqlCDriver_CreateInstance(const Reference< css::lang::XMultiServiceFactory >& _rxFactory);
 
         typedef ::cppu::WeakComponentImplHelper2<   css::sdbc::XDriver,
                                                     css::lang::XServiceInfo > ODriver_BASE;
@@ -81,24 +82,24 @@ namespace connectivity
             // OComponentHelper
             void SAL_CALL disposing() SAL_OVERRIDE;
             // XInterface
-            static rtl::OUString getImplementationName_Static()                  throw(RuntimeException);
-            static Sequence< rtl::OUString > getSupportedServiceNames_Static()   throw(RuntimeException);
+            /// @throws RuntimeException
+            static rtl::OUString getImplementationName_Static();
+            /// @throws RuntimeException
+            static Sequence< rtl::OUString > getSupportedServiceNames_Static();
 
             // XServiceInfo
-            rtl::OUString SAL_CALL getImplementationName()                       throw(RuntimeException, std::exception) SAL_OVERRIDE;
-            sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName)  throw(RuntimeException, std::exception) SAL_OVERRIDE;
-            Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames()        throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
+            sal_Bool SAL_CALL supportsService(const rtl::OUString& ServiceName) SAL_OVERRIDE;
+            Sequence< rtl::OUString > SAL_CALL getSupportedServiceNames() SAL_OVERRIDE;
 
             // XDriver
-            Reference< css::sdbc::XConnection > SAL_CALL connect(const rtl::OUString& url, const Sequence< css::beans::PropertyValue >& info)
-                                                                            throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            Reference< css::sdbc::XConnection > SAL_CALL connect(const rtl::OUString& url, const Sequence< css::beans::PropertyValue >& info) SAL_OVERRIDE;
 
-            sal_Bool SAL_CALL acceptsURL(const rtl::OUString& url) throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(const rtl::OUString& url, const Sequence< css::beans::PropertyValue >& info)
-                                                                            throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Bool SAL_CALL acceptsURL(const rtl::OUString& url) SAL_OVERRIDE;
+            Sequence< css::sdbc::DriverPropertyInfo > SAL_CALL getPropertyInfo(const rtl::OUString& url, const Sequence< css::beans::PropertyValue >& info) SAL_OVERRIDE;
 
-            sal_Int32 SAL_CALL getMajorVersion()                            throw(RuntimeException, std::exception) SAL_OVERRIDE;
-            sal_Int32 SAL_CALL getMinorVersion()                            throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Int32 SAL_CALL getMajorVersion() SAL_OVERRIDE;
+            sal_Int32 SAL_CALL getMinorVersion() SAL_OVERRIDE;
 
             const Reference< css::lang::XMultiServiceFactory >& getFactory() const { return m_xFactory; }
 

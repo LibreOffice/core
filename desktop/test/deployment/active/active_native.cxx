@@ -81,26 +81,22 @@ private:
 
     virtual ~Provider() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException) SAL_OVERRIDE
+    virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE
     { return static_getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
-        throw (css::uno::RuntimeException) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName) SAL_OVERRIDE
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException) SAL_OVERRIDE
+    getSupportedServiceNames() SAL_OVERRIDE
     { return static_getSupportedServiceNames(); }
 
     virtual css::uno::Reference< css::frame::XDispatch > SAL_CALL queryDispatch(
-        css::util::URL const &, rtl::OUString const &, sal_Int32)
-        throw (css::uno::RuntimeException) SAL_OVERRIDE;
+        css::util::URL const &, rtl::OUString const &, sal_Int32) SAL_OVERRIDE;
 
     virtual css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
     SAL_CALL queryDispatches(
-        css::uno::Sequence< css::frame::DispatchDescriptor > const & Requests)
-        throw (css::uno::RuntimeException) SAL_OVERRIDE;
+        css::uno::Sequence< css::frame::DispatchDescriptor > const & Requests) SAL_OVERRIDE;
 
     css::uno::Reference< css::uno::XComponentContext > context_;
 };
@@ -117,7 +113,6 @@ css::uno::Sequence< rtl::OUString > Provider::static_getSupportedServiceNames()
 
 css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
     css::util::URL const &, rtl::OUString const &, sal_Int32)
-    throw (css::uno::RuntimeException)
 {
     css::uno::Reference< css::frame::XDispatch > dispatch;
     if (!(context_->getValueByName(
@@ -138,7 +133,6 @@ css::uno::Reference< css::frame::XDispatch > Provider::queryDispatch(
 css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > >
 Provider::queryDispatches(
     css::uno::Sequence< css::frame::DispatchDescriptor > const & Requests)
-    throw (css::uno::RuntimeException)
 {
     css::uno::Sequence< css::uno::Reference< css::frame::XDispatch > > s(
         Requests.getLength());
@@ -175,33 +169,28 @@ private:
 
     virtual ~Dispatch() {}
 
-    virtual rtl::OUString SAL_CALL getImplementationName()
-        throw (css::uno::RuntimeException) SAL_OVERRIDE
+    virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE
     { return static_getImplementationName(); }
 
-    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName)
-        throw (css::uno::RuntimeException) SAL_OVERRIDE
+    virtual sal_Bool SAL_CALL supportsService(rtl::OUString const & ServiceName) SAL_OVERRIDE
     { return cppu::supportsService(this, ServiceName); }
 
     virtual css::uno::Sequence< rtl::OUString > SAL_CALL
-    getSupportedServiceNames() throw (css::uno::RuntimeException) SAL_OVERRIDE
+    getSupportedServiceNames() SAL_OVERRIDE
     { return static_getSupportedServiceNames(); }
 
     virtual void SAL_CALL dispatch(
         css::util::URL const &,
-        css::uno::Sequence< css::beans::PropertyValue > const &)
-        throw (css::uno::RuntimeException) SAL_OVERRIDE;
+        css::uno::Sequence< css::beans::PropertyValue > const &) SAL_OVERRIDE;
 
     virtual void SAL_CALL addStatusListener(
         css::uno::Reference< css::frame::XStatusListener > const &,
-        css::util::URL const &)
-        throw (css::uno::RuntimeException) SAL_OVERRIDE
+        css::util::URL const &) SAL_OVERRIDE
     {}
 
     virtual void SAL_CALL removeStatusListener(
         css::uno::Reference< css::frame::XStatusListener > const &,
-        css::util::URL const &)
-        throw (css::uno::RuntimeException) SAL_OVERRIDE
+        css::util::URL const &) SAL_OVERRIDE
     {}
 
     css::uno::Reference< css::uno::XComponentContext > context_;
@@ -215,7 +204,6 @@ rtl::OUString Dispatch::static_getImplementationName() {
 void Dispatch::dispatch(
     css::util::URL const &,
     css::uno::Sequence< css::beans::PropertyValue > const &)
-    throw (css::uno::RuntimeException)
 {
     css::uno::Reference< css::frame::XDesktop2 > xDesktop = css::frame::Desktop::create(context_);
     css::uno::Reference< css::frame::XFrame >    xFrame = xDesktop->getCurrentFrame();

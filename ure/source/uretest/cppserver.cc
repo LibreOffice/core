@@ -44,9 +44,7 @@ class Service: public ::cppu::WeakImplHelper1< ::test::types::XServer > {
 public:
     Service() {}
 
-    virtual ::test::types::Data SAL_CALL getData()
-        throw (css::uno::RuntimeException)
-    {
+    virtual ::test::types::Data SAL_CALL getData() {
         return ::test::types::Data(rtl::OUString("Hello"), 42);
     }
 

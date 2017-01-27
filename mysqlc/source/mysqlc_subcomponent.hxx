@@ -55,7 +55,8 @@ namespace connectivity
                      css::uno::Reference< css::uno::XInterface >& _xInterface,
                      css::lang::XComponent* _pObject);
 
-        void checkDisposed(bool _bThrow) throw (css::lang::DisposedException);
+        /// @throws css::lang::DisposedException
+        void checkDisposed(bool _bThrow);
 
         template <class SELF, class WEAK> class OSubComponent
         {

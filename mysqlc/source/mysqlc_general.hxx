@@ -31,17 +31,17 @@ namespace mysqlc_sdbc_driver
 {
     rtl::OUString getStringFromAny(const css::uno::Any& _rAny);
 
+    /// @throws css::sdbc::SQLException
     void throwFeatureNotImplementedException(
             const sal_Char* _pAsciiFeatureName,
             const css::uno::Reference< css::uno::XInterface >& _rxContext
-        )
-        throw (css::sdbc::SQLException);
+        );
 
+    /// @throws css::sdbc::SQLException
     void throwInvalidArgumentException(
             const sal_Char* _pAsciiFeatureName,
             const css::uno::Reference< css::uno::XInterface >& _rxContext
-        )
-        throw (css::sdbc::SQLException);
+        );
 
     void translateAndThrow(const ::sql::SQLException& _error, const css::uno::Reference< css::uno::XInterface >& _context, const rtl_TextEncoding encoding);
 

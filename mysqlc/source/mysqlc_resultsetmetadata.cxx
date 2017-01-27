@@ -34,7 +34,6 @@ OResultSetMetaData::~OResultSetMetaData()
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     try {
         meta->getColumnDisplaySize(column);
@@ -47,7 +46,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnDisplaySize(sal_Int32 column)
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -67,7 +65,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
   Does it change the API, the open-close principle?
 */
 sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount()
-    throw(SQLException, RuntimeException, std::exception)
 {
     try {
         return meta->getColumnCount();
@@ -80,7 +77,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnCount()
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -95,7 +91,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -110,7 +105,6 @@ rtl::OUString SAL_CALL OResultSetMetaData::getSchemaName(sal_Int32 column)
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -125,7 +119,6 @@ rtl::OUString SAL_CALL OResultSetMetaData::getColumnName(sal_Int32 column)
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -140,7 +133,6 @@ rtl::OUString SAL_CALL OResultSetMetaData::getTableName(sal_Int32 column)
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -155,7 +147,6 @@ rtl::OUString SAL_CALL OResultSetMetaData::getCatalogName(sal_Int32 column)
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -170,7 +161,6 @@ rtl::OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -185,7 +175,6 @@ rtl::OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
 }
 
 rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -194,7 +183,6 @@ rtl::OUString SAL_CALL OResultSetMetaData::getColumnServiceName(sal_Int32 column
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -209,7 +197,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isCurrency(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -224,7 +211,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isAutoIncrement(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -239,7 +225,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isSigned(sal_Int32 column)
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -254,7 +239,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getPrecision(sal_Int32 column)
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
-    throw(css::sdbc::SQLException, css::uno::RuntimeException, std::exception)
 {
     checkColumnIndex(column);
     try {
@@ -268,7 +252,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::getScale(sal_Int32 column)
 }
 
 sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -283,7 +266,6 @@ sal_Int32 SAL_CALL OResultSetMetaData::isNullable(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -298,7 +280,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isSearchable(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -313,7 +294,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isReadOnly(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -328,7 +308,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isDefinitelyWritable(sal_Int32 column)
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
-    throw(SQLException, RuntimeException, std::exception)
 {
     checkColumnIndex(column);
 
@@ -343,7 +322,6 @@ sal_Bool SAL_CALL OResultSetMetaData::isWritable(sal_Int32 column)
 }
 
 void OResultSetMetaData::checkColumnIndex(sal_Int32 columnIndex)
-    throw (SQLException, RuntimeException)
 {
     if (columnIndex < 1 || columnIndex > (sal_Int32) meta->getColumnCount()) {
 

@@ -86,7 +86,6 @@ void SAL_CALL OConnection::release()
 }
 
 void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyValue >& info)
-    throw(SQLException)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -198,13 +197,12 @@ void OConnection::construct(const rtl::OUString& url, const Sequence< PropertyVa
     stmt->executeUpdate("SET NAMES utf8");
 }
 
-rtl::OUString OConnection::getImplementationName() throw (css::uno::RuntimeException, std::exception)
+rtl::OUString OConnection::getImplementationName()
 {
     return rtl::OUString("com.sun.star.sdbc.drivers.mysqlc.OConnection");
 }
 
 css::uno::Sequence<rtl::OUString> OConnection::getSupportedServiceNames()
-    throw (css::uno::RuntimeException, std::exception)
 {
     css::uno::Sequence<rtl::OUString> s(1);
     s[0] = "com.sun.star.sdbc.Connection";
@@ -212,13 +210,11 @@ css::uno::Sequence<rtl::OUString> OConnection::getSupportedServiceNames()
 }
 
 sal_Bool OConnection::supportsService(rtl::OUString const & ServiceName)
-    throw (css::uno::RuntimeException, std::exception)
 {
     return cppu::supportsService(this, ServiceName);
 }
 
 Reference< XStatement > SAL_CALL OConnection::createStatement()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -237,7 +233,6 @@ Reference< XStatement > SAL_CALL OConnection::createStatement()
 }
 
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const rtl::OUString& _sSql)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -257,7 +252,6 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareStatement(const rtl
 }
 
 Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(const rtl::OUString& /*_sSql*/ )
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -267,7 +261,6 @@ Reference< XPreparedStatement > SAL_CALL OConnection::prepareCall(const rtl::OUS
 }
 
 rtl::OUString SAL_CALL OConnection::nativeSQL(const rtl::OUString& _sSql)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -283,7 +276,6 @@ rtl::OUString SAL_CALL OConnection::nativeSQL(const rtl::OUString& _sSql)
 }
 
 void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -295,7 +287,6 @@ void SAL_CALL OConnection::setAutoCommit(sal_Bool autoCommit)
 }
 
 sal_Bool SAL_CALL OConnection::getAutoCommit()
-    throw(SQLException, RuntimeException, std::exception)
 {
     // you have to distinguish which if you are in autocommit mode or not
     // at normal case true should be fine here
@@ -313,7 +304,6 @@ sal_Bool SAL_CALL OConnection::getAutoCommit()
 }
 
 void SAL_CALL OConnection::commit()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -325,7 +315,6 @@ void SAL_CALL OConnection::commit()
 }
 
 void SAL_CALL OConnection::rollback()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -337,7 +326,6 @@ void SAL_CALL OConnection::rollback()
 }
 
 sal_Bool SAL_CALL OConnection::isClosed()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
 
@@ -346,7 +334,6 @@ sal_Bool SAL_CALL OConnection::isClosed()
 }
 
 Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -365,7 +352,6 @@ Reference< XDatabaseMetaData > SAL_CALL OConnection::getMetaData()
 }
 
 void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -374,7 +360,6 @@ void SAL_CALL OConnection::setReadOnly(sal_Bool readOnly)
 }
 
 sal_Bool SAL_CALL OConnection::isReadOnly()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -384,7 +369,6 @@ sal_Bool SAL_CALL OConnection::isReadOnly()
 }
 
 void SAL_CALL OConnection::setCatalog(const rtl::OUString& catalog)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -398,7 +382,6 @@ void SAL_CALL OConnection::setCatalog(const rtl::OUString& catalog)
 }
 
 rtl::OUString SAL_CALL OConnection::getCatalog()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -413,7 +396,6 @@ rtl::OUString SAL_CALL OConnection::getCatalog()
 }
 
 void SAL_CALL OConnection::setTransactionIsolation(sal_Int32 level)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -447,7 +429,6 @@ void SAL_CALL OConnection::setTransactionIsolation(sal_Int32 level)
 }
 
 sal_Int32 SAL_CALL OConnection::getTransactionIsolation()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -468,7 +449,6 @@ sal_Int32 SAL_CALL OConnection::getTransactionIsolation()
 }
 
 Reference<XNameAccess> SAL_CALL OConnection::getTypeMap()
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -478,7 +458,6 @@ Reference<XNameAccess> SAL_CALL OConnection::getTypeMap()
 }
 
 void SAL_CALL OConnection::setTypeMap(const Reference<XNameAccess >& typeMap)
-    throw(SQLException, RuntimeException, std::exception)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);
@@ -488,7 +467,6 @@ void SAL_CALL OConnection::setTypeMap(const Reference<XNameAccess >& typeMap)
 
 // XCloseable
 void SAL_CALL OConnection::close()
-    throw(SQLException, RuntimeException, std::exception)
 {
     /*
       we need block, because the mutex is a local variable,
@@ -504,7 +482,6 @@ void SAL_CALL OConnection::close()
 
 // XWarningsSupplier
 Any SAL_CALL OConnection::getWarnings()
-    throw(SQLException, RuntimeException, std::exception)
 {
     Any x = Any();
     // when you collected some warnings -> return it
@@ -512,7 +489,6 @@ Any SAL_CALL OConnection::getWarnings()
 }
 
 void SAL_CALL OConnection::clearWarnings()
-    throw(SQLException, RuntimeException, std::exception)
 {
     // you should clear your collected warnings here#
 }
@@ -538,7 +514,6 @@ void OConnection::disposing()
 }
 
 sal_Int32 OConnection::getMysqlVersion()
-    throw(SQLException, RuntimeException)
 {
     MutexGuard aGuard(m_aMutex);
     checkDisposed(OConnection_BASE::rBHelper.bDisposed);

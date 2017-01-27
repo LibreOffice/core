@@ -86,11 +86,9 @@ namespace connectivity
             // OPropertySetHelper
             ::cppu::IPropertyArrayHelper & SAL_CALL getInfoHelper() SAL_OVERRIDE;
             sal_Bool SAL_CALL convertFastPropertyValue(Any & rConvertedValue, Any & rOldValue,
-                                                               sal_Int32 nHandle, const Any& rValue)
-                                                throw (css::lang::IllegalArgumentException) SAL_OVERRIDE;
+                                                               sal_Int32 nHandle, const Any& rValue) SAL_OVERRIDE;
 
-            void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue)
-                                                throw(css::uno::Exception, std::exception) SAL_OVERRIDE;
+            void SAL_CALL setFastPropertyValue_NoBroadcast(sal_Int32 nHandle, const Any& rValue) SAL_OVERRIDE;
 
             void SAL_CALL getFastPropertyValue(Any& rValue, sal_Int32 nHandle) const SAL_OVERRIDE;
             virtual ~OCommonStatement();
@@ -111,48 +109,40 @@ namespace connectivity
             void SAL_CALL acquire()             throw() SAL_OVERRIDE;
 
             // XInterface
-            Any SAL_CALL queryInterface(const css::uno::Type & rType)
-                                                throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            Any SAL_CALL queryInterface(const css::uno::Type & rType) SAL_OVERRIDE;
 
             //XTypeProvider
-            css::uno::Sequence< css::uno::Type > SAL_CALL getTypes()
-                                                throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE;
 
             // XPropertySet
-            css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo()
-                                                throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::beans::XPropertySetInfo > SAL_CALL getPropertySetInfo() SAL_OVERRIDE;
 
             // XStatement
-            css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery(const rtl::OUString& sql)
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XResultSet > SAL_CALL executeQuery(const rtl::OUString& sql) SAL_OVERRIDE;
 
-            sal_Int32 SAL_CALL executeUpdate(const rtl::OUString& sql)
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Int32 SAL_CALL executeUpdate(const rtl::OUString& sql) SAL_OVERRIDE;
 
-            sal_Bool SAL_CALL execute( const rtl::OUString& sql )
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Bool SAL_CALL execute( const rtl::OUString& sql ) SAL_OVERRIDE;
 
-            css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection()
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XConnection > SAL_CALL getConnection() SAL_OVERRIDE;
 
             // XWarningsSupplier
-            Any SAL_CALL getWarnings()      throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            Any SAL_CALL getWarnings() SAL_OVERRIDE;
 
-            void SAL_CALL clearWarnings()       throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL clearWarnings() SAL_OVERRIDE;
 
             // XCancellable
-            void SAL_CALL cancel()              throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL cancel() SAL_OVERRIDE;
 
             // XCloseable
-            void SAL_CALL close()               throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL close() SAL_OVERRIDE;
 
             // XMultipleResults
-            css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet()
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XResultSet > SAL_CALL getResultSet() SAL_OVERRIDE;
 
-            sal_Int32 SAL_CALL getUpdateCount() throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Int32 SAL_CALL getUpdateCount() SAL_OVERRIDE;
 
-            sal_Bool SAL_CALL getMoreResults()  throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Bool SAL_CALL getMoreResults() SAL_OVERRIDE;
 
             // other methods
             OConnection* getOwnConnection() const { return m_pConnection;}
@@ -175,31 +165,27 @@ namespace connectivity
             OStatement(OConnection* _pConnection, sql::Statement *_cppStatement) :
                 OCommonStatement(_pConnection, _cppStatement) {}
 
-            virtual rtl::OUString SAL_CALL getImplementationName()
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
 
             virtual sal_Bool SAL_CALL supportsService(
-                rtl::OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
+                rtl::OUString const & ServiceName)
                 SAL_OVERRIDE;
 
             virtual css::uno::Sequence<rtl::OUString> SAL_CALL
-            getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+            getSupportedServiceNames()
                 SAL_OVERRIDE;
 
-            Any SAL_CALL queryInterface( const css::uno::Type & rType )
-                                                throw(RuntimeException, std::exception) SAL_OVERRIDE;
+            Any SAL_CALL queryInterface( const css::uno::Type & rType ) SAL_OVERRIDE;
 
             void SAL_CALL acquire()             throw() SAL_OVERRIDE;
             void SAL_CALL release()             throw() SAL_OVERRIDE;
 
             // XBatchExecution
-            void SAL_CALL addBatch(const rtl::OUString& sql)
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL addBatch(const rtl::OUString& sql) SAL_OVERRIDE;
 
-            void SAL_CALL clearBatch()          throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL clearBatch() SAL_OVERRIDE;
 
-            css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch()
-                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Sequence< sal_Int32 > SAL_CALL executeBatch() SAL_OVERRIDE;
 
         };
     }

@@ -110,11 +110,12 @@ namespace connectivity
             bool    m_bClosed;
 
         public:
-            sal_Int32 getMysqlVersion()
-                                                                throw(SQLException, RuntimeException);
+            /// @throws SQLException
+            /// @throws RuntimeException
+            sal_Int32 getMysqlVersion();
 
-            void construct(const rtl::OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info)
-                                                                throw(SQLException);
+            /// @throws SQLException
+            void construct(const rtl::OUString& url,const css::uno::Sequence< css::beans::PropertyValue >& info);
 
             OConnection(MysqlCDriver& _rDriver, sql::Driver * cppDriver);
             virtual ~OConnection();
@@ -129,79 +130,57 @@ namespace connectivity
             virtual void SAL_CALL release()                     throw() SAL_OVERRIDE;
 
             // XServiceInfo
-            virtual rtl::OUString SAL_CALL getImplementationName()
-                throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE;
+            virtual rtl::OUString SAL_CALL getImplementationName() SAL_OVERRIDE;
 
             virtual sal_Bool SAL_CALL supportsService(
-                rtl::OUString const & ServiceName) throw (css::uno::RuntimeException, std::exception)
+                rtl::OUString const & ServiceName)
                 SAL_OVERRIDE;
 
             virtual css::uno::Sequence<rtl::OUString> SAL_CALL
-            getSupportedServiceNames() throw (css::uno::RuntimeException, std::exception)
+            getSupportedServiceNames()
                 SAL_OVERRIDE;
 
             // XConnection
-            css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XStatement > SAL_CALL createStatement() SAL_OVERRIDE;
 
-            css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement(const rtl::OUString& sql)
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareStatement(const rtl::OUString& sql) SAL_OVERRIDE;
 
-            css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall(const rtl::OUString& sql)
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XPreparedStatement > SAL_CALL prepareCall(const rtl::OUString& sql) SAL_OVERRIDE;
 
-            rtl::OUString SAL_CALL nativeSQL(const rtl::OUString& sql)
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL nativeSQL(const rtl::OUString& sql) SAL_OVERRIDE;
 
-            void SAL_CALL setAutoCommit(sal_Bool autoCommit)
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL setAutoCommit(sal_Bool autoCommit) SAL_OVERRIDE;
 
-            sal_Bool SAL_CALL getAutoCommit()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Bool SAL_CALL getAutoCommit() SAL_OVERRIDE;
 
-            void SAL_CALL commit()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL commit() SAL_OVERRIDE;
 
-            void SAL_CALL rollback()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL rollback() SAL_OVERRIDE;
 
-            sal_Bool SAL_CALL isClosed()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Bool SAL_CALL isClosed() SAL_OVERRIDE;
 
-            css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Reference< css::sdbc::XDatabaseMetaData > SAL_CALL getMetaData() SAL_OVERRIDE;
 
-            void SAL_CALL setReadOnly(sal_Bool readOnly)
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL setReadOnly(sal_Bool readOnly) SAL_OVERRIDE;
 
-            sal_Bool SAL_CALL isReadOnly()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Bool SAL_CALL isReadOnly() SAL_OVERRIDE;
 
-            void SAL_CALL setCatalog(const rtl::OUString& catalog)
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL setCatalog(const rtl::OUString& catalog) SAL_OVERRIDE;
 
-            rtl::OUString SAL_CALL getCatalog()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            rtl::OUString SAL_CALL getCatalog() SAL_OVERRIDE;
 
-            void SAL_CALL setTransactionIsolation(sal_Int32 level)
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL setTransactionIsolation(sal_Int32 level) SAL_OVERRIDE;
 
-            sal_Int32 SAL_CALL getTransactionIsolation()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            sal_Int32 SAL_CALL getTransactionIsolation() SAL_OVERRIDE;
 
-            my_XNameAccessRef SAL_CALL getTypeMap()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            my_XNameAccessRef SAL_CALL getTypeMap() SAL_OVERRIDE;
 
-            void SAL_CALL setTypeMap(const my_XNameAccessRef& typeMap)
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL setTypeMap(const my_XNameAccessRef& typeMap) SAL_OVERRIDE;
             // XCloseable
-            void SAL_CALL close()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            void SAL_CALL close() SAL_OVERRIDE;
             // XWarningsSupplier
-            css::uno::Any SAL_CALL getWarnings()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
-            void SAL_CALL clearWarnings()
-                                                                throw(SQLException, RuntimeException, std::exception) SAL_OVERRIDE;
+            css::uno::Any SAL_CALL getWarnings() SAL_OVERRIDE;
+            void SAL_CALL clearWarnings() SAL_OVERRIDE;
 
             // TODO: Not used
             //sal_Int32 sdbcColumnType(rtl::OUString typeName);

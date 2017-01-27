@@ -49,11 +49,11 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return ImplHelper_query( rType, (class_data *)&s_cd, this ); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
         { return ImplHelper_getTypes( (class_data *)&s_cd ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< __CLASS_IFC##N > \
@@ -67,15 +67,15 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return WeakImplHelper_query( rType, (class_data *)&s_cd, this, static_cast<OWeakObject *>(this) ); } \
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE \
         { OWeakObject::acquire(); } \
     virtual void SAL_CALL release() throw () SAL_OVERRIDE \
         { OWeakObject::release(); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
         { return WeakImplHelper_getTypes( (class_data *)&s_cd ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< __CLASS_IFC##N > \
@@ -89,17 +89,17 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggImplHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return OWeakAggObject::queryInterface( rType ); } \
-    virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) SAL_OVERRIDE \
         { return WeakAggImplHelper_queryAgg( rType, (class_data *)&s_cd, this, static_cast<OWeakAggObject *>(this) ); } \
     virtual void SAL_CALL acquire() throw () SAL_OVERRIDE \
         { OWeakAggObject::acquire(); } \
     virtual void SAL_CALL release() throw () SAL_OVERRIDE \
         { OWeakAggObject::release(); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() SAL_OVERRIDE \
         { return WeakAggImplHelper_getTypes( (class_data *)&s_cd ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException, std::exception) SAL_OVERRIDE \
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() SAL_OVERRIDE \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< __CLASS_IFC##N > \
@@ -112,7 +112,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplInheritanceHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) throw (css::uno::RuntimeException) \
+    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) \
     { \
         css::uno::Any aRet( ImplHelper_queryNoXInterface( rType, (class_data *)&s_cd, this ) ); \
         if (aRet.hasValue()) \
@@ -123,9 +123,9 @@ public: \
         { BaseClass::acquire(); } \
     virtual void SAL_CALL release() throw () \
         { BaseClass::release(); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException) \
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() \
         { return ImplInhHelper_getTypes( (class_data *)&s_cd, BaseClass::getTypes() ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException) \
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< class BaseClass, __CLASS_IFC##N > \
@@ -138,9 +138,9 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE AggImplInheritanceHelper##N \
 { \
     static class_data##N s_cd; \
 public: \
-    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) throw (css::uno::RuntimeException) \
+    virtual css::uno::Any SAL_CALL queryInterface( css::uno::Type const & rType ) \
         { return BaseClass::queryInterface( rType ); } \
-    virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) throw (css::uno::RuntimeException) \
+    virtual css::uno::Any SAL_CALL queryAggregation( css::uno::Type const & rType ) \
     { \
         css::uno::Any aRet( ImplHelper_queryNoXInterface( rType, (class_data *)&s_cd, this ) ); \
         if (aRet.hasValue()) \
@@ -151,9 +151,9 @@ public: \
         { BaseClass::acquire(); } \
     virtual void SAL_CALL release() throw () \
         { BaseClass::release(); } \
-    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() throw (css::uno::RuntimeException) \
+    virtual css::uno::Sequence< css::uno::Type > SAL_CALL getTypes() \
         { return ImplInhHelper_getTypes( (class_data *)&s_cd, BaseClass::getTypes() ); } \
-    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (css::uno::RuntimeException) \
+    virtual css::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() \
         { return ImplHelper_getImplementationId( (class_data *)&s_cd ); } \
 }; \
 template< class BaseClass, __CLASS_IFC##N > \

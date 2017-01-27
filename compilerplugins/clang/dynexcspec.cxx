@@ -21,7 +21,12 @@
 namespace {
 
 bool isOverriding(FunctionDecl const * decl) {
-    return decl->hasAttr<OverrideAttr>();
+    if (decl->hasAttr<OverrideAttr>()) {
+        return true;
+    }
+    auto m = dyn_cast<CXXMethodDecl>(decl);
+    return m != nullptr
+        && m->begin_overridden_methods() != m->end_overridden_methods();
 }
 
 class DynExcSpec:
@@ -31,13 +36,6 @@ public:
     explicit DynExcSpec(InstantiationData const & data): RewritePlugin(data) {}
 
     void run() override {
-        // See the mail thread mentioned above for why !LIBO_INTERNAL_ONLY is
-        // excluded for now:
-        if (!compiler.getPreprocessor().getIdentifierInfo("LIBO_INTERNAL_ONLY")
-            ->hasMacroDefinition())
-        {
-            return;
-        }
         if (compiler.getLangOpts().CPlusPlus) {
             TraverseDecl(compiler.getASTContext().getTranslationUnitDecl());
         }
