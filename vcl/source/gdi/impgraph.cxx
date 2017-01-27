@@ -298,13 +298,7 @@ void ImpGraphic::ImplClearGraphics()
 {
     maEx.Clear();
     maMetaFile.Clear();
-
-    if( mpAnimation )
-    {
-        mpAnimation->Clear();
-        mpAnimation.reset();
-    }
-
+    mpAnimation.reset();
     mpGfxLink.reset();
     maSvgData.reset();
     maPdfData = uno::Sequence<sal_Int8>();
