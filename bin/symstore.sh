@@ -7,6 +7,9 @@ add_pdb()
     list=$3
     for file in $(find "${INSTDIR}/" -name "*.${extension}"); do
         filename=$(basename "$file" ".${extension}")
+        if [ -f "$file" ]; then
+            cygpath -w "$file" >> "$list"
+        fi
         pdb="${WORKDIR}/LinkTarget/${type}/${filename}.pdb"
         if [ -f "$pdb" ]; then
             cygpath -w "$pdb" >> "$list"
