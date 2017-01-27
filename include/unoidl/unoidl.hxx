@@ -77,7 +77,7 @@ struct AnnotatedReference {
     std::vector< rtl::OUString > annotations;
 };
 
-class LO_DLLPUBLIC_UNOIDL Entity: public salhelper::SimpleReferenceObject {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL Entity: public salhelper::SimpleReferenceObject {
 public:
     enum Sort {
         SORT_MODULE, SORT_ENUM_TYPE, SORT_PLAIN_STRUCT_TYPE,
@@ -98,7 +98,7 @@ private:
     Sort sort_;
 };
 
-class LO_DLLPUBLIC_UNOIDL MapCursor: public salhelper::SimpleReferenceObject {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL MapCursor: public salhelper::SimpleReferenceObject {
 public:
     // throws FileFormatException:
     virtual rtl::Reference< Entity > getNext(rtl::OUString * name) = 0;
@@ -109,7 +109,7 @@ protected:
     virtual SAL_DLLPRIVATE ~MapCursor() throw() override;
 };
 
-class LO_DLLPUBLIC_UNOIDL ModuleEntity: public Entity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ModuleEntity: public Entity {
 public:
     // throws FileFormatException:
     virtual std::vector< rtl::OUString > getMemberNames() const = 0;
@@ -123,7 +123,7 @@ protected:
     virtual SAL_DLLPRIVATE ~ModuleEntity() throw () override;
 };
 
-class LO_DLLPUBLIC_UNOIDL PublishableEntity: public Entity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PublishableEntity: public Entity {
 public:
     bool isPublished() const { return published_; }
 
@@ -145,7 +145,7 @@ private:
     std::vector< rtl::OUString > annotations_;
 };
 
-class LO_DLLPUBLIC_UNOIDL EnumTypeEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL EnumTypeEntity: public PublishableEntity {
 public:
     struct Member {
         Member(
@@ -176,7 +176,7 @@ private:
     std::vector< Member > members_;
 };
 
-class LO_DLLPUBLIC_UNOIDL PlainStructTypeEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PlainStructTypeEntity: public PublishableEntity {
 public:
     struct Member {
         Member(rtl::OUString const & theName, rtl::OUString const & theType,
@@ -211,7 +211,7 @@ private:
     std::vector< Member > directMembers_;
 };
 
-class LO_DLLPUBLIC_UNOIDL PolymorphicStructTypeTemplateEntity:
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL PolymorphicStructTypeTemplateEntity:
     public PublishableEntity
 {
 public:
@@ -254,7 +254,7 @@ private:
     std::vector< Member > members_;
 };
 
-class LO_DLLPUBLIC_UNOIDL ExceptionTypeEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ExceptionTypeEntity: public PublishableEntity {
 public:
     struct Member {
         Member(
@@ -290,7 +290,7 @@ private:
     std::vector< Member > directMembers_;
 };
 
-class LO_DLLPUBLIC_UNOIDL InterfaceTypeEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL InterfaceTypeEntity: public PublishableEntity {
 public:
     struct Attribute {
         Attribute(
@@ -390,7 +390,7 @@ private:
     std::vector< Method > directMethods_;
 };
 
-class LO_DLLPUBLIC_UNOIDL TypedefEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL TypedefEntity: public PublishableEntity {
 public:
     SAL_DLLPRIVATE TypedefEntity(
         bool published, rtl::OUString const & type,
@@ -406,7 +406,7 @@ private:
     rtl::OUString type_;
 };
 
-struct LO_DLLPUBLIC_UNOIDL ConstantValue {
+struct SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ConstantValue {
     enum Type {
         TYPE_BOOLEAN, TYPE_BYTE, TYPE_SHORT, TYPE_UNSIGNED_SHORT, TYPE_LONG,
         TYPE_UNSIGNED_LONG, TYPE_HYPER, TYPE_UNSIGNED_HYPER, TYPE_FLOAT,
@@ -454,7 +454,7 @@ struct LO_DLLPUBLIC_UNOIDL ConstantValue {
     };
 };
 
-class LO_DLLPUBLIC_UNOIDL ConstantGroupEntity: public PublishableEntity {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ConstantGroupEntity: public PublishableEntity {
 public:
     struct Member {
         Member(
@@ -485,7 +485,7 @@ private:
     std::vector< Member > members_;
 };
 
-class LO_DLLPUBLIC_UNOIDL SingleInterfaceBasedServiceEntity:
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL SingleInterfaceBasedServiceEntity:
     public PublishableEntity
 {
 public:
@@ -547,7 +547,7 @@ private:
     std::vector< Constructor > constructors_;
 };
 
-class LO_DLLPUBLIC_UNOIDL AccumulationBasedServiceEntity:
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL AccumulationBasedServiceEntity:
     public PublishableEntity
 {
 public:
@@ -647,7 +647,7 @@ private:
     rtl::OUString base_;
 };
 
-class LO_DLLPUBLIC_UNOIDL ServiceBasedSingletonEntity: public PublishableEntity
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL ServiceBasedSingletonEntity: public PublishableEntity
 {
 public:
     SAL_DLLPRIVATE ServiceBasedSingletonEntity(
@@ -665,7 +665,7 @@ private:
     rtl::OUString base_;
 };
 
-class LO_DLLPUBLIC_UNOIDL Provider: public salhelper::SimpleReferenceObject {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL Provider: public salhelper::SimpleReferenceObject {
 public:
     // throws FileFormatException:
     virtual rtl::Reference< MapCursor > createRootCursor() const = 0;
@@ -680,7 +680,7 @@ protected:
     virtual SAL_DLLPRIVATE ~Provider() throw () override;
 };
 
-class LO_DLLPUBLIC_UNOIDL Manager: public salhelper::SimpleReferenceObject {
+class SAL_WARN_UNUSED LO_DLLPUBLIC_UNOIDL Manager: public salhelper::SimpleReferenceObject {
 public:
     Manager() {}
 

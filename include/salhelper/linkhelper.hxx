@@ -15,7 +15,7 @@
 
 namespace salhelper
 {
-    class LinkResolver
+    class SAL_WARN_UNUSED LinkResolver
     {
     public:
         osl::FileStatus m_aStatus;

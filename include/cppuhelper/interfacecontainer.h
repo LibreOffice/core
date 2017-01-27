@@ -124,7 +124,7 @@ private:
 
   @see OInterfaceIteratorHelper
  */
-class CPPUHELPER_DLLPUBLIC OInterfaceContainerHelper
+class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OInterfaceContainerHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.
@@ -432,7 +432,7 @@ private:
   can't compile addListener( const container::keyType &key ).
  */
 template < class container , class keyType >
-struct OBroadcastHelperVar
+struct SAL_WARN_UNUSED OBroadcastHelperVar
 {
     /** The shared mutex. */
     ::osl::Mutex &                      rMutex;

@@ -43,7 +43,7 @@ namespace cppu
 /**
    This interface is used by the OPropertyHelper, to access the property description.
  */
-class CPPUHELPER_DLLPUBLIC IPropertyArrayHelper
+class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC IPropertyArrayHelper
 {
 public:
     // these are here to force memory de/allocation to sal lib.
@@ -109,7 +109,7 @@ public:
    You can use this helper class to map a XPropertySet-Interface to a XFast-
    or a XMultiPropertySet interface.
  */
-class CPPUHELPER_DLLPUBLIC OPropertyArrayHelper : public IPropertyArrayHelper
+class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OPropertyArrayHelper : public IPropertyArrayHelper
 {
 public:
      /**
@@ -215,10 +215,11 @@ struct hashInt32_Impl
     size_t operator()(const sal_Int32 & i) const
         { return i; }
 };
+
 /** Specialized class for key type sal_Int32,
     without explicit usage of STL symbols.
 */
-class CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelperInt32
+class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC OMultiTypeInterfaceContainerHelperInt32
 {
 public:
     // these are here to force memory de/allocation to sal lib.

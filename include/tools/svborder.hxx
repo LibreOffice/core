@@ -23,7 +23,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/gen.hxx>
 
-class TOOLS_DLLPUBLIC SvBorder
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC SvBorder
 {
     long nTop, nRight, nBottom, nLeft;
 

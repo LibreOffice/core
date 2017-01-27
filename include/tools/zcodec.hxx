@@ -33,7 +33,7 @@ class SvStream;
 // * BeginCompression, Write*, EndCompression
 // * BeginCompression, Read*, EndCompression
 // * BeginCompression, ReadAsynchron*, EndCompression
-class TOOLS_DLLPUBLIC ZCodec
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ZCodec
 {
     enum State { STATE_INIT, STATE_DECOMPRESS, STATE_COMPRESS };
     State           meState;

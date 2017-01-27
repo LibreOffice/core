@@ -31,7 +31,7 @@
 
 class DateTime;
 
-class INetMessageHeader
+class SAL_WARN_UNUSED INetMessageHeader
 {
     OString m_aName;
     OString m_aValue;
@@ -70,7 +70,7 @@ enum class InetMessageMime
     NUMHDR                     = 4,
 };
 
-class TOOLS_DLLPUBLIC INetMIMEMessage
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC INetMIMEMessage
 {
     ::std::vector< INetMessageHeader* >
                     m_aHeaderList;

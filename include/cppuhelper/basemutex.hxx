@@ -32,7 +32,7 @@ namespace cppu
      initialized when the mutex is used to intialize the
      cppu::WeakComponentImplHelperXX
     */
-    class BaseMutex
+    class SAL_WARN_UNUSED BaseMutex
     {
     protected:
         mutable ::osl::Mutex m_aMutex;

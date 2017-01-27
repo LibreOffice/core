@@ -31,7 +31,7 @@
 
 namespace xmlreader {
 
-class OOO_DLLPUBLIC_XMLREADER Pad {
+class SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Pad {
 public:
     void add(char const * begin, sal_Int32 length);
 

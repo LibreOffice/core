@@ -30,7 +30,7 @@
 #include <tools/toolsdllapi.h>
 
 /// Transformation sets for 3D output
-class TOOLS_DLLPUBLIC B3dTransformationSet
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dTransformationSet
 {
 private:
     // Object Matrix Object -> World
@@ -147,7 +147,7 @@ protected:
     Uses a simplified model, in which a point is described using a View
     Reference Point (VRP).
 */
-class TOOLS_DLLPUBLIC B3dViewport : public B3dTransformationSet
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dViewport : public B3dTransformationSet
 {
 private:
     basegfx::B3DPoint           aVRP;   // View Reference Point
@@ -174,7 +174,7 @@ protected:
 
 // B3D camera
 
-class TOOLS_DLLPUBLIC B3dCamera : public B3dViewport
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC B3dCamera : public B3dViewport
 {
 private:
     basegfx::B3DPoint       aPosition;

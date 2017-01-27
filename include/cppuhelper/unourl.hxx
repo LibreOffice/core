@@ -35,7 +35,7 @@ namespace cppu {
     For example, some functions take a string representing a connection or
     protocol descriptor as input, and can use this class to parse the string.
  */
-class CPPUHELPER_DLLPUBLIC UnoUrlDescriptor
+class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC UnoUrlDescriptor
 {
 public:
     class Impl;
@@ -126,7 +126,7 @@ private:
     invalid UTF-16 entities in the resulting output (e.g., a high surrogate not
     followed by a low surrogate) are not detected.
  */
-class CPPUHELPER_DLLPUBLIC UnoUrl
+class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC UnoUrl
 {
 public:
     /** Construct a UNO URL from a string representation.

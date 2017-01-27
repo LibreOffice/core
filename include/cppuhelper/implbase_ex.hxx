@@ -46,7 +46,7 @@ typedef css::uno::Type const & (SAL_CALL * fptr_getCppuType)( void * );
 
 /** single type + object offset
 */
-struct type_entry
+struct SAL_WARN_UNUSED type_entry
 {
     /** the type_entry is initialized with function pointer to ::getCppuType() function first,
         but holds an unacquired typelib_TypeDescriptionReference * after initialization,
@@ -69,7 +69,7 @@ struct type_entry
 
 /** identical dummy struct for casting class_dataN to class_data
 */
-struct class_data
+struct SAL_WARN_UNUSED class_data
 {
     /** number of supported types in m_typeEntries
     */

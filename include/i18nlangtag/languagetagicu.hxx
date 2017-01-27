@@ -24,7 +24,7 @@ class LanguageTag;
     makefiles) with ICU header file inclusion, only the few code actually using
     this needs to know about ICU, which it did anyway.
 */
-class I18NLANGTAG_DLLPUBLIC LanguageTagIcu
+class SAL_WARN_UNUSED I18NLANGTAG_DLLPUBLIC LanguageTagIcu
 {
 public:
 

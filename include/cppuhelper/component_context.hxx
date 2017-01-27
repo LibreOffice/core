@@ -32,7 +32,7 @@ namespace cppu
 
 /** Context entries init struct calling createComponentContext().
 */
-struct ContextEntry_Init
+struct SAL_WARN_UNUSED ContextEntry_Init
 {
     /** late init denotes a object that will be raised when first get() is calling for it
 

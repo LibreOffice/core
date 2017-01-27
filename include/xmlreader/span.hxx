@@ -31,7 +31,7 @@ namespace rtl { class OUString; }
 
 namespace xmlreader {
 
-struct OOO_DLLPUBLIC_XMLREADER Span {
+struct SAL_WARN_UNUSED OOO_DLLPUBLIC_XMLREADER Span {
     char const * begin;
     sal_Int32 length;
 

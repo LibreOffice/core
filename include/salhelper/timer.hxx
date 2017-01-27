@@ -32,7 +32,7 @@ namespace salhelper
  *
  *  Times are seconds in UTC since 01.01.1970
  */
-struct TTimeValue : public TimeValue
+struct SAL_WARN_UNUSED TTimeValue : public TimeValue
 {
     TTimeValue()
     {

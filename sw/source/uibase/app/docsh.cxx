@@ -453,12 +453,6 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
     {
         if( GetDoc()->getIDocumentSettingAccess().get(DocumentSettingId::GLOBAL_DOCUMENT) && dynamic_cast< const SwGlobalDocShell *>( this ) ==  nullptr )
         {
-            // This is to set the correct class id if SaveAs is
-            // called from SwDoc::SplitDoc to save a normal doc as
-            // global doc. In this case, SaveAs is called at a
-            // normal doc shell, therefore, SfxInplaceObject::SaveAs
-            // will set the wrong class id.
-            SvGlobalName aClassName;
             // The document is closed explicitly, but using SfxObjectShellLock is still more correct here
             SfxObjectShellLock xDocSh =
                 new SwGlobalDocShell( SfxObjectCreateMode::INTERNAL );

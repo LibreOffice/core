@@ -32,7 +32,7 @@ struct IsoLanguageScriptCountryEntry;
 
 /** Methods related to Microsoft language IDs. For details about MS-LANGIDs
     please see lang.h */
-class I18NLANGTAG_DLLPUBLIC MsLangId
+class SAL_WARN_UNUSED I18NLANGTAG_DLLPUBLIC MsLangId
 {
 public:
 

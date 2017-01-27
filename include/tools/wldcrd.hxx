@@ -23,7 +23,7 @@
 #include <osl/thread.h>
 #include <rtl/ustring.hxx>
 
-class TOOLS_DLLPUBLIC WildCard
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC WildCard
 {
 private:
     OString aWildString;

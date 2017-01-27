@@ -34,7 +34,7 @@ namespace vcl { class Window; }
 class DynamicErrorInfo_Impl;
 class ErrorHandler_Impl;
 
-class TOOLS_DLLPUBLIC ErrorInfo
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ErrorInfo
 {
 private:
     sal_uIntPtr             lUserId;
@@ -50,7 +50,7 @@ public:
     static ErrorInfo*       GetErrorInfo(sal_uIntPtr);
 };
 
-class TOOLS_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC DynamicErrorInfo : public ErrorInfo
 {
     friend class DynamicErrorInfo_Impl;
 
@@ -66,7 +66,7 @@ public:
     sal_uInt16              GetDialogMask() const;
 };
 
-class TOOLS_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC StringErrorInfo : public DynamicErrorInfo
 {
 private:
     OUString                aString;
@@ -79,7 +79,7 @@ public:
     const OUString&         GetErrorString() const { return aString; }
 };
 
-class TOOLS_DLLPUBLIC TwoStringErrorInfo: public DynamicErrorInfo
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC TwoStringErrorInfo: public DynamicErrorInfo
 {
 private:
     OUString aArg1;
@@ -96,7 +96,7 @@ public:
 };
 
 struct ErrorContextImpl;
-class TOOLS_DLLPUBLIC ErrorContext
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ErrorContext
 {
     friend class ErrorHandler;
 
@@ -119,7 +119,7 @@ typedef sal_uInt16 WindowDisplayErrorFunc(
 typedef void BasicDisplayErrorFunc(
     const OUString &rErr, const OUString &rAction);
 
-class TOOLS_DLLPUBLIC ErrorHandler
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC ErrorHandler
 {
     friend class ErrorHandler_Impl;
 

@@ -27,9 +27,9 @@
 namespace cppu
 {
 
-/** Helper class retriving access controller singleton from component context.
+/** Helper class for retrieving access controller singleton from component context.
 */
-class CPPUHELPER_DLLPUBLIC AccessControl
+class SAL_WARN_UNUSED CPPUHELPER_DLLPUBLIC AccessControl
 {
     css::uno::Reference< css::security::XAccessController > m_xController;
 

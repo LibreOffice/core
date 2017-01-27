@@ -25,7 +25,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <o3tl/cow_wrapper.hxx>
 
-struct SvGUID
+struct SAL_WARN_UNUSED SvGUID
 {
     sal_uInt32 Data1;
     sal_uInt16 Data2;
@@ -33,7 +33,7 @@ struct SvGUID
     sal_uInt8  Data4[8];
 };
 
-struct ImpSvGlobalName
+struct SAL_WARN_UNUSED ImpSvGlobalName
 {
     struct SvGUID   szData;
 
@@ -52,7 +52,7 @@ struct ImpSvGlobalName
 
 class SvStream;
 
-class TOOLS_DLLPUBLIC SvGlobalName
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC SvGlobalName
 {
     ::o3tl::cow_wrapper< ImpSvGlobalName > pImp;
 

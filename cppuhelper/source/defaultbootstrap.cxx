@@ -58,7 +58,6 @@ cppu::defaultBootstrap_InitialComponentContext(rtl::OUString const & iniUri)
     smgr->init(getBootstrapVariable(bs, "UNO_SERVICES"));
     rtl::Reference< cppuhelper::TypeManager > tmgr(new cppuhelper::TypeManager);
     tmgr->init(getBootstrapVariable(bs, "UNO_TYPES"));
-    cppu::ContextEntry_Init entry;
     std::vector< cppu::ContextEntry_Init > context_values;
     context_values.push_back(
         cppu::ContextEntry_Init(

@@ -22,7 +22,7 @@
 #include <tools/toolsdllapi.h>
 #include <tools/resmgr.hxx>
 
-class TOOLS_DLLPUBLIC Resource
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC Resource
 {
 protected:
     ResMgr* m_pResMgr;

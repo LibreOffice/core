@@ -31,7 +31,7 @@
 
 class InternalResMgr;
 
-class TOOLS_DLLPUBLIC SimpleResMgr final
+class SAL_WARN_UNUSED TOOLS_DLLPUBLIC SimpleResMgr final
 {
     osl::Mutex              m_aAccessSafety;
     std::unique_ptr<InternalResMgr>
