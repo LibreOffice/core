@@ -176,7 +176,6 @@ ImpGraphic::ImpGraphic( const GDIMetaFile& rMtf ) :
 
 ImpGraphic::~ImpGraphic()
 {
-    ImplClear();
 }
 
 ImpGraphic& ImpGraphic::operator=( const ImpGraphic& rImpGraphic )
