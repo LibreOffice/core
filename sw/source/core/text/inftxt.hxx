@@ -376,11 +376,7 @@ protected:
         , pGrammarCheckList(nullptr)
         , pSmartTags(nullptr)
         , pSpaceAdd(nullptr)
-#ifdef DBG_UTIL
-        , pBrushItem(reinterpret_cast<SvxBrushItem*>(-1))
-#else
         , pBrushItem(nullptr)
-#endif
         , nSpaceIdx(0)
         {}
 
