@@ -448,6 +448,8 @@ namespace css = ::com::sun::star;
 #if defined LIBO_INTERNAL_ONLY
 #if defined __clang__
 #define SAL_FALLTHROUGH [[clang::fallthrough]]
+#elif defined __GNUC__ && __GNUC__ >= 7
+#define SAL_FALLTHROUGH [[fallthrough]]
 #else
 #define SAL_FALLTHROUGH
 #endif
