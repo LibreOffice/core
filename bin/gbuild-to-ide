@@ -39,7 +39,7 @@ class GbuildParser:
                      'Executable': re.compile('Executable_(.*)\.mk'),
                      'CppunitTest': re.compile('CppunitTest_(.*)\.mk')}
     _allheaders=[]
-    @staticmethod
+
     def __split_includes(json_srcdir,includes):
         foundisystem = GbuildParser._isystempattern.findall(includes)
         foundincludes=[]
@@ -54,11 +54,13 @@ class GbuildParser:
         #        len(includeswitch) > 2]
         return (foundincludes, foundisystem)
 
-    @staticmethod
-    def __split_objs(module,objsline):
-        return [obj[len(module)+1:] for obj in objsline.strip().split(' ') if len(obj) > 0 and obj != 'CXXOBJECTS' and obj != '+=']
+    def __split_objs(module,objsline, ext):
+        retObj = []
+        for obj in objsline.strip().split(' '):
+            if len(obj) > 0 and obj != 'CXXOBJECTS' and obj != '+=':
+                retObj.append(obj + ext)
+        return sorted(retObj)
 
-    @staticmethod
     def __split_defs(defsline):
         defs = {}
         alldefs = [defswitch.strip() for defswitch in defsline.strip().lstrip('-D').split(' -D') if len(defswitch) > 2]
@@ -70,7 +72,6 @@ class GbuildParser:
         defs["LIBO_INTERNAL_ONLY"] = None
         return defs
 
-    @staticmethod
     def __split_flags(flagsline, flagslineappend):
         return [cxxflag.strip() for cxxflag in GbuildParser._warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
 
@@ -125,7 +126,7 @@ class GbuildParser:
                     for i in ['CXXFLAGS', 'CFLAGS', 'OBJCFLAGS', 'OBJCXXFLAGS']:
                         jsondata[i] = GbuildParser.__split_flags(jsondata[i], jsondata[i+'APPEND'])
                     for i in jsonSrc:
-                        jsondata[i] = sorted(GbuildParser.__split_objs(module, jsondata[i]))
+                        jsondata[i] = GbuildParser.__split_objs(module, jsondata[i], jsonSrc[i])
 
                     if not module in moduleDict:
                         moduleDict[module] = {'targets': [],'headers':{}}
@@ -238,13 +239,11 @@ class testWinIde(IdeIntegrationGenerator):
         return dependency_libs
 
     def write_solution(self, solution_path, projects):
-        print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
         library_projects = [project for project in projects if project.target['build_type'] == 'Library']
         with open(solution_path, 'w') as f:
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
             for project in projects:
                 target = project.target
-                print(' %s' % target['target_name'], end='')
                 proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
@@ -274,7 +273,6 @@ class testWinIde(IdeIntegrationGenerator):
                         '\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.Build.0 = %(proj_cfg)s|%(platform)s\n' % params)
             f.write('\tEndGlobalSection\n')
             f.write('EndGlobal\n')
-        print('')
 
     def write_project(self, project_path, target):
         # See info at http://blogs.msdn.com/b/visualstudio/archive/2010/05/14/a-guide-to-vcxproj-and-props-file-structure.aspx
@@ -355,9 +353,9 @@ class testWinIde(IdeIntegrationGenerator):
         cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
             cxxabspath = os.path.join(self.gbuildparser.srcdir, cxxobject)
-            cxxfile = cxxabspath + '.cxx'
-            if os.path.isfile(cxxfile):
-                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxfile)
+            cxxfile = cxxabspath
+            if os.path.isfile(cxxabspath):
+                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxabspath)
             else:
                 print('Source %s in project %s does not exist' % (cxxfile, target['target_name']))
 
@@ -606,7 +604,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             ref = self.generate_id()
             self.sourceList[self.generate_id()] = ref
             self.sourceRefList[ref] = {'lastKnownFileType': 'sourcecode.cpp.cpp',
-                                       'path': i + '.cxx',
+                                       'path': i,
                                        'sourceTree': '<group>'}
 
     def generate_project(self, target):
@@ -706,13 +704,11 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         return dependency_libs
 
     def write_solution(self, solution_path, projects):
-        print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
         library_projects = [project for project in projects if project.target['build_type'] == 'Library']
         with open(solution_path, 'w') as f:
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
             for project in projects:
                 target = project.target
-                print(' %s' % target['target_name'], end='')
                 proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
@@ -740,7 +736,6 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                     f.write('\t\t{%(guid)s}.%(sol_cfg)s|%(platform)s.Build.0 = %(proj_cfg)s|%(platform)s\n' % params)
             f.write('\tEndGlobalSection\n')
             f.write('EndGlobal\n')
-        print('')
 
     def write_project(self, project_path, target):
         # See info at http://blogs.msdn.com/b/visualstudio/archive/2010/05/14/a-guide-to-vcxproj-and-props-file-structure.aspx
@@ -819,9 +814,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
             cxxabspath = os.path.join(self.gbuildparser.srcdir, cxxobject)
-            cxxfile = cxxabspath + '.cxx'
+            cxxfile = cxxabspath
             if os.path.isfile(cxxfile):
-                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include='../../' + cxxobject + '.cxx')
+                ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include='../../' + cxxobject)
             else:
                 print('Source %s in project %s does not exist' % (cxxfile, target['target_name']))
 
@@ -898,16 +893,19 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         print(self.gbuildparser.srcdir)
         print(self.gbuildparser.builddir)
-        for f in self.gbuildparser.modules:
-            for j in self.gbuildparser.modules[f]['targets']:
-                print(j)
-
+        print("testWinIde test:")
+        testWinIde(self.gbuildparser, self.ide).emit()
+        print("VisualStudioIntegrationGenerator test:")
         VisualStudioIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        print("XcodeIntegrationGenerator test:")
         XcodeIntegrationGenerator(self.gbuildparser, self.ide).emit()
-
+        print("EclipseCDTIntegrationGenerator test:")
         EclipseCDTIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        print("KdevelopIntegrationGenerator test:")
         KdevelopIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        print("VimIntegrationGenerator test:")
         VimIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        print("QtCreatorIntegrationGenerator test:")
         QtCreatorIntegrationGenerator(self.gbuildparser, self.ide).emit()
 
 
@@ -1063,7 +1061,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
             for lib in self.gbuildparser.modules[m]['targets']:
                 entries = []
                 for file in lib['CXXOBJECTS']:
-                    filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
+                    filePath = os.path.join(self.gbuildparser.srcdir, file)
                     entry = {'directory': lib['location'], 'file': filePath, 'command': self.generateCommand(lib, filePath)}
                     entries.append(entry)
                 global_list.extend(entries)
@@ -1724,7 +1722,7 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     def get_source_extension(self, src_file):
         path = os.path.join(self.base_folder, src_file)
         for ext in (".cxx", ".cpp", ".c", ".mm"):
-            if os.path.isfile(path + ext):
+            if os.path.isfile(path):
                 return ext
         return ""
 
