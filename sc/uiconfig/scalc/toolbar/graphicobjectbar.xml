@@ -27,10 +27,10 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineWidth"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FormatArea" toolbar:helpid="10142"/>
+ <toolbar:toolbaritem xlink:href=".uno:FormatArea"/>
  <toolbar:toolbaritem xlink:href=".uno:FillColor" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FillStyle" toolbar:helpid="10164"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillStyle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>

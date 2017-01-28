@@ -24,7 +24,7 @@
  <toolbar:toolbaritem xlink:href=".uno:Open"/>
  <toolbar:toolbaritem xlink:href=".uno:Save"/>
  <toolbar:toolbaritem xlink:href=".uno:SaveAs" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:SendMail" toolbar:helpid="5331"/>
+ <toolbar:toolbaritem xlink:href=".uno:SendMail"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExportDirectToPDF"/>
  <toolbar:toolbaritem xlink:href=".uno:PrintDefault" toolbar:visible="false"/>
@@ -39,6 +39,6 @@
  <toolbar:toolbaritem xlink:href=".uno:Redo"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:HelpIndex"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false" toolbar:helpid="5402"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtendedHelp" toolbar:visible="false"/>
 
 </toolbar:toolbar>

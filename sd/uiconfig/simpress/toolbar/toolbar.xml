@@ -53,17 +53,17 @@
  <toolbar:toolbaritem xlink:href=".uno:ObjectPosition"/>
  <toolbar:toolbaritem xlink:href=".uno:DistributeSelection"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FillShadow" toolbar:helpid="10299"/>
+ <toolbar:toolbaritem xlink:href=".uno:FillShadow"/>
  <toolbar:toolbaritem xlink:href=".uno:Crop"/>
  <toolbar:toolbaritem xlink:href=".uno:GraphicFilterToolbox"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode"/>
  <toolbar:toolbaritem xlink:href=".uno:GlueEditMode"/>
  <toolbar:toolbaritem xlink:href=".uno:ChangeBezier" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ChangePolygon" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ConvertInto3D" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ConvertInto3DLatheFast" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertToolbox" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:visible="false"/>

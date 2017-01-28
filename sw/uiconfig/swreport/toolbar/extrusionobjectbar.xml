@@ -18,12 +18,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltDown" toolbar:helpid="10961"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltUp" toolbar:helpid="10962"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltLeft" toolbar:helpid="10963"/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltRight" toolbar:helpid="10964"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltDown"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltUp"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltLeft"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionTiltRight"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionDepthFloater"/>
  <toolbar:toolbaritem xlink:href=".uno:ExtrusionDirectionFloater"/>

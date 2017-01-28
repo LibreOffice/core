@@ -18,7 +18,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
 -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink" toolbar:id="toolbar">
- <toolbar:toolbaritem xlink:href=".uno:DesignerDialog" toolbar:visible="false" toolbar:helpid="5539"/>
+ <toolbar:toolbaritem xlink:href=".uno:DesignerDialog" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:StyleApply"/>
  <toolbar:toolbaritem xlink:href=".uno:StyleUpdateByExample"/>
@@ -67,8 +67,8 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:LineSpacing"/>
  <toolbar:toolbaritem xlink:href=".uno:Spacing" toolbar:visible="false"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease" toolbar:helpid="27346"/>
- <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease" toolbar:helpid="27347"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceIncrease"/>
+ <toolbar:toolbaritem xlink:href=".uno:ParaspaceDecrease"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:IncrementIndent"/>
  <toolbar:toolbaritem xlink:href=".uno:DecrementIndent"/>

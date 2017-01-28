@@ -51,7 +51,7 @@
  <toolbar:toolbaritem xlink:href=".uno:StarShapes"/>
  <toolbar:toolbaritem xlink:href=".uno:Objects3DToolbox"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:helpid="10126" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ToggleObjectBezierMode" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:GlueEditMode" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ChangeBezier" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:ChangePolygon" toolbar:visible="false"/>
@@ -60,5 +60,5 @@
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:Config" toolbar:visible="false"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:visible="false"/>
 </toolbar:toolbar>
