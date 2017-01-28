@@ -615,14 +615,14 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
     uno::Any aAny;
     if ( 0 == rArguments.getLength( ) )
         throw lang::IllegalArgumentException(
-                OUString( "no arguments" ),
+                "no arguments",
                 static_cast< XFilePicker2* >( this ), 1 );
 
     aAny = rArguments[0];
 
     if ( ( aAny.getValueType() != cppu::UnoType<sal_Int16>::get()) && ( aAny.getValueType() != cppu::UnoType<sal_Int8>::get()) )
         throw lang::IllegalArgumentException(
-                OUString( "invalid argument type" ),
+                "invalid argument type",
                 static_cast< XFilePicker2* >( this ), 1 );
 
     sal_Int16 templateId = -1;
@@ -719,7 +719,7 @@ void SAL_CALL UnxFilePicker::initialize( const uno::Sequence<uno::Any> &rArgumen
 
         default:
             throw lang::IllegalArgumentException(
-                    OUString( "Unknown template" ),
+                    "Unknown template",
                     static_cast< XFilePicker2* >( this ),
                     1 );
     }
@@ -853,7 +853,7 @@ void UnxFilePicker::checkFilePicker()
     else
     {
         throw uno::RuntimeException(
-                OUString( "the external file picker does not run" ),
+                "the external file picker does not run",
                 *this );
     }
 }
