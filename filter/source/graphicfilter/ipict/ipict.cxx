@@ -1882,7 +1882,7 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     try {
     sal_uInt16          nOpcode;
     sal_uInt8           nOneByteOpcode;
-    sal_uLong           nSize, nPercent, nLastPercent;
+    sal_uLong           nSize;
 
     pPict               = &rStreamPict;
     nOrigPos            = pPict->Tell();
@@ -1908,10 +1908,6 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
 
     pPict->SetEndian(SvStreamEndian::BIG);
 
-    sal_uInt64 const nStartPos = pPict->Tell();
-    sal_uInt64 const nRemaining = pPict->remainingSize();
-    nLastPercent=0;
-
     ReadHeader();
 
     aPenPosition=Point(-aBoundingRect.Left(),-aBoundingRect.Top());
@@ -1920,11 +1916,6 @@ void PictReader::ReadPict( SvStream & rStreamPict, GDIMetaFile & rGDIMetaFile )
     sal_uInt64 nPos=pPict->Tell();
 
     for (;;) {
-
-        nPercent = (nPos-nStartPos) * 100 / nRemaining;
-        if (nLastPercent+4<=nPercent) {
-            nLastPercent=nPercent;
-        }
 
         if (IsVersion2 )
             pPict->ReadUInt16( nOpcode );
