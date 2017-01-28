@@ -424,8 +424,8 @@ void SAL_CALL XMLTransformerBase::initialize( const Sequence< Any >& aArguments 
         {
             m_xHandler.set( *pAny, UNO_QUERY );
             m_xFastHandler.set( m_xHandler.get(), UNO_QUERY );
-            if ( (dynamic_cast< SvXMLImport* >( m_xFastHandler.get() ) ) )
-                m_xNamespaceHandler = (dynamic_cast< SvXMLImport* >( m_xFastHandler.get() ) )->getNamespaceHandler();
+            if (SvXMLImport *pFastHandler = dynamic_cast<SvXMLImport*>(m_xFastHandler.get()))
+                m_xNamespaceHandler = pFastHandler->getNamespaceHandler();
         }
 
         // property set to transport data across
