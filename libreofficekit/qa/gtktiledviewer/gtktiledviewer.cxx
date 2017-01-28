@@ -196,6 +196,7 @@ public:
         m_pScrolledWindow(nullptr),
         m_bToolItemBroadcast(true),
         m_pVBox(nullptr),
+        m_pMainHBox(nullptr),
         m_pPartSelector(nullptr),
         m_pPartModeComboBox(nullptr),
         m_bPartSelectorBroadcast(true),
