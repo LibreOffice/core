@@ -190,6 +190,7 @@ XMLTransformerBase::XMLTransformerBase( XMLTransformerActionInit *pInit,
     m_pReplaceNamespaceMap( new SvXMLNamespaceMap ),
     m_pElemActions( new XMLTransformerActions( pInit ) ),
     m_pTokenMap( new XMLTransformerTokenMap( pTKMapInit ) ),
+    nElement(0),
     m_xFastAttributes( new sax_fastparser::FastAttributeList( m_xTokenHandler.get(),
         dynamic_cast< sax_fastparser::FastTokenHandlerBase *>( m_xTokenHandler.get() ) ) )
 {
