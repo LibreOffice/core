@@ -1692,7 +1692,7 @@ void ScTable::UpdateInsertTab( sc::RefUpdateInsertTabContext& rCxt )
                 ScRange( 0, 0, rCxt.mnInsertPos, MAXCOL, MAXROW, MAXTAB),
                 0, 0, rCxt.mnSheets);
 
-    for (SCCOL i=0; i <= MAXCOL; i++)
+    for (SCCOL i=0; i < aCol.size(); i++)
         aCol[i].UpdateInsertTab(rCxt);
 
     if (IsStreamValid())
@@ -1722,7 +1722,7 @@ void ScTable::UpdateDeleteTab( sc::RefUpdateDeleteTabContext& rCxt )
                 ScRange( 0, 0, rCxt.mnDeletePos, MAXCOL, MAXROW, MAXTAB),
                 0, 0, -rCxt.mnSheets);
 
-    for (SCCOL i = 0; i <= MAXCOL; ++i)
+    for (SCCOL i = 0; i < aCol.size(); ++i)
         aCol[i].UpdateDeleteTab(rCxt);
 
     if (IsStreamValid())
@@ -1747,7 +1747,7 @@ void ScTable::UpdateMoveTab(
                 ScRange( 0, 0, rCxt.mnOldPos, MAXCOL, MAXROW, MAXTAB),
                 0, 0, rCxt.mnNewPos - rCxt.mnOldPos);
 
-    for ( SCCOL i=0; i <= MAXCOL; i++ )
+    for ( SCCOL i=0; i < aCol.size(); i++ )
     {
         aCol[i].UpdateMoveTab(rCxt, nTabNo);
         if (pProgress)
@@ -1760,7 +1760,7 @@ void ScTable::UpdateMoveTab(
 
 void ScTable::UpdateCompile( bool bForceIfNameInUse )
 {
-    for (SCCOL i=0; i <= MAXCOL; i++)
+    for (SCCOL i=0; i < aCol.size(); i++)
     {
         aCol[i].UpdateCompile( bForceIfNameInUse );
     }
@@ -1769,7 +1769,8 @@ void ScTable::UpdateCompile( bool bForceIfNameInUse )
 void ScTable::SetTabNo(SCTAB nNewTab)
 {
     nTab = nNewTab;
-    for (SCCOL i=0; i <= MAXCOL; i++) aCol[i].SetTabNo(nNewTab);
+    for (SCCOL i=0; i < aCol.size(); i++)
+        aCol[i].SetTabNo(nNewTab);
 }
 
 void ScTable::FindRangeNamesInUse(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
@@ -1809,6 +1810,11 @@ void ScTable::ExtendPrintArea( OutputDevice* pDev,
             // These columns are visible.  Check for empty columns.
             for (SCCOL j = i; j <= nLastCol; ++j)
             {
+                if ( j >= aCol.size() )
+                {
+                    aSkipCols.setTrue( j, MAXCOL );
+                    break;
+                }
                 if (aCol[j].GetCellCount() == 0)
                     // empty
                     aSkipCols.setTrue(j,j);
