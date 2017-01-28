@@ -54,6 +54,8 @@ class GbuildParser:
     def __split_objs(module,objsline, ext):
         retObj = []
         for obj in objsline.strip().split(' '):
+            if module in obj:
+                obj = obj[len(module)+1:]
             if len(obj) > 0 and obj != 'CXXOBJECTS' and obj != '+=':
                 retObj.append(obj + ext)
         return sorted(retObj)
@@ -137,6 +139,7 @@ class GbuildParser:
             module = moduleDict[i]
             src = []
             for target in module['targets']:
+                target['module'] = i
                 for ext in jsonSrc:
                     src.extend(target[ext])
             module['sources'] = sorted(src)
@@ -356,7 +359,7 @@ class testWinIde(IdeIntegrationGenerator):
 
         cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
-            cxxabspath = os.path.join(self.gbuildparser.srcdir, cxxobject)
+            cxxabspath = os.path.join(self.gbuildparser.srcdir + '/' + target['module'], cxxobject)
             cxxfile = cxxabspath
             if os.path.isfile(cxxabspath):
                 ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxabspath)
@@ -365,7 +368,7 @@ class testWinIde(IdeIntegrationGenerator):
 
         includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
-            include_abs_path = os.path.join(self.gbuildparser.srcdir, cxxobject)
+            include_abs_path = os.path.join(self.gbuildparser.srcdir + '/' + target['module'], cxxobject)
             hxxfile = include_abs_path + '.hxx'
             if os.path.isfile(hxxfile):
                 ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include=hxxfile)
@@ -471,7 +474,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             mainGroup['children'].append(moduleId)
 
             for target in self.gbuildparser.modules[module]['targets']:
-                pbxproj['objects'].update(self.generate_project(target))
+                pbxproj['objects'].update(self.generate_project(target, module))
 
         xcodeprojdir = './osx/libreoffice.xcodeproj'
         try:
@@ -611,7 +614,7 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                                        'path': i,
                                        'sourceTree': '<group>'}
 
-    def generate_project(self, target):
+    def generate_project(self, target, module):
         self.targetId = self.generate_id()
         self.configurationListId = self.generate_id()
         self.configurationDebugId = self.generate_id()
@@ -633,10 +636,10 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         for i in self.sourceList.keys():
             ref = self.sourceList[i]
             path = self.sourceRefList[ref]['path']
-            name = '/'.join(path.split('/')[2:])
+            name = '/'.join(path.split('/')[1:])
             objects[ref] = {'isa': 'PBXFileReference',
                             'lastKnownFileType': self.sourceRefList[ref]['lastKnownFileType'],
-                            'path': path,
+                            'path': module + '/' + path,
                             'name': name,
                             'fileEncoding': 4,
                             'sourceTree': '<group>'}
@@ -817,7 +820,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
         cxxobjects_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
-            cxxabspath = os.path.join(self.gbuildparser.srcdir, cxxobject)
+            cxxabspath = os.path.join(self.gbuildparser.srcdir + '/' + target['module'], cxxobject)
             cxxfile = cxxabspath
             if os.path.isfile(cxxfile):
                 ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include='../../' + cxxobject)
@@ -826,7 +829,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
         includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target['CXXOBJECTS']:
-            include_abs_path = os.path.join(self.gbuildparser.srcdir, cxxobject)
+            include_abs_path = os.path.join(self.gbuildparser.srcdir + '/' + target['module'], cxxobject)
             hxxfile = include_abs_path + '.hxx'
             if os.path.isfile(hxxfile):
                 ET.SubElement(includes_node, '{%s}ClInclude' % ns, Include='../../' + cxxobject + '.hxx')
@@ -1258,6 +1261,7 @@ VersionControl=kdevgit
             for target in self.gbuildparser.modules[m]['targets']:
                 for cxx in target['CXXOBJECTS']:
                     path = '/'.join(cxx.split('/')[:-1])
+                    path = target['module'] + '/' + path
                     if path not in self.target_path:
                         self.target_path[path] = []
                     self.target_path[path].append(target)
