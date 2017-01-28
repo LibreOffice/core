@@ -4549,7 +4549,7 @@
       </node>
       <node oor:name=".uno:About" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">A~bout %PRODUCTNAME</value>
+          <value xml:lang="x-no-translate"></value><value xml:lang="en-US">~About %PRODUCTNAME</value>
         </prop>
       </node>
       <node oor:name=".uno:PrinterSetup" oor:op="replace">

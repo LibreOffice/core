@@ -1644,7 +1644,7 @@
       </node>
       <node oor:name=".uno:ExtendedHelp" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">What's ~This?</value>
+          <value xml:lang="en-US">~What's This?</value>
         </prop>
         <prop oor:name="Properties" oor:type="xs:int">
           <value>1</value>
@@ -4909,7 +4909,7 @@
       </node>
       <node oor:name=".uno:Documentation" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">User Guides...</value>
+          <value xml:lang="en-US">~User Guides...</value>
         </prop>
       </node>
       <node oor:name=".uno:ShowLicense" oor:op="replace">
@@ -5375,7 +5375,7 @@
       </node>
       <node oor:name=".uno:About" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">A~bout %PRODUCTNAME</value>
+          <value xml:lang="en-US">~About %PRODUCTNAME</value>
         </prop>
       </node>
       <node oor:name=".uno:PrinterSetup" oor:op="replace">
@@ -6426,7 +6426,7 @@
       </node>
       <node oor:name=".uno:SafeMode" oor:op="replace">
         <prop oor:name="Label" oor:type="xs:string">
-          <value xml:lang="en-US">Restart in Safe Mode...</value>
+          <value xml:lang="en-US">~Restart in Safe Mode...</value>
         </prop>
       </node>
     </node>

@@ -27,7 +27,7 @@
                     <value/>
                 </prop>
                 <prop oor:name="Title" oor:type="xs:string">
-                    <value xml:lang="en-US">Check for ~Updates...</value>
+                    <value xml:lang="en-US">~Check for Updates...</value>
                 </prop>
                 <prop oor:name="Target" oor:type="xs:string">
                     <value>_self</value>
