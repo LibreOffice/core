@@ -49,9 +49,6 @@ class GbuildParser:
                     foundincludes.append(includeswitch.strip()[len(json_srcdir)+1:])
                 else:
                     foundincludes.append(includeswitch.strip())
-
-        #foundincludes = [includeswitch.strip()[len(json_srcdir)+1:] for includeswitch in GbuildParser._includepattern.findall(includes) if
-        #        len(includeswitch) > 2]
         return (foundincludes, foundisystem)
 
     def __split_objs(module,objsline, ext):
@@ -91,6 +88,7 @@ class GbuildParser:
         #      tools translations
         #      udkapi unoid
         # Add handling of BLACKLIST
+
         # Relation between json object and file extension
         jsonSrc = {
                     'CXXOBJECTS': '.cxx', 'OBJCOBJECTS': '.m', 'OBJCXXOBJECTS': '.mm', 'COBJECTS': '.c',
@@ -135,8 +133,14 @@ class GbuildParser:
 
         moduleDict['include']={ 'targets': [], 'headers':self.headers_of('include')}
 
-        for module in sorted(moduleDict):
-            self.modules[module] = moduleDict[module]
+        for i in sorted(moduleDict):
+            module = moduleDict[i]
+            src = []
+            for target in module['targets']:
+                for ext in jsonSrc:
+                    src.extend(target[ext])
+            module['sources'] = sorted(src)
+            self.modules[i] = module
         return self
 
 
