@@ -349,8 +349,12 @@ void PDFIProcessor::setupImage(ImageId nImage)
     pFrame->h = pImageElement->h = aScale.getY();
     pFrame->ZOrder = m_nNextZOrder++;
 
-    if (aScale.getY() < 0)
-        pFrame->MirrorVertical = pImageElement->MirrorVertical = true;
+    // Poppler wrapper takes into account that vertical axes of PDF and ODF are opposite,
+    // and it flips matrix vertically (see poppler's GfxState::GfxState()).
+    // But image internal vertical axis is independent of PDF vertical axis direction,
+    // so arriving matrix is extra-flipped relative to image.
+    // We force vertical flip here to compensate that.
+    pFrame->MirrorVertical = true;
 }
 
 void PDFIProcessor::drawMask(const uno::Sequence<beans::PropertyValue>& xBitmap,
