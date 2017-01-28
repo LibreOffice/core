@@ -271,6 +271,7 @@ gb_LinkTarget_LDFLAGS += \
 gb_DEBUGINFO_FLAGS := \
 	-FS \
 	-Zi \
+	-DEBUG:fastlink \
 
 gb_DEBUG_CFLAGS :=
 
