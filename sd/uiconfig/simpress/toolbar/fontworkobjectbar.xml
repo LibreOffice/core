@@ -26,5 +26,5 @@
  <toolbar:toolbaritem xlink:href=".uno:FontworkAlignmentFloater"  />
  <toolbar:toolbaritem xlink:href=".uno:FontworkCharacterSpacingFloater"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle" toolbar:helpid="10960"/>
+ <toolbar:toolbaritem xlink:href=".uno:ExtrusionToggle"/>
 </toolbar:toolbar>

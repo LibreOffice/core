@@ -53,5 +53,5 @@
  <toolbar:toolbaritem xlink:href=".uno:ChainFrames"/>
  <toolbar:toolbaritem xlink:href=".uno:UnhainFrames"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:helpid="20458" toolbar:visible="false"/>
+ <toolbar:toolbaritem xlink:href=".uno:FrameDialog" toolbar:visible="false"/>
 </toolbar:toolbar>

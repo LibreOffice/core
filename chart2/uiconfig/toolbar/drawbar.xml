@@ -18,20 +18,20 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  -->
 <toolbar:toolbar xmlns:toolbar="http://openoffice.org/2001/toolbar" xmlns:xlink="http://www.w3.org/1999/xlink">
- <toolbar:toolbaritem xlink:href=".uno:SelectObject" toolbar:helpid="10128"/>
+ <toolbar:toolbaritem xlink:href=".uno:SelectObject"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Line" toolbar:helpid="10102"/>
- <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd" toolbar:helpid="27173"/>
- <toolbar:toolbaritem xlink:href=".uno:Rect" toolbar:helpid="10104"/>
- <toolbar:toolbaritem xlink:href=".uno:Ellipse" toolbar:helpid="10110"/>
- <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled" toolbar:helpid="10464"/>
- <toolbar:toolbaritem xlink:href=".uno:DrawText" toolbar:helpid="10253"/>
- <toolbar:toolbaritem xlink:href=".uno:DrawCaption" toolbar:helpid="10254"/>
+ <toolbar:toolbaritem xlink:href=".uno:Line"/>
+ <toolbar:toolbaritem xlink:href=".uno:LineArrowEnd"/>
+ <toolbar:toolbaritem xlink:href=".uno:Rect"/>
+ <toolbar:toolbaritem xlink:href=".uno:Ellipse"/>
+ <toolbar:toolbaritem xlink:href=".uno:Freeline_Unfilled"/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawText"/>
+ <toolbar:toolbaritem xlink:href=".uno:DrawCaption"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:BasicShapes" toolbar:helpid="11002"/>
- <toolbar:toolbaritem xlink:href=".uno:SymbolShapes" toolbar:helpid="11003"/>
- <toolbar:toolbaritem xlink:href=".uno:ArrowShapes" toolbar:helpid="11004"/>
- <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes" toolbar:helpid="11005"/>
- <toolbar:toolbaritem xlink:href=".uno:CalloutShapes" toolbar:helpid="11006"/>
- <toolbar:toolbaritem xlink:href=".uno:StarShapes" toolbar:helpid="11007"/>
+ <toolbar:toolbaritem xlink:href=".uno:BasicShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:SymbolShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:ArrowShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:FlowChartShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:CalloutShapes"/>
+ <toolbar:toolbaritem xlink:href=".uno:StarShapes"/>
 </toolbar:toolbar>

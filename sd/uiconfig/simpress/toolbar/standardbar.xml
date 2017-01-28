@@ -54,7 +54,7 @@
  <toolbar:toolbaritem xlink:href=".uno:SlideSetup" toolbar:visible="false"/>
  <toolbar:toolbaritem xlink:href=".uno:SlideMasterPage"/>
  <toolbar:toolbarseparator/>
- <toolbar:toolbaritem xlink:href=".uno:Presentation" toolbar:helpid="10157"/>
+ <toolbar:toolbaritem xlink:href=".uno:Presentation"/>
  <toolbar:toolbaritem xlink:href=".uno:PresentationCurrentSlide"/>
  <toolbar:toolbarseparator/>
  <toolbar:toolbaritem xlink:href=".uno:InsertTable"/>
