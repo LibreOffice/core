@@ -114,7 +114,7 @@ public:
     // get the style name that was generated for a key
     OUString GetStyleName( sal_uInt32 nKey );
 
-    void GetWasUsed(css::uno::Sequence<sal_Int32>& rWasUsed);
+    css::uno::Sequence<sal_Int32> GetWasUsed();
     void SetWasUsed(const css::uno::Sequence<sal_Int32>& rWasUsed);
 
 

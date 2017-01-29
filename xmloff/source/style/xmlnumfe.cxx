@@ -106,7 +106,7 @@ public:
     bool    GetFirstUsed(sal_uInt32& nKey);
     bool    GetNextUsed(sal_uInt32& nKey);
 
-    void GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed);
+    uno::Sequence<sal_Int32> GetWasUsed();
     void SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed);
 };
 
@@ -182,10 +182,10 @@ bool SvXMLNumUsedList_Impl::GetNextUsed(sal_uInt32& nKey)
     return bRet;
 }
 
-void SvXMLNumUsedList_Impl::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
+uno::Sequence<sal_Int32> SvXMLNumUsedList_Impl::GetWasUsed()
 {
-    rWasUsed.realloc(nWasUsedCount);
-    sal_Int32* pWasUsed = rWasUsed.getArray();
+    uno::Sequence<sal_Int32> ret(nWasUsedCount);
+    sal_Int32* pWasUsed = ret.getArray();
     if (pWasUsed)
     {
         SvXMLuInt32Set::const_iterator aItr = aWasUsed.begin();
@@ -196,6 +196,7 @@ void SvXMLNumUsedList_Impl::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
             ++pWasUsed;
         }
     }
+    return ret;
 }
 
 void SvXMLNumUsedList_Impl::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
@@ -1889,10 +1890,11 @@ void SvXMLNumFmtExport::SetUsed( sal_uInt32 nKey )
     }
 }
 
-void SvXMLNumFmtExport::GetWasUsed(uno::Sequence<sal_Int32>& rWasUsed)
+uno::Sequence<sal_Int32> SvXMLNumFmtExport::GetWasUsed()
 {
     if (pUsedList)
-        pUsedList->GetWasUsed(rWasUsed);
+        return pUsedList->GetWasUsed();
+    return uno::Sequence<sal_Int32>();
 }
 
 void SvXMLNumFmtExport::SetWasUsed(const uno::Sequence<sal_Int32>& rWasUsed)
