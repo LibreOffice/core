@@ -26,6 +26,7 @@
 #include "document.hxx"
 #include "editutil.hxx"
 
+#include <oox/token/namespaces.hxx>
 #include <oox/token/tokens.hxx>
 #include <rtl/strbuf.hxx>
 #include <svl/sharedstring.hxx>
@@ -377,8 +378,8 @@ void XclExpXmlChTrHeaders::SaveXml( XclExpXmlStream& rStrm )
     pHeaders->write("<")->writeId(XML_headers);
 
     rStrm.WriteAttributes(
-        XML_xmlns,              "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        XML_xmlns,              XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+        FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
         XML_guid,               lcl_GuidToOString(maGUID).getStr(),
         XML_lastGuid,           nullptr,   // OOXTODO
         XML_shared,             nullptr,   // OOXTODO
@@ -470,8 +471,8 @@ void XclExpXmlChTrHeader::SaveXml( XclExpXmlStream& rStrm )
     pRevLogStrm->write("<")->writeId(XML_revisions);
 
     rStrm.WriteAttributes(
-        XML_xmlns,              "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-        FSNS(XML_xmlns, XML_r), "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+        XML_xmlns,              XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+        FSNS(XML_xmlns, XML_r), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
         FSEND);
 
     pRevLogStrm->write(">");
@@ -1645,8 +1646,8 @@ static void lcl_WriteUserNamesXml( XclExpXmlStream& rWorkbookStrm )
             "application/vnd.openxmlformats-officedocument.spreadsheetml.userNames+xml",
             CREATE_OFFICEDOC_RELATION_TYPE("usernames"));
     pUserNames->startElement( XML_users,
-            XML_xmlns,                  "http://schemas.openxmlformats.org/spreadsheetml/2006/main",
-            FSNS( XML_xmlns, XML_r ),   "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            XML_xmlns,                  XclXmlUtils::ToOString(rWorkbookStrm.getNamespaceURL(OOX_NS(xls))).getStr(),
+            FSNS( XML_xmlns, XML_r ),   XclXmlUtils::ToOString(rWorkbookStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
             XML_count,                  "0",
             FSEND );
     // OOXTODO: XML_userinfo elements for each user editing the file
