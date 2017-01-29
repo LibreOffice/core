@@ -308,11 +308,11 @@ uno::Any Content::mapGIOError( GError *pError )
     return convertToException(pError, static_cast< cppu::OWeakObject * >(this), false);
 }
 
-uno::Any Content::getBadArgExcept()
+lang::IllegalArgumentException Content::getBadArgExcept()
 {
-    return uno::makeAny( lang::IllegalArgumentException(
+    return lang::IllegalArgumentException(
         "Wrong argument type!",
-        static_cast< cppu::OWeakObject * >( this ), -1) );
+        static_cast< cppu::OWeakObject * >( this ), -1);
 }
 
 class MountOperation

@@ -226,8 +226,7 @@ uno::Any SAL_CALL Content::execute(
         uno::Sequence< beans::Property > Properties;
         if ( !( aCommand.Argument >>= Properties ) )
         {
-            aRet <<= lang::IllegalArgumentException();
-            ucbhelper::cancelCommandExecution(aRet,Environment);
+            ucbhelper::cancelCommandExecution(lang::IllegalArgumentException(), Environment);
         }
 
         aRet <<= getPropertyValues( Properties );
@@ -237,8 +236,7 @@ uno::Any SAL_CALL Content::execute(
         uno::Sequence<beans::PropertyValue> propertyValues;
 
         if( ! ( aCommand.Argument >>= propertyValues ) ) {
-            aRet <<= lang::IllegalArgumentException();
-            ucbhelper::cancelCommandExecution(aRet,Environment);
+            ucbhelper::cancelCommandExecution(lang::IllegalArgumentException(), Environment);
         }
 
         uno::Sequence< uno::Any > ret(propertyValues.getLength());
@@ -270,8 +268,7 @@ uno::Any SAL_CALL Content::execute(
         ucb::OpenCommandArgument2 aOpenCommand;
         if ( !( aCommand.Argument >>= aOpenCommand ) )
         {
-            aRet <<= lang::IllegalArgumentException();
-            ucbhelper::cancelCommandExecution(aRet,Environment);
+            ucbhelper::cancelCommandExecution(lang::IllegalArgumentException(), Environment);
         }
 
         uno::Reference< io::XActiveDataSink > xActiveDataSink(
@@ -287,8 +284,7 @@ uno::Any SAL_CALL Content::execute(
             aOpenCommand.Sink, uno::UNO_QUERY);
 
         if(xActiveDataStreamer.is()) {
-            aRet <<= ucb::UnsupportedDataSinkException();
-            ucbhelper::cancelCommandExecution(aRet,Environment);
+            ucbhelper::cancelCommandExecution(ucb::UnsupportedDataSinkException(), Environment);
         }
 
         uno::Reference< io::XOutputStream > xOutputStream(
@@ -332,8 +328,7 @@ uno::Any SAL_CALL Content::execute(
     else
     {
         // Unsupported command
-        aRet <<= ucb::UnsupportedCommandException();
-        ucbhelper::cancelCommandExecution(aRet,Environment);
+        ucbhelper::cancelCommandExecution(ucb::UnsupportedCommandException(), Environment);
     }
 
     return aRet;

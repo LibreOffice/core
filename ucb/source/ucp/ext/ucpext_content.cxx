@@ -191,8 +191,8 @@ namespace ucb { namespace ucp { namespace ext
             Sequence< Property > Properties;
             if ( !( aCommand.Argument >>= Properties ) )
             {
-                ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
-                    OUString(), *this, -1 ) ),
+                ::ucbhelper::cancelCommandExecution( IllegalArgumentException(
+                    OUString(), *this, -1 ),
                     i_rEvironment );
                 // unreachable
             }
@@ -204,16 +204,16 @@ namespace ucb { namespace ucp { namespace ext
             Sequence< PropertyValue > aProperties;
             if ( !( aCommand.Argument >>= aProperties ) )
             {
-                ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
-                    OUString(), *this, -1 ) ),
+                ::ucbhelper::cancelCommandExecution( IllegalArgumentException(
+                    OUString(), *this, -1 ),
                     i_rEvironment );
                 // unreachable
             }
 
             if ( !aProperties.getLength() )
             {
-                ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
-                    OUString(), *this, -1 ) ),
+                ::ucbhelper::cancelCommandExecution( IllegalArgumentException(
+                    OUString(), *this, -1 ),
                     i_rEvironment );
                 // unreachable
             }
@@ -235,8 +235,8 @@ namespace ucb { namespace ucp { namespace ext
             OpenCommandArgument2 aOpenCommand;
               if ( !( aCommand.Argument >>= aOpenCommand ) )
             {
-                ::ucbhelper::cancelCommandExecution( makeAny( IllegalArgumentException(
-                    OUString(), *this, -1 ) ),
+                ::ucbhelper::cancelCommandExecution( IllegalArgumentException(
+                    OUString(), *this, -1 ),
                     i_rEvironment );
                 // unreachable
             }
@@ -263,8 +263,8 @@ namespace ucb { namespace ucp { namespace ext
 
         else
         {
-            ::ucbhelper::cancelCommandExecution( makeAny( UnsupportedCommandException(
-                OUString(), *this ) ),
+            ::ucbhelper::cancelCommandExecution( UnsupportedCommandException(
+                OUString(), *this ),
                 i_rEvironment );
             // unreachable
         }

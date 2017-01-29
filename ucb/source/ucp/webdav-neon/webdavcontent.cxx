@@ -39,6 +39,7 @@
 #include <rtl/uri.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <officecfg/Inet.hxx>
+#include <o3tl/make_unique.hxx>
 #include <ucbhelper/contentidentifier.hxx>
 #include <ucbhelper/propertyvalueset.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
@@ -507,10 +508,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= Properties ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -527,10 +528,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aProperties ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -538,10 +539,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !aProperties.getLength() )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                     "No properties!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -578,10 +579,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aTmp ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -608,10 +609,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= arg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -672,10 +673,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= transferArgs ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                   "Wrong argument type!",
                                   static_cast< cppu::OWeakObject * >( this ),
-                                  -1 ) ),
+                                  -1 ),
                 Environment );
             // Unreachable
         }
@@ -692,10 +693,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -741,10 +742,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aArg ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -757,10 +758,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= aPropArg ))
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
         }
 
@@ -772,15 +773,15 @@ uno::Any SAL_CALL Content::execute(
         }
         catch ( const beans::PropertyExistException &e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( e, Environment );
         }
         catch ( const beans::IllegalTypeException&e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( e, Environment );
         }
         catch ( const lang::IllegalArgumentException&e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( e, Environment );
         }
     }
     else if ( aCommand.Name == "removeProperty" )
@@ -789,10 +790,10 @@ uno::Any SAL_CALL Content::execute(
         if ( !( aCommand.Argument >>= sPropName ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                     "Wrong argument type!",
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
         }
 
@@ -804,11 +805,11 @@ uno::Any SAL_CALL Content::execute(
         }
         catch( const beans::UnknownPropertyException &e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( e, Environment );
         }
         catch( const beans::NotRemoveableException &e )
         {
-            ucbhelper::cancelCommandExecution( uno::makeAny( e ), Environment );
+            ucbhelper::cancelCommandExecution( e, Environment );
         }
     }
     else
@@ -818,9 +819,9 @@ uno::Any SAL_CALL Content::execute(
 
 
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( ucb::UnsupportedCommandException(
+            ucb::UnsupportedCommandException(
                               aCommand.Name,
-                              static_cast< cppu::OWeakObject * >( this ) ) ),
+                              static_cast< cppu::OWeakObject * >( this ) ),
             Environment );
         // Unreachable
     }
@@ -2132,7 +2133,8 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             aNewTitle.clear();
 
             // Set error .
-            aRet[ nTitlePos ] = MapDAVException( e, true );
+            auto ex = MapDAVException( e, true );
+            aRet[ nTitlePos ] = makeAny(*ex);
         }
     }
 
@@ -2201,11 +2203,10 @@ uno::Any Content::open(
             }
 
             ucbhelper::cancelCommandExecution(
-                uno::makeAny(
-                    lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                         aMsg.makeStringAndClear(),
                         static_cast< cppu::OWeakObject * >( this ),
-                        -1 ) ),
+                        -1 ),
                 xEnv );
             // Unreachable
         }
@@ -2220,11 +2221,10 @@ uno::Any Content::open(
         {
             // Currently(?) unsupported.
             ucbhelper::cancelCommandExecution(
-                uno::makeAny(
-                    ucb::UnsupportedOpenModeException(
+                ucb::UnsupportedOpenModeException(
                             OUString(),
                             static_cast< cppu::OWeakObject * >( this ),
-                            sal_Int16( rArg.Mode ) ) ),
+                            sal_Int16( rArg.Mode ) ),
                 xEnv );
             // Unreachable
         }
@@ -2346,11 +2346,10 @@ uno::Any Content::open(
                 //       implementation. Support for this type of
                 //       sink is optional...
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny(
-                        ucb::UnsupportedDataSinkException(
+                    ucb::UnsupportedDataSinkException(
                             OUString(),
                             static_cast< cppu::OWeakObject * >( this ),
-                            rArg.Sink ) ),
+                            rArg.Sink ),
                     xEnv );
                 // Unreachable
             }
@@ -2433,11 +2432,10 @@ void Content::post(
         else
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny(
-                    ucb::UnsupportedDataSinkException(
+                ucb::UnsupportedDataSinkException(
                         OUString(),
                         static_cast< cppu::OWeakObject * >( this ),
-                        rArg.Sink ) ),
+                        rArg.Sink ),
                 xEnv );
             // Unreachable
         }
@@ -2522,10 +2520,10 @@ void Content::insert(
 
         uno::Sequence<OUString> aProps { "Title" };
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( ucb::MissingPropertiesException(
+            ucb::MissingPropertiesException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
-                                aProps ) ),
+                                aProps ),
             Environment );
         // Unreachable
     }
@@ -2694,12 +2692,11 @@ void Content::insert(
                         }
 
                         ucbhelper::cancelCommandExecution(
-                            uno::makeAny(
-                                ucb::NameClashException(
+                            ucb::NameClashException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
                                     task::InteractionClassification_ERROR,
-                                    aTitle ) ),
+                                    aTitle ),
                             Environment );
                         // Unreachable
                     }
@@ -2727,10 +2724,9 @@ void Content::insert(
         if ( !xInputStream.is() )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny(
-                    ucb::MissingInputStreamException(
+                ucb::MissingInputStreamException(
                         OUString(),
-                        static_cast< cppu::OWeakObject * >( this ) ) ),
+                        static_cast< cppu::OWeakObject * >( this ) ),
                 Environment );
             // Unreachable
         }
@@ -2811,10 +2807,9 @@ void Content::transfer(
             if ( aScheme != HTTP_URL_SCHEME && aScheme != HTTPS_URL_SCHEME )
             {
                 ucbhelper::cancelCommandExecution(
-                    uno::makeAny(
-                        ucb::InteractiveBadTransferURLException(
+                    ucb::InteractiveBadTransferURLException(
                             "Unsupported URL scheme!",
-                            static_cast< cppu::OWeakObject * >( this ) ) ),
+                            static_cast< cppu::OWeakObject * >( this ) ),
                     Environment );
                 // Unreachable
             }
@@ -2844,9 +2839,9 @@ void Content::transfer(
              ( sourceURI.GetHost() != targetURI.GetHost() ) )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( ucb::InteractiveBadTransferURLException(
+                ucb::InteractiveBadTransferURLException(
                                 "Different hosts!",
-                                static_cast< cppu::OWeakObject * >( this ) ) ),
+                                static_cast< cppu::OWeakObject * >( this ) ),
                 Environment );
             // Unreachable
         }
@@ -2968,12 +2963,11 @@ void Content::transfer(
                 case ucb::NameClash::ERROR:
                 {
                     ucbhelper::cancelCommandExecution(
-                        uno::makeAny(
-                            ucb::NameClashException(
+                        ucb::NameClashException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
                                 task::InteractionClassification_ERROR,
-                                aTargetURI ) ),
+                                aTargetURI ),
                         Environment );
                     SAL_FALLTHROUGH; // Unreachable
                 }
@@ -2987,11 +2981,10 @@ void Content::transfer(
                 default:
                 {
                     ucbhelper::cancelCommandExecution(
-                        uno::makeAny(
-                            ucb::UnsupportedNameClashException(
+                        ucb::UnsupportedNameClashException(
                                 OUString(),
                                 static_cast< cppu::OWeakObject * >( this ),
-                                rArgs.NameClash ) ),
+                                rArgs.NameClash ),
                         Environment );
                     // Unreachable
                 }
@@ -3549,10 +3542,10 @@ bool Content::isFolder(
 }
 
 
-uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
+std::unique_ptr<uno::Exception> Content::MapDAVException( const DAVException & e, bool bWrite )
 {
     // Map DAVException...
-    uno::Any aException;
+    std::unique_ptr<uno::Exception> aException;
 
     OUString aURL;
     if ( m_bTransient )
@@ -3578,14 +3571,13 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
                 uno::makeAny(aURL),
                 beans::PropertyState_DIRECT_VALUE);
 
-            aException <<=
-                ucb::InteractiveAugmentedIOException(
+            return
+                o3tl::make_unique<ucb::InteractiveAugmentedIOException>(
                     "Not found!",
                     static_cast< cppu::OWeakObject * >( this ),
                     task::InteractionClassification_ERROR,
                     ucb::IOErrorCode_NOT_EXISTING,
                     aArgs );
-            return aException;
         }
         default:
             break;
@@ -3596,15 +3588,13 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
     case DAVException::DAV_HTTP_ERROR:
         {
             if ( bWrite )
-                aException <<=
-                    ucb::InteractiveNetworkWriteException(
+                return o3tl::make_unique<ucb::InteractiveNetworkWriteException>(
                         e.getData(),
                         static_cast< cppu::OWeakObject * >( this ),
                         task::InteractionClassification_ERROR,
                         e.getData() );
             else
-                aException <<=
-                    ucb::InteractiveNetworkReadException(
+                o3tl::make_unique<ucb::InteractiveNetworkReadException>(
                         e.getData(),
                         static_cast< cppu::OWeakObject * >( this ),
                         task::InteractionClassification_ERROR,
@@ -3613,8 +3603,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
         }
 
     case DAVException::DAV_HTTP_LOOKUP:
-        aException <<=
-            ucb::InteractiveNetworkResolveNameException(
+        o3tl::make_unique<ucb::InteractiveNetworkResolveNameException>(
                 OUString(),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
@@ -3631,8 +3620,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
 
     case DAVException::DAV_HTTP_TIMEOUT:
     case DAVException::DAV_HTTP_CONNECT:
-        aException <<=
-            ucb::InteractiveNetworkConnectException(
+        o3tl::make_unique<ucb::InteractiveNetworkConnectException>(
                 OUString(),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
@@ -3648,16 +3636,14 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
 //         break;
 
     case DAVException::DAV_INVALID_ARG:
-        aException <<=
-            lang::IllegalArgumentException(
+        o3tl::make_unique<lang::IllegalArgumentException>(
                 OUString(),
                 static_cast< cppu::OWeakObject * >( this ),
                 -1 );
         break;
 
     case DAVException::DAV_LOCKED:
-        aException <<=
-            ucb::InteractiveLockingLockedException(
+        o3tl::make_unique<ucb::InteractiveLockingLockedException>(
                 "Locked!",
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
@@ -3666,8 +3652,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
         break;
 
     case DAVException::DAV_LOCKED_SELF:
-        aException <<=
-            ucb::InteractiveLockingLockedException(
+        o3tl::make_unique<ucb::InteractiveLockingLockedException>(
                 "Locked (self!)",
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
@@ -3676,8 +3661,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
         break;
 
     case DAVException::DAV_NOT_LOCKED:
-        aException <<=
-            ucb::InteractiveLockingNotLockedException(
+        o3tl::make_unique<ucb::InteractiveLockingNotLockedException>(
                 "Not locked!",
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
@@ -3685,8 +3669,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
         break;
 
     case DAVException::DAV_LOCK_EXPIRED:
-        aException <<=
-            ucb::InteractiveLockingLockExpiredException(
+        o3tl::make_unique<ucb::InteractiveLockingLockExpiredException>(
                 "Lock expired!",
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
@@ -3694,8 +3677,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
         break;
 
     default:
-        aException <<=
-            ucb::InteractiveNetworkGeneralException(
+        o3tl::make_unique<ucb::InteractiveNetworkGeneralException>(
                 OUString(),
                 static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR );
@@ -3727,7 +3709,8 @@ void Content::cancelCommandExecution(
                 const uno::Reference< ucb::XCommandEnvironment > & xEnv,
                 bool bWrite /* = sal_False */ )
 {
-    ucbhelper::cancelCommandExecution( MapDAVException( e, bWrite ), xEnv );
+    auto ex = MapDAVException( e, bWrite );
+    ucbhelper::cancelCommandExecution( *ex, xEnv );
     // Unreachable
 }
 

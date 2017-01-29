@@ -74,7 +74,7 @@ private:
     bool isFolder(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
 
     css::uno::Any mapGIOError( GError *error );
-    css::uno::Any getBadArgExcept();
+    css::lang::IllegalArgumentException getBadArgExcept();
 
     css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(

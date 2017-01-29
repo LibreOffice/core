@@ -640,10 +640,10 @@ uno::Reference< ucb::XContent > createNew(
         else
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny( lang::IllegalArgumentException(
+                lang::IllegalArgumentException(
                                         "Unknown transfer operation!",
                                         rContext.xProcessor,
-                                        -1 ) ),
+                                        -1 ),
                               rContext.xOrigEnv );
             // Unreachable
         }
@@ -1027,9 +1027,9 @@ void handleNameClashRename(
     if ( aOldTitle.isEmpty() )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( beans::UnknownPropertyException(
+            beans::UnknownPropertyException(
                             "Unable to get property 'Title' from new object!",
-                            rContext.xProcessor ) ),
+                            rContext.xProcessor ),
             rContext.xOrigEnv );
         // Unreachable
     }
@@ -1141,11 +1141,10 @@ void handleNameClashRename(
     if ( nTry == 50 )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny(
                 ucb::UnsupportedNameClashException(
                     "Unable to resolve name clash!",
                     rContext.xProcessor,
-                    ucb::NameClash::RENAME ) ),
+                    ucb::NameClash::RENAME ),
             rContext.xOrigEnv );
         // Unreachable
     }
@@ -1163,9 +1162,9 @@ void globalTransfer_(
     if ( !bSourceIsFolder && xSourceProps->wasNull() )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( beans::UnknownPropertyException(
+            beans::UnknownPropertyException(
                             "Unable to get property 'IsFolder' from source object!",
-                            rContext.xProcessor ) ),
+                            rContext.xProcessor ),
             rContext.xOrigEnv );
         // Unreachable
     }
@@ -1175,9 +1174,9 @@ void globalTransfer_(
     if ( !bSourceIsDocument && xSourceProps->wasNull() )
     {
         ucbhelper::cancelCommandExecution(
-            uno::makeAny( beans::UnknownPropertyException(
+            beans::UnknownPropertyException(
                             "Unable to get property 'IsDocument' from source object!",
-                            rContext.xProcessor ) ),
+                            rContext.xProcessor ),
             rContext.xOrigEnv );
         // Unreachable
     }
@@ -1361,12 +1360,11 @@ void globalTransfer_(
                 case ucb::NameClash::OVERWRITE:
                 {
                     ucbhelper::cancelCommandExecution(
-                        uno::makeAny(
                             ucb::UnsupportedNameClashException(
                                 "BUG: insert + replace == true MUST NOT "
                                 "throw NameClashException.",
                                 rContext.xProcessor,
-                                rContext.aArg.NameClash ) ),
+                                rContext.aArg.NameClash ),
                         rContext.xOrigEnv );
                     SAL_FALLTHROUGH; // Unreachable
                 }
@@ -1457,12 +1455,11 @@ void globalTransfer_(
                 default:
                 {
                     ucbhelper::cancelCommandExecution(
-                        uno::makeAny(
                             ucb::UnsupportedNameClashException(
                                 "default action, don't know how to "
                                 "handle name clash",
                                 rContext.xProcessor,
-                                rContext.aArg.NameClash ) ),
+                                rContext.aArg.NameClash ),
                         rContext.xOrigEnv );
                     // Unreachable
                 }
