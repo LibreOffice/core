@@ -205,7 +205,7 @@ const Sequence< sal_Int8>& SecurityEnvironment_NssImpl::getUnoTunnelId() {
 OUString SecurityEnvironment_NssImpl::getSecurityEnvironmentInformation()
 {
     OUStringBuffer buff;
-    for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
+    for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); ++is)
     {
         buff.append(OUString::createFromAscii(PK11_GetTokenName(*is)));
         buff.append("\n");
@@ -353,7 +353,7 @@ SecurityEnvironment_NssImpl::getPersonalCertificates()
 
     updateSlots();
     //firstly, we try to find private keys in slot
-    for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
+    for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); ++is)
     {
         PK11SlotInfo *slot = *is;
         SECKEYPrivateKeyList* priKeyList ;
@@ -835,7 +835,7 @@ sal_Int32 SecurityEnvironment_NssImpl::getCertificateCharacters(
     }
     if(priKey == nullptr)
     {
-        for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); is++)
+        for (CIT_SLOTS is = m_Slots.begin(); is != m_Slots.end(); ++is)
         {
             priKey = PK11_FindPrivateKeyFromCert(*is, const_cast<CERTCertificate*>(cert), nullptr);
             if (priKey)
@@ -913,7 +913,7 @@ xmlSecKeysMngrPtr SecurityEnvironment_NssImpl::createKeysManager() {
     std::unique_ptr<PK11SlotInfo*[]> sarSlots(new PK11SlotInfo*[cSlots]);
     PK11SlotInfo**  slots = sarSlots.get();
     int count = 0;
-    for (CIT_SLOTS islots = m_Slots.begin();islots != m_Slots.end(); islots++, count++)
+    for (CIT_SLOTS islots = m_Slots.begin();islots != m_Slots.end(); ++islots, ++count)
         slots[count] = *islots;
 
     pKeysMngr = xmlSecNssAppliedKeysMngrCreate(slots, cSlots, handler ) ;
