@@ -62,8 +62,8 @@ namespace connectivity
                                   const ::rtl::OUString& aCause,
                                   const css::uno::Reference< css::uno::XInterface >& _rxContext);
 
-        sal_Int32 getColumnTypeFromFBType(short aType, short aSubType);
-        ::rtl::OUString getColumnTypeNameFromFBType(short aType, short aSubType);
+        sal_Int32 getColumnTypeFromFBType(short aType, short aSubType, short aScale);
+        ::rtl::OUString getColumnTypeNameFromFBType(short aType, short aSubType, short aScale);
 
         /**
          * Internally (i.e. in RDB$FIELD_TYPE) firebird stores the data type
