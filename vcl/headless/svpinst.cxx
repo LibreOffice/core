@@ -360,10 +360,14 @@ bool SvpSalInstance::DoYield(bool bWait, bool bHandleAllCurrentEvents, sal_uLong
             timeval Timeout;
             // determine remaining timeout.
             gettimeofday (&Timeout, nullptr);
-            nTimeoutMS = (m_aTimeout.tv_sec - Timeout.tv_sec) * 1000
-                         + m_aTimeout.tv_usec/1000 - Timeout.tv_usec/1000;
-            if( nTimeoutMS < 0 )
-                nTimeoutMS = 0;
+            if ( m_aTimeout > Timeout )
+            {
+                int nTimeoutMicroS = m_aTimeout.tv_usec - Timeout.tv_usec;
+                nTimeoutMS = (m_aTimeout.tv_sec - Timeout.tv_sec) * 1000
+                           + nTimeoutMicroS / 1000;
+                if ( nTimeoutMicroS % 1000 )
+                    nTimeoutMS += 1;
+            }
         }
         else
             nTimeoutMS = -1; // wait until something happens
