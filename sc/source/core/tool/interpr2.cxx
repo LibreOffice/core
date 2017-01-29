@@ -783,8 +783,8 @@ void ScInterpreter::ScGetDateDif()
     if ( MustHaveParamCount( GetByte(), 3 ) )
     {
         OUString aInterval = GetString().getString();
-        double nDate2    = GetDouble();
-        double nDate1    = GetDouble();
+        long nDate2 = ::rtl::math::approxFloor( GetDouble() );
+        long nDate1 = ::rtl::math::approxFloor( GetDouble() );
 
         if (nGlobalError != FormulaError::NONE)
         {
@@ -811,12 +811,12 @@ void ScInterpreter::ScGetDateDif()
         sal_uInt16 d1, m1, d2, m2;
         sal_Int16 y1, y2;
         Date aDate1( *( pFormatter->GetNullDate()));
-        aDate1 += (long) ::rtl::math::approxFloor( nDate1 );
+        aDate1 += nDate1;
         y1 = aDate1.GetYear();
         m1 = aDate1.GetMonth();
         d1 = aDate1.GetDay();
         Date aDate2( *( pFormatter->GetNullDate()));
-        aDate2 += (long) ::rtl::math::approxFloor( nDate2 );
+        aDate2 += nDate2;
         y2 = aDate2.GetYear();
         m2 = aDate2.GetMonth();
         d2 = aDate2.GetDay();
@@ -904,9 +904,6 @@ void ScInterpreter::ScGetDateDif()
         else if ( aInterval.equalsIgnoreAsciiCase( "yd" ) )
         {
             // Return number of days, excluding years.
-
-            /* TODO: check what Excel really does, though this seems to be
-             * reasonable */
 
             // Condition corresponds with "y".
             if (m2 > m1 || (m2 == m1 && d2 >= d1))

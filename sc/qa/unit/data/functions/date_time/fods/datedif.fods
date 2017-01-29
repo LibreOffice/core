@@ -2610,6 +2610,33 @@
      </table:table-cell>
      <table:table-cell table:number-columns-repeated="8"/>
     </table:table-row>
+    <table:table-row table:style-name="ro5">
+     <table:table-cell table:formula="of:=DATEDIF([.F112];[.G112];[.H112])" office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="float" office:value="2" calcext:value-type="float">
+      <text:p>2</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce11" table:formula="of:=[.A112]=[.B112]" office:value-type="boolean" office:boolean-value="true" calcext:value-type="boolean">
+      <text:p>PRAVDA</text:p>
+     </table:table-cell>
+     <table:table-cell table:formula="of:=FORMULA([.A112])" office:value-type="string" office:string-value="=DATEDIF(F112;G112;H112)" calcext:value-type="string">
+      <text:p>=DATEDIF(F112;G112;H112)</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>tdf#105548</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce40" office:value-type="date" office:date-value="2017-01-01T08:00:00" calcext:value-type="date">
+      <text:p>01/01/2017 08:00  AM</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="ce40" office:value-type="date" office:date-value="2017-01-03T07:00:00" calcext:value-type="date">
+      <text:p>01/03/17 07:00 AM</text:p>
+     </table:table-cell>
+     <table:table-cell office:value-type="string" calcext:value-type="string">
+      <text:p>d</text:p>
+     </table:table-cell>
+     <table:table-cell table:number-columns-repeated="8"/>
+    </table:table-row>
     <table:table-row table:style-name="ro6" table:number-rows-repeated="1048464">
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
@@ -2617,7 +2644,7 @@
      <table:table-cell table:number-columns-repeated="16"/>
     </table:table-row>
     <calcext:conditional-formats>
-     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C111">
+     <calcext:conditional-format calcext:target-range-address="Sheet2.C2:Sheet2.C112">
       <calcext:condition calcext:apply-style-name="1true" calcext:value="=TRUE()" calcext:base-cell-address="Sheet2.C2"/>
       <calcext:condition calcext:apply-style-name="0false" calcext:value="!=TRUE()" calcext:base-cell-address="Sheet2.C2"/>
      </calcext:conditional-format>
