@@ -36,6 +36,7 @@
 #include <osl/file.hxx>
 #include <osl/thread.h>
 #include <memory>
+#include <algorithm>
 
 class FilterConfigItem;
 
@@ -459,7 +460,6 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     pVDev->SetFillColor();
 
     aFont.SetColor( COL_LIGHTRED );
-//  aFont.SetSize( Size( 0, 32 ) );
 
     pVDev->Push( PushFlags::FONT );
     pVDev->SetFont( aFont );
@@ -470,51 +470,77 @@ void MakePreview(sal_uInt8* pBuf, sal_uInt32 nBytesRead,
     OUString aString;
     int nLen;
     sal_uInt8* pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%Title:"), nBytesRead - 32, 8 );
-    if ( pDest )
+    sal_uInt32 nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf)) : 0;
+    if (nRemainingBytes >= 8)
     {
         pDest += 8;
-        if ( *pDest == ' ' )
-            pDest++;
-        nLen = ImplGetLen( pDest, 32 );
-        sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-        if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )
+        nRemainingBytes -= 8;
+        if (nRemainingBytes && *pDest == ' ')
         {
-            aString += " Title:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
+            ++pDest;
+            --nRemainingBytes;
         }
-        pDest[ nLen ] = aOldValue;
+        nLen = ImplGetLen(pDest, std::min<sal_uInt32>(nRemainingBytes, 32));
+        if (static_cast<sal_uInt32>(nLen) < nRemainingBytes)
+        {
+            sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+            if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )
+            {
+                aString += " Title:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
+            }
+            pDest[ nLen ] = aOldValue;
+        }
     }
     pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%Creator:"), nBytesRead - 32, 10 );
-    if ( pDest )
+    nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf)) : 0;
+    if (nRemainingBytes >= 10)
     {
         pDest += 10;
-        if ( *pDest == ' ' )
-            pDest++;
-        nLen = ImplGetLen( pDest, 32 );
-        sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-        aString += " Creator:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
-        pDest[ nLen ] = aOldValue;
+        nRemainingBytes -= 10;
+        if (nRemainingBytes && *pDest == ' ')
+        {
+            ++pDest;
+            --nRemainingBytes;
+        }
+        nLen = ImplGetLen(pDest, std::min<sal_uInt32>(nRemainingBytes, 32));
+        if (static_cast<sal_uInt32>(nLen) < nRemainingBytes)
+        {
+            sal_uInt8 aOldValue(pDest[nLen]); pDest[nLen] = 0;
+            aString += " Creator:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
+            pDest[nLen] = aOldValue;
+        }
     }
     pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%CreationDate:"), nBytesRead - 32, 15 );
-    if ( pDest )
+    nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf)) : 0;
+    if (nRemainingBytes >= 15)
     {
         pDest += 15;
-        if ( *pDest == ' ' )
-            pDest++;
-        nLen = ImplGetLen( pDest, 32 );
-        sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
-        if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )
+        nRemainingBytes -= 15;
+        if (nRemainingBytes && *pDest == ' ')
         {
-            aString += " CreationDate:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
+            ++pDest;
+            --nRemainingBytes;
         }
-        pDest[ nLen ] = aOldValue;
+        nLen = ImplGetLen(pDest, std::min<sal_uInt32>(nRemainingBytes, 32));
+        if (static_cast<sal_uInt32>(nLen) < nRemainingBytes)
+        {
+            sal_uInt8 aOldValue(pDest[ nLen ]); pDest[ nLen ] = 0;
+            if ( strcmp( reinterpret_cast<char*>(pDest), "none" ) != 0 )
+            {
+                aString += " CreationDate:" + OUString::createFromAscii( reinterpret_cast<char*>(pDest) ) + "\n";
+            }
+            pDest[ nLen ] = aOldValue;
+        }
     }
     pDest = ImplSearchEntry( pBuf, reinterpret_cast<sal_uInt8 const *>("%%LanguageLevel:"), nBytesRead - 4, 16 );
-    if ( pDest )
+    nRemainingBytes = pDest ? (nBytesRead - (pDest - pBuf)) : 0;
+    if (nRemainingBytes >= 16)
     {
         pDest += 16;
-        sal_uInt32 nCount = 4;
-        long nNumber = ImplGetNumber(pDest, nCount);
-        if ( nCount && ( (sal_uInt32)nNumber < 10 ) )
+        nRemainingBytes -= 16;
+        sal_uInt32 nCount = std::min<sal_uInt32>(nRemainingBytes, 4U);
+        sal_uInt32 nNumber = ImplGetNumber(pDest, nCount);
+        if (nCount && nNumber < 10)
         {
             aString += " LanguageLevel:" + OUString::number( nNumber );
         }
