@@ -64,10 +64,15 @@ void firebird::evaluateStatusVector(const ISC_STATUS_ARRAY& rStatusVector,
     }
 }
 
-sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType)
+sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType, short aScale)
 {
     aType &= ~1; // Remove last bit -- it is used to denote whether column
                  // can store Null, not needed for type determination
+
+    // if scale is set without subtype then imply numeric
+    if(aSubType == 0 && aScale < 0)
+        aSubType = 1;
+
     switch (aType)
     {
     case SQL_TEXT:
@@ -134,11 +139,16 @@ sal_Int32 firebird::getColumnTypeFromFBType(short aType, short aSubType)
     }
 }
 
-OUString firebird::getColumnTypeNameFromFBType(short aType, short aSubType)
+OUString firebird::getColumnTypeNameFromFBType(short aType, short aSubType, short aScale)
 {
     aType &= ~1; // Remove last bit -- it is used to denote whether column
                 // can store Null, not needed for type determination
-    switch (aType)
+
+    // if scale is set without subtype than imply numeric
+    if(aSubType == 0 && aScale < 0)
+        aSubType = 1;
+
+   switch (aType)
     {
     case SQL_TEXT:
         return OUString("SQL_TEXT");
