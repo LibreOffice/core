@@ -447,6 +447,13 @@ ORowSetValue OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_S
     // Basically we just have to map to the correct direct request and
     // ORowSetValue does the rest for us here.
     int nSqlSubType = m_pSqlda->sqlvar[nColumnIndex-1].sqlsubtype;
+
+    // TODO Firebird 3.0 does not set subtype (i.e. set to 0) for computed numeric/decimal value.
+    // It may change in the future.
+    // Imply numeric data type when subtype is 0 and scale is negative
+    if( nSqlSubType == 0 && m_pSqlda->sqlvar[nColumnIndex-1].sqlscale < 0 )
+        nSqlSubType = 1;
+
     switch (m_pSqlda->sqlvar[nColumnIndex-1].sqltype & ~1)
     {
         case SQL_TEXT:
@@ -577,9 +584,11 @@ OUString OResultSet::retrieveValue(const sal_Int32 nColumnIndex, const ISC_SHORT
                         aLength,
                         RTL_TEXTENCODING_UTF8);
     }
-    else if ((aSqlType == SQL_SHORT || aSqlType == SQL_LONG
-                || aSqlType == SQL_DOUBLE || aSqlType == SQL_INT64)
-                    && (aSqlSubType == 1 || aSqlSubType == 2))
+    else if ((aSqlType == SQL_SHORT || aSqlType == SQL_LONG ||
+              aSqlType == SQL_DOUBLE || aSqlType == SQL_INT64)
+          && (aSqlSubType == 1 ||
+              aSqlSubType == 2 ||
+              (aSqlSubType == 0 && m_pSqlda->sqlvar[nColumnIndex-1].sqlscale < 0) ) )
     {
         // decimal and numeric types
         switch(aSqlType)
