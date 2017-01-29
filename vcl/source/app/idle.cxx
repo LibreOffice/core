@@ -55,11 +55,6 @@ void Idle::Start()
     Task::StartTimer(nPeriod);
 }
 
-bool Idle::ReadyForSchedule( sal_uInt64 /* nTimeNow */ ) const
-{
-    return true;
-}
-
 sal_uInt64 Idle::UpdateMinPeriod( sal_uInt64 /* nMinPeriod */, sal_uInt64 /* nTimeNow */ ) const
 {
     return Scheduler::ImmediateTimeoutMs;
