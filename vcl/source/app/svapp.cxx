@@ -551,7 +551,7 @@ void Scheduler::ProcessEventsToIdle()
         }
     }
 #if OSL_DEBUG_LEVEL > 0
-    ImplSchedulerData* pSchedulerData = ImplGetSVData()->mpFirstSchedulerData;
+    ImplSchedulerData* pSchedulerData = ImplGetSVData()->maSchedCtx.mpFirstSchedulerData;
     bool bAnyIdle = false;
     while ( pSchedulerData )
     {

@@ -238,10 +238,10 @@ bool SvpSalInstance::CheckTimeout( bool bExecuteTimers )
 
                 // notify
                 ImplSVData* pSVData = ImplGetSVData();
-                if( pSVData->mpSalTimer )
+                if( pSVData->maSchedCtx.mpSalTimer )
                 {
                     bool idle = true; // TODO
-                    pSVData->mpSalTimer->CallCallback( idle );
+                    pSVData->maSchedCtx.mpSalTimer->CallCallback( idle );
                 }
             }
         }
