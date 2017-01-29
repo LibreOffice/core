@@ -437,11 +437,18 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
-    counter = 16777216
+    typeCounter = {'PBXProject'           : 000000,
+                   'PBXGroup'             : 100000,
+                   'PBXFileReference'     : 200000,
+                   'PBXNativeTarget'      : 300000,
+                   'XCConfigurationList'  : 400000,
+                   'PBXSourcesBuildPhase' : 500000,
+                   'XCBuildConfiguration' : 600000,
+                   'PBXBuildFile'         : 700000}
 
     def emit(self):
-        rootId = 'X0000001'
-        mainGroupId = 'X0000002'
+        mainGroupId, mainGroup = self.generate_PBXGroup(None)
+        rootId = self.generate_id('PBXProject')
         self.rootObj = {'attributes': {'LastUpgradeCheck': '0820',
                                        'ORGANIZATIONNAME': 'LibreOffice',
                                        'TargetAttributes': {}},
@@ -455,7 +462,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                         'projectRoot': '',
                         'buildConfigurationList': '',
                         'targets': []}
-        mainGroup = {'isa': 'PBXGroup', 'children': [], 'sourceTree': '<group>'}
         pbxproj = {'archiveVersion': 1,
                    'classes': {},
                    'objectVersion': 46,
@@ -465,27 +471,28 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         for module in self.gbuildparser.modules:
             if module == 'include':
                 continue
-            sourceId, sourceObj = self.define_pbxgroup('Sources')
-            includeId, includeObj = self.define_pbxgroup('Headers')
-            moduleId, moduleObj = self.define_pbxgroup(module)
+            moduleId, moduleObj = self.generate_PBXGroup(module)
+            sourceId, sourceObj = self.generate_PBXGroup('Sources')
+            includeId, includeObj = self.generate_PBXGroup('Headers')
+            targetId, targetObj = self.generate_PBXGroup('Targets')
 
-            moduleObj['children'] = [sourceId, includeId]
+            moduleObj['children'] = [sourceId, includeId, targetId]
             pbxproj['objects'].update({sourceId:  sourceObj,
                                        includeId: includeObj,
-                                       moduleId: moduleObj})
+                                       moduleId: moduleObj,
+                                       targetId: targetObj})
             mainGroup['children'].append(moduleId)
 
             for i in self.gbuildparser.modules[module]['headers']:
-                ref = self.generate_id()
+                ref = self.generate_id('PBXFileReference')
                 pbxproj['objects'][ref] = self.generate_PBXFileReference(module, i)
                 includeObj['children'].append(ref)
             for i in self.gbuildparser.modules[module]['sources']:
-                ref = self.generate_id()
+                ref = self.generate_id('PBXFileReference')
                 pbxproj['objects'][ref] = self.generate_PBXFileReference(module, i)
                 sourceObj['children'].append(ref)
-
             for target in self.gbuildparser.modules[module]['targets']:
-                pbxproj['objects'].update(self.generate_project(target, module, sourceObj['children']))
+                pbxproj['objects'].update(self.generate_target(target, module, targetObj, sourceObj['children']))
 
         xcodeprojdir = './osx/libreoffice.xcodeproj'
         try:
@@ -495,13 +502,6 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         with open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w') as f:
             f.write('// !$*UTF8*$!\n')
             self.write_object(pbxproj, f, 0)
-
-    def define_pbxgroup(self, name):
-        return self.generate_id(), {'isa': 'PBXGroup', 'children': [], 'name': name, 'sourceTree': '<group>'}
-
-    def generate_id(self):
-        XcodeIntegrationGenerator.counter += 1
-        return str('X%07x' % XcodeIntegrationGenerator.counter)
 
     def indent(self, file, level):
         if level != 0:
@@ -535,7 +535,34 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                 file.write(',')
             file.write(')')
 
-    def generate_target(self, modulename):
+    def generate_id(self, id):
+        self.typeCounter[id] += 1
+        return str('X%06d' % self.typeCounter[id])
+
+    def generate_target(self, target, module, targetObj, sourceObj):
+        targetId = self.generate_id('PBXNativeTarget')
+        configurationListId = self.generate_id('XCConfigurationList')
+        configurationDebugId = self.generate_id('XCBuildConfiguration')
+        fileId = self.generate_id('XCBuildConfiguration')
+        objects = {targetId: self.generate_PBXLegacyTarget(target, configurationListId),
+                   configurationListId: self.generate_XCBuildConfiguration(target, configurationDebugId),
+                   configurationDebugId: self.generate_XCBuildConfiguration(target, configurationDebugId, debug=True),
+                   fileId : self.generate_PBXFileReference(module, target['LINKTARGET'], explicit=target['build_type'])
+                   }
+        self.rootObj['attributes']['TargetAttributes'].update({
+            targetId: {'CreatedOnToolsVersion': '8.2', 'ProvisioningStyle': 'Automatic'}})
+        self.rootObj['buildConfigurationList'] = configurationListId
+        self.rootObj['targets'].append(targetId)
+        targetObj['children'].append(fileId)
+        return objects
+
+    def generate_PBXGroup(self, name):
+        obj = {'isa': 'PBXGroup', 'children': [], 'sourceTree': '<group>'}
+        if not name is None:
+            obj['name'] = name
+        return self.generate_id('PBXGroup'), obj
+
+    def generate_PBXLegacyTarget(self, modulename, configurationListId):
         if modulename['build_type'] == 'Library':
             product = 'com.apple.product-type.library.dynamic'
         elif modulename['build_type'] == 'Executable':
@@ -545,8 +572,8 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         else:
             product = 'com.apple.product-type.something'
 
-        result = {'isa': 'PBXLegacyTarget',
-                  'buildConfigurationList': self.configurationListId,
+        return {'isa': 'PBXLegacyTarget',
+                  'buildConfigurationList': configurationListId,
                   'buildArgumentsString': modulename['target_name'],
                   'buildPhases': [],
                   'dependencies': [],
@@ -555,88 +582,74 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                   'name': modulename['target_name'],
                   'productName': modulename['name'],
                   'passBuildSettingsEnvironment': 1}
+
+    def generate_XCBuildConfiguration(self, modulename, configurationDebugId, debug=False):
+        if debug:
+            result = {'isa': 'XCBuildConfiguration',
+                      'buildSettings': {
+                            'ALWAYS_SEARCH_USER_PATHS': 'NO',
+                            'CLANG_ANALYZER_NONNULL': 'YES',
+                            'CLANG_CXX_LANGUAGE_STANDARD': 'gnu++0x',
+                            'CLANG_CXX_LIBRARY': 'libc++',
+                            'CLANG_ENABLE_MODULES': 'YES',
+                            'CLANG_ENABLE_OBJC_ARC': 'YES',
+                            'CLANG_WARN_BOOL_CONVERSION': 'YES',
+                            'CLANG_WARN_CONSTANT_CONVERSION': 'YES',
+                            'CLANG_WARN_DIRECT_OBJC_ISA_USAGE': 'YES_ERROR',
+                            'CLANG_WARN_DOCUMENTATION_COMMENTS': 'YES',
+                            'CLANG_WARN_EMPTY_BODY': 'YES',
+                            'CLANG_WARN_ENUM_CONVERSION': 'YES',
+                            'CLANG_WARN_INFINITE_RECURSION': 'YES',
+                            'CLANG_WARN_INT_CONVERSION': 'YES',
+                            'CLANG_WARN_OBJC_ROOT_CLASS': 'YES_ERROR',
+                            'CLANG_WARN_SUSPICIOUS_MOVE': 'YES',
+                            'CLANG_WARN_UNREACHABLE_CODE': 'YES',
+                            'CLANG_WARN__DUPLICATE_METHOD_MATCH': 'YES',
+                            'CODE_SIGN_IDENTITY': '-',
+                            'COPY_PHASE_STRIP': 'NO',
+                            'DEBUG_INFORMATION_FORMAT': 'dwarf',
+                            'ENABLE_STRICT_OBJC_MSGSEND': 'YES',
+                            'ENABLE_TESTABILITY': 'YES',
+                            'GCC_C_LANGUAGE_STANDARD': 'gnu99',
+                            'GCC_DYNAMIC_NO_PIC': 'NO',
+                            'GCC_NO_COMMON_BLOCKS': 'YES',
+                            'GCC_OPTIMIZATION_LEVEL': 0,
+                            'GCC_PREPROCESSOR_DEFINITIONS': ['DEBUG=1', '$(inherited)'],
+                            'GCC_WARN_64_TO_32_BIT_CONVERSION': 'YES',
+                            'GCC_WARN_ABOUT_RETURN_TYPE': 'YES_ERROR',
+                            'GCC_WARN_UNDECLARED_SELECTOR': 'YES',
+                            'GCC_WARN_UNINITIALIZED_AUTOS': 'YES_AGGRESSIVE',
+                            'GCC_WARN_UNUSED_FUNCTION': 'YES',
+                            'GCC_WARN_UNUSED_VARIABLE': 'YES',
+                            'MACOSX_DEPLOYMENT_TARGET': '10.12',
+                            'MTL_ENABLE_DEBUG_INFO': 'YES',
+                            'ONLY_ACTIVE_ARCH': 'YES',
+                            'PRODUCT_NAME': '$(TARGET_NAME)',
+                            'SDKROOT': 'macosx',
+                            'HEADER_SEARCH_PATHS': modulename['include']},
+                      'name': 'Debug'}
+        else:
+            result = {'isa': 'XCConfigurationList',
+                      'buildConfigurations': [configurationDebugId],
+                      'defaultConfigurationIsVisible': 0,
+                      'defaultConfigurationName': 'Debug'}
         return result
 
-    def generate_configuration_debug(self, modulename):
-        result = {'isa': 'XCBuildConfiguration',
-                  'buildSettings': {
-                      'ALWAYS_SEARCH_USER_PATHS': 'NO',
-                      'CLANG_ANALYZER_NONNULL': 'YES',
-                      'CLANG_CXX_LANGUAGE_STANDARD': 'gnu++0x',
-                      'CLANG_CXX_LIBRARY': 'libc++',
-                      'CLANG_ENABLE_MODULES': 'YES',
-                      'CLANG_ENABLE_OBJC_ARC': 'YES',
-                      'CLANG_WARN_BOOL_CONVERSION': 'YES',
-                      'CLANG_WARN_CONSTANT_CONVERSION': 'YES',
-                      'CLANG_WARN_DIRECT_OBJC_ISA_USAGE': 'YES_ERROR',
-                      'CLANG_WARN_DOCUMENTATION_COMMENTS': 'YES',
-                      'CLANG_WARN_EMPTY_BODY': 'YES',
-                      'CLANG_WARN_ENUM_CONVERSION': 'YES',
-                      'CLANG_WARN_INFINITE_RECURSION': 'YES',
-                      'CLANG_WARN_INT_CONVERSION': 'YES',
-                      'CLANG_WARN_OBJC_ROOT_CLASS': 'YES_ERROR',
-                      'CLANG_WARN_SUSPICIOUS_MOVE': 'YES',
-                      'CLANG_WARN_UNREACHABLE_CODE': 'YES',
-                      'CLANG_WARN__DUPLICATE_METHOD_MATCH': 'YES',
-                      'CODE_SIGN_IDENTITY': '-',
-                      'COPY_PHASE_STRIP': 'NO',
-                      'DEBUG_INFORMATION_FORMAT': 'dwarf',
-                      'ENABLE_STRICT_OBJC_MSGSEND': 'YES',
-                      'ENABLE_TESTABILITY': 'YES',
-                      'GCC_C_LANGUAGE_STANDARD': 'gnu99',
-                      'GCC_DYNAMIC_NO_PIC': 'NO',
-                      'GCC_NO_COMMON_BLOCKS': 'YES',
-                      'GCC_OPTIMIZATION_LEVEL': 0,
-                      'GCC_PREPROCESSOR_DEFINITIONS': [
-                          'DEBUG=1',
-                          '$(inherited)'],
-                      'GCC_WARN_64_TO_32_BIT_CONVERSION': 'YES',
-                      'GCC_WARN_ABOUT_RETURN_TYPE': 'YES_ERROR',
-                      'GCC_WARN_UNDECLARED_SELECTOR': 'YES',
-                      'GCC_WARN_UNINITIALIZED_AUTOS': 'YES_AGGRESSIVE',
-                      'GCC_WARN_UNUSED_FUNCTION': 'YES',
-                      'GCC_WARN_UNUSED_VARIABLE': 'YES',
-                      'MACOSX_DEPLOYMENT_TARGET': '10.12',
-                      'MTL_ENABLE_DEBUG_INFO': 'YES',
-                      'ONLY_ACTIVE_ARCH': 'YES',
-                      'PRODUCT_NAME': '$(TARGET_NAME)',
-                      'SDKROOT': 'macosx',
-                      'HEADER_SEARCH_PATHS': modulename['include']},
-                  'name': 'Debug'}
-        return result
-
-    def generate_configuration_list(self, modulename):
-        result = {'isa': 'XCConfigurationList',
-                  'buildConfigurations': [self.configurationDebugId],
-                  'defaultConfigurationIsVisible': 0,
-                  'defaultConfigurationName': 'Debug'}
-        return result
-
-
-    def generate_PBXFileReference(self, module, filepath):
-        return {'isa': 'PBXFileReference',
+    def generate_PBXFileReference(self, module, filepath, explicit=None):
+        obj =  {'isa': 'PBXFileReference',
                 'path': module + '/' + filepath,
                 'name': filepath,
                 'fileEncoding': 4,
                 'sourceTree': '<group>'}
-
-
-    def generate_project(self, target, module, sourceObj):
-        self.targetId = self.generate_id()
-        self.configurationListId = self.generate_id()
-        self.configurationDebugId = self.generate_id()
-        self.productReferenceId = self.generate_id()
-        self.productGroupId = self.generate_id()
-        self.rootObj['attributes']['TargetAttributes'].update({
-            self.targetId: {'CreatedOnToolsVersion': '8.2',
-                            'ProvisioningStyle': 'Automatic'}})
-        self.rootObj['buildConfigurationList'] = self.configurationListId
-        self.rootObj['targets'].append(self.targetId)
-        objects = {self.targetId: self.generate_target(target),
-                   self.configurationListId: self.generate_configuration_list(target),
-                   self.configurationDebugId: self.generate_configuration_debug(target)
-                   }
-        return objects
+        if not explicit is None:
+            if explicit == 'Library':
+                obj['explicitFileType'] = 'compiled.mach-o.dylib'
+            else:
+                obj['explicitFileType'] = 'compiled.executable'
+            obj['path'] = filepath
+        else:
+            obj['path'] = module + '/' + filepath
+        return obj
 
 
 
