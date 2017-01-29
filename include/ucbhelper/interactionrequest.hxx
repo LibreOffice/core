@@ -67,7 +67,7 @@ class UCBHELPER_DLLPUBLIC InteractionRequest : public cppu::OWeakObject,
     std::unique_ptr<InteractionRequest_Impl> m_pImpl;
 
 protected:
-    void setRequest( const css::uno::Any & rRequest );
+    void setRequest( const css::uno::Exception & rRequest );
 
     InteractionRequest();
     virtual ~InteractionRequest() override;
@@ -78,7 +78,7 @@ public:
       *
       * @param rRequest is the exception describing the error.
       */
-    InteractionRequest( const css::uno::Any & rRequest );
+    InteractionRequest( const css::uno::Exception & rRequest );
 
     /**
       * This method sets the continuations for the request.

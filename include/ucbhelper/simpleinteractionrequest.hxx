@@ -73,7 +73,7 @@ public:
       *        This can be any of the CONTINUATION_* constants combinations
       *        listed above.
       */
-    SimpleInteractionRequest( const css::uno::Any & rRequest,
+    SimpleInteractionRequest( const css::uno::Exception & rRequest,
                               const ContinuationFlags nContinuations );
 
     /**

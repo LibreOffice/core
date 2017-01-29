@@ -38,7 +38,7 @@ SimpleIOErrorRequest::SimpleIOErrorRequest(
     aRequest.Code            = eError;
     aRequest.Arguments       = rArgs;
 
-    setRequest( uno::makeAny( aRequest ) );
+    setRequest( aRequest );
 
     // Fill continuations...
     uno::Sequence< uno::Reference<
