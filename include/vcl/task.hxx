@@ -56,11 +56,18 @@ protected:
     const ImplSchedulerData* GetSchedulerData() const { return mpSchedulerData; }
 
     virtual void SetDeletionFlags();
-    /// Is this item ready to be dispatched at nTimeNow
-    virtual bool ReadyForSchedule( sal_uInt64 nTimeNow ) const = 0;
+
     /**
-     * Adjust nMinPeriod downwards if we want to be notified before
-     * then, nTimeNow is the current time.
+     * How long (in MS) until the Task is ready to be dispatched?
+     *
+     * Simply return Scheduler::ImmediateTimeoutMs if you're ready, like an
+     * Idle. If you have to return Scheduler::InfiniteTimeoutMs, you probably
+     * need an other mechanism to wake up the Scheduler or rely on other
+     * Tasks to be scheduled, or simply use a polling Timer.
+     *
+     * @param nMinPeriod the currently expected sleep time
+     * @param nTimeNow the current time
+     * @return the sleep time of the Task to become ready
      */
     virtual sal_uInt64 UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const = 0;
 
