@@ -1036,7 +1036,7 @@ void MotionPathTag::DeleteMarkedPoints()
         mrView.BrkAction();
 
         SdrUShortCont& rPts = mpMark->GetMarkedPoints();
-        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
+        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly());
         if (aEditor.DeletePoints(rPts))
         {
             if( aEditor.GetPolyPolygon().count() )
@@ -1088,7 +1088,7 @@ void MotionPathTag::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
     if(mpPathObj && isSelected() && (GetMarkedPointCount() != 0))
     {
         SdrUShortCont& rPts = mpMark->GetMarkedPoints();
-        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
+        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly() );
         if (aEditor.SetSegmentsKind(eKind, rPts))
         {
             mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());
@@ -1138,7 +1138,7 @@ void MotionPathTag::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
     if(mpPathObj && mpMark && isSelected() && (GetMarkedPointCount() != 0))
     {
         SdrUShortCont& rPts = mpMark->GetMarkedPoints();
-        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly(), mpPathObj->IsClosed() );
+        PolyPolygonEditor aEditor( mpPathObj->GetPathPoly());
         if (aEditor.SetPointsSmooth(eFlags, rPts))
         {
             mpPathObj->SetPathPoly(aEditor.GetPolyPolygon());

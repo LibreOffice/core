@@ -25,9 +25,8 @@
 
 namespace sdr {
 
-PolyPolygonEditor::PolyPolygonEditor( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed )
+PolyPolygonEditor::PolyPolygonEditor( const basegfx::B2DPolyPolygon& rPolyPolygon)
 : maPolyPolygon( rPolyPolygon )
-, mbIsClosed( bClosed )
 {
 }
 
@@ -46,7 +45,8 @@ bool PolyPolygonEditor::DeletePoints( const std::set< sal_uInt16 >& rAbsPoints )
 
             aCandidate.remove(nPnt);
 
-            if( ( mbIsClosed && aCandidate.count() < 3L) || (aCandidate.count() < 2L) )
+
+            if( aCandidate.count() < 2L )
             {
                 maPolyPolygon.remove(nPoly);
             }
