@@ -31,8 +31,8 @@
 void X11SalData::Timeout( bool idle )
 {
     ImplSVData* pSVData = ImplGetSVData();
-    if( pSVData->mpSalTimer )
-        pSVData->mpSalTimer->CallCallback( idle );
+    if( pSVData->maSchedCtx.mpSalTimer )
+        pSVData->maSchedCtx.mpSalTimer->CallCallback( idle );
 }
 
 void SalXLib::StopTimer()

@@ -596,8 +596,9 @@ void DeInitVCL()
     // and thereby unloading the plugin
     delete pSVData->mpSalSystem;
     pSVData->mpSalSystem = nullptr;
-    delete pSVData->mpSalTimer;
-    pSVData->mpSalTimer = nullptr;
+    assert( !pSVData->maSchedCtx.mpSalTimer );
+    delete pSVData->maSchedCtx.mpSalTimer;
+    pSVData->maSchedCtx.mpSalTimer = nullptr;
 
     // Deinit Sal
     if (pSVData->mpDefInst)

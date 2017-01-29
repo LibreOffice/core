@@ -556,7 +556,7 @@ void Scheduler::ProcessEventsToIdle()
     const ImplSVData* pSVData = ImplGetSVData();
     if ( !pSVData->mpDefInst->IsMainThread() )
         return;
-    const ImplSchedulerData* pSchedulerData = ImplGetSVData()->mpFirstSchedulerData;
+    const ImplSchedulerData* pSchedulerData = ImplGetSVData()->maSchedCtx.mpFirstSchedulerData;
     bool bAnyIdle = false;
     while ( pSchedulerData )
     {
