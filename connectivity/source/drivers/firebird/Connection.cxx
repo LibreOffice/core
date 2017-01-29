@@ -253,6 +253,15 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
             *dpb++ = isc_dpb_sql_dialect;
             *dpb++ = 1; // 1 byte long
             *dpb++ = FIREBIRD_SQL_DIALECT;
+
+            // set UTF8 as default character set
+            const char sCharset[32] = "UTF8";
+            *dpb++ = isc_dpb_set_db_charset;
+            int nCharsetLength = strlen(sCharset);
+            *dpb++ = (char) nCharsetLength;
+            strcpy(dpb, sCharset);
+            dpb+= nCharsetLength;
+
             // Do any more dpbBuffer additions here
 
             if (m_bIsEmbedded || m_bIsFile)
