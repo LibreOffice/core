@@ -35,9 +35,6 @@ class VCL_DLLPUBLIC Scheduler final
     static inline bool HasPendingTasks( const ImplSchedulerContext &rSchedCtx,
                                         const sal_uInt64 nTime );
 
-    static inline void UpdateMinPeriod( ImplSchedulerData *pSchedulerData,
-                                        sal_uInt64 nTime, sal_uInt64 &nMinPeriod );
-
     static inline void UpdateSystemTimer( ImplSchedulerContext &rSchedCtx,
                                           sal_uInt64 nMinPeriod,
                                           bool bForce, sal_uInt64 nTime );

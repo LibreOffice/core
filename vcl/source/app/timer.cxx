@@ -30,21 +30,11 @@ void Timer::SetDeletionFlags()
         Task::SetDeletionFlags();
 }
 
-bool Timer::ReadyForSchedule( sal_uInt64 nTimeNow ) const
-{
-    return (GetSchedulerData()->mnUpdateTime + mnTimeout) <= nTimeNow;
-}
-
-sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64 nMinPeriod, sal_uInt64 nTimeNow ) const
+sal_uInt64 Timer::UpdateMinPeriod( sal_uInt64, sal_uInt64 nTimeNow ) const
 {
     sal_uInt64 nWakeupTime = GetSchedulerData()->mnUpdateTime + mnTimeout;
-    if( nWakeupTime <= nTimeNow )
-        return Scheduler::ImmediateTimeoutMs;
-    else
-    {
-        sal_uInt64 nSleepTime = nWakeupTime - nTimeNow;
-        return ( nSleepTime < nMinPeriod ) ? nSleepTime : nMinPeriod;
-    }
+    return ( nWakeupTime <= nTimeNow )
+        ? Scheduler::ImmediateTimeoutMs : nWakeupTime - nTimeNow;
 }
 
 Timer::Timer( bool bAuto, const sal_Char *pDebugName )
