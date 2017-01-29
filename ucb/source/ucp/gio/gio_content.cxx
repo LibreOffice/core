@@ -139,13 +139,13 @@ OUString SAL_CALL Content::getContentType()
 
 #define EXCEPT(aExcept) \
 do { \
-    if (bThrow) throw aExcept;\
-    aRet = uno::makeAny( aExcept );\
+    aRet.reset(new aExcept); \
+    if (bThrow) throw *aRet;\
 } while(false)
 
-uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterface >& rContext, bool bThrow)
+std::unique_ptr<uno::Exception> convertToException(GError *pError, const uno::Reference< uno::XInterface >& rContext, bool bThrow)
 {
-    uno::Any aRet;
+    std::unique_ptr<uno::Exception> aRet;
 
     gint eCode = pError->code;
     OUString sMessage(pError->message, strlen(pError->message), RTL_TEXTENCODING_UTF8);
@@ -160,108 +160,88 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
     switch (eCode)
     {
         case G_IO_ERROR_FAILED:
-            { io::IOException aExcept(sMessage, rContext);
-            EXCEPT(aExcept); }
+            EXCEPT(io::IOException(sMessage, rContext));
             break;
         case G_IO_ERROR_NOT_MOUNTED:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_EXISTING_PATH, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_EXISTING_PATH, aArgs));
             break;
         case G_IO_ERROR_NOT_FOUND:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_EXISTING, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_EXISTING, aArgs));
             break;
         case G_IO_ERROR_EXISTS:
-            { ucb::NameClashException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, sName);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::NameClashException(sMessage, rContext,
+                task::InteractionClassification_ERROR, sName));
             break;
         case G_IO_ERROR_INVALID_ARGUMENT:
-            { lang::IllegalArgumentException aExcept(sMessage, rContext, -1 );
-            EXCEPT(aExcept); }
+            EXCEPT( lang::IllegalArgumentException(sMessage, rContext, -1 ) );
             break;
         case G_IO_ERROR_PERMISSION_DENIED:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_ACCESS_DENIED, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_ACCESS_DENIED, aArgs));
             break;
         case G_IO_ERROR_IS_DIRECTORY:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_FILE, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_FILE, aArgs));
             break;
         case G_IO_ERROR_NOT_REGULAR_FILE:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_FILE, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_FILE, aArgs));
             break;
         case G_IO_ERROR_NOT_DIRECTORY:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_DIRECTORY, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_NO_DIRECTORY, aArgs));
             break;
         case G_IO_ERROR_FILENAME_TOO_LONG:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NAME_TOO_LONG, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_NAME_TOO_LONG, aArgs));
             break;
         case G_IO_ERROR_PENDING:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_PENDING, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_PENDING, aArgs));
             break;
         case G_IO_ERROR_CLOSED:
         case G_IO_ERROR_CANCELLED:
         case G_IO_ERROR_TOO_MANY_LINKS:
         case G_IO_ERROR_WRONG_ETAG:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_GENERAL, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_GENERAL, aArgs));
             break;
         case G_IO_ERROR_NOT_SUPPORTED:
         case G_IO_ERROR_CANT_CREATE_BACKUP:
         case G_IO_ERROR_WOULD_MERGE:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_SUPPORTED, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_NOT_SUPPORTED, aArgs));
             break;
         case G_IO_ERROR_NO_SPACE:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_OUT_OF_DISK_SPACE, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_OUT_OF_DISK_SPACE, aArgs));
             break;
         case G_IO_ERROR_INVALID_FILENAME:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_INVALID_CHARACTER, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_INVALID_CHARACTER, aArgs));
             break;
         case G_IO_ERROR_READ_ONLY:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_WRITE_PROTECTED, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_WRITE_PROTECTED, aArgs));
             break;
         case G_IO_ERROR_TIMED_OUT:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_DEVICE_NOT_READY, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_DEVICE_NOT_READY, aArgs));
             break;
         case G_IO_ERROR_WOULD_RECURSE:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_RECURSIVE, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_RECURSIVE, aArgs));
             break;
         case G_IO_ERROR_BUSY:
         case G_IO_ERROR_WOULD_BLOCK:
-            { ucb::InteractiveAugmentedIOException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, ucb::IOErrorCode_LOCKING_VIOLATION, aArgs);
-            EXCEPT(aExcept); }
+            EXCEPT( ucb::InteractiveAugmentedIOException(sMessage, rContext,
+                task::InteractionClassification_ERROR, ucb::IOErrorCode_LOCKING_VIOLATION, aArgs));
             break;
         case G_IO_ERROR_HOST_NOT_FOUND:
-            { ucb::InteractiveNetworkResolveNameException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR, sHost);
-              EXCEPT(aExcept);}
+            EXCEPT( ucb::InteractiveNetworkResolveNameException(sMessage, rContext,
+                task::InteractionClassification_ERROR, sHost));
             break;
         default:
         case G_IO_ERROR_ALREADY_MOUNTED:
@@ -269,9 +249,8 @@ uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterfac
         case G_IO_ERROR_NOT_SYMBOLIC_LINK:
         case G_IO_ERROR_NOT_MOUNTABLE_FILE:
         case G_IO_ERROR_FAILED_HANDLED:
-            { ucb::InteractiveNetworkGeneralException aExcept(sMessage, rContext,
-                task::InteractionClassification_ERROR);
-              EXCEPT(aExcept);}
+            EXCEPT( ucb::InteractiveNetworkGeneralException(sMessage, rContext,
+                task::InteractionClassification_ERROR));
             break;
     }
     return aRet;
@@ -300,19 +279,19 @@ void convertToIOException(GError *pError, const uno::Reference< uno::XInterface 
     }
 }
 
-uno::Any Content::mapGIOError( GError *pError )
+std::unique_ptr<uno::Exception> Content::mapGIOError( GError *pError )
 {
     if (!pError)
-        return getBadArgExcept();
+        return std::unique_ptr<uno::Exception>(new lang::IllegalArgumentException(getBadArgExcept()));
 
     return convertToException(pError, static_cast< cppu::OWeakObject * >(this), false);
 }
 
-uno::Any Content::getBadArgExcept()
+lang::IllegalArgumentException Content::getBadArgExcept()
 {
-    return uno::makeAny( lang::IllegalArgumentException(
+    return lang::IllegalArgumentException(
         "Wrong argument type!",
-        static_cast< cppu::OWeakObject * >( this ), -1) );
+        static_cast< cppu::OWeakObject * >( this ), -1);
 }
 
 class MountOperation
@@ -656,7 +635,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
     else
     {
         if (!mbTransient)
-            ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
+            ucbhelper::cancelCommandExecution(*mapGIOError(pError), xEnv);
         else
         {
             if (pError)
@@ -745,7 +724,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
             if ((bOk = doSetFileInfo(pNewInfo)))
             {
                 for (sal_Int32 i = 0; i < nChanged; ++i)
-                    aRet[ i ] = getBadArgExcept();
+                    aRet[ i ] = uno::Any(getBadArgExcept());
             }
         }
 
@@ -859,13 +838,11 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
     {
         uno::Sequence< uno::Any > aArgs( 1 );
         aArgs[ 0 ] <<= m_xIdentifier->getContentIdentifier();
-        uno::Any aErr = uno::makeAny(
+        ucbhelper::cancelCommandExecution(
             ucb::InteractiveAugmentedIOException(OUString(), static_cast< cppu::OWeakObject * >( this ),
                 task::InteractionClassification_ERROR,
-                bIsFolder ? ucb::IOErrorCode_NOT_EXISTING_PATH : ucb::IOErrorCode_NOT_EXISTING, aArgs)
-        );
-
-        ucbhelper::cancelCommandExecution(aErr, xEnv);
+                bIsFolder ? ucb::IOErrorCode_NOT_EXISTING_PATH : ucb::IOErrorCode_NOT_EXISTING, aArgs),
+            xEnv);
     }
 
     uno::Any aRet;
@@ -890,10 +867,10 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
            )
         {
             ucbhelper::cancelCommandExecution(
-                uno::makeAny ( ucb::UnsupportedOpenModeException
+                ucb::UnsupportedOpenModeException
                     ( OUString(), static_cast< cppu::OWeakObject * >( this ),
-                      sal_Int16( rOpenCommand.Mode ) ) ),
-                    xEnv );
+                      sal_Int16( rOpenCommand.Mode ) ),
+                xEnv );
         }
 
         if ( !feedSink( rOpenCommand.Sink, xEnv ) )
@@ -904,10 +881,10 @@ uno::Any Content::open(const ucb::OpenCommandArgument2 & rOpenCommand,
             SAL_WARN("ucb.ucp.gio", "Failed to load data from '" << m_xIdentifier->getContentIdentifier() << "'");
 
             ucbhelper::cancelCommandExecution(
-                uno::makeAny (ucb::UnsupportedDataSinkException
-                    ( OUString(), static_cast< cppu::OWeakObject * >( this ),
-                      rOpenCommand.Sink ) ),
-                    xEnv );
+                ucb::UnsupportedDataSinkException(
+                    OUString(), static_cast< cppu::OWeakObject * >( this ),
+                    rOpenCommand.Sink ),
+                xEnv );
         }
     }
     else
@@ -984,7 +961,7 @@ uno::Any SAL_CALL Content::execute(
         {
             GError *pError = nullptr;
             if (!g_file_delete( getGFile(), nullptr, &pError))
-                ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
+                ucbhelper::cancelCommandExecution(*mapGIOError(pError), xEnv);
         }
 
         destroy( bDeletePhysical );
@@ -994,9 +971,9 @@ uno::Any SAL_CALL Content::execute(
         SAL_WARN("ucb.ucp.gio", "Unknown command " << aCommand.Name << "\n");
 
         ucbhelper::cancelCommandExecution
-            ( uno::makeAny( ucb::UnsupportedCommandException
+            ( ucb::UnsupportedCommandException
               ( OUString(),
-                static_cast< cppu::OWeakObject * >( this ) ) ),
+                static_cast< cppu::OWeakObject * >( this ) ),
               xEnv );
     }
 
@@ -1034,15 +1011,15 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
     {
         SAL_INFO("ucb.ucp.gio", "Make directory");
         if( !g_file_make_directory( getGFile(), nullptr, &pError))
-            ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
+            ucbhelper::cancelCommandExecution(*mapGIOError(pError), xEnv);
         return;
     }
 
     if ( !xInputStream.is() )
     {
-        ucbhelper::cancelCommandExecution( uno::makeAny
-            ( ucb::MissingInputStreamException
-              ( OUString(), static_cast< cppu::OWeakObject * >( this ) ) ),
+        ucbhelper::cancelCommandExecution(
+            ucb::MissingInputStreamException
+              ( OUString(), static_cast< cppu::OWeakObject * >( this ) ),
             xEnv );
     }
 
@@ -1050,12 +1027,12 @@ void Content::insert(const uno::Reference< io::XInputStream > &xInputStream,
     if ( bReplaceExisting )
     {
         if (!(pOutStream = g_file_replace(getGFile(), nullptr, false, G_FILE_CREATE_PRIVATE, nullptr, &pError)))
-            ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
+            ucbhelper::cancelCommandExecution(*mapGIOError(pError), xEnv);
     }
     else
     {
         if (!(pOutStream = g_file_create (getGFile(), G_FILE_CREATE_PRIVATE, nullptr, &pError)))
-            ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
+            ucbhelper::cancelCommandExecution(*mapGIOError(pError), xEnv);
     }
 
     uno::Reference < io::XOutputStream > xOutput = new ::gio::OutputStream(pOutStream);
@@ -1094,7 +1071,7 @@ void Content::transfer( const ucb::TransferInfo& aTransferInfo, const uno::Refer
     g_object_unref(pSource);
     g_object_unref(pDest);
     if (!bSuccess)
-        ucbhelper::cancelCommandExecution(mapGIOError(pError), xEnv);
+        ucbhelper::cancelCommandExecution(*mapGIOError(pError), xEnv);
 }
 
 uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(

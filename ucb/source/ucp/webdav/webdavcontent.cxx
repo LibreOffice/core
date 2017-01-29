@@ -3025,10 +3025,10 @@ bool Content::isFolder(
 }
 
 
-uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
+std::unique_ptr<uno::Exception> Content::MapDAVException( const DAVException & e, bool bWrite )
 {
     // Map DAVException...
-    uno::Any aException;
+    std::unique_ptr<uno::Exception> aException;
 
     OUString aURL;
     if ( m_bTransient )

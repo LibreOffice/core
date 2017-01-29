@@ -165,10 +165,10 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
+                IllegalArgumentException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -183,10 +183,10 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         {
             OSL_FAIL( "Wrong argument type!" );
             ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
+                IllegalArgumentException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -195,10 +195,10 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         {
             OSL_FAIL( "No properties!" );
             ucbhelper::cancelCommandExecution(
-                makeAny( IllegalArgumentException(
+                IllegalArgumentException(
                                     OUString(),
                                     static_cast< cppu::OWeakObject * >( this ),
-                                    -1 ) ),
+                                    -1 ),
                 Environment );
             // Unreachable
         }
@@ -221,9 +221,9 @@ Any SAL_CALL OContentHelper::execute( const Command& aCommand, sal_Int32 /*Comma
         OSL_FAIL( "Content::execute - unsupported command!" );
 
         ucbhelper::cancelCommandExecution(
-            makeAny( UnsupportedCommandException(
+            UnsupportedCommandException(
                             OUString(),
-                            static_cast< cppu::OWeakObject * >( this ) ) ),
+                            static_cast< cppu::OWeakObject * >( this ) ),
             Environment );
         // Unreachable
     }

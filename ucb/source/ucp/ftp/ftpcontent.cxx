@@ -296,21 +296,6 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 aRet = p->getRequest();
             }
 
-//              if(aCommand.Name.equalsAscii(
-//                  "getPropertyValues") &&
-//                 action != NOACTION) {
-//                  // It is not allowed to throw if
-//                  // command is getPropertyValues
-//                  rtl::Reference<ucbhelper::PropertyValueSet> xRow =
-//                      new ucbhelper::PropertyValueSet(m_xSMgr);
-//                  Sequence<Property> Properties;
-//                  aCommand.Argument >>= Properties;
-//                  for(int i = 0; i < Properties.getLength(); ++i)
-//                      xRow->appendVoid(Properties[i]);
-//                  aRet <<= Reference<XRow>(xRow.get());
-//                  return aRet;
-//              }
-
             switch (action)
             {
             case NOACTION:
@@ -318,7 +303,7 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
 
             case THROWAUTHENTICATIONREQUEST:
                 ucbhelper::cancelCommandExecution(
-                    aRet,
+                    aRet.get<css::uno::Exception>(),
                     Reference<XCommandEnvironment>(nullptr));
                 break;
 
@@ -341,9 +326,8 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 {
                     InteractiveNetworkConnectException excep;
                     excep.Server = m_aFTPURL.host();
-                    aRet <<= excep;
                     ucbhelper::cancelCommandExecution(
-                        aRet,
+                        excep,
                         Environment);
                     break;
                 }
@@ -351,9 +335,8 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 {
                     InteractiveNetworkResolveNameException excep;
                     excep.Server = m_aFTPURL.host();
-                    aRet <<= excep;
                     ucbhelper::cancelCommandExecution(
-                        aRet,
+                        excep,
                         Environment);
                     break;
                 }
@@ -385,11 +368,12 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 Sequence<Property> Properties;
                 if(!(aCommand.Argument >>= Properties))
                 {
-                    aRet <<= IllegalArgumentException(
+                    ucbhelper::cancelCommandExecution(
+                        IllegalArgumentException(
                                 "Wrong argument type!",
                                 static_cast< cppu::OWeakObject * >(this),
-                                -1);
-                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                                -1),
+                        Environment);
                 }
 
                 aRet <<= getPropertyValues(Properties,Environment);
@@ -399,11 +383,12 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                 Sequence<PropertyValue> propertyValues;
 
                 if( ! ( aCommand.Argument >>= propertyValues ) ) {
-                    aRet <<= IllegalArgumentException(
+                    ucbhelper::cancelCommandExecution(
+                        IllegalArgumentException(
                                 "Wrong argument type!",
                                 static_cast< cppu::OWeakObject * >(this),
-                                -1);
-                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                                -1),
+                        Environment);
                 }
 
                 aRet <<= setPropertyValues(propertyValues);
@@ -420,11 +405,12 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
             {
                 InsertCommandArgument aInsertArgument;
                 if ( ! ( aCommand.Argument >>= aInsertArgument ) ) {
-                    aRet <<= IllegalArgumentException(
+                    ucbhelper::cancelCommandExecution(
+                        IllegalArgumentException(
                                 "Wrong argument type!",
                                 static_cast< cppu::OWeakObject * >(this),
-                                -1);
-                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                                -1),
+                        Environment);
                 }
                 insert(aInsertArgument,Environment);
             }
@@ -435,12 +421,12 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
             else if(aCommand.Name == "open") {
                 OpenCommandArgument2 aOpenCommand;
                 if ( !( aCommand.Argument >>= aOpenCommand ) ) {
-                    aRet <<= IllegalArgumentException(
+                    ucbhelper::cancelCommandExecution(
+                        IllegalArgumentException(
                                 "Wrong argument type!",
                                 static_cast< cppu::OWeakObject * >(this),
-                                -1);
-
-                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                                -1),
+                        Environment);
                 }
 
                 if(aOpenCommand.Mode == OpenMode::DOCUMENT) {
@@ -491,11 +477,12 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                         }
                     }
                     else {
-                        aRet <<= UnsupportedDataSinkException(
-                            OUString(),
-                            static_cast< cppu::OWeakObject * >(this),
-                            aOpenCommand.Sink);
-                        ucbhelper::cancelCommandExecution(aRet,Environment);
+                        ucbhelper::cancelCommandExecution(
+                            UnsupportedDataSinkException(
+                                OUString(),
+                                static_cast< cppu::OWeakObject * >(this),
+                                aOpenCommand.Sink),
+                            Environment);
                     }
                 }
                 else if(aOpenCommand.Mode == OpenMode::ALL ||
@@ -518,38 +505,39 @@ Any SAL_CALL FTPContent::execute( const Command& aCommand,
                         aOpenCommand.Mode ==
                         OpenMode::DOCUMENT_SHARE_DENY_WRITE) {
                     // Unsupported OpenMode
-                    aRet <<= UnsupportedOpenModeException(
-                        OUString(),
-                        static_cast< cppu::OWeakObject * >(this),
-                        static_cast< sal_Int16 >(aOpenCommand.Mode));
-                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                    ucbhelper::cancelCommandExecution(
+                        UnsupportedOpenModeException(
+                            OUString(),
+                            static_cast< cppu::OWeakObject * >(this),
+                            static_cast< sal_Int16 >(aOpenCommand.Mode)),
+                        Environment);
                 }
                 else {
-                    aRet <<= IllegalArgumentException(
+                    ucbhelper::cancelCommandExecution(
+                        IllegalArgumentException(
                                 "Unexpected OpenMode!",
                                 static_cast< cppu::OWeakObject * >(this),
-                                -1);
-
-                    ucbhelper::cancelCommandExecution(aRet,Environment);
+                                -1),
+                        Environment);
                 }
             } else if(aCommand.Name == "createNewContent") {
                 ContentInfo aArg;
                 if (!(aCommand.Argument >>= aArg)) {
                     ucbhelper::cancelCommandExecution(
-                        makeAny(
-                            IllegalArgumentException(
+                        IllegalArgumentException(
                                 "Wrong argument type!",
                                 static_cast< cppu::OWeakObject * >(this),
-                                -1)),
+                                -1),
                         Environment);
                     // Unreachable
                 }
                 aRet <<= createNewContent(aArg);
             } else {
-                aRet <<= UnsupportedCommandException(
-                    aCommand.Name,
-                    static_cast< cppu::OWeakObject * >(this));
-                ucbhelper::cancelCommandExecution(aRet,Environment);
+                ucbhelper::cancelCommandExecution(
+                    UnsupportedCommandException(
+                        aCommand.Name,
+                        static_cast< cppu::OWeakObject * >(this)),
+                    Environment);
             }
 
             return aRet;
@@ -688,7 +676,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
         MissingPropertiesException excep;
         excep.Properties.realloc(1);
         excep.Properties[0] = "Title";
-        ucbhelper::cancelCommandExecution(Any(excep), Env);
+        ucbhelper::cancelCommandExecution(excep, Env);
     }
 
     if(m_bInserted &&
@@ -696,7 +684,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
        !aInsertCommand.Data.is())
     {
         MissingInputStreamException excep;
-        ucbhelper::cancelCommandExecution(Any(excep), Env);
+        ucbhelper::cancelCommandExecution(excep, Env);
     }
 
     bool bReplace(aInsertCommand.ReplaceExisting);
@@ -714,7 +702,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
             // Deprecated, not used anymore:
             NameClashException excep;
             excep.Name = m_aFTPURL.child();
-            ucbhelper::cancelCommandExecution(Any(excep), Env);
+            ucbhelper::cancelCommandExecution(excep, Env);
         } else if(e.code() == FOLDER_MIGHT_EXIST_DURING_INSERT ||
                   e.code() == FILE_MIGHT_EXIST_DURING_INSERT) {
             // Interact
@@ -726,7 +714,7 @@ void FTPContent::insert(const InsertCommandArgument& aInsertCommand,
             excep.NameClash = 0; //NameClash::ERROR;
 
             if(!xInt.is()) {
-                ucbhelper::cancelCommandExecution(Any(excep), Env);
+                ucbhelper::cancelCommandExecution(excep, Env);
             }
 
             XInteractionRequestImpl request;

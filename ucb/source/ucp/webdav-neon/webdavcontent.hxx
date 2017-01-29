@@ -189,7 +189,7 @@ private:
     /// @throws css::uno::Exception
     void unlock( const css::uno::Reference< css::ucb::XCommandEnvironment >& Environment );
 
-    css::uno::Any MapDAVException( const DAVException & e,
+    std::unique_ptr<css::uno::Exception> MapDAVException( const DAVException & e,
                                                 bool bWrite );
     /// @throws css::uno::Exception
     void cancelCommandExecution(
