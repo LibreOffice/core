@@ -1368,7 +1368,7 @@ MasterPasswordRequest_Impl::MasterPasswordRequest_Impl( PasswordRequestMode Mode
     aRequest.Classification = InteractionClassification_ERROR;
     aRequest.Mode = Mode;
 
-    setRequest( makeAny( aRequest ) );
+    setRequest( aRequest );
 
     // Fill continuations...
     Sequence< RememberAuthentication > aRememberModes( 1 );

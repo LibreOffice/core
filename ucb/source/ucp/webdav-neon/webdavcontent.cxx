@@ -2566,7 +2566,7 @@ void Content::insert(
 
                 rtl::Reference< ucbhelper::SimpleInteractionRequest > xRequest
                     = new ucbhelper::SimpleInteractionRequest(
-                        aExAsAny,
+                        aEx,
                         ContinuationFlags::Approve | ContinuationFlags::Disapprove );
                 xIH->handle( xRequest.get() );
 

@@ -361,8 +361,8 @@ void SfxMedium::CheckFileDate( const util::DateTime& aInitDate )
         {
             try
             {
-                ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
-                    document::ChangedByOthersRequest() ) );
+                ::rtl::Reference< ::ucbhelper::InteractionRequest > xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(
+                    document::ChangedByOthersRequest() );
                 uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
                 aContinuations[0] = new ::ucbhelper::InteractionAbort( xInteractionRequestImpl.get() );
                 aContinuations[1] = new ::ucbhelper::InteractionApprove( xInteractionRequestImpl.get() );
@@ -865,8 +865,8 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
         {
             aInfo = aData[LockFileComponent::EDITTIME];
 
-            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
-                document::OwnLockOnDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) ) );
+            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(
+                document::OwnLockOnDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo, !bIsLoading ) );
         }
         else /*logically therefore bIsLoading is set */
         {
@@ -882,8 +882,8 @@ SfxMedium::ShowLockResult SfxMedium::ShowLockedDocumentDialog( const LockFileEnt
                 aInfo += " )";
             }
 
-            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest( uno::makeAny(
-                document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) ) );
+            xInteractionRequestImpl = new ::ucbhelper::InteractionRequest(
+                document::LockedDocumentRequest( OUString(), uno::Reference< uno::XInterface >(), aDocumentURL, aInfo ) );
         }
 
         uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 3 );
@@ -1203,7 +1203,7 @@ void SfxMedium::LockOrigFileOnDemand( bool bLoading, bool bNoUI )
                                         if ( xHandler.is() )
                                         {
                                             ::rtl::Reference< ::ucbhelper::InteractionRequest > xIgnoreRequestImpl
-                                                = new ::ucbhelper::InteractionRequest( uno::makeAny( document::LockFileIgnoreRequest() ) );
+                                                = new ::ucbhelper::InteractionRequest( document::LockFileIgnoreRequest() );
 
                                             uno::Sequence< uno::Reference< task::XInteractionContinuation > > aContinuations( 2 );
                                             aContinuations[0] = new ::ucbhelper::InteractionAbort( xIgnoreRequestImpl.get() );
