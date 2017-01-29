@@ -40,7 +40,7 @@ namespace ucbhelper
 {
 
 
-void cancelCommandExecution( const uno::Any & rException,
+void cancelCommandExecution( const uno::Exception & rException,
                              const uno::Reference<
                                         ucb::XCommandEnvironment > & xEnv )
 {
@@ -51,7 +51,7 @@ void cancelCommandExecution( const uno::Any & rException,
         if ( xIH.is() )
         {
             rtl::Reference< ucbhelper::InteractionRequest > xRequest
-                = new ucbhelper::InteractionRequest( rException );
+                = new ucbhelper::InteractionRequest( uno::makeAny(rException) );
 
             uno::Sequence< uno::Reference< task::XInteractionContinuation > >
                 aContinuations( 1 );
@@ -69,11 +69,11 @@ void cancelCommandExecution( const uno::Any & rException,
                 throw ucb::CommandFailedException(
                                     OUString(),
                                     uno::Reference< uno::XInterface >(),
-                                    rException );
+                                    uno::makeAny(rException) );
         }
     }
 
-    cppu::throwException( rException );
+    cppu::throwException( uno::makeAny(rException) );
     OSL_FAIL( "Return from cppu::throwException call!!!" );
     throw uno::RuntimeException();
 }

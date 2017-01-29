@@ -57,7 +57,7 @@ private:
 
 private:
 
-    css::uno::Any getBadArgExcept();
+    css::lang::IllegalArgumentException getBadArgExcept();
 
     css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(

@@ -143,7 +143,7 @@ do { \
     aRet = uno::makeAny( aExcept );\
 } while(false)
 
-uno::Any convertToException(GError *pError, const uno::Reference< uno::XInterface >& rContext, bool bThrow)
+std::unique_ptr<uno::Exception> convertToException(GError *pError, const uno::Reference< uno::XInterface >& rContext, bool bThrow)
 {
     uno::Any aRet;
 
@@ -300,7 +300,7 @@ void convertToIOException(GError *pError, const uno::Reference< uno::XInterface 
     }
 }
 
-uno::Any Content::mapGIOError( GError *pError )
+std::unique_ptr<uno::Exception> Content::mapGIOError( GError *pError )
 {
     if (!pError)
         return getBadArgExcept();
@@ -308,11 +308,11 @@ uno::Any Content::mapGIOError( GError *pError )
     return convertToException(pError, static_cast< cppu::OWeakObject * >(this), false);
 }
 
-uno::Any Content::getBadArgExcept()
+lang::IllegalArgumentException Content::getBadArgExcept()
 {
-    return uno::makeAny( lang::IllegalArgumentException(
+    return lang::IllegalArgumentException(
         "Wrong argument type!",
-        static_cast< cppu::OWeakObject * >( this ), -1) );
+        static_cast< cppu::OWeakObject * >( this ), -1);
 }
 
 class MountOperation

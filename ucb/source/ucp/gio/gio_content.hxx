@@ -73,8 +73,8 @@ private:
         GError **ppError=nullptr);
     bool isFolder(const css::uno::Reference< css::ucb::XCommandEnvironment >& xEnv);
 
-    css::uno::Any mapGIOError( GError *error );
-    css::uno::Any getBadArgExcept();
+    std::unique_ptr<css::uno::Exception> mapGIOError( GError *error );
+    css::lang::IllegalArgumentException getBadArgExcept();
 
     css::uno::Reference< css::sdbc::XRow >
         getPropertyValues(
