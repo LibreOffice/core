@@ -697,11 +697,11 @@ extern "C" {
         sal_gtk_timeout_defer( pTSource );
 
         ImplSVData* pSVData = ImplGetSVData();
-        if( pSVData->mpSalTimer )
+        if( pSVData->maSchedCtx.mpSalTimer )
         {
             // TODO: context_pending should be probably checked too, but it causes locking assertion failures
             bool idle = !pSalData->BlockIdleTimeout() && /*!g_main_context_pending( NULL ) &&*/ !gdk_events_pending();
-            pSVData->mpSalTimer->CallCallback( idle );
+            pSVData->maSchedCtx.mpSalTimer->CallCallback( idle );
         }
 
         return TRUE;
