@@ -73,6 +73,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <oox/token/tokens.hxx>
+#include <oox/token/namespaces.hxx>
 #include <oox/export/shapes.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/export/vmlexport.hxx>
@@ -260,9 +261,9 @@ void SaveDrawingMLObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int
 
     rStrm.PushStream( pDrawing );
     pDrawing->startElement( FSNS( XML_xdr, XML_wsDr ),
-            FSNS( XML_xmlns, XML_xdr ), "http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing",
-            FSNS( XML_xmlns, XML_a ),   "http://schemas.openxmlformats.org/drawingml/2006/main",
-            FSNS( XML_xmlns, XML_r ),   "http://schemas.openxmlformats.org/officeDocument/2006/relationships",
+            FSNS( XML_xmlns, XML_xdr ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dmlSpreadDr))).getStr(),
+            FSNS( XML_xmlns, XML_a ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(dml))).getStr(),
+            FSNS( XML_xmlns, XML_r ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(officeRel))).getStr(),
             FSEND );
 
     for (it = aList.begin(), itEnd = aList.end(); it != itEnd; ++it)
@@ -294,10 +295,10 @@ void SaveVmlObjects( XclExpObjList& rList, XclExpXmlStream& rStrm, sal_Int32& nV
 
     rStrm.PushStream( pVmlDrawing );
     pVmlDrawing->startElement( XML_xml,
-            FSNS( XML_xmlns, XML_v ),   "urn:schemas-microsoft-com:vml",
-            FSNS( XML_xmlns, XML_o ),   "urn:schemas-microsoft-com:office:office",
-            FSNS( XML_xmlns, XML_x ),   "urn:schemas-microsoft-com:office:excel",
-            FSNS( XML_xmlns, XML_w10 ), "urn:schemas-microsoft-com:office:word",
+            FSNS( XML_xmlns, XML_v ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vml))).getStr(),
+            FSNS( XML_xmlns, XML_o ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlOffice))).getStr(),
+            FSNS( XML_xmlns, XML_x ),   XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlExcel))).getStr(),
+            FSNS( XML_xmlns, XML_w10 ), XclXmlUtils::ToOString(rStrm.getNamespaceURL(OOX_NS(vmlWord))).getStr(),
             FSEND );
 
     std::vector<XclObj*>::iterator pIter;
