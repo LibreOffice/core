@@ -317,6 +317,13 @@ struct BlendFrameCache
     }
 };
 
+struct ImplSchedulerContext
+{
+    ImplSchedulerData*      mpFirstSchedulerData = nullptr; ///< list of all active tasks
+    SalTimer*               mpSalTimer = nullptr;           ///< interface to sal event loop / system timer
+    sal_uInt64              mnTimerPeriod = 0;              ///< current timer period
+};
+
 struct ImplSVData
 {
     ~ImplSVData();
@@ -325,12 +332,10 @@ struct ImplSVData
     Application*            mpApp = nullptr;                // pApp
     VclPtr<WorkWindow>      mpDefaultWin;                   // Default-Window
     bool                    mbDeInit = false;               // Is VCL deinitializing
-    ImplSchedulerData*      mpFirstSchedulerData = nullptr; // list of all running tasks
-    SalTimer*               mpSalTimer = nullptr;           // interface to sal event loop/timers
     SalI18NImeStatus*       mpImeStatus = nullptr;          // interface to ime status window
     SalSystem*              mpSalSystem = nullptr;          // SalSystem interface
     ResMgr*                 mpResMgr = nullptr;             // SV-Resource-Manager
-    sal_uInt64              mnTimerPeriod = 0;              // current timer period
+    ImplSchedulerContext    maSchedCtx;                     // indepen data for class Scheduler
     ImplSVAppData           maAppData;                      // indepen data for class Application
     ImplSVGDIData           maGDIData;                      // indepen data for Output classes
     ImplSVWinData           maWinData;                      // indepen data for Windows classes
