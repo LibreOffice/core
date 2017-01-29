@@ -788,10 +788,8 @@ static bool UCBOpenContentSync(
                     aExcep.Server = aURL.GetHost();
                     aExcep.Classification = InteractionClassification_ERROR;
                     aExcep.Message = "server not responding after five seconds";
-                    Any request;
-                    request <<= aExcep;
                     ucbhelper::InteractionRequest *ir =
-                        new ucbhelper::InteractionRequest(request);
+                        new ucbhelper::InteractionRequest(aExcep);
                     Reference<XInteractionRequest> xIR(ir);
                     Sequence<Reference<XInteractionContinuation> > aSeq(2);
                     ucbhelper::InteractionRetry *retryP =

@@ -43,13 +43,13 @@ namespace ucbhelper
 struct InteractionRequest_Impl
 {
     rtl::Reference< InteractionContinuation > m_xSelection;
-    css::uno::Any m_aRequest;
+    css::uno::Exception m_aRequest;
     css::uno::Sequence<
         css::uno::Reference<
             css::task::XInteractionContinuation > > m_aContinuations;
 
     InteractionRequest_Impl() {}
-    explicit InteractionRequest_Impl( const uno::Any & rRequest )
+    explicit InteractionRequest_Impl( const uno::Exception & rRequest )
     : m_aRequest( rRequest ) {}
 };
 
@@ -62,7 +62,7 @@ InteractionRequest::InteractionRequest()
 }
 
 
-InteractionRequest::InteractionRequest( const uno::Any & rRequest )
+InteractionRequest::InteractionRequest( const uno::Exception & rRequest )
 : m_pImpl( new InteractionRequest_Impl( rRequest ) )
 {
 }
@@ -74,7 +74,7 @@ InteractionRequest::~InteractionRequest()
 }
 
 
-void InteractionRequest::setRequest( const uno::Any & rRequest )
+void InteractionRequest::setRequest( const uno::Exception & rRequest )
 {
     m_pImpl->m_aRequest = rRequest;
 }
@@ -168,7 +168,7 @@ uno::Sequence< uno::Type > SAL_CALL InteractionRequest::getTypes()
 // virtual
 uno::Any SAL_CALL InteractionRequest::getRequest()
 {
-    return m_pImpl->m_aRequest;
+    return uno::Any(m_pImpl->m_aRequest);
 }
 
 
