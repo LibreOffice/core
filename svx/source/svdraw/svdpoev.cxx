@@ -207,7 +207,7 @@ void SdrPolyEditView::SetMarkedPointsSmooth(SdrPathSmoothKind eKind)
                 continue;
 
             SdrUShortCont& rPts = pM->GetMarkedPoints();
-            PolyPolygonEditor aEditor(pPath->GetPathPoly(), pPath->IsClosed());
+            PolyPolygonEditor aEditor(pPath->GetPathPoly());
             if (aEditor.SetPointsSmooth(eFlags, rPts))
             {
                 if( bUndo )
@@ -240,7 +240,7 @@ void SdrPolyEditView::SetMarkedSegmentsKind(SdrPathSegmentKind eKind)
             if (!pPath)
                 continue;
             SdrUShortCont& rPts = pM->GetMarkedPoints();
-            PolyPolygonEditor aEditor( pPath->GetPathPoly(), pPath->IsClosed() );
+            PolyPolygonEditor aEditor( pPath->GetPathPoly());
             if (aEditor.SetSegmentsKind(eKind, rPts))
             {
                 if( bUndo )
@@ -307,7 +307,7 @@ void SdrPolyEditView::DeleteMarkedPoints()
                 continue;
 
             SdrUShortCont& rPts = pM->GetMarkedPoints();
-            PolyPolygonEditor aEditor( pPath->GetPathPoly(), pPath->IsClosed() );
+            PolyPolygonEditor aEditor( pPath->GetPathPoly());
             if (aEditor.DeletePoints(rPts))
             {
                 if( aEditor.GetPolyPolygon().count() )

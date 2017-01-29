@@ -34,7 +34,7 @@ namespace sdr
 class SVX_DLLPUBLIC PolyPolygonEditor
 {
 public:
-    PolyPolygonEditor( const basegfx::B2DPolyPolygon& rPolyPolygon, bool bClosed );
+    PolyPolygonEditor( const basegfx::B2DPolyPolygon& rPolyPolygon);
 
     const basegfx::B2DPolyPolygon& GetPolyPolygon() const { return maPolyPolygon; }
 
@@ -58,7 +58,6 @@ public:
 
 private:
     basegfx::B2DPolyPolygon maPolyPolygon;
-    bool mbIsClosed;
 };
 
 }
