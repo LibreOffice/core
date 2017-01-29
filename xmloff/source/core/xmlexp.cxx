@@ -557,9 +557,7 @@ SvXMLExport::~SvXMLExport()
                     OUString sWrittenNumberFormats(XML_WRITTENNUMBERSTYLES);
                     if (xPropertySetInfo->hasPropertyByName(sWrittenNumberFormats))
                     {
-                        uno::Sequence<sal_Int32> aWasUsed;
-                        mpNumExport->GetWasUsed(aWasUsed);
-                        mxExportInfo->setPropertyValue(sWrittenNumberFormats, Any(aWasUsed));
+                        mxExportInfo->setPropertyValue(sWrittenNumberFormats, Any(mpNumExport->GetWasUsed()));
                     }
                 }
             }
