@@ -62,8 +62,9 @@ sal_Int32 SAL_CALL OResultSetMetaData::getColumnType(sal_Int32 column)
 
     short aType = m_pSqlda->sqlvar[column-1].sqltype;
     short aSubType = m_pSqlda->sqlvar[column-1].sqlsubtype;
+    short aScale = m_pSqlda->sqlvar[column-1].sqlscale;
 
-    return getColumnTypeFromFBType(aType, aSubType);
+    return getColumnTypeFromFBType(aType, aSubType, aScale);
 }
 
 sal_Bool SAL_CALL OResultSetMetaData::isCaseSensitive(sal_Int32 column)
@@ -111,10 +112,11 @@ OUString SAL_CALL OResultSetMetaData::getColumnTypeName(sal_Int32 column)
 {
     verifyValidColumn(column);
 
-    short aType = m_pSqlda->sqlvar[column-1].sqltype;
-    short aSubType = m_pSqlda->sqlvar[column-1].sqlsubtype;
+    const short aType = m_pSqlda->sqlvar[column-1].sqltype;
+    const short aSubType = m_pSqlda->sqlvar[column-1].sqlsubtype;
+    const short aScale = m_pSqlda->sqlvar[column-1].sqlscale;
 
-    return getColumnTypeNameFromFBType(aType, aSubType);
+    return getColumnTypeNameFromFBType(aType, aSubType, aScale);
 }
 
 OUString SAL_CALL OResultSetMetaData::getColumnLabel(sal_Int32 column)
