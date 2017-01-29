@@ -531,20 +531,86 @@ IMPL_LINK( SvxSaveTabPage, AutoClickHdl_Impl, Button*, pBox, void )
         }
     }
 }
-
 static OUString lcl_ExtracUIName(const Sequence<PropertyValue> &rProperties)
 {
     OUString sName;
     const PropertyValue* pPropVal = rProperties.getConstArray();
+    const PropertyValue* pPropVal_ver = rProperties.getConstArray();
     const PropertyValue* const pEnd = pPropVal + rProperties.getLength();
+    OUString sUIVer;
+    OUString ver;
+    for( ; pPropVal_ver != pEnd; pPropVal_ver++ )
+     {
+         const OUString &vName = pPropVal_ver->Name;
+         if (vName == "Type")
+            {
+                if (pPropVal_ver->Value >>= sUIVer)
+                {
+
+                if(sUIVer=="writer8"){ver="(.odt)";}
+                else if(sUIVer=="generic_Text"){ver="(.txt)";}
+                else if(sUIVer=="math8"){ver="(.odf)";}
+                else if(sUIVer=="math_MathML_XML_Math"){ver="(.mml)";}
+                else if(sUIVer=="draw8_template"){ver="(.otg)";}
+                else if(sUIVer=="draw_ODG_FlatXML"){ver="(.fodg)";}
+                else if(sUIVer=="draw8"){ver="(.odf)";}
+                else if(sUIVer=="generic_HTML"){ver="(.html)";}
+                else if(sUIVer=="writerweb8_writer_template"){ver="(.oth)";}
+                else if(sUIVer=="writerglobal8"){ver="(.odm)";}
+                else if(sUIVer=="writer_MS_Word_97_Vorlage"){ver="(.dot)";}
+                else if(sUIVer=="Unified_Office_Format_text"){ver="(.uot)";}
+                else if(sUIVer=="writer_OOXML"){ver="(.docx)";}
+                else if(sUIVer=="writer8"){ver="(.odt)";}
+                else if(sUIVer=="writer_MS_Word_2003_XML"){ver="(.xml)";}
+                else if(sUIVer=="writer_MS_Word_97"){ver="(.doc)";}
+                else if(sUIVer=="writer8_template"){ver="(.ott)";}
+                else if(sUIVer=="writer_Rich_Text_Format"){ver="(.rtf)";}
+                else if(sUIVer=="writer_MS_Word_2007"){ver="(.docx)";}
+                else if(sUIVer=="writer_DocBook_File"){ver="(.xml)";}
+                else if(sUIVer=="writer_ODT_FlatXML"){ver="(.fodt)";}
+                else if(sUIVer=="calc_MS_Excel_2003_XML"){ver="(.xml)";}
+                else if(sUIVer=="calc_MS_Excel_97"){ver="(.xls)";}
+                else if(sUIVer=="Unified_Office_Format_spreadsheet"){ver="(.uos)";}
+                else if(sUIVer=="calc8"){ver="(.ods)";}
+                else if(sUIVer=="calc8_template"){ver="(.ots)";}
+                else if(sUIVer=="calc_DIF"){ver="(.dif)";}
+                else if(sUIVer=="calc_SYLK"){ver="(.slk)";}
+                else if(sUIVer=="calc_dBase"){ver="(.dbf)";}
+                else if(sUIVer=="MS Excel 2007 XML"){ver="(.xlsx)";}
+                else if(sUIVer=="calc_MS_Excel_97_VorlageTemplate"){ver="(.xlt)";}
+                else if(sUIVer=="calc_ODS_FlatXML"){ver="(.fods)";}
+                else if(sUIVer=="Office Open XML Spreadsheet"){ver="(.xlsx)";}
+                else if(sUIVer=="MS Excel 2007 VBA XML"){ver="(.xlsm)";}
+                else if(sUIVer=="MS PowerPoint 2007 XML Template"){ver="(.potm)";}
+                else if(sUIVer=="MS PowerPoint 2007 XML AutoPlay"){ver="(.ppsx)";}
+                else if(sUIVer=="impress_ODP_FlatXML"){ver="(.fodp)";}
+                else if(sUIVer=="MS PowerPoint 2007 XML"){ver="(.pptx)";}
+                else if(sUIVer=="Unified_Office_Format_presentation"){ver="(.uop)";}
+                else if(sUIVer=="impress8"){ver="(.odp)";}
+                else if(sUIVer=="Office Open XML Pesentation Template"){ver="(.potm)";}
+                else if(sUIVer=="impress8_template"){ver="(.otp)";}
+                else if(sUIVer=="impress_MS_PowerPoint_97"){ver="(.ppt)";}
+                else if(sUIVer=="impress_MS_PowerPoint_97_Vorlage"){ver="(.pot)";}
+                else if(sUIVer=="Office Open XML Presentation"){ver="(.pptx)";}
+                else if(sUIVer=="Office Open XML Presentation AutoPlay"){ver="(.ppsx)";}
+                else if(sUIVer=="Office Open XML Presentation Template"){ver="(.potm)";}
+                else if(sUIVer=="impress_MS_PowerPoint_97_AutoPlay"){ver="(.ppsx)";}
+                else {ver="";}
+                }
+                else {}
+            }
+        else
+            {}
+    }
     for( ; pPropVal != pEnd; pPropVal++ )
     {
         const OUString &rName = pPropVal->Name;
+
         if (rName == "UIName")
         {
             OUString sUIName;
             if ( ( pPropVal->Value >>= sUIName ) && sUIName.getLength() )
-                return sUIName;
+                return sUIName+" "+ver;
         }
         else if (rName == "Name")
         {
