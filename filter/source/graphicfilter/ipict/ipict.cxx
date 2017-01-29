@@ -304,8 +304,6 @@ public:
 {                                                       \
     if ( pAcc )                                         \
         Bitmap::ReleaseAccess( pAcc );                  \
-    if ( pReadAcc )                                     \
-        Bitmap::ReleaseAccess( pReadAcc );              \
     return 0xffffffff;                                  \
 }
 
@@ -705,7 +703,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
 {
     Bitmap              aBitmap;
     BitmapWriteAccess*  pAcc = nullptr;
-    BitmapReadAccess*   pReadAcc = nullptr;
     sal_uInt16              nColTabSize;
     sal_uInt16              nRowBytes, nBndX, nBndY, nWidth, nHeight, nPackType,
                         nPixelSize, nCmpCount, nCmpSize;
@@ -1018,8 +1015,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         size_t              nCount;
         sal_uLong           nSrcBitsPos;
         BitmapColor         aBitmapColor;
-        if ( ( pReadAcc = aBitmap.AcquireReadAccess() ) == nullptr )
-            BITMAPERROR;
         if ( nRowBytes != 4*nWidth )
             BITMAPERROR;
 
@@ -1126,8 +1121,6 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
     }
     else
         BITMAPERROR;
-    if ( pReadAcc )
-        Bitmap::ReleaseAccess( pReadAcc );
     Bitmap::ReleaseAccess( pAcc );
     rBitmap = aBitmap;
     return nDataSize;
