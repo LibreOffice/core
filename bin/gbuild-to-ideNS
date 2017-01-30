@@ -19,50 +19,88 @@ import json
 import xml.etree.ElementTree as ET
 import xml.dom.minidom as minidom
 import traceback
-import collections
-import subprocess
+
 
 class GbuildLinkTarget:
-    def __init__(self, name, location, sources, include, include_sys, defs, cxxobjects, cxxflags, linked_libs,
-                 asmobjects, cflags, gencobjects, gencxxobjects, ilibtarget, linked_static_libs, linktarget,
-                 objcflags, objcobjects, objcxxflags, objcxxobjects, yaccobjects, build_type):
-        (self.name, self.location, self.include,
-         self.include_sys, self.defs, self.cxxobjects,
-         self.cxxflags, self.linked_libs,
-         self.asmobjects, self.cflags, self.gencobjects,
-         self.gencxxobjects, self.ilibtarget, self.linked_static_libs,
-         self.linktarget, self.objcflags, self.objcobjects,
-         self.objcxxflags, self.objcxxobjects, self.yaccobjects,
-         self.build_type) = (name, location, include,
-                             include_sys, defs, cxxobjects,
-                             cxxflags, linked_libs, asmobjects,
-                             cflags, gencobjects, gencxxobjects,
-                             ilibtarget, linked_static_libs, linktarget,
-                             objcflags, objcobjects, objcxxflags,
-                             objcxxobjects, yaccobjects, build_type)
-        self.target_name = self.build_type + '_' + self.name
-        self.sources = sources
+    def __init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+        (self.name, self.location, self.include, self.include_sys, self.defs, self.cxxobjects, self.cxxflags, self.linked_libs) = (
+            name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
+
+    def short_name(self):
+        return self.name
+
+    def is_empty(self):
+        return not self.include and not self.defs and not self.cxxobjects and not self.linked_libs
+
+    def __str__(self):
+        return '%s at %s with include path: %s, isystem includes: %s, defines: %s, objects: %s, cxxflags: %s and linked libs: %s' % (
+            self.short_name(), self.location, self.include, self.include_sys, self.defs, self.cxxobjects,
+            self.cxxflags, self.linked_libs)
+
+
+class GbuildLib(GbuildLinkTarget):
+    def __init__(self, name, library, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
+        self.library = library
+
+    def short_name(self):
+        """Return the short name of target based on the Library_* makefile name"""
+        return 'Library %s' % self.name
+
+    def target_name(self):
+        return 'Library_%s' % self.library
+
+    def library_name(self):
+        return self.library
+
+class GbuildTest(GbuildLinkTarget):
+    def __init__(self, name, test, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
+        self.test = test
+
+    def short_name(self):
+        """Return the short name of target based n the CppunitTest_* makefile names"""
+        return 'CppunitTest %s' % self.name
+
+    def target_name(self):
+        return 'CppunitTest_%s' % self.test
+
+    def test_name(self):
+        return self.test
+
+
+class GbuildExe(GbuildLinkTarget):
+    def __init__(self, name, executable, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs):
+        GbuildLinkTarget.__init__(self, name, location, include, include_sys, defs, cxxobjects, cxxflags, linked_libs)
+        self.executable = executable
+
+    def short_name(self):
+        """Return the short name of target based on the Executable_* makefile name"""
+        return 'Executable %s' % self.name
+
+    def target_name(self):
+        return 'Executable_%s' % self.executable
 
 
 class GbuildParser:
     def __init__(self, makecmd):
         self.makecmd = makecmd
         self.binpath = os.path.dirname(os.environ['GPERF']) # woha, this is quite a hack
-        (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'],
-                                                                    os.environ['INSTDIR'], os.environ['WORKDIR'])
-        self.modules = collections.OrderedDict()
+        (self.srcdir, self.builddir, self.instdir, self.workdir) = (os.environ['SRCDIR'], os.environ['BUILDDIR'], os.environ['INSTDIR'], os.environ['WORKDIR'])
+        (self.libs, self.exes, self.tests, self.modulenamelist) = ([], [], [], [])
+        (self.libnames, self.exenames, self.testnames, self.target_by_path, self.target_by_location) = ({}, {}, {}, {}, {})
 
-    _includepattern = re.compile('-I(\S+)')
-    _isystempattern = re.compile('-isystem\s*(\S+)')
-    _warningpattern = re.compile('-W\S+')
-    _buildpattern = {'Library': re.compile('Library_(.*)\.mk'),
-                     'Executable': re.compile('Executable_(.*)\.mk'),
-                     'CppunitTest': re.compile('CppunitTest_(.*)\.mk')}
-    _allheaders=[]
+    includepattern = re.compile('-I(\S+)')
+    isystempattern = re.compile('-isystem\s*(\S+)')
+    warningpattern = re.compile('-W\S+')
+    libpattern = re.compile('Library_(.*)\.mk')
+    exepattern = re.compile('Executable_(.*)\.mk')
+    testpattern = re.compile('CppunitTest_(.*)\.mk')
+
     @staticmethod
     def __split_includes(includes):
-        foundisystem = GbuildParser._isystempattern.findall(includes)
-        foundincludes = [includeswitch.strip() for includeswitch in GbuildParser._includepattern.findall(includes) if
+        foundisystem = GbuildParser.isystempattern.findall(includes)
+        foundincludes = [includeswitch.strip() for includeswitch in GbuildParser.includepattern.findall(includes) if
                 len(includeswitch) > 2]
         return (foundincludes, foundisystem)
 
@@ -84,107 +122,97 @@ class GbuildParser:
 
     @staticmethod
     def __split_flags(flagsline, flagslineappend):
-        return [cxxflag.strip() for cxxflag in GbuildParser._warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
+        return [cxxflag.strip() for cxxflag in GbuildParser.warningpattern.sub('', '%s %s' % (flagsline, flagslineappend)).split(' ') if len(cxxflag) > 1]
+
+    @staticmethod
+    def __lib_from_json(json):
+        (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
+        return GbuildLib(
+            GbuildParser.libpattern.match(os.path.basename(json['MAKEFILE'])).group(1),
+            json['LINKTARGET'],
+            os.path.dirname(json['MAKEFILE']),
+            foundincludes,
+            foundisystem,
+            GbuildParser.__split_defs(json['DEFS']),
+            GbuildParser.__split_objs(json['CXXOBJECTS']),
+            GbuildParser.__split_flags(json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            json['LINKED_LIBS'].strip().split(' '))
+
+    @staticmethod
+    def __test_from_json(json):
+        (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
+        testname_match = GbuildParser.testpattern.match(os.path.basename(json['MAKEFILE']))
+
+        # Workaround strange writer test makefile setup
+        if testname_match is None:
+            testname = "StrangeWriterMakefiles"
+        else:
+            testname = testname_match.group(1)
+
+        return GbuildTest(
+            testname,
+            json['LINKTARGET'],
+            os.path.dirname(json['MAKEFILE']),
+            foundincludes,
+            foundisystem,
+            GbuildParser.__split_defs(json['DEFS']),
+            GbuildParser.__split_objs(json['CXXOBJECTS']),
+            GbuildParser.__split_flags(json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            json['LINKED_LIBS'].strip().split(' '))
+
+    @staticmethod
+    def __exe_from_json(json):
+        (foundincludes, foundisystem) = GbuildParser.__split_includes(json['INCLUDE'])
+        return GbuildExe(
+            GbuildParser.exepattern.match(os.path.basename(json['MAKEFILE'])).group(1),
+            json['LINKTARGET'],
+            os.path.dirname(json['MAKEFILE']),
+            foundincludes,
+            foundisystem,
+            GbuildParser.__split_defs(json['DEFS']),
+            GbuildParser.__split_objs(json['CXXOBJECTS']),
+            GbuildParser.__split_flags(json['CXXFLAGS'], json['CXXFLAGSAPPEND']),
+            json['LINKED_LIBS'].strip().split(' '))
 
     def parse(self):
-        # Relation between json object and file extension
-        jsonSrc = {
-                   'CXXOBJECTS':    '.cxx',
-                   'GENCXXOBJECTS': '.cxx', # remark is in workdir/GenCxxObject
-                   'OBJCOBJECTS':   '.m',
-                   'OBJCXXOBJECTS': '.mm',
-                   'ASMOBJECTS': '.s',
-                   'YACCOBJECTS': '.y',
-                   'GENCOBJECTS': '.c',
-
-            # not in GbuildLinkTarget
-                   'COBJECTS':      '.c',
-                   'FLEXOBJECTS': '.l',
-                   'JAVAOBJECTS': '.java',
-                   'PYTHONOBJECTS': '.py'
-                  }
-
-
-        moduleDict = {}
-        self.find_all_headers()
-        for jsontype in ['Library', 'Executable', 'CppunitTest']:
-            for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', jsontype)):
-                with open(os.path.join(self.workdir, 'GbuildToJson', jsontype, jsonfilename), 'r') as f:
-                    jsondata = json.load(f)
-
-                    (foundincludes, foundisystem) = GbuildParser.__split_includes(jsondata['INCLUDE'])
-                    match = GbuildParser._buildpattern[jsontype].match(os.path.basename(jsondata['MAKEFILE'])).group(1)
-                    location = os.path.dirname(jsondata['MAKEFILE'])
-                    sources = {}
-                    for i in jsonSrc:
-                        if i in jsondata and len(jsondata[i]) > 0:
-                            sources[i] = sorted(GbuildParser.__split_objs(jsondata[i]))
-                        else:
-                            sources[i] = []
-
-                    # TODO: extend GbuildLinkTarget with new json keys
-                    # Find a better way instead on a zillion parameters
-                    newObj = GbuildLinkTarget(match,
-                                              location,
-                                              sources,
-                                              foundincludes,
-                                              foundisystem,
-                                              GbuildParser.__split_defs(jsondata['DEFS']),
-                                              sources['CXXOBJECTS'],
-                                              GbuildParser.__split_flags(jsondata['CXXFLAGS'], jsondata['CXXFLAGSAPPEND']),
-                                              jsondata['LINKED_LIBS'].strip().split(' '),
-                                              sources['ASMOBJECTS'],
-                                              GbuildParser.__split_flags(jsondata['CFLAGS'], jsondata['CFLAGSAPPEND']),
-                                              sources['GENCOBJECTS'],
-                                              sources['GENCXXOBJECTS'],
-                                              jsondata['ILIBTARGET'],
-                                              jsondata['LINKED_STATIC_LIBS'],
-                                              jsondata['LINKTARGET'],
-                                              GbuildParser.__split_flags(jsondata['OBJCFLAGS'], jsondata['OBJCFLAGSAPPEND']),
-                                              sources['OBJCOBJECTS'],
-                                              GbuildParser.__split_flags(jsondata['OBJCXXFLAGS'], jsondata['OBJCXXFLAGSAPPEND']),
-                                              sources['OBJCXXOBJECTS'],
-                                              sources['YACCOBJECTS'],
-                                              jsontype)
-                    module = location.split('/')[-1]
-                    if not module in moduleDict:
-                        moduleDict[module] = {'targets': set(),'headers':{}}
-                    moduleDict[module]['targets'] |= set([newObj])
-                    moduleDict[module]['headers'] =self.headers_of(module)
-
-
-        moduleDict['include']={ 'targets': set(), 'headers':self.headers_of('include')}
-
-        for module in sorted(moduleDict):
-            self.modules[module] = moduleDict[module]
+        for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Library')):
+            with open(os.path.join(self.workdir, 'GbuildToJson', 'Library', jsonfilename), 'r') as f:
+                lib = self.__lib_from_json(json.load(f))
+                self.libnames[lib.library] = lib.name
+                self.libs.append(lib)
+        for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'Executable')):
+            with open(os.path.join(self.workdir, 'GbuildToJson', 'Executable', jsonfilename), 'r') as f:
+                exe = self.__exe_from_json(json.load(f))
+                self.exenames[exe.executable] = exe.name
+                self.exes.append(exe)
+        for jsonfilename in os.listdir(os.path.join(self.workdir, 'GbuildToJson', 'CppunitTest')):
+            with open(os.path.join(self.workdir, 'GbuildToJson', 'CppunitTest', jsonfilename), 'r') as f:
+                test = self.__test_from_json(json.load(f))
+                self.testnames[test.test] = test.name
+                self.tests.append(test)
+        for target in set(self.libs) | set(self.exes) | set(self.tests):
+            if target.location not in self.target_by_location:
+                self.target_by_location[target.location] = set()
+            self.target_by_location[target.location] |= set([target])
+            for cxx in target.cxxobjects:
+                path = '/'.join(cxx.split('/')[:-1])
+                if path not in self.target_by_path:
+                    self.target_by_path[path] = set()
+                self.target_by_path[path] |= set([target])
+        for path in self.target_by_path:
+            if len(set(self.target_by_path[path])) > 1:
+                print('fdo#70422: multiple target use dir %s: %s' % (
+                    path, ', '.join([target.short_name() for target in set(self.target_by_path[path])])))
+        for location in self.target_by_location:
+            self.modulenamelist.append(os.path.split(location)[1])
         return self
 
-    def find_all_headers(self):
-
-        cmdResult1=subprocess.Popen(('git', 'ls-files'), cwd=self.srcdir,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        cmdResult2=subprocess.check_output(('grep', '-i', '-E', '".*\.hxx$|.*\.h$|.*\.hpp$"'),cwd=self.srcdir,stdin=cmdResult1.stdout,stderr=subprocess.PIPE)
-
-        allfiles={}
-        for file in cmdResult2.splitlines():
-            strfile=file.decode()
-            modulename=strfile.split('/')[0]
-            if not modulename in allfiles:
-                allfiles[modulename]=[]
-            modulename_len=len(modulename)
-            allfiles[modulename].append(strfile[modulename_len + 1:])
-        self._allheaders = allfiles
-
-    def headers_of(self,modulename):
-        if modulename in self._allheaders: #for the modules that not have headers
-            headersof = self._allheaders[modulename]
-        else:
-            headersof=[]
-        return headersof
 
 class IdeIntegrationGenerator:
 
     def __init__(self, gbuildparser, ide):
-        (self.gbuildparser, self.ide) = (gbuildparser, ide)
+        self.gbuildparser = gbuildparser
+        self.ide = ide
 
     def emit(self):
         pass
@@ -194,38 +222,34 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
-    def create_include_path(self):
-        for module in self.gbuildparser.modules:
-            if module == 'include':
-                continue
+    def create_include_paths(self):
+        for module in self.gbuildparser.modulenamelist:
             modulepath = os.path.join(self.gbuildparser.builddir, module)
             includedirfile = open(os.path.join(modulepath, '.eclipsesettingfile'), 'w')
             modulelibs = []
-            for lib in self.target_path.keys():
+            for lib in self.gbuildparser.target_by_path.keys():
                 if lib.startswith(module+'/'):
                     modulelibs.append(lib)
             include = set()
             for lib in modulelibs:
-                for target in self.target_path[lib]:
+                for target in self.gbuildparser.target_by_path[lib]:
                     include |= set(target.include)
             includedirfile.write('\n'.join(include))
             includedirfile.close()
 
 
     def create_macros(self):
-        for module in self.gbuildparser.modules:
-            if module == 'include':
-                continue
+        for module in self.gbuildparser.modulenamelist:
             modulepath = os.path.join(self.gbuildparser.builddir, module)
             macrofile = open(os.path.join(modulepath, '.macros'), 'w')
             modulelibs = []
-            for lib in self.target_path.keys():
+            for lib in self.gbuildparser.target_by_path.keys():
                 if lib.startswith(module+'/'):
                     modulelibs.append(lib)
             define = []
             defineset = set()
             for lib in modulelibs:
-                for target in self.target_path[lib]:
+                for target in self.gbuildparser.target_by_path[lib]:
                     for i in target.defs.keys():
                         tmp = str(i) +','+str(target.defs[i])
                         if tmp not in defineset:
@@ -269,11 +293,9 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
 </language>
 </section>
 </cdtprojectproperties>
-"""
+""" 
 
-        for module in self.gbuildparser.modules:
-            if module == 'include':
-                continue
+        for module in self.gbuildparser.modulenamelist:
             tempxml = []
             modulepath = os.path.join(self.gbuildparser.builddir, module)
 
@@ -296,7 +318,7 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
                 macrokey = macroskeyvalue[0]
                 macrovalue = macroskeyvalue[1]
                 if macrovalue[-1:] == "\n":
-                    macrovalue = macrovalue[:-1]
+                    macrovalue = macrovalue[:-1] 
                 templine = "<macro><name>%s</name><value>%s</value></macro>\n" %(macrokey, macrovalue)
                 tempxml.insert(-13, templine)
             tempxml="".join(tempxml)
@@ -309,19 +331,9 @@ class EclipseCDTIntegrationGenerator(IdeIntegrationGenerator):
             os.remove(os.path.join(modulepath, '.macros'))
 
     def emit(self):
-        self.target_path = {}
-        for m in self.gbuildparser.modules:
-            if m == 'include':
-                continue
-            for target in self.gbuildparser.modules[m]['targets']:
-                for cxx in target.cxxobjects:
-                    path = '/'.join(cxx.split('/')[:-1])
-                    if path not in self.target_path:
-                        self.target_path[path] = set()
-                    self.target_path[path] |= set([target])
-        self.create_include_path()
+        self.create_include_paths()
         self.create_macros()
-        self.create_settings_file()
+        self.create_settings_file() 
 
 class DebugIntegrationGenerator(IdeIntegrationGenerator):
 
@@ -331,17 +343,12 @@ class DebugIntegrationGenerator(IdeIntegrationGenerator):
     def emit(self):
         print(self.gbuildparser.srcdir)
         print(self.gbuildparser.builddir)
-        for f in self.gbuildparser.modules:
-            for j in self.gbuildparser.modules[f]['targets']:
-                print(j)
-
-        VisualStudioIntegrationGenerator(self.gbuildparser, self.ide).emit()
-        XcodeIntegrationGenerator(self.gbuildparser, self.ide).emit()
-
-        EclipseCDTIntegrationGenerator(self.gbuildparser, self.ide).emit()
-        KdevelopIntegrationGenerator(self.gbuildparser, self.ide).emit()
-        VimIntegrationGenerator(self.gbuildparser, self.ide).emit()
-        QtCreatorIntegrationGenerator(self.gbuildparser, self.ide).emit()
+        for lib in self.gbuildparser.libs:
+            print(lib)
+        for exe in self.gbuildparser.exes:
+            print(exe)
+        for test in self.gbuildparser.tests:
+            print(test)
 
 
 class VimIntegrationGenerator(IdeIntegrationGenerator):
@@ -351,14 +358,13 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
 
     def emit(self):
         global_list = []
-        for m in self.gbuildparser.modules:
-            for lib in self.gbuildparser.modules[m]['targets']:
-                entries = []
-                for file in lib.cxxobjects:
-                    filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
-                    entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
-                    entries.append(entry)
-                global_list.extend(entries)
+        for lib in set(self.gbuildparser.libs) | set(self.gbuildparser.tests):
+            entries = []
+            for file in lib.cxxobjects:
+                filePath = os.path.join(self.gbuildparser.srcdir, file) + ".cxx"
+                entry = {'directory': lib.location, 'file': filePath, 'command': self.generateCommand(lib, filePath)}
+                entries.append(entry)
+            global_list.extend(entries)
         export_file = open('compile_commands.json', 'w')
         json.dump(global_list, export_file)
 
@@ -533,7 +539,7 @@ VersionControl=kdevgit
     def write_includepaths(self, path):
         includedirfile = open(os.path.join(path, '.kdev_include_paths'), 'w')
         include = set()
-        for target in self.target_path[path]:
+        for target in self.gbuildparser.target_by_path[path]:
             include |= set(target.include)
         includedirfile.write('\n'.join(include))
         includedirfile.close()
@@ -542,202 +548,119 @@ VersionControl=kdevgit
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
 
     def emit(self):
-        self.target_path = {}
-        for m in self.gbuildparser.modules:
-            for target in self.gbuildparser.modules[m]['targets']:
-                for cxx in target.cxxobjects:
-                    path = '/'.join(cxx.split('/')[:-1])
-                    if path not in self.target_path:
-                        self.target_path[path] = set()
-                    self.target_path[path] |= set([target])
-
-        for path in self.target_path:
+        for path in self.gbuildparser.target_by_path:
             self.write_includepaths(path)
-        for modulename in self.gbuildparser.modules:
-            if modulename=='include':
-                continue
-            location = self.gbuildparser.srcdir + '/' + modulename
-            self.write_modulestub(location, modulename)
-            self.write_modulebeef(location, modulename)
+        for location in self.gbuildparser.target_by_location:
             for f in os.listdir(location):
                 if f.endswith('.kdev4'):
                     try:
                         os.remove(os.path.join(location, f))
                     except OSError:
                         shutil.rmtree(os.path.join(location, f))
+        for location in self.gbuildparser.target_by_location:
+            modulename = os.path.split(location)[1]
+            self.write_modulestub(location, modulename)
+            self.write_modulebeef(location, modulename)
 
 
 class XcodeIntegrationGenerator(IdeIntegrationGenerator):
-    def __init__(self, gbuildparser, ide):
-        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-
-
-    def emit(self):
-        rootId = 'X0000001'
-        mainGroupId = 'X0000002'
-        self.rootObj = {'attributes': {'LastUpgradeCheck': '0820',
-                                       'ORGANIZATIONNAME': 'LibreOffice',
-                                       'TargetAttributes': {}},
-                        'compatibilityVersion': 'Xcode 3.2',
-                        'developmentRegion': 'English',
-                        'isa': 'PBXProject',
-                        'hasScannedForEncodings': 0,
-                        'knownRegions': ['en'],
-                        'mainGroup': mainGroupId,
-                        'projectDirPath': self.gbuildparser.srcdir,
-                        'projectRoot': '',
-                        'buildConfigurationList': '',
-                        'targets': []}
-        mainGroup = {'isa': 'PBXGroup', 'children': [], 'sourceTree': '<group>'}
-        pbxproj = {'archiveVersion': 1,
-                   'classes': {},
-                   'objectVersion': 46,
-                   'objects': {rootId : self.rootObj,
-                               mainGroupId : mainGroup},
-                   'rootObject': rootId}
-        for module in self.gbuildparser.modules:
-            if module == 'include':
-                continue
-            sourceId, self.sourceObj = self.define_pbxgroup('Sources')
-            includeId, self.includeObj = self.define_pbxgroup('Headers')
-            moduleId, self.moduleObj = self.define_pbxgroup(module)
-
-            self.moduleObj['children'] = [sourceId, includeId]
-            pbxproj['objects'].update( {sourceId: self.sourceObj,
-                                        includeId: self.includeObj,
-                                        moduleId: self.moduleObj})
-            mainGroup['children'].append(moduleId)
-
-            for target in self.gbuildparser.modules[module]['targets']:
-                pbxproj['objects'].update(self.generate_project(target))
-
-        xcodeprojdir = './osx/libreoffice.xcodeproj'
-        try:
-            os.mkdir(xcodeprojdir)
-        except:
-            pass
-        with open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w') as f:
-            f.write('// !$*UTF8*$!\n')
-            self.write_object(pbxproj, f, 0)
-
-
-    def define_pbxgroup(self, name):
-        return self.generate_id(), {'isa': 'PBXGroup','children': [],'name': name,'sourceTree': '<group>'}
-
-    counter = 16777216
-
-    def generate_id(self):
-        XcodeIntegrationGenerator.counter += 1
-        return str('X%07x' % XcodeIntegrationGenerator.counter)
 
     def indent(self, file, level):
-        if level != 0:
-            for i in range(0, level):
-                file.write('\t')
+        if level == 0:
+            return
+        for i in range(0, level):
+            file.write(' ')
 
     def write_object(self, object, file, indent):
         if isinstance(object, int):
             file.write('%d' % object)
-        elif isinstance(object, str):
-          if object == '':
-              file.write('""')
-          elif not re.search('[^A-Za-z0-9_]', object):
+        elif isinstance(object, str) and not re.search('[^A-Za-z0-9_]', object):
             file.write('%s' % object)
-          else:
+        elif isinstance(object, str):
             file.write('"%s"' % object)
         elif isinstance(object, dict):
-            file.write('{')
-            file.write('\n')
-            for key in sorted(object.keys()):
-                self.indent(file, indent + 1)
-                file.write('%s = ' % key)
-                self.write_object(object[key], file, indent + 1)
-                file.write(';\n')
-            self.indent(file, indent)
-            file.write('}')
-        elif isinstance(object, list):
-            file.write('(')
-            for key in object:
-                self.write_object(key, file, 1)
-                file.write(',')
-            file.write(')')
+            self.write_dict(object, file, indent)
 
+    # Write a dictionary out as an "old-style (NeXT) ASCII plist"
+    def write_dict(self, dict, file, indent):
+        file.write('{')
+        file.write('\n')
+        for key in sorted(dict.keys()):
+            self.indent(file, indent + 1)
+            file.write('%s = ' % key)
+            self.write_object(dict[key], file, indent + 1)
+            file.write(';\n')
+        self.indent(file, indent)
+        file.write('}')
+
+    def write_dict_to_plist(self, dict, file):
+        file.write('// !$*UTF8*$!\n')
+        self.write_dict(dict, file, 0)
+
+    def get_product_type(self, modulename):
+        if modulename in self.gbuildparser.libs:
+            return 'com.apple.product-type.library.dynamic'
+        elif modulename in self.gbuildparser.exes:
+            return 'com.apple.product-type.something'
+
+    counter = 0
+
+    def generate_id(self):
+        XcodeIntegrationGenerator.counter = XcodeIntegrationGenerator.counter + 1
+        return str('X%07x' % XcodeIntegrationGenerator.counter)
+
+    def generate_build_phases(self, modulename):
+        result = [self.sourcesBuildPhaseId]
+        return result
+
+    def generate_root_object(self, modulename):
+        result = {'isa': 'PBXProject',
+                  'attributes': {'LastUpgradeCheck': '0500',
+                                 'ORGANIZATIONNAME': 'LibreOffice'},
+                  'buildConfigurationList': self.generate_id(),
+                  'compatibilityVersion': 'Xcode 3.2',
+                  'hasScannedForEncodings': 0,
+                  'knownRegions': ['en'],
+                  'mainGroup': self.mainGroupId,
+                  'productRefGroup': self.productRefGroupId,
+                  'projectDirPath': '',
+                  'projectRoot': '',
+                  'targets': self.targetId}
+        return result
 
     def generate_target(self, modulename):
-        if modulename.build_type == 'Library':
-            product = 'com.apple.product-type.library.dynamic'
-        elif modulename.build_type == 'Executable':
-            product = 'com.apple.product-type.executable'
-        elif modulename.build_type == 'CppunitTest':
-            product = 'com.apple.product-type.cppunit'
-        else:
-            product = 'com.apple.product-type.something'
-
-        result = {'isa': 'PBXLegacyTarget',
-                  'buildConfigurationList': self.configurationListId,
-                  'buildArgumentsString': modulename.target_name,
-                  'buildPhases': [],
+        result = {'isa': 'PBXNativeTarget',
+                  'buildConfigurationList': self.generate_id(),
+                  'buildPhases': self.generate_build_phases(modulename),
+                  'buildRules': [],
                   'dependencies': [],
-                  'buildToolPath': 'make',
-                  'buildWorkingDirectory': self.gbuildparser.builddir,
-                  'name': modulename.target_name,
-                  'productName': modulename.name,
-                  'passBuildSettingsEnvironment': 1}
+                  'name': modulename,
+                  'productName': modulename,
+                  'productReference': self.productReferenceId,
+                  'productType': self.get_product_type(modulename)}
         return result
 
-    def generate_configuration_debug(self, modulename):
-        result = {'isa': 'XCBuildConfiguration',
-                  'buildSettings': {
-                      'ALWAYS_SEARCH_USER_PATHS': 'NO',
-                      'CLANG_ANALYZER_NONNULL': 'YES',
-                      'CLANG_CXX_LANGUAGE_STANDARD': 'gnu++0x',
-                      'CLANG_CXX_LIBRARY': 'libc++',
-                      'CLANG_ENABLE_MODULES': 'YES',
-                      'CLANG_ENABLE_OBJC_ARC': 'YES',
-                      'CLANG_WARN_BOOL_CONVERSION': 'YES',
-                      'CLANG_WARN_CONSTANT_CONVERSION': 'YES',
-                      'CLANG_WARN_DIRECT_OBJC_ISA_USAGE': 'YES_ERROR',
-                      'CLANG_WARN_DOCUMENTATION_COMMENTS': 'YES',
-                      'CLANG_WARN_EMPTY_BODY': 'YES',
-                      'CLANG_WARN_ENUM_CONVERSION': 'YES',
-                      'CLANG_WARN_INFINITE_RECURSION': 'YES',
-                      'CLANG_WARN_INT_CONVERSION': 'YES',
-                      'CLANG_WARN_OBJC_ROOT_CLASS': 'YES_ERROR',
-                      'CLANG_WARN_SUSPICIOUS_MOVE': 'YES',
-                      'CLANG_WARN_UNREACHABLE_CODE': 'YES',
-                      'CLANG_WARN__DUPLICATE_METHOD_MATCH': 'YES',
-                      'CODE_SIGN_IDENTITY': '-',
-                      'COPY_PHASE_STRIP': 'NO',
-                      'DEBUG_INFORMATION_FORMAT': 'dwarf',
-                      'ENABLE_STRICT_OBJC_MSGSEND': 'YES',
-                      'ENABLE_TESTABILITY': 'YES',
-                      'GCC_C_LANGUAGE_STANDARD': 'gnu99',
-                      'GCC_DYNAMIC_NO_PIC': 'NO',
-                      'GCC_NO_COMMON_BLOCKS': 'YES',
-                      'GCC_OPTIMIZATION_LEVEL': 0,
-                      'GCC_PREPROCESSOR_DEFINITIONS': [
-                            'DEBUG=1',
-                            '$(inherited)'],
-                      'GCC_WARN_64_TO_32_BIT_CONVERSION': 'YES',
-                      'GCC_WARN_ABOUT_RETURN_TYPE': 'YES_ERROR',
-                      'GCC_WARN_UNDECLARED_SELECTOR': 'YES',
-                      'GCC_WARN_UNINITIALIZED_AUTOS': 'YES_AGGRESSIVE',
-                      'GCC_WARN_UNUSED_FUNCTION': 'YES',
-                      'GCC_WARN_UNUSED_VARIABLE': 'YES',
-                      'MACOSX_DEPLOYMENT_TARGET': '10.12',
-                      'MTL_ENABLE_DEBUG_INFO': 'YES',
-                      'ONLY_ACTIVE_ARCH': 'YES',
-                      'PRODUCT_NAME': '$(TARGET_NAME)',
-                      'SDKROOT': 'macosx',
-                      'HEADER_SEARCH_PATHS': modulename.include},
-                  'name': 'Debug'}
+    def generate_main_group(self, modulename):
+        result = {'isa': 'PBXGroup',
+                  'children': [self.subMainGroupId, self.productGroupId],
+                  'sourceTree': '<group>'}
         return result
 
-    def generate_configuration_list(self, modulename):
-        result = {'isa': 'XCConfigurationList',
-                  'buildConfigurations': [self.configurationDebugId],
-                  'defaultConfigurationIsVisible': 0,
-                  'defaultConfigurationName': 'Debug'}
+    def generate_sub_main_children(self, modulename):
+        return {}
+
+    def generate_sub_main_group(self, modulename):
+        result = {'isa': 'PBXGroup',
+                  'children': self.generate_sub_main_children(modulename),
+                  'path': modulename,
+                  'sourceTree': '<group>'}
+        return result
+
+    def generate_product_group(self, modulename):
+        result = {'isa': 'PBXGroup',
+                  'children': [self.productReferenceId],
+                  'name': 'Products',
+                  'sourceTree': '<group>'}
         return result
 
     def build_source_list(self, module):
@@ -751,44 +674,74 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
                                        'path': i + '.cxx',
                                        'sourceTree': '<group>'}
 
+    def generate_sources_build_phase(self, modulename):
+        result = {'isa': 'PBXSourcesBuildPhase',
+                  'buildActionMask': 2147483647,
+                  'files': self.sourceList.keys(),
+                  'runOnlyForDeploymentPostprocessing': 0}
+        return result
+
     def generate_project(self, target):
-        self.targetId = self.generate_id()
-        self.configurationListId = self.generate_id()
-        self.configurationDebugId = self.generate_id()
-
+        self.rootObjectId = self.generate_id()
+        self.mainGroupId = self.generate_id()
+        self.subMainGroupId = self.generate_id()
         self.productReferenceId = self.generate_id()
+        self.productRefGroupId = self.generate_id()
         self.productGroupId = self.generate_id()
+        self.targetId = self.generate_id()
         self.build_source_list(target)
-        self.sourceObj['children'].extend(list(self.sourceRefList.keys()))
-
-        self.rootObj['attributes']['TargetAttributes'].update({
-        self.targetId: {'CreatedOnToolsVersion': '8.2',
-                        'ProvisioningStyle': 'Automatic'}})
-        self.rootObj['buildConfigurationList'] = self.configurationListId
-        self.rootObj['targets'].append(self.targetId)
-        objects = {self.targetId: self.generate_target(target),
-                   self.configurationListId: self.generate_configuration_list(target),
-                   self.configurationDebugId: self.generate_configuration_debug(target)
+        self.sourcesBuildPhaseId = self.generate_id()
+        objects = {self.rootObjectId: self.generate_root_object(target),
+                   self.targetId: self.generate_target(target),
+                   self.mainGroupId: self.generate_main_group(target),
+                   self.subMainGroupId: self.generate_sub_main_group(target),
+                   self.productGroupId: self.generate_product_group(target),
+                   self.sourcesBuildPhaseId: self.generate_sources_build_phase(target)
                    }
         for i in self.sourceList.keys():
             ref = self.sourceList[i]
-            path = self.sourceRefList[ref]['path']
-            name = '/'.join(path.split('/')[2:])
+            objects[i] = {'isa': 'PBXBuildFile',
+                          'fileRef': ref}
             objects[ref] = {'isa': 'PBXFileReference',
                             'lastKnownFileType': self.sourceRefList[ref]['lastKnownFileType'],
-                            'path': path,
-                            'name': name,
-                            'fileEncoding': 4,
-                            'sourceTree': '<group>'}
-        return objects
+                            'path': self.sourceRefList[ref]['path']}
+        project = {'archiveVersion': 1,
+                   'classes': {},
+                   'objectVersion': 46,
+                   'objects': objects,
+                   'rootObject': self.rootObjectId}
+        return project
+
+    # For some reverse-engineered documentation on the project.pbxproj format,
+    # see http://www.monobjc.net/xcode-project-file-format.html .
+    def write_xcodeproj(self, moduledir, target):
+        xcodeprojdir = os.path.join(moduledir, '%s.xcodeproj' % target.name)
+        try:
+            os.mkdir(xcodeprojdir)
+        except:
+            pass
+        self.write_dict_to_plist(self.generate_project(target),
+                                 open(os.path.join(xcodeprojdir, 'project.pbxproj'), 'w'))
+
+    def __init__(self, gbuildparser, ide):
+        IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
+
+    def emit(self):
+        self.rootlocation = './'
+        for location in self.gbuildparser.target_by_location:
+            # module = location.split('/')[-1]
+            # module_directory = os.path.join(self.rootlocation, module)
+            for target in self.gbuildparser.target_by_location[location]:
+                # project_path = os.path.join(module_directory, '%s.pbxroj' % target.name)
+                self.write_xcodeproj(location, target)
 
 
 class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
-        self.toolset = self.retrieve_toolset()
-        self.solution_directory = './windows'
+        self.toolset = self.retrieve_toolset(ide)
+        self.solution_directory = './'
         self.configurations = {
             'Build': {
                 'build': self.module_make_command('%(target)s'),
@@ -807,8 +760,9 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             }
         }
 
-    def retrieve_toolset(self):
-        return {'vs2013': 'v120', 'vs2015': 'v140'}.get(self.ide, None)
+    def retrieve_toolset(self, ide):
+        ide_toolset_map = {'vs2013': 'v120', 'vs2015': 'v140'}
+        return ide_toolset_map[ide]
 
     def module_make_command(self, targets):
         return '%(sh)s -c "PATH=\\"/bin:$PATH\\";BUILDDIR=\\"%(builddir)s\\" %(makecmd)s -rsC %(location)s ' + targets + '"'
@@ -822,17 +776,17 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
 
     def emit(self):
         all_projects = []
-        for module in self.gbuildparser.modules:
+        for location in self.gbuildparser.target_by_location:
             projects = []
+            module = location.split('/')[-1]
             module_directory = os.path.join(self.solution_directory, module)
-            if module != 'include': #FIXME
-                for target in self.gbuildparser.modules[module]['targets']:
-                    project_path = os.path.join(module_directory, '%s.vcxproj' % target.target_name)
-                    project_guid = self.write_project(project_path, target)
-                    p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
-                    projects.append(p)
-                self.write_solution(os.path.join(module_directory, '%s.sln' % module), projects)
-                all_projects += projects
+            for target in self.gbuildparser.target_by_location[location]:
+                project_path = os.path.join(module_directory, '%s.vcxproj' % target.name)
+                project_guid = self.write_project(project_path, target)
+                p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
+                projects.append(p)
+            self.write_solution(os.path.join(module_directory, '%s.sln' % module), projects)
+            all_projects += projects
 
         self.write_solution(os.path.join(self.solution_directory, 'LibreOffice.sln'), all_projects)
 
@@ -842,22 +796,22 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         dependency_libs = {}
         for linked_lib in linked_libs:
             for library_project in library_projects:
-                if library_project.target.name == linked_lib:
+                if library_project.target.library_name() == linked_lib:
                     dependency_libs[library_project.guid] = library_project
         return dependency_libs
 
     def write_solution(self, solution_path, projects):
         print('Solution %s:' % os.path.splitext(os.path.basename(solution_path))[0], end='')
-        library_projects = [project for project in projects if project.target.build_type == 'Library']
+        library_projects = [project for project in projects if project.target in self.gbuildparser.libs]
         with open(solution_path, 'w') as f:
             f.write('Microsoft Visual Studio Solution File, Format Version 12.00\n')
             for project in projects:
                 target = project.target
-                print(' %s' % target.target_name, end='')
+                print(' %s' % target.name, end='')
                 proj_path = os.path.relpath(project.path, os.path.abspath(os.path.dirname(solution_path)))
                 f.write('Project("{%s}") = "%s", "%s", "{%s}"\n' %
                         (VisualStudioIntegrationGenerator.nmake_project_guid,
-                         target.target_name, proj_path, project.guid))
+                         target.short_name(), proj_path, project.guid))
                 libs_in_solution = self.get_dependency_libs(target.linked_libs,
                                                             library_projects)
                 if libs_in_solution:
@@ -910,7 +864,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
         proj_keyword_node = ET.SubElement(globals_node, '{%s}Keyword' % ns)
         proj_keyword_node.text = 'MakeFileProj'
         proj_name_node = ET.SubElement(globals_node, '{%s}ProjectName' % ns)
-        proj_name_node.text = target.target_name
+        proj_name_node.text = target.short_name()
 
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.Default.props')
         for configuration in self.configurations:
@@ -942,7 +896,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
                 'builddir': self.gbuildparser.builddir,
                 'location': target.location,
                 'makecmd': self.gbuildparser.makecmd,
-                'target': target.target_name}
+                'target': target.target_name()}
             nmake_build_node = ET.SubElement(conf_node, '{%s}NMakeBuildCommandLine' % ns)
             nmake_build_node.text = cfg_targets['build'] % nmake_params
             nmake_clean_node = ET.SubElement(conf_node, '{%s}NMakeCleanCommandLine' % ns)
@@ -965,7 +919,7 @@ class VisualStudioIntegrationGenerator(IdeIntegrationGenerator):
             if os.path.isfile(cxxfile):
                 ET.SubElement(cxxobjects_node, '{%s}ClCompile' % ns, Include=cxxfile)
             else:
-                print('Source %s in project %s does not exist' % (cxxfile, target.target_name))
+                print('Source %s in project %s does not exist' % (cxxfile, target.name))
 
         includes_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
         for cxxobject in target.cxxobjects:
@@ -1037,11 +991,10 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
         self.target_by_location = {}
-        for m in self.gbuildparser.modules:
-            for target in self.gbuildparser.modules[m]['targets']:
-                if target.location not in self.target_by_location:
-                    self.target_by_location[target.location] = set()
-                self.target_by_location[target.location] |= set([target])
+        for target in set(self.gbuildparser.libs) | set(self.gbuildparser.exes):
+            if target.location not in self.target_by_location:
+                self.target_by_location[target.location] = set()
+            self.target_by_location[target.location] |= set([target])
 
         self._do_log = False  # set to 'True' to activate log of QtCreatorIntegrationGenerator
         if self._do_log:
@@ -1494,12 +1447,9 @@ class QtCreatorIntegrationGenerator(IdeIntegrationGenerator):
 
         self.data_libs = {}
 
-        all_libs = []
-        for m in self.gbuildparser.modules:
-            for f in self.gbuildparser.modules[m]['targets']:
-                all_libs.append(f)
+        all_libs = set(self.gbuildparser.libs) | set(self.gbuildparser.exes)
         for lib in all_libs:
-            self._log("\nlibrary : %s, loc=%s" % (lib.target_name, lib.location))
+            self._log("\nlibrary : %s, loc=%s" % (lib.short_name(), lib.location))
             lib_name = os.path.basename(lib.location)
             lib_folder = os.path.relpath(lib.location, self.base_folder)
 
@@ -1670,39 +1620,27 @@ SUBDIRS = %(subdirs)s
 """
 
 
-def get_options():
+if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='LibreOffice gbuild IDE project generator')
     parser.add_argument('--ide', dest='ide', required=True,
                         help='the IDE to generate project files for')
     parser.add_argument('--make', dest='makecmd', required=True,
                         help='the command to execute make')
-    #add to debug a new functions in the project keeping contributors
-    parser.add_argument('--debug',dest='debug',required=False,
-                        help='debug the new functions')
-    return parser.parse_args()
-
-
-if __name__ == '__main__':
-    args = get_options()
+    args = parser.parse_args()
     # FIXME: Hack
     if args.makecmd == 'make':
         args.makecmd = '/usr/bin/make'
-    if args.debug=='allheaders':
-        #headers=GbuildParser(args.makecmd).find_all_headers()
-        pass
+
     paths = {}
     generators = {
-        # Supported platforms
-        'vs2013': VisualStudioIntegrationGenerator,
-        'xcode': XcodeIntegrationGenerator,
-        'debug': DebugIntegrationGenerator,
-
-        # Old platforms
         'eclipsecdt': EclipseCDTIntegrationGenerator,
         'kdevelop': KdevelopIntegrationGenerator,
+        'xcode': XcodeIntegrationGenerator,
+        'vs2013': VisualStudioIntegrationGenerator,
         'vs2015': VisualStudioIntegrationGenerator,
         'vim': VimIntegrationGenerator,
+        'debug': DebugIntegrationGenerator,
         'qtcreator': QtCreatorIntegrationGenerator,
     }
 
