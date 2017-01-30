@@ -150,17 +150,18 @@ class GbuildParser:
 
     def find_all_headers(self):
 
-        cmdResult1=subprocess.Popen(('git', 'ls-files'), cwd=self.srcdir,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        cmdResult2=subprocess.check_output(('grep', '-i', '-E', '".*\.hxx$|.*\.h$|.*\.hpp$"'),cwd=self.srcdir,stdin=cmdResult1.stdout,stderr=subprocess.PIPE)
+        cmdResult=subprocess.check_output(['git', 'ls-files','--','*.h','*.hxx', '*.hpp'], cwd=self.srcdir, stderr=subprocess.PIPE,)
+
 
         allfiles={}
-        for file in cmdResult2.splitlines():
+        for file in cmdResult.splitlines():
             strfile=file.decode()
             modulename=strfile.split('/')[0]
             if not modulename in allfiles:
                 allfiles[modulename]=[]
             modulename_len=len(modulename)
             allfiles[modulename].append(strfile[modulename_len + 1:])
+
         self._allheaders = allfiles
 
     def headers_of(self,modulename):
@@ -182,7 +183,7 @@ class IdeIntegrationGenerator:
 
 
 
-class testWinIde(IdeIntegrationGenerator):
+class testVS2013Ide(IdeIntegrationGenerator):
 
     def __init__(self, gbuildparser, ide):
         IdeIntegrationGenerator.__init__(self, gbuildparser, ide)
@@ -226,9 +227,12 @@ class testWinIde(IdeIntegrationGenerator):
             module_directory = os.path.join(self.solution_directory, module)
             if module != 'include':  # FIXME
                 for target in self.gbuildparser.modules[module]['targets']:
+
                     project_path = os.path.join(module_directory, '%s.vcxproj' % target['target_name'])
+
                     project_guid = self.write_project(project_path, target)
                     p = VisualStudioIntegrationGenerator.Project(project_guid, target, project_path)
+                    self.write_filters(project_path + '.filters',target,self.gbuildparser.modules[module]['headers'])
                     projects.append(p)
                 self.write_solution(os.path.join(module_directory, '%s.sln' % module), projects)
                 all_projects += projects
@@ -379,22 +383,8 @@ class testWinIde(IdeIntegrationGenerator):
         ET.SubElement(proj_node, '{%s}Import' % ns, Project='$(VCTargetsPath)\Microsoft.Cpp.targets')
         ET.SubElement(proj_node, '{%s}ImportGroup' % ns, Label='ExtensionTargets')
         self.write_pretty_xml(proj_node, project_path)
-        self.write_filters(project_path + '.filters',
-                           os.path.join(self.gbuildparser.srcdir, os.path.basename(target['location'])),
-                           [cxx_node.get('Include') for cxx_node in cxxobjects_node.findall('{%s}ClCompile' % ns)],
-                           [include_node.get('Include') for include_node in
-                            includes_node.findall('{%s}ClInclude' % ns)])
+
         return project_guid
-
-    def get_filter(self, module_dir, proj_file):
-        return '\\'.join(os.path.relpath(proj_file, module_dir).split('/')[:-1])
-
-    def get_subfilters(self, proj_filter):
-        parts = proj_filter.split('\\')
-        subfilters = set([proj_filter])
-        for i in range(1, len(parts)):
-            subfilters.add('\\'.join(parts[:i]))
-        return subfilters
 
     def write_pretty_xml(self, node, file_path):
         xml_str = ET.tostring(node, encoding='unicode')
@@ -402,36 +392,35 @@ class testWinIde(IdeIntegrationGenerator):
         with open(file_path, 'w') as f:
             f.write(pretty_str.decode())
 
-    def add_nodes(self, files_node, module_dir, tag, project_files):
-        ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
-        filters = set()
-        for project_file in project_files:
-            file_node = ET.SubElement(files_node, tag, Include=project_file)
-            if os.path.commonprefix([module_dir, project_file]) == module_dir:
-                project_filter = self.get_filter(module_dir, project_file)
-                filter_node = ET.SubElement(file_node, '{%s}Filter' % ns)
-                filter_node.text = project_filter
-                filters |= self.get_subfilters(project_filter)
-        return filters
-
-    def write_filters(self, filters_path, module_dir, compile_files, include_files):
+    def write_filters(self,filters_path,target,headers):
         ns = 'http://schemas.microsoft.com/developer/msbuild/2003'
         ET.register_namespace('', ns)
         proj_node = ET.Element('{%s}Project' % ns, ToolsVersion='4.0')
-        filters = set()
-        compiles_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
-        filters |= self.add_nodes(compiles_node, module_dir, '{%s}ClCompile' % ns, compile_files)
-        include_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
-        filters |= self.add_nodes(include_node, module_dir, '{%s}ClInclude' % ns, include_files)
 
-        filters_node = ET.SubElement(proj_node, '{%s}ItemGroup' % ns)
-        for proj_filter in filters:
-            filter_node = ET.SubElement(filters_node, '{%s}Filter' % ns, Include=proj_filter)
-            filter_id_node = ET.SubElement(filter_node, '{%s}UniqueIdentifier' % ns)
-            filter_id_node.text = '{%s}' % str(uuid.uuid4())
+        filters_node=ET.SubElement(proj_node,'{%s}ItemGroup' % ns)
+        filters={'sources' : 'c;cxx;cpp','headers':'h;hxx;hpp'}
+        for filter_key,filter_value in filters.items():
+            filter_node = ET.SubElement(filters_node,'{%s}Filter' % ns, Include='%s' % filter_key)
+            filter_id_node = ET.SubElement(filter_node,'{%s}UniqueIdentifier' % ns)
+            filter_id_node.text='{%s}' % str(uuid.uuid4())
+            filter_ext_node = ET.SubElement(filter_node,'{%s}Extensions' % ns)
+            filter_ext_node.text = '{%s}' % filter_value
+        sources_node=ET.SubElement(proj_node,'{%s}ItemGroup' % ns)
+        for cxxfile in target['CXXOBJECTS']:
+            cxx_file_name = cxxfile.split('/')[-1] + '.cxx'
+            clinclude_node=ET.SubElement(sources_node,'{%s}ClInclude' % ns, Include='%s' % cxx_file_name)
+            header_filter=ET.SubElement(clinclude_node,'{%s}Filter' % ns)
+            header_filter.text="sources"
+
+        headers_node=ET.SubElement(proj_node,'{%s}ItemGroup' % ns)
+        for header in headers:
+            header_file_name=header.split('/')[-1]
+
+            clinclude_node=ET.SubElement(headers_node,'{%s}ClInclude' % ns, Include='%s' % header_file_name)
+            header_filter=ET.SubElement(clinclude_node,'{%s}Filter' % ns)
+            header_filter.text="headers"
+
         self.write_pretty_xml(proj_node, filters_path)
-
-
 
 class XcodeIntegrationGenerator(IdeIntegrationGenerator):
     def __init__(self, gbuildparser, ide):
@@ -2044,7 +2033,7 @@ if __name__ == '__main__':
         'vs2013': VisualStudioIntegrationGenerator,
         'xcode': XcodeIntegrationGenerator,
         'debug': DebugIntegrationGenerator,
-        'testIde': testWinIde,
+        'testIde': testVS2013Ide,
 
         # Old platforms
         'eclipsecdt': EclipseCDTIntegrationGenerator,
