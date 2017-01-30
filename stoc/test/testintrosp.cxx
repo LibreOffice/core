@@ -745,21 +745,21 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
         "Meyer",
         "33",
         "3",
-        "Wert wurde nicht modifiziert",
-        "Wert wurde nicht modifiziert",
+        "Value has not been modified",
+        "Value has not been modified",
         "315",
-        "Wert wurde nicht modifiziert",
+        "Value has not been modified",
         "42",
         "112",
         "99",
-        "Wert wurde nicht modifiziert",
-        "Wert wurde nicht modifiziert",
-        "Wert wurde nicht modifiziert",
-        "Wert wurde nicht modifiziert",
-        "Wert wurde nicht modifiziert",
+        "Value has not been modified",
+        "Value has not been modified",
+        "Value has not been modified",
+        "Value has not been modified",
+        "Value has not been modified",
         "10",
-        "Wert wurde nicht modifiziert"
-        "Wert wurde nicht modifiziert"
+        "Value has not been modified",
+        "Value has not been modified",
     };
 
     char const * pDemandedPropTypes[] =
@@ -1061,12 +1061,12 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     // loop over all concept combinations
     for( sal_Int32 nConcepts = 0 ; nConcepts < 128 ; nConcepts++ )
     {
-        // Das 2^6-Bit steht fuer "den Rest"
+        // The 2^6th bit stands for "the rest"
         sal_Int32 nRealConcepts = nConcepts;
         if( nConcepts & 0x40 )
             nRealConcepts |= (0xFFFFFFFF - 0x3F);
 
-        // Wieviele Methoden sollten es sein
+        // Count the number of methods there should be
         sal_Int32 nDemandedMethCount = 0;
         sal_Int32 iList = 0;
         while( pMethodDefs[ iList ].pName )
@@ -1076,7 +1076,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             iList++;
         }
 
-        // Methoden-Array ausgeben
+        // Output the method array.
         Sequence< Reference< XIdlMethod > > aMethodSeq = xAccess->getMethods( nRealConcepts );
         sal_Int32 nLen = aMethodSeq.getLength();
 
@@ -1092,14 +1092,12 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
 
         for( i = 0 ; i < nLen ; i++ )
         {
-            // Methode ansprechen
             const Reference< XIdlMethod >& rxMethod = pMethods[i];
 
-            // Methode ausgeben
             OUString aMethName = rxMethod->getName();
             OString aNameStr = OUStringToOString(aMethName, RTL_TEXTENCODING_ASCII_US );
 
-            // Naechste Passende Methode in der Liste suchen
+            // locate the next matching method in the list.
             while( pMethodDefs[ iList ].pName )
             {
                 if( pMethodDefs[ iList ].nConcept & nRealConcepts )
@@ -1116,7 +1114,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
             aErrorStr += "\"";
             OSL_ENSURE( aNameStr == aDemandedName, aErrorStr.getStr() );
 
-            // Checken, ob alle Methoden auch einzeln gefunden werden
+            // Check that the method is really there with hasMethod.
             aErrorStr  = "method \"";
             aErrorStr += aDemandedName;
             aErrorStr += "\" not found with hasMethod()";
@@ -1149,10 +1147,7 @@ static sal_Bool test_introsp( Reference< XMultiServiceFactory > xMgr,
     const Type* pListeners = aClassSeq.getConstArray();
     for( sal_Int32 i = 0 ; i < nLen ; i++ )
     {
-        // Methode ansprechen
         const Type& aListenerType = pListeners[i];
-
-        // get name
         OUString aListenerClassName = aListenerType.getTypeName();
     }
 

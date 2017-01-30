@@ -1282,7 +1282,7 @@ Reference<XRegistryKey > ORegistryServiceManager::getRootKey()
         //  DefaultRegistry suchen !!!!
         if( !m_xRegistry.is() && !m_searchedRegistry )
         {
-            // merken, es wird nur einmal gesucht
+            // NB. we only search this once
             m_searchedRegistry = true;
 
             m_xRegistry.set(
