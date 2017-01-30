@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_63961a96",
+        "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
+        "patchSetId": 3
+      },
+      "lineNbr": 591,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-30T14:05:23Z",
+      "side": 1,
+      "message": "I added just one more space, else the indentation gives the impression of a structure like:\n\n(aSqlSubType \u003d\u003d 1 ||\n aSqlSubType \u003d\u003d 2 ) || // CLOSE PARENTHESIS\n(aSqlSubType \u003d\u003d 0 ..)\n\nAll that is within the same parenthesis should be indented to the right of the opening parenthesis, not at the same level as it.",
+      "revId": "f996b99286df39dbf8a68e3a89ea9699a96a7ef3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
