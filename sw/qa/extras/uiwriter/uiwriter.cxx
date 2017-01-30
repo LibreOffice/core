@@ -226,6 +226,7 @@ public:
     void testTdf35021_tabOverMarginDemo();
     void testTdf104492();
     void testTdf105417();
+    void testTdf105625();
 
     CPPUNIT_TEST_SUITE(SwUiWriterTest);
     CPPUNIT_TEST(testReplaceForward);
@@ -346,6 +347,7 @@ public:
     CPPUNIT_TEST(testTdf35021_tabOverMarginDemo);
     CPPUNIT_TEST(testTdf104492);
     CPPUNIT_TEST(testTdf105417);
+    CPPUNIT_TEST(testTdf105625);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3030,17 +3032,21 @@ void SwUiWriterTest::testTdf88899()
 
 void SwUiWriterTest::testTdf90362()
 {
-    // First check if the end of the second paragraph is indeed protected.
     SwDoc* pDoc = createDoc("tdf90362.fodt");
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    // Ensure correct initial setting
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    // First check if the end of the second paragraph is indeed protected.
     pWrtShell->EndPara();
     pWrtShell->Down(/*bSelect=*/false);
     CPPUNIT_ASSERT_EQUAL(true, pWrtShell->HasReadonlySel());
 
     // Then enable ignoring of protected areas and make sure that this time the cursor is read-write.
-    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
     comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(true), comphelper::EConfigurationModes::Standard);
     CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+    // Clean up, otherwise following tests will have that option set
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
 }
 
 void SwUiWriterTest::testUndoCharAttribute()
@@ -4263,6 +4269,22 @@ void SwUiWriterTest::testTdf105417()
     // This never returned, it kept trying to hyphenate the last word
     // (greenbacks) again and again.
     aWrap.SpellDocument();
+}
+
+void SwUiWriterTest::testTdf105625()
+{
+    // We should be able to edit at positions adjacent to fields.
+    // Check if the start and the end of the only paragraph are not protected
+    // (they are adjacent to FORMCHECKBOX)
+    SwDoc* pDoc = createDoc("tdf105625.fodt");
+    SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
+    uno::Reference<uno::XComponentContext> xComponentContext(comphelper::getProcessComponentContext());
+    // Ensure correct initial setting
+    comphelper::ConfigurationHelper::writeDirectKey(xComponentContext, "org.openoffice.Office.Writer/", "Cursor/Option", "IgnoreProtectedArea", css::uno::Any(false), comphelper::EConfigurationModes::Standard);
+    pWrtShell->SttPara();
+    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
+    pWrtShell->EndPara();
+    CPPUNIT_ASSERT_EQUAL(false, pWrtShell->HasReadonlySel());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SwUiWriterTest);
