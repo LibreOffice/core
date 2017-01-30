@@ -141,14 +141,14 @@ Any IdlEnumFieldImpl::get( const Any & )
 void IdlEnumFieldImpl::set( const Any &, const Any & )
 {
     throw IllegalAccessException(
-        "enum field is constant!",
+        "cannot set enum field, it is constant",
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
 }
 
 void IdlEnumFieldImpl::set( Any &, const Any & )
 {
     throw IllegalAccessException(
-        "enum field is constant!",
+        "cannot set enum field, it is constant",
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
 }
 

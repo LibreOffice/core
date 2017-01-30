@@ -535,13 +535,13 @@ Any SAL_CALL TypeConverter_Impl::convertTo( const Any& rVal, const Type& aDestTy
         if (!ifc || !ifc->is())
         {
             throw CannotConvertException(
-                "value is no interface!",
+                "value is not interface",
                 Reference< XInterface >(), aDestinationClass, FailReason::NO_SUCH_INTERFACE, 0 );
         }
         if (! (aRet = (*ifc)->queryInterface(aDestType )).hasValue())
         {
             throw CannotConvertException(
-                "value has no such interface!",
+                "value does not implement " + aDestType.getTypeName(),
                 Reference< XInterface >(), aDestinationClass, FailReason::NO_SUCH_INTERFACE, 0 );
         }
         break;
@@ -740,7 +740,7 @@ Any TypeConverter_Impl::convertToSimpleType( const Any& rVal, TypeClass aDestina
             else
             {
                 throw CannotConvertException(
-                    "STRING has no boolean value!",
+                    "STRING has no boolean value, " + aStr,
                     Reference< XInterface >(), aDestinationClass, FailReason::IS_NOT_BOOL, 0 );
             }
         }

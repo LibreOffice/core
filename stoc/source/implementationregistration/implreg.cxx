@@ -959,15 +959,9 @@ void insert_singletons(
                             // to be registered
                             if (! is_supported_service( service_name, xExistingService_td ))
                             {
-                                OUStringBuffer buf( 64 );
-                                buf.append( "existing singleton service (" );
-                                buf.append( singleton_name );
-                                buf.append( '=' );
-                                buf.append( existing_name );
-                                buf.append( ") does not support given one: " );
-                                buf.append( service_name );
                                 throw registry::CannotRegisterImplementationException(
-                                    buf.makeStringAndClear() );
+                                    "existing singleton service (" + singleton_name + "=" + existing_name + ") "
+                                    " does not support given one: " + service_name);
                             }
                         }
                         catch (const container::NoSuchElementException & exc)
@@ -1320,12 +1314,9 @@ void ImplementationRegistration::initialize(
 {
 
     if( aArgs.getLength() != 4 ) {
-        OUStringBuffer buf;
-        buf.append( "ImplementationRegistration::initialize() expects 4 parameters, got " );
-        buf.append( (sal_Int32) aArgs.getLength() );
-        throw IllegalArgumentException( buf.makeStringAndClear(),
-                                        Reference<XInterface > (),
-                                        0 );
+        throw IllegalArgumentException(
+            "ImplementationRegistration::initialize() expects 4 parameters, got "  + OUString::number( aArgs.getLength() ),
+            Reference<XInterface > (), 0 );
     }
 
     Reference< XImplementationLoader > rLoader;
@@ -1338,15 +1329,11 @@ void ImplementationRegistration::initialize(
         aArgs.getConstArray()[0] >>= rLoader;
     }
     if( !rLoader.is()) {
-        OUStringBuffer buf;
-        buf.append( "ImplementationRegistration::initialize() invalid first parameter,"
-                    "expected " );
-        buf.append( cppu::UnoType<decltype(rLoader)>::get().getTypeName() );
-        buf.append( ", got " );
-        buf.append( aArgs.getConstArray()[0].getValueTypeName() );
-        throw IllegalArgumentException( buf.makeStringAndClear(),
-                                        Reference< XInterface > (),
-                                        0 );
+        throw IllegalArgumentException(
+            "ImplementationRegistration::initialize() invalid first parameter,"
+            "expected " + cppu::UnoType<decltype(rLoader)>::get().getTypeName() +
+            ", got " + aArgs.getConstArray()[0].getValueTypeName(),
+            Reference< XInterface > (), 0 );
     }
 
     // 2nd argument : The service name of the loader. This name is written into the registry
@@ -1354,13 +1341,10 @@ void ImplementationRegistration::initialize(
         aArgs.getConstArray()[1] >>= loaderServiceName;
     }
     if( loaderServiceName.isEmpty() ) {
-        OUStringBuffer buf;
-        buf.append( "ImplementationRegistration::initialize() invalid second parameter,"
-                    "expected string, got " );
-        buf.append( aArgs.getConstArray()[1].getValueTypeName() );
-        throw IllegalArgumentException( buf.makeStringAndClear(),
-                                        Reference< XInterface > (),
-                                        0 );
+        throw IllegalArgumentException(
+            "ImplementationRegistration::initialize() invalid second parameter,"
+            "expected string, got " + aArgs.getConstArray()[1].getValueTypeName(),
+            Reference< XInterface > (), 0 );
     }
 
     // 3rd argument : The file name of the dll, that contains the loader
@@ -1368,13 +1352,10 @@ void ImplementationRegistration::initialize(
         aArgs.getConstArray()[2] >>= locationUrl;
     }
     if( locationUrl.isEmpty() ) {
-        OUStringBuffer buf;
-        buf.append( "ImplementationRegistration::initialize() invalid third parameter,"
-                    "expected string, got " );
-        buf.append( aArgs.getConstArray()[2].getValueTypeName() );
-        throw IllegalArgumentException( buf.makeStringAndClear(),
-                                        Reference< XInterface > (),
-                                        0 );
+        throw IllegalArgumentException(
+            "ImplementationRegistration::initialize() invalid third parameter,"
+            "expected string, got " + aArgs.getConstArray()[2].getValueTypeName(),
+            Reference< XInterface > (), 0 );
     }
 
     // 4th argument : The registry, the service should be written to
@@ -1385,15 +1366,11 @@ void ImplementationRegistration::initialize(
     if( !rReg.is() ) {
         rReg = getRegistryFromServiceManager();
         if( !rReg.is() ) {
-            OUStringBuffer buf;
-            buf.append( "ImplementationRegistration::initialize() invalid fourth parameter,"
-                        "expected " );
-            buf.append( cppu::UnoType<decltype(rReg)>::get().getTypeName() );
-            buf.append( ", got " );
-            buf.append( aArgs.getConstArray()[3].getValueTypeName() );
-            throw IllegalArgumentException( buf.makeStringAndClear(),
-                                            Reference< XInterface > (),
-                                            0 );
+            throw IllegalArgumentException(
+                "ImplementationRegistration::initialize() invalid fourth parameter,"
+                "expected " + cppu::UnoType<decltype(rReg)>::get().getTypeName() +
+                ", got " + aArgs.getConstArray()[3].getValueTypeName(),
+                Reference< XInterface > (), 0 );
         }
     }
 
@@ -1460,12 +1437,9 @@ void ImplementationRegistration::prepareRegister(
             }
             else
             {
-                OUStringBuffer buf( 128 );
-                buf.append( "ImplementationRegistration::registerImplementation() - The service " );
-                buf.append( activatorName );
-                buf.append( " cannot be instantiated\n" );
                 throw CannotRegisterImplementationException(
-                    buf.makeStringAndClear() );
+                    "ImplementationRegistration::registerImplementation() - The service "
+                    + activatorName + " cannot be instantiated" );
             }
         }
         catch( CannotRegisterImplementationException & )
@@ -1474,23 +1448,15 @@ void ImplementationRegistration::prepareRegister(
         }
         catch( const InvalidRegistryException & e )
         {
-            OUStringBuffer buf;
-            buf.append( "ImplementationRegistration::registerImplementation() "
-                        "InvalidRegistryException during registration (" );
-            buf.append( e.Message );
-            buf.append( ")" );
             throw CannotRegisterImplementationException(
-                buf.makeStringAndClear() );
+                "ImplementationRegistration::registerImplementation() "
+                "InvalidRegistryException during registration (" + e.Message + ")" );
         }
         catch( const MergeConflictException & e )
         {
-            OUStringBuffer buf;
-            buf.append( "ImplementationRegistration::registerImplementation() "
-                        "MergeConflictException during registration (" );
-            buf.append( e.Message );
-            buf.append( ")" );
             throw CannotRegisterImplementationException(
-                buf.makeStringAndClear() );
+                "ImplementationRegistration::registerImplementation() "
+                "MergeConflictException during registration (" + e.Message + ")" );
         }
     }
     else

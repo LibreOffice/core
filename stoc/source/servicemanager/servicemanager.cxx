@@ -183,7 +183,7 @@ Any ServiceEnumeration_Impl::nextElement()
 {
     MutexGuard aGuard( aMutex );
     if( nIt == aFactories.getLength() )
-        throw NoSuchElementException();
+        throw NoSuchElementException("no more elements");
 
     return Any( &aFactories.getConstArray()[nIt++], cppu::UnoType<XInterface>::get());
 }
@@ -266,7 +266,7 @@ Any ImplementationEnumeration_Impl::nextElement()
 {
     MutexGuard aGuard( aMutex );
     if( aIt == aImplementationMap.end() )
-        throw NoSuchElementException();
+        throw NoSuchElementException("no more elements");
 
     Any ret( &(*aIt), cppu::UnoType<XInterface>::get());
     ++aIt;
@@ -744,28 +744,28 @@ void OServiceManager::addPropertyChangeListener(
     const OUString&, const Reference<XPropertyChangeListener >&)
 {
     check_undisposed();
-    throw UnknownPropertyException();
+    throw UnknownPropertyException("unsupported");
 }
 
 void OServiceManager::removePropertyChangeListener(
     const OUString&, const Reference<XPropertyChangeListener >&)
 {
     check_undisposed();
-    throw UnknownPropertyException();
+    throw UnknownPropertyException("unsupported");
 }
 
 void OServiceManager::addVetoableChangeListener(
     const OUString&, const Reference<XVetoableChangeListener >&)
 {
     check_undisposed();
-    throw UnknownPropertyException();
+    throw UnknownPropertyException("unsupported");
 }
 
 void OServiceManager::removeVetoableChangeListener(
     const OUString&, const Reference<XVetoableChangeListener >&)
 {
     check_undisposed();
-    throw UnknownPropertyException();
+    throw UnknownPropertyException("unsupported");
 }
 
 // OServiceManager
@@ -1061,7 +1061,7 @@ void OServiceManager::insert( const Any & Element )
     if( Element.getValueTypeClass() != TypeClass_INTERFACE )
     {
         throw IllegalArgumentException(
-            "no interface given!",
+            "exception interface, got " + Element.getValueType().getTypeName(),
             Reference< XInterface >(), 0 );
     }
     Reference<XInterface > xEle( Element, UNO_QUERY_THROW );
@@ -1134,7 +1134,7 @@ void OServiceManager::remove( const Any & Element )
     else
     {
         throw IllegalArgumentException(
-            "neither interface nor string given!",
+            "expected interface or string, got " + Element.getValueType().getTypeName(),
             Reference< XInterface >(), 0 );
     }
 
@@ -1148,7 +1148,7 @@ void OServiceManager::remove( const Any & Element )
     if( aIt == m_ImplementationMap.end() )
     {
         throw NoSuchElementException(
-            "element is not in!",
+            "element not found",
             static_cast< OWeakObject * >(this) );
     }
     //First remove all factories which have been loaded by ORegistryServiceManager.

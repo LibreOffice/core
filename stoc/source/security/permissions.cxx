@@ -494,10 +494,7 @@ PermissionCollection::PermissionCollection(
         }
         else
         {
-            OUStringBuffer buf( 48 );
-            buf.append( "checking for unsupported permission type: " );
-            buf.append( perm_type.getTypeName() );
-            throw RuntimeException( buf.makeStringAndClear() );
+            throw RuntimeException( "checking for unsupported permission type: " + perm_type.getTypeName() );
         }
     }
 }
@@ -544,11 +541,9 @@ static void demanded_diag(
 static void throwAccessControlException(
     Permission const & perm, Any const & demanded_perm )
 {
-    OUStringBuffer buf( 48 );
-    buf.append( "access denied: " );
-    buf.append( perm.toString() );
     throw security::AccessControlException(
-        buf.makeStringAndClear(), Reference< XInterface >(), demanded_perm );
+        "access denied: " + perm.toString(),
+        Reference< XInterface >(), demanded_perm );
 }
 
 void PermissionCollection::checkPermission( Any const & perm ) const
@@ -611,10 +606,7 @@ void PermissionCollection::checkPermission( Any const & perm ) const
     }
     else
     {
-        OUStringBuffer buf( 48 );
-        buf.append( "checking for unsupported permission type: " );
-        buf.append( demanded_type.getTypeName() );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException( "checking for unsupported permission type: " + demanded_type.getTypeName() );
     }
 }
 

@@ -621,7 +621,7 @@ JavaVirtualMachine::initialize(css::uno::Sequence< css::uno::Any > const &
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            OUString(), static_cast< cppu::OWeakObject * >(this));
+            "", static_cast< cppu::OWeakObject * >(this));
     if (m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
             "bad call to initialize",
@@ -693,7 +693,7 @@ JavaVirtualMachine::getJavaVM(css::uno::Sequence< sal_Int8 > const & rProcessId)
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            OUString(), static_cast< cppu::OWeakObject * >(this));
+            "", static_cast< cppu::OWeakObject * >(this));
     css::uno::Sequence< sal_Int8 > aId(16);
     rtl_getGlobalProcessId(reinterpret_cast< sal_uInt8 * >(aId.getArray()));
     enum ReturnType {
@@ -972,7 +972,7 @@ void SAL_CALL JavaVirtualMachine::registerThread()
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            OUString(), static_cast< cppu::OWeakObject * >(this));
+            "", static_cast< cppu::OWeakObject * >(this));
     if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
             "JavaVirtualMachine::registerThread: null VirtualMachine",
@@ -1004,7 +1004,7 @@ void SAL_CALL JavaVirtualMachine::revokeThread()
     osl::MutexGuard aGuard(m_aMutex);
     if (m_bDisposed)
         throw css::lang::DisposedException(
-            OUString(), static_cast< cppu::OWeakObject * >(this));
+            "", static_cast< cppu::OWeakObject * >(this));
     if (!m_xUnoVirtualMachine.is())
         throw css::uno::RuntimeException(
             "JavaVirtualMachine::revokeThread: null VirtualMachine",

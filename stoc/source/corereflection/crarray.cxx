@@ -80,13 +80,13 @@ void ArrayIdlClassImpl::realloc( Any & rArray, sal_Int32 nLen )
     if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
-            "no sequence given!",
+            "expected sequence, but found " + rArray.getValueType().getTypeName(),
             static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
     }
     if (nLen < 0)
     {
         throw IllegalArgumentException(
-            "illegal length given!",
+            "negative length given!",
             static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
     }
 
@@ -104,7 +104,7 @@ sal_Int32 ArrayIdlClassImpl::getLen( const Any & rArray )
     if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
-            "no sequence given!",
+            "expected sequence, but found " + rArray.getValueType().getTypeName(),
             static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
     }
 
@@ -117,7 +117,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
-            "no sequence given!",
+            "expected sequence, but found " + rArray.getValueType().getTypeName(),
             static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
     }
 
@@ -125,7 +125,7 @@ Any ArrayIdlClassImpl::get( const Any & rArray, sal_Int32 nIndex )
     if (pSeq->nElements <= nIndex)
     {
         throw ArrayIndexOutOfBoundsException(
-            "illegal index given!",
+            "illegal index given, index " + OUString::number(nIndex) + " is < " + OUString::number(pSeq->nElements),
             static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
     }
 
@@ -147,7 +147,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     if (eTC != TypeClass_SEQUENCE)
     {
         throw IllegalArgumentException(
-            "no sequence given!",
+            "expected sequence, but found " + rArray.getValueType().getTypeName(),
             static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
     }
 
@@ -155,7 +155,7 @@ void ArrayIdlClassImpl::set( Any & rArray, sal_Int32 nIndex, const Any & rNewVal
     if (pSeq->nElements <= nIndex)
     {
         throw ArrayIndexOutOfBoundsException(
-            "illegal index given!",
+            "illegal index given, index " + OUString::number(nIndex) + " is < " + OUString::number(pSeq->nElements),
             static_cast<XWeak *>(static_cast<OWeakObject *>(this)) );
     }
 

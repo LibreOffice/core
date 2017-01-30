@@ -576,7 +576,8 @@ Any SAL_CALL IdlInterfaceMethodImpl::invoke( const Any & rObj, Sequence< Any > &
         {
             (*pUnoI->release)( pUnoI );
             throw IllegalArgumentException(
-                "arguments len differ!",
+                "expected " + OUString::number(nParams) +
+                 " arguments, got " + OUString::number(rArgs.getLength()),
                 *o3tl::doAccess<Reference<XInterface>>(rObj), 1 );
         }
 
