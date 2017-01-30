@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_03046e13",
+        "filename": "framework/inc/services/desktop.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-01-30T12:50:31Z",
+      "side": 1,
+      "message": "not 100% certain doxygen gets those multi-line comments after members; at least the member above is not documented here: http://docs.libreoffice.org/framework/html/classframework_1_1Desktop.html#a7cd80789fd5a627854dfd9905c9236df",
+      "revId": "179297d6268d49c2f20d93cc4925fa7a5dc253cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_2309722d",
+        "filename": "framework/source/services/desktop.cxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-01-30T12:50:31Z",
+      "side": 1,
+      "message": "hmm - if this is worth documenting, perhaps best stick it to the header?",
+      "revId": "179297d6268d49c2f20d93cc4925fa7a5dc253cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
