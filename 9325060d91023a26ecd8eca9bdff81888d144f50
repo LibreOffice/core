@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_2035e845",
+        "filename": "cui/source/options/optsave.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1000166
+      },
+      "writtenOn": "2017-01-30T07:48:52Z",
+      "side": 1,
+      "message": "Please find a way to get this information from a point where this is already defined.\nWe don\u0027t want to duplicate every filetype here.",
+      "revId": "9325060d91023a26ecd8eca9bdff81888d144f50",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
