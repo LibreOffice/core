@@ -71,11 +71,15 @@ published service DocumentSettings
     [optional, property] boolean IsPrintTilePage;
 
     /** is the number format used for page number fields
+
+        Values 0-7 are supported.
+
+        @see com::sun::star::style::NumberingType
      */
     [optional, property] long PageNumberFormat;
 
     /** If this is true, the distance between two paragraphs is
-        the sum of ParaTopMargin of the previous and ParaBottomMargin of
+        the sum of ParaBottomMargin of the previous and ParaTopMargin of
         the next paragraph. If false, only the greater of the two is
         chosen.
      */

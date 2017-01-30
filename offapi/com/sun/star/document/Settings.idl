@@ -184,8 +184,13 @@ published service Settings
     [optional, property] boolean IsPrintBookletBack;
 
     // Draw and Impress
-    // Note: Define a constant group for that?
-    /**
+    /** how printing uses color.
+
+        <ul>
+        <li>0: Default</li>
+        <li>1: Grayscale</li>
+        <li>2: Black &amp; White (with grayscale images)</li>
+        </ul>
      */
     [optional, property] long PrintQuality;
 
