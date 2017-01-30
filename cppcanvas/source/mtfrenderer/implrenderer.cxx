@@ -1993,8 +1993,8 @@ namespace cppcanvas
                         ::basegfx::B2DPolygon aPoly(
                             ::basegfx::tools::createPolygonFromEllipse(
                                 aRange.getCenter(),
-                                aRange.getWidth(),
-                                aRange.getHeight() ));
+                                aRange.getWidth() / 2,       // divide by 2 since createPolygonFromEllipse
+                                aRange.getHeight() / 2 ));   // expects the radius and NOT the diameter!
                         aPoly.transform( rStates.getState().mapModeTransform );
 
                         createFillAndStroke( aPoly,
