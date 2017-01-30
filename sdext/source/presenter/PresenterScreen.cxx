@@ -275,7 +275,7 @@ bool PresenterScreen::isPresenterScreenEnabled(const css::uno::Reference<css::un
         bool dEnablePresenterScreen=true;
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString("/org.openoffice.Office.Impress/"),
+            "/org.openoffice.Office.Impress/",
             PresenterConfigurationAccess::READ_ONLY);
         aConfiguration.GetConfigurationNode("Misc/Start/EnablePresenterScreen")
             >>= dEnablePresenterScreen;
@@ -482,7 +482,7 @@ sal_Int32 PresenterScreen::GetPresenterScreenNumber (
             Reference<XComponentContext> xContext (mxContextWeak);
             PresenterConfigurationAccess aConfiguration (
                 xContext,
-                OUString("/org.openoffice.Office.PresenterScreen/"),
+                "/org.openoffice.Office.PresenterScreen/",
                 PresenterConfigurationAccess::READ_ONLY);
             bool bStartAlways (false);
             if (aConfiguration.GetConfigurationNode(
@@ -633,7 +633,7 @@ void PresenterScreen::SetupConfiguration (
     {
         PresenterConfigurationAccess aConfiguration (
             rxContext,
-            OUString("org.openoffice.Office.PresenterScreen"),
+            "org.openoffice.Office.PresenterScreen",
             PresenterConfigurationAccess::READ_ONLY);
         maViewDescriptors.clear();
         ProcessViewDescriptions(aConfiguration);

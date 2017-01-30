@@ -176,25 +176,25 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
     Any aVal;
     {
         aVal <<= rFmt.GetNumberingType();
-        beans::PropertyValue aAlignProp( OUString(UNO_NAME_NRULE_NUMBERINGTYPE), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+        beans::PropertyValue aAlignProp( UNO_NAME_NRULE_NUMBERINGTYPE, -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aAlignProp;
     }
 
     {
         SvxAdjust eAdj = rFmt.GetNumAdjust();
         aVal <<= ConvertUnoAdjust(eAdj);
-        pArray[nIdx++] = beans::PropertyValue( OUString(UNO_NAME_NRULE_ADJUST), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+        pArray[nIdx++] = beans::PropertyValue( UNO_NAME_NRULE_ADJUST, -1, aVal, beans::PropertyState_DIRECT_VALUE);
     }
 
     {
         aVal <<= OUString(rFmt.GetPrefix());
-        beans::PropertyValue aPrefixProp( OUString(UNO_NAME_NRULE_PREFIX), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+        beans::PropertyValue aPrefixProp( UNO_NAME_NRULE_PREFIX, -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aPrefixProp;
     }
 
     {
         aVal <<= OUString(rFmt.GetSuffix());
-        beans::PropertyValue aSuffixProp( OUString(UNO_NAME_NRULE_SUFFIX), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+        beans::PropertyValue aSuffixProp( UNO_NAME_NRULE_SUFFIX, -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aSuffixProp;
     }
 
@@ -203,7 +203,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
         sal_Unicode nCode = rFmt.GetBulletChar();
         OUString aStr( &nCode, 1 );
         aVal <<= aStr;
-        beans::PropertyValue aBulletProp( OUString("BulletChar"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+        beans::PropertyValue aBulletProp( "BulletChar", -1, aVal, beans::PropertyState_DIRECT_VALUE);
         pArray[nIdx++] = aBulletProp;
     }
 
@@ -212,7 +212,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
         awt::FontDescriptor aDesc;
         SvxUnoFontDescriptor::ConvertFromFont( *rFmt.GetBulletFont(), aDesc );
         aVal <<= aDesc;
-        pArray[nIdx++] = beans::PropertyValue( OUString(UNO_NAME_NRULE_BULLET_FONT), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+        pArray[nIdx++] = beans::PropertyValue( UNO_NAME_NRULE_BULLET_FONT, -1, aVal, beans::PropertyState_DIRECT_VALUE);
     }
 
     {
@@ -225,7 +225,7 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
                 RTL_TEXTENCODING_ASCII_US);
 
             aVal <<= aURL;
-            const beans::PropertyValue aGraphicProp( OUString("GraphicURL"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+            const beans::PropertyValue aGraphicProp( "GraphicURL", -1, aVal, beans::PropertyState_DIRECT_VALUE);
             pArray[nIdx++] = aGraphicProp;
         }
     }
@@ -234,26 +234,26 @@ Sequence<beans::PropertyValue> SvxUnoNumberingRules::getNumberingRuleByIndex(sal
         const Size aSize( rFmt.GetGraphicSize() );
         const awt::Size aUnoSize( aSize.Width(), aSize.Height() );
         aVal <<= aUnoSize;
-        const beans::PropertyValue aGraphicSizeProp(OUString("GraphicSize"), -1, aVal, beans::PropertyState_DIRECT_VALUE );
+        const beans::PropertyValue aGraphicSizeProp("GraphicSize", -1, aVal, beans::PropertyState_DIRECT_VALUE );
         pArray[nIdx++] = aGraphicSizeProp;
     }
 
     aVal <<= (sal_Int16)rFmt.GetStart();
-    pArray[nIdx++] = beans::PropertyValue(OUString(UNO_NAME_NRULE_START_WITH), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_START_WITH, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= (sal_Int32)rFmt.GetAbsLSpace();
-    pArray[nIdx++] = beans::PropertyValue(OUString(UNO_NAME_NRULE_LEFT_MARGIN), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_LEFT_MARGIN, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= (sal_Int32)rFmt.GetFirstLineOffset();
-    pArray[nIdx++] = beans::PropertyValue(OUString(UNO_NAME_NRULE_FIRST_LINE_OFFSET), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_FIRST_LINE_OFFSET, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
-    pArray[nIdx++] = beans::PropertyValue(OUString("SymbolTextDistance"), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[nIdx++] = beans::PropertyValue("SymbolTextDistance", -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= (sal_Int32)rFmt.GetBulletColor().GetColor();
-    pArray[nIdx++] = beans::PropertyValue(OUString(UNO_NAME_NRULE_BULLET_COLOR), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_BULLET_COLOR, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     aVal <<= (sal_Int16)rFmt.GetBulletRelSize();
-    pArray[nIdx++] = beans::PropertyValue(OUString(UNO_NAME_NRULE_BULLET_RELSIZE), -1, aVal, beans::PropertyState_DIRECT_VALUE);
+    pArray[nIdx++] = beans::PropertyValue(UNO_NAME_NRULE_BULLET_RELSIZE, -1, aVal, beans::PropertyState_DIRECT_VALUE);
 
     DBG_ASSERT( nIdx <= nProps, "FixMe: overflow in Array!!! [CL]" );
     Sequence< beans::PropertyValue> aSeq(pArray.get(), nIdx);

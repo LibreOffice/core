@@ -707,8 +707,7 @@ void SwGlobalTree::InsertRegion( const SwGlblDocContent* pCont, const OUString* 
     if ( !pFileName )
     {
         delete pDocInserter;
-        pDocInserter = new ::sfx2::DocumentInserter(
-                OUString("swriter"), true );
+        pDocInserter = new ::sfx2::DocumentInserter( "swriter", true );
         pDocInserter->StartExecuteModal( LINK( this, SwGlobalTree, DialogClosedHdl ) );
     }
     else if ( !pFileName->isEmpty() )

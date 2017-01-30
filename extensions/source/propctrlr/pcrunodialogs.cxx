@@ -144,15 +144,15 @@ namespace pcr
         {
             Sequence< Any > aNewArguments( 3 );
             aNewArguments[0] <<= NamedValue(
-                OUString( "TabbingModel" ),
+                "TabbingModel",
                 makeAny( xTabbingModel )
             );
             aNewArguments[1] <<= NamedValue(
-                OUString( "ControlContext" ),
+                "ControlContext",
                 makeAny( xControlContext )
             );
             aNewArguments[2] <<= NamedValue(
-                OUString( "ParentWindow"  ),
+                "ParentWindow",
                 makeAny( xParentWindow )
             );
             OTabOrderDialog_DBase::initialize(aNewArguments);

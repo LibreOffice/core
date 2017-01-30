@@ -94,7 +94,7 @@ void StgInternalStream::Commit()
 ///////////////////////// class StgCompObjStream
 
 StgCompObjStream::StgCompObjStream( BaseStorage& rStg, bool bWr )
-    : StgInternalStream( rStg, OUString("\1CompObj"), bWr )
+    : StgInternalStream( rStg, "\1CompObj", bWr )
 {
     memset( &m_aClsId, 0, sizeof( ClsId ) );
     m_nCbFormat = SotClipboardFormatId::NONE;
@@ -163,7 +163,7 @@ bool StgCompObjStream::Store()
 /////////////////////////// class StgOleStream
 
 StgOleStream::StgOleStream( BaseStorage& rStg )
-    : StgInternalStream( rStg, OUString("\1Ole"), true )
+    : StgInternalStream( rStg, "\1Ole", true )
 {
 }
 

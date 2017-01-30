@@ -259,16 +259,16 @@ void SAL_CALL ScChartsObj::addNewByName( const OUString& rName,
                 // set arguments
                 uno::Sequence< beans::PropertyValue > aArgs( 4 );
                 aArgs[0] = beans::PropertyValue(
-                    OUString("CellRangeRepresentation"), -1,
+                    "CellRangeRepresentation", -1,
                     uno::makeAny( OUString( sRangeStr )), beans::PropertyState_DIRECT_VALUE );
                 aArgs[1] = beans::PropertyValue(
-                    OUString("HasCategories"), -1,
+                    "HasCategories", -1,
                     uno::makeAny( bRowHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[2] = beans::PropertyValue(
-                    OUString("FirstCellAsLabel"), -1,
+                    "FirstCellAsLabel", -1,
                     uno::makeAny( bColumnHeaders ), beans::PropertyState_DIRECT_VALUE );
                 aArgs[3] = beans::PropertyValue(
-                    OUString("DataRowSource"), -1,
+                    "DataRowSource", -1,
                     uno::makeAny( chart::ChartDataRowSource_COLUMNS ), beans::PropertyState_DIRECT_VALUE );
                 xReceiver->setArguments( aArgs );
             }
@@ -316,7 +316,7 @@ void SAL_CALL ScChartsObj::removeByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScChartsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.table.TableChartsEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.table.TableChartsEnumeration");
 }
 
 // XIndexAccess

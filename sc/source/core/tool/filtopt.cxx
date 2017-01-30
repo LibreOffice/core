@@ -34,7 +34,7 @@ using namespace css::uno;
 #define SCFILTOPT_WK3           2
 
 ScFilterOptions::ScFilterOptions() :
-    ConfigItem( OUString( CFGPATH_FILTER ) ),
+    ConfigItem( CFGPATH_FILTER ),
     bWK3Flag( false ),
     fExcelColScale( 0 ),
     fExcelRowScale( 0 )

@@ -26,8 +26,7 @@ using namespace com::sun::star;
 
 SysCredentialsConfigItem::SysCredentialsConfigItem(
     SysCredentialsConfig * pOwner )
-: utl::ConfigItem( OUString("Office.Common/Passwords"),
-                   ConfigItemMode::ImmediateUpdate ),
+: utl::ConfigItem( "Office.Common/Passwords", ConfigItemMode::ImmediateUpdate ),
   m_bInited( false ),
   m_pOwner( pOwner )
 {

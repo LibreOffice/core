@@ -95,7 +95,7 @@ Sequence<OUString> ScDefaultsCfg::GetPropertyNames()
 }
 
 ScDefaultsCfg::ScDefaultsCfg() :
-    ConfigItem( OUString( CFGPATH_FORMULA ) )
+    ConfigItem( CFGPATH_FORMULA )
 {
     OUString aPrefix;
 

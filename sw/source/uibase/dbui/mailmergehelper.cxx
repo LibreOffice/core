@@ -122,7 +122,7 @@ uno::Reference< mail::XSmtpService > ConnectToSmtpServer(
                     new SwConnectionContext(
                         rConfigItem.GetInServerName(),
                         rConfigItem.GetInServerPort(),
-                        OUString("Insecure"));
+                        "Insecure");
             xInMailService->connect(xConnectionContext, xAuthenticator);
             rxInMailService = xInMailService;
         }

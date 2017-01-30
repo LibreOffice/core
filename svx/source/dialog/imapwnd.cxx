@@ -65,7 +65,7 @@ IMapWindow::IMapWindow( vcl::Window* pParent, WinBits nBits, const Reference< XF
 
     pItemInfo = new SfxItemInfo[ 1 ];
     memset( pItemInfo, 0, sizeof( SfxItemInfo ) );
-    pIMapPool = new SfxItemPool( OUString("IMapItemPool"),
+    pIMapPool = new SfxItemPool( "IMapItemPool",
                                  SID_ATTR_MACROITEM, SID_ATTR_MACROITEM, pItemInfo );
     pIMapPool->FreezeIdRanges();
 }

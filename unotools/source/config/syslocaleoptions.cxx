@@ -100,7 +100,7 @@ public:
             const LanguageTag&  GetRealUILocale() { return m_aRealUILocale; }
 };
 
-#define ROOTNODE_SYSLOCALE              OUString("Setup/L10N")
+#define ROOTNODE_SYSLOCALE              "Setup/L10N"
 
 #define PROPERTYNAME_LOCALE             "ooSetupSystemLocale"
 #define PROPERTYNAME_UILOCALE           "ooLocale"

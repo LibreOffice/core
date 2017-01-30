@@ -46,7 +46,7 @@
 #include <svx/sdsxyitm.hxx>
 
 SwAttrPool::SwAttrPool( SwDoc* pD )
-    : SfxItemPool( OUString("SWG"),
+    : SfxItemPool( "SWG",
                     POOLATTR_BEGIN, POOLATTR_END-1,
                     aSlotTab, &aAttrTab ),
     m_pDoc( pD )

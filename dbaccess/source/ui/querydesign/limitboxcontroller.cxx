@@ -90,7 +90,7 @@ LimitBoxController::LimitBoxController(
     const uno::Reference< uno::XComponentContext >& rxContext ) :
     svt::ToolboxController( rxContext,
                             uno::Reference< frame::XFrame >(),
-                            OUString( ".uno:DBLimit" ) ),
+                            ".uno:DBLimit" ),
     m_pLimitBox( nullptr )
 {
 }

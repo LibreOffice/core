@@ -170,12 +170,12 @@ namespace connectivity
             if ( _eType == T_DRIVERTYPE::Odbc )
             {
                 aProps.push_back( PropertyValue(
-                                    OUString("Silent")
+                                    "Silent"
                                     ,0
                                     ,makeAny(true)
                                     ,PropertyState_DIRECT_VALUE) );
                 aProps.push_back( PropertyValue(
-                                    OUString("PreventGetVersionColumns")
+                                    "PreventGetVersionColumns"
                                     ,0
                                     ,makeAny(true)
                                     ,PropertyState_DIRECT_VALUE) );
@@ -185,7 +185,7 @@ namespace connectivity
                 if (!jdc)
                 {
                     aProps.push_back( PropertyValue(
-                                          OUString("JavaDriverClass")
+                                          "JavaDriverClass"
                                           ,0
                                           ,makeAny(OUString("com.mysql.jdbc.Driver"))
                                           ,PropertyState_DIRECT_VALUE) );
@@ -194,23 +194,23 @@ namespace connectivity
             else
             {
                 aProps.push_back( PropertyValue(
-                                    OUString("PublicConnectionURL")
+                                    "PublicConnectionURL"
                                     ,0
                                     ,makeAny(_sUrl)
                                     ,PropertyState_DIRECT_VALUE) );
             }
             aProps.push_back( PropertyValue(
-                                OUString("IsAutoRetrievingEnabled")
+                                "IsAutoRetrievingEnabled"
                                 ,0
                                 ,makeAny(true)
                                 ,PropertyState_DIRECT_VALUE) );
             aProps.push_back( PropertyValue(
-                                OUString("AutoRetrievingStatement")
+                                "AutoRetrievingStatement"
                                 ,0
                                 ,makeAny(OUString("SELECT LAST_INSERT_ID()"))
                                 ,PropertyState_DIRECT_VALUE) );
             aProps.push_back( PropertyValue(
-                                OUString("ParameterNameSubstitution")
+                                "ParameterNameSubstitution"
                                 ,0
                                 ,makeAny(true)
                                 ,PropertyState_DIRECT_VALUE) );
@@ -335,25 +335,25 @@ namespace connectivity
 
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("CharSet")
-                ,OUString("CharSet of the database.")
+                "CharSet"
+                ,"CharSet of the database."
                 ,false
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("SuppressVersionColumns")
-                ,OUString("Display version columns (when available).")
+                "SuppressVersionColumns"
+                ,"Display version columns (when available)."
                 ,false
-                ,OUString("0")
+                ,"0"
                 ,aBoolean)
                 );
         const T_DRIVERTYPE eType = lcl_getDriverType( url );
         if ( eType == T_DRIVERTYPE::Jdbc )
         {
             aDriverInfo.push_back(DriverPropertyInfo(
-                    OUString("JavaDriverClass")
-                    ,OUString("The JDBC driver class name.")
+                    "JavaDriverClass"
+                    ,"The JDBC driver class name."
                     ,true
                     ,getJavaDriverClass(info)
                     ,Sequence< OUString >())
@@ -362,15 +362,15 @@ namespace connectivity
         else if ( eType == T_DRIVERTYPE::Native )
         {
             aDriverInfo.push_back(DriverPropertyInfo(
-                    OUString("LocalSocket")
-                    ,OUString("The file path of a socket to connect to a local MySQL server.")
+                    "LocalSocket"
+                    ,"The file path of a socket to connect to a local MySQL server."
                     ,false
                     ,OUString()
                     ,Sequence< OUString >())
                     );
             aDriverInfo.push_back(DriverPropertyInfo(
-                    OUString("NamedPipe")
-                    ,OUString("The name of a pipe to connect to a local MySQL server.")
+                    "NamedPipe"
+                    ,"The name of a pipe to connect to a local MySQL server."
                     ,false
                     ,OUString()
                     ,Sequence< OUString >())

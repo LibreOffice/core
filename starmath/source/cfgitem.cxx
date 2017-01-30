@@ -330,7 +330,7 @@ const OUString SmFontFormatList::GetNewFontFormatId() const
 
 
 SmMathConfig::SmMathConfig() :
-    ConfigItem(OUString("Office.Math"))
+    ConfigItem("Office.Math")
     , pFormat()
     , pOther()
     , pFontFormatList()

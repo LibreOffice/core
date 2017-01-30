@@ -1552,7 +1552,7 @@ void ScFiltersTest::testPassword_Impl(const OUString& aFileNameBase)
     std::shared_ptr<const SfxFilter> pFilter(new SfxFilter(
         aFilterName,
         OUString(), getFileFormats()[0].nFormatType, nFormat, aFilterType, 0, OUString(),
-        OUString(), OUString("private:factory/scalc*") ));
+        OUString(), "private:factory/scalc*" ));
     const_cast<SfxFilter*>(pFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
 
     ScDocShellRef xDocSh = new ScDocShell;

@@ -154,7 +154,7 @@ void FilterMatch::createWildCardFilterList(const OUString& _rFilterList,::std::v
     else
     {
         // no filter is given -> match all
-        _rFilters.push_back( WildCard(OUString("*")) );
+        _rFilters.push_back( WildCard("*") );
     }
 }
 

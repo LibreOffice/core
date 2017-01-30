@@ -41,57 +41,56 @@ uno::Sequence< beans::Property > FTPContent::getProperties(
     static const beans::Property aPropsInfoTable[] =
     {
         beans::Property(
-            OUString( "ContentType" ),
+            "ContentType",
             -1,
             cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
-            OUString( "IsDocument" ),
+            "IsDocument",
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
-            OUString( "IsFolder" ),
+            "IsFolder",
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
-            OUString( "Title" ),
+            "Title",
             -1,
             cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND
             //  | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
-            OUString( "Size" ),
+            "Size",
             -1,
             cppu::UnoType<sal_Int64>::get(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
-            OUString( "DateCreated" ),
+            "DateCreated",
             -1,
             cppu::UnoType<util::DateTime>::get(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
-            OUString( "IsReadOnly" ),
+            "IsReadOnly",
             -1,
             cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND
             | beans::PropertyAttribute::READONLY
         ),
         beans::Property(
-            OUString(
-                "CreatableContentsInfo" ),
+            "CreatableContentsInfo",
             -1,
             cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
             beans::PropertyAttribute::BOUND
@@ -121,42 +120,42 @@ uno::Sequence< ucb::CommandInfo > FTPContent::getCommands(
         // Required commands
 
         ucb::CommandInfo(
-            OUString( "getCommandInfo" ),
+            "getCommandInfo",
             -1,
             cppu::UnoType<void>::get()
         ),
         ucb::CommandInfo(
-            OUString( "getPropertySetInfo" ),
+            "getPropertySetInfo",
             -1,
             cppu::UnoType<void>::get()
         ),
         ucb::CommandInfo(
-            OUString( "getPropertyValues" ),
+            "getPropertyValues",
             -1,
             cppu::UnoType<uno::Sequence< beans::Property >>::get()
         ),
         ucb::CommandInfo(
-            OUString( "setPropertyValues" ),
+            "setPropertyValues",
             -1,
             cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get()
         ),
         ucb::CommandInfo(
-            OUString( "open" ),
+            "open",
             -1,
             cppu::UnoType<ucb::OpenCommandArgument2>::get()
         ),
         ucb::CommandInfo(
-            OUString( "insert" ),
+            "insert",
             -1,
             cppu::UnoType<ucb::InsertCommandArgument>::get()
         ),
         ucb::CommandInfo(
-            OUString( "delete" ),
+            "delete",
             -1,
             cppu::UnoType<bool>::get()
         ),
         ucb::CommandInfo(
-            OUString( "createNewContent" ),
+            "createNewContent",
             -1,
             cppu::UnoType<ucb::ContentInfo>::get()
         )

@@ -3574,7 +3574,7 @@ uno::Any Content::MapDAVException( const DAVException & e, bool bWrite )
         {
             uno::Sequence< uno::Any > aArgs( 1 );
             aArgs[ 0 ] <<= beans::PropertyValue(
-                OUString("Uri"), -1,
+                "Uri", -1,
                 uno::makeAny(aURL),
                 beans::PropertyState_DIRECT_VALUE);
 

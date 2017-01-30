@@ -102,7 +102,7 @@ namespace dbaui
             if ( !aMetaData.supportsUserAdministration( getORB() ) )
             {
                 OUString sError(ModuleRes(STR_USERADMIN_NOT_AVAILABLE));
-                throw SQLException(sError,nullptr,OUString("S1000") ,0,Any());
+                throw SQLException(sError,nullptr, "S1000" ,0,Any());
             }
         }
         catch(const SQLException&)

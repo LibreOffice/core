@@ -194,7 +194,7 @@ OUString ExtendedColorConfig_Impl::GetComponentName(sal_uInt32 _nPos) const
 bool ExtendedColorConfig_Impl::m_bLockBroadcast = false;
 bool ExtendedColorConfig_Impl::m_bBroadcastWhenUnlocked = false;
 ExtendedColorConfig_Impl::ExtendedColorConfig_Impl() :
-    ConfigItem(OUString("Office.ExtendedColorScheme")),
+    ConfigItem("Office.ExtendedColorScheme"),
     m_bIsBroadcastEnabled(true)
 {
     //try to register on the root node - if possible

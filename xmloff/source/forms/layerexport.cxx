@@ -716,10 +716,7 @@ namespace xmloff
             {
                 // create it for en-US (does not really matter, as we will specify a locale for every
                 // concrete language to use)
-                Locale aLocale (  OUString("en"),
-                                                 OUString("US"),
-                                                 OUString()
-                                             );
+                Locale aLocale (  "en", "US", OUString() );
                 xFormatsSupplier = NumberFormatsSupplier::createWithLocale( m_rContext.getComponentContext(), aLocale );
                 m_xControlNumberFormats = xFormatsSupplier->getNumberFormats();
             }

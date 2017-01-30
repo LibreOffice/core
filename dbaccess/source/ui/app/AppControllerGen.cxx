@@ -119,7 +119,7 @@ void OApplicationController::convertToView(const OUString& _sName)
                 ::dbtools::composeTableName( xMeta, sCatalog, sSchema, sName, false, ::dbtools::EComposeRule::InTableDefinitions ) );
             Reference<XPropertySet> xView = ::dbaui::createView(sNewName,xConnection,xSourceObject);
             if ( !xView.is() )
-                throw SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE),*this,OUString( "S1000" ) ,0,Any());
+                throw SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE),*this, "S1000",0,Any());
             getContainer()->elementAdded(E_TABLE,sNewName,makeAny(xView));
         }
     }
@@ -175,7 +175,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
                 xWindow = VCLUnoHelper::GetInterface(getView()->Window::GetParent());
         }
         // the parent window
-        aArgs[nArgPos++] <<= PropertyValue( OUString("ParentWindow"),
+        aArgs[nArgPos++] <<= PropertyValue( "ParentWindow",
                                     0,
                                     makeAny(xWindow),
                                     PropertyState_DIRECT_VALUE);
@@ -187,7 +187,7 @@ void OApplicationController::openDialog( const OUString& _sServiceName )
         if ( !sInitialSelection.isEmpty() )
         {
             aArgs[ nArgPos++ ] <<= PropertyValue(
-                OUString( "InitialSelection" ), 0,
+                "InitialSelection", 0,
                 makeAny( sInitialSelection ), PropertyState_DIRECT_VALUE );
         }
 

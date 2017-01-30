@@ -1728,7 +1728,7 @@ void SvtFileDialog::displayIOException( const OUString& _rURL, IOErrorCode _eCod
         aException.Arguments.realloc( 2 );
         aException.Arguments[ 0 ] <<= sDisplayPath;
         aException.Arguments[ 1 ] <<= PropertyValue(
-            OUString( "Uri" ),
+            "Uri",
             -1, aException.Arguments[ 0 ], PropertyState_DIRECT_VALUE
         );
             // (formerly, it was sufficient to put the URL first parameter. Nowadays,

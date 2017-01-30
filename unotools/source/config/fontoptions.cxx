@@ -31,7 +31,7 @@ using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
-#define ROOTNODE_FONT                       OUString("Office.Common/Font")
+#define ROOTNODE_FONT                       "Office.Common/Font"
 
 #define PROPERTYNAME_REPLACEMENTTABLE       "Substitution/Replacement"
 #define PROPERTYNAME_FONTHISTORY            "View/History"

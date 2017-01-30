@@ -63,7 +63,7 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
     uno::Reference< lang::XMultiServiceFactory > xConfig(
         configuration::theDefaultProvider::get(xContext));
     uno::Any args[1];
-    beans::PropertyValue aValue( OUString("nodepath"), 0, uno::Any( OUString("/org.openoffice.Office.OptionsDialog/Nodes") ),
+    beans::PropertyValue aValue( "nodepath", 0, uno::Any( OUString("/org.openoffice.Office.OptionsDialog/Nodes") ),
                                  beans::PropertyState_DIRECT_VALUE );
     args[0] <<= aValue;
     m_xNameAccessNodes.set(
@@ -73,7 +73,7 @@ TheExtensionManager::TheExtensionManager( const uno::Reference< awt::XWindow > &
 
     // get the 'get more extensions here' url
     uno::Reference< container::XNameAccess > xNameAccessRepositories;
-    beans::PropertyValue aValue2( OUString("nodepath"), 0, uno::Any( OUString("/org.openoffice.Office.ExtensionManager/ExtensionRepositories") ),
+    beans::PropertyValue aValue2( "nodepath", 0, uno::Any( OUString("/org.openoffice.Office.ExtensionManager/ExtensionRepositories") ),
                                   beans::PropertyState_DIRECT_VALUE );
     args[0] <<= aValue2;
     xNameAccessRepositories.set(

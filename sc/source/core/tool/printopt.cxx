@@ -109,7 +109,7 @@ Sequence<OUString> ScPrintCfg::GetPropertyNames()
 }
 
 ScPrintCfg::ScPrintCfg() :
-    ConfigItem( OUString( CFGPATH_PRINT ) )
+    ConfigItem( CFGPATH_PRINT )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);

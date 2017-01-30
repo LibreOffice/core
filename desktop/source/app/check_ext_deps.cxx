@@ -320,7 +320,7 @@ static void impl_setNeedsCompatCheck()
                 comphelper::getProcessComponentContext() ) );
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString("nodepath"),
+        beans::NamedValue v( "nodepath",
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset(
@@ -351,7 +351,7 @@ static bool impl_needsCompatCheck()
                 comphelper::getProcessComponentContext() ) );
 
         Sequence< Any > theArgs(1);
-        beans::NamedValue v( OUString("nodepath"),
+        beans::NamedValue v( "nodepath",
                       makeAny( OUString("org.openoffice.Setup/Office") ) );
         theArgs[0] <<= v;
         Reference< beans::XPropertySet > pset(

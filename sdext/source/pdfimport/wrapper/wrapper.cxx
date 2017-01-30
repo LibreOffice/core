@@ -714,15 +714,15 @@ uno::Sequence<beans::PropertyValue> Parser::readImageImpl()
         uno::UNO_QUERY_THROW );
 
     uno::Sequence<beans::PropertyValue> aSequence(3);
-    aSequence[0] = beans::PropertyValue( OUString("URL"),
+    aSequence[0] = beans::PropertyValue( "URL",
                                          0,
                                          uno::makeAny(aFileName),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[1] = beans::PropertyValue( OUString("InputStream"),
+    aSequence[1] = beans::PropertyValue( "InputStream",
                                          0,
                                          uno::makeAny( xDataStream ),
                                          beans::PropertyState_DIRECT_VALUE );
-    aSequence[2] = beans::PropertyValue( OUString("InputSequence"),
+    aSequence[2] = beans::PropertyValue( "InputSequence",
                                          0,
                                          uno::makeAny(aDataSequence),
                                          beans::PropertyState_DIRECT_VALUE );

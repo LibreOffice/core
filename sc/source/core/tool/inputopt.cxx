@@ -115,7 +115,7 @@ Sequence<OUString> ScInputCfg::GetPropertyNames()
 }
 
 ScInputCfg::ScInputCfg() :
-    ConfigItem( OUString( CFGPATH_INPUT ) )
+    ConfigItem( CFGPATH_INPUT )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     Sequence<Any> aValues = GetProperties(aNames);

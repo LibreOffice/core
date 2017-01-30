@@ -170,7 +170,7 @@ void PPTWriterBase::exportPPT( const std::vector< css::beans::PropertyValue >& r
     if ( !InitSOIface() )
         return;
 
-    FontCollectionEntry aDefaultFontDesc( OUString( "Times New Roman" ),
+    FontCollectionEntry aDefaultFontDesc( "Times New Roman",
                                           ROMAN,
                                           awt::FontPitch::VARIABLE,
                                                     RTL_TEXTENCODING_MS_1252 );
