@@ -3194,7 +3194,11 @@ OUString SwXTextDocument::getPostIts()
         sw::annotation::SwAnnotationWin* pWin = static_cast<sw::annotation::SwAnnotationWin*>((*i)->pPostIt.get());
 
         const SwPostItField* pField = pWin->GetPostItField();
-        const OString aAnchorPos = OString::number(pWin->GetAnchorPos().X()) + ", " + OString::number(pWin->GetAnchorPos().Y());
+        const SwRect& aRect = pWin->GetAnchorRect();
+        const Rectangle aSVRect(aRect.Pos().getX(),
+                                aRect.Pos().getY(),
+                                aRect.Pos().getX() + aRect.SSize().Width(),
+                                aRect.Pos().getY() + aRect.SSize().Height());
         std::vector<OString> aRects;
         for (const basegfx::B2DRange& aRange : pWin->GetAnnotationTextRanges())
         {
@@ -3209,7 +3213,7 @@ OUString SwXTextDocument::getPostIts()
         aAnnotation.put("author", pField->GetPar1().toUtf8().getStr());
         aAnnotation.put("text", pField->GetPar2().toUtf8().getStr());
         aAnnotation.put("dateTime", utl::toISO8601(pField->GetDateTime().GetUNODateTime()));
-        aAnnotation.put("anchorPos", aAnchorPos.getStr());
+        aAnnotation.put("anchorPos", aSVRect.toString());
         aAnnotation.put("textRange", sRects.getStr());
 
         aAnnotations.push_back(std::make_pair("", aAnnotation));
