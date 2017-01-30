@@ -1432,18 +1432,22 @@ void MetaTextLineAction::Read( SvStream& rIStm, ImplMetaReadData* )
 
     sal_Int32 nTempWidth(0);
     ReadPair( rIStm, maPos );
-    rIStm.ReadInt32( nTempWidth );
+    rIStm.ReadInt32(nTempWidth);
     mnWidth = nTempWidth;
+
     sal_uInt32 nTempStrikeout(0);
     rIStm.ReadUInt32( nTempStrikeout );
     meStrikeout = (FontStrikeout)nTempStrikeout;
+
     sal_uInt32 nTempUnderline(0);
     rIStm.ReadUInt32( nTempUnderline );
     meUnderline = (FontLineStyle)nTempUnderline;
-    if ( aCompat.GetVersion() >= 2 ) {
-        sal_uInt32 nTempUnderline2(0);
-        rIStm.ReadUInt32(nTempUnderline2);
-        meUnderline = (FontLineStyle)nTempUnderline2;
+
+    if (aCompat.GetVersion() >= 2)
+    {
+        sal_uInt32 nTempOverline(0);
+        rIStm.ReadUInt32(nTempOverline);
+        meOverline = (FontLineStyle)nTempOverline;
     }
 }
 
