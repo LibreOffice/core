@@ -1616,17 +1616,26 @@ DECLARE_RTFIMPORT_TEST(testCp1000018, "cp1000018.rtf")
     CPPUNIT_ASSERT_EQUAL(aExpected, xTextRange->getString());
 }
 
-class testTdf105511 : public Test {
+class testTdf105511 : public Test
+{
 protected:
-    virtual OUString getTestName() override { return OUString("testTdf105511"); }
+    virtual OUString getTestName() override
+    {
+        return OUString("testTdf105511");
+    }
 public:
     CPPUNIT_TEST_SUITE(testTdf105511);
     CPPUNIT_TEST(Import);
     CPPUNIT_TEST_SUITE_END();
 
-    void Import() {
-        struct DefaultLocale : public comphelper::ConfigurationProperty<DefaultLocale, rtl::OUString> {
-            static OUString path() { return OUString("/org.openoffice.Office.Linguistic/General/DefaultLocale"); }
+    void Import()
+    {
+        struct DefaultLocale : public comphelper::ConfigurationProperty<DefaultLocale, rtl::OUString>
+        {
+            static OUString path()
+            {
+                return OUString("/org.openoffice.Office.Linguistic/General/DefaultLocale");
+            }
             ~DefaultLocale() = delete;
         };
         auto batch = comphelper::ConfigurationChanges::create();
