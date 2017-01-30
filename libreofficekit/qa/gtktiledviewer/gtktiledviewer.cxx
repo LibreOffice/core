@@ -281,6 +281,30 @@ static void userPromptDialog(GtkWidget* pDocView, const std::string& aTitle, std
     gtk_widget_destroy(pDialog);
 }
 
+static void editButtonClicked(GtkWidget* pWidget, gpointer userdata)
+{
+    TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
+    std::map<std::string, std::string> aEntries;
+    aEntries["Text"] = "";
+
+    userPromptDialog(rWindow.m_pDocView, "Edit comment", aEntries);
+
+    int *commentId = static_cast<int*>(g_object_get_data(G_OBJECT(userdata), "id"));
+
+    boost::property_tree::ptree aTree;
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "type", nullptr), '/'), "long");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Id", "/", "value", nullptr), '/'), std::to_string(*commentId));
+
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "type", nullptr), '/'), "string");
+    aTree.put(boost::property_tree::ptree::path_type(g_strconcat("Text", "/", "value", nullptr), '/'), aEntries["Text"]);
+
+    std::stringstream aStream;
+    boost::property_tree::write_json(aStream, aTree);
+    std::string aArguments = aStream.str();
+
+    lok_doc_view_post_command(LOK_DOC_VIEW(rWindow.m_pDocView), ".uno:EditAnnotation", aArguments.c_str(), false);
+}
+
 static void replyButtonClicked(GtkWidget* pWidget, gpointer userdata)
 {
     TiledWindow& rWindow = lcl_getTiledWindow(pWidget);
@@ -333,13 +357,14 @@ GtkWidget* CommentsSidebar::createCommentBox(const boost::property_tree::ptree& 
     GtkWidget* pCommentAuthor = gtk_label_new(aComment.get<std::string>("author").c_str());
     GtkWidget* pCommentDate = gtk_label_new(aComment.get<std::string>("dateTime").c_str());
     GtkWidget* pControlsHBox = gtk_box_new(GTK_ORIENTATION_HORIZONTAL, 0);
-    GtkWidget* pGotoButton = gtk_button_new_with_label("Goto");
+    GtkWidget* pEditButton = gtk_button_new_with_label("Edit");
     GtkWidget* pReplyButton = gtk_button_new_with_label("Reply");
     GtkWidget* pDeleteButton = gtk_button_new_with_label("Delete");
+    g_signal_connect(G_OBJECT(pEditButton), "clicked", G_CALLBACK(editButtonClicked), pCommentVBox);
     g_signal_connect(G_OBJECT(pReplyButton), "clicked", G_CALLBACK(replyButtonClicked), pCommentVBox);
     g_signal_connect(G_OBJECT(pDeleteButton), "clicked", G_CALLBACK(deleteCommentButtonClicked), pCommentVBox);
 
-    gtk_container_add(GTK_CONTAINER(pControlsHBox), pGotoButton);
+    gtk_container_add(GTK_CONTAINER(pControlsHBox), pEditButton);
     gtk_container_add(GTK_CONTAINER(pControlsHBox), pReplyButton);
     gtk_container_add(GTK_CONTAINER(pControlsHBox), pDeleteButton);
     GtkWidget* pCommentSeparator = gtk_separator_new(GTK_ORIENTATION_HORIZONTAL);
