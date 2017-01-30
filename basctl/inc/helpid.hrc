@@ -21,9 +21,6 @@
 
 #define HID_BASICIDE_OBJECTCAT                            "BASCTL_HID_BASICIDE_OBJECTCAT"
 
-#define HID_BASICIDE_BRKDLG                               "BASCTL_HID_BASICIDE_BRKDLG"
-#define HID_BASICIDE_ACTIV                                "BASCTL_HID_BASICIDE_ACTIV"
-#define HID_BASICIDE_BRKPROPS                             "BASCTL_HID_BASICIDE_BRKPROPS"
 #define HID_BASICIDE_REMOVEWATCH                          "BASCTL_HID_BASICIDE_REMOVEWATCH"
 
 #define HID_BASICIDE_MODULWINDOW                          "BASCTL_HID_BASICIDE_MODULWINDOW"

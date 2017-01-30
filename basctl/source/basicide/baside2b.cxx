@@ -1456,40 +1456,36 @@ void BreakPointWindow::Command( const CommandEvent& rCEvt )
         BreakPoint* pBrk = rCEvt.IsMouseEvent() ? FindBreakPoint( aEventPos ) : nullptr;
         if ( pBrk )
         {
+            if (!mpUIBuilder)
+                mpUIBuilder.reset(new VclBuilder(nullptr, VclBuilderContainer::getUIRootDir(), "modules/BasicIDE/ui/breakpointmenus.ui", ""));
+
             // test if break point is enabled...
-            ScopedVclPtrInstance<PopupMenu> aBrkPropMenu( IDEResId( RID_POPUP_BRKPROPS ) );
-            aBrkPropMenu->CheckItem( RID_ACTIV, pBrk->bEnabled );
-            switch ( aBrkPropMenu->Execute( this, aPos ) )
+            VclPtr<PopupMenu> xBrkPropMenu = mpUIBuilder->get_menu("breakmenu");
+            xBrkPropMenu->CheckItem(xBrkPropMenu->GetItemId("active"), pBrk->bEnabled);
+            OString sCommand = xBrkPropMenu->GetItemIdent(xBrkPropMenu->Execute(this, aPos));
+            if (sCommand == "active")
             {
-                case RID_ACTIV:
-                {
-                    pBrk->bEnabled = !pBrk->bEnabled;
-                    rModulWindow.UpdateBreakPoint( *pBrk );
-                    Invalidate();
-                }
-                break;
-                case RID_BRKPROPS:
-                {
-                    ScopedVclPtrInstance< BreakPointDialog > aBrkDlg( this, GetBreakPoints() );
-                    aBrkDlg->SetCurrentBreakPoint( pBrk );
-                    aBrkDlg->Execute();
-                    Invalidate();
-                }
-                break;
+                pBrk->bEnabled = !pBrk->bEnabled;
+                rModulWindow.UpdateBreakPoint( *pBrk );
+                Invalidate();
+            }
+            else if (sCommand == "properties")
+            {
+                ScopedVclPtrInstance<BreakPointDialog> aBrkDlg(this, GetBreakPoints());
+                aBrkDlg->SetCurrentBreakPoint( pBrk );
+                aBrkDlg->Execute();
+                Invalidate();
             }
         }
         else
         {
-            ScopedVclPtrInstance<PopupMenu> aBrkListMenu( IDEResId( RID_POPUP_BRKDLG ) );
-            switch ( aBrkListMenu->Execute( this, aPos ) )
+            VclPtr<PopupMenu> xBrkListMenu = mpUIBuilder->get_menu("breaklistmenu");
+            OString sCommand = xBrkListMenu->GetItemIdent(xBrkListMenu->Execute(this, aPos));
+            if (sCommand == "manage")
             {
-                case RID_BRKDLG:
-                {
-                    ScopedVclPtrInstance< BreakPointDialog > aBrkDlg( this, GetBreakPoints() );
-                    aBrkDlg->Execute();
-                    Invalidate();
-                }
-                break;
+                ScopedVclPtrInstance< BreakPointDialog > aBrkDlg( this, GetBreakPoints() );
+                aBrkDlg->Execute();
+                Invalidate();
             }
         }
     }
@@ -1531,6 +1527,12 @@ void BreakPointWindow::DataChanged(DataChangedEvent const & rDCEvt)
 void BreakPointWindow::setBackgroundColor(Color aColor)
 {
     SetBackground(Wallpaper(aColor));
+}
+
+void BreakPointWindow::dispose()
+{
+    mpUIBuilder.reset();
+    Window::dispose();
 }
 
 namespace

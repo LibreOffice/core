@@ -326,44 +326,6 @@ String RID_STR_SHAREMACROSDIALOGS
     Text [ en-US ] = "%PRODUCTNAME Macros & Dialogs" ;
 };
 
-Menu RID_POPUP_BRKPROPS
-{
-    Text [ en-US ] = "Properties" ;
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = RID_ACTIV ;
-            HelpId = HID_BASICIDE_ACTIV ;
-            Text [ en-US ] = "Active" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = RID_BRKPROPS ;
-            HelpId = HID_BASICIDE_BRKPROPS ;
-            Text [ en-US ] = "Properties..." ;
-        };
-    };
-};
-
-Menu RID_POPUP_BRKDLG
-{
-    Text [ en-US ] = "Manage Breakpoints" ;
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = RID_BRKDLG ;
-            HelpId = HID_BASICIDE_BRKDLG ;
-            Text [ en-US ] = "Manage Breakpoints..." ;
-        };
-    };
-};
-
 Menu RID_POPUP_TABBAR
 {
     ItemList =
