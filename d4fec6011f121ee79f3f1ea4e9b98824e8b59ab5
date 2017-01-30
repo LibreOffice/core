@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_c02c1cae",
+        "filename": "connectivity/source/drivers/firebird/ResultSet.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 592,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-30T12:28:57Z",
+      "side": 1,
+      "message": "This is not part of this change / this bug, but the indentation here is confusing / counter-intuitive.\n\nThe indentation should make the logical structure of the expression clear. That is, the \"\u0026\u0026\" should definitely be in the left-most indentation position.\n\nI suggest something like:\n\n  \n   (    aSqlType \u003d\u003d SQL_SHORT  || aSqlType \u003d\u003d SQL_LONG\n     || aSqlType \u003d\u003d SQL_DOUBLE || aSqlType \u003d\u003d SQL_INT64)\n\u0026\u0026 (aSqlSubtype \u003d\u003d 1 ||\n    aSqlSubtype \u003d\u003d 2 ||\n    (...))\n\nAlso, you mix two different styles of \"where to put the logical connector: at the end of the line before, or at\nthe beginning of the line after? Please be consistent.\n\nSo I would make:\n\n   ( aSqlType \u003d\u003d SQL_SHORT  || aSqlType \u003d\u003d SQL_LONG ||\n     aSqlType \u003d\u003d SQL_DOUBLE || aSqlType \u003d\u003d SQL_INT64)\n\u0026\u0026 (aSqlSubtype \u003d\u003d 1 ||\n    aSqlSubtype \u003d\u003d 2 ||\n    (...))\n\nor if you prefer \"connector on second line\":\n\n   (    aSqlType \u003d\u003d SQL_SHORT  || aSqlType \u003d\u003d SQL_LONG\n     || aSqlType \u003d\u003d SQL_DOUBLE || aSqlType \u003d\u003d SQL_INT64)\n\u0026\u0026 (    aSqlSubtype \u003d\u003d 1\n     || aSqlSubtype \u003d\u003d 2\n     || (...))",
+      "revId": "d4fec6011f121ee79f3f1ea4e9b98824e8b59ab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_8074d4cf",
+        "filename": "connectivity/source/drivers/firebird/Util.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-30T12:28:57Z",
+      "side": 1,
+      "message": "nitpick: then",
+      "range": {
+        "startLine": 72,
+        "startChar": 39,
+        "endLine": 72,
+        "endChar": 43
+      },
+      "revId": "d4fec6011f121ee79f3f1ea4e9b98824e8b59ab5",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
