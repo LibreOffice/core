@@ -2509,7 +2509,8 @@ void ScTable::RemoveCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex
 void ScTable::ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet* rStyle )
 {
     if (ValidColRow(nCol,nRow))
-        aCol[nCol].ApplyStyle( nRow, rStyle );
+        // If column not exists then we need to create it
+        CreateColumnIfNotExists( nCol ).ApplyStyle( nRow, rStyle );
 }
 
 void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScStyleSheet& rStyle )
@@ -2518,8 +2519,28 @@ void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
     {
         PutInOrder(nStartCol, nEndCol);
         PutInOrder(nStartRow, nEndRow);
-        for (SCCOL i = nStartCol; i <= nEndCol; i++)
-            aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
+        if ( nEndCol == MAXCOL )
+        {
+            if ( nStartCol < aCol.size() )
+            {
+                // If we would like set all columns to specific style, then change only default style for not existing columns
+                nEndCol = aCol.size() - 1;
+                for (SCCOL i = nStartCol; i <= nEndCol; i++)
+                    aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
+                aNextColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle);
+            }
+            else
+            {
+                CreateColumnIfNotExists( nStartCol - 1 );
+                aNextColAttrArray.ApplyStyleArea(nStartRow, nEndRow, rStyle);
+            }
+        }
+        else
+        {
+            CreateColumnIfNotExists( nEndCol );
+            for (SCCOL i = nStartCol; i <= nEndCol; i++)
+                aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
+        }
     }
 }
 
@@ -2541,10 +2562,12 @@ void ScTable::ApplySelectionLineStyle( const ScMarkData& rMark,
 
 const ScStyleSheet* ScTable::GetStyle( SCCOL nCol, SCROW nRow ) const
 {
-    if (ValidColRow(nCol, nRow))
-        return aCol[nCol].GetStyle(nRow);
-    else
+    if ( !ValidColRow( nCol, nRow ) )
         return nullptr;
+    if ( nCol < aCol.size() )
+        return aCol[nCol].GetStyle( nRow );
+    else
+        return aNextColAttrArray.GetPattern( nRow )->GetStyleSheet();
 }
 
 const ScStyleSheet* ScTable::GetSelectionStyle( const ScMarkData& rMark, bool& rFound ) const
