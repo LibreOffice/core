@@ -31,6 +31,7 @@
 #include <com/sun/star/container/XChild.hpp>
 #include <com/sun/star/container/XContainer.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
+#include <com/sun/star/frame/thePopupMenuControllerFactory.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/Frame.hpp>
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
@@ -48,6 +49,7 @@
 #include <com/sun/star/ucb/XCommandProcessor.hpp>
 #include <com/sun/star/ucb/Command.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
+#include <comphelper/propertyvalue.hxx>
 #include <comphelper/string.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include "AppView.hxx"
@@ -59,8 +61,10 @@
 #include "dbaccess_slotid.hrc"
 #include "databaseobjectview.hxx"
 #include "imageprovider.hxx"
+#include <vcl/commandinfoprovider.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
+#include <toolkit/awt/vclxmenu.hxx>
 #include <tools/stream.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "svtools/treelistentry.hxx"
@@ -187,13 +191,14 @@ OAppDetailPageHelper::OAppDetailPageHelper(vcl::Window* _pParent,OAppBorderWindo
     ,m_aBorder(VclPtr<Window>::Create(this,WB_BORDER | WB_READONLY))
     ,m_aPreview(VclPtr<OPreviewWindow>::Create(m_aBorder.get()))
     ,m_aDocumentInfo(VclPtr< ::svtools::ODocumentInfoPreview>::Create(m_aBorder.get(), WB_LEFT | WB_VSCROLL | WB_READONLY) )
-    ,m_aMenu( VclPtr<PopupMenu>::Create( ModuleRes( RID_MENU_APP_PREVIEW ) ) )
     ,m_ePreviewMode(_ePreviewMode)
 {
     m_aBorder->SetBorderStyle(WindowBorderStyle::MONO);
 
     m_aTBPreview->SetOutStyle(TOOLBOX_STYLE_FLAT);
-    m_aTBPreview->InsertItem(SID_DB_APP_DISABLE_PREVIEW,m_aMenu->GetItemText(SID_DB_APP_DISABLE_PREVIEW),ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
+    m_aTBPreview->InsertItem(SID_DB_APP_DISABLE_PREVIEW,
+                             vcl::CommandInfoProvider::Instance().GetCommandPropertyFromModule(".uno:DBDisablePreview", "com.sun.star.sdb.OfficeDatabaseDocument"),
+                             ToolBoxItemBits::LEFT|ToolBoxItemBits::DROPDOWN|ToolBoxItemBits::AUTOSIZE|ToolBoxItemBits::RADIOCHECK);
     m_aTBPreview->SetHelpId(HID_APP_VIEW_PREVIEW_CB);
     m_aTBPreview->SetDropdownClickHdl( LINK( this, OAppDetailPageHelper, OnDropdownClickHdl ) );
     m_aTBPreview->Enable();
@@ -240,7 +245,6 @@ void OAppDetailPageHelper::dispose()
             rpBox.disposeAndClear();
         }
     }
-    m_aMenu.disposeAndClear();
     m_pTablePreview.disposeAndClear();
     m_aDocumentInfo.disposeAndClear();
     m_aPreview.disposeAndClear();
@@ -971,25 +975,28 @@ void OAppDetailPageHelper::switchPreview(PreviewMode _eMode,bool _bForce)
 
         getBorderWin().getView()->getAppController().previewChanged(static_cast<sal_Int32>(m_ePreviewMode));
 
-        sal_uInt16 nSelectedAction = SID_DB_APP_DISABLE_PREVIEW;
+        OUString aCommand;
         switch ( m_ePreviewMode )
         {
             case E_PREVIEWNONE:
-                nSelectedAction = SID_DB_APP_DISABLE_PREVIEW;
+                aCommand = ".uno:DBDisablePreview";
                 break;
             case E_DOCUMENT:
-                nSelectedAction = SID_DB_APP_VIEW_DOC_PREVIEW;
+                aCommand = ".uno:DBShowDocPreview";
                 break;
             case E_DOCUMENTINFO:
                 if ( getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) )
-                    nSelectedAction = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
+                    aCommand = ".uno:DBShowDocInfoPreview";
                 else
+                {
                     m_ePreviewMode = E_PREVIEWNONE;
+                    aCommand = ".uno:DBDisablePreview";
+                }
                 break;
         }
 
-        m_aMenu->CheckItem(nSelectedAction);
-        m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, stripTrailingDots(m_aMenu->GetItemText(nSelectedAction)));
+        OUString aCommandLabel = vcl::CommandInfoProvider::Instance().GetCommandPropertyFromModule(aCommand, "com.sun.star.sdb.OfficeDatabaseDocument");
+        m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, stripTrailingDots(aCommandLabel));
         Resize();
 
         // simulate a selectionChanged event at the controller, to force the preview to be updated
@@ -1151,21 +1158,25 @@ IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
     m_aTBPreview->Update();
 
     // execute the menu
-    ScopedVclPtrInstance<PopupMenu> aMenu( ModuleRes( RID_MENU_APP_PREVIEW ) );
+    css::uno::Reference<css::uno::XComponentContext> xContext(getBorderWin().getView()->getORB());
+    css::uno::Reference<css::frame::XUIControllerFactory> xPopupMenuFactory(css::frame::thePopupMenuControllerFactory::get(xContext));
+    if (!xPopupMenuFactory.is())
+        return;
 
-    const sal_uInt16 pActions[] = { SID_DB_APP_DISABLE_PREVIEW
-                            , SID_DB_APP_VIEW_DOC_PREVIEW
-                            , SID_DB_APP_VIEW_DOCINFO_PREVIEW
-    };
+    css::uno::Sequence<css::uno::Any> aArgs {
+        css::uno::makeAny(comphelper::makePropertyValue("InToolbar", true)),
+        css::uno::makeAny(comphelper::makePropertyValue("ModuleIdentifier", OUString("com.sun.star.sdb.OfficeDatabaseDocument"))),
+        css::uno::makeAny(comphelper::makePropertyValue("Frame", getBorderWin().getView()->getAppController().getFrame())) };
 
-    for(unsigned short nAction : pActions)
-    {
-        aMenu->CheckItem(nAction,m_aMenu->IsItemChecked(nAction));
-    }
-    aMenu->EnableItem( SID_DB_APP_VIEW_DOCINFO_PREVIEW, getBorderWin().getView()->getAppController().isCommandEnabled(SID_DB_APP_VIEW_DOCINFO_PREVIEW) );
+    css::uno::Reference<css::frame::XPopupMenuController> xPopupController(
+        xPopupMenuFactory->createInstanceWithArgumentsAndContext(".uno:DBPreview", aArgs, xContext), css::uno::UNO_QUERY);
 
-    // no disabled entries
-    aMenu->RemoveDisabledEntries();
+    if (!xPopupController.is())
+        return;
+
+    rtl::Reference<VCLXPopupMenu> xPopupMenu(new VCLXPopupMenu);
+    xPopupController->setPopupMenu(xPopupMenu.get());
+    VclPtr<PopupMenu> aMenu(static_cast<PopupMenu*>(xPopupMenu->GetMenu()));
 
     sal_uInt16 nSelectedAction = aMenu->Execute(m_aTBPreview.get(), m_aTBPreview->GetItemRect( SID_DB_APP_DISABLE_PREVIEW ));
     // "cleanup" the toolbox state
@@ -1176,8 +1187,11 @@ IMPL_LINK_NOARG(OAppDetailPageHelper, OnDropdownClickHdl, ToolBox*, void)
     {
         m_aTBPreview->SetItemText(SID_DB_APP_DISABLE_PREVIEW, stripTrailingDots(aMenu->GetItemText(nSelectedAction)));
         Resize();
-        getBorderWin().getView()->getAppController().executeChecked(nSelectedAction,Sequence<PropertyValue>());
     }
+
+    css::uno::Reference<css::lang::XComponent> xComponent(xPopupController, css::uno::UNO_QUERY);
+    if (xComponent.is())
+        xComponent->dispose();
 }
 
 void OAppDetailPageHelper::KeyInput( const KeyEvent& rKEvt )

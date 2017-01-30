@@ -16,6 +16,7 @@ $(eval $(call gb_UIConfig_add_menubarfiles,modules/dbapp,\
 $(eval $(call gb_UIConfig_add_popupmenufiles,modules/dbapp,\
 	dbaccess/uiconfig/dbapp/popupmenu/edit \
 	dbaccess/uiconfig/dbapp/popupmenu/new \
+	dbaccess/uiconfig/dbapp/popupmenu/preview \
 ))
 
 $(eval $(call gb_UIConfig_add_statusbarfiles,modules/dbapp,\

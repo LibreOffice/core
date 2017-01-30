@@ -173,40 +173,6 @@ String STR_QUERY_CLOSEDOCUMENTS
     Text [ en-US ] = "The connection type has been altered.\nFor the changes to take effect, all forms, reports, queries and tables must be closed.\n\nDo you want to close all documents now?" ;
 };
 
-Menu RID_MENU_APP_PREVIEW
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = SID_DB_APP_DISABLE_PREVIEW;
-            Text[ en-US ] = "None";
-            Command = ".uno:DBDisablePreview";
-            Checkable = TRUE;
-            RadioCheck = TRUE;
-            AutoCheck = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = SID_DB_APP_VIEW_DOCINFO_PREVIEW;
-            Text[ en-US ] = "Document Information";
-            Command = ".uno:DBShowDocInfoPreview";
-            Checkable = TRUE;
-            RadioCheck = TRUE;
-            AutoCheck = TRUE;
-        };
-        MenuItem
-        {
-            Identifier = SID_DB_APP_VIEW_DOC_PREVIEW;
-            Text[ en-US ] = "Document";
-            Command = ".uno:DBShowDocPreview";
-            Checkable = TRUE;
-            RadioCheck = TRUE;
-            AutoCheck = TRUE;
-        };
-    };
-};
-
 String RID_STR_FORM
 {
     Text [ en-US ] = "Form";

@@ -425,6 +425,20 @@
           <value>refreshdata</value>
         </prop>
       </node>
+      <node oor:name="c35" oor:op="replace">
+        <prop oor:name="Command">
+          <value>.uno:DBPreview</value>
+        </prop>
+        <prop oor:name="Module">
+          <value>com.sun.star.sdb.OfficeDatabaseDocument</value>
+        </prop>
+        <prop oor:name="Controller">
+          <value>com.sun.star.comp.framework.ResourceMenuController</value>
+        </prop>
+        <prop oor:name="Value">
+          <value>preview</value>
+        </prop>
+      </node>
     </node>
     <node oor:name="ToolBar">
       <node oor:name="ZoomToolBox" oor:op="replace">
