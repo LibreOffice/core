@@ -2579,7 +2579,8 @@ void VclBuilder::handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &read
 
     int nLevel = 1;
 
-    stringmap aProperties, aAccelerators;
+    stringmap aProperties;
+    accelmap aAccelerators;
 
     if (!sCustomProperty.isEmpty())
         aProperties[OString("customproperty")] = sCustomProperty;
@@ -2685,29 +2686,34 @@ OString VclBuilder::convertMnemonicMarkup(const OString &rIn)
 
 namespace
 {
-    vcl::KeyCode makeKeyCode(const OString &rKey)
+    vcl::KeyCode makeKeyCode(const std::pair<OString,OString> &rKey)
     {
-        if (rKey == "Insert")
-            return vcl::KeyCode(KEY_INSERT);
-        else if (rKey == "Delete")
-            return vcl::KeyCode(KEY_DELETE);
+        bool bShift = rKey.second.indexOf("GDK_SHIFT_MASK") != -1;
+        bool bMod1 = rKey.second.indexOf("GDK_CONTROL_MASK") != -1;
+        bool bMod2 = rKey.second.indexOf("GDK_MOD1_MASK") != -1;
+        bool bMod3 = rKey.second.indexOf("GDK_MOD2_MASK") != -1;
 
-        assert (rKey.getLength() == 1);
-        sal_Char cChar = rKey.toChar();
+        if (rKey.first == "Insert")
+            return vcl::KeyCode(KEY_INSERT, bShift, bMod1, bMod2, bMod3);
+        else if (rKey.first == "Delete")
+            return vcl::KeyCode(KEY_DELETE, bShift, bMod1, bMod2, bMod3);
+
+        assert (rKey.first.getLength() == 1);
+        sal_Char cChar = rKey.first.toChar();
 
         if (cChar >= 'a' && cChar <= 'z')
-            return vcl::KeyCode(KEY_A + (cChar - 'a'));
+            return vcl::KeyCode(KEY_A + (cChar - 'a'), bShift, bMod1, bMod2, bMod3);
         else if (cChar >= 'A' && cChar <= 'Z')
-            return vcl::KeyCode(KEY_A + (cChar - 'A'));
+            return vcl::KeyCode(KEY_A + (cChar - 'A'), bShift, bMod1, bMod2, bMod3);
         else if (cChar >= '0' && cChar <= '9')
-            return vcl::KeyCode(KEY_0 + (cChar - 'A'));
+            return vcl::KeyCode(KEY_0 + (cChar - 'A'), bShift, bMod1, bMod2, bMod3);
 
-        return vcl::KeyCode(cChar);
+        return vcl::KeyCode(cChar, bShift, bMod1, bMod2, bMod3);
     }
 }
 
 void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, const OString &rID,
-    stringmap &rProps, stringmap &rAccels)
+    stringmap &rProps, accelmap &rAccels)
 {
     sal_uInt16 nOldCount = pParent->GetItemCount();
     sal_uInt16 nNewId = nOldCount + 1;
@@ -2745,10 +2751,10 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
                 SAL_INFO("vcl.layout", "unhandled property: " << rKey.getStr());
         }
 
-        for (stringmap::iterator aI = rAccels.begin(), aEnd = rAccels.end(); aI != aEnd; ++aI)
+        for (accelmap::iterator aI = rAccels.begin(), aEnd = rAccels.end(); aI != aEnd; ++aI)
         {
             const OString &rSignal = aI->first;
-            const OString &rValue = aI->second;
+            const auto &rValue = aI->second;
 
             if (rSignal == "activate")
                 pParent->SetAccelKey(nNewId, makeKeyCode(rValue));
@@ -3206,13 +3212,14 @@ void VclBuilder::handleActionWidget(xmlreader::XmlReader &reader)
     set_response(sID, sResponse.toInt32());
 }
 
-void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMap)
+void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, accelmap &rMap)
 {
     xmlreader::Span name;
     int nsId;
 
     OString sProperty;
     OString sValue;
+    OString sModifiers;
 
     while (reader.nextAttribute(&nsId, &name))
     {
@@ -3226,12 +3233,16 @@ void VclBuilder::collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMa
             name = reader.getAttributeValue(false);
             sProperty = OString(name.begin, name.length);
         }
-
+        else if (name.equals("modifiers"))
+        {
+            name = reader.getAttributeValue(false);
+            sModifiers = OString(name.begin, name.length);
+        }
     }
 
     if (!sProperty.isEmpty() && !sValue.isEmpty())
     {
-        rMap[sProperty] = sValue;
+        rMap[sProperty] = std::make_pair(sValue, sModifiers);
     }
 }
 

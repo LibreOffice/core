@@ -49,6 +49,7 @@ class VCL_DLLPUBLIC VclBuilder
 {
 public:
     typedef std::map<OString, OString> stringmap;
+    typedef std::map<OString, std::pair<OString, OString>> accelmap;
     /// These functions create a new widget with parent pParent and return it in rRet
     typedef void (*customMakeWidget)(VclPtr<vcl::Window> &rRet, VclPtr<vcl::Window> &pParent, stringmap &rVec);
 
@@ -361,14 +362,14 @@ private:
     void        collectProperty(xmlreader::XmlReader &reader, const OString &rID, stringmap &rVec);
     static void collectPangoAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
     static void collectAtkAttribute(xmlreader::XmlReader &reader, stringmap &rMap);
-    static void collectAccelerator(xmlreader::XmlReader &reader, stringmap &rMap);
+    static void collectAccelerator(xmlreader::XmlReader &reader, accelmap &rMap);
 
     void        insertMenuObject(
                    PopupMenu *pParent,
                    const OString &rClass,
                    const OString &rID,
                    stringmap &rProps,
-                   stringmap &rAccels);
+                   accelmap &rAccels);
 
     void        handleMenuChild(PopupMenu *pParent, xmlreader::XmlReader &reader);
     void        handleMenuObject(PopupMenu *pParent, xmlreader::XmlReader &reader);
