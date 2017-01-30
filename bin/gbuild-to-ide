@@ -543,14 +543,15 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         targetId = self.generate_id('PBXNativeTarget')
         configurationListId = self.generate_id('XCConfigurationList')
         configurationDebugId = self.generate_id('XCBuildConfiguration')
-        fileId = self.generate_id('XCBuildConfiguration')
-        objects = {targetId: self.generate_PBXLegacyTarget(target, configurationListId),
-                   configurationListId: self.generate_XCBuildConfiguration(target, configurationDebugId),
+        fileId = self.generate_id('PBXFileReference')
+        objects = {configurationListId: self.generate_XCBuildConfiguration(target, configurationDebugId),
+#MAKE                   targetId: self.generate_PBXLegacyTarget(target, configurationListId),
+                   targetId: self.generate_PBXNativeTarget(target, configurationListId),
                    configurationDebugId: self.generate_XCBuildConfiguration(target, configurationDebugId, debug=True),
                    fileId : self.generate_PBXFileReference(module, target['LINKTARGET'], explicit=target['build_type'])
                    }
-        self.rootObj['attributes']['TargetAttributes'].update({
-            targetId: {'CreatedOnToolsVersion': '8.2', 'ProvisioningStyle': 'Automatic'}})
+        self.rootObj['attributes']['TargetAttributes'].update(
+            {targetId: {'CreatedOnToolsVersion': '8.2', 'ProvisioningStyle': 'Automatic'}})
         self.rootObj['buildConfigurationList'] = configurationListId
         self.rootObj['targets'].append(targetId)
         targetObj['children'].append(fileId)
@@ -573,15 +574,35 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
             product = 'com.apple.product-type.something'
 
         return {'isa': 'PBXLegacyTarget',
-                  'buildConfigurationList': configurationListId,
-                  'buildArgumentsString': modulename['target_name'],
-                  'buildPhases': [],
-                  'dependencies': [],
-                  'buildToolPath': 'make',
-                  'buildWorkingDirectory': self.gbuildparser.builddir,
-                  'name': modulename['target_name'],
-                  'productName': modulename['name'],
-                  'passBuildSettingsEnvironment': 1}
+                'buildConfigurationList': configurationListId,
+                'buildArgumentsString': modulename['target_name'],
+                'buildPhases': [],
+                'dependencies': [],
+                'buildToolPath': 'make',
+                'buildWorkingDirectory': self.gbuildparser.builddir,
+                'name': modulename['target_name'],
+                'productName': modulename['name'],
+                'passBuildSettingsEnvironment': 1}
+
+    def generate_PBXNativeTarget(self, modulename, configurationListId):
+        if modulename['build_type'] == 'Library':
+            product = 'com.apple.product-type.library.dynamic'
+        elif modulename['build_type'] == 'Executable':
+            product = 'com.apple.product-type.tool'
+        elif modulename['build_type'] == 'CppunitTest':
+            product = 'com.apple.product-type.cppunit'
+        else:
+            product = 'com.apple.product-type.something'
+
+        return {'isa': 'PBXNativeTarget',
+                'buildRules': [],
+                'dependencies': [],
+                'name': modulename['target_name'],
+                'productName': modulename['name'],
+                'productType': product,
+                'buildConfigurationList': configurationListId,
+                'buildPhases': [],
+                'productReference': ''}
 
     def generate_XCBuildConfiguration(self, modulename, configurationDebugId, debug=False):
         if debug:
@@ -639,13 +660,13 @@ class XcodeIntegrationGenerator(IdeIntegrationGenerator):
         obj =  {'isa': 'PBXFileReference',
                 'path': module + '/' + filepath,
                 'name': filepath,
-                'fileEncoding': 4,
                 'sourceTree': '<group>'}
         if not explicit is None:
             if explicit == 'Library':
                 obj['explicitFileType'] = 'compiled.mach-o.dylib'
             else:
                 obj['explicitFileType'] = 'compiled.executable'
+            obj['includeInIndex'] = 0
             obj['path'] = filepath
         else:
             obj['path'] = module + '/' + filepath
@@ -1074,7 +1095,8 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
             for lib in self.gbuildparser.modules[m]['targets']:
                 entries = []
                 for file in lib['CXXOBJECTS']:
-                    filePath = os.path.join(self.gbuildparser.srcdir, file)
+                    xFile = lib['module'] + '/' + file
+                    filePath = os.path.join(self.gbuildparser.srcdir, xFile)
                     entry = {'directory': lib['location'], 'file': filePath, 'command': self.generateCommand(lib, filePath)}
                     entries.append(entry)
                 global_list.extend(entries)
