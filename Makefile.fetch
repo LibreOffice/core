@@ -131,6 +131,7 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,FREETYPE,FREETYPE_TARBALL) \
 		$(call fetch_Optional,EPOXY,EPOXY_TARBALL) \
 		$(call fetch_Optional,GLM,GLM_TARBALL) \
+		$(call fetch_Optional,GPGME,GPGME_TARBALL) \
 		$(call fetch_Optional,GRAPHITE,GRAPHITE_TARBALL) \
 		$(call fetch_Optional,HARFBUZZ,HARFBUZZ_TARBALL) \
 		$(call fetch_Optional,HSQLDB,HSQLDB_TARBALL) \
@@ -153,8 +154,10 @@ $(WORKDIR)/download: $(BUILDDIR)/config_host.mk $(SRCDIR)/download.lst $(SRCDIR)
 		$(call fetch_Optional,LANGUAGETOOL,LANGUAGETOOL_TARBALL) \
 		$(call fetch_Optional,LCMS2,LCMS2_TARBALL) \
 		$(call fetch_Optional,LIBATOMIC_OPS,LIBATOMIC_OPS_TARBALL) \
+		$(call fetch_Optional,LIBASSUAN,LIBASSUAN_TARBALL) \
 		$(call fetch_Optional,LIBEOT,LIBEOT_TARBALL) \
 		$(call fetch_Optional,LIBEXTTEXTCAT,LIBEXTTEXTCAT_TARBALL) \
+		$(call fetch_Optional,LIBGPGERROR,LIBGPGERROR_TARBALL) \
 		$(call fetch_Optional,LIBLANGTAG,LANGTAGREG_TARBALL) \
 		$(call fetch_Optional,LIBLANGTAG,LIBLANGTAG_TARBALL) \
 		$(call fetch_Optional,LIBPNG,PNG_TARBALL) \
