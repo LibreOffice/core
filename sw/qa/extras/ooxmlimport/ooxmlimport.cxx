@@ -1374,6 +1374,27 @@ DECLARE_OOXMLIMPORT_TEST(testTdf96218, "tdf96218.docx")
     CPPUNIT_ASSERT(!getProperty<bool>(getShape(1), "IsFollowingTextFlow"));
 }
 
+DECLARE_OOXMLIMPORT_TEST(testTdf101626, "tdf101626.docx")
+{
+    // Transform soft-hyphen to hard-hyphen as list bulletChar to avoid missing ymbols in export
+    uno::Reference<beans::XPropertySet> xPropertySet(getStyles("NumberingStyles")->getByName("WWNum1"), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue("NumberingRules"), uno::UNO_QUERY);
+    uno::Sequence<beans::PropertyValue> aProps;
+    xLevels->getByIndex(0) >>= aProps; // 1st level
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name == "BulletChar")
+        {
+            // the bulletChar has to be 0x2d!
+            CPPUNIT_ASSERT_EQUAL(OUString("\x2d", 1, RTL_TEXTENCODING_UTF8), rProp.Value.get<OUString>());
+            return;
+        }
+    }
+}
+
 // tests should only be added to ooxmlIMPORT *if* they fail round-tripping in ooxmlEXPORT
 
 CPPUNIT_PLUGIN_IMPLEMENT();
