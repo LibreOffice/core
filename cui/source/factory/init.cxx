@@ -27,7 +27,7 @@ extern "C"
 SAL_DLLPUBLIC_EXPORT bool GetSpecialCharsForEdit(vcl::Window* i_pParent, const vcl::Font& i_rFont, OUString& o_rResult)
 {
     bool bRet = false;
-    VclPtrInstance< SvxCharacterMap > aDlg( i_pParent );
+    ScopedVclPtrInstance<SvxCharacterMap> aDlg(i_pParent);
     aDlg->DisableFontSelection();
     aDlg->SetCharFont(i_rFont);
     if ( aDlg->Execute() == RET_OK )
