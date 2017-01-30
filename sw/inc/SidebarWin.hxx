@@ -81,6 +81,7 @@ class SwSidebarWin : public vcl::Window
         void CheckMetaText();
 
         inline Point GetAnchorPos() { return mAnchorRect.Pos(); }
+        inline const SwRect& GetAnchorRect() { return mAnchorRect; }
         inline const std::vector<basegfx::B2DRange>& GetAnnotationTextRanges() { return maAnnotationTextRanges; }
         SwEditWin& EditWin();
 
