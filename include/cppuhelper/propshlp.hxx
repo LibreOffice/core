@@ -558,8 +558,8 @@ protected:
        @param rValue the value to be converted
        @return true if the value converted.
        @throws css::lang::IllegalArgumentException
-       @throws css::beans::UnknownPropertyException,
-       @thrwos css::uno::RuntimeException
+       @throws css::beans::UnknownPropertyException
+       @throws css::uno::RuntimeException
      */
     virtual sal_Bool SAL_CALL convertFastPropertyValue(
         css::uno::Any & rConvertedValue,
