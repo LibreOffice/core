@@ -457,7 +457,6 @@ uno::Any SAL_CALL Content::execute(
             // Unreachable
         }
 
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
         if ( eType == STREAM )
         {
             Uri aUri( m_xIdentifier->getContentIdentifier() );
@@ -475,7 +474,7 @@ uno::Any SAL_CALL Content::execute(
                 // Unreachable
             }
         }
-#endif
+
         ucb::InsertCommandArgument aArg;
         if ( !( aCommand.Argument >>= aArg ) )
         {
@@ -668,7 +667,6 @@ Content::createNewContent( const ucb::ContentInfo& Info )
 
         bool bCreateFolder = Info.Type == TDOC_FOLDER_CONTENT_TYPE;
 
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
         // streams cannot be created as direct children of document root
         if ( !bCreateFolder && ( m_aProps.getType() == DOCUMENT ) )
         {
@@ -676,7 +674,6 @@ Content::createNewContent( const ucb::ContentInfo& Info )
                         "created as direct children of document root!" );
             return uno::Reference< ucb::XContent >();
         }
-#endif
         if ( !bCreateFolder && Info.Type != TDOC_STREAM_CONTENT_TYPE )
         {
             OSL_FAIL( "Content::createNewContent - unsupported type!" );
@@ -1563,7 +1560,6 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
 
     Uri aUri( m_xIdentifier->getContentIdentifier() );
 
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
 #if OSL_DEBUG_LEVEL > 0
     if ( eType == STREAM )
     {
@@ -1572,7 +1568,6 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
                     "insert command not supported by streams that are direct "
                     "children of document root!" );
     }
-#endif
 #endif
 
     // Check, if all required properties were set.
@@ -1966,7 +1961,6 @@ void Content::transfer(
         }
     }
 
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
     if ( m_aProps.getType() == DOCUMENT )
     {
         bool bOK = false;
@@ -2018,7 +2012,6 @@ void Content::transfer(
             // Unreachable
         }
     }
-#endif
 
 
     // Copy data.
@@ -2887,7 +2880,6 @@ ContentProperties::getCreatableContentsInfo() const
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
 
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
         if ( getType() == DOCUMENT )
         {
             // streams cannot be created as direct children of document root
@@ -2902,7 +2894,6 @@ ContentProperties::getCreatableContentsInfo() const
         }
         else
         {
-#endif
             uno::Sequence< ucb::ContentInfo > aSeq( 2 );
 
             // Folder.
@@ -2919,9 +2910,7 @@ ContentProperties::getCreatableContentsInfo() const
             aSeq.getArray()[ 1 ].Properties = aProps;
 
             return aSeq;
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
         }
-#endif
     }
     else
     {

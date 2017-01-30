@@ -26,8 +26,6 @@
 #include <com/sun/star/ucb/CommandFailedException.hpp>
 #include "tdoc_provider.hxx"
 
-#define NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT 1
-
 namespace com { namespace sun { namespace star {
     namespace sdbc  { class XRow; }
     namespace io    { class XInputStream; class XOutputStream; }

@@ -47,9 +47,6 @@
     transfer            -       x       x       -       -       -
     createNewContent    -       x       x       -       -       -
 
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
- (*) not supported by streams that are direct children of document
-#endif
 
  *************************************************************************/
 
@@ -346,7 +343,6 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
 
     if ( m_aProps.getType() == STREAM )
     {
-#ifdef NO_STREAM_CREATION_WITHIN_DOCUMENT_ROOT
         Uri aUri( m_xIdentifier->getContentIdentifier() );
         Uri aParentUri( aUri.getParentUri() );
 
@@ -401,7 +397,6 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands(
             };
             return MAKECMDSEQUENCE( aStreamCommandInfoTable1 );
         }
-#endif
 
 
         // Stream: Supported commands
