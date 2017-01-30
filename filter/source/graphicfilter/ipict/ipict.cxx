@@ -843,7 +843,7 @@ sal_uLong PictReader::ReadPixMapEtc( Bitmap &rBitmap, bool bBaseAddr, bool bColo
         else if ( nPixelSize == 4 ) nSrcBPL = ( nWidth + 1 ) >> 1;
         else                        nSrcBPL = nWidth;
         nDestBPL = ( nSrcBPL + 3 ) & 0xfffc;
-        if ( nRowBytes < nSrcBPL || nRowBytes > nDestBPL )
+        if (!nRowBytes || nRowBytes < nSrcBPL || nRowBytes > nDestBPL)
             return 0xffffffff;
 
         if (nRowBytes < 8 || nPackType == 1)
