@@ -353,6 +353,16 @@ GtkWidget* CommentsSidebar::createCommentBox(const boost::property_tree::ptree& 
     *id =  aComment.get<int>("id");
     g_object_set_data_full(G_OBJECT(pCommentVBox), "id", id, g_free);
 
+    // Set left-margin if its a reply comment
+    if (aComment.get<int>("parent") > 0)
+    {
+        GtkStyleContext* pStyleContext = gtk_widget_get_style_context(pCommentVBox);
+        GtkCssProvider* pCssProvider = gtk_css_provider_get_default();
+        gtk_style_context_add_class(pStyleContext, "commentbox");
+        gtk_style_context_add_provider(pStyleContext, GTK_STYLE_PROVIDER(pCssProvider), GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+        gtk_css_provider_load_from_data(pCssProvider, ".commentbox {background-color: lightgreen;}", -1, nullptr);
+    }
+
     GtkWidget* pCommentText = gtk_label_new(aComment.get<std::string>("text").c_str());
     GtkWidget* pCommentAuthor = gtk_label_new(aComment.get<std::string>("author").c_str());
     GtkWidget* pCommentDate = gtk_label_new(aComment.get<std::string>("dateTime").c_str());
@@ -436,6 +446,9 @@ gboolean CommentsSidebar::docConfigureEvent(GtkWidget* pDocView, GdkEventConfigu
             gtk_container_add(GTK_CONTAINER(rWindow.m_pMainHBox), rWindow.m_pCommentsSidebar->m_pMainVBox);
 
             rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton = gtk_button_new_with_label(".uno:ViewAnnotations");
+            // Hack to make sidebar grid wide enough to not need any horizontal scrollbar
+            gtk_widget_set_margin_start(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
+            gtk_widget_set_margin_end(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, 20);
             gtk_container_add(GTK_CONTAINER(rWindow.m_pCommentsSidebar->m_pMainVBox), rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton);
             g_signal_connect(rWindow.m_pCommentsSidebar->m_pViewAnnotationsButton, "clicked", G_CALLBACK(CommentsSidebar::unoViewAnnotations), nullptr);
 
