@@ -1118,7 +1118,7 @@ class VimIntegrationGenerator(IdeIntegrationGenerator):
 
         for include in lib['include']:
             command += ' -I'
-            command += include
+            command += os.path.abspath(include)
         for isystem in lib['include_sys']:
             command += ' -isystem '
             command += isystem
