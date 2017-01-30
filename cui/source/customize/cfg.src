@@ -17,62 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 #include <cuires.hrc>
-#include "cfg.hrc"
 #include "helpid.hrc"
-
-#define TEXT_RENAME \
-    Text [ en-US ] = "Rename..." ;\
-
-#define TEXT_DELETE_NODOTS \
-    Text [ en-US ] = "Delete" ;\
-
-Menu MODIFY_TOOLBAR
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_RENAME ;
-            TEXT_RENAME
-        };
-        MenuItem
-        {
-            Identifier = ID_DELETE ;
-            TEXT_DELETE_NODOTS
-        };
-    };
-};
-
-Menu MODIFY_TOOLBAR_CONTENT
-{
-    ItemList =
-    {
-        MenuItem
-        {
-            Identifier = ID_RENAME ;
-            TEXT_RENAME
-        };
-        MenuItem
-        {
-            Identifier = ID_DEFAULT_COMMAND ;
-            Text [ en-US ] = "Restore Default Command" ;
-        };
-        MenuItem
-        {
-            Separator = TRUE ;
-        };
-        MenuItem
-        {
-            Identifier = ID_CHANGE_SYMBOL ;
-            Text [ en-US ] = "Change Icon..." ;
-        };
-        MenuItem
-        {
-            Identifier = ID_RESET_SYMBOL ;
-            Text [ en-US ] = "Reset Icon" ;
-        };
-    };
-};
 
 /* %n will be replaced at runtime by a number starting with 1 and increasing as necessary */
 String RID_SVXSTR_NEW_MENU
