@@ -1721,6 +1721,11 @@ AC_ARG_WITH(system-poppler,
         [Use system poppler (only needed for PDF import).]),,
     [with_system_poppler="$with_system_libs"])
 
+AC_ARG_WITH(system-gpgme,
+    AS_HELP_STRING([--with-system-gpgme],
+        [Use gpgme already on system]),,
+    [with_system_gpgme="$with_system_libs"])
+
 AC_ARG_WITH(system-apache-commons,
     AS_HELP_STRING([--with-system-apache-commons],
         [Use Apache commons libraries already on system.]),,
@@ -10621,6 +10626,29 @@ AC_SUBST(ENABLE_PDFIMPORT)
 AC_SUBST(SYSTEM_POPPLER)
 AC_SUBST(POPPLER_CFLAGS)
 AC_SUBST(POPPLER_LIBS)
+
+SYSTEM_GPGME=
+if test "$_os" = "Linux"; then
+    dnl ===================================================================
+    dnl Check for system gpgme
+    dnl ===================================================================
+    AC_MSG_CHECKING([which gpgme to use])
+    if test "$with_system_gpgme" = "yes"; then
+        AC_MSG_RESULT([external])
+        SYSTEM_GPGME=TRUE
+
+        AC_PATH_PROG(GPGMECONFIG, gpgme-config)
+        if test -z "$GPGMECONFIG"; then
+            AC_MSG_ERROR([--with-system-gpgme requested, but gpgme programs not found])
+        fi
+
+        GPGME_CFLAGS=`$GPGMECONFIG --cflags`
+        GPGME_LIBS=`$GPGMECONFIG --libs`
+    fi
+fi
+AC_SUBST(SYSTEM_GPGME)
+AC_SUBST(GPGME_CFLAGS)
+AC_SUBST(GPGME_LIBS)
 
 AC_MSG_CHECKING([whether to build the Wiki Publisher extension])
 if test "x$enable_ext_wiki_publisher" = "xyes" -a "x$enable_extension_integration" != "xno" -a "$with_java" != "no"; then
