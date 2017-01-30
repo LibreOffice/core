@@ -156,8 +156,7 @@ static bool lcl_IsNumFmtSet(SvxNumRule* pNum, sal_uInt16 nLevelMask)
 static vcl::Font& lcl_GetDefaultBulletFont()
 {
     static bool bInit = false;
-    static vcl::Font aDefBulletFont( OUString("StarSymbol"),
-                                OUString(), Size( 0, 14 ) );
+    static vcl::Font aDefBulletFont( "StarSymbol", OUString(), Size( 0, 14 ) );
     if(!bInit)
     {
         aDefBulletFont.SetCharSet( RTL_TEXTENCODING_SYMBOL );

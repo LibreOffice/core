@@ -695,13 +695,13 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                     case DataType::BOOLEAN:
                     {
                         aCurrentModelType = "CheckBox";
-                        aInitialValues.push_back( NamedValue( OUString( "VisualEffect" ), makeAny( VisualEffect::FLAT ) ) );
+                        aInitialValues.push_back( NamedValue( "VisualEffect", makeAny( VisualEffect::FLAT ) ) );
                         sDefaultProperty = PROPERTY_DEFAULTSTATE;
 
                         sal_Int32 nNullable = ColumnValue::NULLABLE_UNKNOWN;
                         OSL_VERIFY( xColumn->getPropertyValue( PROPERTY_ISNULLABLE ) >>= nNullable );
                         aInitialValues.push_back( NamedValue(
-                            OUString( "TriState" ),
+                            "TriState",
                             makeAny( ColumnValue::NO_NULLS != nNullable )
                         ) );
                         if ( ColumnValue::NO_NULLS == nNullable )
@@ -711,7 +711,7 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
 
                     case DataType::LONGVARCHAR:
                     case DataType::CLOB:
-                        aInitialValues.push_back( NamedValue( OUString( "MultiLine" ), makeAny( true ) ) );
+                        aInitialValues.push_back( NamedValue( "MultiLine", makeAny( true ) ) );
                         SAL_FALLTHROUGH;
                     case DataType::BINARY:
                     case DataType::VARBINARY:
@@ -729,8 +729,8 @@ bool SbaTableQueryBrowser::InitializeGridModel(const Reference< css::form::XForm
                         sDefaultProperty = PROPERTY_EFFECTIVEDEFAULT;
 
                         if ( xSupplier.is() )
-                            aInitialValues.push_back( NamedValue( OUString("FormatsSupplier"), makeAny( xSupplier ) ) );
-                        aInitialValues.push_back( NamedValue( OUString("TreatAsNumber"), makeAny( bFormattedIsNumeric ) ) );
+                            aInitialValues.push_back( NamedValue( "FormatsSupplier", makeAny( xSupplier ) ) );
+                        aInitialValues.push_back( NamedValue( "TreatAsNumber", makeAny( bFormattedIsNumeric ) ) );
                         aCopyProperties.push_back( static_cast<const OUString&>(PROPERTY_FORMATKEY) );
                         break;
                 }

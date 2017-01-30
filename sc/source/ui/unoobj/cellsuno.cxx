@@ -4646,7 +4646,7 @@ sal_Bool SAL_CALL ScCellRangesObj::hasByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScCellRangesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SheetCellRangesEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.SheetCellRangesEnumeration");
 }
 
 // XIndexAccess

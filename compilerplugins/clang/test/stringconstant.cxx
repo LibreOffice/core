@@ -14,6 +14,12 @@
 #include "com/sun/star/uno/Reference.hxx"
 #include "rtl/strbuf.hxx"
 
+extern void foo(OUString const &); // expected-error {{extern prototype in main file without definition}}
+
+struct Foo {
+    Foo(OUString const &, int) {}
+};
+
 int main() {
     char const s1[] = "foo";
     char const * const s2 = "foo";
@@ -47,6 +53,11 @@ int main() {
     sb.insert(0, "foo", std::strlen("foo")); // expected-error {{rewrite call of 'rtl::OStringBuffer::insert' with string constant and matching length arguments as call of 'rtl::OStringBuffer::insert' [loplugin:stringconstant]}}
     sb.insert(0, s1, 3/*std::strlen(s1)*/); // expected-error {{rewrite call of 'rtl::OStringBuffer::insert' with string constant and matching length arguments as call of 'rtl::OStringBuffer::insert' [loplugin:stringconstant]}}
     sb.insert(0, s2, 3/*std::strlen(s2)*/); // expected-error {{rewrite call of 'rtl::OStringBuffer::insert' with string constant and matching length arguments as call of 'rtl::OStringBuffer::insert', and turn the non-array string constant into an array [loplugin:stringconstant]}}
+
+    foo(OUString("xxx")); // expected-error {{in call of 'foo', replace 'OUString' constructed from a string literal directly with the string literal [loplugin:stringconstant}}
+    Foo aFoo(OUString("xxx"), 1); // expected-error {{in call of 'Foo::Foo', replace 'OUString' constructed from a string literal directly with the string literal}}
+    (void)aFoo;
 }
+
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

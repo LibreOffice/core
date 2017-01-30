@@ -66,7 +66,7 @@ sal_Int32 SelectionManager::getSelectionTimeout()
  */
 
 DtransX11ConfigItem::DtransX11ConfigItem() :
-    ConfigItem( OUString( SETTINGS_CONFIGNODE ),
+    ConfigItem( SETTINGS_CONFIGNODE,
                 ConfigItemMode::DelayedUpdate ),
     m_nSelectionTimeout( 3 )
 {

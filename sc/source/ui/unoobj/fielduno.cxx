@@ -377,7 +377,7 @@ sal_Bool SAL_CALL ScCellFieldsObj::hasElements()
 uno::Reference<container::XEnumeration> SAL_CALL ScCellFieldsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.text.TextFieldEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.text.TextFieldEnumeration");
 }
 
 void SAL_CALL ScCellFieldsObj::addContainerListener(
@@ -533,7 +533,7 @@ sal_Bool SAL_CALL ScHeaderFieldsObj::hasElements()
 uno::Reference<container::XEnumeration> SAL_CALL ScHeaderFieldsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.text.TextFieldEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.text.TextFieldEnumeration");
 }
 
 void SAL_CALL ScHeaderFieldsObj::addContainerListener(

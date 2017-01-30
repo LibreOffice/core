@@ -108,7 +108,7 @@ void SbStdPicture::PropHeight( SbxVariable* pVar, SbxArray*, bool bWrite )
 
 
 SbStdPicture::SbStdPicture() :
-    SbxObject( OUString("Picture"))
+    SbxObject( "Picture" )
 {
     // Properties
     SbxVariable* p = Make( "Type", SbxClassType::Property, SbxVARIANT );
@@ -212,7 +212,7 @@ void SbStdFont::PropName( SbxVariable* pVar, SbxArray*, bool bWrite )
 
 
 SbStdFont::SbStdFont()
-    : SbxObject( OUString("Font") )
+    : SbxObject( "Font" )
     , bBold(false)
     , bItalic(false)
     , bStrikeThrough(false)
@@ -370,7 +370,7 @@ void SbStdClipboard::MethSetText( SbxVariable* pVar, SbxArray* pPar_, bool )
 
 
 SbStdClipboard::SbStdClipboard() :
-    SbxObject( OUString("Clipboard") )
+    SbxObject( "Clipboard" )
 {
     SbxVariable* p = Find( "Name", SbxClassType::Property );
     assert(p && "No Name Property");

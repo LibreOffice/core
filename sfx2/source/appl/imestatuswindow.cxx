@@ -194,7 +194,7 @@ css::uno::Reference< css::beans::XPropertySet > ImeStatusWindow::getConfig()
             css::uno::Reference< css::lang::XMultiServiceFactory > xProvider =
                 css::configuration::theDefaultProvider::get( m_xContext );
             css::beans::PropertyValue aArg(
-                OUString("nodepath"), -1,
+                "nodepath", -1,
                 css::uno::makeAny(
                     OUString(
                             "/org.openoffice.Office.Common/I18N/InputMethod")),

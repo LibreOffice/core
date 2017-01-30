@@ -243,7 +243,7 @@ ScFormulaCfg::PropsToIds ScFormulaCfg::GetPropNamesToId()
 }
 
 ScFormulaCfg::ScFormulaCfg() :
-    ConfigItem( OUString( CFGPATH_FORMULA ) )
+    ConfigItem( CFGPATH_FORMULA )
 {
     Sequence<OUString> aNames = GetPropertyNames();
     UpdateFromProperties( aNames );

@@ -42,7 +42,7 @@ using namespace ::com::sun::star::container;
 sdbcx::ObjectType OFlatTables::createObject(const OUString& _rName)
 {
     OFlatTable* pRet = new OFlatTable(this, static_cast<OFlatConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
-                                        _rName,OUString("TABLE"));
+                                        _rName,"TABLE");
     sdbcx::ObjectType xRet = pRet;
     pRet->construct();
     return xRet;

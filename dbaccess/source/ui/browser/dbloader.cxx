@@ -254,7 +254,7 @@ void SAL_CALL DBContentLoader::load(const Reference< XFrame > & rFrame, const OU
         try
         {
             Reference<XInitialization > xIni(xController,UNO_QUERY);
-            PropertyValue aFrame(OUString("Frame"),0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
+            PropertyValue aFrame("Frame",0,makeAny(rFrame),PropertyState_DIRECT_VALUE);
             Sequence< Any > aInitArgs(m_aArgs.getLength()+1);
 
             Any* pBegin = aInitArgs.getArray();

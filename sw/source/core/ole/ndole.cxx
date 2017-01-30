@@ -1087,7 +1087,7 @@ void SwOLEObj::resetBufferedData()
 }
 
 SwOLELRUCache::SwOLELRUCache()
-    : utl::ConfigItem(OUString("Office.Common/Cache"))
+    : utl::ConfigItem("Office.Common/Cache")
     , m_nLRU_InitSize( 20 )
 {
     EnableNotification( GetPropertyNames() );

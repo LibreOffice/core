@@ -554,7 +554,7 @@ ScVbaChart::Activate()
     if ( pChartObj )
         pChartObj->Activate();
     else
-        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, OUString( "no ChartObject as parent" ) );
+        throw script::BasicErrorException( OUString(), uno::Reference< uno::XInterface >(), ERRCODE_BASIC_METHOD_FAILED, "no ChartObject as parent" );
 }
 
 void SAL_CALL

@@ -174,7 +174,7 @@ bool SvxChartColorTable::operator==( const SvxChartColorTable & _rOther ) const
 
 
 SvxChartOptions::SvxChartOptions() :
-    ::utl::ConfigItem( OUString("Office.Chart") ),
+    ::utl::ConfigItem( "Office.Chart" ),
     mbIsInitialized( false )
 {
     maPropertyNames.realloc( 1 );

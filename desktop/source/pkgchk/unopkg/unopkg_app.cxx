@@ -365,7 +365,7 @@ extern "C" int unopkg_main()
                 if (subcmd_add)
                 {
                     beans::NamedValue nvSuppress(
-                        OUString("SUPPRESS_LICENSE"), option_suppressLicense ?
+                        "SUPPRESS_LICENSE", option_suppressLicense ?
                         makeAny(OUString("1")):makeAny(OUString("0")));
                         xExtensionManager->addExtension(
                             cmdPackage, Sequence<beans::NamedValue>(&nvSuppress, 1),

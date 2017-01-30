@@ -47,8 +47,8 @@ private:
 
 ScTableSheetObj::ScTableSheetObj():
     CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-    apitest::XSearchable(OUString("test"), 4),
-    apitest::XReplaceable(OUString("searchReplaceString"), OUString("replaceReplaceString"))
+    apitest::XSearchable("test", 4),
+    apitest::XReplaceable("searchReplaceString", "replaceReplaceString")
 {
 }
 

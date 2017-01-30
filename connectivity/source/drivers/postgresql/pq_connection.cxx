@@ -540,7 +540,7 @@ void Connection::initialize( const Sequence< Any >& aArguments )
                 buf.append( errorMessage );
                 // HY092 is "Invalid attribute/option identifier."
                 // Just the most likely error; the error might be  HY024 "Invalid attribute value".
-                throw SQLException( buf.makeStringAndClear(), *this, OUString("HY092"), 5, Any() );
+                throw SQLException( buf.makeStringAndClear(), *this, "HY092", 5, Any() );
             }
 
             for (  PQconninfoOption * opt = oOpts.get(); opt->keyword != nullptr; ++opt)

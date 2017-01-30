@@ -69,8 +69,8 @@ uno::Reference< lang::XComponent > ScCellRangeObj::mxComponent;
 
 ScCellRangeObj::ScCellRangeObj():
         CalcUnoApiTest("/sc/qa/extras/testdocuments"),
-        apitest::XSearchable(OUString("15"), 1),
-        apitest::XReplaceable(OUString("15"), OUString("35"))
+        apitest::XSearchable("15", 1),
+        apitest::XReplaceable("15", "35")
 {
 }
 

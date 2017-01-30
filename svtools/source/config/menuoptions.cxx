@@ -36,7 +36,7 @@ using namespace ::utl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define ROOTNODE_MENU                           OUString("Office.Common/View/Menu"  )
+#define ROOTNODE_MENU                           "Office.Common/View/Menu"
 #define DEFAULT_DONTHIDEDISABLEDENTRIES         false
 #define DEFAULT_FOLLOWMOUSE                     true
 #define DEFAULT_MENUICONS                       TRISTATE_INDET

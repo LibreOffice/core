@@ -1145,7 +1145,7 @@ static LibreOfficeKitDocument* lo_documentLoadWithOptions(LibreOfficeKit* pThis,
     try
     {
         uno::Sequence<css::beans::PropertyValue> aFilterOptions(2);
-        aFilterOptions[0] = css::beans::PropertyValue( OUString("FilterOptions"),
+        aFilterOptions[0] = css::beans::PropertyValue( "FilterOptions",
                                                        0,
                                                        uno::makeAny(OUString::createFromAscii(pOptions)),
                                                        beans::PropertyState_DIRECT_VALUE);

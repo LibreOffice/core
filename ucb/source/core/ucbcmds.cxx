@@ -214,17 +214,17 @@ CommandProcessorInfo::CommandProcessorInfo()
 
     (*m_pInfo)[ 0 ]
         = ucb::CommandInfo(
-            OUString( GETCOMMANDINFO_NAME ), // Name
+            GETCOMMANDINFO_NAME, // Name
             GETCOMMANDINFO_HANDLE, // Handle
             cppu::UnoType<void>::get() ); // ArgType
     (*m_pInfo)[ 1 ]
         = ucb::CommandInfo(
-            OUString( GLOBALTRANSFER_NAME ), // Name
+            GLOBALTRANSFER_NAME, // Name
             GLOBALTRANSFER_HANDLE, // Handle
             cppu::UnoType<ucb::GlobalTransferCommandArgument>::get() ); // ArgType
     (*m_pInfo)[ 2 ]
         = ucb::CommandInfo(
-            OUString( CHECKIN_NAME ), // Name
+            CHECKIN_NAME, // Name
             CHECKIN_HANDLE, // Handle
             cppu::UnoType<ucb::CheckinArgument>::get() ); // ArgType
 }
@@ -443,7 +443,7 @@ bool setTitle(
         aPropValues[ 0 ].Value  = uno::makeAny( rNewTitle );
 
         ucb::Command aSetPropsCommand(
-            OUString(  "setPropertyValues"  ),
+            "setPropertyValues",
             -1,
             uno::makeAny( aPropValues ) );
 
@@ -497,7 +497,7 @@ uno::Reference< ucb::XContent > createNew(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Folder"),
+                                  "Folder",
                                   -1,
                                   uno::makeAny(rContext.aArg.TargetURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -515,7 +515,7 @@ uno::Reference< ucb::XContent > createNew(
     aPropsToObtain[ 0 ].Handle = -1;
 
     ucb::Command aGetPropsCommand(
-            OUString("getPropertyValues"),
+            "getPropertyValues",
             -1,
             uno::makeAny( aPropsToObtain ) );
 
@@ -548,7 +548,7 @@ uno::Reference< ucb::XContent > createNew(
         {
             uno::Any aProps
                 = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Folder"),
+                                  "Folder",
                                   -1,
                                   uno::makeAny(rContext.aArg.TargetURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -569,7 +569,7 @@ uno::Reference< ucb::XContent > createNew(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                              OUString("Folder"),
+                              "Folder",
                               -1,
                               uno::makeAny(rContext.aArg.TargetURL),
                               beans::PropertyState_DIRECT_VALUE));
@@ -660,7 +660,7 @@ uno::Reference< ucb::XContent > createNew(
                 // First, try it using "CreatabeleContentsInfo" property and
                 // "createNewContent" command -> the "new" way.
                 ucb::Command aCreateNewCommand(
-                   OUString("createNewContent"),
+                   "createNewContent",
                    -1,
                    uno::makeAny( aTypesInfo[ n ] ) );
 
@@ -680,7 +680,7 @@ uno::Reference< ucb::XContent > createNew(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 OUString( "Folder"),
+                                 "Folder",
                                  -1,
                                  uno::makeAny(rContext.aArg.TargetURL),
                                  beans::PropertyState_DIRECT_VALUE));
@@ -706,7 +706,7 @@ void transferProperties(
     const uno::Reference< ucb::XCommandProcessor > & xCommandProcessorN )
 {
     ucb::Command aGetPropertySetInfoCommand(
-                OUString("getPropertySetInfo"),
+                "getPropertySetInfo",
                 -1,
                 uno::Any() );
 
@@ -718,7 +718,7 @@ void transferProperties(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(rContext.aArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -734,7 +734,7 @@ void transferProperties(
     uno::Sequence< beans::Property > aAllProps = xInfo->getProperties();
 
     ucb::Command aGetPropsCommand1(
-                OUString("getPropertyValues"),
+                "getPropertyValues",
                 -1,
                 uno::makeAny( aAllProps ) );
 
@@ -746,7 +746,7 @@ void transferProperties(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(rContext.aArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -847,7 +847,7 @@ void transferProperties(
     // Set properties at new object.
 
     ucb::Command aSetPropsCommand(
-                OUString("setPropertyValues"),
+                "setPropertyValues",
                 -1,
                 uno::makeAny( aPropValues ) );
 
@@ -879,7 +879,7 @@ uno::Reference< io::XInputStream > getInputStream(
         aArg.Properties = uno::Sequence< beans::Property >( 0 ); // unused
 
         ucb::Command aOpenCommand(
-                                OUString("open"),
+                                "open",
                                 -1,
                                 uno::makeAny( aArg ) );
 
@@ -913,7 +913,7 @@ uno::Reference< io::XInputStream > getInputStream(
             aArg.Properties = uno::Sequence< beans::Property >( 0 );
 
             ucb::Command aOpenCommand(
-                                OUString("open"),
+                                "open",
                                 -1,
                                 uno::makeAny( aArg ) );
 
@@ -956,7 +956,7 @@ uno::Reference< sdbc::XResultSet > getResultSet(
     aArg.Sink       = nullptr;
     aArg.Properties = aProps;
 
-    ucb::Command aOpenCommand( OUString("open"),
+    ucb::Command aOpenCommand( "open",
                                      -1,
                                      uno::makeAny( aArg ) );
     try
@@ -997,7 +997,7 @@ void handleNameClashRename(
     aProps[ 0 ].Handle = -1;
 
     ucb::Command aGetPropsCommand(
-            OUString("getPropertyValues"),
+            "getPropertyValues",
             -1,
             uno::makeAny( aProps ) );
 
@@ -1009,7 +1009,7 @@ void handleNameClashRename(
         uno::Any aProps2
             = uno::makeAny(
                      beans::PropertyValue(
-                         OUString(  "Uri"  ),
+                         "Uri",
                          -1,
                          uno::makeAny(
                              xNew->getIdentifier()->getContentIdentifier() ),
@@ -1097,7 +1097,7 @@ void handleNameClashRename(
                         uno::Any aProps2
                             = uno::makeAny(
                                 beans::PropertyValue(
-                                    OUString( "Uri"  ),
+                                    "Uri",
                                     -1,
                                     uno::makeAny(
                                         xNew->getIdentifier()->
@@ -1119,7 +1119,7 @@ void handleNameClashRename(
             aArg.ReplaceExisting = false;
 
             ucb::Command aInsertCommand(
-                        OUString("insert"),
+                        "insert",
                         -1,
                         uno::makeAny( aArg ) );
 
@@ -1199,7 +1199,7 @@ void globalTransfer_(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Folder"),
+                                  "Folder",
                                   -1,
                                   uno::makeAny(rContext.aArg.TargetURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1222,7 +1222,7 @@ void globalTransfer_(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(
                                       xNew->getIdentifier()->
@@ -1245,7 +1245,7 @@ void globalTransfer_(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(rContext.aArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1318,7 +1318,7 @@ void globalTransfer_(
         try
         {
             ucb::Command aInsertCommand(
-                                    OUString("insert"),
+                                    "insert",
                                     -1,
                                     uno::makeAny( aArg ) );
 
@@ -1489,7 +1489,7 @@ void globalTransfer_(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 OUString( "Uri"),
+                                 "Uri",
                                  -1,
                                  uno::makeAny(rContext.aArg.SourceURL),
                                  beans::PropertyState_DIRECT_VALUE));
@@ -1510,7 +1510,7 @@ void globalTransfer_(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 OUString( "Uri"),
+                                 "Uri",
                                  -1,
                                  uno::makeAny(rContext.aArg.SourceURL),
                                  beans::PropertyState_DIRECT_VALUE));
@@ -1576,7 +1576,7 @@ void globalTransfer_(
             aAny =
                 xcp->execute(
                     ucb::Command(
-                        OUString("getCommandInfo"),
+                        "getCommandInfo",
                         -1,
                         uno::Any()),
                     0,
@@ -1648,7 +1648,7 @@ void UniversalContentBroker::globalTransfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(rArg.TargetURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1671,7 +1671,7 @@ void UniversalContentBroker::globalTransfer(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             OUString( "Uri"),
+                             "Uri",
                              -1,
                              uno::makeAny(rArg.TargetURL),
                              beans::PropertyState_DIRECT_VALUE));
@@ -1700,7 +1700,7 @@ void UniversalContentBroker::globalTransfer(
             try
             {
                 ucb::Command aCommand(
-                    OUString( "transfer" ), // Name
+                    "transfer", // Name
                     -1,                                           // Handle
                     uno::makeAny( aTransferArg ) );               // Argument
 
@@ -1737,7 +1737,7 @@ void UniversalContentBroker::globalTransfer(
                             aTransferArg.MimeType );
 
                         ucb::Command aCommand1(
-                            OUString("transfer"),
+                            "transfer",
                             -1,
                             uno::makeAny( aTransferArg1 ) );
 
@@ -1831,7 +1831,7 @@ void UniversalContentBroker::globalTransfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(rArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1850,7 +1850,7 @@ void UniversalContentBroker::globalTransfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(rArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1877,7 +1877,7 @@ void UniversalContentBroker::globalTransfer(
     aProps[ 3 ].Handle = -1; /* unknown */
 
     ucb::Command aGetPropsCommand(
-                OUString("getPropertyValues"),
+                "getPropertyValues",
                 -1,
                 uno::makeAny( aProps ) );
 
@@ -1888,7 +1888,7 @@ void UniversalContentBroker::globalTransfer(
     {
         uno::Any aProps2
             = uno::makeAny(beans::PropertyValue(
-                               OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(rArg.SourceURL),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1927,8 +1927,8 @@ void UniversalContentBroker::globalTransfer(
         try
         {
             ucb::Command aCommand(
-                OUString("delete"), // Name
-                -1,                                         // Handle
+                "delete",                   // Name
+                -1,                         // Handle
                 uno::makeAny( true ) );     // Argument
 
             xCommandProcessor->execute( aCommand, 0, xLocalEnv );
@@ -1975,7 +1975,7 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri" ), -1,
+                                  "Uri", -1,
                                   uno::makeAny( rArg.TargetURL ),
                                   beans::PropertyState_DIRECT_VALUE ) );
         ucbhelper::cancelCommandExecution(
@@ -1994,7 +1994,7 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
         uno::Any aProps
             = uno::makeAny(
                      beans::PropertyValue(
-                         OUString( "Uri" ), -1,
+                         "Uri", -1,
                          uno::makeAny( rArg.TargetURL ),
                          beans::PropertyState_DIRECT_VALUE ) );
         ucbhelper::cancelCommandExecution(
@@ -2009,7 +2009,7 @@ uno::Any UniversalContentBroker::checkIn( const ucb::CheckinArgument& rArg,
     try
     {
         ucb::Command aCommand(
-            OUString( "checkin" ), -1,
+            "checkin", -1,
             uno::makeAny( rArg ) );
 
         aRet = xCommandProcessor->execute( aCommand, 0, xLocalEnv );

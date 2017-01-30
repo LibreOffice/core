@@ -505,7 +505,7 @@ void PresenterWindowManager::RestoreViewMode()
     sal_Int32 nMode (0);
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString("/org.openoffice.Office.PresenterScreen/"),
+        "/org.openoffice.Office.PresenterScreen/",
         PresenterConfigurationAccess::READ_ONLY);
     aConfiguration.GetConfigurationNode("Presenter/InitialViewMode") >>= nMode;
     switch (nMode)
@@ -531,7 +531,7 @@ void PresenterWindowManager::StoreViewMode (const ViewMode eViewMode)
     {
         PresenterConfigurationAccess aConfiguration (
             mxComponentContext,
-            OUString("/org.openoffice.Office.PresenterScreen/"),
+            "/org.openoffice.Office.PresenterScreen/",
             PresenterConfigurationAccess::READ_WRITE);
         aConfiguration.GoToChild(OUString("Presenter"));
         Any aValue;

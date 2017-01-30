@@ -281,17 +281,17 @@ private:
 XPropertySetInfoImpl2::XPropertySetInfoImpl2()
     : m_seq( 3 )
 {
-    m_seq[0] = Property( OUString("HostName"),
+    m_seq[0] = Property( "HostName",
                          -1,
                          cppu::UnoType<OUString>::get(),
                          PropertyAttribute::READONLY );
 
-    m_seq[1] = Property( OUString("HomeDirectory"),
+    m_seq[1] = Property( "HomeDirectory",
                          -1,
                          cppu::UnoType<OUString>::get(),
                          PropertyAttribute::READONLY );
 
-    m_seq[2] = Property( OUString("FileSystemNotation"),
+    m_seq[2] = Property( "FileSystemNotation",
                          -1,
                          cppu::UnoType<sal_Int32>::get(),
                          PropertyAttribute::READONLY );

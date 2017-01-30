@@ -71,14 +71,14 @@ namespace abp
 
             // the parent window
             Reference< XWindow > xDialogParent = VCLUnoHelper::GetInterface(m_pMessageParent);
-            *pArguments++ <<= PropertyValue(OUString("ParentWindow"), -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue("ParentWindow", -1, makeAny(xDialogParent), PropertyState_DIRECT_VALUE);
 
             // the title of the dialog
             OUString sAdminDialogTitle(ModuleRes(RID_STR_ADMINDIALOGTITLE).toString());
-            *pArguments++ <<= PropertyValue(OUString("Title"), -1, makeAny(sAdminDialogTitle), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue("Title", -1, makeAny(sAdminDialogTitle), PropertyState_DIRECT_VALUE);
 
             // the name of the new data source
-            *pArguments++ <<= PropertyValue(OUString("InitialSelection"), -1, makeAny(m_xDataSource), PropertyState_DIRECT_VALUE);
+            *pArguments++ <<= PropertyValue("InitialSelection", -1, makeAny(m_xDataSource), PropertyState_DIRECT_VALUE);
 
             // create the dialog
             Reference< XExecutableDialog > xDialog;

@@ -965,7 +965,7 @@ TaskManager::setv( const OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         ret[0] <<= beans::PropertyValue(
-                            OUString("Uri"), -1,
+                            "Uri", -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError(IOErrorCode_GENERAL);
@@ -1029,7 +1029,7 @@ TaskManager::setv( const OUString& aUnqPath,
                         --propChanged; // unsuccessful setting
                         uno::Sequence< uno::Any > names( 1 );
                         names[0] <<= beans::PropertyValue(
-                            OUString("Uri"), -1,
+                            "Uri", -1,
                             uno::makeAny(aUnqPath),
                             beans::PropertyState_DIRECT_VALUE);
                         IOErrorCode ioError;
@@ -3048,7 +3048,7 @@ uno::Sequence< ucb::ContentInfo > TaskManager::queryCreatableContentsInfo()
 
     uno::Sequence< beans::Property > props( 1 );
     props[0] = beans::Property(
-        OUString("Title"),
+        "Title",
         -1,
         cppu::UnoType<OUString>::get(),
         beans::PropertyAttribute::MAYBEVOID

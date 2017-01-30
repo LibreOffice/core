@@ -32,7 +32,7 @@ using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
-#define ROOTNODE_START                  OUString("Office.Common/Print")
+#define ROOTNODE_START                  "Office.Common/Print"
 
 #define PROPERTYNAME_PAPERSIZE          OUString("Warning/PaperSize")
 #define PROPERTYNAME_PAPERORIENTATION   OUString("Warning/PaperOrientation")

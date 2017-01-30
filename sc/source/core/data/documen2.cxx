@@ -578,8 +578,7 @@ void ScDocument::ResetClip( ScDocument* pSourceDoc, SCTAB nTab )
         {
             maTabs.resize(nTab+1, nullptr );
         }
-        maTabs[nTab] = new ScTable(this, nTab,
-                            OUString("baeh"));
+        maTabs[nTab] = new ScTable(this, nTab, "baeh");
         if (nTab < static_cast<SCTAB>(pSourceDoc->maTabs.size()) && pSourceDoc->maTabs[nTab])
             maTabs[nTab]->SetLayoutRTL( pSourceDoc->maTabs[nTab]->IsLayoutRTL() );
     }

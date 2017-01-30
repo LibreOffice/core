@@ -3171,7 +3171,7 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
                 OUString aContentType;
                 aAny >>= aContentType;
 
-                pImpl->xAttributes->Append( SvKeyValue( OUString("content-type"), aContentType ) );
+                pImpl->xAttributes->Append( SvKeyValue( "content-type", aContentType ) );
             }
             catch ( const css::uno::Exception& )
             {

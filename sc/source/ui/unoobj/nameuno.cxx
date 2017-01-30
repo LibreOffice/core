@@ -574,7 +574,7 @@ void SAL_CALL ScNamedRangesObj::outputList( const table::CellAddress& aOutputPos
 uno::Reference<container::XEnumeration> SAL_CALL ScNamedRangesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.NamedRangesEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.NamedRangesEnumeration");
 }
 
 // container::XIndexAccess
@@ -1122,7 +1122,7 @@ void SAL_CALL ScLabelRangesObj::removeByIndex( sal_Int32 nIndex )
 uno::Reference<container::XEnumeration> SAL_CALL ScLabelRangesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.LabelRangesEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.LabelRangesEnumeration");
 }
 
 // container::XIndexAccess

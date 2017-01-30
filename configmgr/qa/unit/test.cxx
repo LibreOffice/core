@@ -450,7 +450,7 @@ css::uno::Reference< css::uno::XInterface > Test::createViewAccess(
     css::uno::Any arg(
         css::uno::makeAny(
             css::beans::NamedValue(
-                OUString("nodepath"),
+                "nodepath",
                 css::uno::makeAny(path))));
     return provider_->createInstanceWithArguments(
         "com.sun.star.configuration.ConfigurationAccess",
@@ -463,7 +463,7 @@ css::uno::Reference< css::uno::XInterface > Test::createUpdateAccess(
     css::uno::Any arg(
         css::uno::makeAny(
             css::beans::NamedValue(
-                OUString("nodepath"),
+                "nodepath",
                 css::uno::makeAny(path))));
     return provider_->createInstanceWithArguments(
         "com.sun.star.configuration.ConfigurationUpdateAccess",

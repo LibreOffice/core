@@ -185,7 +185,7 @@ void SessionListener::StoreSession( bool bAsync )
             xDispatch->addStatusListener(this, aURL);
 
         Sequence< PropertyValue > args(1);
-        args[0] = PropertyValue(OUString("DispatchAsynchron"),-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
+        args[0] = PropertyValue("DispatchAsynchron",-1,makeAny(bAsync),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception& e) {
         SAL_WARN("fwk.session",e.Message);
@@ -213,7 +213,7 @@ void SessionListener::QuitSessionQuietly()
         xURLTransformer->parseStrict(aURL);
 
         Sequence< PropertyValue > args(1);
-        args[0] = PropertyValue(OUString("DispatchAsynchron"),-1,makeAny(false),PropertyState_DIRECT_VALUE);
+        args[0] = PropertyValue("DispatchAsynchron",-1,makeAny(false),PropertyState_DIRECT_VALUE);
         xDispatch->dispatch(aURL, args);
     } catch (const css::uno::Exception& e) {
         SAL_WARN("fwk.session",e.Message);

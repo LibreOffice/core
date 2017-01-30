@@ -818,7 +818,7 @@ bool callColumnFormatDialog(vcl::Window* _pParent,
         new SvxNumberInfoItem(SID_ATTR_NUMBERFORMAT_INFO)
     };
 
-    SfxItemPool* pPool = new SfxItemPool(OUString("GridBrowserProperties"), SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, &pDefaults);
+    SfxItemPool* pPool = new SfxItemPool("GridBrowserProperties", SBA_DEF_RANGEFORMAT, SBA_ATTR_ALIGN_HOR_JUSTIFY, aItemInfos, &pDefaults);
     pPool->SetDefaultMetric( MapUnit::MapTwip );    // ripped, don't understand why
     pPool->FreezeIdRanges();                        // the same
 
@@ -1445,7 +1445,7 @@ bool insertHierachyElement( vcl::Window* _pParent, const Reference< XComponentCo
     {
         OUString sError(ModuleRes(STR_NAME_ALREADY_EXISTS));
         sError = sError.replaceFirst("#",sNewName);
-        throw SQLException(sError,nullptr,OUString("S1000") ,0,Any());
+        throw SQLException(sError,nullptr,"S1000",0,Any());
     }
 
     try

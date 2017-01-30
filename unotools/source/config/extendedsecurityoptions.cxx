@@ -39,7 +39,7 @@ using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
-#define ROOTNODE_SECURITY               OUString("Office.Security")
+#define ROOTNODE_SECURITY               "Office.Security"
 
 #define SECURE_EXTENSIONS_SET           OUString("SecureExtensions")
 #define EXTENSION_PROPNAME              OUString("/Extension")

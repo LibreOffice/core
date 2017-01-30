@@ -959,7 +959,7 @@ uno::Any SAL_CALL ScTabViewObj::getSelection()
 uno::Reference<container::XEnumeration> SAL_CALL ScTabViewObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SpreadsheetViewPanesEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.SpreadsheetViewPanesEnumeration");
 }
 
 // XIndexAccess

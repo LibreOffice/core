@@ -55,16 +55,16 @@ embed::VisualRepresentation OleEmbeddedObject::GetVisualRepresentationInNativeFo
     {
         // it's a bitmap
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            OUString( "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"" ),
-            OUString( "Bitmap" ),
+            "application/x-openoffice-bitmap;windows_formatname=\"Bitmap\"",
+            "Bitmap",
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
     else
     {
         // it's a metafile
         aVisualRepr.Flavor = datatransfer::DataFlavor(
-            OUString( "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"" ),
-            OUString( "Windows Metafile" ),
+            "application/x-openoffice-wmf;windows_formatname=\"Image WMF\"",
+            "Windows Metafile",
             cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
     }
 

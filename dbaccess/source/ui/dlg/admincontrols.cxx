@@ -156,7 +156,7 @@ namespace dbaui
         m_aControlDependencies.enableOnRadioCheck( *m_pNamedPipeRadio, *m_pNamedPipe );
 
         m_aControlDependencies.addController( std::shared_ptr<svt::DialogController>(
-            new TextResetOperatorController( *m_pHostName, OUString("localhost") )
+            new TextResetOperatorController( *m_pHostName, "localhost" )
         ) );
 
         // sockets are available on Unix systems only, named pipes only on Windows

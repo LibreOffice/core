@@ -73,7 +73,7 @@ public:
 };
 
 SfxMiscCfg::SfxMiscCfg() :
-    ConfigItem(OUString("Office.Common") ),
+    ConfigItem( "Office.Common" ),
     bPaperSize(false),
     bPaperOrientation (false),
     bNotFound (false),

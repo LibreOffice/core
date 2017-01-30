@@ -117,9 +117,9 @@ PropBrw::PropBrw(const Reference< XComponentContext >& _xORB, vcl::Window* pPare
         {
             ::cppu::ContextEntry_Init aHandlerContextInfo[] =
             {
-                ::cppu::ContextEntry_Init( OUString( "ContextDocument" ), makeAny( m_pDesignView->getController().getModel() )),
-                ::cppu::ContextEntry_Init( OUString( "DialogParentWindow" ), makeAny( VCLUnoHelper::GetInterface ( this ) )),
-                ::cppu::ContextEntry_Init( OUString( "ActiveConnection" ), makeAny( m_pDesignView->getController().getConnection() ) ),
+                ::cppu::ContextEntry_Init( "ContextDocument", makeAny( m_pDesignView->getController().getModel() )),
+                ::cppu::ContextEntry_Init( "DialogParentWindow", makeAny( VCLUnoHelper::GetInterface ( this ) )),
+                ::cppu::ContextEntry_Init( "ActiveConnection", makeAny( m_pDesignView->getController().getConnection() ) ),
             };
             m_xInspectorContext.set(
                 ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),

@@ -88,38 +88,38 @@ Sequence< DriverPropertyInfo > SAL_CALL ODriver::getPropertyInfo( const OUString
         aBoolean[1] = "1";
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("FieldDelimiter")
-                ,OUString("Field separator.")
+                "FieldDelimiter"
+                ,"Field separator."
                 ,false
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("HeaderLine")
-                ,OUString("Text contains headers.")
+                "HeaderLine"
+                ,"Text contains headers."
                 ,false
-                ,OUString("0")
+                ,"0"
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("StringDelimiter")
-                ,OUString("Text separator.")
+                "StringDelimiter"
+                ,"Text separator."
                 ,false
-                ,OUString("0")
+                ,"0"
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("DecimalDelimiter")
-                ,OUString("Decimal separator.")
+                "DecimalDelimiter"
+                ,"Decimal separator."
                 ,false
-                ,OUString("0")
+                ,"0"
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("ThousandDelimiter")
-                ,OUString("Thousands separator.")
+                "ThousandDelimiter"
+                ,"Thousands separator."
                 ,false
-                ,OUString("0")
+                ,"0"
                 ,aBoolean)
                 );
         return ::comphelper::concatSequences(OFileDriver::getPropertyInfo(url,info ),

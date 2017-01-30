@@ -232,7 +232,7 @@ namespace sw { namespace mark
 
     // TODO: everything else uses MarkBase::GenerateNewName ?
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
-        : MarkBase(rPaM, OUString("__NavigatorReminder__"))
+        : MarkBase(rPaM, "__NavigatorReminder__")
     { }
 
     UnoMark::UnoMark(const SwPaM& aPaM)

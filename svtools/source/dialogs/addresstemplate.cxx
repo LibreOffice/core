@@ -286,7 +286,7 @@ void AssignmentPersistentData::ImplCommit()
 
 
     AssignmentPersistentData::AssignmentPersistentData()
-        :ConfigItem( OUString( "Office.DataAccess/AddressBook" ))
+        :ConfigItem("Office.DataAccess/AddressBook")
     {
         Sequence< OUString > aStoredNames = GetNodeNames("Fields");
         const OUString* pStoredNames = aStoredNames.getConstArray();

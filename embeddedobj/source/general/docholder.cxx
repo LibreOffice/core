@@ -430,7 +430,7 @@ bool DocumentHolder::ShowInplace( const uno::Reference< awt::XWindowPeer >& xPar
         }
 
         awt::WindowDescriptor aOwnWinDescriptor( awt::WindowClass_TOP,
-                                                OUString("dockingwindow"),
+                                                "dockingwindow",
                                                 xMyParent,
                                                 0,
                                                 awt::Rectangle(),//aOwnRectangle,

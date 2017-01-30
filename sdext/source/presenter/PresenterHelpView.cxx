@@ -352,7 +352,7 @@ void PresenterHelpView::ReadHelpStrings()
     mpTextContainer.reset(new TextContainer());
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString("/org.openoffice.Office.PresenterScreen/"),
+        "/org.openoffice.Office.PresenterScreen/",
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XNameAccess> xStrings (
         aConfiguration.GetConfigurationNode("PresenterScreenSettings/HelpView/HelpStrings"),
