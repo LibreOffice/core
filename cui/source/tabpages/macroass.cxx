@@ -342,13 +342,13 @@ bool SfxMacroTabPage::AssignDeleteHdl(Control* pBtn)
         if( sScriptURI.startsWith( "vnd.sun.star.script:" ) )
         {
             aTbl.Insert(
-                nEvent, SvxMacro( sScriptURI, OUString( SVX_MACRO_LANGUAGE_SF ) ) );
+                nEvent, SvxMacro( sScriptURI, SVX_MACRO_LANGUAGE_SF ) );
         }
         else
         {
             OSL_ENSURE( false, "SfxMacroTabPage::AssignDeleteHdl_Impl: this branch is *not* dead? (out of interest: tell fs, please!)" );
             aTbl.Insert(
-                nEvent, SvxMacro( sScriptURI, OUString( SVX_MACRO_LANGUAGE_STARBASIC ) ) );
+                nEvent, SvxMacro( sScriptURI, SVX_MACRO_LANGUAGE_STARBASIC ) );
         }
     }
 

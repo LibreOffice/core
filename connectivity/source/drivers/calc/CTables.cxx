@@ -41,7 +41,7 @@ using namespace ::com::sun::star::container;
 sdbcx::ObjectType OCalcTables::createObject(const OUString& _rName)
 {
     OCalcTable* pTable = new OCalcTable(this, static_cast<OCalcConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
-                                        _rName,OUString("TABLE"));
+                                        _rName,"TABLE");
     sdbcx::ObjectType xRet = pTable;
     pTable->construct();
     return xRet;

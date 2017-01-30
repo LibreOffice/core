@@ -134,10 +134,10 @@ uno::Any SAL_CALL ScSheetEventsObj::getByName( const OUString& aName )
     {
         uno::Sequence<beans::PropertyValue> aPropSeq( 2 );
         aPropSeq[0] = beans::PropertyValue(
-                        OUString("EventType"), -1,
+                        "EventType", -1,
                         uno::makeAny( OUString("Script") ), beans::PropertyState_DIRECT_VALUE );
         aPropSeq[1] = beans::PropertyValue(
-                        OUString("Script"), -1,
+                        "Script", -1,
                         uno::makeAny( *pScript ), beans::PropertyState_DIRECT_VALUE );
         aRet <<= aPropSeq;
     }

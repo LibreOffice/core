@@ -52,7 +52,7 @@ namespace svt {
 
 
 ShareControlFile::ShareControlFile( const OUString& aOrigURL )
-: LockFileCommon( aOrigURL, OUString( ".~sharing."  ) )
+: LockFileCommon( aOrigURL, ".~sharing." )
 {
     if ( !m_xStream.is() && !m_aURL.isEmpty() )
     {

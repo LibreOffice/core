@@ -185,7 +185,7 @@ static_assert(
 
 ScDocumentPool::ScDocumentPool()
 
-    :   SfxItemPool ( OUString("ScDocumentPool"),
+    :   SfxItemPool ( "ScDocumentPool",
                         ATTR_STARTINDEX, ATTR_ENDINDEX,
                         aItemInfos, nullptr, false/*bLoadRefCounts*/ ),
     mnCurrentMaxKey(0)
@@ -290,8 +290,7 @@ ScDocumentPool::ScDocumentPool()
     if ( ScGlobal::GetEmptyBrushItem() )
         rPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet, ScGlobal::GetRscString(STR_STYLENAME_STANDARD) );
     else
-        rPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet,
-            OUString(STRING_STANDARD) ); // FIXME: without name?
+        rPoolDefaults[ ATTR_PATTERN     - ATTR_STARTINDEX ] = new ScPatternAttr( pSet, STRING_STANDARD ); // FIXME: without name?
 
     rPoolDefaults[ ATTR_LRSPACE         - ATTR_STARTINDEX ] = new SvxLRSpaceItem( ATTR_LRSPACE );
     rPoolDefaults[ ATTR_ULSPACE         - ATTR_STARTINDEX ] = new SvxULSpaceItem( ATTR_ULSPACE );

@@ -97,7 +97,7 @@ Reference< XResultSetMetaData > SAL_CALL SequenceResultSet::getMetaData(  )
         // I did not find "IM001" in a specific standard,
         // but it seems to be used by other systems (such as ODBC)
         // and some parts of LibreOffice special-case it.
-            OUString( "IM001" ), 1, Any() );
+            "IM001", 1, Any() );
     }
     return m_meta;
 }

@@ -506,7 +506,7 @@ void SchXMLSeries2Context::EndElement()
     //different handling for different chart types necessary
     if( bIsScatterChart || ( nDomainCount==1 && !bIsBubbleChart ) )
     {
-        DomainInfo aDomainInfo( OUString( "values-x" ), m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
+        DomainInfo aDomainInfo( "values-x", m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
         bool bCreateXValues = true;
         if( !maDomainAddresses.empty() )
         {
@@ -539,7 +539,7 @@ void SchXMLSeries2Context::EndElement()
     {
         if( nDomainCount>1 )
         {
-            DomainInfo aDomainInfo( OUString( "values-x" ), maDomainAddresses[1], m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
+            DomainInfo aDomainInfo( "values-x", maDomainAddresses[1], m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
             if( m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.isEmpty() )
             {
                 //for bubble chart the second domain contains the x values which should become an index smaller than y values for own data table
@@ -552,12 +552,12 @@ void SchXMLSeries2Context::EndElement()
         }
         else if( !m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress.isEmpty() )
         {
-            DomainInfo aDomainInfo( OUString( "values-x" ), m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress, m_rGlobalSeriesImportInfo.nFirstSecondDomainIndex ) ;
+            DomainInfo aDomainInfo( "values-x", m_rGlobalSeriesImportInfo.aFirstSecondDomainAddress, m_rGlobalSeriesImportInfo.nFirstSecondDomainIndex ) ;
             aDomainInfos.push_back( aDomainInfo );
         }
         if( nDomainCount>0)
         {
-            DomainInfo aDomainInfo( OUString( "values-y" ), maDomainAddresses.front(), m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
+            DomainInfo aDomainInfo( "values-y", maDomainAddresses.front(), m_rGlobalSeriesImportInfo.nCurrentDataIndex ) ;
             if( m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.isEmpty() )
             {
                 m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress = maDomainAddresses.front();
@@ -568,7 +568,7 @@ void SchXMLSeries2Context::EndElement()
         }
         else if( !m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress.isEmpty() )
         {
-            DomainInfo aDomainInfo( OUString("values-y"), m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
+            DomainInfo aDomainInfo( "values-y", m_rGlobalSeriesImportInfo.aFirstFirstDomainAddress, m_rGlobalSeriesImportInfo.nFirstFirstDomainIndex ) ;
             aDomainInfos.push_back( aDomainInfo );
         }
     }

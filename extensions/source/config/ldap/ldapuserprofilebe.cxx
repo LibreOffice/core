@@ -108,7 +108,7 @@ bool LdapUserProfileBe::readLdapConfiguration(
         uno::Reference< lang::XMultiServiceFactory > xCfgProvider(
             css::configuration::theDefaultProvider::get(context));
 
-        css::beans::NamedValue aPath(OUString("nodepath"), uno::makeAny(kComponent) );
+        css::beans::NamedValue aPath("nodepath", uno::makeAny(kComponent) );
 
         uno::Sequence< uno::Any > aArgs(1);
         aArgs[0] <<=  aPath;

@@ -46,7 +46,7 @@ using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star;
 
-#define ROOTNODE_ADDONMENU                              OUString("Office.Addons" )
+#define ROOTNODE_ADDONMENU                              "Office.Addons"
 #define PATHDELIMITER                                   OUString("/"             )
 #define SEPARATOR_URL                                   "private:separator"
 

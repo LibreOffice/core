@@ -88,16 +88,16 @@ static void lcl_SetChartParameters( const uno::Reference< chart2::data::XDataRec
     {
         uno::Sequence< beans::PropertyValue > aArgs( 4 );
         aArgs[0] = beans::PropertyValue(
-            OUString("CellRangeRepresentation"), -1,
+            "CellRangeRepresentation", -1,
             uno::makeAny( rRanges ), beans::PropertyState_DIRECT_VALUE );
         aArgs[1] = beans::PropertyValue(
-            OUString("HasCategories"), -1,
+            "HasCategories", -1,
             uno::makeAny( bHasCategories ), beans::PropertyState_DIRECT_VALUE );
         aArgs[2] = beans::PropertyValue(
-            OUString("FirstCellAsLabel"), -1,
+            "FirstCellAsLabel", -1,
             uno::makeAny( bFirstCellAsLabel ), beans::PropertyState_DIRECT_VALUE );
         aArgs[3] = beans::PropertyValue(
-            OUString("DataRowSource"), -1,
+            "DataRowSource", -1,
             uno::makeAny( eDataRowSource ), beans::PropertyState_DIRECT_VALUE );
         xReceiver->setArguments( aArgs );
     }

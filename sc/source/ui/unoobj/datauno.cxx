@@ -618,7 +618,7 @@ void SAL_CALL ScSubTotalDescriptorBase::addNew(
 uno::Reference<container::XEnumeration> SAL_CALL ScSubTotalDescriptorBase::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SubTotalFieldsEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.SubTotalFieldsEnumeration");
 }
 
 // XIndexAccess
@@ -2215,7 +2215,7 @@ void SAL_CALL ScDatabaseRangesObj::removeByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScDatabaseRangesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DatabaseRangesEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.DatabaseRangesEnumeration");
 }
 
 // XIndexAccess

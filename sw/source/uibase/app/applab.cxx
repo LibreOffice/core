@@ -335,8 +335,7 @@ void SwModule::InsertLab(SfxRequest& rReq, bool bLabel)
                                 else
                                     pSh->SetMark();     // set only the mark
 
-                                SwSectionData aSect(CONTENT_SECTION,
-                                    OUString(MASTER_LABEL));
+                                SwSectionData aSect(CONTENT_SECTION, MASTER_LABEL);
                                 pSh->InsertSection(aSect);
                             }
                         }

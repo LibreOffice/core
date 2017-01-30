@@ -281,7 +281,7 @@ std::shared_ptr<PresenterTheme::Theme> PresenterTheme::ReadTheme()
 
     PresenterConfigurationAccess aConfiguration (
         mxContext,
-        OUString("/org.openoffice.Office.PresenterScreen/"),
+        "/org.openoffice.Office.PresenterScreen/",
         PresenterConfigurationAccess::READ_ONLY);
 
     return aReadContext.ReadTheme(aConfiguration, msThemeName);
@@ -369,7 +369,7 @@ std::shared_ptr<PresenterConfigurationAccess> PresenterTheme::GetNodeForViewStyl
     std::shared_ptr<PresenterConfigurationAccess> pConfiguration (
         new PresenterConfigurationAccess(
             mxContext,
-            OUString("/org.openoffice.Office.PresenterScreen/"),
+            "/org.openoffice.Office.PresenterScreen/",
             PresenterConfigurationAccess::READ_WRITE));
 
     // Get configuration node for the view style container of the current

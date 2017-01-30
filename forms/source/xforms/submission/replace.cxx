@@ -64,9 +64,9 @@ CSubmission::SubmissionResult CSubmission::replace(const OUString& aReplace, con
             // open the stream from the result...
             // build media descriptor
             Sequence< PropertyValue > descriptor(2);
-            descriptor[0] = PropertyValue(OUString("InputStream"),
+            descriptor[0] = PropertyValue("InputStream",
                 -1, makeAny(m_aResultStream), PropertyState_DIRECT_VALUE);
-            descriptor[1] = PropertyValue(OUString("ReadOnly"),
+            descriptor[1] = PropertyValue("ReadOnly",
                 -1, makeAny(true), PropertyState_DIRECT_VALUE);
 
             OUString aURL = m_aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);

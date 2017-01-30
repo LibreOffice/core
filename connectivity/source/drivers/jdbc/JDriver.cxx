@@ -138,92 +138,92 @@ Sequence< DriverPropertyInfo > SAL_CALL java_sql_Driver::getPropertyInfo( const 
         aBooleanValues[1] = "true";
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("JavaDriverClass")
-                ,OUString("The JDBC driver class name.")
+                "JavaDriverClass"
+                ,"The JDBC driver class name."
                 ,true
                 ,OUString()
                 ,Sequence< OUString >())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("JavaDriverClassPath")
-                ,OUString("The class path where to look for the JDBC driver.")
+                "JavaDriverClassPath"
+                ,"The class path where to look for the JDBC driver."
                 ,true
-                ,OUString(  ""  )
+                , ""
                 ,Sequence< OUString >())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("SystemProperties")
-                ,OUString("Additional properties to set at java.lang.System before loading the driver.")
+                "SystemProperties"
+                ,"Additional properties to set at java.lang.System before loading the driver."
                 ,true
-                ,OUString(  ""  )
+                , ""
                 ,Sequence< OUString >())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("ParameterNameSubstitution")
-                ,OUString("Change named parameters with '?'.")
+                "ParameterNameSubstitution"
+                ,"Change named parameters with '?'."
                 ,false
-                ,OUString(  "false"  )
+                ,"false"
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("IgnoreDriverPrivileges")
-                ,OUString("Ignore the privileges from the database driver.")
+                "IgnoreDriverPrivileges"
+                ,"Ignore the privileges from the database driver."
                 ,false
-                ,OUString(  "false"  )
+                , "false"
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("IsAutoRetrievingEnabled")
-                ,OUString("Retrieve generated values.")
+                "IsAutoRetrievingEnabled"
+                ,"Retrieve generated values."
                 ,false
-                ,OUString(  "false"  )
+                ,"false"
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("AutoRetrievingStatement")
-                ,OUString("Auto-increment statement.")
+                "AutoRetrievingStatement"
+                ,"Auto-increment statement."
                 ,false
                 ,OUString()
                 ,Sequence< OUString >())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("GenerateASBeforeCorrelationName")
-                ,OUString("Generate AS before table correlation names.")
+                "GenerateASBeforeCorrelationName"
+                ,"Generate AS before table correlation names."
                 ,false
-                ,OUString(  "false"  )
+                ,"false"
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("IgnoreCurrency")
-                ,OUString("Ignore the currency field from the ResultsetMetaData.")
+                "IgnoreCurrency"
+                ,"Ignore the currency field from the ResultsetMetaData."
                 ,false
-                ,OUString(  "false"  )
+                ,"false"
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("EscapeDateTime")
-                ,OUString("Escape date time format.")
+                "EscapeDateTime"
+                ,"Escape date time format."
                 ,false
-                ,OUString(  "true"  )
+                ,"true"
                 ,aBooleanValues)
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("TypeInfoSettings")
-                ,OUString("Defines how the type info of the database metadata should be manipulated.")
+                "TypeInfoSettings"
+                ,"Defines how the type info of the database metadata should be manipulated."
                 ,false
                 ,OUString( )
                 ,Sequence< OUString > ())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("ImplicitCatalogRestriction")
-                ,OUString("The catalog which should be used in getTables calls, when the caller passed NULL.")
+                "ImplicitCatalogRestriction"
+                ,"The catalog which should be used in getTables calls, when the caller passed NULL."
                 ,false
                 ,OUString( )
                 ,Sequence< OUString > ())
         );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("ImplicitSchemaRestriction")
-                ,OUString("The schema which should be used in getTables calls, when the caller passed NULL.")
+                "ImplicitSchemaRestriction"
+                ,"The schema which should be used in getTables calls, when the caller passed NULL."
                 ,false
                 ,OUString( )
                 ,Sequence< OUString > ())

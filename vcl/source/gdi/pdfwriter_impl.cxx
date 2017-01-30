@@ -4224,7 +4224,7 @@ void PDFWriterImpl::createDefaultPushButtonAppearance( PDFWidget& rButton, const
     // (that is before endRedirect())
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetButtonTextColor() ), aDA );
-    Font aDummyFont( OUString( "Helvetica" ), aFont.GetFontSize() );
+    Font aDummyFont( "Helvetica", aFont.GetFontSize() );
     sal_Int32 nDummyBuiltin = getBestBuiltinFont( aDummyFont );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nDummyBuiltin].getNameObject() );
@@ -4455,7 +4455,7 @@ void PDFWriterImpl::createDefaultCheckBoxAppearance( PDFWidget& rBox, const PDFW
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( OUString( "ZapfDingbats" ), aFont.GetFontSize() ) );
+    sal_Int32 nBest = getBestBuiltinFont( Font( "ZapfDingbats", aFont.GetFontSize() ) );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( " 0 Tf" );
@@ -4559,7 +4559,7 @@ void PDFWriterImpl::createDefaultRadioButtonAppearance( PDFWidget& rBox, const P
 
     OStringBuffer aDA( 256 );
     appendNonStrokingColor( replaceColor( rWidget.TextColor, rSettings.GetRadioCheckTextColor() ), aDA );
-    sal_Int32 nBest = getBestBuiltinFont( Font( OUString( "ZapfDingbats" ), aFont.GetFontSize() ) );
+    sal_Int32 nBest = getBestBuiltinFont( Font( "ZapfDingbats", aFont.GetFontSize() ) );
     aDA.append( ' ' );
     aDA.append( m_aBuiltinFonts[nBest].getNameObject() );
     aDA.append( " 0 Tf" );
@@ -7465,8 +7465,7 @@ sal_Int32 PDFWriterImpl::emitNamedDestinations()
             // directly with a reader (provided the reader has the feature) we
             // need to set the name of the destination the same way it will be encoded
             // in an Internet link
-            INetURLObject aLocalURL(
-                OUString( "http://ahost.ax"  ) ); //dummy location, won't be used
+            INetURLObject aLocalURL( "http://ahost.ax" ); //dummy location, won't be used
             aLocalURL.SetMark( rDest.m_aDestName );
 
             const OUString aName   = aLocalURL.GetMark( INetURLObject::DecodeMechanism::NONE ); //same coding as

@@ -248,7 +248,7 @@ namespace logging
             // write access to the "Settings" node (which includes settings for all loggers)
             Sequence< Any > aArguments(1);
             aArguments[0] <<= NamedValue(
-                OUString( "nodepath" ),
+                "nodepath",
                 makeAny( OUString( "/org.openoffice.Office.Logging/Settings" ) )
             );
             Reference< XNameContainer > xAllSettings( xConfigProvider->createInstanceWithArguments(

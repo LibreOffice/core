@@ -1028,9 +1028,7 @@ MenuSaveInData::GetEntries()
 {
     if ( pRootEntry == nullptr )
     {
-        pRootEntry = new SvxConfigEntry(
-            OUString("MainMenus"),
-            OUString(), true);
+        pRootEntry = new SvxConfigEntry( "MainMenus", OUString(), true);
 
         if ( m_xMenuSettings.is() )
         {
@@ -3880,9 +3878,7 @@ SvxEntries* ToolbarSaveInData::GetEntries()
     if ( pRootEntry == nullptr )
     {
 
-        pRootEntry.reset( new SvxConfigEntry(
-            OUString("MainToolbars"),
-            OUString(), true) );
+        pRootEntry.reset( new SvxConfigEntry( "MainToolbars", OUString(), true) );
 
         uno::Sequence< uno::Sequence < beans::PropertyValue > > info =
             GetConfigManager()->getUIElementsInfo(

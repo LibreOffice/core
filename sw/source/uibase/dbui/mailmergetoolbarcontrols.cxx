@@ -45,7 +45,7 @@ class MMCurrentEntryController : public svt::ToolboxController, public lang::XSe
 
 public:
     explicit MMCurrentEntryController(const uno::Reference<uno::XComponentContext>& rContext)
-        : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), OUString(".uno:MailMergeCurrentEntry"))
+        : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeCurrentEntry")
         , m_pCurrentEdit(nullptr)
     {
     }
@@ -106,7 +106,7 @@ class MMExcludeEntryController : public svt::ToolboxController, public lang::XSe
 
 public:
     explicit MMExcludeEntryController(const uno::Reference<uno::XComponentContext>& rContext)
-        : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), OUString(".uno:MailMergeExcludeEntry"))
+        : svt::ToolboxController(rContext, uno::Reference<frame::XFrame>(), ".uno:MailMergeExcludeEntry")
         , m_pExcludeCheckbox(nullptr)
     {
     }

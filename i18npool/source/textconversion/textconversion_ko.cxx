@@ -57,9 +57,7 @@ TextConversion_ko::TextConversion_ko( const Reference < XComponentContext >& xCo
 
     // get maximum length of word in dictionary
     if (xCDL.is()) {
-        Locale loc(OUString("ko"),
-                    OUString("KR"),
-                    OUString());
+        Locale loc("ko", "KR", OUString());
         maxLeftLength = xCDL->queryMaxCharCount(loc,
                         ConversionDictionaryType::HANGUL_HANJA,
                         ConversionDirection_FROM_LEFT);

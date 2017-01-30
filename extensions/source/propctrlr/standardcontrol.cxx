@@ -461,7 +461,7 @@ namespace pcr
 
     IMPL_LINK_NOARG( OHyperlinkControl, OnHyperlinkClicked, void*, void )
     {
-        ActionEvent aEvent( *this, OUString( "clicked" ) );
+        ActionEvent aEvent( *this, "clicked" );
         m_aActionListeners.forEach< XActionListener >(
             [&aEvent] (uno::Reference<awt::XActionListener> const& xListener)
                 { return xListener->actionPerformed(aEvent); });

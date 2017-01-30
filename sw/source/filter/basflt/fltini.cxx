@@ -232,11 +232,9 @@ bool StgWriter::IsStgWriter() const { return true; }
 </FilterFlags>
 */
 
-#define FILTER_OPTION_ROOT      OUString("Office.Writer/FilterFlags")
-
 SwFilterOptions::SwFilterOptions( sal_uInt16 nCnt, const sal_Char** ppNames,
                                                                 sal_uInt64* pValues )
-    : ConfigItem( FILTER_OPTION_ROOT )
+    : ConfigItem( "Office.Writer/FilterFlags" )
 {
     GetValues( nCnt, ppNames, pValues );
 }

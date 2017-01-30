@@ -259,16 +259,16 @@ namespace cmis
     {
         static const beans::Property aGenericProperties[] =
         {
-            beans::Property( OUString( "IsDocument" ),
+            beans::Property( "IsDocument",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "IsFolder" ),
+            beans::Property( "IsFolder",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "Title" ),
+            beans::Property( "Title",
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( OUString( "IsReadOnly" ),
+            beans::Property( "IsReadOnly",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
@@ -284,21 +284,21 @@ namespace cmis
         {
             // Required commands
             ucb::CommandInfo
-            ( OUString( "getCommandInfo" ),
+            ( "getCommandInfo",
               -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( OUString( "getPropertySetInfo" ),
+            ( "getPropertySetInfo",
               -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( OUString( "getPropertyValues" ),
+            ( "getPropertyValues",
               -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
             ucb::CommandInfo
-            ( OUString( "setPropertyValues" ),
+            ( "setPropertyValues",
               -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
 
             // Optional standard commands
             ucb::CommandInfo
-            ( OUString( "open" ),
+            ( "open",
               -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
         };
 

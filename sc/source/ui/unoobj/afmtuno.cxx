@@ -283,7 +283,7 @@ void SAL_CALL ScAutoFormatsObj::removeByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.TableAutoFormatEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.TableAutoFormatEnumeration");
 }
 
 // container::XIndexAccess
@@ -423,7 +423,7 @@ ScAutoFormatFieldObj* ScAutoFormatObj::GetObjectByIndex_Impl(sal_uInt16 nIndex)
 uno::Reference<container::XEnumeration> SAL_CALL ScAutoFormatObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.TableAutoFormatEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.TableAutoFormatEnumeration");
 }
 
 // container::XIndexAccess

@@ -377,7 +377,7 @@ BaseContent::execute( const Command& aCommand,
     {
         Sequence< beans::Property > seq(1);
         seq[0] = beans::Property(
-            OUString("CasePreservingURL"),
+            "CasePreservingURL",
             -1,
             cppu::UnoType<sal_Bool>::get(),
             0 );
@@ -480,7 +480,7 @@ BaseContent::getContentType()
             {
                 // Who am I ?
                 Sequence< beans::Property > seq(1);
-                seq[0] = beans::Property( OUString("IsDocument"),
+                seq[0] = beans::Property( "IsDocument",
                                           -1,
                                           cppu::UnoType<sal_Bool>::get(),
                                           0 );
@@ -598,7 +598,7 @@ BaseContent::createNewContent( const ContentInfo& Info )
     try
     {
         Sequence< beans::Property > seq(1);
-        seq[0] = beans::Property( OUString("IsDocument"),
+        seq[0] = beans::Property( "IsDocument",
                                   -1,
                                   cppu::UnoType<sal_Bool>::get(),
                                   0 );
@@ -1031,7 +1031,7 @@ BaseContent::transfer( sal_Int32 nMyCommandIdentifier,
 
     // Is destination a document or a folder ?
     Sequence< beans::Property > seq(1);
-    seq[0] = beans::Property( OUString("IsDocument"),
+    seq[0] = beans::Property( "IsDocument",
                               -1,
                               cppu::UnoType<sal_Bool>::get(),
                               0 );
@@ -1097,7 +1097,7 @@ void SAL_CALL BaseContent::insert( sal_Int32 nMyCommandIdentifier,
     bool bDocument = false;
 
     Sequence< beans::Property > seq(1);
-    seq[0] = beans::Property( OUString("IsDocument"),
+    seq[0] = beans::Property( "IsDocument",
                               -1,
                               cppu::UnoType<sal_Bool>::get(),
                               0 );

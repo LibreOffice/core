@@ -869,7 +869,7 @@ PhysicalFontFamily* PhysicalFontCollection::ImplFindFontFamilyOfDefaultFont() co
     if (!utl::ConfigManager::IsAvoidConfig())
     {
         const utl::DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
-        LanguageTag aLanguageTag( OUString( "en"));
+        LanguageTag aLanguageTag("en");
         OUString aFontname = rDefaults.getDefaultFont( aLanguageTag, DefaultFontType::SANS_UNICODE );
         pFoundData = FindFontFamilyByTokenNames( aFontname );
 
@@ -1190,7 +1190,7 @@ PhysicalFontFamily* PhysicalFontCollection::FindFontFamily( FontSelectPattern& r
     // if a target symbol font is not available use a default symbol font
     if( rFSD.IsSymbolFont() )
     {
-        LanguageTag aDefaultLanguageTag( OUString( "en"));
+        LanguageTag aDefaultLanguageTag("en");
         if (utl::ConfigManager::IsAvoidConfig())
             aSearchName = "OpenSymbol";
         else

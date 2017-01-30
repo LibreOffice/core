@@ -57,7 +57,7 @@ ScVbaFormat< Ifc... >::ScVbaFormat( const uno::Reference< XHelperInterface >& xP
                                     const uno::Reference< frame::XModel >& xModel,
                                     bool bCheckAmbiguoity )
     : ScVbaFormat_BASE( xParent, xContext ),
-      m_aDefaultLocale( OUString("en"), OUString( "US"), OUString() ),
+      m_aDefaultLocale( "en", "US", OUString() ),
       mxPropertySet( _xPropertySet ),
       mxModel( xModel ),
       mbCheckAmbiguoity( bCheckAmbiguoity ),

@@ -423,10 +423,10 @@ mkException( OUString const & i_rMessage,
     iaioe.Classification = task::InteractionClassification_ERROR;
     iaioe.Code = i_ErrorCode;
 
-    const beans::PropertyValue uriProp(OUString("Uri"),
+    const beans::PropertyValue uriProp("Uri",
         -1, uno::makeAny(i_rUri), static_cast<beans::PropertyState>(0));
     const beans::PropertyValue rnProp(
-        OUString("ResourceName"),
+        "ResourceName",
         -1, uno::makeAny(i_rResource), static_cast<beans::PropertyState>(0));
     iaioe.Arguments = { uno::makeAny(uriProp), uno::makeAny(rnProp) };
     return iaioe;

@@ -68,7 +68,7 @@ TVFactory::createInstance(
 {
     Sequence< Any > seq( 1 );
     seq[0] <<= PropertyValue(
-        OUString( "nodepath" ),
+        "nodepath",
         -1,
         Any( OUString() ),
         PropertyState_DIRECT_VALUE );

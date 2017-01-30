@@ -51,8 +51,8 @@ css::beans::Property* ImplGetProperties( sal_uInt16& rElementCount )
         {
             static css::beans::Property aPropTable[] =
             {
-                css::beans::Property( OUString("Orientation"), PROPERTY_Orientation, cppu::UnoType<sal_Int16>::get(), 0 ),
-                css::beans::Property( OUString("Horizontal"), PROPERTY_Horizontal, cppu::UnoType<bool>::get(), 0 )
+                css::beans::Property( "Orientation", PROPERTY_Orientation, cppu::UnoType<sal_Int16>::get(), 0 ),
+                css::beans::Property( "Horizontal", PROPERTY_Horizontal, cppu::UnoType<bool>::get(), 0 )
             };
             pProperties = aPropTable;
             nElements = sizeof( aPropTable ) / sizeof( css::beans::Property );

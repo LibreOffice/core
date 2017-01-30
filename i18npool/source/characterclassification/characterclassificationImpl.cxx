@@ -179,7 +179,7 @@ CharacterClassificationImpl::getLocaleSpecificCharacterClassification(const Loca
             return cachedItem->xCI;
         else if (xUCI.is())
         {
-            lookupTable.push_back( cachedItem = new lookupTableItem( rLocale, OUString("Unicode"), xUCI));
+            lookupTable.push_back( cachedItem = new lookupTableItem( rLocale, "Unicode", xUCI));
             return cachedItem->xCI;
         }
     }

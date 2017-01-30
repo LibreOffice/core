@@ -103,7 +103,7 @@ static Sequence< OUString > lcl_GetNotifyNames()
 SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 
     SfxPoolItem( nId ),
-    ConfigItem( OUString(CFG_ROOT_NODE ) ),
+    ConfigItem( CFG_ROOT_NODE ),
 
     m_aSearchOpt      (   SearchAlgorithms_ABSOLUTE,
                         SearchFlags::LEV_RELAXED,
@@ -209,7 +209,7 @@ SvxSearchItem::SvxSearchItem( const sal_uInt16 nId ) :
 SvxSearchItem::SvxSearchItem( const SvxSearchItem& rItem ) :
 
     SfxPoolItem ( rItem ),
-    ConfigItem( OUString(CFG_ROOT_NODE ) ),
+    ConfigItem( CFG_ROOT_NODE ),
 
     m_aSearchOpt      ( rItem.m_aSearchOpt ),
     m_eFamily         ( rItem.m_eFamily ),

@@ -531,7 +531,7 @@ void SmTableNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         SmTmpDevice aTmpDev (rDev, true);
         aTmpDev.SetFont(GetFont());
 
-        SmRect aRect = (SmRect(aTmpDev, &rFormat, OUString("a"),
+        SmRect aRect = (SmRect(aTmpDev, &rFormat, "a",
                                GetFont().GetBorderWidth()));
         mnFormulaBaseline = GetAlignM();
         // move from middle position by constant - distance
@@ -590,7 +590,7 @@ void SmLineNode::Arrange(OutputDevice &rDev, const SmFormat &rFormat)
         //! be sure to use a character that has explicitly defined HiAttribut
         //! line in rect.cxx such as 'a' in order to make 'vec a' look same to
         //! 'vec {a}'.
-        SmRect::operator = (SmRect(aTmpDev, &rFormat, OUString("a"),
+        SmRect::operator = (SmRect(aTmpDev, &rFormat, "a",
                             GetFont().GetBorderWidth()));
         // make sure that the rectangle occupies (almost) no space
         SetWidth(1);
