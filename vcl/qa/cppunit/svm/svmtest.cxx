@@ -19,7 +19,9 @@ using namespace css;
 
 class SvmTest : public test::BootstrapFixture, public XmlTestTools
 {
-    /*OUString getFullUrl(const OUString& sFileName)
+    /*OUString maDataUrl;
+
+    OUString getFullUrl(const OUString& sFileName)
     {
         return m_directories.getURLFromSrc(maDataUrl) + sFileName;
     }*/
@@ -31,6 +33,9 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
 
     void checkPixel(const GDIMetaFile& rMetaFile);
     void testPixel();
+
+    void checkPoint(const GDIMetaFile& rMetaFile);
+    void testPoint();
 
     void checkLine(const GDIMetaFile& rMetaFile);
     void testLine();
@@ -62,15 +67,6 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void checkPolyPolygon(const GDIMetaFile& rMetaFile);
     void testPolyPolygon();
 
-    void checkBitmaps(const GDIMetaFile& rMetaFile);
-    void testBitmaps();
-
-    void checkBitmapExs(const GDIMetaFile& rMetaFile);
-    void testBitmapExs();
-
-    void checkPushPop(const GDIMetaFile& rMetaFile);
-    void testPushPop();
-
     void checkText(const GDIMetaFile& rMetaFile);
     void testText();
 
@@ -79,6 +75,24 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
 
     void checkStrechText(const GDIMetaFile& rMetaFile);
     void testStrechText();
+
+    void checkTextRect(const GDIMetaFile& rMetaFile);
+    void testTextRect();
+
+    void checkTextLine(const GDIMetaFile& rMetaFile);
+    void testTextLine();
+
+    void checkBitmaps(const GDIMetaFile& rMetaFile);
+    void testBitmaps();
+
+    void checkBitmapExs(const GDIMetaFile& rMetaFile);
+    void testBitmapExs();
+
+    void checkMasks(const GDIMetaFile& rMetaFile);
+    void testMasks();
+
+    void checkPushPop(const GDIMetaFile& rMetaFile);
+    void testPushPop();
 
     void checkTextColor(const GDIMetaFile& rMetaFile);
     void testTextColor();
@@ -90,11 +104,13 @@ class SvmTest : public test::BootstrapFixture, public XmlTestTools
     void testTextLineColor();
 
 public:
-    SvmTest() :
-        BootstrapFixture(true, false)
+    SvmTest()
+        : BootstrapFixture(true, false)
+//      , maDataUrl("/vcl/qa/cppunit/svm/data/")
     {}
 
     CPPUNIT_TEST_SUITE(SvmTest);
+    CPPUNIT_TEST(testPoint);
     CPPUNIT_TEST(testPixel);
     CPPUNIT_TEST(testLine);
     CPPUNIT_TEST(testRect);
@@ -106,12 +122,15 @@ public:
     CPPUNIT_TEST(testPolyLine);
     CPPUNIT_TEST(testPolygon);
     CPPUNIT_TEST(testPolyPolygon);
-    CPPUNIT_TEST(testBitmaps);
-    CPPUNIT_TEST(testBitmapExs);
-    CPPUNIT_TEST(testPushPop);
     CPPUNIT_TEST(testText);
     CPPUNIT_TEST(testTextArray);
     CPPUNIT_TEST(testStrechText);
+    CPPUNIT_TEST(testTextRect);
+    CPPUNIT_TEST(testTextLine);
+    CPPUNIT_TEST(testBitmaps); // BMP, BMPSCALE, BMPSCALEPART
+    CPPUNIT_TEST(testBitmapExs);
+    CPPUNIT_TEST(testMasks);
+    CPPUNIT_TEST(testPushPop);
     CPPUNIT_TEST(testTextColor);
     CPPUNIT_TEST(testTextFillColor);
     CPPUNIT_TEST(testTextLineColor);
@@ -216,10 +235,6 @@ void SvmTest::checkPixel(const GDIMetaFile& rMetaFile)
     assertXPathAttrs(pDoc, "/metafile/pixel[2]", {
         {"x", "1"}, {"y", "8"}, {"color", "#000080"},
     });
-
-    assertXPathAttrs(pDoc, "/metafile/point[1]", {
-        {"x", "4"}, {"y", "4"}
-    });
 }
 
 void SvmTest::testPixel()
@@ -230,9 +245,28 @@ void SvmTest::testPixel()
 
     pVirtualDev->DrawPixel(Point(8, 1), COL_GREEN);
     pVirtualDev->DrawPixel(Point(1, 8), COL_BLUE);
-    pVirtualDev->DrawPixel(Point(4, 4));
 
     checkPixel(writeAndRead(aGDIMetaFile, "pixel.svm"));
+}
+
+void SvmTest::checkPoint(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/point[1]", {
+        {"x", "4"}, {"y", "4"}
+    });
+}
+
+void SvmTest::testPoint()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+
+    pVirtualDev->DrawPixel(Point(4, 4));
+
+    checkPoint(writeAndRead(aGDIMetaFile, "point.svm"));
 }
 
 void SvmTest::checkLine(const GDIMetaFile& rMetaFile)
@@ -614,6 +648,112 @@ void SvmTest::testPolyPolygon()
     checkPolyPolygon(writeAndRead(aGDIMetaFile, "polypolygon.svm"));
 }
 
+void SvmTest::checkText(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/text[1]", {
+        {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "2"},
+    });
+
+    assertXPathContent(pDoc, "/metafile/text[1]/textcontent", "xABC");
+}
+
+void SvmTest::testText()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+
+    pVirtualDev->DrawText(Point(4,6), "xABC", 1, 2);
+
+    checkText(writeAndRead(aGDIMetaFile, "text.svm"));
+}
+
+void SvmTest::checkTextArray(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/textarray[1]", {
+        {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "4"},
+    });
+    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray", "15 20 25 ");
+    assertXPathContent(pDoc, "/metafile/textarray[1]/text", "123456");
+}
+
+void SvmTest::testTextArray()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    long aDX[] = { 10, 15, 20, 25, 30, 35 };
+    pVirtualDev->DrawTextArray(Point(4,6), "123456", aDX, 1, 4);
+
+    checkTextArray(writeAndRead(aGDIMetaFile, "textarray.svm"));
+}
+
+void SvmTest::checkStrechText(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/stretchtext[1]", {
+        {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "4"}, {"width", "10"}
+    });
+
+    assertXPathContent(pDoc, "/metafile/stretchtext[1]/textcontent", "123456");
+}
+
+void SvmTest::testStrechText()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    pVirtualDev->DrawStretchText(Point(4,6), 10, "123456", 1, 4);
+
+    checkStrechText(writeAndRead(aGDIMetaFile, "strecthtext.svm"));
+}
+
+void SvmTest::checkTextRect(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/textrect[1]", {
+        {"left", "0"}, {"top", "0"}, {"right", "4"}, {"bottom", "4"}
+    });
+    assertXPathContent(pDoc, "/metafile/textrect[1]/textcontent", "123456");
+    assertXPathContent(pDoc, "/metafile/textrect[1]/style", "Center");
+}
+
+void SvmTest::testTextRect()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    pVirtualDev->DrawText(Rectangle(Point(0,0), Size(5,5)), "123456", DrawTextFlags::Center);
+
+    checkTextRect(writeAndRead(aGDIMetaFile, "textrectangle.svm"));
+}
+
+void SvmTest::checkTextLine(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/textline[1]", {
+        {"x", "4"}, {"y", "6"}, {"width", "10"},
+        {"strikeout", "single"}, {"underline", "single"}, {"overline", "single"}
+    });
+}
+
+void SvmTest::testTextLine()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+    pVirtualDev->DrawTextLine(Point(4,6), 10, STRIKEOUT_SINGLE, LINESTYLE_SINGLE, LINESTYLE_SINGLE);
+
+    checkTextLine(writeAndRead(aGDIMetaFile, "textline.svm"));
+}
+
 void SvmTest::checkBitmaps(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
@@ -736,6 +876,57 @@ void SvmTest::testBitmapExs()
     checkBitmapExs(writeAndRead(aGDIMetaFile, "bitmapexs.svm"));
 }
 
+void SvmTest::checkMasks(const GDIMetaFile& rMetaFile)
+{
+    xmlDocPtr pDoc = dumpMeta(rMetaFile);
+
+    assertXPathAttrs(pDoc, "/metafile/mask[1]", {
+        {"x", "1"}, {"y", "2"},
+        {"color", "#000000"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/maskscale[1]", {
+        {"x", "1"}, {"y", "2"}, {"width", "3"}, {"height", "4"},
+        {"color", "#000000"}
+    });
+    assertXPathAttrs(pDoc, "/metafile/maskscalepart[1]", {
+        {"destx", "1"}, {"desty", "2"}, {"destwidth", "3"}, {"destheight", "4"},
+        {"srcx", "2"},  {"srcy", "1"},  {"srcwidth", "4"},  {"srcheight", "3"},
+        {"color", "#ff0000"}
+    });
+}
+
+// TODO: Masks are kind-of special - we don't persist the color attribute (it is
+// always #000000) of the meta-action (which is wrong), but rely on alpha to do
+// the right thing.
+void SvmTest::testMasks()
+{
+    GDIMetaFile aGDIMetaFile;
+    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
+    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
+
+    Bitmap aBitmap1(Size(4,4), 24);
+    {
+        Bitmap::ScopedWriteAccess pAccess(aBitmap1);
+        pAccess->Erase(COL_RED);
+    }
+    Bitmap aBitmap2(Size(4,4), 24);
+    {
+        Bitmap::ScopedWriteAccess pAccess(aBitmap2);
+        pAccess->Erase(COL_GREEN);
+    }
+    Bitmap aBitmap3(Size(4,4), 24);
+    {
+        Bitmap::ScopedWriteAccess pAccess(aBitmap3);
+        pAccess->Erase(COL_BLUE);
+    }
+
+    pVirtualDev->DrawMask(Point(1, 2), aBitmap1, Color(COL_LIGHTRED));
+    pVirtualDev->DrawMask(Point(1, 2), Size(3, 4), aBitmap2, Color(COL_LIGHTRED));
+    pVirtualDev->DrawMask(Point(1, 2), Size(3, 4), Point(2, 1), Size(4, 3), aBitmap3, Color(COL_LIGHTRED), MetaActionType::MASKSCALEPART);
+
+    checkMasks(writeAndRead(aGDIMetaFile, "masks.svm"));
+}
+
 void SvmTest::checkPushPop(const GDIMetaFile& rMetaFile)
 {
     xmlDocPtr pDoc = dumpMeta(rMetaFile);
@@ -771,71 +962,6 @@ void SvmTest::testPushPop()
     pVirtualDev->DrawLine(Point(1,1), Point(8,8));
 
     checkPushPop(writeAndRead(aGDIMetaFile, "pushpop.svm"));
-}
-
-void SvmTest::checkText(const GDIMetaFile& rMetaFile)
-{
-    xmlDocPtr pDoc = dumpMeta(rMetaFile);
-
-    assertXPathAttrs(pDoc, "/metafile/text[1]", {
-        {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "2"},
-    });
-
-    assertXPathContent(pDoc, "/metafile/text[1]/textcontent", "xABC");
-}
-
-void SvmTest::testText()
-{
-    GDIMetaFile aGDIMetaFile;
-    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
-
-    pVirtualDev->DrawText(Point(4,6), "xABC", 1, 2);
-
-    checkText(writeAndRead(aGDIMetaFile, "text.svm"));
-}
-
-void SvmTest::checkTextArray(const GDIMetaFile& rMetaFile)
-{
-    xmlDocPtr pDoc = dumpMeta(rMetaFile);
-
-    assertXPathAttrs(pDoc, "/metafile/textarray[1]", {
-        {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "4"},
-    });
-    assertXPathContent(pDoc, "/metafile/textarray[1]/dxarray", "15 20 25 ");
-    assertXPathContent(pDoc, "/metafile/textarray[1]/text", "123456");
-}
-
-void SvmTest::testTextArray()
-{
-    GDIMetaFile aGDIMetaFile;
-    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
-    long aDX[] = { 10, 15, 20, 25, 30, 35 };
-    pVirtualDev->DrawTextArray(Point(4,6), "123456", aDX, 1, 4);
-
-    checkTextArray(writeAndRead(aGDIMetaFile, "textarray.svm"));
-}
-
-void SvmTest::checkStrechText(const GDIMetaFile& rMetaFile)
-{
-    xmlDocPtr pDoc = dumpMeta(rMetaFile);
-
-    assertXPathAttrs(pDoc, "/metafile/stretchtext[1]", {
-        {"x", "4"}, {"y", "6"}, {"index", "1"}, {"length", "4"}, {"width", "10"}
-    });
-
-    assertXPathContent(pDoc, "/metafile/stretchtext[1]/textcontent", "123456");
-}
-
-void SvmTest::testStrechText()
-{
-    GDIMetaFile aGDIMetaFile;
-    ScopedVclPtrInstance<VirtualDevice> pVirtualDev;
-    setupBaseVirtualDevice(*pVirtualDev.get(), aGDIMetaFile);
-    pVirtualDev->DrawStretchText(Point(4,6), 10, "123456", 1, 4);
-
-    checkStrechText(writeAndRead(aGDIMetaFile, "strecthtext.svm"));
 }
 
 void SvmTest::checkTextColor(const GDIMetaFile& rMetaFile)
