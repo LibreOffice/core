@@ -137,7 +137,7 @@ void ScDocumentImport::setCellStyleToSheet(SCTAB nTab, const ScStyleSheet& rStyl
     if (!pTab)
         return;
 
-    pTab->ApplyStyleArea(0, 0, MAXCOL, MAXROW, rStyle);
+    pTab->ApplyStyleArea(0, 0, pTab->aCol.size() - 1, MAXROW, rStyle);
 }
 
 SCTAB ScDocumentImport::getSheetIndex(const OUString& rName) const

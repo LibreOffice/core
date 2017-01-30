@@ -2509,7 +2509,8 @@ void ScTable::RemoveCondFormatData( const ScRangeList& rRange, sal_uInt32 nIndex
 void ScTable::ApplyStyle( SCCOL nCol, SCROW nRow, const ScStyleSheet* rStyle )
 {
     if (ValidColRow(nCol,nRow))
-        aCol[nCol].ApplyStyle( nRow, rStyle );
+        // If column not exists then we need to create it
+        CreateColumnIfNotExists( nCol ).ApplyStyle( nRow, rStyle );
 }
 
 void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW nEndRow, const ScStyleSheet& rStyle )
@@ -2518,6 +2519,7 @@ void ScTable::ApplyStyleArea( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, S
     {
         PutInOrder(nStartCol, nEndCol);
         PutInOrder(nStartRow, nEndRow);
+        CreateColumnIfNotExists( nEndCol );
         for (SCCOL i = nStartCol; i <= nEndCol; i++)
             aCol[i].ApplyStyleArea(nStartRow, nEndRow, rStyle);
     }

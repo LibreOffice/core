@@ -55,6 +55,8 @@ public:
         return static_cast<SCCOL>( aCols.size() );
     }
 
+    void resize( const size_t aNewSize );
+
     void Clear();
 
     const ScColumn& back() const
