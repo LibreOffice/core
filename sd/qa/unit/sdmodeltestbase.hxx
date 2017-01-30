@@ -130,7 +130,7 @@ protected:
             OUString::createFromAscii( pFmt->pTypeName ),
             0, OUString(),
             OUString::createFromAscii( pFmt->pUserData ),
-            OUString("private:factory/simpress*") );
+            "private:factory/simpress*" );
         pFilter->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
         std::shared_ptr<const SfxFilter> pFilt(pFilter);
 
@@ -167,7 +167,7 @@ protected:
                                         OUString::createFromAscii(pFormat->pTypeName),
                                         0, OUString(),
                                         OUString::createFromAscii(pFormat->pUserData),
-                                        OUString("private:factory/simpress*") ));
+                                        "private:factory/simpress*" ));
         const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
         aStoreMedium.SetFilter(pExportFilter);
         pShell->ConvertTo(aStoreMedium);
@@ -186,7 +186,7 @@ protected:
                                         OUString::createFromAscii(pFormat->pTypeName),
                                         0, OUString(),
                                         OUString::createFromAscii(pFormat->pUserData),
-                                        OUString("private:factory/simpress*") ));
+                                        "private:factory/simpress*" ));
         const_cast<SfxFilter*>(pExportFilter.get())->SetVersion(SOFFICE_FILEFORMAT_CURRENT);
         aStoreMedium.SetFilter(pExportFilter);
         pShell->DoSaveAs(aStoreMedium);

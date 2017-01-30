@@ -255,9 +255,7 @@ public:
 };
 
 PopupMenuControllerFactory::PopupMenuControllerFactory( const Reference< XComponentContext >& xContext ) :
-    UIControllerFactory(
-        xContext,
-        OUString( "PopupMenu") )
+    UIControllerFactory( xContext, "PopupMenu" )
 {
 }
 
@@ -302,9 +300,7 @@ public:
 };
 
 ToolbarControllerFactory::ToolbarControllerFactory( const Reference< XComponentContext >& xContext ) :
-    UIControllerFactory(
-        xContext,
-        OUString( "ToolBar" ))
+    UIControllerFactory( xContext, "ToolBar" )
 {
 }
 
@@ -349,9 +345,7 @@ public:
 };
 
 StatusbarControllerFactory::StatusbarControllerFactory( const Reference< XComponentContext >& xContext ) :
-    UIControllerFactory(
-        xContext,
-        OUString( "StatusBar" ) )
+    UIControllerFactory( xContext, "StatusBar" )
 {
 }
 

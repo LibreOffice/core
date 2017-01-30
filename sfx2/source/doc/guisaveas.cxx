@@ -874,7 +874,7 @@ bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                                                         "UIName",
                                                         OUString() );
 
-            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, OUString( "pdf" ), rStandardDir, rBlackList ));
+            pFileDlg.reset(new sfx2::FileDialogHelper( aDialogMode, aDialogFlags, aFilterUIName, "pdf", rStandardDir, rBlackList ));
             pFileDlg->SetCurrentFilter( aFilterUIName );
         }
         else

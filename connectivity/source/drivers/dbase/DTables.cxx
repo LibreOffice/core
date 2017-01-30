@@ -49,7 +49,7 @@ using namespace ::com::sun::star::container;
 sdbcx::ObjectType ODbaseTables::createObject(const OUString& _rName)
 {
     ODbaseTable* pRet = new ODbaseTable(this, static_cast<ODbaseConnection*>(static_cast<OFileCatalog&>(m_rParent).getConnection()),
-                                        _rName,OUString("TABLE"));
+                                        _rName,"TABLE");
 
     sdbcx::ObjectType xRet = pRet;
     pRet->construct();

@@ -192,7 +192,7 @@ SbxErrObject::getUnoErrObject()
 SbxVariableRef const &
 SbxErrObject::getErrObject()
 {
-    static SbxVariableRef pGlobErr = new SbxErrObject( OUString("Err"), uno::makeAny( uno::Reference< vba::XErrObject >( new ErrObject() ) ) );
+    static SbxVariableRef pGlobErr = new SbxErrObject( "Err", uno::makeAny( uno::Reference< vba::XErrObject >( new ErrObject() ) ) );
     return pGlobErr;
 }
 

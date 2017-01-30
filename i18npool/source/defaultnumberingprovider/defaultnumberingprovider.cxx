@@ -958,7 +958,7 @@ OUString DefaultNumberingProvider::makeNumberingIdentifier(sal_Int16 index)
         return OUString(aSupportedTypes[index].cSymbol, strlen(aSupportedTypes[index].cSymbol), RTL_TEXTENCODING_UTF8);
     else {
         OUString result;
-        Locale aLocale(OUString("en"), OUString(), OUString());
+        Locale aLocale("en", OUString(), OUString());
         Sequence<beans::PropertyValue> aProperties(2);
         aProperties[0].Name = "NumberingType";
         aProperties[0].Value <<= aSupportedTypes[index].nType;

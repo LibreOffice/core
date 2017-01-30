@@ -3594,8 +3594,8 @@ embed::VisualRepresentation SAL_CALL SfxBaseModel::getPreferredVisualRepresentat
     SfxModelGuard aGuard( *this );
 
     datatransfer::DataFlavor aDataFlavor(
-            OUString("application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
-            OUString("GDIMetaFile"),
+            "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",
+            "GDIMetaFile",
             cppu::UnoType<Sequence< sal_Int8 >>::get() );
 
     embed::VisualRepresentation aVisualRepresentation;

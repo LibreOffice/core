@@ -730,7 +730,7 @@ void SwUiWriterTest::testFdo74981()
     // create a document with an input field
     SwDoc* pDoc = createDoc();
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
-    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, RES_INPUTFLD)), OUString("foo"), OUString("bar"), 0, 0);
+    SwInputField aField(static_cast<SwInputFieldType*>(pWrtShell->GetFieldType(0, RES_INPUTFLD)), "foo", "bar", 0, 0);
     pWrtShell->Insert(aField);
 
     {
@@ -761,10 +761,10 @@ void SwUiWriterTest::testTdf98512()
     SwWrtShell* pWrtShell = pDoc->GetDocShell()->GetWrtShell();
     SwInputFieldType *const pType(static_cast<SwInputFieldType*>(
                 pWrtShell->GetFieldType(0, RES_INPUTFLD)));
-    SwInputField aField1(pType, OUString("foo"), OUString("bar"), INP_TXT, 0);
+    SwInputField aField1(pType, "foo", "bar", INP_TXT, 0);
     pWrtShell->Insert(aField1);
     pWrtShell->SttEndDoc(/*bStt=*/true);
-    SwInputField aField2(pType, OUString("baz"), OUString("quux"), INP_TXT, 0);
+    SwInputField aField2(pType, "baz", "quux", INP_TXT, 0);
     pWrtShell->Insert(aField2);
     pWrtShell->SttEndDoc(/*bStt=*/true);
     pWrtShell->SetMark();
@@ -2084,14 +2084,14 @@ void SwUiWriterTest::testTdf77342()
     //moving cursor to the starting of document
     pWrtShell->SttDoc();
     //inserting reference field 1
-    SwGetRefField aField1(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(0), REF_CONTENT);
+    SwGetRefField aField1(pRefType, "", REF_FOOTNOTE, sal_uInt16(0), REF_CONTENT);
     pWrtShell->Insert(aField1);
     //inserting second footnote
     pWrtShell->InsertFootnote("");
     pWrtShell->SttDoc();
     pCursor->Move(fnMoveForward);
     //inserting reference field 2
-    SwGetRefField aField2(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(1), REF_CONTENT);
+    SwGetRefField aField2(pRefType, "", REF_FOOTNOTE, sal_uInt16(1), REF_CONTENT);
     pWrtShell->Insert(aField2);
     //inserting third footnote
     pWrtShell->InsertFootnote("");
@@ -2099,7 +2099,7 @@ void SwUiWriterTest::testTdf77342()
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //inserting reference field 3
-    SwGetRefField aField3(pRefType, OUString(""), REF_FOOTNOTE, sal_uInt16(2), REF_CONTENT);
+    SwGetRefField aField3(pRefType, "", REF_FOOTNOTE, sal_uInt16(2), REF_CONTENT);
     pWrtShell->Insert(aField3);
     //updating the fields
     IDocumentFieldsAccess& rField(pDoc->getIDocumentFieldsAccess());
@@ -2321,38 +2321,38 @@ void SwUiWriterTest::testTdf63553()
     SwPaM* pCursor = pDoc->GetEditShell()->GetCursor();
     //inserting sequence field 1
     SwSetExpFieldType* pSeqType = static_cast<SwSetExpFieldType*>(pWrtShell->GetFieldType(RES_SETEXPFLD, "Illustration"));
-    SwSetExpField aSetField1(pSeqType, OUString(""), SVX_NUM_ARABIC);
+    SwSetExpField aSetField1(pSeqType, "", SVX_NUM_ARABIC);
     pWrtShell->Insert(aSetField1);
     SwGetRefFieldType* pRefType = static_cast<SwGetRefFieldType*>(pWrtShell->GetFieldType(0, RES_GETREFFLD));
     //moving cursor to the starting of document
     pWrtShell->SttDoc();
     //inserting reference field 1
-    SwGetRefField aGetField1(pRefType, OUString("Illustration"), REF_SEQUENCEFLD, sal_uInt16(0), REF_CONTENT);
+    SwGetRefField aGetField1(pRefType, "Illustration", REF_SEQUENCEFLD, sal_uInt16(0), REF_CONTENT);
     pWrtShell->Insert(aGetField1);
     //now we have ref1-seq1
     //moving the cursor
     pCursor->Move(fnMoveForward);
     //inserting sequence field 2
-    SwSetExpField aSetField2(pSeqType, OUString(""), SVX_NUM_ARABIC);
+    SwSetExpField aSetField2(pSeqType, "", SVX_NUM_ARABIC);
     pWrtShell->Insert(aSetField2);
     //moving the cursor
     pWrtShell->SttDoc();
     pCursor->Move(fnMoveForward);
     //inserting reference field 2
-    SwGetRefField aGetField2(pRefType, OUString("Illustration"), REF_SEQUENCEFLD, sal_uInt16(1), REF_CONTENT);
+    SwGetRefField aGetField2(pRefType, "Illustration", REF_SEQUENCEFLD, sal_uInt16(1), REF_CONTENT);
     pWrtShell->Insert(aGetField2);
     //now we have ref1-ref2-seq1-seq2
     //moving the cursor
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //inserting sequence field 3
-    SwSetExpField aSetField3(pSeqType, OUString(""), SVX_NUM_ARABIC);
+    SwSetExpField aSetField3(pSeqType, "", SVX_NUM_ARABIC);
     pWrtShell->Insert(aSetField3);
     pWrtShell->SttDoc();
     pCursor->Move(fnMoveForward);
     pCursor->Move(fnMoveForward);
     //inserting reference field 3
-    SwGetRefField aGetField3(pRefType, OUString("Illustration"), REF_SEQUENCEFLD, sal_uInt16(2), REF_CONTENT);
+    SwGetRefField aGetField3(pRefType, "Illustration", REF_SEQUENCEFLD, sal_uInt16(2), REF_CONTENT);
     pWrtShell->Insert(aGetField3);
     //now after insertion we have ref1-ref2-ref3-seq1-seq2-seq3
     //updating the fields

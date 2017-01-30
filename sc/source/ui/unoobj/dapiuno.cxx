@@ -452,7 +452,7 @@ void SAL_CALL ScDataPilotTablesObj::removeByName( const OUString& aName )
 Reference< XEnumeration > SAL_CALL ScDataPilotTablesObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DataPilotTablesEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.DataPilotTablesEnumeration");
 }
 
 // XIndexAccess
@@ -1013,7 +1013,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotDescriptorBase::getDataLayoutFi
         {
             if( pSaveData->GetDataLayoutDimension() )
             {
-                ScFieldIdentifier aFieldId( OUString( SC_DATALAYOUT_NAME ), true );
+                ScFieldIdentifier aFieldId( SC_DATALAYOUT_NAME, true );
                 return new ScDataPilotFieldObj( *this, aFieldId );
             }
         }
@@ -1669,7 +1669,7 @@ ScDataPilotFieldObj* ScDataPilotFieldsObj::GetObjectByName_Impl(const OUString& 
 Reference<XEnumeration> SAL_CALL ScDataPilotFieldsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DataPilotFieldsEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.DataPilotFieldsEnumeration");
 }
 
 // XIndexAccess
@@ -2951,7 +2951,7 @@ Any SAL_CALL ScDataPilotFieldGroupsObj::getByIndex( sal_Int32 nIndex )
 Reference<XEnumeration> SAL_CALL ScDataPilotFieldGroupsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration( this, OUString( "com.sun.star.sheet.DataPilotFieldGroupsEnumeration" ) );
+    return new ScIndexEnumeration( this, "com.sun.star.sheet.DataPilotFieldGroupsEnumeration" );
 }
 
 // XElementAccess
@@ -3130,7 +3130,7 @@ Any SAL_CALL ScDataPilotFieldGroupObj::getByIndex( sal_Int32 nIndex )
 Reference< XEnumeration > SAL_CALL ScDataPilotFieldGroupObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration( this, OUString( "com.sun.star.sheet.DataPilotFieldGroupEnumeration" ) );
+    return new ScIndexEnumeration( this, "com.sun.star.sheet.DataPilotFieldGroupEnumeration" );
 }
 
 // XElementAccess
@@ -3269,7 +3269,7 @@ sal_Bool SAL_CALL ScDataPilotItemsObj::hasByName( const OUString& aName )
 Reference<XEnumeration> SAL_CALL ScDataPilotItemsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DataPilotItemsEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.DataPilotItemsEnumeration");
 }
 
 // XIndexAccess

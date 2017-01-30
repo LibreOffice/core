@@ -33,7 +33,7 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-#define ROOTNODE_SLIDESORTERBAR                OUString("Office.Impress/MultiPaneGUI/SlideSorterBar/Visible")
+#define ROOTNODE_SLIDESORTERBAR                "Office.Impress/MultiPaneGUI/SlideSorterBar/Visible"
 
 #define PROPERTYNAME_VISIBLE_IMPRESSVIEW       OUString("ImpressView")
 #define PROPERTYHANDLE_VISIBLE_IMPRESSVIEW     0

@@ -34,13 +34,13 @@ static rtl::Reference<ConfigurationListener> const & getMiscListener()
 
 bool ScCalcConfig::isOpenCLEnabled()
 {
-    static comphelper::ConfigurationListenerProperty<bool> gOpenCLEnabled(getMiscListener(), OUString("UseOpenCL"));
+    static comphelper::ConfigurationListenerProperty<bool> gOpenCLEnabled(getMiscListener(), "UseOpenCL");
     return gOpenCLEnabled.get();
 }
 
 bool ScCalcConfig::isSwInterpreterEnabled()
 {
-    static comphelper::ConfigurationListenerProperty<bool> gSwInterpreterEnabled(getMiscListener(), OUString("UseSwInterpreter"));
+    static comphelper::ConfigurationListenerProperty<bool> gSwInterpreterEnabled(getMiscListener(), "UseSwInterpreter");
     return gSwInterpreterEnabled.get();
 }
 

@@ -417,22 +417,22 @@ namespace ucb { namespace ucp { namespace ext
         else
         {
             // Append all Core Properties.
-            xRow->appendString ( Property( OUString("ContentType"),
+            xRow->appendString ( Property( "ContentType",
                           -1,
                           cppu::UnoType<OUString>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 ContentProvider::getArtificialNodeContentType() );
-            xRow->appendString ( Property( OUString("Title"),
+            xRow->appendString ( Property( "Title",
                           -1,
                           cppu::UnoType<OUString>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 i_rTitle );
-            xRow->appendBoolean( Property( OUString("IsDocument"),
+            xRow->appendBoolean( Property( "IsDocument",
                           -1,
                           cppu::UnoType<bool>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
                 false );
-            xRow->appendBoolean( Property( OUString("IsFolder"),
+            xRow->appendBoolean( Property( "IsFolder",
                           -1,
                           cppu::UnoType<bool>::get(),
                           PropertyAttribute::BOUND | PropertyAttribute::READONLY ),
@@ -536,22 +536,22 @@ namespace ucb { namespace ucp { namespace ext
             // Mandatory commands
 
             CommandInfo(
-                OUString(  "getCommandInfo"  ),
+                "getCommandInfo",
                 -1,
                 cppu::UnoType<void>::get()
             ),
             CommandInfo(
-                OUString(  "getPropertySetInfo"  ),
+                "getPropertySetInfo",
                 -1,
                 cppu::UnoType<void>::get()
             ),
             CommandInfo(
-                OUString(  "getPropertyValues"  ),
+                "getPropertyValues",
                 -1,
                 cppu::UnoType<Sequence< Property >>::get()
             ),
             CommandInfo(
-                OUString(  "setPropertyValues"  ),
+                "setPropertyValues",
                 -1,
                 cppu::UnoType<Sequence< PropertyValue >>::get()
             )
@@ -559,7 +559,7 @@ namespace ucb { namespace ucp { namespace ext
             // Optional standard commands
 
             , CommandInfo(
-                OUString(  "open"  ),
+                "open",
                 -1,
                 cppu::UnoType<OpenCommandArgument2>::get()
             )
@@ -574,25 +574,25 @@ namespace ucb { namespace ucp { namespace ext
         static const Property aProperties[] =
         {
             Property(
-                OUString(  "ContentType"  ),
+                "ContentType",
                 -1,
                 cppu::UnoType<OUString>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
-                OUString(  "IsDocument"  ),
+                "IsDocument",
                 -1,
                 cppu::UnoType<bool>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
-                OUString(  "IsFolder"  ),
+                "IsFolder",
                 -1,
                 cppu::UnoType<bool>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY
             ),
             Property(
-                OUString(  "Title"  ),
+                "Title",
                 -1,
                 cppu::UnoType<OUString>::get(),
                 PropertyAttribute::BOUND | PropertyAttribute::READONLY

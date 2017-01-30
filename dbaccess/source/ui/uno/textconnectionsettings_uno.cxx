@@ -159,42 +159,42 @@ namespace dbaui
         aProps.realloc( nProp + 6 );
 
         aProps[ nProp++ ] = Property(
-            OUString( "HeaderLine" ),
+            "HeaderLine",
             PROPERTY_ID_HEADER_LINE,
             ::cppu::UnoType< sal_Bool >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            OUString( "FieldDelimiter" ),
+            "FieldDelimiter",
             PROPERTY_ID_FIELD_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            OUString( "StringDelimiter" ),
+            "StringDelimiter",
             PROPERTY_ID_STRING_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            OUString( "DecimalDelimiter" ),
+            "DecimalDelimiter",
             PROPERTY_ID_DECIMAL_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            OUString( "ThousandDelimiter" ),
+            "ThousandDelimiter",
             PROPERTY_ID_THOUSAND_DELIMITER,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT
         );
 
         aProps[ nProp++ ] = Property(
-            OUString( "CharSet" ),
+            "CharSet",
             PROPERTY_ID_ENCODING,
             ::cppu::UnoType< OUString >::get(),
             PropertyAttribute::TRANSIENT

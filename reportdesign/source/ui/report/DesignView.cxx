@@ -139,7 +139,7 @@ void ODesignView::dispose()
     }
     if ( m_pAddField )
     {
-        SvtViewOptions aDlgOpt( E_WINDOW, OUString( UID_RPT_RPT_APP_VIEW ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, UID_RPT_RPT_APP_VIEW );
         aDlgOpt.SetWindowState(OStringToOUString(m_pAddField->GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         notifySystemWindow(this,m_pAddField,::comphelper::mem_fun(&TaskPaneList::RemoveWindow));
         m_pAddField.disposeAndClear();
@@ -513,7 +513,7 @@ void ODesignView::toggleAddField()
         uno::Reference < beans::XPropertySet > xSet(rReportController.getRowSet(),uno::UNO_QUERY);
         m_pAddField = VclPtr<OAddFieldWindow>::Create(this,xSet);
         m_pAddField->SetCreateHdl(LINK( &rReportController, OReportController, OnCreateHdl ) );
-        SvtViewOptions aDlgOpt( E_WINDOW, OUString( UID_RPT_RPT_APP_VIEW ) );
+        SvtViewOptions aDlgOpt( E_WINDOW, UID_RPT_RPT_APP_VIEW );
         if ( aDlgOpt.Exists() )
             m_pAddField->SetWindowState(OUStringToOString(aDlgOpt.GetWindowState(), RTL_TEXTENCODING_ASCII_US));
         m_pAddField->Update();

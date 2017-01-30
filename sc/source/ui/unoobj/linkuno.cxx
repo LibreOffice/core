@@ -435,7 +435,7 @@ ScSheetLinkObj* ScSheetLinksObj::GetObjectByName_Impl(const OUString& aName)
 uno::Reference<container::XEnumeration> SAL_CALL ScSheetLinksObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SheetLinksEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.SheetLinksEnumeration");
 }
 
 // XIndexAccess
@@ -945,7 +945,7 @@ void SAL_CALL ScAreaLinksObj::removeByIndex( sal_Int32 nIndex )
 uno::Reference<container::XEnumeration> SAL_CALL ScAreaLinksObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.CellAreaLinksEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.CellAreaLinksEnumeration");
 }
 
 // XIndexAccess
@@ -1244,7 +1244,7 @@ ScDDELinkObj* ScDDELinksObj::GetObjectByName_Impl(const OUString& aName)
 uno::Reference<container::XEnumeration> SAL_CALL ScDDELinksObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.DDELinksEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.DDELinksEnumeration");
 }
 
 // XIndexAccess
@@ -1579,8 +1579,7 @@ Reference< container::XEnumeration > SAL_CALL ScExternalDocLinkObj::createEnumer
 {
     SolarMutexGuard aGuard;
     Reference< container::XEnumeration > aRef(
-        new ScIndexEnumeration(this, OUString(
-            "com.sun.star.sheet.ExternalDocLink")));
+        new ScIndexEnumeration(this, "com.sun.star.sheet.ExternalDocLink"));
     return aRef;
 }
 
@@ -1681,8 +1680,7 @@ Reference< container::XEnumeration > SAL_CALL ScExternalDocLinksObj::createEnume
 {
     SolarMutexGuard aGuard;
     Reference< container::XEnumeration > aRef(
-        new ScIndexEnumeration(this, OUString(
-            "com.sun.star.sheet.ExternalDocLinks")));
+        new ScIndexEnumeration(this, "com.sun.star.sheet.ExternalDocLinks"));
     return aRef;
 }
 

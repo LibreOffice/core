@@ -594,15 +594,15 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
 
     uno::Sequence< beans::PropertyValue > aArgs( 3 );
     aArgs[0] = beans::PropertyValue(
-        OUString( "CellRangeRepresentation" ),
+        "CellRangeRepresentation",
         -1, uno::makeAny( rRectangularRange ),
         beans::PropertyState_DIRECT_VALUE );
     aArgs[1] = beans::PropertyValue(
-        OUString( "DataRowSource" ),
+        "DataRowSource",
         -1, uno::makeAny( eDataRowSource ),
         beans::PropertyState_DIRECT_VALUE );
     aArgs[2] = beans::PropertyValue(
-        OUString( "FirstCellAsLabel" ),
+        "FirstCellAsLabel",
         -1, uno::makeAny( bFirstCellAsLabel ),
         beans::PropertyState_DIRECT_VALUE );
 
@@ -610,7 +610,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
     {
         aArgs.realloc( aArgs.getLength() + 1 );
         aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
-            OUString( "SequenceMapping" ),
+            "SequenceMapping",
             -1, uno::makeAny( !sColTrans.isEmpty()
                 ? lcl_getNumberSequenceFromString( sColTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() )
                 : lcl_getNumberSequenceFromString( sRowTrans, bHasCateories && !xNewDoc->hasInternalDataProvider() ) ),
@@ -636,7 +636,7 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
         {
             aArgs.realloc( aArgs.getLength() + 1 );
             aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
-                OUString( "ChartOleObjectName" ),
+                "ChartOleObjectName",
                 -1, uno::makeAny( aChartOleObjectName ),
                 beans::PropertyState_DIRECT_VALUE );
         }
@@ -647,11 +647,11 @@ static void lcl_ApplyDataFromRectangularRangeToDiagram(
 
     aArgs.realloc( aArgs.getLength() + 2 );
     aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 2 ] = beans::PropertyValue(
-        OUString( "HasCategories" ),
+        "HasCategories",
         -1, uno::makeAny( bHasCateories ),
         beans::PropertyState_DIRECT_VALUE );
     aArgs[ sal::static_int_cast<sal_uInt32>(aArgs.getLength()) - 1 ] = beans::PropertyValue(
-        OUString("UseCategoriesAsX"),
+        "UseCategoriesAsX",
         -1, uno::makeAny( false ),//categories in ODF files are not to be used as x values (independent from what is offered in our ui)
         beans::PropertyState_DIRECT_VALUE );
 

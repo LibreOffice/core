@@ -667,7 +667,7 @@ uno::Any SAL_CALL ScFunctionListObj::getByIndex( sal_Int32 nIndex )
 uno::Reference<container::XEnumeration> SAL_CALL ScFunctionListObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.FunctionDescriptionEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.FunctionDescriptionEnumeration");
 }
 
 // XElementAccess

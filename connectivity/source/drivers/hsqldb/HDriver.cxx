@@ -246,7 +246,7 @@ namespace connectivity
 
                 // security: permitted Java classes
                 NamedValue aPermittedClasses(
-                    OUString(  "hsqldb.method_class_names"  ),
+                    "hsqldb.method_class_names",
                     makeAny( lcl_getPermittedJavaMethods_nothrow( m_xContext ) )
                 );
                 aProperties.put( "SystemProperties", Sequence< NamedValue >( &aPermittedClasses, 1 ) );
@@ -410,24 +410,24 @@ namespace connectivity
             return Sequence< DriverPropertyInfo >();
         ::std::vector< DriverPropertyInfo > aDriverInfo;
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("Storage")
-                ,OUString("Defines the storage where the database will be stored.")
+                "Storage"
+                ,"Defines the storage where the database will be stored."
                 ,true
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("URL")
-                ,OUString("Defines the url of the data source.")
+                "URL"
+                ,"Defines the url of the data source."
                 ,true
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("AutoRetrievingStatement")
-                ,OUString("Defines the statement which will be executed to retrieve auto increment values.")
+                "AutoRetrievingStatement"
+                ,"Defines the statement which will be executed to retrieve auto increment values."
                 ,false
-                ,OUString("CALL IDENTITY()")
+                ,"CALL IDENTITY()"
                 ,Sequence< OUString >())
                 );
         return Sequence< DriverPropertyInfo >(&aDriverInfo[0],aDriverInfo.size());
@@ -832,13 +832,13 @@ namespace connectivity
                 Sequence< Any > aArguments(2);
                 // the path to the node to open
                 aArguments[0] <<= PropertyValue(
-                    OUString("nodepath"), 0,
+                    "nodepath", 0,
                     makeAny( OUString("/org.openoffice.Setup/L10N" ) ),
                     PropertyState_DIRECT_VALUE
                 );
                 // the depth: -1 means unlimited
                 aArguments[1] <<= PropertyValue(
-                    OUString("depth"), 0,
+                    "depth", 0,
                     makeAny( (sal_Int32)-1 ), PropertyState_DIRECT_VALUE
                 );
 

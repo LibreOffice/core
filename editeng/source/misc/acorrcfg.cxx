@@ -225,7 +225,7 @@ void SvxBaseAutoCorrCfg::Load(bool bInit)
 }
 
 SvxBaseAutoCorrCfg::SvxBaseAutoCorrCfg(SvxAutoCorrCfg& rPar) :
-    utl::ConfigItem(OUString("Office.Common/AutoCorrect")),
+    utl::ConfigItem("Office.Common/AutoCorrect"),
     rParent(rPar)
 {
 }
@@ -484,7 +484,7 @@ void SvxSwAutoCorrCfg::Load(bool bInit)
 }
 
 SvxSwAutoCorrCfg::SvxSwAutoCorrCfg(SvxAutoCorrCfg& rPar) :
-    utl::ConfigItem(OUString("Office.Writer/AutoFunction")),
+    utl::ConfigItem("Office.Writer/AutoFunction"),
     rParent(rPar)
 {
 }

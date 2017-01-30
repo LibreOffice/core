@@ -120,7 +120,7 @@ void bufferEscapeConstant( OUStringBuffer & buf, const OUString & value, Connect
         // We have no good XInterface Reference to pass here, so just give NULL
         throw SQLException(OUString(errstr, strlen(errstr), ConnectionSettings::encoding),
                            nullptr,
-                           OUString("22018"),
+                           "22018",
                            -1,
                            Any());
     }
@@ -166,7 +166,7 @@ static inline void ibufferQuoteIdentifier( OUStringBuffer & buf, const OUString 
         // Implementation-defined SQLACCESS error
         throw SQLException(OUString(errstr, strlen(errstr), ConnectionSettings::encoding),
                            nullptr,
-                           OUString("22018"),
+                           "22018",
                            -1,
                            Any());
     }

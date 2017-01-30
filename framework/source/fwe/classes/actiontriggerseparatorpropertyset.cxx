@@ -245,7 +245,7 @@ const Sequence< Property > ActionTriggerSeparatorPropertySet::impl_getStaticProp
 {
     const Property pActionTriggerPropertys[] =
     {
-        Property( OUString( "SeparatorType" ), HANDLE_TYPE, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::TRANSIENT )
+        Property( "SeparatorType", HANDLE_TYPE, cppu::UnoType<sal_Int16>::get(), PropertyAttribute::TRANSIENT )
     };
 
     // Use it to initialize sequence!

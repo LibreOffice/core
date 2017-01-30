@@ -435,7 +435,7 @@ SfxItemSet* ODbAdminDialog::createItemSet(SfxItemSet*& _rpSet, SfxItemPool*& _rp
     };
 
     OSL_ENSURE(SAL_N_ELEMENTS(aItemInfos) == DSID_LAST_ITEM_ID,"Invalid Ids!");
-    _rpPool = new SfxItemPool(OUString("DSAItemPool"), DSID_FIRST_ITEM_ID, DSID_LAST_ITEM_ID,
+    _rpPool = new SfxItemPool("DSAItemPool", DSID_FIRST_ITEM_ID, DSID_LAST_ITEM_ID,
         aItemInfos, _rpDefaults);
     _rpPool->FreezeIdRanges();
 

@@ -40,7 +40,7 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define ROOTNODE_MENUS                                  OUString("Office.Common/Menus/")
+#define ROOTNODE_MENUS                                  "Office.Common/Menus/"
 #define PATHDELIMITER                                   "/"
 
 #define SETNODE_NEWMENU                                 "New"

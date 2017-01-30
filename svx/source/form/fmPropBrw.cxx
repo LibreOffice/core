@@ -541,10 +541,10 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     // a ComponentContext for the
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
-        ::cppu::ContextEntry_Init( OUString( "ContextDocument" ), makeAny( xDocument ) ),
-        ::cppu::ContextEntry_Init( OUString( "DialogParentWindow" ), makeAny( xParentWindow ) ),
-        ::cppu::ContextEntry_Init( OUString( "ControlContext" ), makeAny( xControlContext ) ),
-        ::cppu::ContextEntry_Init( OUString( "ControlShapeAccess" ), makeAny( xControlMap ) )
+        ::cppu::ContextEntry_Init( "ContextDocument", makeAny( xDocument ) ),
+        ::cppu::ContextEntry_Init( "DialogParentWindow", makeAny( xParentWindow ) ),
+        ::cppu::ContextEntry_Init( "ControlContext", makeAny( xControlContext ) ),
+        ::cppu::ContextEntry_Init( "ControlShapeAccess", makeAny( xControlMap ) )
     };
     m_xInspectorContext.set(
         ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),

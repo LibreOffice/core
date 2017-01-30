@@ -232,7 +232,7 @@ ExtrusionDirectionControl::ExtrusionDirectionControl(
 )   : svt::PopupWindowController(
         rxContext,
         Reference< css::frame::XFrame >(),
-        OUString( ".uno:ExtrusionDirectionFloater" )
+        ".uno:ExtrusionDirectionFloater"
     )
 {
 }
@@ -466,7 +466,7 @@ ExtrusionDepthController::ExtrusionDepthController(
 )   : svt::PopupWindowController(
         rxContext,
         Reference< css::frame::XFrame >(),
-        OUString( ".uno:ExtrusionDepthFloater" )
+        ".uno:ExtrusionDepthFloater"
     )
 {
 }
@@ -730,7 +730,7 @@ ExtrusionLightingControl::ExtrusionLightingControl(
     const Reference< XComponentContext >& rxContext
 )   : svt::PopupWindowController( rxContext,
                 Reference< css::frame::XFrame >(),
-                OUString( ".uno:ExtrusionDirectionFloater" )
+                ".uno:ExtrusionDirectionFloater"
     )
 {
 }
@@ -865,7 +865,7 @@ ExtrusionSurfaceControl::ExtrusionSurfaceControl(
 :   svt::PopupWindowController(
         rxContext,
         Reference< css::frame::XFrame >(),
-        OUString( ".uno:ExtrusionSurfaceFloater" )
+        ".uno:ExtrusionSurfaceFloater"
     )
 {
 }

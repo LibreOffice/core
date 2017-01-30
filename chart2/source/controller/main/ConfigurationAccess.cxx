@@ -53,7 +53,7 @@ public:
 };
 
 CalcConfigItem::CalcConfigItem()
-    : ConfigItem( OUString( "Office.Calc/Layout" ))
+    : ConfigItem( "Office.Calc/Layout" )
 {
 }
 

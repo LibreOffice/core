@@ -408,7 +408,7 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
         oox::StorageRef vbaStg = root.openSubStorage( "Macros" , false );
         if ( vbaStg.get() )
         {
-            oox::ole::VbaProject aVbaPrj( mxCtx, mrDocShell.GetModel(), OUString("Writer") );
+            oox::ole::VbaProject aVbaPrj( mxCtx, mrDocShell.GetModel(), "Writer" );
             bRet = aVbaPrj.importVbaProject( *vbaStg );
         }
     }
@@ -4161,7 +4161,7 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_aSectionManager(*this)
     , m_aExtraneousParas(rD)
     , m_aInsertedTables(rD)
-    , m_aSectionNameGenerator(rD, OUString("WW"))
+    , m_aSectionNameGenerator(rD, "WW")
     , m_pSprmParser(nullptr)
     , m_aGrfNameGenerator(bNewDoc, OUString('G'))
     , m_aParaStyleMapper(rD)

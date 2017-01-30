@@ -70,7 +70,7 @@ using namespace svx;
 #define POSTFIX_USER        "_user"
 #define POSTFIX_WRITABLE    "_writable"
 #define VAR_ONE             "%1"
-#define IODLG_CONFIGNAME    OUString("FilePicker_Save")
+#define IODLG_CONFIGNAME    "FilePicker_Save"
 
 // struct OptPath_Impl ---------------------------------------------------
 

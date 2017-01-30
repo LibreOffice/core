@@ -323,7 +323,7 @@ void SwTestAccountSettingsDialog::Test()
                     new SwConnectionContext(
                         m_pParent->m_pConfigItem->GetInServerName(),
                         m_pParent->m_pConfigItem->GetInServerPort(),
-                        OUString("Insecure"));
+                        "Insecure");
             xInMailService->connect(xConnectionContext, xAuthenticator);
         }
         if(m_bStop)

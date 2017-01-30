@@ -1107,7 +1107,7 @@ uno::Sequence< ucb::ContentInfo > Content::queryCreatableContentsInfo(
         // Minimum set of props we really need
         uno::Sequence< beans::Property > props( 1 );
         props[0] = beans::Property(
-            OUString("Title"),
+            "Title",
             -1,
             cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );
@@ -1213,40 +1213,40 @@ uno::Sequence< beans::Property > Content::getProperties(
 {
     static const beans::Property aGenericProperties[] =
     {
-        beans::Property( OUString(  "IsDocument"  ),
+        beans::Property( "IsDocument",
             -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "IsFolder"  ),
+        beans::Property( "IsFolder",
             -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "Title"  ),
+        beans::Property( "Title",
             -1, cppu::UnoType<OUString>::get(),
             beans::PropertyAttribute::BOUND ),
-        beans::Property( OUString(  "IsReadOnly"  ),
+        beans::Property( "IsReadOnly",
             -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "DateCreated"  ),
+        beans::Property( "DateCreated",
             -1, cppu::UnoType<util::DateTime>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "DateModified"  ),
+        beans::Property( "DateModified",
             -1, cppu::UnoType<util::DateTime>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "Size"  ),
+        beans::Property( "Size",
             -1, cppu::UnoType<sal_Int64>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "IsVolume"  ),
+        beans::Property( "IsVolume",
             1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "IsCompactDisc"  ),
+        beans::Property( "IsCompactDisc",
             -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "IsRemoveable"  ),
+        beans::Property( "IsRemoveable",
             -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "IsHidden"  ),
+        beans::Property( "IsHidden",
             -1, cppu::UnoType<bool>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-        beans::Property( OUString(  "CreatableContentsInfo"  ),
+        beans::Property( "CreatableContentsInfo",
             -1, cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
             beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY )
     };
@@ -1261,35 +1261,35 @@ uno::Sequence< ucb::CommandInfo > Content::getCommands( const uno::Reference< uc
     {
         // Required commands
         ucb::CommandInfo
-        ( OUString(  "getCommandInfo"  ),
+        ( "getCommandInfo",
           -1, cppu::UnoType<void>::get() ),
         ucb::CommandInfo
-        ( OUString(  "getPropertySetInfo"  ),
+        ( "getPropertySetInfo",
           -1, cppu::UnoType<void>::get() ),
         ucb::CommandInfo
-        ( OUString(  "getPropertyValues"  ),
+        ( "getPropertyValues",
           -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
         ucb::CommandInfo
-        ( OUString(  "setPropertyValues"  ),
+        ( "setPropertyValues",
           -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
 
         // Optional standard commands
         ucb::CommandInfo
-        ( OUString(  "delete"  ),
+        ( "delete",
           -1, cppu::UnoType<bool>::get() ),
         ucb::CommandInfo
-        ( OUString(  "insert"  ),
+        ( "insert",
           -1, cppu::UnoType<ucb::InsertCommandArgument>::get() ),
         ucb::CommandInfo
-        ( OUString(  "open"  ),
+        ( "open",
           -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
 
         // Folder Only, omitted if not a folder
         ucb::CommandInfo
-        ( OUString(  "transfer"  ),
+        ( "transfer",
           -1, cppu::UnoType<ucb::TransferInfo>::get() ),
         ucb::CommandInfo
-        ( OUString(  "createNewContent"  ),
+        ( "createNewContent",
           -1, cppu::UnoType<ucb::ContentInfo>::get() )
     };
 
