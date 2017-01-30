@@ -31,8 +31,6 @@ class Bitmap;
 
 namespace cairocanvas
 {
-    class Bitmap;
-
     /* Definition of RepaintTarget interface */
 
     /** Target interface for XCachedPrimitive implementations
