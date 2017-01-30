@@ -273,7 +273,7 @@ public:
 
 protected:
     SfxStyleSheet() // do not use! needed by MSVC at compile time to satisfy ImplInheritanceHelper
-        : SfxStyleSheetBase(OUString("dummy"), nullptr, SfxStyleFamily::All, 0)
+        : SfxStyleSheetBase("dummy", nullptr, SfxStyleFamily::All, 0)
     {
         assert(false);
     }

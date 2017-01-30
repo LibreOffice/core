@@ -38,7 +38,7 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star;
 
-#define ROOTNODE_TOOLPANEL                     OUString("Office.Impress/MultiPaneGUI/ToolPanel/Visible")
+#define ROOTNODE_TOOLPANEL                     "Office.Impress/MultiPaneGUI/ToolPanel/Visible"
 
 #define PROPERTYNAME_VISIBLE_IMPRESSVIEW       OUString("ImpressView")
 #define PROPERTYHANDLE_VISIBLE_IMPRESSVIEW     0

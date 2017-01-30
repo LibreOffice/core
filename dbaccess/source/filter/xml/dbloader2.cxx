@@ -340,13 +340,13 @@ bool DBContentLoader::impl_executeNewDatabaseWizard( Reference< XModel >& _rxMod
 {
     Sequence< Any > aWizardArgs(2);
     aWizardArgs[0] <<= PropertyValue(
-                    OUString("ParentWindow"),
+                    "ParentWindow",
                     0,
                     makeAny( lcl_getTopMostWindow( m_aContext ) ),
                     PropertyState_DIRECT_VALUE);
 
     aWizardArgs[1] <<= PropertyValue(
-                    OUString("InitialSelection"),
+                    "InitialSelection",
                     0,
                     makeAny( _rxModel ),
                     PropertyState_DIRECT_VALUE);

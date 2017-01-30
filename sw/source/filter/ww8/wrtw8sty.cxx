@@ -840,13 +840,13 @@ sal_uInt16 wwFontHelper::GetId(const wwFont &rFont)
 
 void wwFontHelper::InitFontTable(const SwDoc& rDoc)
 {
-    GetId(wwFont(OUString("Times New Roman"), PITCH_VARIABLE,
+    GetId(wwFont("Times New Roman", PITCH_VARIABLE,
         FAMILY_ROMAN, RTL_TEXTENCODING_MS_1252));
 
-    GetId(wwFont(OUString("Symbol"), PITCH_VARIABLE, FAMILY_ROMAN,
+    GetId(wwFont("Symbol", PITCH_VARIABLE, FAMILY_ROMAN,
         RTL_TEXTENCODING_SYMBOL));
 
-    GetId(wwFont(OUString("Arial"), PITCH_VARIABLE, FAMILY_SWISS,
+    GetId(wwFont("Arial", PITCH_VARIABLE, FAMILY_SWISS,
         RTL_TEXTENCODING_MS_1252));
 
     const SvxFontItem* pFont = static_cast<const SvxFontItem*>(GetDfltAttr(RES_CHRATR_FONT));

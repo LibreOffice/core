@@ -50,7 +50,7 @@
                     e.g.:
                             NAMELIST[ PROPERTYHANDLE_xxx ] => VALUELIST[ PROPERTYHANDLE_xxx ]
 *//*-*************************************************************************************************************/
-#define ROOTNODE_FACTORIES                  OUString("Setup/Office/Factories")
+#define ROOTNODE_FACTORIES                  "Setup/Office/Factories"
 #define PATHSEPARATOR                       "/"
 
 // Attention: The property "ooSetupFactoryEmptyDocumentURL" is read from configuration but not used! There is

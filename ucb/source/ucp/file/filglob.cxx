@@ -120,25 +120,25 @@ namespace {
                                     (bRemoveProperty ? 1 : 0) );
         sal_Int32 i = 0;
         aArguments[i++]
-            <<= PropertyValue(OUString( "Uri"),
+            <<= PropertyValue("Uri",
                               -1,
                               makeAny(rPhysicalUrl),
                               PropertyState_DIRECT_VALUE);
         if (bResourceName)
             aArguments[i++]
-                <<= PropertyValue(OUString( "ResourceName"),
+                <<= PropertyValue("ResourceName",
                                   -1,
                                   makeAny(aResourceName),
                                   PropertyState_DIRECT_VALUE);
         if (bResourceType)
             aArguments[i++]
-                <<= PropertyValue(OUString( "ResourceType"),
+                <<= PropertyValue("ResourceType",
                                   -1,
                                   makeAny(aResourceType),
                                   PropertyState_DIRECT_VALUE);
         if (bRemoveProperty)
             aArguments[i++]
-                <<= PropertyValue(OUString( "Removable"),
+                <<= PropertyValue("Removable",
                                   -1,
                                   makeAny(bRemovable),
                                   PropertyState_DIRECT_VALUE);

@@ -3051,7 +3051,7 @@ void RTL_Impl_GetProcessServiceManager( StarBASIC* pBasic, SbxArray& rPar, bool 
     Reference< XMultiServiceFactory > xFactory( comphelper::getProcessServiceFactory() );
 
     // Create a SbUnoObject out of it and return it
-    SbUnoObjectRef xUnoObj = new SbUnoObject( OUString( "ProcessServiceManager" ), Any(xFactory) );
+    SbUnoObjectRef xUnoObj = new SbUnoObject( "ProcessServiceManager", Any(xFactory) );
     refVar->PutObject( xUnoObj.get() );
 }
 
@@ -3759,7 +3759,7 @@ SbUnoSingleton* findUnoSingleton( const OUString& rName )
 SbUnoSingleton::SbUnoSingleton( const OUString& aName_ )
         : SbxObject( aName_ )
 {
-    SbxVariableRef xGetMethodRef = new SbxMethod( OUString( "get"  ), SbxOBJECT );
+    SbxVariableRef xGetMethodRef = new SbxMethod( "get", SbxOBJECT );
     QuickInsert( xGetMethodRef.get() );
 }
 
@@ -4130,7 +4130,7 @@ void RTL_Impl_GetDefaultContext( StarBASIC* pBasic, SbxArray& rPar, bool bWrite 
 
     Any aContextAny( comphelper::getProcessComponentContext() );
 
-    SbUnoObjectRef xUnoObj = new SbUnoObject( OUString( "DefaultContext" ), aContextAny );
+    SbUnoObjectRef xUnoObj = new SbUnoObject( "DefaultContext", aContextAny );
     refVar->PutObject( xUnoObj.get() );
 }
 
@@ -4775,15 +4775,15 @@ void SbUnoStructRefObject::implCreateDbgProperties()
     Property aProp;
 
     // Id == -1: display the implemented interfaces corresponding the ClassProvider
-    SbxVariableRef xVarRef = new SbUnoProperty( OUString(ID_DBG_SUPPORTEDINTERFACES), SbxSTRING, SbxSTRING, aProp, -1, false, false );
+    SbxVariableRef xVarRef = new SbUnoProperty( ID_DBG_SUPPORTEDINTERFACES, SbxSTRING, SbxSTRING, aProp, -1, false, false );
     QuickInsert( xVarRef.get() );
 
     // Id == -2: output the properties
-    xVarRef = new SbUnoProperty( OUString(ID_DBG_PROPERTIES), SbxSTRING, SbxSTRING, aProp, -2, false, false );
+    xVarRef = new SbUnoProperty( ID_DBG_PROPERTIES, SbxSTRING, SbxSTRING, aProp, -2, false, false );
     QuickInsert( xVarRef.get() );
 
     // Id == -3: output the Methods
-    xVarRef = new SbUnoProperty( OUString(ID_DBG_METHODS), SbxSTRING, SbxSTRING, aProp, -3, false, false );
+    xVarRef = new SbUnoProperty( ID_DBG_METHODS, SbxSTRING, SbxSTRING, aProp, -3, false, false );
     QuickInsert( xVarRef.get() );
 }
 

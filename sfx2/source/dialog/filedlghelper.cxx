@@ -107,8 +107,8 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::cppu;
 
-#define IODLG_CONFIGNAME        OUString("FilePicker_Save")
-#define IMPGRF_CONFIGNAME       OUString("FilePicker_Graph")
+#define IODLG_CONFIGNAME        "FilePicker_Save"
+#define IMPGRF_CONFIGNAME       "FilePicker_Graph"
 #define USERITEM_NAME           "UserItem"
 
 namespace sfx2
@@ -1046,24 +1046,24 @@ FileDialogHelper_Impl::FileDialogHelper_Impl(
         else
         {
             aInitArguments[0] <<= NamedValue(
-                                    OUString( "TemplateDescription"  ),
+                                    "TemplateDescription",
                                     makeAny( nTemplateDescription )
                                 );
 
             aInitArguments[1] <<= NamedValue(
-                                    OUString( "StandardDir"  ),
+                                    "StandardDir",
                                     makeAny( sStandardDir )
                                 );
 
             aInitArguments[2] <<= NamedValue(
-                                    OUString( "BlackList"  ),
+                                    "BlackList",
                                     makeAny( rBlackList )
                                 );
 
 
             if ( mpPreferredParentWindow )
                 aInitArguments[3] <<= NamedValue(
-                                        OUString( "ParentWindow"  ),
+                                        "ParentWindow",
                                         makeAny( VCLUnoHelper::GetInterface( mpPreferredParentWindow ) )
                                     );
         }

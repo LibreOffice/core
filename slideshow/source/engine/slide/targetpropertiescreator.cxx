@@ -311,7 +311,7 @@ namespace internal
                                             1,
                                             beans::NamedValue(
                                                 //xAnimateNode->getAttributeName(),
-                                                OUString("visibility"),
+                                                "visibility",
                                                 uno::makeAny( bVisible ) ) ) ) );
                     break;
                     }

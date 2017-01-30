@@ -394,7 +394,7 @@ Sequence< OUString > GetPropertyNames()
 }
 
 SvtSaveOptions_Impl::SvtSaveOptions_Impl()
-    : ConfigItem( OUString("Office.Common/Save") )
+    : ConfigItem( "Office.Common/Save" )
     , nAutoSaveTime( 0 )
     , bUseUserData( false )
     , bBackup( false )
@@ -776,7 +776,7 @@ public:
 const sal_Char cUserDefinedSettings[] = "UserDefinedSettings";
 
 SvtLoadOptions_Impl::SvtLoadOptions_Impl()
-    : ConfigItem( OUString("Office.Common/Load") )
+    : ConfigItem( "Office.Common/Load" )
     , bLoadUserDefinedSettings( false )
 {
     Sequence< OUString > aNames { cUserDefinedSettings };

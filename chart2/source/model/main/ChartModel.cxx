@@ -739,7 +739,7 @@ Reference< chart2::data::XDataSource > ChartModel::impl_createDefaultData()
             //create data
             uno::Sequence< beans::PropertyValue > aArgs( 4 );
             aArgs[0] = beans::PropertyValue(
-                OUString( "CellRangeRepresentation" ), -1,
+                "CellRangeRepresentation", -1,
                 uno::makeAny( OUString("all") ), beans::PropertyState_DIRECT_VALUE );
             aArgs[1] = beans::PropertyValue(
                 "HasCategories",

@@ -120,43 +120,43 @@ Sequence< DriverPropertyInfo > SAL_CALL OFileDriver::getPropertyInfo( const OUSt
         aBoolean[1] = "1";
 
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("CharSet")
-                ,OUString("CharSet of the database.")
+                "CharSet"
+                ,"CharSet of the database."
                 ,false
                 ,OUString()
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("Extension")
-                ,OUString("Extension of the file format.")
+                "Extension"
+                ,"Extension of the file format."
                 ,false
-                ,OUString(".*")
+                ,".*"
                 ,Sequence< OUString >())
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("ShowDeleted")
-                ,OUString("Display inactive records.")
+                "ShowDeleted"
+                ,"Display inactive records."
                 ,false
-                ,OUString("0")
+                ,"0"
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("EnableSQL92Check")
-                ,OUString("Use SQL92 naming constraints.")
+                "EnableSQL92Check"
+                ,"Use SQL92 naming constraints."
                 ,false
-                ,OUString("0")
+                ,"0"
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("UseRelativePath")
-                ,OUString("Handle the connection url as relative path.")
+                "UseRelativePath"
+                ,"Handle the connection url as relative path."
                 ,false
-                ,OUString("0")
+                ,"0"
                 ,aBoolean)
                 );
         aDriverInfo.push_back(DriverPropertyInfo(
-                OUString("URL")
-                ,OUString("The URL of the database document which is used to create an absolute path.")
+                "URL"
+                ,"The URL of the database document which is used to create an absolute path."
                 ,false
                 ,OUString()
                 ,Sequence< OUString >())

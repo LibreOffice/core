@@ -67,7 +67,7 @@ public:
 };
 
 SvtSearchOptions_Impl::SvtSearchOptions_Impl() :
-    ConfigItem( OUString("Office.Common/SearchOptions") )
+    ConfigItem( "Office.Common/SearchOptions" )
 {
     nFlags = 0x0003FFFF;    // set all options values to 'true'
     Load();

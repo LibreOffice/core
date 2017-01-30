@@ -42,7 +42,7 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define ROOTNODE_CMDOPTIONS                             OUString("Office.Commands/Execute")
+#define ROOTNODE_CMDOPTIONS                             "Office.Commands/Execute"
 #define PATHDELIMITER                                   "/"
 
 #define SETNODE_DISABLED                                "Disabled"

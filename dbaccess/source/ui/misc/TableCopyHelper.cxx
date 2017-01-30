@@ -205,7 +205,7 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
             aTrans.bHtml            = SotClipboardFormatId::HTML == _nFormatId;
             aTrans.sDefaultTableName = GetTableNameForAppend();
             if ( !bOk || !copyTagTable(aTrans,false,_xConnection) )
-                m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, OUString("S1000"), 0, Any()));
+                m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
         }
         catch(const SQLException&)
         {
@@ -217,7 +217,7 @@ void OTableCopyHelper::pasteTable( SotClipboardFormatId _nFormatId
         }
     }
     else
-        m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, OUString("S1000"), 0, Any()));
+        m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
 }
 
 void OTableCopyHelper::pasteTable( const TransferableDataHelper& _rTransData
@@ -314,7 +314,7 @@ void OTableCopyHelper::asyncCopyTagTable(  DropDescriptor& _rDesc
     else if ( !_rDesc.bError )
         pasteTable(_rDesc.aDroppedData,i_rDestDataSource,_xConnection);
     else
-        m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, OUString("S1000"), 0, Any()));
+        m_pController->showError(SQLException(ModuleRes(STR_NO_TABLE_FORMAT_INSIDE), *m_pController, "S1000", 0, Any()));
 }
 
 }   // namespace dbaui

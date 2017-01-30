@@ -188,8 +188,8 @@ embed::VisualRepresentation SAL_CALL OCommonEmbeddedObject::getPreferredVisualRe
             throw uno::RuntimeException();
 
         datatransfer::DataFlavor aDataFlavor(
-                OUString( "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"" ),
-                OUString( "GDIMetaFile" ),
+                "application/x-openoffice-gdimetafile;windows_formatname=\"GDIMetaFile\"",
+                "GDIMetaFile",
                 cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
         if( xTransferable->isDataFlavorSupported( aDataFlavor ))

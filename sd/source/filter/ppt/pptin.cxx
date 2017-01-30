@@ -105,7 +105,7 @@ SdPPTImport::SdPPTImport( SdDrawDocument* pDocument, SvStream& rDocStream, SotSt
     sal_uInt32 nImportFlags = 0;
 
 #ifdef DBG_UTIL
-    PropRead* pSummaryInformation = new PropRead( rStorage, OUString( "\005SummaryInformation"  ) );
+    PropRead* pSummaryInformation = new PropRead( rStorage, "\005SummaryInformation" );
     if ( pSummaryInformation->IsValid() )
     {
         pSummaryInformation->Read();
@@ -254,7 +254,7 @@ bool ImplSdPPTImport::Import()
         SeekOle( pDocShell, mnFilterOptions );
 
     // hyperlinks
-    PropRead* pDInfoSec2 = new PropRead( mrStorage, OUString( "\005DocumentSummaryInformation" ) );
+    PropRead* pDInfoSec2 = new PropRead( mrStorage, "\005DocumentSummaryInformation" );
     if ( pDInfoSec2->IsValid() )
     {
         PropItem aPropItem;

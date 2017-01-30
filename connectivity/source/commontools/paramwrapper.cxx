@@ -159,7 +159,7 @@ namespace param
                 sal_Int32 nProperties( aProperties.getLength() );
                 aProperties.realloc( nProperties + 1 );
                 aProperties[ nProperties ] = Property(
-                    OUString( "Value" ),
+                    "Value",
                     PROPERTY_ID_VALUE,
                     ::cppu::UnoType< Any >::get(),
                     PropertyAttribute::TRANSIENT | PropertyAttribute::MAYBEVOID

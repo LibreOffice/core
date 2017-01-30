@@ -37,7 +37,7 @@ using namespace ::com::sun::star::uno;
 bool SvtTabAppearanceCfg::bInitialized = false;
 
 SvtTabAppearanceCfg::SvtTabAppearanceCfg()
-    :ConfigItem(OUString("Office.Common/View"))
+    :ConfigItem("Office.Common/View")
     ,nDragMode          ( DEFAULT_DRAGMODE )
     ,nSnapMode          ( DEFAULT_SNAPMODE )
     ,nMiddleMouse       ( MouseMiddleButtonAction::AutoScroll )

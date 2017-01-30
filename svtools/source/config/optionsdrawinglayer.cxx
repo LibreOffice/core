@@ -34,7 +34,7 @@ using namespace ::utl                   ;
 using namespace ::osl                   ;
 using namespace ::com::sun::star::uno   ;
 
-#define ROOTNODE_START                  OUString("Office.Common/Drawinglayer"   )
+#define ROOTNODE_START                  "Office.Common/Drawinglayer"
 #define DEFAULT_OVERLAYBUFFER           true
 #define DEFAULT_PAINTBUFFER             true
 #define DEFAULT_STRIPE_COLOR_A          0

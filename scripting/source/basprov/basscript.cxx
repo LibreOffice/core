@@ -190,7 +190,7 @@ namespace basprov
                          "wrong number of parameters!",
                          Reference< XInterface >(),
                          m_funcName,
-                         OUString( "Basic" ),
+                         "Basic",
                          provider::ScriptFrameworkErrorType::NO_SUCH_SCRIPT  );
                 }
             }

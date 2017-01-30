@@ -457,7 +457,7 @@ private:
 };
 
 FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
-    : svt::ToolboxController(rxContext, css::uno::Reference< css::frame::XFrame >(), OUString(COMMAND_FINDTEXT))
+    : svt::ToolboxController(rxContext, css::uno::Reference< css::frame::XFrame >(), COMMAND_FINDTEXT)
     , m_pFindTextFieldControl(nullptr)
     , m_nDownSearchId(0)
     , m_nUpSearchId(0)
@@ -748,7 +748,7 @@ private:
 MatchCaseToolboxController::MatchCaseToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : svt::ToolboxController( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
-        OUString(COMMAND_MATCHCASE) )
+        COMMAND_MATCHCASE )
     , m_pMatchCaseControl(nullptr)
 {
 }
@@ -868,7 +868,7 @@ private:
 SearchFormattedToolboxController::SearchFormattedToolboxController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
     : svt::ToolboxController( rxContext,
         css::uno::Reference< css::frame::XFrame >(),
-        OUString(COMMAND_SEARCHFORMATTED) )
+        COMMAND_SEARCHFORMATTED )
     , m_pSearchFormattedControl(nullptr)
 {
 }
@@ -1093,7 +1093,7 @@ public:
 ExitSearchToolboxController::ExitSearchToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
     : svt::ToolboxController( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
-            OUString( ".uno:ExitSearch" ) )
+            ".uno:ExitSearch" )
 {
 }
 
@@ -1212,7 +1212,7 @@ public:
 SearchLabelToolboxController::SearchLabelToolboxController( const css::uno::Reference< css::uno::XComponentContext > & rxContext )
     : svt::ToolboxController( rxContext,
             css::uno::Reference< css::frame::XFrame >(),
-            OUString( ".uno:SearchLabel" ) )
+            ".uno:SearchLabel" )
 {
 }
 

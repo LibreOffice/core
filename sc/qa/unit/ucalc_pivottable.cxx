@@ -1251,7 +1251,7 @@ void Test::testPivotTableNumberGrouping()
         aInfo.mfStart = 30;
         aInfo.mfEnd = 60;
         aInfo.mfStep = 10;
-        ScDPSaveNumGroupDimension aGroup(OUString("Order"), aInfo);
+        ScDPSaveNumGroupDimension aGroup("Order", aInfo);
         pDimData->AddNumGroupDimension(aGroup);
     }
 

@@ -224,7 +224,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
     const SfxStringItem* pUser = m_pItemSetHelper->getOutputSet()->GetItem<SfxStringItem>(DSID_USER);
     if (pUser && pUser->GetValue().getLength())
         aReturn.push_back(
-            PropertyValue(  OUString("user"), 0,
+            PropertyValue(  "user", 0,
                             makeAny(OUString(pUser->GetValue())), PropertyState_DIRECT_VALUE));
 
     // check if the connection type requires a password
@@ -310,7 +310,7 @@ bool ODbDataSourceAdministrationHelper::getCurrentSettings(Sequence< PropertyVal
 
         if (!sPassword.isEmpty())
             aReturn.push_back(
-                PropertyValue(  OUString("password"), 0,
+                PropertyValue(  "password", 0,
                                 makeAny(OUString(sPassword)), PropertyState_DIRECT_VALUE));
     }
 
@@ -396,8 +396,8 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
     catch (const Exception& e)
     {
         // wrap the exception into an SQLException
-        SQLException aSQLWrapper(e.Message, getORB(), OUString("S1000"), 0, Any());
-        throw SQLException(sCurrentActionError, getORB(), OUString("S1000"), 0, makeAny(aSQLWrapper));
+        SQLException aSQLWrapper(e.Message, getORB(), "S1000", 0, Any());
+        throw SQLException(sCurrentActionError, getORB(), "S1000", 0, makeAny(aSQLWrapper));
     }
 
     Reference< XDriver > xDriver = xDriverManager->getDriverByURL(_sURL);
@@ -406,7 +406,7 @@ Reference< XDriver > ODbDataSourceAdministrationHelper::getDriver(const OUString
         sCurrentActionError = ModuleRes(STR_NOREGISTEREDDRIVER);
         sCurrentActionError = sCurrentActionError.replaceFirst("#connurl#", _sURL);
         // will be caught and translated into an SQLContext exception
-        throw SQLException(sCurrentActionError, getORB(), OUString("S1000"), 0, Any());
+        throw SQLException(sCurrentActionError, getORB(), "S1000", 0, Any());
     }
     return xDriver;
 }
@@ -807,7 +807,7 @@ void ODbDataSourceAdministrationHelper::fillDatasourceInfo(const SfxItemSet& _rS
     // here we have a special entry for types from oracle
     if ( aTypeSettings.getLength() )
     {
-        aRelevantSettings.insert(PropertyValue(OUString("TypeInfoSettings"), 0, makeAny(aTypeSettings), PropertyState_DIRECT_VALUE));
+        aRelevantSettings.insert(PropertyValue("TypeInfoSettings", 0, makeAny(aTypeSettings), PropertyState_DIRECT_VALUE));
     }
 
     // check which values are still left ('cause they were not present in the original sequence, but are to be set)

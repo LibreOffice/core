@@ -353,7 +353,7 @@ public:
 
 
 FontworkAlignmentControl::FontworkAlignmentControl( const Reference< XComponentContext >& rxContext )
-: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), OUString( ".uno:FontworkAlignment" ) )
+: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), ".uno:FontworkAlignment" )
 {
 }
 
@@ -577,7 +577,7 @@ public:
 
 
 FontworkCharacterSpacingControl::FontworkCharacterSpacingControl( const Reference< XComponentContext >& rxContext )
-: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), OUString( ".uno:FontworkCharacterSpacingFloater" ) )
+: svt::PopupWindowController( rxContext, Reference< css::frame::XFrame >(), ".uno:FontworkCharacterSpacingFloater" )
 {
 }
 

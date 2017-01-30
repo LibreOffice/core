@@ -39,7 +39,7 @@ using namespace ::utl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;
 
-#define ROOTNODE_SECURITY               OUString("Office.Common/Security/Scripting")
+#define ROOTNODE_SECURITY               "Office.Common/Security/Scripting"
 #define DEFAULT_SECUREURL               Sequence< OUString >()
 #define DEFAULT_TRUSTEDAUTHORS          Sequence< SvtSecurityOptions::Certificate >()
 

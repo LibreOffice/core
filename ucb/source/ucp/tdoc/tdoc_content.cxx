@@ -525,7 +525,7 @@ uno::Any SAL_CALL Content::execute(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             OUString( "Uri"),
+                             "Uri",
                              -1,
                              uno::makeAny(m_xIdentifier->
                                               getContentIdentifier()),
@@ -1003,7 +1003,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
     {
         // Append all Core Properties.
         xRow->appendString (
-            beans::Property( OUString("ContentType"),
+            beans::Property( "ContentType",
                       -1,
                       cppu::UnoType<OUString>::get(),
                       beans::PropertyAttribute::BOUND
@@ -1013,7 +1013,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         ContentType eType = rData.getType();
 
         xRow->appendString (
-            beans::Property( OUString("Title"),
+            beans::Property( "Title",
                       -1,
                       cppu::UnoType<OUString>::get(),
                       // Title is read-only for root and documents.
@@ -1023,14 +1023,14 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
                         : 0 ) ),
             rData.getTitle() );
         xRow->appendBoolean(
-            beans::Property( OUString("IsDocument"),
+            beans::Property( "IsDocument",
                       -1,
                       cppu::UnoType<bool>::get(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getIsDocument() );
         xRow->appendBoolean(
-            beans::Property( OUString("IsFolder"),
+            beans::Property( "IsFolder",
                       -1,
                       cppu::UnoType<bool>::get(),
                       beans::PropertyAttribute::BOUND
@@ -1038,7 +1038,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
             rData.getIsFolder() );
         xRow->appendObject(
             beans::Property(
-                OUString("CreatableContentsInfo"),
+                "CreatableContentsInfo",
                 -1,
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
@@ -1048,7 +1048,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // Storage is only supported by folders.
         if ( eType == FOLDER )
             xRow->appendObject(
-                beans::Property( OUString("Storage"),
+                beans::Property( "Storage",
                           -1,
                           cppu::UnoType<embed::XStorage>::get(),
                           beans::PropertyAttribute::BOUND
@@ -1058,7 +1058,7 @@ uno::Reference< sdbc::XRow > Content::getPropertyValues(
         // DocumentModel is only supported by documents.
         if ( eType == DOCUMENT )
             xRow->appendObject(
-                beans::Property( OUString("DocumentModel"),
+                beans::Property( "DocumentModel",
                           -1,
                           cppu::UnoType<frame::XModel>::get(),
                           beans::PropertyAttribute::BOUND
@@ -1339,7 +1339,7 @@ uno::Sequence< uno::Any > Content::setPropertyValues(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 OUString( "Uri"),
+                                 "Uri",
                                  -1,
                                  uno::makeAny(m_xIdentifier->
                                                   getContentIdentifier()),
@@ -1413,7 +1413,7 @@ uno::Any Content::open(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 OUString( "Uri"),
+                                 "Uri",
                                  -1,
                                  uno::makeAny(m_xIdentifier->
                                                   getContentIdentifier()),
@@ -1447,7 +1447,7 @@ uno::Any Content::open(
                     uno::Any aProps
                         = uno::makeAny(
                                  beans::PropertyValue(
-                                     OUString( "Uri"),
+                                     "Uri",
                                      -1,
                                      uno::makeAny(m_xIdentifier->
                                                       getContentIdentifier()),
@@ -1507,7 +1507,7 @@ uno::Any Content::open(
                         uno::Any aProps
                             = uno::makeAny(
                                      beans::PropertyValue(
-                                         OUString( "Uri"),
+                                         "Uri",
                                          -1,
                                          uno::makeAny(m_xIdentifier->
                                                           getContentIdentifier()),
@@ -1690,7 +1690,7 @@ void Content::insert( const uno::Reference< io::XInputStream >& xData,
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(m_xIdentifier->
                                                    getContentIdentifier()),
@@ -1947,7 +1947,7 @@ void Content::transfer(
         {
             uno::Any aProps
                 = uno::makeAny(beans::PropertyValue(
-                                      OUString( "Uri"),
+                                      "Uri",
                                       -1,
                                       uno::makeAny( rInfo.SourceURL ),
                                       beans::PropertyState_DIRECT_VALUE));
@@ -2026,7 +2026,7 @@ void Content::transfer(
         uno::Any aProps
             = uno::makeAny(
                      beans::PropertyValue(
-                         OUString( "Uri"),
+                         "Uri",
                          -1,
                          uno::makeAny( rInfo.SourceURL ),
                          beans::PropertyState_DIRECT_VALUE));
@@ -2057,7 +2057,7 @@ void Content::transfer(
         uno::Any aProps
             = uno::makeAny(
                      beans::PropertyValue(
-                         OUString( "Uri"),
+                         "Uri",
                          -1,
                          uno::makeAny( rInfo.SourceURL ),
                          beans::PropertyState_DIRECT_VALUE));
@@ -2095,7 +2095,7 @@ void Content::transfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny( aTargetUri ),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -2137,7 +2137,7 @@ void Content::transfer(
         {
             uno::Any aProps
                 = uno::makeAny(beans::PropertyValue(
-                                      OUString( "Uri"),
+                                      "Uri",
                                       -1,
                                       uno::makeAny( rInfo.SourceURL ),
                                       beans::PropertyState_DIRECT_VALUE));
@@ -2159,7 +2159,7 @@ void Content::transfer(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             OUString( "Uri"),
+                             "Uri",
                              -1,
                              uno::makeAny( rInfo.SourceURL ),
                              beans::PropertyState_DIRECT_VALUE));
@@ -2178,7 +2178,7 @@ void Content::transfer(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             OUString( "Uri"),
+                             "Uri",
                              -1,
                              uno::makeAny( rInfo.SourceURL ),
                              beans::PropertyState_DIRECT_VALUE));
@@ -2875,7 +2875,7 @@ ContentProperties::getCreatableContentsInfo() const
     {
         uno::Sequence< beans::Property > aProps( 1 );
         aProps.getArray()[ 0 ] = beans::Property(
-                    OUString("Title"),
+                    "Title",
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );

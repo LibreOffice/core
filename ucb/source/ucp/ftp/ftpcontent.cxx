@@ -599,7 +599,7 @@ FTPContent::queryCreatableContentsInfo_Static(  )
         | ContentInfoAttribute::KIND_DOCUMENT;
     Sequence< Property > props( 1 );
     props[0] = Property(
-        OUString("Title"),
+        "Title",
         -1,
         cppu::UnoType<OUString>::get(),
         PropertyAttribute::MAYBEVOID

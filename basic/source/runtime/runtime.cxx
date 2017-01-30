@@ -1924,7 +1924,7 @@ void SbiRuntime::StepSET_Impl( SbxVariableRef& refVal, SbxVariableRef& refVar, b
                             }
                             else if( rItem.m_aObjClass.equalsIgnoreAsciiCase( pCollectionStr ) )
                             {
-                                BasicCollection* pNewCollection = new BasicCollection( OUString(pCollectionStr) );
+                                BasicCollection* pNewCollection = new BasicCollection( pCollectionStr );
                                 pNewCollection->SetName( rItem.m_aObjName );
                                 pNewCollection->SetParent( rItem.m_pObjParent );
                                 refVar->PutObject( pNewCollection );

@@ -445,7 +445,7 @@ SbxObject* SbiFactory::CreateObject( const OUString& rClass )
     }
     else if( rClass.equalsIgnoreAsciiCase( "Collection" ) )
     {
-        return new BasicCollection( OUString("Collection"));
+        return new BasicCollection( "Collection" );
     }
     else if( rClass.equalsIgnoreAsciiCase( "FileSystemObject" ) )
     {
@@ -915,7 +915,7 @@ SbModule* SbClassFactory::FindClass( const OUString& rClassName )
 }
 
 StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
-    : SbxObject( OUString("StarBASIC") ), bDocBasic( bIsDocBasic )
+    : SbxObject("StarBASIC"), bDocBasic( bIsDocBasic )
 {
     SetParent( p );
     pLibInfo = nullptr;
@@ -937,7 +937,7 @@ StarBASIC::StarBASIC( StarBASIC* p, bool bIsDocBasic  )
         GetSbData()->pUnoFac = new SbUnoFactory;
         AddFactory( GetSbData()->pUnoFac );
     }
-    pRtl = new SbiStdObject(OUString(RTLNAME), this );
+    pRtl = new SbiStdObject(RTLNAME, this );
     // Search via StarBasic is always global
     SetFlag( SbxFlagBits::GlobalSearch );
     pVBAGlobals = nullptr;

@@ -108,7 +108,7 @@ class SwNoteProps: public utl::ConfigItem
 
     public:
         SwNoteProps()
-            : ConfigItem(OUString("Office.Writer/Notes"))
+            : ConfigItem("Office.Writer/Notes")
             , bIsShowAnchor(false)
         {
             const css::uno::Sequence< OUString >& rNames = GetPropertyNames();

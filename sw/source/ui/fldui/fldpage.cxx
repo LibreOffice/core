@@ -88,9 +88,9 @@ void SwFieldPage::Init()
             {
                 SwDoc* pDoc = pSh->GetDoc();
                 pSh->InsertFieldType( SwSetExpFieldType( pDoc,
-                                    OUString("HTML_ON"), 1));
+                                    "HTML_ON", 1));
                 pSh->InsertFieldType( SwSetExpFieldType(pDoc,
-                                    OUString("HTML_OFF"), 1));
+                                    "HTML_OFF", 1));
             }
         }
     }

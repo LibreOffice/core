@@ -313,7 +313,7 @@ namespace pcr
             // instead of calling XCloseable::close directly. The latter method would also close
             // the frame, but not care for things like shutting down the office when the last
             // frame is gone ...
-            const UnoURL aCloseURL( OUString( ".uno:CloseDoc" ),
+            const UnoURL aCloseURL( ".uno:CloseDoc",
                 Reference< XMultiServiceFactory >( m_xORB, UNO_QUERY ) );
 
             Reference< XDispatchProvider > xProvider( m_xDesigner->getFrame(), UNO_QUERY_THROW );
