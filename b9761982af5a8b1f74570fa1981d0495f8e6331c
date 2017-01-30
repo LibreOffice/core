@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_6368dabb",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2017-01-30T13:59:20Z",
+      "side": 1,
+      "message": "My concept was a third one that it doesn\u0027t really matter (and I didn\u0027t remember the compiler can handle that). But it can be confusing, you\u0027re right.",
+      "parentUuid": "fa48f94a_40174c51",
+      "range": {
+        "startLine": 258,
+        "startChar": 32,
+        "endLine": 258,
+        "endChar": 34
+      },
+      "revId": "b9761982af5a8b1f74570fa1981d0495f8e6331c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_63137a5d",
         "filename": "connectivity/source/drivers/firebird/Connection.cxx",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2017-01-30T12:59:45Z",
       "side": 1,
       "message": "instead of run-time O(n) strlen() I suggest:\nsizeof(sCharset)-1\n\"-1\" for the terminating NULL",
+      "revId": "b9761982af5a8b1f74570fa1981d0495f8e6331c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_63affae3",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1001240
+      },
+      "writtenOn": "2017-01-30T13:59:20Z",
+      "side": 1,
+      "message": "I\u0027m not really sure it\u0027s better. Considering performance, it\u0027s truly faster, but I think performance aspect is negligible this time, because it\u0027s a one time call for a database connection, with max 100 characters.\n\nThe more important aspect is readablilty. In my version the developer doesn\u0027t have to care about terminating null, there is only a function call. But is doesn\u0027t really matter too.",
+      "parentUuid": "fa48f94a_63137a5d",
       "revId": "b9761982af5a8b1f74570fa1981d0495f8e6331c",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
