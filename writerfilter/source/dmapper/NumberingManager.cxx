@@ -724,7 +724,18 @@ void ListsManager::lcl_attribute( Id nName, Value& rVal )
             //the Writer supports only a number of upper levels to show, separators is always a dot
             //and each level can have a prefix and a suffix
             if(pCurrentLvl.get())
-                pCurrentLvl->SetBulletChar( rVal.getString() );
+            {
+                OUString aString = rVal.getString();
+
+                //if the BulletChar is a soft-hyphen (0xad)
+                //replace it with a hard-hyphen (0x2d)
+                //-> this fixes missing hyphen export in PDF etc.
+                if(!aString.isEmpty() && aString.pData->buffer[0] == 0xad)
+                {
+                    aString.pData->buffer[0] = 0x2d;
+                }
+                pCurrentLvl->SetBulletChar( aString );
+            }
         }
         break;
         case NS_ooxml::LN_CT_Lvl_start:
