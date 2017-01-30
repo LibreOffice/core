@@ -374,7 +374,7 @@ void IntrospectionAccessStatic_Impl::setPropertyValue( const Any& obj, const OUS
     if( i != -1 )
         setPropertyValueByIndex( obj, (sal_Int32)i, aValue );
     else
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(aPropertyName);
 }
 
 void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal_Int32 nSequenceIndex, const Any& aValue) const
@@ -385,16 +385,22 @@ void IntrospectionAccessStatic_Impl::setPropertyValueByIndex(const Any& obj, sal
     if( !(obj >>= xInterface) )
     {
         TypeClass eObjType = obj.getValueType().getTypeClass();
-        if( nSequenceIndex >= mnPropCount || ( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION ) )
-        {
-            throw IllegalArgumentException();
-        }
+        if( nSequenceIndex >= mnPropCount)
+            throw IllegalArgumentException(
+                "IntrospectionAccessStatic_Impl::setPropertyValueByIndex(), index > propertyCount, " +
+                OUString::number(nSequenceIndex) + " > " + OUString::number(mnPropCount),
+                Reference<XInterface>(), 0);
+        if( eObjType != TypeClass_STRUCT && eObjType != TypeClass_EXCEPTION )
+            throw IllegalArgumentException(
+                "IntrospectionAccessStatic_Impl::setPropertyValueByIndex(), expected struct or exception, got" +
+                obj.getValueType().getTypeName(), Reference<XInterface>(), 0);
     }
 
     // Test flags
     if( (maAllPropertySeq[ nSequenceIndex ].Attributes & READONLY) != 0 )
     {
-        throw UnknownPropertyException();
+        throw UnknownPropertyException(
+            "IntrospectionAccessStatic_Impl::setPropertyValueByIndex(), property at index " + OUString::number(nSequenceIndex) + " is readonly");
     }
 
     switch( maMapTypeSeq[ nSequenceIndex ] )
@@ -512,7 +518,7 @@ Any IntrospectionAccessStatic_Impl::getPropertyValue( const Any& obj, const OUSt
     if( i != -1 )
         return getPropertyValueByIndex( obj, i );
 
-    throw UnknownPropertyException();
+    throw UnknownPropertyException(aPropertyName);
 }
 
 Any IntrospectionAccessStatic_Impl::getPropertyValueByIndex(const Any& obj, sal_Int32 nSequenceIndex) const
@@ -1250,7 +1256,7 @@ Property ImplIntrospectionAccess::getProperty(const OUString& Name, sal_Int32 Pr
         }
     }
     if( !bFound )
-        throw NoSuchElementException() ;
+        throw NoSuchElementException(Name);
     return aRet;
 }
 
@@ -1335,7 +1341,7 @@ Reference<XIdlMethod> ImplIntrospectionAccess::getMethod(const OUString& Name, s
         }
     }
     if( !xRet.is() )
-        throw NoSuchMethodException();
+        throw NoSuchMethodException(Name);
     return xRet;
 }
 

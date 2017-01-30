@@ -189,7 +189,7 @@ Any IdlCompFieldImpl::get( const Any & rObj )
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
-        "illegal object given!",
+        "expected struct or exception, got " + rObj.getValueType().getTypeName(),
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 
@@ -217,14 +217,14 @@ void IdlCompFieldImpl::set( const Any & rObj, const Any & rValue )
             else
             {
                 throw IllegalArgumentException(
-                    "illegal value given!",
+                    "cannot assign value to destination",
                     static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
             }
         }
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
-        "illegal object given!",
+        "expected struct or exception, got " + rObj.getValueType().getTypeName(),
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 
@@ -253,14 +253,14 @@ void IdlCompFieldImpl::set( Any & rObj, const Any & rValue )
             else
             {
                 throw IllegalArgumentException(
-                    "illegal value given!",
+                    "cannot assign to destination",
                     static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 1 );
             }
         }
         TYPELIB_DANGER_RELEASE( pObjTD );
     }
     throw IllegalArgumentException(
-        "illegal object given!",
+        "expected struct or exception, got " + rObj.getValueType().getTypeName(),
         static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
 }
 

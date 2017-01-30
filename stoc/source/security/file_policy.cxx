@@ -328,16 +328,11 @@ sal_Unicode PolicyReader::get()
 
 void PolicyReader::error( OUString const & msg )
 {
-    OUStringBuffer buf( 32 );
-    buf.append( "error processing file \"" );
-    buf.append( m_fileName );
-    buf.append( "\" [line " );
-    buf.append( m_linepos );
-    buf.append( ", column " );
-    buf.append( m_pos );
-    buf.append( "] " );
-    buf.append( msg );
-    throw RuntimeException( buf.makeStringAndClear() );
+    throw RuntimeException(
+        "error processing file \"" + m_fileName +
+        "\" [line " + OUString::number(m_linepos) +
+        ", column " + OUString::number(m_pos) +
+        "] " + msg);
 }
 
 PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
@@ -349,11 +344,7 @@ PolicyReader::PolicyReader( OUString const & fileName, AccessControl & ac )
     ac.checkFilePermission( m_fileName, "read" );
     if (osl_File_E_None != ::osl_openFile( m_fileName.pData, &m_file, osl_File_OpenFlag_Read ))
     {
-        OUStringBuffer buf( 32 );
-        buf.append( "cannot open file \"" );
-        buf.append( m_fileName );
-        buf.append( "\"!" );
-        throw RuntimeException( buf.makeStringAndClear() );
+        throw RuntimeException( "cannot open file \"" + m_fileName + "\"!" );
     }
 }
 

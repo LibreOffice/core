@@ -699,10 +699,7 @@ PermissionCollection AccessController::getEffectivePermissions(
     catch (const security::AccessControlException & exc) // wrapped into DeploymentException
     {
         clearPostPoned(); // safety: exception could have happened before checking postponed?
-        OUStringBuffer buf( 64 );
-        buf.append( "deployment error (AccessControlException occurred): " );
-        buf.append( exc.Message );
-        throw DeploymentException( buf.makeStringAndClear(), exc.Context );
+        throw DeploymentException( "deployment error (AccessControlException occurred): " + exc.Message, exc.Context );
     }
     catch (RuntimeException &)
     {

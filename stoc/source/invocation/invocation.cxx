@@ -607,7 +607,8 @@ Any Invocation_Impl::invoke( const OUString& FunctionName, const Sequence<Any>& 
         if (nFParamsLen != InParams.getLength())
         {
             throw IllegalArgumentException(
-                "incorrect number of parameters passed invoking function " + FunctionName,
+                "incorrect number of parameters passed invoking function " + FunctionName +
+                "expected " + OUString::number(nFParamsLen) + ", got " + OUString::number(InParams.getLength()),
                 static_cast<OWeakObject *>(this), (sal_Int16) 1 );
         }
 
@@ -887,7 +888,7 @@ InvocationInfo SAL_CALL Invocation_Impl::getInfoForName( const OUString& aName, 
     if( !bFound )
     {
         throw IllegalArgumentException(
-            "Unknown name, getExactName() failed!",
+            "getExactName(), Unknown name " + aName,
             static_cast<XWeak *>(static_cast<OWeakObject *>(this)), 0 );
     }
     return aRetInfo;
