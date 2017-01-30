@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_a362c2d6",
+        "filename": "vcl/unx/generic/app/sm.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-01-30T13:51:55Z",
+      "side": 1,
+      "message": "why do all of the below everytime SaveYourselfProc is called?",
+      "revId": "53f8269caf9b3ad6d5c4fc33a6ef687e59c3cea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_a3b9e230",
+        "filename": "vcl/unx/generic/app/sm.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-01-30T13:51:55Z",
+      "side": 1,
+      "message": "mmh, we should really use snprintf in new code (or OString::number())",
+      "revId": "53f8269caf9b3ad6d5c4fc33a6ef687e59c3cea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_c3b6e63c",
+        "filename": "vcl/unx/generic/app/sm.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000006
+      },
+      "writtenOn": "2017-01-30T13:51:55Z",
+      "side": 1,
+      "message": "might be overkill here as static, and would need assurance we never call it concurrently?",
+      "revId": "53f8269caf9b3ad6d5c4fc33a6ef687e59c3cea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
