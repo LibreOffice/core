@@ -590,6 +590,17 @@ void SwFlyDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint
         if (pFormat && pFormat->Which() == RES_FLYFRMFMT && !pFormat->getIDocumentLayoutAccess().GetCurrentViewShell())
             pGetZOrdnerHint->m_rnZOrder = GetMaster()->GetOrdNum();
     }
+    else if (auto pDrawFrameFormatHint = dynamic_cast<const sw::DrawFrameFormatHint*>(&rHint))
+    {
+        switch(pDrawFrameFormatHint->m_eId)
+        {
+            case sw::DrawFrameFormatHintId::DYING_FLYFRAMEFORMAT:
+                delete this;
+                break;
+            default:
+                ;
+        }
+    }
 }
 
 // SwDrawContact
@@ -1528,7 +1539,7 @@ void SwDrawContact::SwClientNotify(const SwModify& rMod, const SfxHint& rHint)
                 GetAnchoredObj(GetMaster())->MakeObjPos();
                 break;
             default:
-                SAL_WARN("sw.core", "unhandled DrawFrameFormatHintId");
+                ;
         }
     }
     else if (auto pCheckDrawFrameFormatLayerHint = dynamic_cast<const sw::CheckDrawFrameFormatLayerHint*>(&rHint))
