@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_c317c6eb",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1944,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-01-30T16:11:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa48f94a_e05da0ed",
+      "revId": "0a043520ae8c00cd0f184027d1afa3143bf01a2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_c0697c8d",
         "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_e3d20a34",
+        "filename": "officecfg/registry/data/org/openoffice/Office/UI/WriterCommands.xcu",
+        "patchSetId": 2
+      },
+      "lineNbr": 1946,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-01-30T16:11:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa48f94a_c0697c8d",
+      "revId": "0a043520ae8c00cd0f184027d1afa3143bf01a2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_e004c0c7",
         "filename": "sw/source/uibase/shells/basesh.cxx",
         "patchSetId": 2
@@ -47,6 +83,30 @@
       "writtenOn": "2017-01-29T20:43:18Z",
       "side": 1,
       "message": "Maybe we can simply use the existing GetCurrSection method?",
+      "range": {
+        "startLine": 1399,
+        "startChar": 25,
+        "endLine": 1399,
+        "endChar": 42
+      },
+      "revId": "0a043520ae8c00cd0f184027d1afa3143bf01a2d",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_03d8ee52",
+        "filename": "sw/source/uibase/shells/basesh.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 1399,
+      "author": {
+        "id": 1000868
+      },
+      "writtenOn": "2017-01-30T16:11:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa48f94a_e004c0c7",
       "range": {
         "startLine": 1399,
         "startChar": 25,
