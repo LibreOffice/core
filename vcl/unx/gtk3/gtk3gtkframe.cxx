@@ -2143,9 +2143,9 @@ void GtkSalFrame::SetPointerPos( long nX, long nY )
     unsigned int nWindowLeft = maGeometry.nX + nX;
     unsigned int nWindowTop  = maGeometry.nY + nY;
 
-    XWarpPointer( GDK_DISPLAY_XDISPLAY (pDisplay), None,
-                  GDK_WINDOW_XID (gdk_screen_get_root_window( pScreen ) ),
-                  0, 0, 0, 0, nWindowLeft, nWindowTop);
+    GdkDeviceManager* pManager = gdk_display_get_device_manager(pDisplay);
+    gdk_device_warp(gdk_device_manager_get_client_pointer(pManager), pScreen, nWindowLeft, nWindowTop);
+
     // #i38648# ask for the next motion hint
     gint x, y;
     GdkModifierType mask;
