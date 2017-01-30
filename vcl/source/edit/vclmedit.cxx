@@ -850,7 +850,6 @@ void TextWindow::Command( const CommandEvent& rCEvt )
         pPopup->EnableItem(pPopup->GetItemId("specialchar"), bEnableSpecialChar);
         pPopup->EnableItem(pPopup->GetItemId("undo"), bEnableUndo);
         pPopup->ShowItem(pPopup->GetItemId("specialchar"), !Edit::GetGetSpecialCharsFunction());
-        pPopup->ShowItem(pPopup->GetItemId("selectall"), !Edit::GetGetSpecialCharsFunction());
 
         mbActivePopup = true;
         Point aPos = rCEvt.GetMousePosPixel();

@@ -1985,7 +1985,6 @@ void Edit::Command( const CommandEvent& rCEvt )
         bool bAllSelected = maSelection.Min() == 0 && maSelection.Max() == maText.getLength();
         pPopup->EnableItem(pPopup->GetItemId("selectall"), !bAllSelected);
         pPopup->ShowItem(pPopup->GetItemId("specialchar"), pImplFncGetSpecialChars);
-        pPopup->ShowItem(pPopup->GetItemId("selectall"), pImplFncGetSpecialChars);
 
         mbActivePopup = true;
         Selection aSaveSel = GetSelection(); // if someone changes selection in Get/LoseFocus, e.g. URL bar
