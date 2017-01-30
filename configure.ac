@@ -10644,6 +10644,9 @@ if test "$_os" = "Linux"; then
 
         GPGME_CFLAGS=`$GPGMECONFIG --cflags`
         GPGME_LIBS=`$GPGMECONFIG --libs`
+    else
+        AC_MSG_RESULT([internal])
+        BUILD_TYPE="$BUILD_TYPE LIBGPGERROR LIBASSUAN GPGME"
     fi
 fi
 AC_SUBST(SYSTEM_GPGME)
