@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_43467624",
+        "filename": "framework/inc/services/desktop.hxx",
+        "patchSetId": 4
+      },
+      "lineNbr": 379,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2017-01-30T15:00:33Z",
+      "side": 1,
+      "message": "i will change, should i change the \"m_bTerminated\" too?",
+      "parentUuid": "fa48f94a_03046e13",
+      "revId": "179297d6268d49c2f20d93cc4925fa7a5dc253cc",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_2309722d",
         "filename": "framework/source/services/desktop.cxx",
         "patchSetId": 4
