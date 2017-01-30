@@ -1586,10 +1586,9 @@ static void commentCallback(LOKDocView* pLOKDocView, gchar* pComment, gpointer /
     boost::property_tree::ptree aRoot;
     boost::property_tree::read_json(aStream, aRoot);
     boost::property_tree::ptree aComment = aRoot.get_child("comment");
-    gint nPos = 0;
     GtkWidget* pCommentsGrid = rWindow.m_pCommentsSidebar->m_pCommentsVBox;
     GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pCommentsGrid));
-    for (GList* l = pChildren; l != nullptr; l = l->next, nPos++)
+    for (GList* l = pChildren; l != nullptr; l = l->next)
     {
         int *id = static_cast<int*>(g_object_get_data(G_OBJECT(l->data), "id"));
 
