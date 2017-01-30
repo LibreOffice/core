@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fa48f94a_40174c51",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 258,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-30T12:59:45Z",
+      "side": 1,
+      "message": "I\u0027m not sure why \"32\" here. It sounds like:\n\n1) You confused bytes (4 characters in UTF8) and bits.\n2) You forgot the terminating NULL.\n\nThe string \"UTF8\" takes *5* bytes of storage.\n\nI recommend to let the compiler handle this automatically:\n\nconst char sCharset[] \u003d \"UTF8\";",
+      "range": {
+        "startLine": 258,
+        "startChar": 32,
+        "endLine": 258,
+        "endChar": 34
+      },
+      "revId": "b9761982af5a8b1f74570fa1981d0495f8e6331c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_63137a5d",
+        "filename": "connectivity/source/drivers/firebird/Connection.cxx",
+        "patchSetId": 1
+      },
+      "lineNbr": 260,
+      "author": {
+        "id": 1000084
+      },
+      "writtenOn": "2017-01-30T12:59:45Z",
+      "side": 1,
+      "message": "instead of run-time O(n) strlen() I suggest:\nsizeof(sCharset)-1\n\"-1\" for the terminating NULL",
+      "revId": "b9761982af5a8b1f74570fa1981d0495f8e6331c",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
