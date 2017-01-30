@@ -313,7 +313,7 @@ class Parser:
             "pyuno" : 1,
             "registry" : 1,
             "remotebridges" : 1,
-            "reportdesign" : 0, #
+            "reportdesign" : 1,
             "rsc" : 1,
             "sal" : 1,
             "salhelper" : 1,
@@ -324,7 +324,7 @@ class Parser:
             "scripting" : 1,
             "sd" : 1,
             "sdext" : 1,
-            "sfx2" : 0, #
+            "sfx2" : 1,
             "shell" : 1,
             "setup_native" : 1,
             "sot" : 1,
@@ -333,7 +333,7 @@ class Parser:
             "solenv" : 1,
             "soltools" : 1,
             "starmath" : 1,
-            "stoc" : 0, #
+            "stoc" : 1,
             "store" : 1,
             "svgio" : 1,
             "svl" : 1,
