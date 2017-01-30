@@ -659,9 +659,12 @@ void ScCondFormatDlg::OkPressed()
             nKey = pList->getMaxKey() + 1;
         }
 
-        pFormat->SetKey(nKey);
         pList->erase(nKey);
-        pList->InsertNew(pFormat);
+        if (pFormat)
+        {
+            pFormat->SetKey(nKey);
+            pList->InsertNew(pFormat);
+        }
         mpViewData->GetViewShell()->GetPool().Put(*mpDlgItem);
 
         SetDispatcherLock( false );
