@@ -419,35 +419,6 @@ namespace
         }
     }
 
-    // #i86492#
-    bool lcl_ContainsOnlyParagraphsInList( const SwPaM& rPam )
-    {
-        bool bRet = false;
-
-        const SwTextNode* pTextNd = rPam.Start()->nNode.GetNode().GetTextNode();
-        const SwTextNode* pEndTextNd = rPam.End()->nNode.GetNode().GetTextNode();
-        if ( pTextNd && pTextNd->IsInList() &&
-             pEndTextNd && pEndTextNd->IsInList() )
-        {
-            bRet = true;
-            SwNodeIndex aIdx(rPam.Start()->nNode);
-
-            do
-            {
-                ++aIdx;
-                pTextNd = aIdx.GetNode().GetTextNode();
-
-                if ( !pTextNd || !pTextNd->IsInList() )
-                {
-                    bRet = false;
-                    break;
-                }
-            } while ( pTextNd && pTextNd != pEndTextNd );
-        }
-
-        return bRet;
-    }
-
     bool lcl_MarksWholeNode(const SwPaM & rPam)
     {
         bool bResult = false;
@@ -4205,31 +4176,6 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pDoc->SetOutlineNumRule(*m_rDoc.GetOutlineNumRule());
     }
 
-    // #i86492#
-    // Correct the search for a previous list:
-    // First search for non-outline numbering list. Then search for non-outline
-    // bullet list.
-    // Keep also the <ListId> value for possible propagation.
-    OUString aListIdToPropagate;
-    const SwNumRule* pNumRuleToPropagate =
-        pDoc->SearchNumRule( rPos, false, true, false, 0, aListIdToPropagate, true );
-    if ( !pNumRuleToPropagate )
-    {
-        pNumRuleToPropagate =
-            pDoc->SearchNumRule( rPos, false, false, false, 0, aListIdToPropagate, true );
-    }
-    // #i86492#
-    // Do not propagate previous found list, if
-    // - destination is an empty paragraph which is not in a list and
-    // - source contains at least one paragraph which is not in a list
-    if ( pNumRuleToPropagate &&
-         pDestTextNd && !pDestTextNd->GetText().getLength() &&
-         !pDestTextNd->IsInList() &&
-         !lcl_ContainsOnlyParagraphsInList( rPam ) )
-    {
-        pNumRuleToPropagate = nullptr;
-    }
-
     // This do/while block is only there so that we can break out of it!
     do {
         if( pSttTextNd )
@@ -4530,13 +4476,6 @@ bool DocumentContentOperationsManager::CopyImpl( SwPaM& rPam, SwPosition& rPos,
         pCpyRange->SetMark();
         *pCpyRange->GetPoint() = *pCopyPam->GetPoint();
         *pCpyRange->GetMark() = *pCopyPam->GetMark();
-    }
-
-    if ( pNumRuleToPropagate != nullptr )
-    {
-        // #i86492# - use <SwDoc::SetNumRule(..)>, because it also handles the <ListId>
-        pDoc->SetNumRule( *pCopyPam, *pNumRuleToPropagate, false,
-                          aListIdToPropagate, true, true );
     }
 
     pDoc->getIDocumentRedlineAccess().SetRedlineFlags_intern( eOld );
