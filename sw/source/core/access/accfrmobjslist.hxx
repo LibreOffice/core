@@ -31,13 +31,13 @@ class SwAccessibleChildSList_const_iterator
 private:
     friend class SwAccessibleChildSList;
 
-    const SwAccessibleChildSList& rList;    // The frame we are iterating over
-    sw::access::SwAccessibleChild aCurr;    // The current object
-    size_t nNextObj;                        // The index of the current sdr object
+    const SwAccessibleChildSList& m_rList;    // The frame we are iterating over
+    sw::access::SwAccessibleChild m_aCurr;    // The current object
+    size_t m_nNextObj;                        // The index of the current sdr object
 
     inline SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList& rLst )
-        : rList( rLst )
-        , nNextObj( 0 )
+        : m_rList( rLst )
+        , m_nNextObj( 0 )
     {}
 
     SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList& rLst,
@@ -48,14 +48,14 @@ private:
 
 public:
     inline SwAccessibleChildSList_const_iterator( const SwAccessibleChildSList_const_iterator& rIter )
-        : rList( rIter.rList )
-        , aCurr( rIter.aCurr )
-        , nNextObj( rIter.nNextObj )
+        : m_rList( rIter.m_rList )
+        , m_aCurr( rIter.m_aCurr )
+        , m_nNextObj( rIter.m_nNextObj )
     {}
 
     inline bool operator==( const SwAccessibleChildSList_const_iterator& r ) const
     {
-        return aCurr == r.aCurr;
+        return m_aCurr == r.m_aCurr;
     }
 
     inline bool operator!=(
@@ -68,7 +68,7 @@ public:
 
     inline const sw::access::SwAccessibleChild& operator*() const
     {
-        return aCurr;
+        return m_aCurr;
     }
 };
 

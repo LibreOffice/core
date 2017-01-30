@@ -30,20 +30,20 @@ using namespace ::sw::access;
 SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
     const SwAccessibleChildSList& rLst,
     SwAccessibleMap& rAccMap )
-    : rList( rLst ),
-      aCurr( rList.GetFrame().GetLower() ),
-      nNextObj( 0 )
+    : m_rList( rLst ),
+      m_aCurr( m_rList.GetFrame().GetLower() ),
+      m_nNextObj( 0 )
 {
-    if( !aCurr.GetSwFrame() )
+    if( !m_aCurr.GetSwFrame() )
     {
-        const SwFrame& rFrame = rList.GetFrame();
+        const SwFrame& rFrame = m_rList.GetFrame();
         if( rFrame.IsPageFrame() )
         {
             const SwPageFrame& rPgFrame = static_cast< const SwPageFrame& >( rFrame );
             const SwSortedObjs *pObjs = rPgFrame.GetSortedObjs();
             if( pObjs && pObjs->size() )
             {
-                aCurr = (*pObjs)[nNextObj++]->GetDrawObj();
+                m_aCurr = (*pObjs)[m_nNextObj++]->GetDrawObj();
             }
         }
         else if( rFrame.IsTextFrame() )
@@ -51,34 +51,34 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
             const SwSortedObjs *pObjs = rFrame.GetDrawObjs();
             if ( pObjs && pObjs->size() )
             {
-                aCurr = (*pObjs)[nNextObj++]->GetDrawObj();
-                while( aCurr.IsValid() && !aCurr.IsBoundAsChar() )
+                m_aCurr = (*pObjs)[m_nNextObj++]->GetDrawObj();
+                while( m_aCurr.IsValid() && !m_aCurr.IsBoundAsChar() )
                 {
-                    aCurr = (nNextObj < pObjs->size())
-                            ? (*pObjs)[nNextObj++]->GetDrawObj()
+                    m_aCurr = (m_nNextObj < pObjs->size())
+                            ? (*pObjs)[m_nNextObj++]->GetDrawObj()
                             : static_cast< const SdrObject *>( nullptr );
                 }
             }
-            if ( !aCurr.IsValid() )
+            if ( !m_aCurr.IsValid() )
             {
                 ::rtl::Reference < SwAccessibleContext > xAccImpl =
                                     rAccMap.GetContextImpl( &rFrame, false );
                 if( xAccImpl.is() )
                 {
                     SwAccessibleContext* pAccImpl = xAccImpl.get();
-                    aCurr = SwAccessibleChild( pAccImpl->GetAdditionalAccessibleChild( 0 ) );
-                    ++nNextObj;
+                    m_aCurr = SwAccessibleChild( pAccImpl->GetAdditionalAccessibleChild( 0 ) );
+                    ++m_nNextObj;
                 }
             }
         }
     }
 
-    if( rList.IsVisibleChildrenOnly() )
+    if( m_rList.IsVisibleChildrenOnly() )
     {
         // Find the first visible
-        while( aCurr.IsValid() &&
-               !aCurr.AlwaysIncludeAsChild() &&
-               !aCurr.GetBox( rAccMap ).IsOver( rList.GetVisArea() ) )
+        while( m_aCurr.IsValid() &&
+               !m_aCurr.AlwaysIncludeAsChild() &&
+               !m_aCurr.GetBox( rAccMap ).IsOver( m_rList.GetVisArea() ) )
         {
             next();
         }
@@ -88,14 +88,14 @@ SwAccessibleChildSList_const_iterator::SwAccessibleChildSList_const_iterator(
 SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::next()
 {
     bool bNextTaken( true );
-    if( aCurr.GetDrawObject() || aCurr.GetWindow() )
+    if( m_aCurr.GetDrawObject() || m_aCurr.GetWindow() )
     {
         bNextTaken = false;
     }
-    else if( aCurr.GetSwFrame() )
+    else if( m_aCurr.GetSwFrame() )
     {
-        aCurr = aCurr.GetSwFrame()->GetNext();
-        if( !aCurr.GetSwFrame() )
+        m_aCurr = m_aCurr.GetSwFrame()->GetNext();
+        if( !m_aCurr.GetSwFrame() )
         {
             bNextTaken = false;
         }
@@ -103,37 +103,37 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
 
     if( !bNextTaken )
     {
-        const SwFrame& rFrame = rList.GetFrame();
+        const SwFrame& rFrame = m_rList.GetFrame();
         if( rFrame.IsPageFrame() )
         {
             const SwPageFrame& rPgFrame = static_cast< const SwPageFrame& >( rFrame );
             const SwSortedObjs *pObjs = rPgFrame.GetSortedObjs();
-            aCurr = ( pObjs && nNextObj < pObjs->size() )
-                    ? (*pObjs)[nNextObj++]->GetDrawObj()
+            m_aCurr = ( pObjs && m_nNextObj < pObjs->size() )
+                    ? (*pObjs)[m_nNextObj++]->GetDrawObj()
                     : static_cast< const SdrObject *>( nullptr );
         }
         else if( rFrame.IsTextFrame() )
         {
             const SwSortedObjs* pObjs = rFrame.GetDrawObjs();
             const size_t nObjsCount = pObjs ? pObjs->size() : 0;
-            aCurr = ( pObjs && nNextObj < nObjsCount )
-                    ? (*pObjs)[nNextObj++]->GetDrawObj()
+            m_aCurr = ( pObjs && m_nNextObj < nObjsCount )
+                    ? (*pObjs)[m_nNextObj++]->GetDrawObj()
                     : static_cast< const SdrObject *>( nullptr );
-            while( aCurr.IsValid() && !aCurr.IsBoundAsChar() )
+            while( m_aCurr.IsValid() && !m_aCurr.IsBoundAsChar() )
             {
-                aCurr = ( nNextObj < nObjsCount )
-                        ? (*pObjs)[nNextObj++]->GetDrawObj()
+                m_aCurr = ( m_nNextObj < nObjsCount )
+                        ? (*pObjs)[m_nNextObj++]->GetDrawObj()
                         : static_cast< const SdrObject *>( nullptr );
             }
-            if ( !aCurr.IsValid() )
+            if ( !m_aCurr.IsValid() )
             {
                 ::rtl::Reference < SwAccessibleContext > xAccImpl =
-                                    rList.GetAccMap().GetContextImpl( &rFrame, false );
+                                    m_rList.GetAccMap().GetContextImpl( &rFrame, false );
                 if( xAccImpl.is() )
                 {
                     SwAccessibleContext* pAccImpl = xAccImpl.get();
-                    aCurr = SwAccessibleChild( pAccImpl->GetAdditionalAccessibleChild( nNextObj - nObjsCount ) );
-                    ++nNextObj;
+                    m_aCurr = SwAccessibleChild( pAccImpl->GetAdditionalAccessibleChild( m_nNextObj - nObjsCount ) );
+                    ++m_nNextObj;
                 }
             }
         }
@@ -145,9 +145,9 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
 SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::next_visible()
 {
     next();
-    while( aCurr.IsValid() &&
-           !aCurr.AlwaysIncludeAsChild() &&
-           !aCurr.GetBox( rList.GetAccMap() ).IsOver( rList.GetVisArea() ) )
+    while( m_aCurr.IsValid() &&
+           !m_aCurr.AlwaysIncludeAsChild() &&
+           !m_aCurr.GetBox( m_rList.GetAccMap() ).IsOver( m_rList.GetVisArea() ) )
     {
         next();
     }
@@ -157,7 +157,7 @@ SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::ne
 
 SwAccessibleChildSList_const_iterator& SwAccessibleChildSList_const_iterator::operator++()
 {
-    return rList.IsVisibleChildrenOnly() ? next_visible() : next();
+    return m_rList.IsVisibleChildrenOnly() ? next_visible() : next();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
