@@ -2723,6 +2723,17 @@ void VclBuilder::insertMenuObject(PopupMenu *pParent, const OString &rClass, con
         OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
         pParent->InsertItem(nNewId, sLabel, MenuItemBits::TEXT, rID);
     }
+    else if (rClass == "GtkCheckMenuItem")
+    {
+        OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
+        pParent->InsertItem(nNewId, sLabel, MenuItemBits::CHECKABLE, rID);
+    }
+    else if (rClass == "GtkRadioMenuItem")
+    {
+        OUString sLabel(OStringToOUString(convertMnemonicMarkup(extractLabel(rProps)), RTL_TEXTENCODING_UTF8));
+        pParent->InsertItem(nNewId, sLabel, MenuItemBits::CHECKABLE | MenuItemBits::RADIOCHECK, rID);
+    }
+
     else if (rClass == "GtkSeparatorMenuItem")
     {
         pParent->InsertSeparator(rID);
