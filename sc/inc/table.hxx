@@ -241,6 +241,21 @@ public:
 
     ScOutlineTable* GetOutlineTable()               { return pOutlineTable; }
 
+    ScColumn& CreateColumnIfNotExists( SCCOL nScCol )
+    {
+        if ( nScCol >= aCol.size() )
+        {
+            SCCOL aOldColSize = aCol.size();
+            bool bUseEmptyAttrArray = false;
+            if ( aOldColSize == 0 )
+                bUseEmptyAttrArray = true;
+            aCol.resize( static_cast< size_t >( nScCol + 1 ) );
+            for (SCCOL i = aOldColSize; i <= nScCol; i++)
+                aCol[i].Init( i, nTab, pDocument, bUseEmptyAttrArray );
+
+        }
+        return aCol[nScCol];
+    }
     sal_uLong       GetCellCount() const;
     sal_uLong       GetWeightedCount() const;
     sal_uLong       GetCodeCount() const;       // RPN code in formula
@@ -544,7 +559,7 @@ public:
 
     FormulaError    GetErrCode( const ScAddress& rPos ) const
                     {
-                        return ValidColRow(rPos.Col(),rPos.Row()) ?
+                        return IsColRowValid(rPos.Col(),rPos.Row()) ?
                             aCol[rPos.Col()].GetErrCode( rPos.Row() ) :
                             FormulaError::NONE;
                     }
