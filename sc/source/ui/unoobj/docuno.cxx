@@ -3370,7 +3370,7 @@ uno::Sequence < uno::Reference< table::XCellRange > > SAL_CALL ScTableSheetsObj:
 uno::Reference<container::XEnumeration> SAL_CALL ScTableSheetsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.SpreadsheetsEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.SpreadsheetsEnumeration");
 }
 
 // XIndexAccess
@@ -3535,7 +3535,7 @@ void SAL_CALL ScTableColumnsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCou
 uno::Reference<container::XEnumeration> SAL_CALL ScTableColumnsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.table.TableColumnsEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.table.TableColumnsEnumeration");
 }
 
 // XIndexAccess
@@ -3773,7 +3773,7 @@ void SAL_CALL ScTableRowsObj::removeByIndex( sal_Int32 nIndex, sal_Int32 nCount 
 uno::Reference<container::XEnumeration> SAL_CALL ScTableRowsObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.table.TableRowsEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.table.TableRowsEnumeration");
 }
 
 // XIndexAccess
@@ -4080,7 +4080,7 @@ uno::Reference<container::XEnumeration> SAL_CALL ScAnnotationsObj::createEnumera
     //! iterate directly (more efficiently)?
 
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.CellAnnotationsEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.CellAnnotationsEnumeration");
 }
 
 // XIndexAccess
@@ -4235,7 +4235,7 @@ void SAL_CALL ScScenariosObj::removeByName( const OUString& aName )
 uno::Reference<container::XEnumeration> SAL_CALL ScScenariosObj::createEnumeration()
 {
     SolarMutexGuard aGuard;
-    return new ScIndexEnumeration(this, OUString("com.sun.star.sheet.ScenariosEnumeration"));
+    return new ScIndexEnumeration(this, "com.sun.star.sheet.ScenariosEnumeration");
 }
 
 // XIndexAccess

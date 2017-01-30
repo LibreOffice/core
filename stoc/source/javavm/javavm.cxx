@@ -1335,13 +1335,13 @@ void JavaVirtualMachine::registerConfigChangesListener()
             // arguments for ConfigurationAccess
             css::uno::Sequence< css::uno::Any > aArguments(2);
             aArguments[0] <<= css::beans::PropertyValue(
-                OUString("nodepath"),
+                "nodepath",
                 0,
                 css::uno::makeAny(OUString("org.openoffice.Inet/Settings")),
                 css::beans::PropertyState_DIRECT_VALUE);
             // depth: -1 means unlimited
             aArguments[1] <<= css::beans::PropertyValue(
-                OUString("depth"),
+                "depth",
                 0,
                 css::uno::makeAny( (sal_Int32)-1),
                 css::beans::PropertyState_DIRECT_VALUE);
@@ -1358,13 +1358,13 @@ void JavaVirtualMachine::registerConfigChangesListener()
             // now register as listener to changes in org.openoffice.Java/VirtualMachine
             css::uno::Sequence< css::uno::Any > aArguments2(2);
             aArguments2[0] <<= css::beans::PropertyValue(
-                OUString("nodepath"),
+                "nodepath",
                 0,
                 css::uno::makeAny(OUString("org.openoffice.Office.Java/VirtualMachine")),
                 css::beans::PropertyState_DIRECT_VALUE);
             // depth: -1 means unlimited
             aArguments2[1] <<= css::beans::PropertyValue(
-                OUString("depth"),
+                "depth",
                 0,
                 css::uno::makeAny( (sal_Int32)-1),
                 css::beans::PropertyState_DIRECT_VALUE);

@@ -300,11 +300,11 @@ const Sequence< Property > ActionTriggerPropertySet::impl_getStaticPropertyDescr
 {
     const Property pActionTriggerPropertys[] =
     {
-        Property( OUString( "CommandURL"    ), HANDLE_COMMANDURL   , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( OUString( "HelpURL"       ), HANDLE_HELPURL      , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( OUString( "Image"         ), HANDLE_IMAGE     , cppu::UnoType<XBitmap>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( OUString( "SubContainer"  ), HANDLE_SUBCONTAINER , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
-        Property( OUString( "Text"          ), HANDLE_TEXT         , cppu::UnoType<XInterface>::get(), PropertyAttribute::TRANSIENT  )
+        Property( "CommandURL"   , HANDLE_COMMANDURL   , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
+        Property( "HelpURL"      , HANDLE_HELPURL      , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
+        Property( "Image"        , HANDLE_IMAGE        , cppu::UnoType<XBitmap>::get(), PropertyAttribute::TRANSIENT  ),
+        Property( "SubContainer" , HANDLE_SUBCONTAINER , cppu::UnoType<OUString>::get(), PropertyAttribute::TRANSIENT  ),
+        Property( "Text"         , HANDLE_TEXT         , cppu::UnoType<XInterface>::get(), PropertyAttribute::TRANSIENT  )
     };
 
     // Use it to initialize sequence!

@@ -36,7 +36,7 @@ using namespace ::osl;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 
-#define ROOTNODE_OPTIONS        OUString( "Office.Compatibility/" )
+#define ROOTNODE_OPTIONS        "Office.Compatibility/"
 #define PATHDELIMITER           "/"
 #define SETNODE_ALLFILEFORMATS  "AllFileFormats"
 

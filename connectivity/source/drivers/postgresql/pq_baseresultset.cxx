@@ -95,25 +95,25 @@ static ::cppu::IPropertyArrayHelper & getResultSetPropertyArrayHelper()
                     // Should really share!
                     // At least use for the handles the #define'd values in .hxx file...
                     Property(
-                        OUString("CursorName"), 0,
+                        "CursorName", 0,
                         ::cppu::UnoType<OUString>::get() , 0 ),
                     Property(
-                        OUString("EscapeProcessing"), 1,
+                        "EscapeProcessing", 1,
                         cppu::UnoType<bool>::get() , 0 ),
                     Property(
-                        OUString("FetchDirection"), 2,
+                        "FetchDirection", 2,
                         ::cppu::UnoType<sal_Int32>::get() , 0 ),
                     Property(
-                        OUString("FetchSize"), 3,
+                        "FetchSize", 3,
                         ::cppu::UnoType<sal_Int32>::get() , 0 ),
                     Property(
-                        OUString("IsBookmarkable"), 4,
+                        "IsBookmarkable", 4,
                         cppu::UnoType<bool>::get() , 0 ),
                     Property(
-                        OUString("ResultSetConcurrency"), 5,
+                        "ResultSetConcurrency", 5,
                         ::cppu::UnoType<sal_Int32>::get() , 0 ),
                     Property(
-                        OUString("ResultSetType"), 6,
+                        "ResultSetType", 6,
                         ::cppu::UnoType<sal_Int32>::get() , 0 )
                 };
             static_assert( SAL_N_ELEMENTS(aTable) == BASERESULTSET_SIZE, "wrong number of elements" );

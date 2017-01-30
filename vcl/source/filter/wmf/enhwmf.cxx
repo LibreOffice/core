@@ -1351,7 +1351,7 @@ bool EnhWMFReader::ReadEnhWMF()
 
                                 if(bDoSaveForVisualControl)
                                 {
-                                    SvFileStream aNew(OUString("c:\\metafile_content.png"), StreamMode::WRITE|StreamMode::TRUNC);
+                                    SvFileStream aNew("c:\\metafile_content.png", StreamMode::WRITE|StreamMode::TRUNC);
                                     vcl::PNGWriter aPNGWriter(aBitmapEx);
                                     aPNGWriter.Write(aNew);
                                 }

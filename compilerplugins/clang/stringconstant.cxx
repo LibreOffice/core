@@ -152,6 +152,10 @@ private:
         CallExpr const * expr, unsigned arg, FunctionDecl const * callee,
         bool explicitFunctionalCastNotation);
 
+    void handleOUStringCtor(
+        Expr const * expr, Expr const * argExpr, FunctionDecl const * callee,
+        bool explicitFunctionalCastNotation);
+
     void handleFunArgOstring(
         CallExpr const * expr, unsigned arg, FunctionDecl const * callee);
 
@@ -1054,37 +1058,33 @@ bool StringConstant::VisitCXXConstructExpr(CXXConstructExpr const * expr) {
         return true;
     }
 
+    std::string file(compiler.getSourceManager().getFilename(
+                        compiler.getSourceManager().getSpellingLoc(expr->getLocStart())));
+    if (file == SRCDIR "/sal/qa/rtl/oustringbuffer/test_oustringbuffer_tostring.cxx")
+    {
+        return true;
+    }
+    if (isInUnoIncludeFile(expr->getLocStart())) {
+        return true;
+    }
+    auto consDecl = expr->getConstructor();
+    for (unsigned i = 0; i != consDecl->getNumParams(); ++i) {
+        auto t = consDecl->getParamDecl(i)->getType();
+        if (loplugin::TypeCheck(t).NotSubstTemplateTypeParmType()
+            .LvalueReference().Const().NotSubstTemplateTypeParmType()
+            .Class("OUString").Namespace("rtl").GlobalNamespace())
+        {
+            auto argExpr = expr->getArg(i);
+            if (argExpr && i <= consDecl->getNumParams())
+            {
+                if (!hasOverloads(consDecl, expr->getNumArgs()))
+                {
+                    handleOUStringCtor(expr, argExpr, consDecl, true);
+                }
+            }
+        }
+    }
 
-    // Now check for calls to one of our exception classes where an unnecessary OUString
-    // constructor is used for the first parameter.
-    if (isInUnoIncludeFile(expr->getConstructor()->getCanonicalDecl())) {
-        return true;
-    }
-    if (!expr->getConstructor()->getParent()->getName().endswith("Exception")) {
-        return true;
-    }
-    if (expr->getNumArgs() == 0) {
-        return true;
-    }
-    MaterializeTemporaryExpr const * subExpr1 = dyn_cast<MaterializeTemporaryExpr>(expr->getArg(0));
-    if (!subExpr1) {
-        return true;
-    }
-    if (!loplugin::TypeCheck(subExpr1->getType()).Class("OUString").Namespace("rtl").GlobalNamespace()) {
-        return true;
-    }
-    ImplicitCastExpr const * subExpr2 = dyn_cast<ImplicitCastExpr>(subExpr1->GetTemporaryExpr());
-    if (!subExpr2) {
-        return true;
-    }
-    CXXFunctionalCastExpr const * subExpr3 = dyn_cast<CXXFunctionalCastExpr>(subExpr2->getSubExpr());
-    if (!subExpr3) {
-        return true;
-    }
-    report(DiagnosticsEngine::Warning,
-            "no need to use an explicit OUString constructor here",
-            subExpr3->getLocStart())
-        << subExpr3->getSourceRange();
     return true;
 }
 
@@ -1592,7 +1592,14 @@ void StringConstant::handleOUStringCtor(
     CallExpr const * expr, unsigned arg, FunctionDecl const * callee,
     bool explicitFunctionalCastNotation)
 {
-    auto e0 = expr->getArg(arg)->IgnoreParenImpCasts();
+    handleOUStringCtor(expr, expr->getArg(arg), callee, explicitFunctionalCastNotation);
+}
+
+void StringConstant::handleOUStringCtor(
+    Expr const * expr, Expr const * argExpr, FunctionDecl const * callee,
+    bool explicitFunctionalCastNotation)
+{
+    auto e0 = argExpr->IgnoreParenImpCasts();
     auto e1 = dyn_cast<CXXFunctionalCastExpr>(e0);
     if (e1 == nullptr) {
         if (explicitFunctionalCastNotation) {

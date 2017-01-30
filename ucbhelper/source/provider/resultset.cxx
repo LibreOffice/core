@@ -1402,7 +1402,7 @@ void ResultSet::rowCountChanged( sal_uInt32 nOld, sal_uInt32 nNew )
     propertyChanged(
         beans::PropertyChangeEvent(
             static_cast< cppu::OWeakObject * >( this ),
-            OUString("RowCount"),
+            "RowCount",
             false,
             1001,
             uno::makeAny( nOld ),     // old value
@@ -1418,7 +1418,7 @@ void ResultSet::rowCountFinal()
     propertyChanged(
         beans::PropertyChangeEvent(
             static_cast< cppu::OWeakObject * >( this ),
-            OUString("IsRowCountFinal"),
+            "IsRowCountFinal",
             false,
             1000,
             uno:: makeAny( false ),   // old value

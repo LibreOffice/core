@@ -1762,7 +1762,7 @@ PresenterSlideSorter::CurrentSlideFrameRenderer::CurrentSlideFrameRenderer (
 {
     PresenterConfigurationAccess aConfiguration (
         rxContext,
-        OUString("/org.openoffice.Office.PresenterScreen/"),
+        "/org.openoffice.Office.PresenterScreen/",
         PresenterConfigurationAccess::READ_ONLY);
     Reference<container::XHierarchicalNameAccess> xBitmaps (
         aConfiguration.GetConfigurationNode(

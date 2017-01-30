@@ -1112,7 +1112,7 @@ namespace numfunc
     }
 
     SwDefBulletConfig::SwDefBulletConfig()
-        : ConfigItem( OUString("Office.Writer/Numbering/DefaultBulletList") ),
+        : ConfigItem( "Office.Writer/Numbering/DefaultBulletList" ),
           // default bullet font is now OpenSymbol
           msFontname( OUString("OpenSymbol") ),
           mbUserDefinedFontname( false ),
@@ -1312,7 +1312,7 @@ namespace numfunc
     }
 
     SwNumberingUIBehaviorConfig::SwNumberingUIBehaviorConfig()
-        : ConfigItem( OUString("Office.Writer/Numbering/UserInterfaceBehavior") ),
+        : ConfigItem( "Office.Writer/Numbering/UserInterfaceBehavior" ),
           mbChangeIndentOnTabAtFirstPosOfFirstListItem( true )
     {
         SetToDefault();

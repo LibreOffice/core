@@ -462,7 +462,7 @@ uno::Any SAL_CALL HierarchyContent::execute(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             OUString( "Uri"),
+                             "Uri",
                              -1,
                              uno::makeAny(m_xIdentifier->
                                               getContentIdentifier()),
@@ -974,28 +974,28 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
     {
         // Append all Core Properties.
         xRow->appendString (
-            beans::Property( OUString("ContentType"),
+            beans::Property( "ContentType",
                       -1,
                       cppu::UnoType<OUString>::get(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getContentType() );
         xRow->appendString (
-            beans::Property( OUString("Title"),
+            beans::Property( "Title",
                       -1,
                       cppu::UnoType<OUString>::get(),
                           // @@@ Might actually be read-only!
                       beans::PropertyAttribute::BOUND ),
             rData.getTitle() );
         xRow->appendBoolean(
-            beans::Property( OUString("IsDocument"),
+            beans::Property( "IsDocument",
                       -1,
                       cppu::UnoType<bool>::get(),
                       beans::PropertyAttribute::BOUND
                         | beans::PropertyAttribute::READONLY ),
             rData.getIsDocument() );
         xRow->appendBoolean(
-            beans::Property( OUString("IsFolder"),
+            beans::Property( "IsFolder",
                       -1,
                       cppu::UnoType<bool>::get(),
                       beans::PropertyAttribute::BOUND
@@ -1004,7 +1004,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
 
         if ( rData.getIsDocument() )
             xRow->appendString(
-                beans::Property( OUString("TargetURL"),
+                beans::Property( "TargetURL",
                           -1,
                           cppu::UnoType<OUString>::get(),
                           // @@@ Might actually be read-only!
@@ -1012,7 +1012,7 @@ uno::Reference< sdbc::XRow > HierarchyContent::getPropertyValues(
                 rData.getTargetURL() );
         xRow->appendObject(
             beans::Property(
-                OUString("CreatableContentsInfo"),
+                "CreatableContentsInfo",
                 -1,
                 cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND
@@ -1322,7 +1322,7 @@ uno::Sequence< uno::Any > HierarchyContent::setPropertyValues(
                 uno::Any aProps
                     = uno::makeAny(
                              beans::PropertyValue(
-                                 OUString( "Uri"),
+                                "Uri",
                                  -1,
                                  uno::makeAny(m_xIdentifier->
                                                   getContentIdentifier()),
@@ -1468,7 +1468,7 @@ void HierarchyContent::insert( sal_Int32 nNameClashResolve,
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(m_xIdentifier->
                                                    getContentIdentifier()),
@@ -1591,7 +1591,7 @@ void HierarchyContent::transfer(
         {
             uno::Any aProps
                 = uno::makeAny(beans::PropertyValue(
-                                      OUString( "Uri"),
+                                      "Uri",
                                       -1,
                                       uno::makeAny(rInfo.SourceURL),
                                       beans::PropertyState_DIRECT_VALUE));
@@ -1630,7 +1630,7 @@ void HierarchyContent::transfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Uri"),
+                                  "Uri",
                                   -1,
                                   uno::makeAny(xId->getContentIdentifier()),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1663,7 +1663,7 @@ void HierarchyContent::transfer(
     {
         uno::Any aProps
             = uno::makeAny(beans::PropertyValue(
-                                  OUString( "Folder"),
+                                  "Folder",
                                   -1,
                                   uno::makeAny(aId),
                                   beans::PropertyState_DIRECT_VALUE));
@@ -1793,7 +1793,7 @@ void HierarchyContent::transfer(
             uno::Any aProps
                 = uno::makeAny(
                          beans::PropertyValue(
-                             OUString( "Uri"),
+                             "Uri",
                              -1,
                              uno::makeAny(
                                  xSource->m_xIdentifier->
@@ -1830,7 +1830,7 @@ HierarchyContentProperties::getCreatableContentsInfo() const
 
         uno::Sequence< beans::Property > aFolderProps( 1 );
         aFolderProps.getArray()[ 0 ] = beans::Property(
-                    OUString("Title"),
+                    "Title",
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
@@ -1842,12 +1842,12 @@ HierarchyContentProperties::getCreatableContentsInfo() const
 
         uno::Sequence< beans::Property > aLinkProps( 2 );
         aLinkProps.getArray()[ 0 ] = beans::Property(
-                    OUString("Title"),
+                    "Title",
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );
         aLinkProps.getArray()[ 1 ] = beans::Property(
-                    OUString("TargetURL"),
+                    "TargetURL",
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::BOUND );

@@ -606,7 +606,7 @@ void PresenterToolBar::CreateControls (
     // Expand the macro in the bitmap file names.
     PresenterConfigurationAccess aConfiguration (
         mxComponentContext,
-        OUString("/org.openoffice.Office.PresenterScreen/"),
+        "/org.openoffice.Office.PresenterScreen/",
         PresenterConfigurationAccess::READ_ONLY);
 
     mpCurrentContainerPart.reset(new ElementContainerPart());

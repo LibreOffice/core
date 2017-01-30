@@ -182,7 +182,7 @@ void SwDocTest::testFileNameFields()
 {
     //Here's a file name with some chars in it that will be %% encoded, when expanding
     //SwFileNameFields we want to restore the original readable filename
-    utl::TempFile aTempFile(OUString("demo [name]"));
+    utl::TempFile aTempFile("demo [name]");
     aTempFile.EnableKillingFile();
 
     INetURLObject aTempFileURL(aTempFile.GetURL());
@@ -190,9 +190,9 @@ void SwDocTest::testFileNameFields()
     SfxMedium aDstMed(sFileURL, StreamMode::STD_READWRITE);
 
     std::shared_ptr<SfxFilter> pFilter(new SfxFilter(
-        OUString("Text"),
+        "Text",
         OUString(), SfxFilterFlags::NONE, SotClipboardFormatId::NONE, OUString(), 0, OUString(),
-        OUString("TEXT"), OUString() ));
+        "TEXT", OUString() ));
     aDstMed.SetFilter(pFilter);
 
     m_xDocShRef->DoSaveAs(aDstMed);
@@ -574,7 +574,7 @@ void SwDocTest::testSwScanner()
     //fdo#40449 and fdo#39365
     {
         SwScanner aScanner(*pTextNode,
-            OUString("Hello World"),
+            "Hello World",
             nullptr, ModelToViewHelper(), i18n::WordType::DICTIONARY_WORD, 0,
             RTL_CONSTASCII_LENGTH("Hello World"));
 
@@ -716,8 +716,8 @@ void SwDocTest::testSwScanner()
 
         DateTime aDate(DateTime::SYSTEM);
         SwPostItField aPostIt(
-            static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(RES_POSTITFLD)), OUString("An Author"),
-            OUString("Some Text"), OUString("Initials"), OUString("Name"), aDate );
+            static_cast<SwPostItFieldType*>(m_pDoc->getIDocumentFieldsAccess().GetSysFieldType(RES_POSTITFLD)), "An Author",
+            "Some Text", "Initials", "Name", aDate );
         m_pDoc->getIDocumentContentOperations().InsertPoolItem(aPaM, SwFormatField(aPostIt));
 
         m_pDoc->getIDocumentContentOperations().InsertString(aPaM, "Apple");

@@ -156,14 +156,14 @@ namespace {
                 Sequence< Any > aArguments(5);
                 Any* pArguments = aArguments.getArray();
                 // the parent window
-                *pArguments++ <<= PropertyValue(OUString( "ParentWindow" ), -1, makeAny( xParentWindow ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue( "ParentWindow", -1, makeAny( xParentWindow ), PropertyState_DIRECT_VALUE);
                 // the data source to use
-                *pArguments++ <<= PropertyValue(OUString( "DataSource" ), -1, makeAny( xDataSource ), PropertyState_DIRECT_VALUE);
-                *pArguments++ <<= PropertyValue(OUString( "DataSourceName" ), -1, makeAny( sDataSourceName ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue( "DataSource", -1, makeAny( xDataSource ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue( "DataSourceName", -1, makeAny( sDataSourceName ), PropertyState_DIRECT_VALUE);
                 // the table to use
-                *pArguments++ <<= PropertyValue(OUString( "Command" ), -1, makeAny( sCommand ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue( "Command", -1, makeAny( sCommand ), PropertyState_DIRECT_VALUE);
                 // the title
-                *pArguments++ <<= PropertyValue(OUString( "Title" ), -1, makeAny( sTitle ), PropertyState_DIRECT_VALUE);
+                *pArguments++ <<= PropertyValue( "Title", -1, makeAny( sTitle ), PropertyState_DIRECT_VALUE);
                 OGenericUnoDialog::initialize(aArguments);
                 return;
             }

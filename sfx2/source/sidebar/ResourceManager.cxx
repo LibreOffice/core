@@ -251,7 +251,7 @@ void ResourceManager::ReadDeckList()
 {
     const utl::OConfigurationTreeRoot aDeckRootNode(
                                         comphelper::getProcessComponentContext(),
-                                        OUString("org.openoffice.Office.UI.Sidebar/Content/DeckList"),
+                                        "org.openoffice.Office.UI.Sidebar/Content/DeckList",
                                         false);
     if (!aDeckRootNode.isValid())
         return;
@@ -311,7 +311,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 {
     const utl::OConfigurationTreeRoot aDeckRootNode(
                                     comphelper::getProcessComponentContext(),
-                                    OUString("org.openoffice.Office.UI.Sidebar/Content/DeckList"),
+                                    "org.openoffice.Office.UI.Sidebar/Content/DeckList",
                                     true);
     if (!aDeckRootNode.isValid())
         return;
@@ -332,7 +332,7 @@ void ResourceManager::SaveDeckSettings(const DeckDescriptor* pDeckDesc)
 
     const utl::OConfigurationTreeRoot aPanelRootNode(
                                     comphelper::getProcessComponentContext(),
-                                    OUString("org.openoffice.Office.UI.Sidebar/Content/PanelList"),
+                                    "org.openoffice.Office.UI.Sidebar/Content/PanelList",
                                     true);
 
     if (!aPanelRootNode.isValid())
@@ -368,7 +368,7 @@ void ResourceManager::ReadPanelList()
 {
     const utl::OConfigurationTreeRoot aPanelRootNode(
                                         comphelper::getProcessComponentContext(),
-                                        OUString("org.openoffice.Office.UI.Sidebar/Content/PanelList"),
+                                        "org.openoffice.Office.UI.Sidebar/Content/PanelList",
                                         false);
     if (!aPanelRootNode.isValid())
         return;
@@ -607,7 +607,7 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rDeckDescriptor.msHelpText = rDeckDescriptor.msTitle;
         rDeckDescriptor.mbIsEnabled = true;
         rDeckDescriptor.mnOrderIndex = 100000 + nReadIndex;
-        rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, OUString("any")), true, OUString());
+        rDeckDescriptor.maContextList.AddContextDescription(Context(sModuleName, "any"), true, OUString());
 
         maPanels.push_back(std::make_shared<PanelDescriptor>());
         PanelDescriptor& rPanelDescriptor(*maPanels.back());
@@ -622,7 +622,7 @@ void ResourceManager::ReadLegacyAddons (const Reference<frame::XController>& rxC
         rPanelDescriptor.mnOrderIndex = 100000 + nReadIndex;
         rPanelDescriptor.mbShowForReadOnlyDocuments = false;
         rPanelDescriptor.mbWantsCanvas = false;
-        rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, OUString("any")), true, OUString());
+        rPanelDescriptor.maContextList.AddContextDescription(Context(sModuleName, "any"), true, OUString());
     }
 }
 

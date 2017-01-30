@@ -187,7 +187,7 @@ public:
 };
 
 SvtLinguConfigItem::SvtLinguConfigItem() :
-    utl::ConfigItem( OUString("Office.Linguistic") )
+    utl::ConfigItem( "Office.Linguistic" )
 {
     const uno::Sequence< OUString > &rPropertyNames = GetPropertyNames();
     LoadOptions( rPropertyNames );

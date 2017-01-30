@@ -131,7 +131,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
 
         Any propValue(
             makeAny( beans::PropertyValue(
-                         OUString("nodepath"), -1,
+                         "nodepath", -1,
                          makeAny( OUString("/org.openoffice.Office.Canvas") ),
                          beans::PropertyState_DIRECT_VALUE ) ) );
 
@@ -143,7 +143,7 @@ CanvasFactory::CanvasFactory( Reference<XComponentContext> const & xContext ) :
 
         propValue = makeAny(
             beans::PropertyValue(
-                OUString("nodepath"), -1,
+                "nodepath", -1,
                 makeAny( OUString("/org.openoffice.Office.Canvas/CanvasServiceList") ),
                 beans::PropertyState_DIRECT_VALUE ) );
 

@@ -1597,8 +1597,8 @@ OSQLTable OSQLParseTreeIterator::impl_createTableObject( const OUString& rTableN
         nullptr,
         false,
         rTableName,
-        OUString("Table"),
-        OUString("New Created Table"),
+        "Table",
+        "New Created Table",
         rSchemaName,
         rCatalogName
     );
@@ -1704,7 +1704,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
                 // did not find a column with this name in any of the tables
                 OParseColumn* pColumn = new OParseColumn(
                     aNewColName,
-                    OUString("VARCHAR"),
+                    "VARCHAR",
                         // TODO: does this match with _nType?
                         // Or should be fill this from the getTypeInfo of the connection?
                     OUString(),

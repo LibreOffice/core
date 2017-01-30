@@ -244,7 +244,7 @@ bool isMainSequenceRootNode_(
     // detect main sequence root node (need that for
     // end-of-mainsequence signalling below)
     beans::NamedValue const aSearchKey(
-        OUString( "node-type" ),
+        "node-type",
         uno::makeAny( presentation::EffectNodeType::MAIN_SEQUENCE ) );
 
     uno::Sequence<beans::NamedValue> const userData(xNode->getUserData());

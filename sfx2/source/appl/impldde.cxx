@@ -220,7 +220,7 @@ bool SvDDEObject::Connect( SvBaseLink * pSvLink )
         bool bSysTopic = false;
         if (!sTopic.equalsIgnoreAsciiCase("SYSTEM"))
         {
-            DdeConnection aTmp(sServer, OUString("SYSTEM"));
+            DdeConnection aTmp(sServer, "SYSTEM");
             bSysTopic = !aTmp.GetError();
         }
 

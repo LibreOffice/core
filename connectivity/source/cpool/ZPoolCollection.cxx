@@ -321,7 +321,7 @@ Reference< XInterface > OPoolCollection::createWithProvider(const Reference< XMu
     Sequence< Any > args(1);
     args[0] = makeAny(
         NamedValue(
-            OUString("nodepath"),
+            "nodepath",
             makeAny(_rPath)));
     Reference< XInterface > xInterface(
         _rxConfProvider->createInstanceWithArguments(

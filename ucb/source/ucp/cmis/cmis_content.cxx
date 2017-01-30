@@ -261,19 +261,19 @@ namespace
 
         size_t i = 0;
         aArguments[i++] <<= beans::PropertyValue(
-            OUString( "Binding URL" ),
+            "Binding URL",
             - 1,
             uno::makeAny( rURL.getBindingUrl() ),
             beans::PropertyState_DIRECT_VALUE );
 
         aArguments[i++] <<= beans::PropertyValue(
-            OUString( "Username" ),
+            "Username",
             -1,
             uno::makeAny( rURL.getUsername() ),
             beans::PropertyState_DIRECT_VALUE );
 
         aArguments[i++] <<= beans::PropertyValue(
-            OUString( "Repository Id" ),
+            "Repository Id",
             -1,
             uno::makeAny( rURL.getRepositoryId() ),
             beans::PropertyState_DIRECT_VALUE );
@@ -1587,52 +1587,52 @@ namespace cmis
     {
         static const beans::Property aGenericProperties[] =
         {
-            beans::Property( OUString( "IsDocument" ),
+            beans::Property( "IsDocument",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "IsFolder" ),
+            beans::Property( "IsFolder",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "Title" ),
+            beans::Property( "Title",
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( OUString( "ObjectId" ),
+            beans::Property( "ObjectId",
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( OUString( "TitleOnServer" ),
+            beans::Property( "TitleOnServer",
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( OUString( "IsReadOnly" ),
+            beans::Property( "IsReadOnly",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "DateCreated" ),
+            beans::Property( "DateCreated",
                 -1, cppu::UnoType<util::DateTime>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "DateModified" ),
+            beans::Property( "DateModified",
                 -1, cppu::UnoType<util::DateTime>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "Size" ),
+            beans::Property( "Size",
                 -1, cppu::UnoType<sal_Int64>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "CreatableContentsInfo" ),
+            beans::Property( "CreatableContentsInfo",
                 -1, cppu::UnoType<uno::Sequence< ucb::ContentInfo >>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "MediaType" ),
+            beans::Property( "MediaType",
                 -1, cppu::UnoType<OUString>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( OUString( "CmisProperties" ),
+            beans::Property( "CmisProperties",
                 -1, cppu::UnoType<uno::Sequence< document::CmisProperty>>::get(),
                 beans::PropertyAttribute::BOUND ),
-            beans::Property( OUString( "IsVersionable" ),
+            beans::Property( "IsVersionable",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "CanCheckOut" ),
+            beans::Property( "CanCheckOut",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "CanCancelCheckOut" ),
+            beans::Property( "CanCancelCheckOut",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
-            beans::Property( OUString( "CanCheckIn" ),
+            beans::Property( "CanCheckIn",
                 -1, cppu::UnoType<bool>::get(),
                 beans::PropertyAttribute::BOUND | beans::PropertyAttribute::READONLY ),
         };
@@ -1648,46 +1648,46 @@ namespace cmis
         {
             // Required commands
             ucb::CommandInfo
-            ( OUString( "getCommandInfo" ),
+            ( "getCommandInfo",
               -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( OUString( "getPropertySetInfo" ),
+            ( "getPropertySetInfo",
               -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( OUString( "getPropertyValues" ),
+            ( "getPropertyValues",
               -1, cppu::UnoType<uno::Sequence< beans::Property >>::get() ),
             ucb::CommandInfo
-            ( OUString( "setPropertyValues" ),
+            ( "setPropertyValues",
               -1, cppu::UnoType<uno::Sequence< beans::PropertyValue >>::get() ),
 
             // Optional standard commands
             ucb::CommandInfo
-            ( OUString( "delete" ),
+            ( "delete",
               -1, cppu::UnoType<bool>::get() ),
             ucb::CommandInfo
-            ( OUString( "insert" ),
+            ( "insert",
               -1, cppu::UnoType<ucb::InsertCommandArgument2>::get() ),
             ucb::CommandInfo
-            ( OUString( "open" ),
+            ( "open",
               -1, cppu::UnoType<ucb::OpenCommandArgument2>::get() ),
 
             // Mandatory CMIS-only commands
-            ucb::CommandInfo ( OUString( "checkout" ), -1, cppu::UnoType<void>::get() ),
-            ucb::CommandInfo ( OUString( "cancelCheckout" ), -1, cppu::UnoType<void>::get() ),
-            ucb::CommandInfo ( OUString( "checkIn" ), -1,
+            ucb::CommandInfo ( "checkout", -1, cppu::UnoType<void>::get() ),
+            ucb::CommandInfo ( "cancelCheckout", -1, cppu::UnoType<void>::get() ),
+            ucb::CommandInfo ( "checkIn", -1,
                     cppu::UnoType<ucb::TransferInfo>::get() ),
-            ucb::CommandInfo ( OUString( "updateProperties" ), -1, cppu::UnoType<void>::get() ),
+            ucb::CommandInfo ( "updateProperties", -1, cppu::UnoType<void>::get() ),
             ucb::CommandInfo
-            ( OUString( "getAllVersions" ),
+            ( "getAllVersions",
               -1, cppu::UnoType<uno::Sequence< document::CmisVersion >>::get() ),
 
 
             // Folder Only, omitted if not a folder
             ucb::CommandInfo
-            ( OUString( "transfer" ),
+            ( "transfer",
               -1, cppu::UnoType<ucb::TransferInfo>::get() ),
             ucb::CommandInfo
-            ( OUString( "createNewContent" ),
+            ( "createNewContent",
               -1, cppu::UnoType<ucb::ContentInfo>::get() )
         };
 
@@ -1997,7 +1997,7 @@ namespace cmis
                 // Minimum set of props we really need
                 uno::Sequence< beans::Property > props( 1 );
                 props[0] = beans::Property(
-                    OUString("Title"),
+                    "Title",
                     -1,
                     cppu::UnoType<OUString>::get(),
                     beans::PropertyAttribute::MAYBEVOID | beans::PropertyAttribute::BOUND );

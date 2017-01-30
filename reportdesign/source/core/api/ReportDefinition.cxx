@@ -2696,8 +2696,8 @@ uno::Sequence< datatransfer::DataFlavor > SAL_CALL OReportDefinition::getTransfe
 {
     uno::Sequence< datatransfer::DataFlavor > aRet(1);
 
-    aRet[0] = datatransfer::DataFlavor( OUString("image/png"),
-        OUString("PNG"),
+    aRet[0] = datatransfer::DataFlavor( "image/png",
+        "PNG",
         cppu::UnoType<uno::Sequence< sal_Int8 >>::get() );
 
     return aRet;

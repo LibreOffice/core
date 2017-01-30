@@ -265,7 +265,7 @@ void SvxFontSizeBox_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 FontHeightToolBoxControl::FontHeightToolBoxControl( const uno::Reference< uno::XComponentContext >& rxContext )
  : svt::ToolboxController( rxContext,
                            uno::Reference< frame::XFrame >(),
-                           OUString( ".uno:FontHeight" ) ),
+                           ".uno:FontHeight" ),
    m_pBox( nullptr )
 {
     addStatusListener( ".uno:CharFontName");

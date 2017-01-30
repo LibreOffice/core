@@ -832,8 +832,7 @@ void ScDocShell::MergeDocument( ScDocument& rOtherDoc, bool bShared, bool bCheck
         return;             //! nichts zu tun - Fehlermeldung?
                             //  ab hier kein return mehr
 
-    ScProgress aProgress( this, OUString("..."),
-                    nNewActionCount, true );
+    ScProgress aProgress( this, "...", nNewActionCount, true );
 
     sal_uLong nLastMergeAction = pSourceTrack->GetLast()->GetActionNumber();
     // UpdateReference-Undo, gueltige Referenzen fuer den letzten gemeinsamen Zustand

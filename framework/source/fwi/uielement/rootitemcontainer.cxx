@@ -353,9 +353,9 @@ const css::uno::Sequence< css::beans::Property > RootItemContainer::impl_getStat
 
     const css::beans::Property pProperties[] =
     {
-        css::beans::Property( OUString(PROPNAME_UINAME), PROPHANDLE_UINAME ,
-                                         cppu::UnoType<OUString>::get(),
-                                         css::beans::PropertyAttribute::TRANSIENT )
+        css::beans::Property( PROPNAME_UINAME, PROPHANDLE_UINAME ,
+                              cppu::UnoType<OUString>::get(),
+                              css::beans::PropertyAttribute::TRANSIENT )
     };
     // Use it to initialize sequence!
     const css::uno::Sequence< css::beans::Property > lPropertyDescriptor( pProperties, PROPCOUNT );

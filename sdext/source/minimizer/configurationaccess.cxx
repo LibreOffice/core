@@ -296,11 +296,11 @@ Reference< XInterface > ConfigurationAccess::OpenConfiguration( bool bReadOnly )
         Reference< lang::XMultiServiceFactory > xProvider = configuration::theDefaultProvider::get( mxContext );
         Sequence< Any > aCreationArguments( 2 );
         aCreationArguments[0] = makeAny( PropertyValue(
-            OUString( "nodepath" ), 0,
+            "nodepath", 0,
             makeAny( GetPathToConfigurationRoot() ),
             PropertyState_DIRECT_VALUE ) );
         aCreationArguments[1] = makeAny(beans::PropertyValue(
-            OUString( "lazywrite" ), 0, makeAny( true ),
+            "lazywrite", 0, makeAny( true ),
             PropertyState_DIRECT_VALUE ) );
         OUString sAccessService;
         if ( bReadOnly )
