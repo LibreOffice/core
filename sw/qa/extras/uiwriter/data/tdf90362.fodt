@@ -3,7 +3,9 @@
  <office:body>
   <office:text>
    <text:p>Before</text:p>
-   <text:p><field:fieldmark-start text:name="__Fieldmark__2_34585131" field:type="xxx"/><field:fieldmark-end/></text:p>
+   <text:section text:name="Protected" text:protected="true">
+    <text:p>Inside</text:p>
+   </text:section>
    <text:p>After</text:p>
   </office:text>
  </office:body>

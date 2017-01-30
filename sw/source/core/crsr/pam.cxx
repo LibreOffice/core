@@ -564,7 +564,7 @@ static const SwFrame* lcl_FindEditInReadonlyFrame( const SwFrame& rFrame )
 }
 
 /// is in protected section or selection surrounds something protected
-bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
+bool SwPaM::HasReadonlySel( bool bFormView, bool /*bAnnotationMode*/ ) const
 {
     bool bRet = false;
 
@@ -675,54 +675,33 @@ bool SwPaM::HasReadonlySel( bool bFormView, bool bAnnotationMode ) const
         }
     }
 
-    //FIXME FieldBk
-    // TODO: Form Protection when Enhanced Fields are enabled
     const SwDoc *pDoc = GetDoc();
     const IDocumentMarkAccess* pMarksAccess = pDoc->getIDocumentMarkAccess();
     sw::mark::IMark* pA = GetPoint() ? pMarksAccess->getFieldmarkFor( *GetPoint( ) ) : nullptr;
     sw::mark::IMark* pB = GetMark( ) ? pMarksAccess->getFieldmarkFor( *GetMark( ) ) : pA;
 
-    bool bUnhandledMark = false;
-    sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
-    if ( pFieldmark )
-        bUnhandledMark = pFieldmark->GetFieldname( ) == ODF_UNHANDLED;
-
     if (!bRet)
     {
+        sw::mark::IFieldmark* pFieldmark = pMarksAccess->getFieldmarkFor( *GetPoint() );
+        bool bUnhandledMark = pFieldmark && pFieldmark->GetFieldname( ) == ODF_UNHANDLED;
         // Unhandled fieldmarks case shouldn't be edited manually to avoid breaking anything
         if ( ( pA == pB ) && bUnhandledMark )
             bRet = true;
         else
         {
-            // Form protection case
-            bool bAtStartA = pA != nullptr && pA->GetMarkStart() == *GetPoint();
-            bool bAtStartB = pB != nullptr && pB->GetMarkStart() == *GetMark();
-            bRet = ( pA != pB ) || bAtStartA || bAtStartB;
-            bool bProtectForm = pDoc->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM );
-            if ( bProtectForm )
-                bRet |= ( pA == nullptr || pB == nullptr );
+            bRet = pA != pB;
+            if( !bRet && pDoc->GetDocumentSettingManager().get( DocumentSettingId::PROTECT_FORM ) )
+            {
+                // Form protection case
+                bool bAtStartA = pA != nullptr && pA->GetMarkStart() == *GetPoint();
+                bool bAtStartB = pB != nullptr && pB->GetMarkStart() == *GetMark();
+                bRet = pA == nullptr || pB == nullptr ||  pA != pB  || bAtStartA || bAtStartB;
+            }
         }
     }
     else
     {
         bRet = !( pA == pB && pA != nullptr );
-    }
-
-    // Don't allow inserting characters between the 'field mark end' and
-    // the 'comment anchor', unless the cursor is inside the annotation.
-    if (!bRet && !bAnnotationMode)
-    {
-        if (!pA && GetPoint() && GetPoint()->nNode.GetNode().IsTextNode() && GetPoint()->nContent.GetIndex() > 0)
-        {
-            // getFieldmarkFor() searches for >= start and < end, so check for
-            // the previous character, to also get the fieldmark, if we're
-            // exactly at the end.
-            SwPosition aPrevChar(*GetPoint());
-            --aPrevChar.nContent;
-            pFieldmark = pMarksAccess->getFieldmarkFor(aPrevChar);
-            if (pFieldmark && pFieldmark->GetMarkEnd() == *GetPoint())
-                bRet = true;
-        }
     }
 
     return bRet;
