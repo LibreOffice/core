@@ -1588,33 +1588,44 @@ static void commentCallback(LOKDocView* pLOKDocView, gchar* pComment, gpointer /
     boost::property_tree::ptree aComment = aRoot.get_child("comment");
     GtkWidget* pCommentsGrid = rWindow.m_pCommentsSidebar->m_pCommentsVBox;
     GList* pChildren = gtk_container_get_children(GTK_CONTAINER(pCommentsGrid));
+    GtkWidget* pSelf = nullptr;
+    GtkWidget* pParent = nullptr;
     for (GList* l = pChildren; l != nullptr; l = l->next)
     {
         int *id = static_cast<int*>(g_object_get_data(G_OBJECT(l->data), "id"));
 
-        if (aComment.get<std::string>("action") == "Add")
-        {
-            if (*id == aComment.get<int>("parent"))
-            {
-                GtkWidget* pCommentBox = CommentsSidebar::createCommentBox(aComment);
-                gtk_grid_insert_next_to(GTK_GRID(pCommentsGrid), GTK_WIDGET(l->data), GTK_POS_BOTTOM);
-                gtk_grid_attach_next_to(GTK_GRID(pCommentsGrid), pCommentBox, GTK_WIDGET(l->data), GTK_POS_BOTTOM, 1, 1);
-                gtk_widget_show_all(pCommentBox);
-                return;
-            }
-        }
-        else if (aComment.get<std::string>("action") == "Remove" && *id == aComment.get<int>("id"))
-        {
-            gtk_widget_destroy(GTK_WIDGET(l->data));
-            return;
-        }
+        if (*id == aComment.get<int>("id"))
+            pSelf = GTK_WIDGET(l->data);
+
+        // There is no 'parent' in Remove callbacks
+        if (*id == aComment.get("parent", -1))
+            pParent = GTK_WIDGET(l->data);
     }
 
-    if (aComment.get<std::string>("action") == "Add")
+    if (aComment.get<std::string>("action") == "Remove")
+    {
+        if (pSelf)
+            gtk_widget_destroy(pSelf);
+        else
+            g_warning("Can't find the comment to remove in the list !!");
+    }
+    else if (aComment.get<std::string>("action") == "Add" || aComment.get<std::string>("action") == "Modify")
     {
         GtkWidget* pCommentBox = CommentsSidebar::createCommentBox(aComment);
-        gtk_container_add(GTK_CONTAINER(pCommentsGrid), pCommentBox);
+        if (pSelf != nullptr || pParent != nullptr)
+        {
+            gtk_grid_insert_next_to(GTK_GRID(pCommentsGrid), pSelf != nullptr ? pSelf : pParent, GTK_POS_BOTTOM);
+            gtk_grid_attach_next_to(GTK_GRID(pCommentsGrid), pCommentBox, pSelf != nullptr ? pSelf : pParent, GTK_POS_BOTTOM, 1, 1);
+        }
+        else
+            gtk_container_add(GTK_CONTAINER(pCommentsGrid), pCommentBox);
+
         gtk_widget_show_all(pCommentBox);
+
+        // We added the widget already below the existing one, so destroy the
+        // already existing one now
+        if (pSelf)
+            gtk_widget_destroy(pSelf);
     }
 }
 
