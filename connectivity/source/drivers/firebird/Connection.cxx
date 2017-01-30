@@ -240,27 +240,22 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
             }
         }
 
-        char dpbBuffer[1 + 3 + 257 + 257 + 5 ]; // Expand as needed
-        int dpbLength = 0;
+        std::string dpbBuffer;
         {
-            char* dpb;
             char userName[256] = "";
             char userPassword[256] = "";
 
-            dpb = dpbBuffer;
-            *dpb++ = isc_dpb_version1;
-
-            *dpb++ = isc_dpb_sql_dialect;
-            *dpb++ = 1; // 1 byte long
-            *dpb++ = FIREBIRD_SQL_DIALECT;
+            dpbBuffer.push_back(isc_dpb_version1);
+            dpbBuffer.push_back(isc_dpb_sql_dialect);
+            dpbBuffer.push_back(1); // 1 byte long
+            dpbBuffer.push_back(FIREBIRD_SQL_DIALECT);
 
             // set UTF8 as default character set
             const char sCharset[] = "UTF8";
-            *dpb++ = isc_dpb_set_db_charset;
+            dpbBuffer.push_back(isc_dpb_set_db_charset);
             int nCharsetLength = sizeof(sCharset) - 1;
-            *dpb++ = (char) nCharsetLength;
-            strcpy(dpb, sCharset);
-            dpb+= nCharsetLength;
+            dpbBuffer.push_back(nCharsetLength);
+            dpbBuffer.append(sCharset);
 
             // Do any more dpbBuffer additions here
 
@@ -277,22 +272,18 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
             if (strlen(userName))
             {
                 int nUsernameLength = strlen(userName);
-                *dpb++ = isc_dpb_user_name;
-                *dpb++ = (char) nUsernameLength;
-                strcpy(dpb, userName);
-                dpb+= nUsernameLength;
+                dpbBuffer.push_back(isc_dpb_user_name);
+                dpbBuffer.push_back(nUsernameLength);
+                dpbBuffer.append(userName);
             }
 
             if (strlen(userPassword))
             {
                 int nPasswordLength = strlen(userPassword);
-                *dpb++ = isc_dpb_password;
-                *dpb++ = (char) nPasswordLength;
-                strcpy(dpb, userPassword);
-                dpb+= nPasswordLength;
+                dpbBuffer.push_back(isc_dpb_password);
+                dpbBuffer.push_back(nPasswordLength);
+                dpbBuffer.append(userPassword);
             }
-
-            dpbLength = dpb - dpbBuffer;
         }
 
         ISC_STATUS_ARRAY status;            /* status vector */
@@ -303,8 +294,8 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
                                        m_sFirebirdURL.getLength(),
                                        OUStringToOString(m_sFirebirdURL,RTL_TEXTENCODING_UTF8).getStr(),
                                        &m_aDBHandle,
-                                       dpbLength,
-                                       dpbBuffer,
+                                       dpbBuffer.size(),
+                                       dpbBuffer.c_str(),
                                        0);
             if (aErr)
             {
@@ -322,8 +313,8 @@ void Connection::construct(const ::rtl::OUString& url, const Sequence< PropertyV
                                        m_sFirebirdURL.getLength(),
                                        OUStringToOString(m_sFirebirdURL, RTL_TEXTENCODING_UTF8).getStr(),
                                        &m_aDBHandle,
-                                       dpbLength,
-                                       dpbBuffer);
+                                       dpbBuffer.size(),
+                                       dpbBuffer.c_str());
             if (aErr)
             {
                 evaluateStatusVector(status, "isc_attach_database", *this);
