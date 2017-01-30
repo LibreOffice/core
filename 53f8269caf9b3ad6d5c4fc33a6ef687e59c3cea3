@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_a3e7223f",
+        "filename": "vcl/unx/generic/app/sm.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 200,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2017-01-30T15:00:45Z",
+      "side": 1,
+      "message": "It must be init this part, we have here no init-funtionality, the if above make this part once a call.\nThe solution is define a class who only call that, but i would not change",
+      "parentUuid": "fa48f94a_a362c2d6",
+      "revId": "53f8269caf9b3ad6d5c4fc33a6ef687e59c3cea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_a3b9e230",
         "filename": "vcl/unx/generic/app/sm.cxx",
         "patchSetId": 9
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "fa48f94a_03d54e42",
+        "filename": "vcl/unx/generic/app/sm.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2017-01-30T15:00:45Z",
+      "side": 1,
+      "message": "okay old style, i will change",
+      "parentUuid": "fa48f94a_a3b9e230",
+      "revId": "53f8269caf9b3ad6d5c4fc33a6ef687e59c3cea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fa48f94a_c3b6e63c",
         "filename": "vcl/unx/generic/app/sm.cxx",
         "patchSetId": 9
@@ -47,6 +83,24 @@
       "writtenOn": "2017-01-30T13:51:55Z",
       "side": 1,
       "message": "might be overkill here as static, and would need assurance we never call it concurrently?",
+      "revId": "53f8269caf9b3ad6d5c4fc33a6ef687e59c3cea3",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa48f94a_63c45a92",
+        "filename": "vcl/unx/generic/app/sm.cxx",
+        "patchSetId": 9
+      },
+      "lineNbr": 540,
+      "author": {
+        "id": 1000779
+      },
+      "writtenOn": "2017-01-30T15:00:45Z",
+      "side": 1,
+      "message": "i think it call once a time, but you right, i change the static to a smart-pointer",
+      "parentUuid": "fa48f94a_c3b6e63c",
       "revId": "53f8269caf9b3ad6d5c4fc33a6ef687e59c3cea3",
       "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
       "unresolved": false
