@@ -2877,12 +2877,8 @@ SwFlyFrameFormat::~SwFlyFrameFormat()
         } while( nullptr != ( pLast = aIter.Next() ));
 
     SwIterator<SwFlyDrawContact,SwFormat> a2ndIter( *this );
-    SwFlyDrawContact* pC = a2ndIter.First();
-    if( pC )
-        do {
-                delete pC;
 
-        } while( nullptr != ( pC = a2ndIter.Next() ));
+    CallSwClientNotify(sw::DrawFrameFormatHint(sw::DrawFrameFormatHintId::DYING_FLYFRAMEFORMAT));
 }
 
 /// Creates the Frames if the format describes a paragraph-bound frame.
