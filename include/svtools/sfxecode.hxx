@@ -79,11 +79,11 @@
 #define ERRCODE_SFX_FORMAT_ROWCOL           (ERRCODE_AREA_SFX | ERRCODE_CLASS_NONE | 57)
 
 
-//Dies und das
+// Various
 #define ERRCTX_ERROR                    21
 #define ERRCTX_WARNING                  22
 
-//Documentkontexte
+// Document
 #define ERRCTX_SFX_LOADTEMPLATE         1
 #define ERRCTX_SFX_SAVEDOC              2
 #define ERRCTX_SFX_SAVEASDOC            3
@@ -91,19 +91,19 @@
 #define ERRCTX_SFX_DOCTEMPLATE          5
 #define ERRCTX_SFX_MOVEORCOPYCONTENTS   6
 
-//Appkontexte
+// Application
 #define ERRCTX_SFX_DOCMANAGER           50
 #define ERRCTX_SFX_OPENDOC              51
 #define ERRCTX_SFX_NEWDOCDIRECT         52
 #define ERRCTX_SFX_NEWDOC               53
 
-//Organizerkontexte
+// Organizer
 #define ERRCTX_SFX_CREATEOBJSH          70
 
-//BASIC-Kontexte
+// BASIC
 #define ERRCTX_SFX_LOADBASIC            80
 
-//Addressbook contexts
+// Addressbook
 #define ERRCTX_SFX_SEARCHADDRESS        90
 
 #endif // INCLUDED_SVTOOLS_SFXECODE_HXX
